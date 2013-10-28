@@ -1901,137 +1901,6 @@ OpenLayers.Util.getFormattedLonLat = function(coordinate, axis, dmsOption) {
 
 /**
  * @requires OpenLayers/SingleFile.js
- */
-
-OpenLayers.Util = OpenLayers.Util || {};
-/**
- * Namespace: OpenLayers.Util.vendorPrefix
- * A collection of utility functions to detect vendor prefixed features
- */
-OpenLayers.Util.vendorPrefix = (function() {
-    "use strict";
-    
-    var VENDOR_PREFIXES = ["", "O", "ms", "Moz", "Webkit"],
-        divStyle = document.createElement("div").style,
-        cssCache = {},
-        jsCache = {};
-
-    
-    /**
-     * Function: domToCss
-     * Converts a upper camel case DOM style property name to a CSS property
-     *      i.e. transformOrigin -> transform-origin
-     *      or   WebkitTransformOrigin -> -webkit-transform-origin
-     *
-     * Parameters:
-     * prefixedDom - {String} The property to convert
-     *
-     * Returns:
-     * {String} The CSS property
-     */
-    function domToCss(prefixedDom) {
-        if (!prefixedDom) { return null; }
-        return prefixedDom.
-            replace(/([A-Z])/g, function(c) { return "-" + c.toLowerCase(); }).
-            replace(/^ms-/, "-ms-");
-    }
-
-    /**
-     * APIMethod: css
-     * Detect which property is used for a CSS property
-     *
-     * Parameters:
-     * property - {String} The standard (unprefixed) CSS property name
-     *
-     * Returns:
-     * {String} The standard CSS property, prefixed property or null if not
-     *          supported
-     */
-    function css(property) {
-        if (cssCache[property] === undefined) {
-            var domProperty = property.
-                replace(/(-[\s\S])/g, function(c) { return c.charAt(1).toUpperCase(); });
-            var prefixedDom = style(domProperty);
-            cssCache[property] = domToCss(prefixedDom);
-        }
-        return cssCache[property];
-    }
-
-    /**
-     * APIMethod: js
-     * Detect which property is used for a JS property/method
-     *
-     * Parameters:
-     * obj - {Object} The object to test on
-     * property - {String} The standard (unprefixed) JS property name
-     *
-     * Returns:
-     * {String} The standard JS property, prefixed property or null if not
-     *          supported
-     */
-    function js(obj, property) {
-        if (jsCache[property] === undefined) {
-            var tmpProp,
-                i = 0,
-                l = VENDOR_PREFIXES.length,
-                prefix,
-                isStyleObj = (typeof obj.cssText !== "undefined");
-
-            jsCache[property] = null;
-            for(; i<l; i++) {
-                prefix = VENDOR_PREFIXES[i];
-                if(prefix) {
-                    if (!isStyleObj) {
-                        // js prefix should be lower-case, while style
-                        // properties have upper case on first character
-                        prefix = prefix.toLowerCase();
-                    }
-                    tmpProp = prefix + property.charAt(0).toUpperCase() + property.slice(1);
-                } else {
-                    tmpProp = property;
-                }
-
-                if(obj[tmpProp] !== undefined) {
-                    jsCache[property] = tmpProp;
-                    break;
-                }
-            }
-        }
-        return jsCache[property];
-    }
-    
-    /**
-     * APIMethod: style
-     * Detect which property is used for a DOM style property
-     *
-     * Parameters:
-     * property - {String} The standard (unprefixed) style property name
-     *
-     * Returns:
-     * {String} The standard style property, prefixed property or null if not
-     *          supported
-     */
-    function style(property) {
-        return js(divStyle, property);
-    }
-    
-    return {
-        css:      css,
-        js:       js,
-        style:    style,
-        
-        // used for testing
-        cssCache:       cssCache,
-        jsCache:        jsCache
-    };
-}());
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/SingleFile.js
  * @requires OpenLayers/Util/vendorPrefix.js
  */
 
@@ -11697,492 +11566,6 @@ OpenLayers.Layer = OpenLayers.Class({
 
     CLASS_NAME: "OpenLayers.Layer"
 });
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/BaseTypes/Class.js
- */
-
-/**
- * Class: OpenLayers.Icon
- * 
- * The icon represents a graphical icon on the screen.  Typically used in
- * conjunction with a <OpenLayers.Marker> to represent markers on a screen.
- *
- * An icon has a url, size and position.  It also contains an offset which 
- * allows the center point to be represented correctly.  This can be
- * provided either as a fixed offset or a function provided to calculate
- * the desired offset. 
- * 
- */
-OpenLayers.Icon = OpenLayers.Class({
-    
-    /** 
-     * Property: url 
-     * {String}  image url
-     */
-    url: null,
-    
-    /** 
-     * Property: size 
-     * {<OpenLayers.Size>|Object} An OpenLayers.Size or
-     * an object with a 'w' and 'h' properties.
-     */
-    size: null,
-
-    /** 
-     * Property: offset 
-     * {<OpenLayers.Pixel>|Object} distance in pixels to offset the
-     * image when being rendered. An OpenLayers.Pixel or an object
-     * with a 'x' and 'y' properties.
-     */
-    offset: null,    
-    
-    /** 
-     * Property: calculateOffset 
-     * {Function} Function to calculate the offset (based on the size)
-     */
-    calculateOffset: null,    
-    
-    /** 
-     * Property: imageDiv 
-     * {DOMElement} 
-     */
-    imageDiv: null,
-
-    /** 
-     * Property: px 
-     * {<OpenLayers.Pixel>|Object} An OpenLayers.Pixel or an object
-     * with a 'x' and 'y' properties.
-     */
-    px: null,
-    
-    /** 
-     * Constructor: OpenLayers.Icon
-     * Creates an icon, which is an image tag in a div.  
-     *
-     * url - {String} 
-     * size - {<OpenLayers.Size>|Object} An OpenLayers.Size or an
-     *                                   object with a 'w' and 'h'
-     *                                   properties.
-     * offset - {<OpenLayers.Pixel>|Object} An OpenLayers.Pixel or an
-     *                                      object with a 'x' and 'y'
-     *                                      properties.
-     * calculateOffset - {Function} 
-     */
-    initialize: function(url, size, offset, calculateOffset) {
-        this.url = url;
-        this.size = size || {w: 20, h: 20};
-        this.offset = offset || {x: -(this.size.w/2), y: -(this.size.h/2)};
-        this.calculateOffset = calculateOffset;
-
-        var id = OpenLayers.Util.createUniqueID("OL_Icon_");
-        this.imageDiv = OpenLayers.Util.createAlphaImageDiv(id);
-    },
-    
-    /** 
-     * Method: destroy
-     * Nullify references and remove event listeners to prevent circular 
-     * references and memory leaks
-     */
-    destroy: function() {
-        // erase any drawn elements
-        this.erase();
-
-        OpenLayers.Event.stopObservingElement(this.imageDiv.firstChild); 
-        this.imageDiv.innerHTML = "";
-        this.imageDiv = null;
-    },
-
-    /** 
-     * Method: clone
-     * 
-     * Returns:
-     * {<OpenLayers.Icon>} A fresh copy of the icon.
-     */
-    clone: function() {
-        return new OpenLayers.Icon(this.url, 
-                                   this.size, 
-                                   this.offset, 
-                                   this.calculateOffset);
-    },
-    
-    /**
-     * Method: setSize
-     * 
-     * Parameters:
-     * size - {<OpenLayers.Size>|Object} An OpenLayers.Size or
-     * an object with a 'w' and 'h' properties.
-     */
-    setSize: function(size) {
-        if (size != null) {
-            this.size = size;
-        }
-        this.draw();
-    },
-    
-    /**
-     * Method: setUrl
-     * 
-     * Parameters:
-     * url - {String} 
-     */
-    setUrl: function(url) {
-        if (url != null) {
-            this.url = url;
-        }
-        this.draw();
-    },
-
-    /** 
-     * Method: draw
-     * Move the div to the given pixel.
-     * 
-     * Parameters:
-     * px - {<OpenLayers.Pixel>|Object} An OpenLayers.Pixel or an
-     *                                  object with a 'x' and 'y' properties.
-     * 
-     * Returns:
-     * {DOMElement} A new DOM Image of this icon set at the location passed-in
-     */
-    draw: function(px) {
-        OpenLayers.Util.modifyAlphaImageDiv(this.imageDiv, 
-                                            null, 
-                                            null, 
-                                            this.size, 
-                                            this.url, 
-                                            "absolute");
-        this.moveTo(px);
-        return this.imageDiv;
-    }, 
-
-    /** 
-     * Method: erase
-     * Erase the underlying image element.
-     */
-    erase: function() {
-        if (this.imageDiv != null && this.imageDiv.parentNode != null) {
-            OpenLayers.Element.remove(this.imageDiv);
-        }
-    }, 
-    
-    /** 
-     * Method: setOpacity
-     * Change the icon's opacity
-     *
-     * Parameters:
-     * opacity - {float} 
-     */
-    setOpacity: function(opacity) {
-        OpenLayers.Util.modifyAlphaImageDiv(this.imageDiv, null, null, null, 
-                                            null, null, null, null, opacity);
-
-    },
-    
-    /**
-     * Method: moveTo
-     * move icon to passed in px.
-     *
-     * Parameters:
-     * px - {<OpenLayers.Pixel>|Object} the pixel position to move to.
-     * An OpenLayers.Pixel or an object with a 'x' and 'y' properties.
-     */
-    moveTo: function (px) {
-        //if no px passed in, use stored location
-        if (px != null) {
-            this.px = px;
-        }
-
-        if (this.imageDiv != null) {
-            if (this.px == null) {
-                this.display(false);
-            } else {
-                if (this.calculateOffset) {
-                    this.offset = this.calculateOffset(this.size);  
-                }
-                OpenLayers.Util.modifyAlphaImageDiv(this.imageDiv, null, {
-                    x: this.px.x + this.offset.x,
-                    y: this.px.y + this.offset.y
-                });
-            }
-        }
-    },
-    
-    /** 
-     * Method: display
-     * Hide or show the icon
-     *
-     * Parameters:
-     * display - {Boolean} 
-     */
-    display: function(display) {
-        this.imageDiv.style.display = (display) ? "" : "none"; 
-    },
-    
-
-    /**
-     * APIMethod: isDrawn
-     * 
-     * Returns:
-     * {Boolean} Whether or not the icon is drawn.
-     */
-    isDrawn: function() {
-        // nodeType 11 for ie, whose nodes *always* have a parentNode
-        // (of type document fragment)
-        var isDrawn = (this.imageDiv && this.imageDiv.parentNode && 
-                       (this.imageDiv.parentNode.nodeType != 11));    
-
-        return isDrawn;   
-    },
-
-    CLASS_NAME: "OpenLayers.Icon"
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-
-/**
- * @requires OpenLayers/BaseTypes/Class.js
- * @requires OpenLayers/Events.js
- * @requires OpenLayers/Icon.js
- */
-
-/**
- * Class: OpenLayers.Marker
- * Instances of OpenLayers.Marker are a combination of a 
- * <OpenLayers.LonLat> and an <OpenLayers.Icon>.  
- *
- * Markers are generally added to a special layer called
- * <OpenLayers.Layer.Markers>.
- *
- * Example:
- * (code)
- * var markers = new OpenLayers.Layer.Markers( "Markers" );
- * map.addLayer(markers);
- *
- * var size = new OpenLayers.Size(21,25);
- * var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
- * var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png', size, offset);
- * markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(0,0),icon));
- * markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(0,0),icon.clone()));
- *
- * (end)
- *
- * Note that if you pass an icon into the Marker constructor, it will take
- * that icon and use it. This means that you should not share icons between
- * markers -- you use them once, but you should clone() for any additional
- * markers using that same icon.
- */
-OpenLayers.Marker = OpenLayers.Class({
-    
-    /** 
-     * Property: icon 
-     * {<OpenLayers.Icon>} The icon used by this marker.
-     */
-    icon: null,
-
-    /** 
-     * Property: lonlat 
-     * {<OpenLayers.LonLat>} location of object
-     */
-    lonlat: null,
-    
-    /** 
-     * Property: events 
-     * {<OpenLayers.Events>} the event handler.
-     */
-    events: null,
-    
-    /** 
-     * Property: map 
-     * {<OpenLayers.Map>} the map this marker is attached to
-     */
-    map: null,
-    
-    /** 
-     * Constructor: OpenLayers.Marker
-     *
-     * Parameters:
-     * lonlat - {<OpenLayers.LonLat>} the position of this marker
-     * icon - {<OpenLayers.Icon>}  the icon for this marker
-     */
-    initialize: function(lonlat, icon) {
-        this.lonlat = lonlat;
-        
-        var newIcon = (icon) ? icon : OpenLayers.Marker.defaultIcon();
-        if (this.icon == null) {
-            this.icon = newIcon;
-        } else {
-            this.icon.url = newIcon.url;
-            this.icon.size = newIcon.size;
-            this.icon.offset = newIcon.offset;
-            this.icon.calculateOffset = newIcon.calculateOffset;
-        }
-        this.events = new OpenLayers.Events(this, this.icon.imageDiv);
-    },
-    
-    /**
-     * APIMethod: destroy
-     * Destroy the marker. You must first remove the marker from any 
-     * layer which it has been added to, or you will get buggy behavior.
-     * (This can not be done within the marker since the marker does not
-     * know which layer it is attached to.)
-     */
-    destroy: function() {
-        // erase any drawn features
-        this.erase();
-
-        this.map = null;
-
-        this.events.destroy();
-        this.events = null;
-
-        if (this.icon != null) {
-            this.icon.destroy();
-            this.icon = null;
-        }
-    },
-    
-    /** 
-    * Method: draw
-    * Calls draw on the icon, and returns that output.
-    * 
-    * Parameters:
-    * px - {<OpenLayers.Pixel>}
-    * 
-    * Returns:
-    * {DOMElement} A new DOM Image with this marker's icon set at the 
-    * location passed-in
-    */
-    draw: function(px) {
-        return this.icon.draw(px);
-    }, 
-
-    /** 
-    * Method: erase
-    * Erases any drawn elements for this marker.
-    */
-    erase: function() {
-        if (this.icon != null) {
-            this.icon.erase();
-        }
-    }, 
-
-    /**
-    * Method: moveTo
-    * Move the marker to the new location.
-    *
-    * Parameters:
-    * px - {<OpenLayers.Pixel>|Object} the pixel position to move to.
-    * An OpenLayers.Pixel or an object with a 'x' and 'y' properties.
-    */
-    moveTo: function (px) {
-        if ((px != null) && (this.icon != null)) {
-            this.icon.moveTo(px);
-        }           
-        this.lonlat = this.map.getLonLatFromLayerPx(px);
-    },
-
-    /**
-     * APIMethod: isDrawn
-     * 
-     * Returns:
-     * {Boolean} Whether or not the marker is drawn.
-     */
-    isDrawn: function() {
-        var isDrawn = (this.icon && this.icon.isDrawn());
-        return isDrawn;   
-    },
-
-    /**
-     * Method: onScreen
-     *
-     * Returns:
-     * {Boolean} Whether or not the marker is currently visible on screen.
-     */
-    onScreen:function() {
-        
-        var onScreen = false;
-        if (this.map) {
-            var screenBounds = this.map.getExtent();
-            onScreen = screenBounds.containsLonLat(this.lonlat);
-        }    
-        return onScreen;
-    },
-    
-    /**
-     * Method: inflate
-     * Englarges the markers icon by the specified ratio.
-     *
-     * Parameters:
-     * inflate - {float} the ratio to enlarge the marker by (passing 2
-     *                   will double the size).
-     */
-    inflate: function(inflate) {
-        if (this.icon) {
-            this.icon.setSize({
-                w: this.icon.size.w * inflate,
-                h: this.icon.size.h * inflate
-            });
-        }        
-    },
-    
-    /** 
-     * Method: setOpacity
-     * Change the opacity of the marker by changin the opacity of 
-     *   its icon
-     * 
-     * Parameters:
-     * opacity - {float}  Specified as fraction (0.4, etc)
-     */
-    setOpacity: function(opacity) {
-        this.icon.setOpacity(opacity);
-    },
-
-    /**
-     * Method: setUrl
-     * Change URL of the Icon Image.
-     * 
-     * url - {String} 
-     */
-    setUrl: function(url) {
-        this.icon.setUrl(url);
-    },    
-
-    /** 
-     * Method: display
-     * Hide or show the icon
-     * 
-     * display - {Boolean} 
-     */
-    display: function(display) {
-        this.icon.display(display);
-    },
-
-    CLASS_NAME: "OpenLayers.Marker"
-});
-
-
-/**
- * Function: defaultIcon
- * Creates a default <OpenLayers.Icon>.
- * 
- * Returns:
- * {<OpenLayers.Icon>} A default OpenLayers.Icon to use for a marker
- */
-OpenLayers.Marker.defaultIcon = function() {
-    return new OpenLayers.Icon(OpenLayers.Util.getImageLocation("marker.png"),
-                               {w: 21, h: 25}, {x: -10.5, y: -25});
-};
-    
-
 
 /* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
  * full list of contributors). Published under the 2-clause BSD license.
@@ -22673,51 +22056,6 @@ OpenLayers.Control.TYPE_TOOL   = 3;
 
 /**
  * @requires OpenLayers/Control.js
- */
-
-/**
- * Class: OpenLayers.Control.Button 
- * The Button control is a very simple push-button, for use with 
- * <OpenLayers.Control.Panel>.
- * When clicked, the function trigger() is executed.
- * 
- * Inherits from:
- *  - <OpenLayers.Control>
- *
- * Use:
- * (code)
- * var button = new OpenLayers.Control.Button({
- *     displayClass: "MyButton", trigger: myFunction
- * });
- * panel.addControls([button]);
- * (end)
- * 
- * Will create a button with CSS class MyButtonItemInactive, that
- *     will call the function MyFunction() when clicked.
- */
-OpenLayers.Control.Button = OpenLayers.Class(OpenLayers.Control, {
-    /**
-     * Property: type
-     * {Integer} OpenLayers.Control.TYPE_BUTTON.
-     */
-    type: OpenLayers.Control.TYPE_BUTTON,
-    
-    /**
-     * Method: trigger
-     * Called by a control panel when the button is clicked.
-     */
-    trigger: function() {},
-
-    CLASS_NAME: "OpenLayers.Control.Button"
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Control.js
  * @requires OpenLayers/Handler/Box.js
  */
 
@@ -23905,6 +23243,2066 @@ OpenLayers.Control.OverviewMap = OpenLayers.Class(OpenLayers.Control, {
     },
 
     CLASS_NAME: 'OpenLayers.Control.OverviewMap'
+});
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Control/ZoomBox.js
+ * @requires OpenLayers/Control/DragPan.js
+ * @requires OpenLayers/Handler/MouseWheel.js
+ * @requires OpenLayers/Handler/Click.js
+ */
+
+/**
+ * Class: OpenLayers.Control.Navigation
+ * The navigation control handles map browsing with mouse events (dragging,
+ *     double-clicking, and scrolling the wheel).  Create a new navigation 
+ *     control with the <OpenLayers.Control.Navigation> control.  
+ * 
+ *     Note that this control is added to the map by default (if no controls 
+ *     array is sent in the options object to the <OpenLayers.Map> 
+ *     constructor).
+ * 
+ * Inherits:
+ *  - <OpenLayers.Control>
+ */
+OpenLayers.Control.Navigation = OpenLayers.Class(OpenLayers.Control, {
+
+    /** 
+     * Property: dragPan
+     * {<OpenLayers.Control.DragPan>} 
+     */
+    dragPan: null,
+
+    /**
+     * APIProperty: dragPanOptions
+     * {Object} Options passed to the DragPan control.
+     */
+    dragPanOptions: null,
+
+    /**
+     * Property: pinchZoom
+     * {<OpenLayers.Control.PinchZoom>}
+     */
+    pinchZoom: null,
+
+    /**
+     * APIProperty: pinchZoomOptions
+     * {Object} Options passed to the PinchZoom control.
+     */
+    pinchZoomOptions: null,
+
+    /**
+     * APIProperty: documentDrag
+     * {Boolean} Allow panning of the map by dragging outside map viewport.
+     *     Default is false.
+     */
+    documentDrag: false,
+
+    /** 
+     * Property: zoomBox
+     * {<OpenLayers.Control.ZoomBox>}
+     */
+    zoomBox: null,
+
+    /**
+     * APIProperty: zoomBoxEnabled
+     * {Boolean} Whether the user can draw a box to zoom
+     */
+    zoomBoxEnabled: true, 
+
+    /**
+     * APIProperty: zoomWheelEnabled
+     * {Boolean} Whether the mousewheel should zoom the map
+     */
+    zoomWheelEnabled: true,
+    
+    /**
+     * Property: mouseWheelOptions
+     * {Object} Options passed to the MouseWheel control (only useful if
+     *     <zoomWheelEnabled> is set to true). Default is no options for maps
+     *     with fractionalZoom set to true, otherwise
+     *     {cumulative: false, interval: 50, maxDelta: 6} 
+     */
+    mouseWheelOptions: null,
+
+    /**
+     * APIProperty: handleRightClicks
+     * {Boolean} Whether or not to handle right clicks. Default is false.
+     */
+    handleRightClicks: false,
+
+    /**
+     * APIProperty: zoomBoxKeyMask
+     * {Integer} <OpenLayers.Handler> key code of the key, which has to be
+     *    pressed, while drawing the zoom box with the mouse on the screen. 
+     *    You should probably set handleRightClicks to true if you use this
+     *    with MOD_CTRL, to disable the context menu for machines which use
+     *    CTRL-Click as a right click.
+     * Default: <OpenLayers.Handler.MOD_SHIFT>
+     */
+    zoomBoxKeyMask: OpenLayers.Handler.MOD_SHIFT,
+    
+    /**
+     * APIProperty: autoActivate
+     * {Boolean} Activate the control when it is added to a map.  Default is
+     *     true.
+     */
+    autoActivate: true,
+
+    /**
+     * Constructor: OpenLayers.Control.Navigation
+     * Create a new navigation control
+     * 
+     * Parameters:
+     * options - {Object} An optional object whose properties will be set on
+     *                    the control
+     */
+    initialize: function(options) {
+        this.handlers = {};
+        OpenLayers.Control.prototype.initialize.apply(this, arguments);
+    },
+
+    /**
+     * Method: destroy
+     * The destroy method is used to perform any clean up before the control
+     * is dereferenced.  Typically this is where event listeners are removed
+     * to prevent memory leaks.
+     */
+    destroy: function() {
+        this.deactivate();
+
+        if (this.dragPan) {
+            this.dragPan.destroy();
+        }
+        this.dragPan = null;
+
+        if (this.zoomBox) {
+            this.zoomBox.destroy();
+        }
+        this.zoomBox = null;
+
+        if (this.pinchZoom) {
+            this.pinchZoom.destroy();
+        }
+        this.pinchZoom = null;
+
+        OpenLayers.Control.prototype.destroy.apply(this,arguments);
+    },
+    
+    /**
+     * Method: activate
+     */
+    activate: function() {
+        this.dragPan.activate();
+        if (this.zoomWheelEnabled) {
+            this.handlers.wheel.activate();
+        }    
+        this.handlers.click.activate();
+        if (this.zoomBoxEnabled) {
+            this.zoomBox.activate();
+        }
+        if (this.pinchZoom) {
+            this.pinchZoom.activate();
+        }
+        return OpenLayers.Control.prototype.activate.apply(this,arguments);
+    },
+
+    /**
+     * Method: deactivate
+     */
+    deactivate: function() {
+        if (this.pinchZoom) {
+            this.pinchZoom.deactivate();
+        }
+        this.zoomBox.deactivate();
+        this.dragPan.deactivate();
+        this.handlers.click.deactivate();
+        this.handlers.wheel.deactivate();
+        return OpenLayers.Control.prototype.deactivate.apply(this,arguments);
+    },
+    
+    /**
+     * Method: draw
+     */
+    draw: function() {
+        // disable right mouse context menu for support of right click events
+        if (this.handleRightClicks) {
+            this.map.viewPortDiv.oncontextmenu = OpenLayers.Function.False;
+        }
+
+        var clickCallbacks = { 
+            'click': this.defaultClick,
+            'dblclick': this.defaultDblClick, 
+            'dblrightclick': this.defaultDblRightClick 
+        };
+        var clickOptions = {
+            'double': true, 
+            'stopDouble': true
+        };
+        this.handlers.click = new OpenLayers.Handler.Click(
+            this, clickCallbacks, clickOptions
+        );
+        this.dragPan = new OpenLayers.Control.DragPan(
+            OpenLayers.Util.extend({
+                map: this.map,
+                documentDrag: this.documentDrag
+            }, this.dragPanOptions)
+        );
+        this.zoomBox = new OpenLayers.Control.ZoomBox(
+                    {map: this.map, keyMask: this.zoomBoxKeyMask});
+        this.dragPan.draw();
+        this.zoomBox.draw();
+        var wheelOptions = this.map.fractionalZoom ? {} : {
+            cumulative: false,
+            interval: 50,
+            maxDelta: 6
+        };
+        this.handlers.wheel = new OpenLayers.Handler.MouseWheel(
+            this, {up : this.wheelUp, down: this.wheelDown},
+            OpenLayers.Util.extend(wheelOptions, this.mouseWheelOptions)
+        );
+        if (OpenLayers.Control.PinchZoom) {
+            this.pinchZoom = new OpenLayers.Control.PinchZoom(
+                OpenLayers.Util.extend(
+                    {map: this.map}, this.pinchZoomOptions));
+        }
+    },
+
+    /**
+     * Method: defaultClick
+     *
+     * Parameters:
+     * evt - {Event}
+     */
+    defaultClick: function (evt) {
+        if (evt.lastTouches && evt.lastTouches.length == 2) {
+            this.map.zoomOut();
+        }
+    },
+
+    /**
+     * Method: defaultDblClick 
+     * 
+     * Parameters:
+     * evt - {Event} 
+     */
+    defaultDblClick: function (evt) {
+        this.map.zoomTo(this.map.zoom + 1, evt.xy);
+    },
+
+    /**
+     * Method: defaultDblRightClick 
+     * 
+     * Parameters:
+     * evt - {Event} 
+     */
+    defaultDblRightClick: function (evt) {
+        this.map.zoomTo(this.map.zoom - 1, evt.xy);
+    },
+    
+    /**
+     * Method: wheelChange  
+     *
+     * Parameters:
+     * evt - {Event}
+     * deltaZ - {Integer}
+     */
+    wheelChange: function(evt, deltaZ) {
+        if (!this.map.fractionalZoom) {
+            deltaZ =  Math.round(deltaZ);
+        }
+        var currentZoom = this.map.getZoom(),
+            newZoom = currentZoom + deltaZ;
+        newZoom = Math.max(newZoom, 0);
+        newZoom = Math.min(newZoom, this.map.getNumZoomLevels());
+        if (newZoom === currentZoom) {
+            return;
+        }
+        this.map.zoomTo(newZoom, evt.xy);
+    },
+
+    /** 
+     * Method: wheelUp
+     * User spun scroll wheel up
+     * 
+     * Parameters:
+     * evt - {Event}
+     * delta - {Integer}
+     */
+    wheelUp: function(evt, delta) {
+        this.wheelChange(evt, delta || 1);
+    },
+
+    /** 
+     * Method: wheelDown
+     * User spun scroll wheel down
+     * 
+     * Parameters:
+     * evt - {Event}
+     * delta - {Integer}
+     */
+    wheelDown: function(evt, delta) {
+        this.wheelChange(evt, delta || -1);
+    },
+    
+    /**
+     * Method: disableZoomBox
+     */
+    disableZoomBox : function() {
+        this.zoomBoxEnabled = false;
+        this.zoomBox.deactivate();       
+    },
+    
+    /**
+     * Method: enableZoomBox
+     */
+    enableZoomBox : function() {
+        this.zoomBoxEnabled = true;
+        if (this.active) {
+            this.zoomBox.activate();
+        }    
+    },
+    
+    /**
+     * Method: disableZoomWheel
+     */
+    
+    disableZoomWheel : function() {
+        this.zoomWheelEnabled = false;
+        this.handlers.wheel.deactivate();       
+    },
+    
+    /**
+     * Method: enableZoomWheel
+     */
+    
+    enableZoomWheel : function() {
+        this.zoomWheelEnabled = true;
+        if (this.active) {
+            this.handlers.wheel.activate();
+        }    
+    },
+
+    CLASS_NAME: "OpenLayers.Control.Navigation"
+});
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Control.js
+ */
+
+/**
+ * Class: OpenLayers.Control.ScaleLine
+ * The ScaleLine displays a small line indicator representing the current 
+ * map scale on the map. By default it is drawn in the lower left corner of
+ * the map.
+ * 
+ * Inherits from:
+ *  - <OpenLayers.Control>
+ *  
+ * Is a very close copy of:
+ *  - <OpenLayers.Control.Scale>
+ */
+OpenLayers.Control.ScaleLine = OpenLayers.Class(OpenLayers.Control, {
+
+    /**
+     * Property: maxWidth
+     * {Integer} Maximum width of the scale line in pixels.  Default is 100.
+     */
+    maxWidth: 100,
+
+    /**
+     * Property: topOutUnits
+     * {String} Units for zoomed out on top bar.  Default is km.
+     */
+    topOutUnits: "km",
+    
+    /**
+     * Property: topInUnits
+     * {String} Units for zoomed in on top bar.  Default is m.
+     */
+    topInUnits: "m",
+
+    /**
+     * Property: bottomOutUnits
+     * {String} Units for zoomed out on bottom bar.  Default is mi.
+     */
+    bottomOutUnits: "mi",
+
+    /**
+     * Property: bottomInUnits
+     * {String} Units for zoomed in on bottom bar.  Default is ft.
+     */
+    bottomInUnits: "ft",
+    
+    /**
+     * Property: eTop
+     * {DOMElement}
+     */
+    eTop: null,
+
+    /**
+     * Property: eBottom
+     * {DOMElement}
+     */
+    eBottom:null,
+    
+    /**
+     * APIProperty: geodesic
+     * {Boolean} Use geodesic measurement. Default is false. The recommended
+     * setting for maps in EPSG:4326 is false, and true EPSG:900913. If set to
+     * true, the scale will be calculated based on the horizontal size of the
+     * pixel in the center of the map viewport.
+     */
+    geodesic: false,
+
+    /**
+     * Constructor: OpenLayers.Control.ScaleLine
+     * Create a new scale line control.
+     * 
+     * Parameters:
+     * options - {Object} An optional object whose properties will be used
+     *     to extend the control.
+     */
+
+    /**
+     * Method: draw
+     * 
+     * Returns:
+     * {DOMElement}
+     */
+    draw: function() {
+        OpenLayers.Control.prototype.draw.apply(this, arguments);
+        if (!this.eTop) {
+            // stick in the top bar
+            this.eTop = document.createElement("div");
+            this.eTop.className = this.displayClass + "Top";
+            var theLen = this.topInUnits.length;
+            this.div.appendChild(this.eTop);
+            if((this.topOutUnits == "") || (this.topInUnits == "")) {
+                this.eTop.style.visibility = "hidden";
+            } else {
+                this.eTop.style.visibility = "visible";
+            }
+
+            // and the bottom bar
+            this.eBottom = document.createElement("div");
+            this.eBottom.className = this.displayClass + "Bottom";
+            this.div.appendChild(this.eBottom);
+            if((this.bottomOutUnits == "") || (this.bottomInUnits == "")) {
+                this.eBottom.style.visibility = "hidden";
+            } else {
+                this.eBottom.style.visibility = "visible";
+            }
+        }
+        this.map.events.register('moveend', this, this.update);
+        this.update();
+        return this.div;
+    },
+
+    /** 
+     * Method: getBarLen
+     * Given a number, round it down to the nearest 1,2,5 times a power of 10.
+     * That seems a fairly useful set of number groups to use.
+     * 
+     * Parameters:
+     * maxLen - {float}  the number we're rounding down from
+     * 
+     * Returns:
+     * {Float} the rounded number (less than or equal to maxLen)
+     */
+    getBarLen: function(maxLen) {
+        // nearest power of 10 lower than maxLen
+        var digits = parseInt(Math.log(maxLen) / Math.log(10));
+        var pow10 = Math.pow(10, digits);
+        
+        // ok, find first character
+        var firstChar = parseInt(maxLen / pow10);
+
+        // right, put it into the correct bracket
+        var barLen;
+        if(firstChar > 5) {
+            barLen = 5;
+        } else if(firstChar > 2) {
+            barLen = 2;
+        } else {
+            barLen = 1;
+        }
+
+        // scale it up the correct power of 10
+        return barLen * pow10;
+    },
+
+    /**
+     * Method: update
+     * Update the size of the bars, and the labels they contain.
+     */
+    update: function() {
+        var res = this.map.getResolution();
+        if (!res) {
+            return;
+        }
+
+        var curMapUnits = this.map.getUnits();
+        var inches = OpenLayers.INCHES_PER_UNIT;
+
+        // convert maxWidth to map units
+        var maxSizeData = this.maxWidth * res * inches[curMapUnits];
+        var geodesicRatio = 1;
+        if(this.geodesic === true) {
+            var maxSizeGeodesic = (this.map.getGeodesicPixelSize().w ||
+                0.000001) * this.maxWidth;
+            var maxSizeKilometers = maxSizeData / inches["km"];
+            geodesicRatio = maxSizeGeodesic / maxSizeKilometers;
+            maxSizeData *= geodesicRatio;
+        }
+
+        // decide whether to use large or small scale units     
+        var topUnits;
+        var bottomUnits;
+        if(maxSizeData > 100000) {
+            topUnits = this.topOutUnits;
+            bottomUnits = this.bottomOutUnits;
+        } else {
+            topUnits = this.topInUnits;
+            bottomUnits = this.bottomInUnits;
+        }
+
+        // and to map units units
+        var topMax = maxSizeData / inches[topUnits];
+        var bottomMax = maxSizeData / inches[bottomUnits];
+
+        // now trim this down to useful block length
+        var topRounded = this.getBarLen(topMax);
+        var bottomRounded = this.getBarLen(bottomMax);
+
+        // and back to display units
+        topMax = topRounded / inches[curMapUnits] * inches[topUnits];
+        bottomMax = bottomRounded / inches[curMapUnits] * inches[bottomUnits];
+
+        // and to pixel units
+        var topPx = topMax / res / geodesicRatio;
+        var bottomPx = bottomMax / res / geodesicRatio;
+        
+        // now set the pixel widths
+        // and the values inside them
+        
+        if (this.eBottom.style.visibility == "visible"){
+            this.eBottom.style.width = Math.round(bottomPx) + "px"; 
+            this.eBottom.innerHTML = bottomRounded + " " + bottomUnits ;
+        }
+            
+        if (this.eTop.style.visibility == "visible"){
+            this.eTop.style.width = Math.round(topPx) + "px";
+            this.eTop.innerHTML = topRounded + " " + topUnits;
+        }
+        
+    }, 
+
+    CLASS_NAME: "OpenLayers.Control.ScaleLine"
+});
+
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Control.js
+ */
+
+/**
+ * Class: OpenLayers.Control.Button 
+ * The Button control is a very simple push-button, for use with 
+ * <OpenLayers.Control.Panel>.
+ * When clicked, the function trigger() is executed.
+ * 
+ * Inherits from:
+ *  - <OpenLayers.Control>
+ *
+ * Use:
+ * (code)
+ * var button = new OpenLayers.Control.Button({
+ *     displayClass: "MyButton", trigger: myFunction
+ * });
+ * panel.addControls([button]);
+ * (end)
+ * 
+ * Will create a button with CSS class MyButtonItemInactive, that
+ *     will call the function MyFunction() when clicked.
+ */
+OpenLayers.Control.Button = OpenLayers.Class(OpenLayers.Control, {
+    /**
+     * Property: type
+     * {Integer} OpenLayers.Control.TYPE_BUTTON.
+     */
+    type: OpenLayers.Control.TYPE_BUTTON,
+    
+    /**
+     * Method: trigger
+     * Called by a control panel when the button is clicked.
+     */
+    trigger: function() {},
+
+    CLASS_NAME: "OpenLayers.Control.Button"
+});
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+
+/**
+ * @requires OpenLayers/Control.js
+ * @requires OpenLayers/Feature/Vector.js
+ * @requires OpenLayers/Handler/Feature.js
+ * @requires OpenLayers/Layer/Vector/RootContainer.js
+ */
+
+/**
+ * Class: OpenLayers.Control.SelectFeature
+ * The SelectFeature control selects vector features from a given layer on 
+ * click or hover. 
+ *
+ * Inherits from:
+ *  - <OpenLayers.Control>
+ */
+OpenLayers.Control.SelectFeature = OpenLayers.Class(OpenLayers.Control, {
+
+    /** 
+     * APIProperty: events
+     * {<OpenLayers.Events>} Events instance for listeners and triggering
+     *     control specific events.
+     *
+     * Register a listener for a particular event with the following syntax:
+     * (code)
+     * control.events.register(type, obj, listener);
+     * (end)
+     *
+     * Supported event types (in addition to those from <OpenLayers.Control.events>):
+     * beforefeaturehighlighted - Triggered before a feature is highlighted
+     * featurehighlighted - Triggered when a feature is highlighted
+     * featureunhighlighted - Triggered when a feature is unhighlighted
+     * boxselectionstart - Triggered before box selection starts
+     * boxselectionend - Triggered after box selection ends
+     */
+    
+    /**
+     * Property: multipleKey
+     * {String} An event modifier ('altKey' or 'shiftKey') that temporarily sets
+     *     the <multiple> property to true.  Default is null.
+     */
+    multipleKey: null,
+    
+    /**
+     * Property: toggleKey
+     * {String} An event modifier ('altKey' or 'shiftKey') that temporarily sets
+     *     the <toggle> property to true.  Default is null.
+     */
+    toggleKey: null,
+    
+    /**
+     * APIProperty: multiple
+     * {Boolean} Allow selection of multiple geometries.  Default is false.
+     */
+    multiple: false, 
+
+    /**
+     * APIProperty: clickout
+     * {Boolean} Unselect features when clicking outside any feature.
+     *     Default is true.
+     */
+    clickout: true,
+
+    /**
+     * APIProperty: toggle
+     * {Boolean} Unselect a selected feature on click.  Default is false.  Only
+     *     has meaning if hover is false.
+     */
+    toggle: false,
+
+    /**
+     * APIProperty: hover
+     * {Boolean} Select on mouse over and deselect on mouse out.  If true, this
+     * ignores clicks and only listens to mouse moves.
+     */
+    hover: false,
+
+    /**
+     * APIProperty: highlightOnly
+     * {Boolean} If true do not actually select features (that is place them in 
+     * the layer's selected features array), just highlight them. This property
+     * has no effect if hover is false. Defaults to false.
+     */
+    highlightOnly: false,
+    
+    /**
+     * APIProperty: box
+     * {Boolean} Allow feature selection by drawing a box.
+     */
+    box: false,
+    
+    /**
+     * Property: onBeforeSelect 
+     * {Function} Optional function to be called before a feature is selected.
+     *     The function should expect to be called with a feature.
+     */
+    onBeforeSelect: function() {},
+    
+    /**
+     * APIProperty: onSelect 
+     * {Function} Optional function to be called when a feature is selected.
+     *     The function should expect to be called with a feature.
+     */
+    onSelect: function() {},
+
+    /**
+     * APIProperty: onUnselect
+     * {Function} Optional function to be called when a feature is unselected.
+     *     The function should expect to be called with a feature.
+     */
+    onUnselect: function() {},
+    
+    /**
+     * Property: scope
+     * {Object} The scope to use with the onBeforeSelect, onSelect, onUnselect
+     *     callbacks. If null the scope will be this control.
+     */
+    scope: null,
+
+    /**
+     * APIProperty: geometryTypes
+     * {Array(String)} To restrict selecting to a limited set of geometry types,
+     *     send a list of strings corresponding to the geometry class names.
+     */
+    geometryTypes: null,
+
+    /**
+     * Property: layer
+     * {<OpenLayers.Layer.Vector>} The vector layer with a common renderer
+     * root for all layers this control is configured with (if an array of
+     * layers was passed to the constructor), or the vector layer the control
+     * was configured with (if a single layer was passed to the constructor).
+     */
+    layer: null,
+    
+    /**
+     * Property: layers
+     * {Array(<OpenLayers.Layer.Vector>)} The layers this control will work on,
+     * or null if the control was configured with a single layer
+     */
+    layers: null,
+    
+    /**
+     * APIProperty: callbacks
+     * {Object} The functions that are sent to the handlers.feature for callback
+     */
+    callbacks: null,
+    
+    /**
+     * APIProperty: selectStyle 
+     * {Object} Hash of styles
+     */
+    selectStyle: null,
+    
+    /**
+     * Property: renderIntent
+     * {String} key used to retrieve the select style from the layer's
+     * style map.
+     */
+    renderIntent: "select",
+
+    /**
+     * Property: handlers
+     * {Object} Object with references to multiple <OpenLayers.Handler>
+     *     instances.
+     */
+    handlers: null,
+
+    /**
+     * Constructor: OpenLayers.Control.SelectFeature
+     * Create a new control for selecting features.
+     *
+     * Parameters:
+     * layers - {<OpenLayers.Layer.Vector>}, or an array of vector layers. The
+     *     layer(s) this control will select features from.
+     * options - {Object} 
+     */
+    initialize: function(layers, options) {
+        OpenLayers.Control.prototype.initialize.apply(this, [options]);
+        
+        if(this.scope === null) {
+            this.scope = this;
+        }
+        this.initLayer(layers);
+        var callbacks = {
+            click: this.clickFeature,
+            clickout: this.clickoutFeature
+        };
+        if (this.hover) {
+            callbacks.over = this.overFeature;
+            callbacks.out = this.outFeature;
+        }
+             
+        this.callbacks = OpenLayers.Util.extend(callbacks, this.callbacks);
+        this.handlers = {
+            feature: new OpenLayers.Handler.Feature(
+                this, this.layer, this.callbacks,
+                {geometryTypes: this.geometryTypes}
+            )
+        };
+
+        if (this.box) {
+            this.handlers.box = new OpenLayers.Handler.Box(
+                this, {done: this.selectBox},
+                {boxDivClassName: "olHandlerBoxSelectFeature"}
+            ); 
+        }
+    },
+
+    /**
+     * Method: initLayer
+     * Assign the layer property. If layers is an array, we need to use
+     *     a RootContainer.
+     *
+     * Parameters:
+     * layers - {<OpenLayers.Layer.Vector>}, or an array of vector layers.
+     */
+    initLayer: function(layers) {
+        if(OpenLayers.Util.isArray(layers)) {
+            this.layers = layers;
+            this.layer = new OpenLayers.Layer.Vector.RootContainer(
+                this.id + "_container", {
+                    layers: layers
+                }
+            );
+        } else {
+            this.layer = layers;
+        }
+    },
+    
+    /**
+     * Method: destroy
+     */
+    destroy: function() {
+        if(this.active && this.layers) {
+            this.map.removeLayer(this.layer);
+        }
+        OpenLayers.Control.prototype.destroy.apply(this, arguments);
+        if(this.layers) {
+            this.layer.destroy();
+        }
+    },
+
+    /**
+     * Method: activate
+     * Activates the control.
+     * 
+     * Returns:
+     * {Boolean} The control was effectively activated.
+     */
+    activate: function () {
+        if (!this.active) {
+            if(this.layers) {
+                this.map.addLayer(this.layer);
+            }
+            this.handlers.feature.activate();
+            if(this.box && this.handlers.box) {
+                this.handlers.box.activate();
+            }
+        }
+        return OpenLayers.Control.prototype.activate.apply(
+            this, arguments
+        );
+    },
+
+    /**
+     * Method: deactivate
+     * Deactivates the control.
+     * 
+     * Returns:
+     * {Boolean} The control was effectively deactivated.
+     */
+    deactivate: function () {
+        if (this.active) {
+            this.handlers.feature.deactivate();
+            if(this.handlers.box) {
+                this.handlers.box.deactivate();
+            }
+            if(this.layers) {
+                this.map.removeLayer(this.layer);
+            }
+        }
+        return OpenLayers.Control.prototype.deactivate.apply(
+            this, arguments
+        );
+    },
+
+    /**
+     * Method: unselectAll
+     * Unselect all selected features.  To unselect all except for a single
+     *     feature, set the options.except property to the feature.
+     *
+     * Parameters:
+     * options - {Object} Optional configuration object.
+     */
+    unselectAll: function(options) {
+        // we'll want an option to supress notification here
+        var layers = this.layers || [this.layer],
+            layer, feature, l, numExcept;
+        for(l=0; l<layers.length; ++l) {
+            layer = layers[l];
+            numExcept = 0;
+            //layer.selectedFeatures is null when layer is destroyed and 
+            //one of it's preremovelayer listener calls setLayer 
+            //with another layer on this control
+            if(layer.selectedFeatures != null) {
+                while(layer.selectedFeatures.length > numExcept) {
+                    feature = layer.selectedFeatures[numExcept];
+                    if(!options || options.except != feature) {
+                        this.unselect(feature);
+                    } else {
+                        ++numExcept;
+                    }
+                }
+            }
+        }
+    },
+
+    /**
+     * Method: clickFeature
+     * Called on click in a feature
+     * Only responds if this.hover is false.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} 
+     */
+    clickFeature: function(feature) {
+        if(!this.hover) {
+            var selected = (OpenLayers.Util.indexOf(
+                feature.layer.selectedFeatures, feature) > -1);
+            if(selected) {
+                if(this.toggleSelect()) {
+                    this.unselect(feature);
+                } else if(!this.multipleSelect()) {
+                    this.unselectAll({except: feature});
+                }
+            } else {
+                if(!this.multipleSelect()) {
+                    this.unselectAll({except: feature});
+                }
+                this.select(feature);
+            }
+        }
+    },
+
+    /**
+     * Method: multipleSelect
+     * Allow for multiple selected features based on <multiple> property and
+     *     <multipleKey> event modifier.
+     *
+     * Returns:
+     * {Boolean} Allow for multiple selected features.
+     */
+    multipleSelect: function() {
+        return this.multiple || (this.handlers.feature.evt &&
+                                 this.handlers.feature.evt[this.multipleKey]);
+    },
+    
+    /**
+     * Method: toggleSelect
+     * Event should toggle the selected state of a feature based on <toggle>
+     *     property and <toggleKey> event modifier.
+     *
+     * Returns:
+     * {Boolean} Toggle the selected state of a feature.
+     */
+    toggleSelect: function() {
+        return this.toggle || (this.handlers.feature.evt &&
+                               this.handlers.feature.evt[this.toggleKey]);
+    },
+
+    /**
+     * Method: clickoutFeature
+     * Called on click outside a previously clicked (selected) feature.
+     * Only responds if this.hover is false.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Vector.Feature>} 
+     */
+    clickoutFeature: function(feature) {
+        if(!this.hover && this.clickout) {
+            this.unselectAll();
+        }
+    },
+
+    /**
+     * Method: overFeature
+     * Called on over a feature.
+     * Only responds if this.hover is true.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} 
+     */
+    overFeature: function(feature) {
+        var layer = feature.layer;
+        if(this.hover) {
+            if(this.highlightOnly) {
+                this.highlight(feature);
+            } else if(OpenLayers.Util.indexOf(
+                layer.selectedFeatures, feature) == -1) {
+                this.select(feature);
+            }
+        }
+    },
+
+    /**
+     * Method: outFeature
+     * Called on out of a selected feature.
+     * Only responds if this.hover is true.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} 
+     */
+    outFeature: function(feature) {
+        if(this.hover) {
+            if(this.highlightOnly) {
+                // we do nothing if we're not the last highlighter of the
+                // feature
+                if(feature._lastHighlighter == this.id) {
+                    // if another select control had highlighted the feature before
+                    // we did it ourself then we use that control to highlight the
+                    // feature as it was before we highlighted it, else we just
+                    // unhighlight it
+                    if(feature._prevHighlighter &&
+                       feature._prevHighlighter != this.id) {
+                        delete feature._lastHighlighter;
+                        var control = this.map.getControl(
+                            feature._prevHighlighter);
+                        if(control) {
+                            control.highlight(feature);
+                        }
+                    } else {
+                        this.unhighlight(feature);
+                    }
+                }
+            } else {
+                this.unselect(feature);
+            }
+        }
+    },
+
+    /**
+     * Method: highlight
+     * Redraw feature with the select style.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} 
+     */
+    highlight: function(feature) {
+        var layer = feature.layer;
+        var cont = this.events.triggerEvent("beforefeaturehighlighted", {
+            feature : feature
+        });
+        if(cont !== false) {
+            feature._prevHighlighter = feature._lastHighlighter;
+            feature._lastHighlighter = this.id;
+            var style = this.selectStyle || this.renderIntent;
+            layer.drawFeature(feature, style);
+            this.events.triggerEvent("featurehighlighted", {feature : feature});
+        }
+    },
+
+    /**
+     * Method: unhighlight
+     * Redraw feature with the "default" style
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} 
+     */
+    unhighlight: function(feature) {
+        var layer = feature.layer;
+        // three cases:
+        // 1. there's no other highlighter, in that case _prev is undefined,
+        //    and we just need to undef _last
+        // 2. another control highlighted the feature after we did it, in
+        //    that case _last references this other control, and we just
+        //    need to undef _prev
+        // 3. another control highlighted the feature before we did it, in
+        //    that case _prev references this other control, and we need to
+        //    set _last to _prev and undef _prev
+        if(feature._prevHighlighter == undefined) {
+            delete feature._lastHighlighter;
+        } else if(feature._prevHighlighter == this.id) {
+            delete feature._prevHighlighter;
+        } else {
+            feature._lastHighlighter = feature._prevHighlighter;
+            delete feature._prevHighlighter;
+        }
+        layer.drawFeature(feature, feature.style || feature.layer.style ||
+            "default");
+        this.events.triggerEvent("featureunhighlighted", {feature : feature});
+    },
+    
+    /**
+     * Method: select
+     * Add feature to the layer's selectedFeature array, render the feature as
+     * selected, and call the onSelect function.
+     * 
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} 
+     */
+    select: function(feature) {
+        var cont = this.onBeforeSelect.call(this.scope, feature);
+        var layer = feature.layer;
+        if(cont !== false) {
+            cont = layer.events.triggerEvent("beforefeatureselected", {
+                feature: feature
+            });
+            if(cont !== false) {
+                layer.selectedFeatures.push(feature);
+                this.highlight(feature);
+                // if the feature handler isn't involved in the feature
+                // selection (because the box handler is used or the
+                // feature is selected programatically) we fake the
+                // feature handler to allow unselecting on click
+                if(!this.handlers.feature.lastFeature) {
+                    this.handlers.feature.lastFeature = layer.selectedFeatures[0];
+                }
+                layer.events.triggerEvent("featureselected", {feature: feature});
+                this.onSelect.call(this.scope, feature);
+            }
+        }
+    },
+
+    /**
+     * Method: unselect
+     * Remove feature from the layer's selectedFeature array, render the feature as
+     * normal, and call the onUnselect function.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>}
+     */
+    unselect: function(feature) {
+        var layer = feature.layer;
+        // Store feature style for restoration later
+        this.unhighlight(feature);
+        OpenLayers.Util.removeItem(layer.selectedFeatures, feature);
+        layer.events.triggerEvent("featureunselected", {feature: feature});
+        this.onUnselect.call(this.scope, feature);
+    },
+    
+    /**
+     * Method: selectBox
+     * Callback from the handlers.box set up when <box> selection is true
+     *     on.
+     *
+     * Parameters:
+     * position - {<OpenLayers.Bounds> || <OpenLayers.Pixel> }  
+     */
+    selectBox: function(position) {
+        if (position instanceof OpenLayers.Bounds) {
+            var minXY = this.map.getLonLatFromPixel({
+                x: position.left,
+                y: position.bottom
+            });
+            var maxXY = this.map.getLonLatFromPixel({
+                x: position.right,
+                y: position.top
+            });
+            var bounds = new OpenLayers.Bounds(
+                minXY.lon, minXY.lat, maxXY.lon, maxXY.lat
+            );
+            
+            // if multiple is false, first deselect currently selected features
+            if (!this.multipleSelect()) {
+                this.unselectAll();
+            }
+            
+            // because we're using a box, we consider we want multiple selection
+            var prevMultiple = this.multiple;
+            this.multiple = true;
+            var layers = this.layers || [this.layer];
+            this.events.triggerEvent("boxselectionstart", {layers: layers}); 
+            var layer;
+            for(var l=0; l<layers.length; ++l) {
+                layer = layers[l];
+                for(var i=0, len = layer.features.length; i<len; ++i) {
+                    var feature = layer.features[i];
+                    // check if the feature is displayed
+                    if (!feature.getVisibility()) {
+                        continue;
+                    }
+
+                    if (this.geometryTypes == null || OpenLayers.Util.indexOf(
+                            this.geometryTypes, feature.geometry.CLASS_NAME) > -1) {
+                        if (bounds.toGeometry().intersects(feature.geometry)) {
+                            if (OpenLayers.Util.indexOf(layer.selectedFeatures, feature) == -1) {
+                                this.select(feature);
+                            }
+                        }
+                    }
+                }
+            }
+            this.multiple = prevMultiple;
+            this.events.triggerEvent("boxselectionend", {layers: layers}); 
+        }
+    },
+
+    /** 
+     * Method: setMap
+     * Set the map property for the control. 
+     * 
+     * Parameters:
+     * map - {<OpenLayers.Map>} 
+     */
+    setMap: function(map) {
+        this.handlers.feature.setMap(map);
+        if (this.box) {
+            this.handlers.box.setMap(map);
+        }
+        OpenLayers.Control.prototype.setMap.apply(this, arguments);
+    },
+    
+    /**
+     * APIMethod: setLayer
+     * Attach a new layer to the control, overriding any existing layers.
+     *
+     * Parameters:
+     * layers - Array of {<OpenLayers.Layer.Vector>} or a single
+     *     {<OpenLayers.Layer.Vector>}
+     */
+    setLayer: function(layers) {
+        var isActive = this.active;
+        this.unselectAll();
+        this.deactivate();
+        if(this.layers) {
+            this.layer.destroy();
+            this.layers = null;
+        }
+        this.initLayer(layers);
+        this.handlers.feature.layer = this.layer;
+        if (isActive) {
+            this.activate();
+        }
+    },
+    
+    CLASS_NAME: "OpenLayers.Control.SelectFeature"
+});
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Control.js
+ * @requires OpenLayers/Control/Button.js
+ */
+
+/**
+ * Class: OpenLayers.Control.NavigationHistory
+ * A navigation history control.  This is a meta-control, that creates two
+ *     dependent controls: <previous> and <next>.  Call the trigger method
+ *     on the <previous> and <next> controls to restore previous and next
+ *     history states.  The previous and next controls will become active
+ *     when there are available states to restore and will become deactive
+ *     when there are no states to restore.
+ *
+ * Inherits from:
+ *  - <OpenLayers.Control>
+ */
+OpenLayers.Control.NavigationHistory = OpenLayers.Class(OpenLayers.Control, {
+
+    /**
+     * Property: type
+     * {String} Note that this control is not intended to be added directly
+     *     to a control panel.  Instead, add the sub-controls previous and
+     *     next.  These sub-controls are button type controls that activate
+     *     and deactivate themselves.  If this parent control is added to
+     *     a panel, it will act as a toggle.
+     */
+    type: OpenLayers.Control.TYPE_TOGGLE,
+
+    /**
+     * APIProperty: previous
+     * {<OpenLayers.Control>} A button type control whose trigger method restores
+     *     the previous state managed by this control.
+     */
+    previous: null,
+    
+    /**
+     * APIProperty: previousOptions
+     * {Object} Set this property on the options argument of the constructor
+     *     to set optional properties on the <previous> control.
+     */
+    previousOptions: null,
+    
+    /**
+     * APIProperty: next
+     * {<OpenLayers.Control>} A button type control whose trigger method restores
+     *     the next state managed by this control.
+     */
+    next: null,
+
+    /**
+     * APIProperty: nextOptions
+     * {Object} Set this property on the options argument of the constructor
+     *     to set optional properties on the <next> control.
+     */
+    nextOptions: null,
+
+    /**
+     * APIProperty: limit
+     * {Integer} Optional limit on the number of history items to retain.  If
+     *     null, there is no limit.  Default is 50.
+     */
+    limit: 50,
+
+    /**
+     * APIProperty: autoActivate
+     * {Boolean} Activate the control when it is added to a map.  Default is
+     *     true.
+     */
+    autoActivate: true,
+
+    /**
+     * Property: clearOnDeactivate
+     * {Boolean} Clear the history when the control is deactivated.  Default
+     *     is false.
+     */
+    clearOnDeactivate: false,
+
+    /**
+     * Property: registry
+     * {Object} An object with keys corresponding to event types.  Values
+     *     are functions that return an object representing the current state.
+     */
+    registry: null,
+
+    /**
+     * Property: nextStack
+     * {Array} Array of items in the history.
+     */
+    nextStack: null,
+
+    /**
+     * Property: previousStack
+     * {Array} List of items in the history.  First item represents the current
+     *     state.
+     */
+    previousStack: null,
+    
+    /**
+     * Property: listeners
+     * {Object} An object containing properties corresponding to event types.
+     *     This object is used to configure the control and is modified on
+     *     construction.
+     */
+    listeners: null,
+    
+    /**
+     * Property: restoring
+     * {Boolean} Currently restoring a history state.  This is set to true
+     *     before calling restore and set to false after restore returns.
+     */
+    restoring: false,
+    
+    /**
+     * Constructor: OpenLayers.Control.NavigationHistory 
+     * 
+     * Parameters:
+     * options - {Object} An optional object whose properties will be used
+     *     to extend the control.
+     */
+    initialize: function(options) {
+        OpenLayers.Control.prototype.initialize.apply(this, [options]);
+        
+        this.registry = OpenLayers.Util.extend({
+            "moveend": this.getState
+        }, this.registry);
+        
+        var previousOptions = {
+            trigger: OpenLayers.Function.bind(this.previousTrigger, this),
+            displayClass: this.displayClass + " " + this.displayClass + "Previous"
+        };
+        OpenLayers.Util.extend(previousOptions, this.previousOptions);
+        this.previous = new OpenLayers.Control.Button(previousOptions);
+        
+        var nextOptions = {
+            trigger: OpenLayers.Function.bind(this.nextTrigger, this),
+            displayClass: this.displayClass + " " + this.displayClass + "Next"
+        };
+        OpenLayers.Util.extend(nextOptions, this.nextOptions);
+        this.next = new OpenLayers.Control.Button(nextOptions);
+
+        this.clear();
+    },
+    
+    /**
+     * Method: onPreviousChange
+     * Called when the previous history stack changes.
+     *
+     * Parameters:
+     * state - {Object} An object representing the state to be restored
+     *     if previous is triggered again or null if no previous states remain.
+     * length - {Integer} The number of remaining previous states that can
+     *     be restored.
+     */
+    onPreviousChange: function(state, length) {
+        if(state && !this.previous.active) {
+            this.previous.activate();
+        } else if(!state && this.previous.active) {
+            this.previous.deactivate();
+        }
+    },
+    
+    /**
+     * Method: onNextChange
+     * Called when the next history stack changes.
+     *
+     * Parameters:
+     * state - {Object} An object representing the state to be restored
+     *     if next is triggered again or null if no next states remain.
+     * length - {Integer} The number of remaining next states that can
+     *     be restored.
+     */
+    onNextChange: function(state, length) {
+        if(state && !this.next.active) {
+            this.next.activate();
+        } else if(!state && this.next.active) {
+            this.next.deactivate();
+        }
+    },
+    
+    /**
+     * APIMethod: destroy
+     * Destroy the control.
+     */
+    destroy: function() {
+        OpenLayers.Control.prototype.destroy.apply(this);
+        this.previous.destroy();
+        this.next.destroy();
+        this.deactivate();
+        for(var prop in this) {
+            this[prop] = null;
+        }
+    },
+    
+    /** 
+     * Method: setMap
+     * Set the map property for the control and <previous> and <next> child
+     *     controls.
+     *
+     * Parameters:
+     * map - {<OpenLayers.Map>} 
+     */
+    setMap: function(map) {
+        this.map = map;
+        this.next.setMap(map);
+        this.previous.setMap(map);
+    },
+
+    /**
+     * Method: draw
+     * Called when the control is added to the map.
+     */
+    draw: function() {
+        OpenLayers.Control.prototype.draw.apply(this, arguments);
+        this.next.draw();
+        this.previous.draw();
+    },
+    
+    /**
+     * Method: previousTrigger
+     * Restore the previous state.  If no items are in the previous history
+     *     stack, this has no effect.
+     *
+     * Returns:
+     * {Object} Item representing state that was restored.  Undefined if no
+     *     items are in the previous history stack.
+     */
+    previousTrigger: function() {
+        var current = this.previousStack.shift();
+        var state = this.previousStack.shift();
+        if(state != undefined) {
+            this.nextStack.unshift(current);
+            this.previousStack.unshift(state);
+            this.restoring = true;
+            this.restore(state);
+            this.restoring = false;
+            this.onNextChange(this.nextStack[0], this.nextStack.length);
+            this.onPreviousChange(
+                this.previousStack[1], this.previousStack.length - 1
+            );
+        } else {
+            this.previousStack.unshift(current);
+        }
+        return state;
+    },
+    
+    /**
+     * APIMethod: nextTrigger
+     * Restore the next state.  If no items are in the next history
+     *     stack, this has no effect.  The next history stack is populated
+     *     as states are restored from the previous history stack.
+     *
+     * Returns:
+     * {Object} Item representing state that was restored.  Undefined if no
+     *     items are in the next history stack.
+     */
+    nextTrigger: function() {
+        var state = this.nextStack.shift();
+        if(state != undefined) {
+            this.previousStack.unshift(state);
+            this.restoring = true;
+            this.restore(state);
+            this.restoring = false;
+            this.onNextChange(this.nextStack[0], this.nextStack.length);
+            this.onPreviousChange(
+                this.previousStack[1], this.previousStack.length - 1
+            );
+        }
+        return state;
+    },
+    
+    /**
+     * APIMethod: clear
+     * Clear history.
+     */
+    clear: function() {
+        this.previousStack = [];
+        this.previous.deactivate();
+        this.nextStack = [];
+        this.next.deactivate();
+    },
+
+    /**
+     * Method: getState
+     * Get the current state and return it.
+     *
+     * Returns:
+     * {Object} An object representing the current state.
+     */
+    getState: function() {
+        return {
+            center: this.map.getCenter(),
+            resolution: this.map.getResolution(),
+            projection: this.map.getProjectionObject(),
+            units: this.map.getProjectionObject().getUnits() || 
+                this.map.units || this.map.baseLayer.units
+        };
+    },
+
+    /**
+     * Method: restore
+     * Update the state with the given object.
+     *
+     * Parameters:
+     * state - {Object} An object representing the state to restore.
+     */
+    restore: function(state) {
+        var center, zoom;
+        if (this.map.getProjectionObject() == state.projection) { 
+            zoom = this.map.getZoomForResolution(state.resolution);
+            center = state.center;
+        } else {
+            center = state.center.clone();
+            center.transform(state.projection, this.map.getProjectionObject());
+            var sourceUnits = state.units;
+            var targetUnits = this.map.getProjectionObject().getUnits() || 
+                this.map.units || this.map.baseLayer.units;
+            var resolutionFactor = sourceUnits && targetUnits ? 
+                OpenLayers.INCHES_PER_UNIT[sourceUnits] / OpenLayers.INCHES_PER_UNIT[targetUnits] : 1;
+            zoom = this.map.getZoomForResolution(resolutionFactor*state.resolution); 
+        }
+        this.map.setCenter(center, zoom);
+    },
+    
+    /**
+     * Method: setListeners
+     * Sets functions to be registered in the listeners object.
+     */
+    setListeners: function() {
+        this.listeners = {};
+        for(var type in this.registry) {
+            this.listeners[type] = OpenLayers.Function.bind(function() {
+                if(!this.restoring) {
+                    var state = this.registry[type].apply(this, arguments);
+                    this.previousStack.unshift(state);
+                    if(this.previousStack.length > 1) {
+                        this.onPreviousChange(
+                            this.previousStack[1], this.previousStack.length - 1
+                        );
+                    }
+                    if(this.previousStack.length > (this.limit + 1)) {
+                        this.previousStack.pop();
+                    }
+                    if(this.nextStack.length > 0) {
+                        this.nextStack = [];
+                        this.onNextChange(null, 0);
+                    }
+                }
+                return true;
+            }, this);
+        }
+    },
+
+    /**
+     * APIMethod: activate
+     * Activate the control.  This registers any listeners.
+     *
+     * Returns:
+     * {Boolean} Control successfully activated.
+     */
+    activate: function() {
+        var activated = false;
+        if(this.map) {
+            if(OpenLayers.Control.prototype.activate.apply(this)) {
+                if(this.listeners == null) {
+                    this.setListeners();
+                }
+                for(var type in this.listeners) {
+                    this.map.events.register(type, this, this.listeners[type]);
+                }
+                activated = true;
+                if(this.previousStack.length == 0) {
+                    this.initStack();
+                }
+            }
+        }
+        return activated;
+    },
+    
+    /**
+     * Method: initStack
+     * Called after the control is activated if the previous history stack is
+     *     empty.
+     */
+    initStack: function() {
+        if(this.map.getCenter()) {
+            this.listeners.moveend();
+        }
+    },
+    
+    /**
+     * APIMethod: deactivate
+     * Deactivate the control.  This unregisters any listeners.
+     *
+     * Returns:
+     * {Boolean} Control successfully deactivated.
+     */
+    deactivate: function() {
+        var deactivated = false;
+        if(this.map) {
+            if(OpenLayers.Control.prototype.deactivate.apply(this)) {
+                for(var type in this.listeners) {
+                    this.map.events.unregister(
+                        type, this, this.listeners[type]
+                    );
+                }
+                if(this.clearOnDeactivate) {
+                    this.clear();
+                }
+                deactivated = true;
+            }
+        }
+        return deactivated;
+    },
+    
+    CLASS_NAME: "OpenLayers.Control.NavigationHistory"
+});
+
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Control.js
+ * @requires OpenLayers/Feature/Vector.js
+ */
+
+/**
+ * Class: OpenLayers.Control.Measure
+ * Allows for drawing of features for measurements.
+ *
+ * Inherits from:
+ *  - <OpenLayers.Control>
+ */
+OpenLayers.Control.Measure = OpenLayers.Class(OpenLayers.Control, {
+
+    /**
+     * APIProperty: events
+     * {<OpenLayers.Events>} Events instance for listeners and triggering
+     *     control specific events.
+     *
+     * Register a listener for a particular event with the following syntax:
+     * (code)
+     * control.events.register(type, obj, listener);
+     * (end)
+     *
+     * Supported event types (in addition to those from <OpenLayers.Control.events>):
+     * measure - Triggered when a measurement sketch is complete.  Listeners
+     *      will receive an event with measure, units, order, and geometry
+     *      properties.
+     * measurepartial - Triggered when a new point is added to the
+     *      measurement sketch or if the <immediate> property is true and the
+     *      measurement sketch is modified.  Listeners receive an event with measure,
+     *      units, order, and geometry.
+     */
+
+    /**
+     * APIProperty: handlerOptions
+     * {Object} Used to set non-default properties on the control's handler
+     */
+
+    /**
+     * Property: callbacks
+     * {Object} The functions that are sent to the handler for callback
+     */
+    callbacks: null,
+
+    /**
+     * APIProperty: displaySystem
+     * {String} Display system for output measurements.  Supported values
+     *     are 'english', 'metric', and 'geographic'.  Default is 'metric'.
+     */
+    displaySystem: 'metric',
+
+    /**
+     * APIProperty: geodesic
+     * {Boolean} Calculate geodesic metrics instead of planar metrics.  This
+     *     requires that geometries can be transformed into Geographic/WGS84
+     *     (if that is not already the map projection).  Default is false.
+     */
+    geodesic: false,
+
+    /**
+     * Property: displaySystemUnits
+     * {Object} Units for various measurement systems.  Values are arrays
+     *     of unit abbreviations (from OpenLayers.INCHES_PER_UNIT) in decreasing
+     *     order of length.
+     */
+    displaySystemUnits: {
+        geographic: ['dd'],
+        english: ['mi', 'ft', 'in'],
+        metric: ['km', 'm']
+    },
+
+    /**
+     * Property: delay
+     * {Number} Number of milliseconds between clicks before the event is
+     *     considered a double-click.  The "measurepartial" event will not
+     *     be triggered if the sketch is completed within this time.  This
+     *     is required for IE where creating a browser reflow (if a listener
+     *     is modifying the DOM by displaying the measurement values) messes
+     *     with the dblclick listener in the sketch handler.
+     */
+    partialDelay: 300,
+
+    /**
+     * Property: delayedTrigger
+     * {Number} Timeout id of trigger for measurepartial.
+     */
+    delayedTrigger: null,
+
+    /**
+     * APIProperty: persist
+     * {Boolean} Keep the temporary measurement sketch drawn after the
+     *     measurement is complete.  The geometry will persist until a new
+     *     measurement is started, the control is deactivated, or <cancel> is
+     *     called.
+     */
+    persist: false,
+
+    /**
+     * APIProperty: immediate
+     * {Boolean} Activates the immediate measurement so that the "measurepartial"
+     *     event is also fired once the measurement sketch is modified.
+     *     Default is false.
+     */
+    immediate : false,
+
+    /**
+     * Constructor: OpenLayers.Control.Measure
+     *
+     * Parameters:
+     * handler - {<OpenLayers.Handler>}
+     * options - {Object}
+     */
+    initialize: function(handler, options) {
+        OpenLayers.Control.prototype.initialize.apply(this, [options]);
+        var callbacks = {done: this.measureComplete,
+            point: this.measurePartial};
+        if (this.immediate){
+            callbacks.modify = this.measureImmediate;
+        }
+        this.callbacks = OpenLayers.Util.extend(callbacks, this.callbacks);
+
+        // let the handler options override, so old code that passes 'persist'
+        // directly to the handler does not need an update
+        this.handlerOptions = OpenLayers.Util.extend(
+            {persist: this.persist}, this.handlerOptions
+        );
+        this.handler = new handler(this, this.callbacks, this.handlerOptions);
+    },
+
+    /**
+     * APIMethod: deactivate
+     */
+    deactivate: function() {
+        this.cancelDelay();
+        return OpenLayers.Control.prototype.deactivate.apply(this, arguments);
+    },
+
+    /**
+     * APIMethod: cancel
+     * Stop the control from measuring.  If <persist> is true, the temporary
+     *     sketch will be erased.
+     */
+    cancel: function() {
+        this.cancelDelay();
+        this.handler.cancel();
+    },
+
+    /**
+     * APIMethod: setImmediate
+     * Sets the <immediate> property. Changes the activity of immediate
+     * measurement.
+     */
+    setImmediate: function(immediate) {
+        this.immediate = immediate;
+        if (this.immediate){
+            this.callbacks.modify = this.measureImmediate;
+        } else {
+            delete this.callbacks.modify;
+        }
+    },
+
+    /**
+     * Method: updateHandler
+     *
+     * Parameters:
+     * handler - {Function} One of the sketch handler constructors.
+     * options - {Object} Options for the handler.
+     */
+    updateHandler: function(handler, options) {
+        var active = this.active;
+        if(active) {
+            this.deactivate();
+        }
+        this.handler = new handler(this, this.callbacks, options);
+        if(active) {
+            this.activate();
+        }
+    },
+
+    /**
+     * Method: measureComplete
+     * Called when the measurement sketch is done.
+     *
+     * Parameters:
+     * geometry - {<OpenLayers.Geometry>}
+     */
+    measureComplete: function(geometry) {
+        this.cancelDelay();
+        this.measure(geometry, "measure");
+    },
+
+    /**
+     * Method: measurePartial
+     * Called each time a new point is added to the measurement sketch.
+     *
+     * Parameters:
+     * point - {<OpenLayers.Geometry.Point>} The last point added.
+     * geometry - {<OpenLayers.Geometry>} The sketch geometry.
+     */
+    measurePartial: function(point, geometry) {
+        this.cancelDelay();
+        geometry = geometry.clone();
+        // when we're wating for a dblclick, we have to trigger measurepartial
+        // after some delay to deal with reflow issues in IE
+        if (this.handler.freehandMode(this.handler.evt)) {
+            // no dblclick in freehand mode
+            this.measure(geometry, "measurepartial");
+        } else {
+            this.delayedTrigger = window.setTimeout(
+                OpenLayers.Function.bind(function() {
+                    this.delayedTrigger = null;
+                    this.measure(geometry, "measurepartial");
+                }, this),
+                this.partialDelay
+            );
+        }
+    },
+
+    /**
+     * Method: measureImmediate
+     * Called each time the measurement sketch is modified.
+     *
+     * Parameters:
+     * point - {<OpenLayers.Geometry.Point>} The point at the mouse position.
+     * feature - {<OpenLayers.Feature.Vector>} The sketch feature.
+     * drawing - {Boolean} Indicates whether we're currently drawing.
+     */
+    measureImmediate : function(point, feature, drawing) {
+        if (drawing && !this.handler.freehandMode(this.handler.evt)) {
+            this.cancelDelay();
+            this.measure(feature.geometry, "measurepartial");
+        }
+    },
+
+    /**
+     * Method: cancelDelay
+     * Cancels the delay measurement that measurePartial began.
+     */
+    cancelDelay: function() {
+        if (this.delayedTrigger !== null) {
+            window.clearTimeout(this.delayedTrigger);
+            this.delayedTrigger = null;
+        }
+    },
+
+    /**
+     * Method: measure
+     *
+     * Parameters:
+     * geometry - {<OpenLayers.Geometry>}
+     * eventType - {String}
+     */
+    measure: function(geometry, eventType) {
+        var stat, order;
+        if(geometry.CLASS_NAME.indexOf('LineString') > -1) {
+            stat = this.getBestLength(geometry);
+            order = 1;
+        } else {
+            stat = this.getBestArea(geometry);
+            order = 2;
+        }
+        this.events.triggerEvent(eventType, {
+            measure: stat[0],
+            units: stat[1],
+            order: order,
+            geometry: geometry
+        });
+    },
+
+    /**
+     * Method: getBestArea
+     * Based on the <displaySystem> returns the area of a geometry.
+     *
+     * Parameters:
+     * geometry - {<OpenLayers.Geometry>}
+     *
+     * Returns:
+     * {Array([Float, String])}  Returns a two item array containing the
+     *     area and the units abbreviation.
+     */
+    getBestArea: function(geometry) {
+        var units = this.displaySystemUnits[this.displaySystem];
+        var unit, area;
+        for(var i=0, len=units.length; i<len; ++i) {
+            unit = units[i];
+            area = this.getArea(geometry, unit);
+            if(area > 1) {
+                break;
+            }
+        }
+        return [area, unit];
+    },
+
+    /**
+     * Method: getArea
+     *
+     * Parameters:
+     * geometry - {<OpenLayers.Geometry>}
+     * units - {String} Unit abbreviation
+     *
+     * Returns:
+     * {Float} The geometry area in the given units.
+     */
+    getArea: function(geometry, units) {
+        var area, geomUnits;
+        if(this.geodesic) {
+            area = geometry.getGeodesicArea(this.map.getProjectionObject());
+            geomUnits = "m";
+        } else {
+            area = geometry.getArea();
+            geomUnits = this.map.getUnits();
+        }
+        var inPerDisplayUnit = OpenLayers.INCHES_PER_UNIT[units];
+        if(inPerDisplayUnit) {
+            var inPerMapUnit = OpenLayers.INCHES_PER_UNIT[geomUnits];
+            area *= Math.pow((inPerMapUnit / inPerDisplayUnit), 2);
+        }
+        return area;
+    },
+
+    /**
+     * Method: getBestLength
+     * Based on the <displaySystem> returns the length of a geometry.
+     *
+     * Parameters:
+     * geometry - {<OpenLayers.Geometry>}
+     *
+     * Returns:
+     * {Array([Float, String])}  Returns a two item array containing the
+     *     length and the units abbreviation.
+     */
+    getBestLength: function(geometry) {
+        var units = this.displaySystemUnits[this.displaySystem];
+        var unit, length;
+        for(var i=0, len=units.length; i<len; ++i) {
+            unit = units[i];
+            length = this.getLength(geometry, unit);
+            if(length > 1) {
+                break;
+            }
+        }
+        return [length, unit];
+    },
+
+    /**
+     * Method: getLength
+     *
+     * Parameters:
+     * geometry - {<OpenLayers.Geometry>}
+     * units - {String} Unit abbreviation
+     *
+     * Returns:
+     * {Float} The geometry length in the given units.
+     */
+    getLength: function(geometry, units) {
+        var length, geomUnits;
+        if(this.geodesic) {
+            length = geometry.getGeodesicLength(this.map.getProjectionObject());
+            geomUnits = "m";
+        } else {
+            length = geometry.getLength();
+            geomUnits = this.map.getUnits();
+        }
+        var inPerDisplayUnit = OpenLayers.INCHES_PER_UNIT[units];
+        if(inPerDisplayUnit) {
+            var inPerMapUnit = OpenLayers.INCHES_PER_UNIT[geomUnits];
+            length *= (inPerMapUnit / inPerDisplayUnit);
+        }
+        return length;
+    },
+
+    CLASS_NAME: "OpenLayers.Control.Measure"
 });
 
 /* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
@@ -25339,2554 +26737,6 @@ OpenLayers.Control.ModifyFeature.ROTATE = 4;
  * {Integer} Constant used to make the control work in drag mode
  */
 OpenLayers.Control.ModifyFeature.DRAG = 8;
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-
-/**
- * @requires OpenLayers/Control.js
- * @requires OpenLayers/Feature/Vector.js
- * @requires OpenLayers/Handler/Feature.js
- * @requires OpenLayers/Layer/Vector/RootContainer.js
- */
-
-/**
- * Class: OpenLayers.Control.SelectFeature
- * The SelectFeature control selects vector features from a given layer on 
- * click or hover. 
- *
- * Inherits from:
- *  - <OpenLayers.Control>
- */
-OpenLayers.Control.SelectFeature = OpenLayers.Class(OpenLayers.Control, {
-
-    /** 
-     * APIProperty: events
-     * {<OpenLayers.Events>} Events instance for listeners and triggering
-     *     control specific events.
-     *
-     * Register a listener for a particular event with the following syntax:
-     * (code)
-     * control.events.register(type, obj, listener);
-     * (end)
-     *
-     * Supported event types (in addition to those from <OpenLayers.Control.events>):
-     * beforefeaturehighlighted - Triggered before a feature is highlighted
-     * featurehighlighted - Triggered when a feature is highlighted
-     * featureunhighlighted - Triggered when a feature is unhighlighted
-     * boxselectionstart - Triggered before box selection starts
-     * boxselectionend - Triggered after box selection ends
-     */
-    
-    /**
-     * Property: multipleKey
-     * {String} An event modifier ('altKey' or 'shiftKey') that temporarily sets
-     *     the <multiple> property to true.  Default is null.
-     */
-    multipleKey: null,
-    
-    /**
-     * Property: toggleKey
-     * {String} An event modifier ('altKey' or 'shiftKey') that temporarily sets
-     *     the <toggle> property to true.  Default is null.
-     */
-    toggleKey: null,
-    
-    /**
-     * APIProperty: multiple
-     * {Boolean} Allow selection of multiple geometries.  Default is false.
-     */
-    multiple: false, 
-
-    /**
-     * APIProperty: clickout
-     * {Boolean} Unselect features when clicking outside any feature.
-     *     Default is true.
-     */
-    clickout: true,
-
-    /**
-     * APIProperty: toggle
-     * {Boolean} Unselect a selected feature on click.  Default is false.  Only
-     *     has meaning if hover is false.
-     */
-    toggle: false,
-
-    /**
-     * APIProperty: hover
-     * {Boolean} Select on mouse over and deselect on mouse out.  If true, this
-     * ignores clicks and only listens to mouse moves.
-     */
-    hover: false,
-
-    /**
-     * APIProperty: highlightOnly
-     * {Boolean} If true do not actually select features (that is place them in 
-     * the layer's selected features array), just highlight them. This property
-     * has no effect if hover is false. Defaults to false.
-     */
-    highlightOnly: false,
-    
-    /**
-     * APIProperty: box
-     * {Boolean} Allow feature selection by drawing a box.
-     */
-    box: false,
-    
-    /**
-     * Property: onBeforeSelect 
-     * {Function} Optional function to be called before a feature is selected.
-     *     The function should expect to be called with a feature.
-     */
-    onBeforeSelect: function() {},
-    
-    /**
-     * APIProperty: onSelect 
-     * {Function} Optional function to be called when a feature is selected.
-     *     The function should expect to be called with a feature.
-     */
-    onSelect: function() {},
-
-    /**
-     * APIProperty: onUnselect
-     * {Function} Optional function to be called when a feature is unselected.
-     *     The function should expect to be called with a feature.
-     */
-    onUnselect: function() {},
-    
-    /**
-     * Property: scope
-     * {Object} The scope to use with the onBeforeSelect, onSelect, onUnselect
-     *     callbacks. If null the scope will be this control.
-     */
-    scope: null,
-
-    /**
-     * APIProperty: geometryTypes
-     * {Array(String)} To restrict selecting to a limited set of geometry types,
-     *     send a list of strings corresponding to the geometry class names.
-     */
-    geometryTypes: null,
-
-    /**
-     * Property: layer
-     * {<OpenLayers.Layer.Vector>} The vector layer with a common renderer
-     * root for all layers this control is configured with (if an array of
-     * layers was passed to the constructor), or the vector layer the control
-     * was configured with (if a single layer was passed to the constructor).
-     */
-    layer: null,
-    
-    /**
-     * Property: layers
-     * {Array(<OpenLayers.Layer.Vector>)} The layers this control will work on,
-     * or null if the control was configured with a single layer
-     */
-    layers: null,
-    
-    /**
-     * APIProperty: callbacks
-     * {Object} The functions that are sent to the handlers.feature for callback
-     */
-    callbacks: null,
-    
-    /**
-     * APIProperty: selectStyle 
-     * {Object} Hash of styles
-     */
-    selectStyle: null,
-    
-    /**
-     * Property: renderIntent
-     * {String} key used to retrieve the select style from the layer's
-     * style map.
-     */
-    renderIntent: "select",
-
-    /**
-     * Property: handlers
-     * {Object} Object with references to multiple <OpenLayers.Handler>
-     *     instances.
-     */
-    handlers: null,
-
-    /**
-     * Constructor: OpenLayers.Control.SelectFeature
-     * Create a new control for selecting features.
-     *
-     * Parameters:
-     * layers - {<OpenLayers.Layer.Vector>}, or an array of vector layers. The
-     *     layer(s) this control will select features from.
-     * options - {Object} 
-     */
-    initialize: function(layers, options) {
-        OpenLayers.Control.prototype.initialize.apply(this, [options]);
-        
-        if(this.scope === null) {
-            this.scope = this;
-        }
-        this.initLayer(layers);
-        var callbacks = {
-            click: this.clickFeature,
-            clickout: this.clickoutFeature
-        };
-        if (this.hover) {
-            callbacks.over = this.overFeature;
-            callbacks.out = this.outFeature;
-        }
-             
-        this.callbacks = OpenLayers.Util.extend(callbacks, this.callbacks);
-        this.handlers = {
-            feature: new OpenLayers.Handler.Feature(
-                this, this.layer, this.callbacks,
-                {geometryTypes: this.geometryTypes}
-            )
-        };
-
-        if (this.box) {
-            this.handlers.box = new OpenLayers.Handler.Box(
-                this, {done: this.selectBox},
-                {boxDivClassName: "olHandlerBoxSelectFeature"}
-            ); 
-        }
-    },
-
-    /**
-     * Method: initLayer
-     * Assign the layer property. If layers is an array, we need to use
-     *     a RootContainer.
-     *
-     * Parameters:
-     * layers - {<OpenLayers.Layer.Vector>}, or an array of vector layers.
-     */
-    initLayer: function(layers) {
-        if(OpenLayers.Util.isArray(layers)) {
-            this.layers = layers;
-            this.layer = new OpenLayers.Layer.Vector.RootContainer(
-                this.id + "_container", {
-                    layers: layers
-                }
-            );
-        } else {
-            this.layer = layers;
-        }
-    },
-    
-    /**
-     * Method: destroy
-     */
-    destroy: function() {
-        if(this.active && this.layers) {
-            this.map.removeLayer(this.layer);
-        }
-        OpenLayers.Control.prototype.destroy.apply(this, arguments);
-        if(this.layers) {
-            this.layer.destroy();
-        }
-    },
-
-    /**
-     * Method: activate
-     * Activates the control.
-     * 
-     * Returns:
-     * {Boolean} The control was effectively activated.
-     */
-    activate: function () {
-        if (!this.active) {
-            if(this.layers) {
-                this.map.addLayer(this.layer);
-            }
-            this.handlers.feature.activate();
-            if(this.box && this.handlers.box) {
-                this.handlers.box.activate();
-            }
-        }
-        return OpenLayers.Control.prototype.activate.apply(
-            this, arguments
-        );
-    },
-
-    /**
-     * Method: deactivate
-     * Deactivates the control.
-     * 
-     * Returns:
-     * {Boolean} The control was effectively deactivated.
-     */
-    deactivate: function () {
-        if (this.active) {
-            this.handlers.feature.deactivate();
-            if(this.handlers.box) {
-                this.handlers.box.deactivate();
-            }
-            if(this.layers) {
-                this.map.removeLayer(this.layer);
-            }
-        }
-        return OpenLayers.Control.prototype.deactivate.apply(
-            this, arguments
-        );
-    },
-
-    /**
-     * Method: unselectAll
-     * Unselect all selected features.  To unselect all except for a single
-     *     feature, set the options.except property to the feature.
-     *
-     * Parameters:
-     * options - {Object} Optional configuration object.
-     */
-    unselectAll: function(options) {
-        // we'll want an option to supress notification here
-        var layers = this.layers || [this.layer],
-            layer, feature, l, numExcept;
-        for(l=0; l<layers.length; ++l) {
-            layer = layers[l];
-            numExcept = 0;
-            //layer.selectedFeatures is null when layer is destroyed and 
-            //one of it's preremovelayer listener calls setLayer 
-            //with another layer on this control
-            if(layer.selectedFeatures != null) {
-                while(layer.selectedFeatures.length > numExcept) {
-                    feature = layer.selectedFeatures[numExcept];
-                    if(!options || options.except != feature) {
-                        this.unselect(feature);
-                    } else {
-                        ++numExcept;
-                    }
-                }
-            }
-        }
-    },
-
-    /**
-     * Method: clickFeature
-     * Called on click in a feature
-     * Only responds if this.hover is false.
-     *
-     * Parameters:
-     * feature - {<OpenLayers.Feature.Vector>} 
-     */
-    clickFeature: function(feature) {
-        if(!this.hover) {
-            var selected = (OpenLayers.Util.indexOf(
-                feature.layer.selectedFeatures, feature) > -1);
-            if(selected) {
-                if(this.toggleSelect()) {
-                    this.unselect(feature);
-                } else if(!this.multipleSelect()) {
-                    this.unselectAll({except: feature});
-                }
-            } else {
-                if(!this.multipleSelect()) {
-                    this.unselectAll({except: feature});
-                }
-                this.select(feature);
-            }
-        }
-    },
-
-    /**
-     * Method: multipleSelect
-     * Allow for multiple selected features based on <multiple> property and
-     *     <multipleKey> event modifier.
-     *
-     * Returns:
-     * {Boolean} Allow for multiple selected features.
-     */
-    multipleSelect: function() {
-        return this.multiple || (this.handlers.feature.evt &&
-                                 this.handlers.feature.evt[this.multipleKey]);
-    },
-    
-    /**
-     * Method: toggleSelect
-     * Event should toggle the selected state of a feature based on <toggle>
-     *     property and <toggleKey> event modifier.
-     *
-     * Returns:
-     * {Boolean} Toggle the selected state of a feature.
-     */
-    toggleSelect: function() {
-        return this.toggle || (this.handlers.feature.evt &&
-                               this.handlers.feature.evt[this.toggleKey]);
-    },
-
-    /**
-     * Method: clickoutFeature
-     * Called on click outside a previously clicked (selected) feature.
-     * Only responds if this.hover is false.
-     *
-     * Parameters:
-     * feature - {<OpenLayers.Vector.Feature>} 
-     */
-    clickoutFeature: function(feature) {
-        if(!this.hover && this.clickout) {
-            this.unselectAll();
-        }
-    },
-
-    /**
-     * Method: overFeature
-     * Called on over a feature.
-     * Only responds if this.hover is true.
-     *
-     * Parameters:
-     * feature - {<OpenLayers.Feature.Vector>} 
-     */
-    overFeature: function(feature) {
-        var layer = feature.layer;
-        if(this.hover) {
-            if(this.highlightOnly) {
-                this.highlight(feature);
-            } else if(OpenLayers.Util.indexOf(
-                layer.selectedFeatures, feature) == -1) {
-                this.select(feature);
-            }
-        }
-    },
-
-    /**
-     * Method: outFeature
-     * Called on out of a selected feature.
-     * Only responds if this.hover is true.
-     *
-     * Parameters:
-     * feature - {<OpenLayers.Feature.Vector>} 
-     */
-    outFeature: function(feature) {
-        if(this.hover) {
-            if(this.highlightOnly) {
-                // we do nothing if we're not the last highlighter of the
-                // feature
-                if(feature._lastHighlighter == this.id) {
-                    // if another select control had highlighted the feature before
-                    // we did it ourself then we use that control to highlight the
-                    // feature as it was before we highlighted it, else we just
-                    // unhighlight it
-                    if(feature._prevHighlighter &&
-                       feature._prevHighlighter != this.id) {
-                        delete feature._lastHighlighter;
-                        var control = this.map.getControl(
-                            feature._prevHighlighter);
-                        if(control) {
-                            control.highlight(feature);
-                        }
-                    } else {
-                        this.unhighlight(feature);
-                    }
-                }
-            } else {
-                this.unselect(feature);
-            }
-        }
-    },
-
-    /**
-     * Method: highlight
-     * Redraw feature with the select style.
-     *
-     * Parameters:
-     * feature - {<OpenLayers.Feature.Vector>} 
-     */
-    highlight: function(feature) {
-        var layer = feature.layer;
-        var cont = this.events.triggerEvent("beforefeaturehighlighted", {
-            feature : feature
-        });
-        if(cont !== false) {
-            feature._prevHighlighter = feature._lastHighlighter;
-            feature._lastHighlighter = this.id;
-            var style = this.selectStyle || this.renderIntent;
-            layer.drawFeature(feature, style);
-            this.events.triggerEvent("featurehighlighted", {feature : feature});
-        }
-    },
-
-    /**
-     * Method: unhighlight
-     * Redraw feature with the "default" style
-     *
-     * Parameters:
-     * feature - {<OpenLayers.Feature.Vector>} 
-     */
-    unhighlight: function(feature) {
-        var layer = feature.layer;
-        // three cases:
-        // 1. there's no other highlighter, in that case _prev is undefined,
-        //    and we just need to undef _last
-        // 2. another control highlighted the feature after we did it, in
-        //    that case _last references this other control, and we just
-        //    need to undef _prev
-        // 3. another control highlighted the feature before we did it, in
-        //    that case _prev references this other control, and we need to
-        //    set _last to _prev and undef _prev
-        if(feature._prevHighlighter == undefined) {
-            delete feature._lastHighlighter;
-        } else if(feature._prevHighlighter == this.id) {
-            delete feature._prevHighlighter;
-        } else {
-            feature._lastHighlighter = feature._prevHighlighter;
-            delete feature._prevHighlighter;
-        }
-        layer.drawFeature(feature, feature.style || feature.layer.style ||
-            "default");
-        this.events.triggerEvent("featureunhighlighted", {feature : feature});
-    },
-    
-    /**
-     * Method: select
-     * Add feature to the layer's selectedFeature array, render the feature as
-     * selected, and call the onSelect function.
-     * 
-     * Parameters:
-     * feature - {<OpenLayers.Feature.Vector>} 
-     */
-    select: function(feature) {
-        var cont = this.onBeforeSelect.call(this.scope, feature);
-        var layer = feature.layer;
-        if(cont !== false) {
-            cont = layer.events.triggerEvent("beforefeatureselected", {
-                feature: feature
-            });
-            if(cont !== false) {
-                layer.selectedFeatures.push(feature);
-                this.highlight(feature);
-                // if the feature handler isn't involved in the feature
-                // selection (because the box handler is used or the
-                // feature is selected programatically) we fake the
-                // feature handler to allow unselecting on click
-                if(!this.handlers.feature.lastFeature) {
-                    this.handlers.feature.lastFeature = layer.selectedFeatures[0];
-                }
-                layer.events.triggerEvent("featureselected", {feature: feature});
-                this.onSelect.call(this.scope, feature);
-            }
-        }
-    },
-
-    /**
-     * Method: unselect
-     * Remove feature from the layer's selectedFeature array, render the feature as
-     * normal, and call the onUnselect function.
-     *
-     * Parameters:
-     * feature - {<OpenLayers.Feature.Vector>}
-     */
-    unselect: function(feature) {
-        var layer = feature.layer;
-        // Store feature style for restoration later
-        this.unhighlight(feature);
-        OpenLayers.Util.removeItem(layer.selectedFeatures, feature);
-        layer.events.triggerEvent("featureunselected", {feature: feature});
-        this.onUnselect.call(this.scope, feature);
-    },
-    
-    /**
-     * Method: selectBox
-     * Callback from the handlers.box set up when <box> selection is true
-     *     on.
-     *
-     * Parameters:
-     * position - {<OpenLayers.Bounds> || <OpenLayers.Pixel> }  
-     */
-    selectBox: function(position) {
-        if (position instanceof OpenLayers.Bounds) {
-            var minXY = this.map.getLonLatFromPixel({
-                x: position.left,
-                y: position.bottom
-            });
-            var maxXY = this.map.getLonLatFromPixel({
-                x: position.right,
-                y: position.top
-            });
-            var bounds = new OpenLayers.Bounds(
-                minXY.lon, minXY.lat, maxXY.lon, maxXY.lat
-            );
-            
-            // if multiple is false, first deselect currently selected features
-            if (!this.multipleSelect()) {
-                this.unselectAll();
-            }
-            
-            // because we're using a box, we consider we want multiple selection
-            var prevMultiple = this.multiple;
-            this.multiple = true;
-            var layers = this.layers || [this.layer];
-            this.events.triggerEvent("boxselectionstart", {layers: layers}); 
-            var layer;
-            for(var l=0; l<layers.length; ++l) {
-                layer = layers[l];
-                for(var i=0, len = layer.features.length; i<len; ++i) {
-                    var feature = layer.features[i];
-                    // check if the feature is displayed
-                    if (!feature.getVisibility()) {
-                        continue;
-                    }
-
-                    if (this.geometryTypes == null || OpenLayers.Util.indexOf(
-                            this.geometryTypes, feature.geometry.CLASS_NAME) > -1) {
-                        if (bounds.toGeometry().intersects(feature.geometry)) {
-                            if (OpenLayers.Util.indexOf(layer.selectedFeatures, feature) == -1) {
-                                this.select(feature);
-                            }
-                        }
-                    }
-                }
-            }
-            this.multiple = prevMultiple;
-            this.events.triggerEvent("boxselectionend", {layers: layers}); 
-        }
-    },
-
-    /** 
-     * Method: setMap
-     * Set the map property for the control. 
-     * 
-     * Parameters:
-     * map - {<OpenLayers.Map>} 
-     */
-    setMap: function(map) {
-        this.handlers.feature.setMap(map);
-        if (this.box) {
-            this.handlers.box.setMap(map);
-        }
-        OpenLayers.Control.prototype.setMap.apply(this, arguments);
-    },
-    
-    /**
-     * APIMethod: setLayer
-     * Attach a new layer to the control, overriding any existing layers.
-     *
-     * Parameters:
-     * layers - Array of {<OpenLayers.Layer.Vector>} or a single
-     *     {<OpenLayers.Layer.Vector>}
-     */
-    setLayer: function(layers) {
-        var isActive = this.active;
-        this.unselectAll();
-        this.deactivate();
-        if(this.layers) {
-            this.layer.destroy();
-            this.layers = null;
-        }
-        this.initLayer(layers);
-        this.handlers.feature.layer = this.layer;
-        if (isActive) {
-            this.activate();
-        }
-    },
-    
-    CLASS_NAME: "OpenLayers.Control.SelectFeature"
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Control.js
- */
-
-/**
- * Class: OpenLayers.Control.ScaleLine
- * The ScaleLine displays a small line indicator representing the current 
- * map scale on the map. By default it is drawn in the lower left corner of
- * the map.
- * 
- * Inherits from:
- *  - <OpenLayers.Control>
- *  
- * Is a very close copy of:
- *  - <OpenLayers.Control.Scale>
- */
-OpenLayers.Control.ScaleLine = OpenLayers.Class(OpenLayers.Control, {
-
-    /**
-     * Property: maxWidth
-     * {Integer} Maximum width of the scale line in pixels.  Default is 100.
-     */
-    maxWidth: 100,
-
-    /**
-     * Property: topOutUnits
-     * {String} Units for zoomed out on top bar.  Default is km.
-     */
-    topOutUnits: "km",
-    
-    /**
-     * Property: topInUnits
-     * {String} Units for zoomed in on top bar.  Default is m.
-     */
-    topInUnits: "m",
-
-    /**
-     * Property: bottomOutUnits
-     * {String} Units for zoomed out on bottom bar.  Default is mi.
-     */
-    bottomOutUnits: "mi",
-
-    /**
-     * Property: bottomInUnits
-     * {String} Units for zoomed in on bottom bar.  Default is ft.
-     */
-    bottomInUnits: "ft",
-    
-    /**
-     * Property: eTop
-     * {DOMElement}
-     */
-    eTop: null,
-
-    /**
-     * Property: eBottom
-     * {DOMElement}
-     */
-    eBottom:null,
-    
-    /**
-     * APIProperty: geodesic
-     * {Boolean} Use geodesic measurement. Default is false. The recommended
-     * setting for maps in EPSG:4326 is false, and true EPSG:900913. If set to
-     * true, the scale will be calculated based on the horizontal size of the
-     * pixel in the center of the map viewport.
-     */
-    geodesic: false,
-
-    /**
-     * Constructor: OpenLayers.Control.ScaleLine
-     * Create a new scale line control.
-     * 
-     * Parameters:
-     * options - {Object} An optional object whose properties will be used
-     *     to extend the control.
-     */
-
-    /**
-     * Method: draw
-     * 
-     * Returns:
-     * {DOMElement}
-     */
-    draw: function() {
-        OpenLayers.Control.prototype.draw.apply(this, arguments);
-        if (!this.eTop) {
-            // stick in the top bar
-            this.eTop = document.createElement("div");
-            this.eTop.className = this.displayClass + "Top";
-            var theLen = this.topInUnits.length;
-            this.div.appendChild(this.eTop);
-            if((this.topOutUnits == "") || (this.topInUnits == "")) {
-                this.eTop.style.visibility = "hidden";
-            } else {
-                this.eTop.style.visibility = "visible";
-            }
-
-            // and the bottom bar
-            this.eBottom = document.createElement("div");
-            this.eBottom.className = this.displayClass + "Bottom";
-            this.div.appendChild(this.eBottom);
-            if((this.bottomOutUnits == "") || (this.bottomInUnits == "")) {
-                this.eBottom.style.visibility = "hidden";
-            } else {
-                this.eBottom.style.visibility = "visible";
-            }
-        }
-        this.map.events.register('moveend', this, this.update);
-        this.update();
-        return this.div;
-    },
-
-    /** 
-     * Method: getBarLen
-     * Given a number, round it down to the nearest 1,2,5 times a power of 10.
-     * That seems a fairly useful set of number groups to use.
-     * 
-     * Parameters:
-     * maxLen - {float}  the number we're rounding down from
-     * 
-     * Returns:
-     * {Float} the rounded number (less than or equal to maxLen)
-     */
-    getBarLen: function(maxLen) {
-        // nearest power of 10 lower than maxLen
-        var digits = parseInt(Math.log(maxLen) / Math.log(10));
-        var pow10 = Math.pow(10, digits);
-        
-        // ok, find first character
-        var firstChar = parseInt(maxLen / pow10);
-
-        // right, put it into the correct bracket
-        var barLen;
-        if(firstChar > 5) {
-            barLen = 5;
-        } else if(firstChar > 2) {
-            barLen = 2;
-        } else {
-            barLen = 1;
-        }
-
-        // scale it up the correct power of 10
-        return barLen * pow10;
-    },
-
-    /**
-     * Method: update
-     * Update the size of the bars, and the labels they contain.
-     */
-    update: function() {
-        var res = this.map.getResolution();
-        if (!res) {
-            return;
-        }
-
-        var curMapUnits = this.map.getUnits();
-        var inches = OpenLayers.INCHES_PER_UNIT;
-
-        // convert maxWidth to map units
-        var maxSizeData = this.maxWidth * res * inches[curMapUnits];
-        var geodesicRatio = 1;
-        if(this.geodesic === true) {
-            var maxSizeGeodesic = (this.map.getGeodesicPixelSize().w ||
-                0.000001) * this.maxWidth;
-            var maxSizeKilometers = maxSizeData / inches["km"];
-            geodesicRatio = maxSizeGeodesic / maxSizeKilometers;
-            maxSizeData *= geodesicRatio;
-        }
-
-        // decide whether to use large or small scale units     
-        var topUnits;
-        var bottomUnits;
-        if(maxSizeData > 100000) {
-            topUnits = this.topOutUnits;
-            bottomUnits = this.bottomOutUnits;
-        } else {
-            topUnits = this.topInUnits;
-            bottomUnits = this.bottomInUnits;
-        }
-
-        // and to map units units
-        var topMax = maxSizeData / inches[topUnits];
-        var bottomMax = maxSizeData / inches[bottomUnits];
-
-        // now trim this down to useful block length
-        var topRounded = this.getBarLen(topMax);
-        var bottomRounded = this.getBarLen(bottomMax);
-
-        // and back to display units
-        topMax = topRounded / inches[curMapUnits] * inches[topUnits];
-        bottomMax = bottomRounded / inches[curMapUnits] * inches[bottomUnits];
-
-        // and to pixel units
-        var topPx = topMax / res / geodesicRatio;
-        var bottomPx = bottomMax / res / geodesicRatio;
-        
-        // now set the pixel widths
-        // and the values inside them
-        
-        if (this.eBottom.style.visibility == "visible"){
-            this.eBottom.style.width = Math.round(bottomPx) + "px"; 
-            this.eBottom.innerHTML = bottomRounded + " " + bottomUnits ;
-        }
-            
-        if (this.eTop.style.visibility == "visible"){
-            this.eTop.style.width = Math.round(topPx) + "px";
-            this.eTop.innerHTML = topRounded + " " + topUnits;
-        }
-        
-    }, 
-
-    CLASS_NAME: "OpenLayers.Control.ScaleLine"
-});
-
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Control/ZoomBox.js
- * @requires OpenLayers/Control/DragPan.js
- * @requires OpenLayers/Handler/MouseWheel.js
- * @requires OpenLayers/Handler/Click.js
- */
-
-/**
- * Class: OpenLayers.Control.Navigation
- * The navigation control handles map browsing with mouse events (dragging,
- *     double-clicking, and scrolling the wheel).  Create a new navigation 
- *     control with the <OpenLayers.Control.Navigation> control.  
- * 
- *     Note that this control is added to the map by default (if no controls 
- *     array is sent in the options object to the <OpenLayers.Map> 
- *     constructor).
- * 
- * Inherits:
- *  - <OpenLayers.Control>
- */
-OpenLayers.Control.Navigation = OpenLayers.Class(OpenLayers.Control, {
-
-    /** 
-     * Property: dragPan
-     * {<OpenLayers.Control.DragPan>} 
-     */
-    dragPan: null,
-
-    /**
-     * APIProperty: dragPanOptions
-     * {Object} Options passed to the DragPan control.
-     */
-    dragPanOptions: null,
-
-    /**
-     * Property: pinchZoom
-     * {<OpenLayers.Control.PinchZoom>}
-     */
-    pinchZoom: null,
-
-    /**
-     * APIProperty: pinchZoomOptions
-     * {Object} Options passed to the PinchZoom control.
-     */
-    pinchZoomOptions: null,
-
-    /**
-     * APIProperty: documentDrag
-     * {Boolean} Allow panning of the map by dragging outside map viewport.
-     *     Default is false.
-     */
-    documentDrag: false,
-
-    /** 
-     * Property: zoomBox
-     * {<OpenLayers.Control.ZoomBox>}
-     */
-    zoomBox: null,
-
-    /**
-     * APIProperty: zoomBoxEnabled
-     * {Boolean} Whether the user can draw a box to zoom
-     */
-    zoomBoxEnabled: true, 
-
-    /**
-     * APIProperty: zoomWheelEnabled
-     * {Boolean} Whether the mousewheel should zoom the map
-     */
-    zoomWheelEnabled: true,
-    
-    /**
-     * Property: mouseWheelOptions
-     * {Object} Options passed to the MouseWheel control (only useful if
-     *     <zoomWheelEnabled> is set to true). Default is no options for maps
-     *     with fractionalZoom set to true, otherwise
-     *     {cumulative: false, interval: 50, maxDelta: 6} 
-     */
-    mouseWheelOptions: null,
-
-    /**
-     * APIProperty: handleRightClicks
-     * {Boolean} Whether or not to handle right clicks. Default is false.
-     */
-    handleRightClicks: false,
-
-    /**
-     * APIProperty: zoomBoxKeyMask
-     * {Integer} <OpenLayers.Handler> key code of the key, which has to be
-     *    pressed, while drawing the zoom box with the mouse on the screen. 
-     *    You should probably set handleRightClicks to true if you use this
-     *    with MOD_CTRL, to disable the context menu for machines which use
-     *    CTRL-Click as a right click.
-     * Default: <OpenLayers.Handler.MOD_SHIFT>
-     */
-    zoomBoxKeyMask: OpenLayers.Handler.MOD_SHIFT,
-    
-    /**
-     * APIProperty: autoActivate
-     * {Boolean} Activate the control when it is added to a map.  Default is
-     *     true.
-     */
-    autoActivate: true,
-
-    /**
-     * Constructor: OpenLayers.Control.Navigation
-     * Create a new navigation control
-     * 
-     * Parameters:
-     * options - {Object} An optional object whose properties will be set on
-     *                    the control
-     */
-    initialize: function(options) {
-        this.handlers = {};
-        OpenLayers.Control.prototype.initialize.apply(this, arguments);
-    },
-
-    /**
-     * Method: destroy
-     * The destroy method is used to perform any clean up before the control
-     * is dereferenced.  Typically this is where event listeners are removed
-     * to prevent memory leaks.
-     */
-    destroy: function() {
-        this.deactivate();
-
-        if (this.dragPan) {
-            this.dragPan.destroy();
-        }
-        this.dragPan = null;
-
-        if (this.zoomBox) {
-            this.zoomBox.destroy();
-        }
-        this.zoomBox = null;
-
-        if (this.pinchZoom) {
-            this.pinchZoom.destroy();
-        }
-        this.pinchZoom = null;
-
-        OpenLayers.Control.prototype.destroy.apply(this,arguments);
-    },
-    
-    /**
-     * Method: activate
-     */
-    activate: function() {
-        this.dragPan.activate();
-        if (this.zoomWheelEnabled) {
-            this.handlers.wheel.activate();
-        }    
-        this.handlers.click.activate();
-        if (this.zoomBoxEnabled) {
-            this.zoomBox.activate();
-        }
-        if (this.pinchZoom) {
-            this.pinchZoom.activate();
-        }
-        return OpenLayers.Control.prototype.activate.apply(this,arguments);
-    },
-
-    /**
-     * Method: deactivate
-     */
-    deactivate: function() {
-        if (this.pinchZoom) {
-            this.pinchZoom.deactivate();
-        }
-        this.zoomBox.deactivate();
-        this.dragPan.deactivate();
-        this.handlers.click.deactivate();
-        this.handlers.wheel.deactivate();
-        return OpenLayers.Control.prototype.deactivate.apply(this,arguments);
-    },
-    
-    /**
-     * Method: draw
-     */
-    draw: function() {
-        // disable right mouse context menu for support of right click events
-        if (this.handleRightClicks) {
-            this.map.viewPortDiv.oncontextmenu = OpenLayers.Function.False;
-        }
-
-        var clickCallbacks = { 
-            'click': this.defaultClick,
-            'dblclick': this.defaultDblClick, 
-            'dblrightclick': this.defaultDblRightClick 
-        };
-        var clickOptions = {
-            'double': true, 
-            'stopDouble': true
-        };
-        this.handlers.click = new OpenLayers.Handler.Click(
-            this, clickCallbacks, clickOptions
-        );
-        this.dragPan = new OpenLayers.Control.DragPan(
-            OpenLayers.Util.extend({
-                map: this.map,
-                documentDrag: this.documentDrag
-            }, this.dragPanOptions)
-        );
-        this.zoomBox = new OpenLayers.Control.ZoomBox(
-                    {map: this.map, keyMask: this.zoomBoxKeyMask});
-        this.dragPan.draw();
-        this.zoomBox.draw();
-        var wheelOptions = this.map.fractionalZoom ? {} : {
-            cumulative: false,
-            interval: 50,
-            maxDelta: 6
-        };
-        this.handlers.wheel = new OpenLayers.Handler.MouseWheel(
-            this, {up : this.wheelUp, down: this.wheelDown},
-            OpenLayers.Util.extend(wheelOptions, this.mouseWheelOptions)
-        );
-        if (OpenLayers.Control.PinchZoom) {
-            this.pinchZoom = new OpenLayers.Control.PinchZoom(
-                OpenLayers.Util.extend(
-                    {map: this.map}, this.pinchZoomOptions));
-        }
-    },
-
-    /**
-     * Method: defaultClick
-     *
-     * Parameters:
-     * evt - {Event}
-     */
-    defaultClick: function (evt) {
-        if (evt.lastTouches && evt.lastTouches.length == 2) {
-            this.map.zoomOut();
-        }
-    },
-
-    /**
-     * Method: defaultDblClick 
-     * 
-     * Parameters:
-     * evt - {Event} 
-     */
-    defaultDblClick: function (evt) {
-        this.map.zoomTo(this.map.zoom + 1, evt.xy);
-    },
-
-    /**
-     * Method: defaultDblRightClick 
-     * 
-     * Parameters:
-     * evt - {Event} 
-     */
-    defaultDblRightClick: function (evt) {
-        this.map.zoomTo(this.map.zoom - 1, evt.xy);
-    },
-    
-    /**
-     * Method: wheelChange  
-     *
-     * Parameters:
-     * evt - {Event}
-     * deltaZ - {Integer}
-     */
-    wheelChange: function(evt, deltaZ) {
-        if (!this.map.fractionalZoom) {
-            deltaZ =  Math.round(deltaZ);
-        }
-        var currentZoom = this.map.getZoom(),
-            newZoom = currentZoom + deltaZ;
-        newZoom = Math.max(newZoom, 0);
-        newZoom = Math.min(newZoom, this.map.getNumZoomLevels());
-        if (newZoom === currentZoom) {
-            return;
-        }
-        this.map.zoomTo(newZoom, evt.xy);
-    },
-
-    /** 
-     * Method: wheelUp
-     * User spun scroll wheel up
-     * 
-     * Parameters:
-     * evt - {Event}
-     * delta - {Integer}
-     */
-    wheelUp: function(evt, delta) {
-        this.wheelChange(evt, delta || 1);
-    },
-
-    /** 
-     * Method: wheelDown
-     * User spun scroll wheel down
-     * 
-     * Parameters:
-     * evt - {Event}
-     * delta - {Integer}
-     */
-    wheelDown: function(evt, delta) {
-        this.wheelChange(evt, delta || -1);
-    },
-    
-    /**
-     * Method: disableZoomBox
-     */
-    disableZoomBox : function() {
-        this.zoomBoxEnabled = false;
-        this.zoomBox.deactivate();       
-    },
-    
-    /**
-     * Method: enableZoomBox
-     */
-    enableZoomBox : function() {
-        this.zoomBoxEnabled = true;
-        if (this.active) {
-            this.zoomBox.activate();
-        }    
-    },
-    
-    /**
-     * Method: disableZoomWheel
-     */
-    
-    disableZoomWheel : function() {
-        this.zoomWheelEnabled = false;
-        this.handlers.wheel.deactivate();       
-    },
-    
-    /**
-     * Method: enableZoomWheel
-     */
-    
-    enableZoomWheel : function() {
-        this.zoomWheelEnabled = true;
-        if (this.active) {
-            this.handlers.wheel.activate();
-        }    
-    },
-
-    CLASS_NAME: "OpenLayers.Control.Navigation"
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Control.js
- * @requires OpenLayers/Control/Button.js
- */
-
-/**
- * Class: OpenLayers.Control.NavigationHistory
- * A navigation history control.  This is a meta-control, that creates two
- *     dependent controls: <previous> and <next>.  Call the trigger method
- *     on the <previous> and <next> controls to restore previous and next
- *     history states.  The previous and next controls will become active
- *     when there are available states to restore and will become deactive
- *     when there are no states to restore.
- *
- * Inherits from:
- *  - <OpenLayers.Control>
- */
-OpenLayers.Control.NavigationHistory = OpenLayers.Class(OpenLayers.Control, {
-
-    /**
-     * Property: type
-     * {String} Note that this control is not intended to be added directly
-     *     to a control panel.  Instead, add the sub-controls previous and
-     *     next.  These sub-controls are button type controls that activate
-     *     and deactivate themselves.  If this parent control is added to
-     *     a panel, it will act as a toggle.
-     */
-    type: OpenLayers.Control.TYPE_TOGGLE,
-
-    /**
-     * APIProperty: previous
-     * {<OpenLayers.Control>} A button type control whose trigger method restores
-     *     the previous state managed by this control.
-     */
-    previous: null,
-    
-    /**
-     * APIProperty: previousOptions
-     * {Object} Set this property on the options argument of the constructor
-     *     to set optional properties on the <previous> control.
-     */
-    previousOptions: null,
-    
-    /**
-     * APIProperty: next
-     * {<OpenLayers.Control>} A button type control whose trigger method restores
-     *     the next state managed by this control.
-     */
-    next: null,
-
-    /**
-     * APIProperty: nextOptions
-     * {Object} Set this property on the options argument of the constructor
-     *     to set optional properties on the <next> control.
-     */
-    nextOptions: null,
-
-    /**
-     * APIProperty: limit
-     * {Integer} Optional limit on the number of history items to retain.  If
-     *     null, there is no limit.  Default is 50.
-     */
-    limit: 50,
-
-    /**
-     * APIProperty: autoActivate
-     * {Boolean} Activate the control when it is added to a map.  Default is
-     *     true.
-     */
-    autoActivate: true,
-
-    /**
-     * Property: clearOnDeactivate
-     * {Boolean} Clear the history when the control is deactivated.  Default
-     *     is false.
-     */
-    clearOnDeactivate: false,
-
-    /**
-     * Property: registry
-     * {Object} An object with keys corresponding to event types.  Values
-     *     are functions that return an object representing the current state.
-     */
-    registry: null,
-
-    /**
-     * Property: nextStack
-     * {Array} Array of items in the history.
-     */
-    nextStack: null,
-
-    /**
-     * Property: previousStack
-     * {Array} List of items in the history.  First item represents the current
-     *     state.
-     */
-    previousStack: null,
-    
-    /**
-     * Property: listeners
-     * {Object} An object containing properties corresponding to event types.
-     *     This object is used to configure the control and is modified on
-     *     construction.
-     */
-    listeners: null,
-    
-    /**
-     * Property: restoring
-     * {Boolean} Currently restoring a history state.  This is set to true
-     *     before calling restore and set to false after restore returns.
-     */
-    restoring: false,
-    
-    /**
-     * Constructor: OpenLayers.Control.NavigationHistory 
-     * 
-     * Parameters:
-     * options - {Object} An optional object whose properties will be used
-     *     to extend the control.
-     */
-    initialize: function(options) {
-        OpenLayers.Control.prototype.initialize.apply(this, [options]);
-        
-        this.registry = OpenLayers.Util.extend({
-            "moveend": this.getState
-        }, this.registry);
-        
-        var previousOptions = {
-            trigger: OpenLayers.Function.bind(this.previousTrigger, this),
-            displayClass: this.displayClass + " " + this.displayClass + "Previous"
-        };
-        OpenLayers.Util.extend(previousOptions, this.previousOptions);
-        this.previous = new OpenLayers.Control.Button(previousOptions);
-        
-        var nextOptions = {
-            trigger: OpenLayers.Function.bind(this.nextTrigger, this),
-            displayClass: this.displayClass + " " + this.displayClass + "Next"
-        };
-        OpenLayers.Util.extend(nextOptions, this.nextOptions);
-        this.next = new OpenLayers.Control.Button(nextOptions);
-
-        this.clear();
-    },
-    
-    /**
-     * Method: onPreviousChange
-     * Called when the previous history stack changes.
-     *
-     * Parameters:
-     * state - {Object} An object representing the state to be restored
-     *     if previous is triggered again or null if no previous states remain.
-     * length - {Integer} The number of remaining previous states that can
-     *     be restored.
-     */
-    onPreviousChange: function(state, length) {
-        if(state && !this.previous.active) {
-            this.previous.activate();
-        } else if(!state && this.previous.active) {
-            this.previous.deactivate();
-        }
-    },
-    
-    /**
-     * Method: onNextChange
-     * Called when the next history stack changes.
-     *
-     * Parameters:
-     * state - {Object} An object representing the state to be restored
-     *     if next is triggered again or null if no next states remain.
-     * length - {Integer} The number of remaining next states that can
-     *     be restored.
-     */
-    onNextChange: function(state, length) {
-        if(state && !this.next.active) {
-            this.next.activate();
-        } else if(!state && this.next.active) {
-            this.next.deactivate();
-        }
-    },
-    
-    /**
-     * APIMethod: destroy
-     * Destroy the control.
-     */
-    destroy: function() {
-        OpenLayers.Control.prototype.destroy.apply(this);
-        this.previous.destroy();
-        this.next.destroy();
-        this.deactivate();
-        for(var prop in this) {
-            this[prop] = null;
-        }
-    },
-    
-    /** 
-     * Method: setMap
-     * Set the map property for the control and <previous> and <next> child
-     *     controls.
-     *
-     * Parameters:
-     * map - {<OpenLayers.Map>} 
-     */
-    setMap: function(map) {
-        this.map = map;
-        this.next.setMap(map);
-        this.previous.setMap(map);
-    },
-
-    /**
-     * Method: draw
-     * Called when the control is added to the map.
-     */
-    draw: function() {
-        OpenLayers.Control.prototype.draw.apply(this, arguments);
-        this.next.draw();
-        this.previous.draw();
-    },
-    
-    /**
-     * Method: previousTrigger
-     * Restore the previous state.  If no items are in the previous history
-     *     stack, this has no effect.
-     *
-     * Returns:
-     * {Object} Item representing state that was restored.  Undefined if no
-     *     items are in the previous history stack.
-     */
-    previousTrigger: function() {
-        var current = this.previousStack.shift();
-        var state = this.previousStack.shift();
-        if(state != undefined) {
-            this.nextStack.unshift(current);
-            this.previousStack.unshift(state);
-            this.restoring = true;
-            this.restore(state);
-            this.restoring = false;
-            this.onNextChange(this.nextStack[0], this.nextStack.length);
-            this.onPreviousChange(
-                this.previousStack[1], this.previousStack.length - 1
-            );
-        } else {
-            this.previousStack.unshift(current);
-        }
-        return state;
-    },
-    
-    /**
-     * APIMethod: nextTrigger
-     * Restore the next state.  If no items are in the next history
-     *     stack, this has no effect.  The next history stack is populated
-     *     as states are restored from the previous history stack.
-     *
-     * Returns:
-     * {Object} Item representing state that was restored.  Undefined if no
-     *     items are in the next history stack.
-     */
-    nextTrigger: function() {
-        var state = this.nextStack.shift();
-        if(state != undefined) {
-            this.previousStack.unshift(state);
-            this.restoring = true;
-            this.restore(state);
-            this.restoring = false;
-            this.onNextChange(this.nextStack[0], this.nextStack.length);
-            this.onPreviousChange(
-                this.previousStack[1], this.previousStack.length - 1
-            );
-        }
-        return state;
-    },
-    
-    /**
-     * APIMethod: clear
-     * Clear history.
-     */
-    clear: function() {
-        this.previousStack = [];
-        this.previous.deactivate();
-        this.nextStack = [];
-        this.next.deactivate();
-    },
-
-    /**
-     * Method: getState
-     * Get the current state and return it.
-     *
-     * Returns:
-     * {Object} An object representing the current state.
-     */
-    getState: function() {
-        return {
-            center: this.map.getCenter(),
-            resolution: this.map.getResolution(),
-            projection: this.map.getProjectionObject(),
-            units: this.map.getProjectionObject().getUnits() || 
-                this.map.units || this.map.baseLayer.units
-        };
-    },
-
-    /**
-     * Method: restore
-     * Update the state with the given object.
-     *
-     * Parameters:
-     * state - {Object} An object representing the state to restore.
-     */
-    restore: function(state) {
-        var center, zoom;
-        if (this.map.getProjectionObject() == state.projection) { 
-            zoom = this.map.getZoomForResolution(state.resolution);
-            center = state.center;
-        } else {
-            center = state.center.clone();
-            center.transform(state.projection, this.map.getProjectionObject());
-            var sourceUnits = state.units;
-            var targetUnits = this.map.getProjectionObject().getUnits() || 
-                this.map.units || this.map.baseLayer.units;
-            var resolutionFactor = sourceUnits && targetUnits ? 
-                OpenLayers.INCHES_PER_UNIT[sourceUnits] / OpenLayers.INCHES_PER_UNIT[targetUnits] : 1;
-            zoom = this.map.getZoomForResolution(resolutionFactor*state.resolution); 
-        }
-        this.map.setCenter(center, zoom);
-    },
-    
-    /**
-     * Method: setListeners
-     * Sets functions to be registered in the listeners object.
-     */
-    setListeners: function() {
-        this.listeners = {};
-        for(var type in this.registry) {
-            this.listeners[type] = OpenLayers.Function.bind(function() {
-                if(!this.restoring) {
-                    var state = this.registry[type].apply(this, arguments);
-                    this.previousStack.unshift(state);
-                    if(this.previousStack.length > 1) {
-                        this.onPreviousChange(
-                            this.previousStack[1], this.previousStack.length - 1
-                        );
-                    }
-                    if(this.previousStack.length > (this.limit + 1)) {
-                        this.previousStack.pop();
-                    }
-                    if(this.nextStack.length > 0) {
-                        this.nextStack = [];
-                        this.onNextChange(null, 0);
-                    }
-                }
-                return true;
-            }, this);
-        }
-    },
-
-    /**
-     * APIMethod: activate
-     * Activate the control.  This registers any listeners.
-     *
-     * Returns:
-     * {Boolean} Control successfully activated.
-     */
-    activate: function() {
-        var activated = false;
-        if(this.map) {
-            if(OpenLayers.Control.prototype.activate.apply(this)) {
-                if(this.listeners == null) {
-                    this.setListeners();
-                }
-                for(var type in this.listeners) {
-                    this.map.events.register(type, this, this.listeners[type]);
-                }
-                activated = true;
-                if(this.previousStack.length == 0) {
-                    this.initStack();
-                }
-            }
-        }
-        return activated;
-    },
-    
-    /**
-     * Method: initStack
-     * Called after the control is activated if the previous history stack is
-     *     empty.
-     */
-    initStack: function() {
-        if(this.map.getCenter()) {
-            this.listeners.moveend();
-        }
-    },
-    
-    /**
-     * APIMethod: deactivate
-     * Deactivate the control.  This unregisters any listeners.
-     *
-     * Returns:
-     * {Boolean} Control successfully deactivated.
-     */
-    deactivate: function() {
-        var deactivated = false;
-        if(this.map) {
-            if(OpenLayers.Control.prototype.deactivate.apply(this)) {
-                for(var type in this.listeners) {
-                    this.map.events.unregister(
-                        type, this, this.listeners[type]
-                    );
-                }
-                if(this.clearOnDeactivate) {
-                    this.clear();
-                }
-                deactivated = true;
-            }
-        }
-        return deactivated;
-    },
-    
-    CLASS_NAME: "OpenLayers.Control.NavigationHistory"
-});
-
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Control.js
- * @requires OpenLayers/Feature/Vector.js
- */
-
-/**
- * Class: OpenLayers.Control.Measure
- * Allows for drawing of features for measurements.
- *
- * Inherits from:
- *  - <OpenLayers.Control>
- */
-OpenLayers.Control.Measure = OpenLayers.Class(OpenLayers.Control, {
-
-    /**
-     * APIProperty: events
-     * {<OpenLayers.Events>} Events instance for listeners and triggering
-     *     control specific events.
-     *
-     * Register a listener for a particular event with the following syntax:
-     * (code)
-     * control.events.register(type, obj, listener);
-     * (end)
-     *
-     * Supported event types (in addition to those from <OpenLayers.Control.events>):
-     * measure - Triggered when a measurement sketch is complete.  Listeners
-     *      will receive an event with measure, units, order, and geometry
-     *      properties.
-     * measurepartial - Triggered when a new point is added to the
-     *      measurement sketch or if the <immediate> property is true and the
-     *      measurement sketch is modified.  Listeners receive an event with measure,
-     *      units, order, and geometry.
-     */
-
-    /**
-     * APIProperty: handlerOptions
-     * {Object} Used to set non-default properties on the control's handler
-     */
-
-    /**
-     * Property: callbacks
-     * {Object} The functions that are sent to the handler for callback
-     */
-    callbacks: null,
-
-    /**
-     * APIProperty: displaySystem
-     * {String} Display system for output measurements.  Supported values
-     *     are 'english', 'metric', and 'geographic'.  Default is 'metric'.
-     */
-    displaySystem: 'metric',
-
-    /**
-     * APIProperty: geodesic
-     * {Boolean} Calculate geodesic metrics instead of planar metrics.  This
-     *     requires that geometries can be transformed into Geographic/WGS84
-     *     (if that is not already the map projection).  Default is false.
-     */
-    geodesic: false,
-
-    /**
-     * Property: displaySystemUnits
-     * {Object} Units for various measurement systems.  Values are arrays
-     *     of unit abbreviations (from OpenLayers.INCHES_PER_UNIT) in decreasing
-     *     order of length.
-     */
-    displaySystemUnits: {
-        geographic: ['dd'],
-        english: ['mi', 'ft', 'in'],
-        metric: ['km', 'm']
-    },
-
-    /**
-     * Property: delay
-     * {Number} Number of milliseconds between clicks before the event is
-     *     considered a double-click.  The "measurepartial" event will not
-     *     be triggered if the sketch is completed within this time.  This
-     *     is required for IE where creating a browser reflow (if a listener
-     *     is modifying the DOM by displaying the measurement values) messes
-     *     with the dblclick listener in the sketch handler.
-     */
-    partialDelay: 300,
-
-    /**
-     * Property: delayedTrigger
-     * {Number} Timeout id of trigger for measurepartial.
-     */
-    delayedTrigger: null,
-
-    /**
-     * APIProperty: persist
-     * {Boolean} Keep the temporary measurement sketch drawn after the
-     *     measurement is complete.  The geometry will persist until a new
-     *     measurement is started, the control is deactivated, or <cancel> is
-     *     called.
-     */
-    persist: false,
-
-    /**
-     * APIProperty: immediate
-     * {Boolean} Activates the immediate measurement so that the "measurepartial"
-     *     event is also fired once the measurement sketch is modified.
-     *     Default is false.
-     */
-    immediate : false,
-
-    /**
-     * Constructor: OpenLayers.Control.Measure
-     *
-     * Parameters:
-     * handler - {<OpenLayers.Handler>}
-     * options - {Object}
-     */
-    initialize: function(handler, options) {
-        OpenLayers.Control.prototype.initialize.apply(this, [options]);
-        var callbacks = {done: this.measureComplete,
-            point: this.measurePartial};
-        if (this.immediate){
-            callbacks.modify = this.measureImmediate;
-        }
-        this.callbacks = OpenLayers.Util.extend(callbacks, this.callbacks);
-
-        // let the handler options override, so old code that passes 'persist'
-        // directly to the handler does not need an update
-        this.handlerOptions = OpenLayers.Util.extend(
-            {persist: this.persist}, this.handlerOptions
-        );
-        this.handler = new handler(this, this.callbacks, this.handlerOptions);
-    },
-
-    /**
-     * APIMethod: deactivate
-     */
-    deactivate: function() {
-        this.cancelDelay();
-        return OpenLayers.Control.prototype.deactivate.apply(this, arguments);
-    },
-
-    /**
-     * APIMethod: cancel
-     * Stop the control from measuring.  If <persist> is true, the temporary
-     *     sketch will be erased.
-     */
-    cancel: function() {
-        this.cancelDelay();
-        this.handler.cancel();
-    },
-
-    /**
-     * APIMethod: setImmediate
-     * Sets the <immediate> property. Changes the activity of immediate
-     * measurement.
-     */
-    setImmediate: function(immediate) {
-        this.immediate = immediate;
-        if (this.immediate){
-            this.callbacks.modify = this.measureImmediate;
-        } else {
-            delete this.callbacks.modify;
-        }
-    },
-
-    /**
-     * Method: updateHandler
-     *
-     * Parameters:
-     * handler - {Function} One of the sketch handler constructors.
-     * options - {Object} Options for the handler.
-     */
-    updateHandler: function(handler, options) {
-        var active = this.active;
-        if(active) {
-            this.deactivate();
-        }
-        this.handler = new handler(this, this.callbacks, options);
-        if(active) {
-            this.activate();
-        }
-    },
-
-    /**
-     * Method: measureComplete
-     * Called when the measurement sketch is done.
-     *
-     * Parameters:
-     * geometry - {<OpenLayers.Geometry>}
-     */
-    measureComplete: function(geometry) {
-        this.cancelDelay();
-        this.measure(geometry, "measure");
-    },
-
-    /**
-     * Method: measurePartial
-     * Called each time a new point is added to the measurement sketch.
-     *
-     * Parameters:
-     * point - {<OpenLayers.Geometry.Point>} The last point added.
-     * geometry - {<OpenLayers.Geometry>} The sketch geometry.
-     */
-    measurePartial: function(point, geometry) {
-        this.cancelDelay();
-        geometry = geometry.clone();
-        // when we're wating for a dblclick, we have to trigger measurepartial
-        // after some delay to deal with reflow issues in IE
-        if (this.handler.freehandMode(this.handler.evt)) {
-            // no dblclick in freehand mode
-            this.measure(geometry, "measurepartial");
-        } else {
-            this.delayedTrigger = window.setTimeout(
-                OpenLayers.Function.bind(function() {
-                    this.delayedTrigger = null;
-                    this.measure(geometry, "measurepartial");
-                }, this),
-                this.partialDelay
-            );
-        }
-    },
-
-    /**
-     * Method: measureImmediate
-     * Called each time the measurement sketch is modified.
-     *
-     * Parameters:
-     * point - {<OpenLayers.Geometry.Point>} The point at the mouse position.
-     * feature - {<OpenLayers.Feature.Vector>} The sketch feature.
-     * drawing - {Boolean} Indicates whether we're currently drawing.
-     */
-    measureImmediate : function(point, feature, drawing) {
-        if (drawing && !this.handler.freehandMode(this.handler.evt)) {
-            this.cancelDelay();
-            this.measure(feature.geometry, "measurepartial");
-        }
-    },
-
-    /**
-     * Method: cancelDelay
-     * Cancels the delay measurement that measurePartial began.
-     */
-    cancelDelay: function() {
-        if (this.delayedTrigger !== null) {
-            window.clearTimeout(this.delayedTrigger);
-            this.delayedTrigger = null;
-        }
-    },
-
-    /**
-     * Method: measure
-     *
-     * Parameters:
-     * geometry - {<OpenLayers.Geometry>}
-     * eventType - {String}
-     */
-    measure: function(geometry, eventType) {
-        var stat, order;
-        if(geometry.CLASS_NAME.indexOf('LineString') > -1) {
-            stat = this.getBestLength(geometry);
-            order = 1;
-        } else {
-            stat = this.getBestArea(geometry);
-            order = 2;
-        }
-        this.events.triggerEvent(eventType, {
-            measure: stat[0],
-            units: stat[1],
-            order: order,
-            geometry: geometry
-        });
-    },
-
-    /**
-     * Method: getBestArea
-     * Based on the <displaySystem> returns the area of a geometry.
-     *
-     * Parameters:
-     * geometry - {<OpenLayers.Geometry>}
-     *
-     * Returns:
-     * {Array([Float, String])}  Returns a two item array containing the
-     *     area and the units abbreviation.
-     */
-    getBestArea: function(geometry) {
-        var units = this.displaySystemUnits[this.displaySystem];
-        var unit, area;
-        for(var i=0, len=units.length; i<len; ++i) {
-            unit = units[i];
-            area = this.getArea(geometry, unit);
-            if(area > 1) {
-                break;
-            }
-        }
-        return [area, unit];
-    },
-
-    /**
-     * Method: getArea
-     *
-     * Parameters:
-     * geometry - {<OpenLayers.Geometry>}
-     * units - {String} Unit abbreviation
-     *
-     * Returns:
-     * {Float} The geometry area in the given units.
-     */
-    getArea: function(geometry, units) {
-        var area, geomUnits;
-        if(this.geodesic) {
-            area = geometry.getGeodesicArea(this.map.getProjectionObject());
-            geomUnits = "m";
-        } else {
-            area = geometry.getArea();
-            geomUnits = this.map.getUnits();
-        }
-        var inPerDisplayUnit = OpenLayers.INCHES_PER_UNIT[units];
-        if(inPerDisplayUnit) {
-            var inPerMapUnit = OpenLayers.INCHES_PER_UNIT[geomUnits];
-            area *= Math.pow((inPerMapUnit / inPerDisplayUnit), 2);
-        }
-        return area;
-    },
-
-    /**
-     * Method: getBestLength
-     * Based on the <displaySystem> returns the length of a geometry.
-     *
-     * Parameters:
-     * geometry - {<OpenLayers.Geometry>}
-     *
-     * Returns:
-     * {Array([Float, String])}  Returns a two item array containing the
-     *     length and the units abbreviation.
-     */
-    getBestLength: function(geometry) {
-        var units = this.displaySystemUnits[this.displaySystem];
-        var unit, length;
-        for(var i=0, len=units.length; i<len; ++i) {
-            unit = units[i];
-            length = this.getLength(geometry, unit);
-            if(length > 1) {
-                break;
-            }
-        }
-        return [length, unit];
-    },
-
-    /**
-     * Method: getLength
-     *
-     * Parameters:
-     * geometry - {<OpenLayers.Geometry>}
-     * units - {String} Unit abbreviation
-     *
-     * Returns:
-     * {Float} The geometry length in the given units.
-     */
-    getLength: function(geometry, units) {
-        var length, geomUnits;
-        if(this.geodesic) {
-            length = geometry.getGeodesicLength(this.map.getProjectionObject());
-            geomUnits = "m";
-        } else {
-            length = geometry.getLength();
-            geomUnits = this.map.getUnits();
-        }
-        var inPerDisplayUnit = OpenLayers.INCHES_PER_UNIT[units];
-        if(inPerDisplayUnit) {
-            var inPerMapUnit = OpenLayers.INCHES_PER_UNIT[geomUnits];
-            length *= (inPerMapUnit / inPerDisplayUnit);
-        }
-        return length;
-    },
-
-    CLASS_NAME: "OpenLayers.Control.Measure"
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-
-/**
- * @requires OpenLayers/Control.js
- * @requires OpenLayers/Handler/Click.js
- * @requires OpenLayers/Handler/Hover.js
- * @requires OpenLayers/Request.js
- * @requires OpenLayers/Format/WMSGetFeatureInfo.js
- */
-
-/**
- * Class: OpenLayers.Control.WMSGetFeatureInfo
- * The WMSGetFeatureInfo control uses a WMS query to get information about a point on the map.  The
- * information may be in a display-friendly format such as HTML, or a machine-friendly format such
- * as GML, depending on the server's capabilities and the client's configuration.  This control
- * handles click or hover events, attempts to parse the results using an OpenLayers.Format, and
- * fires a 'getfeatureinfo' event with the click position, the raw body of the response, and an
- * array of features if it successfully read the response.
- *
- * Inherits from:
- *  - <OpenLayers.Control>
- */
-OpenLayers.Control.WMSGetFeatureInfo = OpenLayers.Class(OpenLayers.Control, {
-
-   /**
-     * APIProperty: hover
-     * {Boolean} Send GetFeatureInfo requests when mouse stops moving.
-     *     Default is false.
-     */
-    hover: false,
-
-    /**
-     * APIProperty: drillDown
-     * {Boolean} Drill down over all WMS layers in the map. When
-     *     using drillDown mode, hover is not possible, and an infoFormat that
-     *     returns parseable features is required. Default is false.
-     */
-    drillDown: false,
-
-    /**
-     * APIProperty: maxFeatures
-     * {Integer} Maximum number of features to return from a WMS query. This
-     *     sets the feature_count parameter on WMS GetFeatureInfo
-     *     requests.
-     */
-    maxFeatures: 10,
-
-    /**
-     * APIProperty: clickCallback
-     * {String} The click callback to register in the
-     *     {<OpenLayers.Handler.Click>} object created when the hover
-     *     option is set to false. Default is "click".
-     */
-    clickCallback: "click",
-
-    /**
-     * APIProperty: output
-     * {String} Either "features" or "object". When triggering a getfeatureinfo
-     *     request should we pass on an array of features or an object with with
-     *     a "features" property and other properties (such as the url of the
-     *     WMS). Default is "features".
-     */
-    output: "features",
-
-    /**
-     * APIProperty: layers
-     * {Array(<OpenLayers.Layer.WMS>)} The layers to query for feature info.
-     *     If omitted, all map WMS layers with a url that matches this <url> or
-     *     <layerUrls> will be considered.
-     */
-    layers: null,
-
-    /**
-     * APIProperty: queryVisible
-     * {Boolean} If true, filter out hidden layers when searching the map for
-     *     layers to query.  Default is false.
-     */
-    queryVisible: false,
-
-    /**
-     * APIProperty: url
-     * {String} The URL of the WMS service to use.  If not provided, the url
-     *     of the first eligible layer will be used.
-     */
-    url: null,
-
-    /**
-     * APIProperty: layerUrls
-     * {Array(String)} Optional list of urls for layers that should be queried.
-     *     This can be used when the layer url differs from the url used for
-     *     making GetFeatureInfo requests (in the case of a layer using cached
-     *     tiles).
-     */
-    layerUrls: null,
-
-    /**
-     * APIProperty: infoFormat
-     * {String} The mimetype to request from the server. If you are using
-     *     drillDown mode and have multiple servers that do not share a common
-     *     infoFormat, you can override the control's infoFormat by providing an
-     *     INFO_FORMAT parameter in your <OpenLayers.Layer.WMS> instance(s).
-     */
-    infoFormat: 'text/html',
-
-    /**
-     * APIProperty: vendorParams
-     * {Object} Additional parameters that will be added to the request, for
-     *     WMS implementations that support them. This could e.g. look like
-     * (start code)
-     * {
-     *     radius: 5
-     * }
-     * (end)
-     */
-    vendorParams: {},
-
-    /**
-     * APIProperty: format
-     * {<OpenLayers.Format>} A format for parsing GetFeatureInfo responses.
-     *     Default is <OpenLayers.Format.WMSGetFeatureInfo>.
-     */
-    format: null,
-
-    /**
-     * APIProperty: formatOptions
-     * {Object} Optional properties to set on the format (if one is not provided
-     *     in the <format> property.
-     */
-    formatOptions: null,
-
-    /**
-     * APIProperty: handlerOptions
-     * {Object} Additional options for the handlers used by this control, e.g.
-     * (start code)
-     * {
-     *     "click": {delay: 100},
-     *     "hover": {delay: 300}
-     * }
-     * (end)
-     */
-
-    /**
-     * Property: handler
-     * {Object} Reference to the <OpenLayers.Handler> for this control
-     */
-    handler: null,
-
-    /**
-     * Property: hoverRequest
-     * {<OpenLayers.Request>} contains the currently running hover request
-     *     (if any).
-     */
-    hoverRequest: null,
-
-    /**
-     * APIProperty: events
-     * {<OpenLayers.Events>} Events instance for listeners and triggering
-     *     control specific events.
-     *
-     * Register a listener for a particular event with the following syntax:
-     * (code)
-     * control.events.register(type, obj, listener);
-     * (end)
-     *
-     * Supported event types (in addition to those from <OpenLayers.Control.events>):
-     * beforegetfeatureinfo - Triggered before the request is sent.
-     *      The event object has an *xy* property with the position of the
-     *      mouse click or hover event that triggers the request.
-     * nogetfeatureinfo - no queryable layers were found.
-     * getfeatureinfo - Triggered when a GetFeatureInfo response is received.
-     *      The event object has a *text* property with the body of the
-     *      response (String), a *features* property with an array of the
-     *      parsed features, an *xy* property with the position of the mouse
-     *      click or hover event that triggered the request, and a *request*
-     *      property with the request itself. If drillDown is set to true and
-     *      multiple requests were issued to collect feature info from all
-     *      layers, *text* and *request* will only contain the response body
-     *      and request object of the last request.
-     */
-
-    /**
-     * Constructor: <OpenLayers.Control.WMSGetFeatureInfo>
-     *
-     * Parameters:
-     * options - {Object}
-     */
-    initialize: function(options) {
-        options = options || {};
-        options.handlerOptions = options.handlerOptions || {};
-
-        OpenLayers.Control.prototype.initialize.apply(this, [options]);
-
-        if(!this.format) {
-            this.format = new OpenLayers.Format.WMSGetFeatureInfo(
-                options.formatOptions
-            );
-        }
-
-        if(this.drillDown === true) {
-            this.hover = false;
-        }
-
-        if(this.hover) {
-            this.handler = new OpenLayers.Handler.Hover(
-                   this, {
-                       'move': this.cancelHover,
-                       'pause': this.getInfoForHover
-                   },
-                   OpenLayers.Util.extend(this.handlerOptions.hover || {}, {
-                       'delay': 250
-                   }));
-        } else {
-            var callbacks = {};
-            callbacks[this.clickCallback] = this.getInfoForClick;
-            this.handler = new OpenLayers.Handler.Click(
-                this, callbacks, this.handlerOptions.click || {});
-        }
-    },
-
-    /**
-     * Method: getInfoForClick
-     * Called on click
-     *
-     * Parameters:
-     * evt - {<OpenLayers.Event>}
-     */
-    getInfoForClick: function(evt) {
-        this.events.triggerEvent("beforegetfeatureinfo", {xy: evt.xy});
-        // Set the cursor to "wait" to tell the user we're working on their
-        // click.
-        OpenLayers.Element.addClass(this.map.viewPortDiv, "olCursorWait");
-        this.request(evt.xy, {});
-    },
-
-    /**
-     * Method: getInfoForHover
-     * Pause callback for the hover handler
-     *
-     * Parameters:
-     * evt - {Object}
-     */
-    getInfoForHover: function(evt) {
-        this.events.triggerEvent("beforegetfeatureinfo", {xy: evt.xy});
-        this.request(evt.xy, {hover: true});
-    },
-
-    /**
-     * Method: cancelHover
-     * Cancel callback for the hover handler
-     */
-    cancelHover: function() {
-        if (this.hoverRequest) {
-            this.hoverRequest.abort();
-            this.hoverRequest = null;
-        }
-    },
-
-    /**
-     * Method: findLayers
-     * Internal method to get the layers, independent of whether we are
-     *     inspecting the map or using a client-provided array
-     */
-    findLayers: function() {
-
-        var candidates = this.layers || this.map.layers;
-        var layers = [];
-        var layer, url;
-        for(var i = candidates.length - 1; i >= 0; --i) {
-            layer = candidates[i];
-            if(layer instanceof OpenLayers.Layer.WMS &&
-               (!this.queryVisible || layer.getVisibility())) {
-                url = OpenLayers.Util.isArray(layer.url) ? layer.url[0] : layer.url;
-                // if the control was not configured with a url, set it
-                // to the first layer url
-                if(this.drillDown === false && !this.url) {
-                    this.url = url;
-                }
-                if(this.drillDown === true || this.urlMatches(url)) {
-                    layers.push(layer);
-                }
-            }
-        }
-        return layers;
-    },
-
-    /**
-     * Method: urlMatches
-     * Test to see if the provided url matches either the control <url> or one
-     *     of the <layerUrls>.
-     *
-     * Parameters:
-     * url - {String} The url to test.
-     *
-     * Returns:
-     * {Boolean} The provided url matches the control <url> or one of the
-     *     <layerUrls>.
-     */
-    urlMatches: function(url) {
-        var matches = OpenLayers.Util.isEquivalentUrl(this.url, url);
-        if(!matches && this.layerUrls) {
-            for(var i=0, len=this.layerUrls.length; i<len; ++i) {
-                if(OpenLayers.Util.isEquivalentUrl(this.layerUrls[i], url)) {
-                    matches = true;
-                    break;
-                }
-            }
-        }
-        return matches;
-    },
-
-    /**
-     * Method: buildWMSOptions
-     * Build an object with the relevant WMS options for the GetFeatureInfo request
-     *
-     * Parameters:
-     * url - {String} The url to be used for sending the request
-     * layers - {Array(<OpenLayers.Layer.WMS)} An array of layers
-     * clickPosition - {<OpenLayers.Pixel>} The position on the map where the mouse
-     *     event occurred.
-     * format - {String} The format from the corresponding GetMap request
-     */
-    buildWMSOptions: function(url, layers, clickPosition, format) {
-        var layerNames = [], styleNames = [];
-        for (var i = 0, len = layers.length; i < len; i++) {
-            if (layers[i].params.LAYERS != null) {
-                layerNames = layerNames.concat(layers[i].params.LAYERS);
-                styleNames = styleNames.concat(this.getStyleNames(layers[i]));
-            }
-        }
-        var firstLayer = layers[0];
-        // use the firstLayer's projection if it matches the map projection -
-        // this assumes that all layers will be available in this projection
-        var projection = this.map.getProjection();
-        var layerProj = firstLayer.projection;
-        if (layerProj && layerProj.equals(this.map.getProjectionObject())) {
-            projection = layerProj.getCode();
-        }
-        var params = OpenLayers.Util.extend({
-            service: "WMS",
-            version: firstLayer.params.VERSION,
-            request: "GetFeatureInfo",
-            exceptions: firstLayer.params.EXCEPTIONS,
-            bbox: this.map.getExtent().toBBOX(null,
-                firstLayer.reverseAxisOrder()),
-            feature_count: this.maxFeatures,
-            height: this.map.getSize().h,
-            width: this.map.getSize().w,
-            format: format,
-            info_format: firstLayer.params.INFO_FORMAT || this.infoFormat
-        }, (parseFloat(firstLayer.params.VERSION) >= 1.3) ?
-            {
-                crs: projection,
-                i: parseInt(clickPosition.x),
-                j: parseInt(clickPosition.y)
-            } :
-            {
-                srs: projection,
-                x: parseInt(clickPosition.x),
-                y: parseInt(clickPosition.y)
-            }
-        );
-        if (layerNames.length != 0) {
-            params = OpenLayers.Util.extend({
-                layers: layerNames,
-                query_layers: layerNames,
-                styles: styleNames
-            }, params);
-        }
-        OpenLayers.Util.applyDefaults(params, this.vendorParams);
-        return {
-            url: url,
-            params: OpenLayers.Util.upperCaseObject(params),
-            callback: function(request) {
-                this.handleResponse(clickPosition, request, url);
-            },
-            scope: this
-        };
-    },
-
-    /**
-     * Method: getStyleNames
-     * Gets the STYLES parameter for the layer. Make sure the STYLES parameter
-     * matches the LAYERS parameter
-     *
-     * Parameters:
-     * layer - {<OpenLayers.Layer.WMS>}
-     *
-     * Returns:
-     * {Array(String)} The STYLES parameter
-     */
-    getStyleNames: function(layer) {
-        // in the event of a WMS layer bundling multiple layers but not
-        // specifying styles,we need the same number of commas to specify
-        // the default style for each of the layers.  We can't just leave it
-        // blank as we may be including other layers that do specify styles.
-        var styleNames;
-        if (layer.params.STYLES) {
-            styleNames = layer.params.STYLES;
-        } else {
-            if (OpenLayers.Util.isArray(layer.params.LAYERS)) {
-                styleNames = new Array(layer.params.LAYERS.length);
-            } else { // Assume it's a String
-                styleNames = layer.params.LAYERS.replace(/[^,]/g, "");
-            }
-        }
-        return styleNames;
-    },
-
-    /**
-     * Method: request
-     * Sends a GetFeatureInfo request to the WMS
-     *
-     * Parameters:
-     * clickPosition - {<OpenLayers.Pixel>} The position on the map where the
-     *     mouse event occurred.
-     * options - {Object} additional options for this method.
-     *
-     * Valid options:
-     * - *hover* {Boolean} true if we do the request for the hover handler
-     */
-    request: function(clickPosition, options) {
-        var layers = this.findLayers();
-        if(layers.length == 0) {
-            this.events.triggerEvent("nogetfeatureinfo");
-            // Reset the cursor.
-            OpenLayers.Element.removeClass(this.map.viewPortDiv, "olCursorWait");
-            return;
-        }
-
-        options = options || {};
-        if(this.drillDown === false) {
-            var wmsOptions = this.buildWMSOptions(this.url, layers,
-                clickPosition, layers[0].params.FORMAT);
-            var request = OpenLayers.Request.GET(wmsOptions);
-
-            if (options.hover === true) {
-                this.hoverRequest = request;
-            }
-        } else {
-            this._requestCount = 0;
-            this._numRequests = 0;
-            this.features = [];
-            // group according to service url to combine requests
-            var services = {}, url;
-            for(var i=0, len=layers.length; i<len; i++) {
-                var layer = layers[i];
-                var service, found = false;
-                url = OpenLayers.Util.isArray(layer.url) ? layer.url[0] : layer.url;
-                if(url in services) {
-                    services[url].push(layer);
-                } else {
-                    this._numRequests++;
-                    services[url] = [layer];
-                }
-            }
-            var layers;
-            for (var url in services) {
-                layers = services[url];
-                var wmsOptions = this.buildWMSOptions(url, layers,
-                    clickPosition, layers[0].params.FORMAT);
-                OpenLayers.Request.GET(wmsOptions);
-            }
-        }
-    },
-
-    /**
-     * Method: triggerGetFeatureInfo
-     * Trigger the getfeatureinfo event when all is done
-     *
-     * Parameters:
-     * request - {XMLHttpRequest} The request object
-     * xy - {<OpenLayers.Pixel>} The position on the map where the
-     *     mouse event occurred.
-     * features - {Array(<OpenLayers.Feature.Vector>)} or
-     *     {Array({Object}) when output is "object". The object has a url and a
-     *     features property which contains an array of features.
-     */
-    triggerGetFeatureInfo: function(request, xy, features) {
-        this.events.triggerEvent("getfeatureinfo", {
-            text: request.responseText,
-            features: features,
-            request: request,
-            xy: xy
-        });
-
-        // Reset the cursor.
-        OpenLayers.Element.removeClass(this.map.viewPortDiv, "olCursorWait");
-    },
-
-    /**
-     * Method: handleResponse
-     * Handler for the GetFeatureInfo response.
-     *
-     * Parameters:
-     * xy - {<OpenLayers.Pixel>} The position on the map where the
-     *     mouse event occurred.
-     * request - {XMLHttpRequest} The request object.
-     * url - {String} The url which was used for this request.
-     */
-    handleResponse: function(xy, request, url) {
-
-        var doc = request.responseXML;
-        if(!doc || !doc.documentElement) {
-            doc = request.responseText;
-        }
-        var features = this.format.read(doc);
-        if (this.drillDown === false) {
-            this.triggerGetFeatureInfo(request, xy, features);
-        } else {
-            this._requestCount++;
-            if (this.output === "object") {
-                this._features = (this._features || []).concat(
-                    {url: url, features: features}
-                );
-            } else {
-            this._features = (this._features || []).concat(features);
-            }
-            if (this._requestCount === this._numRequests) {
-                this.triggerGetFeatureInfo(request, xy, this._features.concat());
-                delete this._features;
-                delete this._requestCount;
-                delete this._numRequests;
-            }
-        }
-    },
-
-    CLASS_NAME: "OpenLayers.Control.WMSGetFeatureInfo"
-});
 
 /* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
  * full list of contributors). Published under the 2-clause BSD license.
@@ -35432,6 +34282,128 @@ OpenLayers.Renderer.VML.LABEL_SHIFT = {
  * full text of the license. */
 
 /**
+ * @requires OpenLayers/BaseTypes/Class.js
+ */
+
+/**
+ * Class: OpenLayers.Strategy
+ * Abstract vector layer strategy class.  Not to be instantiated directly.  Use
+ *     one of the strategy subclasses instead.
+ */
+OpenLayers.Strategy = OpenLayers.Class({
+    
+    /**
+     * Property: layer
+     * {<OpenLayers.Layer.Vector>} The layer this strategy belongs to.
+     */
+    layer: null,
+    
+    /**
+     * Property: options
+     * {Object} Any options sent to the constructor.
+     */
+    options: null,
+
+    /** 
+     * Property: active 
+     * {Boolean} The control is active.
+     */
+    active: null,
+
+    /**
+     * Property: autoActivate
+     * {Boolean} The creator of the strategy can set autoActivate to false
+     *      to fully control when the protocol is activated and deactivated.
+     *      Defaults to true.
+     */
+    autoActivate: true,
+
+    /**
+     * Property: autoDestroy
+     * {Boolean} The creator of the strategy can set autoDestroy to false
+     *      to fully control when the strategy is destroyed. Defaults to
+     *      true.
+     */
+    autoDestroy: true,
+
+    /**
+     * Constructor: OpenLayers.Strategy
+     * Abstract class for vector strategies.  Create instances of a subclass.
+     *
+     * Parameters:
+     * options - {Object} Optional object whose properties will be set on the
+     *     instance.
+     */
+    initialize: function(options) {
+        OpenLayers.Util.extend(this, options);
+        this.options = options;
+        // set the active property here, so that user cannot override it
+        this.active = false;
+    },
+    
+    /**
+     * APIMethod: destroy
+     * Clean up the strategy.
+     */
+    destroy: function() {
+        this.deactivate();
+        this.layer = null;
+        this.options = null;
+    },
+
+    /**
+     * Method: setLayer
+     * Called to set the <layer> property.
+     *
+     * Parameters:
+     * layer - {<OpenLayers.Layer.Vector>}
+     */
+    setLayer: function(layer) {
+        this.layer = layer;
+    },
+    
+    /**
+     * Method: activate
+     * Activate the strategy.  Register any listeners, do appropriate setup.
+     *
+     * Returns:
+     * {Boolean} True if the strategy was successfully activated or false if
+     *      the strategy was already active.
+     */
+    activate: function() {
+        if (!this.active) {
+            this.active = true;
+            return true;
+        }
+        return false;
+    },
+    
+    /**
+     * Method: deactivate
+     * Deactivate the strategy.  Unregister any listeners, do appropriate
+     *     tear-down.
+     *
+     * Returns:
+     * {Boolean} True if the strategy was successfully deactivated or false if
+     *      the strategy was already inactive.
+     */
+    deactivate: function() {
+        if (this.active) {
+            this.active = false;
+            return true;
+        }
+        return false;
+    },
+   
+    CLASS_NAME: "OpenLayers.Strategy" 
+});
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
  * @requires OpenLayers/Layer.js
  * @requires OpenLayers/Renderer.js
  * @requires OpenLayers/StyleMap.js
@@ -36439,1924 +35411,6 @@ OpenLayers.Layer.Vector = OpenLayers.Class(OpenLayers.Layer, {
  * See license.txt in the OpenLayers distribution or repository for the
  * full text of the license. */
 
-/**
- * @requires OpenLayers/Layer/Vector.js
- */
-
-/**
- * Class: OpenLayers.Layer.Vector.RootContainer
- * A special layer type to combine multiple vector layers inside a single
- *     renderer root container. This class is not supposed to be instantiated
- *     from user space, it is a helper class for controls that require event
- *     processing for multiple vector layers.
- *
- * Inherits from:
- *  - <OpenLayers.Layer.Vector>
- */
-OpenLayers.Layer.Vector.RootContainer = OpenLayers.Class(OpenLayers.Layer.Vector, {
-    
-    /**
-     * Property: displayInLayerSwitcher
-     * Set to false for this layer type
-     */
-    displayInLayerSwitcher: false,
-    
-    /**
-     * APIProperty: layers
-     * Layers that are attached to this container. Required config option.
-     */
-    layers: null,
-    
-    /**
-     * Constructor: OpenLayers.Layer.Vector.RootContainer
-     * Create a new root container for multiple vector layer. This constructor
-     * is not supposed to be used from user space, it is only to be used by
-     * controls that need feature selection across multiple vector layers.
-     *
-     * Parameters:
-     * name - {String} A name for the layer
-     * options - {Object} Optional object with non-default properties to set on
-     *           the layer.
-     * 
-     * Required options properties:
-     * layers - {Array(<OpenLayers.Layer.Vector>)} The layers managed by this
-     *     container
-     *
-     * Returns:
-     * {<OpenLayers.Layer.Vector.RootContainer>} A new vector layer root
-     *     container
-     */
-    
-    /**
-     * Method: display
-     */
-    display: function() {},
-    
-    /**
-     * Method: getFeatureFromEvent
-     * walk through the layers to find the feature returned by the event
-     * 
-     * Parameters:
-     * evt - {Object} event object with a feature property
-     * 
-     * Returns:
-     * {<OpenLayers.Feature.Vector>}
-     */
-    getFeatureFromEvent: function(evt) {
-        var layers = this.layers;
-        var feature;
-        for(var i=0; i<layers.length; i++) {
-            feature = layers[i].getFeatureFromEvent(evt);
-            if(feature) {
-                return feature;
-            }
-        }
-    },
-    
-    /**
-     * Method: setMap
-     * 
-     * Parameters:
-     * map - {<OpenLayers.Map>}
-     */
-    setMap: function(map) {
-        OpenLayers.Layer.Vector.prototype.setMap.apply(this, arguments);
-        this.collectRoots();
-        map.events.register("changelayer", this, this.handleChangeLayer);
-    },
-    
-    /**
-     * Method: removeMap
-     * 
-     * Parameters:
-     * map - {<OpenLayers.Map>}
-     */
-    removeMap: function(map) {
-        map.events.unregister("changelayer", this, this.handleChangeLayer);
-        this.resetRoots();
-        OpenLayers.Layer.Vector.prototype.removeMap.apply(this, arguments);
-    },
-    
-    /**
-     * Method: collectRoots
-     * Collects the root nodes of all layers this control is configured with
-     * and moveswien the nodes to this control's layer
-     */
-    collectRoots: function() {
-        var layer;
-        // walk through all map layers, because we want to keep the order
-        for(var i=0; i<this.map.layers.length; ++i) {
-            layer = this.map.layers[i];
-            if(OpenLayers.Util.indexOf(this.layers, layer) != -1) {
-                layer.renderer.moveRoot(this.renderer);
-            }
-        }
-    },
-    
-    /**
-     * Method: resetRoots
-     * Resets the root nodes back into the layers they belong to.
-     */
-    resetRoots: function() {
-        var layer;
-        for(var i=0; i<this.layers.length; ++i) {
-            layer = this.layers[i];
-            if(this.renderer && layer.renderer.getRenderLayerId() == this.id) {
-                this.renderer.moveRoot(layer.renderer);
-            }
-        }
-    },
-    
-    /**
-     * Method: handleChangeLayer
-     * Event handler for the map's changelayer event. We need to rebuild
-     * this container's layer dom if order of one of its layers changes.
-     * This handler is added with the setMap method, and removed with the
-     * removeMap method.
-     * 
-     * Parameters:
-     * evt - {Object}
-     */
-    handleChangeLayer: function(evt) {
-        var layer = evt.layer;
-        if(evt.property == "order" &&
-                        OpenLayers.Util.indexOf(this.layers, layer) != -1) {
-            this.resetRoots();
-            this.collectRoots();
-        }
-    },
-
-    CLASS_NAME: "OpenLayers.Layer.Vector.RootContainer"
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/BaseTypes/Class.js
- */
-
-/**
- * Class: OpenLayers.Strategy
- * Abstract vector layer strategy class.  Not to be instantiated directly.  Use
- *     one of the strategy subclasses instead.
- */
-OpenLayers.Strategy = OpenLayers.Class({
-    
-    /**
-     * Property: layer
-     * {<OpenLayers.Layer.Vector>} The layer this strategy belongs to.
-     */
-    layer: null,
-    
-    /**
-     * Property: options
-     * {Object} Any options sent to the constructor.
-     */
-    options: null,
-
-    /** 
-     * Property: active 
-     * {Boolean} The control is active.
-     */
-    active: null,
-
-    /**
-     * Property: autoActivate
-     * {Boolean} The creator of the strategy can set autoActivate to false
-     *      to fully control when the protocol is activated and deactivated.
-     *      Defaults to true.
-     */
-    autoActivate: true,
-
-    /**
-     * Property: autoDestroy
-     * {Boolean} The creator of the strategy can set autoDestroy to false
-     *      to fully control when the strategy is destroyed. Defaults to
-     *      true.
-     */
-    autoDestroy: true,
-
-    /**
-     * Constructor: OpenLayers.Strategy
-     * Abstract class for vector strategies.  Create instances of a subclass.
-     *
-     * Parameters:
-     * options - {Object} Optional object whose properties will be set on the
-     *     instance.
-     */
-    initialize: function(options) {
-        OpenLayers.Util.extend(this, options);
-        this.options = options;
-        // set the active property here, so that user cannot override it
-        this.active = false;
-    },
-    
-    /**
-     * APIMethod: destroy
-     * Clean up the strategy.
-     */
-    destroy: function() {
-        this.deactivate();
-        this.layer = null;
-        this.options = null;
-    },
-
-    /**
-     * Method: setLayer
-     * Called to set the <layer> property.
-     *
-     * Parameters:
-     * layer - {<OpenLayers.Layer.Vector>}
-     */
-    setLayer: function(layer) {
-        this.layer = layer;
-    },
-    
-    /**
-     * Method: activate
-     * Activate the strategy.  Register any listeners, do appropriate setup.
-     *
-     * Returns:
-     * {Boolean} True if the strategy was successfully activated or false if
-     *      the strategy was already active.
-     */
-    activate: function() {
-        if (!this.active) {
-            this.active = true;
-            return true;
-        }
-        return false;
-    },
-    
-    /**
-     * Method: deactivate
-     * Deactivate the strategy.  Unregister any listeners, do appropriate
-     *     tear-down.
-     *
-     * Returns:
-     * {Boolean} True if the strategy was successfully deactivated or false if
-     *      the strategy was already inactive.
-     */
-    deactivate: function() {
-        if (this.active) {
-            this.active = false;
-            return true;
-        }
-        return false;
-    },
-   
-    CLASS_NAME: "OpenLayers.Strategy" 
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-
-/**
- * @requires OpenLayers/BaseTypes/Class.js
- * @requires OpenLayers/Util.js
- * @requires OpenLayers/Style.js
- */
-
-/**
- * Class: OpenLayers.Filter
- * This class represents an OGC Filter.
- */
-OpenLayers.Filter = OpenLayers.Class({
-    
-    /** 
-     * Constructor: OpenLayers.Filter
-     * This class represents a generic filter.
-     *
-     * Parameters:
-     * options - {Object} Optional object whose properties will be set on the
-     *     instance.
-     * 
-     * Returns:
-     * {<OpenLayers.Filter>}
-     */
-    initialize: function(options) {
-        OpenLayers.Util.extend(this, options);
-    },
-
-    /** 
-     * APIMethod: destroy
-     * Remove reference to anything added.
-     */
-    destroy: function() {
-    },
-
-    /**
-     * APIMethod: evaluate
-     * Evaluates this filter in a specific context.  Instances or subclasses
-     * are supposed to override this method.
-     * 
-     * Parameters:
-     * context - {Object} Context to use in evaluating the filter.  If a vector
-     *     feature is provided, the feature.attributes will be used as context.
-     * 
-     * Returns:
-     * {Boolean} The filter applies.
-     */
-    evaluate: function(context) {
-        return true;
-    },
-    
-    /**
-     * APIMethod: clone
-     * Clones this filter. Should be implemented by subclasses.
-     * 
-     * Returns:
-     * {<OpenLayers.Filter>} Clone of this filter.
-     */
-    clone: function() {
-        return null;
-    },
-    
-    /**
-     * APIMethod: toString
-     *
-     * Returns:
-     * {String} Include <OpenLayers.Format.CQL> in your build to get a CQL
-     *     representation of the filter returned. Otherwise "[Object object]"
-     *     will be returned.
-     */
-    toString: function() {
-        var string;
-        if (OpenLayers.Format && OpenLayers.Format.CQL) {
-            string = OpenLayers.Format.CQL.prototype.write(this);
-        } else {
-            string = Object.prototype.toString.call(this);
-        }
-        return string;
-    },
-    
-    CLASS_NAME: "OpenLayers.Filter"
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-
-/**
- * @requires OpenLayers/Filter.js
- */
-
-/**
- * Class: OpenLayers.Filter.FeatureId
- * This class represents a ogc:FeatureId Filter, as being used for rule-based SLD
- * styling
- * 
- * Inherits from:
- * - <OpenLayers.Filter>
- */
-OpenLayers.Filter.FeatureId = OpenLayers.Class(OpenLayers.Filter, {
-
-    /** 
-     * APIProperty: fids
-     * {Array(String)} Feature Ids to evaluate this rule against. 
-     *     To be passed inside the params object.
-     */
-    fids: null,
-    
-    /** 
-     * Property: type
-     * {String} Type to identify this filter.
-     */
-    type: "FID",
-    
-    /** 
-     * Constructor: OpenLayers.Filter.FeatureId
-     * Creates an ogc:FeatureId rule.
-     *
-     * Parameters:
-     * options - {Object} An optional object with properties to set on the
-     *           rule
-     * 
-     * Returns:
-     * {<OpenLayers.Filter.FeatureId>}
-     */
-    initialize: function(options) {
-        this.fids = [];
-        OpenLayers.Filter.prototype.initialize.apply(this, [options]);
-    },
-
-    /**
-     * APIMethod: evaluate
-     * evaluates this rule for a specific feature
-     * 
-     * Parameters:
-     * feature - {<OpenLayers.Feature>} feature to apply the rule to.
-     *           For vector features, the check is run against the fid,
-     *           for plain features against the id.
-     * 
-     * Returns:
-     * {Boolean} true if the rule applies, false if it does not
-     */
-    evaluate: function(feature) {
-        for (var i=0, len=this.fids.length; i<len; i++) {
-            var fid = feature.fid || feature.id;
-            if (fid == this.fids[i]) {
-                return true;
-            }
-        }
-        return false;
-    },
-    
-    /**
-     * APIMethod: clone
-     * Clones this filter.
-     * 
-     * Returns:
-     * {<OpenLayers.Filter.FeatureId>} Clone of this filter.
-     */
-    clone: function() {
-        var filter = new OpenLayers.Filter.FeatureId();
-        OpenLayers.Util.extend(filter, this);
-        filter.fids = this.fids.slice();
-        return filter;
-    },
-    
-    CLASS_NAME: "OpenLayers.Filter.FeatureId"
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-
-/**
- * @requires OpenLayers/Filter.js
- */
-
-/**
- * Class: OpenLayers.Filter.Logical
- * This class represents ogc:And, ogc:Or and ogc:Not rules.
- * 
- * Inherits from:
- * - <OpenLayers.Filter>
- */
-OpenLayers.Filter.Logical = OpenLayers.Class(OpenLayers.Filter, {
-
-    /**
-     * APIProperty: filters
-     * {Array(<OpenLayers.Filter>)} Child filters for this filter.
-     */
-    filters: null, 
-     
-    /**
-     * APIProperty: type
-     * {String} type of logical operator. Available types are:
-     * - OpenLayers.Filter.Logical.AND = "&&";
-     * - OpenLayers.Filter.Logical.OR  = "||";
-     * - OpenLayers.Filter.Logical.NOT = "!";
-     */
-    type: null,
-
-    /** 
-     * Constructor: OpenLayers.Filter.Logical
-     * Creates a logical filter (And, Or, Not).
-     *
-     * Parameters:
-     * options - {Object} An optional object with properties to set on the
-     *     filter.
-     * 
-     * Returns:
-     * {<OpenLayers.Filter.Logical>}
-     */
-    initialize: function(options) {
-        this.filters = [];
-        OpenLayers.Filter.prototype.initialize.apply(this, [options]);
-    },
-    
-    /** 
-     * APIMethod: destroy
-     * Remove reference to child filters.
-     */
-    destroy: function() {
-        this.filters = null;
-        OpenLayers.Filter.prototype.destroy.apply(this);
-    },
-
-    /**
-     * APIMethod: evaluate
-     * Evaluates this filter in a specific context.
-     * 
-     * Parameters:
-     * context - {Object} Context to use in evaluating the filter.  A vector
-     *     feature may also be provided to evaluate feature attributes in 
-     *     comparison filters or geometries in spatial filters.
-     * 
-     * Returns:
-     * {Boolean} The filter applies.
-     */
-    evaluate: function(context) {
-        var i, len;
-        switch(this.type) {
-            case OpenLayers.Filter.Logical.AND:
-                for (i=0, len=this.filters.length; i<len; i++) {
-                    if (this.filters[i].evaluate(context) == false) {
-                        return false;
-                    }
-                }
-                return true;
-                
-            case OpenLayers.Filter.Logical.OR:
-                for (i=0, len=this.filters.length; i<len; i++) {
-                    if (this.filters[i].evaluate(context) == true) {
-                        return true;
-                    }
-                }
-                return false;
-            
-            case OpenLayers.Filter.Logical.NOT:
-                return (!this.filters[0].evaluate(context));
-        }
-        return undefined;
-    },
-    
-    /**
-     * APIMethod: clone
-     * Clones this filter.
-     * 
-     * Returns:
-     * {<OpenLayers.Filter.Logical>} Clone of this filter.
-     */
-    clone: function() {
-        var filters = [];        
-        for(var i=0, len=this.filters.length; i<len; ++i) {
-            filters.push(this.filters[i].clone());
-        }
-        return new OpenLayers.Filter.Logical({
-            type: this.type,
-            filters: filters
-        });
-    },
-    
-    CLASS_NAME: "OpenLayers.Filter.Logical"
-});
-
-
-OpenLayers.Filter.Logical.AND = "&&";
-OpenLayers.Filter.Logical.OR  = "||";
-OpenLayers.Filter.Logical.NOT = "!";
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Filter.js
- */
-
-/**
- * Class: OpenLayers.Filter.Comparison
- * This class represents a comparison filter.
- * 
- * Inherits from:
- * - <OpenLayers.Filter>
- */
-OpenLayers.Filter.Comparison = OpenLayers.Class(OpenLayers.Filter, {
-
-    /**
-     * APIProperty: type
-     * {String} type: type of the comparison. This is one of
-     * - OpenLayers.Filter.Comparison.EQUAL_TO                 = "==";
-     * - OpenLayers.Filter.Comparison.NOT_EQUAL_TO             = "!=";
-     * - OpenLayers.Filter.Comparison.LESS_THAN                = "<";
-     * - OpenLayers.Filter.Comparison.GREATER_THAN             = ">";
-     * - OpenLayers.Filter.Comparison.LESS_THAN_OR_EQUAL_TO    = "<=";
-     * - OpenLayers.Filter.Comparison.GREATER_THAN_OR_EQUAL_TO = ">=";
-     * - OpenLayers.Filter.Comparison.BETWEEN                  = "..";
-     * - OpenLayers.Filter.Comparison.LIKE                     = "~";
-     * - OpenLayers.Filter.Comparison.IS_NULL                  = "NULL";
-     */
-    type: null,
-    
-    /**
-     * APIProperty: property
-     * {String}
-     * name of the context property to compare
-     */
-    property: null,
-    
-    /**
-     * APIProperty: value
-     * {Number} or {String}
-     * comparison value for binary comparisons. In the case of a String, this
-     * can be a combination of text and propertyNames in the form
-     * "literal ${propertyName}"
-     */
-    value: null,
-    
-    /**
-     * Property: matchCase
-     * {Boolean} Force case sensitive searches for EQUAL_TO and NOT_EQUAL_TO
-     *     comparisons.  The Filter Encoding 1.1 specification added a matchCase
-     *     attribute to ogc:PropertyIsEqualTo and ogc:PropertyIsNotEqualTo
-     *     elements.  This property will be serialized with those elements only
-     *     if using the v1.1.0 filter format. However, when evaluating filters
-     *     here, the matchCase property will always be respected (for EQUAL_TO
-     *     and NOT_EQUAL_TO).  Default is true. 
-     */
-    matchCase: true,
-    
-    /**
-     * APIProperty: lowerBoundary
-     * {Number} or {String}
-     * lower boundary for between comparisons. In the case of a String, this
-     * can be a combination of text and propertyNames in the form
-     * "literal ${propertyName}"
-     */
-    lowerBoundary: null,
-    
-    /**
-     * APIProperty: upperBoundary
-     * {Number} or {String}
-     * upper boundary for between comparisons. In the case of a String, this
-     * can be a combination of text and propertyNames in the form
-     * "literal ${propertyName}"
-     */
-    upperBoundary: null,
-
-    /** 
-     * Constructor: OpenLayers.Filter.Comparison
-     * Creates a comparison rule.
-     *
-     * Parameters:
-     * options - {Object} An optional object with properties to set on the
-     *           rule
-     * 
-     * Returns:
-     * {<OpenLayers.Filter.Comparison>}
-     */
-    initialize: function(options) {
-        OpenLayers.Filter.prototype.initialize.apply(this, [options]);
-        // since matchCase on PropertyIsLike is not schema compliant, we only
-        // want to use this if explicitly asked for
-        if (this.type === OpenLayers.Filter.Comparison.LIKE 
-            && options.matchCase === undefined) {
-                this.matchCase = null;
-        }
-    },
-
-    /**
-     * APIMethod: evaluate
-     * Evaluates this filter in a specific context.
-     * 
-     * Parameters:
-     * context - {Object} Context to use in evaluating the filter.  If a vector
-     *     feature is provided, the feature.attributes will be used as context.
-     * 
-     * Returns:
-     * {Boolean} The filter applies.
-     */
-    evaluate: function(context) {
-        if (context instanceof OpenLayers.Feature.Vector) {
-            context = context.attributes;
-        }
-        var result = false;
-        var got = context[this.property];
-        var exp;
-        switch(this.type) {
-            case OpenLayers.Filter.Comparison.EQUAL_TO:
-                exp = this.value;
-                if(!this.matchCase &&
-                   typeof got == "string" && typeof exp == "string") {
-                    result = (got.toUpperCase() == exp.toUpperCase());
-                } else {
-                    result = (got == exp);
-                }
-                break;
-            case OpenLayers.Filter.Comparison.NOT_EQUAL_TO:
-                exp = this.value;
-                if(!this.matchCase &&
-                   typeof got == "string" && typeof exp == "string") {
-                    result = (got.toUpperCase() != exp.toUpperCase());
-                } else {
-                    result = (got != exp);
-                }
-                break;
-            case OpenLayers.Filter.Comparison.LESS_THAN:
-                result = got < this.value;
-                break;
-            case OpenLayers.Filter.Comparison.GREATER_THAN:
-                result = got > this.value;
-                break;
-            case OpenLayers.Filter.Comparison.LESS_THAN_OR_EQUAL_TO:
-                result = got <= this.value;
-                break;
-            case OpenLayers.Filter.Comparison.GREATER_THAN_OR_EQUAL_TO:
-                result = got >= this.value;
-                break;
-            case OpenLayers.Filter.Comparison.BETWEEN:
-                result = (got >= this.lowerBoundary) &&
-                    (got <= this.upperBoundary);
-                break;
-            case OpenLayers.Filter.Comparison.LIKE:
-                var regexp = new RegExp(this.value, "gi");
-                result = regexp.test(got);
-                break;
-            case OpenLayers.Filter.Comparison.IS_NULL:
-                result = (got === null);
-                break;
-        }
-        return result;
-    },
-    
-    /**
-     * APIMethod: value2regex
-     * Converts the value of this rule into a regular expression string,
-     * according to the wildcard characters specified. This method has to
-     * be called after instantiation of this class, if the value is not a
-     * regular expression already.
-     * 
-     * Parameters:
-     * wildCard   - {Char} wildcard character in the above value, default
-     *              is "*"
-     * singleChar - {Char} single-character wildcard in the above value
-     *              default is "."
-     * escapeChar - {Char} escape character in the above value, default is
-     *              "!"
-     * 
-     * Returns:
-     * {String} regular expression string
-     */
-    value2regex: function(wildCard, singleChar, escapeChar) {
-        if (wildCard == ".") {
-            throw new Error("'.' is an unsupported wildCard character for " +
-                            "OpenLayers.Filter.Comparison");
-        }
-        
-
-        // set UMN MapServer defaults for unspecified parameters
-        wildCard = wildCard ? wildCard : "*";
-        singleChar = singleChar ? singleChar : ".";
-        escapeChar = escapeChar ? escapeChar : "!";
-        
-        this.value = this.value.replace(
-                new RegExp("\\"+escapeChar+"(.|$)", "g"), "\\$1");
-        this.value = this.value.replace(
-                new RegExp("\\"+singleChar, "g"), ".");
-        this.value = this.value.replace(
-                new RegExp("\\"+wildCard, "g"), ".*");
-        this.value = this.value.replace(
-                new RegExp("\\\\.\\*", "g"), "\\"+wildCard);
-        this.value = this.value.replace(
-                new RegExp("\\\\\\.", "g"), "\\"+singleChar);
-        
-        return this.value;
-    },
-    
-    /**
-     * Method: regex2value
-     * Convert the value of this rule from a regular expression string into an
-     *     ogc literal string using a wildCard of *, a singleChar of ., and an
-     *     escape of !.  Leaves the <value> property unmodified.
-     * 
-     * Returns:
-     * {String} A string value.
-     */
-    regex2value: function() {
-        
-        var value = this.value;
-        
-        // replace ! with !!
-        value = value.replace(/!/g, "!!");
-
-        // replace \. with !. (watching out for \\.)
-        value = value.replace(/(\\)?\\\./g, function($0, $1) {
-            return $1 ? $0 : "!.";
-        });
-        
-        // replace \* with #* (watching out for \\*)
-        value = value.replace(/(\\)?\\\*/g, function($0, $1) {
-            return $1 ? $0 : "!*";
-        });
-        
-        // replace \\ with \
-        value = value.replace(/\\\\/g, "\\");
-
-        // convert .* to * (the sequence #.* is not allowed)
-        value = value.replace(/\.\*/g, "*");
-        
-        return value;
-    },
-    
-    /**
-     * APIMethod: clone
-     * Clones this filter.
-     * 
-     * Returns:
-     * {<OpenLayers.Filter.Comparison>} Clone of this filter.
-     */
-    clone: function() {
-        return OpenLayers.Util.extend(new OpenLayers.Filter.Comparison(), this);
-    },
-    
-    CLASS_NAME: "OpenLayers.Filter.Comparison"
-});
-
-
-OpenLayers.Filter.Comparison.EQUAL_TO                 = "==";
-OpenLayers.Filter.Comparison.NOT_EQUAL_TO             = "!=";
-OpenLayers.Filter.Comparison.LESS_THAN                = "<";
-OpenLayers.Filter.Comparison.GREATER_THAN             = ">";
-OpenLayers.Filter.Comparison.LESS_THAN_OR_EQUAL_TO    = "<=";
-OpenLayers.Filter.Comparison.GREATER_THAN_OR_EQUAL_TO = ">=";
-OpenLayers.Filter.Comparison.BETWEEN                  = "..";
-OpenLayers.Filter.Comparison.LIKE                     = "~";
-OpenLayers.Filter.Comparison.IS_NULL                  = "NULL";
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Filter.js
- */
-
-/**
- * Class: OpenLayers.Filter.Spatial
- * This class represents a spatial filter.
- * Currently implemented: BBOX, DWithin and Intersects
- * 
- * Inherits from:
- * - <OpenLayers.Filter>
- */
-OpenLayers.Filter.Spatial = OpenLayers.Class(OpenLayers.Filter, {
-
-    /**
-     * APIProperty: type
-     * {String} Type of spatial filter.
-     *
-     * The type should be one of:
-     * - OpenLayers.Filter.Spatial.BBOX
-     * - OpenLayers.Filter.Spatial.INTERSECTS
-     * - OpenLayers.Filter.Spatial.DWITHIN
-     * - OpenLayers.Filter.Spatial.WITHIN
-     * - OpenLayers.Filter.Spatial.CONTAINS
-     */
-    type: null,
-    
-    /**
-     * APIProperty: property
-     * {String} Name of the context property to compare.
-     */
-    property: null,
-    
-    /**
-     * APIProperty: value
-     * {<OpenLayers.Bounds> || <OpenLayers.Geometry>} The bounds or geometry
-     *     to be used by the filter.  Use bounds for BBOX filters and geometry
-     *     for INTERSECTS or DWITHIN filters.
-     */
-    value: null,
-
-    /**
-     * APIProperty: distance
-     * {Number} The distance to use in a DWithin spatial filter.
-     */
-    distance: null,
-
-    /**
-     * APIProperty: distanceUnits
-     * {String} The units to use for the distance, e.g. 'm'.
-     */
-    distanceUnits: null,
-    
-    /** 
-     * Constructor: OpenLayers.Filter.Spatial
-     * Creates a spatial filter.
-     *
-     * Parameters:
-     * options - {Object} An optional object with properties to set on the
-     *     filter.
-     * 
-     * Returns:
-     * {<OpenLayers.Filter.Spatial>}
-     */
-
-   /**
-    * Method: evaluate
-    * Evaluates this filter for a specific feature.
-    * 
-    * Parameters:
-    * feature - {<OpenLayers.Feature.Vector>} feature to apply the filter to.
-    * 
-    * Returns:
-    * {Boolean} The feature meets filter criteria.
-    */
-    evaluate: function(feature) {
-        var intersect = false;
-        switch(this.type) {
-            case OpenLayers.Filter.Spatial.BBOX:
-            case OpenLayers.Filter.Spatial.INTERSECTS:
-                if(feature.geometry) {
-                    var geom = this.value;
-                    if(this.value.CLASS_NAME == "OpenLayers.Bounds") {
-                        geom = this.value.toGeometry();
-                    }
-                    if(feature.geometry.intersects(geom)) {
-                        intersect = true;
-                    }
-                }
-                break;
-            default:
-                throw new Error('evaluate is not implemented for this filter type.');
-        }
-        return intersect;
-    },
-
-    /**
-     * APIMethod: clone
-     * Clones this filter.
-     * 
-     * Returns:
-     * {<OpenLayers.Filter.Spatial>} Clone of this filter.
-     */
-    clone: function() {
-        var options = OpenLayers.Util.applyDefaults({
-            value: this.value && this.value.clone && this.value.clone()
-        }, this);
-        return new OpenLayers.Filter.Spatial(options);
-    },
-    CLASS_NAME: "OpenLayers.Filter.Spatial"
-});
-
-OpenLayers.Filter.Spatial.BBOX = "BBOX";
-OpenLayers.Filter.Spatial.INTERSECTS = "INTERSECTS";
-OpenLayers.Filter.Spatial.DWITHIN = "DWITHIN";
-OpenLayers.Filter.Spatial.WITHIN = "WITHIN";
-OpenLayers.Filter.Spatial.CONTAINS = "CONTAINS";
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Filter.js
- */
-
-/**
- * Class: OpenLayers.Filter.Function
- * This class represents a filter function.
- * We are using this class for creation of complex 
- * filters that can contain filter functions as values.
- * Nesting function as other functions parameter is supported.
- * 
- * Inherits from:
- * - <OpenLayers.Filter>
- */
-OpenLayers.Filter.Function = OpenLayers.Class(OpenLayers.Filter, {
-
-    /**
-     * APIProperty: name
-     * {String} Name of the function.
-     */
-    name: null,
-    
-    /**
-     * APIProperty: params
-     * {Array(<OpenLayers.Filter.Function> || String || Number)} Function parameters
-     * For now support only other Functions, String or Number
-     */
-    params: null,  
-    
-    /** 
-     * Constructor: OpenLayers.Filter.Function
-     * Creates a filter function.
-     *
-     * Parameters:
-     * options - {Object} An optional object with properties to set on the
-     *     function.
-     * 
-     * Returns:
-     * {<OpenLayers.Filter.Function>}
-     */
-
-    CLASS_NAME: "OpenLayers.Filter.Function"
-});
-
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/BaseTypes/Class.js
- */
-
-/**
- * Class: OpenLayers.Protocol
- * Abstract vector layer protocol class.  Not to be instantiated directly.  Use
- *     one of the protocol subclasses instead.
- */
-OpenLayers.Protocol = OpenLayers.Class({
-    
-    /**
-     * Property: format
-     * {<OpenLayers.Format>} The format used by this protocol.
-     */
-    format: null,
-    
-    /**
-     * Property: options
-     * {Object} Any options sent to the constructor.
-     */
-    options: null,
-
-    /**
-     * Property: autoDestroy
-     * {Boolean} The creator of the protocol can set autoDestroy to false
-     *      to fully control when the protocol is destroyed. Defaults to
-     *      true.
-     */
-    autoDestroy: true,
-   
-    /**
-     * Property: defaultFilter
-     * {<OpenLayers.Filter>} Optional default filter to read requests
-     */
-    defaultFilter: null,
-    
-    /**
-     * Constructor: OpenLayers.Protocol
-     * Abstract class for vector protocols.  Create instances of a subclass.
-     *
-     * Parameters:
-     * options - {Object} Optional object whose properties will be set on the
-     *     instance.
-     */
-    initialize: function(options) {
-        options = options || {};
-        OpenLayers.Util.extend(this, options);
-        this.options = options;
-    },
-
-    /**
-     * Method: mergeWithDefaultFilter
-     * Merge filter passed to the read method with the default one
-     *
-     * Parameters:
-     * filter - {<OpenLayers.Filter>}
-     */
-    mergeWithDefaultFilter: function(filter) {
-        var merged;
-        if (filter && this.defaultFilter) {
-            merged = new OpenLayers.Filter.Logical({
-                type: OpenLayers.Filter.Logical.AND,
-                filters: [this.defaultFilter, filter]
-            });
-        } else {
-            merged = filter || this.defaultFilter || undefined;
-        }
-        return merged;
-    },
-
-    /**
-     * APIMethod: destroy
-     * Clean up the protocol.
-     */
-    destroy: function() {
-        this.options = null;
-        this.format = null;
-    },
-    
-    /**
-     * APIMethod: read
-     * Construct a request for reading new features.
-     *
-     * Parameters:
-     * options - {Object} Optional object for configuring the request.
-     *
-     * Returns:
-     * {<OpenLayers.Protocol.Response>} An <OpenLayers.Protocol.Response>
-     * object, the same object will be passed to the callback function passed
-     * if one exists in the options object.
-     */
-    read: function(options) {
-        options = options || {};
-        options.filter = this.mergeWithDefaultFilter(options.filter);
-    },
-    
-    
-    /**
-     * APIMethod: create
-     * Construct a request for writing newly created features.
-     *
-     * Parameters:
-     * features - {Array({<OpenLayers.Feature.Vector>})} or
-     *            {<OpenLayers.Feature.Vector>}
-     * options - {Object} Optional object for configuring the request.
-     *
-     * Returns:
-     * {<OpenLayers.Protocol.Response>} An <OpenLayers.Protocol.Response>
-     * object, the same object will be passed to the callback function passed
-     * if one exists in the options object.
-     */
-    create: function() {
-    },
-    
-    /**
-     * APIMethod: update
-     * Construct a request updating modified features.
-     *
-     * Parameters:
-     * features - {Array({<OpenLayers.Feature.Vector>})} or
-     *            {<OpenLayers.Feature.Vector>}
-     * options - {Object} Optional object for configuring the request.
-     *
-     * Returns:
-     * {<OpenLayers.Protocol.Response>} An <OpenLayers.Protocol.Response>
-     * object, the same object will be passed to the callback function passed
-     * if one exists in the options object.
-     */
-    update: function() {
-    },
-    
-    /**
-     * APIMethod: delete
-     * Construct a request deleting a removed feature.
-     *
-     * Parameters:
-     * feature - {<OpenLayers.Feature.Vector>}
-     * options - {Object} Optional object for configuring the request.
-     *
-     * Returns:
-     * {<OpenLayers.Protocol.Response>} An <OpenLayers.Protocol.Response>
-     * object, the same object will be passed to the callback function passed
-     * if one exists in the options object.
-     */
-    "delete": function() {
-    },
-
-    /**
-     * APIMethod: commit
-     * Go over the features and for each take action
-     * based on the feature state. Possible actions are create,
-     * update and delete.
-     *
-     * Parameters:
-     * features - {Array({<OpenLayers.Feature.Vector>})}
-     * options - {Object} Object whose possible keys are "create", "update",
-     *      "delete", "callback" and "scope", the values referenced by the
-     *      first three are objects as passed to the "create", "update", and
-     *      "delete" methods, the value referenced by the "callback" key is
-     *      a function which is called when the commit operation is complete
-     *      using the scope referenced by the "scope" key.
-     *
-     * Returns:
-     * {Array({<OpenLayers.Protocol.Response>})} An array of
-     * <OpenLayers.Protocol.Response> objects.
-     */
-    commit: function() {
-    },
-
-    /**
-     * Method: abort
-     * Abort an ongoing request.
-     *
-     * Parameters:
-     * response - {<OpenLayers.Protocol.Response>}
-     */
-    abort: function(response) {
-    },
-   
-    /**
-     * Method: createCallback
-     * Returns a function that applies the given public method with resp and
-     *     options arguments.
-     *
-     * Parameters:
-     * method - {Function} The method to be applied by the callback.
-     * response - {<OpenLayers.Protocol.Response>} The protocol response object.
-     * options - {Object} Options sent to the protocol method
-     */
-    createCallback: function(method, response, options) {
-        return OpenLayers.Function.bind(function() {
-            method.apply(this, [response, options]);
-        }, this);
-    },
-   
-    CLASS_NAME: "OpenLayers.Protocol" 
-});
-
-/**
- * Class: OpenLayers.Protocol.Response
- * Protocols return Response objects to their users.
- */
-OpenLayers.Protocol.Response = OpenLayers.Class({
-    /**
-     * Property: code
-     * {Number} - OpenLayers.Protocol.Response.SUCCESS or
-     *            OpenLayers.Protocol.Response.FAILURE
-     */
-    code: null,
-
-    /**
-     * Property: requestType
-     * {String} The type of request this response corresponds to. Either
-     *      "create", "read", "update" or "delete".
-     */
-    requestType: null,
-
-    /**
-     * Property: last
-     * {Boolean} - true if this is the last response expected in a commit,
-     * false otherwise, defaults to true.
-     */
-    last: true,
-
-    /**
-     * Property: features
-     * {Array({<OpenLayers.Feature.Vector>})} or {<OpenLayers.Feature.Vector>}
-     * The features returned in the response by the server. Depending on the 
-     * protocol's read payload, either features or data will be populated.
-     */
-    features: null,
-
-    /**
-     * Property: data
-     * {Object}
-     * The data returned in the response by the server. Depending on the 
-     * protocol's read payload, either features or data will be populated.
-     */
-    data: null,
-
-    /**
-     * Property: reqFeatures
-     * {Array({<OpenLayers.Feature.Vector>})} or {<OpenLayers.Feature.Vector>}
-     * The features provided by the user and placed in the request by the
-     *      protocol.
-     */
-    reqFeatures: null,
-
-    /**
-     * Property: priv
-     */
-    priv: null,
-
-    /**
-     * Property: error
-     * {Object} The error object in case a service exception was encountered.
-     */
-    error: null,
-
-    /**
-     * Constructor: OpenLayers.Protocol.Response
-     *
-     * Parameters:
-     * options - {Object} Optional object whose properties will be set on the
-     *     instance.
-     */
-    initialize: function(options) {
-        OpenLayers.Util.extend(this, options);
-    },
-
-    /**
-     * Method: success
-     *
-     * Returns:
-     * {Boolean} - true on success, false otherwise
-     */
-    success: function() {
-        return this.code > 0;
-    },
-
-    CLASS_NAME: "OpenLayers.Protocol.Response"
-});
-
-OpenLayers.Protocol.Response.SUCCESS = 1;
-OpenLayers.Protocol.Response.FAILURE = 0;
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Protocol.js
- */
-
-/**
- * Class: OpenLayers.Protocol.WFS
- * Used to create a versioned WFS protocol.  Default version is 1.0.0.
- *
- * Returns:
- * {<OpenLayers.Protocol>} A WFS protocol of the given version.
- *
- * Example:
- * (code)
- *     var protocol = new OpenLayers.Protocol.WFS({
- *         version: "1.1.0",
- *         url:  "http://demo.opengeo.org/geoserver/wfs",
- *         featureType: "tasmania_roads",
- *         featureNS: "http://www.openplans.org/topp",
- *         geometryName: "the_geom"
- *     });
- * (end)
- *
- * See the protocols for specific WFS versions for more detail.
- */
-OpenLayers.Protocol.WFS = function(options) {
-    options = OpenLayers.Util.applyDefaults(
-        options, OpenLayers.Protocol.WFS.DEFAULTS
-    );
-    var cls = OpenLayers.Protocol.WFS["v"+options.version.replace(/\./g, "_")];
-    if(!cls) {
-        throw "Unsupported WFS version: " + options.version;
-    }
-    return new cls(options);
-};
-
-/**
- * Function: fromWMSLayer
- * Convenience function to create a WFS protocol from a WMS layer.  This makes
- *     the assumption that a WFS requests can be issued at the same URL as
- *     WMS requests and that a WFS featureType exists with the same name as the
- *     WMS layer.
- *     
- * This function is designed to auto-configure <url>, <featureType>,
- *     <featurePrefix> and <srsName> for WFS <version> 1.1.0. Note that
- *     srsName matching with the WMS layer will not work with WFS 1.0.0.
- * 
- * Parameters:
- * layer - {<OpenLayers.Layer.WMS>} WMS layer that has a matching WFS
- *     FeatureType at the same server url with the same typename.
- * options - {Object} Default properties to be set on the protocol.
- *
- * Returns:
- * {<OpenLayers.Protocol.WFS>}
- */
-OpenLayers.Protocol.WFS.fromWMSLayer = function(layer, options) {
-    var typeName, featurePrefix;
-    var param = layer.params["LAYERS"];
-    var parts = (OpenLayers.Util.isArray(param) ? param[0] : param).split(":");
-    if(parts.length > 1) {
-        featurePrefix = parts[0];
-    }
-    typeName = parts.pop();
-    var protocolOptions = {
-        url: layer.url,
-        featureType: typeName,
-        featurePrefix: featurePrefix,
-        srsName: layer.projection && layer.projection.getCode() ||
-                 layer.map && layer.map.getProjectionObject().getCode(),
-        version: "1.1.0"
-    };
-    return new OpenLayers.Protocol.WFS(OpenLayers.Util.applyDefaults(
-        options, protocolOptions
-    ));
-};
-
-/**
- * Constant: OpenLayers.Protocol.WFS.DEFAULTS
- */
-OpenLayers.Protocol.WFS.DEFAULTS = {
-    "version": "1.0.0"
-};
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Protocol/WFS.js
- */
-
-/**
- * Class: OpenLayers.Protocol.WFS.v1
- * Abstract class for for v1.0.0 and v1.1.0 protocol.
- *
- * Inherits from:
- *  - <OpenLayers.Protocol>
- */
-OpenLayers.Protocol.WFS.v1 = OpenLayers.Class(OpenLayers.Protocol, {
-    
-    /**
-     * Property: version
-     * {String} WFS version number.
-     */
-    version: null,
-    
-    /**
-     * Property: srsName
-     * {String} Name of spatial reference system.  Default is "EPSG:4326".
-     */
-    srsName: "EPSG:4326",
-    
-    /**
-     * Property: featureType
-     * {String} Local feature typeName.
-     */
-    featureType: null,
-    
-    /**
-     * Property: featureNS
-     * {String} Feature namespace.
-     */
-    featureNS: null,
-    
-    /**
-     * Property: geometryName
-     * {String} Name of the geometry attribute for features.  Default is
-     *     "the_geom" for WFS <version> 1.0, and null for higher versions.
-     */
-    geometryName: "the_geom",
-
-    /**
-     * Property: maxFeatures
-     * {Integer} Optional maximum number of features to retrieve.
-     */
-    
-    /**
-     * Property: schema
-     * {String} Optional schema location that will be included in the
-     *     schemaLocation attribute value.  Note that the feature type schema
-     *     is required for a strict XML validator (on transactions with an
-     *     insert for example), but is *not* required by the WFS specification
-     *     (since the server is supposed to know about feature type schemas).
-     */
-    schema: null,
-
-    /**
-     * Property: featurePrefix
-     * {String} Namespace alias for feature type.  Default is "feature".
-     */
-    featurePrefix: "feature",
-    
-    /**
-     * Property: formatOptions
-     * {Object} Optional options for the format.  If a format is not provided,
-     *     this property can be used to extend the default format options.
-     */
-    formatOptions: null,
-
-    /** 
-     * Property: readFormat 
-     * {<OpenLayers.Format>} For WFS requests it is possible to get a  
-     *     different output format than GML. In that case, we cannot parse  
-     *     the response with the default format (WFST) and we need a different 
-     *     format for reading. 
-     */ 
-    readFormat: null,
-    
-    /**
-     * Property: readOptions
-     * {Object} Optional object to pass to format's read.
-     */
-    readOptions: null,
-    
-    /**
-     * Constructor: OpenLayers.Protocol.WFS
-     * A class for giving layers WFS protocol.
-     *
-     * Parameters:
-     * options - {Object} Optional object whose properties will be set on the
-     *     instance.
-     *
-     * Valid options properties:
-     * url - {String} URL to send requests to (required).
-     * featureType - {String} Local (without prefix) feature typeName (required).
-     * featureNS - {String} Feature namespace (required, but can be autodetected
-     *     during the first query if GML is used as readFormat and
-     *     featurePrefix is provided and matches the prefix used by the server
-     *     for this featureType).
-     * featurePrefix - {String} Feature namespace alias (optional - only used
-     *     for writing if featureNS is provided).  Default is 'feature'.
-     * geometryName - {String} Name of geometry attribute.  The default is
-     *     'the_geom' for WFS <version> 1.0, and null for higher versions. If
-     *     null, it will be set to the name of the first geometry found in the
-     *     first read operation.
-     * multi - {Boolean} If set to true, geometries will be casted to Multi
-     *     geometries before they are written in a transaction. No casting will
-     *     be done when reading features.
-     */
-    initialize: function(options) {
-        OpenLayers.Protocol.prototype.initialize.apply(this, [options]);
-        if(!options.format) {
-            this.format = OpenLayers.Format.WFST(OpenLayers.Util.extend({
-                version: this.version,
-                featureType: this.featureType,
-                featureNS: this.featureNS,
-                featurePrefix: this.featurePrefix,
-                geometryName: this.geometryName,
-                srsName: this.srsName,
-                schema: this.schema
-            }, this.formatOptions));
-        }
-        if (!options.geometryName && parseFloat(this.format.version) > 1.0) {
-            this.setGeometryName(null);
-        }
-    },
-    
-    /**
-     * APIMethod: destroy
-     * Clean up the protocol.
-     */
-    destroy: function() {
-        if(this.options && !this.options.format) {
-            this.format.destroy();
-        }
-        this.format = null;
-        OpenLayers.Protocol.prototype.destroy.apply(this);
-    },
-
-    /**
-     * APIMethod: read
-     * Construct a request for reading new features.  Since WFS splits the
-     *     basic CRUD operations into GetFeature requests (for read) and
-     *     Transactions (for all others), this method does not make use of the
-     *     format's read method (that is only about reading transaction
-     *     responses).
-     *
-     * Parameters:
-     * options - {Object} Options for the read operation, in addition to the
-     *     options set on the instance (options set here will take precedence).
-     *
-     * To use a configured protocol to get e.g. a WFS hit count, applications
-     * could do the following:
-     *
-     * (code)
-     * protocol.read({
-     *     readOptions: {output: "object"},
-     *     resultType: "hits",
-     *     maxFeatures: null,
-     *     callback: function(resp) {
-     *         // process resp.numberOfFeatures here
-     *     }
-     * });
-     * (end)
-     *
-     * To use a configured protocol to use WFS paging (if supported by the
-     * server), applications could do the following:
-     *
-     * (code)
-     * protocol.read({
-     *     startIndex: 0,
-     *     count: 50
-     * });
-     * (end)
-     *
-     * To limit the attributes returned by the GetFeature request, applications
-     * can use the propertyNames option to specify the properties to include in
-     * the response:
-     *
-     * (code)
-     * protocol.read({
-     *     propertyNames: ["DURATION", "INTENSITY"]
-     * });
-     * (end)
-     */
-    read: function(options) {
-        OpenLayers.Protocol.prototype.read.apply(this, arguments);
-        options = OpenLayers.Util.extend({}, options);
-        OpenLayers.Util.applyDefaults(options, this.options || {});
-        var response = new OpenLayers.Protocol.Response({requestType: "read"});
-        
-        var data = OpenLayers.Format.XML.prototype.write.apply(
-            this.format, [this.format.writeNode("wfs:GetFeature", options)]
-        );
-
-        response.priv = OpenLayers.Request.POST({
-            url: options.url,
-            callback: this.createCallback(this.handleRead, response, options),
-            params: options.params,
-            headers: options.headers,
-            data: data
-        });
-
-        return response;
-    },
-
-    /**
-     * APIMethod: setFeatureType
-     * Change the feature type on the fly.
-     *
-     * Parameters:
-     * featureType - {String} Local (without prefix) feature typeName.
-     */
-    setFeatureType: function(featureType) {
-        this.featureType = featureType;
-        this.format.featureType = featureType;
-    },
- 
-    /**
-     * APIMethod: setGeometryName
-     * Sets the geometryName option after instantiation.
-     *
-     * Parameters:
-     * geometryName - {String} Name of geometry attribute.
-     */
-    setGeometryName: function(geometryName) {
-        this.geometryName = geometryName;
-        this.format.geometryName = geometryName;
-    },
-    
-    /**
-     * Method: handleRead
-     * Deal with response from the read request.
-     *
-     * Parameters:
-     * response - {<OpenLayers.Protocol.Response>} The response object to pass
-     *     to the user callback.
-     * options - {Object} The user options passed to the read call.
-     */
-    handleRead: function(response, options) {
-        options = OpenLayers.Util.extend({}, options);
-        OpenLayers.Util.applyDefaults(options, this.options);
-
-        if(options.callback) {
-            var request = response.priv;
-            if(request.status >= 200 && request.status < 300) {
-                // success
-                var result = this.parseResponse(request, options.readOptions);
-                if (result && result.success !== false) { 
-                    if (options.readOptions && options.readOptions.output == "object") {
-                        OpenLayers.Util.extend(response, result);
-                    } else {
-                        response.features = result;
-                    }
-                    response.code = OpenLayers.Protocol.Response.SUCCESS;
-                } else {
-                    // failure (service exception)
-                    response.code = OpenLayers.Protocol.Response.FAILURE;
-                    response.error = result;
-                }
-            } else {
-                // failure
-                response.code = OpenLayers.Protocol.Response.FAILURE;
-            }
-            options.callback.call(options.scope, response);
-        }
-    },
-
-    /**
-     * Method: parseResponse
-     * Read HTTP response body and return features
-     *
-     * Parameters:
-     * request - {XMLHttpRequest} The request object
-     * options - {Object} Optional object to pass to format's read
-     *
-     * Returns:
-     * {Object} or {Array({<OpenLayers.Feature.Vector>})} or
-     *     {<OpenLayers.Feature.Vector>} 
-     * An object with a features property, an array of features or a single 
-     * feature.
-     */
-    parseResponse: function(request, options) {
-        var doc = request.responseXML;
-        if(!doc || !doc.documentElement) {
-            doc = request.responseText;
-        }
-        if(!doc || doc.length <= 0) {
-            return null;
-        }
-        var result = (this.readFormat !== null) ? this.readFormat.read(doc) : 
-            this.format.read(doc, options);
-        if (!this.featureNS) {
-            var format = this.readFormat || this.format;
-            this.featureNS = format.featureNS;
-            // no need to auto-configure again on subsequent reads
-            format.autoConfig = false;
-            if (!this.geometryName) {
-                this.setGeometryName(format.geometryName);
-            }
-        }
-        return result;
-    },
-
-    /**
-     * Method: commit
-     * Given a list of feature, assemble a batch request for update, create,
-     *     and delete transactions.  A commit call on the prototype amounts
-     *     to writing a WFS transaction - so the write method on the format
-     *     is used.
-     *
-     * Parameters:
-     * features - {Array(<OpenLayers.Feature.Vector>)}
-     * options - {Object}
-     *
-     * Valid options properties:
-     * nativeElements - {Array({Object})} Array of objects with information for writing
-     * out <Native> elements, these objects have vendorId, safeToIgnore and
-     * value properties. The <Native> element is intended to allow access to 
-     * vendor specific capabilities of any particular web feature server or 
-     * datastore.
-     *
-     * Returns:
-     * {<OpenLayers.Protocol.Response>} A response object with a features
-     *     property containing any insertIds and a priv property referencing
-     *     the XMLHttpRequest object.
-     */
-    commit: function(features, options) {
-
-        options = OpenLayers.Util.extend({}, options);
-        OpenLayers.Util.applyDefaults(options, this.options);
-        
-        var response = new OpenLayers.Protocol.Response({
-            requestType: "commit",
-            reqFeatures: features
-        });
-        response.priv = OpenLayers.Request.POST({
-            url: options.url,
-            headers: options.headers,
-            data: this.format.write(features, options),
-            callback: this.createCallback(this.handleCommit, response, options)
-        });
-        
-        return response;
-    },
-    
-    /**
-     * Method: handleCommit
-     * Called when the commit request returns.
-     * 
-     * Parameters:
-     * response - {<OpenLayers.Protocol.Response>} The response object to pass
-     *     to the user callback.
-     * options - {Object} The user options passed to the commit call.
-     */
-    handleCommit: function(response, options) {
-        if(options.callback) {
-            var request = response.priv;
-
-            // ensure that we have an xml doc
-            var data = request.responseXML;
-            if(!data || !data.documentElement) {
-                data = request.responseText;
-            }
-            
-            var obj = this.format.read(data) || {};
-            
-            response.insertIds = obj.insertIds || [];
-            if (obj.success) {
-                response.code = OpenLayers.Protocol.Response.SUCCESS;
-            } else {
-                response.code = OpenLayers.Protocol.Response.FAILURE;
-                response.error = obj;
-            }
-            options.callback.call(options.scope, response);
-        }
-    },
-    
-    /**
-     * Method: filterDelete
-     * Send a request that deletes all features by their filter.
-     * 
-     * Parameters:
-     * filter - {<OpenLayers.Filter>} filter
-     */
-    filterDelete: function(filter, options) {
-        options = OpenLayers.Util.extend({}, options);
-        OpenLayers.Util.applyDefaults(options, this.options);    
-        
-        var response = new OpenLayers.Protocol.Response({
-            requestType: "commit"
-        });    
-        
-        var root = this.format.createElementNSPlus("wfs:Transaction", {
-            attributes: {
-                service: "WFS",
-                version: this.version
-            }
-        });
-        
-        var deleteNode = this.format.createElementNSPlus("wfs:Delete", {
-            attributes: {
-                typeName: (options.featureNS ? this.featurePrefix + ":" : "") +
-                    options.featureType
-            }
-        });       
-        
-        if(options.featureNS) {
-            deleteNode.setAttribute("xmlns:" + this.featurePrefix, options.featureNS);
-        }
-        var filterNode = this.format.writeNode("ogc:Filter", filter);
-        
-        deleteNode.appendChild(filterNode);
-        
-        root.appendChild(deleteNode);
-        
-        var data = OpenLayers.Format.XML.prototype.write.apply(
-            this.format, [root]
-        );
-        
-        return OpenLayers.Request.POST({
-            url: this.url,
-            callback : options.callback || function(){},
-            data: data
-        });   
-        
-    },
-
-    /**
-     * Method: abort
-     * Abort an ongoing request, the response object passed to
-     * this method must come from this protocol (as a result
-     * of a read, or commit operation).
-     *
-     * Parameters:
-     * response - {<OpenLayers.Protocol.Response>}
-     */
-    abort: function(response) {
-        if (response) {
-            response.priv.abort();
-        }
-    },
-  
-    CLASS_NAME: "OpenLayers.Protocol.WFS.v1" 
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Protocol/WFS/v1.js
- * @requires OpenLayers/Format/WFST/v1_1_0.js
- */
-
-/**
- * Class: OpenLayers.Protocol.WFS.v1_1_0
- * A WFS v1.1.0 protocol for vector layers.  Create a new instance with the
- *     <OpenLayers.Protocol.WFS.v1_1_0> constructor.
- *
- * Differences from the v1.0.0 protocol:
- *  - uses Filter Encoding 1.1.0 instead of 1.0.0
- *  - uses GML 3 instead of 2 if no format is provided
- *  
- * Inherits from:
- *  - <OpenLayers.Protocol.WFS.v1>
- */
-OpenLayers.Protocol.WFS.v1_1_0 = OpenLayers.Class(OpenLayers.Protocol.WFS.v1, {
-    
-    /**
-     * Property: version
-     * {String} WFS version number.
-     */
-    version: "1.1.0",
-    
-    /**
-     * Constructor: OpenLayers.Protocol.WFS.v1_1_0
-     * A class for giving layers WFS v1.1.0 protocol.
-     *
-     * Parameters:
-     * options - {Object} Optional object whose properties will be set on the
-     *     instance.
-     *
-     * Valid options properties:
-     * featureType - {String} Local (without prefix) feature typeName (required).
-     * featureNS - {String} Feature namespace (optional).
-     * featurePrefix - {String} Feature namespace alias (optional - only used
-     *     if featureNS is provided).  Default is 'feature'.
-     * geometryName - {String} Name of geometry attribute.  Default is 'the_geom'.
-     * outputFormat - {String} Optional output format to use for WFS GetFeature
-     *     requests. This can be any format advertized by the WFS's
-     *     GetCapabilities response. If set, an appropriate readFormat also
-     *     has to be provided, unless outputFormat is GML3, GML2 or JSON.
-     * readFormat - {<OpenLayers.Format>} An appropriate format parser if
-     *     outputFormat is none of GML3, GML2 or JSON.
-     */
-    initialize: function(options) {
-        OpenLayers.Protocol.WFS.v1.prototype.initialize.apply(this, arguments);
-        if (this.outputFormat && !this.readFormat) {
-            if (this.outputFormat.toLowerCase() == "gml2") {
-                this.readFormat = new OpenLayers.Format.GML.v2({
-                    featureType: this.featureType,
-                    featureNS: this.featureNS,
-                    geometryName: this.geometryName
-                });
-            } else if (this.outputFormat.toLowerCase() == "json") {
-                this.readFormat = new OpenLayers.Format.GeoJSON();
-            }
-        }
-    },
-   
-    CLASS_NAME: "OpenLayers.Protocol.WFS.v1_1_0"
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
 
 /**
  * @requires OpenLayers/BaseTypes/Class.js
@@ -38968,242 +36022,6 @@ OpenLayers.StyleMap = OpenLayers.Class({
  * See license.txt in the OpenLayers distribution or repository for the
  * full text of the license. */
 
-
-/**
- * @requires OpenLayers/BaseTypes/Class.js
- * @requires OpenLayers/Util.js
- * @requires OpenLayers/Style.js
- */
-
-/**
- * Class: OpenLayers.Rule
- * This class represents an SLD Rule, as being used for rule-based SLD styling.
- */
-OpenLayers.Rule = OpenLayers.Class({
-    
-    /**
-     * Property: id
-     * {String} A unique id for this session.
-     */
-    id: null,
-    
-    /**
-     * APIProperty: name
-     * {String} name of this rule
-     */
-    name: null,
-    
-    /**
-     * Property: title
-     * {String} Title of this rule (set if included in SLD)
-     */
-    title: null,
-    
-    /**
-     * Property: description
-     * {String} Description of this rule (set if abstract is included in SLD)
-     */
-    description: null,
-
-    /**
-     * Property: context
-     * {Object} An optional object with properties that the rule should be
-     * evaluated against. If no context is specified, feature.attributes will
-     * be used.
-     */
-    context: null,
-    
-    /**
-     * Property: filter
-     * {<OpenLayers.Filter>} Optional filter for the rule.
-     */
-    filter: null,
-
-    /**
-     * Property: elseFilter
-     * {Boolean} Determines whether this rule is only to be applied only if
-     * no other rules match (ElseFilter according to the SLD specification). 
-     * Default is false.  For instances of OpenLayers.Rule, if elseFilter is
-     * false, the rule will always apply.  For subclasses, the else property is 
-     * ignored.
-     */
-    elseFilter: false,
-    
-    /**
-     * Property: symbolizer
-     * {Object} Symbolizer or hash of symbolizers for this rule. If hash of
-     * symbolizers, keys are one or more of ["Point", "Line", "Polygon"]. The
-     * latter if useful if it is required to style e.g. vertices of a line
-     * with a point symbolizer. Note, however, that this is not implemented
-     * yet in OpenLayers, but it is the way how symbolizers are defined in
-     * SLD.
-     */
-    symbolizer: null,
-    
-    /**
-     * Property: symbolizers
-     * {Array} Collection of symbolizers associated with this rule.  If 
-     *     provided at construction, the symbolizers array has precedence
-     *     over the deprecated symbolizer property.  Note that multiple 
-     *     symbolizers are not currently supported by the vector renderers.
-     *     Rules with multiple symbolizers are currently only useful for
-     *     maintaining elements in an SLD document.
-     */
-    symbolizers: null,
-    
-    /**
-     * APIProperty: minScaleDenominator
-     * {Number} or {String} minimum scale at which to draw the feature.
-     * In the case of a String, this can be a combination of text and
-     * propertyNames in the form "literal ${propertyName}"
-     */
-    minScaleDenominator: null,
-
-    /**
-     * APIProperty: maxScaleDenominator
-     * {Number} or {String} maximum scale at which to draw the feature.
-     * In the case of a String, this can be a combination of text and
-     * propertyNames in the form "literal ${propertyName}"
-     */
-    maxScaleDenominator: null,
-    
-    /** 
-     * Constructor: OpenLayers.Rule
-     * Creates a Rule.
-     *
-     * Parameters:
-     * options - {Object} An optional object with properties to set on the
-     *           rule
-     * 
-     * Returns:
-     * {<OpenLayers.Rule>}
-     */
-    initialize: function(options) {
-        this.symbolizer = {};
-        OpenLayers.Util.extend(this, options);
-        if (this.symbolizers) {
-            delete this.symbolizer;
-        }
-        this.id = OpenLayers.Util.createUniqueID(this.CLASS_NAME + "_");
-    },
-
-    /** 
-     * APIMethod: destroy
-     * nullify references to prevent circular references and memory leaks
-     */
-    destroy: function() {
-        for (var i in this.symbolizer) {
-            this.symbolizer[i] = null;
-        }
-        this.symbolizer = null;
-        delete this.symbolizers;
-    },
-    
-    /**
-     * APIMethod: evaluate
-     * evaluates this rule for a specific feature
-     * 
-     * Parameters:
-     * feature - {<OpenLayers.Feature>} feature to apply the rule to.
-     * 
-     * Returns:
-     * {Boolean} true if the rule applies, false if it does not.
-     * This rule is the default rule and always returns true.
-     */
-    evaluate: function(feature) {
-        var context = this.getContext(feature);
-        var applies = true;
-
-        if (this.minScaleDenominator || this.maxScaleDenominator) {
-            var scale = feature.layer.map.getScale();
-        }
-        
-        // check if within minScale/maxScale bounds
-        if (this.minScaleDenominator) {
-            applies = scale >= OpenLayers.Style.createLiteral(
-                    this.minScaleDenominator, context);
-        }
-        if (applies && this.maxScaleDenominator) {
-            applies = scale < OpenLayers.Style.createLiteral(
-                    this.maxScaleDenominator, context);
-        }
-        
-        // check if optional filter applies
-        if(applies && this.filter) {
-            // feature id filters get the feature, others get the context
-            if(this.filter.CLASS_NAME == "OpenLayers.Filter.FeatureId") {
-                applies = this.filter.evaluate(feature);
-            } else {
-                applies = this.filter.evaluate(context);
-            }
-        }
-
-        return applies;
-    },
-    
-    /**
-     * Method: getContext
-     * Gets the context for evaluating this rule
-     * 
-     * Paramters:
-     * feature - {<OpenLayers.Feature>} feature to take the context from if
-     *           none is specified.
-     */
-    getContext: function(feature) {
-        var context = this.context;
-        if (!context) {
-            context = feature.attributes || feature.data;
-        }
-        if (typeof this.context == "function") {
-            context = this.context(feature);
-        }
-        return context;
-    },
-    
-    /**
-     * APIMethod: clone
-     * Clones this rule.
-     * 
-     * Returns:
-     * {<OpenLayers.Rule>} Clone of this rule.
-     */
-    clone: function() {
-        var options = OpenLayers.Util.extend({}, this);
-        if (this.symbolizers) {
-            // clone symbolizers
-            var len = this.symbolizers.length;
-            options.symbolizers = new Array(len);
-            for (var i=0; i<len; ++i) {
-                options.symbolizers[i] = this.symbolizers[i].clone();
-            }
-        } else {
-            // clone symbolizer
-            options.symbolizer = {};
-            var value, type;
-            for(var key in this.symbolizer) {
-                value = this.symbolizer[key];
-                type = typeof value;
-                if(type === "object") {
-                    options.symbolizer[key] = OpenLayers.Util.extend({}, value);
-                } else if(type === "string") {
-                    options.symbolizer[key] = value;
-                }
-            }
-        }
-        // clone filter
-        options.filter = this.filter && this.filter.clone();
-        // clone context
-        options.context = this.context && OpenLayers.Util.extend({}, this.context);
-        return new OpenLayers.Rule(options);
-    },
-        
-    CLASS_NAME: "OpenLayers.Rule"
-});
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
 /**
  * @requires OpenLayers/BaseTypes/Class.js
  * @requires OpenLayers/Util.js
@@ -39321,6 +36139,1515 @@ OpenLayers.Format = OpenLayers.Class({
     },
 
     CLASS_NAME: "OpenLayers.Format"
+});     
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * Note:
+ * This work draws heavily from the public domain JSON serializer/deserializer
+ *     at http://www.json.org/json.js. Rewritten so that it doesn't modify
+ *     basic data prototypes.
+ */
+
+/**
+ * @requires OpenLayers/Format.js
+ */
+
+/**
+ * Class: OpenLayers.Format.JSON
+ * A parser to read/write JSON safely.  Create a new instance with the
+ *     <OpenLayers.Format.JSON> constructor.
+ *
+ * Inherits from:
+ *  - <OpenLayers.Format>
+ */
+OpenLayers.Format.JSON = OpenLayers.Class(OpenLayers.Format, {
+    
+    /**
+     * APIProperty: indent
+     * {String} For "pretty" printing, the indent string will be used once for
+     *     each indentation level.
+     */
+    indent: "    ",
+    
+    /**
+     * APIProperty: space
+     * {String} For "pretty" printing, the space string will be used after
+     *     the ":" separating a name/value pair.
+     */
+    space: " ",
+    
+    /**
+     * APIProperty: newline
+     * {String} For "pretty" printing, the newline string will be used at the
+     *     end of each name/value pair or array item.
+     */
+    newline: "\n",
+    
+    /**
+     * Property: level
+     * {Integer} For "pretty" printing, this is incremented/decremented during
+     *     serialization.
+     */
+    level: 0,
+
+    /**
+     * Property: pretty
+     * {Boolean} Serialize with extra whitespace for structure.  This is set
+     *     by the <write> method.
+     */
+    pretty: false,
+
+    /**
+     * Property: nativeJSON
+     * {Boolean} Does the browser support native json?
+     */
+    nativeJSON: (function() {
+        return !!(window.JSON && typeof JSON.parse == "function" && typeof JSON.stringify == "function");
+    })(),
+
+    /**
+     * Constructor: OpenLayers.Format.JSON
+     * Create a new parser for JSON.
+     *
+     * Parameters:
+     * options - {Object} An optional object whose properties will be set on
+     *     this instance.
+     */
+
+    /**
+     * APIMethod: read
+     * Deserialize a json string.
+     *
+     * Parameters:
+     * json - {String} A JSON string
+     * filter - {Function} A function which will be called for every key and
+     *     value at every level of the final result. Each value will be
+     *     replaced by the result of the filter function. This can be used to
+     *     reform generic objects into instances of classes, or to transform
+     *     date strings into Date objects.
+     *     
+     * Returns:
+     * {Object} An object, array, string, or number .
+     */
+    read: function(json, filter) {
+        var object;
+        if (this.nativeJSON) {
+            object = JSON.parse(json, filter);
+        } else try {
+            /**
+             * Parsing happens in three stages. In the first stage, we run the
+             *     text against a regular expression which looks for non-JSON
+             *     characters. We are especially concerned with '()' and 'new'
+             *     because they can cause invocation, and '=' because it can
+             *     cause mutation. But just to be safe, we will reject all
+             *     unexpected characters.
+             */
+            if (/^[\],:{}\s]*$/.test(json.replace(/\\["\\\/bfnrtu]/g, '@').
+                                replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+                                replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+
+                /**
+                 * In the second stage we use the eval function to compile the
+                 *     text into a JavaScript structure. The '{' operator is
+                 *     subject to a syntactic ambiguity in JavaScript - it can
+                 *     begin a block or an object literal. We wrap the text in
+                 *     parens to eliminate the ambiguity.
+                 */
+                object = eval('(' + json + ')');
+
+                /**
+                 * In the optional third stage, we recursively walk the new
+                 *     structure, passing each name/value pair to a filter
+                 *     function for possible transformation.
+                 */
+                if(typeof filter === 'function') {
+                    function walk(k, v) {
+                        if(v && typeof v === 'object') {
+                            for(var i in v) {
+                                if(v.hasOwnProperty(i)) {
+                                    v[i] = walk(i, v[i]);
+                                }
+                            }
+                        }
+                        return filter(k, v);
+                    }
+                    object = walk('', object);
+                }
+            }
+        } catch(e) {
+            // Fall through if the regexp test fails.
+        }
+
+        if(this.keepData) {
+            this.data = object;
+        }
+
+        return object;
+    },
+
+    /**
+     * APIMethod: write
+     * Serialize an object into a JSON string.
+     *
+     * Parameters:
+     * value - {String} The object, array, string, number, boolean or date
+     *     to be serialized.
+     * pretty - {Boolean} Structure the output with newlines and indentation.
+     *     Default is false.
+     *
+     * Returns:
+     * {String} The JSON string representation of the input value.
+     */
+    write: function(value, pretty) {
+        this.pretty = !!pretty;
+        var json = null;
+        var type = typeof value;
+        if(this.serialize[type]) {
+            try {
+                json = (!this.pretty && this.nativeJSON) ?
+                    JSON.stringify(value) :
+                    this.serialize[type].apply(this, [value]);
+            } catch(err) {
+                OpenLayers.Console.error("Trouble serializing: " + err);
+            }
+        }
+        return json;
+    },
+    
+    /**
+     * Method: writeIndent
+     * Output an indentation string depending on the indentation level.
+     *
+     * Returns:
+     * {String} An appropriate indentation string.
+     */
+    writeIndent: function() {
+        var pieces = [];
+        if(this.pretty) {
+            for(var i=0; i<this.level; ++i) {
+                pieces.push(this.indent);
+            }
+        }
+        return pieces.join('');
+    },
+    
+    /**
+     * Method: writeNewline
+     * Output a string representing a newline if in pretty printing mode.
+     *
+     * Returns:
+     * {String} A string representing a new line.
+     */
+    writeNewline: function() {
+        return (this.pretty) ? this.newline : '';
+    },
+    
+    /**
+     * Method: writeSpace
+     * Output a string representing a space if in pretty printing mode.
+     *
+     * Returns:
+     * {String} A space.
+     */
+    writeSpace: function() {
+        return (this.pretty) ? this.space : '';
+    },
+
+    /**
+     * Property: serialize
+     * Object with properties corresponding to the serializable data types.
+     *     Property values are functions that do the actual serializing.
+     */
+    serialize: {
+        /**
+         * Method: serialize.object
+         * Transform an object into a JSON string.
+         *
+         * Parameters:
+         * object - {Object} The object to be serialized.
+         * 
+         * Returns:
+         * {String} A JSON string representing the object.
+         */
+        'object': function(object) {
+            // three special objects that we want to treat differently
+            if(object == null) {
+                return "null";
+            }
+            if(object.constructor == Date) {
+                return this.serialize.date.apply(this, [object]);
+            }
+            if(object.constructor == Array) {
+                return this.serialize.array.apply(this, [object]);
+            }
+            var pieces = ['{'];
+            this.level += 1;
+            var key, keyJSON, valueJSON;
+            
+            var addComma = false;
+            for(key in object) {
+                if(object.hasOwnProperty(key)) {
+                    // recursive calls need to allow for sub-classing
+                    keyJSON = OpenLayers.Format.JSON.prototype.write.apply(this,
+                                                    [key, this.pretty]);
+                    valueJSON = OpenLayers.Format.JSON.prototype.write.apply(this,
+                                                    [object[key], this.pretty]);
+                    if(keyJSON != null && valueJSON != null) {
+                        if(addComma) {
+                            pieces.push(',');
+                        }
+                        pieces.push(this.writeNewline(), this.writeIndent(),
+                                    keyJSON, ':', this.writeSpace(), valueJSON);
+                        addComma = true;
+                    }
+                }
+            }
+            
+            this.level -= 1;
+            pieces.push(this.writeNewline(), this.writeIndent(), '}');
+            return pieces.join('');
+        },
+        
+        /**
+         * Method: serialize.array
+         * Transform an array into a JSON string.
+         *
+         * Parameters:
+         * array - {Array} The array to be serialized
+         * 
+         * Returns:
+         * {String} A JSON string representing the array.
+         */
+        'array': function(array) {
+            var json;
+            var pieces = ['['];
+            this.level += 1;
+    
+            for(var i=0, len=array.length; i<len; ++i) {
+                // recursive calls need to allow for sub-classing
+                json = OpenLayers.Format.JSON.prototype.write.apply(this,
+                                                    [array[i], this.pretty]);
+                if(json != null) {
+                    if(i > 0) {
+                        pieces.push(',');
+                    }
+                    pieces.push(this.writeNewline(), this.writeIndent(), json);
+                }
+            }
+
+            this.level -= 1;    
+            pieces.push(this.writeNewline(), this.writeIndent(), ']');
+            return pieces.join('');
+        },
+        
+        /**
+         * Method: serialize.string
+         * Transform a string into a JSON string.
+         *
+         * Parameters:
+         * string - {String} The string to be serialized
+         * 
+         * Returns:
+         * {String} A JSON string representing the string.
+         */
+        'string': function(string) {
+            // If the string contains no control characters, no quote characters, and no
+            // backslash characters, then we can simply slap some quotes around it.
+            // Otherwise we must also replace the offending characters with safe
+            // sequences.    
+            var m = {
+                '\b': '\\b',
+                '\t': '\\t',
+                '\n': '\\n',
+                '\f': '\\f',
+                '\r': '\\r',
+                '"' : '\\"',
+                '\\': '\\\\'
+            };
+            if(/["\\\x00-\x1f]/.test(string)) {
+                return '"' + string.replace(/([\x00-\x1f\\"])/g, function(a, b) {
+                    var c = m[b];
+                    if(c) {
+                        return c;
+                    }
+                    c = b.charCodeAt();
+                    return '\\u00' +
+                        Math.floor(c / 16).toString(16) +
+                        (c % 16).toString(16);
+                }) + '"';
+            }
+            return '"' + string + '"';
+        },
+
+        /**
+         * Method: serialize.number
+         * Transform a number into a JSON string.
+         *
+         * Parameters:
+         * number - {Number} The number to be serialized.
+         *
+         * Returns:
+         * {String} A JSON string representing the number.
+         */
+        'number': function(number) {
+            return isFinite(number) ? String(number) : "null";
+        },
+        
+        /**
+         * Method: serialize.boolean
+         * Transform a boolean into a JSON string.
+         *
+         * Parameters:
+         * bool - {Boolean} The boolean to be serialized.
+         * 
+         * Returns:
+         * {String} A JSON string representing the boolean.
+         */
+        'boolean': function(bool) {
+            return String(bool);
+        },
+        
+        /**
+         * Method: serialize.object
+         * Transform a date into a JSON string.
+         *
+         * Parameters:
+         * date - {Date} The date to be serialized.
+         * 
+         * Returns:
+         * {String} A JSON string representing the date.
+         */
+        'date': function(date) {    
+            function format(number) {
+                // Format integers to have at least two digits.
+                return (number < 10) ? '0' + number : number;
+            }
+            return '"' + date.getFullYear() + '-' +
+                    format(date.getMonth() + 1) + '-' +
+                    format(date.getDate()) + 'T' +
+                    format(date.getHours()) + ':' +
+                    format(date.getMinutes()) + ':' +
+                    format(date.getSeconds()) + '"';
+        }
+    },
+
+    CLASS_NAME: "OpenLayers.Format.JSON" 
+
+});     
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Format/JSON.js
+ * @requires OpenLayers/Feature/Vector.js
+ * @requires OpenLayers/Geometry/Point.js
+ * @requires OpenLayers/Geometry/MultiPoint.js
+ * @requires OpenLayers/Geometry/LineString.js
+ * @requires OpenLayers/Geometry/MultiLineString.js
+ * @requires OpenLayers/Geometry/Polygon.js
+ * @requires OpenLayers/Geometry/MultiPolygon.js
+ * @requires OpenLayers/Console.js
+ */
+
+/**
+ * Class: OpenLayers.Format.GeoJSON
+ * Read and write GeoJSON. Create a new parser with the
+ *     <OpenLayers.Format.GeoJSON> constructor.
+ *
+ * Inherits from:
+ *  - <OpenLayers.Format.JSON>
+ */
+OpenLayers.Format.GeoJSON = OpenLayers.Class(OpenLayers.Format.JSON, {
+
+    /**
+     * APIProperty: ignoreExtraDims
+     * {Boolean} Ignore dimensions higher than 2 when reading geometry
+     * coordinates.
+     */ 
+    ignoreExtraDims: false,
+    
+    /**
+     * Constructor: OpenLayers.Format.GeoJSON
+     * Create a new parser for GeoJSON.
+     *
+     * Parameters:
+     * options - {Object} An optional object whose properties will be set on
+     *     this instance.
+     */
+
+    /**
+     * APIMethod: read
+     * Deserialize a GeoJSON string.
+     *
+     * Parameters:
+     * json - {String} A GeoJSON string
+     * type - {String} Optional string that determines the structure of
+     *     the output.  Supported values are "Geometry", "Feature", and
+     *     "FeatureCollection".  If absent or null, a default of
+     *     "FeatureCollection" is assumed.
+     * filter - {Function} A function which will be called for every key and
+     *     value at every level of the final result. Each value will be
+     *     replaced by the result of the filter function. This can be used to
+     *     reform generic objects into instances of classes, or to transform
+     *     date strings into Date objects.
+     *
+     * Returns: 
+     * {Object} The return depends on the value of the type argument. If type
+     *     is "FeatureCollection" (the default), the return will be an array
+     *     of <OpenLayers.Feature.Vector>. If type is "Geometry", the input json
+     *     must represent a single geometry, and the return will be an
+     *     <OpenLayers.Geometry>.  If type is "Feature", the input json must
+     *     represent a single feature, and the return will be an
+     *     <OpenLayers.Feature.Vector>.
+     */
+    read: function(json, type, filter) {
+        type = (type) ? type : "FeatureCollection";
+        var results = null;
+        var obj = null;
+        if (typeof json == "string") {
+            obj = OpenLayers.Format.JSON.prototype.read.apply(this,
+                                                              [json, filter]);
+        } else { 
+            obj = json;
+        }    
+        if(!obj) {
+            OpenLayers.Console.error("Bad JSON: " + json);
+        } else if(typeof(obj.type) != "string") {
+            OpenLayers.Console.error("Bad GeoJSON - no type: " + json);
+        } else if(this.isValidType(obj, type)) {
+            switch(type) {
+                case "Geometry":
+                    try {
+                        results = this.parseGeometry(obj);
+                    } catch(err) {
+                        OpenLayers.Console.error(err);
+                    }
+                    break;
+                case "Feature":
+                    try {
+                        results = this.parseFeature(obj);
+                        results.type = "Feature";
+                    } catch(err) {
+                        OpenLayers.Console.error(err);
+                    }
+                    break;
+                case "FeatureCollection":
+                    // for type FeatureCollection, we allow input to be any type
+                    results = [];
+                    switch(obj.type) {
+                        case "Feature":
+                            try {
+                                results.push(this.parseFeature(obj));
+                            } catch(err) {
+                                results = null;
+                                OpenLayers.Console.error(err);
+                            }
+                            break;
+                        case "FeatureCollection":
+                            for(var i=0, len=obj.features.length; i<len; ++i) {
+                                try {
+                                    results.push(this.parseFeature(obj.features[i]));
+                                } catch(err) {
+                                    results = null;
+                                    OpenLayers.Console.error(err);
+                                }
+                            }
+                            break;
+                        default:
+                            try {
+                                var geom = this.parseGeometry(obj);
+                                results.push(new OpenLayers.Feature.Vector(geom));
+                            } catch(err) {
+                                results = null;
+                                OpenLayers.Console.error(err);
+                            }
+                    }
+                break;
+            }
+        }
+        return results;
+    },
+    
+    /**
+     * Method: isValidType
+     * Check if a GeoJSON object is a valid representative of the given type.
+     *
+     * Returns:
+     * {Boolean} The object is valid GeoJSON object of the given type.
+     */
+    isValidType: function(obj, type) {
+        var valid = false;
+        switch(type) {
+            case "Geometry":
+                if(OpenLayers.Util.indexOf(
+                    ["Point", "MultiPoint", "LineString", "MultiLineString",
+                     "Polygon", "MultiPolygon", "Box", "GeometryCollection"],
+                    obj.type) == -1) {
+                    // unsupported geometry type
+                    OpenLayers.Console.error("Unsupported geometry type: " +
+                                              obj.type);
+                } else {
+                    valid = true;
+                }
+                break;
+            case "FeatureCollection":
+                // allow for any type to be converted to a feature collection
+                valid = true;
+                break;
+            default:
+                // for Feature types must match
+                if(obj.type == type) {
+                    valid = true;
+                } else {
+                    OpenLayers.Console.error("Cannot convert types from " +
+                                              obj.type + " to " + type);
+                }
+        }
+        return valid;
+    },
+    
+    /**
+     * Method: parseFeature
+     * Convert a feature object from GeoJSON into an
+     *     <OpenLayers.Feature.Vector>.
+     *
+     * Parameters:
+     * obj - {Object} An object created from a GeoJSON object
+     *
+     * Returns:
+     * {<OpenLayers.Feature.Vector>} A feature.
+     */
+    parseFeature: function(obj) {
+        var feature, geometry, attributes, bbox;
+        attributes = (obj.properties) ? obj.properties : {};
+        bbox = (obj.geometry && obj.geometry.bbox) || obj.bbox;
+        try {
+            geometry = this.parseGeometry(obj.geometry);
+        } catch(err) {
+            // deal with bad geometries
+            throw err;
+        }
+        feature = new OpenLayers.Feature.Vector(geometry, attributes);
+        if(bbox) {
+            feature.bounds = OpenLayers.Bounds.fromArray(bbox);
+        }
+        if(obj.id) {
+            feature.fid = obj.id;
+        }
+        return feature;
+    },
+    
+    /**
+     * Method: parseGeometry
+     * Convert a geometry object from GeoJSON into an <OpenLayers.Geometry>.
+     *
+     * Parameters:
+     * obj - {Object} An object created from a GeoJSON object
+     *
+     * Returns: 
+     * {<OpenLayers.Geometry>} A geometry.
+     */
+    parseGeometry: function(obj) {
+        if (obj == null) {
+            return null;
+        }
+        var geometry, collection = false;
+        if(obj.type == "GeometryCollection") {
+            if(!(OpenLayers.Util.isArray(obj.geometries))) {
+                throw "GeometryCollection must have geometries array: " + obj;
+            }
+            var numGeom = obj.geometries.length;
+            var components = new Array(numGeom);
+            for(var i=0; i<numGeom; ++i) {
+                components[i] = this.parseGeometry.apply(
+                    this, [obj.geometries[i]]
+                );
+            }
+            geometry = new OpenLayers.Geometry.Collection(components);
+            collection = true;
+        } else {
+            if(!(OpenLayers.Util.isArray(obj.coordinates))) {
+                throw "Geometry must have coordinates array: " + obj;
+            }
+            if(!this.parseCoords[obj.type.toLowerCase()]) {
+                throw "Unsupported geometry type: " + obj.type;
+            }
+            try {
+                geometry = this.parseCoords[obj.type.toLowerCase()].apply(
+                    this, [obj.coordinates]
+                );
+            } catch(err) {
+                // deal with bad coordinates
+                throw err;
+            }
+        }
+        // We don't reproject collections because the children are reprojected
+        // for us when they are created.
+        if (this.internalProjection && this.externalProjection && !collection) {
+            geometry.transform(this.externalProjection, 
+                               this.internalProjection); 
+        }                       
+        return geometry;
+    },
+    
+    /**
+     * Property: parseCoords
+     * Object with properties corresponding to the GeoJSON geometry types.
+     *     Property values are functions that do the actual parsing.
+     */
+    parseCoords: {
+        /**
+         * Method: parseCoords.point
+         * Convert a coordinate array from GeoJSON into an
+         *     <OpenLayers.Geometry>.
+         *
+         * Parameters:
+         * array - {Object} The coordinates array from the GeoJSON fragment.
+         *
+         * Returns:
+         * {<OpenLayers.Geometry>} A geometry.
+         */
+        "point": function(array) {
+            if (this.ignoreExtraDims == false && 
+                  array.length != 2) {
+                    throw "Only 2D points are supported: " + array;
+            }
+            return new OpenLayers.Geometry.Point(array[0], array[1]);
+        },
+        
+        /**
+         * Method: parseCoords.multipoint
+         * Convert a coordinate array from GeoJSON into an
+         *     <OpenLayers.Geometry>.
+         *
+         * Parameters:
+         * array - {Object} The coordinates array from the GeoJSON fragment.
+         *
+         * Returns:
+         * {<OpenLayers.Geometry>} A geometry.
+         */
+        "multipoint": function(array) {
+            var points = [];
+            var p = null;
+            for(var i=0, len=array.length; i<len; ++i) {
+                try {
+                    p = this.parseCoords["point"].apply(this, [array[i]]);
+                } catch(err) {
+                    throw err;
+                }
+                points.push(p);
+            }
+            return new OpenLayers.Geometry.MultiPoint(points);
+        },
+
+        /**
+         * Method: parseCoords.linestring
+         * Convert a coordinate array from GeoJSON into an
+         *     <OpenLayers.Geometry>.
+         *
+         * Parameters:
+         * array - {Object} The coordinates array from the GeoJSON fragment.
+         *
+         * Returns:
+         * {<OpenLayers.Geometry>} A geometry.
+         */
+        "linestring": function(array) {
+            var points = [];
+            var p = null;
+            for(var i=0, len=array.length; i<len; ++i) {
+                try {
+                    p = this.parseCoords["point"].apply(this, [array[i]]);
+                } catch(err) {
+                    throw err;
+                }
+                points.push(p);
+            }
+            return new OpenLayers.Geometry.LineString(points);
+        },
+        
+        /**
+         * Method: parseCoords.multilinestring
+         * Convert a coordinate array from GeoJSON into an
+         *     <OpenLayers.Geometry>.
+         *
+         * Parameters:
+         * array - {Object} The coordinates array from the GeoJSON fragment.
+         *
+         * Returns:
+         * {<OpenLayers.Geometry>} A geometry.
+         */
+        "multilinestring": function(array) {
+            var lines = [];
+            var l = null;
+            for(var i=0, len=array.length; i<len; ++i) {
+                try {
+                    l = this.parseCoords["linestring"].apply(this, [array[i]]);
+                } catch(err) {
+                    throw err;
+                }
+                lines.push(l);
+            }
+            return new OpenLayers.Geometry.MultiLineString(lines);
+        },
+        
+        /**
+         * Method: parseCoords.polygon
+         * Convert a coordinate array from GeoJSON into an
+         *     <OpenLayers.Geometry>.
+         *
+         * Returns:
+         * {<OpenLayers.Geometry>} A geometry.
+         */
+        "polygon": function(array) {
+            var rings = [];
+            var r, l;
+            for(var i=0, len=array.length; i<len; ++i) {
+                try {
+                    l = this.parseCoords["linestring"].apply(this, [array[i]]);
+                } catch(err) {
+                    throw err;
+                }
+                r = new OpenLayers.Geometry.LinearRing(l.components);
+                rings.push(r);
+            }
+            return new OpenLayers.Geometry.Polygon(rings);
+        },
+
+        /**
+         * Method: parseCoords.multipolygon
+         * Convert a coordinate array from GeoJSON into an
+         *     <OpenLayers.Geometry>.
+         *
+         * Parameters:
+         * array - {Object} The coordinates array from the GeoJSON fragment.
+         *
+         * Returns:
+         * {<OpenLayers.Geometry>} A geometry.
+         */
+        "multipolygon": function(array) {
+            var polys = [];
+            var p = null;
+            for(var i=0, len=array.length; i<len; ++i) {
+                try {
+                    p = this.parseCoords["polygon"].apply(this, [array[i]]);
+                } catch(err) {
+                    throw err;
+                }
+                polys.push(p);
+            }
+            return new OpenLayers.Geometry.MultiPolygon(polys);
+        },
+
+        /**
+         * Method: parseCoords.box
+         * Convert a coordinate array from GeoJSON into an
+         *     <OpenLayers.Geometry>.
+         *
+         * Parameters:
+         * array - {Object} The coordinates array from the GeoJSON fragment.
+         *
+         * Returns:
+         * {<OpenLayers.Geometry>} A geometry.
+         */
+        "box": function(array) {
+            if(array.length != 2) {
+                throw "GeoJSON box coordinates must have 2 elements";
+            }
+            return new OpenLayers.Geometry.Polygon([
+                new OpenLayers.Geometry.LinearRing([
+                    new OpenLayers.Geometry.Point(array[0][0], array[0][1]),
+                    new OpenLayers.Geometry.Point(array[1][0], array[0][1]),
+                    new OpenLayers.Geometry.Point(array[1][0], array[1][1]),
+                    new OpenLayers.Geometry.Point(array[0][0], array[1][1]),
+                    new OpenLayers.Geometry.Point(array[0][0], array[0][1])
+                ])
+            ]);
+        }
+
+    },
+
+    /**
+     * APIMethod: write
+     * Serialize a feature, geometry, array of features into a GeoJSON string.
+     *
+     * Parameters:
+     * obj - {Object} An <OpenLayers.Feature.Vector>, <OpenLayers.Geometry>,
+     *     or an array of features.
+     * pretty - {Boolean} Structure the output with newlines and indentation.
+     *     Default is false.
+     *
+     * Returns:
+     * {String} The GeoJSON string representation of the input geometry,
+     *     features, or array of features.
+     */
+    write: function(obj, pretty) {
+        var geojson = {
+            "type": null
+        };
+        if(OpenLayers.Util.isArray(obj)) {
+            geojson.type = "FeatureCollection";
+            var numFeatures = obj.length;
+            geojson.features = new Array(numFeatures);
+            for(var i=0; i<numFeatures; ++i) {
+                var element = obj[i];
+                if(!element instanceof OpenLayers.Feature.Vector) {
+                    var msg = "FeatureCollection only supports collections " +
+                              "of features: " + element;
+                    throw msg;
+                }
+                geojson.features[i] = this.extract.feature.apply(
+                    this, [element]
+                );
+            }
+        } else if (obj.CLASS_NAME.indexOf("OpenLayers.Geometry") == 0) {
+            geojson = this.extract.geometry.apply(this, [obj]);
+        } else if (obj instanceof OpenLayers.Feature.Vector) {
+            geojson = this.extract.feature.apply(this, [obj]);
+            if(obj.layer && obj.layer.projection) {
+                geojson.crs = this.createCRSObject(obj);
+            }
+        }
+        return OpenLayers.Format.JSON.prototype.write.apply(this,
+                                                            [geojson, pretty]);
+    },
+
+    /**
+     * Method: createCRSObject
+     * Create the CRS object for an object.
+     *
+     * Parameters:
+     * object - {<OpenLayers.Feature.Vector>} 
+     *
+     * Returns:
+     * {Object} An object which can be assigned to the crs property
+     * of a GeoJSON object.
+     */
+    createCRSObject: function(object) {
+       var proj = object.layer.projection.toString();
+       var crs = {};
+       if (proj.match(/epsg:/i)) {
+           var code = parseInt(proj.substring(proj.indexOf(":") + 1));
+           if (code == 4326) {
+               crs = {
+                   "type": "name",
+                   "properties": {
+                       "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+                   }
+               };
+           } else {    
+               crs = {
+                   "type": "name",
+                   "properties": {
+                       "name": "EPSG:" + code
+                   }
+               };
+           }    
+       }
+       return crs;
+    },
+    
+    /**
+     * Property: extract
+     * Object with properties corresponding to the GeoJSON types.
+     *     Property values are functions that do the actual value extraction.
+     */
+    extract: {
+        /**
+         * Method: extract.feature
+         * Return a partial GeoJSON object representing a single feature.
+         *
+         * Parameters:
+         * feature - {<OpenLayers.Feature.Vector>}
+         *
+         * Returns:
+         * {Object} An object representing the point.
+         */
+        'feature': function(feature) {
+            var geom = this.extract.geometry.apply(this, [feature.geometry]);
+            var json = {
+                "type": "Feature",
+                "properties": feature.attributes,
+                "geometry": geom
+            };
+            if (feature.fid != null) {
+                json.id = feature.fid;
+            }
+            return json;
+        },
+        
+        /**
+         * Method: extract.geometry
+         * Return a GeoJSON object representing a single geometry.
+         *
+         * Parameters:
+         * geometry - {<OpenLayers.Geometry>}
+         *
+         * Returns:
+         * {Object} An object representing the geometry.
+         */
+        'geometry': function(geometry) {
+            if (geometry == null) {
+                return null;
+            }
+            if (this.internalProjection && this.externalProjection) {
+                geometry = geometry.clone();
+                geometry.transform(this.internalProjection, 
+                                   this.externalProjection);
+            }                       
+            var geometryType = geometry.CLASS_NAME.split('.')[2];
+            var data = this.extract[geometryType.toLowerCase()].apply(this, [geometry]);
+            var json;
+            if(geometryType == "Collection") {
+                json = {
+                    "type": "GeometryCollection",
+                    "geometries": data
+                };
+            } else {
+                json = {
+                    "type": geometryType,
+                    "coordinates": data
+                };
+            }
+            
+            return json;
+        },
+
+        /**
+         * Method: extract.point
+         * Return an array of coordinates from a point.
+         *
+         * Parameters:
+         * point - {<OpenLayers.Geometry.Point>}
+         *
+         * Returns: 
+         * {Array} An array of coordinates representing the point.
+         */
+        'point': function(point) {
+            return [point.x, point.y];
+        },
+
+        /**
+         * Method: extract.multipoint
+         * Return an array of point coordinates from a multipoint.
+         *
+         * Parameters:
+         * multipoint - {<OpenLayers.Geometry.MultiPoint>}
+         *
+         * Returns:
+         * {Array} An array of point coordinate arrays representing
+         *     the multipoint.
+         */
+        'multipoint': function(multipoint) {
+            var array = [];
+            for(var i=0, len=multipoint.components.length; i<len; ++i) {
+                array.push(this.extract.point.apply(this, [multipoint.components[i]]));
+            }
+            return array;
+        },
+        
+        /**
+         * Method: extract.linestring
+         * Return an array of coordinate arrays from a linestring.
+         *
+         * Parameters:
+         * linestring - {<OpenLayers.Geometry.LineString>}
+         *
+         * Returns:
+         * {Array} An array of coordinate arrays representing
+         *     the linestring.
+         */
+        'linestring': function(linestring) {
+            var array = [];
+            for(var i=0, len=linestring.components.length; i<len; ++i) {
+                array.push(this.extract.point.apply(this, [linestring.components[i]]));
+            }
+            return array;
+        },
+
+        /**
+         * Method: extract.multilinestring
+         * Return an array of linestring arrays from a linestring.
+         * 
+         * Parameters:
+         * multilinestring - {<OpenLayers.Geometry.MultiLineString>}
+         * 
+         * Returns:
+         * {Array} An array of linestring arrays representing
+         *     the multilinestring.
+         */
+        'multilinestring': function(multilinestring) {
+            var array = [];
+            for(var i=0, len=multilinestring.components.length; i<len; ++i) {
+                array.push(this.extract.linestring.apply(this, [multilinestring.components[i]]));
+            }
+            return array;
+        },
+        
+        /**
+         * Method: extract.polygon
+         * Return an array of linear ring arrays from a polygon.
+         *
+         * Parameters:
+         * polygon - {<OpenLayers.Geometry.Polygon>}
+         * 
+         * Returns:
+         * {Array} An array of linear ring arrays representing the polygon.
+         */
+        'polygon': function(polygon) {
+            var array = [];
+            for(var i=0, len=polygon.components.length; i<len; ++i) {
+                array.push(this.extract.linestring.apply(this, [polygon.components[i]]));
+            }
+            return array;
+        },
+
+        /**
+         * Method: extract.multipolygon
+         * Return an array of polygon arrays from a multipolygon.
+         * 
+         * Parameters:
+         * multipolygon - {<OpenLayers.Geometry.MultiPolygon>}
+         * 
+         * Returns:
+         * {Array} An array of polygon arrays representing
+         *     the multipolygon
+         */
+        'multipolygon': function(multipolygon) {
+            var array = [];
+            for(var i=0, len=multipolygon.components.length; i<len; ++i) {
+                array.push(this.extract.polygon.apply(this, [multipolygon.components[i]]));
+            }
+            return array;
+        },
+        
+        /**
+         * Method: extract.collection
+         * Return an array of geometries from a geometry collection.
+         * 
+         * Parameters:
+         * collection - {<OpenLayers.Geometry.Collection>}
+         * 
+         * Returns:
+         * {Array} An array of geometry objects representing the geometry
+         *     collection.
+         */
+        'collection': function(collection) {
+            var len = collection.components.length;
+            var array = new Array(len);
+            for(var i=0; i<len; ++i) {
+                array[i] = this.extract.geometry.apply(
+                    this, [collection.components[i]]
+                );
+            }
+            return array;
+        }
+        
+
+    },
+
+    CLASS_NAME: "OpenLayers.Format.GeoJSON" 
+
+});     
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Format.js
+ * @requires OpenLayers/Feature/Vector.js
+ * @requires OpenLayers/Geometry/Point.js
+ * @requires OpenLayers/Geometry/MultiPoint.js
+ * @requires OpenLayers/Geometry/LineString.js
+ * @requires OpenLayers/Geometry/MultiLineString.js
+ * @requires OpenLayers/Geometry/Polygon.js
+ * @requires OpenLayers/Geometry/MultiPolygon.js
+ */
+
+/**
+ * Class: OpenLayers.Format.WKT
+ * Class for reading and writing Well-Known Text.  Create a new instance
+ * with the <OpenLayers.Format.WKT> constructor.
+ * 
+ * Inherits from:
+ *  - <OpenLayers.Format>
+ */
+OpenLayers.Format.WKT = OpenLayers.Class(OpenLayers.Format, {
+    
+    /**
+     * Constructor: OpenLayers.Format.WKT
+     * Create a new parser for WKT
+     *
+     * Parameters:
+     * options - {Object} An optional object whose properties will be set on
+     *           this instance
+     *
+     * Returns:
+     * {<OpenLayers.Format.WKT>} A new WKT parser.
+     */
+    initialize: function(options) {
+        this.regExes = {
+            'typeStr': /^\s*(\w+)\s*\(\s*(.*)\s*\)\s*$/,
+            'spaces': /\s+/,
+            'parenComma': /\)\s*,\s*\(/,
+            'doubleParenComma': /\)\s*\)\s*,\s*\(\s*\(/,  // can't use {2} here
+            'trimParens': /^\s*\(?(.*?)\)?\s*$/
+        };
+        OpenLayers.Format.prototype.initialize.apply(this, [options]);
+    },
+
+    /**
+     * APIMethod: read
+     * Deserialize a WKT string and return a vector feature or an
+     * array of vector features.  Supports WKT for POINT, MULTIPOINT,
+     * LINESTRING, MULTILINESTRING, POLYGON, MULTIPOLYGON, and
+     * GEOMETRYCOLLECTION.
+     *
+     * Parameters:
+     * wkt - {String} A WKT string
+     *
+     * Returns:
+     * {<OpenLayers.Feature.Vector>|Array} A feature or array of features for
+     * GEOMETRYCOLLECTION WKT.
+     */
+    read: function(wkt) {
+        var features, type, str;
+        wkt = wkt.replace(/[\n\r]/g, " ");
+        var matches = this.regExes.typeStr.exec(wkt);
+        if(matches) {
+            type = matches[1].toLowerCase();
+            str = matches[2];
+            if(this.parse[type]) {
+                features = this.parse[type].apply(this, [str]);
+            }
+            if (this.internalProjection && this.externalProjection) {
+                if (features && 
+                    features.CLASS_NAME == "OpenLayers.Feature.Vector") {
+                    features.geometry.transform(this.externalProjection,
+                                                this.internalProjection);
+                } else if (features &&
+                           type != "geometrycollection" &&
+                           typeof features == "object") {
+                    for (var i=0, len=features.length; i<len; i++) {
+                        var component = features[i];
+                        component.geometry.transform(this.externalProjection,
+                                                     this.internalProjection);
+                    }
+                }
+            }
+        }    
+        return features;
+    },
+
+    /**
+     * APIMethod: write
+     * Serialize a feature or array of features into a WKT string.
+     *
+     * Parameters:
+     * features - {<OpenLayers.Feature.Vector>|Array} A feature or array of
+     *            features
+     *
+     * Returns:
+     * {String} The WKT string representation of the input geometries
+     */
+    write: function(features) {
+        var collection, geometry, isCollection;
+        if (features.constructor == Array) {
+            collection = features;
+            isCollection = true;
+        } else {
+            collection = [features];
+            isCollection = false;
+        }
+        var pieces = [];
+        if (isCollection) {
+            pieces.push('GEOMETRYCOLLECTION(');
+        }
+        for (var i=0, len=collection.length; i<len; ++i) {
+            if (isCollection && i>0) {
+                pieces.push(',');
+            }
+            geometry = collection[i].geometry;
+            pieces.push(this.extractGeometry(geometry));
+        }
+        if (isCollection) {
+            pieces.push(')');
+        }
+        return pieces.join('');
+    },
+
+    /**
+     * Method: extractGeometry
+     * Entry point to construct the WKT for a single Geometry object.
+     *
+     * Parameters:
+     * geometry - {<OpenLayers.Geometry.Geometry>}
+     *
+     * Returns:
+     * {String} A WKT string of representing the geometry
+     */
+    extractGeometry: function(geometry) {
+        var type = geometry.CLASS_NAME.split('.')[2].toLowerCase();
+        if (!this.extract[type]) {
+            return null;
+        }
+        if (this.internalProjection && this.externalProjection) {
+            geometry = geometry.clone();
+            geometry.transform(this.internalProjection, this.externalProjection);
+        }                       
+        var wktType = type == 'collection' ? 'GEOMETRYCOLLECTION' : type.toUpperCase();
+        var data = wktType + '(' + this.extract[type].apply(this, [geometry]) + ')';
+        return data;
+    },
+    
+    /**
+     * Object with properties corresponding to the geometry types.
+     * Property values are functions that do the actual data extraction.
+     */
+    extract: {
+        /**
+         * Return a space delimited string of point coordinates.
+         * @param {OpenLayers.Geometry.Point} point
+         * @returns {String} A string of coordinates representing the point
+         */
+        'point': function(point) {
+            return point.x + ' ' + point.y;
+        },
+
+        /**
+         * Return a comma delimited string of point coordinates from a multipoint.
+         * @param {OpenLayers.Geometry.MultiPoint} multipoint
+         * @returns {String} A string of point coordinate strings representing
+         *                  the multipoint
+         */
+        'multipoint': function(multipoint) {
+            var array = [];
+            for(var i=0, len=multipoint.components.length; i<len; ++i) {
+                array.push('(' +
+                           this.extract.point.apply(this, [multipoint.components[i]]) +
+                           ')');
+            }
+            return array.join(',');
+        },
+        
+        /**
+         * Return a comma delimited string of point coordinates from a line.
+         * @param {OpenLayers.Geometry.LineString} linestring
+         * @returns {String} A string of point coordinate strings representing
+         *                  the linestring
+         */
+        'linestring': function(linestring) {
+            var array = [];
+            for(var i=0, len=linestring.components.length; i<len; ++i) {
+                array.push(this.extract.point.apply(this, [linestring.components[i]]));
+            }
+            return array.join(',');
+        },
+
+        /**
+         * Return a comma delimited string of linestring strings from a multilinestring.
+         * @param {OpenLayers.Geometry.MultiLineString} multilinestring
+         * @returns {String} A string of of linestring strings representing
+         *                  the multilinestring
+         */
+        'multilinestring': function(multilinestring) {
+            var array = [];
+            for(var i=0, len=multilinestring.components.length; i<len; ++i) {
+                array.push('(' +
+                           this.extract.linestring.apply(this, [multilinestring.components[i]]) +
+                           ')');
+            }
+            return array.join(',');
+        },
+        
+        /**
+         * Return a comma delimited string of linear ring arrays from a polygon.
+         * @param {OpenLayers.Geometry.Polygon} polygon
+         * @returns {String} An array of linear ring arrays representing the polygon
+         */
+        'polygon': function(polygon) {
+            var array = [];
+            for(var i=0, len=polygon.components.length; i<len; ++i) {
+                array.push('(' +
+                           this.extract.linestring.apply(this, [polygon.components[i]]) +
+                           ')');
+            }
+            return array.join(',');
+        },
+
+        /**
+         * Return an array of polygon arrays from a multipolygon.
+         * @param {OpenLayers.Geometry.MultiPolygon} multipolygon
+         * @returns {String} An array of polygon arrays representing
+         *                  the multipolygon
+         */
+        'multipolygon': function(multipolygon) {
+            var array = [];
+            for(var i=0, len=multipolygon.components.length; i<len; ++i) {
+                array.push('(' +
+                           this.extract.polygon.apply(this, [multipolygon.components[i]]) +
+                           ')');
+            }
+            return array.join(',');
+        },
+
+        /**
+         * Return the WKT portion between 'GEOMETRYCOLLECTION(' and ')' for an <OpenLayers.Geometry.Collection>
+         * @param {OpenLayers.Geometry.Collection} collection
+         * @returns {String} internal WKT representation of the collection
+         */
+        'collection': function(collection) {
+            var array = [];
+            for(var i=0, len=collection.components.length; i<len; ++i) {
+                array.push(this.extractGeometry.apply(this, [collection.components[i]]));
+            }
+            return array.join(',');
+        }
+
+    },
+
+    /**
+     * Object with properties corresponding to the geometry types.
+     * Property values are functions that do the actual parsing.
+     */
+    parse: {
+        /**
+         * Return point feature given a point WKT fragment.
+         * @param {String} str A WKT fragment representing the point
+         * @returns {OpenLayers.Feature.Vector} A point feature
+         * @private
+         */
+        'point': function(str) {
+            var coords = OpenLayers.String.trim(str).split(this.regExes.spaces);
+            return new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.Point(coords[0], coords[1])
+            );
+        },
+
+        /**
+         * Return a multipoint feature given a multipoint WKT fragment.
+         * @param {String} str A WKT fragment representing the multipoint
+         * @returns {OpenLayers.Feature.Vector} A multipoint feature
+         * @private
+         */
+        'multipoint': function(str) {
+            var point;
+            var points = OpenLayers.String.trim(str).split(',');
+            var components = [];
+            for(var i=0, len=points.length; i<len; ++i) {
+                point = points[i].replace(this.regExes.trimParens, '$1');
+                components.push(this.parse.point.apply(this, [point]).geometry);
+            }
+            return new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.MultiPoint(components)
+            );
+        },
+        
+        /**
+         * Return a linestring feature given a linestring WKT fragment.
+         * @param {String} str A WKT fragment representing the linestring
+         * @returns {OpenLayers.Feature.Vector} A linestring feature
+         * @private
+         */
+        'linestring': function(str) {
+            var points = OpenLayers.String.trim(str).split(',');
+            var components = [];
+            for(var i=0, len=points.length; i<len; ++i) {
+                components.push(this.parse.point.apply(this, [points[i]]).geometry);
+            }
+            return new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.LineString(components)
+            );
+        },
+
+        /**
+         * Return a multilinestring feature given a multilinestring WKT fragment.
+         * @param {String} str A WKT fragment representing the multilinestring
+         * @returns {OpenLayers.Feature.Vector} A multilinestring feature
+         * @private
+         */
+        'multilinestring': function(str) {
+            var line;
+            var lines = OpenLayers.String.trim(str).split(this.regExes.parenComma);
+            var components = [];
+            for(var i=0, len=lines.length; i<len; ++i) {
+                line = lines[i].replace(this.regExes.trimParens, '$1');
+                components.push(this.parse.linestring.apply(this, [line]).geometry);
+            }
+            return new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.MultiLineString(components)
+            );
+        },
+        
+        /**
+         * Return a polygon feature given a polygon WKT fragment.
+         * @param {String} str A WKT fragment representing the polygon
+         * @returns {OpenLayers.Feature.Vector} A polygon feature
+         * @private
+         */
+        'polygon': function(str) {
+            var ring, linestring, linearring;
+            var rings = OpenLayers.String.trim(str).split(this.regExes.parenComma);
+            var components = [];
+            for(var i=0, len=rings.length; i<len; ++i) {
+                ring = rings[i].replace(this.regExes.trimParens, '$1');
+                linestring = this.parse.linestring.apply(this, [ring]).geometry;
+                linearring = new OpenLayers.Geometry.LinearRing(linestring.components);
+                components.push(linearring);
+            }
+            return new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.Polygon(components)
+            );
+        },
+
+        /**
+         * Return a multipolygon feature given a multipolygon WKT fragment.
+         * @param {String} str A WKT fragment representing the multipolygon
+         * @returns {OpenLayers.Feature.Vector} A multipolygon feature
+         * @private
+         */
+        'multipolygon': function(str) {
+            var polygon;
+            var polygons = OpenLayers.String.trim(str).split(this.regExes.doubleParenComma);
+            var components = [];
+            for(var i=0, len=polygons.length; i<len; ++i) {
+                polygon = polygons[i].replace(this.regExes.trimParens, '$1');
+                components.push(this.parse.polygon.apply(this, [polygon]).geometry);
+            }
+            return new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.MultiPolygon(components)
+            );
+        },
+
+        /**
+         * Return an array of features given a geometrycollection WKT fragment.
+         * @param {String} str A WKT fragment representing the geometrycollection
+         * @returns {Array} An array of OpenLayers.Feature.Vector
+         * @private
+         */
+        'geometrycollection': function(str) {
+            // separate components of the collection with |
+            str = str.replace(/,\s*([A-Za-z])/g, '|$1');
+            var wktArray = OpenLayers.String.trim(str).split('|');
+            var components = [];
+            for(var i=0, len=wktArray.length; i<len; ++i) {
+                components.push(OpenLayers.Format.WKT.prototype.read.apply(this,[wktArray[i]]));
+            }
+            return components;
+        }
+
+    },
+
+    CLASS_NAME: "OpenLayers.Format.WKT" 
 });     
 
 /* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
@@ -41363,645 +39690,323 @@ OpenLayers.Format.GML = OpenLayers.Class(OpenLayers.Format.XML, {
  * See license.txt in the OpenLayers distribution or repository for the
  * full text of the license. */
 
+
 /**
- * @requires OpenLayers/Format/XML.js
- * @requires OpenLayers/Format/GML.js
+ * @requires OpenLayers/BaseTypes/Class.js
+ * @requires OpenLayers/Util.js
+ * @requires OpenLayers/Style.js
  */
 
 /**
- * Though required in the full build, if the GML format is excluded, we set
- * the namespace here.
+ * Class: OpenLayers.Rule
+ * This class represents an SLD Rule, as being used for rule-based SLD styling.
  */
-if(!OpenLayers.Format.GML) {
-    OpenLayers.Format.GML = {};
-}
-
-/**
- * Class: OpenLayers.Format.GML.Base
- * Superclass for GML parsers.
- *
- * Inherits from:
- *  - <OpenLayers.Format.XML>
- */
-OpenLayers.Format.GML.Base = OpenLayers.Class(OpenLayers.Format.XML, {
+OpenLayers.Rule = OpenLayers.Class({
     
     /**
-     * Property: namespaces
-     * {Object} Mapping of namespace aliases to namespace URIs.
+     * Property: id
+     * {String} A unique id for this session.
      */
-    namespaces: {
-        gml: "http://www.opengis.net/gml",
-        xlink: "http://www.w3.org/1999/xlink",
-        xsi: "http://www.w3.org/2001/XMLSchema-instance",
-        wfs: "http://www.opengis.net/wfs" // this is a convenience for reading wfs:FeatureCollection
-    },
+    id: null,
     
     /**
-     * Property: defaultPrefix
+     * APIProperty: name
+     * {String} name of this rule
      */
-    defaultPrefix: "gml",
-
-    /**
-     * Property: schemaLocation
-     * {String} Schema location for a particular minor version.
-     */
-    schemaLocation: null,
+    name: null,
     
     /**
-     * APIProperty: featureType
-     * {Array(String) or String} The local (without prefix) feature typeName(s).
+     * Property: title
+     * {String} Title of this rule (set if included in SLD)
      */
-    featureType: null,
+    title: null,
     
     /**
-     * APIProperty: featureNS
-     * {String} The feature namespace.  Must be set in the options at
-     *     construction.
+     * Property: description
+     * {String} Description of this rule (set if abstract is included in SLD)
      */
-    featureNS: null,
+    description: null,
 
     /**
-     * APIProperty: geometry
-     * {String} Name of geometry element.  Defaults to "geometry". If null, it
-     * will be set on <read> when the first geometry is parsed.
+     * Property: context
+     * {Object} An optional object with properties that the rule should be
+     * evaluated against. If no context is specified, feature.attributes will
+     * be used.
      */
-    geometryName: "geometry",
-
-    /**
-     * APIProperty: extractAttributes
-     * {Boolean} Extract attributes from GML.  Default is true.
-     */
-    extractAttributes: true,
+    context: null,
     
     /**
-     * APIProperty: srsName
-     * {String} URI for spatial reference system.  This is optional for
-     *     single part geometries and mandatory for collections and multis.
-     *     If set, the srsName attribute will be written for all geometries.
-     *     Default is null.
+     * Property: filter
+     * {<OpenLayers.Filter>} Optional filter for the rule.
      */
-    srsName: null,
+    filter: null,
 
     /**
-     * APIProperty: xy
-     * {Boolean} Order of the GML coordinate true:(x,y) or false:(y,x)
-     * Changing is not recommended, a new Format should be instantiated.
-     */ 
-    xy: true,
-
-    /**
-     * Property: geometryTypes
-     * {Object} Maps OpenLayers geometry class names to GML element names.
-     *     Use <setGeometryTypes> before accessing this property.
+     * Property: elseFilter
+     * {Boolean} Determines whether this rule is only to be applied only if
+     * no other rules match (ElseFilter according to the SLD specification). 
+     * Default is false.  For instances of OpenLayers.Rule, if elseFilter is
+     * false, the rule will always apply.  For subclasses, the else property is 
+     * ignored.
      */
-    geometryTypes: null,
-
-    /**
-     * Property: singleFeatureType
-     * {Boolean} True if there is only 1 featureType, and not an array
-     *     of featuretypes.
-     */
-    singleFeatureType: null,
+    elseFilter: false,
     
     /**
-     * Property: autoConfig
-     * {Boolean} Indicates if the format was configured without a <featureNS>,
-     * but auto-configured <featureNS> and <featureType> during read.
-     * Subclasses making use of <featureType> auto-configuration should make
-     * the first call to the <readNode> method (usually in the read method)
-     * with true as 3rd argument, so the auto-configured featureType can be
-     * reset and the format can be reused for subsequent reads with data from
-     * different featureTypes. Set to false after read if you want to keep the
-     * auto-configured values.
+     * Property: symbolizer
+     * {Object} Symbolizer or hash of symbolizers for this rule. If hash of
+     * symbolizers, keys are one or more of ["Point", "Line", "Polygon"]. The
+     * latter if useful if it is required to style e.g. vertices of a line
+     * with a point symbolizer. Note, however, that this is not implemented
+     * yet in OpenLayers, but it is the way how symbolizers are defined in
+     * SLD.
      */
+    symbolizer: null,
+    
+    /**
+     * Property: symbolizers
+     * {Array} Collection of symbolizers associated with this rule.  If 
+     *     provided at construction, the symbolizers array has precedence
+     *     over the deprecated symbolizer property.  Note that multiple 
+     *     symbolizers are not currently supported by the vector renderers.
+     *     Rules with multiple symbolizers are currently only useful for
+     *     maintaining elements in an SLD document.
+     */
+    symbolizers: null,
+    
+    /**
+     * APIProperty: minScaleDenominator
+     * {Number} or {String} minimum scale at which to draw the feature.
+     * In the case of a String, this can be a combination of text and
+     * propertyNames in the form "literal ${propertyName}"
+     */
+    minScaleDenominator: null,
 
     /**
-     * Property: regExes
-     * Compiled regular expressions for manipulating strings.
+     * APIProperty: maxScaleDenominator
+     * {Number} or {String} maximum scale at which to draw the feature.
+     * In the case of a String, this can be a combination of text and
+     * propertyNames in the form "literal ${propertyName}"
      */
-    regExes: {
-        trimSpace: (/^\s*|\s*$/g),
-        removeSpace: (/\s*/g),
-        splitSpace: (/\s+/),
-        trimComma: (/\s*,\s*/g),
-        featureMember: (/^(.*:)?featureMembers?$/)
-    },
-
-    /**
-     * Constructor: OpenLayers.Format.GML.Base
-     * Instances of this class are not created directly.  Use the
-     *     <OpenLayers.Format.GML.v2> or <OpenLayers.Format.GML.v3> constructor
-     *     instead.
+    maxScaleDenominator: null,
+    
+    /** 
+     * Constructor: OpenLayers.Rule
+     * Creates a Rule.
      *
      * Parameters:
-     * options - {Object} An optional object whose properties will be set on
-     *     this instance.
-     *
-     * Valid options properties:
-     * featureType - {Array(String) or String} Local (without prefix) feature 
-     *     typeName(s) (required for write).
-     * featureNS - {String} Feature namespace (required for write).
-     * geometryName - {String} Geometry element name (required for write).
+     * options - {Object} An optional object with properties to set on the
+     *           rule
+     * 
+     * Returns:
+     * {<OpenLayers.Rule>}
      */
     initialize: function(options) {
-        OpenLayers.Format.XML.prototype.initialize.apply(this, [options]);
-        this.setGeometryTypes();
-        if(options && options.featureNS) {
-            this.setNamespace("feature", options.featureNS);
+        this.symbolizer = {};
+        OpenLayers.Util.extend(this, options);
+        if (this.symbolizers) {
+            delete this.symbolizer;
         }
-        this.singleFeatureType = !options || (typeof options.featureType === "string");
+        this.id = OpenLayers.Util.createUniqueID(this.CLASS_NAME + "_");
+    },
+
+    /** 
+     * APIMethod: destroy
+     * nullify references to prevent circular references and memory leaks
+     */
+    destroy: function() {
+        for (var i in this.symbolizer) {
+            this.symbolizer[i] = null;
+        }
+        this.symbolizer = null;
+        delete this.symbolizers;
     },
     
     /**
-     * Method: read
-     *
+     * APIMethod: evaluate
+     * evaluates this rule for a specific feature
+     * 
      * Parameters:
-     * data - {DOMElement} A gml:featureMember element, a gml:featureMembers
-     *     element, or an element containing either of the above at any level.
-     *
+     * feature - {<OpenLayers.Feature>} feature to apply the rule to.
+     * 
      * Returns:
-     * {Array(<OpenLayers.Feature.Vector>)} An array of features.
+     * {Boolean} true if the rule applies, false if it does not.
+     * This rule is the default rule and always returns true.
      */
-    read: function(data) {
-        if(typeof data == "string") { 
-            data = OpenLayers.Format.XML.prototype.read.apply(this, [data]);
+    evaluate: function(feature) {
+        var context = this.getContext(feature);
+        var applies = true;
+
+        if (this.minScaleDenominator || this.maxScaleDenominator) {
+            var scale = feature.layer.map.getScale();
         }
-        if(data && data.nodeType == 9) {
-            data = data.documentElement;
+        
+        // check if within minScale/maxScale bounds
+        if (this.minScaleDenominator) {
+            applies = scale >= OpenLayers.Style.createLiteral(
+                    this.minScaleDenominator, context);
         }
-        var features = [];
-        this.readNode(data, {features: features}, true);
-        if(features.length == 0) {
-            // look for gml:featureMember elements
-            var elements = this.getElementsByTagNameNS(
-                data, this.namespaces.gml, "featureMember"
-            );
-            if(elements.length) {
-                for(var i=0, len=elements.length; i<len; ++i) {
-                    this.readNode(elements[i], {features: features}, true);
-                }
+        if (applies && this.maxScaleDenominator) {
+            applies = scale < OpenLayers.Style.createLiteral(
+                    this.maxScaleDenominator, context);
+        }
+        
+        // check if optional filter applies
+        if(applies && this.filter) {
+            // feature id filters get the feature, others get the context
+            if(this.filter.CLASS_NAME == "OpenLayers.Filter.FeatureId") {
+                applies = this.filter.evaluate(feature);
             } else {
-                // look for gml:featureMembers elements (this is v3, but does no harm here)
-                var elements = this.getElementsByTagNameNS(
-                    data, this.namespaces.gml, "featureMembers"
-                );
-                if(elements.length) {
-                    // there can be only one
-                    this.readNode(elements[0], {features: features}, true);
-                }
+                applies = this.filter.evaluate(context);
             }
         }
-        return features;
+
+        return applies;
     },
     
     /**
-     * Method: readNode
-     * Shorthand for applying one of the named readers given the node
-     *     namespace and local name.  Readers take two args (node, obj) and
-     *     generally extend or modify the second.
-     *
-     * Parameters:
-     * node - {DOMElement} The node to be read (required).
-     * obj - {Object} The object to be modified (optional).
-     * first - {Boolean} Should be set to true for the first node read. This
-     *     is usually the readNode call in the read method. Without this being
-     *     set, auto-configured properties will stick on subsequent reads.
-     *
+     * Method: getContext
+     * Gets the context for evaluating this rule
+     * 
+     * Paramters:
+     * feature - {<OpenLayers.Feature>} feature to take the context from if
+     *           none is specified.
+     */
+    getContext: function(feature) {
+        var context = this.context;
+        if (!context) {
+            context = feature.attributes || feature.data;
+        }
+        if (typeof this.context == "function") {
+            context = this.context(feature);
+        }
+        return context;
+    },
+    
+    /**
+     * APIMethod: clone
+     * Clones this rule.
+     * 
      * Returns:
-     * {Object} The input object, modified (or a new one if none was provided).
+     * {<OpenLayers.Rule>} Clone of this rule.
      */
-    readNode: function(node, obj, first) {
-        // on subsequent calls of format.read(), we want to reset auto-
-        // configured properties and auto-configure again.
-        if (first === true && this.autoConfig === true) {
-            this.featureType = null;
-            delete this.namespaceAlias[this.featureNS];
-            delete this.namespaces["feature"];
-            this.featureNS = null;
-        }
-        // featureType auto-configuration
-        if (!this.featureNS && (!(node.prefix in this.namespaces) &&
-                node.parentNode.namespaceURI == this.namespaces["gml"] &&
-                this.regExes.featureMember.test(node.parentNode.nodeName))) {
-            this.featureType = node.nodeName.split(":").pop();
-            this.setNamespace("feature", node.namespaceURI);
-            this.featureNS = node.namespaceURI;
-            this.autoConfig = true;
-        }
-        return OpenLayers.Format.XML.prototype.readNode.apply(this, [node, obj]);
-    },
-    
-    /**
-     * Property: readers
-     * Contains public functions, grouped by namespace prefix, that will
-     *     be applied when a namespaced node is found matching the function
-     *     name.  The function will be applied in the scope of this parser
-     *     with two arguments: the node being read and a context object passed
-     *     from the parent.
-     */
-    readers: {
-        "gml": {
-            "_inherit": function(node, obj, container) {
-                // To be implemented by version specific parsers
-            },
-            "featureMember": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "featureMembers": function(node, obj) {
-                this.readChildNodes(node, obj);                
-            },
-            "name": function(node, obj) {
-                obj.name = this.getChildValue(node);
-            },
-            "boundedBy": function(node, obj) {
-                var container = {};
-                this.readChildNodes(node, container);
-                if(container.components && container.components.length > 0) {
-                    obj.bounds = container.components[0];
-                }
-            },
-            "Point": function(node, container) {
-                var obj = {points: []};
-                this.readChildNodes(node, obj);
-                if(!container.components) {
-                    container.components = [];
-                }
-                container.components.push(obj.points[0]);
-            },
-            "coordinates": function(node, obj) {
-                var str = this.getChildValue(node).replace(
-                    this.regExes.trimSpace, ""
-                );
-                str = str.replace(this.regExes.trimComma, ",");
-                var pointList = str.split(this.regExes.splitSpace);
-                var coords;
-                var numPoints = pointList.length;
-                var points = new Array(numPoints);
-                for(var i=0; i<numPoints; ++i) {
-                    coords = pointList[i].split(",");
-                    if (this.xy) {
-                        points[i] = new OpenLayers.Geometry.Point(
-                            coords[0], coords[1], coords[2]
-                        );
-                    } else {
-                        points[i] = new OpenLayers.Geometry.Point(
-                            coords[1], coords[0], coords[2]
-                        );
-                    }
-                }
-                obj.points = points;
-            },
-            "coord": function(node, obj) {
-                var coord = {};
-                this.readChildNodes(node, coord);
-                if(!obj.points) {
-                    obj.points = [];
-                }
-                obj.points.push(new OpenLayers.Geometry.Point(
-                    coord.x, coord.y, coord.z
-                ));
-            },
-            "X": function(node, coord) {
-                coord.x = this.getChildValue(node);
-            },
-            "Y": function(node, coord) {
-                coord.y = this.getChildValue(node);
-            },
-            "Z": function(node, coord) {
-                coord.z = this.getChildValue(node);
-            },
-            "MultiPoint": function(node, container) {
-                var obj = {components: []};
-                this.readers.gml._inherit.apply(this, [node, obj, container]);
-                this.readChildNodes(node, obj);
-                container.components = [
-                    new OpenLayers.Geometry.MultiPoint(obj.components)
-                ];
-            },
-            "pointMember": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "LineString": function(node, container) {
-                var obj = {};
-                this.readers.gml._inherit.apply(this, [node, obj, container]);
-                this.readChildNodes(node, obj);
-                if(!container.components) {
-                    container.components = [];
-                }
-                container.components.push(
-                    new OpenLayers.Geometry.LineString(obj.points)
-                );
-            },
-            "MultiLineString": function(node, container) {
-                var obj = {components: []};
-                this.readers.gml._inherit.apply(this, [node, obj, container]);
-                this.readChildNodes(node, obj);
-                container.components = [
-                    new OpenLayers.Geometry.MultiLineString(obj.components)
-                ];
-            },
-            "lineStringMember": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "Polygon": function(node, container) {
-                var obj = {outer: null, inner: []};
-                this.readers.gml._inherit.apply(this, [node, obj, container]);
-                this.readChildNodes(node, obj);
-                obj.inner.unshift(obj.outer);
-                if(!container.components) {
-                    container.components = [];
-                }
-                container.components.push(
-                    new OpenLayers.Geometry.Polygon(obj.inner)
-                );
-            },
-            "LinearRing": function(node, obj) {
-                var container = {};
-                this.readers.gml._inherit.apply(this, [node, container]);
-                this.readChildNodes(node, container);
-                obj.components = [new OpenLayers.Geometry.LinearRing(
-                    container.points
-                )];
-            },
-            "MultiPolygon": function(node, container) {
-                var obj = {components: []};
-                this.readers.gml._inherit.apply(this, [node, obj, container]);
-                this.readChildNodes(node, obj);
-                container.components = [
-                    new OpenLayers.Geometry.MultiPolygon(obj.components)
-                ];
-            },
-            "polygonMember": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "GeometryCollection": function(node, container) {
-                var obj = {components: []};
-                this.readers.gml._inherit.apply(this, [node, obj, container]);
-                this.readChildNodes(node, obj);
-                container.components = [
-                    new OpenLayers.Geometry.Collection(obj.components)
-                ];
-            },
-            "geometryMember": function(node, obj) {
-                this.readChildNodes(node, obj);
+    clone: function() {
+        var options = OpenLayers.Util.extend({}, this);
+        if (this.symbolizers) {
+            // clone symbolizers
+            var len = this.symbolizers.length;
+            options.symbolizers = new Array(len);
+            for (var i=0; i<len; ++i) {
+                options.symbolizers[i] = this.symbolizers[i].clone();
             }
-        },
-        "feature": {
-            "*": function(node, obj) {
-                // The node can either be named like the featureType, or it
-                // can be a child of the feature:featureType.  Children can be
-                // geometry or attributes.
-                var name;
-                var local = node.localName || node.nodeName.split(":").pop();
-                // Since an attribute can have the same name as the feature type
-                // we only want to read the node as a feature if the parent
-                // node can have feature nodes as children.  In this case, the
-                // obj.features property is set.
-                if (obj.features) {
-                    if (!this.singleFeatureType &&
-                        (OpenLayers.Util.indexOf(this.featureType, local) !== -1)) {
-                        name = "_typeName";
-                    } else if(local === this.featureType) {
-                        name = "_typeName";
-                    }
-                } else {
-                    // Assume attribute elements have one child node and that the child
-                    // is a text node.  Otherwise assume it is a geometry node.
-                    if(node.childNodes.length == 0 ||
-                       (node.childNodes.length == 1 && node.firstChild.nodeType == 3)) {
-                        if(this.extractAttributes) {
-                            name = "_attribute";
-                        }
-                    } else {
-                        name = "_geometry";
-                    }
-                }
-                if(name) {
-                    this.readers.feature[name].apply(this, [node, obj]);
-                }
-            },
-            "_typeName": function(node, obj) {
-                var container = {components: [], attributes: {}};
-                this.readChildNodes(node, container);
-                // look for common gml namespaced elements
-                if(container.name) {
-                    container.attributes.name = container.name;
-                }
-                var feature = new OpenLayers.Feature.Vector(
-                    container.components[0], container.attributes
-                );
-                if (!this.singleFeatureType) {
-                    feature.type = node.nodeName.split(":").pop();
-                    feature.namespace = node.namespaceURI;
-                }
-                var fid = node.getAttribute("fid") ||
-                    this.getAttributeNS(node, this.namespaces["gml"], "id");
-                if(fid) {
-                    feature.fid = fid;
-                }
-                if(this.internalProjection && this.externalProjection &&
-                   feature.geometry) {
-                    feature.geometry.transform(
-                        this.externalProjection, this.internalProjection
-                    );
-                }
-                if(container.bounds) {
-                    feature.bounds = container.bounds;
-                }
-                obj.features.push(feature);
-            },
-            "_geometry": function(node, obj) {
-                if (!this.geometryName) {
-                    this.geometryName = node.nodeName.split(":").pop();
-                }
-                this.readChildNodes(node, obj);
-            },
-            "_attribute": function(node, obj) {
-                var local = node.localName || node.nodeName.split(":").pop();
-                var value = this.getChildValue(node);
-                obj.attributes[local] = value;
-            }
-        },
-        "wfs": {
-            "FeatureCollection": function(node, obj) {
-                this.readChildNodes(node, obj);
-            }
-        }
-    },
-    
-    /**
-     * Method: write
-     *
-     * Parameters:
-     * features - {Array(<OpenLayers.Feature.Vector>) | OpenLayers.Feature.Vector}
-     *     An array of features or a single feature.
-     *
-     * Returns:
-     * {String} Given an array of features, a doc with a gml:featureMembers
-     *     element will be returned.  Given a single feature, a doc with a
-     *     gml:featureMember element will be returned.
-     */
-    write: function(features) {
-        var name;
-        if(OpenLayers.Util.isArray(features)) {
-            name = "featureMembers";
         } else {
-            name = "featureMember";
+            // clone symbolizer
+            options.symbolizer = {};
+            var value, type;
+            for(var key in this.symbolizer) {
+                value = this.symbolizer[key];
+                type = typeof value;
+                if(type === "object") {
+                    options.symbolizer[key] = OpenLayers.Util.extend({}, value);
+                } else if(type === "string") {
+                    options.symbolizer[key] = value;
+                }
+            }
         }
-        var root = this.writeNode("gml:" + name, features);
-        this.setAttributeNS(
-            root, this.namespaces["xsi"],
-            "xsi:schemaLocation", this.schemaLocation
-        );
+        // clone filter
+        options.filter = this.filter && this.filter.clone();
+        // clone context
+        options.context = this.context && OpenLayers.Util.extend({}, this.context);
+        return new OpenLayers.Rule(options);
+    },
+        
+    CLASS_NAME: "OpenLayers.Rule"
+});
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
 
-        return OpenLayers.Format.XML.prototype.write.apply(this, [root]);
+
+/**
+ * @requires OpenLayers/BaseTypes/Class.js
+ * @requires OpenLayers/Util.js
+ * @requires OpenLayers/Style.js
+ */
+
+/**
+ * Class: OpenLayers.Filter
+ * This class represents an OGC Filter.
+ */
+OpenLayers.Filter = OpenLayers.Class({
+    
+    /** 
+     * Constructor: OpenLayers.Filter
+     * This class represents a generic filter.
+     *
+     * Parameters:
+     * options - {Object} Optional object whose properties will be set on the
+     *     instance.
+     * 
+     * Returns:
+     * {<OpenLayers.Filter>}
+     */
+    initialize: function(options) {
+        OpenLayers.Util.extend(this, options);
+    },
+
+    /** 
+     * APIMethod: destroy
+     * Remove reference to anything added.
+     */
+    destroy: function() {
+    },
+
+    /**
+     * APIMethod: evaluate
+     * Evaluates this filter in a specific context.  Instances or subclasses
+     * are supposed to override this method.
+     * 
+     * Parameters:
+     * context - {Object} Context to use in evaluating the filter.  If a vector
+     *     feature is provided, the feature.attributes will be used as context.
+     * 
+     * Returns:
+     * {Boolean} The filter applies.
+     */
+    evaluate: function(context) {
+        return true;
     },
     
     /**
-     * Property: writers
-     * As a compliment to the readers property, this structure contains public
-     *     writing functions grouped by namespace alias and named like the
-     *     node names they produce.
+     * APIMethod: clone
+     * Clones this filter. Should be implemented by subclasses.
+     * 
+     * Returns:
+     * {<OpenLayers.Filter>} Clone of this filter.
      */
-    writers: {
-        "gml": {
-            "featureMember": function(feature) {
-                var node = this.createElementNSPlus("gml:featureMember");
-                this.writeNode("feature:_typeName", feature, node);
-                return node;
-            },
-            "MultiPoint": function(geometry) {
-                var node = this.createElementNSPlus("gml:MultiPoint");
-                var components = geometry.components || [geometry];
-                for(var i=0, ii=components.length; i<ii; ++i) {
-                    this.writeNode("pointMember", components[i], node);
-                }
-                return node;
-            },
-            "pointMember": function(geometry) {
-                var node = this.createElementNSPlus("gml:pointMember");
-                this.writeNode("Point", geometry, node);
-                return node;
-            },
-            "MultiLineString": function(geometry) {
-                var node = this.createElementNSPlus("gml:MultiLineString");
-                var components = geometry.components || [geometry];
-                for(var i=0, ii=components.length; i<ii; ++i) {
-                    this.writeNode("lineStringMember", components[i], node);
-                }
-                return node;
-            },
-            "lineStringMember": function(geometry) {
-                var node = this.createElementNSPlus("gml:lineStringMember");
-                this.writeNode("LineString", geometry, node);
-                return node;
-            },
-            "MultiPolygon": function(geometry) {
-                var node = this.createElementNSPlus("gml:MultiPolygon");
-                var components = geometry.components || [geometry];
-                for(var i=0, ii=components.length; i<ii; ++i) {
-                    this.writeNode(
-                        "polygonMember", components[i], node
-                    );
-                }
-                return node;
-            },
-            "polygonMember": function(geometry) {
-                var node = this.createElementNSPlus("gml:polygonMember");
-                this.writeNode("Polygon", geometry, node);
-                return node;
-            },
-            "GeometryCollection": function(geometry) {
-                var node = this.createElementNSPlus("gml:GeometryCollection");
-                for(var i=0, len=geometry.components.length; i<len; ++i) {
-                    this.writeNode("geometryMember", geometry.components[i], node);
-                }
-                return node;
-            },
-            "geometryMember": function(geometry) {
-                var node = this.createElementNSPlus("gml:geometryMember");
-                var child = this.writeNode("feature:_geometry", geometry);
-                node.appendChild(child.firstChild);
-                return node;
-            }
-        },
-        "feature": {
-            "_typeName": function(feature) {
-                var node = this.createElementNSPlus("feature:" + this.featureType, {
-                    attributes: {fid: feature.fid}
-                });
-                if(feature.geometry) {
-                    this.writeNode("feature:_geometry", feature.geometry, node);
-                }
-                for(var name in feature.attributes) {
-                    var value = feature.attributes[name];
-                    if(value != null) {
-                        this.writeNode(
-                            "feature:_attribute",
-                            {name: name, value: value}, node
-                        );
-                    }
-                }
-                return node;
-            },
-            "_geometry": function(geometry) {
-                if(this.externalProjection && this.internalProjection) {
-                    geometry = geometry.clone().transform(
-                        this.internalProjection, this.externalProjection
-                    );
-                }    
-                var node = this.createElementNSPlus(
-                    "feature:" + this.geometryName
-                );
-                var type = this.geometryTypes[geometry.CLASS_NAME];
-                var child = this.writeNode("gml:" + type, geometry, node);
-                if(this.srsName) {
-                    child.setAttribute("srsName", this.srsName);
-                }
-                return node;
-            },
-            "_attribute": function(obj) {
-                return this.createElementNSPlus("feature:" + obj.name, {
-                    value: obj.value
-                });
-            }
-        },
-        "wfs": {
-            "FeatureCollection": function(features) {
-                /**
-                 * This is only here because GML2 only describes abstract
-                 * feature collections.  Typically, you would not be using
-                 * the GML format to write wfs elements.  This just provides
-                 * some way to write out lists of features.  GML3 defines the
-                 * featureMembers element, so that is used by default instead.
-                 */
-                var node = this.createElementNSPlus("wfs:FeatureCollection");
-                for(var i=0, len=features.length; i<len; ++i) {
-                    this.writeNode("gml:featureMember", features[i], node);
-                }
-                return node;
-            }
-        }
+    clone: function() {
+        return null;
     },
     
     /**
-     * Method: setGeometryTypes
-     * Sets the <geometryTypes> mapping.
+     * APIMethod: toString
+     *
+     * Returns:
+     * {String} Include <OpenLayers.Format.CQL> in your build to get a CQL
+     *     representation of the filter returned. Otherwise "[Object object]"
+     *     will be returned.
      */
-    setGeometryTypes: function() {
-        this.geometryTypes = {
-            "OpenLayers.Geometry.Point": "Point",
-            "OpenLayers.Geometry.MultiPoint": "MultiPoint",
-            "OpenLayers.Geometry.LineString": "LineString",
-            "OpenLayers.Geometry.MultiLineString": "MultiLineString",
-            "OpenLayers.Geometry.Polygon": "Polygon",
-            "OpenLayers.Geometry.MultiPolygon": "MultiPolygon",
-            "OpenLayers.Geometry.Collection": "GeometryCollection"
-        };
+    toString: function() {
+        var string;
+        if (OpenLayers.Format && OpenLayers.Format.CQL) {
+            string = OpenLayers.Format.CQL.prototype.write(this);
+        } else {
+            string = Object.prototype.toString.call(this);
+        }
+        return string;
     },
-
-    CLASS_NAME: "OpenLayers.Format.GML.Base" 
-
+    
+    CLASS_NAME: "OpenLayers.Filter"
 });
 
 /* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
@@ -42009,478 +40014,601 @@ OpenLayers.Format.GML.Base = OpenLayers.Class(OpenLayers.Format.XML, {
  * See license.txt in the OpenLayers distribution or repository for the
  * full text of the license. */
 
+
 /**
- * @requires OpenLayers/Format/GML/Base.js
+ * @requires OpenLayers/Filter.js
  */
 
 /**
- * Class: OpenLayers.Format.GML.v3
- * Parses GML version 3.
- *
+ * Class: OpenLayers.Filter.FeatureId
+ * This class represents a ogc:FeatureId Filter, as being used for rule-based SLD
+ * styling
+ * 
  * Inherits from:
- *  - <OpenLayers.Format.GML.Base>
+ * - <OpenLayers.Filter>
  */
-OpenLayers.Format.GML.v3 = OpenLayers.Class(OpenLayers.Format.GML.Base, {
-    
-    /**
-     * Property: schemaLocation
-     * {String} Schema location for a particular minor version.  The writers
-     *     conform with the Simple Features Profile for GML.
-     */
-    schemaLocation: "http://www.opengis.net/gml http://schemas.opengis.net/gml/3.1.1/profiles/gmlsfProfile/1.0.0/gmlsf.xsd",
+OpenLayers.Filter.FeatureId = OpenLayers.Class(OpenLayers.Filter, {
 
-    /**
-     * Property: curve
-     * {Boolean} Write gml:Curve instead of gml:LineString elements.  This also
-     *     affects the elements in multi-part geometries.  Default is false.
-     *     To write gml:Curve elements instead of gml:LineString, set curve
-     *     to true in the options to the contstructor (cannot be changed after
-     *     instantiation).
+    /** 
+     * APIProperty: fids
+     * {Array(String)} Feature Ids to evaluate this rule against. 
+     *     To be passed inside the params object.
      */
-    curve: false,
+    fids: null,
     
-    /**
-     * Property: multiCurve
-     * {Boolean} Write gml:MultiCurve instead of gml:MultiLineString.  Since
-     *     the latter is deprecated in GML 3, the default is true.  To write
-     *     gml:MultiLineString instead of gml:MultiCurve, set multiCurve to
-     *     false in the options to the constructor (cannot be changed after
-     *     instantiation).
+    /** 
+     * Property: type
+     * {String} Type to identify this filter.
      */
-    multiCurve: true,
+    type: "FID",
     
-    /**
-     * Property: surface
-     * {Boolean} Write gml:Surface instead of gml:Polygon elements.  This also
-     *     affects the elements in multi-part geometries.  Default is false.
-     *     To write gml:Surface elements instead of gml:Polygon, set surface
-     *     to true in the options to the contstructor (cannot be changed after
-     *     instantiation).
-     */
-    surface: false,
-
-    /**
-     * Property: multiSurface
-     * {Boolean} Write gml:multiSurface instead of gml:MultiPolygon.  Since
-     *     the latter is deprecated in GML 3, the default is true.  To write
-     *     gml:MultiPolygon instead of gml:multiSurface, set multiSurface to
-     *     false in the options to the constructor (cannot be changed after
-     *     instantiation).
-     */
-    multiSurface: true,
-
-    /**
-     * Constructor: OpenLayers.Format.GML.v3
-     * Create a parser for GML v3.
+    /** 
+     * Constructor: OpenLayers.Filter.FeatureId
+     * Creates an ogc:FeatureId rule.
      *
      * Parameters:
-     * options - {Object} An optional object whose properties will be set on
-     *     this instance.
-     *
-     * Valid options properties:
-     * featureType - {String} Local (without prefix) feature typeName (required).
-     * featureNS - {String} Feature namespace (required).
-     * geometryName - {String} Geometry element name.
+     * options - {Object} An optional object with properties to set on the
+     *           rule
+     * 
+     * Returns:
+     * {<OpenLayers.Filter.FeatureId>}
      */
     initialize: function(options) {
-        OpenLayers.Format.GML.Base.prototype.initialize.apply(this, [options]);
+        this.fids = [];
+        OpenLayers.Filter.prototype.initialize.apply(this, [options]);
     },
 
     /**
-     * Property: readers
-     * Contains public functions, grouped by namespace prefix, that will
-     *     be applied when a namespaced node is found matching the function
-     *     name.  The function will be applied in the scope of this parser
-     *     with two arguments: the node being read and a context object passed
-     *     from the parent.
+     * APIMethod: evaluate
+     * evaluates this rule for a specific feature
+     * 
+     * Parameters:
+     * feature - {<OpenLayers.Feature>} feature to apply the rule to.
+     *           For vector features, the check is run against the fid,
+     *           for plain features against the id.
+     * 
+     * Returns:
+     * {Boolean} true if the rule applies, false if it does not
      */
-    readers: {
-        "gml": OpenLayers.Util.applyDefaults({
-            "_inherit": function(node, obj, container) {
-                // SRSReferenceGroup attributes
-                var dim = parseInt(node.getAttribute("srsDimension"), 10) ||
-                    (container && container.srsDimension);
-                if (dim) {
-                    obj.srsDimension = dim;
-                }
-            },
-            "featureMembers": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "Curve": function(node, container) {
-                var obj = {points: []};
-                this.readers.gml._inherit.apply(this, [node, obj, container]);
-                this.readChildNodes(node, obj);
-                if(!container.components) {
-                    container.components = [];
-                }
-                container.components.push(
-                    new OpenLayers.Geometry.LineString(obj.points)
-                );
-            },
-            "segments": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "LineStringSegment": function(node, container) {
-                var obj = {};
-                this.readChildNodes(node, obj);
-                if(obj.points) {
-                    Array.prototype.push.apply(container.points, obj.points);
-                }
-            },
-            "pos": function(node, obj) {
-                var str = this.getChildValue(node).replace(
-                    this.regExes.trimSpace, ""
-                );
-                var coords = str.split(this.regExes.splitSpace);
-                var point;
-                if(this.xy) {
-                    point = new OpenLayers.Geometry.Point(
-                        coords[0], coords[1], coords[2]
-                    );
-                } else {
-                    point = new OpenLayers.Geometry.Point(
-                        coords[1], coords[0], coords[2]
-                    );
-                }
-                obj.points = [point];
-            },
-            "posList": function(node, obj) {
-                var str = this.getChildValue(node).replace(
-                    this.regExes.trimSpace, ""
-                );
-                var coords = str.split(this.regExes.splitSpace);
-                // The "dimension" attribute is from the GML 3.0.1 spec.
-                var dim = obj.srsDimension ||
-                    parseInt(node.getAttribute("srsDimension") || node.getAttribute("dimension"), 10) || 2;
-                var j, x, y, z;
-                var numPoints = coords.length / dim;
-                var points = new Array(numPoints);
-                for(var i=0, len=coords.length; i<len; i += dim) {
-                    x = coords[i];
-                    y = coords[i+1];
-                    z = (dim == 2) ? undefined : coords[i+2];
-                    if (this.xy) {
-                        points[i/dim] = new OpenLayers.Geometry.Point(x, y, z);
-                    } else {
-                        points[i/dim] = new OpenLayers.Geometry.Point(y, x, z);
-                    }
-                }
-                obj.points = points;
-            },
-            "Surface": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "patches": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "PolygonPatch": function(node, obj) {
-                this.readers.gml.Polygon.apply(this, [node, obj]);
-            },
-            "exterior": function(node, container) {
-                var obj = {};
-                this.readChildNodes(node, obj);
-                container.outer = obj.components[0];
-            },
-            "interior": function(node, container) {
-                var obj = {};
-                this.readChildNodes(node, obj);
-                container.inner.push(obj.components[0]);
-            },
-            "MultiCurve": function(node, container) {
-                var obj = {components: []};
-                this.readers.gml._inherit.apply(this, [node, obj, container]);
-                this.readChildNodes(node, obj);
-                if(obj.components.length > 0) {
-                    container.components = [
-                        new OpenLayers.Geometry.MultiLineString(obj.components)
-                    ];
-                }
-            },
-            "curveMember": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "MultiSurface": function(node, container) {
-                var obj = {components: []};
-                this.readers.gml._inherit.apply(this, [node, obj, container]);
-                this.readChildNodes(node, obj);
-                if(obj.components.length > 0) {
-                    container.components = [
-                        new OpenLayers.Geometry.MultiPolygon(obj.components)
-                    ];
-                }
-            },
-            "surfaceMember": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "surfaceMembers": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "pointMembers": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "lineStringMembers": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "polygonMembers": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "geometryMembers": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "Envelope": function(node, container) {
-                var obj = {points: new Array(2)};
-                this.readChildNodes(node, obj);
-                if(!container.components) {
-                    container.components = [];
-                }
-                var min = obj.points[0];
-                var max = obj.points[1];
-                container.components.push(
-                    new OpenLayers.Bounds(min.x, min.y, max.x, max.y)
-                );
-            },
-            "lowerCorner": function(node, container) {
-                var obj = {};
-                this.readers.gml.pos.apply(this, [node, obj]);
-                container.points[0] = obj.points[0];
-            },
-            "upperCorner": function(node, container) {
-                var obj = {};
-                this.readers.gml.pos.apply(this, [node, obj]);
-                container.points[1] = obj.points[0];
+    evaluate: function(feature) {
+        for (var i=0, len=this.fids.length; i<len; i++) {
+            var fid = feature.fid || feature.id;
+            if (fid == this.fids[i]) {
+                return true;
             }
-        }, OpenLayers.Format.GML.Base.prototype.readers["gml"]),            
-        "feature": OpenLayers.Format.GML.Base.prototype.readers["feature"],
-        "wfs": OpenLayers.Format.GML.Base.prototype.readers["wfs"]
+        }
+        return false;
     },
     
     /**
-     * Method: write
+     * APIMethod: clone
+     * Clones this filter.
+     * 
+     * Returns:
+     * {<OpenLayers.Filter.FeatureId>} Clone of this filter.
+     */
+    clone: function() {
+        var filter = new OpenLayers.Filter.FeatureId();
+        OpenLayers.Util.extend(filter, this);
+        filter.fids = this.fids.slice();
+        return filter;
+    },
+    
+    CLASS_NAME: "OpenLayers.Filter.FeatureId"
+});
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+
+/**
+ * @requires OpenLayers/Filter.js
+ */
+
+/**
+ * Class: OpenLayers.Filter.Logical
+ * This class represents ogc:And, ogc:Or and ogc:Not rules.
+ * 
+ * Inherits from:
+ * - <OpenLayers.Filter>
+ */
+OpenLayers.Filter.Logical = OpenLayers.Class(OpenLayers.Filter, {
+
+    /**
+     * APIProperty: filters
+     * {Array(<OpenLayers.Filter>)} Child filters for this filter.
+     */
+    filters: null, 
+     
+    /**
+     * APIProperty: type
+     * {String} type of logical operator. Available types are:
+     * - OpenLayers.Filter.Logical.AND = "&&";
+     * - OpenLayers.Filter.Logical.OR  = "||";
+     * - OpenLayers.Filter.Logical.NOT = "!";
+     */
+    type: null,
+
+    /** 
+     * Constructor: OpenLayers.Filter.Logical
+     * Creates a logical filter (And, Or, Not).
      *
      * Parameters:
-     * features - {Array(<OpenLayers.Feature.Vector>) | OpenLayers.Feature.Vector}
-     *     An array of features or a single feature.
-     *
+     * options - {Object} An optional object with properties to set on the
+     *     filter.
+     * 
      * Returns:
-     * {String} Given an array of features, a doc with a gml:featureMembers
-     *     element will be returned.  Given a single feature, a doc with a
-     *     gml:featureMember element will be returned.
+     * {<OpenLayers.Filter.Logical>}
      */
-    write: function(features) {
-        var name;
-        if(OpenLayers.Util.isArray(features)) {
-            name = "featureMembers";
-        } else {
-            name = "featureMember";
-        }
-        var root = this.writeNode("gml:" + name, features);
-        this.setAttributeNS(
-            root, this.namespaces["xsi"],
-            "xsi:schemaLocation", this.schemaLocation
-        );
-
-        return OpenLayers.Format.XML.prototype.write.apply(this, [root]);
-    },
-
-    /**
-     * Property: writers
-     * As a compliment to the readers property, this structure contains public
-     *     writing functions grouped by namespace alias and named like the
-     *     node names they produce.
-     */
-    writers: {
-        "gml": OpenLayers.Util.applyDefaults({
-            "featureMembers": function(features) {
-                var node = this.createElementNSPlus("gml:featureMembers");
-                for(var i=0, len=features.length; i<len; ++i) {
-                    this.writeNode("feature:_typeName", features[i], node);
-                }
-                return node;
-            },
-            "Point": function(geometry) {
-                var node = this.createElementNSPlus("gml:Point");
-                this.writeNode("pos", geometry, node);
-                return node;
-            },
-            "pos": function(point) {
-                // only 2d for simple features profile
-                var pos = (this.xy) ?
-                    (point.x + " " + point.y) : (point.y + " " + point.x);
-                return this.createElementNSPlus("gml:pos", {
-                    value: pos
-                });
-            },
-            "LineString": function(geometry) {
-                var node = this.createElementNSPlus("gml:LineString");
-                this.writeNode("posList", geometry.components, node);
-                return node;
-            },
-            "Curve": function(geometry) {
-                var node = this.createElementNSPlus("gml:Curve");
-                this.writeNode("segments", geometry, node);
-                return node;
-            },
-            "segments": function(geometry) {
-                var node = this.createElementNSPlus("gml:segments");
-                this.writeNode("LineStringSegment", geometry, node);
-                return node;
-            },
-            "LineStringSegment": function(geometry) {
-                var node = this.createElementNSPlus("gml:LineStringSegment");
-                this.writeNode("posList", geometry.components, node);
-                return node;
-            },
-            "posList": function(points) {
-                // only 2d for simple features profile
-                var len = points.length;
-                var parts = new Array(len);
-                var point;
-                for(var i=0; i<len; ++i) {
-                    point = points[i];
-                    if(this.xy) {
-                        parts[i] = point.x + " " + point.y;
-                    } else {
-                        parts[i] = point.y + " " + point.x;
-                    }
-                }
-                return this.createElementNSPlus("gml:posList", {
-                    value: parts.join(" ")
-                }); 
-            },
-            "Surface": function(geometry) {
-                var node = this.createElementNSPlus("gml:Surface");
-                this.writeNode("patches", geometry, node);
-                return node;
-            },
-            "patches": function(geometry) {
-                var node = this.createElementNSPlus("gml:patches");
-                this.writeNode("PolygonPatch", geometry, node);
-                return node;
-            },
-            "PolygonPatch": function(geometry) {
-                var node = this.createElementNSPlus("gml:PolygonPatch", {
-                    attributes: {interpolation: "planar"}
-                });
-                this.writeNode("exterior", geometry.components[0], node);
-                for(var i=1, len=geometry.components.length; i<len; ++i) {
-                    this.writeNode(
-                        "interior", geometry.components[i], node
-                    );
-                }
-                return node;
-            },
-            "Polygon": function(geometry) {
-                var node = this.createElementNSPlus("gml:Polygon");
-                this.writeNode("exterior", geometry.components[0], node);
-                for(var i=1, len=geometry.components.length; i<len; ++i) {
-                    this.writeNode(
-                        "interior", geometry.components[i], node
-                    );
-                }
-                return node;
-            },
-            "exterior": function(ring) {
-                var node = this.createElementNSPlus("gml:exterior");
-                this.writeNode("LinearRing", ring, node);
-                return node;
-            },
-            "interior": function(ring) {
-                var node = this.createElementNSPlus("gml:interior");
-                this.writeNode("LinearRing", ring, node);
-                return node;
-            },
-            "LinearRing": function(ring) {
-                var node = this.createElementNSPlus("gml:LinearRing");
-                this.writeNode("posList", ring.components, node);
-                return node;
-            },
-            "MultiCurve": function(geometry) {
-                var node = this.createElementNSPlus("gml:MultiCurve");
-                var components = geometry.components || [geometry];
-                for(var i=0, len=components.length; i<len; ++i) {
-                    this.writeNode("curveMember", components[i], node);
-                }
-                return node;
-            },
-            "curveMember": function(geometry) {
-                var node = this.createElementNSPlus("gml:curveMember");
-                if(this.curve) {
-                    this.writeNode("Curve", geometry, node);
-                } else {
-                    this.writeNode("LineString", geometry, node);
-                }
-                return node;
-            },
-            "MultiSurface": function(geometry) {
-                var node = this.createElementNSPlus("gml:MultiSurface");
-                var components = geometry.components || [geometry];
-                for(var i=0, len=components.length; i<len; ++i) {
-                    this.writeNode("surfaceMember", components[i], node);
-                }
-                return node;
-            },
-            "surfaceMember": function(polygon) {
-                var node = this.createElementNSPlus("gml:surfaceMember");
-                if(this.surface) {
-                    this.writeNode("Surface", polygon, node);
-                } else {
-                    this.writeNode("Polygon", polygon, node);
-                }
-                return node;
-            },
-            "Envelope": function(bounds) {
-                var node = this.createElementNSPlus("gml:Envelope");
-                this.writeNode("lowerCorner", bounds, node);
-                this.writeNode("upperCorner", bounds, node);
-                // srsName attribute is required for gml:Envelope
-                if(this.srsName) {
-                    node.setAttribute("srsName", this.srsName);
-                }
-                return node;
-            },
-            "lowerCorner": function(bounds) {
-                // only 2d for simple features profile
-                var pos = (this.xy) ?
-                    (bounds.left + " " + bounds.bottom) :
-                    (bounds.bottom + " " + bounds.left);
-                return this.createElementNSPlus("gml:lowerCorner", {
-                    value: pos
-                });
-            },
-            "upperCorner": function(bounds) {
-                // only 2d for simple features profile
-                var pos = (this.xy) ?
-                    (bounds.right + " " + bounds.top) :
-                    (bounds.top + " " + bounds.right);
-                return this.createElementNSPlus("gml:upperCorner", {
-                    value: pos
-                });
-            }
-        }, OpenLayers.Format.GML.Base.prototype.writers["gml"]),
-        "feature": OpenLayers.Format.GML.Base.prototype.writers["feature"],
-        "wfs": OpenLayers.Format.GML.Base.prototype.writers["wfs"]
-    },
-
-    /**
-     * Method: setGeometryTypes
-     * Sets the <geometryTypes> mapping.
-     */
-    setGeometryTypes: function() {
-        this.geometryTypes = {
-            "OpenLayers.Geometry.Point": "Point",
-            "OpenLayers.Geometry.MultiPoint": "MultiPoint",
-            "OpenLayers.Geometry.LineString": (this.curve === true) ? "Curve": "LineString",
-            "OpenLayers.Geometry.MultiLineString": (this.multiCurve === false) ? "MultiLineString" : "MultiCurve",
-            "OpenLayers.Geometry.Polygon": (this.surface === true) ? "Surface" : "Polygon",
-            "OpenLayers.Geometry.MultiPolygon": (this.multiSurface === false) ? "MultiPolygon" : "MultiSurface",
-            "OpenLayers.Geometry.Collection": "GeometryCollection"
-        };
+    initialize: function(options) {
+        this.filters = [];
+        OpenLayers.Filter.prototype.initialize.apply(this, [options]);
     },
     
-    CLASS_NAME: "OpenLayers.Format.GML.v3" 
+    /** 
+     * APIMethod: destroy
+     * Remove reference to child filters.
+     */
+    destroy: function() {
+        this.filters = null;
+        OpenLayers.Filter.prototype.destroy.apply(this);
+    },
 
+    /**
+     * APIMethod: evaluate
+     * Evaluates this filter in a specific context.
+     * 
+     * Parameters:
+     * context - {Object} Context to use in evaluating the filter.  A vector
+     *     feature may also be provided to evaluate feature attributes in 
+     *     comparison filters or geometries in spatial filters.
+     * 
+     * Returns:
+     * {Boolean} The filter applies.
+     */
+    evaluate: function(context) {
+        var i, len;
+        switch(this.type) {
+            case OpenLayers.Filter.Logical.AND:
+                for (i=0, len=this.filters.length; i<len; i++) {
+                    if (this.filters[i].evaluate(context) == false) {
+                        return false;
+                    }
+                }
+                return true;
+                
+            case OpenLayers.Filter.Logical.OR:
+                for (i=0, len=this.filters.length; i<len; i++) {
+                    if (this.filters[i].evaluate(context) == true) {
+                        return true;
+                    }
+                }
+                return false;
+            
+            case OpenLayers.Filter.Logical.NOT:
+                return (!this.filters[0].evaluate(context));
+        }
+        return undefined;
+    },
+    
+    /**
+     * APIMethod: clone
+     * Clones this filter.
+     * 
+     * Returns:
+     * {<OpenLayers.Filter.Logical>} Clone of this filter.
+     */
+    clone: function() {
+        var filters = [];        
+        for(var i=0, len=this.filters.length; i<len; ++i) {
+            filters.push(this.filters[i].clone());
+        }
+        return new OpenLayers.Filter.Logical({
+            type: this.type,
+            filters: filters
+        });
+    },
+    
+    CLASS_NAME: "OpenLayers.Filter.Logical"
 });
+
+
+OpenLayers.Filter.Logical.AND = "&&";
+OpenLayers.Filter.Logical.OR  = "||";
+OpenLayers.Filter.Logical.NOT = "!";
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Filter.js
+ */
+
+/**
+ * Class: OpenLayers.Filter.Comparison
+ * This class represents a comparison filter.
+ * 
+ * Inherits from:
+ * - <OpenLayers.Filter>
+ */
+OpenLayers.Filter.Comparison = OpenLayers.Class(OpenLayers.Filter, {
+
+    /**
+     * APIProperty: type
+     * {String} type: type of the comparison. This is one of
+     * - OpenLayers.Filter.Comparison.EQUAL_TO                 = "==";
+     * - OpenLayers.Filter.Comparison.NOT_EQUAL_TO             = "!=";
+     * - OpenLayers.Filter.Comparison.LESS_THAN                = "<";
+     * - OpenLayers.Filter.Comparison.GREATER_THAN             = ">";
+     * - OpenLayers.Filter.Comparison.LESS_THAN_OR_EQUAL_TO    = "<=";
+     * - OpenLayers.Filter.Comparison.GREATER_THAN_OR_EQUAL_TO = ">=";
+     * - OpenLayers.Filter.Comparison.BETWEEN                  = "..";
+     * - OpenLayers.Filter.Comparison.LIKE                     = "~";
+     * - OpenLayers.Filter.Comparison.IS_NULL                  = "NULL";
+     */
+    type: null,
+    
+    /**
+     * APIProperty: property
+     * {String}
+     * name of the context property to compare
+     */
+    property: null,
+    
+    /**
+     * APIProperty: value
+     * {Number} or {String}
+     * comparison value for binary comparisons. In the case of a String, this
+     * can be a combination of text and propertyNames in the form
+     * "literal ${propertyName}"
+     */
+    value: null,
+    
+    /**
+     * Property: matchCase
+     * {Boolean} Force case sensitive searches for EQUAL_TO and NOT_EQUAL_TO
+     *     comparisons.  The Filter Encoding 1.1 specification added a matchCase
+     *     attribute to ogc:PropertyIsEqualTo and ogc:PropertyIsNotEqualTo
+     *     elements.  This property will be serialized with those elements only
+     *     if using the v1.1.0 filter format. However, when evaluating filters
+     *     here, the matchCase property will always be respected (for EQUAL_TO
+     *     and NOT_EQUAL_TO).  Default is true. 
+     */
+    matchCase: true,
+    
+    /**
+     * APIProperty: lowerBoundary
+     * {Number} or {String}
+     * lower boundary for between comparisons. In the case of a String, this
+     * can be a combination of text and propertyNames in the form
+     * "literal ${propertyName}"
+     */
+    lowerBoundary: null,
+    
+    /**
+     * APIProperty: upperBoundary
+     * {Number} or {String}
+     * upper boundary for between comparisons. In the case of a String, this
+     * can be a combination of text and propertyNames in the form
+     * "literal ${propertyName}"
+     */
+    upperBoundary: null,
+
+    /** 
+     * Constructor: OpenLayers.Filter.Comparison
+     * Creates a comparison rule.
+     *
+     * Parameters:
+     * options - {Object} An optional object with properties to set on the
+     *           rule
+     * 
+     * Returns:
+     * {<OpenLayers.Filter.Comparison>}
+     */
+    initialize: function(options) {
+        OpenLayers.Filter.prototype.initialize.apply(this, [options]);
+        // since matchCase on PropertyIsLike is not schema compliant, we only
+        // want to use this if explicitly asked for
+        if (this.type === OpenLayers.Filter.Comparison.LIKE 
+            && options.matchCase === undefined) {
+                this.matchCase = null;
+        }
+    },
+
+    /**
+     * APIMethod: evaluate
+     * Evaluates this filter in a specific context.
+     * 
+     * Parameters:
+     * context - {Object} Context to use in evaluating the filter.  If a vector
+     *     feature is provided, the feature.attributes will be used as context.
+     * 
+     * Returns:
+     * {Boolean} The filter applies.
+     */
+    evaluate: function(context) {
+        if (context instanceof OpenLayers.Feature.Vector) {
+            context = context.attributes;
+        }
+        var result = false;
+        var got = context[this.property];
+        var exp;
+        switch(this.type) {
+            case OpenLayers.Filter.Comparison.EQUAL_TO:
+                exp = this.value;
+                if(!this.matchCase &&
+                   typeof got == "string" && typeof exp == "string") {
+                    result = (got.toUpperCase() == exp.toUpperCase());
+                } else {
+                    result = (got == exp);
+                }
+                break;
+            case OpenLayers.Filter.Comparison.NOT_EQUAL_TO:
+                exp = this.value;
+                if(!this.matchCase &&
+                   typeof got == "string" && typeof exp == "string") {
+                    result = (got.toUpperCase() != exp.toUpperCase());
+                } else {
+                    result = (got != exp);
+                }
+                break;
+            case OpenLayers.Filter.Comparison.LESS_THAN:
+                result = got < this.value;
+                break;
+            case OpenLayers.Filter.Comparison.GREATER_THAN:
+                result = got > this.value;
+                break;
+            case OpenLayers.Filter.Comparison.LESS_THAN_OR_EQUAL_TO:
+                result = got <= this.value;
+                break;
+            case OpenLayers.Filter.Comparison.GREATER_THAN_OR_EQUAL_TO:
+                result = got >= this.value;
+                break;
+            case OpenLayers.Filter.Comparison.BETWEEN:
+                result = (got >= this.lowerBoundary) &&
+                    (got <= this.upperBoundary);
+                break;
+            case OpenLayers.Filter.Comparison.LIKE:
+                var regexp = new RegExp(this.value, "gi");
+                result = regexp.test(got);
+                break;
+            case OpenLayers.Filter.Comparison.IS_NULL:
+                result = (got === null);
+                break;
+        }
+        return result;
+    },
+    
+    /**
+     * APIMethod: value2regex
+     * Converts the value of this rule into a regular expression string,
+     * according to the wildcard characters specified. This method has to
+     * be called after instantiation of this class, if the value is not a
+     * regular expression already.
+     * 
+     * Parameters:
+     * wildCard   - {Char} wildcard character in the above value, default
+     *              is "*"
+     * singleChar - {Char} single-character wildcard in the above value
+     *              default is "."
+     * escapeChar - {Char} escape character in the above value, default is
+     *              "!"
+     * 
+     * Returns:
+     * {String} regular expression string
+     */
+    value2regex: function(wildCard, singleChar, escapeChar) {
+        if (wildCard == ".") {
+            throw new Error("'.' is an unsupported wildCard character for " +
+                            "OpenLayers.Filter.Comparison");
+        }
+        
+
+        // set UMN MapServer defaults for unspecified parameters
+        wildCard = wildCard ? wildCard : "*";
+        singleChar = singleChar ? singleChar : ".";
+        escapeChar = escapeChar ? escapeChar : "!";
+        
+        this.value = this.value.replace(
+                new RegExp("\\"+escapeChar+"(.|$)", "g"), "\\$1");
+        this.value = this.value.replace(
+                new RegExp("\\"+singleChar, "g"), ".");
+        this.value = this.value.replace(
+                new RegExp("\\"+wildCard, "g"), ".*");
+        this.value = this.value.replace(
+                new RegExp("\\\\.\\*", "g"), "\\"+wildCard);
+        this.value = this.value.replace(
+                new RegExp("\\\\\\.", "g"), "\\"+singleChar);
+        
+        return this.value;
+    },
+    
+    /**
+     * Method: regex2value
+     * Convert the value of this rule from a regular expression string into an
+     *     ogc literal string using a wildCard of *, a singleChar of ., and an
+     *     escape of !.  Leaves the <value> property unmodified.
+     * 
+     * Returns:
+     * {String} A string value.
+     */
+    regex2value: function() {
+        
+        var value = this.value;
+        
+        // replace ! with !!
+        value = value.replace(/!/g, "!!");
+
+        // replace \. with !. (watching out for \\.)
+        value = value.replace(/(\\)?\\\./g, function($0, $1) {
+            return $1 ? $0 : "!.";
+        });
+        
+        // replace \* with #* (watching out for \\*)
+        value = value.replace(/(\\)?\\\*/g, function($0, $1) {
+            return $1 ? $0 : "!*";
+        });
+        
+        // replace \\ with \
+        value = value.replace(/\\\\/g, "\\");
+
+        // convert .* to * (the sequence #.* is not allowed)
+        value = value.replace(/\.\*/g, "*");
+        
+        return value;
+    },
+    
+    /**
+     * APIMethod: clone
+     * Clones this filter.
+     * 
+     * Returns:
+     * {<OpenLayers.Filter.Comparison>} Clone of this filter.
+     */
+    clone: function() {
+        return OpenLayers.Util.extend(new OpenLayers.Filter.Comparison(), this);
+    },
+    
+    CLASS_NAME: "OpenLayers.Filter.Comparison"
+});
+
+
+OpenLayers.Filter.Comparison.EQUAL_TO                 = "==";
+OpenLayers.Filter.Comparison.NOT_EQUAL_TO             = "!=";
+OpenLayers.Filter.Comparison.LESS_THAN                = "<";
+OpenLayers.Filter.Comparison.GREATER_THAN             = ">";
+OpenLayers.Filter.Comparison.LESS_THAN_OR_EQUAL_TO    = "<=";
+OpenLayers.Filter.Comparison.GREATER_THAN_OR_EQUAL_TO = ">=";
+OpenLayers.Filter.Comparison.BETWEEN                  = "..";
+OpenLayers.Filter.Comparison.LIKE                     = "~";
+OpenLayers.Filter.Comparison.IS_NULL                  = "NULL";
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Filter.js
+ */
+
+/**
+ * Class: OpenLayers.Filter.Spatial
+ * This class represents a spatial filter.
+ * Currently implemented: BBOX, DWithin and Intersects
+ * 
+ * Inherits from:
+ * - <OpenLayers.Filter>
+ */
+OpenLayers.Filter.Spatial = OpenLayers.Class(OpenLayers.Filter, {
+
+    /**
+     * APIProperty: type
+     * {String} Type of spatial filter.
+     *
+     * The type should be one of:
+     * - OpenLayers.Filter.Spatial.BBOX
+     * - OpenLayers.Filter.Spatial.INTERSECTS
+     * - OpenLayers.Filter.Spatial.DWITHIN
+     * - OpenLayers.Filter.Spatial.WITHIN
+     * - OpenLayers.Filter.Spatial.CONTAINS
+     */
+    type: null,
+    
+    /**
+     * APIProperty: property
+     * {String} Name of the context property to compare.
+     */
+    property: null,
+    
+    /**
+     * APIProperty: value
+     * {<OpenLayers.Bounds> || <OpenLayers.Geometry>} The bounds or geometry
+     *     to be used by the filter.  Use bounds for BBOX filters and geometry
+     *     for INTERSECTS or DWITHIN filters.
+     */
+    value: null,
+
+    /**
+     * APIProperty: distance
+     * {Number} The distance to use in a DWithin spatial filter.
+     */
+    distance: null,
+
+    /**
+     * APIProperty: distanceUnits
+     * {String} The units to use for the distance, e.g. 'm'.
+     */
+    distanceUnits: null,
+    
+    /** 
+     * Constructor: OpenLayers.Filter.Spatial
+     * Creates a spatial filter.
+     *
+     * Parameters:
+     * options - {Object} An optional object with properties to set on the
+     *     filter.
+     * 
+     * Returns:
+     * {<OpenLayers.Filter.Spatial>}
+     */
+
+   /**
+    * Method: evaluate
+    * Evaluates this filter for a specific feature.
+    * 
+    * Parameters:
+    * feature - {<OpenLayers.Feature.Vector>} feature to apply the filter to.
+    * 
+    * Returns:
+    * {Boolean} The feature meets filter criteria.
+    */
+    evaluate: function(feature) {
+        var intersect = false;
+        switch(this.type) {
+            case OpenLayers.Filter.Spatial.BBOX:
+            case OpenLayers.Filter.Spatial.INTERSECTS:
+                if(feature.geometry) {
+                    var geom = this.value;
+                    if(this.value.CLASS_NAME == "OpenLayers.Bounds") {
+                        geom = this.value.toGeometry();
+                    }
+                    if(feature.geometry.intersects(geom)) {
+                        intersect = true;
+                    }
+                }
+                break;
+            default:
+                throw new Error('evaluate is not implemented for this filter type.');
+        }
+        return intersect;
+    },
+
+    /**
+     * APIMethod: clone
+     * Clones this filter.
+     * 
+     * Returns:
+     * {<OpenLayers.Filter.Spatial>} Clone of this filter.
+     */
+    clone: function() {
+        var options = OpenLayers.Util.applyDefaults({
+            value: this.value && this.value.clone && this.value.clone()
+        }, this);
+        return new OpenLayers.Filter.Spatial(options);
+    },
+    CLASS_NAME: "OpenLayers.Filter.Spatial"
+});
+
+OpenLayers.Filter.Spatial.BBOX = "BBOX";
+OpenLayers.Filter.Spatial.INTERSECTS = "INTERSECTS";
+OpenLayers.Filter.Spatial.DWITHIN = "DWITHIN";
+OpenLayers.Filter.Spatial.WITHIN = "WITHIN";
+OpenLayers.Filter.Spatial.CONTAINS = "CONTAINS";
 
 /* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
  * full list of contributors). Published under the 2-clause BSD license.
@@ -42563,1122 +40691,6 @@ OpenLayers.Format.SLD = OpenLayers.Class(OpenLayers.Format.XML.VersionedOGC, {
 
     CLASS_NAME: "OpenLayers.Format.SLD" 
 });
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * Note:
- * This work draws heavily from the public domain JSON serializer/deserializer
- *     at http://www.json.org/json.js. Rewritten so that it doesn't modify
- *     basic data prototypes.
- */
-
-/**
- * @requires OpenLayers/Format.js
- */
-
-/**
- * Class: OpenLayers.Format.JSON
- * A parser to read/write JSON safely.  Create a new instance with the
- *     <OpenLayers.Format.JSON> constructor.
- *
- * Inherits from:
- *  - <OpenLayers.Format>
- */
-OpenLayers.Format.JSON = OpenLayers.Class(OpenLayers.Format, {
-    
-    /**
-     * APIProperty: indent
-     * {String} For "pretty" printing, the indent string will be used once for
-     *     each indentation level.
-     */
-    indent: "    ",
-    
-    /**
-     * APIProperty: space
-     * {String} For "pretty" printing, the space string will be used after
-     *     the ":" separating a name/value pair.
-     */
-    space: " ",
-    
-    /**
-     * APIProperty: newline
-     * {String} For "pretty" printing, the newline string will be used at the
-     *     end of each name/value pair or array item.
-     */
-    newline: "\n",
-    
-    /**
-     * Property: level
-     * {Integer} For "pretty" printing, this is incremented/decremented during
-     *     serialization.
-     */
-    level: 0,
-
-    /**
-     * Property: pretty
-     * {Boolean} Serialize with extra whitespace for structure.  This is set
-     *     by the <write> method.
-     */
-    pretty: false,
-
-    /**
-     * Property: nativeJSON
-     * {Boolean} Does the browser support native json?
-     */
-    nativeJSON: (function() {
-        return !!(window.JSON && typeof JSON.parse == "function" && typeof JSON.stringify == "function");
-    })(),
-
-    /**
-     * Constructor: OpenLayers.Format.JSON
-     * Create a new parser for JSON.
-     *
-     * Parameters:
-     * options - {Object} An optional object whose properties will be set on
-     *     this instance.
-     */
-
-    /**
-     * APIMethod: read
-     * Deserialize a json string.
-     *
-     * Parameters:
-     * json - {String} A JSON string
-     * filter - {Function} A function which will be called for every key and
-     *     value at every level of the final result. Each value will be
-     *     replaced by the result of the filter function. This can be used to
-     *     reform generic objects into instances of classes, or to transform
-     *     date strings into Date objects.
-     *     
-     * Returns:
-     * {Object} An object, array, string, or number .
-     */
-    read: function(json, filter) {
-        var object;
-        if (this.nativeJSON) {
-            object = JSON.parse(json, filter);
-        } else try {
-            /**
-             * Parsing happens in three stages. In the first stage, we run the
-             *     text against a regular expression which looks for non-JSON
-             *     characters. We are especially concerned with '()' and 'new'
-             *     because they can cause invocation, and '=' because it can
-             *     cause mutation. But just to be safe, we will reject all
-             *     unexpected characters.
-             */
-            if (/^[\],:{}\s]*$/.test(json.replace(/\\["\\\/bfnrtu]/g, '@').
-                                replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
-                                replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
-
-                /**
-                 * In the second stage we use the eval function to compile the
-                 *     text into a JavaScript structure. The '{' operator is
-                 *     subject to a syntactic ambiguity in JavaScript - it can
-                 *     begin a block or an object literal. We wrap the text in
-                 *     parens to eliminate the ambiguity.
-                 */
-                object = eval('(' + json + ')');
-
-                /**
-                 * In the optional third stage, we recursively walk the new
-                 *     structure, passing each name/value pair to a filter
-                 *     function for possible transformation.
-                 */
-                if(typeof filter === 'function') {
-                    function walk(k, v) {
-                        if(v && typeof v === 'object') {
-                            for(var i in v) {
-                                if(v.hasOwnProperty(i)) {
-                                    v[i] = walk(i, v[i]);
-                                }
-                            }
-                        }
-                        return filter(k, v);
-                    }
-                    object = walk('', object);
-                }
-            }
-        } catch(e) {
-            // Fall through if the regexp test fails.
-        }
-
-        if(this.keepData) {
-            this.data = object;
-        }
-
-        return object;
-    },
-
-    /**
-     * APIMethod: write
-     * Serialize an object into a JSON string.
-     *
-     * Parameters:
-     * value - {String} The object, array, string, number, boolean or date
-     *     to be serialized.
-     * pretty - {Boolean} Structure the output with newlines and indentation.
-     *     Default is false.
-     *
-     * Returns:
-     * {String} The JSON string representation of the input value.
-     */
-    write: function(value, pretty) {
-        this.pretty = !!pretty;
-        var json = null;
-        var type = typeof value;
-        if(this.serialize[type]) {
-            try {
-                json = (!this.pretty && this.nativeJSON) ?
-                    JSON.stringify(value) :
-                    this.serialize[type].apply(this, [value]);
-            } catch(err) {
-                OpenLayers.Console.error("Trouble serializing: " + err);
-            }
-        }
-        return json;
-    },
-    
-    /**
-     * Method: writeIndent
-     * Output an indentation string depending on the indentation level.
-     *
-     * Returns:
-     * {String} An appropriate indentation string.
-     */
-    writeIndent: function() {
-        var pieces = [];
-        if(this.pretty) {
-            for(var i=0; i<this.level; ++i) {
-                pieces.push(this.indent);
-            }
-        }
-        return pieces.join('');
-    },
-    
-    /**
-     * Method: writeNewline
-     * Output a string representing a newline if in pretty printing mode.
-     *
-     * Returns:
-     * {String} A string representing a new line.
-     */
-    writeNewline: function() {
-        return (this.pretty) ? this.newline : '';
-    },
-    
-    /**
-     * Method: writeSpace
-     * Output a string representing a space if in pretty printing mode.
-     *
-     * Returns:
-     * {String} A space.
-     */
-    writeSpace: function() {
-        return (this.pretty) ? this.space : '';
-    },
-
-    /**
-     * Property: serialize
-     * Object with properties corresponding to the serializable data types.
-     *     Property values are functions that do the actual serializing.
-     */
-    serialize: {
-        /**
-         * Method: serialize.object
-         * Transform an object into a JSON string.
-         *
-         * Parameters:
-         * object - {Object} The object to be serialized.
-         * 
-         * Returns:
-         * {String} A JSON string representing the object.
-         */
-        'object': function(object) {
-            // three special objects that we want to treat differently
-            if(object == null) {
-                return "null";
-            }
-            if(object.constructor == Date) {
-                return this.serialize.date.apply(this, [object]);
-            }
-            if(object.constructor == Array) {
-                return this.serialize.array.apply(this, [object]);
-            }
-            var pieces = ['{'];
-            this.level += 1;
-            var key, keyJSON, valueJSON;
-            
-            var addComma = false;
-            for(key in object) {
-                if(object.hasOwnProperty(key)) {
-                    // recursive calls need to allow for sub-classing
-                    keyJSON = OpenLayers.Format.JSON.prototype.write.apply(this,
-                                                    [key, this.pretty]);
-                    valueJSON = OpenLayers.Format.JSON.prototype.write.apply(this,
-                                                    [object[key], this.pretty]);
-                    if(keyJSON != null && valueJSON != null) {
-                        if(addComma) {
-                            pieces.push(',');
-                        }
-                        pieces.push(this.writeNewline(), this.writeIndent(),
-                                    keyJSON, ':', this.writeSpace(), valueJSON);
-                        addComma = true;
-                    }
-                }
-            }
-            
-            this.level -= 1;
-            pieces.push(this.writeNewline(), this.writeIndent(), '}');
-            return pieces.join('');
-        },
-        
-        /**
-         * Method: serialize.array
-         * Transform an array into a JSON string.
-         *
-         * Parameters:
-         * array - {Array} The array to be serialized
-         * 
-         * Returns:
-         * {String} A JSON string representing the array.
-         */
-        'array': function(array) {
-            var json;
-            var pieces = ['['];
-            this.level += 1;
-    
-            for(var i=0, len=array.length; i<len; ++i) {
-                // recursive calls need to allow for sub-classing
-                json = OpenLayers.Format.JSON.prototype.write.apply(this,
-                                                    [array[i], this.pretty]);
-                if(json != null) {
-                    if(i > 0) {
-                        pieces.push(',');
-                    }
-                    pieces.push(this.writeNewline(), this.writeIndent(), json);
-                }
-            }
-
-            this.level -= 1;    
-            pieces.push(this.writeNewline(), this.writeIndent(), ']');
-            return pieces.join('');
-        },
-        
-        /**
-         * Method: serialize.string
-         * Transform a string into a JSON string.
-         *
-         * Parameters:
-         * string - {String} The string to be serialized
-         * 
-         * Returns:
-         * {String} A JSON string representing the string.
-         */
-        'string': function(string) {
-            // If the string contains no control characters, no quote characters, and no
-            // backslash characters, then we can simply slap some quotes around it.
-            // Otherwise we must also replace the offending characters with safe
-            // sequences.    
-            var m = {
-                '\b': '\\b',
-                '\t': '\\t',
-                '\n': '\\n',
-                '\f': '\\f',
-                '\r': '\\r',
-                '"' : '\\"',
-                '\\': '\\\\'
-            };
-            if(/["\\\x00-\x1f]/.test(string)) {
-                return '"' + string.replace(/([\x00-\x1f\\"])/g, function(a, b) {
-                    var c = m[b];
-                    if(c) {
-                        return c;
-                    }
-                    c = b.charCodeAt();
-                    return '\\u00' +
-                        Math.floor(c / 16).toString(16) +
-                        (c % 16).toString(16);
-                }) + '"';
-            }
-            return '"' + string + '"';
-        },
-
-        /**
-         * Method: serialize.number
-         * Transform a number into a JSON string.
-         *
-         * Parameters:
-         * number - {Number} The number to be serialized.
-         *
-         * Returns:
-         * {String} A JSON string representing the number.
-         */
-        'number': function(number) {
-            return isFinite(number) ? String(number) : "null";
-        },
-        
-        /**
-         * Method: serialize.boolean
-         * Transform a boolean into a JSON string.
-         *
-         * Parameters:
-         * bool - {Boolean} The boolean to be serialized.
-         * 
-         * Returns:
-         * {String} A JSON string representing the boolean.
-         */
-        'boolean': function(bool) {
-            return String(bool);
-        },
-        
-        /**
-         * Method: serialize.object
-         * Transform a date into a JSON string.
-         *
-         * Parameters:
-         * date - {Date} The date to be serialized.
-         * 
-         * Returns:
-         * {String} A JSON string representing the date.
-         */
-        'date': function(date) {    
-            function format(number) {
-                // Format integers to have at least two digits.
-                return (number < 10) ? '0' + number : number;
-            }
-            return '"' + date.getFullYear() + '-' +
-                    format(date.getMonth() + 1) + '-' +
-                    format(date.getDate()) + 'T' +
-                    format(date.getHours()) + ':' +
-                    format(date.getMinutes()) + ':' +
-                    format(date.getSeconds()) + '"';
-        }
-    },
-
-    CLASS_NAME: "OpenLayers.Format.JSON" 
-
-});     
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Format/JSON.js
- * @requires OpenLayers/Feature/Vector.js
- * @requires OpenLayers/Geometry/Point.js
- * @requires OpenLayers/Geometry/MultiPoint.js
- * @requires OpenLayers/Geometry/LineString.js
- * @requires OpenLayers/Geometry/MultiLineString.js
- * @requires OpenLayers/Geometry/Polygon.js
- * @requires OpenLayers/Geometry/MultiPolygon.js
- * @requires OpenLayers/Console.js
- */
-
-/**
- * Class: OpenLayers.Format.GeoJSON
- * Read and write GeoJSON. Create a new parser with the
- *     <OpenLayers.Format.GeoJSON> constructor.
- *
- * Inherits from:
- *  - <OpenLayers.Format.JSON>
- */
-OpenLayers.Format.GeoJSON = OpenLayers.Class(OpenLayers.Format.JSON, {
-
-    /**
-     * APIProperty: ignoreExtraDims
-     * {Boolean} Ignore dimensions higher than 2 when reading geometry
-     * coordinates.
-     */ 
-    ignoreExtraDims: false,
-    
-    /**
-     * Constructor: OpenLayers.Format.GeoJSON
-     * Create a new parser for GeoJSON.
-     *
-     * Parameters:
-     * options - {Object} An optional object whose properties will be set on
-     *     this instance.
-     */
-
-    /**
-     * APIMethod: read
-     * Deserialize a GeoJSON string.
-     *
-     * Parameters:
-     * json - {String} A GeoJSON string
-     * type - {String} Optional string that determines the structure of
-     *     the output.  Supported values are "Geometry", "Feature", and
-     *     "FeatureCollection".  If absent or null, a default of
-     *     "FeatureCollection" is assumed.
-     * filter - {Function} A function which will be called for every key and
-     *     value at every level of the final result. Each value will be
-     *     replaced by the result of the filter function. This can be used to
-     *     reform generic objects into instances of classes, or to transform
-     *     date strings into Date objects.
-     *
-     * Returns: 
-     * {Object} The return depends on the value of the type argument. If type
-     *     is "FeatureCollection" (the default), the return will be an array
-     *     of <OpenLayers.Feature.Vector>. If type is "Geometry", the input json
-     *     must represent a single geometry, and the return will be an
-     *     <OpenLayers.Geometry>.  If type is "Feature", the input json must
-     *     represent a single feature, and the return will be an
-     *     <OpenLayers.Feature.Vector>.
-     */
-    read: function(json, type, filter) {
-        type = (type) ? type : "FeatureCollection";
-        var results = null;
-        var obj = null;
-        if (typeof json == "string") {
-            obj = OpenLayers.Format.JSON.prototype.read.apply(this,
-                                                              [json, filter]);
-        } else { 
-            obj = json;
-        }    
-        if(!obj) {
-            OpenLayers.Console.error("Bad JSON: " + json);
-        } else if(typeof(obj.type) != "string") {
-            OpenLayers.Console.error("Bad GeoJSON - no type: " + json);
-        } else if(this.isValidType(obj, type)) {
-            switch(type) {
-                case "Geometry":
-                    try {
-                        results = this.parseGeometry(obj);
-                    } catch(err) {
-                        OpenLayers.Console.error(err);
-                    }
-                    break;
-                case "Feature":
-                    try {
-                        results = this.parseFeature(obj);
-                        results.type = "Feature";
-                    } catch(err) {
-                        OpenLayers.Console.error(err);
-                    }
-                    break;
-                case "FeatureCollection":
-                    // for type FeatureCollection, we allow input to be any type
-                    results = [];
-                    switch(obj.type) {
-                        case "Feature":
-                            try {
-                                results.push(this.parseFeature(obj));
-                            } catch(err) {
-                                results = null;
-                                OpenLayers.Console.error(err);
-                            }
-                            break;
-                        case "FeatureCollection":
-                            for(var i=0, len=obj.features.length; i<len; ++i) {
-                                try {
-                                    results.push(this.parseFeature(obj.features[i]));
-                                } catch(err) {
-                                    results = null;
-                                    OpenLayers.Console.error(err);
-                                }
-                            }
-                            break;
-                        default:
-                            try {
-                                var geom = this.parseGeometry(obj);
-                                results.push(new OpenLayers.Feature.Vector(geom));
-                            } catch(err) {
-                                results = null;
-                                OpenLayers.Console.error(err);
-                            }
-                    }
-                break;
-            }
-        }
-        return results;
-    },
-    
-    /**
-     * Method: isValidType
-     * Check if a GeoJSON object is a valid representative of the given type.
-     *
-     * Returns:
-     * {Boolean} The object is valid GeoJSON object of the given type.
-     */
-    isValidType: function(obj, type) {
-        var valid = false;
-        switch(type) {
-            case "Geometry":
-                if(OpenLayers.Util.indexOf(
-                    ["Point", "MultiPoint", "LineString", "MultiLineString",
-                     "Polygon", "MultiPolygon", "Box", "GeometryCollection"],
-                    obj.type) == -1) {
-                    // unsupported geometry type
-                    OpenLayers.Console.error("Unsupported geometry type: " +
-                                              obj.type);
-                } else {
-                    valid = true;
-                }
-                break;
-            case "FeatureCollection":
-                // allow for any type to be converted to a feature collection
-                valid = true;
-                break;
-            default:
-                // for Feature types must match
-                if(obj.type == type) {
-                    valid = true;
-                } else {
-                    OpenLayers.Console.error("Cannot convert types from " +
-                                              obj.type + " to " + type);
-                }
-        }
-        return valid;
-    },
-    
-    /**
-     * Method: parseFeature
-     * Convert a feature object from GeoJSON into an
-     *     <OpenLayers.Feature.Vector>.
-     *
-     * Parameters:
-     * obj - {Object} An object created from a GeoJSON object
-     *
-     * Returns:
-     * {<OpenLayers.Feature.Vector>} A feature.
-     */
-    parseFeature: function(obj) {
-        var feature, geometry, attributes, bbox;
-        attributes = (obj.properties) ? obj.properties : {};
-        bbox = (obj.geometry && obj.geometry.bbox) || obj.bbox;
-        try {
-            geometry = this.parseGeometry(obj.geometry);
-        } catch(err) {
-            // deal with bad geometries
-            throw err;
-        }
-        feature = new OpenLayers.Feature.Vector(geometry, attributes);
-        if(bbox) {
-            feature.bounds = OpenLayers.Bounds.fromArray(bbox);
-        }
-        if(obj.id) {
-            feature.fid = obj.id;
-        }
-        return feature;
-    },
-    
-    /**
-     * Method: parseGeometry
-     * Convert a geometry object from GeoJSON into an <OpenLayers.Geometry>.
-     *
-     * Parameters:
-     * obj - {Object} An object created from a GeoJSON object
-     *
-     * Returns: 
-     * {<OpenLayers.Geometry>} A geometry.
-     */
-    parseGeometry: function(obj) {
-        if (obj == null) {
-            return null;
-        }
-        var geometry, collection = false;
-        if(obj.type == "GeometryCollection") {
-            if(!(OpenLayers.Util.isArray(obj.geometries))) {
-                throw "GeometryCollection must have geometries array: " + obj;
-            }
-            var numGeom = obj.geometries.length;
-            var components = new Array(numGeom);
-            for(var i=0; i<numGeom; ++i) {
-                components[i] = this.parseGeometry.apply(
-                    this, [obj.geometries[i]]
-                );
-            }
-            geometry = new OpenLayers.Geometry.Collection(components);
-            collection = true;
-        } else {
-            if(!(OpenLayers.Util.isArray(obj.coordinates))) {
-                throw "Geometry must have coordinates array: " + obj;
-            }
-            if(!this.parseCoords[obj.type.toLowerCase()]) {
-                throw "Unsupported geometry type: " + obj.type;
-            }
-            try {
-                geometry = this.parseCoords[obj.type.toLowerCase()].apply(
-                    this, [obj.coordinates]
-                );
-            } catch(err) {
-                // deal with bad coordinates
-                throw err;
-            }
-        }
-        // We don't reproject collections because the children are reprojected
-        // for us when they are created.
-        if (this.internalProjection && this.externalProjection && !collection) {
-            geometry.transform(this.externalProjection, 
-                               this.internalProjection); 
-        }                       
-        return geometry;
-    },
-    
-    /**
-     * Property: parseCoords
-     * Object with properties corresponding to the GeoJSON geometry types.
-     *     Property values are functions that do the actual parsing.
-     */
-    parseCoords: {
-        /**
-         * Method: parseCoords.point
-         * Convert a coordinate array from GeoJSON into an
-         *     <OpenLayers.Geometry>.
-         *
-         * Parameters:
-         * array - {Object} The coordinates array from the GeoJSON fragment.
-         *
-         * Returns:
-         * {<OpenLayers.Geometry>} A geometry.
-         */
-        "point": function(array) {
-            if (this.ignoreExtraDims == false && 
-                  array.length != 2) {
-                    throw "Only 2D points are supported: " + array;
-            }
-            return new OpenLayers.Geometry.Point(array[0], array[1]);
-        },
-        
-        /**
-         * Method: parseCoords.multipoint
-         * Convert a coordinate array from GeoJSON into an
-         *     <OpenLayers.Geometry>.
-         *
-         * Parameters:
-         * array - {Object} The coordinates array from the GeoJSON fragment.
-         *
-         * Returns:
-         * {<OpenLayers.Geometry>} A geometry.
-         */
-        "multipoint": function(array) {
-            var points = [];
-            var p = null;
-            for(var i=0, len=array.length; i<len; ++i) {
-                try {
-                    p = this.parseCoords["point"].apply(this, [array[i]]);
-                } catch(err) {
-                    throw err;
-                }
-                points.push(p);
-            }
-            return new OpenLayers.Geometry.MultiPoint(points);
-        },
-
-        /**
-         * Method: parseCoords.linestring
-         * Convert a coordinate array from GeoJSON into an
-         *     <OpenLayers.Geometry>.
-         *
-         * Parameters:
-         * array - {Object} The coordinates array from the GeoJSON fragment.
-         *
-         * Returns:
-         * {<OpenLayers.Geometry>} A geometry.
-         */
-        "linestring": function(array) {
-            var points = [];
-            var p = null;
-            for(var i=0, len=array.length; i<len; ++i) {
-                try {
-                    p = this.parseCoords["point"].apply(this, [array[i]]);
-                } catch(err) {
-                    throw err;
-                }
-                points.push(p);
-            }
-            return new OpenLayers.Geometry.LineString(points);
-        },
-        
-        /**
-         * Method: parseCoords.multilinestring
-         * Convert a coordinate array from GeoJSON into an
-         *     <OpenLayers.Geometry>.
-         *
-         * Parameters:
-         * array - {Object} The coordinates array from the GeoJSON fragment.
-         *
-         * Returns:
-         * {<OpenLayers.Geometry>} A geometry.
-         */
-        "multilinestring": function(array) {
-            var lines = [];
-            var l = null;
-            for(var i=0, len=array.length; i<len; ++i) {
-                try {
-                    l = this.parseCoords["linestring"].apply(this, [array[i]]);
-                } catch(err) {
-                    throw err;
-                }
-                lines.push(l);
-            }
-            return new OpenLayers.Geometry.MultiLineString(lines);
-        },
-        
-        /**
-         * Method: parseCoords.polygon
-         * Convert a coordinate array from GeoJSON into an
-         *     <OpenLayers.Geometry>.
-         *
-         * Returns:
-         * {<OpenLayers.Geometry>} A geometry.
-         */
-        "polygon": function(array) {
-            var rings = [];
-            var r, l;
-            for(var i=0, len=array.length; i<len; ++i) {
-                try {
-                    l = this.parseCoords["linestring"].apply(this, [array[i]]);
-                } catch(err) {
-                    throw err;
-                }
-                r = new OpenLayers.Geometry.LinearRing(l.components);
-                rings.push(r);
-            }
-            return new OpenLayers.Geometry.Polygon(rings);
-        },
-
-        /**
-         * Method: parseCoords.multipolygon
-         * Convert a coordinate array from GeoJSON into an
-         *     <OpenLayers.Geometry>.
-         *
-         * Parameters:
-         * array - {Object} The coordinates array from the GeoJSON fragment.
-         *
-         * Returns:
-         * {<OpenLayers.Geometry>} A geometry.
-         */
-        "multipolygon": function(array) {
-            var polys = [];
-            var p = null;
-            for(var i=0, len=array.length; i<len; ++i) {
-                try {
-                    p = this.parseCoords["polygon"].apply(this, [array[i]]);
-                } catch(err) {
-                    throw err;
-                }
-                polys.push(p);
-            }
-            return new OpenLayers.Geometry.MultiPolygon(polys);
-        },
-
-        /**
-         * Method: parseCoords.box
-         * Convert a coordinate array from GeoJSON into an
-         *     <OpenLayers.Geometry>.
-         *
-         * Parameters:
-         * array - {Object} The coordinates array from the GeoJSON fragment.
-         *
-         * Returns:
-         * {<OpenLayers.Geometry>} A geometry.
-         */
-        "box": function(array) {
-            if(array.length != 2) {
-                throw "GeoJSON box coordinates must have 2 elements";
-            }
-            return new OpenLayers.Geometry.Polygon([
-                new OpenLayers.Geometry.LinearRing([
-                    new OpenLayers.Geometry.Point(array[0][0], array[0][1]),
-                    new OpenLayers.Geometry.Point(array[1][0], array[0][1]),
-                    new OpenLayers.Geometry.Point(array[1][0], array[1][1]),
-                    new OpenLayers.Geometry.Point(array[0][0], array[1][1]),
-                    new OpenLayers.Geometry.Point(array[0][0], array[0][1])
-                ])
-            ]);
-        }
-
-    },
-
-    /**
-     * APIMethod: write
-     * Serialize a feature, geometry, array of features into a GeoJSON string.
-     *
-     * Parameters:
-     * obj - {Object} An <OpenLayers.Feature.Vector>, <OpenLayers.Geometry>,
-     *     or an array of features.
-     * pretty - {Boolean} Structure the output with newlines and indentation.
-     *     Default is false.
-     *
-     * Returns:
-     * {String} The GeoJSON string representation of the input geometry,
-     *     features, or array of features.
-     */
-    write: function(obj, pretty) {
-        var geojson = {
-            "type": null
-        };
-        if(OpenLayers.Util.isArray(obj)) {
-            geojson.type = "FeatureCollection";
-            var numFeatures = obj.length;
-            geojson.features = new Array(numFeatures);
-            for(var i=0; i<numFeatures; ++i) {
-                var element = obj[i];
-                if(!element instanceof OpenLayers.Feature.Vector) {
-                    var msg = "FeatureCollection only supports collections " +
-                              "of features: " + element;
-                    throw msg;
-                }
-                geojson.features[i] = this.extract.feature.apply(
-                    this, [element]
-                );
-            }
-        } else if (obj.CLASS_NAME.indexOf("OpenLayers.Geometry") == 0) {
-            geojson = this.extract.geometry.apply(this, [obj]);
-        } else if (obj instanceof OpenLayers.Feature.Vector) {
-            geojson = this.extract.feature.apply(this, [obj]);
-            if(obj.layer && obj.layer.projection) {
-                geojson.crs = this.createCRSObject(obj);
-            }
-        }
-        return OpenLayers.Format.JSON.prototype.write.apply(this,
-                                                            [geojson, pretty]);
-    },
-
-    /**
-     * Method: createCRSObject
-     * Create the CRS object for an object.
-     *
-     * Parameters:
-     * object - {<OpenLayers.Feature.Vector>} 
-     *
-     * Returns:
-     * {Object} An object which can be assigned to the crs property
-     * of a GeoJSON object.
-     */
-    createCRSObject: function(object) {
-       var proj = object.layer.projection.toString();
-       var crs = {};
-       if (proj.match(/epsg:/i)) {
-           var code = parseInt(proj.substring(proj.indexOf(":") + 1));
-           if (code == 4326) {
-               crs = {
-                   "type": "name",
-                   "properties": {
-                       "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
-                   }
-               };
-           } else {    
-               crs = {
-                   "type": "name",
-                   "properties": {
-                       "name": "EPSG:" + code
-                   }
-               };
-           }    
-       }
-       return crs;
-    },
-    
-    /**
-     * Property: extract
-     * Object with properties corresponding to the GeoJSON types.
-     *     Property values are functions that do the actual value extraction.
-     */
-    extract: {
-        /**
-         * Method: extract.feature
-         * Return a partial GeoJSON object representing a single feature.
-         *
-         * Parameters:
-         * feature - {<OpenLayers.Feature.Vector>}
-         *
-         * Returns:
-         * {Object} An object representing the point.
-         */
-        'feature': function(feature) {
-            var geom = this.extract.geometry.apply(this, [feature.geometry]);
-            var json = {
-                "type": "Feature",
-                "properties": feature.attributes,
-                "geometry": geom
-            };
-            if (feature.fid != null) {
-                json.id = feature.fid;
-            }
-            return json;
-        },
-        
-        /**
-         * Method: extract.geometry
-         * Return a GeoJSON object representing a single geometry.
-         *
-         * Parameters:
-         * geometry - {<OpenLayers.Geometry>}
-         *
-         * Returns:
-         * {Object} An object representing the geometry.
-         */
-        'geometry': function(geometry) {
-            if (geometry == null) {
-                return null;
-            }
-            if (this.internalProjection && this.externalProjection) {
-                geometry = geometry.clone();
-                geometry.transform(this.internalProjection, 
-                                   this.externalProjection);
-            }                       
-            var geometryType = geometry.CLASS_NAME.split('.')[2];
-            var data = this.extract[geometryType.toLowerCase()].apply(this, [geometry]);
-            var json;
-            if(geometryType == "Collection") {
-                json = {
-                    "type": "GeometryCollection",
-                    "geometries": data
-                };
-            } else {
-                json = {
-                    "type": geometryType,
-                    "coordinates": data
-                };
-            }
-            
-            return json;
-        },
-
-        /**
-         * Method: extract.point
-         * Return an array of coordinates from a point.
-         *
-         * Parameters:
-         * point - {<OpenLayers.Geometry.Point>}
-         *
-         * Returns: 
-         * {Array} An array of coordinates representing the point.
-         */
-        'point': function(point) {
-            return [point.x, point.y];
-        },
-
-        /**
-         * Method: extract.multipoint
-         * Return an array of point coordinates from a multipoint.
-         *
-         * Parameters:
-         * multipoint - {<OpenLayers.Geometry.MultiPoint>}
-         *
-         * Returns:
-         * {Array} An array of point coordinate arrays representing
-         *     the multipoint.
-         */
-        'multipoint': function(multipoint) {
-            var array = [];
-            for(var i=0, len=multipoint.components.length; i<len; ++i) {
-                array.push(this.extract.point.apply(this, [multipoint.components[i]]));
-            }
-            return array;
-        },
-        
-        /**
-         * Method: extract.linestring
-         * Return an array of coordinate arrays from a linestring.
-         *
-         * Parameters:
-         * linestring - {<OpenLayers.Geometry.LineString>}
-         *
-         * Returns:
-         * {Array} An array of coordinate arrays representing
-         *     the linestring.
-         */
-        'linestring': function(linestring) {
-            var array = [];
-            for(var i=0, len=linestring.components.length; i<len; ++i) {
-                array.push(this.extract.point.apply(this, [linestring.components[i]]));
-            }
-            return array;
-        },
-
-        /**
-         * Method: extract.multilinestring
-         * Return an array of linestring arrays from a linestring.
-         * 
-         * Parameters:
-         * multilinestring - {<OpenLayers.Geometry.MultiLineString>}
-         * 
-         * Returns:
-         * {Array} An array of linestring arrays representing
-         *     the multilinestring.
-         */
-        'multilinestring': function(multilinestring) {
-            var array = [];
-            for(var i=0, len=multilinestring.components.length; i<len; ++i) {
-                array.push(this.extract.linestring.apply(this, [multilinestring.components[i]]));
-            }
-            return array;
-        },
-        
-        /**
-         * Method: extract.polygon
-         * Return an array of linear ring arrays from a polygon.
-         *
-         * Parameters:
-         * polygon - {<OpenLayers.Geometry.Polygon>}
-         * 
-         * Returns:
-         * {Array} An array of linear ring arrays representing the polygon.
-         */
-        'polygon': function(polygon) {
-            var array = [];
-            for(var i=0, len=polygon.components.length; i<len; ++i) {
-                array.push(this.extract.linestring.apply(this, [polygon.components[i]]));
-            }
-            return array;
-        },
-
-        /**
-         * Method: extract.multipolygon
-         * Return an array of polygon arrays from a multipolygon.
-         * 
-         * Parameters:
-         * multipolygon - {<OpenLayers.Geometry.MultiPolygon>}
-         * 
-         * Returns:
-         * {Array} An array of polygon arrays representing
-         *     the multipolygon
-         */
-        'multipolygon': function(multipolygon) {
-            var array = [];
-            for(var i=0, len=multipolygon.components.length; i<len; ++i) {
-                array.push(this.extract.polygon.apply(this, [multipolygon.components[i]]));
-            }
-            return array;
-        },
-        
-        /**
-         * Method: extract.collection
-         * Return an array of geometries from a geometry collection.
-         * 
-         * Parameters:
-         * collection - {<OpenLayers.Geometry.Collection>}
-         * 
-         * Returns:
-         * {Array} An array of geometry objects representing the geometry
-         *     collection.
-         */
-        'collection': function(collection) {
-            var len = collection.components.length;
-            var array = new Array(len);
-            for(var i=0; i<len; ++i) {
-                array[i] = this.extract.geometry.apply(
-                    this, [collection.components[i]]
-                );
-            }
-            return array;
-        }
-        
-
-    },
-
-    CLASS_NAME: "OpenLayers.Format.GeoJSON" 
-
-});     
 
 /* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
  * full list of contributors). Published under the 2-clause BSD license.
@@ -43982,460 +40994,532 @@ OpenLayers.Format.WMSGetFeatureInfo = OpenLayers.Class(OpenLayers.Format.XML, {
  * See license.txt in the OpenLayers distribution or repository for the
  * full text of the license. */
 
+
 /**
- * @requires OpenLayers/Format/XML/VersionedOGC.js
+ * @requires OpenLayers/Control.js
+ * @requires OpenLayers/Handler/Click.js
+ * @requires OpenLayers/Handler/Hover.js
+ * @requires OpenLayers/Request.js
+ * @requires OpenLayers/Format/WMSGetFeatureInfo.js
  */
 
 /**
- * Class: OpenLayers.Format.OWSCommon
- * Read OWSCommon. Create a new instance with the <OpenLayers.Format.OWSCommon>
- *     constructor.
- * 
- * Inherits from:
- *  - <OpenLayers.Format.XML.VersionedOGC>
- */
-OpenLayers.Format.OWSCommon = OpenLayers.Class(OpenLayers.Format.XML.VersionedOGC, {
-    
-    /**
-     * APIProperty: defaultVersion
-     * {String} Version number to assume if none found.  Default is "1.0.0".
-     */
-    defaultVersion: "1.0.0",
-    
-    /**
-     * Constructor: OpenLayers.Format.OWSCommon
-     * Create a new parser for OWSCommon.
-     *
-     * Parameters:
-     * options - {Object} An optional object whose properties will be set on
-     *     this instance.
-     */
-
-    /**
-     * Method: getVersion
-     * Returns the version to use. Subclasses can override this function
-     * if a different version detection is needed.
-     *
-     * Parameters:
-     * root - {DOMElement}
-     * options - {Object} Optional configuration object.
-     *
-     * Returns:
-     * {String} The version to use.
-     */
-    getVersion: function(root, options) {
-        var version = this.version;
-        if(!version) {
-            // remember version does not correspond to the OWS version
-            // it corresponds to the WMS/WFS/WCS etc. request version
-            var uri = root.getAttribute("xmlns:ows");
-            // the above will fail if the namespace prefix is different than
-            // ows and if the namespace is declared on a different element
-            if (uri && uri.substring(uri.lastIndexOf("/")+1) === "1.1") {
-                version ="1.1.0";
-            } 
-            if(!version) {
-                version = this.defaultVersion;
-            }
-        }
-        return version;
-    },
-
-    /**
-     * APIMethod: read
-     * Read an OWSCommon document and return an object.
-     *
-     * Parameters:
-     * data - {String | DOMElement} Data to read.
-     * options - {Object} Options for the reader.
-     *
-     * Returns:
-     * {Object} An object representing the structure of the document.
-     */
-
-    CLASS_NAME: "OpenLayers.Format.OWSCommon" 
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Format/OWSCommon.js
- */
-
-/**
- * Class: OpenLayers.Format.OWSCommon.v1
- * Common readers and writers for OWSCommon v1.X formats
+ * Class: OpenLayers.Control.WMSGetFeatureInfo
+ * The WMSGetFeatureInfo control uses a WMS query to get information about a point on the map.  The
+ * information may be in a display-friendly format such as HTML, or a machine-friendly format such
+ * as GML, depending on the server's capabilities and the client's configuration.  This control
+ * handles click or hover events, attempts to parse the results using an OpenLayers.Format, and
+ * fires a 'getfeatureinfo' event with the click position, the raw body of the response, and an
+ * array of features if it successfully read the response.
  *
  * Inherits from:
- *  - <OpenLayers.Format.XML>
+ *  - <OpenLayers.Control>
  */
-OpenLayers.Format.OWSCommon.v1 = OpenLayers.Class(OpenLayers.Format.XML, {
-   
-    /**
-     * Property: regExes
-     * Compiled regular expressions for manipulating strings.
+OpenLayers.Control.WMSGetFeatureInfo = OpenLayers.Class(OpenLayers.Control, {
+
+   /**
+     * APIProperty: hover
+     * {Boolean} Send GetFeatureInfo requests when mouse stops moving.
+     *     Default is false.
      */
-    regExes: {
-        trimSpace: (/^\s*|\s*$/g),
-        removeSpace: (/\s*/g),
-        splitSpace: (/\s+/),
-        trimComma: (/\s*,\s*/g)
-    },
+    hover: false,
 
     /**
-     * Method: read
+     * APIProperty: drillDown
+     * {Boolean} Drill down over all WMS layers in the map. When
+     *     using drillDown mode, hover is not possible, and an infoFormat that
+     *     returns parseable features is required. Default is false.
+     */
+    drillDown: false,
+
+    /**
+     * APIProperty: maxFeatures
+     * {Integer} Maximum number of features to return from a WMS query. This
+     *     sets the feature_count parameter on WMS GetFeatureInfo
+     *     requests.
+     */
+    maxFeatures: 10,
+
+    /**
+     * APIProperty: clickCallback
+     * {String} The click callback to register in the
+     *     {<OpenLayers.Handler.Click>} object created when the hover
+     *     option is set to false. Default is "click".
+     */
+    clickCallback: "click",
+
+    /**
+     * APIProperty: output
+     * {String} Either "features" or "object". When triggering a getfeatureinfo
+     *     request should we pass on an array of features or an object with with
+     *     a "features" property and other properties (such as the url of the
+     *     WMS). Default is "features".
+     */
+    output: "features",
+
+    /**
+     * APIProperty: layers
+     * {Array(<OpenLayers.Layer.WMS>)} The layers to query for feature info.
+     *     If omitted, all map WMS layers with a url that matches this <url> or
+     *     <layerUrls> will be considered.
+     */
+    layers: null,
+
+    /**
+     * APIProperty: queryVisible
+     * {Boolean} If true, filter out hidden layers when searching the map for
+     *     layers to query.  Default is false.
+     */
+    queryVisible: false,
+
+    /**
+     * APIProperty: url
+     * {String} The URL of the WMS service to use.  If not provided, the url
+     *     of the first eligible layer will be used.
+     */
+    url: null,
+
+    /**
+     * APIProperty: layerUrls
+     * {Array(String)} Optional list of urls for layers that should be queried.
+     *     This can be used when the layer url differs from the url used for
+     *     making GetFeatureInfo requests (in the case of a layer using cached
+     *     tiles).
+     */
+    layerUrls: null,
+
+    /**
+     * APIProperty: infoFormat
+     * {String} The mimetype to request from the server. If you are using
+     *     drillDown mode and have multiple servers that do not share a common
+     *     infoFormat, you can override the control's infoFormat by providing an
+     *     INFO_FORMAT parameter in your <OpenLayers.Layer.WMS> instance(s).
+     */
+    infoFormat: 'text/html',
+
+    /**
+     * APIProperty: vendorParams
+     * {Object} Additional parameters that will be added to the request, for
+     *     WMS implementations that support them. This could e.g. look like
+     * (start code)
+     * {
+     *     radius: 5
+     * }
+     * (end)
+     */
+    vendorParams: {},
+
+    /**
+     * APIProperty: format
+     * {<OpenLayers.Format>} A format for parsing GetFeatureInfo responses.
+     *     Default is <OpenLayers.Format.WMSGetFeatureInfo>.
+     */
+    format: null,
+
+    /**
+     * APIProperty: formatOptions
+     * {Object} Optional properties to set on the format (if one is not provided
+     *     in the <format> property.
+     */
+    formatOptions: null,
+
+    /**
+     * APIProperty: handlerOptions
+     * {Object} Additional options for the handlers used by this control, e.g.
+     * (start code)
+     * {
+     *     "click": {delay: 100},
+     *     "hover": {delay: 300}
+     * }
+     * (end)
+     */
+
+    /**
+     * Property: handler
+     * {Object} Reference to the <OpenLayers.Handler> for this control
+     */
+    handler: null,
+
+    /**
+     * Property: hoverRequest
+     * {<OpenLayers.Request>} contains the currently running hover request
+     *     (if any).
+     */
+    hoverRequest: null,
+
+    /**
+     * APIProperty: events
+     * {<OpenLayers.Events>} Events instance for listeners and triggering
+     *     control specific events.
+     *
+     * Register a listener for a particular event with the following syntax:
+     * (code)
+     * control.events.register(type, obj, listener);
+     * (end)
+     *
+     * Supported event types (in addition to those from <OpenLayers.Control.events>):
+     * beforegetfeatureinfo - Triggered before the request is sent.
+     *      The event object has an *xy* property with the position of the
+     *      mouse click or hover event that triggers the request.
+     * nogetfeatureinfo - no queryable layers were found.
+     * getfeatureinfo - Triggered when a GetFeatureInfo response is received.
+     *      The event object has a *text* property with the body of the
+     *      response (String), a *features* property with an array of the
+     *      parsed features, an *xy* property with the position of the mouse
+     *      click or hover event that triggered the request, and a *request*
+     *      property with the request itself. If drillDown is set to true and
+     *      multiple requests were issued to collect feature info from all
+     *      layers, *text* and *request* will only contain the response body
+     *      and request object of the last request.
+     */
+
+    /**
+     * Constructor: <OpenLayers.Control.WMSGetFeatureInfo>
      *
      * Parameters:
-     * data - {DOMElement} An OWSCommon document element.
-     * options - {Object} Options for the reader.
-     *
-     * Returns:
-     * {Object} An object representing the OWSCommon document.
+     * options - {Object}
      */
-    read: function(data, options) {
-        options = OpenLayers.Util.applyDefaults(options, this.options);
-        var ows = {};
-        this.readChildNodes(data, ows);
-        return ows;
+    initialize: function(options) {
+        options = options || {};
+        options.handlerOptions = options.handlerOptions || {};
+
+        OpenLayers.Control.prototype.initialize.apply(this, [options]);
+
+        if(!this.format) {
+            this.format = new OpenLayers.Format.WMSGetFeatureInfo(
+                options.formatOptions
+            );
+        }
+
+        if(this.drillDown === true) {
+            this.hover = false;
+        }
+
+        if(this.hover) {
+            this.handler = new OpenLayers.Handler.Hover(
+                   this, {
+                       'move': this.cancelHover,
+                       'pause': this.getInfoForHover
+                   },
+                   OpenLayers.Util.extend(this.handlerOptions.hover || {}, {
+                       'delay': 250
+                   }));
+        } else {
+            var callbacks = {};
+            callbacks[this.clickCallback] = this.getInfoForClick;
+            this.handler = new OpenLayers.Handler.Click(
+                this, callbacks, this.handlerOptions.click || {});
+        }
     },
 
     /**
-     * Property: readers
-     * Contains public functions, grouped by namespace prefix, that will
-     *     be applied when a namespaced node is found matching the function
-     *     name.  The function will be applied in the scope of this parser
-     *     with two arguments: the node being read and a context object passed
-     *     from the parent.
+     * Method: getInfoForClick
+     * Called on click
+     *
+     * Parameters:
+     * evt - {<OpenLayers.Event>}
      */
-    readers: {
-        "ows": {
-            "Exception": function(node, exceptionReport) {
-                var exception = {
-                    code: node.getAttribute('exceptionCode'),
-                    locator: node.getAttribute('locator'),
-                    texts: []
-                };
-                exceptionReport.exceptions.push(exception);
-                this.readChildNodes(node, exception);
-            },
-            "ExceptionText": function(node, exception) {
-                var text = this.getChildValue(node);
-                exception.texts.push(text);
-            },
-            "ServiceIdentification": function(node, obj) {
-                obj.serviceIdentification = {};
-                this.readChildNodes(node, obj.serviceIdentification);
-            },
-            "Title": function(node, obj) {
-                obj.title = this.getChildValue(node);
-            },
-            "Abstract": function(node, serviceIdentification) {
-                serviceIdentification["abstract"] = this.getChildValue(node);
-            },
-            "Keywords": function(node, serviceIdentification) {
-                serviceIdentification.keywords = {};
-                this.readChildNodes(node, serviceIdentification.keywords);
-            },
-            "Keyword": function(node, keywords) {
-                keywords[this.getChildValue(node)] = true;
-            },
-            "ServiceType": function(node, serviceIdentification) {
-                serviceIdentification.serviceType = {
-                    codeSpace: node.getAttribute('codeSpace'), 
-                    value: this.getChildValue(node)};
-            },
-            "ServiceTypeVersion": function(node, serviceIdentification) {
-                serviceIdentification.serviceTypeVersion = this.getChildValue(node);
-            },
-            "Fees": function(node, serviceIdentification) {
-                serviceIdentification.fees = this.getChildValue(node);
-            },
-            "AccessConstraints": function(node, serviceIdentification) {
-                serviceIdentification.accessConstraints = 
-                    this.getChildValue(node);
-            },
-            "ServiceProvider": function(node, obj) {
-                obj.serviceProvider = {};
-                this.readChildNodes(node, obj.serviceProvider);
-            },
-            "ProviderName": function(node, serviceProvider) {
-                serviceProvider.providerName = this.getChildValue(node);
-            },
-            "ProviderSite": function(node, serviceProvider) {
-                serviceProvider.providerSite = this.getAttributeNS(node, 
-                    this.namespaces.xlink, "href");
-            },
-            "ServiceContact": function(node, serviceProvider) {
-                serviceProvider.serviceContact = {};
-                this.readChildNodes(node, serviceProvider.serviceContact);
-            },
-            "IndividualName": function(node, serviceContact) {
-                serviceContact.individualName = this.getChildValue(node);
-            },
-            "PositionName": function(node, serviceContact) {
-                serviceContact.positionName = this.getChildValue(node);
-            },
-            "ContactInfo": function(node, serviceContact) {
-                serviceContact.contactInfo = {};
-                this.readChildNodes(node, serviceContact.contactInfo);
-            },
-            "Phone": function(node, contactInfo) {
-                contactInfo.phone = {};
-                this.readChildNodes(node, contactInfo.phone);
-            },
-            "Voice": function(node, phone) {
-                phone.voice = this.getChildValue(node);
-            },
-            "Address": function(node, contactInfo) {
-                contactInfo.address = {};
-                this.readChildNodes(node, contactInfo.address);
-            },
-            "DeliveryPoint": function(node, address) {
-                address.deliveryPoint = this.getChildValue(node);
-            },
-            "City": function(node, address) {
-                address.city = this.getChildValue(node);
-            },
-            "AdministrativeArea": function(node, address) {
-                address.administrativeArea = this.getChildValue(node);
-            },
-            "PostalCode": function(node, address) {
-                address.postalCode = this.getChildValue(node);
-            },
-            "Country": function(node, address) {
-                address.country = this.getChildValue(node);
-            },
-            "ElectronicMailAddress": function(node, address) {
-                address.electronicMailAddress = this.getChildValue(node);
-            },
-            "Role": function(node, serviceContact) {
-                serviceContact.role = this.getChildValue(node);
-            },
-            "OperationsMetadata": function(node, obj) {
-                obj.operationsMetadata = {};
-                this.readChildNodes(node, obj.operationsMetadata);
-            },
-            "Operation": function(node, operationsMetadata) {
-                var name = node.getAttribute("name");
-                operationsMetadata[name] = {};
-                this.readChildNodes(node, operationsMetadata[name]);
-            },
-            "DCP": function(node, operation) {
-                operation.dcp = {};
-                this.readChildNodes(node, operation.dcp);
-            },
-            "HTTP": function(node, dcp) {
-                dcp.http = {};
-                this.readChildNodes(node, dcp.http);
-            },
-            "Get": function(node, http) {
-                if (!http.get) {
-                    http.get = [];
+    getInfoForClick: function(evt) {
+        this.events.triggerEvent("beforegetfeatureinfo", {xy: evt.xy});
+        // Set the cursor to "wait" to tell the user we're working on their
+        // click.
+        OpenLayers.Element.addClass(this.map.viewPortDiv, "olCursorWait");
+        this.request(evt.xy, {});
+    },
+
+    /**
+     * Method: getInfoForHover
+     * Pause callback for the hover handler
+     *
+     * Parameters:
+     * evt - {Object}
+     */
+    getInfoForHover: function(evt) {
+        this.events.triggerEvent("beforegetfeatureinfo", {xy: evt.xy});
+        this.request(evt.xy, {hover: true});
+    },
+
+    /**
+     * Method: cancelHover
+     * Cancel callback for the hover handler
+     */
+    cancelHover: function() {
+        if (this.hoverRequest) {
+            this.hoverRequest.abort();
+            this.hoverRequest = null;
+        }
+    },
+
+    /**
+     * Method: findLayers
+     * Internal method to get the layers, independent of whether we are
+     *     inspecting the map or using a client-provided array
+     */
+    findLayers: function() {
+
+        var candidates = this.layers || this.map.layers;
+        var layers = [];
+        var layer, url;
+        for(var i = candidates.length - 1; i >= 0; --i) {
+            layer = candidates[i];
+            if(layer instanceof OpenLayers.Layer.WMS &&
+               (!this.queryVisible || layer.getVisibility())) {
+                url = OpenLayers.Util.isArray(layer.url) ? layer.url[0] : layer.url;
+                // if the control was not configured with a url, set it
+                // to the first layer url
+                if(this.drillDown === false && !this.url) {
+                    this.url = url;
                 }
-                var obj = {
-                    url: this.getAttributeNS(node, this.namespaces.xlink, "href")
-                };
-                this.readChildNodes(node, obj);
-                http.get.push(obj);
-            },
-            "Post": function(node, http) {
-                if (!http.post) {
-                    http.post = [];
+                if(this.drillDown === true || this.urlMatches(url)) {
+                    layers.push(layer);
                 }
-                var obj = {
-                    url: this.getAttributeNS(node, this.namespaces.xlink, "href")
-                };
-                this.readChildNodes(node, obj);
-                http.post.push(obj);
-            },
-            "Parameter": function(node, operation) {
-                if (!operation.parameters) {
-                    operation.parameters = {};
+            }
+        }
+        return layers;
+    },
+
+    /**
+     * Method: urlMatches
+     * Test to see if the provided url matches either the control <url> or one
+     *     of the <layerUrls>.
+     *
+     * Parameters:
+     * url - {String} The url to test.
+     *
+     * Returns:
+     * {Boolean} The provided url matches the control <url> or one of the
+     *     <layerUrls>.
+     */
+    urlMatches: function(url) {
+        var matches = OpenLayers.Util.isEquivalentUrl(this.url, url);
+        if(!matches && this.layerUrls) {
+            for(var i=0, len=this.layerUrls.length; i<len; ++i) {
+                if(OpenLayers.Util.isEquivalentUrl(this.layerUrls[i], url)) {
+                    matches = true;
+                    break;
                 }
-                var name = node.getAttribute("name");
-                operation.parameters[name] = {};
-                this.readChildNodes(node, operation.parameters[name]);
+            }
+        }
+        return matches;
+    },
+
+    /**
+     * Method: buildWMSOptions
+     * Build an object with the relevant WMS options for the GetFeatureInfo request
+     *
+     * Parameters:
+     * url - {String} The url to be used for sending the request
+     * layers - {Array(<OpenLayers.Layer.WMS)} An array of layers
+     * clickPosition - {<OpenLayers.Pixel>} The position on the map where the mouse
+     *     event occurred.
+     * format - {String} The format from the corresponding GetMap request
+     */
+    buildWMSOptions: function(url, layers, clickPosition, format) {
+        var layerNames = [], styleNames = [];
+        for (var i = 0, len = layers.length; i < len; i++) {
+            if (layers[i].params.LAYERS != null) {
+                layerNames = layerNames.concat(layers[i].params.LAYERS);
+                styleNames = styleNames.concat(this.getStyleNames(layers[i]));
+            }
+        }
+        var firstLayer = layers[0];
+        // use the firstLayer's projection if it matches the map projection -
+        // this assumes that all layers will be available in this projection
+        var projection = this.map.getProjection();
+        var layerProj = firstLayer.projection;
+        if (layerProj && layerProj.equals(this.map.getProjectionObject())) {
+            projection = layerProj.getCode();
+        }
+        var params = OpenLayers.Util.extend({
+            service: "WMS",
+            version: firstLayer.params.VERSION,
+            request: "GetFeatureInfo",
+            exceptions: firstLayer.params.EXCEPTIONS,
+            bbox: this.map.getExtent().toBBOX(null,
+                firstLayer.reverseAxisOrder()),
+            feature_count: this.maxFeatures,
+            height: this.map.getSize().h,
+            width: this.map.getSize().w,
+            format: format,
+            info_format: firstLayer.params.INFO_FORMAT || this.infoFormat
+        }, (parseFloat(firstLayer.params.VERSION) >= 1.3) ?
+            {
+                crs: projection,
+                i: parseInt(clickPosition.x),
+                j: parseInt(clickPosition.y)
+            } :
+            {
+                srs: projection,
+                x: parseInt(clickPosition.x),
+                y: parseInt(clickPosition.y)
+            }
+        );
+        if (layerNames.length != 0) {
+            params = OpenLayers.Util.extend({
+                layers: layerNames,
+                query_layers: layerNames,
+                styles: styleNames
+            }, params);
+        }
+        OpenLayers.Util.applyDefaults(params, this.vendorParams);
+        return {
+            url: url,
+            params: OpenLayers.Util.upperCaseObject(params),
+            callback: function(request) {
+                this.handleResponse(clickPosition, request, url);
             },
-            "Constraint": function(node, obj) {
-                if (!obj.constraints) {
-                    obj.constraints = {};
-                }
-                var name = node.getAttribute("name");
-                obj.constraints[name] = {};
-                this.readChildNodes(node, obj.constraints[name]);
-            },
-            "Value": function(node, allowedValues) {
-                allowedValues[this.getChildValue(node)] = true;
-            },
-            "OutputFormat": function(node, obj) {
-                obj.formats.push({value: this.getChildValue(node)});
-                this.readChildNodes(node, obj);
-            },
-            "WGS84BoundingBox": function(node, obj) {
-                var boundingBox = {};
-                boundingBox.crs = node.getAttribute("crs");
-                if (obj.BoundingBox) {
-                    obj.BoundingBox.push(boundingBox);
+            scope: this
+        };
+    },
+
+    /**
+     * Method: getStyleNames
+     * Gets the STYLES parameter for the layer. Make sure the STYLES parameter
+     * matches the LAYERS parameter
+     *
+     * Parameters:
+     * layer - {<OpenLayers.Layer.WMS>}
+     *
+     * Returns:
+     * {Array(String)} The STYLES parameter
+     */
+    getStyleNames: function(layer) {
+        // in the event of a WMS layer bundling multiple layers but not
+        // specifying styles,we need the same number of commas to specify
+        // the default style for each of the layers.  We can't just leave it
+        // blank as we may be including other layers that do specify styles.
+        var styleNames;
+        if (layer.params.STYLES) {
+            styleNames = layer.params.STYLES;
+        } else {
+            if (OpenLayers.Util.isArray(layer.params.LAYERS)) {
+                styleNames = new Array(layer.params.LAYERS.length);
+            } else { // Assume it's a String
+                styleNames = layer.params.LAYERS.replace(/[^,]/g, "");
+            }
+        }
+        return styleNames;
+    },
+
+    /**
+     * Method: request
+     * Sends a GetFeatureInfo request to the WMS
+     *
+     * Parameters:
+     * clickPosition - {<OpenLayers.Pixel>} The position on the map where the
+     *     mouse event occurred.
+     * options - {Object} additional options for this method.
+     *
+     * Valid options:
+     * - *hover* {Boolean} true if we do the request for the hover handler
+     */
+    request: function(clickPosition, options) {
+        var layers = this.findLayers();
+        if(layers.length == 0) {
+            this.events.triggerEvent("nogetfeatureinfo");
+            // Reset the cursor.
+            OpenLayers.Element.removeClass(this.map.viewPortDiv, "olCursorWait");
+            return;
+        }
+
+        options = options || {};
+        if(this.drillDown === false) {
+            var wmsOptions = this.buildWMSOptions(this.url, layers,
+                clickPosition, layers[0].params.FORMAT);
+            var request = OpenLayers.Request.GET(wmsOptions);
+
+            if (options.hover === true) {
+                this.hoverRequest = request;
+            }
+        } else {
+            this._requestCount = 0;
+            this._numRequests = 0;
+            this.features = [];
+            // group according to service url to combine requests
+            var services = {}, url;
+            for(var i=0, len=layers.length; i<len; i++) {
+                var layer = layers[i];
+                var service, found = false;
+                url = OpenLayers.Util.isArray(layer.url) ? layer.url[0] : layer.url;
+                if(url in services) {
+                    services[url].push(layer);
                 } else {
-                    obj.projection = boundingBox.crs;
-                    boundingBox = obj;
-               }
-               this.readChildNodes(node, boundingBox);
-            },
-            "BoundingBox": function(node, obj) {
-                // FIXME: We consider that BoundingBox is the same as WGS84BoundingBox
-                // LowerCorner = "min_x min_y"
-                // UpperCorner = "max_x max_y"
-                // It should normally depend on the projection
-                this.readers['ows']['WGS84BoundingBox'].apply(this, [node, obj]);
-            },
-            "LowerCorner": function(node, obj) {
-                var str = this.getChildValue(node).replace(
-                    this.regExes.trimSpace, "");
-                str = str.replace(this.regExes.trimComma, ",");
-                var pointList = str.split(this.regExes.splitSpace);
-                obj.left = pointList[0];
-                obj.bottom = pointList[1];
-            },
-            "UpperCorner": function(node, obj) {
-                var str = this.getChildValue(node).replace(
-                    this.regExes.trimSpace, "");
-                str = str.replace(this.regExes.trimComma, ",");
-                var pointList = str.split(this.regExes.splitSpace);
-                obj.right = pointList[0];
-                obj.top = pointList[1];
-                obj.bounds = new OpenLayers.Bounds(obj.left, obj.bottom,
-                    obj.right, obj.top);
-                delete obj.left;
-                delete obj.bottom;
-                delete obj.right;
-                delete obj.top;
-            },
-            "Language": function(node, obj) {
-                obj.language = this.getChildValue(node);
+                    this._numRequests++;
+                    services[url] = [layer];
+                }
+            }
+            var layers;
+            for (var url in services) {
+                layers = services[url];
+                var wmsOptions = this.buildWMSOptions(url, layers,
+                    clickPosition, layers[0].params.FORMAT);
+                OpenLayers.Request.GET(wmsOptions);
             }
         }
     },
 
     /**
-     * Property: writers
-     * As a compliment to the readers property, this structure contains public
-     *     writing functions grouped by namespace alias and named like the
-     *     node names they produce.
+     * Method: triggerGetFeatureInfo
+     * Trigger the getfeatureinfo event when all is done
+     *
+     * Parameters:
+     * request - {XMLHttpRequest} The request object
+     * xy - {<OpenLayers.Pixel>} The position on the map where the
+     *     mouse event occurred.
+     * features - {Array(<OpenLayers.Feature.Vector>)} or
+     *     {Array({Object}) when output is "object". The object has a url and a
+     *     features property which contains an array of features.
      */
-    writers: {
-        "ows": {
-            "BoundingBox": function(options, nodeName) {
-                var node = this.createElementNSPlus(nodeName || "ows:BoundingBox", {
-                    attributes: {
-                        crs: options.projection
-                    }
-                });
-                this.writeNode("ows:LowerCorner", options, node);
-                this.writeNode("ows:UpperCorner", options, node);
-                return node;
-            },
-            "LowerCorner": function(options) {
-                var node = this.createElementNSPlus("ows:LowerCorner", {
-                    value: options.bounds.left + " " + options.bounds.bottom });
-                return node;
-            },
-            "UpperCorner": function(options) {
-                var node = this.createElementNSPlus("ows:UpperCorner", {
-                    value: options.bounds.right + " " + options.bounds.top });
-                return node;
-            },
-            "Identifier": function(identifier) {
-                var node = this.createElementNSPlus("ows:Identifier", {
-                    value: identifier });
-                return node;
-            },
-            "Title": function(title) {
-                var node = this.createElementNSPlus("ows:Title", {
-                    value: title });
-                return node;
-            },
-            "Abstract": function(abstractValue) {
-                var node = this.createElementNSPlus("ows:Abstract", {
-                    value: abstractValue });
-                return node;
-            },
-            "OutputFormat": function(format) {
-                var node = this.createElementNSPlus("ows:OutputFormat", {
-                    value: format });
-                return node;
+    triggerGetFeatureInfo: function(request, xy, features) {
+        this.events.triggerEvent("getfeatureinfo", {
+            text: request.responseText,
+            features: features,
+            request: request,
+            xy: xy
+        });
+
+        // Reset the cursor.
+        OpenLayers.Element.removeClass(this.map.viewPortDiv, "olCursorWait");
+    },
+
+    /**
+     * Method: handleResponse
+     * Handler for the GetFeatureInfo response.
+     *
+     * Parameters:
+     * xy - {<OpenLayers.Pixel>} The position on the map where the
+     *     mouse event occurred.
+     * request - {XMLHttpRequest} The request object.
+     * url - {String} The url which was used for this request.
+     */
+    handleResponse: function(xy, request, url) {
+
+        var doc = request.responseXML;
+        if(!doc || !doc.documentElement) {
+            doc = request.responseText;
+        }
+        var features = this.format.read(doc);
+        if (this.drillDown === false) {
+            this.triggerGetFeatureInfo(request, xy, features);
+        } else {
+            this._requestCount++;
+            if (this.output === "object") {
+                this._features = (this._features || []).concat(
+                    {url: url, features: features}
+                );
+            } else {
+            this._features = (this._features || []).concat(features);
+            }
+            if (this._requestCount === this._numRequests) {
+                this.triggerGetFeatureInfo(request, xy, this._features.concat());
+                delete this._features;
+                delete this._requestCount;
+                delete this._numRequests;
             }
         }
     },
 
-    CLASS_NAME: "OpenLayers.Format.OWSCommon.v1"
-
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Format/OWSCommon/v1.js
- */
-
-/**
- * Class: OpenLayers.Format.OWSCommon.v1_0_0
- * Parser for OWS Common version 1.0.0.
- *
- * Inherits from:
- *  - <OpenLayers.Format.OWSCommon.v1>
- */
-OpenLayers.Format.OWSCommon.v1_0_0 = OpenLayers.Class(OpenLayers.Format.OWSCommon.v1, {
-    
-    /**
-     * Property: namespaces
-     * {Object} Mapping of namespace aliases to namespace URIs.
-     */
-    namespaces: {
-        ows: "http://www.opengis.net/ows",
-        xlink: "http://www.w3.org/1999/xlink"
-    },    
-    
-    /**
-     * Property: readers
-     * Contains public functions, grouped by namespace prefix, that will
-     *     be applied when a namespaced node is found matching the function
-     *     name.  The function will be applied in the scope of this parser
-     *     with two arguments: the node being read and a context object passed
-     *     from the parent.
-     */
-    readers: {
-        "ows": OpenLayers.Util.applyDefaults({
-            "ExceptionReport": function(node, obj) {
-                obj.success = false;
-                obj.exceptionReport = {
-                    version: node.getAttribute('version'),
-                    language: node.getAttribute('language'),
-                    exceptions: []
-                };
-                this.readChildNodes(node, obj.exceptionReport);
-            } 
-        }, OpenLayers.Format.OWSCommon.v1.prototype.readers.ows)
-    },
-
-    /**
-     * Property: writers
-     * As a compliment to the readers property, this structure contains public
-     *     writing functions grouped by namespace alias and named like the
-     *     node names they produce.
-     */
-    writers: {
-        "ows": OpenLayers.Format.OWSCommon.v1.prototype.writers.ows
-    },
-    
-    CLASS_NAME: "OpenLayers.Format.OWSCommon.v1_0_0"
-
+    CLASS_NAME: "OpenLayers.Control.WMSGetFeatureInfo"
 });
 
 /* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
@@ -44792,1362 +41876,91 @@ OpenLayers.Format.WMTSCapabilities = OpenLayers.Class(OpenLayers.Format.XML.Vers
  * full text of the license. */
 
 /**
- * @requires OpenLayers/Format.js
- * @requires OpenLayers/Feature/Vector.js
- * @requires OpenLayers/Geometry/Point.js
- * @requires OpenLayers/Geometry/MultiPoint.js
- * @requires OpenLayers/Geometry/LineString.js
- * @requires OpenLayers/Geometry/MultiLineString.js
- * @requires OpenLayers/Geometry/Polygon.js
- * @requires OpenLayers/Geometry/MultiPolygon.js
+ * @requires OpenLayers/Format/WMTSCapabilities.js
+ * @requires OpenLayers/Format/OWSCommon/v1_1_0.js
  */
 
 /**
- * Class: OpenLayers.Format.WKT
- * Class for reading and writing Well-Known Text.  Create a new instance
- * with the <OpenLayers.Format.WKT> constructor.
+ * Class: OpenLayers.Format.WMTSCapabilities.v1_0_0
+ * Read WMTS Capabilities version 1.0.0.
  * 
  * Inherits from:
- *  - <OpenLayers.Format>
+ *  - <OpenLayers.Format.WMTSCapabilities>
  */
-OpenLayers.Format.WKT = OpenLayers.Class(OpenLayers.Format, {
-    
-    /**
-     * Constructor: OpenLayers.Format.WKT
-     * Create a new parser for WKT
-     *
-     * Parameters:
-     * options - {Object} An optional object whose properties will be set on
-     *           this instance
-     *
-     * Returns:
-     * {<OpenLayers.Format.WKT>} A new WKT parser.
-     */
-    initialize: function(options) {
-        this.regExes = {
-            'typeStr': /^\s*(\w+)\s*\(\s*(.*)\s*\)\s*$/,
-            'spaces': /\s+/,
-            'parenComma': /\)\s*,\s*\(/,
-            'doubleParenComma': /\)\s*\)\s*,\s*\(\s*\(/,  // can't use {2} here
-            'trimParens': /^\s*\(?(.*?)\)?\s*$/
-        };
-        OpenLayers.Format.prototype.initialize.apply(this, [options]);
-    },
-
-    /**
-     * APIMethod: read
-     * Deserialize a WKT string and return a vector feature or an
-     * array of vector features.  Supports WKT for POINT, MULTIPOINT,
-     * LINESTRING, MULTILINESTRING, POLYGON, MULTIPOLYGON, and
-     * GEOMETRYCOLLECTION.
-     *
-     * Parameters:
-     * wkt - {String} A WKT string
-     *
-     * Returns:
-     * {<OpenLayers.Feature.Vector>|Array} A feature or array of features for
-     * GEOMETRYCOLLECTION WKT.
-     */
-    read: function(wkt) {
-        var features, type, str;
-        wkt = wkt.replace(/[\n\r]/g, " ");
-        var matches = this.regExes.typeStr.exec(wkt);
-        if(matches) {
-            type = matches[1].toLowerCase();
-            str = matches[2];
-            if(this.parse[type]) {
-                features = this.parse[type].apply(this, [str]);
-            }
-            if (this.internalProjection && this.externalProjection) {
-                if (features && 
-                    features.CLASS_NAME == "OpenLayers.Feature.Vector") {
-                    features.geometry.transform(this.externalProjection,
-                                                this.internalProjection);
-                } else if (features &&
-                           type != "geometrycollection" &&
-                           typeof features == "object") {
-                    for (var i=0, len=features.length; i<len; i++) {
-                        var component = features[i];
-                        component.geometry.transform(this.externalProjection,
-                                                     this.internalProjection);
-                    }
-                }
-            }
-        }    
-        return features;
-    },
-
-    /**
-     * APIMethod: write
-     * Serialize a feature or array of features into a WKT string.
-     *
-     * Parameters:
-     * features - {<OpenLayers.Feature.Vector>|Array} A feature or array of
-     *            features
-     *
-     * Returns:
-     * {String} The WKT string representation of the input geometries
-     */
-    write: function(features) {
-        var collection, geometry, isCollection;
-        if (features.constructor == Array) {
-            collection = features;
-            isCollection = true;
-        } else {
-            collection = [features];
-            isCollection = false;
-        }
-        var pieces = [];
-        if (isCollection) {
-            pieces.push('GEOMETRYCOLLECTION(');
-        }
-        for (var i=0, len=collection.length; i<len; ++i) {
-            if (isCollection && i>0) {
-                pieces.push(',');
-            }
-            geometry = collection[i].geometry;
-            pieces.push(this.extractGeometry(geometry));
-        }
-        if (isCollection) {
-            pieces.push(')');
-        }
-        return pieces.join('');
-    },
-
-    /**
-     * Method: extractGeometry
-     * Entry point to construct the WKT for a single Geometry object.
-     *
-     * Parameters:
-     * geometry - {<OpenLayers.Geometry.Geometry>}
-     *
-     * Returns:
-     * {String} A WKT string of representing the geometry
-     */
-    extractGeometry: function(geometry) {
-        var type = geometry.CLASS_NAME.split('.')[2].toLowerCase();
-        if (!this.extract[type]) {
-            return null;
-        }
-        if (this.internalProjection && this.externalProjection) {
-            geometry = geometry.clone();
-            geometry.transform(this.internalProjection, this.externalProjection);
-        }                       
-        var wktType = type == 'collection' ? 'GEOMETRYCOLLECTION' : type.toUpperCase();
-        var data = wktType + '(' + this.extract[type].apply(this, [geometry]) + ')';
-        return data;
-    },
-    
-    /**
-     * Object with properties corresponding to the geometry types.
-     * Property values are functions that do the actual data extraction.
-     */
-    extract: {
-        /**
-         * Return a space delimited string of point coordinates.
-         * @param {OpenLayers.Geometry.Point} point
-         * @returns {String} A string of coordinates representing the point
-         */
-        'point': function(point) {
-            return point.x + ' ' + point.y;
-        },
-
-        /**
-         * Return a comma delimited string of point coordinates from a multipoint.
-         * @param {OpenLayers.Geometry.MultiPoint} multipoint
-         * @returns {String} A string of point coordinate strings representing
-         *                  the multipoint
-         */
-        'multipoint': function(multipoint) {
-            var array = [];
-            for(var i=0, len=multipoint.components.length; i<len; ++i) {
-                array.push('(' +
-                           this.extract.point.apply(this, [multipoint.components[i]]) +
-                           ')');
-            }
-            return array.join(',');
-        },
+OpenLayers.Format.WMTSCapabilities.v1_0_0 = OpenLayers.Class(
+    OpenLayers.Format.OWSCommon.v1_1_0, {
         
-        /**
-         * Return a comma delimited string of point coordinates from a line.
-         * @param {OpenLayers.Geometry.LineString} linestring
-         * @returns {String} A string of point coordinate strings representing
-         *                  the linestring
-         */
-        'linestring': function(linestring) {
-            var array = [];
-            for(var i=0, len=linestring.components.length; i<len; ++i) {
-                array.push(this.extract.point.apply(this, [linestring.components[i]]));
-            }
-            return array.join(',');
-        },
-
-        /**
-         * Return a comma delimited string of linestring strings from a multilinestring.
-         * @param {OpenLayers.Geometry.MultiLineString} multilinestring
-         * @returns {String} A string of of linestring strings representing
-         *                  the multilinestring
-         */
-        'multilinestring': function(multilinestring) {
-            var array = [];
-            for(var i=0, len=multilinestring.components.length; i<len; ++i) {
-                array.push('(' +
-                           this.extract.linestring.apply(this, [multilinestring.components[i]]) +
-                           ')');
-            }
-            return array.join(',');
-        },
-        
-        /**
-         * Return a comma delimited string of linear ring arrays from a polygon.
-         * @param {OpenLayers.Geometry.Polygon} polygon
-         * @returns {String} An array of linear ring arrays representing the polygon
-         */
-        'polygon': function(polygon) {
-            var array = [];
-            for(var i=0, len=polygon.components.length; i<len; ++i) {
-                array.push('(' +
-                           this.extract.linestring.apply(this, [polygon.components[i]]) +
-                           ')');
-            }
-            return array.join(',');
-        },
-
-        /**
-         * Return an array of polygon arrays from a multipolygon.
-         * @param {OpenLayers.Geometry.MultiPolygon} multipolygon
-         * @returns {String} An array of polygon arrays representing
-         *                  the multipolygon
-         */
-        'multipolygon': function(multipolygon) {
-            var array = [];
-            for(var i=0, len=multipolygon.components.length; i<len; ++i) {
-                array.push('(' +
-                           this.extract.polygon.apply(this, [multipolygon.components[i]]) +
-                           ')');
-            }
-            return array.join(',');
-        },
-
-        /**
-         * Return the WKT portion between 'GEOMETRYCOLLECTION(' and ')' for an <OpenLayers.Geometry.Collection>
-         * @param {OpenLayers.Geometry.Collection} collection
-         * @returns {String} internal WKT representation of the collection
-         */
-        'collection': function(collection) {
-            var array = [];
-            for(var i=0, len=collection.components.length; i<len; ++i) {
-                array.push(this.extractGeometry.apply(this, [collection.components[i]]));
-            }
-            return array.join(',');
-        }
-
-    },
-
     /**
-     * Object with properties corresponding to the geometry types.
-     * Property values are functions that do the actual parsing.
+     * Property: version
+     * {String} The parser version ("1.0.0").
      */
-    parse: {
-        /**
-         * Return point feature given a point WKT fragment.
-         * @param {String} str A WKT fragment representing the point
-         * @returns {OpenLayers.Feature.Vector} A point feature
-         * @private
-         */
-        'point': function(str) {
-            var coords = OpenLayers.String.trim(str).split(this.regExes.spaces);
-            return new OpenLayers.Feature.Vector(
-                new OpenLayers.Geometry.Point(coords[0], coords[1])
-            );
-        },
+    version: "1.0.0",
 
-        /**
-         * Return a multipoint feature given a multipoint WKT fragment.
-         * @param {String} str A WKT fragment representing the multipoint
-         * @returns {OpenLayers.Feature.Vector} A multipoint feature
-         * @private
-         */
-        'multipoint': function(str) {
-            var point;
-            var points = OpenLayers.String.trim(str).split(',');
-            var components = [];
-            for(var i=0, len=points.length; i<len; ++i) {
-                point = points[i].replace(this.regExes.trimParens, '$1');
-                components.push(this.parse.point.apply(this, [point]).geometry);
-            }
-            return new OpenLayers.Feature.Vector(
-                new OpenLayers.Geometry.MultiPoint(components)
-            );
-        },
-        
-        /**
-         * Return a linestring feature given a linestring WKT fragment.
-         * @param {String} str A WKT fragment representing the linestring
-         * @returns {OpenLayers.Feature.Vector} A linestring feature
-         * @private
-         */
-        'linestring': function(str) {
-            var points = OpenLayers.String.trim(str).split(',');
-            var components = [];
-            for(var i=0, len=points.length; i<len; ++i) {
-                components.push(this.parse.point.apply(this, [points[i]]).geometry);
-            }
-            return new OpenLayers.Feature.Vector(
-                new OpenLayers.Geometry.LineString(components)
-            );
-        },
-
-        /**
-         * Return a multilinestring feature given a multilinestring WKT fragment.
-         * @param {String} str A WKT fragment representing the multilinestring
-         * @returns {OpenLayers.Feature.Vector} A multilinestring feature
-         * @private
-         */
-        'multilinestring': function(str) {
-            var line;
-            var lines = OpenLayers.String.trim(str).split(this.regExes.parenComma);
-            var components = [];
-            for(var i=0, len=lines.length; i<len; ++i) {
-                line = lines[i].replace(this.regExes.trimParens, '$1');
-                components.push(this.parse.linestring.apply(this, [line]).geometry);
-            }
-            return new OpenLayers.Feature.Vector(
-                new OpenLayers.Geometry.MultiLineString(components)
-            );
-        },
-        
-        /**
-         * Return a polygon feature given a polygon WKT fragment.
-         * @param {String} str A WKT fragment representing the polygon
-         * @returns {OpenLayers.Feature.Vector} A polygon feature
-         * @private
-         */
-        'polygon': function(str) {
-            var ring, linestring, linearring;
-            var rings = OpenLayers.String.trim(str).split(this.regExes.parenComma);
-            var components = [];
-            for(var i=0, len=rings.length; i<len; ++i) {
-                ring = rings[i].replace(this.regExes.trimParens, '$1');
-                linestring = this.parse.linestring.apply(this, [ring]).geometry;
-                linearring = new OpenLayers.Geometry.LinearRing(linestring.components);
-                components.push(linearring);
-            }
-            return new OpenLayers.Feature.Vector(
-                new OpenLayers.Geometry.Polygon(components)
-            );
-        },
-
-        /**
-         * Return a multipolygon feature given a multipolygon WKT fragment.
-         * @param {String} str A WKT fragment representing the multipolygon
-         * @returns {OpenLayers.Feature.Vector} A multipolygon feature
-         * @private
-         */
-        'multipolygon': function(str) {
-            var polygon;
-            var polygons = OpenLayers.String.trim(str).split(this.regExes.doubleParenComma);
-            var components = [];
-            for(var i=0, len=polygons.length; i<len; ++i) {
-                polygon = polygons[i].replace(this.regExes.trimParens, '$1');
-                components.push(this.parse.polygon.apply(this, [polygon]).geometry);
-            }
-            return new OpenLayers.Feature.Vector(
-                new OpenLayers.Geometry.MultiPolygon(components)
-            );
-        },
-
-        /**
-         * Return an array of features given a geometrycollection WKT fragment.
-         * @param {String} str A WKT fragment representing the geometrycollection
-         * @returns {Array} An array of OpenLayers.Feature.Vector
-         * @private
-         */
-        'geometrycollection': function(str) {
-            // separate components of the collection with |
-            str = str.replace(/,\s*([A-Za-z])/g, '|$1');
-            var wktArray = OpenLayers.String.trim(str).split('|');
-            var components = [];
-            for(var i=0, len=wktArray.length; i<len; ++i) {
-                components.push(OpenLayers.Format.WKT.prototype.read.apply(this,[wktArray[i]]));
-            }
-            return components;
-        }
-
-    },
-
-    CLASS_NAME: "OpenLayers.Format.WKT" 
-});     
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Format/XML/VersionedOGC.js
- * @requires OpenLayers/Filter/FeatureId.js
- * @requires OpenLayers/Filter/Logical.js
- * @requires OpenLayers/Filter/Comparison.js
- */
-
-/**
- * Class: OpenLayers.Format.Filter
- * Read/Write ogc:Filter. Create a new instance with the <OpenLayers.Format.Filter>
- *     constructor.
- * 
- * Inherits from:
- *  - <OpenLayers.Format.XML.VersionedOGC>
- */
-OpenLayers.Format.Filter = OpenLayers.Class(OpenLayers.Format.XML.VersionedOGC, {
-    
-    /**
-     * APIProperty: defaultVersion
-     * {String} Version number to assume if none found.  Default is "1.0.0".
-     */
-    defaultVersion: "1.0.0",
-    
-    /**
-     * APIMethod: write
-     * Write an ogc:Filter given a filter object.
-     *
-     * Parameters:
-     * filter - {<OpenLayers.Filter>} An filter.
-     * options - {Object} Optional configuration object.
-     *
-     * Returns:
-     * {Elment} An ogc:Filter element node.
-     */
-    
-    /**
-     * APIMethod: read
-     * Read and Filter doc and return an object representing the Filter.
-     *
-     * Parameters:
-     * data - {String | DOMElement} Data to read.
-     *
-     * Returns:
-     * {<OpenLayers.Filter>} A filter object.
-     */
-
-    CLASS_NAME: "OpenLayers.Format.Filter" 
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-/**
- * @requires OpenLayers/Format/Filter.js
- * @requires OpenLayers/Format/XML.js
- * @requires OpenLayers/Filter/Function.js
- * @requires OpenLayers/BaseTypes/Date.js
- */
-
-/**
- * Class: OpenLayers.Format.Filter.v1
- * Superclass for Filter version 1 parsers.
- *
- * Inherits from:
- *  - <OpenLayers.Format.XML>
- */
-OpenLayers.Format.Filter.v1 = OpenLayers.Class(OpenLayers.Format.XML, {
-    
     /**
      * Property: namespaces
      * {Object} Mapping of namespace aliases to namespace URIs.
      */
     namespaces: {
-        ogc: "http://www.opengis.net/ogc",
-        gml: "http://www.opengis.net/gml",
-        xlink: "http://www.w3.org/1999/xlink",
-        xsi: "http://www.w3.org/2001/XMLSchema-instance"
-    },
-
-    /**
-     * Property: defaultPrefix
-     */
-    defaultPrefix: "ogc",
-
-    /**
-     * Property: schemaLocation
-     * {String} Schema location for a particular minor version.
-     */
-    schemaLocation: null,
-    
-    /**
-     * Constructor: OpenLayers.Format.Filter.v1
-     * Instances of this class are not created directly.  Use the
-     *     <OpenLayers.Format.Filter> constructor instead.
-     *
-     * Parameters:
-     * options - {Object} An optional object whose properties will be set on
-     *     this instance.
-     */
-    initialize: function(options) {
-        OpenLayers.Format.XML.prototype.initialize.apply(this, [options]);
-    },
-    
-    /**
-     * Method: read
-     *
-     * Parameters:
-     * data - {DOMElement} A Filter document element.
-     *
-     * Returns:
-     * {<OpenLayers.Filter>} A filter object.
-     */
-    read: function(data) {
-        var obj = {};
-        this.readers.ogc["Filter"].apply(this, [data, obj]);
-        return obj.filter;
-    },
-    
-    /**
-     * Property: readers
-     * Contains public functions, grouped by namespace prefix, that will
-     *     be applied when a namespaced node is found matching the function
-     *     name.  The function will be applied in the scope of this parser
-     *     with two arguments: the node being read and a context object passed
-     *     from the parent.
-     */
-    readers: {
-        "ogc": {
-            "_expression": function(node) {
-                // only the simplest of ogc:expression handled
-                // "some text and an <PropertyName>attribute</PropertyName>"}
-                var obj, value = "";
-                for(var child=node.firstChild; child; child=child.nextSibling) {
-                    switch(child.nodeType) {
-                        case 1:
-                            obj = this.readNode(child);
-                            if (obj.property) {
-                                value += "${" + obj.property + "}";
-                            } else if (obj.value !== undefined) {
-                                value += obj.value;
-                            }
-                            break;
-                        case 3: // text node
-                        case 4: // cdata section
-                            value += child.nodeValue;
-                    }
-                }
-                return value;
-            },
-            "Filter": function(node, parent) {
-                // Filters correspond to subclasses of OpenLayers.Filter.
-                // Since they contain information we don't persist, we
-                // create a temporary object and then pass on the filter
-                // (ogc:Filter) to the parent obj.
-                var obj = {
-                    fids: [],
-                    filters: []
-                };
-                this.readChildNodes(node, obj);
-                if(obj.fids.length > 0) {
-                    parent.filter = new OpenLayers.Filter.FeatureId({
-                        fids: obj.fids
-                    });
-                } else if(obj.filters.length > 0) {
-                    parent.filter = obj.filters[0];
-                }
-            },
-            "FeatureId": function(node, obj) {
-                var fid = node.getAttribute("fid");
-                if(fid) {
-                    obj.fids.push(fid);
-                }
-            },
-            "And": function(node, obj) {
-                var filter = new OpenLayers.Filter.Logical({
-                    type: OpenLayers.Filter.Logical.AND
-                });
-                this.readChildNodes(node, filter);
-                obj.filters.push(filter);
-            },
-            "Or": function(node, obj) {
-                var filter = new OpenLayers.Filter.Logical({
-                    type: OpenLayers.Filter.Logical.OR
-                });
-                this.readChildNodes(node, filter);
-                obj.filters.push(filter);
-            },
-            "Not": function(node, obj) {
-                var filter = new OpenLayers.Filter.Logical({
-                    type: OpenLayers.Filter.Logical.NOT
-                });
-                this.readChildNodes(node, filter);
-                obj.filters.push(filter);
-            },
-            "PropertyIsLessThan": function(node, obj) {
-                var filter = new OpenLayers.Filter.Comparison({
-                    type: OpenLayers.Filter.Comparison.LESS_THAN
-                });
-                this.readChildNodes(node, filter);
-                obj.filters.push(filter);
-            },
-            "PropertyIsGreaterThan": function(node, obj) {
-                var filter = new OpenLayers.Filter.Comparison({
-                    type: OpenLayers.Filter.Comparison.GREATER_THAN
-                });
-                this.readChildNodes(node, filter);
-                obj.filters.push(filter);
-            },
-            "PropertyIsLessThanOrEqualTo": function(node, obj) {
-                var filter = new OpenLayers.Filter.Comparison({
-                    type: OpenLayers.Filter.Comparison.LESS_THAN_OR_EQUAL_TO
-                });
-                this.readChildNodes(node, filter);
-                obj.filters.push(filter);
-            },
-            "PropertyIsGreaterThanOrEqualTo": function(node, obj) {
-                var filter = new OpenLayers.Filter.Comparison({
-                    type: OpenLayers.Filter.Comparison.GREATER_THAN_OR_EQUAL_TO
-                });
-                this.readChildNodes(node, filter);
-                obj.filters.push(filter);
-            },
-            "PropertyIsBetween": function(node, obj) {
-                var filter = new OpenLayers.Filter.Comparison({
-                    type: OpenLayers.Filter.Comparison.BETWEEN
-                });
-                this.readChildNodes(node, filter);
-                obj.filters.push(filter);
-            },
-            "Literal": function(node, obj) {
-                obj.value = OpenLayers.String.numericIf(
-                    this.getChildValue(node), true);
-            },
-            "PropertyName": function(node, filter) {
-                filter.property = this.getChildValue(node);
-            },
-            "LowerBoundary": function(node, filter) {
-                filter.lowerBoundary = OpenLayers.String.numericIf(
-                    this.readers.ogc._expression.call(this, node), true);
-            },
-            "UpperBoundary": function(node, filter) {
-                filter.upperBoundary = OpenLayers.String.numericIf(
-                    this.readers.ogc._expression.call(this, node), true);
-            },
-            "Intersects": function(node, obj) {
-                this.readSpatial(node, obj, OpenLayers.Filter.Spatial.INTERSECTS);
-            },
-            "Within": function(node, obj) {
-                this.readSpatial(node, obj, OpenLayers.Filter.Spatial.WITHIN);
-            },
-            "Contains": function(node, obj) {
-                this.readSpatial(node, obj, OpenLayers.Filter.Spatial.CONTAINS);
-            },
-            "DWithin": function(node, obj) {
-                this.readSpatial(node, obj, OpenLayers.Filter.Spatial.DWITHIN);
-            },
-            "Distance": function(node, obj) {
-                obj.distance = parseInt(this.getChildValue(node));
-                obj.distanceUnits = node.getAttribute("units");
-            },
-            "Function": function(node, obj) {
-                //TODO write decoder for it
-                return;
-            },
-            "PropertyIsNull": function(node, obj) {
-                var filter = new OpenLayers.Filter.Comparison({
-                    type: OpenLayers.Filter.Comparison.IS_NULL
-                });
-                this.readChildNodes(node, filter);
-                obj.filters.push(filter);
-            }
-        }
-    },
-    
-    /**
-     * Method: readSpatial
-     *
-     * Read a {<OpenLayers.Filter.Spatial>} filter.
-     * 
-     * Parameters:
-     * node - {DOMElement} A DOM element that contains an ogc:expression.
-     * obj - {Object} The target object.
-     * type - {String} One of the OpenLayers.Filter.Spatial.* constants.
-     *
-     * Returns:
-     * {<OpenLayers.Filter.Spatial>} The created filter.
-     */
-    readSpatial: function(node, obj, type) {
-        var filter = new OpenLayers.Filter.Spatial({
-            type: type
-        });
-        this.readChildNodes(node, filter);
-        filter.value = filter.components[0];
-        delete filter.components;
-        obj.filters.push(filter);
-    },
-
-    /**
-     * APIMethod: encodeLiteral
-     * Generates the string representation of a value for use in <Literal> 
-     *     elements.  The default encoder writes Date values as ISO 8601 
-     *     strings.
-     *
-     * Parameters:
-     * value - {Object} Literal value to encode
-     *
-     * Returns:
-     * {String} String representation of the provided value.
-     */
-    encodeLiteral: function(value) {
-        if (value instanceof Date) {
-            value = OpenLayers.Date.toISOString(value);
-        }
-        return value;
-    },
-
-    /**
-     * Method: writeOgcExpression
-     * Limited support for writing OGC expressions. Currently it supports
-     * (<OpenLayers.Filter.Function> || String || Number)
-     *
-     * Parameters:
-     * value - (<OpenLayers.Filter.Function> || String || Number)
-     * node - {DOMElement} A parent DOM element 
-     *
-     * Returns:
-     * {DOMElement} Updated node element.
-     */
-    writeOgcExpression: function(value, node) {
-        if (value instanceof OpenLayers.Filter.Function){
-            this.writeNode("Function", value, node);
-        } else {
-            this.writeNode("Literal", value, node);
-        }
-        return node;
+        ows: "http://www.opengis.net/ows/1.1",
+        wmts: "http://www.opengis.net/wmts/1.0",
+        xlink: "http://www.w3.org/1999/xlink"
     },    
     
     /**
-     * Method: write
-     *
-     * Parameters:
-     * filter - {<OpenLayers.Filter>} A filter object.
-     *
-     * Returns:
-     * {DOMElement} An ogc:Filter element.
+     * Property: yx
+     * {Object} Members in the yx object are used to determine if a CRS URN
+     *     corresponds to a CRS with y,x axis order.  Member names are CRS URNs
+     *     and values are boolean.  Defaults come from the 
+     *     <OpenLayers.Format.WMTSCapabilities> prototype.
      */
-    write: function(filter) {
-        return this.writers.ogc["Filter"].apply(this, [filter]);
-    },
-    
-    /**
-     * Property: writers
-     * As a compliment to the readers property, this structure contains public
-     *     writing functions grouped by namespace alias and named like the
-     *     node names they produce.
-     */
-    writers: {
-        "ogc": {
-            "Filter": function(filter) {
-                var node = this.createElementNSPlus("ogc:Filter");
-                this.writeNode(this.getFilterType(filter), filter, node);
-                return node;
-            },
-            "_featureIds": function(filter) {
-                var node = this.createDocumentFragment();
-                for (var i=0, ii=filter.fids.length; i<ii; ++i) {
-                    this.writeNode("ogc:FeatureId", filter.fids[i], node);
-                }
-                return node;
-            },
-            "FeatureId": function(fid) {
-                return this.createElementNSPlus("ogc:FeatureId", {
-                    attributes: {fid: fid}
-                });
-            },
-            "And": function(filter) {
-                var node = this.createElementNSPlus("ogc:And");
-                var childFilter;
-                for (var i=0, ii=filter.filters.length; i<ii; ++i) {
-                    childFilter = filter.filters[i];
-                    this.writeNode(
-                        this.getFilterType(childFilter), childFilter, node
-                    );
-                }
-                return node;
-            },
-            "Or": function(filter) {
-                var node = this.createElementNSPlus("ogc:Or");
-                var childFilter;
-                for (var i=0, ii=filter.filters.length; i<ii; ++i) {
-                    childFilter = filter.filters[i];
-                    this.writeNode(
-                        this.getFilterType(childFilter), childFilter, node
-                    );
-                }
-                return node;
-            },
-            "Not": function(filter) {
-                var node = this.createElementNSPlus("ogc:Not");
-                var childFilter = filter.filters[0];
-                this.writeNode(
-                    this.getFilterType(childFilter), childFilter, node
-                );
-                return node;
-            },
-            "PropertyIsLessThan": function(filter) {
-                var node = this.createElementNSPlus("ogc:PropertyIsLessThan");
-                // no ogc:expression handling for PropertyName for now
-                this.writeNode("PropertyName", filter, node);
-                // handle Literals or Functions for now
-                this.writeOgcExpression(filter.value, node);
-                return node;
-            },
-            "PropertyIsGreaterThan": function(filter) {
-                var node = this.createElementNSPlus("ogc:PropertyIsGreaterThan");
-                // no ogc:expression handling for PropertyName for now
-                this.writeNode("PropertyName", filter, node);
-                // handle Literals or Functions for now
-                this.writeOgcExpression(filter.value, node);
-                return node;
-            },
-            "PropertyIsLessThanOrEqualTo": function(filter) {
-                var node = this.createElementNSPlus("ogc:PropertyIsLessThanOrEqualTo");
-                // no ogc:expression handling for PropertyName for now
-                this.writeNode("PropertyName", filter, node);
-                // handle Literals or Functions for now
-                this.writeOgcExpression(filter.value, node);
-                return node;
-            },
-            "PropertyIsGreaterThanOrEqualTo": function(filter) {
-                var node = this.createElementNSPlus("ogc:PropertyIsGreaterThanOrEqualTo");
-                // no ogc:expression handling for PropertyName for now
-                this.writeNode("PropertyName", filter, node);
-                // handle Literals or Functions for now
-                this.writeOgcExpression(filter.value, node);
-                return node;
-            },
-            "PropertyIsBetween": function(filter) {
-                var node = this.createElementNSPlus("ogc:PropertyIsBetween");
-                // no ogc:expression handling for PropertyName for now
-                this.writeNode("PropertyName", filter, node);
-                this.writeNode("LowerBoundary", filter, node);
-                this.writeNode("UpperBoundary", filter, node);
-                return node;
-            },
-            "PropertyName": function(filter) {
-                // no ogc:expression handling for now
-                return this.createElementNSPlus("ogc:PropertyName", {
-                    value: filter.property
-                });
-            },
-            "Literal": function(value) {
-                var encode = this.encodeLiteral ||
-                    OpenLayers.Format.Filter.v1.prototype.encodeLiteral;
-                return this.createElementNSPlus("ogc:Literal", {
-                    value: encode(value)
-                });
-            },
-            "LowerBoundary": function(filter) {
-                // handle Literals or Functions for now
-                var node = this.createElementNSPlus("ogc:LowerBoundary");
-                this.writeOgcExpression(filter.lowerBoundary, node);
-                return node;
-            },
-            "UpperBoundary": function(filter) {
-                // handle Literals or Functions for now
-                var node = this.createElementNSPlus("ogc:UpperBoundary");
-                this.writeNode("Literal", filter.upperBoundary, node);
-                return node;
-            },
-            "INTERSECTS": function(filter) {
-                return this.writeSpatial(filter, "Intersects");
-            },
-            "WITHIN": function(filter) {
-                return this.writeSpatial(filter, "Within");
-            },
-            "CONTAINS": function(filter) {
-                return this.writeSpatial(filter, "Contains");
-            },
-            "DWITHIN": function(filter) {
-                var node = this.writeSpatial(filter, "DWithin");
-                this.writeNode("Distance", filter, node);
-                return node;
-            },
-            "Distance": function(filter) {
-                return this.createElementNSPlus("ogc:Distance", {
-                    attributes: {
-                        units: filter.distanceUnits
-                    },
-                    value: filter.distance
-                });
-            },
-            "Function": function(filter) {
-                var node = this.createElementNSPlus("ogc:Function", {
-                    attributes: {
-                        name: filter.name
-                    }
-                });
-                var params = filter.params;
-                for(var i=0, len=params.length; i<len; i++){
-                    this.writeOgcExpression(params[i], node);
-                }
-                return node;
-            },
-            "PropertyIsNull": function(filter) {
-                var node = this.createElementNSPlus("ogc:PropertyIsNull");
-                this.writeNode("PropertyName", filter, node);
-                return node;
-            }
-        }
-    },
+    yx: null,
 
-    /**
-     * Method: getFilterType
-     */
-    getFilterType: function(filter) {
-        var filterType = this.filterMap[filter.type];
-        if(!filterType) {
-            throw "Filter writing not supported for rule type: " + filter.type;
-        }
-        return filterType;
-    },
-    
-    /**
-     * Property: filterMap
-     * {Object} Contains a member for each filter type.  Values are node names
-     *     for corresponding OGC Filter child elements.
-     */
-    filterMap: {
-        "&&": "And",
-        "||": "Or",
-        "!": "Not",
-        "==": "PropertyIsEqualTo",
-        "!=": "PropertyIsNotEqualTo",
-        "<": "PropertyIsLessThan",
-        ">": "PropertyIsGreaterThan",
-        "<=": "PropertyIsLessThanOrEqualTo",
-        ">=": "PropertyIsGreaterThanOrEqualTo",
-        "..": "PropertyIsBetween",
-        "~": "PropertyIsLike",
-        "NULL": "PropertyIsNull",
-        "BBOX": "BBOX",
-        "DWITHIN": "DWITHIN",
-        "WITHIN": "WITHIN",
-        "CONTAINS": "CONTAINS",
-        "INTERSECTS": "INTERSECTS",
-        "FID": "_featureIds"
-    },
-
-    CLASS_NAME: "OpenLayers.Format.Filter.v1" 
-
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Format/Filter/v1.js
- * @requires OpenLayers/Format/GML/v3.js
- */
-
-/**
- * Class: OpenLayers.Format.Filter.v1_1_0
- * Write ogc:Filter version 1.1.0.
- *
- * Differences from the v1.0.0 parser:
- *  - uses GML v3 instead of GML v2
- *  - reads matchCase attribute on ogc:PropertyIsEqual and
- *        ogc:PropertyIsNotEqual elements.
- *  - writes matchCase attribute from comparison filters of type EQUAL_TO,
- *        NOT_EQUAL_TO and LIKE.
- * 
- * Inherits from: 
- *  - <OpenLayers.Format.GML.v3>
- *  - <OpenLayers.Format.Filter.v1>
- */
-OpenLayers.Format.Filter.v1_1_0 = OpenLayers.Class(
-    OpenLayers.Format.GML.v3, OpenLayers.Format.Filter.v1, {
-    
-    /**
-     * Constant: VERSION
-     * {String} 1.1.0
-     */
-    VERSION: "1.1.0",
-    
-    /**
-     * Property: schemaLocation
-     * {String} http://www.opengis.net/ogc/filter/1.1.0/filter.xsd
-     */
-    schemaLocation: "http://www.opengis.net/ogc/filter/1.1.0/filter.xsd",
-
-    /**
-     * Constructor: OpenLayers.Format.Filter.v1_1_0
-     * Instances of this class are not created directly.  Use the
-     *     <OpenLayers.Format.Filter> constructor instead.
-     *
-     * Parameters:
-     * options - {Object} An optional object whose properties will be set on
-     *     this instance.
-     */
-    initialize: function(options) {
-        OpenLayers.Format.GML.v3.prototype.initialize.apply(
-            this, [options]
-        );
-    },
-
-    /**
-     * Property: readers
-     * Contains public functions, grouped by namespace prefix, that will
-     *     be applied when a namespaced node is found matching the function
-     *     name.  The function will be applied in the scope of this parser
-     *     with two arguments: the node being read and a context object passed
-     *     from the parent.
-     */
-    readers: {
-        "ogc": OpenLayers.Util.applyDefaults({
-            "PropertyIsEqualTo": function(node, obj) {
-                var matchCase = node.getAttribute("matchCase");
-                var filter = new OpenLayers.Filter.Comparison({
-                    type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                    matchCase: !(matchCase === "false" || matchCase === "0")
-                });
-                this.readChildNodes(node, filter);
-                obj.filters.push(filter);
-            },
-            "PropertyIsNotEqualTo": function(node, obj) {
-                var matchCase = node.getAttribute("matchCase");
-                var filter = new OpenLayers.Filter.Comparison({
-                    type: OpenLayers.Filter.Comparison.NOT_EQUAL_TO,
-                    matchCase: !(matchCase === "false" || matchCase === "0")
-                });
-                this.readChildNodes(node, filter);
-                obj.filters.push(filter);
-            },
-            "PropertyIsLike": function(node, obj) {
-                var filter = new OpenLayers.Filter.Comparison({
-                    type: OpenLayers.Filter.Comparison.LIKE
-                });
-                this.readChildNodes(node, filter);
-                var wildCard = node.getAttribute("wildCard");
-                var singleChar = node.getAttribute("singleChar");
-                var esc = node.getAttribute("escapeChar");
-                filter.value2regex(wildCard, singleChar, esc);
-                obj.filters.push(filter);
-            }
-        }, OpenLayers.Format.Filter.v1.prototype.readers["ogc"]),
-        "gml": OpenLayers.Format.GML.v3.prototype.readers["gml"],
-        "feature": OpenLayers.Format.GML.v3.prototype.readers["feature"]        
-    },
-
-    /**
-     * Property: writers
-     * As a compliment to the readers property, this structure contains public
-     *     writing functions grouped by namespace alias and named like the
-     *     node names they produce.
-     */
-    writers: {
-        "ogc": OpenLayers.Util.applyDefaults({
-            "PropertyIsEqualTo": function(filter) {
-                var node = this.createElementNSPlus("ogc:PropertyIsEqualTo", {
-                    attributes: {matchCase: filter.matchCase}
-                });
-                // no ogc:expression handling for PropertyName for now
-                this.writeNode("PropertyName", filter, node);
-                // handle Literals or Functions for now
-                this.writeOgcExpression(filter.value, node);
-                return node;
-            },
-            "PropertyIsNotEqualTo": function(filter) {
-                var node = this.createElementNSPlus("ogc:PropertyIsNotEqualTo", {
-                    attributes: {matchCase: filter.matchCase}
-                });
-                // no ogc:expression handling for PropertyName for now
-                this.writeNode("PropertyName", filter, node);
-                // handle Literals or Functions for now
-                this.writeOgcExpression(filter.value, node);
-                return node;
-            },
-            "PropertyIsLike": function(filter) {
-                var node = this.createElementNSPlus("ogc:PropertyIsLike", {
-                    attributes: {
-                        matchCase: filter.matchCase,
-                        wildCard: "*", singleChar: ".", escapeChar: "!"
-                    }
-                });
-                // no ogc:expression handling for now
-                this.writeNode("PropertyName", filter, node);
-                // convert regex string to ogc string
-                this.writeNode("Literal", filter.regex2value(), node);
-                return node;
-            },
-            "BBOX": function(filter) {
-                var node = this.createElementNSPlus("ogc:BBOX");
-                // PropertyName is optional in 1.1.0
-                filter.property && this.writeNode("PropertyName", filter, node);
-                var box = this.writeNode("gml:Envelope", filter.value);
-                if(filter.projection) {
-                    box.setAttribute("srsName", filter.projection);
-                }
-                node.appendChild(box); 
-                return node;
-            },
-            "SortBy": function(sortProperties) {
-                var node = this.createElementNSPlus("ogc:SortBy");
-                for (var i=0,l=sortProperties.length;i<l;i++) {
-                    this.writeNode(
-                        "ogc:SortProperty",
-                        sortProperties[i],
-                        node
-                    );
-                }
-                return node;
-            }, 
-            "SortProperty": function(sortProperty) {
-                var node = this.createElementNSPlus("ogc:SortProperty");
-                this.writeNode(
-                    "ogc:PropertyName",
-                    sortProperty,
-                    node
-                );
-                this.writeNode(
-                    "ogc:SortOrder",
-                    (sortProperty.order == 'DESC') ? 'DESC' : 'ASC',
-                    node
-                );
-                return node;
-            },
-            "SortOrder": function(value) {
-                var node = this.createElementNSPlus("ogc:SortOrder", {
-                    value: value
-                });
-                return node;
-            }
-        }, OpenLayers.Format.Filter.v1.prototype.writers["ogc"]),
-        "gml": OpenLayers.Format.GML.v3.prototype.writers["gml"],
-        "feature": OpenLayers.Format.GML.v3.prototype.writers["feature"]
-    },
-
-    /**
-     * Method: writeSpatial
-     *
-     * Read a {<OpenLayers.Filter.Spatial>} filter and converts it into XML.
-     *
-     * Parameters:
-     * filter - {<OpenLayers.Filter.Spatial>} The filter.
-     * name - {String} Name of the generated XML element.
-     *
-     * Returns:
-     * {DOMElement} The created XML element.
-     */
-    writeSpatial: function(filter, name) {
-        var node = this.createElementNSPlus("ogc:"+name);
-        this.writeNode("PropertyName", filter, node);
-        if(filter.value instanceof OpenLayers.Filter.Function) {
-            this.writeNode("Function", filter.value, node);
-        } else {
-        var child;
-        if(filter.value instanceof OpenLayers.Geometry) {
-            child = this.writeNode("feature:_geometry", filter.value).firstChild;
-        } else {
-            child = this.writeNode("gml:Envelope", filter.value);
-        }
-        if(filter.projection) {
-            child.setAttribute("srsName", filter.projection);
-        }
-        node.appendChild(child);
-        }
-        return node;
-    },
-
-    CLASS_NAME: "OpenLayers.Format.Filter.v1_1_0" 
-
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Format.js
- */
-
-/**
- * Function: OpenLayers.Format.WFST
- * Used to create a versioned WFS protocol.  Default version is 1.0.0.
- *
- * Returns:
- * {<OpenLayers.Format>} A WFST format of the given version.
- */
-OpenLayers.Format.WFST = function(options) {
-    options = OpenLayers.Util.applyDefaults(
-        options, OpenLayers.Format.WFST.DEFAULTS
-    );
-    var cls = OpenLayers.Format.WFST["v"+options.version.replace(/\./g, "_")];
-    if(!cls) {
-        throw "Unsupported WFST version: " + options.version;
-    }
-    return new cls(options);
-};
-
-/**
- * Constant: OpenLayers.Format.WFST.DEFAULTS
- * {Object} Default properties for the WFST format.
- */
-OpenLayers.Format.WFST.DEFAULTS = {
-    "version": "1.0.0"
-};
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Format/XML.js
- * @requires OpenLayers/Format/WFST.js
- * @requires OpenLayers/Filter/Spatial.js
- * @requires OpenLayers/Filter/FeatureId.js
- */
-
-/**
- * Class: OpenLayers.Format.WFST.v1
- * Superclass for WFST parsers.
- *
- * Inherits from:
- *  - <OpenLayers.Format.XML>
- */
-OpenLayers.Format.WFST.v1 = OpenLayers.Class(OpenLayers.Format.XML, {
-    
-    /**
-     * Property: namespaces
-     * {Object} Mapping of namespace aliases to namespace URIs.
-     */
-    namespaces: {
-        xlink: "http://www.w3.org/1999/xlink",
-        xsi: "http://www.w3.org/2001/XMLSchema-instance",
-        wfs: "http://www.opengis.net/wfs",
-        gml: "http://www.opengis.net/gml",
-        ogc: "http://www.opengis.net/ogc",
-        ows: "http://www.opengis.net/ows"
-    },
-    
     /**
      * Property: defaultPrefix
+     * {String} The default namespace alias for creating element nodes.
      */
-    defaultPrefix: "wfs",
+    defaultPrefix: "wmts",
 
     /**
-     * Property: version
-     * {String} WFS version number.
-     */
-    version: null,
-
-    /**
-     * Property: schemaLocation
-     * {String} Schema location for a particular minor version.
-     */
-    schemaLocations: null,
-    
-    /**
-     * APIProperty: srsName
-     * {String} URI for spatial reference system.
-     */
-    srsName: null,
-
-    /**
-     * APIProperty: extractAttributes
-     * {Boolean} Extract attributes from GML.  Default is true.
-     */
-    extractAttributes: true,
-    
-    /**
-     * APIProperty: xy
-     * {Boolean} Order of the GML coordinate true:(x,y) or false:(y,x)
-     * Changing is not recommended, a new Format should be instantiated.
-     */ 
-    xy: true,
-
-    /**
-     * Property: stateName
-     * {Object} Maps feature states to node names.
-     */
-    stateName: null,
-    
-    /**
-     * Constructor: OpenLayers.Format.WFST.v1
-     * Instances of this class are not created directly.  Use the
-     *     <OpenLayers.Format.WFST.v1_0_0> or <OpenLayers.Format.WFST.v1_1_0>
-     *     constructor instead.
+     * Constructor: OpenLayers.Format.WMTSCapabilities.v1_0_0
+     * Create a new parser for WMTS capabilities version 1.0.0. 
      *
      * Parameters:
      * options - {Object} An optional object whose properties will be set on
      *     this instance.
      */
     initialize: function(options) {
-        // set state name mapping
-        this.stateName = {};
-        this.stateName[OpenLayers.State.INSERT] = "wfs:Insert";
-        this.stateName[OpenLayers.State.UPDATE] = "wfs:Update";
-        this.stateName[OpenLayers.State.DELETE] = "wfs:Delete";
         OpenLayers.Format.XML.prototype.initialize.apply(this, [options]);
-    },
-    
-    /**
-     * Method: getSrsName
-     */
-    getSrsName: function(feature, options) {
-        var srsName = options && options.srsName;
-        if(!srsName) {
-            if(feature && feature.layer) {
-                srsName = feature.layer.projection.getCode();
-            } else {
-                srsName = this.srsName;
-            }
-        }
-        return srsName;
+        this.options = options;
+        var yx = OpenLayers.Util.extend(
+            {}, OpenLayers.Format.WMTSCapabilities.prototype.yx
+        );
+        this.yx = OpenLayers.Util.extend(yx, this.yx);
     },
 
     /**
      * APIMethod: read
-     * Parse the response from a transaction.  Because WFS is split into
-     *     Transaction requests (create, update, and delete) and GetFeature
-     *     requests (read), this method handles parsing of both types of
-     *     responses.
-     *
-     * Parameters:
-     * data - {String | Document} The WFST document to read
-     * options - {Object} Options for the reader
-     *
-     * Valid options properties:
-     * output - {String} either "features" or "object". The default is
-     *     "features", which means that the method will return an array of
-     *     features. If set to "object", an object with a "features" property
-     *     and other properties read by the parser will be returned.
+     * Read capabilities data from a string, and return info about the WMTS.
+     * 
+     * Parameters: 
+     * data - {String} or {DOMElement} data to read/parse.
      *
      * Returns:
-     * {Array | Object} Output depending on the output option.
+     * {Object} Information about the SOS service.
      */
-    read: function(data, options) {
-        options = options || {};
-        OpenLayers.Util.applyDefaults(options, {
-            output: "features"
-        });
-        
-        if(typeof data == "string") { 
+    read: function(data) {
+        if(typeof data == "string") {
             data = OpenLayers.Format.XML.prototype.read.apply(this, [data]);
         }
         if(data && data.nodeType == 9) {
             data = data.documentElement;
         }
-        var obj = {};
-        if(data) {
-            this.readNode(data, obj, true);
-        }
-        if(obj.features && options.output === "features") {
-            obj = obj.features;
-        }
-        return obj;
+        var capabilities = {};
+        this.readNode(data, capabilities);
+        capabilities.version = this.version;
+        return capabilities;
     },
-    
+
     /**
      * Property: readers
      * Contains public functions, grouped by namespace prefix, that will
@@ -46156,481 +41969,157 @@ OpenLayers.Format.WFST.v1 = OpenLayers.Class(OpenLayers.Format.XML, {
      *     with two arguments: the node being read and a context object passed
      *     from the parent.
      */
-    readers: {
-        "wfs": {
-            "FeatureCollection": function(node, obj) {
-                obj.features = [];
+    readers: {        
+        "wmts": {
+            "Capabilities": function(node, obj) {
                 this.readChildNodes(node, obj);
-            }
-        }
-    },
-    
-    /**
-     * Method: write
-     * Given an array of features, write a WFS transaction.  This assumes
-     *     the features have a state property that determines the operation
-     *     type - insert, update, or delete.
-     *
-     * Parameters:
-     * features - {Array(<OpenLayers.Feature.Vector>)} A list of features. See
-     *     below for a more detailed description of the influence of the
-     *     feature's *modified* property.
-     * options - {Object}
-     *
-     * feature.modified rules:
-     * If a feature has a modified property set, the following checks will be
-     * made before a feature's geometry or attribute is included in an Update
-     * transaction:
-     * - *modified* is not set at all: The geometry and all attributes will be
-     *     included.
-     * - *modified.geometry* is set (null or a geometry): The geometry will be
-     *     included. If *modified.attributes* is not set, all attributes will
-     *     be included.
-     * - *modified.attributes* is set: Only the attributes set (i.e. to null or
-     *     a value) in *modified.attributes* will be included. 
-     *     If *modified.geometry* is not set, the geometry will not be included.
-     *
-     * Valid options include:
-     * - *multi* {Boolean} If set to true, geometries will be casted to
-     *   Multi geometries before writing.
-     *
-     * Returns:
-     * {String} A serialized WFS transaction.
-     */
-    write: function(features, options) {
-        var node = this.writeNode("wfs:Transaction", {
-            features:features,
-            options: options
-        });
-        var value = this.schemaLocationAttr();
-        if(value) {
-            this.setAttributeNS(
-                node, this.namespaces["xsi"], "xsi:schemaLocation",  value
-            );
-        }
-        return OpenLayers.Format.XML.prototype.write.apply(this, [node]);
-    },
-    
-    /**
-     * Property: writers
-     * As a compliment to the readers property, this structure contains public
-     *     writing functions grouped by namespace alias and named like the
-     *     node names they produce.
-     */
-    writers: {
-        "wfs": {
-            "GetFeature": function(options) {
-                var node = this.createElementNSPlus("wfs:GetFeature", {
-                    attributes: {
-                        service: "WFS",
-                        version: this.version,
-                        handle: options && options.handle,
-                        outputFormat: options && options.outputFormat,
-                        maxFeatures: options && options.maxFeatures,
-                        "xsi:schemaLocation": this.schemaLocationAttr(options)
-                    }
-                });
-                if (typeof this.featureType == "string") {
-                    this.writeNode("Query", options, node);
+            },
+            "Contents": function(node, obj) {
+                obj.contents = {};                
+                obj.contents.layers = [];
+                obj.contents.tileMatrixSets = {};                
+                this.readChildNodes(node, obj.contents);
+            },
+            "Layer": function(node, obj) {
+                var layer = {
+                    styles: [],
+                    formats: [],
+                    dimensions: [],
+                    tileMatrixSetLinks: []
+                };
+                layer.layers = [];
+                this.readChildNodes(node, layer);
+                obj.layers.push(layer);
+            },
+            "Style": function(node, obj) {
+                var style = {};
+                style.isDefault = (node.getAttribute("isDefault") === "true");
+                this.readChildNodes(node, style);
+                obj.styles.push(style);
+            },
+            "Format": function(node, obj) {
+                obj.formats.push(this.getChildValue(node)); 
+            },
+            "TileMatrixSetLink": function(node, obj) {
+                var tileMatrixSetLink = {};
+                this.readChildNodes(node, tileMatrixSetLink);
+                obj.tileMatrixSetLinks.push(tileMatrixSetLink);
+            },
+            "TileMatrixSet": function(node, obj) {
+                // node could be child of wmts:Contents or wmts:TileMatrixSetLink
+                // duck type wmts:Contents by looking for layers
+                if (obj.layers) {
+                    // TileMatrixSet as object type in schema
+                    var tileMatrixSet = {
+                        matrixIds: []
+                    };
+                    this.readChildNodes(node, tileMatrixSet);
+                    obj.tileMatrixSets[tileMatrixSet.identifier] = tileMatrixSet;
                 } else {
-                    for (var i=0,len = this.featureType.length; i<len; i++) { 
-                        options.featureType = this.featureType[i]; 
-                        this.writeNode("Query", options, node); 
-                    } 
+                    // TileMatrixSet as string type in schema
+                    obj.tileMatrixSet = this.getChildValue(node);
                 }
-                return node;
             },
-            "Transaction": function(obj) {
-                obj = obj || {};
-                var options = obj.options || {};
-                var node = this.createElementNSPlus("wfs:Transaction", {
-                    attributes: {
-                        service: "WFS",
-                        version: this.version,
-                        handle: options.handle
-                    }
-                });
-                var i, len;
-                var features = obj.features;
-                if(features) {
-                    // temporarily re-assigning geometry types
-                    if (options.multi === true) {
-                        OpenLayers.Util.extend(this.geometryTypes, {
-                            "OpenLayers.Geometry.Point": "MultiPoint",
-                            "OpenLayers.Geometry.LineString": (this.multiCurve === true) ? "MultiCurve": "MultiLineString",
-                            "OpenLayers.Geometry.Polygon": (this.multiSurface === true) ? "MultiSurface" : "MultiPolygon"
-                        });
-                    }
-                    var name, feature;
-                    for(i=0, len=features.length; i<len; ++i) {
-                        feature = features[i];
-                        name = this.stateName[feature.state];
-                        if(name) {
-                            this.writeNode(name, {
-                                feature: feature, 
-                                options: options
-                            }, node);
-                        }
-                    }
-                    // switch back to original geometry types assignment
-                    if (options.multi === true) {
-                        this.setGeometryTypes();
-                    }
+            "TileMatrix": function(node, obj) {
+                var tileMatrix = {
+                    supportedCRS: obj.supportedCRS
+                };
+                this.readChildNodes(node, tileMatrix);
+                obj.matrixIds.push(tileMatrix);
+            },
+            "ScaleDenominator": function(node, obj) {
+                obj.scaleDenominator = parseFloat(this.getChildValue(node)); 
+            },
+            "TopLeftCorner": function(node, obj) {                
+                var topLeftCorner = this.getChildValue(node);
+                var coords = topLeftCorner.split(" ");
+                // decide on axis order for the given CRS
+                var yx;
+                if (obj.supportedCRS) {
+                    // extract out version from URN
+                    var crs = obj.supportedCRS.replace(
+                        /urn:ogc:def:crs:(\w+):.+:(\w+)$/, 
+                        "urn:ogc:def:crs:$1::$2"
+                    );
+                    yx = !!this.yx[crs];
                 }
-                if (options.nativeElements) {
-                    for (i=0, len=options.nativeElements.length; i<len; ++i) {
-                        this.writeNode("wfs:Native", 
-                            options.nativeElements[i], node);
-                    }
-                }
-                return node;
-            },
-            "Native": function(nativeElement) {
-                var node = this.createElementNSPlus("wfs:Native", {
-                    attributes: {
-                        vendorId: nativeElement.vendorId,
-                        safeToIgnore: nativeElement.safeToIgnore
-                    },
-                    value: nativeElement.value
-                });
-                return node;
-            },
-            "Insert": function(obj) {
-                var feature = obj.feature;
-                var options = obj.options;
-                var node = this.createElementNSPlus("wfs:Insert", {
-                    attributes: {
-                        handle: options && options.handle
-                    }
-                });
-                this.srsName = this.getSrsName(feature);
-                this.writeNode("feature:_typeName", feature, node);
-                return node;
-            },
-            "Update": function(obj) {
-                var feature = obj.feature;
-                var options = obj.options;
-                var node = this.createElementNSPlus("wfs:Update", {
-                    attributes: {
-                        handle: options && options.handle,
-                        typeName: (this.featureNS ? this.featurePrefix + ":" : "") +
-                            this.featureType
-                    }
-                });
-                if(this.featureNS) {
-                    node.setAttribute("xmlns:" + this.featurePrefix, this.featureNS);
-                }
-                
-                // add in geometry
-                var modified = feature.modified;
-                if (this.geometryName !== null && (!modified || modified.geometry !== undefined)) {
-                    this.srsName = this.getSrsName(feature);
-                    this.writeNode(
-                        "Property", {name: this.geometryName, value: feature.geometry}, node
+                if (yx) {
+                    obj.topLeftCorner = new OpenLayers.LonLat(
+                        coords[1], coords[0]
+                    );
+                } else {
+                    obj.topLeftCorner = new OpenLayers.LonLat(
+                        coords[0], coords[1]
                     );
                 }
-        
-                // add in attributes
-                for(var key in feature.attributes) {
-                    if(feature.attributes[key] !== undefined &&
-                                (!modified || !modified.attributes ||
-                                (modified.attributes && modified.attributes[key] !== undefined))) {
-                        this.writeNode(
-                            "Property", {name: key, value: feature.attributes[key]}, node
-                        );
-                    }
-                }
-                
-                // add feature id filter
-                this.writeNode("ogc:Filter", new OpenLayers.Filter.FeatureId({
-                    fids: [feature.fid]
-                }), node);
-        
-                return node;
             },
-            "Property": function(obj) {
-                var node = this.createElementNSPlus("wfs:Property");
-                this.writeNode("Name", obj.name, node);
-                if(obj.value !== null) {
-                    this.writeNode("Value", obj.value, node);
-                }
-                return node;
+            "TileWidth": function(node, obj) {
+                obj.tileWidth = parseInt(this.getChildValue(node)); 
             },
-            "Name": function(name) {
-                return this.createElementNSPlus("wfs:Name", {value: name});
+            "TileHeight": function(node, obj) {
+                obj.tileHeight = parseInt(this.getChildValue(node)); 
             },
-            "Value": function(obj) {
-                var node;
-                if(obj instanceof OpenLayers.Geometry) {
-                    node = this.createElementNSPlus("wfs:Value");
-                    var geom = this.writeNode("feature:_geometry", obj).firstChild;
-                    node.appendChild(geom);
-                } else {
-                    node = this.createElementNSPlus("wfs:Value", {value: obj});                
-                }
-                return node;
+            "MatrixWidth": function(node, obj) {
+                obj.matrixWidth = parseInt(this.getChildValue(node)); 
             },
-            "Delete": function(obj) {
-                var feature = obj.feature;
-                var options = obj.options;
-                var node = this.createElementNSPlus("wfs:Delete", {
-                    attributes: {
-                        handle: options && options.handle,
-                        typeName: (this.featureNS ? this.featurePrefix + ":" : "") +
-                            this.featureType
-                    }
-                });
-                if(this.featureNS) {
-                    node.setAttribute("xmlns:" + this.featurePrefix, this.featureNS);
+            "MatrixHeight": function(node, obj) {
+                obj.matrixHeight = parseInt(this.getChildValue(node)); 
+            },
+            "ResourceURL": function(node, obj) {
+                obj.resourceUrl = obj.resourceUrl || {};
+                var resourceType = node.getAttribute("resourceType");
+                if (!obj.resourceUrls) {
+                    obj.resourceUrls = [];
                 }
-                this.writeNode("ogc:Filter", new OpenLayers.Filter.FeatureId({
-                    fids: [feature.fid]
-                }), node);
-                return node;
+                var resourceUrl = obj.resourceUrl[resourceType] = {
+                    format: node.getAttribute("format"),
+                    template: node.getAttribute("template"),
+                    resourceType: resourceType
+                };
+                obj.resourceUrls.push(resourceUrl);
+            },
+            // not used for now, can be added in the future though
+            /*"Themes": function(node, obj) {
+                obj.themes = [];
+                this.readChildNodes(node, obj.themes);
+            },
+            "Theme": function(node, obj) {
+                var theme = {};                
+                this.readChildNodes(node, theme);
+                obj.push(theme);
+            },*/
+            "WSDL": function(node, obj) {
+                obj.wsdl = {};
+                obj.wsdl.href = node.getAttribute("xlink:href");
+                // TODO: other attributes of <WSDL> element                
+            },
+            "ServiceMetadataURL": function(node, obj) {
+                obj.serviceMetadataUrl = {};
+                obj.serviceMetadataUrl.href = node.getAttribute("xlink:href");
+                // TODO: other attributes of <ServiceMetadataURL> element                
+            },
+            "LegendURL": function(node, obj) {
+                obj.legend = {};
+                obj.legend.href = node.getAttribute("xlink:href");
+                obj.legend.format = node.getAttribute("format");
+            },
+            "Dimension": function(node, obj) {
+                var dimension = {values: []};
+                this.readChildNodes(node, dimension);
+                obj.dimensions.push(dimension);
+            },
+            "Default": function(node, obj) {
+                obj["default"] = this.getChildValue(node);
+            },
+            "Value": function(node, obj) {
+                obj.values.push(this.getChildValue(node));
             }
-        }
-    },
-
-    /**
-     * Method: schemaLocationAttr
-     * Generate the xsi:schemaLocation attribute value.
-     *
-     * Returns:
-     * {String} The xsi:schemaLocation attribute or undefined if none.
-     */
-    schemaLocationAttr: function(options) {
-        options = OpenLayers.Util.extend({
-            featurePrefix: this.featurePrefix,
-            schema: this.schema
-        }, options);
-        var schemaLocations = OpenLayers.Util.extend({}, this.schemaLocations);
-        if(options.schema) {
-            schemaLocations[options.featurePrefix] = options.schema;
-        }
-        var parts = [];
-        var uri;
-        for(var key in schemaLocations) {
-            uri = this.namespaces[key];
-            if(uri) {
-                parts.push(uri + " " + schemaLocations[key]);
-            }
-        }
-        var value = parts.join(" ") || undefined;
-        return value;
-    },
+        },
+        "ows": OpenLayers.Format.OWSCommon.v1_1_0.prototype.readers["ows"]
+    },    
     
-    /**
-     * Method: setFilterProperty
-     * Set the property of each spatial filter.
-     *
-     * Parameters:
-     * filter - {<OpenLayers.Filter>}
-     */
-    setFilterProperty: function(filter) {
-        if(filter.filters) {
-            for(var i=0, len=filter.filters.length; i<len; ++i) {
-                OpenLayers.Format.WFST.v1.prototype.setFilterProperty.call(this, filter.filters[i]);
-            }
-        } else {
-            if(filter instanceof OpenLayers.Filter.Spatial && !filter.property) {
-                // got a spatial filter without property, so set it
-                filter.property = this.geometryName;
-            }
-        }
-    },
+    CLASS_NAME: "OpenLayers.Format.WMTSCapabilities.v1_0_0" 
 
-    CLASS_NAME: "OpenLayers.Format.WFST.v1" 
-
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Format/WFST/v1.js
- * @requires OpenLayers/Format/Filter/v1_1_0.js
- * @requires OpenLayers/Format/OWSCommon/v1_0_0.js
- */
-
-/**
- * Class: OpenLayers.Format.WFST.v1_1_0
- * A format for creating WFS v1.1.0 transactions.  Create a new instance with the
- *     <OpenLayers.Format.WFST.v1_1_0> constructor.
- *
- * Inherits from:
- *  - <OpenLayers.Format.Filter.v1_1_0>
- *  - <OpenLayers.Format.WFST.v1>
- */
-OpenLayers.Format.WFST.v1_1_0 = OpenLayers.Class(
-    OpenLayers.Format.Filter.v1_1_0, OpenLayers.Format.WFST.v1, {
-    
-    /**
-     * Property: version
-     * {String} WFS version number.
-     */
-    version: "1.1.0",
-    
-    /**
-     * Property: schemaLocations
-     * {Object} Properties are namespace aliases, values are schema locations.
-     */
-    schemaLocations: {
-        "wfs": "http://schemas.opengis.net/wfs/1.1.0/wfs.xsd"
-    },
-    
-    /**
-     * Constructor: OpenLayers.Format.WFST.v1_1_0
-     * A class for parsing and generating WFS v1.1.0 transactions.
-     *
-     * To read additional information like hit count (numberOfFeatures) from
-     * the  FeatureCollection, call the <OpenLayers.Format.WFST.v1.read> method
-     * with {output: "object"} as 2nd argument. Note that it is possible to
-     * just request the hit count from a WFS 1.1.0 server with the
-     * resultType="hits" request parameter.
-     *
-     * Parameters:
-     * options - {Object} Optional object whose properties will be set on the
-     *     instance.
-     *
-     * Valid options properties:
-     * featureType - {String} Local (without prefix) feature typeName (required).
-     * featureNS - {String} Feature namespace (optional).
-     * featurePrefix - {String} Feature namespace alias (optional - only used
-     *     if featureNS is provided).  Default is 'feature'.
-     * geometryName - {String} Name of geometry attribute.  Default is 'the_geom'.
-     */
-    initialize: function(options) {
-        OpenLayers.Format.Filter.v1_1_0.prototype.initialize.apply(this, [options]);
-        OpenLayers.Format.WFST.v1.prototype.initialize.apply(this, [options]);
-    },
-    
-    /**
-     * Method: readNode
-     * Shorthand for applying one of the named readers given the node
-     *     namespace and local name.  Readers take two args (node, obj) and
-     *     generally extend or modify the second.
-     *
-     * Parameters:
-     * node - {DOMElement} The node to be read (required).
-     * obj - {Object} The object to be modified (optional).
-     * first - {Boolean} Should be set to true for the first node read. This
-     *     is usually the readNode call in the read method. Without this being
-     *     set, auto-configured properties will stick on subsequent reads.
-     *
-     * Returns:
-     * {Object} The input object, modified (or a new one if none was provided).
-     */
-    readNode: function(node, obj, first) {
-        // Not the superclass, only the mixin classes inherit from
-        // Format.GML.v3. We need this because we don't want to get readNode
-        // from the superclass's superclass, which is OpenLayers.Format.XML.
-        return OpenLayers.Format.GML.v3.prototype.readNode.apply(this, arguments);
-    },
-    
-    /**
-     * Property: readers
-     * Contains public functions, grouped by namespace prefix, that will
-     *     be applied when a namespaced node is found matching the function
-     *     name.  The function will be applied in the scope of this parser
-     *     with two arguments: the node being read and a context object passed
-     *     from the parent.
-     */
-    readers: {
-        "wfs": OpenLayers.Util.applyDefaults({
-            "FeatureCollection": function(node, obj) {
-                obj.numberOfFeatures = parseInt(node.getAttribute(
-                    "numberOfFeatures"));
-                OpenLayers.Format.WFST.v1.prototype.readers["wfs"]["FeatureCollection"].apply(
-                    this, arguments);
-            },
-            "TransactionResponse": function(node, obj) {
-                obj.insertIds = [];
-                obj.success = false;
-                this.readChildNodes(node, obj);
-            },
-            "TransactionSummary": function(node, obj) {
-                // this is a limited test of success
-                obj.success = true;
-            },
-            "InsertResults": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "Feature": function(node, container) {
-                var obj = {fids: []};
-                this.readChildNodes(node, obj);
-                container.insertIds.push(obj.fids[0]);
-            }
-        }, OpenLayers.Format.WFST.v1.prototype.readers["wfs"]),
-        "gml": OpenLayers.Format.GML.v3.prototype.readers["gml"],
-        "feature": OpenLayers.Format.GML.v3.prototype.readers["feature"],
-        "ogc": OpenLayers.Format.Filter.v1_1_0.prototype.readers["ogc"],
-        "ows": OpenLayers.Format.OWSCommon.v1_0_0.prototype.readers["ows"]
-    },
-
-    /**
-     * Property: writers
-     * As a compliment to the readers property, this structure contains public
-     *     writing functions grouped by namespace alias and named like the
-     *     node names they produce.
-     */
-    writers: {
-        "wfs": OpenLayers.Util.applyDefaults({
-            "GetFeature": function(options) {
-                var node = OpenLayers.Format.WFST.v1.prototype.writers["wfs"]["GetFeature"].apply(this, arguments);
-                options && this.setAttributes(node, {
-                    resultType: options.resultType,
-                    startIndex: options.startIndex,
-                    count: options.count
-                });
-                return node;
-            },
-            "Query": function(options) {
-                options = OpenLayers.Util.extend({
-                    featureNS: this.featureNS,
-                    featurePrefix: this.featurePrefix,
-                    featureType: this.featureType,
-                    srsName: this.srsName
-                }, options);
-                var prefix = options.featurePrefix;
-                var node = this.createElementNSPlus("wfs:Query", {
-                    attributes: {
-                        typeName: (prefix ? prefix + ":" : "") +
-                            options.featureType,
-                        srsName: options.srsName
-                    }
-                });
-                if(options.featureNS) {
-                    node.setAttribute("xmlns:" + prefix, options.featureNS);
-                }
-                if(options.propertyNames) {
-                    for(var i=0,len = options.propertyNames.length; i<len; i++) {
-                        this.writeNode(
-                            "wfs:PropertyName", 
-                            {property: options.propertyNames[i]},
-                            node
-                        );
-                    }
-                }
-                if(options.filter) {
-                    OpenLayers.Format.WFST.v1_1_0.prototype.setFilterProperty.call(this, options.filter);
-                    this.writeNode("ogc:Filter", options.filter, node);
-                }
-                return node;
-            },
-            "PropertyName": function(obj) {
-                return this.createElementNSPlus("wfs:PropertyName", {
-                    value: obj.property
-                });
-            }            
-        }, OpenLayers.Format.WFST.v1.prototype.writers["wfs"]),
-        "gml": OpenLayers.Format.GML.v3.prototype.writers["gml"],
-        "feature": OpenLayers.Format.GML.v3.prototype.writers["feature"],
-        "ogc": OpenLayers.Format.Filter.v1_1_0.prototype.writers["ogc"]
-    },
-
-    CLASS_NAME: "OpenLayers.Format.WFST.v1_1_0" 
 });
 
 /* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for

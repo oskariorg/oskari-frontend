@@ -32,7 +32,7 @@
         },
         {
           "type" : "text/javascript",
-          "src" : "../../../../libraries/OpenLayers/OpenLayers.2.13.1-full-map.js"
+          "src" : "../../../../libraries/OpenLayers/OpenLayers.2_13_1-full-map.js"
         }
       ]
     },
