@@ -2,7 +2,6 @@
   "name": "tools",
   "version": "0.0.0",
   "dependencies": {
-    "openlayers": "http://openlayers.org/download/OpenLayers-2.12.zip",
-    "openlayers-2.13.1": "http://openlayers.org/download/OpenLayers-2.13.1.zip"
+    "openlayers": "http://openlayers.org/download/OpenLayers-2.12.zip"
   }
 }

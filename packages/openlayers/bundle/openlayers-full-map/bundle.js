@@ -41,7 +41,7 @@
         },*/
         {
           "type" : "text/javascript",
-          "src" : "../../../../libraries/OpenLayers/OpenLayers.2_13_1-full-map.js"
+          "src" : "../../../../libraries/OpenLayers/OpenLayers.full-map.js"
         }
       ]
     },

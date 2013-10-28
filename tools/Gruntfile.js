@@ -333,7 +333,7 @@ module.exports = function (grunt) {
             for (i in files) {
                 if (files.hasOwnProperty(i)) {
                     file = files[i];
-                    if (file.indexOf('.cfg') !== -1 && file.indexOf('2_13_1') !== -1) {
+                    if (file.indexOf('.cfg') !== -1) {
                         packages.push(file);
                     }
                 }
