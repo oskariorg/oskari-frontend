@@ -2,10 +2,10 @@
 (function() {
 	
   /**
-   * @class Oskari.openlayers.bundle.openlayers-full-map.OpenLayersBundle
+   * @class Oskari.openlayers.bundle.openlayers-2_13_1-full-map.OpenLayersBundle
    *
    */
-  Oskari.clazz.define("Oskari.openlayers.bundle.openlayers-full-map.OpenLayersBundle", function() {
+  Oskari.clazz.define("Oskari.openlayers.bundle.openlayers-2_13_1-full-map.OpenLayersBundle", function() {
 
   }, {
     "create" : function() {
@@ -30,18 +30,9 @@
           "type" : "text/javascript",
           "src" : "../../../../libraries/proj4js-1.0.1/proj4js-compressed.js"
         },
-        /*
-        {
-            "type" : "text/javascript",
-            "src" : "defs.js"
-        },*/
-        /*{
-          "type" : "text/javascript",
-          "src" : "../../../../libraries/proj4js-1.0.1/defs/EPSG3067.js"
-        },*/
         {
           "type" : "text/javascript",
-          "src" : "../../../../libraries/OpenLayers/OpenLayers.full-map.js"
+          "src" : "../../../../libraries/OpenLayers/OpenLayers.2.13.1-full-map.js"
         }
       ]
     },
@@ -57,15 +48,15 @@
             "End" : "2011"
           },
           "Copyleft" : {
-              "License" : [{
-                "Part" : "OpenLayers",
-                "License-Name" : "BSD",
-                "License-Online-Resource" : "http://svn.openlayers.org/trunk/openlayers/license.txt"
-              }, {
-                "Part" : "Proj4JS",
-                "License-Name" : "LGPL/BSD",
-                "License-Online-Resource" : ""
-              }]
+            "License" : [{
+              "Part" : "OpenLayers",
+              "License-Name" : "BSD",
+              "License-Online-Resource" : "http://svn.openlayers.org/trunk/openlayers/license.txt"
+            }, {
+              "Part" : "Proj4JS",
+              "License-Name" : "LGPL/BSD",
+              "License-Online-Resource" : ""
+            }]
           }
         }],
         "Bundle-Name-Locale" : {
@@ -87,7 +78,7 @@
 	 * Install this bundle by instantating the Bundle Class
 	 * 
 	 */
-	Oskari.bundle_manager.installBundleClass("openlayers-full-map",
-			"Oskari.openlayers.bundle.openlayers-full-map.OpenLayersBundle");
+	Oskari.bundle_manager.installBundleClass("openlayers-2_13_1-full-map",
+			"Oskari.openlayers.bundle.openlayers-2_13_1-full-map.OpenLayersBundle");
 
 })();

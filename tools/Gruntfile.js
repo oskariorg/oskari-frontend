@@ -301,6 +301,8 @@ module.exports = function (grunt) {
             path = require('path'),
             wrench = require('wrench'),
             sourceDirectory,
+            sourceDirectory_2_13_1,
+            isVersion2_13_1,
             //outputFilenamePrefix = "OpenLayers.",
             //outputFilenamePostfix = ".min.js",
             cfg = null,
@@ -345,12 +347,19 @@ module.exports = function (grunt) {
 
         console.log('Running openlayers packager...');
         sourceDirectory = path.join(process.cwd(), "/components/openlayers/lib/");
+        sourceDirectory_2_13_1 = path.join(process.cwd(), "/components/openlayers-2.13.1/lib/");
 
         // read cfg files
         for (i = 0, ilen = packages.length; i < ilen; i += 1) {
             cfgFile = fs.readFileSync(packages[i], 'utf8').split("\r\n");
             profile = packages[i];
             profile = profile.substring(profile.lastIndexOf("/") + 1, profile.indexOf('.cfg'));
+            if (profle.indexOf('2.13.1') !== -1) {
+                isVersion2_13_1 = true;
+            } else {
+                isVersion2_13_1 = false;
+            }
+
             cfg = {};
             for (j = 0, jlen = cfgFile.length; j < jlen; j += 1) {
                 line = cfgFile[j];
@@ -371,7 +380,11 @@ module.exports = function (grunt) {
                             cfg[linegroup] = [];
                         }
                         // add line as absolute path to array
-                        line = path.join(sourceDirectory, line);
+                        if (isVersion2_13_1) {
+                            line = path.join(sourceDirectory_2_13_1, line);
+                        } else {
+                            line = path.join(sourceDirectory, line);
+                        }
                         cfg[linegroup].push(line);
                     }
                 }
@@ -383,11 +396,19 @@ module.exports = function (grunt) {
                 cfg.include = [];
 
                 // read all files in source folder
-                files = wrench.readdirSyncRecursive(sourceDirectory);
+                if (isVersion2_13_1) {
+                    files = wrench.readdirSyncRecursive(sourceDirectory_2_13_1);    
+                } else {
+                    files = wrench.readdirSyncRecursive(sourceDirectory);
+                }
 
                 // loop files to exclude the ones that are not supposed to be included
                 for (j = 0, jlen = files.length; j < jlen; j += 1) {
-                    file = path.join(sourceDirectory, files[j]);
+                    if (isVersion2_13_1) {
+                        file = path.join(sourceDirectory_2_13_1, files[j]);
+                    } else {
+                        file = path.join(sourceDirectory, files[j]);
+                    }
                     include = true;
                     for (k = 0, klen = exclude.length; k < klen; k += 1) {
                         // check the excluded path is not include
@@ -411,7 +432,7 @@ module.exports = function (grunt) {
 
             // set configuration to concat
             grunt.config.set("concat." + profile + ".src", cfg.include);
-            grunt.config.set("concat." + profile + ".dest", "../libraries/OpenLayers/OpenLayers-2.13.1." + profile + ".js");
+            grunt.config.set("concat." + profile + ".dest", "../libraries/OpenLayers/OpenLayers." + profile + ".js");
         }
 
         // concatenate the files
