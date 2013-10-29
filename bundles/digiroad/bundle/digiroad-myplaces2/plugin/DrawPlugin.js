@@ -231,11 +231,20 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
         
         // doesn't really need to be in array, but lets keep it for future development
         this.modifyControls = {
-        	select : new OpenLayers.Control.SelectFeature(me.drawLayer),
-        	modify : new OpenLayers.Control.ModifyFeature(me.drawLayer, {
+            modify : new OpenLayers.Control.ModifyFeature(me.drawLayer, {
                 standalone: true
             })
         };
+        this.modifyControls.select = new OpenLayers.Control.SelectFeature(me.drawLayer, {
+            geometryTypes: this.modifyControls.modify.geometryTypes,
+            clickout: this.modifyControls.modify.clickout,
+            toggle: this.modifyControls.modify.toggle,
+            onBeforeSelect: this.modifyControls.modify.beforeSelectFeature,
+            onSelect: this.modifyControls.modify.selectFeature,
+            onUnselect: this.modifyControls.modify.unselectFeature,
+            scope: this.modifyControls.modify
+        });
+
         this._map.addLayers([me.drawLayer, this.snappingGridLayer]);
         for(var key in this.drawControls) {
             this._map.addControl(this.drawControls[key]);

@@ -238,7 +238,15 @@ function(locale, conf) {
             autoActivate:true,
             standalone:true
             });
-        this.selectControl = new OpenLayers.Control.SelectFeature(me._drawLayer);
+        this.selectControl = new OpenLayers.Control.SelectFeature(me._drawLayer, {
+            geometryTypes: this.modifyControl.geometryTypes,
+            clickout: this.modifyControl.clickout,
+            toggle: this.modifyControl.toggle,
+            onBeforeSelect: this.modifyControl.beforeSelectFeature,
+            onSelect: this.modifyControl.selectFeature,
+            onUnselect: this.modifyControl.unselectFeature,
+            scope: this.modifyControl
+        });
         
         var addGeometryToolsContainer = me.templateAddGeometryTools.clone();
         var addGeometryContainer = me.templateAddGeometry.clone();
