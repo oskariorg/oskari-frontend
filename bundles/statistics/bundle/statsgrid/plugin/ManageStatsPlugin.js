@@ -319,11 +319,12 @@ function(config, locale) {
             name : this._locale['sotka'].municipality,
             field : "municipality",
             sortable : true
-        }, {
+        }
+        /*, {
             id : "code",
             name : this._locale['sotka'].code,
             field : "code"
-        }];
+        }*/];
         // options
         var options = {
             enableCellNavigation : true,
