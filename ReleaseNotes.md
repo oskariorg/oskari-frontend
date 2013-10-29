@@ -6,6 +6,10 @@
 
 Environment specific localized values (URLs) have been move to bundle configuration. If something is broken, check the new configurations to fix it.
 
+### Sandbox/map layer service
+
+Added new method to create maplayer domain objects based on type: createLayerTypeInstance(type). This is a preferred way to create layer domain classes instead of Oskari.clazz.create() if you need to create one manually.
+
 ### mapmodule-plugin/layers/backgroundlayerselector
 
 New plugin for selecting a background layer from a preset list. See the bundle documentation for more information.
