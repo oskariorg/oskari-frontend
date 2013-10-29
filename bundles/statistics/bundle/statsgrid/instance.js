@@ -147,7 +147,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
             if(this.conf && this.conf.defaultLayerId) {
                 var layer = service.findMapLayer(this.conf.defaultLayerId);
-                return (layer != null && layer.isLayerOfType('STATS');
+                return (layer != null && layer.isLayerOfType('STATS'));
             }
             var layers = service.getLayersOfType('STATS');
             if(layers && layers.length > 0) {
