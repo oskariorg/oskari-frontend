@@ -1,4 +1,9 @@
 # Release Notes
+## 1.16
+
+### Statsgrid
+
+Municipality code was removed from the columns.
 
 ## 1.15
 
