@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
     deactivateSnapping: function() {
         this.snappingLayerStrategy.deactivate();
         if(this.snappingGridLayer) {
-            this.snappingGridLayer.removeAllFeatures();
+            this.snappingGridLayer.destroyFeatures();
         }
     },
     /**
@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
         }
         else {
 	        // remove possible old drawing
-	        this.drawLayer.removeAllFeatures();
+	        this.drawLayer.destroyFeatures();
         	
 	        if(params.geometry) {
 	            // sent existing geometry == edit mode
@@ -120,7 +120,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
         // disable all draw controls
         this.toggleControl();
         // clear drawing
-        this.drawLayer.removeAllFeatures();
+        this.drawLayer.destroyFeatures();
         this.deactivateSnapping();
     },
     

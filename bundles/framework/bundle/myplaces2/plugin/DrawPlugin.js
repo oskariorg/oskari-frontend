@@ -48,8 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
         }
         else {
 	        // remove possible old drawing
-	        this.drawLayer.removeAllFeatures();
-        	
+	        this.drawLayer.destroyFeatures();
 	        if(params.geometry) {
 	            // sent existing geometry == edit mode
 	            this.editMode = true;
@@ -76,7 +75,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
         // disable all draw controls
         this.toggleControl();
         // clear drawing
-        this.drawLayer.removeAllFeatures();
+        this.drawLayer.destroyFeatures();
     },
     
     forceFinishDraw : function() {
@@ -232,9 +231,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
             })
         };
         this.modifyControls.select = new OpenLayers.Control.SelectFeature(me.drawLayer, {
-            geometryTypes: this.modifyControls.modify.geometryTypes,
-            clickout: this.modifyControls.modify.clickout,
-            toggle: this.modifyControls.modify.toggle,
             onBeforeSelect: this.modifyControls.modify.beforeSelectFeature,
             onSelect: this.modifyControls.modify.selectFeature,
             onUnselect: this.modifyControls.modify.unselectFeature,

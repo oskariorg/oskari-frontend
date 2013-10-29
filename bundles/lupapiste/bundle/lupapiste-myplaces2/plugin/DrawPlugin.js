@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
         }
         else {
 	        // remove possible old drawing
-	        this.drawLayer.removeAllFeatures();
+	        this.drawLayer.destroyFeatures();
         	
 	        if(params.geometry) {
 	            // sent existing geometry == edit mode
@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
         // disable all draw controls
         this.toggleControl();
         // clear drawing
-        this.drawLayer.removeAllFeatures();
+        this.drawLayer.destroyFeatures();
     },
     
     forceFinishDraw : function() {

@@ -108,7 +108,7 @@ function(locale, conf) {
     		me._show=false;
     	}
     	if(removeAllFeatures!=null && removeAllFeatures==true){
-			me._drawLayer.removeAllFeatures();
+			me._drawLayer.destroyFeatures();
 		}
     },
     /**
