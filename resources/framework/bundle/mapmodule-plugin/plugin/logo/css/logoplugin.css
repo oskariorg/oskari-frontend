@@ -20,6 +20,12 @@
   .logoplugin .terms {
     display: inline-block;
     margin: 5px; }
+  .logoplugin .data-sources {
+    display: inline-block;
+    margin: 5px;
+    text-decoration: underline;
+    cursor: pointer;
+  }
   .logoplugin.bottom {
     bottom: 0;
     top: auto; }
@@ -29,6 +35,16 @@
   .logoplugin.right {
     left: auto;
     right: 0; }
+
+.data-sources-dialog {
+  max-width: 400px;
+}
+.data-sources-dialog .layers h4, .data-sources-dialog .indicators h4 {
+  padding-bottom: 5px;
+}
+.data-sources-dialog .indicators {
+  margin-top: 10px;
+}
 
 /* Force measurement bar up a notch so it isn't occluded by the logo */
 #mapdiv .olControlScaleLine {

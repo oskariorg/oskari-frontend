@@ -27,6 +27,8 @@ function(config, locale) {
     this.statsService = null;
     // indicators (meta data)
     this.indicators = [];
+    // indicators meta for data sources
+    this.indicatorsMeta = {};
     this.selectedMunicipalities = {};
 //    this.conf = config || {};
     defaults = {"statistics" : [
@@ -769,7 +771,9 @@ function(config, locale) {
             gender = gender != null ? gender: 'total';
             // me.getSotkaIndicatorData(container,indicator, gender, year);
             var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
-            me.getSotkaIndicatorData(container, indicator.id, gender, year);
+            me.getSotkaIndicatorData(container, indicator.id, gender, year, function() {
+                me.addIndicatorMeta(indicator);
+            });
         });
 
         // click listener
@@ -838,8 +842,9 @@ function(config, locale) {
      * @param indicatorId id
      * @param gender (male / female / total)
      * @param year selected year
+     * @param {Function} cb optional callback which gets executed after a successful fetch
      */
-    getSotkaIndicatorData : function(container, indicatorId, gender, year) {
+    getSotkaIndicatorData : function(container, indicatorId, gender, year, cb) {
         var me = this;
         var gndrs = gender != null ? gender : 'total';
         // ajax call
@@ -849,6 +854,9 @@ function(config, locale) {
             // success callback
             function(data) {
                 if (data) {
+                    if (cb && typeof cb === 'function') {
+                        cb();
+                    }
                     // Add indicator to the state.
                     if (me._state.indicators == null) {
                         me._state.indicators = [];
@@ -1053,6 +1061,9 @@ function(config, locale) {
             }
         }
 
+        // remove from metadata hash as well
+        this.removeIndicatorMeta(indicatorId);
+
         this.updateDemographicsButtons(indicatorId, gender, year);
 
         if (columnId === this._state.currentColumn) {
@@ -1205,6 +1216,8 @@ function(config, locale) {
                     fetchedIndicators++;
 
                     if (data) {
+                        me.addIndicatorMeta(data);
+
                         for(var j = 0; j < indicators.length; j++) {
                             if(indicators[j].indicator == data.id) {
                                 me.indicators[j] = data;
@@ -1989,6 +2002,48 @@ function(config, locale) {
     toggleSelectMunicipalitiesMode : function() {
         this.selectMunicipalitiesMode = !this.selectMunicipalitiesMode;
         return this.selectMunicipalitiesMode;
+    },
+
+    /**
+     * Adds indicator title and organization info to the metadata hash
+     * for data sources listing.
+     *
+     * @method addIndicatorMeta
+     * @param {Object} indicator
+     */
+    addIndicatorMeta: function(indicator) {
+        // push the indicator title and organization to the meta data hash
+        var me = this,
+            lang = Oskari.getLang(),
+            indiMeta = me.indicatorsMeta[indicator.id];
+
+        if (indiMeta) {
+            indiMeta.count += 1
+        } else {
+            me.indicatorsMeta[indicator.id] = {
+                count: 1,
+                title: indicator.title[lang],
+                organization: indicator.organization.title[lang]
+            };
+        }
+    },
+
+    /**
+     * Removes the indicator from the metadata hash if it's the last
+     * one from the same id.
+     *
+     * @method removeIndicatorMeta
+     * @param  {Number} indicatorId
+     * @return {undefined}
+     */
+    removeIndicatorMeta: function(indicatorId) {
+        var indiMeta = this.indicatorsMeta[indicatorId];
+        if (indiMeta) {
+            indiMeta.count -= 1;
+            if (indiMeta.count === 0) {
+                delete this.indicatorsMeta[indicatorId];
+            }
+        }
     }
 
 }, {
