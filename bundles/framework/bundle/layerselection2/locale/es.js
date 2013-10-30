@@ -20,7 +20,6 @@ Oskari.registerLocalization({
         "guest": "Identificarse para publicar esta capa.",
         "loggedin": "Publicación permitida",
         "official": "Publicación permitida para el uso mediante autorización.",
-        "login-url": "<a href='/web/en/login'>Acceder</a>",
         "need-login": "Debe identificarse.",
         "can_be_published_by_provider": {
           "label": "Publicación permitida para proveedores de datos.",

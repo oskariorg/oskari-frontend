@@ -5,7 +5,6 @@ Oskari.registerLocalization({
     "buttons": {
       "link": {
         "tooltip": "Länk",
-        "prefixUrl": "www.paikkatietoikkuna.fi/web/sv/kartfonstret?",
         "ok": "Ok",
         "title": "Länk till kartvyn"
       },

@@ -108,7 +108,7 @@ function(locale, conf) {
     		me._show=false;
     	}
     	if(removeAllFeatures!=null && removeAllFeatures==true){
-			me._drawLayer.removeAllFeatures();
+			me._drawLayer.destroyFeatures();
 		}
     },
     /**
@@ -235,8 +235,18 @@ function(locale, conf) {
     	
     	// Add module modify controls
         this.modifyControl = new OpenLayers.Control.ModifyFeature(me._drawLayer, {
-            autoActivate:true
+            autoActivate:true,
+            standalone:true
             });
+        this.selectControl = new OpenLayers.Control.SelectFeature(me._drawLayer, {
+            geometryTypes: this.modifyControl.geometryTypes,
+            clickout: this.modifyControl.clickout,
+            toggle: this.modifyControl.toggle,
+            onBeforeSelect: this.modifyControl.beforeSelectFeature,
+            onSelect: this.modifyControl.selectFeature,
+            onUnselect: this.modifyControl.unselectFeature,
+            scope: this.modifyControl
+        });
         
         var addGeometryToolsContainer = me.templateAddGeometryTools.clone();
         var addGeometryContainer = me.templateAddGeometry.clone();
@@ -349,7 +359,7 @@ function(locale, conf) {
     		var answer = confirm(me._locale.confirmDelete);
     		if(answer){    			
     			me._lastfeature.destroy();
-    			me.modifyControl.selectControl.unselectAll();
+    			me.selectControl.unselectAll();
     			me._lastfeature = null;
     			me.toggleControl(oldMode);
     			me.modifyControl.deactivate();
@@ -368,7 +378,7 @@ function(locale, conf) {
     finishedDrawing : function(suppressEnd){
     	var me = this;
     	
-    	me.modifyControl.selectControl.unselectAll();
+    	me.selectControl.unselectAll();
     	var currentFeature = me._drawLayer.features[me._drawLayer.features.length - 1];
     	
     	var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);    	

@@ -84,6 +84,18 @@ function() {
             "lang" : "en",
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapwfs2/locale/en.js"
+        }, {
+            "lang" : "es",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapwfs2/locale/es.js"
+        }, {
+            "lang" : "de",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapwfs2/locale/de.js"
+        }, {
+            "lang" : "cs",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapwfs2/locale/cs.js"
         }]
     },
     "bundle" : {

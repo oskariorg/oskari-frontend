@@ -7,485 +7,506 @@
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundleInstance",
 
-/**
- * @method create called automatically on construction
- * @static
- */
-function() {
-	this._localization = null;
-	this._sandbox = null;
-	this._started = false;
-	this._pendingAjaxQuery = {
-		busy : false,
-		jqhr : null,
-		timestamp : null
-	};
+    /**
+     * @method create called automatically on construction
+     * @static
+     */
 
-	this.timeInterval = this.ajaxSettings.defaultTimeThreshold;
-	this.backendStatus = {};
-	this.backendExtendedStatus = {};
+    function () {
+        this._localization = null;
+        this._sandbox = null;
+        this._started = false;
+        this._pendingAjaxQuery = {
+            busy: false,
+            jqhr: null,
+            timestamp: null
+        };
 
-	/* IE debug ... */
-	this.gotStartupEvent = false;
-	this.gotStartupTimeoutEvent = false;
-	this.gotStartupProcessCall = false;
+        this.timeInterval = this.ajaxSettings.defaultTimeThreshold;
+        this.backendStatus = {};
+        this.backendExtendedStatus = {};
 
-	/* maplayerservice */
-	this._mapLayerService = null;
+        /* IE debug ... */
+        this.gotStartupEvent = false;
+        this.gotStartupTimeoutEvent = false;
+        this.gotStartupProcessCall = false;
 
-}, {
-	ajaxSettings : {
-		defaultTimeThreshold : 15000
-	},
-	/**
-	 * @method getLocalization
-	 * Returns JSON presentation of bundles localization data for
-	 * current language.
-	 * If key-parameter is not given, returns the whole localization
-	 * data.
-	 *
-	 * @param {String} key (optional) if given, returns the value for
-	 *         key
-	 * @return {String/Object} returns single localization string or
-	 * 		JSON object for complete data depending on localization
-	 * 		structure and if parameter key is given
-	 */
-	getLocalization : function(key) {
-		if(!this._localization) {
-			this._localization = Oskari.getLocalization(this.getName());
-		}
-		if(key) {
-			return this._localization[key];
-		}
-		return this._localization;
-	},
-	/**
-	 * @static
-	 * @property __name
-	 */
-	__name : 'BackendStatus',
-	/**
-	 * @method getName
-	 * @return {String} the name for the component
-	 */
-	"getName" : function() {
-		return this.__name;
-	},
-	/**
-	 * @method setSandbox
-	 * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-	 * Sets the sandbox reference to this component
-	 */
-	setSandbox : function(sandbox) {
-		this._sandbox = sandbox;
-	},
-	/**
-	 * @method getSandbox
-	 * @return {Oskari.mapframework.sandbox.Sandbox}
-	 */
-	getSandbox : function() {
-		return this._sandbox;
-	},
-	getAjaxUrl : function(key, allKnown) {
-		var ajaxUrl = this.getSandbox().getAjaxUrl();
-		var url = null;
+        /* maplayerservice */
+        this._mapLayerService = null;
 
-		if(allKnown) {
-			url = ajaxUrl + 'action_route=GetBackendStatus&Subset=AllKnown';
-		} else {
-			url = ajaxUrl + 'action_route=GetBackendStatus&Subset=Alert';
-		}
+    }, {
+        ajaxSettings: {
+            defaultTimeThreshold: 15000
+        },
+        /**
+         * @method getLocalization
+         * Returns JSON presentation of bundles localization data for
+         * current language.
+         * If key-parameter is not given, returns the whole localization
+         * data.
+         *
+         * @param {String} key (optional) if given, returns the value for
+         *         key
+         * @return {String/Object} returns single localization string or
+         *      JSON object for complete data depending on localization
+         *      structure and if parameter key is given
+         */
+        getLocalization: function (key) {
+            if (!this._localization) {
+                this._localization = Oskari.getLocalization(this.getName());
+            }
+            if (key) {
+                return this._localization[key];
+            }
+            return this._localization;
+        },
+        /**
+         * @static
+         * @property __name
+         */
+        __name: 'BackendStatus',
+        /**
+         * @method getName
+         * @return {String} the name for the component
+         */
+        "getName": function () {
+            return this.__name;
+        },
+        /**
+         * @method setSandbox
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * Sets the sandbox reference to this component
+         */
+        setSandbox: function (sandbox) {
+            this._sandbox = sandbox;
+        },
+        /**
+         * @method getSandbox
+         * @return {Oskari.mapframework.sandbox.Sandbox}
+         */
+        getSandbox: function () {
+            return this._sandbox;
+        },
+        getAjaxUrl: function (key, allKnown) {
+            var ajaxUrl = this.getSandbox().getAjaxUrl();
+            var url = null;
 
-		return url;
-		/*return 'GetBackendStatus.json';*/
-	},
-	/**
-	 * @method start
-	 * implements BundleInstance protocol start method
-	 */
-	"start" : function() {
-		var me = this;
+            if (allKnown) {
+                url = ajaxUrl + 'action_route=GetBackendStatus&Subset=AllKnown';
+            } else {
+                url = ajaxUrl + 'action_route=GetBackendStatus&Subset=Alert';
+            }
 
-		if(me._started) {
-			return;
-		}
+            return url;
+            /*return 'GetBackendStatus.json';*/
+        },
+        /**
+         * @method start
+         * implements BundleInstance protocol start method
+         */
+        "start": function () {
+            var me = this;
 
-		me._started = true;
+            if (me._started) {
+                return;
+            }
 
-		var conf = me.conf ;
-		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
-		var sandbox = Oskari.getSandbox(sandboxName);
-		
-		me._sandbox = sandbox;
+            me._started = true;
 
-		me._mapLayerService = sandbox.getService("Oskari.mapframework.service.MapLayerService");
+            var conf = me.conf,
+                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
+                sandbox = Oskari.getSandbox(sandboxName),
+                p;
 
-		sandbox.register(me);
-		for(p in me.eventHandlers) {
-			sandbox.registerForEventByName(me, p);
-		}
+            me._sandbox = sandbox;
 
-		/* we may have missed the maplayerevent */
-		if(me._mapLayerService.isAllLayersLoaded() && !me.gotStartupProcessCall) {
-			me.updateBackendStatus(true);
-		}
-	},
-	/**
-	 * @method init
-	 * implements Module protocol init method - does nothing atm
-	 */
-	"init" : function() {
-		return null;
-	},
-	/**
-	 * @method update
-	 * implements BundleInstance protocol update method - does nothing atm
-	 */
-	"update" : function() {
+            me._mapLayerService = sandbox.getService("Oskari.mapframework.service.MapLayerService");
 
-	},
-	/**
-	 * @method onEvent
-	 * @param {Oskari.mapframework.event.Event} event a Oskari event object
-	 * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-	 */
-	onEvent : function(event) {
+            sandbox.register(me);
+            for (p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(me, p);
+                }
+            }
 
-		var handler = this.eventHandlers[event.getName()];
-		if(!handler)
-			return;
+            /* we may have missed the maplayerevent */
+            if (me._mapLayerService.isAllLayersLoaded() && !me.gotStartupProcessCall) {
+                me.updateBackendStatus(true);
+            }
+        },
+        /**
+         * @method init
+         * implements Module protocol init method - does nothing atm
+         */
+        "init": function () {
+            return null;
+        },
+        /**
+         * @method update
+         * implements BundleInstance protocol update method - does nothing atm
+         */
+        "update": function () {
 
-		return handler.apply(this, [event]);
+        },
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         */
+        onEvent: function (event) {
 
-	},
-	/**
-	 * @property extensionsByName
-	 * @static
-	 * extensions that trigger update
-	 *
-	 */
-	extensionsByName : {
-		'LayerSelector' : true
-	},
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
 
-	/**
-	 * @property extensionStatesByName
-	 * @static
-	 * extension states that trigger update
-	 *
-	 */
-	extensionStatesByName : {
-		'attach' : true,
-		'detach' : true
-	},
+            return handler.apply(this, [event]);
 
-	/**
-	 * @property {Object} eventHandlers
-	 * @static
-	 */
-	eventHandlers : {
+        },
+        /**
+         * @property extensionsByName
+         * @static
+         * extensions that trigger update
+         *
+         */
+        extensionsByName: {
+            'LayerSelector': true
+        },
 
-		/**
-		 * @method ExtensionUpdatedEvent
-		 */
-		'userinterface.ExtensionUpdatedEvent' : function(event) {
+        /**
+         * @property extensionStatesByName
+         * @static
+         * extension states that trigger update
+         *
+         */
+        extensionStatesByName: {
+            'attach': true,
+            'detach': true
+        },
 
-			var extension = event.getExtension();
-			if(!extension) {
-				return;
-			}
-			var extensionName = extension.getName();
-			if(!extensionName) {
-				return;
-			}
-			if(!this.extensionsByName[extensionName]) {
-				return;
-			}
-			var extensionViewState = event.getViewState();
+        /**
+         * @property {Object} eventHandlers
+         * @static
+         */
+        eventHandlers: {
 
-			if(!this.extensionStatesByName[extensionViewState]) {
-				return;
-			}
+            /**
+             * @method ExtensionUpdatedEvent
+             */
+            'userinterface.ExtensionUpdatedEvent': function (event) {
 
-			this.updateBackendStatus();
-		},
-		/**
-		 * @method AfterShowMapLayerInfoEvent
-		 */
+                var extension = event.getExtension();
+                if (!extension) {
+                    return;
+                }
+                var extensionName = extension.getName();
+                if (!extensionName) {
+                    return;
+                }
+                if (!this.extensionsByName[extensionName]) {
+                    return;
+                }
+                var extensionViewState = event.getViewState();
 
-		'AfterShowMapLayerInfoEvent' : function(event) {
+                if (!this.extensionStatesByName[extensionViewState]) {
+                    return;
+                }
 
-			var mapLayer = event.getMapLayer();
-			var mapLayerId = mapLayer.getId();
-			var mapLayerBackendStatus = mapLayer.getBackendStatus();
-			/*console.log("ABOUT to show information for "+mapLayerId,mapLayer,mapLayerBackendStatus);*/
+                this.updateBackendStatus();
+            },
+            /**
+             * @method AfterShowMapLayerInfoEvent
+             */
 
-			/*if(!mapLayerBackendStatus) {
-			 this.showFeedbackDialog('missing_backendstatus_status');
-			 return;
-			 }*/
+            'AfterShowMapLayerInfoEvent': function (event) {
 
-			var backendExtendedStatusForLayer = this.backendExtendedStatus[mapLayerId];
+                var mapLayer = event.getMapLayer();
+                var mapLayerId = mapLayer.getId();
+                var mapLayerBackendStatus = mapLayer.getBackendStatus();
+                /*console.log("ABOUT to show information for "+mapLayerId,mapLayer,mapLayerBackendStatus);*/
 
-			/*console.log("MIGHT show information for "+mapLayerId,mapLayer,backendExtendedStatusForLayer);*/
+                /*if(!mapLayerBackendStatus) {
+             this.showFeedbackDialog('missing_backendstatus_status');
+             return;
+             }*/
 
-			if(!backendExtendedStatusForLayer) {
-				this.showFeedbackDialog('missing_backendstatus_information');
-				return;
-			}
+                var backendExtendedStatusForLayer = this.backendExtendedStatus[mapLayerId];
 
-			var infoUrl = backendExtendedStatusForLayer.infourl;
-			if(!infoUrl) {
-				this.showFeedbackDialog('missing_backendstatus_infourl');
-				return;
-			}
+                /*console.log("MIGHT show information for "+mapLayerId,mapLayer,backendExtendedStatusForLayer);*/
 
-			/*console.log("WOULD show information for "+mapLayerId,mapLayer,infoUrl);*/
+                if (!backendExtendedStatusForLayer) {
+                    this.showFeedbackDialog('missing_backendstatus_information');
+                    return;
+                }
 
-			this.openURLinWindow(infoUrl);
-		},
-		'MapLayerEvent' : function(event) {
-			if(!(event.getLayerId() == null && event.getOperation() == 'add')) {
-				return;
-			}
+                var infoUrl = backendExtendedStatusForLayer.infourl;
+                if (!infoUrl) {
+                    this.showFeedbackDialog('missing_backendstatus_infourl');
+                    return;
+                }
 
-			/* this is where we get after layers.json has been read from server to maplayer service */
-			/* we do not know the order of bundles and modules notifications though */
-			var me = this;
-			me.gotStartupEvent = true;
-			window.setTimeout(function() {
-				me.gotStartupTimeoutEvent = true;
-				me.updateBackendStatus(true);
-			}, 15);
-		}
-	},
+                /*console.log("WOULD show information for "+mapLayerId,mapLayer,infoUrl);*/
 
-	/**
-	 *
-	 */
-	showFeedbackDialog : function(context) {
-		var feedBackTextx = this.getLocalization('feedback')[context];
+                this.openURLinWindow(infoUrl);
+            },
+            'MapLayerEvent': function (event) {
+                // FIXME use ===
+                if (!(event.getLayerId() == null && event.getOperation() == 'add')) {
+                    return;
+                }
 
-		var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-		dialog.show(feedBackTextx['title'], feedBackTextx['message']);
-		dialog.fadeout();
+                /* this is where we get after layers.json has been read from server to maplayer service */
+                /* we do not know the order of bundles and modules notifications though */
+                var me = this;
+                me.gotStartupEvent = true;
+                window.setTimeout(function () {
+                    me.gotStartupTimeoutEvent = true;
+                    me.updateBackendStatus(true);
+                }, 15);
+            }
+        },
 
-	},
-	openURLinWindow : function(infoUrl) {
-		var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
-		var link = infoUrl;
-		window.open(link, "BackendStatus", wopParm);
-	},
-	/**
-	 * @method stop
-	 * implements BundleInstance protocol stop method
-	 */
-	"stop" : function() {
+        /**
+         *
+         */
+        showFeedbackDialog: function (context) {
+            var feedBackTextx = this.getLocalization('feedback')[context],
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            dialog.show(feedBackTextx.title, feedBackTextx.message);
+            dialog.fadeout();
 
-		var me = this;
-		var sandbox = me._sandbox;
+        },
+        openURLinWindow: function (infoUrl) {
+            var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200",
+                link = infoUrl;
+            window.open(link, "BackendStatus", wopParm);
+        },
+        /**
+         * @method stop
+         * implements BundleInstance protocol stop method
+         */
+        "stop": function () {
 
-		me._cancelAjaxRequest();
+            var me = this,
+                sandbox = me._sandbox,
+                p;
 
-		for(p in me.eventHandlers) {
-			sandbox.unregisterFromEventByName(this, p);
-		}
+            me._cancelAjaxRequest();
 
-		sandbox.unregister(this);
-		this._started = false;
-		this._sandbox = null;
-	},
-	/**
-	 * @method getTitle
-	 * @return {String} localized text for the title of the component
-	 */
-	getTitle : function() {
-		return 'Backend Status';
-	},
-	/**
-	 * @method getDescription
-	 * @return {String} localized text for the description of the component
-	 */
-	getDescription : function() {
-		return 'Backend Status';
-	},
-	_cancelAjaxRequest : function() {
-		var me = this;
-		if(!me._pendingAjaxQuery.busy) {
-			return;
-		}
-		var jqhr = me._pendingAjaxQuery.jqhr;
-		me._pendingAjaxQuery.jqhr = null;
-		if(!jqhr) {
-			return;
-		}
-		this._sandbox.printDebug("[BackendStatus] Abort jqhr ajax request");
-		jqhr.abort();
-		jqhr = null;
-		me._pendingAjaxQuery.busy = false;
-	},
-	_startAjaxRequest : function(dteMs) {
-		var me = this;
-		me._pendingAjaxQuery.busy = true;
-		me._pendingAjaxQuery.timestamp = dteMs;
+            for (p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.unregisterFromEventByName(this, p);
+                }
+            }
 
-	},
-	_finishAjaxRequest : function() {
-		var me = this;
-		me._pendingAjaxQuery.busy = false;
-		me._pendingAjaxQuery.jqhr = null;
-		this._sandbox.printDebug("[BackendStatus] finished jqhr ajax request");
-	},
-	_notifyAjaxFailure : function() {
-		var me = this;
-		me._sandbox.printDebug("[BackendStatus] BackendStatus AJAX failed");
-		me._processResponse({
-			backendstatus : []
-		});
-	},
-	_isAjaxRequestBusy : function() {
-		var me = this;
-		return me._pendingAjaxQuery.busy;
-	},
-	updateBackendStatus : function(allKnown) {
-		var me = this;
-		me.gotStartupProcessCall = me.gotStartupProcessCall || allKnown;
-		var sandbox = me._sandbox;
-		if(!allKnown && me._pendingAjaxQuery.busy) {
-			sandbox.printDebug("[BackendStatus] updateBackendStatus NOT SENT previous query is busy");
-			return;
-		}
-		var dte = new Date();
-		var dteMs = dte.getTime();
+            sandbox.unregister(this);
+            this._started = false;
+            this._sandbox = null;
+        },
+        /**
+         * @method getTitle
+         * @return {String} localized text for the title of the component
+         */
+        getTitle: function () {
+            return 'Backend Status';
+        },
+        /**
+         * @method getDescription
+         * @return {String} localized text for the description of the component
+         */
+        getDescription: function () {
+            return 'Backend Status';
+        },
+        _cancelAjaxRequest: function () {
+            var me = this;
+            if (!me._pendingAjaxQuery.busy) {
+                return;
+            }
+            var jqhr = me._pendingAjaxQuery.jqhr;
+            me._pendingAjaxQuery.jqhr = null;
+            if (!jqhr) {
+                return;
+            }
+            this._sandbox.printDebug("[BackendStatus] Abort jqhr ajax request");
+            jqhr.abort();
+            jqhr = null;
+            me._pendingAjaxQuery.busy = false;
+        },
+        _startAjaxRequest: function (dteMs) {
+            var me = this;
+            me._pendingAjaxQuery.busy = true;
+            me._pendingAjaxQuery.timestamp = dteMs;
 
-		if(!allKnown && me._pendingAjaxQuery.timestamp && dteMs - me._pendingAjaxQuery.timestamp < me.timeInterval) {
-			sandbox.printDebug("[BackendStatus] updateBackendStatus NOT SENT (time difference < " + me.timeInterval + "ms)");
-			return;
-		}
+        },
+        _finishAjaxRequest: function () {
+            var me = this;
+            me._pendingAjaxQuery.busy = false;
+            me._pendingAjaxQuery.jqhr = null;
+            this._sandbox.printDebug("[BackendStatus] finished jqhr ajax request");
+        },
+        _notifyAjaxFailure: function () {
+            var me = this;
+            me._sandbox.printDebug("[BackendStatus] BackendStatus AJAX failed");
+            me._processResponse({
+                backendstatus: []
+            });
+        },
+        _isAjaxRequestBusy: function () {
+            var me = this;
+            return me._pendingAjaxQuery.busy;
+        },
+        updateBackendStatus: function (allKnown) {
+            var me = this;
+            me.gotStartupProcessCall = me.gotStartupProcessCall || allKnown;
+            var sandbox = me._sandbox;
+            if (!allKnown && me._pendingAjaxQuery.busy) {
+                sandbox.printDebug("[BackendStatus] updateBackendStatus NOT SENT previous query is busy");
+                return;
+            }
+            var dte = new Date();
+            var dteMs = dte.getTime();
 
-		me._cancelAjaxRequest();
-		me._startAjaxRequest(dteMs);
+            if (!allKnown && me._pendingAjaxQuery.timestamp && dteMs - me._pendingAjaxQuery.timestamp < me.timeInterval) {
+                sandbox.printDebug("[BackendStatus] updateBackendStatus NOT SENT (time difference < " + me.timeInterval + "ms)");
+                return;
+            }
 
-		var ajaxUrl = me.getAjaxUrl(null, allKnown);
+            me._cancelAjaxRequest();
+            me._startAjaxRequest(dteMs);
 
-		jQuery.ajax({
-			beforeSend : function(x) {
-				me._pendingAjaxQuery.jqhr = x;
-				if(x && x.overrideMimeType) {
-					x.overrideMimeType("application/j-son;charset=UTF-8");
-				}
-			},
-			success : function(resp) {
-				me._finishAjaxRequest();
-				me._processResponse(resp, allKnown);
-			},
-			error : function() {
-				me._finishAjaxRequest();
-				me._notifyAjaxFailure();
-			},
-			always : function() {
-				me._finishAjaxRequest();
-			},
-			complete : function() {
-				me._finishAjaxRequest();
-			},
-			data : {
-			},
-			type : 'POST',
-			dataType : 'json',
-			url : ajaxUrl
-			/*url : 'GetBackendStatus.json'*/
-		});
-	},
-	_processResponse : function(resp, allKnown) {
-		var me = this;
-		var sandbox = this._sandbox;
-		if(!resp) {
-            sandbox.printDebug("[BackendStatus] empty data from server");
-            return;		    
-		}
+            var ajaxUrl = me.getAjaxUrl(null, allKnown);
 
-		var backendStatusArr = resp.backendstatus;
-		if(!backendStatusArr || backendStatusArr.length == undefined) {
-			sandbox.printDebug("[BackendStatus] backendStatus NO data");
-			return;
-		}
-		
-        var evtBuilder = sandbox.getEventBuilder('MapLayerEvent');
-		var changeNotifications = {};
+            jQuery.ajax({
+                beforeSend: function (x) {
+                    me._pendingAjaxQuery.jqhr = x;
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                success: function (resp) {
+                    me._finishAjaxRequest();
+                    me._processResponse(resp, allKnown);
+                },
+                error: function () {
+                    me._finishAjaxRequest();
+                    me._notifyAjaxFailure();
+                },
+                always: function () {
+                    me._finishAjaxRequest();
+                },
+                complete: function () {
+                    me._finishAjaxRequest();
+                },
+                data: {},
+                type: 'POST',
+                dataType: 'json',
+                url: ajaxUrl
+                /*url : 'GetBackendStatus.json'*/
+            });
+        },
+        _processResponse: function (resp, allKnown) {
+            var me = this;
+            var sandbox = this._sandbox;
+            if (!resp) {
+                sandbox.printDebug("[BackendStatus] empty data from server");
+                return;
+            }
 
-		/* let's update AllKnown */
-		var extendedStatuses = allKnown ? {} : this.backendExtendedStatus;
+            var backendStatusArr = resp.backendstatus;
+            // FIXME use ===
+            if (!backendStatusArr || backendStatusArr.length == undefined) {
+                sandbox.printDebug("[BackendStatus] backendStatus NO data");
+                return;
+            }
 
-		for(var n = 0; n < backendStatusArr.length; n++) {
-			var data = backendStatusArr[n];
-			var layerId = data.maplayer_id;
-			if(!this.backendStatus[layerId]) {
-				changeNotifications[layerId] = {
-					status : data.status,
-					changed : true
-				};
-				extendedStatuses[layerId] = data;
-				/*sandbox.printDebug("[BackendStatus] "+layerId+" new alert");*/
-			} else if(this.backendStatus[layerId].status != data.status) {
-				changeNotifications[layerId] = {
-					status : data.status,
-					changed : true
-				};
-				extendedStatuses[layerId] = data;
-				/*sandbox.printDebug("[BackendStatus] "+layerId+" changed alert");*/
-			} else {
-				changeNotifications[layerId] = {
-					status : data.status,
-					changed : false
-				};
-				extendedStatuses[layerId] = data;
-			}
-		}
+            var evtBuilder = sandbox.getEventBuilder('MapLayerEvent'),
+                changeNotifications = {};
 
-		for(p in this.backendStatus ) {
-			if(!changeNotifications[p] && this.backendStatus[p].status != null) {
-				changeNotifications[p] = {
-					status : null,
-					changed : true
-				};
-				/*sandbox.printDebug("[BackendStatus] "+p+" alert closed");*/
-			}
-		}
+            /* let's update AllKnown */
+            var extendedStatuses = allKnown ? {} : this.backendExtendedStatus,
+                n,
+                data,
+                layerId,
+                p;
 
-		this.backendExtendedStatus = extendedStatuses;
+            for (n = 0; n < backendStatusArr.length; n += 1) {
+                data = backendStatusArr[n];
+                layerId = data.maplayer_id;
+                if (!this.backendStatus[layerId]) {
+                    changeNotifications[layerId] = {
+                        status: data.status,
+                        changed: true
+                    };
+                    extendedStatuses[layerId] = data;
+                    /*sandbox.printDebug("[BackendStatus] "+layerId+" new alert");*/
+                // FIXME use !==
+                } else if (this.backendStatus[layerId].status != data.status) {
+                    changeNotifications[layerId] = {
+                        status: data.status,
+                        changed: true
+                    };
+                    extendedStatuses[layerId] = data;
+                    /*sandbox.printDebug("[BackendStatus] "+layerId+" changed alert");*/
+                } else {
+                    changeNotifications[layerId] = {
+                        status: data.status,
+                        changed: false
+                    };
+                    extendedStatuses[layerId] = data;
+                }
+            }
 
-		var maplayers = {};
+            for (p in me.backendStatus) {
+                if (me.backendStatus.hasOwnProperty(p)) {
+                    // FIXME use !==
+                    if (!changeNotifications[p] && this.backendStatus[p].status != null) {
+                        changeNotifications[p] = {
+                            status: null,
+                            changed: true
+                        };
+                        /*sandbox.printDebug("[BackendStatus] "+p+" alert closed");*/
+                    }
+                }
+            }
 
-		for(p in changeNotifications ) {
-			this.backendStatus[p] = changeNotifications[p];
+            this.backendExtendedStatus = extendedStatuses;
 
-			var maplayer = sandbox.findMapLayerFromAllAvailable(p);
-			if(!maplayer) {
-				continue;
-			}
-			maplayer.setBackendStatus(this.backendStatus[p].status);
+            var maplayers = {};
 
-			/* forcing DOWN to be notified - we do not know if layerselector2 has shown the msg or not...*/
-			if(changeNotifications[p].changed || "DOWN" == maplayer.getBackendStatus()) {
-				maplayers[p] = maplayer;
-			}
-		}
+            for (p in changeNotifications) {
+                if (changeNotifications.hasOwnProperty(p)) {
+                    this.backendStatus[p] = changeNotifications[p];
 
-		if(allKnown) {
-			me._pendingAjaxQuery.timestamp = null;
-			me.backendStatus = {};
-		} else {
-			for(p in maplayers ) {
-				var evt = evtBuilder(p, 'update');
-				sandbox.notifyAll(evt);
-			}
-		}
-	}
-}, {
-	/**
-	 * @property {String[]} protocol
-	 * @static
-	 */
-	"protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
-});
+                    var maplayer = sandbox.findMapLayerFromAllAvailable(p);
+                    if (!maplayer) {
+                        continue;
+                    }
+                    maplayer.setBackendStatus(this.backendStatus[p].status);
+
+                    /* forcing DOWN to be notified - we do not know if layerselector2 has shown the msg or not...*/
+                    if (changeNotifications[p].changed || "DOWN" === maplayer.getBackendStatus()) {
+                        maplayers[p] = maplayer;
+                    }
+                }
+            }
+
+            if (allKnown) {
+                me._pendingAjaxQuery.timestamp = null;
+                me.backendStatus = {};
+            } else {
+                var evt;
+                for (p in maplayers) {
+                    if (maplayers.hasOwnProperty(p)) {
+                        evt = evtBuilder(p, 'update');
+                        sandbox.notifyAll(evt);
+                    }
+                }
+            }
+        }
+    }, {
+        /**
+         * @property {String[]} protocol
+         * @static
+         */
+        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
+    });

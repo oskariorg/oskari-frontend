@@ -24,7 +24,7 @@ jQuery(document).ready(function() {
 		type : 'GET',
 		dataType : 'json',
         data : getAppSetupParams,
-		url : '/ajax/?action_route=GetAppSetup',
+        url: ajaxUrl + 'action_route=GetAppSetup',
 		success : function(setup) {
 			var app = Oskari.app;
 			app.setApplicationSetup(setup);

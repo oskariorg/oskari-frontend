@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>demo</title>
+        <!-- ############# css ################# -->
+
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="../css/icons.css" />
+        <style type="text/css">
+            @media screen {
+                body {
+                    margin: 0;
+                    padding: 0;
+                }                
+                #maptools {
+                    background-color: #333438;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    width: 153px;
+                    z-index: 2;
+                }
+                #contentMap {
+                    
+                }
+                .mapcontainer {
+                    top: 30px;
+                    position: relative;
+                }
+            }
+        </style>
+        <!-- ############# /css ################# -->
+    </head>
+    <body>
+
+        <!-- Fixed navbar -->
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Bootstrap DivManazer</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav" id="menubar">
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+
+        <div class="container theme-showcase">
+            <div class="jumbotron mapcontainer">
+                <h1>Bootstrap DivManazer</h1>
+                <p>A Proof-of-Concept DivManazer for Bootstrap 3</p>
+                <div id="contentMap">
+                    <div id="mapdiv"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ############# Javascript ################# -->
+
+        <!--  OSKARI -->
+        <script type="text/javascript"
+        src="../../../bundles/bundle.js"></script>
+
+        <!--  OPENLAYERS -->
+        <script type="text/javascript"
+        src="../../../packages/openlayers/startup.js"></script>
+
+        <!--
+        <script type="text/javascript" src="full.js">
+        </script>
+        -->
+        <script type="text/javascript" src="index.js"></script>
+
+        <!-- ############# /Javascript ################# -->
+    </body>
+</html>

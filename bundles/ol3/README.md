@@ -9,7 +9,11 @@ Proof-of-Concept ol3 ( https://github.com/openlayers/ol3 ) based mapfull/mapmodu
 for oskari.
 
 This is only a partial implementation and will change.
-Work-in-Progress. 
+
+This version inherits from a generalised mapmodule implementation.
+
+Work-in-Progress.
+ 
 
 # Features migrated
 
@@ -43,8 +47,6 @@ Only the minimum required was coded.
 # Future work
 
 Remove duplicate PoC code and implementations.
-
-Generalise implementations for ol2,ol3,leaflet, other-map.
 
 Design and document dependencies for bundles dependent on ol2, ol3 or a generic dependency of 
 a map implementation.

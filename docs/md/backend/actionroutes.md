@@ -25,7 +25,10 @@
 - [GetBackendStatus](<%= docsurl %>backend/actionroutes/getBackendStatus.html)
 - [GetAdminMapLayers](<%= docsurl %>backend/actionroutes/getAdminMapLayers.html)
 - [GetWSCapabilities](<%= docsurl %>backend/actionroutes/getWSCapabilities.html)
+- [GetWSFDescribeFeature](<%= docsurl %>backend/actionroutes/GetWSFDescribeFeature.html)
 - [GetMapLayerClasses](<%= docsurl %>backend/actionroutes/getMapLayerClasses.html)
+- [GetAnalysisLayers](<%= docsurl %>backend/actionroutes/getAnalysisLayers.html)
+
 GetWmsServices
 - [SaveLayer](<%= docsurl %>backend/actionroutes/saveLayer.html)
 - [SaveOrganization](<%= docsurl %>backend/actionroutes/saveOrganization.html)

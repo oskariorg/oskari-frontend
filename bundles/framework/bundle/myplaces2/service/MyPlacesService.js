@@ -20,8 +20,7 @@ function(url, uuid, sandbox, defaults, pInstance) {
     // list of loaded categories & myplaces
     this._categoryList = [];
     this._placesList = [];
-
-    this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore', url, uuid);
+    this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore', url, uuid, pInstance.featureNS);
     this._sandbox = sandbox;
     this.defaultCategory = null;
     this.defaults = defaults;
@@ -116,8 +115,8 @@ function(url, uuid, sandbox, defaults, pInstance) {
         defaultCategory.setAreaLineCorner(this.defaults.area.linecorner);
         defaultCategory.setAreaLineStyle(this.defaults.area.linestyle);
         defaultCategory.setAreaLineColor(this.defaults.area.linecolor);
-        defaultCategory.setAreaFillColor(this.defaults.area.fillcolor);
-        defaultCategory.setAreaFillStyle(this.defaults.area.style);
+        defaultCategory.setAreaFillColor(this.defaults.area.color);
+        defaultCategory.setAreaFillStyle(this.defaults.area.fill);
         defaultCategory.setDefault(true);
         
         var defaultCategoryCreationCallback = function() {
@@ -554,23 +553,29 @@ function(url, uuid, sandbox, defaults, pInstance) {
         var me = this;
         var isNew = !(myplaceModel.getId());
 
-        var callBackWrapper = function(success, list) {
+        var callBackWrapper = function (success, list) {
             if (isNew && success) {
                 me._addMyPlace(list[0]);
             } else {
-                // update models updateDate in store
-                var myplace = me.findMyPlace(list[0].getId());
-                if (myplace) {
-                    // update values
-                    myplace.setName(myplaceModel.getName());
-                    myplace.setDescription(myplaceModel.getDescription());
-                    myplace.setLink(myplaceModel.getLink());
-                    myplace.setCategoryID(myplaceModel.getCategoryID());
-                    myplace.setGeometry(myplaceModel.getGeometry());
-                    myplace.setUpdateDate(list[0].getUpdateDate());
-                } else {
-                    // couldn't load it -> failed to save it
+                if (list.length < 1) {
+                    // couldn't parse myplaces featurecollection
                     success = false;
+                }
+                else {
+                    // update models updateDate in store
+                    var myplace = me.findMyPlace(list[0].getId());
+                    if (myplace) {
+                        // update values
+                        myplace.setName(myplaceModel.getName());
+                        myplace.setDescription(myplaceModel.getDescription());
+                        myplace.setLink(myplaceModel.getLink());
+                        myplace.setCategoryID(myplaceModel.getCategoryID());
+                        myplace.setGeometry(myplaceModel.getGeometry());
+                        myplace.setUpdateDate(list[0].getUpdateDate());
+                    } else {
+                        // couldn't load it -> failed to save it
+                        success = false;
+                    }
                 }
             }
             me._notifyDataChanged();

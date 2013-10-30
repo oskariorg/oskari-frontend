@@ -213,16 +213,18 @@ function(core) {
      *            module
      */
     unregister : function(module) {
-        var remainingModules = [];
-        for (var m = 0; m < this._modules.length; m++) {
-            if (module === this._modules[m]) {
+        var me = this,
+            remainingModules = [],
+            m;
+        for (m = 0; m < me._modules.length; m++) {
+            if (module === me._modules[m]) {
                 continue;
             }
-            remainingModules.push(this._modules[m]);
+            remainingModules.push(me._modules[m]);
         }
-        this._modules = remainingModules;
-        this._modulesByName[module.getName()] = undefined;
-        delete this._modulesByName[module.getName()];
+        me._modules = remainingModules;
+        me._modulesByName[module.getName()] = undefined;
+        delete me._modulesByName[module.getName()];
     },
 
     /**
@@ -254,15 +256,16 @@ function(core) {
      */
     unregisterFromEventByName : function(module, eventName) {
         this._core.printDebug("Sandbox is unregistering module '" + module.getName() + "' from event '" + eventName + "'");
-        var oldListeners = this._listeners[eventName];
+        var oldListeners = this._listeners[eventName],
+            deleteIndex = -1,
+            d;
         if (oldListeners == null) {
             // no listeners
             this._core.printDebug("Module does not listen to that event, skipping.");
             return;
         }
 
-        var deleteIndex = -1;
-        for (var d = 0; d < oldListeners.length; d++) {
+        for (d = 0; d < oldListeners.length; d++) {
             if (oldListeners[d] == module) {
                 deleteIndex = d;
                 break;
@@ -312,13 +315,15 @@ function(core) {
      *            request to be performed
      */
     request : function(creator, request) {
-        var creatorName = null;
+        var creatorName = null,
+            creatorComponent,
+            rv = null;
         if (creator.getName != null) {
             creatorName = creator.getName();
         } else {
             creatorName = creator;
         }
-        var creatorComponent = this.findRegisteredModuleInstance(creatorName);
+        creatorComponent = this.findRegisteredModuleInstance(creatorName);
 
         if (creatorComponent == null) {
             throw "Attempt to create request with unknown component '" + creator + "' as creator";
@@ -331,8 +336,6 @@ function(core) {
         if (this.gatherDebugRequests) {
             this._pushRequestAndEventGather(creatorName + "->Sandbox: ", this.getObjectName(request));
         }
-
-        var rv = null;
 
         this._debugPushRequest(creatorName, request);
         rv = this._core.processRequest(request);
@@ -387,21 +390,21 @@ function(core) {
      * @param {Array} requestArgs (optional)
      */
     postRequestByName : function(requestName, requestArgs) {
-        var me = this;
-        var requestBuilder = me.getRequestBuilder(requestName);
+        var me = this,
+            requestBuilder = me.getRequestBuilder(requestName);
         if(!requestBuilder) {
             return;
         }
         window.setTimeout(function() {
             
-            var request = requestBuilder.apply(me, requestArgs||[]);
-            var creatorComponent = this.postMasterComponent;
+            var request = requestBuilder.apply(me, requestArgs||[]),
+                creatorComponent = this.postMasterComponent,
+                rv = null;
             me._core.setObjectCreator(request, creatorComponent);
 
             if (me.gatherDebugRequests) {
                 me._pushRequestAndEventGather(creatorComponent + "->Sandbox: ", me.getObjectName(request));
             }
-            var rv = null;
 
 			if (this.debugRequests) {
 	            me._debugPushRequest(creatorComponent, request);
@@ -426,8 +429,8 @@ function(core) {
      * @return {Oskari.mapframework.module.Module[]} modules listening to the event
      */
     _findModulesInterestedIn : function(event) {
-        var eventName = event.getName();
-        var currentListeners = this._listeners[eventName];
+        var eventName = event.getName(),
+            currentListeners = this._listeners[eventName];
         if(!currentListeners) {
             return [];
         }
@@ -505,6 +508,7 @@ function(core) {
      * @return {Object} object with properties width and height as the window size in pixels
      */
     getBrowserWindowSize : function() {
+        // FIXME get rid of jQuery.browser and make this code sane... height isn't used for anything?
         if (jQuery.browser.opera && window.innerHeight != null) {
             var height = window.innerHeight;
         }
@@ -687,18 +691,51 @@ function(core) {
      * Uses www.websequencediagrams.com to create the diagram.
      */
     popUpSeqDiagram : function() {
-        var seq_html = '<html><head></head><body><div class="wsd" wsd_style="modern-blue"><pre>';
-        var seq_commands = '';
+        var seq_html = '<html><head></head><body><div class="wsd" wsd_style="modern-blue"><pre>',
+            seq_commands = '',
+            openedWindow;
         for (x in this.requestAndEventGather) {
             seq_commands += this.requestAndEventGather[x].name + this.requestAndEventGather[x].request + "\n";
         }
         if (seq_commands != '') {
             seq_html += seq_commands + '</pre></div><script type="text/javascript" src="http://www.websequencediagrams.com/service.js"></script></body></html>';
-            var openedWindow = window.open();
+            openedWindow = window.open();
             openedWindow.document.write(seq_html);
             this.requestAndEventGather = [];
         } else {
             alert('No requests in queue');
         }
+    },
+    /**
+     * @method getLocalizedProperty
+     * @param property Property
+     */
+    getLocalizedProperty : function (property) {
+        var ret,
+            supportedLocales,
+            i;
+        if (property === null || typeof property === 'undefined') {
+            return null;
+        }
+        if (typeof property === 'object') {
+            // property value is an object, so it's prolly localized
+            ret = property[Oskari.getLang()];
+            if (ret === null) {
+                supportedLocales = Oskari.getSupportedLocales();
+                for (i = 0; i < supportedLocales.length; i += 1) {
+                    ret = property[supportedLocales[i]];
+                    if (ret) {
+                        // We found the property in _some_ language...
+                        break;
+                    }
+                }
+                // TODO (needs supportedLocales)
+                // try default lang
+                // try any lang?
+            }
+            return ret;
+        }
+        // property is not localized
+        return property;
     }
 });

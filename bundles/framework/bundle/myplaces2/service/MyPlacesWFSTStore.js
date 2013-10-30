@@ -26,11 +26,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
  * @static
  * @param {String} url
  * @param {String} uuid current users uuid
+ * @param {String} featureNS
  */
-function(url, uuid) {
+function(url, uuid, featureNS) {
     this.uuid = uuid;
     this.protocols = {};
     this.url = url;
+    this.featureNS = featureNS;
 }, {
 
     /**
@@ -44,7 +46,7 @@ function(url, uuid) {
             version : '1.1.0',
             srsName : 'EPSG:3067',
             featureType : 'categories',
-            featureNS : 'http://www.paikkatietoikkuna.fi',
+            featureNS : this.featureNS,
             url : url
         });
         this.protocols['my_places'] = new OpenLayers.Protocol.WFS({
@@ -52,7 +54,7 @@ function(url, uuid) {
             srsName : 'EPSG:3067',
             geometryName : 'geometry',
             featureType : 'my_places',
-            featureNS : 'http://www.paikkatietoikkuna.fi',
+            featureNS : this.featureNS,
             url : url
         });
     },
@@ -110,24 +112,26 @@ function(url, uuid) {
 
             var category = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
             category.setId(id);
-            category.setDefault("true" === featAtts['default']);
             category.setName(featAtts['category_name']);
-            category.setLineWidth(featAtts['stroke_style']);
-            category.setLineWidth(featAtts['stroke_cap']);
-            category.setLineWidth(featAtts['stroke_corner']);
+            category.setDefault("true" === featAtts['default']);
             category.setLineWidth(featAtts['stroke_width']);
+            category.setLineStyle(featAtts['stroke_dasharray']);
+            category.setLineCap(featAtts['stroke_linecap']);
+            category.setLineCorner(featAtts['stroke_linejoin']);
             category.setLineColor(this._formatColorFromServer(featAtts['stroke_color']));
             category.setAreaLineWidth(featAtts['border_width']);
+            category.setAreaLineStyle(featAtts['border_dasharray']);
+            category.setAreaLineCorner(featAtts['border_linejoin']);
             category.setAreaLineColor(this._formatColorFromServer(featAtts['border_color']));
             category.setAreaFillColor(this._formatColorFromServer(featAtts['fill_color']));
-            category.setDotShape(featAtts['shape']);
+            category.setAreaFillStyle(featAtts['fill_pattern']);
+            category.setDotShape(featAtts['dot_shape']);
             category.setDotColor(this._formatColorFromServer(featAtts['dot_color']));
             category.setDotSize(featAtts['dot_size']);
             category.setUUID(uuid);
             if(featAtts['publisher_name']) {
                 category.setPublic(true);
             }
-             
 
             list.push(category);
         }
@@ -188,8 +192,8 @@ function(url, uuid) {
                 'border_dasharray' : m.getAreaLineStyle(),
                 'border_linejoin' : m.getAreaLineCorner(),
                 'border_color' : this._prefixColorForServer(m.getAreaLineColor()),
-                'fill_pattern' : m.getAreaFillStyle(),
                 'fill_color' : this._prefixColorForServer(m.getAreaFillColor()),
+                'fill_pattern' : m.getAreaFillStyle(),
                 'dot_color' : this._prefixColorForServer(m.getDotColor()),
                 'dot_size' : m.getDotSize(),
                 'dot_shape' : m.getDotShape(),
@@ -356,15 +360,15 @@ function(url, uuid) {
      */
     _handleMyPlacesResponse : function(response, cb) {
         var uuid = this.uuid;
+        var list = [];
         var feats = response.features;
-        if (feats == null || feats.length == 0) {
+        if (feats == null || feats.length == 0 || jQuery.isEmptyObject(feats)) {
 	        if (cb) {
-	            cb();
+	            cb(list);
 	        }
             return;
         }
-            
-        var list = [];
+
         for (var n = 0; n < feats.length; n++) {
             var f = feats[n];
             var featAtts = f.attributes;
@@ -501,7 +505,8 @@ function(url, uuid) {
             // make another roundtrip to get the updated models from server
             // to get the create/update date
             var modelUpdateCb = function(pList) {
-                cb(true, pList);
+                if (pList.length < 1)cb(false, pList);
+                else cb(true, pList);
             };
             this.getMyPlacesByIdList(formattedIdList, modelUpdateCb);
 

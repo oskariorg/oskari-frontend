@@ -12,3 +12,4 @@ tools/coverage
 tools/components
 META-INF/
 tests/minifierFullMapAppSetup.opts.js
+tools/test-results.xml

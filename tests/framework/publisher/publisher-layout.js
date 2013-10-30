@@ -56,8 +56,22 @@ describe('Test Suite for Publisher - Layout changes', function() {
             },
             "wmsUrl": "http://dummyUrl"
         });
+        var publisherConf = {
+            "loginUrl": {
+                "en": "http://dummyUrl/en/login",
+                "fi": "http://dummyUrl/fi/login",
+                "sv": "http://dummyUrl/sv/login"
+            },
+            "registerUrl": {
+                "en": "http://dummyUrl/en/register",
+                "fi": "http://dummyUrl/fi/register",
+                "sv": "http://dummyUrl/sv/register"
+            },
+            "urlPrefix": "www.paikkatietoikkuna.fi"
+        };
         appConf = { 
-            "mapfull" : mapfullConf
+            "mapfull" : mapfullConf,
+            "publisher" : publisherConf
         };
     });
 
@@ -66,6 +80,8 @@ describe('Test Suite for Publisher - Layout changes', function() {
         jQuery("body").html(getDefaultHTML());  
         // startup Oskari
         setupOskari(appSetup, appConf, function() {
+            // Set supported locales
+            Oskari.setSupportedLocales(['fi_FI', 'sv_SE', 'en_US']);
             sandbox = Oskari.getSandbox();
             publisherModule = sandbox.findRegisteredModuleInstance('Publisher');
             flyout = publisherModule.plugins['Oskari.userinterface.Flyout']; 
@@ -113,8 +129,8 @@ describe('Test Suite for Publisher - Layout changes', function() {
         });
 
         it('should change the colour scheme to blue when the blue input is clicked', function(done) {
-            var popup = jQuery('div#publisher-colour-popup');
-            var colourChangedStub = sinon.stub(publisherView.layoutPanel, '_sendColourSchemeChangedEvent');
+            var popup = jQuery('div#publisher-colour-popup'),
+                colourChangedStub = sinon.stub(publisherView.layoutPanel, '_sendColourSchemeChangedEvent');
             popup.find('input#blue').change();
 
             waitsFor(function() {
@@ -131,8 +147,8 @@ describe('Test Suite for Publisher - Layout changes', function() {
         });
 
         it('should change the font to "Georgia" when chosen from the select', function(done) {
-            var fontChangedStub = sinon.stub(publisherView.layoutPanel, '_sendFontChangedEvent');
-            var fontSelect = layoutPanelContent.find('div#publisher-layout-fonts select[name=publisher-fonts]');
+            var fontChangedStub = sinon.stub(publisherView.layoutPanel, '_sendFontChangedEvent'),
+                fontSelect = layoutPanelContent.find('div#publisher-layout-fonts select[name=publisher-fonts]');
             fontSelect.val(testFont).change();
 
             waitsFor(function() {
@@ -147,8 +163,8 @@ describe('Test Suite for Publisher - Layout changes', function() {
         });
 
         it('should change the tool style to "3d-dark" when chosen from the select', function(done) {
-            var toolStyleChangedStub = sinon.stub(publisherView.layoutPanel, '_sendToolStyleChangedEvent');
-            var toolStyleSelect = layoutPanelContent.find('div#publisher-layout-toolStyles select[name=publisher-toolStyles]');
+            var toolStyleChangedStub = sinon.stub(publisherView.layoutPanel, '_sendToolStyleChangedEvent'),
+                toolStyleSelect = layoutPanelContent.find('div#publisher-layout-toolStyles select[name=publisher-toolStyles]');
             toolStyleSelect.val(testToolStyle.val).change();
 
             waitsFor(function() {

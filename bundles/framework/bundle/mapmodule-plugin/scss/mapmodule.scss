@@ -5,18 +5,37 @@ div.mapplugin {
     position : absolute;
     z-index: 15000;
 }
-div.mapplugins.left {
-    position : absolute;
-    z-index: 15000;
-    top : 20px;
-    right : 20px;
-    text-align: right;
-    max-width : 85%;
-}
-div.mapplugins.left > div {
-	display: inline-block;
-    margin: 5px;
-    vertical-align: top;
+
+div.mapplugins {
+    &.top {
+        bottom: auto;
+        top: 20px;
+    }
+
+    &.left, &.right {
+        position : absolute;
+        z-index: 15000;
+        max-width : 85%;
+
+        > div {
+            display: inline-block;
+            margin: 5px;
+            vertical-align: top;
+        }
+
+    }
+
+    &.left {
+        left: 20px;
+        right: auto;
+        text-align: left;
+    }
+
+    &.right {
+        left: auto;
+        right: 20px;
+        text-align: right;
+    }
 }
 
 .oskari-publisher-font-arial {

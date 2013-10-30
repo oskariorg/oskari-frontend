@@ -43,12 +43,12 @@ Oskari.registerLocalization({
             "aggregate" : {
                 "label" : "Aggregate function",
                 "options" : [{
-                    "id" : "oskari_analyse_Sum",
-                    "label" : "Sum",
-                    "selected" : true
-                }, {
                     "id" : "oskari_analyse_Count",
-                    "label" : "Count"
+                    "label" : "Count",
+                    "selected" : true
+                },{
+                    "id" : "oskari_analyse_Sum",
+                    "label" : "Sum"
                 }, {
                     "id" : "oskari_analyse_Min",
                     "label" : "Minimum"
@@ -61,9 +61,6 @@ Oskari.registerLocalization({
                 },{
                     "id" : "oskari_analyse_StdDev",
                     "label" : "Standard deviation"
-                },{
-                    "id" : "oskari_analyse_Median",
-                    "label" : "Median"
                 }],
                 "attribute": "Choose an attribute"
             },
@@ -175,7 +172,8 @@ Oskari.registerLocalization({
                 "illegalCharacters" : "No alfabets - use digits",
                 "nohelp" : "No guide found",
                 "saveFailed" : "Storing analysis failed. Try again a little later.",
-                "loadLayersFailed": "Analysis layer load failed"
+                "loadLayersFailed": "Analysis layer load failed",
+                "loadLayerTypesFailed": "Analysis or WFS layer field types request failed"
             }
         },
         "StartView": {

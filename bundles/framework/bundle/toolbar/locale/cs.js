@@ -5,7 +5,6 @@ Oskari.registerLocalization({
     "buttons": {
       "link": {
         "tooltip": "Odkaz",
-        "prefixUrl": "www.paikkatietoikkuna.fi/web/en/map-window?",
         "ok": "Ok",
         "title": "Odkaz na zobrazení mapy"
       },

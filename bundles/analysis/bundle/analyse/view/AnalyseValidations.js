@@ -99,13 +99,13 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
     _validate_method_union: function(selections, errorTitle) {
         var noErrors = true;
 
-        if (!selections.methodParams.layerId) {
+   /* decrecated     if (!selections.methodParams.layerId) {
             this._notifyValidationError('Union layer is not selected', errorTitle);
             noErrors = false;
         } else if (selections.layerId == selections.methodParams.layerId) {
             this._notifyValidationError('No unions to itself', errorTitle);
             noErrors = false;
-        }
+        }  */
         return noErrors;
     },
     /**

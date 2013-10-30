@@ -99,6 +99,7 @@ function(config, plugin) {
 
         this.cometd.publish('/service/wfs/init', {
             "session" : this.session.session,
+            "route" : this.session.route,
             "language" : Oskari.getLang(),
             "browser" : this.session.browser,
             "browserVersion" : this.session.browserVersion,
@@ -265,6 +266,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             this.plugin.getSandbox().printDebug(error);
         }
         var layerType = data.data.type;
+        var boundaryTile = data.data.boundaryTile;
         // "highlight" | "normal"
         var keepPrevious = data.data.keepPrevious;
         // true | false
@@ -274,7 +276,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         };
 
         // send as an event forward to WFSPlugin (draws)
-        var event = this.plugin.getSandbox().getEventBuilder("WFSImageEvent")(layer, imageUrl, data.data.bbox, size, layerType, keepPrevious);
+        var event = this.plugin.getSandbox().getEventBuilder("WFSImageEvent")(layer, imageUrl, data.data.bbox, size, layerType, boundaryTile, keepPrevious);
         this.plugin.getSandbox().notifyAll(event);
 
 
@@ -308,7 +310,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
      * sends message to /service/wfs/addMapLayer
      */
     addMapLayer : function(id, style) {
-
         if(this.connection.isConnected()) {
             this.cometd.publish('/service/wfs/addMapLayer', {
                 "layerId" : id,

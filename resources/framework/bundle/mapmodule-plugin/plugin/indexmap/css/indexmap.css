@@ -1,54 +1,49 @@
-.olControlOverviewMapElement  {
-    padding: 5px !important;
-    background-color: #FFFFFF !important;
-    border-color: #D0D0D0 !important;
-    border-style: solid;
-    border-left-width: 2px;
-    border-top-width: 2px;
-    
-}
-#olControlOverviewMapMaximizeButton
-{
-    position: absolute !important;
-    right: 10px;
-    bottom: 2px;
-}
+.olControlOverviewMapContainer .olControlOverviewMapElement {
+  padding: 5px !important;
+  background-color: #FFFFFF !important;
+  border-color: #D0D0D0 !important;
+  border-style: solid;
+  border-left-width: 2px;
+  border-top-width: 2px; }
+.olControlOverviewMapContainer #olControlOverviewMapMaximizeButton {
+  position: absolute !important;
+  width: 46px !important;
+  height: 46px !important;
+  right: 0px;
+  bottom: 0px;
+  cursor: default;
+  background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap.png') 0px 0px !important; }
+  .olControlOverviewMapContainer #olControlOverviewMapMaximizeButton:hover {
+    background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png') !important; }
+.olControlOverviewMapContainer #OpenLayers_Control_minimizeDiv {
+  position: absolute !important;
+  width: 46px !important;
+  height: 46px !important;
+  right: 0px;
+  bottom: 0px;
+  cursor: default;
+  background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png') !important; }
+.olControlOverviewMapContainer.bottom {
+  bottom: 0;
+  top: auto; }
+  .olControlOverviewMapContainer.bottom #olControlOverviewMapMaximizeButton, .olControlOverviewMapContainer.bottom #OpenLayers_Control_minimizeDiv {
+    bottom: 0;
+    top: auto; }
+.olControlOverviewMapContainer.left {
+  left: 0;
+  right: auto; }
+  .olControlOverviewMapContainer.left #olControlOverviewMapMaximizeButton, .olControlOverviewMapContainer.left #OpenLayers_Control_minimizeDiv {
+    left: 0;
+    right: auto; }
+.olControlOverviewMapContainer.right {
+  left: auto;
+  right: 0; }
+  .olControlOverviewMapContainer.right #olControlOverviewMapMaximizeButton, .olControlOverviewMapContainer.right #OpenLayers_Control_minimizeDiv {
+    left: auto;
+    right: 0; }
 
-#OpenLayers_Control_minimizeDiv
-{
-    width: 46px !important;
-    height: 46px !important;
-    right: 0px;
-    bottom: 0px;
-    cursor: default;
-    background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png')  !important;
-    
-}
+#olControlOverviewMapMaximizeButton_innerImage, #OpenLayers_Control_minimizeDiv_innerImage {
+  display: none !important; }
 
-#olControlOverviewMapMaximizeButton_innerImage, #OpenLayers_Control_minimizeDiv_innerImage{
-    display: none !important;
-}
-
-#olControlOverviewMapMaximizeButton{
-    width: 46px !important;
-    height: 46px !important;
-    right: 0px;
-    bottom: 0px;
-    cursor: default;
-    background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap.png') 0px 0px !important;
-}
-
-#olControlOverviewMapMaximizeButton:hover
-{
-    background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png') !important;
-}
-
-#OpenLayers_Control_minimizeDiv{
-    position: absolute !important;
-    right: 0px;
-    bottom: 0px;
-}
-
-.olControlOverviewMapExtentRectangle  {
-    border:2px dashed #f47729 !important;
-}
+.olControlOverviewMapExtentRectangle {
+  border: 2px dashed #f47729 !important; }

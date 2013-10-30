@@ -30,6 +30,17 @@ Select hilighted mode: selected municipalities (map) are also selected in the gr
 
 ## Bundle configuration
 
+Enabling tile:
+```javascript
+config : {
+  "tileClazz": "Oskari.statistics.bundle.statsgrid.Tile",
+  "defaultLayerId": 274
+}
+```
+
+* defaultLayerId is optional, first registered layer of type 'STATS' will be used if not configured
+* tileClazz is optional and will add a tile to menu for easier access if configured
+
 Configuration for `ManageStatsPlugin`:
 ```javascript
 config : {

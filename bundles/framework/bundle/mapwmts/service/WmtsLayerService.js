@@ -10,7 +10,7 @@
 Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', function(mapLayerService) {
     this.mapLayerService = mapLayerService;
     this.capabilities = {};
-    this.capabilitiesClazz = Oskari.clazz.create("Oskari.openlayers.Patch.WMTSCapabilities_v1_0_0");
+    //this.capabilitiesClazz = Oskari.clazz.create("Oskari.openlayers.Patch.WMTSCapabilities_v1_0_0");
 }, {
     /**
      * TEmp
