@@ -5,6 +5,14 @@
 
 Municipality code was removed from the columns.
 
+### mapmodule-plugin/LogoPlugin
+
+Added a new link next to EULA which shows the data sources for map layers and open statistics indicators.
+
+### ui-components
+
+Added a new bundle which imports user interface components from under divmanazer.
+
 ## 1.15
 
 ### **Breaking changes**
