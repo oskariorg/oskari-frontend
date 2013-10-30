@@ -160,7 +160,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
          */
         eventHandlers: {
             'StatsGrid.IndicatorsEvent': function(event) {
-                this._openDataSourcesDialog(event.getIndicators());
+                this._addIndicatorsToDataSourcesDialog(event.getIndicators());
             }
         },
 
@@ -264,7 +264,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             } else {
                 dataSources.html(myLoc.dataSources);
                 dataSources.click(function(e) {
-                    me._requestDataSources(e.target);
+                    me._openDataSourcesDialog(e.target);
+                    me._requestDataSources();
                 });
             }
         },
@@ -299,7 +300,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
          * @method _requestDataSources
          * @return {undefined}
          */
-        _requestDataSources: function(target) {
+        _requestDataSources: function() {
             var me = this,
                 reqBuilder = me._sandbox.getRequestBuilder('StatsGrid.IndicatorsRequest'),
                 request;
@@ -307,8 +308,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             if (reqBuilder) {
                 request = reqBuilder();
                 me._sandbox.request(me, request);
-            } else {
-                me._openDataSourcesDialog(null, target);
             }
         },
 
@@ -321,21 +320,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
          * @param  {Array[Object]} indicators the open indicators
          * @return {undefined}
          */
-        _openDataSourcesDialog: function(indicators, target) {
+        _openDataSourcesDialog: function(target) {
             var me = this,
                 pluginLoc = me.getMapModule().getLocalization('plugin', true)[me.__name],
                 popupTitle = pluginLoc.dataSources,
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                closeButton = dialog.createCloseButton('OK'),
+                closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 content = me.templates.dataSourcesDialog.clone(),
                 layersCont = content.find('div.layers'),
                 layersHeaderLoc = pluginLoc.layersHeader,
                 layers = me._sandbox.findAllSelectedMapLayers(),
                 layersLen = layers.length,
-                indicatorsCont = content.find('div.indicators'),
-                indicatorsHeaderLoc = pluginLoc.indicatorsHeader,
-                indicators = indicators || {},
-                layer, indicator, i;
+                layer, i;
+
+            closeButton.setTitle('OK');
+            closeButton.setHandler(function () {
+                me.dataSourcesDialog = null;
+                dialog.close(true);
+            });
 
             // List the layers if any
             if (layersLen === 0) {
@@ -353,6 +355,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 }
             }
 
+            this.dataSourcesDialog = dialog;
+
+            dialog.show(popupTitle, content, [closeButton]);
+
+            target = target || me.element.find('div.data-sources');
+            dialog.moveTo(target, 'top');
+        },
+
+        /**
+         * Adds indicators to the data sources dialog.
+         *
+         * @method _addIndicatorsToDataSourcesDialog
+         * @param {Object} indicators
+         */
+        _addIndicatorsToDataSourcesDialog: function(indicators) {
+            var dialog = this.dataSourcesDialog;
+            if (!dialog) return;
+
+            var pluginLoc = this.getMapModule().getLocalization('plugin', true)[this.__name],
+                content = dialog.getJqueryContent(),
+                indicatorsCont = content.find('div.indicators'),
+                indicatorsHeaderLoc = pluginLoc.indicatorsHeader,
+                indicators = indicators || {},
+                indicator, i, target;
+
             // List the indicators if any
             if (jQuery.isEmptyObject(indicators)) {
                 indicatorsCont.remove();
@@ -369,9 +396,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 }
             }
 
-            dialog.show(popupTitle, content, [closeButton]);
-
-            target = target || me.element.find('div.data-sources');
+            target = target || this.element.find('div.data-sources');
             dialog.moveTo(target, 'top');
         }
     }, {
