@@ -106,7 +106,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 var me = this,
                     view = this.plugins['Oskari.userinterface.View'];
 
-                if (event.getExtension().getName() !== me.getName()) {
+                if (event.getExtension().getName() !== me.getName() || !this._isLayerPresent()) {
                     // not me -> do nothing
                     return;
                 }
@@ -139,12 +139,25 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
              */
             'MapLayerEvent': function (event) {
                 // Enable tile when stats layer is available
-                var layer = this.sandbox.findMapLayerFromAllAvailable(this.conf.defaultLayerId),
+                var layerPresent = this._isLayerPresent(),
                     tile = this.plugins['Oskari.userinterface.Tile'];
-                if (layer && tile) {
+                if (layerPresent && tile) {
                     tile.enable();
                 }
             }
+        },
+        _isLayerPresent : function() {
+            var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            if(this.conf && this.conf.defaultLayerId) {
+                var layer = service.findMapLayer(this.conf.defaultLayerId);
+                return (layer != null && layer.isLayerOfType('STATS'));
+            }
+            var layers = service.getLayersOfType('STATS');
+            if(layers && layers.length > 0) {
+                this.conf.defaultLayerId = layers[0].getId();
+                return true;
+            }
+            return false;
         },
         /**
          * @method setState

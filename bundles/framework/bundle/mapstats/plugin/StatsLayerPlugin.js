@@ -334,6 +334,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             this._navCtrl = new OpenLayers.Control.Navigation();
             this._map.addControl(this._navCtrl);
             var queryableMapLayers = [openLayer];
+
             this._getFeatureControlHover = new OpenLayers.Control.WMSGetFeatureInfo({
                 drillDown: false,
                 hover: true,

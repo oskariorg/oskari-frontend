@@ -38,6 +38,9 @@ config : {
 }
 ```
 
+* defaultLayerId is optional, first registered layer of type 'STATS' will be used if not configured
+* tileClazz is optional and will add a tile to menu for easier access if configured
+
 Configuration for `ManageStatsPlugin`:
 ```javascript
 config : {
