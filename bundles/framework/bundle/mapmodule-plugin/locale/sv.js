@@ -20,7 +20,10 @@ Oskari.registerLocalization({
     },
     "plugin": {
       "LogoPlugin": {
-        "terms": "Användningsvillkor"
+        "terms": "Användningsvillkor",
+        "dataSources": "Datakällor",
+        "layersHeader": "Kartlager",
+        "indicatorsHeader": "Indikator"
       },
        "DataSourcePlugin": {
         "link": "Datakälla",

@@ -29,6 +29,13 @@
 		margin: 5px;
 	}
 
+	.data-sources {
+		display: inline-block;
+		margin: 5px;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+
 	&.bottom {
 		bottom: 0;
 		top: auto;
@@ -44,6 +51,16 @@
 		right: 0;
 	}
 
+}
+
+.data-sources-dialog {
+	max-width: 400px;
+	.layers h4, .indicators h4 {
+		padding-bottom: 5px;
+	}
+	.indicators {
+		margin-top: 10px;
+	}
 }
 
 /* Force measurement bar up a notch so it isn't occluded by the logo */
