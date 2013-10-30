@@ -425,6 +425,24 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             return list;
         },
         /**
+         * @method getLayersOfType
+         * Returns an array of layers added to the service that are of given type (layer.isLayerOfType(type)).
+         *
+         * @param {String} type
+         *            type to filter the layers with
+         * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
+         */
+        getLayersOfType: function (type) {
+            var list = [];
+            for (var i = 0; i < this._loadedLayersList.length; ++i) {
+                var layer = this._loadedLayersList[i];
+                if (layer.isLayerOfType(type)) {
+                    list.push(layer);
+                }
+            }
+            return list;
+        },
+        /**
          * @method registerLayerModel
          *      Register an external layer model type (to be used by extension bundles).
          * Adds a new type to #typeMapping

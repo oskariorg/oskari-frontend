@@ -44,12 +44,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
     startDrawing : function(params) {
         if(params.isModify) {
             // preselect it for modification
-            this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+            this.modifyControls.select.select(this.drawLayer.features[0]);
         }
         else {
 	        // remove possible old drawing
-	        this.drawLayer.removeAllFeatures();
-        	
+	        this.drawLayer.destroyFeatures();
 	        if(params.geometry) {
 	            // sent existing geometry == edit mode
 	            this.editMode = true;
@@ -57,7 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
 	            var features = [new OpenLayers.Feature.Vector(params.geometry)];
 	            this.drawLayer.addFeatures(features);
 	            // preselect it for modification
-	            this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+	            this.modifyControls.select.select(this.drawLayer.features[0]);
 	        } else {
 	            // otherwise activate requested draw control for new geometry
 	            this.editMode = false;
@@ -76,7 +75,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
         // disable all draw controls
         this.toggleControl();
         // clear drawing
-        this.drawLayer.removeAllFeatures();
+        this.drawLayer.destroyFeatures();
     },
     
     forceFinishDraw : function() {
@@ -130,7 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
             // programmatically select the drawn feature ("not really supported by openlayers")
             // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
             var lastIndex = this.drawLayer.features.length-1;
-            this.modifyControls.modify.selectControl.select(this.drawLayer.features[lastIndex]);
+            this.modifyControls.select.select(this.drawLayer.features[lastIndex]);
         }
 
         var event;
@@ -227,9 +226,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
         
         // doesn't really need to be in array, but lets keep it for future development
         this.modifyControls = {
-        	//select : new OpenLayers.Control.SelectFeature(me.drawLayer),
-        	modify : new OpenLayers.Control.ModifyFeature(me.drawLayer)
+        	modify : new OpenLayers.Control.ModifyFeature(me.drawLayer, {
+                standalone: true
+            })
         };
+        this.modifyControls.select = new OpenLayers.Control.SelectFeature(me.drawLayer, {
+            onBeforeSelect: this.modifyControls.modify.beforeSelectFeature,
+            onSelect: this.modifyControls.modify.selectFeature,
+            onUnselect: this.modifyControls.modify.unselectFeature,
+            scope: this.modifyControls.modify
+        });
+
         this._map.addLayers([me.drawLayer]);
         for(var key in this.drawControls) {
             this._map.addControl(this.drawControls[key]);

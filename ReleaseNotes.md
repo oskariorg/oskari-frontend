@@ -1,4 +1,17 @@
 # Release Notes
+## 1.16
+
+### Statsgrid
+
+Municipality code was removed from the columns.
+
+### mapmodule-plugin/LogoPlugin
+
+Added a new link next to EULA which shows the data sources for map layers and open statistics indicators.
+
+### ui-components
+
+Added a new bundle which imports user interface components from under divmanazer.
 
 ## 1.15
 
@@ -9,6 +22,8 @@ Environment specific localized values (URLs) have been move to bundle configurat
 ### Sandbox/map layer service
 
 Added new method to create maplayer domain objects based on type: createLayerTypeInstance(type). This is a preferred way to create layer domain classes instead of Oskari.clazz.create() if you need to create one manually.
+
+Added new method to find all layers of given type: getLayersOfType(type). For example get all wfs layers by calling getLayersOfType('wfs').
 
 ### mapmodule-plugin/layers/backgroundlayerselector
 
@@ -80,6 +95,8 @@ User interface bug fixes.
 
 Sorting is now disabled when clicking the header menu buttons of an indicator in the grid.
 The classification now shows distinct class ranges thanks to the geostats library update.
+
+Bundle now has a tile for easier access to statistics. Statistics layer to use can be configured with defaultLayerId : [layer id]
 
 ### libraries/geostats
 

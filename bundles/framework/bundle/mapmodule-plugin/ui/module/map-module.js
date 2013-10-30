@@ -466,7 +466,8 @@ function(id, imageUrl, options) {
             isBaseLayer : true,
             center : lonlat,
             theme : null,
-            zoom : 0
+            zoom : 0,
+            zoomMethod : null
         });
 
         return this._map;

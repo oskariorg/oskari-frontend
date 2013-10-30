@@ -43,6 +43,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             var tooltipRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.TooltipContentRequestHandler', this);
             sandbox.addRequestHandler('StatsGrid.TooltipContentRequest', tooltipRequestHandler);
 
+            var indicatorRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.IndicatorsRequestHandler', this);
+            sandbox.addRequestHandler('StatsGrid.IndicatorsRequest', indicatorRequestHandler);
+
             var locale = me.getLocalization(),
                 mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             this.mapModule = mapModule;
@@ -103,7 +106,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 var me = this,
                     view = this.plugins['Oskari.userinterface.View'];
 
-                if (event.getExtension().getName() !== me.getName()) {
+                if (event.getExtension().getName() !== me.getName() || !this._isLayerPresent()) {
                     // not me -> do nothing
                     return;
                 }
@@ -136,12 +139,25 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
              */
             'MapLayerEvent': function (event) {
                 // Enable tile when stats layer is available
-                var layer = this.sandbox.findMapLayerFromAllAvailable(this.conf.defaultLayerId),
+                var layerPresent = this._isLayerPresent(),
                     tile = this.plugins['Oskari.userinterface.Tile'];
-                if (layer && tile) {
+                if (layerPresent && tile) {
                     tile.enable();
                 }
             }
+        },
+        _isLayerPresent : function() {
+            var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            if(this.conf && this.conf.defaultLayerId) {
+                var layer = service.findMapLayer(this.conf.defaultLayerId);
+                return (layer != null && layer.isLayerOfType('STATS'));
+            }
+            var layers = service.getLayersOfType('STATS');
+            if(layers && layers.length > 0) {
+                this.conf.defaultLayerId = layers[0].getId();
+                return true;
+            }
+            return false;
         },
         /**
          * @method setState
@@ -240,6 +256,26 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
         },
 
         /**
+         * Gets the instance sandbox.
+         *
+         * @method getSandbox
+         * @return {Object} return the sandbox associated with this instance
+         */
+        getSandbox: function() {
+            return this.sandbox;
+        },
+
+        /**
+         * Returns the open indicators of the instance's grid plugin.
+         *
+         * @method getGridIndicators
+         * @return {Object/null} returns the open indicators of the grid plugin, or null if no grid plugin
+         */
+        getGridIndicators: function() {
+            return ( this.gridPlugin ? this.gridPlugin.indicatorsMeta : null );
+        },
+
+        /**
          * Creates parameters for printout bundle and sends an event to it.
          * Params include the BBOX and the image url of the layer with current
          * visualization parameters.
@@ -249,7 +285,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @param {Object} layer
          */
         _createPrintParams: function (layer) {
-            console.log("getOLMapLayers:", this.mapModule.getOLMapLayers(layer.getId()));
             var oLayer = this.mapModule.getOLMapLayers(layer.getId())[0],
                 data = [{
                     // The max extent of the layer
