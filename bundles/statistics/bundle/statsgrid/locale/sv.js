@@ -5,7 +5,7 @@ Oskari.registerLocalization({
         "title": "patiopoc",
         "desc": "",
         "tile": {
-            "title": "Tematisk karta"
+            "title": "Tematisk kartor"
         },
         "view": {
             "title": "patiopoc",

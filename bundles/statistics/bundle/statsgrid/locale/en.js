@@ -5,7 +5,7 @@ Oskari.registerLocalization({
         "title": "Patio",
         "desc": "",
         "tile": {
-            "title": "Theme map"
+            "title": "Theme maps"
         },
         "view": {
             "title": "Patio",
