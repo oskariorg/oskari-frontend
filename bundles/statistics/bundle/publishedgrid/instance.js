@@ -62,6 +62,9 @@ function() {
         sandbox.registerService(statsService);
         this.statsService = statsService;
 
+        var tooltipRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.TooltipContentRequestHandler', this);
+        sandbox.addRequestHandler('StatsGrid.TooltipContentRequest', tooltipRequestHandler);
+
         var indicatorRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.IndicatorsRequestHandler', this);
         sandbox.addRequestHandler('StatsGrid.IndicatorsRequest', indicatorRequestHandler);
 
