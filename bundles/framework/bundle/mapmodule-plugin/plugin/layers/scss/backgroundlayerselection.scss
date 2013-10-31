@@ -1,4 +1,4 @@
-div.backgroundLayerSelectionPlugin {
+div.mapplugin.backgroundLayerSelectionPlugin {
     $buttonHeight: 28px;
     $buttonWidthWithoutPadding: 110px;
     $buttonHorizontalPadding: 10px;
@@ -13,10 +13,10 @@ div.backgroundLayerSelectionPlugin {
     $backgroundColor: #000;
     $backgroundOpacity: 0.3;
 
-    bottom: 0;
-    left: 0;
     width: 100%;
     height: $buttonHeight + $contentVerticalMargin + $contentVerticalMargin;
+    margin: 0;
+    z-index: 15000;
     text-align: center;
 
     div.bg {

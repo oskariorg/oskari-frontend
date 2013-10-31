@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
 
                 // Update the layer if current layer is null or if the layer has changed.
                 if ((layer != null && me._layer == null) ||
-                    (layer != null && me._layer.getId() != layer.getId())) {
+                        (layer != null && me._layer.getId() != layer.getId())) {
                     me._layer = layer;
                     // Notify the grid plugin of the changed layer.
                     me.instance.gridPlugin.setLayer(layer);
@@ -91,7 +91,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                     // Notify other components of the mode change.
                     var eventBuilder = me.instance.getSandbox().getEventBuilder('StatsGrid.ModeChangedEvent');
                     if (eventBuilder) {
-                        var evt= eventBuilder(me.isVisible);
+                        var evt = eventBuilder(me.isVisible);
                         me.instance.getSandbox().notifyAll(evt);
                     }
                 };

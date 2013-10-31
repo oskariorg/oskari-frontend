@@ -2,9 +2,7 @@
   background-color: #FFF;
   background-repeat: no-repeat;
   display: block;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
+  height: 25px;
   z-index: 100000000 !important;
   filter: alpha(opacity= 80 );
   /* unquote for libsass bug */
@@ -24,28 +22,11 @@
     display: inline-block;
     margin: 5px;
     text-decoration: underline;
-    cursor: pointer;
-  }
-  .logoplugin.bottom {
-    bottom: 0;
-    top: auto; }
-  .logoplugin.left {
-    left: 0;
-    right: auto; }
-  .logoplugin.right {
-    left: auto;
-    right: 0; }
+    cursor: pointer; }
 
 .data-sources-dialog {
-  max-width: 400px;
-}
-.data-sources-dialog .layers h4, .data-sources-dialog .indicators h4 {
-  padding-bottom: 5px;
-}
-.data-sources-dialog .indicators {
-  margin-top: 10px;
-}
-
-/* Force measurement bar up a notch so it isn't occluded by the logo */
-#mapdiv .olControlScaleLine {
-  bottom: 30px; }
+  max-width: 400px; }
+  .data-sources-dialog .layers h4, .data-sources-dialog .indicators h4 {
+    padding-bottom: 5px; }
+  .data-sources-dialog .indicators {
+    margin-top: 10px; }
