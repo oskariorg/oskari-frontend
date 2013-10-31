@@ -13,6 +13,10 @@ Added a new link next to EULA which shows the data sources for map layers and op
 
 Added a new bundle which imports user interface components from under divmanazer.
 
+### myplaces2
+
+Added new configuration option 'layerDefaults' which can be used to override default values found in code. See bundle documentation for details.
+
 ## 1.15
 
 ### **Breaking changes**
