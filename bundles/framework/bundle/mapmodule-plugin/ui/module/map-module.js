@@ -125,6 +125,22 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             delete this._controls[id];
         },
         /**
+         * Adds containers for map control plugins
+         */
+        _addMapControlPluginContainers: function () {
+            var containerClasses = ['bottom center', 'top center', 'right center', 'left center', 'bottom right', 'bottom left', 'top right', 'top left'],
+                containerDiv,
+                mapDiv = jQuery('#mapdiv'),
+                i;
+            for (i = 0; i < containerClasses.length; i++) {
+                containerDiv = jQuery('<div class="mapplugins"><div class="mappluginsContainer"><div class="mappluginsContent"></div></div></div>');
+                containerDiv.addClass(containerClasses[i]);
+                mapDiv.append(containerDiv);
+            }
+            
+
+        },
+        /**
          * @method setMapControlPlugin
          * Inserts a map control plugin instance to the map DOM
          * @param  {Object} element          Control container (jQuery)
@@ -306,7 +322,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             this.addMapControl('navigationHistoryTool', this._navigationHistoryTool);
             this.getMapControl('navigationHistoryTool').activate();
-
+            this._addMapControlPluginContainers();
             return this._map;
         },
 
