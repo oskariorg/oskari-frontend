@@ -26,4 +26,21 @@
 		display: inline-block;
 		margin: 5px;
 	}
+
+	.data-sources {
+		display: inline-block;
+		margin: 5px;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+
+}
+.data-sources-dialog {
+	max-width: 400px;
+	.layers h4, .indicators h4 {
+		padding-bottom: 5px;
+	}
+	.indicators {
+		margin-top: 10px;
+	}
 }

@@ -425,6 +425,24 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             return list;
         },
         /**
+         * @method getLayersOfType
+         * Returns an array of layers added to the service that are of given type (layer.isLayerOfType(type)).
+         *
+         * @param {String} type
+         *            type to filter the layers with
+         * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
+         */
+        getLayersOfType: function (type) {
+            var list = [];
+            for (var i = 0; i < this._loadedLayersList.length; ++i) {
+                var layer = this._loadedLayersList[i];
+                if (layer.isLayerOfType(type)) {
+                    list.push(layer);
+                }
+            }
+            return list;
+        },
+        /**
          * @method registerLayerModel
          *      Register an external layer model type (to be used by extension bundles).
          * Adds a new type to #typeMapping
@@ -528,7 +546,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         _createGroupMapLayer: function (baseMapJson, isBase) {
 
-            var baseLayer = Oskari.clazz.create('Oskari.mapframework.domain.WmsLayer');
+            var baseLayer = this.createLayerTypeInstance('wmslayer'); 
+            //Oskari.clazz.create('Oskari.mapframework.domain.WmsLayer');
             if (isBase) {
                 baseLayer.setAsBaseLayer();
             } else {
@@ -604,6 +623,24 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             return baseLayer;
         },
         /**
+         * Creates an empty domain object instance for given type. Passes params and options to constructor.
+         * Given type should match a key in typeMapping, otherwise [null] is returned
+         * 
+         * @method createLayerTypeInstance
+         *
+         * @param {String} type type of the layer (should match something on the typeMapping)
+         * @param {Object} params object for constructor (optional)
+         * @param {Object} options object for constructor (optional)
+         * @return {Oskari.mapframework.domain.AbstractLayer} empty layer model for the layer type
+         */
+        createLayerTypeInstance: function (type, params, options) {
+            var clazz = this.typeMapping[type];
+            if (!clazz) {
+                return null;
+            }
+            return Oskari.clazz.create(clazz, params, options);
+        },
+        /**
          * @method _createActualMapLayer
          * @private
          *
@@ -615,94 +652,92 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            parsed layer model that can be added with #addLayer()
          */
         _createActualMapLayer: function (mapLayerJson) {
-            var layer = null;
-            var mapLayerId = mapLayerJson.id;
-
-            if (mapLayerJson != null) {
-                if (!this.typeMapping[mapLayerJson.type]) {
-                    throw "Unknown layer type '" + mapLayerJson.type + "'";
-                }
-                layer = Oskari.clazz.create(this.typeMapping[mapLayerJson.type], mapLayerJson.params, mapLayerJson.options);
-                //these may be implemented as jsonHandler
-                if (mapLayerJson.type == 'wmslayer') {
-                    this._populateWmsMapLayerAdditionalData(layer, mapLayerJson);
-                } else if (mapLayerJson.type == 'vectorlayer') {
-                    layer.setStyledLayerDescriptor(mapLayerJson.styledLayerDescriptor);
-                }
-
-                if (mapLayerJson.metaType && layer.setMetaType) {
-                    layer.setMetaType(mapLayerJson.metaType);
-                }
-
-                // set common map layer data
-                layer.setAsNormalLayer();
-                layer.setId(mapLayerId);
-                layer.setName(mapLayerJson.name);
-
-                if (mapLayerJson.opacity != null) {
-                    layer.setOpacity(mapLayerJson.opacity);
-                } else {
-                    layer.setOpacity(100);
-                }
-                layer.setMaxScale(mapLayerJson.maxScale);
-                layer.setMinScale(mapLayerJson.minScale);
-                layer.setDescription(mapLayerJson.subtitle);
-                layer.setQueryable(mapLayerJson.isQueryable === "true" ||
-                    mapLayerJson.isQueryable === true);
-
-                // metadata 
-                layer.setDataUrl(mapLayerJson.dataUrl);
-                layer.setMetadataIdentifier(mapLayerJson.dataUrl_uuid);
-                if (!layer.getMetadataIdentifier() && layer.getDataUrl()) {
-                    var tempPartsForMetadata = layer.getDataUrl().split("uuid=");
-                    if (tempPartsForMetadata.length == 2) {
-                        layer.setMetadataIdentifier(tempPartsForMetadata[1]);
-                    }
-                }
-
-                // backendstatus 
-                if (mapLayerJson.backendStatus && layer.setBackendStatus) {
-                    layer.setBackendStatus(mapLayerJson.backendStatus);
-                }
-
-                // for grouping: organisation and inspire 
-                if (mapLayerJson.orgName) {
-                    layer.setOrganizationName(mapLayerJson.orgName);
-                } else {
-                    layer.setOrganizationName("");
-                }
-
-                if (mapLayerJson.inspire) {
-                    layer.setInspireName(mapLayerJson.inspire);
-                } else {
-                    layer.setInspireName("");
-                }
-                layer.setVisible(true);
-
-                // extent  
-                if (mapLayerJson.geom && layer.setGeometryWKT) {
-                    layer.setGeometryWKT(mapLayerJson.geom);
-                }
-
-                // permissions
-                if (mapLayerJson.permissions) {
-                    for (var perm in mapLayerJson.permissions) {
-                        layer.addPermission(perm, mapLayerJson.permissions[perm]);
-                    }
-                }
-
-                var builder = this.modelBuilderMapping[mapLayerJson.type];
-                if (builder) {
-                    builder.parseLayerData(layer, mapLayerJson, this);
-                }
-
-            } else {
+            if(!mapLayerJson) {
                 // sandbox.printDebug
                 /*
                  * console.log("[LayersService] " + "Trying to create mapLayer
                  * without " + "backing JSON data - id: " +mapLayerId);
                  */
+                return null;
             }
+
+            var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options);
+            if (!layer) {
+                throw "Unknown layer type '" + mapLayerJson.type + "'";
+            }
+            //these may be implemented as jsonHandler
+            if (mapLayerJson.type == 'wmslayer') {
+                this._populateWmsMapLayerAdditionalData(layer, mapLayerJson);
+            } else if (mapLayerJson.type == 'vectorlayer') {
+                layer.setStyledLayerDescriptor(mapLayerJson.styledLayerDescriptor);
+            }
+
+            if (mapLayerJson.metaType && layer.setMetaType) {
+                layer.setMetaType(mapLayerJson.metaType);
+            }
+
+            // set common map layer data
+            layer.setAsNormalLayer();
+            layer.setId(mapLayerJson.id);
+            layer.setName(mapLayerJson.name);
+
+            if (mapLayerJson.opacity != null) {
+                layer.setOpacity(mapLayerJson.opacity);
+            } else {
+                layer.setOpacity(100);
+            }
+            layer.setMaxScale(mapLayerJson.maxScale);
+            layer.setMinScale(mapLayerJson.minScale);
+            layer.setDescription(mapLayerJson.subtitle);
+            layer.setQueryable(mapLayerJson.isQueryable === "true" ||
+                mapLayerJson.isQueryable === true);
+
+            // metadata 
+            layer.setDataUrl(mapLayerJson.dataUrl);
+            layer.setMetadataIdentifier(mapLayerJson.dataUrl_uuid);
+            if (!layer.getMetadataIdentifier() && layer.getDataUrl()) {
+                var tempPartsForMetadata = layer.getDataUrl().split("uuid=");
+                if (tempPartsForMetadata.length == 2) {
+                    layer.setMetadataIdentifier(tempPartsForMetadata[1]);
+                }
+            }
+
+            // backendstatus 
+            if (mapLayerJson.backendStatus && layer.setBackendStatus) {
+                layer.setBackendStatus(mapLayerJson.backendStatus);
+            }
+
+            // for grouping: organisation and inspire 
+            if (mapLayerJson.orgName) {
+                layer.setOrganizationName(mapLayerJson.orgName);
+            } else {
+                layer.setOrganizationName("");
+            }
+
+            if (mapLayerJson.inspire) {
+                layer.setInspireName(mapLayerJson.inspire);
+            } else {
+                layer.setInspireName("");
+            }
+            layer.setVisible(true);
+
+            // extent  
+            if (mapLayerJson.geom && layer.setGeometryWKT) {
+                layer.setGeometryWKT(mapLayerJson.geom);
+            }
+
+            // permissions
+            if (mapLayerJson.permissions) {
+                for (var perm in mapLayerJson.permissions) {
+                    layer.addPermission(perm, mapLayerJson.permissions[perm]);
+                }
+            }
+
+            var builder = this.modelBuilderMapping[mapLayerJson.type];
+            if (builder) {
+                builder.parseLayerData(layer, mapLayerJson, this);
+            }
+
 
             return layer;
         },

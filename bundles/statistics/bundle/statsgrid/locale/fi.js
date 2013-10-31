@@ -5,7 +5,7 @@ Oskari.registerLocalization({
 		"title": "Patio",
 		"desc": "",
 		"tile": {
-			"title": "Teemakartta"
+			"title": "Teemakartat"
 		},
 		"view": {
 			"title": "Patio",

@@ -260,7 +260,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
          * if not.
          */
         onEvent: function (event) {
-            return this.eventHandlers[event.getName()].apply(this, [event]);
+            var handler = this.eventHandlers[event.getName()];
+            if (handler) {
+                return handler.apply(this, [event]);
+            }
         }
     }, {
         /**

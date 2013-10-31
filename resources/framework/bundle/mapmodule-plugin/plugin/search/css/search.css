@@ -77,8 +77,8 @@ div.published-search div.search-area-div div.search-left, div.published-search d
   float: left;
   height: 38px; }
 
-div.published-search div.search-area-div div.search-middle {
-  width: 180px; }
+div.published-search-div div.search-area-div div.search-middle {
+  min-width: 180px; }
 
 div.published-search div.search-area-div div.search-right {
   cursor: pointer; }
@@ -90,6 +90,7 @@ div.published-search div.search-area-div input.search-input {
   background-image: none;
   width: 145px;
   float: left;
+  padding: 8px 0px 8px 0px;
   outline: none; }
 
 div.published-search div.published-search-results {

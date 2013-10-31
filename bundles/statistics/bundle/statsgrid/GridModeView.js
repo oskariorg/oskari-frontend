@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                     }
                     if (me._layer) {
                         // Notify the grid plugin of the changed layer.
-                        me.instance.gridPlugin.setLayer(layer);
+                        me.instance.gridPlugin.setLayer(me._layer);
                         // Save the changed layer to the state.
                         me.instance.state.layerId = me._layer.getId();
                         me.toolbar.changeName(me._layer.getName());

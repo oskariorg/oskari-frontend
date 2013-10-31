@@ -44,7 +44,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         var key;
         if (options) {
             for (key in options) {
-                this._options[key] = options[key];
+                if (options.hasOwnProperty(key)) {
+                    this._options[key] = options[key];
+                }
             }
         }
 
@@ -153,8 +155,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 container.find('.mapplugin').each(function () {
                     curr = $(this);
                     // if plugin's slot isn't bigger (or smaller for bottom corners) than ours, store it to precedingPlugin
-                    if ( (!inverted && curr.attr('data-position') <= pos) ||
-                            ( inverted && curr.attr('data-position') > pos) ) {
+                    if ((!inverted && curr.attr('data-position') <= pos) ||
+                            (inverted && curr.attr('data-position') > pos)) {
                         precedingPlugin = curr;
                     }
                 });
@@ -272,7 +274,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // TODO: should these be in start-method?
             var p;
             for (p in this.eventHandlers) {
-                sandbox.registerForEventByName(this, p);
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(this, p);
+                }
             }
 
             this.requestHandlers = {
@@ -400,8 +404,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         startPlugins: function (sandbox) {
             var pluginName;
             for (pluginName in this._pluginInstances) {
-                sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
-                this._pluginInstances[pluginName].startPlugin(sandbox);
+                if (this._pluginInstances.hasOwnProperty(pluginName)) {
+                    sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
+                    this._pluginInstances[pluginName].startPlugin(sandbox);
+                }
             }
         },
         /**
@@ -413,8 +419,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         stopPlugins: function (sandbox) {
             var pluginName;
             for (pluginName in this._pluginInstances) {
-                sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
-                this._pluginInstances[pluginName].stopPlugin(sandbox);
+                if (this._pluginInstances.hasOwnProperty(pluginName)) {
+                    sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
+                    this._pluginInstances[pluginName].stopPlugin(sandbox);
+                }
             }
         },
         /**
@@ -511,17 +519,17 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if (this._options != null && this._options.maxExtent != null && this._options.maxExtent.left != null && this._options.maxExtent.bottom != null && this._options.maxExtent.right != null && this._options.maxExtent.top != null) {
                 mapExtent = new OpenLayers.Bounds(this._options.maxExtent.left, this._options.maxExtent.bottom, this._options.maxExtent.right, this._options.maxExtent.top);
             }
-
             this._map = new OpenLayers.Map({
-                controls: [],
-                units: this._options.units, //'m',
-                maxExtent: mapExtent,
-                resolutions: this._options.resolutions,
-                projection: this._options.srsName,
-                isBaseLayer: true,
-                center: lonlat,
-                theme: null,
-                zoom: 0
+                controls : [],
+                units : this._options.units, //'m',
+                maxExtent : mapExtent,
+                resolutions : this._options.resolutions,
+                projection : this._options.srsName,
+                isBaseLayer : true,
+                center : lonlat,
+                theme : null,
+                zoom : 0,
+                zoomMethod : null
             });
 
             return this._map;
@@ -532,7 +540,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Currently always 'EPSG:3067'
          * @return {String}
          */
-        getProjection: function () {
+        getProjection : function () {
             return this._options.srsName;
         },
         /**
@@ -1164,13 +1172,15 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // let the actual layerplugins find the layer since the name depends on
             // type
             for (p in lps) {
-                layersPlugin = lps[p];
-                // find the actual openlayers layers (can be many)
-                layerList = layersPlugin.getOLMapLayers(layer);
-                if (layerList) {
-                    // if found -> return list
-                    // otherwise continue looping
-                    return layerList;
+                if (lps.hasOwnProperty(p)) {
+                    layersPlugin = lps[p];
+                    // find the actual openlayers layers (can be many)
+                    layerList = layersPlugin.getOLMapLayers(layer);
+                    if (layerList) {
+                        // if found -> return list
+                        // otherwise continue looping
+                        return layerList;
+                    }
                 }
             }
             return null;
@@ -1195,10 +1205,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 p;
 
             for (p in lps) {
-                layersPlugin = lps[p];
+                if (lps.hasOwnProperty(p)) {
+                    layersPlugin = lps[p];
 
-                sandbox.printDebug('preselecting ' + p);
-                layersPlugin.preselectLayers(layers);
+                    sandbox.printDebug('preselecting ' + p);
+                    layersPlugin.preselectLayers(layers);
+                }
             }
         },
 
