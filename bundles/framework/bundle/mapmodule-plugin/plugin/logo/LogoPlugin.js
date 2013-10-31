@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
     }, {
 
         templates: {
-            main: jQuery("<div class='logoplugin'><div class='icon'></div>" +
+            main: jQuery("<div class='mapplugin logoplugin'><div class='icon'></div>" +
                 "<div class='terms'><a href='JavaScript:void(0);'></a></div>" +
                 "</div>")
         },
@@ -87,13 +87,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         startPlugin: function (sandbox) {
             var me = this,
                 p;
-            me._sandbox = sandbox;
+            me._sandbox = sandbox || me.getMapModule().getSandbox();
             me._map = me.getMapModule().getMap();
 
-            sandbox.register(me);
+            me._sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
+                    me._sandbox.registerForEventByName(me, p);
                 }
             }
             me._createUI();
@@ -112,11 +112,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
 
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(me, p);
+                    me._sandbox.unregisterFromEventByName(me, p);
                 }
             }
 
-            sandbox.unregister(me);
+            me._sandbox.unregister(me);
             me._map = null;
             me._sandbox = null;
 
@@ -159,32 +159,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             return this.eventHandlers[event.getName()].apply(this, [event]);
         },
 
-        setLocation: function (location, logoContainer) {
-            var container = logoContainer || this.element;
-            if (this.conf) {
-                this.conf.location = location;
+        /**
+         * Sets the location of the logo.
+         *
+         * @method setLocation
+         * @param {String} location The new location
+         */
+        setLocation: function (location) {
+            var me = this;
+            if (!me.conf) {
+                me.conf = {};
             }
-            // override default location if configured
-            if (location) {
-                if (location.top) {
-                    container.css('bottom', 'auto');
-                    container.css('top', location.top);
-                }
-                if (location.left) {
-                    container.css('right', 'auto');
-                    container.css('left', location.left);
-                }
-                if (location.right) {
-                    container.css('left', 'auto');
-                    container.css('right', location.right);
-                }
-                if (location.bottom) {
-                    container.css('top', 'auto');
-                    container.css('bottom', location.bottom);
-                }
-                if (location.classes) {
-                    container.removeClass('top left bottom right center').addClass(location.classes);
-                }
+            me.conf.location = location;
+
+            // reset plugin if active
+            if (me.element) {
+                me.stopPlugin();
+                me.startPlugin();
             }
         },
 
@@ -196,13 +187,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         _createUI: function () {
             var me = this,
                 sandbox = me._sandbox,
-                parentContainer = jQuery(me._map.div), // div where the map is rendered from openlayers
                 pluginLoc = me.getMapModule().getLocalization('plugin', true),
                 myLoc = pluginLoc[me.__name],
                 link,
                 linkParams,
                 mapUrl,
-                termsUrl;
+                termsUrl,
+                containerClasses = 'bottom left',
+                position = 1;
 
             if (me.conf) {
                 mapUrl = sandbox.getLocalizedProperty(me.conf.mapUrlPrefix);
@@ -213,11 +205,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 me.element = me.templates.main.clone();
             }
 
-            parentContainer.append(me.element);
-
             if (me.conf && me.conf.location) {
-                me.setLocation(me.conf.location, me.element);
+                containerClasses = me.conf.location.classes || containerClasses;
+                position = me.conf.location.position || position;
             }
+            //parentContainer.append(me.element);
+            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
 
             link = me.element.find('div.icon');
             if (mapUrl) {

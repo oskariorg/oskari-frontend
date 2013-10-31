@@ -1,13 +1,6 @@
-
-div.mapplugin.layerSelectionPlugin {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 100000000 !important;
-}
-
-.layerSelectionPlugin {
+div.mapplugin.layerselection {
   max-width: 200px;
+  z-index: 100000000 !important;
 
   div.content {
     background-color: white;

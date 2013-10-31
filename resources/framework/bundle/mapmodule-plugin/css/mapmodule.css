@@ -1,29 +1,108 @@
 .olMap {
   position: relative; }
 
-div.mapplugin {
+div.mapplugins {
   position: absolute;
+  text-align: center;
   z-index: 15000; }
-
-div.mapplugins.top {
-  bottom: auto;
-  top: 20px; }
-div.mapplugins.left, div.mapplugins.right {
-  position: absolute;
-  z-index: 15000;
-  max-width: 85%; }
-  div.mapplugins.left > div, div.mapplugins.right > div {
-    display: inline-block;
-    margin: 5px;
-    vertical-align: top; }
-div.mapplugins.left {
-  left: 20px;
-  right: auto;
-  text-align: left; }
-div.mapplugins.right {
-  left: auto;
-  right: 20px;
-  text-align: right; }
+  div.mapplugins .mappluginsContainer {
+    margin: 0;
+    padding: 0; }
+    div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin {
+      margin: 0 auto;
+      z-index: 15000;
+      /* Hackish margin fixes */ }
+      div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.indexmap {
+        margin-bottom: 0; }
+      div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.logoplugin {
+        margin-top: 10px; }
+      div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.scalebar {
+        margin-bottom: 0; }
+      div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.zoombar {
+        margin-top: 10px;
+        margin-bottom: 10px; }
+  div.mapplugins.top {
+    top: 0; }
+    div.mapplugins.top .mappluginsContainer .mappluginsContent {
+      margin-top: 10px; }
+    div.mapplugins.top.center {
+      width: 100%; }
+      div.mapplugins.top.center .mappluginsContainer .mappluginsContent {
+        margin-right: auto;
+        margin-left: auto;
+        display: inline-block; }
+        div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin {
+          display: inline-block;
+          vertical-align: top;
+          margin: 0 5px; }
+          div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin.layerselection, div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin.search {
+            float: right; }
+    div.mapplugins.top.right .mapplugin.layerselection {
+      margin-left: 0; }
+    div.mapplugins.top.right .mapplugin.layerselection, div.mapplugins.top.right .mapplugin.search {
+      display: block;
+      float: right;
+      margin: 0 5px; }
+    div.mapplugins.top.left .mapplugin.layerselection {
+      margin-right: 0; }
+    div.mapplugins.top.left .mapplugin.layerselection, div.mapplugins.top.left .mapplugin.search {
+      display: block;
+      float: left;
+      margin: 0 5px; }
+  div.mapplugins.bottom {
+    bottom: 0; }
+    div.mapplugins.bottom .mappluginsContainer .mappluginsContent {
+      margin-bottom: 10px; }
+    div.mapplugins.bottom.center {
+      width: 100%; }
+      div.mapplugins.bottom.center .mappluginsContainer .mappluginsContent {
+        margin-right: auto;
+        margin-left: auto;
+        display: inline-block; }
+        div.mapplugins.bottom.center .mappluginsContainer .mappluginsContent .mapplugin {
+          display: inline-block;
+          vertical-align: top;
+          margin: 0 5px; }
+          div.mapplugins.bottom.center .mappluginsContainer .mappluginsContent .mapplugin.layerselection, div.mapplugins.bottom.center .mappluginsContainer .mappluginsContent .mapplugin.search {
+            float: right; }
+    div.mapplugins.bottom.right .mapplugin.indexmap {
+      margin-left: 20px;
+      margin-right: -10px; }
+    div.mapplugins.bottom.right .mapplugin.logoplugin {
+      clear: both;
+      margin-right: -10px; }
+    div.mapplugins.bottom.right .mapplugin.indexmap, div.mapplugins.bottom.right .mapplugin.logoplugin, div.mapplugins.bottom.right .mapplugin.scalebar {
+      float: right;
+      display: inline-block; }
+    div.mapplugins.bottom.left .mapplugin.indexmap {
+      margin-right: 20px;
+      margin-left: -10px; }
+    div.mapplugins.bottom.left .mapplugin.logoplugin {
+      clear: both;
+      margin-left: -10px; }
+    div.mapplugins.bottom.left .mapplugin.indexmap, div.mapplugins.bottom.left .mapplugin.logoplugin, div.mapplugins.bottom.left .mapplugin.scalebar {
+      float: left;
+      display: inline-block; }
+  div.mapplugins.left {
+    left: 0; }
+    div.mapplugins.left .mappluginsContainer .mappluginsContent {
+      margin-left: 10px; }
+    div.mapplugins.left.center {
+      height: 100%;
+      display: table; }
+      div.mapplugins.left.center .mappluginsContainer {
+        display: table-cell;
+        vertical-align: middle; }
+  div.mapplugins.right {
+    right: 0; }
+    div.mapplugins.right .mappluginsContainer .mappluginsContent {
+      margin-right: 10px; }
+    div.mapplugins.right.center {
+      height: 100%;
+      display: table; }
+      div.mapplugins.right.center .mappluginsContainer {
+        display: table-cell;
+        vertical-align: middle; }
 
 .oskari-publisher-font-arial {
   font-family: Arial, sans-serif !important; }
