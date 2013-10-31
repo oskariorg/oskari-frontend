@@ -64,7 +64,32 @@ Adding external graphics in DrawPlugin.js:
 
 ## Bundle configuration
 
-No configuration is required
+```javascript
+{
+    "queryUrl" : "[REPLACED BY HANDLER(url for wfst operations)]",
+    "featureNS" : "http://www.oskari.org",
+    "layerDefaults" : {
+      "wmsName" : "oskari:my_places_categories"
+    },
+    "wmsUrl" : "/maptiles/myplaces?myCat="
+}
+```
+* queryUrl is the url for WFST operations, if you are using oskari-server it will be resolved by the server
+* featureNS is the namespace defined for geoserver for myplaces
+* layerDefaults is an optional configuration that can be used to override some or all myplaces-layer defaults in code:
+```javascript
+{
+    wmsName: 'ows:my_places_categories',
+    type: "wmslayer",
+    isQueryable: true,
+    opacity: 90,
+    metaType: this.instance.idPrefix,
+    orgName: catLoc.organization,
+    inspire: catLoc.inspire
+}
+```
+Note! Changing metaType may result in unexpected behavior
+* wmsUrl is the base url which returns images (myplaces category id is added to the end automatically/layer)
 
 ## Bundle state
 
