@@ -251,6 +251,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
 
             // handle colors separately
             var colorArr = [];
+            colors.flipped = colors.flipped === true;
             for (i = 0, ilen = colorKeys.length; i < ilen; ++i) {
                 var cKey = colorKeys[i];
                 if (colors.hasOwnProperty(cKey) && colors[cKey] != null) {
