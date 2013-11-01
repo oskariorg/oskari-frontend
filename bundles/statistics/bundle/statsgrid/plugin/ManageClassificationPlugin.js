@@ -411,6 +411,7 @@ function(config, locale) {
 
         var manualBreaksInput = this.element.find('.manualBreaks').find('input[name=breaksInput]').val();
         var colors = colors.replace(/,/g, '|');
+        var classificationMode = me.element.find('select.classification-mode').val();
 
         var returnObject = {
             //instance.js - state handling: method
@@ -425,6 +426,8 @@ function(config, locale) {
                 index: me.colorsetIndex,
                 flipped: me.colorsFlipped
             },
+            // instance.js - state handling: classification mode
+            classificationMode: classificationMode,
             VIS_ID : -1,
             VIS_NAME : params.VIS_NAME,
             VIS_ATTR : params.VIS_ATTR,
@@ -441,7 +444,7 @@ function(config, locale) {
                 return (Math.round(i * 10) / 10);
         };
 
-        var colortab = gstats.getHtmlLegend(null, sortcol.name, true, legendRounder, 'distinct');
+        var colortab = gstats.getHtmlLegend(null, sortcol.name, true, legendRounder, classificationMode);
         var classify = me.element.find('.classificationMethod');
         classify.find('.block').remove();
         var block = jQuery('<div class="block"></div>');
@@ -536,6 +539,28 @@ function(config, locale) {
 		});
         manualcls.hide();
 
+        // Classification mode selector
+        
+        var modeSelector = jQuery(
+            '<div>' +
+                this._locale.classify.mode + '<br />' +
+                '<select class="classification-mode"></select><br />' +
+            '</div>'
+        );
+        var modes = ['distinct', 'discontinuous'];
+        jQuery.each(modes, function(i, val) {
+            modeSelector.find('select.classification-mode').append(
+                '<option value="' + val + '">' +
+                    me._locale.classify.modes[val] +
+                '</option>'
+            );
+        });
+        modeSelector.find('select.classification-mode').change(function(e) {
+            me.classifyData();
+        });
+
+        // Colours selectors
+
         var colorsButton = jQuery('<input type="button" value="' + me._locale.colorset.button + '" />');
         colorsButton.click(function(event) {
             me._createColorDialog();
@@ -548,6 +573,7 @@ function(config, locale) {
 
         classify.append(classcnt);
         classify.append(manualcls);
+        classify.append(modeSelector);
         classify.append(colorsButton);
         classify.append(flipColorsButton);
         content.append(classify);

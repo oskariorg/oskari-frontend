@@ -214,13 +214,18 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 indicatorSeparator = ",",
                 stateValues = null,
                 indicatorValues = null,
+                colorsValues = null,
                 state = this.state,
-                keys = ['layerId', 'currentColumn', 'methodId', 'numberOfClasses', 'manualBreaksInput'],
+                colors = state.colors || {},
+                keys = ['layerId', 'currentColumn', 'methodId', 'numberOfClasses', 'classificationMode', 'manualBreaksInput'],
+                colorKeys = ['set', 'index', 'flipped'],
                 indicators = state.indicators || [],
                 value;
 
-            // Note! keys needs to be handled in the backend as well. Therefore the key order is important as well as actual values.
-            // 'manualBreaksInput' can be an empty string and must be last.
+            // Note! keys needs to be handled in the backend as well.
+            // Therefore the key order is important as well as actual values.
+            // 'classificationMode' can be an empty string but it must be the fifth value.
+            // 'manualBreaksInput' can be an empty string but it must be the sixth value.
             for (i = 0, ilen = keys.length, ilast = ilen - 1; i < ilen; i++) {
                 value = state[keys[i]];
                 if (value !== null && value !== undefined) {
@@ -243,9 +248,23 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                     indicatorValues += indicatorSeparator;
                 }
             }
+
+            // handle colors separately
+            var colorArr = [];
+            for (i = 0, ilen = colorKeys.length; i < ilen; ++i) {
+                var cKey = colorKeys[i];
+                if (colors.hasOwnProperty(cKey) && colors[cKey] != null) {
+                    colorArr.push(colors[cKey]);
+                }
+            }
+            if (colorArr.length === 3) {
+                colorsValues = colorArr.join(',');
+            }
+
             var ret = null;
             if (stateValues && indicatorValues) {
                 ret = statsgridState + stateValues + "-" + indicatorValues;
+                if (colorsValues) ret += "-" + colorsValues;
             }
 
             return ret;
@@ -329,6 +348,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             this.state.numberOfClasses = params.numberOfClasses;
             this.state.manualBreaksInput = params.manualBreaksInput;
             this.state.colors = params.colors;
+            this.state.classificationMode = params.classificationMode;
             // Send data to printout bundle
             this._createPrintParams(layer);
         },

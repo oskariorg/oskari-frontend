@@ -5,6 +5,10 @@
 
 Municipality code was removed from the columns.
 
+Users can now select the class limits mode from distinct and discontinuous.
+
+The map link now gets the class limits mode and colour selections as parameters.
+
 ### mapmodule-plugin/LogoPlugin
 
 Added a new link next to EULA which shows the data sources for map layers and open statistics indicators.
