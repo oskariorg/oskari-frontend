@@ -55,10 +55,10 @@ Oskari.registerLocalization({
             "nanError": "Ett värde var inte ett nummer!",
             "infoTitle": "Manuell klassificering",
             "info": "Ange siffrorna separerade med kommatecken. Punkt fungerar som ett decimaltecken. Först in den nedre gränsen, då gränserna klass och slutligen den övre gränsen. T.ex. genom att skriva \"0, 10,5, 24, 30,2, 57, 73,1\" du får fem klasser med nedre och övre gränsen satt till 0 och 73,1 och klass gränser mellan dem. Värden kvar utanför gränserna kommer att uteslutas.",
-            "mode": "Luokkarajat",
+            "mode": "Klass gränsen",
             "modes": {
-                "distinct": "Jatkuva",
-                "discontinuous": "Epäjatkuva"
+                "distinct": "Kontinuerlig",
+                "discontinuous": "Diskontinuerlig"
             }
         },
         "colorset": {

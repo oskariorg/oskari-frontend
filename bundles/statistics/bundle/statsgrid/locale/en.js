@@ -57,8 +57,8 @@ Oskari.registerLocalization({
             "info": "Input manual breaks separated with a comma. Period works as a decimal separator. First enter the lower bound, then the class bounds and finally the upper bound. E.g. by entering \"0, 10.5, 24, 30.2, 57, 73.1\" you'll get five classes with lower and upper bounds set to 0 and 73,1 and class bounds between those. Values left outside the bounds will be excluded.",
             "mode": "Class limits",
             "modes": {
-                "distinct": "Distinct",
-                "discontinuous": "Discontinuous"
+                "distinct": "Continuous",
+                "discontinuous": "Discrete"
             }
         },
         "colorset": {
