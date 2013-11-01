@@ -18,8 +18,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this.pluginName = null;
         this._sandbox = null;
         this._map = null;
-        this.__templates = {};
-        this.__elements = {};
+        this.templates = {};
+        this.element = null;
         this.__parent = null;
         this._slider = null;
         this._zoombar_messages = {};
@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         init: function () {
             var me = this;
             // templates
-            this.__templates.zoombar = jQuery('<div class="oskariui mapplugin pzbDiv">' +
+            this.templates.main = jQuery('<div class="oskariui mapplugin pzbDiv zoombar">' +
                 '<div class="pzbDiv-plus"  title="Katu"></div>' +
                 '<input type=\'hidden\' />' +
                 '<div class="slider"></div>' +
@@ -101,12 +101,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          */
         startPlugin: function (sandbox) {
             var p;
-            this._sandbox = sandbox;
-            sandbox.register(this);
+            this._sandbox = sandbox || this.getMapModule().getSandbox();
+            this._sandbox.register(this);
 
             for (p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(this, p);
+                    this._sandbox.registerForEventByName(this, p);
                 }
             }
             this._draw();
@@ -119,16 +119,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          */
         stopPlugin: function (sandbox) {
-
-            if (this.__elements.zoombarSlider) {
-                this.__elements.zoombarSlider.remove();
-                this._slider.remove();
-                delete this.__elements.zoombarSlider;
+            var me = this;
+            if (me.element) {
+                me.element.remove();
+                me._slider.remove();
+                delete me.element;
             }
-            sandbox.unregister(this);
+            me._sandbox.unregister(me);
 
             //this._map = null;
-            this._sandbox = null;
+            me._sandbox = null;
         },
         /**
          * @method _draw
@@ -139,59 +139,63 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         _draw: function () {
             var me = this;
             if (!me.__parent) {
-                me.__parent = this._map.div;
+                me.__parent = me._map.div;
             }
-            if (!me.__elements.zoombarSlider) {
-                me.__elements.zoombarSlider = me.__templates.zoombar.clone();
+            if (!me.element) {
+                me.element = me.templates.main.clone();
             }
 
-            var inputId = 'pzb-input-' + this.getName();
-            var sliderId = 'pzb-slider-' + this.getName();
-            var sliderEl = me.__elements.zoombarSlider.find('div.slider');
+            var inputId = 'pzb-input-' + me.getName(),
+                sliderId = 'pzb-slider-' + me.getName(),
+                sliderEl = me.element.find('div.slider'),
+                containerClasses = 'top right',
+                position = 2;
 
-            me.__elements.zoombarSlider.find('input').attr('id', inputId);
+            me.element.find('input').attr('id', inputId);
             sliderEl.attr('id', sliderId);
 
-            me.__elements.zoombarSlider.mousedown(function (event) {
+            me.element.mousedown(function (event) {
                 event.stopPropagation();
             });
 
-            jQuery(me.__parent).append(me.__elements.zoombarSlider);
+            if (me.conf && me.conf.location) {
+                containerClasses = me.conf.location.classes || containerClasses;
+                position = me.conf.location.position || position;
+            }
 
-            sliderEl = me.__elements.zoombarSlider.find('div.slider');
-            sliderEl.css("height", (this._map.getNumZoomLevels() * 11) + "px");
+            // hackhack for old configs so we don't have to remove with-panbuttons from them
+            me.getMapModule().setMapControlPlugin(me.element, containerClasses.replace('with-panbuttons', ''), position);
+
+            sliderEl = me.element.find('div.slider');
+            sliderEl.css("height", (me._map.getNumZoomLevels() * 11) + "px");
             me._slider = sliderEl.slider({
                 orientation: "vertical",
                 range: "min",
                 min: 0,
-                max: this._map.getNumZoomLevels() - 1,
-                value: this._map.getZoom(),
+                max: me._map.getNumZoomLevels() - 1,
+                value: me._map.getZoom(),
                 slide: function (event, ui) {
                     me.getMapModule().zoomTo(ui.value);
                 }
             });
 
 
-            var plus = me.__elements.zoombarSlider.find('.pzbDiv-plus');
+            var plus = me.element.find('.pzbDiv-plus');
             plus.bind('click', function (event) {
                 if (me._slider.slider('value') < me._map.getNumZoomLevels()) {
                     me.getMapModule().zoomTo(me._slider.slider('value') + 1);
                 }
             });
-            var minus = me.__elements.zoombarSlider.find('.pzbDiv-minus');
+            var minus = me.element.find('.pzbDiv-minus');
             minus.bind('click', function (event) {
                 if (me._slider.slider('value') > 0) {
                     me.getMapModule().zoomTo(me._slider.slider('value') - 1);
                 }
             });
-            // override default location if configured
-            if (me.conf && me.conf.location) {
-                me.setLocation(this.conf.location, me.__elements.zoombarSlider);
-            }
 
             // Change the style if in the conf
             if (me.conf && me.conf.toolStyle) {
-                me.changeToolStyle(me.conf.toolStyle, me.__elements.zoombarSlider);
+                me.changeToolStyle(me.conf.toolStyle, me.element);
             }
         },
         /**
@@ -215,33 +219,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * Sets the location of the zoombar.
          *
          * @method setLocation
-         * @param {Object} location The new location
-         * @param {Object} zoombarContainer The element where the zoombar is contained in
+         * @param {String} location The new location
          */
-        setLocation: function (location, zoombarContainer) {
-            var container = zoombarContainer || this.__elements.zoombarSlider;
-            if (this.conf) {
-                this.conf.location = location;
+        setLocation: function (location) {
+            var me = this;
+            if (!me.conf) {
+                me.conf = {};
             }
-            // clear possible opposite position with 'auto'
-            if (location.top) {
-                container.css('bottom', 'auto');
-                container.css('top', location.top);
-            }
-            if (location.left) {
-                container.css('right', 'auto');
-                container.css('left', location.left);
-            }
-            if (location.right) {
-                container.css('left', 'auto');
-                container.css('right', location.right);
-            }
-            if (location.bottom) {
-                container.css('top', 'auto');
-                container.css('bottom', location.bottom);
-            }
-            if (location.classes) {
-                container.removeClass('top left bottom right center with-panbuttons').addClass(location.classes);
+            me.conf.location = location;
+
+            // reset plugin if active
+            if (me.element) {
+                me.stopPlugin();
+                me.startPlugin();
             }
         },
 
@@ -288,7 +278,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * @param {jQuery} div
          */
         changeToolStyle: function (style, div) {
-            div = div || this.__elements.zoombarSlider;
+            div = div || this.element;
 
             if (!style || !div) {
                 return;

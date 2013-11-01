@@ -20,17 +20,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
 
         templates: {
             main: jQuery(
-                "<div class='logoplugin'>" +
+                "<div class='mapplugin logoplugin'>" +
                     "<div class='icon'></div>" +
                     "<div class='terms'><a href='JavaScript:void(0);'></a></div>" +
                     "<div class='data-sources'></div>" +
-                "</div>"
+                    "</div>"
             ),
             dataSourcesDialog: jQuery(
                 "<div class='data-sources-dialog'>" +
                     "<div class='layers'><h4></h4></div>" +
                     "<div class='indicators'><h4></h4></div>" +
-                "</div>"
+                    "</div>"
             )
         },
 
@@ -97,13 +97,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         startPlugin: function (sandbox) {
             var me = this,
                 p;
-            me._sandbox = sandbox;
+            me._sandbox = sandbox || me.getMapModule().getSandbox();
             me._map = me.getMapModule().getMap();
 
-            sandbox.register(me);
+            me._sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
+                    me._sandbox.registerForEventByName(me, p);
                 }
             }
             me._createUI();
@@ -122,11 +122,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
 
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(me, p);
+                    me._sandbox.unregisterFromEventByName(me, p);
                 }
             }
 
-            sandbox.unregister(me);
+            me._sandbox.unregister(me);
             me._map = null;
             me._sandbox = null;
 
@@ -159,7 +159,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
          * @static
          */
         eventHandlers: {
-            'StatsGrid.IndicatorsEvent': function(event) {
+            'StatsGrid.IndicatorsEvent': function (event) {
                 this._addIndicatorsToDataSourcesDialog(event.getIndicators());
             }
         },
@@ -176,32 +176,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             }
         },
 
-        setLocation: function (location, logoContainer) {
-            var container = logoContainer || this.element;
-            if (this.conf) {
-                this.conf.location = location;
+        /**
+         * Sets the location of the logo.
+         *
+         * @method setLocation
+         * @param {String} location The new location
+         */
+        setLocation: function (location) {
+            var me = this;
+            if (!me.conf) {
+                me.conf = {};
             }
-            // override default location if configured
-            if (location) {
-                if (location.top) {
-                    container.css('bottom', 'auto');
-                    container.css('top', location.top);
-                }
-                if (location.left) {
-                    container.css('right', 'auto');
-                    container.css('left', location.left);
-                }
-                if (location.right) {
-                    container.css('left', 'auto');
-                    container.css('right', location.right);
-                }
-                if (location.bottom) {
-                    container.css('top', 'auto');
-                    container.css('bottom', location.bottom);
-                }
-                if (location.classes) {
-                    container.removeClass('top left bottom right center').addClass(location.classes);
-                }
+            me.conf.location = location;
+
+            // reset plugin if active
+            if (me.element) {
+                me.stopPlugin();
+                me.startPlugin();
             }
         },
 
@@ -213,13 +204,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         _createUI: function () {
             var me = this,
                 sandbox = me._sandbox,
-                parentContainer = jQuery(me._map.div), // div where the map is rendered from openlayers
                 pluginLoc = me.getMapModule().getLocalization('plugin', true),
                 myLoc = pluginLoc[me.__name],
                 link,
                 linkParams,
                 mapUrl,
                 termsUrl,
+                containerClasses = 'bottom left',
+                position = 1,
                 dataSources;
 
             if (me.conf) {
@@ -231,11 +223,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 me.element = me.templates.main.clone();
             }
 
-            parentContainer.append(me.element);
-
             if (me.conf && me.conf.location) {
-                me.setLocation(me.conf.location, me.element);
+                containerClasses = me.conf.location.classes || containerClasses;
+                position = me.conf.location.position || position;
             }
+            //parentContainer.append(me.element);
+            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
 
             link = me.element.find('div.icon');
             if (mapUrl) {
@@ -263,7 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 dataSources.remove();
             } else {
                 dataSources.html(myLoc.dataSources);
-                dataSources.click(function(e) {
+                dataSources.click(function (e) {
                     me._openDataSourcesDialog(e.target);
                     me._requestDataSources();
                 });
@@ -300,7 +293,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
          * @method _requestDataSources
          * @return {undefined}
          */
-        _requestDataSources: function() {
+        _requestDataSources: function () {
             var me = this,
                 reqBuilder = me._sandbox.getRequestBuilder('StatsGrid.IndicatorsRequest'),
                 request;
@@ -320,7 +313,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
          * @param  {Array[Object]} indicators the open indicators
          * @return {undefined}
          */
-        _openDataSourcesDialog: function(target) {
+        _openDataSourcesDialog: function (target) {
             var me = this,
                 pluginLoc = me.getMapModule().getLocalization('plugin', true)[me.__name],
                 popupTitle = pluginLoc.dataSources,
@@ -331,7 +324,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 layersHeaderLoc = pluginLoc.layersHeader,
                 layers = me._sandbox.findAllSelectedMapLayers(),
                 layersLen = layers.length,
-                layer, i;
+                layer,
+                i;
 
             closeButton.setTitle('OK');
             closeButton.setHandler(function () {
@@ -350,7 +344,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                     layersCont.append(
                         '<div>' +
                             layer.getName() + ' - ' + layer.getOrganizationName() +
-                        '</div>'
+                            '</div>'
                     );
                 }
             }
@@ -369,16 +363,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
          * @method _addIndicatorsToDataSourcesDialog
          * @param {Object} indicators
          */
-        _addIndicatorsToDataSourcesDialog: function(indicators) {
+        _addIndicatorsToDataSourcesDialog: function (indicators) {
             var dialog = this.dataSourcesDialog;
-            if (!dialog) return;
+            if (!dialog) {
+                return;
+            }
 
             var pluginLoc = this.getMapModule().getLocalization('plugin', true)[this.__name],
                 content = dialog.getJqueryContent(),
                 indicatorsCont = content.find('div.indicators'),
                 indicatorsHeaderLoc = pluginLoc.indicatorsHeader,
-                indicators = indicators || {},
-                indicator, i, target;
+                indicator,
+                i,
+                target;
+
+            indicators = indicators || {};
 
             // List the indicators if any
             if (jQuery.isEmptyObject(indicators)) {
@@ -387,12 +386,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 indicatorsCont.find('h4').html(indicatorsHeaderLoc);
 
                 for (i in indicators) {
-                    indicator = indicators[i];
-                    indicatorsCont.append(
-                        '<div>' +
-                            indicator.title + ' - ' + indicator.organization +
-                        '</div>'
-                    );
+                    if (indicators.hasOwnProperty(i)) {
+                        indicator = indicators[i];
+                        indicatorsCont.append(
+                            '<div>' +
+                                indicator.title + ' - ' + indicator.organization +
+                                '</div>'
+                        );
+                    }
                 }
             }
 
