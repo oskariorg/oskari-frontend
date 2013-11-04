@@ -1,5 +1,5 @@
 .manageClassificationPlugin {
-  z-index: 100000000 !important;
+  z-index: 1000000 !important;
   max-width: 240px;
   background-color: white !important;
   color: black !important;

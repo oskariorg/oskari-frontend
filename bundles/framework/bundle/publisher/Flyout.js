@@ -127,6 +127,9 @@ function(instance) {
     handleLayerSelectionChanged : function() {
         if(this.view && this.view.handleLayerSelectionChanged) {
             this.view.handleLayerSelectionChanged();
+            if(this.instance.publisher) {
+                this.instance.publisher.maplayerPanel.handleLayerSelectionChanged();
+            }
         }
     }
 }, {

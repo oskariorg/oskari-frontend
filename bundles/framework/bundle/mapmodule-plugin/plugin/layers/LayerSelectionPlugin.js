@@ -377,6 +377,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     myLoc = pluginLoc[this.__name],
                     header = this.templates.baseLayerHeader.clone();
                 header.append(myLoc.chooseDefaultBaseLayer);
+                baseLayersDiv.parent().find(".baseLayerHeader").remove();
                 baseLayersDiv.before(header);
                 input.attr('checked', 'checked');
             }
@@ -435,8 +436,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             for (i = 0; i < values.baseLayers.length; i += 1) {
                 layerId = values.baseLayers[i];
                 layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-                // Numeric layer IDs are Numbers for some reason...
-                me._setLayerVisible(layer, (values.defaultBaseLayer + '' === layerId + ''));
+                if(layer != null) {
+                    // Numeric layer IDs are Numbers for some reason...
+                    me._setLayerVisible(layer, (values.defaultBaseLayer + '' === layerId + ''));
+                }
             }
             // send Request to rearrange layers
             var reqName = 'RearrangeSelectedMapLayerRequest',
