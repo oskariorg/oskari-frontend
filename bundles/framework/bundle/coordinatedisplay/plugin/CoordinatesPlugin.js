@@ -209,8 +209,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
                 var map = this._sandbox.getMap();
                 data = {
                     'latlon': {
-                        'lat': map.getY(),
-                        'lon': map.getX()
+                        'lat': Math.floor(map.getY()),
+                        'lon': Math.floor(map.getX())
                     }
                 };
             }
@@ -220,8 +220,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
                 spanLat = el.find('.cbValue[axis="lat"]'),
                 spanLon = el.find('.cbValue[axis="lon"]');
             if (spanLat && spanLon) {
-                spanLat.text(latlon.lat);
-                spanLon.text(latlon.lon);
+                spanLat.text(Math.floor(latlon.lat));
+                spanLon.text(Math.floor(latlon.lon));
             }
         },
 
