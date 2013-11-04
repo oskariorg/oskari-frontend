@@ -184,6 +184,17 @@ Oskari.registerLocalization({
                 "reject": "Reject",
                 "accept": "Accept"
             }
+        },
+        "layer": {
+            "show": "Show",
+            "hide": "Hide",
+            "hidden": "The map has been temporarily hidden.",
+            "rights": {
+                "can_be_published_map_user": {
+                    "label": "Publication permitted",
+                    "tooltip": "The map layer can be published in an embedded map window and the number of users per week may be limited."
+                }
+            }
         }
     }
 });
