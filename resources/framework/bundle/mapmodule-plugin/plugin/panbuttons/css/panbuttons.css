@@ -1,7 +1,4 @@
 .panbuttonDiv.mapplugin {
-  top: 10px;
-  right: 36px;
-  display: block;
   color: black;
   background: transparent;
   font-size: 12px;
@@ -11,15 +8,6 @@
   /*background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/default.png');*/
   height: 90px;
   width: 90px; }
-  .panbuttonDiv.mapplugin.top {
-    bottom: auto;
-    top: 10px; }
-  .panbuttonDiv.mapplugin.left {
-    left: 10px;
-    right: auto; }
-  .panbuttonDiv.mapplugin.right {
-    left: auto;
-    right: 10px; }
 
 .panbuttonDivImg {
   background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/sprite.png'); }

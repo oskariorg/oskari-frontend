@@ -12,12 +12,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
     function (conf) {
         var me = this;
         me.conf = conf;
+        me.element = null;
         me.mapModule = null;
         me.pluginName = null;
         me._sandbox = null;
         me._map = null;
         me._scalebar = null;
     }, {
+
+        templates: {
+            main: jQuery('<div class="mapplugin scalebar"></div>')
+        },
+
         /** @static @property __name plugin name */
         __name: 'ScaleBarPlugin',
 
@@ -63,50 +69,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          *          reference to application sandbox
          */
-        init: function (sandbox) {
-            this._scalebar = new OpenLayers.Control.ScaleLine();
-        },
+        init: function (sandbox) {},
         /**
          * @method register
          * Interface method for the module protocol
          */
-        register: function () {
-
-        },
+        register: function () {},
         /**
          * @method unregister
          * Interface method for the module protocol
          */
-        unregister: function () {
+        unregister: function () {},
 
-        },
-
-        setLocation: function (location, scaleBarContainer) {
-            var container = scaleBarContainer || jQuery(this._scalebar.div);
-            if (this.conf) {
-                this.conf.location = location;
+        /**
+         * Sets the location of the scalebar.
+         *
+         * @method setLocation
+         * @param {String} location The new location
+         */
+        setLocation: function (location) {
+            var me = this;
+            if (!me.conf) {
+                me.conf = {};
             }
-            // override default location if configured
-            if (location) {
-                if (location.top) {
-                    container.css('bottom', 'auto');
-                    container.css('top', location.top);
-                }
-                if (location.left) {
-                    container.css('right', 'auto');
-                    container.css('left', location.left);
-                }
-                if (location.right) {
-                    container.css('left', 'auto');
-                    container.css('right', location.right);
-                }
-                if (location.bottom) {
-                    container.css('top', 'auto');
-                    container.css('bottom', location.bottom);
-                }
-                if (location.classes) {
-                    container.removeClass('top left bottom right center').addClass(location.classes);
-                }
+            me.conf.location = location;
+
+            // reset plugin if active
+            if (me.element) {
+                me.stopPlugin();
+                me.startPlugin();
             }
         },
 
@@ -120,23 +111,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
          */
         startPlugin: function (sandbox) {
             var me = this,
-                p;
-            me._sandbox = sandbox;
+                p,
+                containerClasses = 'bottom left',
+                position = 3;
+            me._sandbox = sandbox || me.getMapModule().getSandbox();
             me._map = me.getMapModule().getMap();
+            me.element = me.templates.main.clone();
 
-            sandbox.register(me);
+            me._sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
+                    me._sandbox.registerForEventByName(me, p);
                 }
             }
 
-            me.getMapModule().addMapControl('scaleBar', me._scalebar);
-
             if (me.conf && me.conf.location) {
-                // FIXME: it's a tad ugly to fetch the div from scalebar's innards... alas, OL doesn't allow us to add classes trough its API?
-                me.setLocation(me.conf.location, jQuery(me._scalebar.div));
+                containerClasses = me.conf.location.classes || containerClasses;
+                position = me.conf.location.position || position;
             }
+            // add container to map
+            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
+            // initialize control, pass container
+            me._scalebar = new OpenLayers.Control.ScaleLine({
+                div: me.element[0]
+            });
+            // add control to ol
+            me.getMapModule().addMapControl('scaleBar', me._scalebar);
         },
         /**
          * @method stopPlugin
@@ -153,13 +153,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
 
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(me, p);
+                    me._sandbox.unregisterFromEventByName(me, p);
                 }
             }
 
-            sandbox.unregister(me);
+            me._sandbox.unregister(me);
             me._map = null;
             me._sandbox = null;
+            if (me.element) {
+                me.element.remove();
+                me.element = undefined;
+            }
         },
         /**
          * @method start

@@ -236,6 +236,14 @@ function(instance) {
             orgName: catLoc.organization,
             inspire: catLoc.inspire
         };
+        if(this.instance.conf && 
+            this.instance.conf.layerDefaults && 
+            typeof this.instance.conf.layerDefaults === 'object') {
+            var defaults = this.instance.conf.layerDefaults;
+            for(var key in defaults) {
+                json[key] = defaults[key];
+            }
+        }
         return json;
     },
     /**

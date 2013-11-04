@@ -43,6 +43,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             var tooltipRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.TooltipContentRequestHandler', this);
             sandbox.addRequestHandler('StatsGrid.TooltipContentRequest', tooltipRequestHandler);
 
+            var indicatorRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.IndicatorsRequestHandler', this);
+            sandbox.addRequestHandler('StatsGrid.IndicatorsRequest', indicatorRequestHandler);
+
             var locale = me.getLocalization(),
                 mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             this.mapModule = mapModule;
@@ -103,7 +106,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 var me = this,
                     view = this.plugins['Oskari.userinterface.View'];
 
-                if (event.getExtension().getName() !== me.getName()) {
+                if (event.getExtension().getName() !== me.getName() || !this._isLayerPresent()) {
                     // not me -> do nothing
                     return;
                 }
@@ -136,12 +139,25 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
              */
             'MapLayerEvent': function (event) {
                 // Enable tile when stats layer is available
-                var layer = this.sandbox.findMapLayerFromAllAvailable(this.conf.defaultLayerId),
+                var layerPresent = this._isLayerPresent(),
                     tile = this.plugins['Oskari.userinterface.Tile'];
-                if (layer && tile) {
+                if (layerPresent && tile) {
                     tile.enable();
                 }
             }
+        },
+        _isLayerPresent : function() {
+            var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            if(this.conf && this.conf.defaultLayerId) {
+                var layer = service.findMapLayer(this.conf.defaultLayerId);
+                return (layer != null && layer.isLayerOfType('STATS'));
+            }
+            var layers = service.getLayersOfType('STATS');
+            if(layers && layers.length > 0) {
+                this.conf.defaultLayerId = layers[0].getId();
+                return true;
+            }
+            return false;
         },
         /**
          * @method setState
@@ -198,13 +214,18 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 indicatorSeparator = ",",
                 stateValues = null,
                 indicatorValues = null,
+                colorsValues = null,
                 state = this.state,
-                keys = ['layerId', 'currentColumn', 'methodId', 'numberOfClasses', 'manualBreaksInput'],
+                colors = state.colors || {},
+                keys = ['layerId', 'currentColumn', 'methodId', 'numberOfClasses', 'classificationMode', 'manualBreaksInput'],
+                colorKeys = ['set', 'index', 'flipped'],
                 indicators = state.indicators || [],
                 value;
 
-            // Note! keys needs to be handled in the backend as well. Therefore the key order is important as well as actual values.
-            // 'manualBreaksInput' can be an empty string and must be last.
+            // Note! keys needs to be handled in the backend as well.
+            // Therefore the key order is important as well as actual values.
+            // 'classificationMode' can be an empty string but it must be the fifth value.
+            // 'manualBreaksInput' can be an empty string but it must be the sixth value.
             for (i = 0, ilen = keys.length, ilast = ilen - 1; i < ilen; i++) {
                 value = state[keys[i]];
                 if (value !== null && value !== undefined) {
@@ -227,9 +248,24 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                     indicatorValues += indicatorSeparator;
                 }
             }
+
+            // handle colors separately
+            var colorArr = [];
+            colors.flipped = colors.flipped === true;
+            for (i = 0, ilen = colorKeys.length; i < ilen; ++i) {
+                var cKey = colorKeys[i];
+                if (colors.hasOwnProperty(cKey) && colors[cKey] != null) {
+                    colorArr.push(colors[cKey]);
+                }
+            }
+            if (colorArr.length === 3) {
+                colorsValues = colorArr.join(',');
+            }
+
             var ret = null;
             if (stateValues && indicatorValues) {
                 ret = statsgridState + stateValues + "-" + indicatorValues;
+                if (colorsValues) ret += "-" + colorsValues;
             }
 
             return ret;
@@ -237,6 +273,26 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
 
         getView: function () {
             return this.plugins['Oskari.userinterface.View'];
+        },
+
+        /**
+         * Gets the instance sandbox.
+         *
+         * @method getSandbox
+         * @return {Object} return the sandbox associated with this instance
+         */
+        getSandbox: function() {
+            return this.sandbox;
+        },
+
+        /**
+         * Returns the open indicators of the instance's grid plugin.
+         *
+         * @method getGridIndicators
+         * @return {Object/null} returns the open indicators of the grid plugin, or null if no grid plugin
+         */
+        getGridIndicators: function() {
+            return ( this.gridPlugin ? this.gridPlugin.indicatorsMeta : null );
         },
 
         /**
@@ -249,7 +305,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @param {Object} layer
          */
         _createPrintParams: function (layer) {
-            console.log("getOLMapLayers:", this.mapModule.getOLMapLayers(layer.getId()));
             var oLayer = this.mapModule.getOLMapLayers(layer.getId())[0],
                 data = [{
                     // The max extent of the layer
@@ -294,6 +349,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             this.state.numberOfClasses = params.numberOfClasses;
             this.state.manualBreaksInput = params.manualBreaksInput;
             this.state.colors = params.colors;
+            this.state.classificationMode = params.classificationMode;
             // Send data to printout bundle
             this._createPrintParams(layer);
         },

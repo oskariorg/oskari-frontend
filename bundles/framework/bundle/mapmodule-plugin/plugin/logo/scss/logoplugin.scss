@@ -5,9 +5,7 @@
 	background-color: #FFF;
 	background-repeat: no-repeat;
 	display: block;
-	position: absolute;
-	bottom: 0px;
-	left: 0px;
+	height: 25px;
 	z-index: 100000000 !important;
 	filter: unquote("alpha(opacity=")$logoOpacity * 100 unquote(")"); /* unquote for libsass bug */
 	opacity: $logoOpacity !important;
@@ -29,24 +27,20 @@
 		margin: 5px;
 	}
 
-	&.bottom {
-		bottom: 0;
-		top: auto;
-	}
-
-	&.left {
-		left: 0;
-		right: auto;
-	}
-
-	&.right {
-		left: auto;
-		right: 0;
+	.data-sources {
+		display: inline-block;
+		margin: 5px;
+		text-decoration: underline;
+		cursor: pointer;
 	}
 
 }
-
-/* Force measurement bar up a notch so it isn't occluded by the logo */
-#mapdiv .olControlScaleLine {
-	bottom: 30px;
+.data-sources-dialog {
+	max-width: 400px;
+	.layers h4, .indicators h4 {
+		padding-bottom: 5px;
+	}
+	.indicators {
+		margin-top: 10px;
+	}
 }
