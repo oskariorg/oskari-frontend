@@ -107,12 +107,12 @@ div#publisher-custom-colours div.rgbInput {
 div#publisher-custom-colours div.rgbInput input[type="text"] {
   margin: 0 8px;
   width: 30px; }
+
 .maincontainer ul.selectedLayersList {
-  margin-left: 0px;
-}
-.maincontainer ul.selectedLayersList li {
-  list-style: none;
-}
+  margin-left: 0px; }
+  .maincontainer ul.selectedLayersList li {
+    list-style: none; }
+
 div.basic_publisher .layer.selected {
   border: 1pt solid #c0d0e0;
   margin: 0 5px 5px 0;
@@ -144,7 +144,7 @@ div.basic_publisher .layer.selected {
         display: inline-block; }
       div.basic_publisher .layer.selected div.layer-tools div.left-tools div.layer-opacity {
         display: inline-block;
-        background-image: url('/Oskari/resources/framework/bundle/publisher/images/opacity_slider.png');
+        background-image: url('/Oskari/resources/framework/bundle/layerselection2/images/opacity_slider.png');
         background-repeat: no-repeat; }
         div.basic_publisher .layer.selected div.layer-tools div.left-tools div.layer-opacity input.opacity {
           padding: 1px;

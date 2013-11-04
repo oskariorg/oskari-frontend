@@ -31,7 +31,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
         me.templateLayer    = jQuery('<li class="layer selected">' + '<div class="layer-info">' + '<div class="layer-tool-remove icon-close"></div>' + '<div class="layer-title"><h4></h4></div>' + '</div>' + '<div class="layer-tools volatile">' + '</div>' + '</li>');
         // footers are changed based on layer state
         var layerLoc = me.instance.getLocalization('layer');
-        me.templateLayerFooterTools = jQuery('<div class="left-tools">' + '<div class="layer-visibility">' + 
+        me.templateLayerFooterTools = 
+            jQuery('<div class="left-tools">' + '<div class="layer-visibility">' + 
             '<a href="JavaScript:void(0);">' + layerLoc['hide'] + '</a>' + 
             '&nbsp;' + '<span class="temphidden" ' + 'style="display: none;">' + layerLoc['hidden'] + '</span>' + 
             '</div>' + '<div class="oskariui layer-opacity">' + 
@@ -451,6 +452,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             opa.attr('value', layer.getOpacity());
         },
         /**
+         * @method handleLayerVisibilityChanged
+         * Changes the container representing the layer by f.ex
+         * "dimming" it and changing the footer to match current
+         * layer status
+         * @param
+         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object}
+         * layer to modify
+         * @param {Boolean} isInScale true if map is in layers scale range
+         * @param {Boolean} isGeometryMatch true if layers geometry is in map
+         * viewport
+         */
+        handleLayerVisibilityChanged : function(layer, isInScale, isGeometryMatch) {
+            var me = this;
+            var sandbox = me.instance.getSandbox();
+            var lyrSel = 'li.layer.selected[data-id=' + layer.getId() + ']';
+
+            var layerDiv = jQuery(this.container).find(lyrSel);
+            var loc = this.instance.getLocalization('layer');
+
+            // teardown previous footer & layer state classes
+            var footer = layerDiv.find('div.layer-tools');
+            var isChecked = footer.find('.baselayer').is(':checked');
+            footer.empty();
+
+            layerDiv.removeClass('hidden-layer');
+
+            this._sliders[layer.getId()] = null;
+
+            this._appendLayerFooter(layerDiv, layer, isChecked);
+        },
+        /**
          * @method _createLayerFooter
          * @private
          * @param
@@ -502,37 +534,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             return tools;
         },
         /**
-         * @method handleLayerVisibilityChanged
-         * Changes the container representing the layer by f.ex
-         * "dimming" it and changing the footer to match current
-         * layer status
-         * @param
-         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object}
-         * layer to modify
-         * @param {Boolean} isInScale true if map is in layers scale range
-         * @param {Boolean} isGeometryMatch true if layers geometry is in map
-         * viewport
-         */
-        handleLayerVisibilityChanged : function(layer, isInScale, isGeometryMatch) {
-            var me = this;
-            var sandbox = me.instance.getSandbox();
-            var lyrSel = 'li.layer.selected[data-id=' + layer.getId() + ']';
-
-            var layerDiv = jQuery(this.container).find(lyrSel);
-            var loc = this.instance.getLocalization('layer');
-
-            // teardown previous footer & layer state classes
-            var footer = layerDiv.find('div.layer-tools');
-            var isChecked = footer.find('.baselayer').is(':checked');
-            footer.empty();
-
-            layerDiv.removeClass('hidden-layer');
-
-            this._sliders[layer.getId()] = null;
-
-            this._appendLayerFooter(layerDiv, layer, isChecked);
-        },
-        /**
          * @method _createLayerFooterHidden
          * @private
          * @param
@@ -557,6 +558,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             });
             return msg;
         },
+        /**
+         * @method _appendLayerFooter
+         * @private
+         * @param {Object} container div
+         * @param
+         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object}
+         * layer
+         * @param {boolean} isChecked states if the layer is checked as possible base layer 
+         * 
+         * Appends layer footer to layer in publisher's manipulation panel
+         */
         _appendLayerFooter : function(layerDiv, layer, isChecked) {
             var toolsDiv = layerDiv.find('div.layer-tools');
 
@@ -582,6 +594,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
 
         },
 
+
+        /**
+         * @method _addSlider
+         * @private
+         * @param
+         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object}
+         * layer
+         * @param {Object} container div
+         * 
+         * Adds slider to layer's footer to change layer opacity
+         */
         _addSlider : function(layer, layerDiv) {
             var me = this;
             var lyrId = layer.getId();
