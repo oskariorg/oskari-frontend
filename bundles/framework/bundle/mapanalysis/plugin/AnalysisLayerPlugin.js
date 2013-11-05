@@ -112,7 +112,7 @@ function(config) {
         this._map = this.getMapModule().getMap();
 
         sandbox.register(this);
-        for(p in this.eventHandlers) {
+        for(var p in this.eventHandlers) {
             sandbox.registerForEventByName(this, p);
         }
         if(!this.ajaxUrl) {
@@ -129,7 +129,7 @@ function(config) {
      */
     stopPlugin : function(sandbox) {
 
-        for(p in this.eventHandlers) {
+        for(var p in this.eventHandlers) {
             sandbox.unregisterFromEventByName(this, p);
         }
 
@@ -206,7 +206,7 @@ function(config) {
          * @param {Object} event
          */
         'MapLayerVisibilityChangedEvent' : function(event) {
-           // this.wfsLayerPlugin.mapLayerVisibilityChangedHandler(event);
+            this._mapLayerVisibilityChangeEvent(event);
         },
         /**
          * @method MapSizeChangedEvent
@@ -395,15 +395,44 @@ function(config) {
      *            event
      */
     _afterChangeMapLayerOpacityEvent : function(event) {
-        
+        var layer = event.getMapLayer();
+
+        if(!layer.isLayerOfType(this._layerType)) {
+            return;
+        }
+
+        this._sandbox.printDebug("Setting Layer Opacity for " + layer.getId() + " to " + layer.getOpacity());
+        var mapLayer = this.getOLMapLayers(layer);
+        if(mapLayer && mapLayer.length > 0 && mapLayer[0] != null) {
+            mapLayer[0].setOpacity(layer.getOpacity() / 100);
+        }
     },
    
     _afterAnalysisVisualizationChangeEvent: function(event) {
         var layer = event.getLayer();
         var params = event.getParams();
         var mapLayer = this.getOLMapLayers(layer);
-        
+        // TODO: add handling
        
+    },
+    /**
+     * @method _mapLayerVisibilityChangedEvent
+     * Handle MapLayerVisibilityChangedEvent
+     * @private
+     * @param {Oskari.mapframework.event.common.MapLayerVisibilityChangedEvent}
+     */
+    _mapLayerVisibilityChangeEvent : function(evt) {
+        var layer = evt.getMapLayer();
+        
+        if(!layer.isLayerOfType(this._layerType)) {
+            return;
+        }
+
+        var mapLayer = this.getOLMapLayers(layer);
+        if(mapLayer && mapLayer.length > 0 && mapLayer[0] != null) {
+           mapLayer[0].setVisibility(layer.isVisible());
+        }
+
     }
     
 }, {
