@@ -9,28 +9,18 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.AreaForm"
  * @method create called automatically on construction
  * @static
  */
-function(creator, loc, options) {
-    this.instance = instance;
-    this.loc = instance.getLocalization('areaform');
-    this.defaultValues = {
-        color: [instance.myPlacesService.defaults.area.linecolor,
-                instance.myPlacesService.defaults.area.color],
-        line: {
-            style: instance.myPlacesService.defaults.area.linestyle,
-            corner: instance.myPlacesService.defaults.area.linecorner,
-            width: instance.myPlacesService.defaults.area.linewidth,
-            color: instance.myPlacesService.defaults.area.linecolor
-        },
-        fill: instance.myPlacesService.defaults.area.fill
-    };
+function(creator, loc, defaultValues) {
+    this.creator = creator;
+    this.loc = loc;
+    this.defaultValues = defaultValues;
 
     this.values = {
         lineWidth : this.defaultValues.line.width,
         lineCorner : this.defaultValues.line.corner,
         lineStyle : this.defaultValues.line.style,
-        lineColor : this.defaultValues.color[0],
-        fillColor : this.defaultValues.color[1],
-        fillStyle : this.defaultValues.fill
+        lineColor : this.defaultValues.line.color,
+        fillColor : this.defaultValues.fill.color,
+        fillStyle : this.defaultValues.fill.style
     };
 
     this.styleButtonNames = ["icon-line-basic", "icon-line-dashed", "icon-double-line"];
@@ -119,6 +109,40 @@ function(creator, loc, options) {
     this.selectColor = "#dddddd";
 }, {
     /**
+     * Returns the values.
+     *
+     * @method getValues
+     * @return {Object}
+     */
+    getValues: function() {
+        var lineCorner = this.values.lineCorner,
+            lineStyle = this.values.lineStyle;
+
+        if (typeof lineCorner === 'number') {
+            lineCorner = this.creator.lineCornerMap[lineCorner];
+        }
+
+        if (typeof lineStyle === 'number') {
+            lineStyle = this.creator.lineStyleMap[lineStyle];
+        }
+
+        return {
+            lineWidth : this.values.lineWidth,
+            lineCorner : lineCorner,
+            lineStyle : lineStyle,
+            lineColor : this.values.lineColor,
+            fillColor : this.values.fillColor,
+            fillStyle : this.values.fillStyle
+        };
+    },
+    /**
+     * @method setValues
+     * @param {Object} values
+     */
+    setValues: function(values) {
+
+    },
+    /**
      * @method showForm
      * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory[]} categories array containing available categories
      * @return {jQuery} jquery reference for the form
@@ -146,7 +170,7 @@ function(creator, loc, options) {
             styleBtnContainer.attr('id',i+"linestyle");
             if (i === me.values.lineStyle) this._styleSelectedButton(styleBtnContainer);
             styleBtnContainer.click(function(){
-                var newValue = parseInt(jQuery(this).attr('id').charAt(0));
+                var newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                 me._selectButton("lineStyle",newValue);
                 me.values.lineStyle = newValue;
                 me._updatePreview(dialogContent);
@@ -162,7 +186,7 @@ function(creator, loc, options) {
             cornerBtnContainer.attr('id',i+"linecorner");
             if (i === me.values.lineCorner) this._styleSelectedButton(cornerBtnContainer);
             cornerBtnContainer.click(function(){
-                var newValue = parseInt(jQuery(this).attr('id').charAt(0));
+                var newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                 me._selectButton("lineCorner",newValue);
                 me.values.lineCorner = newValue;
                 me._updatePreview(dialogContent);
@@ -205,7 +229,7 @@ function(creator, loc, options) {
                         if (me.activeColorCell[colorType] < 10) activeCell = "0"+activeCell;
                         jQuery('#'+activeCell+colorType+'ColorCell').css('border','1px solid #000000');
                     }
-                    me.values[colorType == 0 ? 'lineColor':'fillColor'] = me.instance.rgbToHex(this.style.backgroundColor);
+                    me.values[colorType == 0 ? 'lineColor':'fillColor'] = me.creator.rgbToHex(this.style.backgroundColor);
                     me.activeColorCell[colorType] = cellIndex;
                     if (cellIndex < 10) cellIndex = "0"+cellIndex.toString();
                     jQuery('#'+cellIndex+colorType+'ColorCell').css('border','3px solid #ffffff');
@@ -295,7 +319,7 @@ function(creator, loc, options) {
             // if the color is not picked from selection, it must be users own color
             // add color values to the input fields
             if(!statedChosenColor) {
-                var rgb = me.instance.hexToRgb(me.values[cType]);
+                var rgb = me.creator.hexToRgb(me.values[cType]);
                 content.find('input.custom-color.custom-red-value').val(rgb.r);
                 content.find('input.custom-color.custom-green-value').val(rgb.g);
                 content.find('input.custom-color.custom-blue-value').val(rgb.b);
@@ -361,9 +385,9 @@ function(creator, loc, options) {
             me.values.lineWidth = me.defaultValues.line.width;
             me.values.lineCorner = me.defaultValues.line.corner;
             me.values.lineStyle = me.defaultValues.line.style;
-            me.values.lineColor = me.defaultValues.color[0];
-            me.values.fillColor = me.defaultValues.color[1];
-            me.values.fillStyle = me.defaultValues.fill;
+            me.values.lineColor = me.defaultValues.line.color;
+            me.values.fillColor = me.defaultValues.fill.color;
+            me.values.fillStyle = me.defaultValues.fill.style;
             renderDialog.close();
         });
         renderDialog.show(title, dialogContent, [saveBtn, cancelBtn]);

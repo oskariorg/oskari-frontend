@@ -9,14 +9,11 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.PointForm
  * @method create called automatically on construction
  * @static
  */
-function(instance) {
-    this.instance = instance;
-    this.loc = instance.getLocalization('pointform');
-    this.defaultValues = {
-        size: instance.myPlacesService.defaults.point.size,
-        color: instance.myPlacesService.defaults.point.color,
-        shape: instance.myPlacesService.defaults.point.shape
-    };
+function(creator, loc, defaultValues) {
+    this.creator = creator;
+    this.loc = loc;
+    this.defaultValues = defaultValues;
+
     this.values = {
         size: this.defaultValues.size,
         color: this.defaultValues.color,
@@ -24,15 +21,15 @@ function(instance) {
     };
 
     // Minimum dot size
-    if ((this.instance.conf)&&(this.instance.conf.defaults)&&(this.instance.conf.defaults['dotMinSize'])) {
-        this.minSize = this.instance.conf.defaults['dotMinSize'];
+    if (this.defaultValues.dotMinSize != null) {
+        this.minSize = this.defaultValues.dotMinSize;
     } else {
         this.minSize = 1;
     }
 
     // Maximum dot size
-    if ((this.instance.conf)&&(this.instance.conf.defaults)&&(this.instance.conf.defaults['dotMaxSize'])) {
-        this.maxSize = this.instance.conf.defaults['dotMaxSize'];
+    if (this.defaultValues.dotMaxSize) {
+        this.maxSize = this.defaultValues.dotMaxSize;
     } else {
         this.maxSize = 5;
     }
@@ -212,6 +209,19 @@ function(instance) {
     this.previewSize = 50;
 }, {
     /**
+     * Returns the values.
+     *
+     * @method getValues
+     * @return {Object}
+     */
+    getValues: function() {
+        return {
+            size : this.values.size,
+            color : this.values.color,
+            shape : this.values.shape
+        };
+    },
+    /**
      * @method showForm
      * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory[]} categories array containing available categories
      * @return {jQuery} jquery reference for the form 
@@ -299,7 +309,7 @@ function(instance) {
                     if (me.activeColorCell < 10) activeCell = "0"+activeCell;
                     jQuery('#'+activeCell+'ColorCell').css('border','1px solid #000000');
                 }
-                me.values.color = me.instance.rgbToHex(this.style.backgroundColor);
+                me.values.color = me.creator.rgbToHex(this.style.backgroundColor);
                 me.activeColorCell = cellIndex;
                 if (cellIndex < 10) cellIndex = "0"+cellIndex.toString();
                 jQuery('#'+cellIndex+'ColorCell').css('border','3px solid #ffffff');
@@ -360,7 +370,7 @@ function(instance) {
         // if the color is not picked from selection, it must be users own color
         // add color values to the input fields
         if(!statedChosenColor) {
-            var rgb = me.instance.hexToRgb(me.values.color);
+            var rgb = me.creator.hexToRgb(me.values.color);
 
             dialogContent.find('input.custom-color.custom-red-value').val(rgb.r);
             dialogContent.find('input.custom-color.custom-green-value').val(rgb.g);
@@ -524,6 +534,7 @@ function(instance) {
      * Returns form values as an object
      * @return {Object}
      */
+    /*
     getValues : function() {
         var newShape = null;
         for (var buttonName in this.symbolButtons) {
@@ -540,6 +551,7 @@ function(instance) {
 //          shape: this.symbolButtons[this.values.shape].iconId
         };
     },
+    */
 
     /**
      * @method _getOnScreenForm

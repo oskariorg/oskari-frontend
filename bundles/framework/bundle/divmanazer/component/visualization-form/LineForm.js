@@ -9,16 +9,11 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
  * @method create called automatically on construction
  * @static
  */
-function(instance) {
-    this.instance = instance;
-    this.loc = instance.getLocalization('lineform');
-    this.defaultValues = {
-        style: instance.myPlacesService.defaults.line.style,
-        cap: instance.myPlacesService.defaults.line.cap,
-        corner: instance.myPlacesService.defaults.line.corner,
-        width: instance.myPlacesService.defaults.line.width,
-        color: instance.myPlacesService.defaults.line.color
-    };
+function(creator, loc, defaultValues) {
+    this.creator = creator;
+    this.loc = loc;
+    this.defaultValues = defaultValues;
+
     this.values = {
         style: this.defaultValues.style,
         cap: this.defaultValues.cap,
@@ -93,6 +88,37 @@ function(instance) {
     this.previewSize = 50;
     this.selectColor = "#dddddd";
 }, {
+    /**
+     * Returns the values.
+     *
+     * @method getValues
+     * @return {Object}
+     */
+    getValues: function() {
+        var cap = this.values.cap,
+            corner = this.values.corner,
+            style = this.values.style;
+
+        if (typeof cap === 'number') {
+            cap = this.creator.lineCapMap[cap];
+        }
+
+        if (typeof corner === 'number') {
+            corner = this.creator.lineCornerMap[corner];
+        }
+
+        if (typeof style === 'number') {
+            style = this.creator.lineStyleMap[style];
+        }
+
+        return {
+            width : this.values.width,
+            color : this.values.color,
+            cap : cap,
+            corner : corner,
+            style : style
+        };
+    },
     /**
      * @method showForm
      * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory[]} categories array containing available categories
@@ -195,7 +221,7 @@ function(instance) {
                     if (me.activeColorCell < 10) activeCell = "0"+activeCell;
                     jQuery('#'+activeCell+'ColorCell').css('border','1px solid #000000');
                 }
-                me.values.color = me.instance.rgbToHex(this.style.backgroundColor);
+                me.values.color = me.creator.rgbToHex(this.style.backgroundColor);
                 me.activeColorCell = cellIndex;
                 if (cellIndex < 10) cellIndex = "0"+cellIndex.toString();
                 jQuery('#'+cellIndex+'ColorCell').css('border','3px solid #ffffff');
@@ -275,7 +301,7 @@ function(instance) {
         // if the color is not picked from selection, it must be users own color
         // add color values to the input fields
         if(!statedChosenColor) {
-            var rgb = me.instance.hexToRgb(me.values.color);
+            var rgb = me.creator.hexToRgb(me.values.color);
             dialogContent.find('input.custom-color.custom-red-value').val(rgb.r);
             dialogContent.find('input.custom-color.custom-green-value').val(rgb.g);
             dialogContent.find('input.custom-color.custom-blue-value').val(rgb.b);
@@ -402,6 +428,7 @@ function(instance) {
      * Returns form values as an object
      * @return {Object}
      */
+    /*
     getValues : function() {
         var newShape = null;
         for (var buttonName in this.symbolButtons) {
@@ -419,6 +446,7 @@ function(instance) {
 //          shape: this.symbolButtons[this.values.shape].iconId
         };
     },
+    */
 
     /**
      * @method _styleSelectedButton
