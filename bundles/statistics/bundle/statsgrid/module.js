@@ -15,6 +15,8 @@ define([
 	"./request/StatsGridRequestHandler",
 	"./request/TooltipContentRequest",
 	"./request/TooltipContentRequestHandler",
+	"./request/IndicatorsRequest",
+	"./request/IndicatorsRequestHandler",
 	"./service/StatisticsService",
 	"css!resources/statistics/bundle/statsgrid/css/style.css",
 	"css!resources/statistics/bundle/statsgrid/css/classifyplugin.css",
