@@ -395,9 +395,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             div.remove();
 
             var input = div.find('input');
+            var isActive = input.is(':checked');
             input.remove();
             input = this.templates.checkbox.clone();
             input.attr('value', layer.getId());
+            if(isActive){
+                input.attr('checked', 'checked');
+            }
             this._bindCheckbox(input, layer);
             div.find('span').before(input);
 
@@ -409,6 +413,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             // remove text if nothing to select 
             var baseLayersDiv = this.element.find('div.content div.baselayers'),
                 baseLayers = baseLayersDiv.find('div.layer');
+debugger;
             if (baseLayers.length === 0) {
                 var baselayerHeader = this.element.find('div.content div.baseLayerHeader');
                 baselayerHeader.remove();
