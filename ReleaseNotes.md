@@ -21,6 +21,14 @@ Added a new bundle which imports user interface components from under divmanazer
 
 Added new configuration option 'layerDefaults' which can be used to override default values found in code. See bundle documentation for details.
 
+### divmanazer/VisualizationForm
+
+New component which defines functionality to create geometry visualizations for eg. myplaces2 bundle.
+
+### publisher
+
+Added possibility to change order of the layer as well as its opacity. Also removing and adding new layers is now possible.
+
 ## 1.15
 
 ### **Breaking changes**

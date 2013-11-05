@@ -635,6 +635,26 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
 
             /* opening  flyouts 'attached' closes previously attachily opened  flyout(s) */
             if (state === 'attach' && flyoutInfo) {
+                var extTop = null, 
+                    extLeft = null;
+
+                if(request.getExtensionLocation().top || request.getExtensionLocation().left){
+                    me.origExtensionLocation = {};
+                }
+
+                var extLocation = function(request, me, axis){
+                    if(me.origExtensionLocation) {
+                        if(request.getExtensionLocation()[axis]){
+                            me.origExtensionLocation[axis] = jQuery(flyoutInfo.el).css(axis);
+                            jQuery(flyoutInfo.el).css(axis, request.getExtensionLocation()[axis]+'px');
+                        } else if( me.origExtensionLocation[axis]) {
+                            jQuery(flyoutInfo.el).css(axis, me.origExtensionLocation[axis]);
+                        }
+                    }
+                }
+                extLocation(request, me, 'top');
+                extLocation(request, me, 'left');
+
                 ops = me.flyoutOps;
                 closeOp = ops.close;
                 for (n = 0, len = extensions.length; n < len; n += 1) {
