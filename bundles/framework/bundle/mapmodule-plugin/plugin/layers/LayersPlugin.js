@@ -394,10 +394,12 @@ function() {
         }
 
         for(var i = 0, ilen = layers.length; i < ilen; i++) {
-            var olLayers = this.getMapModule().getOLMapLayers(layers[i].getId());
-            for(var j = 0, jlen = olLayers.length; j < jlen; j++) {
-                this._map.setLayerIndex(olLayers[j], layerIndex);
-                layerIndex++;
+            if(layers[i] != null) {
+                var olLayers = this.getMapModule().getOLMapLayers(layers[i].getId());
+                for(var j = 0, jlen = olLayers.length; j < jlen; j++) {
+                    this._map.setLayerIndex(olLayers[j], layerIndex);
+                    layerIndex++;
+                }
             }
         }
     }

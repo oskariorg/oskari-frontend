@@ -370,6 +370,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             div.find('span').before(input);
 
+
             var baseLayersDiv = this.element.find('div.content div.baselayers');
             // add text if first selection available
             if (baseLayersDiv.find('div.layer').length === 0) {
@@ -545,7 +546,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (!me.element) {
                 me.element = me.templates.main.clone();
             }
-
             var pluginLoc = me.getMapModule().getLocalization('plugin', true),
                 myLoc = pluginLoc[me.__name],
                 header = me.element.find('div.header');

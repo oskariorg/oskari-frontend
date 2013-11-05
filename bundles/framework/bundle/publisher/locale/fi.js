@@ -128,7 +128,8 @@ Oskari.registerLocalization({
                 "saveNew": "Tallenna uusi",
                 "ok": "OK",
                 "replace": "Korvaa",
-                "cancel": "Peruuta"
+                "cancel": "Peruuta",
+                "add": "Lisää karttataso"
             },
             "confirm": {
                 "replace": {

@@ -43,6 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             '<div class="right-tools">' + '<div class="layer-rights"></div>' + 
             '<div class="object-data"></div>' + '<div class="layer-description">' + '</div></div>');
         me.templateLayerFooterHidden = jQuery('<p class="layer-msg">' + '<a href="JavaScript:void(0);">' + layerLoc['show'] + '</a> ' + layerLoc['hidden'] + '</p>');
+        me.templateButtonsDiv = jQuery('<div class="buttons"></div>');
 
         me.config = {
             layers: {
@@ -70,7 +71,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 this.panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                 this.panel.setTitle(this.loc.layers.label);
             }
-            //this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin', this.pluginConfig);
+            this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin', this.pluginConfig);
         },
 
         /**
@@ -312,11 +313,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 }
             });
 
+            var buttonCont = me.templateButtonsDiv.clone();
+            var addBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            addBtn.setTitle(me.loc.buttons.add);
+            addBtn.addClass('block');
+            addBtn.insertTo(buttonCont);
+
+            var add = function () {
+                me._openExtension('LayerSelector');
+            };
+            addBtn.setHandler(function () {
+                add();
+            });
+
+
+            contentPanel.append(buttonCont);
             // There will be a button for adding more layers
             //            if (this.config.layers.promote && this.config.layers.promote.length > 0) {
             //                this._populateLayerPromotion(contentPanel);
             //            }
         },
+
         /**
          * Populates the layer promotion part of the map layers panel in publisher
          *
@@ -523,12 +540,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             };
 
 
-                var input = tools.find('input.baselayer');
-                input.attr('id', 'checkbox' + layer.getId());
-                if(isChecked) {
-                    input.attr('checked', 'checked');
-                }
-                input.change(closureMagic(layer));
+            var input = tools.find('input.baselayer');
+            input.attr('id', 'checkbox' + layer.getId());
+            if(isChecked) {
+                input.attr('checked', 'checked');
+            }
+            input.change(closureMagic(layer));
 
 
             return tools;
@@ -629,6 +646,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             me._sliders[lyrId] = slider;
 
             return slider;
+        },
+        _getFakeExtension: function (name) {
+            return {
+                getName: function () {
+                    return name;
+                }
+            };
+        },
+        _openExtension: function (name) {
+            var extension = this._getFakeExtension(name);
+            var rn = 'userinterface.UpdateExtensionRequest';
+            this.instance.getSandbox().postRequestByName(rn, [extension, 'attach', rn, "10", "405"]);
         }
 
     });

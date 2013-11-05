@@ -85,7 +85,8 @@ Oskari.registerLocalization({
                 "saveNew": "Uložit novou",
                 "ok": "OK",
                 "replace": "Nahradit",
-                "cancel": "Storno"
+                "cancel": "Storno",
+                "add": "Přidat mapovou vrstvu"
             },
             "confirm": {
                 "replace": {

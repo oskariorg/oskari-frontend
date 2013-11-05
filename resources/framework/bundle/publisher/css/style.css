@@ -167,3 +167,6 @@ div.basic_publisher ul.selectedLayersList {
   div.basic_publisher ul.selectedLayersList span {
     position: absolute;
     margin-left: -1.3em; }
+
+.maincontainer .block {
+  display: block; }

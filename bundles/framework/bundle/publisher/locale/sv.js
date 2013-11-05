@@ -129,7 +129,8 @@ Oskari.registerLocalization({
                 "saveNew": "Lagra ny",
                 "ok": "OK",
                 "replace": "Ersätt",
-                "cancel": "Avbryt"
+                "cancel": "Avbryt",
+                "add": "lägg kartan lager"
             },
             "confirm": {
                 "replace": {

@@ -85,7 +85,8 @@ Oskari.registerLocalization({
                 "saveNew": "Speichern unter",
                 "ok": "OK",
                 "replace": "Ersetzen",
-                "cancel": "Abbrechen"
+                "cancel": "Abbrechen",
+                "add": "Kartenbenen hinzufügen"
             },
             "confirm": {
                 "replace": {

@@ -128,7 +128,8 @@ Oskari.registerLocalization({
                 "saveNew": "Save new",
                 "ok": "OK",
                 "replace": "Replace",
-                "cancel": "Cancel"
+                "cancel": "Cancel",
+                "add": "add map layer"
             },
             "confirm": {
                 "replace": {
