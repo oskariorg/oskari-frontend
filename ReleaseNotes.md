@@ -23,7 +23,7 @@ Added new configuration option 'layerDefaults' which can be used to override def
 
 ### publisher
 
-Added possibility to change order of the layer as well as its opacity. Also removing layer is now possible.
+Added possibility to change order of the layer as well as its opacity. Also removing and adding new layers is now possible.
 
 ## 1.15
 
