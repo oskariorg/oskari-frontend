@@ -85,7 +85,8 @@ Oskari.registerLocalization({
                 "saveNew": "Guardar nuevo",
                 "ok": "Hecho",
                 "replace": "Reemplazar",
-                "cancel": "Cancelar"
+                "cancel": "Cancelar",
+                "add": "añadir capa"
             },
             "confirm": {
                 "replace": {
@@ -140,6 +141,18 @@ Oskari.registerLocalization({
                 "reject": "Rechazar",
                 "accept": "Aceptar"
             }
+        },
+        "layer": {
+            "show": "Mostrar",
+            "hide": "Ocultar",
+            "hidden": "Se ha ocultado el mapa temporalmente.",
+            "rights": {
+                "can_be_published_map_user": {
+                    "label": "Publicación permitida",
+                    "tooltip": "La capa puede publicarse en un visualizador incorporado y el número de usuarios semanales puede limitarse."
+                }
+            }
         }
+
     }
 });

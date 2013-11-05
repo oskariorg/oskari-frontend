@@ -1184,22 +1184,23 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var lps = this.getLayerPlugins(),
                 p,
                 layersPlugin,
-                layerList;
+                layerList,
+                results = [];
             // let the actual layerplugins find the layer since the name depends on
             // type
-            for (p in lps) {
+            for (var p in lps) {
                 if (lps.hasOwnProperty(p)) {
                     layersPlugin = lps[p];
                     // find the actual openlayers layers (can be many)
                     layerList = layersPlugin.getOLMapLayers(layer);
                     if (layerList) {
-                        // if found -> return list
+                        // if found -> add to results
                         // otherwise continue looping
-                        return layerList;
+                        results = results.concat(layerList);
                     }
                 }
             }
-            return null;
+            return results;
         },
         /**
          * @method updateCurrentState
