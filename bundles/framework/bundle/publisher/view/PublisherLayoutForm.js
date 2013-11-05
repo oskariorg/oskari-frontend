@@ -352,7 +352,7 @@ function(localization, publisher) {
             i, selectedFont;
 
         // Set the localization.
-        template.find('label').html(fontLabel);
+        template.find('label').html(fontLabel).after('<br />');
 
         for (i = 0; i < fLen; ++i) {
             fontOption = this.template.option.clone();
@@ -392,7 +392,7 @@ function(localization, publisher) {
             i, selectedToolStyleCode, selectedToolStyle;
 
         // Set the localizations.
-        template.find('label').html(toolStylesLabel);
+        template.find('label').html(toolStylesLabel).after('<br />');;
 
         for (i = 0; i < tsLen; ++i) {
             toolStyleOption = this.template.option.clone();

@@ -1375,6 +1375,11 @@ function(config, locale) {
 
                     if(state.currentColumn != null) {
                         if(classifyPlugin) {
+                            if (state.classificationMode) {
+                                classifyPlugin.classificationMode = state.classificationMode;
+                                var modeSelect = classifyPlugin.element.find('.classification-mode');
+                                modeSelect.val(state.classificationMode);
+                            }
                             if (state.colors) {
                                 classifyPlugin.currentColorSet = state.colors.set;
                                 classifyPlugin.colorsetIndex = state.colors.index;

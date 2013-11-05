@@ -184,6 +184,18 @@ Oskari.registerLocalization({
                 "reject": "Hylkää",
                 "accept": "Hyväksy"
             }
+        },
+        "layer": {
+            "show": "Näytä",
+            "hide": "Piilota",
+            "hidden": "Karttataso on tilapäisesti piilotettu.",
+            "selectAsBaselayer": "Valitse pohjakartaksi",
+            "rights": {
+                "can_be_published_map_user": {
+                    "label": "Julkaistavissa",
+                    "tooltip": "Karttatason voi julkaista upotetussa karttaikkunassa. Viikoittainen käyttömäärä voi olla rajoitettu."
+                }
+            }
         }
     }
 });

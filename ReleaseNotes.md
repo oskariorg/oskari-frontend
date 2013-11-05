@@ -5,6 +5,10 @@
 
 Municipality code was removed from the columns.
 
+Users can now select the class limits mode from distinct and discontinuous.
+
+The map link now gets the class limits mode and colour selections as parameters.
+
 ### mapmodule-plugin/LogoPlugin
 
 Added a new link next to EULA which shows the data sources for map layers and open statistics indicators.
@@ -16,6 +20,10 @@ Added a new bundle which imports user interface components from under divmanazer
 ### myplaces2
 
 Added new configuration option 'layerDefaults' which can be used to override default values found in code. See bundle documentation for details.
+
+### publisher
+
+Added possibility to change order of the layer as well as its opacity. Also removing layer is now possible.
 
 ## 1.15
 

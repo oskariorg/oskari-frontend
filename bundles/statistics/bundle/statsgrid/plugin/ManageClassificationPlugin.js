@@ -461,7 +461,55 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 return ret;
             };
 
-            var colortab = gstats.getHtmlLegend(null, sortcol.name, true, legendRounder, 'distinct');
+            var colors = me._getColors(this.currentColorSet, me.colorsetIndex, classes - 2);
+            // If true, reverses the color "array"
+            if (me.colorsFlipped) {
+                colors = colors.split(',').reverse().join(',');
+            }
+            var colorArr = colors.split(",");
+
+            /*document.getElementById("mover").style.backgroundColor = currentColor;*/
+
+            for ( i = 0; i < colorArr.length; i++)
+                colorArr[i] = '#' + colorArr[i];
+            gstats.setColors(colorArr);
+
+            var manualBreaksInput = this.element.find('.manualBreaks').find('input[name=breaksInput]').val();
+            var colors = colors.replace(/,/g, '|');
+            var classificationMode = me.element.find('select.classification-mode').val();
+
+            var returnObject = {
+                //instance.js - state handling: method
+                methodId : method,
+                //instance.js - state handling: number of classes
+                numberOfClasses : classes,
+                //instance.js - state handling: input string of manual classification method
+                manualBreaksInput : manualBreaksInput.toString(),
+                //instance.js - state handling: input object for colors
+                colors: {
+                    set: me.currentColorSet,
+                    index: me.colorsetIndex,
+                    flipped: me.colorsFlipped
+                },
+                // instance.js - state handling: classification mode
+                classificationMode: classificationMode,
+                VIS_ID : -1,
+                VIS_NAME : params.VIS_NAME,
+                VIS_ATTR : params.VIS_ATTR,
+                VIS_CLASSES : classString,
+                VIS_COLORS : "choro:" + colors
+            };
+            // Send the data out for visualization.
+            this.statsService.sendVisualizationData(layer, returnObject);
+
+            var legendRounder = function(i) {
+                if (i % 1 === 0)
+                    return i;
+                else
+                    return (Math.round(i * 10) / 10);
+            };
+
+            var colortab = gstats.getHtmlLegend(null, sortcol.name, true, legendRounder, classificationMode);
             classify = me.element.find('.classificationMethod');
             classify.find('.block').remove();
             block = jQuery('<div class="block"></div>');
@@ -559,39 +607,64 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             });
             manualcls.hide();
 
+            // Classification mode selector
+            
+            var modeSelector = jQuery(
+                '<div>' +
+                    this._locale.classify.mode + '<br />' +
+                    '<select class="classification-mode"></select><br />' +
+                '</div>'
+            );
+            var modes = ['distinct', 'discontinuous'];
+            jQuery.each(modes, function(i, val) {
+                modeSelector.find('select.classification-mode').append(
+                    '<option value="' + val + '">' +
+                        me._locale.classify.modes[val] +
+                    '</option>'
+                );
+            });
+            modeSelector.find('select.classification-mode').change(function(e) {
+                me.classifyData();
+            });
+
+            // Colours selectors
+
             var colorsButton = jQuery('<input type="button" value="' + me._locale.colorset.button + '" />');
-            colorsButton.click(function (event) {
+            colorsButton.click(function(event) {
                 me._createColorDialog();
             });
 
             var flipColorsButton = jQuery('<input type="button" value="' + me._locale.colorset.flipButton + '" />');
-            flipColorsButton.click(function (e) {
+            flipColorsButton.click(function(e) {
                 me._flipCurrentColors();
             });
 
             classify.append(classcnt);
             classify.append(manualcls);
+            classify.append(modeSelector);
             classify.append(colorsButton);
             classify.append(flipColorsButton);
             content.append(classify);
             // Toggle content HTML
-            header.click(function () {
+            header.click(function() {
                 content.animate({
-                    height: 'toggle'
+                    height : 'toggle'
                 }, 500);
 
             });
 
-            var containerClasses = 'bottom right',
-                position = 0;
+            // get div where the map is rendered from openlayers
+            var parentContainer = jQuery(this._map.div);
 
-
-            if (me.conf && me.conf.location) {
-                containerClasses = me.conf.location.classes || containerClasses;
-                position = me.conf.location.position || position;
+            // add always as first plugin
+            var existingPlugins = parentContainer.find('div');
+            if (!existingPlugins || existingPlugins.length == 0) {
+                // no existing plugins -> just put it there
+                parentContainer.append(this.element);
+            } else {
+                // put in front of existing plugins
+                existingPlugins.first().before(this.element);
             }
-
-            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
 
             // Hide content
             content.hide();

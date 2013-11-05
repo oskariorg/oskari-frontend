@@ -1,11 +1,14 @@
 .manageClassificationPlugin {
-  z-index: 100000000 !important;
+  z-index: 1000000 !important;
   max-width: 240px;
   background-color: white !important;
   color: black !important;
   padding: 0px;
   text-align: left;
-  font: 12px/100% Arial, sans-serif; }
+  font: 12px/100% Arial, sans-serif;
+  position: absolute;
+  bottom: 5px;
+  right: 5px; }
   .manageClassificationPlugin .content select {
     /* TODO moz-only? */
     background: -moz-linear-gradient(center top, #fefefe, #e3e3e3) repeat scroll 0 0 transparent;

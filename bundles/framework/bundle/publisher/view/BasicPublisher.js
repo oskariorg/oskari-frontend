@@ -212,7 +212,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             for (i = 0; i < plugins.length; i += 1) {
                 selectedPluginIDs[plugins[i].id] = true;
                 if (plugins[i].id === 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin') {
-                    me.data.hasLayerSelectionPlugin = plugin.config;
+                    me.data.hasLayerSelectionPlugin = plugins[i].config;
                 }
             }
             me.data.hasLayerSelectionPlugin = false;

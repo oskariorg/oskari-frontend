@@ -5,7 +5,7 @@ Oskari.registerLocalization({
         "title": "Patio",
         "desc": "",
         "tile": {
-            "title": "Theme maps"
+            "title": "Thematic maps"
         },
         "view": {
             "title": "Patio",
@@ -54,7 +54,12 @@ Oskari.registerLocalization({
             "manualRangeError": "There should be at least {min} and at most {max} numbers!",
             "nanError": "A value was not a number!",
             "infoTitle": "Manual breaks",
-            "info": "Input manual breaks separated with a comma. Period works as a decimal separator. First enter the lower bound, then the class bounds and finally the upper bound. E.g. by entering \"0, 10.5, 24, 30.2, 57, 73.1\" you'll get five classes with lower and upper bounds set to 0 and 73,1 and class bounds between those. Values left outside the bounds will be excluded."
+            "info": "Input manual breaks separated with a comma. Period works as a decimal separator. First enter the lower bound, then the class bounds and finally the upper bound. E.g. by entering \"0, 10.5, 24, 30.2, 57, 73.1\" you'll get five classes with lower and upper bounds set to 0 and 73,1 and class bounds between those. Values left outside the bounds will be excluded.",
+            "mode": "Class limits",
+            "modes": {
+                "distinct": "Continuous",
+                "discontinuous": "Discrete"
+            }
         },
         "colorset": {
             "button": "Colors",
