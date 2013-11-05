@@ -7038,7 +7038,7 @@ function() {
     }
 });
 
-define("bundles/oskari/platform/core/core", function(){});
+define("bundles/oskari/base/core/core", function(){});
 
 /**
  * @class Oskari.mapframework.core.Core.enhancementMethods
@@ -7062,7 +7062,7 @@ Oskari.clazz.category(
         }
     }
 }); 
-define("bundles/oskari/platform/core/core-enhancement-methods", function(){});
+define("bundles/oskari/base/core/core-enhancement-methods", function(){});
 
 /**
  * @class Oskari.mapframework.core.Core.keyListenerMethods
@@ -7098,7 +7098,7 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'feature-key-listener-met
     }
 });
 
-define("bundles/oskari/platform/core/core-key-listener-methods", function(){});
+define("bundles/oskari/base/core/core-key-listener-methods", function(){});
 
 /**
  * @class Oskari.mapframework.core.Core.mapLayerMethods
@@ -7484,7 +7484,7 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
     }
 });
 
-define("bundles/oskari/platform/core/core-map-layer-methods", function(){});
+define("bundles/oskari/base/core/core-map-layer-methods", function(){});
 
 /**
  * @class Oskari.mapframework.core.Core.mapMethods
@@ -7514,9 +7514,9 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-methods', {
     }
 });
 
-define("bundles/oskari/platform/core/core-map-methods", function(){});
+define("bundles/oskari/base/core/core-map-methods", function(){});
 
-define('bundles/oskari/platform/core/module',["oskari", 
+define('bundles/oskari/base/core/module',["oskari", 
 			"./core",	
 			"./core-enhancement-methods",
 			"./core-key-listener-methods",
@@ -7617,7 +7617,7 @@ function() {
     }
 });
 
-define("bundles/oskari/platform/event/event", function(){});
+define("bundles/oskari/base/event/event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.FeaturesAvailableEvent
@@ -7707,7 +7707,7 @@ function(mapLayer, features, mimeType, projCode, op) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/features-available-event", function(){});
+define("bundles/oskari/base/event/common/features-available-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterMapLayerAddEvent
@@ -7785,7 +7785,7 @@ function(mapLayer, keepLayersOrder, isBasemap) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-map-layer-add-event", function(){});
+define("bundles/oskari/base/event/common/after-map-layer-add-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterMapLayerRemoveEvent
@@ -7836,7 +7836,7 @@ function(mapLayer) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-map-layer-remove-event", function(){});
+define("bundles/oskari/base/event/common/after-map-layer-remove-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterMapMoveEvent
@@ -7932,7 +7932,7 @@ function(centerX, centerY, zoom, marker, scale) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-map-move-event", function(){});
+define("bundles/oskari/base/event/common/after-map-move-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.MapMoveStartEvent
@@ -7991,7 +7991,7 @@ function(x, y) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-map-move-start-event", function(){});
+define("bundles/oskari/base/event/common/after-map-move-start-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterShowMapLayerInfoEvent
@@ -8041,7 +8041,7 @@ function(mapLayer) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-show-map-layer-info-event", function(){});
+define("bundles/oskari/base/event/common/after-show-map-layer-info-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterHideMapMarkerEvent
@@ -8073,7 +8073,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.event.Event']
 });
-define("bundles/oskari/platform/event/common/after-hide-map-marker-event", function(){});
+define("bundles/oskari/base/event/common/after-hide-map-marker-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.MouseHoverEvent
@@ -8163,7 +8163,7 @@ function(lon, lat,isPaused) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/mouse-hover-event", function(){});
+define("bundles/oskari/base/event/common/mouse-hover-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.MapLayerEvent
@@ -8240,7 +8240,7 @@ function(layerId, operation) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/MapLayerEvent", function(){});
+define("bundles/oskari/base/event/common/MapLayerEvent", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent
@@ -8308,7 +8308,7 @@ function(movedMapLayer, fromPosition, toPosition) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-rearrange-selected-map-layer-event", function(){});
+define("bundles/oskari/base/event/common/after-rearrange-selected-map-layer-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent
@@ -8355,7 +8355,7 @@ function(mapLayer) {
      */
     'protocol' : ['Oskari.mapframework.event.Event']
 });
-define("bundles/oskari/platform/event/common/after-change-map-layer-opacity-event", function(){});
+define("bundles/oskari/base/event/common/after-change-map-layer-opacity-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterChangeMapLayerStyleEvent
@@ -8403,7 +8403,7 @@ function(mapLayer) {
     'protocol' : ['Oskari.mapframework.event.Event']
 });
 
-define("bundles/oskari/platform/event/common/after-change-map-layer-style-event", function(){});
+define("bundles/oskari/base/event/common/after-change-map-layer-style-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterHighlightMapLayerEvent
@@ -8455,7 +8455,7 @@ function(mapLayer) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-highlight-map-layer-event", function(){});
+define("bundles/oskari/base/event/common/after-highlight-map-layer-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterDimMapLayerEvent
@@ -8507,9 +8507,9 @@ function(mapLayer) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-dim-map-layer-event", function(){});
+define("bundles/oskari/base/event/common/after-dim-map-layer-event", function(){});
 
-define('bundles/oskari/platform/event/module',["oskari", 
+define('bundles/oskari/base/event/module',["oskari", 
 			"./event",
 			"./common/features-available-event",
 			"./common/after-map-layer-add-event",
@@ -9271,7 +9271,7 @@ function(params, options) {
 		return this._options;
 	}
 }); 
-define("bundles/oskari/platform/domain/AbstractLayer", function(){});
+define("bundles/oskari/base/domain/AbstractLayer", function(){});
 
 /**
  * @class Oskari.mapframework.domain.WmsLayer
@@ -9329,7 +9329,7 @@ function() {
     "extend" : ["Oskari.mapframework.domain.AbstractLayer"]
 });
 
-define("bundles/oskari/platform/domain/wmslayer", function(){});
+define("bundles/oskari/base/domain/wmslayer", function(){});
 
 /**
  * @class Oskari.mapframework.domain.VectorLayer
@@ -9371,7 +9371,7 @@ function() { /* style definition for this layer */
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]
 });
-define("bundles/oskari/platform/domain/vectorlayer", function(){});
+define("bundles/oskari/base/domain/vectorlayer", function(){});
 
 /**
  * @class Oskari.mapframework.domain.Map
@@ -9684,7 +9684,7 @@ function() {
     }
 });
 
-define("bundles/oskari/platform/domain/map", function(){});
+define("bundles/oskari/base/domain/map", function(){});
 
 /**
  * @class Oskari.mapframework.domain.Style
@@ -9762,7 +9762,7 @@ function() {
     }
 });
 
-define("bundles/oskari/platform/domain/style", function(){});
+define("bundles/oskari/base/domain/style", function(){});
 
 /**
  * @class Oskari.mapframework.domain.Tool
@@ -9878,7 +9878,7 @@ function() {
     }
 });
 
-define("bundles/oskari/platform/domain/tool", function(){});
+define("bundles/oskari/base/domain/tool", function(){});
 
 /**
  * @class Oskari.mapframework.domain.User
@@ -9984,10 +9984,10 @@ function(userData) {
 		return this._loggedIn;
 	}
 });
-define("bundles/oskari/platform/domain/user", function(){});
+define("bundles/oskari/base/domain/user", function(){});
 
 
-define('bundles/oskari/platform/domain/module',["oskari",
+define('bundles/oskari/base/domain/module',["oskari",
 			"./AbstractLayer",
             "./wmslayer",
 			"./vectorlayer",
@@ -10083,7 +10083,7 @@ function() {
     }
 });
 
-define("bundles/oskari/platform/request/request", function(){});
+define("bundles/oskari/base/request/request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.AddMapLayerRequest
@@ -10163,7 +10163,7 @@ function(mapLayerId, keepLayersOrder, isBasemap, isExternal) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/add-map-layer-request", function(){});
+define("bundles/oskari/base/request/common/add-map-layer-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.RemoveMapLayerRequest
@@ -10210,7 +10210,7 @@ function(mapLayerId) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/remove-map-layer-request", function(){});
+define("bundles/oskari/base/request/common/remove-map-layer-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.MapMoveRequest
@@ -10303,7 +10303,7 @@ function(centerX, centerY, zoom, marker, srsName) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/map-move-request", function(){});
+define("bundles/oskari/base/request/common/map-move-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.ShowMapLayerInfoRequest
@@ -10354,7 +10354,7 @@ function(mapLayerId) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/show-map-layer-info-request", function(){});
+define("bundles/oskari/base/request/common/show-map-layer-info-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.HideMapMarkerRequest
@@ -10385,7 +10385,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/hide-map-marker-request", function(){});
+define("bundles/oskari/base/request/common/hide-map-marker-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.CtrlKeyDownRequest
@@ -10419,7 +10419,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/ctrl-key-down-request", function(){});
+define("bundles/oskari/base/request/common/ctrl-key-down-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.CtrlKeyUpRequest
@@ -10453,7 +10453,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/ctrl-key-up-request", function(){});
+define("bundles/oskari/base/request/common/ctrl-key-up-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.RearrangeSelectedMapLayerRequest
@@ -10514,7 +10514,7 @@ function(mapLayerId, toPosition) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 }); 
-define("bundles/oskari/platform/request/common/rearrange-selected-map-layer-request", function(){});
+define("bundles/oskari/base/request/common/rearrange-selected-map-layer-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.ChangeMapLayerOpacityRequest
@@ -10571,7 +10571,7 @@ function(mapLayerId, opacity) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/change-map-layer-opacity-request", function(){});
+define("bundles/oskari/base/request/common/change-map-layer-opacity-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.ChangeMapLayerStyleRequest
@@ -10629,7 +10629,7 @@ function(mapLayerId, style) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/change-map-layer-style-request", function(){});
+define("bundles/oskari/base/request/common/change-map-layer-style-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.HighlightMapLayerRequest
@@ -10677,7 +10677,7 @@ function(mapLayerId) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/highlight-map-layer-request", function(){});
+define("bundles/oskari/base/request/common/highlight-map-layer-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.DimMapLayerRequest
@@ -10726,9 +10726,9 @@ function(mapLayerId) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/dim-map-layer-request", function(){});
+define("bundles/oskari/base/request/common/dim-map-layer-request", function(){});
 
-define('bundles/oskari/platform/request/module',["oskari", 
+define('bundles/oskari/base/request/module',["oskari", 
 			"./request",
 			"./common/add-map-layer-request",
 			"./common/remove-map-layer-request",
@@ -11482,7 +11482,7 @@ function(core) {
     }
 });
 
-define("bundles/oskari/platform/sandbox/sandbox", function(){});
+define("bundles/oskari/base/sandbox/sandbox", function(){});
 
 /**
  * @class Oskari.mapframework.sandbox.Sandbox.keyListenerMethods
@@ -11501,7 +11501,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'key-listener-metho
         return this._core.isCtrlKeyDown();
     }
 }); 
-define("bundles/oskari/platform/sandbox/sandbox-key-listener-methods", function(){});
+define("bundles/oskari/base/sandbox/sandbox-key-listener-methods", function(){});
 
 /**
  * @class Oskari.mapframework.sandbox.Sandbox.mapLayerMethods
@@ -11597,7 +11597,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-layer-methods'
     }
 });
 
-define("bundles/oskari/platform/sandbox/sandbox-map-layer-methods", function(){});
+define("bundles/oskari/base/sandbox/sandbox-map-layer-methods", function(){});
 
 /**
  * @class Oskari.mapframework.sandbox.Sandbox.mapMethods
@@ -11713,7 +11713,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-methods', {
     }
 });
 
-define("bundles/oskari/platform/sandbox/sandbox-map-methods", function(){});
+define("bundles/oskari/base/sandbox/sandbox-map-methods", function(){});
 
 /**
  * @class Oskari.mapframework.sandbox.Sandbox.abstractionMethods
@@ -11797,9 +11797,9 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'abstraction-method
 	}
 });
 
-define("bundles/oskari/platform/sandbox/sandbox-abstraction-methods", function(){});
+define("bundles/oskari/base/sandbox/sandbox-abstraction-methods", function(){});
 
-define('bundles/oskari/platform/sandbox/module',["oskari",
+define('bundles/oskari/base/sandbox/module',["oskari",
 			"./sandbox",
 			"./sandbox-key-listener-methods",
 			"./sandbox-map-layer-methods",
@@ -11835,7 +11835,7 @@ function() {
     }
 });
 
-define("bundles/oskari/platform/service/service", function(){});
+define("bundles/oskari/base/service/service", function(){});
 
 /**
  * @class Oskari.mapframework.service.MapLayerService
@@ -12525,9 +12525,9 @@ function(mapLayerUrl, sandbox) {
      */
     'protocol' : ['Oskari.mapframework.service.Service']
 });
-define("bundles/oskari/platform/service/map-layer-service", function(){});
+define("bundles/oskari/base/service/map-layer-service", function(){});
 
-define('bundles/oskari/platform/service/module',["oskari",
+define('bundles/oskari/base/service/module',["oskari",
 			"./service",
 			"./map-layer-service"], function(Oskari) {
 			
@@ -12536,7 +12536,7 @@ define('bundles/oskari/platform/service/module',["oskari",
 			
 		});
 
-define('bundles/oskari/platform/module',["oskari",
+define('bundles/oskari/base/module',["oskari",
 "./core/module",
 "./event/module",
 "./domain/module",
@@ -26179,7 +26179,7 @@ define("bundles/framework/bundle/mapmodule-plugin/locale/en", function(){});
 define('bundles/framework/bundle/mapmodule-plugin/module',[
     "oskari",
     "jquery",
-    "bundles/oskari/platform/module",
+    "bundles/oskari/base/module",
     "bundles/framework/bundle/oskariui/module",
     "bundles/framework/bundle/mapwfs/module",
     "bundles/framework/bundle/mapstats/module",

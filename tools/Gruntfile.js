@@ -81,6 +81,9 @@ module.exports = function (grunt) {
                     outputFile: 'test-results.xml'
                 },
                 singleRun: true
+            },
+            test: {
+                configFile: 'src.conf.js'
             }
         },
         clean: {

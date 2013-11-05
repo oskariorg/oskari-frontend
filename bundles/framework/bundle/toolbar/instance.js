@@ -370,4 +370,3 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
          */
         protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     });
->>>>>>> c5ff83ebe42be4e3a17db6ebddc24859fe67375a

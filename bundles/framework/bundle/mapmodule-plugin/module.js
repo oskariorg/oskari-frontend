@@ -1,7 +1,7 @@
 define([
     "oskari",
     "jquery",
-    "bundles/oskari/platform/module",
+    "bundles/oskari/base/module",
     "bundles/framework/bundle/oskariui/module",
     "bundles/framework/bundle/mapwfs/module",
     "bundles/framework/bundle/mapstats/module",

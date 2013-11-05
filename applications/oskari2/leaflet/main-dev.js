@@ -1,132 +1,98 @@
 require(["mainConfig"], function() {
 
     /* loading base requirements */
-    require(["jquery", "oskari","domReady"],
-    /**
-     * ... now we have jQuery and Oskari
-     */
-    function($, Oskari) {
+    require(["jquery", "oskari-with-app", "domReady"],
+        /**
+         * ... now we have jQuery and Oskari
+         */
 
-        function getURLParameter(name) {
-            var re = name + '=' + '([^&]*)(&|$)';
-            var value = RegExp(re).exec(location.search);
-            if (value && value.length && value.length > 1) {
-                value = value[1];
-            }
-            if (value) {
-                return decodeURI(value);
-            }
-            return null;
-        }
+        function($, Oskari) {
 
-        function gfiParamHandler(sandbox) {
-            if (getURLParameter('showGetFeatureInfo') != 'true') {
-                return;
-            }
-            var lon = sandbox.getMap().getX();
-            var lat = sandbox.getMap().getY();
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var px = mapModule.getMap().getViewPortPxFromLonLat({
-                lon: lon,
-                lat: lat
-            });
-            sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
-        }
-
-        var config = "json!applications/oskari2/leaflet/minifierAppSetup.json";
-        if (window.ajaxUrl) {
-            // populate url with possible control parameters
-            var getAppSetupParams = "";
-            if(typeof window.controlParams == 'object') {
-                for(var key in controlParams) {
-                    getAppSetupParams += "&" + key + "=" + controlParams[key];
+            function getURLParameter(name) {
+                var re = name + '=' + '([^&]*)(&|$)';
+                var value = RegExp(re).exec(location.search);
+                if (value && value.length && value.length > 1) {
+                    value = value[1];
                 }
+                if (value) {
+                    return decodeURI(value);
+                }
+                return null;
             }
 
-            //config = "json!/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&&action_route=GetAppSetup" + getAppSetupParams;
-        }
+            function gfiParamHandler(sandbox) {
+                if (getURLParameter('showGetFeatureInfo') != 'true') {
+                    return;
+                }
+                var lon = sandbox.getMap().getX();
+                var lat = sandbox.getMap().getY();
+                var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+                var px = mapModule.getMap().getViewPortPxFromLonLat({
+                    lon: lon,
+                    lat: lat
+                });
+                sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
+            }
 
-        /* loading configuration */
-        require([config, 
-            "bundles/oskari/bundle/map-leaflet/module"], function(appSetup) {
-            Oskari.setLang(language);
-            var appConfig = appSetup.configuration;
-            appConfig.promote = {
-                    "conf": {
-                        "__name": "Promote",
-                        "title": {
-                            "fi": "Otsikko tileen",
-                            "en": "Title for Tile"
-                        },
-                        "desc": {
-                            "fi": "Voit käyttää julkaisutoimintoa kirjauduttuasi palveluun.",
-                            "en": "You need to log in before using the embedding function."
-                        },
-                        "signup": {
-                            "fi": "Kirjaudu sisään",
-                            "en": "Log in"
-                        },
-                        "signupUrl": {
-                            "fi": "/web/fi/login",
-                            "en": "/web/en/login"
-                        },
-                        "register": {
-                            "fi": "Rekisteröidy",
-                            "en": "Register"
-                        },
-                        "registerUrl": {
-                            "fi": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account",
-                            "en": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
-                        },
-                        "test_toolbarButtons": {
-                            "buttonGrp": {
-                                "buttonId": {
-                                    "iconCls": "tool-reset",
-                                    "tooltip": {
-                                        "fi": "jee",
-                                        "en": "jee en"
-                                    }
-                                }
-                            }
-                        }
+            var config = "json!applications/oskari2/leaflet/minifierAppSetup.json";
+            if (window.ajaxUrl) {
+                // populate url with possible control parameters
+                var getAppSetupParams = "";
+                if (typeof window.controlParams == 'object') {
+                    for (var key in controlParams) {
+                        getAppSetupParams += "&" + key + "=" + controlParams[key];
                     }
-                };
+                }
 
-            Oskari.setConfiguration(appConfig);
+                //config = "json!/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&&action_route=GetAppSetup" + getAppSetupParams;
+            }
 
-            /* loading main map and divmanazer */
-            require(["bundles/leaflet/bundle/mapfull/module",
-                "bundles/leaflet/bundle/mapmodule-plugin/module",
-                "bundles/framework/bundle/divmanazer/module"
+            /* loading configuration */
+            require([config], function(appSetup) {
+
+                Oskari.setLang(language);
+
+                window.debugApp = Oskari.Application
+                    .create()
+                    .setStartupSequence(appSetup.startupSequence)
+                    .setConfiguration(appSetup.configuration)
+                    .start()
+                    .success(function() { console.log("ALL DONE");});
+
+                /* loading main map and divmanazer 
+                require(["mapfull",
+                    "mapmodule-plugin",
+                    "src/framework/bundle/divmanazer/module"
                 ], function(mapfull, mapmodule, divmanazer) {
 
-                /* starting to show user that something or another is happening */
-                mapfull.start();
-                console.log('starting divmanazer');
-                divmanazer.start();
-                console.log('divmanazer started');
 
-                var bundles = [];
+                    /* starting to show user that something or another is happening *
+//                    mapfull.start();
+                    console.log('starting divmanazer');
+//                    divmanazer.start();
+                    console.log('divmanazer started');
 
-                for (bundle in appConfig) {
-                    if ((bundle === "mapfull") || (bundle === "divmanazer") || (bundle === "openlayers-default-theme")) {
-                        // already loaded
-                    } else if (bundle === "statsgrid") {
-                        bundles.push("bundles/statistics/bundle/" + bundle + "/module");
-                    } else if (bundle === "metadataflyout") {
-                        bundles.push("bundles/catalogue/bundle/" + bundle + "/module");
-                    } else if (bundle === "infobox") {
-                        bundles.push("bundles/leaflet/bundle/" + bundle + "/module");
-                    } else {
-                        bundles.push("bundles/framework/bundle/" + bundle + "/module");
+                    var bundles = [];
+
+                    for (bundle in appConfig) {
+                        if ((bundle === "mapfull") || (bundle === "divmanazer") || (bundle === "openlayers-default-theme")) {
+                            // already loaded
+                        } else if (bundle === "statsgrid") {
+                            bundles.push("bundles/statistics/bundle/" + bundle + "/module");
+                        } else if (bundle === "metadataflyout") {
+                            bundles.push("bundles/catalogue/bundle/" + bundle + "/module");
+                        } else if (bundle === "infobox") {
+                            bundles.push("src/leaflet/bundle/" + bundle + "/module");
+                        } else {
+                            bundles.push("bundles/framework/bundle/" + bundle + "/module");
+                        }
                     }
-                }
 
-//                console.log('bundles', bundles);
+                    //                console.log('bundles', bundles);
 
-                require(bundles, function () {
+                    require(bundles, function() {
 
-/*                require([
+                        /*                require([
                     "bundles/framework/bundle/backendstatus/module",
                     "bundles/framework/bundle/guidedtour/module",
                     "bundles/framework/bundle/toolbar/module",
@@ -143,16 +109,16 @@ require(["mainConfig"], function() {
                     "bundles/framework/bundle/statehandler/module",
                     "bundles/framework/bundle/infobox/module",
                     "bundles/framework/bundle/coordinatedisplay/module",
-                    "bundles/framework/bundle/promote/module"], function () {*/
-                        for(var i = 0, ilen = arguments.length; i < ilen; i++) {
-                            arguments[i].start();
+                    "bundles/framework/bundle/promote/module"], function () {*
+                        for (var i = 0, ilen = arguments.length; i < ilen; i++) {
+//                            arguments[i].start();
                         }
                         console.log('Calling GFI Param Handler');
                         var sb = Oskari.getSandbox();
                         gfiParamHandler(sb);
-                    }
-                );
+                    });
+                });
+*/
             });
         });
-    });
 });

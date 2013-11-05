@@ -48,7 +48,7 @@ require(["mainConfig"], function() {
 
         /* loading configuration */
         require([config, 
-            "bundles/oskari/bundle/map-ol2/module"], function(appSetup) {
+            "map"], function(appSetup) {
             Oskari.setLang(language);
             var appConfig = appSetup.configuration;
             appConfig.promote = {
@@ -94,8 +94,8 @@ require(["mainConfig"], function() {
 
             Oskari.setConfiguration(appConfig);
             /* loading main map and divmanazer */
-            require(["bundles/ol2/bundle/mapmodule-plugin/module",
-                "bundles/ol2/bundle/mapfull/module",
+            require(["mapmodule-plugin",
+                "mapfull",
                 "bundles/framework/bundle/divmanazer/module"], function(mapmodule, mapfull, divmanazer) {
 
                 /* starting to show user that something or another is happening */

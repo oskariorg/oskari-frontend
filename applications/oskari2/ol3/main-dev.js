@@ -48,7 +48,7 @@ require(["mainConfig"], function() {
 
         /* loading configuration */
         require([config, 
-            "bundles/oskari/bundle/map-ol3/module"], function(appSetup) {
+            "map"], function(appSetup) {
             Oskari.setLang(language);
             var appConfig = appSetup.configuration;
             appConfig.promote = {
@@ -94,8 +94,8 @@ require(["mainConfig"], function() {
 
             Oskari.setConfiguration(appConfig);
             /* loading main map and divmanazer */
-            require(["bundles/ol3/bundle/mapfull/module",
-                "bundles/ol3/bundle/mapmodule-plugin/module",
+            require(["mapfull",
+                "mapmodule-plugin",
                 "bundles/framework/bundle/divmanazer/module"
                 ], function(mapfull, mapmodule, divmanazer) {
 
@@ -113,7 +113,7 @@ require(["mainConfig"], function() {
                     } else if (bundle === "metadataflyout") {
                         bundles.push("bundles/catalogue/bundle/" + bundle + "/module");
                     } else if (bundle === "infobox") {
-                        bundles.push("bundles/ol3/bundle/" + bundle + "/module");
+                        bundles.push("src/ol3/bundle/" + bundle + "/module");
                     } else {
                         bundles.push("bundles/framework/bundle/" + bundle + "/module");
                     }

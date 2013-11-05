@@ -1,38 +1,45 @@
 
 require.config({
-    baseUrl : "/Oskari/", // the base is set to requirejs lib to help requiring 3rd party libs
-    paths : { // some path shortcuts to ease declarations
-        oskari: "bundles/oskari/oskari",
-        "oskari-with-loader": "bundles/oskari/oskari-with-loader",
-        jquery: "http://code.jquery.com/jquery-1.9.1",
-        "jquery-migrate": "libraries/jquery/jquery-migrate-1.2.1-modified",
-        css: "libraries/requirejs/lib/css",
-        json: "libraries/requirejs/lib/json",
-        domReady: "libraries/requirejs/lib/domReady",
-        text: "libraries/requirejs/lib/text",
-        normalize: "libraries/requirejs/lib/normalize"
+  baseUrl: "/Oskari/", // the base is set to requirejs lib to help requiring 3rd party libs
+  paths: { // some path shortcuts to ease declarations
+    oskari: "src/oskari/oskari",
+    "oskari-with-loader": "src/oskari/oskari-with-loader",
+    jquery: "http://code.jquery.com/jquery-1.9.1",
+    "jquery-migrate": "libraries/jquery/jquery-migrate-1.2.1-modified",
+    css: "libraries/requirejs/lib/css",
+    json: "libraries/requirejs/lib/json",
+    domReady: "libraries/requirejs/lib/domReady",
+    text: "libraries/requirejs/lib/text",
+    normalize: "libraries/requirejs/lib/normalize"
+  },
+  map: {
+    // '*' means all modules will get 'jquery-private'
+    // for their 'jquery' dependency.
+    "*": {
+      "jquery": "jquery-migrate",
+      "map": "src/oskari/bundle/map-leaflet/module",
+      "mapmodule-plugin": "src/leaflet/bundle/mapmodule-plugin/module",
+      "mapfull": "src/leaflet/bundle/mapfull/module"      
     },
-    map: {
-      // '*' means all modules will get 'jquery-private'
-      // for their 'jquery' dependency.
-      '*': { 'jquery': 'jquery-migrate' },
 
-      // 'jquery-private' wants the real jQuery module
-      // though. If this line was not here, there would
-      // be an unresolvable cyclic dependency.
-      'jquery-migrate': { 'jquery': 'jquery' }
-    },
-    shim: {
-      'oskari' : {
-        exports: 'Oskari'
-      }
-    },
-    config : {
-        i18n : {
-            locale : language
-        }
-    },
-    waitSeconds: 30
+    // 'jquery-private' wants the real jQuery module
+    // though. If this line was not here, there would
+    // be an unresolvable cyclic dependency.
+    "jquery-migrate": {
+      "jquery": "jquery"
+    }
+  },
+  shim: {
+    "oskari": {
+      exports: "Oskari"
+    }
+  },
+  config: {
+    i18n: {
+      locale: language
+    }
+  },
+  waitSeconds: 30
 });
 define("mainConfig", function(){});
 
@@ -6297,7 +6304,7 @@ define('css',['./normalize'], function(normalize) {
   return cssAPI;
 });
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('libraries/leaflet/leaflet.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-define('bundles/oskari/bundle/map-leaflet/module',["oskari",  
+define('src/oskari/bundle/map-leaflet/module',["oskari",  
 /* leaflet */ 
 "libraries/leaflet/leaflet",
 "libraries/leaflet/leaflet-ol2-compatibility",
@@ -6801,7 +6808,7 @@ function() {
 	"protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.userinterface.Stateful']
 });
 
-define("bundles/leaflet/bundle/mapfull/instance", function(){});
+define("src/leaflet/bundle/mapfull/instance", function(){});
 
 /**
  * @class Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement
@@ -7027,16 +7034,16 @@ function(mapfull) {
 define("bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequestHandler", function(){});
 
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapfull/css/style.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-define('bundles/leaflet/bundle/mapfull/module',[
+define('src/leaflet/bundle/mapfull/module',[
 	"oskari",
 	"jquery",
 	"bundles/framework/bundle/oskariui/module",
 	"./instance",
-	"../../../framework/bundle/mapfull/enhancement/start-map-with-link-enhancement",
-	"../../../framework/bundle/mapfull/request/MapResizeEnabledRequest",
-	"../../../framework/bundle/mapfull/request/MapResizeEnabledRequestHandler",
-	"../../../framework/bundle/mapfull/request/MapWindowFullScreenRequest",
-	"../../../framework/bundle/mapfull/request/MapWindowFullScreenRequestHandler",
+	"bundles/framework/bundle/mapfull/enhancement/start-map-with-link-enhancement",
+	"bundles/framework/bundle/mapfull/request/MapResizeEnabledRequest",
+	"bundles/framework/bundle/mapfull/request/MapResizeEnabledRequestHandler",
+	"bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequest",
+	"bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequestHandler",
 	"css!resources/framework/bundle/mapfull/css/style.css"
 ], function(Oskari, jQuery) {
 
@@ -7498,7 +7505,7 @@ function() {
     }
 });
 
-define("bundles/oskari/platform/core/core", function(){});
+define("src/oskari/base/core/core", function(){});
 
 /**
  * @class Oskari.mapframework.core.Core.enhancementMethods
@@ -7522,7 +7529,7 @@ Oskari.clazz.category(
         }
     }
 }); 
-define("bundles/oskari/platform/core/core-enhancement-methods", function(){});
+define("src/oskari/base/core/core-enhancement-methods", function(){});
 
 /**
  * @class Oskari.mapframework.core.Core.keyListenerMethods
@@ -7558,7 +7565,7 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'feature-key-listener-met
     }
 });
 
-define("bundles/oskari/platform/core/core-key-listener-methods", function(){});
+define("src/oskari/base/core/core-key-listener-methods", function(){});
 
 /**
  * @class Oskari.mapframework.core.Core.mapLayerMethods
@@ -7944,7 +7951,7 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
     }
 });
 
-define("bundles/oskari/platform/core/core-map-layer-methods", function(){});
+define("src/oskari/base/core/core-map-layer-methods", function(){});
 
 /**
  * @class Oskari.mapframework.core.Core.mapMethods
@@ -7974,9 +7981,9 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-methods', {
     }
 });
 
-define("bundles/oskari/platform/core/core-map-methods", function(){});
+define("src/oskari/base/core/core-map-methods", function(){});
 
-define('bundles/oskari/platform/core/module',["oskari", 
+define('src/oskari/base/core/module',["oskari", 
 			"./core",	
 			"./core-enhancement-methods",
 			"./core-key-listener-methods",
@@ -8077,7 +8084,7 @@ function() {
     }
 });
 
-define("bundles/oskari/platform/event/event", function(){});
+define("src/oskari/base/event/event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.FeaturesAvailableEvent
@@ -8167,7 +8174,7 @@ function(mapLayer, features, mimeType, projCode, op) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/features-available-event", function(){});
+define("src/oskari/base/event/common/features-available-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterMapLayerAddEvent
@@ -8245,7 +8252,7 @@ function(mapLayer, keepLayersOrder, isBasemap) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-map-layer-add-event", function(){});
+define("src/oskari/base/event/common/after-map-layer-add-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterMapLayerRemoveEvent
@@ -8296,7 +8303,7 @@ function(mapLayer) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-map-layer-remove-event", function(){});
+define("src/oskari/base/event/common/after-map-layer-remove-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterMapMoveEvent
@@ -8392,7 +8399,7 @@ function(centerX, centerY, zoom, marker, scale) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-map-move-event", function(){});
+define("src/oskari/base/event/common/after-map-move-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.MapMoveStartEvent
@@ -8451,7 +8458,7 @@ function(x, y) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-map-move-start-event", function(){});
+define("src/oskari/base/event/common/after-map-move-start-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterShowMapLayerInfoEvent
@@ -8501,7 +8508,7 @@ function(mapLayer) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-show-map-layer-info-event", function(){});
+define("src/oskari/base/event/common/after-show-map-layer-info-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterHideMapMarkerEvent
@@ -8533,7 +8540,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.event.Event']
 });
-define("bundles/oskari/platform/event/common/after-hide-map-marker-event", function(){});
+define("src/oskari/base/event/common/after-hide-map-marker-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.MouseHoverEvent
@@ -8623,7 +8630,7 @@ function(lon, lat,isPaused) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/mouse-hover-event", function(){});
+define("src/oskari/base/event/common/mouse-hover-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.MapLayerEvent
@@ -8700,7 +8707,7 @@ function(layerId, operation) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/MapLayerEvent", function(){});
+define("src/oskari/base/event/common/MapLayerEvent", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent
@@ -8768,7 +8775,7 @@ function(movedMapLayer, fromPosition, toPosition) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-rearrange-selected-map-layer-event", function(){});
+define("src/oskari/base/event/common/after-rearrange-selected-map-layer-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent
@@ -8815,7 +8822,7 @@ function(mapLayer) {
      */
     'protocol' : ['Oskari.mapframework.event.Event']
 });
-define("bundles/oskari/platform/event/common/after-change-map-layer-opacity-event", function(){});
+define("src/oskari/base/event/common/after-change-map-layer-opacity-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterChangeMapLayerStyleEvent
@@ -8863,7 +8870,7 @@ function(mapLayer) {
     'protocol' : ['Oskari.mapframework.event.Event']
 });
 
-define("bundles/oskari/platform/event/common/after-change-map-layer-style-event", function(){});
+define("src/oskari/base/event/common/after-change-map-layer-style-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterHighlightMapLayerEvent
@@ -8915,7 +8922,7 @@ function(mapLayer) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-highlight-map-layer-event", function(){});
+define("src/oskari/base/event/common/after-highlight-map-layer-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterDimMapLayerEvent
@@ -8967,9 +8974,9 @@ function(mapLayer) {
 });
 
 /* Inheritance */;
-define("bundles/oskari/platform/event/common/after-dim-map-layer-event", function(){});
+define("src/oskari/base/event/common/after-dim-map-layer-event", function(){});
 
-define('bundles/oskari/platform/event/module',["oskari", 
+define('src/oskari/base/event/module',["oskari", 
 			"./event",
 			"./common/features-available-event",
 			"./common/after-map-layer-add-event",
@@ -9731,7 +9738,7 @@ function(params, options) {
 		return this._options;
 	}
 }); 
-define("bundles/oskari/platform/domain/AbstractLayer", function(){});
+define("src/oskari/base/domain/AbstractLayer", function(){});
 
 /**
  * @class Oskari.mapframework.domain.WmsLayer
@@ -9789,7 +9796,7 @@ function() {
     "extend" : ["Oskari.mapframework.domain.AbstractLayer"]
 });
 
-define("bundles/oskari/platform/domain/wmslayer", function(){});
+define("src/oskari/base/domain/wmslayer", function(){});
 
 /**
  * @class Oskari.mapframework.domain.VectorLayer
@@ -9831,7 +9838,7 @@ function() { /* style definition for this layer */
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]
 });
-define("bundles/oskari/platform/domain/vectorlayer", function(){});
+define("src/oskari/base/domain/vectorlayer", function(){});
 
 /**
  * @class Oskari.mapframework.domain.Map
@@ -10144,7 +10151,7 @@ function() {
     }
 });
 
-define("bundles/oskari/platform/domain/map", function(){});
+define("src/oskari/base/domain/map", function(){});
 
 /**
  * @class Oskari.mapframework.domain.Style
@@ -10222,7 +10229,7 @@ function() {
     }
 });
 
-define("bundles/oskari/platform/domain/style", function(){});
+define("src/oskari/base/domain/style", function(){});
 
 /**
  * @class Oskari.mapframework.domain.Tool
@@ -10338,7 +10345,7 @@ function() {
     }
 });
 
-define("bundles/oskari/platform/domain/tool", function(){});
+define("src/oskari/base/domain/tool", function(){});
 
 /**
  * @class Oskari.mapframework.domain.User
@@ -10444,10 +10451,10 @@ function(userData) {
 		return this._loggedIn;
 	}
 });
-define("bundles/oskari/platform/domain/user", function(){});
+define("src/oskari/base/domain/user", function(){});
 
 
-define('bundles/oskari/platform/domain/module',["oskari",
+define('src/oskari/base/domain/module',["oskari",
 			"./AbstractLayer",
             "./wmslayer",
 			"./vectorlayer",
@@ -10543,7 +10550,7 @@ function() {
     }
 });
 
-define("bundles/oskari/platform/request/request", function(){});
+define("src/oskari/base/request/request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.AddMapLayerRequest
@@ -10623,7 +10630,7 @@ function(mapLayerId, keepLayersOrder, isBasemap, isExternal) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/add-map-layer-request", function(){});
+define("src/oskari/base/request/common/add-map-layer-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.RemoveMapLayerRequest
@@ -10670,7 +10677,7 @@ function(mapLayerId) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/remove-map-layer-request", function(){});
+define("src/oskari/base/request/common/remove-map-layer-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.MapMoveRequest
@@ -10763,7 +10770,7 @@ function(centerX, centerY, zoom, marker, srsName) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/map-move-request", function(){});
+define("src/oskari/base/request/common/map-move-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.ShowMapLayerInfoRequest
@@ -10814,7 +10821,7 @@ function(mapLayerId) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/show-map-layer-info-request", function(){});
+define("src/oskari/base/request/common/show-map-layer-info-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.HideMapMarkerRequest
@@ -10845,7 +10852,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/hide-map-marker-request", function(){});
+define("src/oskari/base/request/common/hide-map-marker-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.CtrlKeyDownRequest
@@ -10879,7 +10886,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/ctrl-key-down-request", function(){});
+define("src/oskari/base/request/common/ctrl-key-down-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.CtrlKeyUpRequest
@@ -10913,7 +10920,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/ctrl-key-up-request", function(){});
+define("src/oskari/base/request/common/ctrl-key-up-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.RearrangeSelectedMapLayerRequest
@@ -10974,7 +10981,7 @@ function(mapLayerId, toPosition) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 }); 
-define("bundles/oskari/platform/request/common/rearrange-selected-map-layer-request", function(){});
+define("src/oskari/base/request/common/rearrange-selected-map-layer-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.ChangeMapLayerOpacityRequest
@@ -11031,7 +11038,7 @@ function(mapLayerId, opacity) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/change-map-layer-opacity-request", function(){});
+define("src/oskari/base/request/common/change-map-layer-opacity-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.ChangeMapLayerStyleRequest
@@ -11089,7 +11096,7 @@ function(mapLayerId, style) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/change-map-layer-style-request", function(){});
+define("src/oskari/base/request/common/change-map-layer-style-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.HighlightMapLayerRequest
@@ -11137,7 +11144,7 @@ function(mapLayerId) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/highlight-map-layer-request", function(){});
+define("src/oskari/base/request/common/highlight-map-layer-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.DimMapLayerRequest
@@ -11186,9 +11193,9 @@ function(mapLayerId) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("bundles/oskari/platform/request/common/dim-map-layer-request", function(){});
+define("src/oskari/base/request/common/dim-map-layer-request", function(){});
 
-define('bundles/oskari/platform/request/module',["oskari", 
+define('src/oskari/base/request/module',["oskari", 
 			"./request",
 			"./common/add-map-layer-request",
 			"./common/remove-map-layer-request",
@@ -11942,7 +11949,7 @@ function(core) {
     }
 });
 
-define("bundles/oskari/platform/sandbox/sandbox", function(){});
+define("src/oskari/base/sandbox/sandbox", function(){});
 
 /**
  * @class Oskari.mapframework.sandbox.Sandbox.keyListenerMethods
@@ -11961,7 +11968,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'key-listener-metho
         return this._core.isCtrlKeyDown();
     }
 }); 
-define("bundles/oskari/platform/sandbox/sandbox-key-listener-methods", function(){});
+define("src/oskari/base/sandbox/sandbox-key-listener-methods", function(){});
 
 /**
  * @class Oskari.mapframework.sandbox.Sandbox.mapLayerMethods
@@ -12057,7 +12064,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-layer-methods'
     }
 });
 
-define("bundles/oskari/platform/sandbox/sandbox-map-layer-methods", function(){});
+define("src/oskari/base/sandbox/sandbox-map-layer-methods", function(){});
 
 /**
  * @class Oskari.mapframework.sandbox.Sandbox.mapMethods
@@ -12173,7 +12180,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-methods', {
     }
 });
 
-define("bundles/oskari/platform/sandbox/sandbox-map-methods", function(){});
+define("src/oskari/base/sandbox/sandbox-map-methods", function(){});
 
 /**
  * @class Oskari.mapframework.sandbox.Sandbox.abstractionMethods
@@ -12257,9 +12264,9 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'abstraction-method
 	}
 });
 
-define("bundles/oskari/platform/sandbox/sandbox-abstraction-methods", function(){});
+define("src/oskari/base/sandbox/sandbox-abstraction-methods", function(){});
 
-define('bundles/oskari/platform/sandbox/module',["oskari",
+define('src/oskari/base/sandbox/module',["oskari",
 			"./sandbox",
 			"./sandbox-key-listener-methods",
 			"./sandbox-map-layer-methods",
@@ -12295,7 +12302,7 @@ function() {
     }
 });
 
-define("bundles/oskari/platform/service/service", function(){});
+define("src/oskari/base/service/service", function(){});
 
 /**
  * @class Oskari.mapframework.service.MapLayerService
@@ -12985,9 +12992,9 @@ function(mapLayerUrl, sandbox) {
      */
     'protocol' : ['Oskari.mapframework.service.Service']
 });
-define("bundles/oskari/platform/service/map-layer-service", function(){});
+define("src/oskari/base/service/map-layer-service", function(){});
 
-define('bundles/oskari/platform/service/module',["oskari",
+define('src/oskari/base/service/module',["oskari",
 			"./service",
 			"./map-layer-service"], function(Oskari) {
 			
@@ -12996,7 +13003,7 @@ define('bundles/oskari/platform/service/module',["oskari",
 			
 		});
 
-define('bundles/oskari/platform/module',["oskari",
+define('src/oskari/base/module',["oskari",
 "./core/module",
 "./event/module",
 "./domain/module",
@@ -13133,7 +13140,7 @@ function(id, imageUrl, options) {
      */
     removeMapControl : function(id) {
         this._removeMapControlImpl(ctl);
-        delete this._controls[id] ;        
+        delete this._controls[id];
     },
     /**
      * @method setLayerPlugin
@@ -13857,6 +13864,24 @@ function(id, imageUrl, options) {
         }
         return layerScales;
     },
+    /**
+     * @method calculateLayerResolutions
+     * Calculate a subset of maps resolutions array that matches the given boundaries.
+     * If boundaries are not defined, returns all possible resolutions.
+     * @param {Number} maxScale maximum scale boundary (optional)
+     * @param {Number} minScale minimum scale boundary (optional)
+     * @return {Number[]} calculated resolutions that are within given bounds
+     */
+    calculateLayerResolutions : function(maxScale, minScale) {
+        var layerResolutions = [];
+        for (var i = 0; i < this._mapScales.length; i++) {
+            if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
+                // resolutions are in the same order as scales so just use them
+                layerResolutions.push(this._options.resolutions[i]);
+            }
+        }
+        return layerResolutions;
+    },
 
     /* IMPL specific */
 
@@ -13882,7 +13907,9 @@ function(id, imageUrl, options) {
      * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
      * @param {Boolean} pIsDragging true if the user is dragging the map to a new location currently (optional)
      */
-    moveMapToLanLot : Oskari.AbstractFunc("moveMapToLanLot"),
+    moveMapToLanLot : function() {
+        return this.panMapToLonLat.apply(this, arguments);
+    },
     /**
      * @method panMapToLonLat
      * Pans the map to the given position.
@@ -13998,25 +14025,6 @@ function(id, imageUrl, options) {
     notifyMoveEnd : function() {
     },
 
-    /**
-     * @method calculateLayerResolutions
-     * Calculate a subset of maps resolutions array that matches the given boundaries.
-     * If boundaries are not defined, returns all possible resolutions.
-     * @param {Number} maxScale maximum scale boundary (optional)
-     * @param {Number} minScale minimum scale boundary (optional)
-     * @return {Number[]} calculated resolutions that are within given bounds
-     */
-    calculateLayerResolutions : function(maxScale, minScale) {
-        var layerResolutions = [];
-        for (var i = 0; i < this._mapScales.length; i++) {
-            if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
-                // resolutions are in the same order as scales so just use them
-                layerResolutions.push(this._options.resolutions[i]);
-            }
-        }
-        return layerResolutions;
-    },
-
     _addMapControlImpl : Oskari.AbstractFunc("_addMapControlImpl(ctl)"),
 
     _removeMapControlImpl : Oskari.AbstractFunc("_removeMapControlImpl(ctl)")
@@ -14029,7 +14037,7 @@ function(id, imageUrl, options) {
     'protocol' : ['Oskari.mapframework.module.Module']
 });
 
-define("bundles/mapping/bundle/mapmodule-plugin/map-module", function(){});
+define("src/mapping/bundle/mapmodule-plugin/map-module", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PanButtons
@@ -14192,7 +14200,7 @@ function(config) {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("bundles/mapping/bundle/mapmodule-plugin/plugin/MapPlugin", function(){});
+define("src/mapping/bundle/mapmodule-plugin/plugin/MapPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.mapmodule.WmsLayerPlugin
@@ -14497,7 +14505,7 @@ function() {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("bundles/mapping/bundle/mapmodule-plugin/plugin/MapLayerPlugin", function(){});
+define("src/mapping/bundle/mapmodule-plugin/plugin/MapLayerPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PanButtons
@@ -14658,7 +14666,7 @@ function(config) {
     "extend" : ["Oskari.mapping.mapmodule.plugin.MapPlugin"]
 });
 
-define("bundles/mapping/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons", function(){});
+define("src/mapping/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin
@@ -15098,7 +15106,7 @@ function() {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("bundles/mapping/bundle/mapmodule-plugin/plugin/layers/LayersPlugin", function(){});
+define("src/mapping/bundle/mapmodule-plugin/plugin/layers/LayersPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequest
@@ -15208,7 +15216,7 @@ function(sandbox, layersPlugin) {
     protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("bundles/mapping/bundle/mapmodule-plugin/request/MapLayerVisibilityRequestHandler", function(){});
+define("src/mapping/bundle/mapmodule-plugin/request/MapLayerVisibilityRequestHandler", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler
@@ -15281,7 +15289,7 @@ function(sandbox, mapModule) {
     protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("bundles/mapping/bundle/mapmodule-plugin/request/MapMoveRequestHandler", function(){});
+define("src/mapping/bundle/mapmodule-plugin/request/MapMoveRequestHandler", function(){});
 
 /**
  * @class Oskari.mapframework.ui.module.common.MapModule
@@ -15788,7 +15796,7 @@ function(id, imageUrl, options) {
     "extend" : ["Oskari.mapping.mapmodule.AbstractMapModule"]
 });
 
-define("bundles/leaflet/bundle/mapmodule-plugin/ui/module/map-module", function(){});
+define("src/leaflet/bundle/mapmodule-plugin/ui/module/map-module", function(){});
 
 /**
  * @class Oskari.mapframework.ui.module.common.mapmodule.Plugin
@@ -16125,7 +16133,7 @@ function(config) {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("bundles/leaflet/bundle/mapmodule-plugin/plugin/controls/ControlsPlugin", function(){});
+define("src/leaflet/bundle/mapmodule-plugin/plugin/controls/ControlsPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.DisableMapKeyboardMovementRequest
@@ -16773,7 +16781,7 @@ function() {
 });
 
 
-define("bundles/leaflet/bundle/mapmodule-plugin/plugin/wmslayer/WmsLayerPlugin", function(){});
+define("src/leaflet/bundle/mapmodule-plugin/plugin/wmslayer/WmsLayerPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.mapmodule.WmtsLayerPlugin
@@ -16984,7 +16992,7 @@ function() {
 });
 
 
-define("bundles/leaflet/bundle/mapmodule-plugin/plugin/wmtslayer/WmtsLayerPlugin", function(){});
+define("src/leaflet/bundle/mapmodule-plugin/plugin/wmtslayer/WmtsLayerPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.wmts.domain.WmtsLayer
@@ -17085,7 +17093,7 @@ function() {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]
 });
 
-define("bundles/leaflet/bundle/mapmodule-plugin/plugin/wmtslayer/WmtsLayer", function(){});
+define("src/leaflet/bundle/mapmodule-plugin/plugin/wmtslayer/WmtsLayer", function(){});
 
 /*
  * @class
@@ -17138,7 +17146,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
     }
 });
 
-define("bundles/leaflet/bundle/mapmodule-plugin/plugin/wmtslayer/WmtsLayerModelBuilder", function(){});
+define("src/leaflet/bundle/mapmodule-plugin/plugin/wmtslayer/WmtsLayerModelBuilder", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.ToolSelectionRequest
@@ -17601,345 +17609,351 @@ define("bundles/framework/bundle/mapmodule-plugin/plugin/controls/ClearHistoryHa
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar
- * 
+ *
  * Zoombar implementation with jQuery UI and refined graphics. Location can be configured,
  * but defaults on top of the map with placement details on the css-file.
- * 
+ *
  * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginPorttiZoombar
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
 
-/**
- * @method create called automatically on construction
- * @static
- */
-function(config) {
-    this.mapModule = null;
-    this.pluginName = null;
-    this._sandbox = null;
-    this._map = null;
-    this.__templates = {};
-    this.__elements = {};
-    this.__parent = null;
-    this._slider = null;
-    this._zoombar_messages = {};
-    this._suppressEvents = false;
-    this._conf = config;
-}, {
     /**
+     * @method create called automatically on construction
      * @static
-     * @property __name
      */
-    __name : 'Portti2Zoombar',
 
-    /**
-     * @method getName
-     * @return {String} the name for the component
-     */
-    getName : function() {
-        return this.pluginName;
-    },
-    /**
-     * @method getMapModule
-     * Returns reference to map module
-     * @return {Oskari.mapframework.ui.module.common.MapModule} 
-     */
-    getMapModule : function() {
-        return this.mapModule;
-    },
-    /**
-     * @method hasUI
-     * This plugin has an UI so always returns true
-     * @return {Boolean} true
-     */
-    hasUI : function() {
-        return true;
-    },
-    /**
-     * @method setMapModule
-     * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
-     * module
-     */
-    setMapModule : function(mapModule) {
-        this.mapModule = mapModule;
-        if(mapModule) {
-            this._map = mapModule.getMap();
-            this.pluginName = mapModule.getName() + this.__name;
-        }
-    },
-    /**
-     * @method init
-     * implements Module protocol init method - declares popup templates
-     */
-    init : function() {
-        var me = this;
-        // templates
-        this.__templates['zoombar'] = jQuery('<div class="oskariui mapplugin pzbDiv">' + 
-            '<div class="pzbDiv-plus"  title="Katu"></div>' + 
-            '<input type=\'hidden\' />' + 
-            '<div class="slider"></div>' + 
-            '<div class="pzbDiv-minus"  title="Koko Maa"></div>' + 
-        '</div>');
-    },
-    /**
-     * @method register
-     * mapmodule.Plugin protocol method - does nothing atm
-     */
-    register : function() {
-
-    },
-    /**
-     * @method unregister
-     * mapmodule.Plugin protocol method - does nothing atm
-     */
-    unregister : function() {
-    },
-    /**
-     * @method startPlugin
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     * mapmodule.Plugin protocol method.
-     * Sets sandbox and registers self to sandbox
-     */
-    startPlugin : function(sandbox) {
-        this._sandbox = sandbox;
-        sandbox.register(this);
-
-        for(p in this.eventHandlers) {
-            sandbox.registerForEventByName(this, p);
-        }
-        this._draw();
-        this._setZoombarValue(this._map.getZoom());
-    },
-    /**
-     * @method stopPlugin
-     * mapmodule.Plugin protocol method.
-     * Unregisters self from sandbox and removes plugins UI.
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     */
-    stopPlugin : function(sandbox) {
-
-        if(this.__elements['zoombarSlider']) {
-            this.__elements['zoombarSlider'].remove();
-            this._slider.remove();
-            delete this.__elements['zoombarSlider'];
-        }
-        sandbox.unregister(this);
-
-        //this._map = null;
+    function (config) {
+        this.mapModule = null;
+        this.pluginName = null;
         this._sandbox = null;
-    },
-    /**
-     * @method _draw
-     * @private
-     * 
-     * Draws the zoombar on the screen.
-     */
-    _draw : function() {
-        var me = this;
-        if(!me.__parent) {
-            me.__parent = this._map.div;
-        }
-        if(!me.__elements['zoombarSlider']) {
-            me.__elements['zoombarSlider'] = me.__templates['zoombar'].clone();
-        }
+        this._map = null;
+        this.__templates = {};
+        this.__elements = {};
+        this.__parent = null;
+        this._slider = null;
+        this._zoombar_messages = {};
+        this._suppressEvents = false;
+        this.conf = config;
+    }, {
+        /**
+         * @static
+         * @property __name
+         */
+        __name: 'Portti2Zoombar',
 
-        var inputId = 'pzb-input-' + this.getName();
-        var sliderId = 'pzb-slider-' + this.getName();
-        var sliderEl = me.__elements['zoombarSlider'].find('div.slider');
-
-        me.__elements['zoombarSlider'].find('input').attr('id', inputId);
-        sliderEl.attr('id', sliderId);
-        
-        me.__elements['zoombarSlider'].mousedown(function(event) {
-            event.stopPropagation();
-        });
-        
-        jQuery(me.__parent).append(me.__elements['zoombarSlider']);
-
-        var sliderEl = me.__elements['zoombarSlider'].find('div.slider');
-        sliderEl.css("height",(this._map.getNumZoomLevels()*11)+"px");
-        me._slider = sliderEl.slider({
-            orientation: "vertical",
-            range: "min",
-            min: 0,
-            max: this._map.getNumZoomLevels()-1,
-            value: this._map.getZoom(),
-            slide: function( event, ui ) {
-                me.getMapModule().zoomTo( ui.value );
+        /**
+         * @method getName
+         * @return {String} the name for the component
+         */
+        getName: function () {
+            return this.pluginName;
+        },
+        /**
+         * @method getMapModule
+         * Returns reference to map module
+         * @return {Oskari.mapframework.ui.module.common.MapModule}
+         */
+        getMapModule: function () {
+            return this.mapModule;
+        },
+        /**
+         * @method hasUI
+         * This plugin has an UI so always returns true
+         * @return {Boolean} true
+         */
+        hasUI: function () {
+            return true;
+        },
+        /**
+         * @method setMapModule
+         * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
+         * module
+         */
+        setMapModule: function (mapModule) {
+            this.mapModule = mapModule;
+            if (mapModule) {
+                this._map = mapModule.getMap();
+                this.pluginName = mapModule.getName() + this.__name;
             }
-        });
-        
-       
-        var plus = me.__elements['zoombarSlider'].find('.pzbDiv-plus');
-        plus.bind('click', function(event) {
-            if(me._slider.slider('value') < me._map.getNumZoomLevels()) {
-                me.getMapModule().zoomTo(me._slider.slider('value') + 1);
+        },
+        /**
+         * @method init
+         * implements Module protocol init method - declares popup templates
+         */
+        init: function () {
+            var me = this;
+            // templates
+            this.__templates.zoombar = jQuery('<div class="oskariui mapplugin pzbDiv">' +
+                '<div class="pzbDiv-plus"  title="Katu"></div>' +
+                '<input type=\'hidden\' />' +
+                '<div class="slider"></div>' +
+                '<div class="pzbDiv-minus"  title="Koko Maa"></div>' +
+                '</div>');
+        },
+        /**
+         * @method register
+         * mapmodule.Plugin protocol method - does nothing atm
+         */
+        register: function () {
+
+        },
+        /**
+         * @method unregister
+         * mapmodule.Plugin protocol method - does nothing atm
+         */
+        unregister: function () {},
+        /**
+         * @method startPlugin
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * mapmodule.Plugin protocol method.
+         * Sets sandbox and registers self to sandbox
+         */
+        startPlugin: function (sandbox) {
+            var p;
+            this._sandbox = sandbox;
+            sandbox.register(this);
+
+            for (p in this.eventHandlers) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(this, p);
+                }
             }
-        });
-        var minus = me.__elements['zoombarSlider'].find('.pzbDiv-minus');
-        minus.bind('click', function(event) {
-            if(me._slider.slider('value') > 0) {
-                me.getMapModule().zoomTo(me._slider.slider('value') - 1);
+            this._draw();
+            this._setZoombarValue(this._map.getZoom());
+        },
+        /**
+         * @method stopPlugin
+         * mapmodule.Plugin protocol method.
+         * Unregisters self from sandbox and removes plugins UI.
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         */
+        stopPlugin: function (sandbox) {
+
+            if (this.__elements.zoombarSlider) {
+                this.__elements.zoombarSlider.remove();
+                this._slider.remove();
+                delete this.__elements.zoombarSlider;
             }
-        });
-        // override default location if configured
-        if(this._conf && this._conf.location) {
-            me.setZoombarLocation(this._conf.location, me.__elements['zoombarSlider']);
-        }
+            sandbox.unregister(this);
 
-        // Change the style if in the conf
-        if (me._conf && me._conf.toolStyle) {
-            me.changeToolStyle(me._conf.toolStyle, me.__elements['zoombarSlider']);
-        }
-    },
-    /**
-     * @method _setZoombarValue
-     * Sets the zoombar slider value
-     * @private
-     * @param {Number} value new Zoombar value
-     */
-    _setZoombarValue : function(value) {
-        var me = this;
-        if(me._slider) {
-            // disable events in "onChange"
-            this._suppressEvents = true;
-            /*me._slider.setValue(value);*/
-           me._slider.slider('value',value);
-            this._suppressEvents = false;
-        }
-    },
-
-    /**
-     * Sets the location of the zoombar.
-     *
-     * @method setZoombarLocation
-     * @param {Object} location The new location
-     * @param {Object} zoombarContainer The element where the zoombar is contained in
-     */
-    setZoombarLocation: function(location, zoombarContainer) {
-        if (!zoombarContainer) {
-            zoombarContainer = this.__elements['zoombarSlider'];
-        }
-        // clear possible opposite position with 'auto'
-        if(location.top) {
-            zoombarContainer.css('bottom', 'auto');
-            zoombarContainer.css('top', location.top);
-        }
-        if(location.left) {
-            zoombarContainer.css('right', 'auto');
-            zoombarContainer.css('left', location.left);
-        }
-        if(location.right) {
-            zoombarContainer.css('left', 'auto');
-            zoombarContainer.css('right', location.right);
-        }
-        if(location.bottom) {
-            zoombarContainer.css('top', 'auto');
-            zoombarContainer.css('bottom', location.bottom);
-        }
-    },
-
-    /**
-     * @property {Object} eventHandlers
-     * @static
-     */
-    eventHandlers : {
-        'AfterMapMoveEvent' : function(event) {
-            if(this._sandbox) {
-                var me = this;
-                me._setZoombarValue(event.getZoom());
+            //this._map = null;
+            this._sandbox = null;
+        },
+        /**
+         * @method _draw
+         * @private
+         *
+         * Draws the zoombar on the screen.
+         */
+        _draw: function () {
+            var me = this;
+            if (!me.__parent) {
+                me.__parent = this._map.div;
             }
+            if (!me.__elements.zoombarSlider) {
+                me.__elements.zoombarSlider = me.__templates.zoombar.clone();
+            }
+
+            var inputId = 'pzb-input-' + this.getName();
+            var sliderId = 'pzb-slider-' + this.getName();
+            var sliderEl = me.__elements.zoombarSlider.find('div.slider');
+
+            me.__elements.zoombarSlider.find('input').attr('id', inputId);
+            sliderEl.attr('id', sliderId);
+
+            me.__elements.zoombarSlider.mousedown(function (event) {
+                event.stopPropagation();
+            });
+
+            jQuery(me.__parent).append(me.__elements.zoombarSlider);
+
+            sliderEl = me.__elements.zoombarSlider.find('div.slider');
+            sliderEl.css("height", (this._map.getNumZoomLevels() * 11) + "px");
+            me._slider = sliderEl.slider({
+                orientation: "vertical",
+                range: "min",
+                min: 0,
+                max: this._map.getNumZoomLevels() - 1,
+                value: this._map.getZoom(),
+                slide: function (event, ui) {
+                    me.getMapModule().zoomTo(ui.value);
+                }
+            });
+
+
+            var plus = me.__elements.zoombarSlider.find('.pzbDiv-plus');
+            plus.bind('click', function (event) {
+                if (me._slider.slider('value') < me._map.getNumZoomLevels()) {
+                    me.getMapModule().zoomTo(me._slider.slider('value') + 1);
+                }
+            });
+            var minus = me.__elements.zoombarSlider.find('.pzbDiv-minus');
+            minus.bind('click', function (event) {
+                if (me._slider.slider('value') > 0) {
+                    me.getMapModule().zoomTo(me._slider.slider('value') - 1);
+                }
+            });
+            // override default location if configured
+            if (me.conf && me.conf.location) {
+                me.setLocation(this.conf.location, me.__elements.zoombarSlider);
+            }
+
+            // Change the style if in the conf
+            if (me.conf && me.conf.toolStyle) {
+                me.changeToolStyle(me.conf.toolStyle, me.__elements.zoombarSlider);
+            }
+        },
+        /**
+         * @method _setZoombarValue
+         * Sets the zoombar slider value
+         * @private
+         * @param {Number} value new Zoombar value
+         */
+        _setZoombarValue: function (value) {
+            var me = this;
+            if (me._slider) {
+                // disable events in "onChange"
+                this._suppressEvents = true;
+                /*me._slider.setValue(value);*/
+                me._slider.slider('value', value);
+                this._suppressEvents = false;
+            }
+        },
+
+        /**
+         * Sets the location of the zoombar.
+         *
+         * @method setLocation
+         * @param {Object} location The new location
+         * @param {Object} zoombarContainer The element where the zoombar is contained in
+         */
+        setLocation: function (location, zoombarContainer) {
+            var container = zoombarContainer || this.__elements.zoombarSlider;
+            if (this.conf) {
+                this.conf.location = location;
+            }
+            // clear possible opposite position with 'auto'
+            if (location.top) {
+                container.css('bottom', 'auto');
+                container.css('top', location.top);
+            }
+            if (location.left) {
+                container.css('right', 'auto');
+                container.css('left', location.left);
+            }
+            if (location.right) {
+                container.css('left', 'auto');
+                container.css('right', location.right);
+            }
+            if (location.bottom) {
+                container.css('top', 'auto');
+                container.css('bottom', location.bottom);
+            }
+            if (location.classes) {
+                container.removeClass('top left bottom right center with-panbuttons').addClass(location.classes);
+            }
+        },
+
+        /**
+         * @property {Object} eventHandlers
+         * @static
+         */
+        eventHandlers: {
+            'AfterMapMoveEvent': function (event) {
+                if (this._sandbox) {
+                    var me = this;
+                    me._setZoombarValue(event.getZoom());
+                }
+            }
+        },
+
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded
+         * if not.
+         */
+        onEvent: function (event) {
+            return this.eventHandlers[event.getName()].apply(this, [event]);
+        },
+        /**
+         * @method start
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * Module protocol method - does nothing atm
+         */
+        start: function (sandbox) {},
+        /**
+         * @method stop
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * Module protocol method - does nothing atm
+         */
+        stop: function (sandbox) {},
+
+        /**
+         * Changes the tool style of the plugin
+         *
+         * @method changeToolStyle
+         * @param {Object} style
+         * @param {jQuery} div
+         */
+        changeToolStyle: function (style, div) {
+            div = div || this.__elements.zoombarSlider;
+
+            if (!style || !div) {
+                return;
+            }
+
+            var resourcesPath = this.getMapModule().getImageUrl(),
+                imgUrl = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/',
+                styleName = style.val,
+                zoombarImg = imgUrl + 'zoombar-' + styleName + '.png',
+                zoombarCursorImg = imgUrl + 'zoombar-cursor-' + styleName + '.png',
+                zoombarMinusImg = imgUrl + 'zoombar_minus-' + styleName + '.png',
+                zoombarPlusImg = imgUrl + 'zoombar_plus-' + styleName + '.png',
+                bar = div.find('.ui-slider-vertical'),
+                cursor = div.find('.ui-slider-handle'),
+                plus = div.find('.pzbDiv-plus'),
+                minus = div.find('.pzbDiv-minus'),
+                slider = div.find('div.slider');
+
+            // Used to get the cursor to the right position since
+            // it's off by 2 pixels with the 'rounded' style.
+            var isRounded = styleName.match(/^rounded/);
+
+            var sliderHeight = this._map.getNumZoomLevels() * style.heightCenter;
+
+            bar.css({
+                'background-image': 'url("' + zoombarImg + '")',
+                'width': style.widthCenter,
+                'margin-left': '0'
+            });
+            cursor.css({
+                'background-image': 'url("' + zoombarCursorImg + '")',
+                'width': style.widthCursor,
+                'height': style.heightCursor,
+                'margin-left': (isRounded ? '2px' : '0')
+            });
+            plus.css({
+                'background-image': 'url("' + zoombarPlusImg + '")',
+                'width': style.widthPlus,
+                'height': style.heightPlus
+            });
+            minus.css({
+                'background-image': 'url("' + zoombarMinusImg + '")',
+                'width': style.widthMinus,
+                'height': style.heightMinus
+            });
+            slider.css({
+                'height': sliderHeight + 'px'
+            });
         }
-    },
-
-    /**
-     * @method onEvent
-     * @param {Oskari.mapframework.event.Event} event a Oskari event object
-     * Event is handled forwarded to correct #eventHandlers if found or discarded
-     * if not.
-     */
-    onEvent : function(event) {
-        return this.eventHandlers[event.getName()].apply(this, [event]);
-    },
-    /**
-     * @method start
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     * Module protocol method - does nothing atm
-     */
-    start : function(sandbox) {
-    },
-    /**
-     * @method stop
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     * Module protocol method - does nothing atm
-     */
-    stop : function(sandbox) {
-    },
-
-    /**
-     * Changes the tool style of the plugin
-     *
-     * @method changeToolStyle
-     * @param {Object} style
-     * @param {jQuery} div
-     */
-    changeToolStyle: function(style, div) {
-        div = div || this.__elements['zoombarSlider'];
-
-        if (!style || !div) return;
-
-        var resourcesPath = this.getMapModule().getImageUrl(),
-            imgUrl = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/',
-            styleName = style.val,
-            zoombarImg = imgUrl + 'zoombar-' + styleName + '.png',
-            zoombarCursorImg = imgUrl + 'zoombar-cursor-' + styleName + '.png',
-            zoombarMinusImg = imgUrl + 'zoombar_minus-' + styleName + '.png',
-            zoombarPlusImg = imgUrl + 'zoombar_plus-' + styleName + '.png',
-            bar = div.find('.ui-slider-vertical'),
-            cursor = div.find('.ui-slider-handle'),
-            plus = div.find('.pzbDiv-plus'),
-            minus = div.find('.pzbDiv-minus'),
-            slider = div.find('div.slider');
-
-        // Used to get the cursor to the right position since
-        // it's off by 2 pixels with the 'rounded' style.
-        var isRounded = styleName.match(/^rounded/);
-
-        var sliderHeight = this._map.getNumZoomLevels() * style.heightCenter;
-
-        bar.css({
-            'background-image': 'url("' + zoombarImg + '")',
-            'width': style.widthCenter,
-            'margin-left': '0'
-        });
-        cursor.css({
-            'background-image': 'url("' + zoombarCursorImg + '")',
-            'width': style.widthCursor,
-            'height': style.heightCursor,
-            'margin-left': (isRounded ? '2px' : '0')
-        });
-        plus.css({
-            'background-image': 'url("' + zoombarPlusImg + '")',
-            'width': style.widthPlus,
-            'height': style.heightPlus
-        });
-        minus.css({
-            'background-image': 'url("' + zoombarMinusImg + '")',
-            'width': style.widthMinus,
-            'height': style.heightMinus
-        });
-        slider.css({
-            'height': sliderHeight + 'px'
-        });
-    }
-}, {
-    /**
-     * @property {String[]} protocol
-     * @static
-     */
-    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
-});
-
+    }, {
+        /**
+         * @property {String[]} protocol
+         * @static
+         */
+        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    });
 define("bundles/framework/bundle/mapmodule-plugin/plugin/zoombar/Portti2Zoombar", function(){});
 
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/css/porttizoombar.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
@@ -17997,7 +18011,7 @@ function(config) {
 
 });
 
-define("bundles/leaflet/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons", function(){});
+define("src/leaflet/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons", function(){});
 
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/css/panbuttons.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapmodule-plugin/css/mapmodule.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
@@ -18184,50 +18198,50 @@ Oskari.registerLocalization({
 });
 define("bundles/framework/bundle/mapmodule-plugin/locale/en", function(){});
 
-define('bundles/leaflet/bundle/mapmodule-plugin/module',[
+define('src/leaflet/bundle/mapmodule-plugin/module',[
 	"oskari",
 	"jquery",
-    "bundles/oskari/platform/module",
+    "src/oskari/base/module",
 	"../../../mapping/bundle/mapmodule-plugin/map-module",
 	"../../../mapping/bundle/mapmodule-plugin/plugin/MapPlugin",
 	"../../../mapping/bundle/mapmodule-plugin/plugin/MapLayerPlugin",
 	"../../../mapping/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons",
 	"../../../mapping/bundle/mapmodule-plugin/plugin/layers/LayersPlugin",
-	"../../../framework/bundle/mapmodule-plugin/request/MapLayerVisibilityRequest",
+	"bundles/framework/bundle/mapmodule-plugin/request/MapLayerVisibilityRequest",
 	"../../../mapping/bundle/mapmodule-plugin/request/MapLayerVisibilityRequestHandler",
 	"../../../mapping/bundle/mapmodule-plugin/request/MapMoveRequestHandler",
 	"./ui/module/map-module",
-	"../../../framework/bundle/mapmodule-plugin/plugin/Plugin",
+	"bundles/framework/bundle/mapmodule-plugin/plugin/Plugin",
 	"./plugin/controls/ControlsPlugin",
-	"../../../framework/bundle/mapmodule-plugin/request/DisableMapKeyboardMovementRequest",
-	"../../../framework/bundle/mapmodule-plugin/request/DisableMapMouseMovementRequest",
-	"../../../framework/bundle/mapmodule-plugin/request/EnableMapKeyboardMovementRequest",
-	"../../../framework/bundle/mapmodule-plugin/request/EnableMapMouseMovementRequest",
-	 "../../../framework/bundle/mapmodule-plugin/request/MapMovementControlsRequestHandler",
+	"bundles/framework/bundle/mapmodule-plugin/request/DisableMapKeyboardMovementRequest",
+	"bundles/framework/bundle/mapmodule-plugin/request/DisableMapMouseMovementRequest",
+	"bundles/framework/bundle/mapmodule-plugin/request/EnableMapKeyboardMovementRequest",
+	"bundles/framework/bundle/mapmodule-plugin/request/EnableMapMouseMovementRequest",
+	 "bundles/framework/bundle/mapmodule-plugin/request/MapMovementControlsRequestHandler",
 	  "../../../../sources/framework/request/common/show-map-measurement-request", 
-	  "../../../framework/bundle/mapmodule-plugin/request/MapMoveByLayerContentRequest", 
-	  "../../../framework/bundle/mapmodule-plugin/request/MapMoveByLayerContentRequestHandler", 
-	  "../../../framework/bundle/mapmodule-plugin/event/MapLayerVisibilityChangedEvent", 
+	  "bundles/framework/bundle/mapmodule-plugin/request/MapMoveByLayerContentRequest", 
+	  "bundles/framework/bundle/mapmodule-plugin/request/MapMoveByLayerContentRequestHandler", 
+	  "bundles/framework/bundle/mapmodule-plugin/event/MapLayerVisibilityChangedEvent", 
 	  "./plugin/wmslayer/WmsLayerPlugin", 
 	  "./plugin/wmtslayer/WmtsLayerPlugin", 
 	  "./plugin/wmtslayer/WmtsLayer", 
 	  "./plugin/wmtslayer/WmtsLayerModelBuilder", 
-	  "../../../framework/bundle/mapmodule-plugin/request/ToolSelectionRequest", 
-	  "../../../framework/bundle/mapmodule-plugin/plugin/controls/ToolSelectionHandler", 
-	  "../../../framework/bundle/mapmodule-plugin/request/MapLayerUpdateRequest", 
-	  "../../../framework/bundle/mapmodule-plugin/request/MapLayerUpdateRequestHandler", 
-	  "../../../framework/bundle/mapmodule-plugin/event/MapClickedEvent", 
-	  "../../../framework/bundle/mapmodule-plugin/event/EscPressedEvent", 
-	  "../../../framework/bundle/mapmodule-plugin/request/ClearHistoryRequest", 
-	  "../../../framework/bundle/mapmodule-plugin/plugin/controls/ClearHistoryHandler", 
-	  "../../../framework/bundle/mapmodule-plugin/plugin/zoombar/Portti2Zoombar", 
+	  "bundles/framework/bundle/mapmodule-plugin/request/ToolSelectionRequest", 
+	  "bundles/framework/bundle/mapmodule-plugin/plugin/controls/ToolSelectionHandler", 
+	  "bundles/framework/bundle/mapmodule-plugin/request/MapLayerUpdateRequest", 
+	  "bundles/framework/bundle/mapmodule-plugin/request/MapLayerUpdateRequestHandler", 
+	  "bundles/framework/bundle/mapmodule-plugin/event/MapClickedEvent", 
+	  "bundles/framework/bundle/mapmodule-plugin/event/EscPressedEvent", 
+	  "bundles/framework/bundle/mapmodule-plugin/request/ClearHistoryRequest", 
+	  "bundles/framework/bundle/mapmodule-plugin/plugin/controls/ClearHistoryHandler", 
+	  "bundles/framework/bundle/mapmodule-plugin/plugin/zoombar/Portti2Zoombar", 
 	  "css!resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/css/porttizoombar.css", 
 	  "./plugin/panbuttons/PanButtons", 
 	  "css!resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/css/panbuttons.css", 
 	  "css!resources/framework/bundle/mapmodule-plugin/css/mapmodule.css", 
-	  "../../../framework/bundle/mapmodule-plugin/locale/fi", 
-	  "../../../framework/bundle/mapmodule-plugin/locale/sv", 
-	  "../../../framework/bundle/mapmodule-plugin/locale/en"
+	  "bundles/framework/bundle/mapmodule-plugin/locale/fi", 
+	  "bundles/framework/bundle/mapmodule-plugin/locale/sv", 
+	  "bundles/framework/bundle/mapmodule-plugin/locale/en"
 ], function(Oskari, jQuery) {
 	return Oskari.bundleCls("mapmodule-plugin").category({
 		create: function() {
@@ -24677,7 +24691,7 @@ require(["mainConfig"], function() {
 
         /* loading configuration */
         require([config, 
-            "bundles/oskari/bundle/map-leaflet/module"], function(appSetup) {
+            "map"], function(appSetup) {
             Oskari.setLang(language);
             var appConfig = appSetup.configuration;
             appConfig.promote = {
@@ -24724,8 +24738,8 @@ require(["mainConfig"], function() {
             Oskari.setConfiguration(appConfig);
 
             /* loading main map and divmanazer */
-            require(["bundles/leaflet/bundle/mapfull/module",
-                "bundles/leaflet/bundle/mapmodule-plugin/module",
+            require(["mapfull",
+                "mapmodule-plugin",
                 "bundles/framework/bundle/divmanazer/module"
                 ], function(mapfull, mapmodule, divmanazer) {
 
@@ -24745,7 +24759,7 @@ require(["mainConfig"], function() {
                     } else if (bundle === "metadataflyout") {
                         bundles.push("bundles/catalogue/bundle/" + bundle + "/module");
                     } else if (bundle === "infobox") {
-                        bundles.push("bundles/leaflet/bundle/" + bundle + "/module");
+                        bundles.push("src/leaflet/bundle/" + bundle + "/module");
                     } else {
                         bundles.push("bundles/framework/bundle/" + bundle + "/module");
                     }
@@ -24787,4 +24801,4 @@ require(["mainConfig"], function() {
 });
 define("applications/oskari2/leaflet/main-dev", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.setBuffer('/* required styles */\r\n\r\n.leaflet-map-pane,\r\n.leaflet-tile,\r\n.leaflet-marker-icon,\r\n.leaflet-marker-shadow,\r\n.leaflet-tile-pane,\r\n.leaflet-tile-container,\r\n.leaflet-overlay-pane,\r\n.leaflet-shadow-pane,\r\n.leaflet-marker-pane,\r\n.leaflet-popup-pane,\r\n.leaflet-overlay-pane svg,\r\n.leaflet-zoom-box,\r\n.leaflet-image-layer,\r\n.leaflet-layer {\r\n\tposition: absolute;\r\n\tleft: 0;\r\n\ttop: 0;\r\n\t}\r\n.leaflet-container {\r\n\toverflow: hidden;\r\n\t-ms-touch-action: none;\r\n\t}\r\n.leaflet-tile,\r\n.leaflet-marker-icon,\r\n.leaflet-marker-shadow {\r\n\t-webkit-user-select: none;\r\n\t   -moz-user-select: none;\r\n\t        user-select: none;\r\n\t-webkit-user-drag: none;\r\n\t}\r\n.leaflet-marker-icon,\r\n.leaflet-marker-shadow {\r\n\tdisplay: block;\r\n\t}\r\n/* map is broken in FF if you have max-width: 100% on tiles */\r\n.leaflet-container img {\r\n\tmax-width: none !important;\r\n\t}\r\n/* stupid Android 2 doesn\'t understand \"max-width: none\" properly */\r\n.leaflet-container img.leaflet-image-layer {\r\n\tmax-width: 15000px !important;\r\n\t}\r\n.leaflet-tile {\r\n\tfilter: inherit;\r\n\tvisibility: hidden;\r\n\t}\r\n.leaflet-tile-loaded {\r\n\tvisibility: inherit;\r\n\t}\r\n.leaflet-zoom-box {\r\n\twidth: 0;\r\n\theight: 0;\r\n\t}\r\n/* workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=888319 */\r\n.leaflet-overlay-pane svg {\r\n\t-moz-user-select: none;\r\n\t}\r\n\r\n.leaflet-tile-pane    { z-index: 2; }\r\n.leaflet-objects-pane { z-index: 3; }\r\n.leaflet-overlay-pane { z-index: 4; }\r\n.leaflet-shadow-pane  { z-index: 5; }\r\n.leaflet-marker-pane  { z-index: 6; }\r\n.leaflet-popup-pane   { z-index: 7; }\r\n\r\n\r\n/* control positioning */\r\n\r\n.leaflet-control {\r\n\tposition: relative;\r\n\tz-index: 7;\r\n\tpointer-events: auto;\r\n\t}\r\n.leaflet-top,\r\n.leaflet-bottom {\r\n\tposition: absolute;\r\n\tz-index: 1000;\r\n\tpointer-events: none;\r\n\t}\r\n.leaflet-top {\r\n\ttop: 0;\r\n\t}\r\n.leaflet-right {\r\n\tright: 0;\r\n\t}\r\n.leaflet-bottom {\r\n\tbottom: 0;\r\n\t}\r\n.leaflet-left {\r\n\tleft: 0;\r\n\t}\r\n.leaflet-control {\r\n\tfloat: left;\r\n\tclear: both;\r\n\t}\r\n.leaflet-right .leaflet-control {\r\n\tfloat: right;\r\n\t}\r\n.leaflet-top .leaflet-control {\r\n\tmargin-top: 10px;\r\n\t}\r\n.leaflet-bottom .leaflet-control {\r\n\tmargin-bottom: 10px;\r\n\t}\r\n.leaflet-left .leaflet-control {\r\n\tmargin-left: 10px;\r\n\t}\r\n.leaflet-right .leaflet-control {\r\n\tmargin-right: 10px;\r\n\t}\r\n\r\n\r\n/* zoom and fade animations */\r\n\r\n.leaflet-fade-anim .leaflet-tile,\r\n.leaflet-fade-anim .leaflet-popup {\r\n\topacity: 0;\r\n\t-webkit-transition: opacity 0.2s linear;\r\n\t   -moz-transition: opacity 0.2s linear;\r\n\t     -o-transition: opacity 0.2s linear;\r\n\t        transition: opacity 0.2s linear;\r\n\t}\r\n.leaflet-fade-anim .leaflet-tile-loaded,\r\n.leaflet-fade-anim .leaflet-map-pane .leaflet-popup {\r\n\topacity: 1;\r\n\t}\r\n\r\n.leaflet-zoom-anim .leaflet-zoom-animated {\r\n\t-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1);\r\n\t   -moz-transition:    -moz-transform 0.25s cubic-bezier(0,0,0.25,1);\r\n\t     -o-transition:      -o-transform 0.25s cubic-bezier(0,0,0.25,1);\r\n\t        transition:         transform 0.25s cubic-bezier(0,0,0.25,1);\r\n\t}\r\n.leaflet-zoom-anim .leaflet-tile,\r\n.leaflet-pan-anim .leaflet-tile,\r\n.leaflet-touching .leaflet-zoom-animated {\r\n\t-webkit-transition: none;\r\n\t   -moz-transition: none;\r\n\t     -o-transition: none;\r\n\t        transition: none;\r\n\t}\r\n\r\n.leaflet-zoom-anim .leaflet-zoom-hide {\r\n\tvisibility: hidden;\r\n\t}\r\n\r\n\r\n/* cursors */\r\n\r\n.leaflet-clickable {\r\n\tcursor: pointer;\r\n\t}\r\n.leaflet-container {\r\n\tcursor: -webkit-grab;\r\n\tcursor:    -moz-grab;\r\n\t}\r\n.leaflet-popup-pane,\r\n.leaflet-control {\r\n\tcursor: auto;\r\n\t}\r\n.leaflet-dragging,\r\n.leaflet-dragging .leaflet-clickable,\r\n.leaflet-dragging .leaflet-container {\r\n\tcursor: move;\r\n\tcursor: -webkit-grabbing;\r\n\tcursor:    -moz-grabbing;\r\n\t}\r\n\r\n\r\n/* visual tweaks */\r\n\r\n.leaflet-container {\r\n\tbackground: #ddd;\r\n\toutline: 0;\r\n\t}\r\n.leaflet-container a {\r\n\tcolor: #0078A8;\r\n\t}\r\n.leaflet-container a.leaflet-active {\r\n\toutline: 2px solid orange;\r\n\t}\r\n.leaflet-zoom-box {\r\n\tborder: 2px dotted #05f;\r\n\tbackground: white;\r\n\topacity: 0.5;\r\n\t}\r\n\r\n\r\n/* general typography */\r\n.leaflet-container {\r\n\tfont: 12px/1.5 \"Helvetica Neue\", Arial, Helvetica, sans-serif;\r\n\t}\r\n\r\n\r\n/* general toolbar styles */\r\n\r\n.leaflet-bar {\r\n\tbox-shadow: 0 1px 7px rgba(0,0,0,0.65);\r\n\t-webkit-border-radius: 4px;\r\n\t        border-radius: 4px;\r\n\t}\r\n.leaflet-bar a, .leaflet-bar a:hover {\r\n\tbackground-color: #fff;\r\n\tborder-bottom: 1px solid #ccc;\r\n\twidth: 26px;\r\n\theight: 26px;\r\n\tline-height: 26px;\r\n\tdisplay: block;\r\n\ttext-align: center;\r\n\ttext-decoration: none;\r\n\tcolor: black;\r\n\t}\r\n.leaflet-bar a,\r\n.leaflet-control-layers-toggle {\r\n\tbackground-position: 50% 50%;\r\n\tbackground-repeat: no-repeat;\r\n\tdisplay: block;\r\n\t}\r\n.leaflet-bar a:hover {\r\n\tbackground-color: #f4f4f4;\r\n\t}\r\n.leaflet-bar a:first-child {\r\n\t-webkit-border-top-left-radius: 4px;\r\n\t        border-top-left-radius: 4px;\r\n\t-webkit-border-top-right-radius: 4px;\r\n\t        border-top-right-radius: 4px;\r\n\t}\r\n.leaflet-bar a:last-child {\r\n\t-webkit-border-bottom-left-radius: 4px;\r\n\t        border-bottom-left-radius: 4px;\r\n\t-webkit-border-bottom-right-radius: 4px;\r\n\t        border-bottom-right-radius: 4px;\r\n\tborder-bottom: none;\r\n\t}\r\n.leaflet-bar a.leaflet-disabled {\r\n\tcursor: default;\r\n\tbackground-color: #f4f4f4;\r\n\tcolor: #bbb;\r\n\t}\r\n\r\n.leaflet-touch .leaflet-bar {\r\n\t-webkit-border-radius: 10px;\r\n\t        border-radius: 10px;\r\n\t}\r\n.leaflet-touch .leaflet-bar a {\r\n\twidth: 30px;\r\n\theight: 30px;\r\n\t}\r\n.leaflet-touch .leaflet-bar a:first-child {\r\n\t-webkit-border-top-left-radius: 7px;\r\n\t        border-top-left-radius: 7px;\r\n\t-webkit-border-top-right-radius: 7px;\r\n\t        border-top-right-radius: 7px;\r\n\t}\r\n.leaflet-touch .leaflet-bar a:last-child {\r\n\t-webkit-border-bottom-left-radius: 7px;\r\n\t        border-bottom-left-radius: 7px;\r\n\t-webkit-border-bottom-right-radius: 7px;\r\n\t        border-bottom-right-radius: 7px;\r\n\tborder-bottom: none;\r\n\t}\r\n\r\n\r\n/* zoom control */\r\n\r\n.leaflet-control-zoom-in {\r\n\tfont: bold 18px \'Lucida Console\', Monaco, monospace;\r\n\t}\r\n.leaflet-control-zoom-out {\r\n\tfont: bold 22px \'Lucida Console\', Monaco, monospace;\r\n\t}\r\n\r\n.leaflet-touch .leaflet-control-zoom-in {\r\n\tfont-size: 22px;\r\n\tline-height: 30px;\r\n\t}\r\n.leaflet-touch .leaflet-control-zoom-out {\r\n\tfont-size: 28px;\r\n\tline-height: 30px;\r\n\t}\r\n\r\n\r\n/* layers control */\r\n\r\n.leaflet-control-layers {\r\n\tbox-shadow: 0 1px 7px rgba(0,0,0,0.4);\r\n\tbackground: #f8f8f9;\r\n\t-webkit-border-radius: 5px;\r\n\t        border-radius: 5px;\r\n\t}\r\n.leaflet-control-layers-toggle {\r\n\tbackground-image: url(libraries/leaflet/images/layers.png);\r\n\twidth: 36px;\r\n\theight: 36px;\r\n\t}\r\n.leaflet-retina .leaflet-control-layers-toggle {\r\n\tbackground-image: url(libraries/leaflet/images/layers-2x.png);\r\n\tbackground-size: 26px 26px;\r\n\t}\r\n.leaflet-touch .leaflet-control-layers-toggle {\r\n\twidth: 44px;\r\n\theight: 44px;\r\n\t}\r\n.leaflet-control-layers .leaflet-control-layers-list,\r\n.leaflet-control-layers-expanded .leaflet-control-layers-toggle {\r\n\tdisplay: none;\r\n\t}\r\n.leaflet-control-layers-expanded .leaflet-control-layers-list {\r\n\tdisplay: block;\r\n\tposition: relative;\r\n\t}\r\n.leaflet-control-layers-expanded {\r\n\tpadding: 6px 10px 6px 6px;\r\n\tcolor: #333;\r\n\tbackground: #fff;\r\n\t}\r\n.leaflet-control-layers-selector {\r\n\tmargin-top: 2px;\r\n\tposition: relative;\r\n\ttop: 1px;\r\n\t}\r\n.leaflet-control-layers label {\r\n\tdisplay: block;\r\n\t}\r\n.leaflet-control-layers-separator {\r\n\theight: 0;\r\n\tborder-top: 1px solid #ddd;\r\n\tmargin: 5px -10px 5px -6px;\r\n\t}\r\n\r\n\r\n/* attribution and scale controls */\r\n\r\n.leaflet-container .leaflet-control-attribution {\r\n\tbackground-color: rgba(255, 255, 255, 0.7);\r\n\tbox-shadow: 0 0 5px #bbb;\r\n\tmargin: 0;\r\n\t}\r\n.leaflet-control-attribution,\r\n.leaflet-control-scale-line {\r\n\tpadding: 0 5px;\r\n\tcolor: #333;\r\n\t}\r\n.leaflet-container .leaflet-control-attribution,\r\n.leaflet-container .leaflet-control-scale {\r\n\tfont-size: 11px;\r\n\t}\r\n.leaflet-left .leaflet-control-scale {\r\n\tmargin-left: 5px;\r\n\t}\r\n.leaflet-bottom .leaflet-control-scale {\r\n\tmargin-bottom: 5px;\r\n\t}\r\n.leaflet-control-scale-line {\r\n\tborder: 2px solid #777;\r\n\tborder-top: none;\r\n\tcolor: black;\r\n\tline-height: 1.1;\r\n\tpadding: 2px 5px 1px;\r\n\tfont-size: 11px;\r\n\ttext-shadow: 1px 1px 1px #fff;\r\n\tbackground-color: rgba(255, 255, 255, 0.5);\r\n\tbox-shadow: 0 -1px 5px rgba(0, 0, 0, 0.2);\r\n\twhite-space: nowrap;\r\n\toverflow: hidden;\r\n\t}\r\n.leaflet-control-scale-line:not(:first-child) {\r\n\tborder-top: 2px solid #777;\r\n\tborder-bottom: none;\r\n\tmargin-top: -2px;\r\n\tbox-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);\r\n\t}\r\n.leaflet-control-scale-line:not(:first-child):not(:last-child) {\r\n\tborder-bottom: 2px solid #777;\r\n\t}\r\n\r\n.leaflet-touch .leaflet-control-attribution,\r\n.leaflet-touch .leaflet-control-layers,\r\n.leaflet-touch .leaflet-bar {\r\n\tbox-shadow: none;\r\n\t}\r\n.leaflet-touch .leaflet-control-layers,\r\n.leaflet-touch .leaflet-bar {\r\n\tborder: 4px solid rgba(0,0,0,0.3);\r\n\t}\r\n\r\n\r\n/* popup */\r\n\r\n.leaflet-popup {\r\n\tposition: absolute;\r\n\ttext-align: center;\r\n\t}\r\n.leaflet-popup-content-wrapper {\r\n\tpadding: 1px;\r\n\ttext-align: left;\r\n\t-webkit-border-radius: 12px;\r\n\t        border-radius: 12px;\r\n\t}\r\n.leaflet-popup-content {\r\n\tmargin: 13px 19px;\r\n\tline-height: 1.4;\r\n\t}\r\n.leaflet-popup-content p {\r\n\tmargin: 18px 0;\r\n\t}\r\n.leaflet-popup-tip-container {\r\n\tmargin: 0 auto;\r\n\twidth: 40px;\r\n\theight: 20px;\r\n\tposition: relative;\r\n\toverflow: hidden;\r\n\t}\r\n.leaflet-popup-tip {\r\n\twidth: 17px;\r\n\theight: 17px;\r\n\tpadding: 1px;\r\n\r\n\tmargin: -10px auto 0;\r\n\r\n\t-webkit-transform: rotate(45deg);\r\n\t   -moz-transform: rotate(45deg);\r\n\t    -ms-transform: rotate(45deg);\r\n\t     -o-transform: rotate(45deg);\r\n\t        transform: rotate(45deg);\r\n\t}\r\n.leaflet-popup-content-wrapper, .leaflet-popup-tip {\r\n\tbackground: white;\r\n\r\n\tbox-shadow: 0 3px 14px rgba(0,0,0,0.4);\r\n\t}\r\n.leaflet-container a.leaflet-popup-close-button {\r\n\tposition: absolute;\r\n\ttop: 0;\r\n\tright: 0;\r\n\tpadding: 4px 4px 0 0;\r\n\ttext-align: center;\r\n\twidth: 18px;\r\n\theight: 14px;\r\n\tfont: 16px/14px Tahoma, Verdana, sans-serif;\r\n\tcolor: #c3c3c3;\r\n\ttext-decoration: none;\r\n\tfont-weight: bold;\r\n\tbackground: transparent;\r\n\t}\r\n.leaflet-container a.leaflet-popup-close-button:hover {\r\n\tcolor: #999;\r\n\t}\r\n.leaflet-popup-scrolled {\r\n\toverflow: auto;\r\n\tborder-bottom: 1px solid #ddd;\r\n\tborder-top: 1px solid #ddd;\r\n\t}\r\n\r\n\r\n/* div icon */\r\n\r\n.leaflet-div-icon {\r\n\tbackground: #fff;\r\n\tborder: 1px solid #666;\r\n\t}\r\n.leaflet-editing-icon {\r\n\t-webkit-border-radius: 2px;\r\n\t        border-radius: 2px;\r\n\t}\r\n/*! jQuery UI - v1.9.1 - 2012-11-09\r\n* http://jqueryui.com\r\n* Includes: jquery.ui.core.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.slider.css, jquery.ui.tooltip.css\r\n* To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Segoe%20UI%2CArial%2Csans-serif&fwDefault=bold&fsDefault=1.1em&cornerRadius=6px&bgColorHeader=333333&bgTextureHeader=12_gloss_wave.png&bgImgOpacityHeader=25&borderColorHeader=333333&fcHeader=ffffff&iconColorHeader=ffffff&bgColorContent=000000&bgTextureContent=05_inset_soft.png&bgImgOpacityContent=25&borderColorContent=666666&fcContent=ffffff&iconColorContent=cccccc&bgColorDefault=555555&bgTextureDefault=02_glass.png&bgImgOpacityDefault=20&borderColorDefault=666666&fcDefault=eeeeee&iconColorDefault=cccccc&bgColorHover=0078a3&bgTextureHover=02_glass.png&bgImgOpacityHover=40&borderColorHover=59b4d4&fcHover=ffffff&iconColorHover=ffffff&bgColorActive=f58400&bgTextureActive=05_inset_soft.png&bgImgOpacityActive=30&borderColorActive=ffaf0f&fcActive=ffffff&iconColorActive=222222&bgColorHighlight=eeeeee&bgTextureHighlight=03_highlight_soft.png&bgImgOpacityHighlight=80&borderColorHighlight=cccccc&fcHighlight=2e7db2&iconColorHighlight=4b8e0b&bgColorError=ffc73d&bgTextureError=02_glass.png&bgImgOpacityError=40&borderColorError=ffb73d&fcError=111111&iconColorError=a83300&bgColorOverlay=5c5c5c&bgTextureOverlay=01_flat.png&bgImgOpacityOverlay=50&opacityOverlay=80&bgColorShadow=cccccc&bgTextureShadow=01_flat.png&bgImgOpacityShadow=30&opacityShadow=60&thicknessShadow=7px&offsetTopShadow=-7px&offsetLeftShadow=-7px&cornerRadiusShadow=8px\r\n* Copyright (c) 2012 jQuery Foundation and other contributors Licensed MIT */\r\n\r\n/* Layout helpers\r\n----------------------------------*/\r\n.oskariui .ui-helper-hidden { display: none; }\r\n.oskariui .ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px,1px,1px,1px); clip: rect(1px,1px,1px,1px); }\r\n.oskariui .ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }\r\n.oskariui .ui-helper-clearfix:before, .ui-helper-clearfix:after { content: \"\"; display: table; }\r\n.oskariui .ui-helper-clearfix:after { clear: both; }\r\n.oskariui .ui-helper-clearfix { zoom: 1; }\r\n.oskariui .ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }\r\n\r\n\r\n/* Interaction Cues\r\n----------------------------------*/\r\n.oskariui .ui-state-disabled { cursor: default !important; }\r\n\r\n\r\n/* Icons\r\n----------------------------------*/\r\n\r\n/* states and images */\r\n.oskariui .ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }\r\n\r\n\r\n/* Misc visuals\r\n----------------------------------*/\r\n\r\n/* Overlays */\r\n.oskariui .ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }\r\n.oskariui .ui-resizable { position: relative;}\r\n.oskariui .ui-resizable-handle { position: absolute;font-size: 0.1px; display: block; }\r\n.oskariui .ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }\r\n.oskariui .ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0; }\r\n.oskariui .ui-resizable-s { cursor: s-resize; height: 7px; width: 100%; bottom: -5px; left: 0; }\r\n.oskariui .ui-resizable-e { cursor: e-resize; width: 7px; right: -5px; top: 0; height: 100%; }\r\n.oskariui .ui-resizable-w { cursor: w-resize; width: 7px; left: -5px; top: 0; height: 100%; }\r\n.oskariui .ui-resizable-se { cursor: se-resize; width: 12px; height: 12px; right: 1px; bottom: 1px; }\r\n.oskariui .ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: -5px; bottom: -5px; }\r\n.oskariui .ui-resizable-nw { cursor: nw-resize; width: 9px; height: 9px; left: -5px; top: -5px; }\r\n.oskariui .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}.ui-selectable-helper { position: absolute; border:1px dotted black; }\r\n\r\n.oskariui .ui-slider { position: relative; text-align: left; }\r\n.oskariui .ui-slider .ui-slider-handle { position: absolute; width: 16px; height: 17px; cursor: default; }\r\n.oskariui .ui-slider .ui-slider-range { position: absolute; font-size: .7em; display: block; border: 0; background-position: 0 0; }\r\n\r\n.oskariui .ui-slider-horizontal { height: 14px; }\r\n.oskariui .ui-slider-horizontal .ui-slider-handle { background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/horizontal_handle.png\'); background-repeat: no-repeat;}\r\n\r\n.oskariui .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }\r\n.oskariui .ui-slider-horizontal .ui-slider-range-min { left: 0; }\r\n.oskariui .ui-slider-horizontal .ui-slider-range-max { right: 0; }\r\n\r\n.oskariui .ui-slider-vertical { margin-left: 2px; width: 24px; background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/zoombar_part.png\'); background-repeat: repeat-y; }\r\n.oskariui .ui-slider-vertical .ui-slider-handle { margin-left: 0; background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/zoombar_cursor.png\'); background-repeat: no-repeat;}\r\n.oskariui .ui-slider-vertical .ui-slider-range { left: 0; width: 100%; }\r\n.oskariui .ui-slider-vertical .ui-slider-range-min { bottom: 0; }\r\n.oskariui .ui-slider-vertical .ui-slider-range-max { top: 0; }.ui-tooltip {\r\n\tpadding: 8px;\r\n\tposition: absolute;\r\n\tz-index: 9999;\r\n\tmax-width: 300px;\r\n\t-webkit-box-shadow: 0 0 5px #aaa;\r\n\tbox-shadow: 0 0 5px #aaa;\r\n}\r\n/* Fades and background-images don\'t work well together in IE6, drop the image */\r\n* html .ui-tooltip {\r\n\tbackground-image: none;\r\n}\r\nbody .oskariui .ui-tooltip { border-width: 2px; }\r\n\r\n/* Component containers\r\n----------------------------------*/\r\n.oskariui .ui-widget { font-family: Segoe UI,Arial,sans-serif; font-size: 1.1em; }\r\n.oskariui .ui-widget .ui-widget { font-size: 1em; }\r\n.oskariui .ui-widget input, .oskariui .ui-widget select, .oskariui .ui-widget textarea, .oskariui .ui-widget button { font-family: Segoe UI,Arial,sans-serif; font-size: 1em; }\r\n.oskariui .ui-widget-content {  }\r\n.oskariui .ui-widget-content a {  }\r\n.oskariui .ui-widget-header {  }\r\n.oskariui .ui-widget-header a {  }\r\n\r\n/* Interaction states\r\n----------------------------------*/\r\n.oskariui .ui-state-default, .oskariui .ui-widget-content .ui-state-default, .oskariui .ui-widget-header .ui-state-default {  }\r\n.oskariui .ui-state-default a, .oskariui .ui-state-default a:link, .oskariui .ui-state-default a:visited {  }\r\n.oskariui .ui-state-hover, .oskariui .ui-widget-content .ui-state-hover, .oskariui .ui-widget-header .ui-state-hover, .oskariui .ui-state-focus, .oskariui .ui-widget-content .ui-state-focus, .oskariui .ui-widget-header .ui-state-focus {  }\r\n.oskariui .ui-state-hover a, .oskariui .ui-state-hover a:hover, .oskariui .ui-state-hover a:link, .oskariui .ui-state-hover a:visited { }\r\n.oskariui .ui-state-active, .oskariui .ui-widget-content .ui-state-active, .oskariui .ui-widget-header .ui-state-active {  }\r\n.oskariui .ui-state-active a, .oskariui .ui-state-active a:link, .oskariui .ui-state-active a:visited {  }\r\n\r\n/* Interaction Cues\r\n----------------------------------*/\r\n.oskariui .ui-state-highlight, .oskariui .ui-widget-content .ui-state-highlight, .oskariui .ui-widget-header .ui-state-highlight  { }\r\n.oskariui .ui-state-highlight a, .oskariui .ui-widget-content .ui-state-highlight a,.oskariui .ui-widget-header .ui-state-highlight a { }\r\n.oskariui .ui-state-error, .oskariui .ui-widget-content .ui-state-error, .oskariui .ui-widget-header .ui-state-error { }\r\n.oskariui .ui-state-error a, .oskariui .ui-widget-content .ui-state-error a, .oskariui .ui-widget-header .ui-state-error a { }\r\n.oskariui .ui-state-error-text, .oskariui .ui-widget-content .ui-state-error-text, .oskariui .ui-widget-header .ui-state-error-text {  }\r\n.oskariui .ui-priority-primary, .oskariui .ui-widget-content .ui-priority-primary, .oskariui .ui-widget-header .ui-priority-primary {  }\r\n.oskariui .ui-priority-secondary, .oskariui .ui-widget-content .ui-priority-secondary,  .oskariui .ui-widget-header .ui-priority-secondary { }\r\n.oskariui .ui-state-disabled, .oskariui .ui-widget-content .ui-state-disabled, .oskariui .ui-widget-header .ui-state-disabled {  }\r\n.oskariui .ui-state-disabled .ui-icon { filter:Alpha(Opacity=35); } /* For IE8 - See #6059 */\r\n\r\n/* Icons\r\n----------------------------------*/\r\n\r\n/* states and images */\r\n.oskariui .ui-icon { width: 16px; height: 16px; }\r\n.oskariui .ui-widget-content .ui-icon { }\r\n.oskariui .ui-widget-header .ui-icon { }\r\n.oskariui .ui-state-default .ui-icon {  }\r\n.oskariui .ui-state-hover .ui-icon, .oskariui .ui-state-focus .ui-icon {}\r\n.oskariui .ui-state-active .ui-icon { }\r\n.oskariui .ui-state-highlight .ui-icon { }\r\n.oskariui .ui-state-error .ui-icon, .oskariui .ui-state-error-text .ui-icon { }\r\n\r\n\r\n/* Misc visuals\r\n----------------------------------*/\r\n\r\n/* Corner radius */\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-top, .oskariui .ui-corner-left, .oskariui .ui-corner-tl { -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; -khtml-border-top-left-radius: 6px; border-top-left-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-top, .oskariui .ui-corner-right, .oskariui .ui-corner-tr { -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; -khtml-border-top-right-radius: 6px; border-top-right-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-left, .oskariui .ui-corner-bl { -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; -khtml-border-bottom-left-radius: 6px; border-bottom-left-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-right, .oskariui .ui-corner-br { -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; -khtml-border-bottom-right-radius: 6px; border-bottom-right-radius: 6px; }\r\n\r\n/* Overlays */\r\n.oskariui .ui-widget-overlay { background: #5c5c5c url(resources/framework/bundle/oskariui/css/images/ui-bg_flat_50_5c5c5c_40x100.png) 50% 50% repeat-x; opacity: .8;filter:Alpha(Opacity=80); }\r\n.oskariui .ui-widget-shadow { margin: -7px 0 0 -7px; padding: 7px; background: #cccccc url(resources/framework/bundle/oskariui/css/images/ui-bg_flat_30_cccccc_40x100.png) 50% 50% repeat-x; opacity: .6;filter:Alpha(Opacity=60); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }\r\n/*!\r\n * Bootstrap v2.3.1\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\r\n.oskariui .clearfix {\r\n  *zoom: 1;\r\n}\r\n.oskariui .clearfix:before,\r\n.oskariui .clearfix:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .clearfix:after {\r\n  clear: both;\r\n}\r\n.oskariui .hide-text {\r\n  font: 0/0 a;\r\n  color: transparent;\r\n  text-shadow: none;\r\n  background-color: transparent;\r\n  border: 0;\r\n}\r\n.oskariui .input-block-level {\r\n  display: block;\r\n  width: 100%;\r\n  min-height: 30px;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box;\r\n  box-sizing: border-box;\r\n}\r\n.oskariui .row {\r\n  margin-left: -20px;\r\n  *zoom: 1;\r\n}\r\n.oskariui .row:before,\r\n.oskariui .row:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .row:after {\r\n  clear: both;\r\n}\r\n[class*=\"span\"] {\r\n  float: left;\r\n  min-height: 1px;\r\n  margin-left: 20px;\r\n}\r\n.oskariui .container,\r\n.oskariui .navbar-static-top .container,\r\n.oskariui .navbar-fixed-top .container,\r\n.oskariui .navbar-fixed-bottom .container {\r\n  width: 940px;\r\n}\r\n.oskariui .span12 {\r\n  width: 940px;\r\n}\r\n.oskariui .span11 {\r\n  width: 860px;\r\n}\r\n.oskariui .span10 {\r\n  width: 780px;\r\n}\r\n.oskariui .span9 {\r\n  width: 700px;\r\n}\r\n.oskariui .span8 {\r\n  width: 620px;\r\n}\r\n.oskariui .span7 {\r\n  width: 540px;\r\n}\r\n.oskariui .span6 {\r\n  width: 460px;\r\n}\r\n.oskariui .span5 {\r\n  width: 380px;\r\n}\r\n.oskariui .span4 {\r\n  width: 300px;\r\n}\r\n.oskariui .span3 {\r\n  width: 220px;\r\n}\r\n.oskariui .span2 {\r\n  width: 140px;\r\n}\r\n.oskariui .span1 {\r\n  width: 60px;\r\n}\r\n.oskariui .offset12 {\r\n  margin-left: 980px;\r\n}\r\n.oskariui .offset11 {\r\n  margin-left: 900px;\r\n}\r\n.oskariui .offset10 {\r\n  margin-left: 820px;\r\n}\r\n.oskariui .offset9 {\r\n  margin-left: 740px;\r\n}\r\n.oskariui .offset8 {\r\n  margin-left: 660px;\r\n}\r\n.oskariui .offset7 {\r\n  margin-left: 580px;\r\n}\r\n.oskariui .offset6 {\r\n  margin-left: 500px;\r\n}\r\n.oskariui .offset5 {\r\n  margin-left: 420px;\r\n}\r\n.oskariui .offset4 {\r\n  margin-left: 340px;\r\n}\r\n.oskariui .offset3 {\r\n  margin-left: 260px;\r\n}\r\n.oskariui .offset2 {\r\n  margin-left: 180px;\r\n}\r\n.oskariui .offset1 {\r\n  margin-left: 100px;\r\n}\r\n.oskariui .row-fluid {\r\n  width: 100%;\r\n  *zoom: 1;\r\n}\r\n.oskariui .row-fluid:before,\r\n.oskariui .row-fluid:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .row-fluid:after {\r\n  clear: both;\r\n}\r\n.oskariui .row-fluid [class*=\"span\"] {\r\n  display: block;\r\n  width: 100%;\r\n  min-height: 30px;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box;\r\n  box-sizing: border-box;\r\n  float: left;\r\n  margin-left: 2.127659574468085%;\r\n  *margin-left: 2.074468085106383%;\r\n}\r\n.oskariui .row-fluid [class*=\"span\"]:first-child {\r\n  margin-left: 0;\r\n}\r\n.oskariui .row-fluid .controls-row [class*=\"span\"] + [class*=\"span\"] {\r\n  margin-left: 2.127659574468085%;\r\n}\r\n.oskariui .row-fluid .span12 {\r\n  width: 100%;\r\n  *width: 99.94680851063829%;\r\n}\r\n.oskariui .row-fluid .span11 {\r\n  width: 91.48936170212765%;\r\n  *width: 91.43617021276594%;\r\n}\r\n.oskariui .row-fluid .span10 {\r\n  width: 82.97872340425532%;\r\n  *width: 82.92553191489361%;\r\n}\r\n.oskariui .row-fluid .span9 {\r\n  width: 74.46808510638297%;\r\n  *width: 74.41489361702126%;\r\n}\r\n.oskariui .row-fluid .span8 {\r\n  width: 65.95744680851064%;\r\n  *width: 65.90425531914893%;\r\n}\r\n.oskariui .row-fluid .span7 {\r\n  width: 57.44680851063829%;\r\n  *width: 57.39361702127659%;\r\n}\r\n.oskariui .row-fluid .span6 {\r\n  width: 48.93617021276595%;\r\n  *width: 48.88297872340425%;\r\n}\r\n.oskariui .row-fluid .span5 {\r\n  width: 40.42553191489362%;\r\n  *width: 40.37234042553192%;\r\n}\r\n.oskariui .row-fluid .span4 {\r\n  width: 31.914893617021278%;\r\n  *width: 31.861702127659576%;\r\n}\r\n.oskariui .row-fluid .span3 {\r\n  width: 23.404255319148934%;\r\n  *width: 23.351063829787233%;\r\n}\r\n.oskariui .row-fluid .span2 {\r\n  width: 14.893617021276595%;\r\n  *width: 14.840425531914894%;\r\n}\r\n.oskariui .row-fluid .span1 {\r\n  width: 6.382978723404255%;\r\n  *width: 6.329787234042553%;\r\n}\r\n.oskariui .row-fluid .offset12 {\r\n  margin-left: 104.25531914893617%;\r\n  *margin-left: 104.14893617021275%;\r\n}\r\n.oskariui .row-fluid .offset12:first-child {\r\n  margin-left: 102.12765957446808%;\r\n  *margin-left: 102.02127659574467%;\r\n}\r\n.oskariui .row-fluid .offset11 {\r\n  margin-left: 95.74468085106382%;\r\n  *margin-left: 95.6382978723404%;\r\n}\r\n.oskariui .row-fluid .offset11:first-child {\r\n  margin-left: 93.61702127659574%;\r\n  *margin-left: 93.51063829787232%;\r\n}\r\n.oskariui .row-fluid .offset10 {\r\n  margin-left: 87.23404255319149%;\r\n  *margin-left: 87.12765957446807%;\r\n}\r\n.oskariui .row-fluid .offset10:first-child {\r\n  margin-left: 85.1063829787234%;\r\n  *margin-left: 84.99999999999999%;\r\n}\r\n.oskariui .row-fluid .offset9 {\r\n  margin-left: 78.72340425531914%;\r\n  *margin-left: 78.61702127659572%;\r\n}\r\n.oskariui .row-fluid .offset9:first-child {\r\n  margin-left: 76.59574468085106%;\r\n  *margin-left: 76.48936170212764%;\r\n}\r\n.oskariui .row-fluid .offset8 {\r\n  margin-left: 70.2127659574468%;\r\n  *margin-left: 70.10638297872339%;\r\n}\r\n.oskariui .row-fluid .offset8:first-child {\r\n  margin-left: 68.08510638297872%;\r\n  *margin-left: 67.9787234042553%;\r\n}\r\n.oskariui .row-fluid .offset7 {\r\n  margin-left: 61.70212765957446%;\r\n  *margin-left: 61.59574468085106%;\r\n}\r\n.oskariui .row-fluid .offset7:first-child {\r\n  margin-left: 59.574468085106375%;\r\n  *margin-left: 59.46808510638297%;\r\n}\r\n.oskariui .row-fluid .offset6 {\r\n  margin-left: 53.191489361702125%;\r\n  *margin-left: 53.085106382978715%;\r\n}\r\n.oskariui .row-fluid .offset6:first-child {\r\n  margin-left: 51.063829787234035%;\r\n  *margin-left: 50.95744680851063%;\r\n}\r\n.oskariui .row-fluid .offset5 {\r\n  margin-left: 44.68085106382979%;\r\n  *margin-left: 44.57446808510638%;\r\n}\r\n.oskariui .row-fluid .offset5:first-child {\r\n  margin-left: 42.5531914893617%;\r\n  *margin-left: 42.4468085106383%;\r\n}\r\n.oskariui .row-fluid .offset4 {\r\n  margin-left: 36.170212765957444%;\r\n  *margin-left: 36.06382978723405%;\r\n}\r\n.oskariui .row-fluid .offset4:first-child {\r\n  margin-left: 34.04255319148936%;\r\n  *margin-left: 33.93617021276596%;\r\n}\r\n.oskariui .row-fluid .offset3 {\r\n  margin-left: 27.659574468085104%;\r\n  *margin-left: 27.5531914893617%;\r\n}\r\n.oskariui .row-fluid .offset3:first-child {\r\n  margin-left: 25.53191489361702%;\r\n  *margin-left: 25.425531914893618%;\r\n}\r\n.oskariui .row-fluid .offset2 {\r\n  margin-left: 19.148936170212764%;\r\n  *margin-left: 19.04255319148936%;\r\n}\r\n.oskariui .row-fluid .offset2:first-child {\r\n  margin-left: 17.02127659574468%;\r\n  *margin-left: 16.914893617021278%;\r\n}\r\n.oskariui .row-fluid .offset1 {\r\n  margin-left: 10.638297872340425%;\r\n  *margin-left: 10.53191489361702%;\r\n}\r\n.oskariui .row-fluid .offset1:first-child {\r\n  margin-left: 8.51063829787234%;\r\n  *margin-left: 8.404255319148938%;\r\n}\r\n[class*=\"span\"].hide,\r\n.oskariui .row-fluid [class*=\"span\"].hide {\r\n  display: none;\r\n}\r\n[class*=\"span\"].pull-right,\r\n.oskariui .row-fluid [class*=\"span\"].pull-right {\r\n  float: right;\r\n}\r\n.oskariui .container {\r\n  margin-right: auto;\r\n  margin-left: auto;\r\n  *zoom: 1;\r\n}\r\n.oskariui .container:before,\r\n.oskariui .container:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .container:after {\r\n  clear: both;\r\n}\r\n.oskariui .container-fluid {\r\n  padding-right: 20px;\r\n  padding-left: 20px;\r\n  *zoom: 1;\r\n}\r\n.oskariui .container-fluid:before,\r\n.oskariui .container-fluid:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .container-fluid:after {\r\n  clear: both;\r\n}\r\n#contentMap.oskari-map-window-fullscreen {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  z-index: 10000;\n  margin: 0 !important; }\ndiv.pzbDiv.mapplugin {\r\n    top : 140px;\r\n    right : 64px;\r\n    background : transparent;\r\n    z-index: 15000;\r\n}\r\ndiv.pzbDiv div.pzbDiv-plus {\r\n    width : 18px;\r\n    height : 46px;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_plus_patched.png\');\r\n}\r\n\r\ndiv.pzbDiv div.pzbDiv-minus {\r\n    width : 18px;\r\n    height : 18px;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_minus.png\');\r\n}\r\ndiv.pzbDiv div.rui-slider-vertical {\r\n    background-color : transparent;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar.png\');\r\n    height : 148px;\r\n    width : 18px;\r\n    border : 0;\r\n    margin : 0;\r\n}\r\n\r\n\r\n\r\n\r\n.panbuttonDiv.mapplugin {\n  top: 10px;\n  right: 36px;\n  display: block;\n  color: black;\n  background: transparent;\n  font-size: 12px;\n  z-index: 15000;\n  /*64738;*/\n  font-weight: bold;\n  /*background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/default.png\');*/\n  height: 90px;\n  width: 90px; }\n\n.panbuttonDivImg {\n  background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/sprite.png\'); }\n\n.panbuttonDivImg.root {\n  background-position: 0px -90px; }\n\n.panbuttonDivImg.left {\n  background-position: 0px -180px; }\n\n.panbuttonDivImg.right {\n  background-position: 0px -270px; }\n\n.panbuttonDivImg.up {\n  background-position: 0px -360px; }\n\n.panbuttonDivImg.down {\n  background-position: 0px -450px; }\n\n.panbutton_left {\n  float: left; }\n\n.panbutton_right {\n  float: right; }\n.olMap {\n  position: relative; }\n\ndiv.mapplugin {\n  position: absolute;\n  z-index: 15000; }\n\ndiv.mapplugins.left {\n  position: absolute;\n  z-index: 15000;\n  top: 20px;\n  right: 20px;\n  text-align: right;\n  max-width: 85%; }\n\ndiv.mapplugins.left > div {\n  display: inline-block;\n  margin: 5px;\n  vertical-align: top; }\n\n.oskari-publisher-font-arial {\n  font-family: Arial, sans-serif !important; }\n\n.oskari-publisher-font-georgia {\n  font-family: Georgia, serif !important; }\n/* setup document body so flyouts will not make scrollbars to browser window */\nbody {\n  position: fixed;\n  width: 100%;\n  height: 100%; }\n\n/* flyout toolbar */\n.oskari-flyoutheading {\n  background-color: #ffd400;\n  border-top: 1px solid #ffdf00;\n  border-bottom: 1px solid #ebb819;\n  height: 14px;\n  width: 100%; }\n\n.oskari-flyouttoolbar {\n  height: 57px;\n  width: 100%;\n  background-color: #fdf8d9;\n  border-top: #fdfdfd;\n  border-bottom: #fef2ba; }\n\n.oskari-flyout-title {\n  float: left;\n  margin-left: 20px;\n  margin-top: 12px;\n  height: 20px;\n  display: inline-block; }\n\n.oskari-flyout-title p {\n  margin: 0;\n  padding: 0;\n  font: 16px/20px \"Open Sans\", \"Helvetica Neue\", \"HelveticaNeue\", Helvetica, Arial, sans-serif; }\n\n/** flyout toolbar tools and tool states  */\n.oskari-flyouttools {\n  float: right;\n  margin-right: 25px;\n  height: 16px;\n  display: inline-block;\n  margin-top: 15px; }\n\n.oskari-flyouttool-detach {\n  display: none;\n  /* visualise here if this tool required */ }\n\n.oskari-detached .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-flyouttool-attach {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-attached .oskari-flyouttool-attach {\n  display: none; }\n\n.oskari-flyouttool-minimize {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-attached .oskari-flyouttool-minimize {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-minimize {\n  display: none; }\n\n.oskari-flyouttool-restore {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-flyouttool-help {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-restore {\n  display: inline-block; }\n\n.oskari-minimized .oskari-flyouttool-attach {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-flyouttool-close {\n  display: inline-block;\n  width: 16px;\n  height: 16px;\n  margin-right: 2px;\n  margin-left: auto; }\n\n/* flyout */\n.oskari-flyout {\n  background-color: #fafafa;\n  position: absolute;\n  z-index: 1100;\n  margin: 0px;\n  padding: 0px;\n  border: 1px solid rgba(0, 0, 0, 0.2); }\n\n/* flyout states */\n/*.oskari-minimized {\r\n width: 640px;\r\n height: 64px;\r\n overflow: hidden;\r\n\r\n min-height: 64px;\r\n max-height: 64px;\r\n }*/\n.oskari-closed {\n  display: none; }\n\n.oskari-minimized {\n  display: none; }\n\n.oskari-flyoutcontent {\n  margin: 0;\n  padding: 20px 20px 20px 25px;\n  border: 0;\n  /*overflow: auto;*/ }\n\n/** tile */\n/* tile states */\n.oskari-tile-attached {\n  border-bottom: 1px solid white;\n  background-color: white; }\n\n.oskari-tile-detached {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: white; }\n\n.oskari-tile-minimized {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: #2d2d2d; }\n\n.oskari-tile-closed {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: #2d2d2d; }\n\n.oskari-tile-container {\n  margin: 0; }\n\n.oskari-tile {\n  margin: 0;\n  padding: 0;\n  cursor: pointer;\n  height: 31px;\n  width: 153px;\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  line-height: 24px; }\n\n.oskari-tile-title {\n  display: inline-block;\n  margin: 0;\n  margin-top: 2px;\n  margin-left: 16px;\n  padding: 0;\n  float: left;\n  height: 28px;\n  width: 112px;\n  font-family: Arial, Helvetica;\n  font-weight: bold;\n  font-size: 11px;\n  text-align: left;\n  text-transform: uppercase;\n  /*color: white;*/ }\n\n.oskari-tile-attached .oskari-tile-title {\n  color: #333438; }\n\n.oskari-tile-detached .oskari-tile-title {\n  color: #333438; }\n\n.oskari-tile-minimized .oskari-tile-title {\n  color: white; }\n\n.oskari-tile-closed .oskari-tile-title {\n  color: white; }\n\n.oskari-tile-status {\n  float: right;\n  text-align: center;\n  display: inline-block;\n  font-size: 11px;\n  font-weight: bold;\n  height: 19px !important;\n  width: 20px !important;\n  margin: 1px;\n  padding: 1px; }\n\n.oskari-tile-close {\n  display: none; }\n\n.oskariform .oskarifield {\n  padding: 10px; }\n\n/** media queries */\n@media screen {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media screen {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media only screen and (min-width: 400px) and (max-width: 599px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 500px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 500px; } }\n@media only screen and (min-width: 600px) and (max-width: 799px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 600px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-width: 800px) and (max-width: 1199px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 1000px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-width: 1200px) and (max-width: 1599px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 600px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-height: 400px) and (max-height: 599px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 300px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 600px) and (max-height: 799px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 800px) and (max-height: 999px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 700px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1000px) and (max-height: 1199px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 900px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1200px) and (max-height: 1399px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 1100px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1400px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 1300px;\n    /* overflow: auto; */ } }\n/* IE8 TEMP fixes */\n.oskari-flyoutcontentcontainer_IE_400_599 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 300px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_600_799 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 500px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_800_999 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 700px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1000_1199 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 900px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1200_1399 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 1100px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1400 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 1300px;\n  /* overflow: auto; */ }\n/* Accordion */\ndiv.accordion div.accordion_panel {\n  background-color: #f3f3f3;\n  border: 1pt solid #c0d0d0;\n  margin: 0;\n  padding: 0; }\n\ndiv.accordion_panel div.header div.headerIcon {\n  display: inline-block;\n  margin-left: 12px;\n  vertical-align: middle; }\n\ndiv.accordion_panel div.header div.headerText {\n  display: inline-block;\n  font-weight: bold;\n  padding: 8px 10px 8px 12px;\n  font: 14pt Arial, sans-serif; }\n\ndiv.accordion div.accordion_panel.open {\n  background-color: #FFFFFF; }\n\ndiv.accordion div.accordion_panel div.content {\n  padding: 5px; }\n\ndiv.accordion div.accordionmsg {\n  padding: 10px; }\n/* \"tab\" content */\ndiv.oskariTabs div.tabsContent {\n  border-left: 1px solid #999999;\n  border-right: 1px solid #999999;\n  border-top: 0px solid #999999;\n  border-bottom: 1px solid #999999;\n  color: #000000;\n  height: 90%; }\n\ndiv.oskariTabs div.tab-content {\n  padding: 10px; }\n\n/* tab headers */\ndiv.oskariTabs div.tabsHeader {\n  background: url(\'/Oskari/resources/framework/bundle/divmanazer/images/tab_bg.png\') repeat-x scroll center bottom;\n  /* #FFFFFF*/\n  clear: left;\n  float: left;\n  font: 12pt Arial, sans-serif;\n  font-weight: bold;\n  overflow: hidden;\n  padding: 0;\n  width: 100%; }\n\ndiv.oskariTabs div.tabsHeader ul {\n  float: left;\n  list-style: none outside none;\n  margin: 0;\n  padding: 0;\n  text-align: center; }\n\ndiv.oskariTabs div.tabsHeader ul li {\n  display: block;\n  float: left;\n  list-style: none outside none;\n  margin: 10px 0 0;\n  padding: 0;\n  right: 50%; }\n\ndiv.oskariTabs div.tabsHeader ul li a {\n  background: none repeat scroll 0 0 #FFFFFF;\n  border-bottom: 1px solid #999999;\n  color: #3333FF;\n  display: block;\n  float: left;\n  padding: 10px 20px;\n  position: relative;\n  text-decoration: none; }\n\ndiv.oskariTabs div.tabsHeader ul li.active a {\n  border-left: 1px solid #999999;\n  border-right: 1px solid #999999;\n  border-top: 1px solid #999999;\n  border-bottom: 0px solid #999999;\n  color: #000000; }\n\ndiv.oskariTabs div.tabsHeader ul li.fill a {\n  width: 100%; }\n.modaldialog {\n  border: 1px solid #3C3C3C;\n  margin: 0px; }\n\n.modaltitle {\n  margin: 0px;\n  border-bottom: 1px solid #3C3C3C;\n  color: #3C3C3C;\n  padding: 8px 16px 4px 16px; }\n\n.modalmessage {\n  width: 100%;\n  color: #3C3C3C;\n  padding: 8px 16px 8px 16px; }\n\n.modalbuttons {\n  width: 100%;\n  display: inline-block;\n  padding: 0px 16px 4px 16px; }\n\n.modalbutton {\n  margin: 2px;\n  display: inline-block; }\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-badge {\n  font-size: 10.998px;\n  font-weight: bold;\n  line-height: 14px;\n  color: #ffffff;\n  vertical-align: baseline;\n  white-space: nowrap;\n  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);\n  background-color: #999999; }\n\n.oskari-badge {\n  padding: 1px 9px 2px;\n  -webkit-border-radius: 9px;\n  -moz-border-radius: 9px;\n  border-radius: 9px; }\n\na.oskari-badge:hover {\n  color: #ffffff;\n  text-decoration: none;\n  cursor: pointer; }\n\n.oskari-badge-important {\n  background-color: #b94a48; }\n\n.oskari-badge-important[href] {\n  background-color: #953b39; }\n\n.oskari-badge-warning {\n  background-color: #f89406; }\n\n.oskari-badge-warning[href] {\n  background-color: #c67605; }\n\n.oskari-badge-success {\n  background-color: #468847; }\n\n.oskari-badge-success[href] {\n  background-color: #356635; }\n\n.oskari-badge-info {\n  background-color: #3a87ad; }\n\n.oskari-badge-info[href] {\n  background-color: #2d6987; }\n\n.oskari-badge-inverse {\n  background-color: #333333; }\n\n.oskari-badge-inverse[href] {\n  background-color: #1a1a1a; }\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-alert {\n  padding-left: 8px;\n  padding-top: 4px;\n  margin: 4px;\n  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);\n  background-color: #fcf8e3;\n  border: 1px solid #fbeed5;\n  -webkit-border-radius: 4px;\n  -moz-border-radius: 4px;\n  border-radius: 4px;\n  color: #c09853;\n  position: relative;\n  height: 24px; }\n\n.oskari-alert-heading {\n  color: inherit; }\n\n.oskari-alert-icon-close {\n  position: absolute;\n  top: 4px;\n  right: 0px;\n  width: 24px;\n  height: 24px; }\n\n.oskari-alert-success {\n  background-color: #dff0d8;\n  border-color: #d6e9c6;\n  color: #468847; }\n\n.oskari-alert-danger, .oskari-alert-error {\n  background-color: #f2dede;\n  border-color: #eed3d7;\n  color: #b94a48; }\n\n.oskari-alert-info {\n  background-color: #d9edf7;\n  border-color: #bce8f1;\n  color: #3a87ad; }\ndiv.oskarifield div.icon-close {\n  display: inline-block;\n  left: -20px;\n  margin-left: 0px;\n  position: relative;\n  top: 3px; }\nth.asc {\n  background-image: url(\'/Oskari/resources/framework/bundle/divmanazer/images/asc_arrow.png\');\n  background-repeat: no-repeat;\n  background-position: center center; }\n\nth.desc {\n  background-image: url(\'/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png\');\n  background-repeat: no-repeat;\n  background-position: center center; }\n\ndiv.column-selector-placeholder {\n  border-style: none;\n  float: left;\n  opacity: 1.0;\n  margin: 0;\n  padding: 0;\n  right: 0;\n  width: 25px;\n  height: 7px;\n  max-width: 25px;\n  max-height: 7px; }\n\ndiv.icon-menu {\n  position: absolute;\n  opacity: 1.0;\n  margin: 0;\n  cursor: pointer;\n  padding: 0;\n  width: 25px;\n  height: 8px;\n  max-width: 25px;\n  max-height: 7px; }\n\ndiv.column-selector {\n  position: absolute;\n  visibility: hidden;\n  background-color: white;\n  margin-top: 7px;\n  margin-right: 50px;\n  padding: 0;\n  border: 1px solid;\n  z-index: 10001; }\n\ndiv.column-selector div.close-selector-button {\n  width: 16px;\n  height: 16px;\n  position: absolute;\n  top: 5px;\n  right: 5px; }\n\ndiv.column-selector ul.column-selector-list {\n  list-style-type: none;\n  padding-right: 30px; }\n\ndiv.column-selector label.column-label {\n  padding-left: 5px; }\ndiv.divmanazerpopup {\n  max-width: 700px;\n  min-width: 200px;\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  background-color: white;\n  -moz-background-clip: border;\n  /* Firefox 3.6 */\n  -webkit-background-clip: border;\n  /* Safari 4? Chrome 6? */\n  background-clip: border-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  -moz-background-clip: padding;\n  /* Firefox 3.6 */\n  -webkit-background-clip: padding;\n  /* Safari 4? Chrome 6? */\n  background-clip: padding-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  -moz-background-clip: content;\n  /* Firefox 3.6 */\n  -webkit-background-clip: content;\n  /* Safari 4? Chrome 6? */\n  background-clip: content-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  border: 5px solid rgba(0, 0, 0, 0.2);\n  border-radius: 7px;\n  /*\r\n    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.80);\r\n    -moz-box-shadow: 0px 3px 3px black;\r\n    -webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);\r\n    */\n  z-index: 9000; }\n\ndiv.divmanazerpopup h3.popupHeader {\n  background-color: #FDF8D9;\n  border-radius: 5px 5px 0 0;\n  font-size: 18px;\n  line-height: 28px;\n  padding: 5px 10px; }\n\ndiv.divmanazerpopup div.content {\n  margin: 10px; }\n\ndiv.divmanazerpopup div.content textarea {\n  resize: none; }\n\ndiv.divmanazerpopup div.content ul {\n  margin: 10px; }\n\ndiv.divmanazerpopup.no_resize div.content textarea {\n  resize: none; }\n\ndiv.divmanazerpopup div.actions {\n  margin: 10px;\n  text-align: center; }\n\ndiv.divmanazerpopup div.actions input {\n  margin: 10px; }\n\n.divmanazerpopup.arrow:after, .divmanazerpopup.arrow:before {\n  border: solid transparent;\n  content: \" \";\n  height: 0;\n  width: 0;\n  position: absolute;\n  /*pointer-events: none; */ }\n\n/* Bottom alignment */\n.divmanazerpopup.bottom:after, .divmanazerpopup.bottom:before {\n  bottom: 100%; }\n\n.divmanazerpopup.bottom:after {\n  border-bottom-color: #FDF8D9;\n  border-width: 5px;\n  margin-left: -5px;\n  left: 50%; }\n\n.divmanazerpopup.bottom:before {\n  border-bottom-color: #000000;\n  border-width: 6px;\n  margin-left: -6px;\n  left: 50%; }\n\n/* top alignment */\n.divmanazerpopup.top:after, .divmanazerpopup.top:before {\n  top: 100%; }\n\n.divmanazerpopup.top:after {\n  border-top-color: #FFFFFF;\n  border-width: 5px;\n  margin-left: -5px;\n  left: 50%; }\n\n.divmanazerpopup.top:before {\n  border-top-color: #000000;\n  border-width: 6px;\n  margin-left: -6px;\n  left: 50%; }\n\n/* left alignment */\n.divmanazerpopup.left:after, .divmanazerpopup.left:before {\n  left: 100%; }\n\n.divmanazerpopup.left:after {\n  border-left-color: #FDF8D9;\n  border-width: 5px;\n  margin-top: -5px;\n  top: 50%; }\n\n.divmanazerpopup.left:before {\n  border-left-color: #000000;\n  border-width: 6px;\n  margin-top: -6px;\n  top: 50%; }\n\n/* right alignment */\n.divmanazerpopup.right:after, .divmanazerpopup.right:before {\n  right: 100%; }\n\n.divmanazerpopup.right:after {\n  border-right-color: #FDF8D9;\n  border-width: 5px;\n  margin-top: -5px;\n  top: 50%; }\n\n.divmanazerpopup.right:before {\n  border-right-color: #000000;\n  border-width: 6px;\n  margin-top: -6px;\n  top: 50%; }\ndiv.oskaributton {\n  display: inline-block;\n  margin: 5px; }\n\ndiv.oskaributton.primary input {\n  color: #3CA9FC; }\ndiv.oskarioverlay {\n  position: absolute;\n  background-color: black;\n  z-index: 8000; }\n\n.transparent {\n  zoom: 1;\n  filter: alpha(opacity=50);\n  /* unquote for libsass bug */\n  opacity: 0.5; }\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-tooltip {\n  position: absolute;\n  z-index: 1200;\n  display: block;\n  visibility: visible;\n  padding: 5px;\n  font-size: 11px;\n  opacity: 0;\n  filter: alpha(opacity=0);\n  /* unquote for libsass bug */ }\n\n.oskari-tooltip.in {\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  /* unquote for libsass bug */ }\n\n.oskari-tooltip.top {\n  margin-top: -2px; }\n\n.oskari-tooltip.right {\n  margin-left: 2px; }\n\n.oskari-tooltip.bottom {\n  margin-top: 2px; }\n\n.oskari-tooltip.left {\n  margin-left: -2px; }\n\n.oskari-tooltip.top .oskari-tooltip-arrow {\n  bottom: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-top: 5px solid #000000; }\n\n.oskari-tooltip.left .oskari-tooltip-arrow {\n  top: 50%;\n  right: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-left: 5px solid #000000; }\n\n.oskari-tooltip.bottom .oskari-tooltip-arrow {\n  top: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-bottom: 5px solid #000000; }\n\n.oskari-tooltip.right .oskari-tooltip-arrow {\n  top: 50%;\n  left: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-right: 5px solid #000000; }\n\n.oskari-tooltip-inner {\n  max-width: 640px;\n  padding: 3px 8px;\n  color: #ffffff;\n  text-align: center;\n  text-decoration: none;\n  background-color: #000000;\n  -webkit-border-radius: 4px;\n  -moz-border-radius: 4px;\n  border-radius: 4px; }\n\n.oskari-tooltip-arrow {\n  position: absolute;\n  width: 0;\n  height: 0; }\n\n.oskari-popover {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 1210;\n  display: none;\n  padding: 5px; }\n\n.oskari-popover.top {\n  margin-top: -5px; }\n\n.oskari-popover.right {\n  margin-left: 5px; }\n\n.oskari-popover.bottom {\n  margin-top: 5px; }\n\n.oskari-popover.left {\n  margin-left: -5px; }\n\n.oskari-popover.top .oskari-arrow {\n  bottom: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-top: 5px solid #000000; }\n\n.oskari-popover.right .oskari-arrow {\n  top: 50%;\n  left: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-right: 5px solid #000000; }\n\n.oskari-popover.bottom .oskari-arrow {\n  top: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-bottom: 5px solid #000000; }\n\n.oskari-popover.left .oskari-arrow {\n  top: 50%;\n  right: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-left: 5px solid #000000; }\n\n.oskari-popover .oskari-arrow {\n  position: absolute;\n  width: 0;\n  height: 0; }\n\n.oskari-popover-inner {\n  padding: 3px;\n  /*width: 280px;*/\n  overflow: hidden;\n  background: #000000;\n  background: rgba(0, 0, 0, 0.8);\n  -webkit-border-radius: 6px;\n  -moz-border-radius: 6px;\n  border-radius: 6px;\n  -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3); }\n\n.oskari-popover-title {\n  padding: 9px 15px;\n  line-height: 1;\n  background-color: #f5f5f5;\n  border-bottom: 1px solid #eee;\n  -webkit-border-radius: 3px 3px 0 0;\n  -moz-border-radius: 3px 3px 0 0;\n  border-radius: 3px 3px 0 0; }\n\n.oskari-popover-content {\n  padding: 14px;\n  background-color: #ffffff;\n  -webkit-border-radius: 0 0 3px 3px;\n  -moz-border-radius: 0 0 3px 3px;\n  border-radius: 0 0 3px 3px;\n  -webkit-background-clip: padding-box;\n  -moz-background-clip: padding-box;\n  background-clip: padding-box; }\n\n.oskari-popover-content p, .oskari-popover-content ul, .oskari-popover-content ol {\n  margin-bottom: 0; }\n'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick; 
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.setBuffer('/* required styles */\r\n\r\n.leaflet-map-pane,\r\n.leaflet-tile,\r\n.leaflet-marker-icon,\r\n.leaflet-marker-shadow,\r\n.leaflet-tile-pane,\r\n.leaflet-tile-container,\r\n.leaflet-overlay-pane,\r\n.leaflet-shadow-pane,\r\n.leaflet-marker-pane,\r\n.leaflet-popup-pane,\r\n.leaflet-overlay-pane svg,\r\n.leaflet-zoom-box,\r\n.leaflet-image-layer,\r\n.leaflet-layer {\r\n\tposition: absolute;\r\n\tleft: 0;\r\n\ttop: 0;\r\n\t}\r\n.leaflet-container {\r\n\toverflow: hidden;\r\n\t-ms-touch-action: none;\r\n\t}\r\n.leaflet-tile,\r\n.leaflet-marker-icon,\r\n.leaflet-marker-shadow {\r\n\t-webkit-user-select: none;\r\n\t   -moz-user-select: none;\r\n\t        user-select: none;\r\n\t-webkit-user-drag: none;\r\n\t}\r\n.leaflet-marker-icon,\r\n.leaflet-marker-shadow {\r\n\tdisplay: block;\r\n\t}\r\n/* map is broken in FF if you have max-width: 100% on tiles */\r\n.leaflet-container img {\r\n\tmax-width: none !important;\r\n\t}\r\n/* stupid Android 2 doesn\'t understand \"max-width: none\" properly */\r\n.leaflet-container img.leaflet-image-layer {\r\n\tmax-width: 15000px !important;\r\n\t}\r\n.leaflet-tile {\r\n\tfilter: inherit;\r\n\tvisibility: hidden;\r\n\t}\r\n.leaflet-tile-loaded {\r\n\tvisibility: inherit;\r\n\t}\r\n.leaflet-zoom-box {\r\n\twidth: 0;\r\n\theight: 0;\r\n\t}\r\n/* workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=888319 */\r\n.leaflet-overlay-pane svg {\r\n\t-moz-user-select: none;\r\n\t}\r\n\r\n.leaflet-tile-pane    { z-index: 2; }\r\n.leaflet-objects-pane { z-index: 3; }\r\n.leaflet-overlay-pane { z-index: 4; }\r\n.leaflet-shadow-pane  { z-index: 5; }\r\n.leaflet-marker-pane  { z-index: 6; }\r\n.leaflet-popup-pane   { z-index: 7; }\r\n\r\n\r\n/* control positioning */\r\n\r\n.leaflet-control {\r\n\tposition: relative;\r\n\tz-index: 7;\r\n\tpointer-events: auto;\r\n\t}\r\n.leaflet-top,\r\n.leaflet-bottom {\r\n\tposition: absolute;\r\n\tz-index: 1000;\r\n\tpointer-events: none;\r\n\t}\r\n.leaflet-top {\r\n\ttop: 0;\r\n\t}\r\n.leaflet-right {\r\n\tright: 0;\r\n\t}\r\n.leaflet-bottom {\r\n\tbottom: 0;\r\n\t}\r\n.leaflet-left {\r\n\tleft: 0;\r\n\t}\r\n.leaflet-control {\r\n\tfloat: left;\r\n\tclear: both;\r\n\t}\r\n.leaflet-right .leaflet-control {\r\n\tfloat: right;\r\n\t}\r\n.leaflet-top .leaflet-control {\r\n\tmargin-top: 10px;\r\n\t}\r\n.leaflet-bottom .leaflet-control {\r\n\tmargin-bottom: 10px;\r\n\t}\r\n.leaflet-left .leaflet-control {\r\n\tmargin-left: 10px;\r\n\t}\r\n.leaflet-right .leaflet-control {\r\n\tmargin-right: 10px;\r\n\t}\r\n\r\n\r\n/* zoom and fade animations */\r\n\r\n.leaflet-fade-anim .leaflet-tile,\r\n.leaflet-fade-anim .leaflet-popup {\r\n\topacity: 0;\r\n\t-webkit-transition: opacity 0.2s linear;\r\n\t   -moz-transition: opacity 0.2s linear;\r\n\t     -o-transition: opacity 0.2s linear;\r\n\t        transition: opacity 0.2s linear;\r\n\t}\r\n.leaflet-fade-anim .leaflet-tile-loaded,\r\n.leaflet-fade-anim .leaflet-map-pane .leaflet-popup {\r\n\topacity: 1;\r\n\t}\r\n\r\n.leaflet-zoom-anim .leaflet-zoom-animated {\r\n\t-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1);\r\n\t   -moz-transition:    -moz-transform 0.25s cubic-bezier(0,0,0.25,1);\r\n\t     -o-transition:      -o-transform 0.25s cubic-bezier(0,0,0.25,1);\r\n\t        transition:         transform 0.25s cubic-bezier(0,0,0.25,1);\r\n\t}\r\n.leaflet-zoom-anim .leaflet-tile,\r\n.leaflet-pan-anim .leaflet-tile,\r\n.leaflet-touching .leaflet-zoom-animated {\r\n\t-webkit-transition: none;\r\n\t   -moz-transition: none;\r\n\t     -o-transition: none;\r\n\t        transition: none;\r\n\t}\r\n\r\n.leaflet-zoom-anim .leaflet-zoom-hide {\r\n\tvisibility: hidden;\r\n\t}\r\n\r\n\r\n/* cursors */\r\n\r\n.leaflet-clickable {\r\n\tcursor: pointer;\r\n\t}\r\n.leaflet-container {\r\n\tcursor: -webkit-grab;\r\n\tcursor:    -moz-grab;\r\n\t}\r\n.leaflet-popup-pane,\r\n.leaflet-control {\r\n\tcursor: auto;\r\n\t}\r\n.leaflet-dragging,\r\n.leaflet-dragging .leaflet-clickable,\r\n.leaflet-dragging .leaflet-container {\r\n\tcursor: move;\r\n\tcursor: -webkit-grabbing;\r\n\tcursor:    -moz-grabbing;\r\n\t}\r\n\r\n\r\n/* visual tweaks */\r\n\r\n.leaflet-container {\r\n\tbackground: #ddd;\r\n\toutline: 0;\r\n\t}\r\n.leaflet-container a {\r\n\tcolor: #0078A8;\r\n\t}\r\n.leaflet-container a.leaflet-active {\r\n\toutline: 2px solid orange;\r\n\t}\r\n.leaflet-zoom-box {\r\n\tborder: 2px dotted #05f;\r\n\tbackground: white;\r\n\topacity: 0.5;\r\n\t}\r\n\r\n\r\n/* general typography */\r\n.leaflet-container {\r\n\tfont: 12px/1.5 \"Helvetica Neue\", Arial, Helvetica, sans-serif;\r\n\t}\r\n\r\n\r\n/* general toolbar styles */\r\n\r\n.leaflet-bar {\r\n\tbox-shadow: 0 1px 7px rgba(0,0,0,0.65);\r\n\t-webkit-border-radius: 4px;\r\n\t        border-radius: 4px;\r\n\t}\r\n.leaflet-bar a, .leaflet-bar a:hover {\r\n\tbackground-color: #fff;\r\n\tborder-bottom: 1px solid #ccc;\r\n\twidth: 26px;\r\n\theight: 26px;\r\n\tline-height: 26px;\r\n\tdisplay: block;\r\n\ttext-align: center;\r\n\ttext-decoration: none;\r\n\tcolor: black;\r\n\t}\r\n.leaflet-bar a,\r\n.leaflet-control-layers-toggle {\r\n\tbackground-position: 50% 50%;\r\n\tbackground-repeat: no-repeat;\r\n\tdisplay: block;\r\n\t}\r\n.leaflet-bar a:hover {\r\n\tbackground-color: #f4f4f4;\r\n\t}\r\n.leaflet-bar a:first-child {\r\n\t-webkit-border-top-left-radius: 4px;\r\n\t        border-top-left-radius: 4px;\r\n\t-webkit-border-top-right-radius: 4px;\r\n\t        border-top-right-radius: 4px;\r\n\t}\r\n.leaflet-bar a:last-child {\r\n\t-webkit-border-bottom-left-radius: 4px;\r\n\t        border-bottom-left-radius: 4px;\r\n\t-webkit-border-bottom-right-radius: 4px;\r\n\t        border-bottom-right-radius: 4px;\r\n\tborder-bottom: none;\r\n\t}\r\n.leaflet-bar a.leaflet-disabled {\r\n\tcursor: default;\r\n\tbackground-color: #f4f4f4;\r\n\tcolor: #bbb;\r\n\t}\r\n\r\n.leaflet-touch .leaflet-bar {\r\n\t-webkit-border-radius: 10px;\r\n\t        border-radius: 10px;\r\n\t}\r\n.leaflet-touch .leaflet-bar a {\r\n\twidth: 30px;\r\n\theight: 30px;\r\n\t}\r\n.leaflet-touch .leaflet-bar a:first-child {\r\n\t-webkit-border-top-left-radius: 7px;\r\n\t        border-top-left-radius: 7px;\r\n\t-webkit-border-top-right-radius: 7px;\r\n\t        border-top-right-radius: 7px;\r\n\t}\r\n.leaflet-touch .leaflet-bar a:last-child {\r\n\t-webkit-border-bottom-left-radius: 7px;\r\n\t        border-bottom-left-radius: 7px;\r\n\t-webkit-border-bottom-right-radius: 7px;\r\n\t        border-bottom-right-radius: 7px;\r\n\tborder-bottom: none;\r\n\t}\r\n\r\n\r\n/* zoom control */\r\n\r\n.leaflet-control-zoom-in {\r\n\tfont: bold 18px \'Lucida Console\', Monaco, monospace;\r\n\t}\r\n.leaflet-control-zoom-out {\r\n\tfont: bold 22px \'Lucida Console\', Monaco, monospace;\r\n\t}\r\n\r\n.leaflet-touch .leaflet-control-zoom-in {\r\n\tfont-size: 22px;\r\n\tline-height: 30px;\r\n\t}\r\n.leaflet-touch .leaflet-control-zoom-out {\r\n\tfont-size: 28px;\r\n\tline-height: 30px;\r\n\t}\r\n\r\n\r\n/* layers control */\r\n\r\n.leaflet-control-layers {\r\n\tbox-shadow: 0 1px 7px rgba(0,0,0,0.4);\r\n\tbackground: #f8f8f9;\r\n\t-webkit-border-radius: 5px;\r\n\t        border-radius: 5px;\r\n\t}\r\n.leaflet-control-layers-toggle {\r\n\tbackground-image: url(libraries/leaflet/images/layers.png);\r\n\twidth: 36px;\r\n\theight: 36px;\r\n\t}\r\n.leaflet-retina .leaflet-control-layers-toggle {\r\n\tbackground-image: url(libraries/leaflet/images/layers-2x.png);\r\n\tbackground-size: 26px 26px;\r\n\t}\r\n.leaflet-touch .leaflet-control-layers-toggle {\r\n\twidth: 44px;\r\n\theight: 44px;\r\n\t}\r\n.leaflet-control-layers .leaflet-control-layers-list,\r\n.leaflet-control-layers-expanded .leaflet-control-layers-toggle {\r\n\tdisplay: none;\r\n\t}\r\n.leaflet-control-layers-expanded .leaflet-control-layers-list {\r\n\tdisplay: block;\r\n\tposition: relative;\r\n\t}\r\n.leaflet-control-layers-expanded {\r\n\tpadding: 6px 10px 6px 6px;\r\n\tcolor: #333;\r\n\tbackground: #fff;\r\n\t}\r\n.leaflet-control-layers-selector {\r\n\tmargin-top: 2px;\r\n\tposition: relative;\r\n\ttop: 1px;\r\n\t}\r\n.leaflet-control-layers label {\r\n\tdisplay: block;\r\n\t}\r\n.leaflet-control-layers-separator {\r\n\theight: 0;\r\n\tborder-top: 1px solid #ddd;\r\n\tmargin: 5px -10px 5px -6px;\r\n\t}\r\n\r\n\r\n/* attribution and scale controls */\r\n\r\n.leaflet-container .leaflet-control-attribution {\r\n\tbackground-color: rgba(255, 255, 255, 0.7);\r\n\tbox-shadow: 0 0 5px #bbb;\r\n\tmargin: 0;\r\n\t}\r\n.leaflet-control-attribution,\r\n.leaflet-control-scale-line {\r\n\tpadding: 0 5px;\r\n\tcolor: #333;\r\n\t}\r\n.leaflet-container .leaflet-control-attribution,\r\n.leaflet-container .leaflet-control-scale {\r\n\tfont-size: 11px;\r\n\t}\r\n.leaflet-left .leaflet-control-scale {\r\n\tmargin-left: 5px;\r\n\t}\r\n.leaflet-bottom .leaflet-control-scale {\r\n\tmargin-bottom: 5px;\r\n\t}\r\n.leaflet-control-scale-line {\r\n\tborder: 2px solid #777;\r\n\tborder-top: none;\r\n\tcolor: black;\r\n\tline-height: 1.1;\r\n\tpadding: 2px 5px 1px;\r\n\tfont-size: 11px;\r\n\ttext-shadow: 1px 1px 1px #fff;\r\n\tbackground-color: rgba(255, 255, 255, 0.5);\r\n\tbox-shadow: 0 -1px 5px rgba(0, 0, 0, 0.2);\r\n\twhite-space: nowrap;\r\n\toverflow: hidden;\r\n\t}\r\n.leaflet-control-scale-line:not(:first-child) {\r\n\tborder-top: 2px solid #777;\r\n\tborder-bottom: none;\r\n\tmargin-top: -2px;\r\n\tbox-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);\r\n\t}\r\n.leaflet-control-scale-line:not(:first-child):not(:last-child) {\r\n\tborder-bottom: 2px solid #777;\r\n\t}\r\n\r\n.leaflet-touch .leaflet-control-attribution,\r\n.leaflet-touch .leaflet-control-layers,\r\n.leaflet-touch .leaflet-bar {\r\n\tbox-shadow: none;\r\n\t}\r\n.leaflet-touch .leaflet-control-layers,\r\n.leaflet-touch .leaflet-bar {\r\n\tborder: 4px solid rgba(0,0,0,0.3);\r\n\t}\r\n\r\n\r\n/* popup */\r\n\r\n.leaflet-popup {\r\n\tposition: absolute;\r\n\ttext-align: center;\r\n\t}\r\n.leaflet-popup-content-wrapper {\r\n\tpadding: 1px;\r\n\ttext-align: left;\r\n\t-webkit-border-radius: 12px;\r\n\t        border-radius: 12px;\r\n\t}\r\n.leaflet-popup-content {\r\n\tmargin: 13px 19px;\r\n\tline-height: 1.4;\r\n\t}\r\n.leaflet-popup-content p {\r\n\tmargin: 18px 0;\r\n\t}\r\n.leaflet-popup-tip-container {\r\n\tmargin: 0 auto;\r\n\twidth: 40px;\r\n\theight: 20px;\r\n\tposition: relative;\r\n\toverflow: hidden;\r\n\t}\r\n.leaflet-popup-tip {\r\n\twidth: 17px;\r\n\theight: 17px;\r\n\tpadding: 1px;\r\n\r\n\tmargin: -10px auto 0;\r\n\r\n\t-webkit-transform: rotate(45deg);\r\n\t   -moz-transform: rotate(45deg);\r\n\t    -ms-transform: rotate(45deg);\r\n\t     -o-transform: rotate(45deg);\r\n\t        transform: rotate(45deg);\r\n\t}\r\n.leaflet-popup-content-wrapper, .leaflet-popup-tip {\r\n\tbackground: white;\r\n\r\n\tbox-shadow: 0 3px 14px rgba(0,0,0,0.4);\r\n\t}\r\n.leaflet-container a.leaflet-popup-close-button {\r\n\tposition: absolute;\r\n\ttop: 0;\r\n\tright: 0;\r\n\tpadding: 4px 4px 0 0;\r\n\ttext-align: center;\r\n\twidth: 18px;\r\n\theight: 14px;\r\n\tfont: 16px/14px Tahoma, Verdana, sans-serif;\r\n\tcolor: #c3c3c3;\r\n\ttext-decoration: none;\r\n\tfont-weight: bold;\r\n\tbackground: transparent;\r\n\t}\r\n.leaflet-container a.leaflet-popup-close-button:hover {\r\n\tcolor: #999;\r\n\t}\r\n.leaflet-popup-scrolled {\r\n\toverflow: auto;\r\n\tborder-bottom: 1px solid #ddd;\r\n\tborder-top: 1px solid #ddd;\r\n\t}\r\n\r\n\r\n/* div icon */\r\n\r\n.leaflet-div-icon {\r\n\tbackground: #fff;\r\n\tborder: 1px solid #666;\r\n\t}\r\n.leaflet-editing-icon {\r\n\t-webkit-border-radius: 2px;\r\n\t        border-radius: 2px;\r\n\t}\r\n/*! jQuery UI - v1.9.1 - 2012-11-09\r\n* http://jqueryui.com\r\n* Includes: jquery.ui.core.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.slider.css, jquery.ui.tooltip.css\r\n* To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Segoe%20UI%2CArial%2Csans-serif&fwDefault=bold&fsDefault=1.1em&cornerRadius=6px&bgColorHeader=333333&bgTextureHeader=12_gloss_wave.png&bgImgOpacityHeader=25&borderColorHeader=333333&fcHeader=ffffff&iconColorHeader=ffffff&bgColorContent=000000&bgTextureContent=05_inset_soft.png&bgImgOpacityContent=25&borderColorContent=666666&fcContent=ffffff&iconColorContent=cccccc&bgColorDefault=555555&bgTextureDefault=02_glass.png&bgImgOpacityDefault=20&borderColorDefault=666666&fcDefault=eeeeee&iconColorDefault=cccccc&bgColorHover=0078a3&bgTextureHover=02_glass.png&bgImgOpacityHover=40&borderColorHover=59b4d4&fcHover=ffffff&iconColorHover=ffffff&bgColorActive=f58400&bgTextureActive=05_inset_soft.png&bgImgOpacityActive=30&borderColorActive=ffaf0f&fcActive=ffffff&iconColorActive=222222&bgColorHighlight=eeeeee&bgTextureHighlight=03_highlight_soft.png&bgImgOpacityHighlight=80&borderColorHighlight=cccccc&fcHighlight=2e7db2&iconColorHighlight=4b8e0b&bgColorError=ffc73d&bgTextureError=02_glass.png&bgImgOpacityError=40&borderColorError=ffb73d&fcError=111111&iconColorError=a83300&bgColorOverlay=5c5c5c&bgTextureOverlay=01_flat.png&bgImgOpacityOverlay=50&opacityOverlay=80&bgColorShadow=cccccc&bgTextureShadow=01_flat.png&bgImgOpacityShadow=30&opacityShadow=60&thicknessShadow=7px&offsetTopShadow=-7px&offsetLeftShadow=-7px&cornerRadiusShadow=8px\r\n* Copyright (c) 2012 jQuery Foundation and other contributors Licensed MIT */\r\n\r\n/* Layout helpers\r\n----------------------------------*/\r\n.oskariui .ui-helper-hidden { display: none; }\r\n.oskariui .ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px,1px,1px,1px); clip: rect(1px,1px,1px,1px); }\r\n.oskariui .ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }\r\n.oskariui .ui-helper-clearfix:before, .ui-helper-clearfix:after { content: \"\"; display: table; }\r\n.oskariui .ui-helper-clearfix:after { clear: both; }\r\n.oskariui .ui-helper-clearfix { zoom: 1; }\r\n.oskariui .ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }\r\n\r\n\r\n/* Interaction Cues\r\n----------------------------------*/\r\n.oskariui .ui-state-disabled { cursor: default !important; }\r\n\r\n\r\n/* Icons\r\n----------------------------------*/\r\n\r\n/* states and images */\r\n.oskariui .ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }\r\n\r\n\r\n/* Misc visuals\r\n----------------------------------*/\r\n\r\n/* Overlays */\r\n.oskariui .ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }\r\n.oskariui .ui-resizable { position: relative;}\r\n.oskariui .ui-resizable-handle { position: absolute;font-size: 0.1px; display: block; }\r\n.oskariui .ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }\r\n.oskariui .ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0; }\r\n.oskariui .ui-resizable-s { cursor: s-resize; height: 7px; width: 100%; bottom: -5px; left: 0; }\r\n.oskariui .ui-resizable-e { cursor: e-resize; width: 7px; right: -5px; top: 0; height: 100%; }\r\n.oskariui .ui-resizable-w { cursor: w-resize; width: 7px; left: -5px; top: 0; height: 100%; }\r\n.oskariui .ui-resizable-se { cursor: se-resize; width: 12px; height: 12px; right: 1px; bottom: 1px; }\r\n.oskariui .ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: -5px; bottom: -5px; }\r\n.oskariui .ui-resizable-nw { cursor: nw-resize; width: 9px; height: 9px; left: -5px; top: -5px; }\r\n.oskariui .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}.ui-selectable-helper { position: absolute; border:1px dotted black; }\r\n\r\n.oskariui .ui-slider { position: relative; text-align: left; }\r\n.oskariui .ui-slider .ui-slider-handle { position: absolute; width: 16px; height: 17px; cursor: default; }\r\n.oskariui .ui-slider .ui-slider-range { position: absolute; font-size: .7em; display: block; border: 0; background-position: 0 0; }\r\n\r\n.oskariui .ui-slider-horizontal { height: 14px; }\r\n.oskariui .ui-slider-horizontal .ui-slider-handle { background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/horizontal_handle.png\'); background-repeat: no-repeat;}\r\n\r\n.oskariui .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }\r\n.oskariui .ui-slider-horizontal .ui-slider-range-min { left: 0; }\r\n.oskariui .ui-slider-horizontal .ui-slider-range-max { right: 0; }\r\n\r\n.oskariui .ui-slider-vertical { margin-left: 2px; width: 24px; background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/zoombar_part.png\'); background-repeat: repeat-y; }\r\n.oskariui .ui-slider-vertical .ui-slider-handle { margin-left: 0; background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/zoombar_cursor.png\'); background-repeat: no-repeat;}\r\n.oskariui .ui-slider-vertical .ui-slider-range { left: 0; width: 100%; }\r\n.oskariui .ui-slider-vertical .ui-slider-range-min { bottom: 0; }\r\n.oskariui .ui-slider-vertical .ui-slider-range-max { top: 0; }.ui-tooltip {\r\n\tpadding: 8px;\r\n\tposition: absolute;\r\n\tz-index: 9999;\r\n\tmax-width: 300px;\r\n\t-webkit-box-shadow: 0 0 5px #aaa;\r\n\tbox-shadow: 0 0 5px #aaa;\r\n}\r\n/* Fades and background-images don\'t work well together in IE6, drop the image */\r\n* html .ui-tooltip {\r\n\tbackground-image: none;\r\n}\r\nbody .oskariui .ui-tooltip { border-width: 2px; }\r\n\r\n/* Component containers\r\n----------------------------------*/\r\n.oskariui .ui-widget { font-family: Segoe UI,Arial,sans-serif; font-size: 1.1em; }\r\n.oskariui .ui-widget .ui-widget { font-size: 1em; }\r\n.oskariui .ui-widget input, .oskariui .ui-widget select, .oskariui .ui-widget textarea, .oskariui .ui-widget button { font-family: Segoe UI,Arial,sans-serif; font-size: 1em; }\r\n.oskariui .ui-widget-content {  }\r\n.oskariui .ui-widget-content a {  }\r\n.oskariui .ui-widget-header {  }\r\n.oskariui .ui-widget-header a {  }\r\n\r\n/* Interaction states\r\n----------------------------------*/\r\n.oskariui .ui-state-default, .oskariui .ui-widget-content .ui-state-default, .oskariui .ui-widget-header .ui-state-default {  }\r\n.oskariui .ui-state-default a, .oskariui .ui-state-default a:link, .oskariui .ui-state-default a:visited {  }\r\n.oskariui .ui-state-hover, .oskariui .ui-widget-content .ui-state-hover, .oskariui .ui-widget-header .ui-state-hover, .oskariui .ui-state-focus, .oskariui .ui-widget-content .ui-state-focus, .oskariui .ui-widget-header .ui-state-focus {  }\r\n.oskariui .ui-state-hover a, .oskariui .ui-state-hover a:hover, .oskariui .ui-state-hover a:link, .oskariui .ui-state-hover a:visited { }\r\n.oskariui .ui-state-active, .oskariui .ui-widget-content .ui-state-active, .oskariui .ui-widget-header .ui-state-active {  }\r\n.oskariui .ui-state-active a, .oskariui .ui-state-active a:link, .oskariui .ui-state-active a:visited {  }\r\n\r\n/* Interaction Cues\r\n----------------------------------*/\r\n.oskariui .ui-state-highlight, .oskariui .ui-widget-content .ui-state-highlight, .oskariui .ui-widget-header .ui-state-highlight  { }\r\n.oskariui .ui-state-highlight a, .oskariui .ui-widget-content .ui-state-highlight a,.oskariui .ui-widget-header .ui-state-highlight a { }\r\n.oskariui .ui-state-error, .oskariui .ui-widget-content .ui-state-error, .oskariui .ui-widget-header .ui-state-error { }\r\n.oskariui .ui-state-error a, .oskariui .ui-widget-content .ui-state-error a, .oskariui .ui-widget-header .ui-state-error a { }\r\n.oskariui .ui-state-error-text, .oskariui .ui-widget-content .ui-state-error-text, .oskariui .ui-widget-header .ui-state-error-text {  }\r\n.oskariui .ui-priority-primary, .oskariui .ui-widget-content .ui-priority-primary, .oskariui .ui-widget-header .ui-priority-primary {  }\r\n.oskariui .ui-priority-secondary, .oskariui .ui-widget-content .ui-priority-secondary,  .oskariui .ui-widget-header .ui-priority-secondary { }\r\n.oskariui .ui-state-disabled, .oskariui .ui-widget-content .ui-state-disabled, .oskariui .ui-widget-header .ui-state-disabled {  }\r\n.oskariui .ui-state-disabled .ui-icon { filter:Alpha(Opacity=35); } /* For IE8 - See #6059 */\r\n\r\n/* Icons\r\n----------------------------------*/\r\n\r\n/* states and images */\r\n.oskariui .ui-icon { width: 16px; height: 16px; }\r\n.oskariui .ui-widget-content .ui-icon { }\r\n.oskariui .ui-widget-header .ui-icon { }\r\n.oskariui .ui-state-default .ui-icon {  }\r\n.oskariui .ui-state-hover .ui-icon, .oskariui .ui-state-focus .ui-icon {}\r\n.oskariui .ui-state-active .ui-icon { }\r\n.oskariui .ui-state-highlight .ui-icon { }\r\n.oskariui .ui-state-error .ui-icon, .oskariui .ui-state-error-text .ui-icon { }\r\n\r\n\r\n/* Misc visuals\r\n----------------------------------*/\r\n\r\n/* Corner radius */\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-top, .oskariui .ui-corner-left, .oskariui .ui-corner-tl { -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; -khtml-border-top-left-radius: 6px; border-top-left-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-top, .oskariui .ui-corner-right, .oskariui .ui-corner-tr { -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; -khtml-border-top-right-radius: 6px; border-top-right-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-left, .oskariui .ui-corner-bl { -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; -khtml-border-bottom-left-radius: 6px; border-bottom-left-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-right, .oskariui .ui-corner-br { -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; -khtml-border-bottom-right-radius: 6px; border-bottom-right-radius: 6px; }\r\n\r\n/* Overlays */\r\n.oskariui .ui-widget-overlay { background: #5c5c5c url(resources/framework/bundle/oskariui/css/images/ui-bg_flat_50_5c5c5c_40x100.png) 50% 50% repeat-x; opacity: .8;filter:Alpha(Opacity=80); }\r\n.oskariui .ui-widget-shadow { margin: -7px 0 0 -7px; padding: 7px; background: #cccccc url(resources/framework/bundle/oskariui/css/images/ui-bg_flat_30_cccccc_40x100.png) 50% 50% repeat-x; opacity: .6;filter:Alpha(Opacity=60); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }\r\n/*!\r\n * Bootstrap v2.3.1\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\r\n.oskariui .clearfix {\r\n  *zoom: 1;\r\n}\r\n.oskariui .clearfix:before,\r\n.oskariui .clearfix:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .clearfix:after {\r\n  clear: both;\r\n}\r\n.oskariui .hide-text {\r\n  font: 0/0 a;\r\n  color: transparent;\r\n  text-shadow: none;\r\n  background-color: transparent;\r\n  border: 0;\r\n}\r\n.oskariui .input-block-level {\r\n  display: block;\r\n  width: 100%;\r\n  min-height: 30px;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box;\r\n  box-sizing: border-box;\r\n}\r\n.oskariui .row {\r\n  margin-left: -20px;\r\n  *zoom: 1;\r\n}\r\n.oskariui .row:before,\r\n.oskariui .row:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .row:after {\r\n  clear: both;\r\n}\r\n[class*=\"span\"] {\r\n  float: left;\r\n  min-height: 1px;\r\n  margin-left: 20px;\r\n}\r\n.oskariui .container,\r\n.oskariui .navbar-static-top .container,\r\n.oskariui .navbar-fixed-top .container,\r\n.oskariui .navbar-fixed-bottom .container {\r\n  width: 940px;\r\n}\r\n.oskariui .span12 {\r\n  width: 940px;\r\n}\r\n.oskariui .span11 {\r\n  width: 860px;\r\n}\r\n.oskariui .span10 {\r\n  width: 780px;\r\n}\r\n.oskariui .span9 {\r\n  width: 700px;\r\n}\r\n.oskariui .span8 {\r\n  width: 620px;\r\n}\r\n.oskariui .span7 {\r\n  width: 540px;\r\n}\r\n.oskariui .span6 {\r\n  width: 460px;\r\n}\r\n.oskariui .span5 {\r\n  width: 380px;\r\n}\r\n.oskariui .span4 {\r\n  width: 300px;\r\n}\r\n.oskariui .span3 {\r\n  width: 220px;\r\n}\r\n.oskariui .span2 {\r\n  width: 140px;\r\n}\r\n.oskariui .span1 {\r\n  width: 60px;\r\n}\r\n.oskariui .offset12 {\r\n  margin-left: 980px;\r\n}\r\n.oskariui .offset11 {\r\n  margin-left: 900px;\r\n}\r\n.oskariui .offset10 {\r\n  margin-left: 820px;\r\n}\r\n.oskariui .offset9 {\r\n  margin-left: 740px;\r\n}\r\n.oskariui .offset8 {\r\n  margin-left: 660px;\r\n}\r\n.oskariui .offset7 {\r\n  margin-left: 580px;\r\n}\r\n.oskariui .offset6 {\r\n  margin-left: 500px;\r\n}\r\n.oskariui .offset5 {\r\n  margin-left: 420px;\r\n}\r\n.oskariui .offset4 {\r\n  margin-left: 340px;\r\n}\r\n.oskariui .offset3 {\r\n  margin-left: 260px;\r\n}\r\n.oskariui .offset2 {\r\n  margin-left: 180px;\r\n}\r\n.oskariui .offset1 {\r\n  margin-left: 100px;\r\n}\r\n.oskariui .row-fluid {\r\n  width: 100%;\r\n  *zoom: 1;\r\n}\r\n.oskariui .row-fluid:before,\r\n.oskariui .row-fluid:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .row-fluid:after {\r\n  clear: both;\r\n}\r\n.oskariui .row-fluid [class*=\"span\"] {\r\n  display: block;\r\n  width: 100%;\r\n  min-height: 30px;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box;\r\n  box-sizing: border-box;\r\n  float: left;\r\n  margin-left: 2.127659574468085%;\r\n  *margin-left: 2.074468085106383%;\r\n}\r\n.oskariui .row-fluid [class*=\"span\"]:first-child {\r\n  margin-left: 0;\r\n}\r\n.oskariui .row-fluid .controls-row [class*=\"span\"] + [class*=\"span\"] {\r\n  margin-left: 2.127659574468085%;\r\n}\r\n.oskariui .row-fluid .span12 {\r\n  width: 100%;\r\n  *width: 99.94680851063829%;\r\n}\r\n.oskariui .row-fluid .span11 {\r\n  width: 91.48936170212765%;\r\n  *width: 91.43617021276594%;\r\n}\r\n.oskariui .row-fluid .span10 {\r\n  width: 82.97872340425532%;\r\n  *width: 82.92553191489361%;\r\n}\r\n.oskariui .row-fluid .span9 {\r\n  width: 74.46808510638297%;\r\n  *width: 74.41489361702126%;\r\n}\r\n.oskariui .row-fluid .span8 {\r\n  width: 65.95744680851064%;\r\n  *width: 65.90425531914893%;\r\n}\r\n.oskariui .row-fluid .span7 {\r\n  width: 57.44680851063829%;\r\n  *width: 57.39361702127659%;\r\n}\r\n.oskariui .row-fluid .span6 {\r\n  width: 48.93617021276595%;\r\n  *width: 48.88297872340425%;\r\n}\r\n.oskariui .row-fluid .span5 {\r\n  width: 40.42553191489362%;\r\n  *width: 40.37234042553192%;\r\n}\r\n.oskariui .row-fluid .span4 {\r\n  width: 31.914893617021278%;\r\n  *width: 31.861702127659576%;\r\n}\r\n.oskariui .row-fluid .span3 {\r\n  width: 23.404255319148934%;\r\n  *width: 23.351063829787233%;\r\n}\r\n.oskariui .row-fluid .span2 {\r\n  width: 14.893617021276595%;\r\n  *width: 14.840425531914894%;\r\n}\r\n.oskariui .row-fluid .span1 {\r\n  width: 6.382978723404255%;\r\n  *width: 6.329787234042553%;\r\n}\r\n.oskariui .row-fluid .offset12 {\r\n  margin-left: 104.25531914893617%;\r\n  *margin-left: 104.14893617021275%;\r\n}\r\n.oskariui .row-fluid .offset12:first-child {\r\n  margin-left: 102.12765957446808%;\r\n  *margin-left: 102.02127659574467%;\r\n}\r\n.oskariui .row-fluid .offset11 {\r\n  margin-left: 95.74468085106382%;\r\n  *margin-left: 95.6382978723404%;\r\n}\r\n.oskariui .row-fluid .offset11:first-child {\r\n  margin-left: 93.61702127659574%;\r\n  *margin-left: 93.51063829787232%;\r\n}\r\n.oskariui .row-fluid .offset10 {\r\n  margin-left: 87.23404255319149%;\r\n  *margin-left: 87.12765957446807%;\r\n}\r\n.oskariui .row-fluid .offset10:first-child {\r\n  margin-left: 85.1063829787234%;\r\n  *margin-left: 84.99999999999999%;\r\n}\r\n.oskariui .row-fluid .offset9 {\r\n  margin-left: 78.72340425531914%;\r\n  *margin-left: 78.61702127659572%;\r\n}\r\n.oskariui .row-fluid .offset9:first-child {\r\n  margin-left: 76.59574468085106%;\r\n  *margin-left: 76.48936170212764%;\r\n}\r\n.oskariui .row-fluid .offset8 {\r\n  margin-left: 70.2127659574468%;\r\n  *margin-left: 70.10638297872339%;\r\n}\r\n.oskariui .row-fluid .offset8:first-child {\r\n  margin-left: 68.08510638297872%;\r\n  *margin-left: 67.9787234042553%;\r\n}\r\n.oskariui .row-fluid .offset7 {\r\n  margin-left: 61.70212765957446%;\r\n  *margin-left: 61.59574468085106%;\r\n}\r\n.oskariui .row-fluid .offset7:first-child {\r\n  margin-left: 59.574468085106375%;\r\n  *margin-left: 59.46808510638297%;\r\n}\r\n.oskariui .row-fluid .offset6 {\r\n  margin-left: 53.191489361702125%;\r\n  *margin-left: 53.085106382978715%;\r\n}\r\n.oskariui .row-fluid .offset6:first-child {\r\n  margin-left: 51.063829787234035%;\r\n  *margin-left: 50.95744680851063%;\r\n}\r\n.oskariui .row-fluid .offset5 {\r\n  margin-left: 44.68085106382979%;\r\n  *margin-left: 44.57446808510638%;\r\n}\r\n.oskariui .row-fluid .offset5:first-child {\r\n  margin-left: 42.5531914893617%;\r\n  *margin-left: 42.4468085106383%;\r\n}\r\n.oskariui .row-fluid .offset4 {\r\n  margin-left: 36.170212765957444%;\r\n  *margin-left: 36.06382978723405%;\r\n}\r\n.oskariui .row-fluid .offset4:first-child {\r\n  margin-left: 34.04255319148936%;\r\n  *margin-left: 33.93617021276596%;\r\n}\r\n.oskariui .row-fluid .offset3 {\r\n  margin-left: 27.659574468085104%;\r\n  *margin-left: 27.5531914893617%;\r\n}\r\n.oskariui .row-fluid .offset3:first-child {\r\n  margin-left: 25.53191489361702%;\r\n  *margin-left: 25.425531914893618%;\r\n}\r\n.oskariui .row-fluid .offset2 {\r\n  margin-left: 19.148936170212764%;\r\n  *margin-left: 19.04255319148936%;\r\n}\r\n.oskariui .row-fluid .offset2:first-child {\r\n  margin-left: 17.02127659574468%;\r\n  *margin-left: 16.914893617021278%;\r\n}\r\n.oskariui .row-fluid .offset1 {\r\n  margin-left: 10.638297872340425%;\r\n  *margin-left: 10.53191489361702%;\r\n}\r\n.oskariui .row-fluid .offset1:first-child {\r\n  margin-left: 8.51063829787234%;\r\n  *margin-left: 8.404255319148938%;\r\n}\r\n[class*=\"span\"].hide,\r\n.oskariui .row-fluid [class*=\"span\"].hide {\r\n  display: none;\r\n}\r\n[class*=\"span\"].pull-right,\r\n.oskariui .row-fluid [class*=\"span\"].pull-right {\r\n  float: right;\r\n}\r\n.oskariui .container {\r\n  margin-right: auto;\r\n  margin-left: auto;\r\n  *zoom: 1;\r\n}\r\n.oskariui .container:before,\r\n.oskariui .container:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .container:after {\r\n  clear: both;\r\n}\r\n.oskariui .container-fluid {\r\n  padding-right: 20px;\r\n  padding-left: 20px;\r\n  *zoom: 1;\r\n}\r\n.oskariui .container-fluid:before,\r\n.oskariui .container-fluid:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .container-fluid:after {\r\n  clear: both;\r\n}\r\n#contentMap.oskari-map-window-fullscreen {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  z-index: 10000;\n  margin: 0 !important; }\ndiv.pzbDiv.mapplugin {\r\n  top: 140px;\r\n  right: 64px;\r\n  background: transparent;\r\n  z-index: 15000;\r\n  /* Remember to removeClass */ }\r\n  div.pzbDiv.mapplugin div.pzbDiv-plus {\r\n    width: 18px;\r\n    height: 46px;\r\n    background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_plus_patched.png\'); }\r\n  div.pzbDiv.mapplugin div.pzbDiv-minus {\r\n    width: 18px;\r\n    height: 18px;\r\n    background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_minus.png\'); }\r\n  div.pzbDiv.mapplugin div.rui-slider-vertical {\r\n    background-color: transparent;\r\n    background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar.png\');\r\n    height: 148px;\r\n    width: 18px;\r\n    border: 0;\r\n    margin: 0; }\r\n  div.pzbDiv.mapplugin.top {\r\n    bottom: auto;\r\n    top: 10px; }\r\n  div.pzbDiv.mapplugin.left {\r\n    left: 10px;\r\n    right: auto; }\r\n  div.pzbDiv.mapplugin.right {\r\n    left: auto;\r\n    right: 10px; }\r\n  div.pzbDiv.mapplugin.with-panbuttons.top {\r\n    /* Add panbuttons\' height and top to top */\r\n    top: 110px !important; }\r\n  div.pzbDiv.mapplugin.with-panbuttons.left {\r\n    left: 45px !important; }\r\n  div.pzbDiv.mapplugin.with-panbuttons.right {\r\n    right: 43px !important; }\r\n.panbuttonDiv.mapplugin {\r\n  top: 10px;\r\n  right: 36px;\r\n  display: block;\r\n  color: black;\r\n  background: transparent;\r\n  font-size: 12px;\r\n  z-index: 15000;\r\n  /*64738;*/\r\n  font-weight: bold;\r\n  /*background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/default.png\');*/\r\n  height: 90px;\r\n  width: 90px; }\r\n  .panbuttonDiv.mapplugin.top {\r\n    bottom: auto;\r\n    top: 10px; }\r\n  .panbuttonDiv.mapplugin.left {\r\n    left: 10px;\r\n    right: auto; }\r\n  .panbuttonDiv.mapplugin.right {\r\n    left: auto;\r\n    right: 10px; }\r\n\r\n.panbuttonDivImg {\r\n  background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/sprite.png\'); }\r\n  .panbuttonDivImg.root {\r\n    background-position: 0px -90px; }\r\n  .panbuttonDivImg.up {\r\n    background-position: 0px -360px; }\r\n  .panbuttonDivImg.right {\r\n    background-position: 0px -270px; }\r\n  .panbuttonDivImg.down {\r\n    background-position: 0px -450px; }\r\n  .panbuttonDivImg.left {\r\n    background-position: 0px -180px; }\r\n\r\n/* TODO check if it\'s safe to remove these... */\r\n.panbutton_left {\r\n  float: left; }\r\n\r\n.panbutton_right {\r\n  float: right; }\r\n.olMap {\r\n  position: relative; }\r\n\r\ndiv.mapplugin {\r\n  position: absolute;\r\n  z-index: 15000; }\r\n\r\ndiv.mapplugins.top {\r\n  bottom: auto;\r\n  top: 20px; }\r\ndiv.mapplugins.left, div.mapplugins.right {\r\n  position: absolute;\r\n  z-index: 15000;\r\n  max-width: 85%; }\r\n  div.mapplugins.left > div, div.mapplugins.right > div {\r\n    display: inline-block;\r\n    margin: 5px;\r\n    vertical-align: top; }\r\ndiv.mapplugins.left {\r\n  left: 20px;\r\n  right: auto;\r\n  text-align: left; }\r\ndiv.mapplugins.right {\r\n  left: auto;\r\n  right: 20px;\r\n  text-align: right; }\r\n\r\n.oskari-publisher-font-arial {\r\n  font-family: Arial, sans-serif !important; }\r\n\r\n.oskari-publisher-font-georgia {\r\n  font-family: Georgia, serif !important; }\r\n/* setup document body so flyouts will not make scrollbars to browser window */\nbody {\n  position: fixed;\n  width: 100%;\n  height: 100%; }\n\n/* flyout toolbar */\n.oskari-flyoutheading {\n  background-color: #ffd400;\n  border-top: 1px solid #ffdf00;\n  border-bottom: 1px solid #ebb819;\n  height: 14px;\n  width: 100%; }\n\n.oskari-flyouttoolbar {\n  height: 57px;\n  width: 100%;\n  background-color: #fdf8d9;\n  border-top: #fdfdfd;\n  border-bottom: #fef2ba; }\n\n.oskari-flyout-title {\n  float: left;\n  margin-left: 20px;\n  margin-top: 12px;\n  height: 20px;\n  display: inline-block; }\n\n.oskari-flyout-title p {\n  margin: 0;\n  padding: 0;\n  font: 16px/20px \"Open Sans\", \"Helvetica Neue\", \"HelveticaNeue\", Helvetica, Arial, sans-serif; }\n\n/** flyout toolbar tools and tool states  */\n.oskari-flyouttools {\n  float: right;\n  margin-right: 25px;\n  height: 16px;\n  display: inline-block;\n  margin-top: 15px; }\n\n.oskari-flyouttool-detach {\n  display: none;\n  /* visualise here if this tool required */ }\n\n.oskari-detached .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-flyouttool-attach {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-attached .oskari-flyouttool-attach {\n  display: none; }\n\n.oskari-flyouttool-minimize {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-attached .oskari-flyouttool-minimize {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-minimize {\n  display: none; }\n\n.oskari-flyouttool-restore {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-flyouttool-help {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-restore {\n  display: inline-block; }\n\n.oskari-minimized .oskari-flyouttool-attach {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-flyouttool-close {\n  display: inline-block;\n  width: 16px;\n  height: 16px;\n  margin-right: 2px;\n  margin-left: auto; }\n\n/* flyout */\n.oskari-flyout {\n  background-color: #fafafa;\n  position: absolute;\n  z-index: 1100;\n  margin: 0px;\n  padding: 0px;\n  border: 1px solid rgba(0, 0, 0, 0.2); }\n\n/* flyout states */\n/*.oskari-minimized {\r\n width: 640px;\r\n height: 64px;\r\n overflow: hidden;\r\n\r\n min-height: 64px;\r\n max-height: 64px;\r\n }*/\n.oskari-closed {\n  display: none; }\n\n.oskari-minimized {\n  display: none; }\n\n.oskari-flyoutcontent {\n  margin: 0;\n  padding: 20px 20px 20px 25px;\n  border: 0;\n  /*overflow: auto;*/ }\n\n/** tile */\n/* tile states */\n.oskari-tile-attached {\n  border-bottom: 1px solid white;\n  background-color: white; }\n\n.oskari-tile-detached {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: white; }\n\n.oskari-tile-minimized {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: #2d2d2d; }\n\n.oskari-tile-closed {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: #2d2d2d; }\n\n.oskari-tile-container {\n  margin: 0; }\n\n.oskari-tile {\n  margin: 0;\n  padding: 0;\n  cursor: pointer;\n  height: 31px;\n  width: 153px;\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  line-height: 24px; }\n  .oskari-tile.disabled {\n    opacity: 0.25;\n    filter: alpha(opacity=25);\n    /* For IE8 and earlier, unquote for libsass bug */\n    cursor: default; }\n\n.oskari-tile-title {\n  display: inline-block;\n  margin: 0;\n  margin-top: 2px;\n  margin-left: 16px;\n  padding: 0;\n  float: left;\n  height: 28px;\n  width: 112px;\n  font-family: Arial, Helvetica;\n  font-weight: bold;\n  font-size: 11px;\n  text-align: left;\n  text-transform: uppercase;\n  /*color: white;*/ }\n\n.oskari-tile-attached .oskari-tile-title {\n  color: #333438; }\n\n.oskari-tile-detached .oskari-tile-title {\n  color: #333438; }\n\n.oskari-tile-minimized .oskari-tile-title {\n  color: white; }\n\n.oskari-tile-closed .oskari-tile-title {\n  color: white; }\n\n.oskari-tile-status {\n  float: right;\n  text-align: center;\n  display: inline-block;\n  font-size: 11px;\n  font-weight: bold;\n  height: 19px !important;\n  width: 20px !important;\n  margin: 1px;\n  padding: 1px; }\n\n.oskari-tile-close {\n  display: none; }\n\n.oskariform .oskarifield {\n  padding: 10px; }\n\n/** media queries */\n@media screen {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media screen {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media only screen and (min-width: 400px) and (max-width: 599px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 500px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 500px; } }\n@media only screen and (min-width: 600px) and (max-width: 799px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 600px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-width: 800px) and (max-width: 1199px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 1000px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-width: 1200px) and (max-width: 1599px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 600px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-height: 400px) and (max-height: 599px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 300px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 600px) and (max-height: 799px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 800px) and (max-height: 999px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 700px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1000px) and (max-height: 1199px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 900px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1200px) and (max-height: 1399px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 1100px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1400px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 1300px;\n    /* overflow: auto; */ } }\n/* IE8 TEMP fixes */\n.oskari-flyoutcontentcontainer_IE_400_599 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 300px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_600_799 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 500px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_800_999 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 700px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1000_1199 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 900px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1200_1399 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 1100px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1400 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 1300px;\n  /* overflow: auto; */ }\n/* Accordion */\ndiv.accordion div.accordion_panel {\n  background-color: #f3f3f3;\n  border: 1pt solid #c0d0d0;\n  margin: 0;\n  padding: 0; }\n\ndiv.accordion_panel div.header div.headerIcon {\n  display: inline-block;\n  margin-left: 12px;\n  vertical-align: middle; }\n\ndiv.accordion_panel div.header div.headerText {\n  display: inline-block;\n  font-weight: bold;\n  padding: 8px 10px 8px 12px;\n  font: 14pt Arial, sans-serif; }\n\ndiv.accordion div.accordion_panel.open {\n  background-color: #FFFFFF; }\n\ndiv.accordion div.accordion_panel div.content {\n  padding: 5px; }\n\ndiv.accordion div.accordionmsg {\n  padding: 10px; }\n/* \"tab\" content */\ndiv.oskariTabs div.tabsContent {\n  border-left: 1px solid #999999;\n  border-right: 1px solid #999999;\n  border-top: 0px solid #999999;\n  border-bottom: 1px solid #999999;\n  color: #000000;\n  height: 90%; }\n\ndiv.oskariTabs div.tab-content {\n  padding: 10px; }\n\n/* tab headers */\ndiv.oskariTabs div.tabsHeader {\n  background: url(\'/Oskari/resources/framework/bundle/divmanazer/images/tab_bg.png\') repeat-x scroll center bottom;\n  /* #FFFFFF*/\n  clear: left;\n  float: left;\n  font: 12pt Arial, sans-serif;\n  font-weight: bold;\n  overflow: hidden;\n  padding: 0;\n  width: 100%; }\n\ndiv.oskariTabs div.tabsHeader ul {\n  float: left;\n  list-style: none outside none;\n  margin: 0;\n  padding: 0;\n  text-align: center; }\n\ndiv.oskariTabs div.tabsHeader ul li {\n  display: block;\n  float: left;\n  list-style: none outside none;\n  margin: 10px 0 0;\n  padding: 0;\n  right: 50%; }\n\ndiv.oskariTabs div.tabsHeader ul li a {\n  background: none repeat scroll 0 0 #FFFFFF;\n  border-bottom: 1px solid #999999;\n  color: #3333FF;\n  display: block;\n  float: left;\n  padding: 10px 20px;\n  position: relative;\n  text-decoration: none; }\n\ndiv.oskariTabs div.tabsHeader ul li.active a {\n  border-left: 1px solid #999999;\n  border-right: 1px solid #999999;\n  border-top: 1px solid #999999;\n  border-bottom: 0px solid #999999;\n  color: #000000; }\n\ndiv.oskariTabs div.tabsHeader ul li.fill a {\n  width: 100%; }\n.modaldialog {\n  border: 1px solid #3C3C3C;\n  margin: 0px; }\n\n.modaltitle {\n  margin: 0px;\n  border-bottom: 1px solid #3C3C3C;\n  color: #3C3C3C;\n  padding: 8px 16px 4px 16px; }\n\n.modalmessage {\n  width: 100%;\n  color: #3C3C3C;\n  padding: 8px 16px 8px 16px; }\n\n.modalbuttons {\n  width: 100%;\n  display: inline-block;\n  padding: 0px 16px 4px 16px; }\n\n.modalbutton {\n  margin: 2px;\n  display: inline-block; }\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-badge {\n  font-size: 10.998px;\n  font-weight: bold;\n  line-height: 14px;\n  color: #ffffff;\n  vertical-align: baseline;\n  white-space: nowrap;\n  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);\n  background-color: #999999; }\n\n.oskari-badge {\n  padding: 1px 9px 2px;\n  -webkit-border-radius: 9px;\n  -moz-border-radius: 9px;\n  border-radius: 9px; }\n\na.oskari-badge:hover {\n  color: #ffffff;\n  text-decoration: none;\n  cursor: pointer; }\n\n.oskari-badge-important {\n  background-color: #b94a48; }\n\n.oskari-badge-important[href] {\n  background-color: #953b39; }\n\n.oskari-badge-warning {\n  background-color: #f89406; }\n\n.oskari-badge-warning[href] {\n  background-color: #c67605; }\n\n.oskari-badge-success {\n  background-color: #468847; }\n\n.oskari-badge-success[href] {\n  background-color: #356635; }\n\n.oskari-badge-info {\n  background-color: #3a87ad; }\n\n.oskari-badge-info[href] {\n  background-color: #2d6987; }\n\n.oskari-badge-inverse {\n  background-color: #333333; }\n\n.oskari-badge-inverse[href] {\n  background-color: #1a1a1a; }\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-alert {\n  padding-left: 8px;\n  padding-top: 4px;\n  margin: 4px;\n  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);\n  background-color: #fcf8e3;\n  border: 1px solid #fbeed5;\n  -webkit-border-radius: 4px;\n  -moz-border-radius: 4px;\n  border-radius: 4px;\n  color: #c09853;\n  position: relative;\n  height: 24px; }\n\n.oskari-alert-heading {\n  color: inherit; }\n\n.oskari-alert-icon-close {\n  position: absolute;\n  top: 4px;\n  right: 0px;\n  width: 24px;\n  height: 24px; }\n\n.oskari-alert-success {\n  background-color: #dff0d8;\n  border-color: #d6e9c6;\n  color: #468847; }\n\n.oskari-alert-danger, .oskari-alert-error {\n  background-color: #f2dede;\n  border-color: #eed3d7;\n  color: #b94a48; }\n\n.oskari-alert-info {\n  background-color: #d9edf7;\n  border-color: #bce8f1;\n  color: #3a87ad; }\ndiv.oskarifield div.icon-close {\n  display: inline-block;\n  left: -20px;\n  margin-left: 0px;\n  position: relative;\n  top: 3px; }\nth.asc {\n  background-image: url(\'/Oskari/resources/framework/bundle/divmanazer/images/asc_arrow.png\');\n  background-repeat: no-repeat;\n  background-position: center center; }\n\nth.desc {\n  background-image: url(\'/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png\');\n  background-repeat: no-repeat;\n  background-position: center center; }\n\ndiv.column-selector-placeholder {\n  border-style: none;\n  float: left;\n  opacity: 1.0;\n  margin: 0;\n  padding: 0;\n  right: 0;\n  width: 25px;\n  height: 7px;\n  max-width: 25px;\n  max-height: 7px; }\n\ndiv.icon-menu {\n  position: absolute;\n  opacity: 1.0;\n  margin: 0;\n  cursor: pointer;\n  padding: 0;\n  width: 25px;\n  height: 8px;\n  max-width: 25px;\n  max-height: 7px; }\n\ndiv.column-selector {\n  position: absolute;\n  visibility: hidden;\n  background-color: white;\n  margin-top: 7px;\n  margin-right: 50px;\n  padding: 0;\n  border: 1px solid;\n  z-index: 10001; }\n\ndiv.column-selector div.close-selector-button {\n  width: 16px;\n  height: 16px;\n  position: absolute;\n  top: 5px;\n  right: 5px; }\n\ndiv.column-selector ul.column-selector-list {\n  list-style-type: none;\n  padding-right: 30px; }\n\ndiv.column-selector label.column-label {\n  padding-left: 5px; }\ndiv.divmanazerpopup {\n  max-width: 700px;\n  min-width: 200px;\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  background-color: white;\n  -moz-background-clip: border;\n  /* Firefox 3.6 */\n  -webkit-background-clip: border;\n  /* Safari 4? Chrome 6? */\n  background-clip: border-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  -moz-background-clip: padding;\n  /* Firefox 3.6 */\n  -webkit-background-clip: padding;\n  /* Safari 4? Chrome 6? */\n  background-clip: padding-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  -moz-background-clip: content;\n  /* Firefox 3.6 */\n  -webkit-background-clip: content;\n  /* Safari 4? Chrome 6? */\n  background-clip: content-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  border: 5px solid rgba(0, 0, 0, 0.2);\n  border-radius: 7px;\n  /*\r\n    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.80);\r\n    -moz-box-shadow: 0px 3px 3px black;\r\n    -webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);\r\n    */\n  z-index: 9000; }\n\ndiv.divmanazerpopup h3.popupHeader {\n  background-color: #FDF8D9;\n  border-radius: 5px 5px 0 0;\n  font-size: 18px;\n  line-height: 28px;\n  padding: 5px 10px; }\n\ndiv.divmanazerpopup div.content {\n  margin: 10px; }\n\ndiv.divmanazerpopup div.content textarea {\n  resize: none; }\n\ndiv.divmanazerpopup div.content ul {\n  margin: 10px; }\n\ndiv.divmanazerpopup.no_resize div.content textarea {\n  resize: none; }\n\ndiv.divmanazerpopup div.actions {\n  margin: 10px;\n  text-align: center; }\n\ndiv.divmanazerpopup div.actions input {\n  margin: 10px; }\n\n.divmanazerpopup.arrow:after, .divmanazerpopup.arrow:before {\n  border: solid transparent;\n  content: \" \";\n  height: 0;\n  width: 0;\n  position: absolute;\n  /*pointer-events: none; */ }\n\n/* Bottom alignment */\n.divmanazerpopup.bottom:after, .divmanazerpopup.bottom:before {\n  bottom: 100%; }\n\n.divmanazerpopup.bottom:after {\n  border-bottom-color: #FDF8D9;\n  border-width: 5px;\n  margin-left: -5px;\n  left: 50%; }\n\n.divmanazerpopup.bottom:before {\n  border-bottom-color: #000000;\n  border-width: 6px;\n  margin-left: -6px;\n  left: 50%; }\n\n/* top alignment */\n.divmanazerpopup.top:after, .divmanazerpopup.top:before {\n  top: 100%; }\n\n.divmanazerpopup.top:after {\n  border-top-color: #FFFFFF;\n  border-width: 5px;\n  margin-left: -5px;\n  left: 50%; }\n\n.divmanazerpopup.top:before {\n  border-top-color: #000000;\n  border-width: 6px;\n  margin-left: -6px;\n  left: 50%; }\n\n/* left alignment */\n.divmanazerpopup.left:after, .divmanazerpopup.left:before {\n  left: 100%; }\n\n.divmanazerpopup.left:after {\n  border-left-color: #FDF8D9;\n  border-width: 5px;\n  margin-top: -5px;\n  top: 50%; }\n\n.divmanazerpopup.left:before {\n  border-left-color: #000000;\n  border-width: 6px;\n  margin-top: -6px;\n  top: 50%; }\n\n/* right alignment */\n.divmanazerpopup.right:after, .divmanazerpopup.right:before {\n  right: 100%; }\n\n.divmanazerpopup.right:after {\n  border-right-color: #FDF8D9;\n  border-width: 5px;\n  margin-top: -5px;\n  top: 50%; }\n\n.divmanazerpopup.right:before {\n  border-right-color: #000000;\n  border-width: 6px;\n  margin-top: -6px;\n  top: 50%; }\ndiv.oskaributton {\n  display: inline-block;\n  margin: 5px; }\n\ndiv.oskaributton.primary input {\n  color: #3CA9FC; }\ndiv.oskarioverlay {\n  position: absolute;\n  background-color: black;\n  z-index: 8000; }\n\n.transparent {\n  zoom: 1;\n  filter: alpha(opacity=50);\n  /* unquote for libsass bug */\n  opacity: 0.5; }\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-tooltip {\n  position: absolute;\n  z-index: 1200;\n  display: block;\n  visibility: visible;\n  padding: 5px;\n  font-size: 11px;\n  opacity: 0;\n  filter: alpha(opacity=0);\n  /* unquote for libsass bug */ }\n\n.oskari-tooltip.in {\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  /* unquote for libsass bug */ }\n\n.oskari-tooltip.top {\n  margin-top: -2px; }\n\n.oskari-tooltip.right {\n  margin-left: 2px; }\n\n.oskari-tooltip.bottom {\n  margin-top: 2px; }\n\n.oskari-tooltip.left {\n  margin-left: -2px; }\n\n.oskari-tooltip.top .oskari-tooltip-arrow {\n  bottom: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-top: 5px solid #000000; }\n\n.oskari-tooltip.left .oskari-tooltip-arrow {\n  top: 50%;\n  right: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-left: 5px solid #000000; }\n\n.oskari-tooltip.bottom .oskari-tooltip-arrow {\n  top: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-bottom: 5px solid #000000; }\n\n.oskari-tooltip.right .oskari-tooltip-arrow {\n  top: 50%;\n  left: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-right: 5px solid #000000; }\n\n.oskari-tooltip-inner {\n  max-width: 640px;\n  padding: 3px 8px;\n  color: #ffffff;\n  text-align: center;\n  text-decoration: none;\n  background-color: #000000;\n  -webkit-border-radius: 4px;\n  -moz-border-radius: 4px;\n  border-radius: 4px; }\n\n.oskari-tooltip-arrow {\n  position: absolute;\n  width: 0;\n  height: 0; }\n\n.oskari-popover {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 1210;\n  display: none;\n  padding: 5px; }\n\n.oskari-popover.top {\n  margin-top: -5px; }\n\n.oskari-popover.right {\n  margin-left: 5px; }\n\n.oskari-popover.bottom {\n  margin-top: 5px; }\n\n.oskari-popover.left {\n  margin-left: -5px; }\n\n.oskari-popover.top .oskari-arrow {\n  bottom: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-top: 5px solid #000000; }\n\n.oskari-popover.right .oskari-arrow {\n  top: 50%;\n  left: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-right: 5px solid #000000; }\n\n.oskari-popover.bottom .oskari-arrow {\n  top: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-bottom: 5px solid #000000; }\n\n.oskari-popover.left .oskari-arrow {\n  top: 50%;\n  right: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-left: 5px solid #000000; }\n\n.oskari-popover .oskari-arrow {\n  position: absolute;\n  width: 0;\n  height: 0; }\n\n.oskari-popover-inner {\n  padding: 3px;\n  /*width: 280px;*/\n  overflow: hidden;\n  background: #000000;\n  background: rgba(0, 0, 0, 0.8);\n  -webkit-border-radius: 6px;\n  -moz-border-radius: 6px;\n  border-radius: 6px;\n  -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3); }\n\n.oskari-popover-title {\n  padding: 9px 15px;\n  line-height: 1;\n  background-color: #f5f5f5;\n  border-bottom: 1px solid #eee;\n  -webkit-border-radius: 3px 3px 0 0;\n  -moz-border-radius: 3px 3px 0 0;\n  border-radius: 3px 3px 0 0; }\n\n.oskari-popover-content {\n  padding: 14px;\n  background-color: #ffffff;\n  -webkit-border-radius: 0 0 3px 3px;\n  -moz-border-radius: 0 0 3px 3px;\n  border-radius: 0 0 3px 3px;\n  -webkit-background-clip: padding-box;\n  -moz-background-clip: padding-box;\n  background-clip: padding-box; }\n\n.oskari-popover-content p, .oskari-popover-content ul, .oskari-popover-content ol {\n  margin-bottom: 0; }\n'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick; 
