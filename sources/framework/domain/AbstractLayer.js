@@ -98,6 +98,10 @@ function(params, options) {
 
 	/* does this layer have Feature Data boolean */
 	this._featureData = false;
+
+    // Layers service urls
+	this._layerUrls = [];
+
 }, {
 	/**
 	 * @method setId
@@ -748,5 +752,21 @@ function(params, options) {
 	 */
 	hasFeatureData : function() {
 		return this._featureData;
-	}
+	}, 
+    /**
+     * @method addLayerUrl
+     * @param {String} layerUrl
+     * Apppends the url to layer array of wms image urls
+     */
+    addLayerUrl : function(layerUrl) {
+        this._layerUrls.push(layerUrl);
+    },
+    /**
+     * @method getWmsUrls
+     * @return {String[]} 
+     * Gets array of layer wms image urls
+     */
+    getLayerUrls : function() {
+        return this._layerUrls;
+    }
 }); 

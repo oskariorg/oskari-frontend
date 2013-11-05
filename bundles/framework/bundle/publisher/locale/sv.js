@@ -185,6 +185,17 @@ Oskari.registerLocalization({
                 "reject": "Avvisa",
                 "accept": "Acceptera"
             }
+        },
+        "layer": {
+            "show": "Visa",
+            "hide": "Göm",
+            "hidden": "Kartan är tillfälligt gömd.",
+            "rights": {
+                "can_be_published_map_user": {
+                    "label": "Får publiceras",
+                    "tooltip": "Kartlagret får publiceras i ett inbäddat kartfönster. Antalet användare per vecka kan vara begränsat."
+                }
+            }
         }
     }
 });

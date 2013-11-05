@@ -11,15 +11,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
      */
 
     function (config) {
-        this.mapModule = null;
-        this.pluginName = null;
-        this._sandbox = null;
-        this._map = null;
-        this.__templates = {};
-        this.__elements = {};
-        this.__parent = null;
-        this.conf = config;
-        this.__prestart = null;
+        var me = this;
+        me.mapModule = null;
+        me.pluginName = null;
+        me._sandbox = null;
+        me._map = null;
+        me.templates = {};
+        me.element = null;
+        me.__parent = null;
+        me.conf = config;
     }, {
         /**
          * @static
@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             var me = this,
                 ppid = (new Date()).getTime().toString();
             // templates
-            this.__templates.pan = jQuery('<div class="mapplugin panbuttonDiv">' +
+            this.templates.main = jQuery('<div class="mapplugin panbuttonDiv panbuttons">' +
                 '<div>' +
                 '  <img class="panbuttonDivImg" usemap="#panbuttons_' + ppid + '">' +
                 '    <map name="panbuttons_' + ppid + '">' +
@@ -110,79 +110,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
          */
         startPlugin: function (sandbox) {
             var me = this,
-                p,
-                zb = null;
-            me._sandbox = sandbox;
-            sandbox.register(me);
+                p;
+            me._sandbox = sandbox || me.getMapModule().getSandbox();
+            me._sandbox.register(me);
 
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
+                    me._sandbox.registerForEventByName(me, p);
                 }
-            }
-            if (me._map.div) {
-                zb = jQuery(me._map.div).find('.pzbDiv');
-            }
-            if (me.conf && me.conf.location && me.conf.location.top && zb) {
-
-                // TODO: Ugly, put zoombar and panbuttons in a div instead,
-                // see maplayersplugin
-
-                var mytop = me.conf.location.top;
-                if (mytop === 'auto') {
-                    mytop = 10;
-                } else if (mytop.indexOf('px') >= 0) {
-                    mytop = mytop.substring(0, mytop.indexOf('px'));
-                }
-                var mapheight = jQuery(me._map.div).height();
-                // var mybtm = mapheight - ((mytop * 1) + 90);
-                var mybtm = 'auto',
-                    myheight = 90,
-                    margin = 10,
-                    zbheight = 185,
-                    zbtop = zb.css('top'),
-                    zbbtm = zb.css('bottom');
-                if (!zbtop) {
-                    zbtop = 'auto';
-                }
-                if (!zbbtm) {
-                    zbbtm = 'auto';
-                }
-
-                if (!me.__prestart) {
-                    me.__prestart = {
-                        zbtop: zbtop,
-                        zbbtm: zbbtm
-                    };
-                }
-                mytop = 10;
-                mybtm = 'auto';
-                zbtop = 110;
-                zbbtm = 'auto';
-
-                if (zbtop !== 'auto') {
-                    zbtop = zbtop + 'px';
-                }
-                if (zbbtm !== 'auto') {
-                    zbbtm = zbbtm + 'px';
-                }
-                zb.css('top', zbtop);
-                zb.css('bottom', zbbtm);
-                if (mytop !== 'auto') {
-                    mytop = mytop + 'px';
-                }
-                if (mybtm !== 'auto') {
-                    mybtm = mybtm + 'px';
-                }
-                me.conf.location.top = mytop;
-                me.conf.location.bottom = mybtm;
-                window.setTimeout(function () {
-                    var pb = me.__elements.panbuttons;
-                    if (pb) {
-                        pb.css('top', mytop);
-                        pb.css('bottom', 'auto');
-                    }
-                }, 50);
             }
 
             this._draw();
@@ -196,49 +131,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          */
         stopPlugin: function (sandbox) {
-            if (this.__elements.panbuttons) {
-                this.__elements.panbuttons.remove();
-                delete this.__elements.panbuttons;
+            var me = this;
+            if (me.element) {
+                me.element.remove();
+                delete me.element;
             }
-            if (this._map.div && this.__prestart) {
-                var zb = jQuery(this._map.div).find('.pzbDiv');
-                if (zb) {
-                    zb.css('top', this.__prestart.zbtop);
-                    zb.css('bottom', this.__prestart.zbbtm);
-                }
-            }
-            sandbox.unregister(this);
+            me._sandbox.unregister(this);
         },
 
-        setLocation: function (location, panbuttonContainer) {
-            var container = panbuttonContainer || this.__elements.panbuttons;
-            if (this.conf) {
-                this.conf.location = location;
+        /**
+         * Sets the location of the panbuttons.
+         *
+         * @method setLocation
+         * @param {String} location The new location
+         */
+        setLocation: function (location) {
+            var me = this;
+            if (!me.conf) {
+                me.conf = {};
             }
-            // override default location if configured
-            if (location) {
-                if (location.top) {
-                    container.css('bottom', 'auto');
-                    container.css(location.top);
-                }
-                if (location.left) {
-                    container.css('right', 'auto');
-                    container.css('left', location.left);
-                }
-                if (location.right) {
-                    container.css('left', 'auto');
-                    container.css('right', location.right);
-                }
-                if (location.bottom) {
-                    container.css('top', 'auto');
-                    container.css('bottom', location.bottom);
-                }
-                if (location.classes) {
-                    container.removeClass('top left bottom right center').addClass(location.classes);
-                }
+            me.conf.location = location;
+
+            // reset plugin if active
+            if (me.element) {
+                me.stopPlugin();
+                me.startPlugin();
             }
         },
-
         /**
          * @method _draw
          * @private
@@ -250,13 +169,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             if (!me.__parent) {
                 me.__parent = this._map.div;
             }
-            if (!me.__elements.panbuttons) {
-                me.__elements.panbuttons = me.__templates.pan.clone();
+            if (!me.element) {
+                me.element = me.templates.main.clone();
             }
 
-            var pb = me.__elements.panbuttons;
+            var pb = me.element,
+                containerClasses = 'top right',
+                position = 0;
 
-            jQuery(me.__parent).append(pb);
+            if (me.conf && me.conf.location) {
+                containerClasses = me.conf.location.classes || containerClasses;
+                position = me.conf.location.position || position;
+            }
+
+            me.mapModule.setMapControlPlugin(pb, containerClasses, position);
 
             var pbimg = this.getMapModule().getImageUrl() + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/',
                 panbuttonDivImg = pb.find('.panbuttonDivImg');
@@ -278,20 +204,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panbuttonDivImg.removeClass("root");
             });
             center.bind('click', function (event) {
-                var rn = 'StateHandler.SetStateRequest';
-                var mm = me.getMapModule();
-                var sb = mm.getSandbox();
-                var rb = sb.getRequestBuilder(rn);
+                var rn = 'StateHandler.SetStateRequest',
+                    mm = me.getMapModule(),
+                    sb = mm.getSandbox(),
+                    rb = sb.getRequestBuilder(rn);
                 if (rb) {
                     sb.request(me, rb());
                 } else {
                     sb.resetState();
                 }
             });
-
-            if (me.conf && me.conf.location) {
-                me.setLocation(me.conf.location, pb);
-            }
 
             var left = pb.find('.panbuttons_left');
             left.bind('mouseover', function (event) {
@@ -385,7 +307,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
          * @param {jQuery} div
          */
         changeToolStyle: function (styleName, div) {
-            div = div || this.__elements.panbuttons;
+            div = div || this.element;
 
             if (!styleName || !div) {
                 return;

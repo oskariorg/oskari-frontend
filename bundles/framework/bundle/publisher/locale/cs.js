@@ -140,6 +140,17 @@ Oskari.registerLocalization({
                 "reject": "Odmítám",
                 "accept": "Přijímám"
             }
-        }
+        },
+        "layer": {
+            "show": "Zobrazit",
+            "hide": "Skrýt",
+            "hidden": "Mapa byla dočasně skryta.",
+            "rights": {
+                "can_be_published_map_user": {
+                    "label": "Publikace povolena",
+                    "tooltip": "Mapová vrstva může být publikována ve vloženém mapovém okně a počet uživatelů za týden může být omezen."
+                }
+            }
+        }        
     }
 });

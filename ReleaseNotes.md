@@ -1,4 +1,29 @@
 # Release Notes
+## 1.16
+
+### Statsgrid
+
+Municipality code was removed from the columns.
+
+Users can now select the class limits mode from distinct and discontinuous.
+
+The map link now gets the class limits mode and colour selections as parameters.
+
+### mapmodule-plugin/LogoPlugin
+
+Added a new link next to EULA which shows the data sources for map layers and open statistics indicators.
+
+### ui-components
+
+Added a new bundle which imports user interface components from under divmanazer.
+
+### myplaces2
+
+Added new configuration option 'layerDefaults' which can be used to override default values found in code. See bundle documentation for details.
+
+### publisher
+
+Added possibility to change order of the layer as well as its opacity. Also removing layer is now possible.
 
 ## 1.15
 
@@ -9,6 +34,8 @@ Environment specific localized values (URLs) have been move to bundle configurat
 ### Sandbox/map layer service
 
 Added new method to create maplayer domain objects based on type: createLayerTypeInstance(type). This is a preferred way to create layer domain classes instead of Oskari.clazz.create() if you need to create one manually.
+
+Added new method to find all layers of given type: getLayersOfType(type). For example get all wfs layers by calling getLayersOfType('wfs').
 
 ### mapmodule-plugin/layers/backgroundlayerselector
 
@@ -80,6 +107,8 @@ User interface bug fixes.
 
 Sorting is now disabled when clicking the header menu buttons of an indicator in the grid.
 The classification now shows distinct class ranges thanks to the geostats library update.
+
+Bundle now has a tile for easier access to statistics. Statistics layer to use can be configured with defaultLayerId : [layer id]
 
 ### libraries/geostats
 

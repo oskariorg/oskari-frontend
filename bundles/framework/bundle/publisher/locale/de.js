@@ -140,6 +140,18 @@ Oskari.registerLocalization({
                 "reject": "Verweigern",
                 "accept": "Akzeptieren"
             }
+        },
+        "layer": {
+            "show": "Zeige",
+            "hide": "Verberge",
+            "hidden": "Diese Karte wurde vorübergehend ausgeblendet.",
+            "rights": {
+                "can_be_published_map_user": {
+                    "label": "Veröffentlichung erlaubt",
+                    "tooltip": "Die Kartenebene darf mit einer eventuellen Begrenzung der Nutzeranzahl pro Woche in einem eingebundenen Kartenfenster veröffentlicht werden."
+                }
+            }
         }
+
     }
 });

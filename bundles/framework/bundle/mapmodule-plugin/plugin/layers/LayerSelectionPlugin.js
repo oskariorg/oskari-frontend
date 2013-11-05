@@ -13,13 +13,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
      */
 
     function (config) {
-        this.mapModule = null;
-        this.pluginName = null;
-        this._sandbox = null;
-        this._map = null;
-        this.element = undefined;
-        this.conf = config;
-        this.initialSetup = true;
+        var me = this;
+        me.mapModule = null;
+        me.pluginName = null;
+        me._sandbox = null;
+        me._map = null;
+        me.element = undefined;
+        me.conf = config;
+        me.initialSetup = true;
+        me.templates = {};
     }, {
         /** @static @property __name module name */
         __name: 'LayerSelectionPlugin',
@@ -85,17 +87,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         init: function (sandbox) {
             var me = this;
-            me.template = jQuery("<div class='layerSelectionPlugin'>" +
+            me.templates.main = jQuery("<div class='mapplugin layerselection'>" +
                 '<div class="header"><div class="header-icon icon-arrow-white-right"></div></div>' +
                 '<div class="content"><div class="layers"></div><div class="baselayers"></div></div>' +
                 "</div>");
-            me.templateLayer = jQuery("<div class='layer'><label><span></span></label></div>");
-            me.templateCheckbox = jQuery("<input type='checkbox' />");
-            me.templateRadiobutton = jQuery("<input type='radio' name='defaultBaselayer'/>");
-            me.templateBaseLayerHeader = jQuery('<div class="baseLayerHeader"></div>');
+            me.templates.layer = jQuery("<div class='layer'><label><span></span></label></div>");
+            me.templates.checkbox = jQuery("<input type='checkbox' />");
+            me.templates.radiobutton = jQuery("<input type='radio' name='defaultBaselayer'/>");
+            me.templates.baseLayerHeader = jQuery('<div class="baseLayerHeader"></div>');
 
-            me.templateHeaderArrow = jQuery('<div class="styled-header-arrow"></div>');
-            me.templateContentHeader = jQuery('<div class="content-header"><div class="content-header-title"></div><div class="content-close icon-close-white"></div></div>');
+            me.templates.headerArrow = jQuery('<div class="styled-header-arrow"></div>');
+            me.templates.contentHeader = jQuery('<div class="content-header"><div class="content-header-title"></div><div class="content-close icon-close-white"></div></div>');
         },
         /**
          * @method startPlugin
@@ -107,17 +109,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          *         reference to application sandbox
          */
         startPlugin: function (sandbox) {
-            var p;
-            this._sandbox = sandbox;
-            this._map = this.getMapModule().getMap();
-            sandbox.register(this);
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(this, p);
+            var me = this,
+                p;
+            me._sandbox = sandbox || me.getMapModule().getSandbox();
+            me._map = me.getMapModule().getMap();
+            me._sandbox.register(me);
+            for (p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me._sandbox.registerForEventByName(me, p);
                 }
             }
 
-            this._createUI();
+            me._createUI();
         },
         /**
          * @method stopPlugin
@@ -129,20 +132,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          *         reference to application sandbox
          */
         stopPlugin: function (sandbox) {
-            var p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
+            var me = this,
+                p;
+            for (p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me._sandbox.unregisterFromEventByName(me, p);
                 }
             }
 
-            sandbox.unregister(this);
+            me._sandbox.unregister(me);
 
             // remove ui
-            if (this.element) {
-                this.element.remove();
-                this.element = undefined;
-                delete this.element;
+            if (me.element) {
+                me.element.remove();
+                me.element = undefined;
+                delete me.element;
             }
         },
         /**
@@ -259,8 +263,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var me = this,
                 content = this.element.find('div.content'),
                 layersDiv = content.find('div.layers'),
-                div = this.templateLayer.clone(),
-                input = this.templateCheckbox.clone();
+                div = this.templates.layer.clone(),
+                input = this.templates.checkbox.clone();
             div.find('span').append(layer.getName());
 
             input.attr('value', layer.getId());
@@ -356,7 +360,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             var input = div.find('input');
             input.remove();
-            input = this.templateRadiobutton.clone();
+            input = this.templates.radiobutton.clone();
             input.attr('value', layer.getId());
 
             var me = this;
@@ -371,8 +375,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (baseLayersDiv.find('div.layer').length === 0) {
                 var pluginLoc = this.getMapModule().getLocalization('plugin'),
                     myLoc = pluginLoc[this.__name],
-                    header = this.templateBaseLayerHeader.clone();
+                    header = this.templates.baseLayerHeader.clone();
                 header.append(myLoc.chooseDefaultBaseLayer);
+                baseLayersDiv.parent().find(".baseLayerHeader").remove();
                 baseLayersDiv.before(header);
                 input.attr('checked', 'checked');
             }
@@ -390,7 +395,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             var input = div.find('input');
             input.remove();
-            input = this.templateCheckbox.clone();
+            input = this.templates.checkbox.clone();
             input.attr('value', layer.getId());
             this._bindCheckbox(input, layer);
             div.find('span').before(input);
@@ -401,8 +406,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             this._setLayerVisible(layer, true);
 
             // remove text if nothing to select 
-            var baseLayersDiv = this.element.find('div.content div.baselayers');
-            var baseLayers = baseLayersDiv.find('div.layer');
+            var baseLayersDiv = this.element.find('div.content div.baselayers'),
+                baseLayers = baseLayersDiv.find('div.layer');
             if (baseLayers.length === 0) {
                 var baselayerHeader = this.element.find('div.content div.baseLayerHeader');
                 baselayerHeader.remove();
@@ -431,8 +436,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             for (i = 0; i < values.baseLayers.length; i += 1) {
                 layerId = values.baseLayers[i];
                 layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-                // Numeric layer IDs are Numbers for some reason...
-                me._setLayerVisible(layer, (values.defaultBaseLayer + '' === layerId + ''));
+                if(layer != null) {
+                    // Numeric layer IDs are Numbers for some reason...
+                    me._setLayerVisible(layer, (values.defaultBaseLayer + '' === layerId + ''));
+                }
             }
             // send Request to rearrange layers
             var reqName = 'RearrangeSelectedMapLayerRequest',
@@ -502,27 +509,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             };
         },
 
-        setLocation: function (location, layerSelectionContainer) {
-            var container = layerSelectionContainer || this.element;
-            if (this.conf) {
-                this.conf.location = location;
+        /**
+         * Sets the location of the layerselectio.
+         *
+         * @method setLocation
+         * @param {String} location The new location
+         */
+        setLocation: function (location) {
+            var me = this;
+            if (!me.conf) {
+                me.conf = {};
             }
-            if (location) {
-                if (location.top) {
-                    container.css('top', location.top);
-                }
-                if (location.left) {
-                    container.css('left', location.left);
-                }
-                if (location.right) {
-                    container.css('right', location.right);
-                }
-                if (location.bottom) {
-                    container.css('bottom', location.bottom);
-                }
-                if (location.classes) {
-                    container.parent().removeClass('top left bottom right center').addClass(location.classes);
-                }
+            me.conf.location = location;
+
+            // reset plugin if active
+            if (me.element) {
+                me.stopPlugin();
+                me.startPlugin();
             }
         },
 
@@ -535,10 +538,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @private
          */
         _createUI: function () {
-            var me = this;
+            var me = this,
+                containerClasses = 'top right',
+                position = 3;
 
             if (!me.element) {
-                me.element = me.template.clone();
+                me.element = me.templates.main.clone();
             }
 
             var pluginLoc = me.getMapModule().getLocalization('plugin', true),
@@ -558,22 +563,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             me.setupLayers();
 
-            // get div where the map is rendered from openlayers
-            var parentContainer = jQuery('div.mapplugins.left');
-            if (!parentContainer || parentContainer.length === 0) {
-                parentContainer = jQuery('div.mapplugins.right');
-            }
-            if (!parentContainer || parentContainer.length === 0) {
-                // fallback to OL map div
-                parentContainer = jQuery(me._map.div);
-                var content = me.element.find('div.content');
-                content.addClass('mapplugin');
-            }
-            parentContainer.prepend(me.element);
-
             if (me.conf && me.conf.location) {
-                me.setLocation(me.conf.location, me.element);
+                containerClasses = me.conf.location.classes || containerClasses;
+                position = me.conf.location.position || position;
             }
+            //parentContainer.append(me.element);
+            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
 
             if (me.conf && me.conf.toolStyle) {
                 me.changeToolStyle(me.conf.toolStyle, me.element);
@@ -605,9 +600,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var self = this,
                 pluginLoc = this.getMapModule().getLocalization('plugin', true),
                 header = div.find('div.header'),
-                headerArrow = this.templateHeaderArrow.clone(),
+                headerArrow = this.templates.headerArrow.clone(),
                 content = div.find('div.content'),
-                contentHeader = this.templateContentHeader.clone(),
+                contentHeader = this.templates.contentHeader.clone(),
                 resourcesPath = this.getMapModule().getImageUrl(),
                 imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/layers/images/',
                 bgImg = imgPath + 'map-layer-button-' + styleName + '.png';

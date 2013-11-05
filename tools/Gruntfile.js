@@ -600,6 +600,7 @@ module.exports = function (grunt) {
             cfgFile = fs.readFileSync(packages[i], 'utf8').split("\r\n");
             profile = packages[i];
             profile = profile.substring(profile.lastIndexOf("/") + 1, profile.indexOf('.cfg'));
+
             cfg = {};
             for (j = 0, jlen = cfgFile.length; j < jlen; j += 1) {
                 line = cfgFile[j];
@@ -620,6 +621,7 @@ module.exports = function (grunt) {
                             cfg[linegroup] = [];
                         }
                         // add line as absolute path to array
+
                         line = path.join(sourceDirectory, line);
                         cfg[linegroup].push(line);
                     }

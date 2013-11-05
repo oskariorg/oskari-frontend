@@ -1,3 +1,27 @@
+div.mapplugin.indexmap {
+    .olControlOverviewMapElement {
+        /* Hide by default, control's maximize: false doesn't seem to do anything */
+        display: none;
+        background-color: #FFFFFF;
+        border-color: #D0D0D0;
+        border-left-width: 2px;
+        border-style: solid;
+        border-top-width: 2px;
+        padding: 5px;
+    }
+    .indexmapToggle {
+        width: 46px !important;
+        height: 46px !important;
+        cursor: default;
+        background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap.png') 0px 0px !important;
+
+        &:hover {
+            background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png') !important;
+        }
+
+    }
+}
+
 .olControlOverviewMapContainer {
 
     .olControlOverviewMapElement {
@@ -10,20 +34,7 @@
         
     }
 
-    #olControlOverviewMapMaximizeButton {
-        position: absolute !important;
-        width: 46px !important;
-        height: 46px !important;
-        right: 0px;
-        bottom: 0px;
-        cursor: default;
-        background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap.png') 0px 0px !important;
 
-        &:hover {
-            background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png') !important;
-        }
-
-    }
 
     #OpenLayers_Control_minimizeDiv {
         position: absolute !important;
@@ -35,47 +46,7 @@
         background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png')  !important;
         
     }
-
-    &.bottom {
-        bottom: 0;
-        top: auto;
-
-        #olControlOverviewMapMaximizeButton, #OpenLayers_Control_minimizeDiv {
-            bottom: 0;
-            top: auto;
-        }
-
-    }
-
-    &.left {
-        left: 0;
-        right: auto;
-
-        #olControlOverviewMapMaximizeButton, #OpenLayers_Control_minimizeDiv {
-            left: 0;
-            right: auto;
-        }
-
-    }
-
-    &.right {
-        left: auto;
-        right: 0;
-
-        #olControlOverviewMapMaximizeButton, #OpenLayers_Control_minimizeDiv {
-            left: auto;
-            right: 0;
-        }
-
-    }
-
 }
-
-#olControlOverviewMapMaximizeButton_innerImage, #OpenLayers_Control_minimizeDiv_innerImage{
-    display: none !important;
-}
-
-
 
 .olControlOverviewMapExtentRectangle  {
     border:2px dashed #f47729 !important;

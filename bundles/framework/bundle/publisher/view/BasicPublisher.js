@@ -212,7 +212,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             for (i = 0; i < plugins.length; i += 1) {
                 selectedPluginIDs[plugins[i].id] = true;
                 if (plugins[i].id === 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin') {
-                    me.data.hasLayerSelectionPlugin = plugin.config;
+                    me.data.hasLayerSelectionPlugin = plugins[i].config;
                 }
             }
             me.data.hasLayerSelectionPlugin = false;
@@ -541,9 +541,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             return panel;
         },
-        _panButtonsIsActive: function () {
-            return this.tools[this.toolIndices["Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"]]._isPluginStarted;
-        },
         _changeToolLayout: function (layout) {
             // iterate plugins
             var me = this,
@@ -555,11 +552,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 tool = tools[i];
                 if (tool[layout]) {
                     tool.config.location.classes = tool[layout];
-                    if (tool.id === "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar") {
-                        if (me._panButtonsIsActive()) {
-                            tool.config.location.classes += " with-panbuttons";
-                        }
-                    }
                     if (tool.plugin) {
                         if (tool.plugin.setLocation) {
                             tool.plugin.setLocation(tool.config.location);
@@ -573,23 +565,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 me.logoPlugin.setLocation(me.logoPluginClasses);
             }
             me.layerSelectionClasses.classes = me.layerSelectionClasses[layout];
-            if (me.maplayerPanel.isEnabled()) {
-//                console.log("lsp enabled, setting layout to ", me.layerSelectionClasses);
-                me.maplayerPanel.plugin.setLocation(me.layerSelectionClasses);
-            } else {
-//                console.log("lsp disabled, setting layout to ", me.layerSelectionClasses);
-                if (!me.maplayerPanel.plugin.conf) {
-                    me.maplayerPanel.plugin.conf = {
-                        "location": {
-                            "classes": me.layerSelectionClasses.classes
-                        }
-                    };
-                } else {
-                    me.maplayerPanel.plugin.conf.location = {
-                        "classes": me.layerSelectionClasses.classes
-                    };
-                }
-            }
+            me.maplayerPanel.plugin.setLocation(me.layerSelectionClasses);
         },
         _createToolLayoutPanel: function () {
             var me = this,
@@ -774,8 +750,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     tool.plugin.stopPlugin(this.instance.sandbox);
                 }
             }
-            //console.log("_adjustMapNavigationLocation", tool, enabled);
-            this._adjustMapNavigationLocation(tool, enabled);
         },
         /**
          * @method _getButtons
@@ -1003,34 +977,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
             return selections;
 
-        },
-
-        /**
-         * Adjust the location of the zoombar in case the panbuttons tool is selected.
-         *
-         * @method _adjustMapNavigationLocation
-         * @private
-         * @param {Object} tool
-         * @param {Boolean} enabled
-         */
-        _adjustMapNavigationLocation: function (tool, enabled) {
-            /* TODO check that changing tool styles works with this.. I'm not sure if it changes tool size */
-            if (tool && tool.id === 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons') {
-                var zoombar = this.tools[this.toolIndices['Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar']],
-                    zbClasses = zoombar.config.location.classes.split(" "),
-                    withIndex = jQuery.inArray("with-panbuttons", zbClasses);
-                if (enabled) {
-                    if (withIndex < 0) {
-                        zbClasses.push("with-panbuttons");
-                    }
-                } else {
-                    if (withIndex > -1) {
-                        zbClasses.splice(withIndex, 1);
-                    }
-                }
-                zoombar.config.location.classes = zbClasses.join(" ");
-                zoombar.plugin.setLocation(zoombar.config.location);
-            }
         },
 
         /**
