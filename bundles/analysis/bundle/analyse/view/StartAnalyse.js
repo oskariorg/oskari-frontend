@@ -520,22 +520,22 @@ function(instance, localization) {
             // found form on screen
             // Point style
             var dotSize = onScreenForm.find('input[name=dotSize]').val();
-            var dotColor = onScreenForm.find('input[name=dotColor]').val();
+            var dotColor = '#'+onScreenForm.find('input[name=dotColor]').val();
             values.dot = {
                 size : dotSize,
                 color : dotColor
             }
             // Line style
             var lineSize = onScreenForm.find('input[name=lineSize]').val();
-            var lineColor = onScreenForm.find('input[name=lineColor]').val();
+            var lineColor = '#'+onScreenForm.find('input[name=lineColor]').val();
             values.line = {
                 size : lineSize,
                 color : lineColor
             }
             // Polygon style
             var areaLineSize = onScreenForm.find('input[name=areaLineSize]').val();
-            var areaLineColor = onScreenForm.find('input[name=areaLineColor]').val();
-            var areaFillColor = onScreenForm.find('input[name=areaFillColor]').val();
+            var areaLineColor = '#'+onScreenForm.find('input[name=areaLineColor]').val();
+            var areaFillColor = '#'+onScreenForm.find('input[name=areaFillColor]').val();
             values.area = {
                 size : areaLineSize,
                 lineColor : areaLineColor,
@@ -1329,6 +1329,7 @@ function(instance, localization) {
      */
     _handleAnalyseMapResponse : function(analyseJson) {
         // TODO: some error checking perhaps?
+        var me=this;
         var mapLayerService, mapLayer, requestBuilder, request;
 
         // TODO: Handle WPS results when no FeatureCollection eg. aggregate
@@ -1358,6 +1359,9 @@ function(instance, localization) {
                 this.instance.sandbox.request(this.instance, request);
             }
         }
+        // Set random colors for next analyse
+        me.categoryForm.randomColors();
+
     },
 
     /**

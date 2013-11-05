@@ -215,6 +215,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 }
 
                 this.publisher.changeFont(event.getFont());
+            },
+            /**
+             * @method MapLayerVisibilityChangedEvent
+             */
+            'MapLayerVisibilityChangedEvent' : function(event) {
+                if(this.publisher) {
+                    this.publisher.maplayerPanel.handleLayerVisibilityChanged(event.getMapLayer(), event.isInScale(), event.isGeometryMatch());
+                }
             }
         },
 
