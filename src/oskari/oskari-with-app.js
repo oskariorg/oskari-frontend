@@ -139,7 +139,16 @@ define([
     Oskari.Module = ConfigurableModule.create();
     
     /* Event, Request support Classes */   
-    var eventCls = Oskari.cls('Oskari.event.Event',function(instanceProps) {
+    
+    
+    /* Oskari.Event */
+    /* example: 
+     *   var evtCls = Oskari.Event.extend({ name: 'MyEvent' });
+     *   var evt = evtCls.create({ 'prop': 'value' }); 
+     *   Oskari.getSandbox().notifyAll(evt);  
+     */ 
+    */
+    Oskari.Event = Oskari.cls('Oskari.event.Event',function(instanceProps) {
         for (ip in instanceProps) {
             if (instanceProps.hasOwnProperty(ip)) {
                  this[ip] = instanceProps[ip];
@@ -153,9 +162,14 @@ define([
         protocol : ['Oskari.mapframework.event.Event']
     });
     
-    Oskari.Event = eventCls;
-    
-    var requestCls = Oskari.cls('Oskari.request.Request',function(instanceProps) {
+    /* Oskari.Request */
+    /* example: 
+     *   var reqCls = Oskari.Request.extend({ name: 'MyRequest'});
+     *   var req = reqcls.create( { 'prop': 'value' });
+     *   Oskari.getSandbox().request("MainMapModule", req);
+     *    
+     */ 
+    Oskari.Request = Oskari.cls('Oskari.request.Request',function(instanceProps) {
         for (ip in instanceProps) {
             if (instanceProps.hasOwnProperty(ip)) {
                  this[ip] = instanceProps[ip];
@@ -168,11 +182,20 @@ define([
     },{
         protocol : ['Oskari.mapframework.request.Request']
     });
-    
-    Oskari.Request = requestCls;
    
     /* Object Generic class */
-    var objectcls = 
+    /* example:
+     *    // instantiate
+     *    var obj = Oskari.Object.create({ 'prop' : 'value' });
+     * 
+     *    // extend 
+     *    var objCls = Oskari.Object.extend( {
+     *        funk: function() { return "obj extended "+this.prop; } 
+     *   }); 
+     *    // and instantiate
+     *   var enhancedObj = objCls.create({ 'prop' : 'new value' });
+     *   enhancedObj.funk();
+     */ 
     Oskari.Object = Oskari.cls('Oskari.Object',function(instanceProps) {
         for (ip in instanceProps) {
             if (instanceProps.hasOwnProperty(ip)) {
