@@ -370,6 +370,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             div.find('span').before(input);
 
+
             var baseLayersDiv = this.element.find('div.content div.baselayers');
             // add text if first selection available
             if (baseLayersDiv.find('div.layer').length === 0) {
@@ -377,6 +378,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     myLoc = pluginLoc[this.__name],
                     header = this.templates.baseLayerHeader.clone();
                 header.append(myLoc.chooseDefaultBaseLayer);
+                baseLayersDiv.parent().find(".baseLayerHeader").remove();
                 baseLayersDiv.before(header);
                 input.attr('checked', 'checked');
             }
@@ -393,9 +395,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             div.remove();
 
             var input = div.find('input');
+            var isActive = input.is(':checked');
             input.remove();
             input = this.templates.checkbox.clone();
             input.attr('value', layer.getId());
+            if(isActive){
+                input.attr('checked', 'checked');
+            }
             this._bindCheckbox(input, layer);
             div.find('span').before(input);
 
@@ -407,6 +413,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             // remove text if nothing to select 
             var baseLayersDiv = this.element.find('div.content div.baselayers'),
                 baseLayers = baseLayersDiv.find('div.layer');
+debugger;
             if (baseLayers.length === 0) {
                 var baselayerHeader = this.element.find('div.content div.baseLayerHeader');
                 baselayerHeader.remove();
@@ -435,8 +442,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             for (i = 0; i < values.baseLayers.length; i += 1) {
                 layerId = values.baseLayers[i];
                 layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-                // Numeric layer IDs are Numbers for some reason...
-                me._setLayerVisible(layer, (values.defaultBaseLayer + '' === layerId + ''));
+                if(layer != null) {
+                    // Numeric layer IDs are Numbers for some reason...
+                    me._setLayerVisible(layer, (values.defaultBaseLayer + '' === layerId + ''));
+                }
             }
             // send Request to rearrange layers
             var reqName = 'RearrangeSelectedMapLayerRequest',
@@ -542,7 +551,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (!me.element) {
                 me.element = me.templates.main.clone();
             }
-
             var pluginLoc = me.getMapModule().getLocalization('plugin', true),
                 myLoc = pluginLoc[me.__name],
                 header = me.element.find('div.header');

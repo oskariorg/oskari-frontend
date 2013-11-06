@@ -32,12 +32,12 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
      * read in backend
      *
      */
-    readWMTSCapabilites : function(wmtsName, capsPath, matrixSet, cb) {
+    readWMTSCapabilites : function(wmtsName, capsPath, matrixSet, cb,conf) {
 
         var me = this;
         var format = new OpenLayers.Format.WMTSCapabilities();
 
-        OpenLayers.Request.GET({
+        var httpGetConf = OpenLayers.Util.extend({
             url : capsPath,
             params : {
                 SERVICE : "WMTS",
@@ -53,15 +53,20 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
 
                 me.setCapabilities(wmtsName, caps);
                 var layersCreated = me.parseCapabilitiesToLayers(wmtsName, caps, matrixSet);
-                if (cb)
-                    cb(layersCreated, caps);
+                if (cb) {
+                    cb.apply(this,[layersCreated, caps]);
+                }
 
             },
             failure : function() {
                 alert("Trouble getting capabilities doc");
                 OpenLayers.Console.error.apply(OpenLayers.Console, arguments);
             }
-        });
+        }, conf||{});
+        
+        console.log(httpGetConf);
+        
+        OpenLayers.Request.GET(httpGetConf);
 
     },
     /**

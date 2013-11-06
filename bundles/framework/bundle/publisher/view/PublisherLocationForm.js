@@ -52,6 +52,7 @@ function(localization, publisher) {
 		for(var fkey in this.fields) {
 			var data = this.fields[fkey];
             var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput', fkey);
+            field.getField().find('input').before('<br />');
             field.setLabel(data.label);
 			field.setTooltip(data.tooltip, data.helptags);
 			field.setPlaceholder(data.placeholder);

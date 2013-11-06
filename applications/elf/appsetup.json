@@ -1,9 +1,5 @@
 {
-    "startupSequence": [{
-            "title": "oskariui",
-            "en": "oskariui",
-            "fi": "oskariui",
-            "sv": "oskariui",
+    "startupSequence": [{      
             "bundleinstancename": "oskariui",
             "bundlename": "oskariui",
             "instanceProps": {},
@@ -15,11 +11,7 @@
                 },
                 "Require-Bundle-Instance": []
             }
-        }, {
-            "title": "OpenLayers",
-            "en": "OpenLayers",
-            "fi": "OpenLayers",
-            "sv": "OpenLayers",
+        }, {         
             "bundleinstancename": "openlayers-default-theme",
             "bundlename": "openlayers-default-theme",
             "instanceProps": {},
@@ -36,11 +28,7 @@
             }
         },
 
-        {
-            "title": "Map",
-            "en": "Map",
-            "fi": "Map",
-            "sv": "Map",
+        {        
             "bundleinstancename": "mapfull",
             "bundlename": "mapfull",
             "instanceProps": {},
@@ -103,13 +91,6 @@
                 "Require-Bundle-Instance": []
             }
         }, {
-            "title": "Oskari DIV Manazer",
-            "en": "Oskari DIV Manazer",
-            "fi": "Oskari DIV Manazer",
-            "sv": "Oskari DIV Manazer",
-            "es": "Oskari DIV Manazer",
-            "cs": "Oskari DIV Manazer",
-            "de": "Oskari DIV Manazer",
             "bundleinstancename": "divmanazer",
             "bundlename": "divmanazer",
             "instanceProps": {},
@@ -122,14 +103,7 @@
                 "Require-Bundle-Instance": []
             }
         }, {
-            "title": "ELF",
-            "en": "ELF",
-            "fi": "ELF",
-            "sv": "ELF",
-            "es": "ELF",
-            "cs": "ELF",
-            "de": "ELF",
-            "bundleinstancename": "toolbar",
+             "bundleinstancename": "toolbar",
             "bundlename": "toolbar",
             "instanceProps": {},
             "metadata": {
@@ -141,13 +115,19 @@
                 "Require-Bundle-Instance": []
             }
         }, {
+            "instanceProps": {},
             "title": "ELF",
-            "en": "ELF",
-            "fi": "ELF",
-            "sv": "ELF",
-            "es": "ELF",
-            "cs": "ELF",
-            "de": "ELF",
+            "bundleinstancename": "elf-language-selector",
+            "bundlename": "elf-language-selector",
+            "metadata": {
+                "Import-Bundle": {
+                    "elf-language-selector": {
+                        "bundlePath": "../../packages/elf/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
             "bundleinstancename": "layerselector2",
             "bundlename": "layerselector2",
             "instanceProps": {},
@@ -160,13 +140,6 @@
                 "Require-Bundle-Instance": []
             }
         }, {
-            "title": "ELF",
-            "en": "ELF",
-            "fi": "ELF",
-            "sv": "ELF",
-            "es": "ELF",
-            "cs": "ELF",
-            "de": "ELF",
             "bundleinstancename": "layerselection2",
             "bundlename": "layerselection2",
             "instanceProps": {},
@@ -179,13 +152,6 @@
                 "Require-Bundle-Instance": []
             }
         }, {
-            "title": "ELF",
-            "en": "ELF",
-            "fi": "ELF",
-            "sv": "ELF",
-            "es": "ELF",
-            "cs": "ELF",
-            "de": "ELF",
             "bundleinstancename": "infobox",
             "bundlename": "infobox",
             "instanceProps": {},
@@ -198,13 +164,6 @@
                 "Require-Bundle-Instance": []
             }
         }, {
-            "title": "ELF",
-            "en": "ELF",
-            "fi": "ELF",
-            "sv": "ELF",
-            "es": "ELF",
-            "cs": "ELF",
-            "de": "ELF",
             "bundleinstancename": "statehandler",
             "bundlename": "statehandler",
             "instanceProps": {},
@@ -217,13 +176,6 @@
                 "Require-Bundle-Instance": []
             }
         }, {
-            "title": "ELF",
-            "en": "ELF",
-            "fi": "ELF",
-            "sv": "ELF",
-            "es": "ELF",
-            "cs": "ELF",
-            "de": "ELF",
             "bundleinstancename": "coordinatedisplay",
             "bundlename": "coordinatedisplay",
             "instanceProps": {},
@@ -236,13 +188,6 @@
                 "Require-Bundle-Instance": []
             }
         }, {
-            "title": "Feature data",
-            "en": "featuredata2",
-            "fi": "featuredata2",
-            "sv": "featuredata2",
-            "es": "featuredata2",
-            "cs": "featuredata2",
-            "de": "featuredata2",
             "bundleinstancename": "featuredata2",
             "bundlename": "featuredata2",
             "instanceProps": {},
@@ -258,17 +203,11 @@
             "instanceProps": {},
             "title": "Info Box",
             "bundleinstancename": "infobox",
-            "fi": "infobox",
-            "sv": "?",
-            "en": "?",
-            "es": "?",
-            "cs": "?",
-            "de": "?",
             "bundlename": "infobox",
             "metadata": {
                 "Import-Bundle": {
                     "infobox": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../packages/framework/bundle/"
                     }
                 },
                 "Require-Bundle-Instance": []

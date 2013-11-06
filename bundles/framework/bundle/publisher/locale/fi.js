@@ -128,7 +128,8 @@ Oskari.registerLocalization({
                 "saveNew": "Tallenna uusi",
                 "ok": "OK",
                 "replace": "Korvaa",
-                "cancel": "Peruuta"
+                "cancel": "Peruuta",
+                "add": "Lisää karttataso"
             },
             "confirm": {
                 "replace": {
@@ -183,6 +184,18 @@ Oskari.registerLocalization({
                 "notfound": "Käyttöehtoja ei löytynyt",
                 "reject": "Hylkää",
                 "accept": "Hyväksy"
+            }
+        },
+        "layer": {
+            "show": "Näytä",
+            "hide": "Piilota",
+            "hidden": "Karttataso on tilapäisesti piilotettu.",
+            "selectAsBaselayer": "Valitse pohjakartaksi",
+            "rights": {
+                "can_be_published_map_user": {
+                    "label": "Julkaistavissa",
+                    "tooltip": "Karttatason voi julkaista upotetussa karttaikkunassa. Viikoittainen käyttömäärä voi olla rajoitettu."
+                }
             }
         }
     }
