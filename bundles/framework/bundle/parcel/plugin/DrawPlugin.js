@@ -172,6 +172,8 @@ function(instance) {
 						lineString.components[lastIndex].y = lineString.components[lastIndex].y0;
 					}
 					// Updates middle points
+                    me.controls.modify.deactivate();
+                    me.controls.modify.activate();
 					me.controls.modify.selectFeature(operatingFeature);
                     me.controls.modify.clickout = false;
                     me.controls.modify.toggle = false;
