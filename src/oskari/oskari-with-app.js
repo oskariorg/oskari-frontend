@@ -137,6 +137,52 @@ define([
     });
 
     Oskari.Module = ConfigurableModule.create();
+    
+    /* Event, Request support Classes */   
+    var eventCls = Oskari.cls('Oskari.event.Event',function(instanceProps) {
+        for (ip in instanceProps) {
+            if (instanceProps.hasOwnProperty(ip)) {
+                 this[ip] = instanceProps[ip];
+            }
+        }
+    },{
+         getName : function() {
+                return this.name;
+         }
+    },{
+        protocol : ['Oskari.mapframework.event.Event']
+    });
+    
+    Oskari.Event = eventCls;
+    
+    var requestCls = Oskari.cls('Oskari.request.Request',function(instanceProps) {
+        for (ip in instanceProps) {
+            if (instanceProps.hasOwnProperty(ip)) {
+                 this[ip] = instanceProps[ip];
+            }
+        }
+    },{
+         getName : function() {
+                return this.name;
+         }
+    },{
+        protocol : ['Oskari.mapframework.request.Request']
+    });
+    
+    Oskari.Request = requestCls;
+   
+    /* Object Generic class */
+    var objectcls = 
+    Oskari.Object = Oskari.cls('Oskari.Object',function(instanceProps) {
+        for (ip in instanceProps) {
+            if (instanceProps.hasOwnProperty(ip)) {
+                 this[ip] = instanceProps[ip];
+            }
+        }
+    });
+   
+   
+    
 
     return Oskari;
 
