@@ -37,6 +37,11 @@ Oskari.registerLocalization({
                         "label": "Intersect",
                         "classForPreview": "intersect",
                         "tooltip": ""
+                    }, {
+                        "id": "oskari_analyse_layer_union",
+                        "label": "Union of analyse layers",
+                        "classForPreview": "layer_union",
+                        "tooltip": "Unifies analyse layers with the same feature fields"
                     }
                 ]
             },
@@ -81,6 +86,11 @@ Oskari.registerLocalization({
             },
             "union" : {
                 "label" : "Second layer for union input"
+            },
+            "layer_union" : {
+                "label" : "Chosen layers for union input",
+                "notAnalyseLayer": "Choose an analysis layer",
+                "noLayersAvailable": "No layers found with the same feature fields"
             },
             "spatial" : {
                 "label" : "Spatial operator",
@@ -167,6 +177,7 @@ Oskari.registerLocalization({
                 "invalidSetup": "Invalid parameters",
                 "noParameters": "No parameters set",
                 "noLayer": "No layer / features selected",
+                "noAnalyseUnionLayer": "Choose at least another analyse layer",
                 "invalidMethod": "Unknown method: ",
                 "bufferSize" : "Error in buffer size",
                 "illegalCharacters" : "No alfabets - use digits",

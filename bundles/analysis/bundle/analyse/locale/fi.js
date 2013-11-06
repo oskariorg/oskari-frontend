@@ -36,6 +36,11 @@ Oskari.registerLocalization({
                         "label": "Leikkaavien kohteiden suodatus",
                         "classForPreview": "intersect",
                         "tooltip": "Valitaan uudet kohteet leikkaamalla leikkaavan tason kohteilla leikattavaa tasoa"
+                    }, {
+                        "id": "oskari_analyse_layer_union",
+                        "label": "Analyysitasojen yhdiste",
+                        "classForPreview": "layer_union",
+                        "tooltip": "Yhdistää analyysitasoja, joilla on samat ominaisuustietokentät"
                     }
                 ]
             },
@@ -81,6 +86,11 @@ Oskari.registerLocalization({
             },
             "union" : {
                 "label" : "Valittu yhdistettävä taso"
+            },
+            "layer_union" : {
+                "label" : "Valitut yhdistettävät tasot",
+                "notAnalyseLayer": "Valitse jokin analyysitaso",
+                "noLayersAvailable": "Tasoja, joilla on samat ominaisuustietokentät ei löytynyt"
             },
             "spatial" : {
                 "label" : "Spatiaalinen operaattori",
@@ -167,6 +177,7 @@ Oskari.registerLocalization({
                 "invalidSetup": "Virheellisiä parametrejä",
                 "noParameters": "Ei parametrejä",
                 "noLayer": "Ei valittua tasoa",
+                "noAnalyseUnionLayer": "Valitse ainakin toinen analyysitaso",
                 "invalidMethod": "Tuntematon menetelmä: ",
                 "bufferSize": "Virhe vyöhykkeen koossa",
                 "illegalCharacters": "ei kirjaimia - käytä numeroita",

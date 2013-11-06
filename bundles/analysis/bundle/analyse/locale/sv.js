@@ -36,6 +36,11 @@ Oskari.registerLocalization({
                         "label": "Sektion",
                         "classForPreview": "intersect",
                         "tooltip": ""
+                    }, {
+                        "id": "oskari_analyse_layer_union",
+                        "label": "Analyysitasojen yhdiste",
+                        "classForPreview": "layer_union",
+                        "tooltip": "Yhdistää analyysitasoja, joilla on samat ominaisuustietokentät"
                     }
                 ]
             },
@@ -80,6 +85,11 @@ Oskari.registerLocalization({
             },
              "union" : {
                 "label" : "Andra lag för union input"
+            },
+            "layer_union" : {
+                "label" : "Andra lager för union input",
+                "notAnalyseLayer": "Välj ett analys lag",
+                "noLayersAvailable": "Tasoja, joilla on samat ominaisuustietokentät ei löytynyt"
             },
             "spatial" : {
                 "label" : "Spatial operator",
@@ -168,8 +178,14 @@ Oskari.registerLocalization({
                 "nohelp": "ingen anvisning",
                 "saveFailed": "Fel i analys lagring. Försök senare igen.",
                 "illegalCharacters": "ingen bokstaver - använda sifror",
-                 "loadLayersFailed": "Fel i analys ladda ner",
-                "loadLayerTypesFailed": "Analys eller WFS data typ request fel"
+                "loadLayersFailed": "Fel i analys ladda ner",
+                "loadLayerTypesFailed": "Analys eller WFS data typ request fel",
+                "invalidSetup": "Virheellisiä parametrejä",
+                "noParameters": "Ei parametrejä",
+                "noLayer": "Ei valittua tasoa",
+                "noAnalyseUnionLayer": "Valitse ainakin toinen analyysitaso",
+                "invalidMethod": "Tuntematon menetelmä: ",
+                "bufferSize": "Virhe vyöhykkeen koossa"
             }
 
         },

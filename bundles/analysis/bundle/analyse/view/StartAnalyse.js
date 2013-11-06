@@ -99,6 +99,7 @@ function(instance, localization) {
         "spatialOptionTool" : '<div class="tool ">' + '<input type="radio" name="spatial" />' + '<label></label></div>',
         "intersectOptionTool" : '<div class="tool ">' + '<input type="radio" name="intersect" />' + '<label></label></div>',
         "unionOptionTool" : '<div class="tool ">' + '<input type="radio" name="union" />' + '<label></label></div>',
+        "layerUnionOptionTool" : '<div class="tool"><input type="checkbox" name="layer_union" /><label></label></div>',
         "title" : '<div class="analyse_title_cont analyse_settings_cont"><div class="settings_buffer_label"></div><input class="settings_buffer_field" type="text"></div>',
         "title_name" : '<div class="analyse_title_name analyse_settings_cont"><div class="settings_name_label"></div><input class="settings_name_field" type="text"></div>',
         "title_color" : '<div class="analyse_title_colcont analyse_output_cont"><div class="output_color_label"></div></div>',
@@ -694,12 +695,10 @@ function(instance, localization) {
         }
         else if (method == this.id_prefix + "aggregateNumeric") {
             // sum, count, min, max, med
-
             me._aggregateExtra(extra);
 
         }else if (method == this.id_prefix + "aggregateText") {
             // sum, count, min, max, med
-
             me._aggregateExtraText(extra);
 
         } else if (method == this.id_prefix + "intersect") {
@@ -710,6 +709,9 @@ function(instance, localization) {
             // union input 2 layer selection
             // deprecated  me._unionExtra(extra);
 
+        } else if (method == this.id_prefix + "layer_union") {
+            // unfiy two or more analyse layers
+            me._layerUnionExtra(extra);
         }
     },
     /**
@@ -1038,6 +1040,124 @@ function(instance, localization) {
         }
 
     },
+
+    /**
+     * Add layer selection ui for analyse layer union.
+     *
+     * @method _layerUnionExtra
+     * @param  {jQuery} contentPanel
+     * @return {undefined}
+     */
+    _layerUnionExtra: function(contentPanel) {
+        var me = this,
+            selectedLayer = me._getSelectedMapLayer();
+
+        if (!selectedLayer || (selectedLayer && !selectedLayer.isLayerOfType('ANALYSIS'))) {
+            contentPanel.append(jQuery(
+                '<div>'+ me.loc.layer_union.notAnalyseLayer +'</div>'
+            ));
+            return;
+        }
+
+        me.unionOptions = jQuery.map(me.contentOptionsMap || {}, function(val, key) {
+            if (me._validForLayerUnion(selectedLayer, val.id)) {
+                return { id: val.id, label: val.label };
+            }
+        });
+
+        if (me.unionOptions.length === 0) {
+            contentPanel.append(jQuery(
+                '<div>'+ me.loc.layer_union.noLayersAvailable +'</div>'
+            ));
+            return;
+        }
+
+        // title
+        var title = me.template.title_extra.clone();
+        title.find('.extra_title_label').html(me.loc.layer_union.label);
+        contentPanel.append(title);
+
+        // layers
+        for (var i = 0; i < me.unionOptions.length; ++i) {
+            var option = me.unionOptions[i];
+            var toolContainer = me.template.layerUnionOptionTool.clone();
+            var label = option.label;
+            toolContainer.find('label').append(label).attr({
+                'for' : option.id,
+                'class' : 'params_checkboxlabel'
+            });
+            if (option.selected) {
+                toolContainer.find('input').attr('checked', 'checked');
+            }
+            contentPanel.append(toolContainer);
+            toolContainer.find('input').attr({
+                'value' : option.id,
+                'id' : option.id
+            });
+        }
+    },
+
+    /**
+     * Checks to see if the layer hiding behind the id is valid for layer union.
+     * It performs checks to see if the layer is not the same as the selected layer,
+     * the layer is of type 'analysis', and if the layer has the same feature fields
+     * as the selected layer.
+     *
+     * @method _validForLayerUnion
+     * @param  {Oskari.Layer} selectedLayer
+     * @param  {String} oskari_analyse_id id of the layer in form 'oskari_analyse_layer_<id>'
+     * @return {Boolean} returns true if the layer is valid for analyse union
+     */
+    _validForLayerUnion: function(selectedLayer, oskari_analyse_id) {
+        if (!oskari_analyse_id) return false;
+        // is layer id invalid?
+        var layerId = oskari_analyse_id.replace((this.id_prefix + 'layer_'), '');
+        if (!layerId) return false;
+        // do we find the layer?
+        var layer = this.instance.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
+        if (!layer) return false;
+        // is it the same layer as the selected layer?
+        if (layer.getId() === selectedLayer.getId()) return false;
+        // is the layer an analysis layer?
+        if (!layer.isLayerOfType('ANALYSIS')) return false;
+        // does the layer have the same fields as the selected layer
+        var fields1 = ( selectedLayer.getFields ? selectedLayer.getFields().slice() : [] ),
+            fields2 = ( layer.getFields ? layer.getFields().slice() : [] ),
+            f1Len = fields1.length, f2Len = fields2.length,
+            i;
+
+        // arrays are of different lengths
+        if (f1Len !== f2Len) return false;
+        // compare the elemets
+        for (i = 0; i < f1Len; ++i) {
+            if (fields1[i] !== fields2[i]) return false;
+        }
+
+        return true;
+    },
+
+    /**
+     * Returns the analyse layers the user has selected for union.
+     * Adds also the selected layer since it's not included in the checkboxes.
+     *
+     * @method _getLayerUnionLayers
+     * @param  {jQuery} container
+     * @return {Array[String]}
+     */
+    _getLayerUnionLayers: function(container) {
+        var me = this,
+            layerUnionLayers = container.find('input[name=layer_union]:checked'),
+            selectedLayer = this._getSelectedMapLayer();
+
+        layerUnionLayers = jQuery.map(layerUnionLayers, function(val, i) {
+            return val.value.replace((me.id_prefix + 'layer_'), '');
+        });
+
+        layerUnionLayers.push(selectedLayer.getId());
+
+        return layerUnionLayers;
+    },
+
     /**
      * @method _modifyExtraParameters
      * @private
@@ -1243,6 +1363,8 @@ function(instance, localization) {
         intersectLayerId = intersectLayerId && intersectLayerId.replace((this.id_prefix + 'layer_'), '');
         var spatialOperator = container.find('input[name=spatial]:checked').val();
         spatialOperator = spatialOperator && spatialOperator.replace(this.id_prefix, '');
+        // layer union
+        var layerUnionLayers = this._getLayerUnionLayers(container);
 
         var methodSelections = {
             'buffer' : {
@@ -1266,6 +1388,11 @@ function(instance, localization) {
                 methodParams : {
                     layerId : intersectLayerId,
                     operator : spatialOperator // TODO: param name?
+                }
+            },
+            'layer_union' : {
+                methodParams : {
+                    layers: layerUnionLayers
                 }
             }
         };
@@ -1457,43 +1584,43 @@ function(instance, localization) {
                 }
             }
         }
-        },
-        /**
-         * Check if wfs field type is numeric
-         * @param layers
-         * @private
-         */
-        _isNumericField: function (fieldName) {
-            var me = this;
-            var isIt = false;
-            var selectedLayer = me._getSelectedMapLayer();
-            var data = selectedLayer.getPropertyTypes();
-            jQuery.each(data, function (key, value) {
-                if (fieldName === key) {
-                    if (value == 'numeric')  isIt = true;
-                }
-            });
+    },
+    /**
+     * Check if wfs field type is numeric
+     * @param layers
+     * @private
+     */
+    _isNumericField: function (fieldName) {
+        var me = this;
+        var isIt = false;
+        var selectedLayer = me._getSelectedMapLayer();
+        var data = selectedLayer.getPropertyTypes();
+        jQuery.each(data, function (key, value) {
+            if (fieldName === key) {
+                if (value == 'numeric')  isIt = true;
+            }
+        });
 
 
-            return isIt;
-        },
-        /**
-         * Modify analyse name when analyse layer is changed
-         * @private
-         */
-        _modifyAnalyseName: function () {
-            var me = this;
-            var container = me.mainPanel;
-            var selected_layer = me._getSelectedMapLayer();
-            var name = '_';
-            if (selected_layer)
-                name = selected_layer.getName().substring(0, 15)+name;
-            container.find('.settings_name_field').attr({
-                'value' : name,
-                'placeholder' : me.loc.analyse_name.tooltip
-            });
-        },
-        /**
+        return isIt;
+    },
+    /**
+     * Modify analyse name when analyse layer is changed
+     * @private
+     */
+    _modifyAnalyseName: function () {
+        var me = this;
+        var container = me.mainPanel;
+        var selected_layer = me._getSelectedMapLayer();
+        var name = '_';
+        if (selected_layer)
+            name = selected_layer.getName().substring(0, 15)+name;
+        container.find('.settings_name_field').attr({
+            'value' : name,
+            'placeholder' : me.loc.analyse_name.tooltip
+        });
+    },
+    /**
      * @method destroy
      * Destroyes/removes this view from the screen.
      */
