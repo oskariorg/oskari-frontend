@@ -18,7 +18,7 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
             "content" : '<a href="?lang=fi#">Finnish</a><br /><br /><a href="?lang=sv#">Swedish</a><br />' + '<a href="?lang=en#">English</a><br /><br /><a href="?lang=de#">German</a><br />' + '<a href="?lang=es#">Spanish</a><br /><br /><a href="?lang=cs#">Czech</a><br />'
         },
         "cs" : {
-            "content" : '<a href="?lang=fi#">Finština</a><br /><br /><a href="?lang=sv#">Švédština</a><br />' + '<a href="?lang=en#">Angličtina</a><br /><br /><a href="?lang=de#">Němčina</a><br />' + '<a href="?lang=es#">espanja</a><br /><br /><a href="?lang=cs#">Čeština</a><br />'
+            "content" : '<a href="?lang=fi#">Finština</a><br /><br /><a href="?lang=sv#">Švédština</a><br />' + '<a href="?lang=en#">Angličtina</a><br /><br /><a href="?lang=de#">Němčina</a><br />' + '<a href="?lang=es#">Španělština</a><br /><br /><a href="?lang=cs#">Čeština</a><br />'
         },
         "es" : {
             "content" : '<a href="?lang=fi#">finés</a><br /><br /><a href="?lang=sv#">sueco</a><br />' + '<a href="?lang=en#">inglés</a><br /><br /><a href="?lang=de#">alemán</a><br />' + '<a href="?lang=es#">español</a><br /><br /><a href="?lang=cs#">checo</a><br />'
