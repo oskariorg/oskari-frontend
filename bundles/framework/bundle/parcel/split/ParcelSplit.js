@@ -568,7 +568,7 @@ function(drawPlugin) {
                     // Scaling for integer operations
                     l = clipSourcePolygons.length-1;
                     clipSourcePolygons[l] = this.scaleup(clipSourcePolygons[l], scale);
-                } else if (olOldFeatures[i].id.indexOf("OpenLayers.Geometry.LineString") !== -1) {
+                } else if (olOldFeatures[i].id.indexOf("LineString") !== -1) {
                     jstsLine = jstsParser.read(olOldFeatures[i]);
                 }
             }

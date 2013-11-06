@@ -82,7 +82,7 @@ function(instance) {
                             dialog.close();
                         },200);
                     } else {
-                        me.processFeatures()
+                        me.processFeatures();
                     }
 				}
 			}
@@ -100,7 +100,10 @@ function(instance) {
                     } else {
                         this.updateHole(event.feature);
                     }
-        			this.redraw();
+                    // Reproduce the original OL 2.12 behaviour
+                    jQuery('svg').find('circle').css('cursor', 'move');
+                    jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); // IE8
+          			this.redraw();
 		        	me.drawLayer.redraw();
 				}
 			}
@@ -170,6 +173,8 @@ function(instance) {
 					}
 					// Updates middle points
 					me.controls.modify.selectFeature(operatingFeature);
+                    me.controls.modify.clickout = false;
+                    me.controls.modify.toggle = false;
 				}
 
 				this.refresh();
@@ -211,7 +216,7 @@ function(instance) {
 		this.selectInfoControl = new OpenLayers.Control.SelectFeature(me.drawLayer);
 		this._map.addControl(this.selectInfoControl);
 
-		var modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer);
+		var modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer, {clickout:false, toggle:false});
 		this._map.addControl(modifyEditControl);
 
 		this.controls = {
@@ -582,6 +587,7 @@ function(instance) {
 	 */
 	clear : function() {
 		// remove possible old drawing
+        this.controls.modify.deactivate();
 		this.drawLayer.removeAllFeatures();
 		this.editLayer.removeAllFeatures();
 		var startIndex = this.markerLayer.markers.length - 1;
@@ -593,7 +599,7 @@ function(instance) {
 		this.splitSelection = false;
 		// Clear parcel map layers
 		this.instance.getService().clearParcelMap();
-		
+
 	},
 	/**
 	 * Handles the splitting of the parcel feature
@@ -607,12 +613,17 @@ function(instance) {
 			this.controls.select.select(operatingFeature);
 			this.controls.modify.selectFeature(operatingFeature);
 			this.controls.modify.activate();
+            this.controls.modify.clickout = false;
+            this.controls.modify.toggle = false;
 			//this.drawLayer.features[0].style = this.selectStyle;
 			//this.selectedFeature = 0;
 			// Make sure the marker layer is topmost (previous activations push the vector layer too high)
 			var index = Math.max(this._map.Z_INDEX_BASE['Feature'], this.markerLayer.getZIndex()) + 1;
 			this.markerLayer.setZIndex(index);
 			this.updateInfobox();
+            // Reproduce the original OL 2.12 behaviour
+            jQuery('svg').find('circle').css('cursor', 'move');
+            jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); // IE8
 		}
 	},
 	/**
