@@ -122,7 +122,8 @@ Oskari.registerLocalization({
                 "label" : "Layout",
                 "color_label" : "Select colors:",
                 "colorset_tooltip" : "Modify colors",
-                "tooltip" : "Setup colors for analysis layout"
+                "tooltip" : "Setup colors for analysis layout",
+                "random_color_label": "Random colors"
             },
             "buttons" : {
                 "save" : "Save",

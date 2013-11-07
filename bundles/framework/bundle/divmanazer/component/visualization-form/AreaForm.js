@@ -140,7 +140,22 @@ function(creator, loc, defaultValues) {
      * @param {Object} values
      */
     setValues: function(values) {
+        var i;
 
+        if(values != null) {
+            // transform strings into array indices
+            for (i = 0; i < this.creator.lineCornerMap.length; i++) {
+                if (values.lineCorner === this.creator.lineCornerMap[i]) {
+                    values.lineCorner = i;
+                }
+            }
+            for (i = 0; i < this.creator.lineStyleMap.length; i++) {
+                if (values.lineStyle === this.creator.lineStyleMap[i]) {
+                    values.lineStyle = i;
+                }
+            }
+            jQuery.extend(true, this.values, values);
+        }
     },
     /**
      * @method showForm

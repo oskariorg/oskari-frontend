@@ -19,7 +19,6 @@ Oskari.clazz.define('Oskari.userinterface.component.VisualizationForm',
         this.lineCapMap = ["butt","round"];
         this.lineCornerMap = ["mitre","round","bevel"];
         this.lineStyleMap = ["","5 2",""];
-        this.state = null;
         this.dialog = null;
 
         var defaultOptions = {
@@ -109,36 +108,21 @@ Oskari.clazz.define('Oskari.userinterface.component.VisualizationForm',
     },
 
     /**
-     * Sets the state which is used by form clazzes.
+     * Sets the values of the form clazzes.
      *
      * @method setValues
      * @param {Object} values
      */
     setValues: function(values) {
-        // 'round' -> 1 etc.
-        for (var i = 0; i < this.lineCapMap.length; i++) {
-            if(values.line.cap === this.lineCapMap[i]) {
-                values.line.cap = i;
-            }
-        }
-        for (var i = 0; i < this.lineCornerMap.length; i++) {
-            if(values.line.corner === this.lineCornerMap[i]) {
-                values.line.corner = i;
-            }
-            if(values.area.lineCorner === this.lineCornerMap[i]) {
-                values.area.lineCorner = i;
-            }
-        }
-        for (var i = 0; i < this.lineStyleMap.length; i++) {
-            if(values.line.style === this.lineStyleMap[i]) {
-                values.line.style = i;
-            }
-            if(values.area.lineStyle === this.lineStyleMap[i]) {
-                values.area.lineStyle = i;
-            }
-        }
+        if (values == null || typeof values !== 'object') return;
 
-        this.state = values;
+        var formClazzes = this._getFormClazz(),
+            fClazzName, fClazz;
+
+        for (fClazzName in formClazzes) {
+            fClazz = formClazzes[fClazzName];
+            fClazz.setValues(values[fClazzName]);
+        }
     },
 
     /**
@@ -196,7 +180,7 @@ Oskari.clazz.define('Oskari.userinterface.component.VisualizationForm',
                 if (me.dialog) {
                     me.dialog.close(true);
                 }
-                me.dialog = formClazz.showForm(e.target, me.state);
+                me.dialog = formClazz.showForm(e.target);
             }
         };
     },

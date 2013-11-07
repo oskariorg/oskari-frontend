@@ -122,7 +122,8 @@ Oskari.registerLocalization({
                 "label": "Layout",
                 "color_label": "Väljä färg:",
                 "colorset_tooltip": "Ändra färg inställning",
-                "tooltip": "Passa färg för analys layout"
+                "tooltip": "Passa färg för analys layout",
+                "random_color_label": "Satunnaiset värit"
             },
             "buttons" : {
                 "save" : "Lagra",

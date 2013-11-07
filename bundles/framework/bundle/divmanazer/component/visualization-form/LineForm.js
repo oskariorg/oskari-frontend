@@ -120,6 +120,33 @@ function(creator, loc, defaultValues) {
         };
     },
     /**
+     * @method setValues
+     * @param {Object} values
+     */
+    setValues: function(values) {
+        var i;
+
+        if(values != null) {
+            // transform strings into array indices
+            for (i = 0; i < this.creator.lineCapMap.length; i++) {
+                if(values.cap === this.creator.lineCapMap[i]) {
+                    values.cap = i;
+                }
+            }
+            for (i = 0; i < this.creator.lineCornerMap.length; i++) {
+                if(values.corner === this.creator.lineCornerMap[i]) {
+                    values.corner = i;
+                }
+            }
+            for (i = 0; i < this.creator.lineStyleMap.length; i++) {
+                if(values.style === this.creator.lineStyleMap[i]) {
+                    values.style = i;
+                }
+            }
+            jQuery.extend(true, this.values, values);
+        }
+    },
+    /**
      * @method showForm
      * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory[]} categories array containing available categories
      * @return {jQuery} jquery reference for the form 
