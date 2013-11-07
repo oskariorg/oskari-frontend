@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.event.AddedFeatureEvent
+ * @class Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.AddedFeatureEvent
  * 
  * Used to notify components that the feature has been added.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.event.AddedFeatureEvent',
+Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.AddedFeatureEvent',
 /**
  * @method create called automatically on construction
  * @static
@@ -14,7 +14,7 @@ function(geometry, drawingMode) {
     this._drawingMode = drawingMode;
 }, {
     /** @static @property __name event name */
-    __name : "MyPlaces.AddedFeatureEvent",
+    __name : "DrawPlugin.AddedFeatureEvent",
     /**
      * @method getName
      * Returns event name

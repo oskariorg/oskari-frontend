@@ -56,7 +56,7 @@ function(instance) {
             "id" : 'MyPlaces',
             multipart : true
         };
-        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', pluginConfig);
+        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin', pluginConfig);
         mapModule.registerPlugin(drawPlugin);
         mapModule.startPlugin(drawPlugin);
         this.drawPlugin = drawPlugin;
@@ -110,10 +110,10 @@ function(instance) {
             this._cleanupPopup();
         },
         /**
-         * @method MyPlaces.FinishedDrawingEvent
-         * @param {Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent} event
+         * @method DrawPlugin.FinishedDrawingEvent
+         * @param {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.FinishedDrawingEvent} event
          */
-        'MyPlaces.FinishedDrawingEvent' : function(event) {
+        'DrawPlugin.FinishedDrawingEvent' : function(event) {
             this._handleFinishedDrawingEvent(event);
         }
     },
@@ -121,7 +121,7 @@ function(instance) {
      * @method _handleFinishedDrawingEvent
      * Handles custom event when drawing is finished
      * @private
-     * @param {Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent} event
+     * @param {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.FinishedDrawingEvent} event
      */
     _handleFinishedDrawingEvent : function(event) {
         var center = event.getDrawing().getCentroid();

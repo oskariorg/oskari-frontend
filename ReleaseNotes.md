@@ -1,6 +1,33 @@
 # Release Notes
 ## 1.16
 
+### **Breaking changes**
+
+MyPlaces prefix was changed to DrawPlugin. Affected changes are:
+'Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin' --> 'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin'
+
+'MyPlaces.GetGeometryRequest' --> 'DrawPlugin.GetGeometryRequest'
+
+'MyPlaces.GetGeometryRequestHandler' --> 'DrawPlugin.GetGeometryRequestHandler'
+
+'MyPlaces.StartDrawingRequest' --> 'DrawPlugin.StartDrawingRequest'
+
+'MyPlaces.StartDrawingRequestHandler' --> 'DrawPlugin.StaǥrtDrawingRequestHandler'
+
+'MyPlaces.StopDrawingRequest' --> 'DrawPlugin.StopDrawingRequest'
+
+'MyPlaces.StopDrawingRequestHandler' --> 'DrawPlugin.StopDrawingRequestHandler'
+
+'Oskari.mapframework.bundle.myplaces2.event.MyPlaceSelectedEvent' --> 'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.SelectedDrawingEvent'
+'MyPlaces.MyPlaceSelectedEvent' --> 'DrawPlugin.SelectedDrawingEvent'
+
+'Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent' --> 'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.FinishedDrawingEvent'
+'MyPlaces.FinishedDrawingEvent' --> 'DrawPlugin.FinishedDrawingEvent'
+
+'Oskari.mapframework.bundle.myplaces2.event.AddedFeatureEvent' --> 'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.AddedFeatureEvent'
+'MyPlaces.AddedFeatureEvent' --> 'DrawPlugin.AddedFeatureEvent'
+
+
 ### Statsgrid
 
 Municipality code was removed from the columns.
@@ -17,9 +44,14 @@ Added a new link next to EULA which shows the data sources for map layers and op
 
 Added a new bundle which imports user interface components from under divmanazer.
 
+### mapmodule-plugin/DrawPlugin
+
+Refactored DrawPlugin from myplaces2 as an independent plugin.
+
 ### myplaces2
 
 Added new configuration option 'layerDefaults' which can be used to override default values found in code. See bundle documentation for details.
+Refactored DrawPlugin to mapmodule-plugin/DrawPlugin.
 
 ### divmanazer/VisualizationForm
 
