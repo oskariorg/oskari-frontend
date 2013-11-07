@@ -346,6 +346,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         _loadAllLayersAjaxCallBack: function (pResp, callbackSuccess) {
             var allLayers = pResp.layers;
 
+            
             for (var i = 0; i < allLayers.length; i++) {
 
                 var mapLayer = this.createMapLayer(allLayers[i]);
@@ -731,6 +732,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 for (var perm in mapLayerJson.permissions) {
                     layer.addPermission(perm, mapLayerJson.permissions[perm]);
                 }
+            }
+
+            if (mapLayerJson.url) {
+                layer.addLayerUrl(mapLayerJson.url);
             }
 
             var builder = this.modelBuilderMapping[mapLayerJson.type];
