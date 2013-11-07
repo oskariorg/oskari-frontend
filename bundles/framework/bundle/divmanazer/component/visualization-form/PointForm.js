@@ -222,6 +222,15 @@ function(creator, loc, defaultValues) {
         };
     },
     /**
+     * @method setValues
+     * @param {Object} values
+     */
+    setValues: function(values) {
+        if(values != null) {
+            jQuery.extend(true, this.values, values);
+        }
+    },
+    /**
      * @method showForm
      * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory[]} categories array containing available categories
      * @return {jQuery} jquery reference for the form 

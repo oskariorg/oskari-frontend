@@ -82,7 +82,6 @@ function(instance, localization) {
 
     this._filterJsons = {};
     this._filterPopups = {};
-
 }, {
     __templates : {
         "content" : '<div class="layer_data"></div>',
@@ -106,6 +105,7 @@ function(instance, localization) {
         "title_columns" : '<div class="analyse_title_columns analyse_output_cont"><div class="columns_title_label"></div></div>',
         "title_extra" : '<div class="analyse_title_extra analyse_output_cont"><div class="extra_title_label"></div></div>',
         "icon_colors" : '<div class="icon-menu"></div>',
+        "random_colors" : '<div class="analyse_randomize_colors tool"><input type="checkbox" name="randomize_colors" id="analyse_randomize_colors_input" /><label for="analyse_randomize_colors_input"></label></div>',
         "option" : '<div class="analyse_option_cont analyse_settings_cont">' + '<input type="radio" name="selectedlayer" />' + '<label></label></div>',
         "methodOptionTool" : '<div class="tool ">' + '<input type="radio" name="method" />' + '<label></label></div>',
         "featureListSelect" : '<div class="analyse-select-featurelist"><a href="#">...</a></div>',
@@ -437,19 +437,20 @@ function(instance, localization) {
         var tooltipCont = this.template.help.clone();
         tooltipCont.attr('title', this.loc.output.tooltip);
         contentPanel.append(tooltipCont);
-
+        // title
         var colorTitle = this.template.title_color.clone();
         colorTitle.find('.output_color_label').html(this.loc.output.color_label);
-
         contentPanel.append(colorTitle);
-        // ... icon maybe later
-        // var icon_colors = this.template.icon_colors.clone();
-        // icon_colors.attr('title', this.loc.output.colorset_tooltip);
-        // contentPanel.append(icon_colors);
-        // Select colors for
-        // icon_colors.click(function() {
-        me._colorSelector(contentPanel);
-        // });
+        // Create random color picker checkbox
+        var colorRandomizer = this.template.random_colors.clone();
+        colorRandomizer.find('input[name=randomize_colors]').attr('checked', 'checked');
+        colorRandomizer.find('label').addClass('params_checklabel').
+            html(this.loc.output.random_color_label);
+        contentPanel.append(colorRandomizer);
+
+        var visualizationForm = Oskari.clazz.create('Oskari.userinterface.component.VisualizationForm');
+        me.visualizationForm = visualizationForm;
+        contentPanel.append(me.visualizationForm.getForm());
 
         return panel;
     },
@@ -490,59 +491,42 @@ function(instance, localization) {
         alert('TODO: add columns selector - use grid component - layers: ' + JSON.stringify(layers));
     },
     /**
-     * @method _colorSelector
-     * @private
-     * Select colors for analyse
-     * @param {jQuery} coldiv  div, to where append style setup form
-     *
-     */
-    _colorSelector : function(coldiv) {
-        var me = this;
-        // Use myplace style setup
-        me.categoryForm = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.CategoryForm', me.instance);
-        // hide myplace layer name input
-        var myform = me.categoryForm.getForm();
-        myform.find('div.field:first').hide();
-        coldiv.append(myform);
-    },
-    /**
      * @method getStyleValues
      * Returns style values as an object
      * @return {Object}
      */
     getStyleValues : function() {
-        var me = this;
-        var values = {};
-        // infobox will make us lose our reference so search
-        // from document using the form-class
-        var onScreenForm = me.mainPanel;
+        var me = this,
+            values = {};
 
-        if (onScreenForm.length > 0) {
-            // found form on screen
-            // Point style
-            var dotSize = onScreenForm.find('input[name=dotSize]').val();
-            var dotColor = '#'+onScreenForm.find('input[name=dotColor]').val();
+        // Sets random color values for visualization form
+        // if the checkbox is checked.
+        me.randomizeColors();
+
+        var formValues = me.visualizationForm.getValues();
+        if (formValues) {
             values.dot = {
-                size : dotSize,
-                color : dotColor
-            }
-            // Line style
-            var lineSize = onScreenForm.find('input[name=lineSize]').val();
-            var lineColor = '#'+onScreenForm.find('input[name=lineColor]').val();
+                size: formValues.point.size,
+                color: '#' + formValues.point.color,
+                shape: formValues.point.shape
+            };
             values.line = {
-                size : lineSize,
-                color : lineColor
-            }
-            // Polygon style
-            var areaLineSize = onScreenForm.find('input[name=areaLineSize]').val();
-            var areaLineColor = '#'+onScreenForm.find('input[name=areaLineColor]').val();
-            var areaFillColor = '#'+onScreenForm.find('input[name=areaFillColor]').val();
+                size: formValues.line.width,
+                color: '#' + formValues.line.color,
+                cap: formValues.line.cap,
+                corner: formValues.line.corner,
+                style: formValues.line.style
+            };
             values.area = {
-                size : areaLineSize,
-                lineColor : areaLineColor,
-                fillColor : areaFillColor
-            }
+                size: formValues.area.lineWidth,
+                lineColor: '#' + formValues.area.lineColor,
+                fillColor: '#' + formValues.area.fillColor,
+                lineStyle: formValues.area.lineStyle,
+                fillStyle: formValues.area.fillStyle,
+                lineCorner: formValues.area.lineCorner
+            };
         }
+
         return values;
     },
     /**
@@ -1084,7 +1068,7 @@ function(instance, localization) {
             var label = option.label;
             toolContainer.find('label').append(label).attr({
                 'for' : option.id,
-                'class' : 'params_checkboxlabel'
+                'class' : 'params_checklabel'
             });
             if (option.selected) {
                 toolContainer.find('input').attr('checked', 'checked');
@@ -1486,9 +1470,6 @@ function(instance, localization) {
                 this.instance.sandbox.request(this.instance, request);
             }
         }
-        // Set random colors for next analyse
-        me.categoryForm.randomColors();
-
     },
 
     /**
@@ -1620,6 +1601,50 @@ function(instance, localization) {
             'placeholder' : me.loc.analyse_name.tooltip
         });
     },
+
+    /**
+     * Change default colors for analyse in random range order
+     * @method randomColors
+     */
+    randomizeColors: function () {
+        if (!this.mainPanel.find('input[name=randomize_colors]').is(':checked')) {
+            return;
+        }
+
+        if (this.colorCount == undefined || this.colorCount === 16) {
+            this.colorCount = 0;
+        } else {
+            ++this.colorCount;
+        }
+
+        var line_point_border_colors = [
+                'e31a1c', '2171b5', '238b45', '88419d',
+                '2b8cbe', '238b45', 'd94801', 'd7301f',
+                '0570b0', '02818a', 'ce1256', '6a51a3',
+                'ae017e', 'cb181d', '238443', '225ea8',
+                'cc4c02'
+            ],
+            fill_colors = [
+                'fd8d3c', '6baed6', '66c2a4', '8c96c6',
+                '7bccc4', '74c476', 'fd8d3c', 'fc8d59',
+                '74a9cf', '67a9cf', 'df65b0', '9e9ac8',
+                'f768a1', 'fb6a4a', '78c679', '41b6c4',
+                'fe9929'
+            ],
+            values = {
+                point: { color: line_point_border_colors[this.colorCount] },
+                line: { color: line_point_border_colors[this.colorCount] },
+                area: {
+                    lineColor: line_point_border_colors[this.colorCount],
+                    fillColor: fill_colors[this.colorCount]
+                }
+            };
+
+        if (this.visualizationForm) {
+            this.visualizationForm.setValues(values);
+        }
+    },
+
     /**
      * @method destroy
      * Destroyes/removes this view from the screen.

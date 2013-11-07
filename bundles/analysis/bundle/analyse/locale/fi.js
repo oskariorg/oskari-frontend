@@ -122,7 +122,8 @@ Oskari.registerLocalization({
                 "label" : "Ulkoasu",
                 "color_label" : "Valitse tyylit:",
                 "colorset_tooltip" : "Valitse tyylit eri geometria tyyleille",
-                "tooltip" : "Voit valita analyysin tuloksille sivuillesi sopivan tyylimaailman"
+                "tooltip" : "Voit valita analyysin tuloksille sivuillesi sopivan tyylimaailman",
+                "random_color_label": "Satunnaiset värit"
             },
             "buttons" : {
                 "save" : "Tallenna",
