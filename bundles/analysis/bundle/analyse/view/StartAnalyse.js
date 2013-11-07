@@ -442,13 +442,17 @@ function(instance, localization) {
         colorTitle.find('.output_color_label').html(this.loc.output.color_label);
 
         contentPanel.append(colorTitle);
+
+        var visualizationForm = Oskari.clazz.create('Oskari.userinterface.component.VisualizationForm');
+        me.visualizationForm = visualizationForm;
+        contentPanel.append(me.visualizationForm.getForm());
         // ... icon maybe later
         // var icon_colors = this.template.icon_colors.clone();
         // icon_colors.attr('title', this.loc.output.colorset_tooltip);
         // contentPanel.append(icon_colors);
         // Select colors for
         // icon_colors.click(function() {
-        me._colorSelector(contentPanel);
+        //me._colorSelector(contentPanel);
         // });
 
         return panel;
@@ -513,6 +517,23 @@ function(instance, localization) {
     getStyleValues : function() {
         var me = this;
         var values = {};
+        var formValues = me.visualizationForm.getValues();
+        if (formValues) {
+            values.dot = {
+                size: formValues.point.size,
+                color: '#' + formValues.point.color
+            };
+            values.line = {
+                size: formValues.line.width,
+                color: '#' + formValues.line.color
+            };
+            values.area = {
+                size: formValues.area.lineWidth,
+                lineColor: '#' + formValues.area.lineColor,
+                fillColor: '#' + formValues.area.fillColor
+            };
+        }
+        /*
         // infobox will make us lose our reference so search
         // from document using the form-class
         var onScreenForm = me.mainPanel;
@@ -543,6 +564,7 @@ function(instance, localization) {
                 fillColor : areaFillColor
             }
         }
+        */
         return values;
     },
     /**
@@ -1414,6 +1436,7 @@ function(instance, localization) {
         var sandbox = this.instance.getSandbox();
         var url = sandbox.getAjaxUrl();
         var selections = me._gatherSelections();
+        console.log(selections);
         var data = {};
         data.analyse = JSON.stringify(selections);
 
@@ -1487,7 +1510,7 @@ function(instance, localization) {
             }
         }
         // Set random colors for next analyse
-        me.categoryForm.randomColors();
+        //me.categoryForm.randomColors();
 
     },
 
