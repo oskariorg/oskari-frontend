@@ -1,4 +1,154 @@
 # Release Notes
+## 1.16
+
+### **Breaking changes**
+
+MyPlaces prefix was changed to DrawPlugin. Affected changes are:
+'Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin' --> 'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin'
+
+'MyPlaces.GetGeometryRequest' --> 'DrawPlugin.GetGeometryRequest'
+
+'MyPlaces.GetGeometryRequestHandler' --> 'DrawPlugin.GetGeometryRequestHandler'
+
+'MyPlaces.StartDrawingRequest' --> 'DrawPlugin.StartDrawingRequest'
+
+'MyPlaces.StartDrawingRequestHandler' --> 'DrawPlugin.StaǥrtDrawingRequestHandler'
+
+'MyPlaces.StopDrawingRequest' --> 'DrawPlugin.StopDrawingRequest'
+
+'MyPlaces.StopDrawingRequestHandler' --> 'DrawPlugin.StopDrawingRequestHandler'
+
+'Oskari.mapframework.bundle.myplaces2.event.MyPlaceSelectedEvent' --> 'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.SelectedDrawingEvent'
+'MyPlaces.MyPlaceSelectedEvent' --> 'DrawPlugin.SelectedDrawingEvent'
+
+'Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent' --> 'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.FinishedDrawingEvent'
+'MyPlaces.FinishedDrawingEvent' --> 'DrawPlugin.FinishedDrawingEvent'
+
+'Oskari.mapframework.bundle.myplaces2.event.AddedFeatureEvent' --> 'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.AddedFeatureEvent'
+'MyPlaces.AddedFeatureEvent' --> 'DrawPlugin.AddedFeatureEvent'
+
+
+### Statsgrid
+
+Municipality code was removed from the columns.
+
+Users can now select the class limits mode from distinct and discontinuous.
+
+The map link now gets the class limits mode and colour selections as parameters.
+
+### mapmodule-plugin/LogoPlugin
+
+Added a new link next to EULA which shows the data sources for map layers and open statistics indicators.
+
+### ui-components
+
+Added a new bundle which imports user interface components from under divmanazer.
+
+### mapmodule-plugin/DrawPlugin
+
+Refactored DrawPlugin from myplaces2 as an independent plugin.
+
+### myplaces2
+
+Added new configuration option 'layerDefaults' which can be used to override default values found in code. See bundle documentation for details.
+Refactored DrawPlugin to mapmodule-plugin/DrawPlugin.
+
+### divmanazer/VisualizationForm
+
+New component which defines functionality to create geometry visualizations for eg. myplaces2 bundle.
+
+### publisher
+
+Added possibility to change order of the layer as well as its opacity. Also removing and adding new layers is now possible.
+
+## 1.15
+
+### **Breaking changes**
+
+Environment specific localized values (URLs) have been move to bundle configuration. If something is broken, check the new configurations to fix it.
+
+### Sandbox/map layer service
+
+Added new method to create maplayer domain objects based on type: createLayerTypeInstance(type). This is a preferred way to create layer domain classes instead of Oskari.clazz.create() if you need to create one manually.
+
+Added new method to find all layers of given type: getLayersOfType(type). For example get all wfs layers by calling getLayersOfType('wfs').
+
+### mapmodule-plugin/layers/backgroundlayerselector
+
+New plugin for selecting a background layer from a preset list. See the bundle documentation for more information.
+
+### myplaces
+
+Clicking a preview image in the My places GFI popup opens the image URL in a new browser tab or window.
+
+Improved parameter handling for My places visualizations.
+
+Improved "Finish drawing" button functionality when drawing new lines and polygons.
+
+Localized URLs have been moved from bundles to bundle configurations.
+
+### personaldata bundle
+
+Now supports adding tabs with PersonalData.AddTabRequest request
+
+English and swedish text & tooltips added.
+
+Localized publishedMapUrl in bundle configuration.
+
+### featuredata2 bundle
+
+Uses hasFeatureData to check WFS-like layers instead of isLayerOfType('WFS')
+
+### mapanalysis bundle
+
+AnalysisLayer.js extends 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer'
+
+AnalysisLayerModelBuilder.js utilizes 'Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder'
+
+Analysis layers' jsons are now constructed in mapfullhandler
+
+### analyse bundle
+
+Analyse bundle now requests personaldata bundle to show an additional tab with analysis layer listing. Analysis layers can be removed from the tab.
+
+Properties moved from localization to bundle conf.
+
+New analyse methods geom union and intersect/within selection released
+
+Analyse filter popups are now draggable so that feature data can be visible at the same time.
+
+### statehandler bundle
+
+Fixed to send parameters correctly on ajax call. Views are now saved correctly again.
+
+### publisher
+
+Users can now choose to create and use a custom colour scheme for the GFI dialogs. Colour scheme is created with rgb values for the colours.
+
+Localized URLs in bundle configuration.
+
+### admin bundle
+
+Fixed WMS interface address pre-filling problem.
+
+Compatibility fixed for old WMTS layer json format
+
+Every inline style removed that made any sense to remove.
+
+### admin-layerselector
+
+User interface bug fixes.
+
+### statistics/statsgrid
+
+Sorting is now disabled when clicking the header menu buttons of an indicator in the grid.
+The classification now shows distinct class ranges thanks to the geostats library update.
+
+Bundle now has a tile for easier access to statistics. Statistics layer to use can be configured with defaultLayerId : [layer id]
+
+### libraries/geostats
+
+Updated the geostats library to version per 10/17/2013.
 
 ## 1.14
 

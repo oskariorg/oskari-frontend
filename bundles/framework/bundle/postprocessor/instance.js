@@ -74,7 +74,16 @@ function() {
                 featureIdList.push(featureId);
             }
             // create dummy layer since the real one might not be available and we only need it for id
-            var dummyLayer = Oskari.clazz.create('Oskari.mapframework.domain.WfsLayer');
+            var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            if(!mapLayerService) {
+                // service not found - should never happen
+                return;
+            }
+            var dummyLayer = mapLayerService.createLayerTypeInstance('wfslayer'); 
+            if(!dummyLayer) {
+                // layer couldnt be created - wfslayermodelbuilder not registered!
+                return;
+            }
             dummyLayer.setId(layerId);
             dummyLayer.setOpacity(100);
             var event = builder(featureIdList, dummyLayer);

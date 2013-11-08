@@ -36,18 +36,23 @@ Oskari.registerLocalization({
                         "label": "Sektion",
                         "classForPreview": "intersect",
                         "tooltip": ""
+                    }, {
+                        "id": "oskari_analyse_layer_union",
+                        "label": "Analyysitasojen yhdiste",
+                        "classForPreview": "layer_union",
+                        "tooltip": "Yhdistää analyysitasoja, joilla on samat ominaisuustietokentät"
                     }
                 ]
             },
              "aggregate" : {
                  "label" : "Aggregate funktion",
                 "options" : [{
-                    "id" : "oskari_analyse_Sum",
-                    "label" : "Summa",
-                    "selected" : true
-                }, {
                     "id" : "oskari_analyse_Count",
-                    "label" : "Antal"
+                    "label" : "Antal",
+                    "selected" : true
+                },{
+                    "id" : "oskari_analyse_Sum",
+                    "label" : "Summa"
                 }, {
                     "id" : "oskari_analyse_Min",
                     "label" : "Minimum"
@@ -60,9 +65,6 @@ Oskari.registerLocalization({
                 },{
                     "id" : "oskari_analyse_StdDev",
                     "label" : "Medel spridning"
-                },{
-                    "id" : "oskari_analyse_Median",
-                    "label" : "Mediaan"
                 }],
                 "attribute": "Välj ett attribut"
             },
@@ -83,6 +85,11 @@ Oskari.registerLocalization({
             },
              "union" : {
                 "label" : "Andra lag för union input"
+            },
+            "layer_union" : {
+                "label" : "Andra lager för union input",
+                "notAnalyseLayer": "Välj ett analys lag",
+                "noLayersAvailable": "Tasoja, joilla on samat ominaisuustietokentät ei löytynyt"
             },
             "spatial" : {
                 "label" : "Spatial operator",
@@ -115,7 +122,8 @@ Oskari.registerLocalization({
                 "label": "Layout",
                 "color_label": "Väljä färg:",
                 "colorset_tooltip": "Ändra färg inställning",
-                "tooltip": "Passa färg för analys layout"
+                "tooltip": "Passa färg för analys layout",
+                "random_color_label": "Satunnaiset värit"
             },
             "buttons" : {
                 "save" : "Lagra",
@@ -171,7 +179,14 @@ Oskari.registerLocalization({
                 "nohelp": "ingen anvisning",
                 "saveFailed": "Fel i analys lagring. Försök senare igen.",
                 "illegalCharacters": "ingen bokstaver - använda sifror",
-                 "loadLayersFailed": "Fel i analys ladda ner"
+                "loadLayersFailed": "Fel i analys ladda ner",
+                "loadLayerTypesFailed": "Analys eller WFS data typ request fel",
+                "invalidSetup": "Virheellisiä parametrejä",
+                "noParameters": "Ei parametrejä",
+                "noLayer": "Ei valittua tasoa",
+                "noAnalyseUnionLayer": "Valitse ainakin toinen analyysitaso",
+                "invalidMethod": "Tuntematon menetelmä: ",
+                "bufferSize": "Virhe vyöhykkeen koossa"
             }
 
         },
@@ -220,7 +235,7 @@ Oskari.registerLocalization({
                 "name" : "Namn",
                 "delete": " "
             },
-            "title" : "Analys",
+            "title" : "Analyser",
             "confirmDeleteMsg" : "Vill du ta bort:",
             "buttons" : {
                 "ok": "OK",

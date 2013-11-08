@@ -1,0 +1,241 @@
+{
+
+
+	"metadataflyout": {
+		"conf": {
+			
+		}
+	},
+	"search": {
+		"conf": {
+			
+		}
+	},
+	"backendstatus": {
+		"conf": {
+			
+		}
+	},
+	"layerselection2": {
+		"conf": {
+			
+		}
+	},
+	"layerselector2": {
+		"conf": {
+			
+		}
+	},
+
+	"divmanazer": {
+		"conf": {
+			
+		}
+	},
+	"infobox": {
+		"conf": {
+			
+		}
+	},
+	"toolbar": {
+		"conf": {
+			
+			"defaultToolbarContainer": "#toolbar",
+			"defaultMenuToolbarContainer": "#menutoolbar",
+			"viewtools": {
+				"print": false
+			}
+		}
+	},
+
+	"mapfull": {
+		"state": {
+			"selectedLayers": [
+				{
+					"id": "base_35"
+				}
+			],
+			"zoom": 1,
+			"north": "4244531.25",
+			"east": "5046875"
+		},
+		"conf": {
+			
+			"globalMapAjaxUrl": "ajax.json?",
+
+			"mapOptions": {
+				"resolutions": [781.25, 390.625, 156.25, 78.125, 39.0625],
+				"maxExtent": {
+					"left": 2600000,
+					"bottom": 1300000,
+					"right": 6000000,
+					"top": 5500000
+				},
+				"srsName": "EPSG:3035"
+			},
+			"projectionDefs": {
+				"EPSG:3035": "+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +units=m +no_defs",
+				"EPSG:3067": "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
+				"EPSG:4326": "+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
+			},
+
+			"plugins": [
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
+				}, {
+					"id": "Oskari.mapframework.mapmodule.WmsLayerPlugin"
+				}, {
+					"id": "Oskari.mapframework.mapmodule.ControlsPlugin",
+					"config": {
+						"mouse": {
+							"useCenterMapInWheelZoom": false,
+							"useCenterMapInDblClickZoom": false
+						}
+					}
+				}, {
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"
+				}, {
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"
+				}, {
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
+				}, {
+                    "id": "Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin"
+                }, {
+                	"id": "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
+                	"config": {
+                		"backoffIncrement": 1000,
+						"contextPath": "/transport-0.0.1",
+						"disconnectTime": 30000,
+						"hostname": "localhost",
+						"lazy": true,
+						"maxBackoff": 60000,
+						"maxNetworkDelay": 10000,
+						"port": "8888"
+                	}
+                }, {
+                	"id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
+                	"config": {
+                		"ignoredLayerTypes": ["WFS"],
+                		"infoBox": false
+                	}
+                }
+			],
+			"layers": [
+				{
+					"wmsName": "meri_manner_tk",
+					"type": "wmslayer",
+					"id": "NLS",
+					"wmsUrl": "http://a.karttatiili.fi/dataset/inspire/service/wms?",
+					"maxScale" : 1,
+					"minScale" : 2214570,
+					"name": "NLS Coast",
+					"inspire": "NLS",
+					"orgName": "National Land Survey of Finland",
+					"params": {
+						"bgcolor": "0xdaf0e1"
+					}
+				},
+				{
+					"dataUrl_uuid":"",
+					"wmsName":"kunnat_plus_2013",
+					"styles":{},
+					"orgName":"asdf",
+					"type":"wfslayer",
+					"baseLayerId":114,
+					"formats":{},
+					"isQueryable":true,
+					"id":425,
+					"minScale":1000000,
+					"dataUrl":"",
+					"style":"default",
+					"wmsUrl":"",
+					"title":{
+						"fi":"","sv":"","en":""
+					},
+					"epsg":4326,
+					"layerType":"wfslayer",
+					"resource_daily_max_per_ip":-1,
+					"inspireTheme":34,
+					"name":{
+						"fi":"Kunnat plus 2013 EPSG:4326",
+						"sv":"Kunnat plus 2013 EPSG:4326",
+						"en":"Kunnat plus 2013 EPSG:4326"
+					},
+					"name":"Kunnat plus 2013 EPSG:4326",
+					"opacity":100,
+					"subtitle":"",
+					"inspire":"Muut",
+					"maxScale":1
+				},
+				{
+					"type": "base",
+					"id": "base_35",
+					"name": "Background Map Series",
+					"subLayer": [
+						{
+							"wmsName": "taustakartta_800k",
+							"type": "wmslayer",
+							"id": 800,
+							"wmsUrl": "http://a.karttatiili.fi/dataset/inspire/service/wms?",
+							"maxScale" : 200000,
+							"minScale" : 400000
+
+						},
+						{
+							"wmsName": "taustakartta_2000k",
+							"type": "wmslayer",
+							"id": 2000,
+							"wmsUrl": "http://a.karttatiili.fi/dataset/inspire/service/wms?",
+							"maxScale" : 400000,
+							"minScale" : 800000
+
+						},
+						{
+							"wmsName": "taustakartta_4000k",
+							"type": "wmslayer",
+							"id": 4000,
+							"wmsUrl": "http://a.karttatiili.fi/dataset/inspire/service/wms?",
+							"maxScale" : 800000
+
+						},
+						{
+							"wmsName": "taustakartta_8000k",
+							"type": "wmslayer",
+							"id": 8000,
+							"wmsUrl": "http://a.karttatiili.fi/dataset/inspire/service/wms?",
+							"maxScale" : 2000000,
+							"minScale" : 2214570
+						}
+					],
+					"inspire": "NLS",
+					"orgName": "National Land Survey of Finland"
+				}
+				
+			]
+		}
+	},
+
+	"oskariui": {
+		"conf": {
+			"partsMap": {
+				"root": "#contentMap",
+				"map": "#mapdiv",
+				"toolbar": "#toolbar",
+				"menubar": "#menubar",
+				"menutoolbar": "#menutoolbar",
+				"left": ".oskariui-left",
+				"right": ".oskariui-right",
+				"center": ".oskariui-center"
+			}
+		}
+	},
+
+	"featuredata2": {
+		"conf": {
+			"selectionTools": true
+		},
+		"state": {}
+	}
+	
+	
+}

@@ -36,19 +36,24 @@ Oskari.registerLocalization({
                         "label": "Leikkaavien kohteiden suodatus",
                         "classForPreview": "intersect",
                         "tooltip": "Valitaan uudet kohteet leikkaamalla leikkaavan tason kohteilla leikattavaa tasoa"
+                    }, {
+                        "id": "oskari_analyse_layer_union",
+                        "label": "Analyysitasojen yhdiste",
+                        "classForPreview": "layer_union",
+                        "tooltip": "Yhdistää analyysitasoja, joilla on samat ominaisuustietokentät"
                     }
                 ]
             },
           "aggregate" : {
                 "label" : "Aggregointifunktio",
-                "options" : [{
-                    "id" : "oskari_analyse_Sum",
-                    "label" : "Summa",
-                    "selected" : true
-                }, {
+                "options" : [ {
                     "id" : "oskari_analyse_Count",
-                    "label" : "Lukumäärä"
-                }, {
+                    "label" : "Lukumäärä",
+                    "selected" : true
+                },{
+                    "id" : "oskari_analyse_Sum",
+                    "label" : "Summa"
+                },{
                     "id" : "oskari_analyse_Min",
                     "label" : "Minimi"
                 }, {
@@ -60,10 +65,8 @@ Oskari.registerLocalization({
                 }, {
                     "id" : "oskari_analyse_StdDev",
                     "label" : "Keskihajonta"
-                },{
-                    "id" : "oskari_analyse_Median",
-                    "label" : "Mediaani"
-                }],
+                }
+                ],
                 "attribute": "Valitse ominaisuustieto"
             },
             "buffer_size": {
@@ -83,6 +86,11 @@ Oskari.registerLocalization({
             },
             "union" : {
                 "label" : "Valittu yhdistettävä taso"
+            },
+            "layer_union" : {
+                "label" : "Valitut yhdistettävät tasot",
+                "notAnalyseLayer": "Valitse jokin analyysitaso",
+                "noLayersAvailable": "Tasoja, joilla on samat ominaisuustietokentät ei löytynyt"
             },
             "spatial" : {
                 "label" : "Spatiaalinen operaattori",
@@ -114,7 +122,8 @@ Oskari.registerLocalization({
                 "label" : "Ulkoasu",
                 "color_label" : "Valitse tyylit:",
                 "colorset_tooltip" : "Valitse tyylit eri geometria tyyleille",
-                "tooltip" : "Voit valita analyysin tuloksille sivuillesi sopivan tyylimaailman"
+                "tooltip" : "Voit valita analyysin tuloksille sivuillesi sopivan tyylimaailman",
+                "random_color_label": "Satunnaiset värit"
             },
             "buttons" : {
                 "save" : "Tallenna",
@@ -169,12 +178,14 @@ Oskari.registerLocalization({
                 "invalidSetup": "Virheellisiä parametrejä",
                 "noParameters": "Ei parametrejä",
                 "noLayer": "Ei valittua tasoa",
+                "noAnalyseUnionLayer": "Valitse ainakin toinen analyysitaso",
                 "invalidMethod": "Tuntematon menetelmä: ",
                 "bufferSize": "Virhe vyöhykkeen koossa",
                 "illegalCharacters": "ei kirjaimia - käytä numeroita",
                 "nohelp": "Ohjetta ei löytynyt",
                 "saveFailed": "Analyysin tallennus epäonnistui. Yritä myöhemmin uudelleen.",
-                "loadLayersFailed": "Analyysitasojen lataus epäonnistui. Yritä myöhemmin uudelleen."
+                "loadLayersFailed": "Analyysitasojen lataus epäonnistui. Yritä myöhemmin uudelleen.",
+                "loadLayerTypesFailed": "Analyysi- tai WFS-tason tietotyyppien haku epäonnistui "
              
             }
         },
@@ -223,7 +234,7 @@ Oskari.registerLocalization({
                 "name" : "Nimi",
                 "delete": " "
             },
-            "title" : "Analyysi",
+            "title" : "Analyysit",
             "confirmDeleteMsg" : "Haluatko poistaa analyysin:",
             "buttons" : {
                 "ok": "OK",

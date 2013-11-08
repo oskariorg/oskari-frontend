@@ -64,9 +64,9 @@ Oskari.registerLocalization({
 			"addOrganization" 		: "Lisää tiedontuottaja",
 			"addOrganizationDesc"	: "Lisää tiedontuottaja eli uusi orgasaatio",
 			"addInspire" 			: "Lisää aihe",
-			"addInspireDesc" 		: "Lisää aihe eli uusi Inspire&shy;-teema",
+			"addInspireDesc" 		: "Lisää aihe eli uusi Inspire-teema",
 			"addLayer" 				: "Lisää taso",
-			"addLayerDesc"			: "Lisää taso tähän Inspire&shy;-teemaan",
+			"addLayerDesc"			: "Lisää taso tähän Inspire-teemaan",
 			"edit" 					: "Muokkaa", 
 			"editDesc" 				: "Muokkaa nimeä",
 			"layerType"				: "Tason tyyppi",
@@ -92,11 +92,11 @@ Oskari.registerLocalization({
 			"subLayers" 			: "Alatasot",
 			"addSubLayer"			: "Lisää alataso",
 
-			"wmsInterfaceAddress" 	: "WMS&shy;-rajapinnan osoitteet",
-			"wmsInterfaceAddressDesc": "WMS&shy;-rajapinnan URL-osoitteet pilkulla eroteltuna",
+			"wmsInterfaceAddress" 	: "WMS-rajapinnan osoitteet",
+			"wmsInterfaceAddressDesc": "WMS-rajapinnan URL-osoitteet pilkulla eroteltuna",
 			"wmsServiceMetaId" 		: "WMS metatiedon tunniste",
-			"wmsServiceMetaIdDesc" 	: "WMS&shy;-palvelun metatiedon tiedostotunniste",
-			"layerNameAndDesc" 		: "Tason nimi ja lisätieto",
+			"wmsServiceMetaIdDesc" 	: "WMS-palvelun metatiedon tiedostotunniste",
+			"layerNameAndDesc" 		: "Tason nimi ja kuvaus",
 
 			"metaInfoIdDesc" 		: "Paikkatieto&shy;hakemiston metatiedon tiedostotunniste, joka yksilöi metatiedon XML kuvailun",
 			"metaInfoId" 			: "Metatiedon tiedosto&shy;tunniste",
@@ -125,29 +125,40 @@ Oskari.registerLocalization({
 			"maxScalePlaceholder" 	: "1 (1:1) Maximimittakaava ",
 			"srsName"				: "Koordinaatti&shy;järjestelmä",
 			"srsNamePlaceholder"	: "Koordinaattijärjestelmä",
-			"legendImage" 			: "Legenda&shy;-kuvan osoite",
+			"legendImage" 			: "Legenda-kuvan osoite",
 			"legendImageDesc" 		: "Legenda-kuvan osoite",
 			"legendImagePlaceholder" : "Legenda-kuvan osoite",
-			"gfiResponseType" 		: "GFI vastauksen tyyppi",
+			"gsandbox.getRequefiResponseType" 		: "GFI vastauksen tyyppi",
 			"gfiResponseTypeDesc" 	: "Vastauksen tyyppi eli Get Feature Info (GFI)",
 			"gfiStyle" 				: "GFI:n tyyli",
 			"gfiStyleDesc" 			: "GFI:n tyyli (XSLT)",
 
-			"finnish" 				: "Suomeksi:",
-			"finnishTitle" 			: "Fi",
-			"finnishPlaceholder" 	: "Nimi suomeksi",
-			"finnishDescPlaceholder" : "Kuvaus suomeksi",
-			"swedish" 				: "Ruotsiksi:",
-			"swedishTitle" 			: "Sv",
-			"swedishPlaceholder" 	: "Nimi ruotsiksi",
-			"swedishDescPlaceholder" : "Kuvaus ruotsiksi",
-			"english" 				: "Englanniksi:",
-			"englishTitle" 			: "En",
-			"englishPlaceholder" 	: "Nimi englanniksi",
-			"englishDescPlaceholder" : "Kuvaus englanniksi",
+			"generic"               : {
+				"placeholder"     : "Nimi kielellä {0}",
+				"descplaceholder" : "Kuvaus kielellä {0}"
+			},
+			"en"                    : {
+				"lang"            : "Englanniksi:",
+				"title"           : "En",
+				"placeholder"     : "Nimi englanniksi",
+				"descplaceholder" : "Kuvaus englanniksi"
+			},
+			"fi"                    : {
+				"lang"            : "Suomeksi:",
+				"title"           : "Fi",
+				"placeholder"     : "Nimi suomeksi",
+				"descplaceholder" : "Kuvaus suomeksi"
+			},
+			"sv"                    : {
+				"lang"            : "Ruotsiksi:",
+				"title"           : "Sv",
+				"placeholder"     : "Nimi ruotsiksi",
+				"descplaceholder" : "Kuvaus ruotsiksi"
+			},
 
 			"interfaceAddress" 		: "Rajapinnan osoite",
-			"interfaceAddressDesc" 	: "WMS&shy;-tasomäärittelyjen osoite"
+			"interfaceAddressDesc" 	: "WMS&shy;-tasomäärittelyjen osoite",
+			"viewingRightsRoles" 	: "Katseluoikeudet rooleille"
 		},
 		"cancel" 	: "Peruuta",
 		"add" 		: "Tallenna",

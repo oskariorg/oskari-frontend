@@ -139,6 +139,7 @@ function(instance) {
         // Line style
         var dialogContent = me.templateAreaStyleDialogContent.clone();
         var content = dialogContent.find('div.style');
+        if (me.values.lineStyle.length === 0) me.values.lineStyle = 0;
         for (var i=0; i<me.styleButtonNames.length; i++) {
             var styleBtnContainer = me.templateButton.clone();
             styleBtnContainer.addClass(me.styleButtonNames[i]);
@@ -295,10 +296,12 @@ function(instance) {
             // add color values to the input fields
             if(!statedChosenColor) {
                 var rgb = me.instance.hexToRgb(me.values[cType]);
-
                 content.find('input.custom-color.custom-red-value').val(rgb.r);
                 content.find('input.custom-color.custom-green-value').val(rgb.g);
                 content.find('input.custom-color.custom-blue-value').val(rgb.b);
+                dialogContent.find('input#'+ c.toString()+'red-value.custom-color').prop('disabled',false);
+                dialogContent.find('input#'+ c.toString()+'green-value.custom-color').prop('disabled',false);
+                dialogContent.find('input#'+ c.toString()+'blue-value.custom-color').prop('disabled',false);
             }
 
             content.find('.custom-color').change(function() {
@@ -314,7 +317,7 @@ function(instance) {
                     values[i] = intValue.toString(16);
                     if (values[i].length == 1) values[i] = '0' + values[i];
                 }
-                me.values[cType] = values.join('');
+                me.values[(colorType==0)?'lineColor':'fillColor'] = values.join('');
                 me._updatePreview();
             });
         }

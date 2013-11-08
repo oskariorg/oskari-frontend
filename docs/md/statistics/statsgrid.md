@@ -32,6 +32,17 @@ Each data column has a menu from where the user can filter the values in the gri
 
 ## Bundle configuration
 
+Enabling tile:
+```javascript
+config : {
+  "tileClazz": "Oskari.statistics.bundle.statsgrid.Tile",
+  "defaultLayerId": 274
+}
+```
+
+* defaultLayerId is optional, first registered layer of type 'STATS' will be used if not configured
+* tileClazz is optional and will add a tile to menu for easier access if configured
+
 Configuration for `ManageStatsPlugin`:
 ```javascript
 config : {

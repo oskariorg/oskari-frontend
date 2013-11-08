@@ -3,17 +3,17 @@
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundle", function() {
+Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundle", function () {
 
 }, {
-    "create": function() {
-        var me = this;
-        var inst = Oskari.clazz.create("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleInstance");
+    "create": function () {
+        var me = this,
+            inst = Oskari.clazz.create("Oskari.mapframework.bundle.featuredata2.FeatureDataBundleInstance");
 
         return inst;
 
     },
-    "update": function(manager, bundle, bi, info) {
+    "update": function (manager, bundle, bi, info) {
 
     }
 }, {
@@ -68,6 +68,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundle",
             "lang": "en",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/featuredata2/locale/en.js"
+        }, {
+            "lang": "es",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata2/locale/es.js"
+        }, {
+            "lang": "de",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata2/locale/de.js"
+        }, {
+            "lang": "cs",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata2/locale/cs.js"
         }]
     },
     "bundle": {

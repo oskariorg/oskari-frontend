@@ -67,8 +67,8 @@ function(instance, title, selectedEventName) {
         if (this.actionButton) {
             return this.actionButton;
         }
-        var me = this;
-        var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        var me = this,
+            btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         // Make button visually primary button.
         btn.addClass('primary');
         btn.setTitle(this.instance.getLocalization('button'));
@@ -84,14 +84,16 @@ function(instance, title, selectedEventName) {
      * Starts the action by sending the event if parcel fid is given correctly.
      * Closes the bundle view if event is sent.
      */
-    _startAction : function() {
-        var input = this._getFilterField().getValue().trim();
-        if (!input) {
+    _startAction : function(input) {
+        var userInput = input || this._getFilterField().getValue().trim(),
+            selectedEvent;
+
+        if (!userInput) {
             // Show error message about illegal input.
             this.instance.showMessage(this.instance.getLocalization('title'), this.instance.getLocalization('errors').illegalInput);
 
         } else if (this.selectedEventName) {
-            var selectedEvent = this.instance.sandbox.getEventBuilder(this.selectedEventName)(input);
+            selectedEvent = this.instance.sandbox.getEventBuilder(this.selectedEventName)(userInput);
             // Start the flow by sending the event.
             this.instance.sandbox.notifyAll(selectedEvent);
             // Close the flyout.

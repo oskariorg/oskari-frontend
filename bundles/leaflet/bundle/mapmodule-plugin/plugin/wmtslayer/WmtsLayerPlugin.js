@@ -21,172 +21,6 @@ function() {
     __name : 'WmtsLayerPlugin',
 
     /**
-     * @method getName
-     * @return {String} plugin name
-     */
-    getName : function() {
-        return this.pluginName;
-    },
-    /**
-     * @method getMapModule
-     * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
-     * module
-     */
-    getMapModule : function() {
-        return this.mapModule;
-    },
-    /**
-     * @method setMapModule
-     * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
-     * module
-     */
-    setMapModule : function(mapModule) {
-        this.mapModule = mapModule;
-        this.pluginName = mapModule.getName() + this.__name;
-    },
-    /**
-     * @method hasUI
-     * This plugin doesn't have an UI that we would want to ever hide so always returns false
-     * @return {Boolean}
-     */
-    hasUI : function() {
-        return false;
-    },
-    /**
-     * @method register
-     * Interface method for the plugin protocol.
-     * Registers self as a layerPlugin to mapmodule with mapmodule.setLayerPlugin()
-     */
-    register : function() {
-        this.getMapModule().setLayerPlugin('wmslayer', this);
-    },
-    /**
-     * @method unregister
-     * Interface method for the plugin protocol
-     * Unregisters self from mapmodules layerPlugins
-     */
-    unregister : function() {
-        this.getMapModule().setLayerPlugin('wmslayer', null);
-    },
-    /**
-     * @method init
-     * Interface method for the module protocol.
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     *          reference to application sandbox
-     */
-    init : function(sandbox) {
-    },
-    /**
-     * @method startPlugin
-     * Interface method for the plugin protocol.
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     *          reference to application sandbox
-     */
-    startPlugin : function(sandbox) {
-        this._sandbox = sandbox;
-
-        sandbox.register(this);
-        for (p in this.eventHandlers) {
-            sandbox.registerForEventByName(this, p);
-        }
-    },
-    /**
-     * @method stopPlugin
-     * Interface method for the plugin protocol
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     *          reference to application sandbox
-     */
-    stopPlugin : function(sandbox) {
-
-        for (p in this.eventHandlers) {
-            sandbox.unregisterFromEventByName(this, p);
-        }
-
-        sandbox.unregister(this);
-
-        this._sandbox = null;
-    },
-    /**
-     * @method start
-     * Interface method for the module protocol
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     *          reference to application sandbox
-     */
-    start : function(sandbox) {
-    },
-    /**
-     * @method stop
-     * Interface method for the module protocol
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     *          reference to application sandbox
-     */
-    stop : function(sandbox) {
-    },
-    /**
-     * @property {Object} eventHandlers
-     * @static
-     */
-    eventHandlers : {
-        'AfterMapLayerAddEvent' : function(event) {
-            this._afterMapLayerAddEvent(event);
-        },
-        'AfterMapLayerRemoveEvent' : function(event) {
-            this._afterMapLayerRemoveEvent(event);
-        },
-        'AfterChangeMapLayerOpacityEvent' : function(event) {
-            this._afterChangeMapLayerOpacityEvent(event);
-        },
-        'AfterChangeMapLayerStyleEvent' : function(event) {
-            this._afterChangeMapLayerStyleEvent(event);
-        }
-    },
-
-    /**
-     * @method onEvent
-     * Event is handled forwarded to correct #eventHandlers if found or discarded
-     * if not.
-     * @param {Oskari.mapframework.event.Event} event a Oskari event object
-     */
-    onEvent : function(event) {
-        return this.eventHandlers[event.getName()].apply(this, [event]);
-    },
-    /**
-     * @method preselectLayers
-     * Adds given layers to map if of type WMS
-     * @param {Oskari.mapframework.domain.WmtsLayer[]} layers
-     */
-    preselectLayers : function(layers) {
-
-        var sandbox = this._sandbox;
-        for (var i = 0; i < layers.length; i++) {
-            var layer = layers[i];
-            var layerId = layer.getId();
-
-            if (!layer.isLayerOfType('WMTS')) {
-                continue;
-            }
-
-            sandbox.printDebug("preselecting " + layerId);
-            this._addMapLayerToMap(layer, true, layer.isBaseLayer());
-        }
-
-    },
-    /**
-     * Handle _afterMapLayerAddEvent
-     * @private
-     * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent}
-     *            event
-     */
-    _afterMapLayerAddEvent : function(event) {
-        this._addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
-    },
-
-    /**
      * @method _addMapLayerToMap
      * @private
      * Adds a single Wmts layer to this map
@@ -195,10 +29,6 @@ function() {
      * @param {Boolean} isBaseMap
      */
     _addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
-
-        if (!layer.isLayerOfType('WMTS')) {
-            return;
-        }
 
         var layers = [], layerIdPrefix = 'layer_';
         // insert layer or sublayers into array to handle them identically
@@ -275,27 +105,11 @@ function() {
 
     /**
      * @method _afterMapLayerRemoveEvent
-     * Handle AfterMapLayerRemoveEvent
-     * @private
-     * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent}
-     *            event
-     */
-    _afterMapLayerRemoveEvent : function(event) {
-        var layer = event.getMapLayer();
-
-        this._removeMapLayerFromMap(layer);
-    },
-    /**
-     * @method _afterMapLayerRemoveEvent
      * Removes the layer from the map
      * @private
      * @param {Oskari.mapframework.domain.WmtsLayer} layer
      */
     _removeMapLayerFromMap : function(layer) {
-
-        if (!layer.isLayerOfType('WMTS')) {
-            return;
-        }
 
         if (layer.isBaseLayer() || layer.isGroupLayer()) {
             var baseLayerId = "";
@@ -320,35 +134,7 @@ function() {
             this.mapModule.removeLayer(remLayer[0], layer, name);
         }
     },
-    /**
-     * @method getOLMapLayers
-     * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
-     * @param {Oskari.mapframework.domain.WmtsLayer} layer
-     * @return {OpenLayers.Layer[]}
-     */
-    getOLMapLayers : function(layer) {
 
-        if (!layer.isLayerOfType('WMTS')) {
-            return null;
-        }
-
-        if (layer.isBaseLayer() || layer.isGroupLayer()) {
-            var baseLayerId = "";
-            if (layer.getSubLayers().length > 0) {
-                var olLayers = [];
-                for (var i = 0; i < layer.getSubLayers().length; i++) {
-                    var tmpLayers = this.mapModule.getLayersByName('basemap_' + layer.getSubLayers()[i].getId());
-                    olLayers.push(tmpLayers[0]);
-                }
-                return olLayers;
-            } else {
-                return this.mapModule.getLayersByName('layer_' + layer.getId());
-            }
-        } else {
-            return this.mapModule.getLayersByName('layer_' + layer.getId());
-        }
-        return null;
-    },
     /**
      * @method _afterChangeMapLayerOpacityEvent
      * Handle AfterChangeMapLayerOpacityEvent
@@ -358,9 +144,6 @@ function() {
      */
     _afterChangeMapLayerOpacityEvent : function(event) {
         var layer = event.getMapLayer();
-
-        if (!layer.isLayerOfType('WMTS'))
-            return;
 
         if (layer.isBaseLayer() || layer.isGroupLayer()) {
             if (layer.getSubLayers().length > 0) {
@@ -393,20 +176,33 @@ function() {
         var layer = event.getMapLayer();
 
         // Change selected layer style to defined style
+
         if (!layer.isBaseLayer()) {
             var styledLayer = this.mapModule.getLayersByName('layer_' + layer.getId());
             if (styledLayer != null) {
-                styledLayer[0].setParams({
-                    styles : layer.getCurrentStyle().getName()
-                });
+                var currStyle = layer.getCurrentStyle();
+                var currStyleName = currStyle ? currStyle.getName() : null;
+                if (currStyleName) {
+                    /*styledLayer[0].setParams({
+                        styles : currStyleName
+                    });*/
+                }
             }
         }
+    },
+
+    getLayerTypeIdentifier : function() {
+        return 'wmtslayer';
+    },
+    getLayerTypeSelector : function() {
+        return 'WMTS';
     }
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"],
+    "extend" : ["Oskari.mapping.mapmodule.plugin.MapLayerPlugin"]
 });
 

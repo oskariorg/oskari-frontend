@@ -1,0 +1,130 @@
+div.mapplugin.backgroundLayerSelectionPlugin {
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  z-index: 15000;
+  text-align: center; }
+  div.mapplugin.backgroundLayerSelectionPlugin div.bg {
+    background-color: black;
+    opacity: 0.3;
+    filter: alpha(opacity= 30 );
+    width: 100%;
+    height: 44px;
+    position: absolute;
+    bottom: 0;
+    left: 0; }
+  div.mapplugin.backgroundLayerSelectionPlugin div.content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 8px 0;
+    width: 100%;
+    /* dropdown version */ }
+    div.mapplugin.backgroundLayerSelectionPlugin div.content div.currentSelection {
+      display: none;
+      cursor: pointer;
+      margin: 0 auto;
+      height: 28px;
+      line-height: 28px;
+      font-size: 14px;
+      width: 110px;
+      padding: 0 10px;
+      background-color: #3c3c3c;
+      color: white;
+      overflow: hidden;
+      white-space: nowrap;
+      text-align: center;
+      text-overflow: ellipsis;
+      -webkit-border-radius: 2px;
+      -moz-border-radius: 2px;
+      border-radius: 2px;
+      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3); }
+      div.mapplugin.backgroundLayerSelectionPlugin div.content div.currentSelection::selection, div.mapplugin.backgroundLayerSelectionPlugin div.content div.currentSelection::-moz-selection {
+        background: transparent; }
+    div.mapplugin.backgroundLayerSelectionPlugin div.content ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 28px; }
+      div.mapplugin.backgroundLayerSelectionPlugin div.content ul li {
+        display: inline-block;
+        cursor: pointer;
+        width: 110px;
+        background-color: #3c3c3c;
+        color: white;
+        margin: 0 1px 0 0;
+        padding: 0 10px;
+        line-height: 28px;
+        font-size: 14px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3); }
+        div.mapplugin.backgroundLayerSelectionPlugin div.content ul li::selection, div.mapplugin.backgroundLayerSelectionPlugin div.content ul li::-moz-selection {
+          background: transparent; }
+        div.mapplugin.backgroundLayerSelectionPlugin div.content ul li:first-child {
+          -webkit-border-top-left-radius: 2px;
+          -webkit-border-bottom-left-radius: 2px;
+          -moz-border-radius-topleft: 2px;
+          -moz-border-radius-bottomleft: 2px;
+          border-top-left-radius: 2px;
+          border-bottom-left-radius: 2px; }
+        div.mapplugin.backgroundLayerSelectionPlugin div.content ul li:last-child {
+          -webkit-border-top-right-radius: 2px;
+          -webkit-border-bottom-right-radius: 2px;
+          -moz-border-radius-topright: 2px;
+          -moz-border-radius-bottomright: 2px;
+          border-top-right-radius: 2px;
+          border-bottom-right-radius: 2px; }
+        div.mapplugin.backgroundLayerSelectionPlugin div.content ul li.selected {
+          background-color: #fafafa;
+          color: #3c3c3c; }
+    div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown div.currentSelection {
+      display: block; }
+      div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown div.currentSelection div.header-icon {
+        float: left;
+        clear: none;
+        margin-left: -5px;
+        margin-top: 7px; }
+    div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown ul {
+      display: none;
+      width: 128px;
+      margin: 0 auto;
+      height: auto;
+      border: 1px solid #3c3c3c;
+      border-bottom-width: 0; }
+      div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown ul li {
+        background-color: #fafafa;
+        color: #3c3c3c;
+        display: block;
+        text-align: left;
+        padding: 0 9px;
+        line-height: 26px;
+        height: 26px;
+        border-bottom: 1px solid #e6e6e6;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        border-radius: 0; }
+        div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown ul li.selected {
+          display: none; }
+    div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown.open ul {
+      display: block; }
+    div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown.open div.currentSelection {
+      -webkit-border-top-left-radius: 0;
+      -webkit-border-top-right-radius: 0;
+      -moz-border-radius-topleft: 0;
+      -moz-border-radius-topright: 0;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0; }
+  div.mapplugin.backgroundLayerSelectionPlugin div.error {
+    margin: 0 auto;
+    display: inline-block;
+    height: 28px;
+    line-height: 28px;
+    font-size: 14px;
+    margin: 8px 0;
+    padding: 0 10px;
+    background-color: #911;
+    color: white;
+    text-align: center; }

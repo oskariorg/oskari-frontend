@@ -110,7 +110,7 @@ function(instance) {
 	/**
 	 * @method setState
 	 * @param {Object} state
-	 * 		state that this component should use
+	 *     state that this component should use
 	 * Interface method implementation, does nothing atm
 	 */
 	setState : function(state) {
@@ -122,21 +122,22 @@ function(instance) {
 	 * Creates the UI for a fresh start
 	 */
 	createUi : function() {
-		var me = this;
-
-		var celOriginal = jQuery(this.container);
+		var me = this,
+			celOriginal = jQuery(this.container);
 		celOriginal.empty();
 		var listContainer = this.template.clone();
 		celOriginal.append(listContainer);
 
-		var sandbox = me.instance.getSandbox();
-		var layers = sandbox.findAllSelectedMapLayers();
+		var sandbox = me.instance.getSandbox(),
+			layers = sandbox.findAllSelectedMapLayers(),
+			scale = sandbox.getMap().getScale(),
+			n,
+			layer,
+			layerContainer;
 
-		var scale = sandbox.getMap().getScale();
-
-		for (var n = layers.length - 1; n >= 0; --n) {
-			var layer = layers[n];
-			var layerContainer = this._createLayerContainer(layer);
+		for (n = layers.length - 1; n >= 0; --n) {
+			layer = layers[n];
+			layerContainer = this._createLayerContainer(layer);
 			listContainer.append(layerContainer);
 
 			// footer tools
@@ -540,10 +541,28 @@ function(instance) {
 		});
 
 		// data url link
+		 subLmeta = false;
 		if (!layer.getMetadataIdentifier()) {
-			// no functionality -> hide
-			tools.find('div.layer-description').hide();
-		} else {
+			//Check if sublayers have metadata info		
+ 			 subLayers = layer.getSubLayers();
+               
+                if (subLayers && subLayers.length > 0) {
+                    subLmeta = true;
+                    for (s = 0; s < subLayers.length; s += 1) {
+
+                        subUuid = subLayers[s].getMetadataIdentifier();
+                        if (!subUuid || subUuid == "" ) {
+                          subLmeta = false;      
+                          break;
+                        }
+                    }  
+                }
+            if (!subLmeta) {
+				// no functionality -> hide
+				tools.find('div.layer-description').hide();
+			}
+		} 
+		if (layer.getMetadataIdentifier() || subLmeta) {
 			tools.find('div.icon-info').bind('click', function() {
 				var rn = 'catalogue.ShowMetadataRequest';
 				var uuid = layer.getMetadataIdentifier();

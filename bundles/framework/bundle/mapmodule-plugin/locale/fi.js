@@ -21,8 +21,9 @@ Oskari.registerLocalization({
     "plugin": {
       "LogoPlugin": {
         "terms": "Käyttöehdot",
-        "termsLink": "http://www.paikkatietoikkuna.fi/web/fi/kayttoehdot",
-        "mapLinkBase": "http://www.paikkatietoikkuna.fi/web/fi/kartta?"
+        "dataSources": "Tietolähteet",
+        "layersHeader": "Karttatasot",
+        "indicatorsHeader": "Indikaattorit"
       },
       "DataSourcePlugin": {
         "link": "Aineistolähde",

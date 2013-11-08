@@ -21,8 +21,9 @@ Oskari.registerLocalization({
     "plugin": {
       "LogoPlugin": {
         "terms": "Terms of Use",
-        "termsLink": "http://www.paikkatietoikkuna.fi/web/en/terms-and-conditions",
-        "mapLinkBase": "http://www.paikkatietoikkuna.fi/web/en/map-window?"
+        "dataSources": "Data sources",
+        "layersHeader": "Map layers",
+        "indicatorsHeader": "Indicators"
       },
        "DataSourcePlugin": {
         "link": "Data Source",

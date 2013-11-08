@@ -1,17 +1,15 @@
-div.pzbDiv.mapplugin {
-  top: 140px;
-  right: 64px;
+div.mapplugin.zoombar {
   background: transparent;
-  z-index: 15000; }
-  div.pzbDiv.mapplugin div.pzbDiv-plus {
+  width: 18px; }
+  div.mapplugin.zoombar div.pzbDiv-plus {
     width: 18px;
     height: 46px;
     background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_plus_patched.png'); }
-  div.pzbDiv.mapplugin div.pzbDiv-minus {
+  div.mapplugin.zoombar div.pzbDiv-minus {
     width: 18px;
     height: 18px;
     background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_minus.png'); }
-  div.pzbDiv.mapplugin div.rui-slider-vertical {
+  div.mapplugin.zoombar div.rui-slider-vertical {
     background-color: transparent;
     background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar.png');
     height: 148px;

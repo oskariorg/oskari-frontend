@@ -130,6 +130,27 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         return noErrors;
     },
     /**
+     * Validates selections for analysis method intersect
+     *
+     * @method _validate_method_layer_union
+     * @param  {Object} selections Selections for output JSON
+     * @param  {String} errorTitle Error title to display to the user
+     * @return {Boolean} returns true if no validation errors, false otherwise
+     */
+    _validate_method_layer_union: function(selections, errorTitle) {
+        var noErrors = true;
+
+        if (!selections.methodParams.layers) {
+            this._notifyValidationError(this.loc.error.noLayer, errorTitle);
+            noErrors = false;
+        }
+        if (selections.methodParams.layers && selections.methodParams.layers.length < 2) {
+            this._notifyValidationError(this.loc.error.noAnalyseUnionLayer, errorTitle);
+            noErrors = false;
+        }
+        return noErrors;
+    },
+    /**
      * Notifies the user of a validation error.
      *
      * @method _notifyValidationError

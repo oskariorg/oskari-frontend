@@ -37,18 +37,23 @@ Oskari.registerLocalization({
                         "label": "Intersect",
                         "classForPreview": "intersect",
                         "tooltip": ""
+                    }, {
+                        "id": "oskari_analyse_layer_union",
+                        "label": "Union of analyse layers",
+                        "classForPreview": "layer_union",
+                        "tooltip": "Unifies analyse layers with the same feature fields"
                     }
                 ]
             },
             "aggregate" : {
                 "label" : "Aggregate function",
                 "options" : [{
-                    "id" : "oskari_analyse_Sum",
-                    "label" : "Sum",
-                    "selected" : true
-                }, {
                     "id" : "oskari_analyse_Count",
-                    "label" : "Count"
+                    "label" : "Count",
+                    "selected" : true
+                },{
+                    "id" : "oskari_analyse_Sum",
+                    "label" : "Sum"
                 }, {
                     "id" : "oskari_analyse_Min",
                     "label" : "Minimum"
@@ -61,9 +66,6 @@ Oskari.registerLocalization({
                 },{
                     "id" : "oskari_analyse_StdDev",
                     "label" : "Standard deviation"
-                },{
-                    "id" : "oskari_analyse_Median",
-                    "label" : "Median"
                 }],
                 "attribute": "Choose an attribute"
             },
@@ -84,6 +86,11 @@ Oskari.registerLocalization({
             },
             "union" : {
                 "label" : "Second layer for union input"
+            },
+            "layer_union" : {
+                "label" : "Chosen layers for union input",
+                "notAnalyseLayer": "Choose an analysis layer",
+                "noLayersAvailable": "No layers found with the same feature fields"
             },
             "spatial" : {
                 "label" : "Spatial operator",
@@ -115,7 +122,8 @@ Oskari.registerLocalization({
                 "label" : "Layout",
                 "color_label" : "Select colors:",
                 "colorset_tooltip" : "Modify colors",
-                "tooltip" : "Setup colors for analysis layout"
+                "tooltip" : "Setup colors for analysis layout",
+                "random_color_label": "Random colors"
             },
             "buttons" : {
                 "save" : "Save",
@@ -170,12 +178,14 @@ Oskari.registerLocalization({
                 "invalidSetup": "Invalid parameters",
                 "noParameters": "No parameters set",
                 "noLayer": "No layer / features selected",
+                "noAnalyseUnionLayer": "Choose at least another analyse layer",
                 "invalidMethod": "Unknown method: ",
                 "bufferSize" : "Error in buffer size",
                 "illegalCharacters" : "No alfabets - use digits",
                 "nohelp" : "No guide found",
                 "saveFailed" : "Storing analysis failed. Try again a little later.",
-                "loadLayersFailed": "Analysis layer load failed"
+                "loadLayersFailed": "Analysis layer load failed",
+                "loadLayerTypesFailed": "Analysis or WFS layer field types request failed"
             }
         },
         "StartView": {

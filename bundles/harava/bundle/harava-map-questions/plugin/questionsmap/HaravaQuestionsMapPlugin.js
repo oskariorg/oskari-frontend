@@ -218,8 +218,8 @@ function(config) {
      */
     "onPopupClose" : function(evt, me){
     	me.showTools();
-    	if(me._currentControls!= null && me._currentControls.modify!=null){
-    		me._currentControls.modify.selectControl.unselectAll();
+    	if(me._currentControls!= null && me._currentControls.select!=null){
+    		me._currentControls.select.unselectAll();
     	}
     	
     	jQuery.each(me.modules, function(k, module){
@@ -244,6 +244,7 @@ function(config) {
     	var module = me.getModuleById(me._currentStep);
     	if(module!=null){
     		me._currentControls.modify = module.modifyControls.modify;
+            me._currentControls.select = module.modifyControls.select;
     		module.modifyControls.modify.deactivate();
     		module.modifyControls.modify.activate();
     	}
@@ -349,8 +350,10 @@ function(config) {
 	        	// Add module modify controls
 	            module.modifyControls = {
 	            	modify : new OpenLayers.Control.ModifyFeature(module.layer, {
-	                autoActivate:true
-	                })
+	                    autoActivate:true,
+                        standalone:true
+	                }),
+                    select : new OpenLayers.Control.SelectFeature(module.layer)
 	            };
 	            
 	            // Add module layer to map
@@ -783,7 +786,7 @@ function(config) {
     	var me = this;    	
 
     	// programmatically select the drawn feature ("not really supported by openlayers")       	
-   		me._currentControls.modify.selectControl.unselectAll();   		
+   		me._currentControls.select.unselectAll();   		
    		var module = me.getModuleById(me._currentStep);
  
    		var layer = null;
@@ -839,7 +842,7 @@ function(config) {
 		if(!maxAnswersExceeded && isOk){
 			currentFeature.attributes.QUESTION = me._currentStep + me._currentQuestion.id;
 			layer.redraw();
-			me._currentControls.modify.selectControl.select(currentFeature);
+			me._currentControls.select.select(currentFeature);
 		}
     },
     /**
@@ -859,6 +862,7 @@ function(config) {
     	if(module!=null){        
     		module.layer.setVisibility(true);
     		me._currentControls.modify = module.modifyControls.modify;
+            me._currentControls.select = module.modifyControls.select;
     		module.modifyControls.modify.activate();
     		me.scaleAndCenterMap(module.defaultScale,module.centerLon,module.centerLat);
     	}
@@ -888,6 +892,7 @@ function(config) {
     	var me = this;    	
     	me._currentPopupHtml = null;
     	me._currentControls.modify = null;
+        me._currentControls.select = null;
     	me._currentControls.draw = null;
     	me._currentStepAndQuestion = null;
     	
@@ -957,6 +962,7 @@ function(config) {
 		    		me._currentStepAndQuestion = null;
 		    	}
 		        me._currentControls.modify = module.modifyControls.modify;
+                me._currentControls.select = module.modifyControls.select;
 		        me._currentQuestion = question;
 		        
 		        // activate all modify controls
@@ -972,7 +978,7 @@ function(config) {
     	var me = this;
     	var feature = me._lastfeature;
     	if (feature) {
-    		me._currentControls.modify.selectControl.unselectAll();
+    		me._currentControls.select.unselectAll();
     		if (feature.popup) {
         		feature.popup.destroy();
         	}
@@ -989,7 +995,7 @@ function(config) {
     	var me = this;
     	var feature = me._lastfeature;
     	if (feature) {
-    		me._currentControls.modify.selectControl.unselectAll();
+    		me._currentControls.select.unselectAll();
     		if (feature.popup) {
         		feature.popup.hide();
         	}

@@ -6,8 +6,8 @@ Oskari.registerLocalization({
     "desc": "",
     "category": {
       "defaultName": "Oma karttataso",
-      "organizationnew": "Omat kohteet",
-      "inspire": "Kohteet"
+      "organization": "Omat kohteet",
+      "inspire": "Omat kohteet"
     },
     "guest": {
       "loginShort": "Kirjaudu sisään käyttääksesi"
@@ -178,6 +178,9 @@ Oskari.registerLocalization({
       "tooltip": "",
       "linestyle": {
         "label": "Alueen viivan tyyli"
+      },
+      "linecap": {
+        "label": "Alueen viivan päädyt"
       },
       "linecorner": {
         "label": "Kulmat"

@@ -7,7 +7,7 @@ Oskari.registerLocalization({
     "category": {
       "defaultName": "Moje mapová vrstva",
       "organization": "Moje místa",
-      "inspire": "Místa"
+      "inspire": "Moje místa"
     },
     "guest": {
       "loginShort": "Pro použití se přihlašte"

@@ -1,7 +1,4 @@
 .panbuttonDiv.mapplugin {
-  top: 10px;
-  right: 36px;
-  display: block;
   color: black;
   background: transparent;
   font-size: 12px;
@@ -14,22 +11,18 @@
 
 .panbuttonDivImg {
   background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/sprite.png'); }
+  .panbuttonDivImg.root {
+    background-position: 0px -90px; }
+  .panbuttonDivImg.up {
+    background-position: 0px -360px; }
+  .panbuttonDivImg.right {
+    background-position: 0px -270px; }
+  .panbuttonDivImg.down {
+    background-position: 0px -450px; }
+  .panbuttonDivImg.left {
+    background-position: 0px -180px; }
 
-.panbuttonDivImg.root {
-  background-position: 0px -90px; }
-
-.panbuttonDivImg.left {
-  background-position: 0px -180px; }
-
-.panbuttonDivImg.right {
-  background-position: 0px -270px; }
-
-.panbuttonDivImg.up {
-  background-position: 0px -360px; }
-
-.panbuttonDivImg.down {
-  background-position: 0px -450px; }
-
+/* TODO check if it's safe to remove these... */
 .panbutton_left {
   float: left; }
 

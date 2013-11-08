@@ -116,6 +116,7 @@ function(instance) {
         // Line style
         var dialogContent = me.templateLineStyleDialogContent.clone();
         var content = dialogContent.find('div.style');
+        if (me.values.style.length === 0) me.values.style = 0;
         for (var i=0; i<me.styleButtonNames.length; i++) {
             var styleBtnContainer = me.templateButton.clone();
             styleBtnContainer.addClass(me.styleButtonNames[i]);
@@ -275,10 +276,10 @@ function(instance) {
         // add color values to the input fields
         if(!statedChosenColor) {
             var rgb = me.instance.hexToRgb(me.values.color);
-
             dialogContent.find('input.custom-color.custom-red-value').val(rgb.r);
             dialogContent.find('input.custom-color.custom-green-value').val(rgb.g);
             dialogContent.find('input.custom-color.custom-blue-value').val(rgb.b);
+            dialogContent.find('input.custom-color').prop('disabled',false);
         }
 
         dialogContent.find('.custom-color').change(function() {
