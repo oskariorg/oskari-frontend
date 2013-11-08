@@ -55,8 +55,21 @@ function(config, locale) {
         'filterSelect'      : '<div><select class="filter-select"></select><div class="filter-inputs-container"></div></div>',
         'filterOption'      : '<option></option>',
         'filterInputs'      : '<input type="text" class="filter-input filter-input1" /><span class="filter-between" style="display:none;">-</span><input type="text" class="filter-input filter-input2" style="display:none;" />',
-        'filterLink'        : '<a href="javascript:void(0);"></a>'
-    }
+        'filterLink'        : '<a href="javascript:void(0);"></a>',
+        'filterByRegion'    : '<div id="statsgrid-filter-by-region"><p class="filter-desc"></p><div class="filter-container"></div></div>',
+        'regionCatSelect'   : '<div class="filter-region-category-select"><select></select></div>',
+        'regionSelect'      : '<div class="filter-region-select"><select class="filter-region-select" multiple tabindex="3"></select></div>'
+    };
+
+    this.regionCategories = {};
+    this._acceptedRegionCategories = [
+        'ALUEHALLINTOVIRASTO',
+        'MAAKUNTA',
+        'NUTS1',
+        'SAIRAANHOITOPIIRI',
+        'SEUTUKUNTA',
+        'SUURALUE'
+    ];
 }, {
     /** 
      * @property __name module name
@@ -276,6 +289,7 @@ function(config, locale) {
         // success callback
         function(regionData) {
             if (regionData) {
+                me.setRegionCategories(regionData);
                 // get the actual data
                 //me.createMunicipalitySlickGrid(container, indicator, genders, years, indicatorMeta, regionData);
                 me.createMunicipalitySlickGrid(container, regionData);
@@ -292,6 +306,36 @@ function(config, locale) {
         function(jqXHR, textStatus) {
             me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].regionDataXHRError);
         });
+    },
+
+    setRegionCategories: function(regionData) {
+        var rLen = regionData.length,
+            i, region;
+
+        for (i = 0; i < rLen; ++i) {
+            region = regionData[i];
+            if (this._isAcceptedRegionCategory(region)) {
+                if (!this.regionCategories[region.category]) {
+                    this.regionCategories[region.category] = [];
+                }
+                this.regionCategories[region.category].push({
+                    id: region.id,
+                    code: region.code,
+                    title: region.title[Oskari.getLang()]
+                });
+            }
+        }
+    },
+
+    _isAcceptedRegionCategory: function(region) {
+        var catLen = this._acceptedRegionCategories.length,
+            i, category;
+
+        for (i = 0; i < catLen; ++i) {
+            category = this._acceptedRegionCategories[i];
+            if (category === region.category) return true;
+        }
+        return false;
     },
 
     /**
@@ -347,6 +391,7 @@ function(config, locale) {
                     id : indicData.id,
                     code : indicData.code,
                     municipality : indicData.title[Oskari.getLang()],
+                    memberOf: indicData.memberOf,
                     sel : 'checked'
                 }
                 rowId++;
@@ -446,7 +491,7 @@ function(config, locale) {
 
         grid.onColumnsReordered.subscribe(function(e, args){
             me.dataView.refresh();
-        })
+        });
 
         // register checboxSelector plugin
         grid.registerPlugin(checkboxSelector);
@@ -498,6 +543,10 @@ function(config, locale) {
 
 
         me._initHeaderPlugin(columns, grid);
+
+        // register header buttons plugin
+        var headerButtonsPlugin = new Slick.Plugins.HeaderButtons();
+        grid.registerPlugin(headerButtonsPlugin);
 
         // notify dataview that we are starting to update data
         dataView.beginUpdate();
@@ -910,6 +959,14 @@ function(config, locale) {
             return false;
         }
 
+        var headerButtons = [{
+            cssClass: 'icon-close-dark statsgrid-remove-indicator',
+            tooltip: me._locale.removeColumn,
+            handler: function(e) {
+                me.removeIndicatorDataFromGrid(indicatorId, gender, year);
+            }
+        }];
+
         var name = indicatorName + '/' + year + '/' + gender;
         columns.push({
             id : columnId,
@@ -918,11 +975,15 @@ function(config, locale) {
             toolTip : name,
             sortable : true,
             header : {
-                  menu: {
-                    items: [{element: jQuery(me.templates.filterLink).text(me._locale.filter), command: 'filter', actionType: 'link'}]
-                  },
-                  icon: 'icon-funnel'
-
+                menu: {
+                    items: [
+                        {element: jQuery('<div></div>').text(me._locale.filter)},
+                        {element: jQuery(me.templates.filterLink).text(me._locale.filterByValue), command: 'filter', actionType: 'link'},
+                        {element: jQuery(me.templates.filterLink).text(me._locale.filterByRegion), command: 'filterByRegion', actionType: 'link'}
+                    ]
+                },
+                icon: 'icon-funnel',
+                buttons: ( (this.conf && this.conf.published) ? null : headerButtons )
             },
             groupTotalsFormatter: function(totals, columnDef) {
                 var text = "";
@@ -1594,6 +1655,8 @@ function(config, locale) {
 
             } else if(args.command == 'filter') {
                 me._createFilterPopup(args.column, this);
+            } else if (args.command == 'filterByRegion') {
+                me._createFilterByRegionPopup(args.column, this);
             } else {
 
                 for (var i = 0; i < me.conf.statistics.length; i++) {
@@ -1719,12 +1782,121 @@ function(config, locale) {
     },
 
     /**
+     * Creates a popup to filter municipalities according to region groups.
+     * 
+     * @method _createFilterByRegionPopup
+     * @param  {Object} column
+     * @param  {Object} headerMenuPlugin
+     * @return {undefined}
+     */
+    _createFilterByRegionPopup: function(column, headerMenuPlugin) {
+        var me = this,
+            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            dialogTitle = me._locale['filterTitle'],
+            cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+            cancelLoc = me._locale['buttons'].cancel,
+            filterBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+            filterLoc = me._locale['buttons'].filter,
+            content = jQuery(me.templates.filterByRegion).clone(),
+            regionCatCont = jQuery(me.templates.filterRow).clone(),
+            regionCat = jQuery(me.templates.regionCatSelect).clone(),
+            labelsCont = jQuery(me.templates.filterRow).clone(),
+            regionIds, key, regionCatOption, regionCatLoc;
+
+        cancelBtn.setTitle(cancelLoc);
+        cancelBtn.setHandler(function() {
+            content.off();
+            headerMenuPlugin.hide();
+            dialog.close(true);
+        });
+
+        filterBtn.setTitle(filterLoc);
+        filterBtn.addClass('primary');
+        filterBtn.setHandler(function(e) {
+            regionIds = content.find('div.filter-region-select select').val();
+            me.filterColumnByRegion(column, regionIds);
+
+            content.off();
+            headerMenuPlugin.hide();
+            dialog.close(true);
+        });
+
+        // Description text
+        content.find('.filter-desc').text(me._locale['indicatorFilterDesc']);
+
+        // Show the column name
+        labelsCont.find('.filter-label').text(me._locale['filterIndicator']);
+        labelsCont.find('.filter-value').text(column.name);
+        content.find('.filter-container').append(labelsCont);
+
+        // Show the region category select
+        // Create an empty option first
+        regionCatOption = jQuery(me.templates.filterOption).clone();
+        regionCatLoc = me._locale.regionCatPlaceholder;
+        regionCatOption.val('').text(regionCatLoc);
+        regionCat.find('select').append(regionCatOption);
+
+        for (key in me.regionCategories) {
+            regionCatOption = jQuery(me.templates.filterOption).clone();
+            regionCatLoc = me._locale.regionCategories[key];
+            regionCatOption.val(key).text(regionCatLoc);
+            regionCat.find('select').append(regionCatOption);
+        }
+        regionCatCont.find('.filter-label').text(me._locale['selectRegionCategory']);
+        regionCatCont.find('.filter-value').append(regionCat);
+        content.find('.filter-container').append(regionCatCont);
+        regionCat.change(function(e) {
+            me._createFilterByRegionSelect(content, e.target.value);
+        });
+
+        dialog.show(dialogTitle, content, [cancelBtn, filterBtn]);
+    },
+
+    /**
+     * Creates an element to select regions from a region category.
+     *
+     * @method _createFilterByRegionSelect
+     * @private
+     * @param  {jQuery} container      The container of the popup's content
+     * @param  {String} regionCategory the region category id
+     * @return {undefined}
+     */
+    _createFilterByRegionSelect: function(container, regionCategory) {
+        container.find('.filter-region-container').remove();
+
+        if (!regionCategory) return null;
+
+        var regionCont = jQuery(this.templates.filterRow).clone(),
+            regionSelect = jQuery(this.templates.regionSelect).clone(),
+            regions = this.regionCategories[regionCategory],
+            rLen = regions.length,
+            regionOption, region, i;
+
+        regionCont.addClass('filter-region-container');
+
+        for (i = 0; i < rLen; ++i) {
+            region = regions[i];
+            regionOption = jQuery(this.templates.filterOption).clone();
+            regionOption.val(region.id).text(region.title);
+            regionSelect.find('select').append(regionOption);
+        }
+
+        regionCont.find('.filter-label').text(this._locale['selectRegion']);
+        regionCont.find('.filter-value').append(regionSelect);
+        container.find('.filter-container').append(regionCont);
+        container.find('div.filter-region-select select').chosen({
+            width: '90%',
+            no_results_text : this._locale['noRegionFound'],
+            placeholder_text : this._locale['chosenRegionText']
+        });
+    },
+
+    /**
      * Filters municipalities according to method and constraints (i.e. inputArray)
      * @param column Apply this filter to column
      * @method of filtering
      * @inputArray constraints
      */
-
     filterColumn : function(column, method, inputArray) {
         var data = this.grid.getData(); 
         var items = data.getItems();
@@ -1778,6 +1950,58 @@ function(config, locale) {
         // sendstats ...update map
         this.sendStatsData(column);
 
+    },
+
+    /**
+     * Filters municipalities whether they belong to any of the
+     * regions provided and updates the grid view accordingly.
+     * 
+     * @method filterColumnByRegion
+     * @param  {Object} column
+     * @param  {Array} regionIds
+     * @return {undefined}
+     */
+    filterColumnByRegion: function(column, regionIds) {
+        if (!regionIds || regionIds.length === 0) return;
+
+        var data = this.grid.getData(); 
+        var items = data.getItems();
+
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            
+            if(item.sel == 'checked'){
+                if (item[column.id] == null) {
+                    item.sel = 'empty'
+                } else {
+                    if (!this._itemBelongsToAnyRegions(item, regionIds)) {
+                        item.sel = 'empty';
+                    }
+                }
+                data.updateItem(item.id, item);
+            }
+
+        };
+        this.dataView.refresh();
+        data.collapseGroup('empty');
+        // sendstats ...update map
+        this.sendStatsData(column);
+    },
+
+    /**
+     * Returns true if the item belongs to any of the regions, false otherwise.
+     * 
+     * @method _itemBelongsToAnyRegions
+     * @param  {Object} item
+     * @param  {Array} regionIds
+     * @return {Boolean}
+     */
+    _itemBelongsToAnyRegions: function(item, regionIds) {
+        for (var i = 0; i < regionIds.length; ++i) {
+            var regionId = Number(regionIds[i]);
+            if (item.memberOf.indexOf(regionId) > -1) return true;
+        }
+        return false;
     },
 
     /**

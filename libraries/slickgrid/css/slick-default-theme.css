@@ -14,7 +14,11 @@ classes should alter those!
 .slick-header-column {
 /* Oskari change,  background: url('/Oskari/libraries/slickgrid/css/images/header-columns-bg.gif') repeat-x center bottom; */
   border-right: 1px solid silver;
+/*
+  Oskari change:
   border-top: 40px solid transparent;
+*/
+  padding-top: 40px !important;
 }
 
 /* Oskari change,
