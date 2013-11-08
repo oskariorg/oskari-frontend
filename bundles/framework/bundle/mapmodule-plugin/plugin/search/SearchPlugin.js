@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         me._sandbox = null;
         me._map = null;
         me.conf = config;
-        me.container = null;
+        me.element = null;
         me.loc = null;
     }, {
 
@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             me.loc = pluginLoc[me.__name];
 
             me.template = jQuery(
-                '<div class="search-div">' +
+                '<div class="mapplugin search">' +
                     '<div class="search-textarea-and-button">' +
                     '<input placeholder="' + me.loc.placeholder + '" type="text" />' +
                     '<input type="button" value="' + me.loc.search + '" name="search" />' +
@@ -144,10 +144,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         startPlugin: function (sandbox) {
             var me = this,
                 p;
-            me._sandbox = sandbox;
-            me._map = this.getMapModule().getMap();
+            me._sandbox = sandbox || me.getMapModule().getSandbox();
+            me._map = me.getMapModule().getMap();
 
-            sandbox.register(me);
+            me._sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     sandbox.registerForEventByName(me, p);
@@ -166,14 +166,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         stopPlugin: function (sandbox) {
             var me = this,
                 p;
-            me.container.remove();
+            me.element.remove();
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(me, p);
+                    me._sandbox.unregisterFromEventByName(me, p);
                 }
             }
 
-            sandbox.unregister(me);
+            me._sandbox.unregister(me);
             me._map = null;
             me._sandbox = null;
         },
@@ -209,23 +209,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             return this.eventHandlers[event.getName()].apply(this, [event]);
         },
 
-        setSearchLocation: function (location, searchContainer) {
-            if (location) {
-                if (location.top) {
-                    searchContainer.css('top', location.top);
-                }
-                if (location.left) {
-                    searchContainer.css('left', location.left);
-                }
-                if (location.right) {
-                    searchContainer.css('right', location.right);
-                }
-                if (location.bottom) {
-                    searchContainer.css('bottom', location.bottom);
-                }
-                if (location.classes) {
-                    searchContainer.parent().removeClass('top left bottom right center').addClass(location.classes);
-                }
+        /**
+         * Sets the location of the search.
+         *
+         * @method setLocation
+         * @param {String} location The new location
+         */
+        setLocation: function (location) {
+            var me = this;
+            if (!me.conf) {
+                me.conf = {};
+            }
+            me.conf.location = location;
+
+            // reset plugin if active
+            if (me.element) {
+                me.stopPlugin();
+                me.startPlugin();
             }
         },
         /**
@@ -237,7 +237,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         _createUI: function () {
             var me = this,
                 sandbox = me._sandbox,
-                content;
+                content,
+                containerClasses = 'top right',
+                position = 1;
 
             if (this.conf && this.conf.toolStyle) {
                 content = this.styledTemplate.clone();
@@ -246,18 +248,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 content = this.template.clone();
             }
 
-            this.container = content;
-
-            // get div where the map is rendered from openlayers
-            var parentContainer = jQuery('div.mapplugins.left');
-            if (!parentContainer || parentContainer.length === 0) {
-                parentContainer = jQuery('div.mapplugins.right');
-            }
-            if (!parentContainer || parentContainer.length === 0) {
-                // fallback to OL map div
-                parentContainer = jQuery(me._map.div);
-                content.addClass('mapplugin');
-            }
+            this.element = content;
 
             // bind events
             var inputField = content.find('input[type=text]');
@@ -291,11 +282,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 inputField.val('');
             });
             content.find('div.results').hide();
-            parentContainer.append(content);
-            // override default location if configured
+
             if (me.conf && me.conf.location) {
-                me.setSearchLocation(me.conf.location, content);
+                containerClasses = me.conf.location.classes || containerClasses;
+                position = me.conf.location.position || position;
             }
+            //parentContainer.append(me.element);
+            me.getMapModule().setMapControlPlugin(content, containerClasses, position);
 
             if (me.conf && me.conf.font) {
                 me.changeFont(me.conf.font, content);
@@ -341,7 +334,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             var me = this;
             me._hideSearch();
             me._searchInProgess = true;
-            var inputField = me.container.find('input[type=text]');
+            var inputField = me.element.find('input[type=text]');
             inputField.addClass("search-loading");
             var searchText = inputField.val(),
                 searchCallback = function (msg) {
@@ -368,7 +361,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             // check if there is a problem with search string
             var errorMsg = msg.error,
                 me = this,
-                resultsContainer = me.container.find('div.results'),
+                resultsContainer = me.element.find('div.results'),
                 header = resultsContainer.find('div.header'),
                 content = resultsContainer.find('div.content');
 
@@ -483,7 +476,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          */
         _hideSearch: function () {
 
-            this.container.find('div.results').hide();
+            this.element.find('div.results').hide();
             // Send hide marker request
             this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('HideMapMarkerRequest')());
         },
@@ -496,7 +489,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * @param {jQuery} div
          */
         changeToolStyle: function (style, div) {
-            div = div || this.container;
+            div = div || this.element;
 
             if (!style || !div) {
                 return;
@@ -573,7 +566,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * @param {jQuery} div
          */
         changeFont: function (fontId, div) {
-            div = div || this.container;
+            div = div || this.element;
 
             if (!div || !fontId) {
                 return;

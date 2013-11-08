@@ -129,7 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
         startPlugin: function (sandbox) {
             var p,
                 me = this;
-            me._sandbox = sandbox;
+            me._sandbox = sandbox || me.getMapModule().getSandbox();
             me._map = me.getMapModule().getMap();
             sandbox.register(me);
             for (p in me.eventHandlers) {
@@ -137,7 +137,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                     sandbox.registerForEventByName(me, p);
                 }
             }
-            this._createUI();
+            me._createUI();
         },
 
         /**
@@ -154,11 +154,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 me = this;
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(me, p);
+                    me._sandbox.unregisterFromEventByName(me, p);
                 }
             }
 
-            sandbox.unregister(me);
+            me._sandbox.unregister(me);
 
             // remove ui
             if (me.element) {
@@ -280,24 +280,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             return null;
         },
         /**
-         * @method _arrayContains
-         * @param  {Array} arr Array
-         * @param  {String} val Value
-         * @return {Boolean} True if arr contains val
-         */
-        _arrayContains: function (arr, val) {
-            var i;
-            if (arr.indexOf) {
-                return arr.indexOf(val) > -1;
-            }
-            for (i = arr.length; i > -1; i -= 1) {
-                if (arr[i] === val) {
-                    return true;
-                }
-            }
-            return false;
-        },
-        /**
          * Does the actual layer selection update
          * @param  {Number} newSelectionId Id of the new base layer
          * @private
@@ -316,7 +298,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             // - check if current bottom layer exists & is in our list (if so, remove)
             if (currentBottom) {
                 currentBottomId += currentBottom.getId();
-                if (me._arrayContains(me.conf.baseLayers, currentBottomId)) {
+                if (jQuery.inArray(currentBottomId, me.conf.baseLayers) > -1) {
                     me._sandbox.postRequestByName('RemoveMapLayerRequest', [currentBottomId]);
                 }
             }
@@ -368,7 +350,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             });
             // - update currentSelection with the new selection's information if it's in baseLayers
             currentSelection.empty();
-            if (me._arrayContains(me.conf.baseLayers, newSelectionId)) {
+            if (jQuery.inArray(newSelectionId, me.conf.baseLayers) > -1) {
                 currentSelection.attr("data-layerId", newSelectionId);
                 currentSelection.attr("title", newSelectionName);
                 currentSelection.html(newSelectionName);
@@ -436,7 +418,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
          * @private
          */
         _createUI: function () {
-            var me = this;
+            var me = this,
+                containerClasses = 'bottom center',
+                position = 0;
 
             if (!me.element) {
                 if (me.error) {
@@ -456,7 +440,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             }
 
             // make sure we're in before logo etc.
-            jQuery(me._map.div).prepend(me.element);
+            if (me.conf && me.conf.location) {
+                containerClasses = me.conf.location.classes || containerClasses;
+                position = me.conf.location.position || position;
+            }
+            //parentContainer.append(me.element);
+            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
+        },
+        /**
+         * Sets the location of the plugin.
+         *
+         * @method setLocation
+         * @param {String} location The new location
+         */
+        setLocation: function (location) {
+            var me = this;
+            if (!me.conf) {
+                me.conf = {};
+            }
+            me.conf.location = location;
+
+            // reset plugin if active
+            if (me.element) {
+                me.stopPlugin();
+                me.startPlugin();
+            }
         },
         /**
          * Changes the color scheme of the plugin

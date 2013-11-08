@@ -1,18 +1,9 @@
 div.notLoggedIn {
   padding: 10px; }
 
+
 #contentMap.mapPublishMode {
-  margin-left: 0px; }
-
-#contentMap.mapPublishMode > #mapdiv {
-  position: relative;
-  left: 255px
-}
-
-#contentMap.mapPublishMode > div.row-fluid {
-  position: relative;
-  left: 255px
-}
+  margin-left: 365px; }
 
 div.publisher div.startview div.icon-info, div.basic_publisher div.icon-info {
   float: right; }
@@ -44,10 +35,10 @@ div.publisher div.startview div.error ul li {
   position: absolute;
   height: 100%;
   top: 0;
- /* left: 40px;*/
+  left: 40px;
   /* sidebar has 3, we want to open it on top of this */
   z-index: 2;
-  width: 255px; }
+  width: 365px; }
 
 #contentMap div.basic_publisher div.content {
   padding: 10px; }
@@ -116,3 +107,66 @@ div#publisher-custom-colours div.rgbInput {
 div#publisher-custom-colours div.rgbInput input[type="text"] {
   margin: 0 8px;
   width: 30px; }
+
+.maincontainer ul.selectedLayersList {
+  margin-left: 0px; }
+  .maincontainer ul.selectedLayersList li {
+    list-style: none; }
+
+div.basic_publisher .layer.selected {
+  border: 1pt solid #c0d0e0;
+  margin: 0 5px 5px 0;
+  height: 70px9;
+  /*IE9 */ }
+  div.basic_publisher .layer.selected.out-of-scale, div.basic_publisher .layer.selected.out-of-content, div.basic_publisher .layer.selected.hidden {
+    color: #909090; }
+  div.basic_publisher .layer.selected div.layer-info {
+    background-color: #FFF;
+    padding: 5px; }
+    div.basic_publisher .layer.selected div.layer-info div.layer-title {
+      display: inline; }
+      div.basic_publisher .layer.selected div.layer-info div.layer-title h4 {
+        font: 10pt Arial, sans-serif;
+        padding: 0; }
+    div.basic_publisher .layer.selected div.layer-info div.layer-tool-remove {
+      float: right; }
+  div.basic_publisher .layer.selected div.layer-tools {
+    background-color: #f3f3f3;
+    padding: 7px; }
+    div.basic_publisher .layer.selected div.layer-tools div.layout-slider {
+      width: 140px;
+      display: inline-block;
+      margin-right: 16px; }
+    div.basic_publisher .layer.selected div.layer-tools div.left-tools {
+      display: inline-block; }
+      div.basic_publisher .layer.selected div.layer-tools div.left-tools div.layer-visibility {
+        padding-right: 5px;
+        display: inline-block; }
+      div.basic_publisher .layer.selected div.layer-tools div.left-tools div.layer-opacity {
+        display: inline-block;
+        background-image: url('/Oskari/resources/framework/bundle/layerselection2/images/opacity_slider.png');
+        background-repeat: no-repeat; }
+        div.basic_publisher .layer.selected div.layer-tools div.left-tools div.layer-opacity input.opacity {
+          padding: 1px;
+          width: 25px; }
+    div.basic_publisher .layer.selected div.layer-tools div.right-tools {
+      padding-top: 5px;
+      float: right; }
+      div.basic_publisher .layer.selected div.layer-tools div.right-tools div {
+        float: left;
+        margin-right: 5px; }
+        div.basic_publisher .layer.selected div.layer-tools div.right-tools div.layer-rights, div.basic_publisher .layer.selected div.layer-tools div.right-tools div.object-data {
+          padding-top: 2px; }
+div.basic_publisher ul.selectedLayersList {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  list-style-type: none;
+  padding: 0;
+  margin: 0; }
+  div.basic_publisher ul.selectedLayersList span {
+    position: absolute;
+    margin-left: -1.3em; }
+
+.maincontainer .block {
+  display: block; }

@@ -14,14 +14,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
      */
 
     function (config) {
-        this.mapModule = null;
-        this.pluginName = null;
-        this._sandbox = null;
-        this._map = null;
-        this.conf = config;
-        this._indexMap = null;
-        this._indexMapUrl = '/framework/bundle/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
+        var me = this;
+        me.mapModule = null;
+        me.pluginName = null;
+        me._sandbox = null;
+        me._map = null;
+        me.conf = config;
+        me.element = null;
+        me._indexMap = null;
+        me._indexMapUrl = '/framework/bundle/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
     }, {
+        templates: {
+            main: jQuery('<div class="mapplugin indexmap"></div>'),
+            toggle: jQuery('<div class="indexmapToggle"></div>')
+        },
+
         /** @static @property __name plugin name */
         __name: 'IndexMapPlugin',
 
@@ -70,28 +77,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
 
         },
 
-        setIndexMapLocation: function (location, indexMapContainer) {
-            // override default location if configured
-            if (location) {
-                if (location.top) {
-                    indexMapContainer.css('bottom', 'auto');
-                    indexMapContainer.css('top', location.top);
-                }
-                if (location.left) {
-                    indexMapContainer.css('right', 'auto');
-                    indexMapContainer.css('left', location.left);
-                }
-                if (location.right) {
-                    indexMapContainer.css('left', 'auto');
-                    indexMapContainer.css('right', location.right);
-                }
-                if (location.bottom) {
-                    indexMapContainer.css('top', 'auto');
-                    indexMapContainer.css('bottom', location.bottom);
-                }
-                if (location.classes) {
-                    indexMapContainer.removeClass('top left bottom right center').addClass(location.classes);
-                }
+        /**
+         * Sets the location of the indexmap.
+         *
+         * @method setLocation
+         * @param {String} location The new location
+         */
+        setLocation: function (location) {
+            var me = this;
+            if (!me.conf) {
+                me.conf = {};
+            }
+            me.conf.location = location;
+
+            // reset plugin if active
+            if (me.element) {
+                me.stopPlugin();
+                me.startPlugin();
             }
         },
         /**
@@ -105,13 +107,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             var me = this,
                 graphic = new OpenLayers.Layer.Image('Overview map image',
                     me.getMapModule().getImageUrl() + me._indexMapUrl,
-                    new OpenLayers.Bounds(26783, 6608595, 852783, 7787250), new OpenLayers.Size(120, 173));
+                    new OpenLayers.Bounds(26783, 6608595, 852783, 7787250), new OpenLayers.Size(120, 173)),
+                containerClasses = 'bottom right',
+                position = 5;
+
+            me.element = me.templates.main.clone();
 
             /*
              * create an overview map control with non-default
              * options
              */
             var controlOptions = {
+                div: me.element[0],
                 mapOptions: {
                     maxExtent: new OpenLayers.Bounds(26783, 6608595, 852783, 7787250),
                     units: 'm',
@@ -125,13 +132,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             };
 
             /* Indexmap */
+            if (me.conf && me.conf.location) {
+                containerClasses = me.conf.location.classes || containerClasses;
+                position = me.conf.location.position || position;
+            }
+
+            // add container to map
+            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
+            // initialize control, pass container
             me._indexMap = new OpenLayers.Control.OverviewMap(controlOptions);
 
-            if (me.conf && me.conf.location) {
-                // FIXME change pb to whatever...
-                // - we need to apply the class to .olControlOverviewMapContainer
-                me.setIndexMapLocation(me.conf.location, graphic);
-            }
 
         },
         /**
@@ -159,17 +169,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
         startPlugin: function (sandbox) {
             var me = this,
                 p;
-            me._sandbox = sandbox;
+            me._sandbox = sandbox || me.getMapModule().getSandbox();
             me._map = me.getMapModule().getMap();
             me._createUI();
 
-            sandbox.register(me);
+            me._sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
+                    me._sandbox.registerForEventByName(me, p);
                 }
             }
             me.getMapModule().addMapControl('overviewMap', me._indexMap);
+            var toggleButton = me.templates.toggle.clone();
+            // add toggle functionality to button
+            toggleButton.click(function () {
+                me.element.find('.olControlOverviewMapElement').toggle();
+            });
+            // button has to be added separately so the element order is correct...
+            me.element.append(toggleButton);
         },
         /**
          * @method stopPlugin
@@ -186,13 +203,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
 
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(me, p);
+                    me._sandbox.unregisterFromEventByName(me, p);
                 }
             }
 
-            sandbox.unregister(me);
+            me._sandbox.unregister(me);
             me._map = null;
             me._sandbox = null;
+            if (me.element) {
+                me.element.remove();
+                me.element = undefined;
+            }
         },
         /**
          * @method start

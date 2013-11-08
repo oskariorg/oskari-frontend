@@ -1,43 +1,38 @@
-div.mapplugin.layerSelectionPlugin {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+div.mapplugin.layerselection {
+  max-width: 200px;
   z-index: 100000000 !important; }
-
-.layerSelectionPlugin {
-  max-width: 200px; }
-  .layerSelectionPlugin div.content {
+  div.mapplugin.layerselection div.content {
     background-color: white; }
-    .layerSelectionPlugin div.content div.content-header {
+    div.mapplugin.layerselection div.content div.content-header {
       background-color: #333438;
       color: #FFFFFF;
       text-align: left;
       height: 25px;
       padding: 5px; }
-      .layerSelectionPlugin div.content div.content-header .content-close {
+      div.mapplugin.layerselection div.content div.content-header .content-close {
         display: inline-block;
         float: right;
         cursor: pointer; }
-      .layerSelectionPlugin div.content div.content-header div.content-header-title {
+      div.mapplugin.layerselection div.content div.content-header div.content-header-title {
         display: inline-block;
         float: left;
         padding: 5px; }
-    .layerSelectionPlugin div.content div.baseLayerHeader {
+    div.mapplugin.layerselection div.content div.baseLayerHeader {
       background-color: #DDDDDD;
       padding: 10px;
       text-align: left; }
-    .layerSelectionPlugin div.content div.layer {
+    div.mapplugin.layerselection div.content div.layer {
       margin: 5px 0;
       text-align: left;
       clear: both; }
-      .layerSelectionPlugin div.content div.layer input {
+      div.mapplugin.layerselection div.content div.layer input {
         margin-right: 10px;
         float: left; }
-      .layerSelectionPlugin div.content div.layer span {
+      div.mapplugin.layerselection div.content div.layer span {
         display: block;
         margin-left: 30px;
         word-break: break-all; }
-    .layerSelectionPlugin div.content div.styled-header-arrow {
+    div.mapplugin.layerselection div.content div.styled-header-arrow {
       width: 0px;
       height: 0px;
       margin-left: 170px;
@@ -46,41 +41,41 @@ div.mapplugin.layerSelectionPlugin {
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;
       border-bottom: 10px solid #333438; }
-  .layerSelectionPlugin div.layers, .layerSelectionPlugin div.baselayers {
+  div.mapplugin.layerselection div.layers, div.mapplugin.layerselection div.baselayers {
     padding: 10px; }
-  .layerSelectionPlugin div.header {
+  div.mapplugin.layerselection div.header {
     background-color: #333333;
     color: white !important;
     padding: 8px;
     cursor: pointer; }
-    .layerSelectionPlugin div.header div.header-icon {
+    div.mapplugin.layerselection div.header div.header-icon {
       display: inline-block;
       margin-right: 10px;
       vertical-align: middle; }
-  .layerSelectionPlugin div.layerselection-styled-content {
+  div.mapplugin.layerselection div.layerselection-styled-content {
     width: 200px;
     border: 1px solid #333438; }
-  .layerSelectionPlugin .oskari-publisher-layers-rounded-dark, .layerSelectionPlugin .oskari-publisher-layers-rounded-light {
+  div.mapplugin.layerselection .oskari-publisher-layers-rounded-dark, div.mapplugin.layerselection .oskari-publisher-layers-rounded-light {
     border-radius: 15px;
     -moz-border-radius: 15px;
     -webkit-border-radius: 15px; }
-  .layerSelectionPlugin .oskari-publisher-layers-sharp-dark, .layerSelectionPlugin .oskari-publisher-layers-sharp-light {
+  div.mapplugin.layerselection .oskari-publisher-layers-sharp-dark, div.mapplugin.layerselection .oskari-publisher-layers-sharp-light {
     border-radius: 0px;
     -moz-border-radius: 0px;
     -webkit-border-radius: 0px; }
-  .layerSelectionPlugin .oskari-publisher-layers-3d-dark, .layerSelectionPlugin .oskari-publisher-layers-3d-light {
+  div.mapplugin.layerselection .oskari-publisher-layers-3d-dark, div.mapplugin.layerselection .oskari-publisher-layers-3d-light {
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px; }
-  .layerSelectionPlugin .oskari-publisher-layers-header-rounded-dark, .layerSelectionPlugin .oskari-publisher-layers-header-rounded-light {
+  div.mapplugin.layerselection .oskari-publisher-layers-header-rounded-dark, div.mapplugin.layerselection .oskari-publisher-layers-header-rounded-light {
     border-radius: 13px 13px 0 0;
     -moz-border-radius: 13px 13px 0 0;
     -webkit-border-radius: 13px 13px 0 0; }
-  .layerSelectionPlugin .oskari-publisher-layers-header-sharp-dark, .layerSelectionPlugin .oskari-publisher-layers-header-sharp-light {
+  div.mapplugin.layerselection .oskari-publisher-layers-header-sharp-dark, div.mapplugin.layerselection .oskari-publisher-layers-header-sharp-light {
     border-radius: 0px;
     -moz-border-radius: 0px;
     -webkit-border-radius: 0px; }
-  .layerSelectionPlugin .oskari-publisher-layers-header-3d-dark, .layerSelectionPlugin .oskari-publisher-layers-header-3d-light {
+  div.mapplugin.layerselection .oskari-publisher-layers-header-3d-dark, div.mapplugin.layerselection .oskari-publisher-layers-header-3d-light {
     border-radius: 1px 1px 0 0;
     -moz-border-radius: 1px 1px 0 0;
     -webkit-border-radius: 1px 1px 0 0; }

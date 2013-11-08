@@ -115,6 +115,8 @@ function(instance) {
      */
     _handleAnalysisLayersResponse : function(analysislayersJson) {
         // TODO: some error checking perhaps?
+        var me = this;
+        var sandbox = me.instance.getSandbox();
         var mapLayerService, mapLayer, requestBuilder, request;
         var layerarr = analysislayersJson.analysislayers; 
         for (var i in layerarr) {
@@ -133,7 +135,7 @@ function(instance) {
 
             } 
         }
-        if (layerarr.length > 0) {
+        if (layerarr && layerarr.length > 0) {
             // notify components of added layer if not suppressed
             var event = sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
             sandbox.notifyAll(event); // add the analysis layers programmatically since normal link processing

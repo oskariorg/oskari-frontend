@@ -130,7 +130,7 @@ function(instance) {
      */
     startNewDrawing : function(config) {
         // notify components to reset any saved "selected place" data
-        var event = this.instance.sandbox.getEventBuilder('MyPlaces.MyPlaceSelectedEvent')();
+        var event = this.instance.sandbox.getEventBuilder('DrawPlugin.SelectedDrawingEvent')();
         this.instance.sandbox.notifyAll(event);
 
         // notify plugin to start drawing new geometry
@@ -144,7 +144,7 @@ function(instance) {
      */
     sendDrawRequest : function(config) {
         var me = this;
-        var startRequest = this.instance.sandbox.getRequestBuilder('MyPlaces.StartDrawingRequest')(config);
+        var startRequest = this.instance.sandbox.getRequestBuilder('DrawPlugin.StartDrawingRequest')(config);
         this.instance.sandbox.request(this, startRequest);
 
         if(!config.geometry) {
@@ -199,7 +199,7 @@ function(instance) {
      */
     sendStopDrawRequest : function(isCancel) {
         var me = this;
-        var request = this.instance.sandbox.getRequestBuilder('MyPlaces.StopDrawingRequest')(isCancel);
+        var request = this.instance.sandbox.getRequestBuilder('DrawPlugin.StopDrawingRequest')(isCancel);
         this.instance.sandbox.request(this, request);
         if(this.dialog) {
             this.dialog.close();
@@ -247,11 +247,11 @@ function(instance) {
             }
         },
         /**
-         * @method MyPlaces.MyPlaceSelectedEvent
+         * @method DrawPlugin.MyPlaceSelectedEvent
          * Place was selected
-         * @param {Oskari.mapframework.bundle.myplaces2.event.MyPlaceSelectedEvent} event
+         * @param {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.SelectedDrawingEvent} event
          */
-        'MyPlaces.MyPlaceSelectedEvent' : function(event) {
+        'DrawPlugin.SelectedDrawingEvent' : function(event) {
         	if(!event.getPlace()) {
         		// cleanup
 	            // ask toolbar to select default tool
@@ -260,11 +260,11 @@ function(instance) {
         	}
         },
         /**
-         * @method MyPlaces.FinishedDrawingEvent
+         * @method DrawPlugin.FinishedDrawingEvent
          * Requests toolbar to select default tool
-         * @param {Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent} event
+         * @param {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.FinishedDrawingEvent} event
          */
-        'MyPlaces.FinishedDrawingEvent' : function(event) {
+        'DrawPlugin.FinishedDrawingEvent' : function(event) {
             // set ignore so we don't cancel our drawing unintentionally
             this.ignoreEvents = true;
             // ask toolbar to select default tool
@@ -280,11 +280,11 @@ function(instance) {
         },
 
         /**
-         * @method MyPlaces.AddedFeatureEvent
+         * @method DrawPlugin.AddedFeatureEvent
          * Update the help dialog after a new feature was added
-         * @param {Oskari.mapframework.bundle.myplaces2.event.AddedFeatureEvent} event
+         * @param {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.AddedFeatureEvent} event
          */
-        'MyPlaces.AddedFeatureEvent' : function(event) {
+        'DrawPlugin.AddedFeatureEvent' : function(event) {
             if (typeof  event.getDrawingMode() !== "undefined") {
                 if (event.getDrawingMode() !== null) {
                     var loc = this.instance.getLocalization('tools');
