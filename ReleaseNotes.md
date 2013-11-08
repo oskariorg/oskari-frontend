@@ -27,6 +27,7 @@ MyPlaces prefix was changed to DrawPlugin. Affected changes are:
 'Oskari.mapframework.bundle.myplaces2.event.AddedFeatureEvent' --> 'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.AddedFeatureEvent'
 'MyPlaces.AddedFeatureEvent' --> 'DrawPlugin.AddedFeatureEvent'
 
+Myplaces2 now uses AreaForm, PointForm and LineForm from under divmanazer (VisualizationForm)
 
 ### Statsgrid
 
@@ -35,6 +36,10 @@ Municipality code was removed from the columns.
 Users can now select the class limits mode from distinct and discontinuous.
 
 The map link now gets the class limits mode and colour selections as parameters.
+
+Removing indicator from the grid is now easier with a close icon on the top-right corner of each indicator
+
+Added area based filtering, which allows users to filter municipalities based on different regions in which they belong
 
 ### mapmodule-plugin/LogoPlugin
 
