@@ -191,4 +191,6 @@ div.filter-region-select ul {
   position: absolute;
   top: 5px;
   right: 5px;
+  width: 16px !important;
+  height: 16px !important;
 }
