@@ -1469,6 +1469,21 @@ function(instance, localization) {
                 request = requestBuilder(mapLayer.getId());
                 this.instance.sandbox.request(this.instance, request);
             }
+            // Remove old layers if any
+            if (analyseJson.mergeLayers) {
+                var mlays = analyseJson.mergeLayers;
+                if (mlays.length > 0) {
+                    // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
+                    // also we need to do it before service.remove() to avoid problems on other components
+                    var removeMLrequestBuilder = this.instance.sandbox.getRequestBuilder('RemoveMapLayerRequest');
+
+                    for (var i in mlays) {
+                        var request = removeMLrequestBuilder(mlays[i]);
+                        this.instance.sandbox.request(this.instance, request);
+                        mapLayerService.removeLayer(mlays[i]);
+                    }
+                }
+            }
         }
     },
 
