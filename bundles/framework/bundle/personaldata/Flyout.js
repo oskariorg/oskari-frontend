@@ -55,7 +55,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 tabsLocalization = me.instance.getLocalization('tabs');
             // TODO: move these to correct bundle and use AddTabRequest to add itself to PersonalData
             this.tabsData = {
-                "myPlaces": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyPlacesTab', me.instance, tabsLocalization.myplaces),
                 "myViews": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyViewsTab', me.instance, tabsLocalization.myviews),
                 "publishedMaps": Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.PublishedMapsTab', me.instance, tabsLocalization.publishedmaps),
                 // TODO should we pass conf to accounttab here?
@@ -114,7 +113,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 panel;
             flyout.empty();
             this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer',
-                this.instance.getLocalization('notLoggedIn'));
+            this.instance.getLocalization('notLoggedIn'));
             this.tabsContainer.insertTo(flyout);
 
             if (!sandbox.getUser().isLoggedIn()) {
@@ -127,11 +126,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                     tab = this.tabsData[tabId];
                     panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
                     panel.setTitle(tab.getTitle());
-
-                    // Eikö sen pitäisi asettaa tabin contentti paneliin?
-                    // panel.setContent(tab.getContent());
-                    // sen sijaan että addTabContentille annetaan container mihin dom ammutaan?
                     tab.addTabContent(panel.getContainer());
+               
                     // binds tab to events
                     if (tab.bindEvents) {
                         tab.bindEvents();

@@ -12,6 +12,37 @@ Oskari.registerLocalization({
     "guest": {
       "loginShort": "Melden Sie sich an, um den Dienst zu nutzen"
     },
+    "tab": {
+        "title": "Orte",
+        "nocategories": "Sie haben die Orte bisher nicht gespeichert.",
+        "publishCategory": {
+            "privateTooltip": "Die Kartenebene ist nicht öffentlich.| Klicken Sie auf die Kartenebene, um sie öffentlich zu machen.",
+            "publicTooltip": "Die Kartenebene ist öffentlich| Klicken Sie auf die Kartenebene, um sie nicht öffentlich zu machen."
+        },
+        "editCategory": "Kartenebene bearbeiten",
+        "deleteCategory": "Kartenebene löschen",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "grid": {
+          "name": "Name",
+          "desc": "Beschreibung",
+          "createDate": "Erstellt",
+          "updateDate": "Aktualisiert",
+          "edit": " ",
+          "delete": " "
+        },
+        "notification": {
+          "delete": {
+            "title": "Ort löschen",
+            "confirm": "Möchten Sie diesen Ort löschen?",
+            "btnDelete": "Abbrechen",
+            "btnCancel": "Cancel",
+            "success": "Der Ort wurde gelöscht.",
+            "error": "Dieser Ort konnte nicht gelöscht werden. Bitte versuchen Sie es später noch einmal.",
+            "cancel": "Der Ort wurde nicht gelöscht."
+          }
+        }
+    },
     "tools": {
       "point": {
         "tooltip": "Punkt hinzufügen",

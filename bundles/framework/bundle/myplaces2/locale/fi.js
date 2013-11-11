@@ -12,6 +12,37 @@ Oskari.registerLocalization({
     "guest": {
       "loginShort": "Kirjaudu sisään käyttääksesi"
     },
+    "tab": {
+        "title": "Kohteet",
+        "nocategories": "Et ole vielä tallentanut kohteita.",
+        "publishCategory": {
+            "privateTooltip": "Taso on yksityinen. Muuta taso julkiseksi klikkaamalla.",
+            "publicTooltip": "Taso on julkinen. Muuta taso yksityiseksi klikkaamalla."
+        },
+        "editCategory": "Muokkaa tasoa",
+        "deleteCategory": "Poista taso",
+        "edit": "Muokkaa",
+        "delete": "Poista",
+        "grid": {
+          "name": "Nimi",
+          "desc": "Kuvaus",
+          "createDate": "Luotu",
+          "updateDate": "Päivitetty",
+          "edit": " ",
+          "delete": " "
+        },
+        "notification": {
+          "delete": {
+            "title": "Kohteen poistaminen",
+            "confirm": "Haluatko poistaa kohteen?",
+            "btnDelete": "Poista",
+            "btnCancel": "Peruuta",
+            "success": "Kohde on poistettu.",
+            "error": "Kohteen poistaminen epäonnistui. Kokeile uudestaan myöhemmin.",
+            "cancel": "Kohdetta ei ole poistettu."
+          }
+        }
+    },
     "tools": {
       "point": {
         "tooltip": "Lisää piste",
