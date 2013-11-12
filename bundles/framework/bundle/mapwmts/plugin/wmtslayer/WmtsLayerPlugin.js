@@ -188,7 +188,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             serverResolutions : serverResolutions,
             /*minScale : layer.getMinScale(),
              maxScale : layer.getMaxScale(),*/
-            layerDef : layerDef
+            layerDef : layerDef,
+            zoomOffset: layer.getZoomOffset()
         };
 
         sandbox.printDebug("[WmtsLayerPlugin] creating WMTS Layer " + matrixSet.identifier + " / " + wmtsLayerConfig.id + "/" + wmtsLayerConfig.layer + "/" + wmtsLayerConfig.url);

@@ -12,6 +12,37 @@ Oskari.registerLocalization({
     "guest": {
       "loginShort": "Logga in för att använda"
     },
+    "tab": {
+        "title": "Objekt",
+        "nocategories": "Du har ännu inte lagrat objekten.",
+        "publishCategory": {
+            "privateTooltip": "Kartlagret är privat. Klicka på lagret för att offentliggöra det.",
+            "publicTooltip": "Kartlagret är offentliggöra. Klicka på lagret för att privat det."
+        },
+        "editCategory": "Editera kartlager",
+        "deleteCategory": "Ta bort kartlager",
+        "edit": "Editera",
+        "delete": "Ta bort",
+        "grid": {
+          "name": "Namn",
+          "desc": "Beskrivning",
+          "createDate": "Skapad",
+          "updateDate": "Uppdaterad",
+          "edit": " ",
+          "delete": " "
+        },
+        "notification": {
+          "delete": {
+            "title": "Ta bort objekt",
+            "confirm": "Vill du ta bort detta objekt?",
+            "btnDelete": "Ta bort",
+            "btnCancel": "Tillbaka",
+            "success": "Objektet har tagits bort.",
+            "error": "Objektet kunde inte tas bort. Prova på nytt senare.",
+            "cancel": "Objektet har inte tagits bort."
+          }
+        }
+      },
     "tools": {
       "point": {
         "tooltip": "Tillägg punkt",

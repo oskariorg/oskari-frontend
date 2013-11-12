@@ -57,6 +57,7 @@ Refactored DrawPlugin from myplaces2 as an independent plugin.
 
 Added new configuration option 'layerDefaults' which can be used to override default values found in code. See bundle documentation for details.
 Refactored DrawPlugin to mapmodule-plugin/DrawPlugin.
+Moved myplacestab from personaldata to myplaces bundle. Refactored adding to use addTabRequest.
 
 ### divmanazer/VisualizationForm
 
@@ -65,6 +66,10 @@ New component which defines functionality to create geometry visualizations for 
 ### publisher
 
 Added possibility to change order of the layer as well as its opacity. Also removing and adding new layers is now possible.
+
+### personaldata
+
+Removed myplacestab (is now in myplaces bundle).
 
 ## 1.15
 

@@ -34,6 +34,9 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
             }
         }
 
+        // Right now hard coded to set it two value '2'.
+        layer.setZoomOffset();
+
         /*
          * layer.setWmtsMatrixSet(mapLayerJson.tileMatrixSetData);
          *
