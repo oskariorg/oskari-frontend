@@ -536,6 +536,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     toolContainer.find('input').attr('checked', 'checked');
                 }
                 contentPanel.append(toolContainer);
+
+                if(me.data) {
+                    var classes = me._getInitialPluginLocation(me.data, this.tools[i].id);
+                    if(classes) {
+                        this.tools[i].config.location.classes = classes;
+                    }
+                }
+
+
                 toolContainer.find('input').change(closureMagic(this.tools[i]));
             }
 
@@ -709,7 +718,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             for(var i = 0; i < me.tools.length; i++) {
                 var tool = me.tools[i];
                 if(tool.id == "Oskari.mapframework.mapmodule.ControlsPlugin") {
-                    me.isMapControlActive = tool.selected;
                     me._activatePreviewPlugin(tool, me.isMapControlActive);
                     delete me.isMapControlActive;
                 }
@@ -1539,6 +1547,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
 
             return infoPlugin;
+        },
+        _getInitialPluginLocation: function(data, pluginName) {
+            var plugins = this.data.state.mapfull.config.plugins;
+            for (var i = 0; i < plugins.length; i++) {
+                plugin = plugins[i];
+                if(plugin.id == pluginName && plugin.config && plugin.config.location) {
+                    return plugin.config.location.classes;
+                }
+            };
+            return null;
         },
 
         /**
