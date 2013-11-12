@@ -125,6 +125,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 me._slider.remove();
                 delete me.element;
             }
+
+            for (p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me._sandbox.unregisterFromEventByName(me, p);
+                }
+            }
+
             me._sandbox.unregister(me);
 
             //this._map = null;
@@ -151,11 +158,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 containerClasses = 'top right',
                 position = 2;
 
+
             me.element.find('input').attr('id', inputId);
             sliderEl.attr('id', sliderId);
 
             me.element.mousedown(function (event) {
-                event.stopPropagation();
+                if(!me.isInLayerToolsEditMode){
+                    event.stopPropagation();
+                }
             });
 
             if (me.conf && me.conf.location) {
@@ -182,14 +192,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
 
             var plus = me.element.find('.pzbDiv-plus');
             plus.bind('click', function (event) {
-                if (me._slider.slider('value') < me._map.getNumZoomLevels()) {
-                    me.getMapModule().zoomTo(me._slider.slider('value') + 1);
+                if(!me.isInLayerToolsEditMode){
+                    if (me._slider.slider('value') < me._map.getNumZoomLevels()) {
+                        me.getMapModule().zoomTo(me._slider.slider('value') + 1);
+                    }
                 }
             });
             var minus = me.element.find('.pzbDiv-minus');
             minus.bind('click', function (event) {
-                if (me._slider.slider('value') > 0) {
-                    me.getMapModule().zoomTo(me._slider.slider('value') - 1);
+                if(!me.isInLayerToolsEditMode){
+                    if (me._slider.slider('value') > 0) {
+                        me.getMapModule().zoomTo(me._slider.slider('value') - 1);
+                    }
                 }
             });
 
@@ -197,6 +211,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             if (me.conf && me.conf.toolStyle) {
                 me.changeToolStyle(me.conf.toolStyle, me.element);
             }
+            // in case we are already in edit mode when plugin is drawn
+            me._setLayerToolsEditMode(me.getMapModule().isInLayerToolsEditMode());
+
         },
         /**
          * @method _setZoombarValue
@@ -226,8 +243,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
-
+            me.conf.location.classes = location;
             // reset plugin if active
             if (me.element) {
                 me.stopPlugin();
@@ -245,6 +261,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     var me = this;
                     me._setZoombarValue(event.getZoom());
                 }
+            },
+            'LayerToolsEditModeEvent' : function(event) {
+                if (this._sandbox) {
+                    this._setLayerToolsEditMode(event.isInMode());
+                    if(this.isInLayerToolsEditMode == false) {
+                        this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
+                    }
+               }
+            }
+        },
+
+        _setLayerToolsEditMode: function(isInEditMode) {
+            this.isInLayerToolsEditMode = isInEditMode;
+            if(this._slider != null && this.isInLayerToolsEditMode){
+                this._slider.slider( "option", "disabled", true );
+            } else if(this._slider != null){
+                this._slider.slider( "option", "disabled", false );
             }
         },
 

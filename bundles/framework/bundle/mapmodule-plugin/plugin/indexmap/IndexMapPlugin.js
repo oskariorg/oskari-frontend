@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
+            me.conf.location.classes = location;
 
             // reset plugin if active
             if (me.element) {
@@ -142,6 +142,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             // initialize control, pass container
             me._indexMap = new OpenLayers.Control.OverviewMap(controlOptions);
 
+            // in case we are already in edit mode when plugin is drawn
+            this.isInLayerToolsEditMode = me.getMapModule().isInLayerToolsEditMode();
 
         },
         /**
@@ -183,7 +185,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             var toggleButton = me.templates.toggle.clone();
             // add toggle functionality to button
             toggleButton.click(function () {
-                me.element.find('.olControlOverviewMapElement').toggle();
+                if(!me.isInLayerToolsEditMode){
+                    me.element.find('.olControlOverviewMapElement').toggle();
+                }
             });
             // button has to be added separately so the element order is correct...
             me.element.append(toggleButton);
@@ -239,6 +243,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             'AfterMapMoveEvent': function (event) {
                 if (this._indexMap) {
                     this._indexMap.update();
+                }
+            },
+            'LayerToolsEditModeEvent' : function(event) {
+                if (this._sandbox) {
+                    this.isInLayerToolsEditMode = event.isInMode();
+                    if(this.isInLayerToolsEditMode == false) {
+                        this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
+                    }
                 }
             }
         },

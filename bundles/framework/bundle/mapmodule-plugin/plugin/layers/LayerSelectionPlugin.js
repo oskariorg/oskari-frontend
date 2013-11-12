@@ -134,13 +134,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         stopPlugin: function (sandbox) {
             var me = this,
                 p;
+            var sb = sandbox ? sandbox : this._sandbox;
+
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    me._sandbox.unregisterFromEventByName(me, p);
+                    sb.unregisterFromEventByName(me, p);
                 }
             }
 
-            me._sandbox.unregister(me);
+            sb.unregister(me);
 
             // remove ui
             if (me.element) {
@@ -413,7 +415,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             // remove text if nothing to select 
             var baseLayersDiv = this.element.find('div.content div.baselayers'),
                 baseLayers = baseLayersDiv.find('div.layer');
-debugger;
             if (baseLayers.length === 0) {
                 var baselayerHeader = this.element.find('div.content div.baseLayerHeader');
                 baselayerHeader.remove();
@@ -526,7 +527,7 @@ debugger;
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
+            me.conf.location.classes = location;
 
             // reset plugin if active
             if (me.element) {

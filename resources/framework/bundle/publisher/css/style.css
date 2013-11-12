@@ -113,6 +113,8 @@ div#publisher-custom-colours div.rgbInput input[type="text"] {
   .maincontainer ul.selectedLayersList li {
     list-style: none; }
 
+div.basic_publisher .disabled-button {
+  opacity: 0.8; }
 div.basic_publisher .layer.selected {
   border: 1pt solid #c0d0e0;
   margin: 0 5px 5px 0;

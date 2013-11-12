@@ -235,3 +235,10 @@ div.published-search div.search-middle div.close-results {
   float: right;
   cursor: pointer;
 }
+.search-textarea-and-button .search-editmode-overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  }

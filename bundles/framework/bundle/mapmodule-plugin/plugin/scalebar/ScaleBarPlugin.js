@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
+            me.conf.location.classes = location;
 
             // reset plugin if active
             if (me.element) {
@@ -189,6 +189,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
             'AfterMapMoveEvent': function (event) {
                 if (this._scalebar) {
                     this._scalebar.update();
+                }
+            },
+            'LayerToolsEditModeEvent' : function(event) {
+                this.isInLayerToolsEditMode = event.isInMode();
+                if(this.isInLayerToolsEditMode == false) {
+                    this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
                 }
             }
         },

@@ -119,6 +119,13 @@ div.mapplugins {
                     &.layerselection, &.search {
                         float: right;
                     }
+                    &.logoplugin.toollayoutedit,
+                    &.scalebar.toollayoutedit {
+                        clear: both;
+                        margin-top: $pluginMargin;
+                        margin-right: $pluginMargin;
+                        margin-left: $pluginMargin;                    
+                    }
     
                 }
             }
@@ -131,14 +138,28 @@ div.mapplugins {
                     margin-left: 20px;
                     margin-right: $pluginMargin * -1;
                 }
+                &.indexmap.toollayoutedit {
+                    margin-top: $pluginMargin;
+                    margin-left: $pluginMargin * 2.5;
+                    margin-right: $pluginMargin * 2.5;
+                }
                 
                 &.logoplugin {
                     clear: both;
                     margin-right: $pluginMargin * -1;
                 }
+                &.logoplugin.toollayoutedit {
+                    clear: both;
+                    margin-top: $pluginMargin;
+                    margin-left: $pluginMargin;
+                    margin-right: $pluginMargin;
+                }
                 
-                &.scalebar {
-                    
+                &.scalebar.toollayoutedit {
+                    clear: both;
+                    margin-top: $pluginMargin;
+                    margin-right: $pluginMargin;
+                    margin-left: $pluginMargin;                    
                 }
                 
                 &.indexmap, &.logoplugin, &.scalebar {
@@ -156,14 +177,28 @@ div.mapplugins {
                     margin-right: $pluginMargin * 2;
                     margin-left: $pluginMargin * -1;
                 }
+                &.indexmap.toollayoutedit {
+                    margin-top: $pluginMargin;
+                    margin-right: $pluginMargin * 2.5;
+                    margin-left: $pluginMargin * 2.5;
+                }
                 
                 &.logoplugin {
                     clear: both;
                     margin-left: $pluginMargin * -1;
                 }
+                &.logoplugin.toollayoutedit {
+                    clear: both;
+                    margin-top: $pluginMargin;
+                    margin-right: $pluginMargin;
+                    margin-left: $pluginMargin;
+                }
                 
-                &.scalebar {
-                    
+                &.scalebar.toollayoutedit {
+                    clear: both;
+                    margin-top: $pluginMargin;
+                    margin-right: $pluginMargin;
+                    margin-left: $pluginMargin;
                 }
                 
                 &.indexmap, &.logoplugin, &.scalebar {
@@ -189,9 +224,17 @@ div.mapplugins {
             .mappluginsContainer {
                 display: table-cell;
                 vertical-align: middle;
+
+                .logoplugin.toollayoutedit,
+                .scalebar.toollayoutedit,
+                .indexmap.toollayoutedit {
+                    clear: both;
+                    margin-top: $pluginMargin;
+                    margin-right: $pluginMargin;
+                    margin-left: $pluginMargin;                    
+                }
             }
-        }
-        
+        }        
     }
 
     &.right {
@@ -206,11 +249,18 @@ div.mapplugins {
             .mappluginsContainer {
                 display: table-cell;
                 vertical-align: middle;
+
+                .logoplugin.toollayoutedit,
+                .scalebar.toollayoutedit,
+                .indexmap.toollayoutedit {
+                    clear: both;
+                    margin-top: $pluginMargin;
+                    margin-right: $pluginMargin;
+                    margin-left: $pluginMargin;                    
+                }
             }
         }
-
     }
-
 }
 
 .oskari-publisher-font-arial {

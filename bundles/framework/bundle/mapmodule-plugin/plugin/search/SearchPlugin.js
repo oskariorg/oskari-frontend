@@ -150,7 +150,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             me._sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
+                    me._sandbox.registerForEventByName(me, p);
                 }
             }
             me._createUI();
@@ -197,7 +197,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * @property {Object} eventHandlers
          * @static
          */
-        eventHandlers: {},
+        eventHandlers: {
+            'LayerToolsEditModeEvent' : function(event) {
+                this._setLayerToolsEditMode(event.isInMode());
+                if(this.isInLayerToolsEditMode == false) {
+                    this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
+                }
+            }
+        },
+
+        _setLayerToolsEditMode: function(isInEditMode) {
+            this.isInLayerToolsEditMode = isInEditMode;
+            if(this.isInLayerToolsEditMode) {
+                this._inputField.prop( "disabled", true );
+                this._searchButton.prop( "disabled", true );
+
+                var overlay = jQuery('<div class="search-editmode-overlay">');
+                this.element.find('.search-textarea-and-button')
+                    .css({'position':'relative'})
+                    .append(overlay);
+            } else {
+                this._inputField.prop( "disabled", false );
+                this._searchButton.prop( "disabled", false );
+                this.element.find('.search-editmode-overlay').remove();
+            }
+        },
+
 
         /**
          * @method onEvent
@@ -220,7 +245,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
+            me.conf.location.classes = location;
 
             // reset plugin if active
             if (me.element) {
@@ -262,24 +287,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 //me._checkForKeywordInsert();
             });
 
-            inputField.keypress(function (event) {
-                me._checkForEnter(event);
+            me._inputField = inputField.keypress(function (event) {
+                if(!me.isInLayerToolsEditMode){
+                    me._checkForEnter(event);
+                }
             });
             // to search button
-            content.find('input[type=button]').click(function (event) {
-                me._doSearch();
+            me._searchButton = content.find('input[type=button]').click(function (event) {
+                if(!me.isInLayerToolsEditMode){
+                    me._doSearch();
+                }
             });
             content.find('div.search-right').click(function (event) {
-                me._doSearch();
+                if(!me.isInLayerToolsEditMode){
+                    me._doSearch();
+                }
             });
             // to close button
             content.find('div.close').click(function (event) {
-                me._hideSearch();
-                // TODO: this should also unbind the TR tag click listeners?
+                if(!me.isInLayerToolsEditMode){
+                    me._hideSearch();
+                    // TODO: this should also unbind the TR tag click listeners?
+                }
             });
             content.find('div.close-results').click(function (event) {
-                me._hideSearch();
-                inputField.val('');
+                if(!me.isInLayerToolsEditMode){
+                    me._hideSearch();
+                    inputField.val('');
+                }
             });
             content.find('div.results').hide();
 
@@ -301,6 +336,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                     }
                 });
             }
+            // in case we are already in edit mode when plugin is drawn
+            me._setLayerToolsEditMode(me.getMapModule().isInLayerToolsEditMode());
+
         },
         /**
          * @method _checkForEnter

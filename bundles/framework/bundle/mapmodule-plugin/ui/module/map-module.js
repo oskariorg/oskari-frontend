@@ -135,6 +135,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             for (i = 0; i < containerClasses.length; i++) {
                 containerDiv = jQuery('<div class="mapplugins"><div class="mappluginsContainer"><div class="mappluginsContent"></div></div></div>');
                 containerDiv.addClass(containerClasses[i]);
+                containerDiv.attr('data-location', containerClasses[i]);
                 mapDiv.append(containerDiv);
             }
             
@@ -1149,6 +1150,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         eventHandlers: {
             'SearchClearedEvent': function (event) {
                 this._removeMarkers();
+            },
+            'LayerToolsEditModeEvent' : function(event) {
+                this._isInLayerToolsEditMode = event.isInMode();
             }
         },
 
@@ -1266,6 +1270,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 // Add the new font as a CSS class.
                 el.addClass(classToAdd);
             }
+        },
+        isInLayerToolsEditMode : function() {
+            return this._isInLayerToolsEditMode;
         }
     }, {
         /**

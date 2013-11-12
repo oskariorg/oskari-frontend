@@ -161,7 +161,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         eventHandlers: {
             'StatsGrid.IndicatorsEvent': function (event) {
                 this._addIndicatorsToDataSourcesDialog(event.getIndicators());
+            },
+            'LayerToolsEditModeEvent' : function(event) {
+                this.isInLayerToolsEditMode = event.isInMode();
+                if(this.isInLayerToolsEditMode == false) {
+                    this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
+                }
             }
+
         },
 
         /** 
@@ -187,7 +194,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
+            if(!me.conf.location){
+                me.conf.location = {};
+            }
+            me.conf.location.classes = location;
 
             // reset plugin if active
             if (me.element) {
@@ -233,10 +243,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             link = me.element.find('div.icon');
             if (mapUrl) {
                 link.bind('click', function () {
-                    linkParams = sandbox.generateMapLinkParameters();
-                    mapUrl += linkParams;
-                    window.open(mapUrl, '_blank');
-                    return false;
+                    if(!me.isInLayerToolsEditMode){
+                        linkParams = sandbox.generateMapLinkParameters();
+                        mapUrl += linkParams;
+                        window.open(mapUrl, '_blank');
+                        return false;
+                    }
                 });
             }
 
@@ -244,8 +256,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             if (termsUrl) {
                 link.append(myLoc.terms);
                 link.bind('click', function () {
-                    window.open(termsUrl, '_blank');
-                    return false;
+                    if(!me.isInLayerToolsEditMode){
+                        window.open(termsUrl, '_blank');
+                        return false;
+                    }
                 });
             } else {
                 link.hide();
@@ -257,10 +271,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             } else {
                 dataSources.html(myLoc.dataSources);
                 dataSources.click(function (e) {
-                    me._openDataSourcesDialog(e.target);
-                    me._requestDataSources();
+                    if(!me.isInLayerToolsEditMode){
+                        me._openDataSourcesDialog(e.target);
+                        me._requestDataSources();
+                    }
                 });
             }
+            // in case we are already in edit mode when plugin is drawn
+            this.isInLayerToolsEditMode = me.getMapModule().isInLayerToolsEditMode();
+
         },
 
         /**
