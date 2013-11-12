@@ -325,7 +325,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
      * sends message to /service/wfs/removeMapLayer
      */
     removeMapLayer : function(id) {
-
         if(this.connection.isConnected()) {
             this.cometd.publish('/service/wfs/removeMapLayer', {
                 "layerId" : id
@@ -402,6 +401,38 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
             this.cometd.publish('/service/wfs/setMapLayerStyle', {
                 "layerId" : id,
                 "styleName" : style
+            });
+        }
+    },
+
+    /**
+     * @method setMapLayerStyle
+     * @param {Number} id
+     * @param {Object} style
+     *
+     * sends message to /service/wfs/setMapLayerCustomStyle
+     */
+    setMapLayerCustomStyle : function(id, style) {
+        if(this.connection.isConnected()) {
+            this.cometd.publish('/service/wfs/setMapLayerCustomStyle', {
+                "layerId" : id,
+
+                "fill_color" : style.area.fillColor, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
+                "fill_pattern" : style.area.fillStyle, 
+                "border_color" : style.area.lineColor, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
+                "border_linejoin" : style.area.lineCorner,
+                "border_dasharray" : style.area.lineStyle,
+                "border_width" : style.area.lineWidth,
+
+                "stroke_linecap" : style.line.cap,
+                "stroke_color" : style.line.color, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
+                "stroke_linejoin" : style.line.corner,
+                "stroke_dasharray" : style.line.style,
+                "stroke_width" : style.line.width,
+
+                "dot_color" : style.point.color, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
+                "dot_shape" : style.point.shape,
+                "dot_size" : style.point.size,
             });
         }
     },

@@ -484,11 +484,11 @@ function(params, options) {
 		var me = this;
 		var style = null;
 		// Layer have styles
-		if (me._styles.length > 0) {
+		if (me.getStyles().length > 0) {
 			// There is default style defined
 			if (styleName !== "") {
-				for (var i = 0; i < me._styles.length; i++) {
-					style = me._styles[i];
+				for (var i = 0; i < me.getStyles().length; i++) {
+					style = me.getStyles()[i];
 					if (style.getName() == styleName) {
 						me._currentStyle = style;
 						if (style.getLegend() != "") {
@@ -506,8 +506,8 @@ function(params, options) {
 				// founded style to default
 				// Because of layer style error this if clause
 				// must compare at there is more than one style.
-				if (me._styles.length > 1) {
-					me._currentStyle = me._styles[0];
+				if (me.getStyles().length > 1) {
+					me._currentStyle = me.getStyles()[0];
 				}
 				// Layer have not styles, add empty style to
 				// default
@@ -609,8 +609,8 @@ function(params, options) {
 		if (this._legendImage) {
 			return true;
 		} else {
-			for (var i = 0; i < this._styles.length; ++i) {
-				if (this._styles[i].getLegend()) {
+			for (var i = 0; i < this.getStyles().length; ++i) {
+				if (this.getStyles()[i].getLegend()) {
 					return true;
 				}
 			}
