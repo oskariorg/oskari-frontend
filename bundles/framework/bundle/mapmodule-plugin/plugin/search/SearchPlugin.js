@@ -216,6 +216,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 this.element.find('.search-textarea-and-button')
                     .css({'position':'relative'})
                     .append(overlay);
+                overlay.mousedown(function(e){
+                    e.preventDefault();
+                }); 
+
             } else {
                 this._inputField.prop( "disabled", false );
                 this._searchButton.prop( "disabled", false );
