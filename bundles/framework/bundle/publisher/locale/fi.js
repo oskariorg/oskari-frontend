@@ -60,7 +60,7 @@ Oskari.registerLocalization({
                 "righthanded": "Oikeakätinen",
                 "userlayout" : "Siirrä itse",
                 "usereditmode": "Editointitila päälle",
-                "usereditmodeoff": "Poistu editointitilasta",
+                "usereditmodeoff": "Poistu editointitilasta"
             },
             "data": {
                 "label": "Tilastot",
