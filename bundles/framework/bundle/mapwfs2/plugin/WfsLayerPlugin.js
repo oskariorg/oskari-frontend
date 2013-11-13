@@ -466,7 +466,6 @@ function(config) {
      */
     featuresSelectedHandler : function(event) {
         if(event.getMapLayer().hasFeatureData()) {
-            //var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getMapLayer().getId());
             var layer = event.getMapLayer();
             var ids = layer.getClickedFeatureListIds();
             var tmpIds = event.getWfsFeatureIds();
@@ -492,6 +491,15 @@ function(config) {
             // remove highlight image
             if(!event.isKeepSelection()) {
                 this.removeHighlightImages();
+            }
+
+            // TODO 472: if no connection or the layer is not registered, get highlight with URl
+            if(this.getConnection().isLazy() && !this.getConnection().isConnected() || 
+                !this.getSandbox().findMapLayerFromSelectedMapLayers(layer.getId())) {
+                var srs = this.getSandbox().getMap().getSrsName();
+                var bbox = this.getSandbox().getMap().getExtent();
+                var zoom = this.getSandbox().getMap().getZoom();
+                this.getHighlightImage(layer, srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom, event.getWfsFeatureIds());
             }
 
             this.getIO().highlightMapLayerFeatures(layer.getId(), event.getWfsFeatureIds(), event.isKeepSelection());
@@ -1419,7 +1427,43 @@ function(config) {
         dialog.addClass("error_handling");
         dialog.show(popupLoc, content, [okBtn]);
         dialog.fadeout(5000);
-    }
+    },
+
+    /**
+     * @method getHighlightImage
+     * @param {Number} layerId
+     * @param {String} srs
+     * @param {Number[]} bbox
+     * @param {Number} zoom
+     * @param {String[]} featureIds
+     *
+     * sends message to /highlight*
+     */
+    getHighlightImage : function(layer, srs, bbox, zoom, featureIds) {
+        var imageSize = {
+            width : this.getSandbox().getMap().getWidth(), 
+            height : this.getSandbox().getMap().getHeight()
+        };
+
+        var params = "?layerId=" + layer.getId() + 
+            "&srs=" + srs + 
+            "&bbox=" + 
+                bbox[0] + "," +
+                bbox[1] + "," +
+                bbox[2] + "," +
+                bbox[3] +
+            "&zoom=" + zoom +
+            "&featureIds=" + featureIds +
+            "&session=" + this.getIO().getSessionID() +
+            "&width=" + imageSize.width +
+            "&height=" + imageSize.height;
+
+        var imageUrl = this.getIO().getRootURL() + "/highlight" + params;
+
+        // send as an event forward to WFSPlugin (draws)
+        var event = this.getSandbox().getEventBuilder("WFSImageEvent")(layer, imageUrl, bbox, imageSize, "highlight", false, false);
+        this.getSandbox().notifyAll(event);
+    },
 
 }, {
     "protocol" : [ "Oskari.mapframework.module.Module",
