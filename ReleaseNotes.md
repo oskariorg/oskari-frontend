@@ -57,6 +57,7 @@ Refactored DrawPlugin from myplaces2 as an independent plugin.
 
 Added new configuration option 'layerDefaults' which can be used to override default values found in code. See bundle documentation for details.
 Refactored DrawPlugin to mapmodule-plugin/DrawPlugin.
+Moved myplacestab from personaldata to myplaces bundle. Refactored adding to use addTabRequest.
 
 ### divmanazer/VisualizationForm
 
@@ -65,6 +66,14 @@ New component which defines functionality to create geometry visualizations for 
 ### publisher
 
 Added possibility to change order of the layer as well as its opacity. Also removing and adding new layers is now possible.
+
+### personaldata
+
+Removed myplacestab (is now in myplaces bundle).
+
+### Core/AbstractLayer/MapLayerService
+
+Added optional feature to enable localization on layer name, description, inspire name and organization name. The properties can now be set as objects containing language id as keys f.ex "en". For example layer.getName() now returns language version based on Oskari.getLang() if an object has been set with setName({ "en" : "layername" }). Alternatively another language version can be requested with for example getName("en").
 
 ## 1.15
 

@@ -6,37 +6,6 @@ Oskari.registerLocalization({
     "desc": "Mina uppgifter",
     "notLoggedIn": "Du kan lagra dina egna kartvyer och titta på kartor som du har inbäddat på andra webbplatser i Mina uppgifter. <a href='/web/sv/login'>Logga in</a>.",
     "tabs": {
-      "myplaces": {
-        "title": "Objekt",
-        "nocategories": "Du har ännu inte lagrat objekten.",
-        "publishCategory": {
-            "privateTooltip": "Kartlagret är privat. Klicka på lagret för att offentliggöra det.",
-            "publicTooltip": "Kartlagret är offentliggöra. Klicka på lagret för att privat det."
-        },
-        "editCategory": "Editera kartlager",
-        "deleteCategory": "Ta bort kartlager",
-        "edit": "Editera",
-        "delete": "Ta bort",
-        "grid": {
-          "name": "Namn",
-          "desc": "Beskrivning",
-          "createDate": "Skapad",
-          "updateDate": "Uppdaterad",
-          "edit": " ",
-          "delete": " "
-        },
-        "notification": {
-          "delete": {
-            "title": "Ta bort objekt",
-            "confirm": "Vill du ta bort detta objekt?",
-            "btnDelete": "Ta bort",
-            "btnCancel": "Tillbaka",
-            "success": "Objektet har tagits bort.",
-            "error": "Objektet kunde inte tas bort. Prova på nytt senare.",
-            "cancel": "Objektet har inte tagits bort."
-          }
-        }
-      },
       "myviews": {
         "title": "Mina vyer",
         "edit" : "Editera",

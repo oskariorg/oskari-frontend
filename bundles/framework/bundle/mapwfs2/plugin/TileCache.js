@@ -3,64 +3,77 @@ function() {
     this.data = {};
     this.ts = {};
 },{
-    mget: function(layerId, bbox, style) {
+    mget: function(layerId, style, bbox) {
         var dataByLayerId = this.data[layerId];
         if(!dataByLayerId) 
             return;
-        var dataByBbox = dataByLayerId[bbox];
-        if(!dataByBbox)
+
+        var dataByStyle = dataByLayerId[style];
+        if(!dataByStyle)
             return;
-        return dataByBbox[style];
+
+        return dataByStyle[bbox];
     },
 
-    mput: function(layerId, bbox, style, data) {
+    mput: function(layerId, style, bbox, data) {
         var dataByLayerId = this.data[layerId];
         if(!dataByLayerId) { 
             dataByLayerId = {}; 
             this.data[layerId] = dataByLayerId; 
         }
-        var dataByBbox = dataByLayerId[bbox];
-        if(!dataByBbox) { 
-            dataByBbox = {}; 
-            dataByLayerId[bbox] = dataByBbox; 
+
+        var dataByStyle = dataByLayerId[style];
+        if(!dataByStyle) { 
+            dataByStyle = {}; 
+            dataByLayerId[style] = dataByStyle; 
         }
-        dataByBbox[style] = data;
+        dataByStyle[bbox] = data;
 
         var tsByLayerId = this.ts[layerId];
         if(!tsByLayerId) { 
             tsByLayerId = {}; 
             this.ts[layerId] = tsByLayerId; 
         }
-        var tsByBbox = tsByLayerId[bbox];
-        if(!tsByBbox) { 
-            tsByBbox = {}; 
-            tsByLayerId[bbox] = tsByBbox; 
+
+        var tsByStyle = tsByLayerId[style];
+        if(!tsByStyle) { 
+            tsByStyle = {}; 
+            tsByLayerId[style] = tsByStyle; 
         }
-        tsByBbox[style] = new Date().getTime();
+        tsByStyle[bbox] = new Date().getTime();
     },
 
-    mdel: function(layerId, bbox, style) {
-      var dataByLayerId = this.data[layerId];
-      if(!dataByLayerId)
-          return;
-      var dataByBbox = dataByLayerId[bbox];
-      if(!dataByBbox)
-          return;
-      var dataByStyle = dataByBbox[style];
-      if(!dataByStyle)
-          return;
-      dataByStyle = undefined;
-      delete dataByBbox[style];
+    mdel: function(layerId, style, bbox) {
+        var dataByLayerId = this.data[layerId];
+        if(!dataByLayerId)
+            return;
+
+        var dataByStyle = dataByLayerId[style];
+        if(!dataByStyle)
+            return;
+
+        if(bbox == null) {
+            dataByStyle = undefined;
+            delete dataByLayerId[style];
+            return;
+        }
+
+        var dataByBbox = dataByStyle[bbox];
+        if(!dataByBbox)
+            return;
+
+        dataByBbox = undefined;
+        delete dataByStyle[bbox];
     },
 
     purgeOffset: function(offset){
         var ref = new Date().getTime() - offset;
         for(var layerId in this.data) {
-            for (var bbox in this.data[layerId]) { 
-                for (var style in this.data[layerId][bbox]) { 
-                    if(this.ts[layerId][bbox][style] < ref) {
-                        delete this.data[layerId][bbox][style];
-                        delete this.ts[layerId][bbox][style];
+            for (var style in this.data[layerId]) { 
+                for (var bbox in this.data[layerId][style]) { 
+                    if(this.ts[layerId][style][bbox] < ref) {
+                        delete this.data[layerId][style][bbox];
+                        delete this.ts[layerId][style][bbox];
                     }
                 }
             }

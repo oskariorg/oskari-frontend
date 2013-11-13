@@ -125,6 +125,8 @@ function(config) {
         // data for tiles - key: layerId + bbox
         this._tileData = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache");
         this._tileDataTemp = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache");
+
+        this._visualizationForm = Oskari.clazz.create("Oskari.userinterface.component.VisualizationForm");
     },
 
     /**
@@ -158,6 +160,12 @@ function(config) {
         for (p in this.eventHandlers) {
             sandbox.registerForEventByName(this, p);
         }
+
+        this.requestHandlers = {
+            showOwnStyleHandler : Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequestHandler', this)
+        };
+
+        sandbox.addRequestHandler('ShowOwnStyleRequest', this.requestHandlers.showOwnStyleHandler);
     },
 
     /**
@@ -210,6 +218,14 @@ function(config) {
      */
     getIO: function() {
         return this._io;
+    },
+
+    /**
+     * @method getVisualizationForm
+     * @return {Object} io
+     */
+    getVisualizationForm: function() {
+        return this._visualizationForm;
     },
 
     /**
@@ -596,6 +612,15 @@ function(config) {
 
         this.getIO().setFilter(event.getGeoJson());
     },
+
+    /**
+     * @method setCustomStyle
+     */
+    setCustomStyle : function(layerId, values) {
+        // convert values to send (copy the values - don't edit the original)
+        this.getIO().setMapLayerCustomStyle(layerId, values);
+    },
+
 
     /**
      * @method clearConnectionErrorTriggers
@@ -1002,17 +1027,17 @@ function(config) {
             var bboxKey = BBOX.join(",");
 
             var style = layer.getCurrentStyle().getName();
-            var tileToUpdate = this._tilesToUpdate.mget(layer.getId(), bboxKey, "");
-                   
+            var tileToUpdate = this._tilesToUpdate.mget(layer.getId(), "", bboxKey);
+            
             // put the data in cache      
             if(!boundaryTile) { // normal case and cached
-                this._tileData.mput(layer.getId(), bboxKey, style, imageUrl);
+                this._tileData.mput(layer.getId(), style, bboxKey, imageUrl);
             } else { // temp cached and redrawn if gotten better
-                var dataForTileTemp = this._tileDataTemp.mget(layer.getId(), bboxKey, style);
+                var dataForTileTemp = this._tileDataTemp.mget(layer.getId(), style, bboxKey);
                 if (dataForTileTemp) {
                     return;
                 }
-                this._tileDataTemp.mput(layer.getId(), bboxKey, style, imageUrl);
+                this._tileDataTemp.mput(layer.getId(), style, bboxKey, imageUrl);
             }
 
             if (tileToUpdate) {
@@ -1055,14 +1080,15 @@ function(config) {
                 
                 var layer = this._plugin.getSandbox().findMapLayerFromSelectedMapLayers(this.layerId);
                 var style = layer.getCurrentStyle().getName();
-                var dataForTile = this._plugin._tileData.mget(this.layerId, bboxKey, style);
+                var dataForTile = this._plugin._tileData.mget(this.layerId, style, bboxKey);
                 if (dataForTile) {
-                     this._plugin._tilesToUpdate.mdel(this.layerId, bboxKey, ""); // remove from drawing
+                     this._plugin._tilesToUpdate.mdel(this.layerId, "", bboxKey); // remove from drawing
                 } else {
                     // temp cache
-                    dataForTile = this._plugin._tileDataTemp.mget(this.layerId, bboxKey, style);
+                    dataForTile = this._plugin._tileDataTemp.mget(this.layerId, style, bboxKey);
 
-                    this._plugin._tilesToUpdate.mput(this.layerId, bboxKey, "", theTile); // put in drawing
+                    this._plugin._tilesToUpdate.mput(this.layerId, "", bboxKey, theTile); // put in drawing
+
                     // DEBUG image (red)
                     //dataForTile = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
                 }
@@ -1113,7 +1139,7 @@ function(config) {
                 var bboxKey = BBOX.join(",");
                 var layer = this._plugin.getSandbox().findMapLayerFromSelectedMapLayers(this.layerId);
                 var style = layer.getCurrentStyle().getName();
-                this._plugin._tilesToUpdate.mput(this.layerId, bboxKey, "", tile);
+                this._plugin._tilesToUpdate.mput(this.layerId, "", bboxKey, tile);
 
                 tile.events.register("beforedraw", this, this.queueTileDraw);
                 return tile;
@@ -1279,13 +1305,23 @@ function(config) {
         var result = [];
         for(var i = 0; i < grid.bounds.length; i++) {
             var bboxKey = grid.bounds[i].join(",");
-            var dataForTile = this._tileData.mget(layerId, bboxKey, style);
+            var dataForTile = this._tileData.mget(layerId, style, bboxKey);
             if(!dataForTile) {
                 result.push(grid.bounds[i]);
             }
         }
-
         return result;
+    },
+
+    /*
+     * @method deleteTileCache
+     *
+     * @param layerId
+     * @param styleName
+     */
+    deleteTileCache : function(layerId, styleName) {
+        this._tileData.mdel(layerId, styleName);
+        this._tileDataTemp.mdel(layerId, styleName);
     },
 
     /*
