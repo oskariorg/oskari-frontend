@@ -19,16 +19,18 @@ function(sandbox) {
 		var me = this;
 		var toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
 
-		var locOwnStyle = this.localization['own-style'];
-		var toolOwnStyle = toolBuilder();
-		toolOwnStyle.setName("ownStyle");
-		toolOwnStyle.setTitle(locOwnStyle);
-		toolOwnStyle.setTooltip(locOwnStyle);
-		toolOwnStyle.setCallback(function() {
-			me.sandbox.postRequestByName('ShowOwnStyleRequest',[layer.getId()]);
-		});
-		layer.addTool(toolOwnStyle);
-
+		if(layer.isLayerOfType("WFS")) {
+			var locOwnStyle = this.localization['own-style'];
+			var toolOwnStyle = toolBuilder();
+			toolOwnStyle.setName("ownStyle");
+			toolOwnStyle.setTitle(locOwnStyle);
+			toolOwnStyle.setTooltip(locOwnStyle);
+			toolOwnStyle.setCallback(function() {
+				me.sandbox.postRequestByName('ShowOwnStyleRequest',[layer.getId()]);
+			});
+			layer.addTool(toolOwnStyle);
+		}
+		
 		// add object data tool
 		// TODO: should propably be configurable -> maybe through wfslayerplugin conf
 		// so we can disable if feature data bundle is not loaded
