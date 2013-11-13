@@ -490,7 +490,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          */
         changeToolStyle: function (style, div) {
             div = div || this.element;
-debugger;
+
             if (!style || !div) {
                 return;
             }
