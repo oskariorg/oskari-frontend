@@ -732,7 +732,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                     // TODO: check if we want to generate SLD from DB with VIS_ID 
                     VIS_ID: layer.getCurrentStyle().getName(),
                     // OR generate from given params (VIS_ID should be -1 or undefined if we go here)
-                    VIS_NAME: "ows:Kunnat2013",
+                    VIS_NAME: "oskari:Kunnat2013",
                     VIS_ATTR: "Kuntakoodi",
                     VIS_CLASSES: "020,091|186,086,982|111,139,740",
                     VIS_COLORS: "choro:ccffcc|99cc99|669966"
