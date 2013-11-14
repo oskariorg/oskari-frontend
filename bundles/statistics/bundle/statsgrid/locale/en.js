@@ -20,6 +20,7 @@ Oskari.registerLocalization({
         "addColumn": "Get data",
         "removeColumn": "Remove",
         "indicators": "Indicators",
+        "cannotDisplayIndicator": "The indicator does not have municipality based values and it cannot be displayed in the grid.",
         "year": "Year",
         "buttons": {
             "ok": "OK",

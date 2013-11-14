@@ -20,6 +20,7 @@ Oskari.registerLocalization({
 		"addColumn": "Hae data",
 		"removeColumn": "Poista",
 		"indicators": "Indikaattorit",
+		"cannotDisplayIndicator": "Indikaattorilla ei ole kuntapohjaisia arvoja, joten sitä ei voi näyttää taulukossa.",
 		"year": "Vuosi",
 		"buttons": {
 			"ok": "OK",

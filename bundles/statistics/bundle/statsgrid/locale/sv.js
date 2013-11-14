@@ -20,6 +20,7 @@ Oskari.registerLocalization({
         "addColumn": "Hämta data",
         "removeColumn": "Radera",
         "indicators": "Indikator",
+        "cannotDisplayIndicator": "Indikaattorilla ei ole kuntapohjaisia arvoja, joten sitä ei voi näyttää taulukossa.",
         "year": "År",
         "buttons": {
             "ok": "OK",

@@ -220,9 +220,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
              * Removes the layer from selection
              */
             'AfterMapLayerRemoveEvent': function (event) {
-                // Hide Classify dialog
+                // Reset the UI and hide the dialog
                 if (event.getMapLayer()._layerType === "STATS") {
-                    this._visibilityOff();
+                    this.resetUI();
                 }
             },
             /**
@@ -547,7 +547,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 VIS_COLORS : "choro:"
             });
         },
-
+        /**
+         * Creates UI again from scratch
+         *
+         * @method resetUI
+         * @return {undefined}
+         */
+        resetUI: function() {
+            this.element = null;
+            this._createUI();
+        },
         /**
          * @method  _createUI
          * Creates classification UI (method select, class count, colors)
@@ -556,9 +565,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
          */
         _createUI: function () {
             var me = this;
-            if (!this.element) {
-                this.element = this.classify_temp.clone();
-            }
+
+            // destroy the old plugin from the map
+            jQuery('div.manageClassificationPlugin').remove();
+            this.element = this.classify_temp.clone();
             // Classify html header
             var header = this.element.find('div.classheader');
             header.append(this._locale.classify.classify);
