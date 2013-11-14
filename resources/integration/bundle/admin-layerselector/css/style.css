@@ -45,7 +45,7 @@ div.admin-layerselector {
       height: 16px;
       margin: 0; }
       div.admin-layerselector div.layer .add-layer-input.mid, div.admin-layerselector div.create-layer .add-layer-input.mid {
-        width: 220px; }
+        width: 217px; }
       div.admin-layerselector div.layer .add-layer-input.long, div.admin-layerselector div.create-layer .add-layer-input.long {
         width: 297px; }
     div.admin-layerselector div.layer .layer-title, div.admin-layerselector div.create-layer .layer-title {
@@ -142,7 +142,7 @@ div.admin-layerselector {
     min-height: 20px; }
   div.admin-layerselector .add-layer-record, div.admin-layerselector .add-layer-send, div.admin-layerselector .add-class-record, div.admin-layerselector .add-class-send, div.admin-layerselector .add-group-record {
     width: 100%;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     overflow: hidden;
     position: relative; }
   div.admin-layerselector .add-layer-separation {
@@ -183,8 +183,8 @@ div.admin-layerselector {
     transition-duration: 300ms;
     transition-property: height; }
   div.admin-layerselector .show-add-class {
-    padding: 1s0px 10px;
-    height: 190px;
+    padding: 10px 10px;
+    height: 200px;
     width: 100%; }
   div.admin-layerselector .add-layer-wrapper, div.admin-layerselector .add-class-wrapper {
     display: block; }
@@ -193,7 +193,7 @@ div.admin-layerselector {
   div.admin-layerselector .add-layer-grouping, div.admin-layerselector .add-class-grouping {
     font-weight: bold;
     font-size: 130%;
-    margin-top: 40px;
+    margin-top: 20px;
     margin-bottom: 10px; }
   div.admin-layerselector .add-layer-label-area, div.admin-layerselector .add-class-label-area {
     display: table;
@@ -261,5 +261,5 @@ div.admin-layerselector {
   div.admin-layerselector #admin-select-capability {
     margin-bottom: 15px; }
   div.admin-layerselector .fetch-wms-button {
-    margin-top: 5px;
+    margin-top: 2px;
     margin-bottom: 5px; }

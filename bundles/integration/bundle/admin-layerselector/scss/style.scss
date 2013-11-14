@@ -65,7 +65,7 @@ div.admin-layerselector {
             margin: 0;
 
             &.mid {
-                width: 220px;
+                width: 217px;
             }
 
             &.long {
@@ -230,7 +230,7 @@ div.admin-layerselector {
     .add-class-send,
     .add-group-record {
         width: 100%;
-        margin-bottom: 5px;
+        margin-bottom: 8px;
         overflow: hidden;
         position: relative;
     }
@@ -278,8 +278,8 @@ div.admin-layerselector {
         transition-property: height;
     }
     .show-add-class {
-        padding: 1s0px 10px;
-        height: 190px;
+        padding: 10px 10px;
+        height: 200px;
         width: 100%;
     }
 
@@ -294,7 +294,7 @@ div.admin-layerselector {
     .add-layer-grouping, .add-class-grouping {
         font-weight: bold;
         font-size: 130%;
-        margin-top: 40px;
+        margin-top: 20px;
         margin-bottom: 10px;
     }
     .add-layer-label-area, .add-class-label-area {
@@ -389,7 +389,7 @@ div.admin-layerselector {
         margin-bottom: 15px;
     }
     .fetch-wms-button {
-        margin-top: 5px;
+        margin-top: 2px;
         margin-bottom: 5px;
     }
 }
