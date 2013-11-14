@@ -19,8 +19,7 @@ div.search div.results {
   max-height: 320px;
   width: auto;
   overflow: auto;
-  margin-top: 5px;
-}
+  margin-top: 5px; }
 
 div.search div.results div.header {
   background: #DDDDDD; }
@@ -111,12 +110,12 @@ div.published-search-div div.published-search-results table.search-results {
   float: left;
   width: 316px;
   margin: 0 0 10px 0; }
+
 div.published-search-div div.published-search-results table.search-results thead {
-  float: left;
-}
+  float: left; }
+
 div.published-search-div div.published-search-results table.search-results thead tr {
-  display: block;
-}
+  display: block; }
 
 div.published-search-div div.published-search-results table.search-results tbody {
   overflow: hidden;
@@ -125,72 +124,64 @@ div.published-search-div div.published-search-results table.search-results tbody
   display: block;
   width: 100%;
   max-height: 250px;
-  min-height: 30px;
-}
+  min-height: 30px; }
 
 div.published-search-div div.published-search-results table.search-results thead tr th {
   padding: 5px;
   background-color: #efefef;
-  width: 110px;
-}
+  width: 110px; }
+
 div.published-search-div div.published-search-results table.search-results thead tr th + th {
-  width: 70px;
-}
+  width: 70px; }
+
 div.published-search-div div.published-search-results table.search-results thead tr th + th + th {
-  width: 106px;
-}
-div.published-search-div .oskari-publisher-search-results-rounded-dark div.published-search-results table.search-results thead tr th:first-child,
-div.published-search-div .oskari-publisher-search-results-rounded-light div.published-search-results table.search-results thead tr th:first-child {
+  width: 106px; }
+
+div.published-search-div .oskari-publisher-search-results-rounded-dark div.published-search-results table.search-results thead tr th:first-child, div.published-search-div .oskari-publisher-search-results-rounded-light div.published-search-results table.search-results thead tr th:first-child {
   border-radius: 15px 0 0 0;
   -moz-border-radius: 15px 0 0 0;
-  -webkit-border-radius: 15px 0 0 0;
-}
-div.published-search-div .oskari-publisher-search-results-rounded-dark div.published-search-results table.search-results thead tr th:last-child,
-div.published-search-div .oskari-publisher-search-results-rounded-light div.published-search-results table.search-results thead tr th:last-child {
+  -webkit-border-radius: 15px 0 0 0; }
+
+div.published-search-div .oskari-publisher-search-results-rounded-dark div.published-search-results table.search-results thead tr th:last-child, div.published-search-div .oskari-publisher-search-results-rounded-light div.published-search-results table.search-results thead tr th:last-child {
   border-radius: 0 15px 0 0;
   -moz-border-radius: 0 15px 0 0;
-  -webkit-border-radius: 0 15px 0 0;
-}
-div.published-search-div .oskari-publisher-search-results-sharp-dark div.published-search-results table.search-results thead tr th:first-child,
-div.published-search-div .oskari-publisher-search-results-sharp-light div.published-search-results table.search-results thead tr th:first-child {
+  -webkit-border-radius: 0 15px 0 0; }
+
+div.published-search-div .oskari-publisher-search-results-sharp-dark div.published-search-results table.search-results thead tr th:first-child, div.published-search-div .oskari-publisher-search-results-sharp-light div.published-search-results table.search-results thead tr th:first-child {
   border-radius: 0;
   -moz-border-radius: 0;
-  -webkit-border-radius: 0;
-}
-div.published-search-div .oskari-publisher-search-results-sharp-dark div.published-search-results table.search-results thead tr th:last-child,
-div.published-search-div .oskari-publisher-search-results-sharp-light div.published-search-results table.search-results thead tr th:last-child {
+  -webkit-border-radius: 0; }
+
+div.published-search-div .oskari-publisher-search-results-sharp-dark div.published-search-results table.search-results thead tr th:last-child, div.published-search-div .oskari-publisher-search-results-sharp-light div.published-search-results table.search-results thead tr th:last-child {
   border-radius: 0;
   -moz-border-radius: 0;
-  -webkit-border-radius: 0;
-}
-div.published-search-div .oskari-publisher-search-results-3d-dark div.published-search-results table.search-results thead tr th:first-child,
-div.published-search-div .oskari-publisher-search-results-3d-light div.published-search-results table.search-results thead tr th:first-child {
+  -webkit-border-radius: 0; }
+
+div.published-search-div .oskari-publisher-search-results-3d-dark div.published-search-results table.search-results thead tr th:first-child, div.published-search-div .oskari-publisher-search-results-3d-light div.published-search-results table.search-results thead tr th:first-child {
   border-radius: 3px 0 0 0;
   -moz-border-radius: 3px 0 0 0;
-  -webkit-border-radius: 3px 0 0 0;
-}
-div.published-search-div .oskari-publisher-search-results-3d-dark div.published-search-results table.search-results thead tr th:last-child,
-div.published-search-div .oskari-publisher-search-results-3d-light div.published-search-results table.search-results thead tr th:last-child {
+  -webkit-border-radius: 3px 0 0 0; }
+
+div.published-search-div .oskari-publisher-search-results-3d-dark div.published-search-results table.search-results thead tr th:last-child, div.published-search-div .oskari-publisher-search-results-3d-light div.published-search-results table.search-results thead tr th:last-child {
   border-radius: 0 3px 0 0;
   -moz-border-radius: 0 3px 0 0;
-  -webkit-border-radius: 0 3px 0 0;
-}
+  -webkit-border-radius: 0 3px 0 0; }
+
 div.published-search-div div.published-search-results table.search-results tbody td {
   display: inline-block;
   overflow: hidden;
   padding: 2px 0 2px 5px;
   text-overflow: ellipsis;
   max-width: 115px;
-  width: 115px;
-}
+  width: 115px; }
+
 div.published-search-div div.published-search-results table.search-results tbody td + td {
   max-width: 75px;
-  width: 75px;
-}
+  width: 75px; }
+
 div.published-search-div div.published-search-results table.search-results tbody td + td + td {
   max-width: 95px;
-  width: 95px;
-}
+  width: 95px; }
 
 div.published-search-div .oskari-publisher-search-results-rounded-dark, div.published-search-div .oskari-publisher-search-results-rounded-light {
   border-radius: 15px;
@@ -211,8 +202,7 @@ div.published-search-div div.search-middle div.close-results {
   margin-right: 5px;
   display: inline-block;
   float: right;
-  cursor: pointer;
-}
+  cursor: pointer; }
 
 div.published-search-div .oskari-publisher-search-results-rounded-dark, div.published-search-div .oskari-publisher-search-results-rounded-light {
   border-radius: 15px;
@@ -233,5 +223,4 @@ div.published-search-div div.search-middle div.close-results {
   margin-right: 5px;
   display: inline-block;
   float: right;
-  cursor: pointer;
-}
+  cursor: pointer; }

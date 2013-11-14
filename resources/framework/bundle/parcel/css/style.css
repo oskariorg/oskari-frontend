@@ -22,6 +22,4 @@ div.parcel div.buttons div.button {
   max-width: 260px; }
 
 circle.parceleditor {
-  cursor:move;
-}
-
+  cursor: move; }
