@@ -64,7 +64,8 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             // populate layer list
             mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
             layers = mapLayerService.getAllLayers();
-        if (this.view != null) {
+
+        if (this.view !== null && this.view !== undefined) {
             this.view.addToCollection(layers);
         } else {
             this.layers = layers;
@@ -152,23 +153,24 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         e.stopPropagation();
         var me = e.data.me,
             sandbox = me.getSandbox(),
-            mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+            parentLayerId;
         /*
          *****************
          * NORMAL LAYERS *
          *****************
          */
-        if (e.command == "removeLayer") {
+        if (e.command === "removeLayer") {
             // remove layer from mapLayerService
             if (e.baseLayerId) {
                 // If this is a sublayer, remove it from its parent's sublayer array
-                var parentLayerId = 'base_' + e.baseLayerId;
+                parentLayerId = 'base_' + e.baseLayerId;
                 mapLayerService.removeSubLayer(parentLayerId, e.modelId);
             } else {
                 // otherwise just remove it from map layer service.
                 mapLayerService.removeLayer(e.modelId);
             }
-        } else if (e.command == "addLayer") {
+        } else if (e.command === "addLayer") {
             // add layer into mapLayerService
             e.layerData.name = e.layerData.admin.name[Oskari.getDefaultLanguage()];
             var mapLayer = mapLayerService.createMapLayer(e.layerData);
@@ -176,7 +178,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
 
             if (e.baseLayerId) {
                 // If this is a sublayer, add it to its parent's sublayer array
-                var parentLayerId = 'base_' + e.baseLayerId;
+                parentLayerId = 'base_' + e.baseLayerId;
                 mapLayerService.addSubLayer(parentLayerId, mapLayer);
             } else {
                 // Otherwise just add it to the map layer service.
@@ -184,31 +186,29 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                     mapLayerService.addLayer(mapLayer);
                 }
             }
-        } else if (e.command == "editLayer") {
+        } else if (e.command === "editLayer") {
             // update layer info
             //console.log("Editing layer");
             //console.log(e.layerData.admin);
             e.layerData.name = e.layerData.admin.name[Oskari.getDefaultLanguage()]; //TODO this should be in mapLayerService
             mapLayerService.updateLayer(e.layerData.id, e.layerData);
-        }
+        } else if (e.command === "addGroup") {
+            /*
+             ************************
+             * BASE OR GROUP LAYERS *
+             ************************
+             */
+            // load the map layers again
 
-        /*
-         ************************
-         * BASE OR GROUP LAYERS *
-         ************************
-         */
-        // load the map layers again
-        else if (e.command == "addGroup") {
             mapLayerService.loadAllLayersAjax();
-        }
-        // Remove the base/group layer from mapLayerService
-        // and load it again from backend, since we edited
-        // the layer class and the changes will not be
-        // reflected to the corresponding map layer directly.
-        else if (e.command == "editGroup") {
+        } else if (e.command === "editGroup") {
+            // Remove the base/group layer from mapLayerService
+            // and load it again from backend, since we edited
+            // the layer class and the changes will not be
+            // reflected to the corresponding map layer directly.
             mapLayerService.removeLayer(e.id, true);
             mapLayerService.loadAllLayersAjax();
-        } else if (e.command == "deleteGroup") {
+        } else if (e.command === "deleteGroup") {
             mapLayerService.removeLayer(e.id);
         }
     }

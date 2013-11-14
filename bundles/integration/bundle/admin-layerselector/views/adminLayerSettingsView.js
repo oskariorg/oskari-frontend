@@ -137,74 +137,83 @@ define([
             },
 
             createLayerForm: function (e) {
-                var supportedLanguages = Oskari.getSupportedLanguages(),
+                var me = this,
+                    supportedLanguages = Oskari.getSupportedLanguages(),
                     i,
                     opacity = 100,
                     styles = [];
-                if (!this.model) {
-                    this.model = {};
+                if (!me.model) {
+                    me.model = {};
                 }
-                if (!this.model.admin) {
-                    this.model.admin = {
+                if (!me.model.admin) {
+                    me.model.admin = {
                         "locales": []
                     };
                     supportedLanguages.sort();
                     for (i = 0; i < supportedLanguages.length; i += 1) {
-                        this.model.admin.locales.push({
+                        me.model.admin.locales.push({
                             "lang": supportedLanguages[i],
                             "name": "",
                             "title": ""
                         });
                     }
                 }
-                this.$el.append(this.layerTemplate({
-                    model: this.model,
-                    instance: this.options.instance,
-                    classNames: this.classes.getGroupTitles(),
-                    isSubLayer: this.options.baseLayerId,
-                    roles: this.roles
+                me.$el.append(me.layerTemplate({
+                    model: me.model,
+                    instance: me.options.instance,
+                    classNames: me.classes.getGroupTitles(),
+                    isSubLayer: me.options.baseLayerId,
+                    roles: me.roles
                 }));
                 // if settings are hidden, we need to populate template and
                 // add it to the DOM
-                if (!this.$el.hasClass('show-edit-layer')) {
+                if (!me.$el.hasClass('show-edit-layer')) {
                     // decode xslt
-                    if (this.model && this.model.admin.xslt && !this.model.admin.xslt_decoded) {
-                        this.model.admin.xslt_decoded = this.classes.decode64(this.model.admin.xslt);
+                    if (me.model && me.model.admin.xslt && !me.model.admin.xslt_decoded) {
+                        me.model.admin.xslt_decoded = me.classes.decode64(me.model.admin.xslt);
                     }
-                    if (this.model &&
-                            !this.model.admin.style_decoded &&
-                            this.model.admin.style) {
+                    if (me.model &&
+                            !me.model.admin.style_decoded &&
+                            me.model.admin.style) {
 
-                        styles.push(this.classes.decode64(this.model.admin.style));
-                        this.model.admin.style_decoded = styles;
+                        styles.push(me.classes.decode64(me.model.admin.style));
+                        me.model.admin.style_decoded = styles;
                     }
-
                     // add opacity
-                    if (this.model && !this.model.admin.opacity) {
-                        opacity = this.model.admin.opacity;
+                    if (me.model && me.model.admin && me.model.admin.opacity !== null && me.model.admin.opacity !== undefined) {
+                        opacity = me.model.admin.opacity;
                     }
-                    this.$el.find('.layout-slider').slider({
+                    // FIXME non-unique ID
+                    me.$el.find('.layout-slider').slider({
                         min: 0,
                         max: 100,
                         value: opacity,
                         slide: function (event, ui) {
+                            console.log("Slider changed");
                             jQuery(ui.handle).parents('.left-tools').find("#opacity-slider").val(ui.value);
                         }
+                    });
+                    console.log(me.$el.find("#opacity-slider"));
+                    me.$el.find("#opacity-slider").on('change paste keyup', function () {
+                        console.log("Value changed");
+                        var sldr = me.$el.find('.layout-slider');
+                        sldr.slider('value', jQuery(this).val());
                     });
                 }
             },
 
             createGroupForm: function (groupTitle, e) {
 
-                var subLayers = (this.model && this.model.getSubLayers ? this.model.getSubLayers() : []),
+                var me = this,
+                    subLayers = (me.model && me.model.getSubLayers ? me.model.getSubLayers() : []),
                     supportedLanguages = Oskari.getSupportedLanguages(),
                     locales = {},
                     i,
                     lang,
-                    newModel = this.model;
+                    newModel = me.model;
                 if (!newModel) {
                     newModel = {};
-                    this.model = newModel;
+                    me.model = newModel;
                 }
                 //console.log(newModel);
                 newModel.locales = [];
@@ -247,13 +256,13 @@ define([
                     return 0;
                 });
 
-                this.$el.append(this.groupTemplate({
-                    model: this.model,
-                    instance: this.options.instance,
+                me.$el.append(me.groupTemplate({
+                    model: me.model,
+                    instance: me.options.instance,
                     groupTitle: groupTitle,
                     subLayers: subLayers,
-                    subLayerTemplate: this.subLayerTemplate,
-                    roles: this.roles
+                    subLayerTemplate: me.subLayerTemplate,
+                    roles: me.roles
                 }));
             },
 
@@ -269,7 +278,7 @@ define([
                         element.parents('.admin-add-layer').hasClass('show-add-layer')) {
 
                     element.parents('.create-layer').children('.admin-add-layer-btn').html(this.options.instance.getLocalization('admin').addLayer);
-                    element.parents('.create-layer').children('.admin-add-layer-btn').attr('title',this.options.instance.getLocalization('admin').addLayerDesc);
+                    element.parents('.create-layer').children('.admin-add-layer-btn').attr('title', this.options.instance.getLocalization('admin').addLayerDesc);
                     element.parents('.admin-add-layer').removeClass('show-edit-layer');
                     element.parents('.admin-add-layer').remove();
                 }
@@ -372,8 +381,8 @@ define([
                 //console.log("form: ", form);
 
                 // If this is a sublayer the layer class id should be of its base layer's
-                if (this.options.baseLayerId) {
-                    lcId = this.options.baseLayerId;
+                if (me.options.baseLayerId) {
+                    lcId = me.options.baseLayerId;
                 }
 
                 // add layer type and version
@@ -437,9 +446,9 @@ define([
                 }
 
                 data.viewPermissions = '';
-                for (i = 0; i < this.roles.length; i += 1) {
-                    if (form.find('#layer-view-roles-' + this.roles[i].id).is(':checked')) {
-                        data.viewPermissions += this.roles[i].id + ',';
+                for (i = 0; i < me.roles.length; i += 1) {
+                    if (form.find('#layer-view-roles-' + me.roles[i].id).is(':checked')) {
+                        data.viewPermissions += me.roles[i].id + ',';
                     }
                 }
 
@@ -499,7 +508,7 @@ define([
                             createLayer = form.parents('.create-layer');
                             if (createLayer) {
                                 createLayer.find('.admin-add-layer-btn').html(me.instance.getLocalization('admin').addLayer);
-                                createLayer.find('.admin-add-layer-btn').attr('title',me.instance.getLocalization('admin').addLayerDesc);
+                                createLayer.find('.admin-add-layer-btn').attr('title', me.instance.getLocalization('admin').addLayerDesc);
                             }
                             form.remove();
                             resp.admin.style = me.classes.encode64(resp.admin.style);
@@ -737,7 +746,7 @@ define([
                     jQuery('#admin-select-sublayer').remove();
                     return;
                 }
-                capability = this.getValue(this.capabilities, 'Capability');
+                capability = me.getValue(me.capabilities, 'Capability');
                 selectedLayer = capability.Layer.Layer[selected];
 
                 jQuery('#admin-select-sublayer').remove();
@@ -746,7 +755,7 @@ define([
 
                     // This might be more elegant as its own template
                     subLayerSelect = '<select id="admin-select-sublayer">';
-                    subLayerSelect += '<option value="" selected="selected">' + this.options.instance.getLocalization('admin').selectSubLayer + '</option>';
+                    subLayerSelect += '<option value="" selected="selected">' + me.options.instance.getLocalization('admin').selectSubLayer + '</option>';
                     subLayers = selectedLayer.Layer;
                     for (i = subLayers.length - 1; i >= 0; i -= 1) {
                         subLayerSelect += '<option value="' + i + '">' + subLayers[i].Title + '</option>';
