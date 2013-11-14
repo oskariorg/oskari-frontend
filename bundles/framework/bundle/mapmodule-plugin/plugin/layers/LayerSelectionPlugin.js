@@ -135,7 +135,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var me = this,
                 p;
             for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
+                if (me.eventHandlers.hasOwnProperty(p) && me._sandbox) {
                     me._sandbox.unregisterFromEventByName(me, p);
                 }
             }
