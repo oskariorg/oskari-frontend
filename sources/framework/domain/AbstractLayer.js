@@ -104,6 +104,44 @@ function(params, options) {
 
 }, {
 	/**
+	 * Populates name, description, inspire and organization fields with a localization JSON object
+	 * @method setLocalization
+	 * @param {Object} loc
+	 *          object containing localization for name/desc/inspire/organization
+	 * (e.g. MapLayerService)
+	 */
+	setLocalization : function(loc) {
+		var name = {};
+		var desc = {};
+		var inspire = {};
+		var organization = {};
+
+		for(var lang in loc) {
+			var singleLang = loc[lang];
+			if(singleLang.name) name[lang] = singleLang.name;
+			if(singleLang.subtitle) desc[lang] = singleLang.subtitle;
+			if(singleLang.inspire) inspire[lang] = singleLang.inspire;
+			if(singleLang.orgName) organization[lang] = singleLang.orgName;
+		}
+		// set objects if we had any localizations
+		for(var lang in name) {
+			this.setName(name);
+			break;
+		}
+		for(var lang in desc) {
+			this.setDescription(desc);
+			break;
+		}
+		for(var lang in inspire) {
+			this.setInspireName(inspire);
+			break;
+		}
+		for(var lang in organization) {
+			this.setOrganizationName(organization);
+			break;
+		}
+	},
+	/**
 	 * @method setId
 	 * @param {String} id
 	 *          unique identifier for map layer used to reference the layer internally
@@ -139,17 +177,28 @@ function(params, options) {
 	},
 	/**
 	 * @method setName
-	 * @param {String} name
+	 * @param {String/Object} name
 	 *          name for the maplayer that is shown in UI
 	 */
 	setName : function(name) {
 		this._name = name;
 	},
 	/**
+	 * Returns a name for the layer. 
+	 * If the name is populated with a string, always returns it.
+	 * With populated object assumes that the object keys are language codes. 
+	 * If language param is not given, uses Oskari.getLang()
 	 * @method getName
+	 * @param {String} lang language id like 'en' or 'fi' (optional)
 	 * @return {String} maplayer UI name
 	 */
-	getName : function() {
+	getName : function(lang) {
+		if(this._name && typeof this._name === 'object') {
+			if(lang) {
+				return this._name[lang];
+			}
+			return this._name[Oskari.getLang()];
+		}
 		return this._name;
 	},
 	/**
@@ -187,17 +236,28 @@ function(params, options) {
 	},
 	/**
 	 * @method setOrganizationName
-	 * @param {String} param
+	 * @param {String/Object} param
 	 *          organization name under which the layer is listed in UI
 	 */
 	setOrganizationName : function(param) {
 		this._organizationName = param;
 	},
 	/**
+	 * Returns a organization name for the layer. 
+	 * If the name is populated with a string, always returns it.
+	 * With populated object assumes that the object keys are language codes. 
+	 * If language param is not given, uses Oskari.getLang()
 	 * @method getOrganizationName
+	 * @param {String} lang language id like 'en' or 'fi' (optional)
 	 * @return {String} organization name under which the layer is listed in UI
 	 */
-	getOrganizationName : function() {
+	getOrganizationName : function(lang) {
+		if(this._organizationName && typeof this._organizationName === 'object') {
+			if(lang) {
+				return this._organizationName[lang];
+			}
+			return this._organizationName[Oskari.getLang()];
+		}
 		return this._organizationName;
 	},
 	/**
@@ -209,10 +269,21 @@ function(params, options) {
 		this._inspireName = param;
 	},
 	/**
+	 * Returns an inspire name for the layer. 
+	 * If the name is populated with a string, always returns it.
+	 * With populated object assumes that the object keys are language codes. 
+	 * If language param is not given, uses Oskari.getLang()
 	 * @method getInspireName
+	 * @param {String} lang language id like 'en' or 'fi' (optional)
 	 * @return {String} inspire theme name under which the layer is listed in UI
 	 */
-	getInspireName : function() {
+	getInspireName : function(lang) {
+		if(this._inspireName && typeof this._inspireName === 'object') {
+			if(lang) {
+				return this._inspireName[lang];
+			}
+			return this._inspireName[Oskari.getLang()];
+		}
 		return this._inspireName;
 	},
 	/**
@@ -241,10 +312,21 @@ function(params, options) {
 		this._description = description;
 	},
 	/**
+	 * Returns a description for the layer. 
+	 * If the description is populated with a string, always returns it.
+	 * With populated object assumes that the object keys are language codes. 
+	 * If language param is not given, uses Oskari.getLang()
 	 * @method getDescription
+	 * @param {String} lang language id like 'en' or 'fi' (optional)
 	 * @return {String} map layer description text
 	 */
-	getDescription : function() {
+	getDescription : function(lang) {
+		if(this._description && typeof this._description === 'object') {
+			if(lang) {
+				return this._description[lang];
+			}
+			return this._description[Oskari.getLang()];
+		}
 		return this._description;
 	},
 	/**
@@ -484,11 +566,11 @@ function(params, options) {
 		var me = this;
 		var style = null;
 		// Layer have styles
-		if (me._styles.length > 0) {
+		if (me.getStyles().length > 0) {
 			// There is default style defined
 			if (styleName !== "") {
-				for (var i = 0; i < me._styles.length; i++) {
-					style = me._styles[i];
+				for (var i = 0; i < me.getStyles().length; i++) {
+					style = me.getStyles()[i];
 					if (style.getName() == styleName) {
 						me._currentStyle = style;
 						if (style.getLegend() != "") {
@@ -506,8 +588,8 @@ function(params, options) {
 				// founded style to default
 				// Because of layer style error this if clause
 				// must compare at there is more than one style.
-				if (me._styles.length > 1) {
-					me._currentStyle = me._styles[0];
+				if (me.getStyles().length > 1) {
+					me._currentStyle = me.getStyles()[0];
 				}
 				// Layer have not styles, add empty style to
 				// default
@@ -609,8 +691,8 @@ function(params, options) {
 		if (this._legendImage) {
 			return true;
 		} else {
-			for (var i = 0; i < this._styles.length; ++i) {
-				if (this._styles[i].getLegend()) {
+			for (var i = 0; i < this.getStyles().length; ++i) {
+				if (this.getStyles()[i].getLegend()) {
 					return true;
 				}
 			}

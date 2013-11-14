@@ -100,7 +100,7 @@ function(drawPlugin) {
         var editLayer = this.drawPlugin.editLayer;
 
         this.map.moveActiveMarker = function(evt) {
-            var lonlat = this.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y))
+            var lonlat = this.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y));
             lonlat.lon -= this.activeMarker.markerMouseOffset.lon;
             lonlat.lat -= this.activeMarker.markerMouseOffset.lat;
 
@@ -124,7 +124,7 @@ function(drawPlugin) {
             this.events.unregister("mouseup",this,this.freezeActiveMarker);
             OpenLayers.Event.stop(evt);
 
-            var lonlat = this.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y))
+            var lonlat = this.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y));
             lonlat.lon -= this.activeMarker.markerMouseOffset.lon;
             lonlat.lat -= this.activeMarker.markerMouseOffset.lat;
 
@@ -568,7 +568,7 @@ function(drawPlugin) {
                     // Scaling for integer operations
                     l = clipSourcePolygons.length-1;
                     clipSourcePolygons[l] = this.scaleup(clipSourcePolygons[l], scale);
-                } else if (olOldFeatures[i].id.indexOf("OpenLayers.Geometry.LineString") !== -1) {
+                } else if (olOldFeatures[i].id.indexOf("LineString") !== -1) {
                     jstsLine = jstsParser.read(olOldFeatures[i]);
                 }
             }

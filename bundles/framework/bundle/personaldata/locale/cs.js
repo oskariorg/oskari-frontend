@@ -6,37 +6,6 @@ Oskari.registerLocalization({
     "desc": "Moje data",
     "notLoggedIn": "Lze uložit zobrazení map a prohlížet mapy, které jste vložili do jiných webů v Mých datech. <a href='/web/en/login'>Přihlásit se</a>.",
     "tabs": {
-      "myplaces": {
-        "title": "Místa",
-        "nocategories": "Místa jste ještě neuložil.",
-        "publishCategory": {
-            "privateTooltip": "Mapa je soukromá| Klikněte na mapovou vrstvu pro její veřejné zpřístupnění.",
-            "publicTooltip": "Mapa je veřejná| Klikněte na mapovou vrstvu pro její změnu na soukromou."
-        },
-        "editCategory": "Upravit mapovou vrstvu",
-        "deleteCategory": "Smazat mapovou vrstvu",
-        "edit": "Upravit",
-        "delete": "Smazat",
-        "grid": {
-          "name": "Jméno",
-          "desc": "Popis",
-          "createDate": "Vytvořeno",
-          "updateDate": "Aktualizováno",
-          "edit": " ",
-          "delete": " "
-        },
-        "notification": {
-          "delete": {
-            "title": "Smazat místo",
-            "confirm": "Chcete toto místo smazat?",
-            "btnDelete": "Smazat",
-            "btnCancel": "Storno",
-            "success": "Místo bylo smazáno.",
-            "error": "Místo nelze smazat, zkuste to prosím později.",
-            "cancel": "Tento objekt nebyl smazán."
-          }
-        }
-      },
       "myviews": {
         "title": "Má zobrazení mapy",
         "edit": "Upravit",

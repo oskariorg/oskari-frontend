@@ -5,6 +5,7 @@ Oskari.registerLocalization({
         "title" : "MapWfs2",
         "desc" : "",
         "object-data": "Kohdetiedot",
+        "own-style": "Oma tyyli",
         "tile" : {
             "title" : "MapWfs2"
         },
@@ -26,6 +27,13 @@ Oskari.registerLocalization({
             "show": "Näytä kohteet",
             "close": "Sulje",
             "edit" : "Muokkaa"
+        },
+        "popup": {
+            "title": "Oma tyyli",
+            "button": {
+                "cancel": "Peruuta",
+                "save": "Tallenna"
+            }
         }
     }
 });

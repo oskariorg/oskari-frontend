@@ -12,6 +12,37 @@ Oskari.registerLocalization({
     "guest": {
       "loginShort": "Identificarse para usar"
     },
+     "tab": {
+        "title": "Sitios",
+        "nocategories": "Todavía no ha guardado los sitios.",
+        "publishCategory": {
+            "privateTooltip": "La capa es privada. Pulse en la capa para publicarla.",
+            "publicTooltip": "La capa es pública. Pulse en la capa para despublicarla."
+        },
+        "editCategory": "Editar capa",
+        "deleteCategory": "Borrar capa",
+        "edit": "Editar",
+        "delete": "Borrar",
+        "grid": {
+          "name": "Nombre",
+          "desc": "Descripción",
+          "createDate": "Creada",
+          "updateDate": "Actualizada",
+          "edit": " ",
+          "delete": " "
+        },
+        "notification": {
+          "delete": {
+            "title": "Borrar sitio",
+            "confirm": "¿Desea borrar este sitio?",
+            "btnDelete": "Borrar",
+            "btnCancel": "Cancelar",
+            "success": "Se ha borrado el sitio.",
+            "error": "El sitio no puede borrarse. Por favor, inténtelo más tarde.",
+            "cancel": "No se ha borrado el objeto."
+          }
+        }
+      },
     "tools": {
       "point": {
         "tooltip": "Añadir punto",

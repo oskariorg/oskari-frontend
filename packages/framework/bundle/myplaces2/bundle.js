@@ -19,10 +19,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
 		/* event */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/myplaces2/event/FinishedDrawingEvent.js"
+			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/drawplugin/event/FinishedDrawingEvent.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/myplaces2/event/AddedFeatureEvent.js"
+			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/drawplugin/event/AddedFeatureEvent.js"
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/myplaces2/event/MyPlaceHoverEvent.js"
@@ -31,7 +31,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
 			"src" : "../../../../bundles/framework/bundle/myplaces2/event/MyPlacesChangedEvent.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/myplaces2/event/MyPlaceSelectedEvent.js"
+			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/drawplugin/event/SelectedDrawingEvent.js"
 		},
 		/* model */
 		{
@@ -44,30 +44,33 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
 		/* plugin */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/myplaces2/plugin/DrawPlugin.js"
+			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/drawplugin/DrawPlugin.js"
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/myplaces2/plugin/HoverPlugin.js"
-		},
+		}, {
+           "type" : "text/javascript",
+           "src" : "../../../../bundles/framework/bundle/myplaces2/MyPlacesTab.js"
+        },
 		/* request */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/myplaces2/request/StopDrawingRequest.js"
+			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/drawplugin/request/StopDrawingRequest.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/myplaces2/request/StartDrawingRequest.js"
+			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/drawplugin/request/StartDrawingRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/myplaces2/request/GetGeometryRequest.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/drawplugin/request/GetGeometryRequest.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/myplaces2/request/GetGeometryRequestHandler.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/drawplugin/request/GetGeometryRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/myplaces2/request/StartDrawingRequestHandler.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/drawplugin/request/StartDrawingRequestHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/myplaces2/request/StopDrawingRequestHandler.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/drawplugin/request/StopDrawingRequestHandler.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/myplaces2/request/EditPlaceRequest.js"

@@ -330,7 +330,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 }
             }
 
-            this.sandbox.notifyAll(this.printEvent, retainEvent);
+            if (this.printEvent) {
+                this.sandbox.notifyAll(this.printEvent, retainEvent);
+            }
         },
 
         /**

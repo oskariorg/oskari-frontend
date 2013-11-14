@@ -135,6 +135,12 @@ function() {
      */
     update : function() {
     },
+     /**
+     * @method init
+     * implements Module protocol init method
+     */
+    init : function() {
+    },
     /**
      * @method start
      * implements BundleInstance protocol start methdod
@@ -164,6 +170,8 @@ function() {
             // guest users don't need anything else
             return;
         }
+
+        sandbox.register(me);
         // handles category related logic - syncs categories to my places map layers etc
         this.categoryHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.CategoryHandler', this);
         this.categoryHandler.start();        
@@ -190,6 +198,26 @@ function() {
         sandbox.addRequestHandler('MyPlaces.EditCategoryRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.DeleteCategoryRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.PublishCategoryRequest', this.editRequestHandler);
+       
+        var tabLocalization = this.getLocalization('tab');
+
+        tab = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.MyPlacesTab', this, tabLocalization);
+  
+        tab.initContainer();
+         // binds tab to events
+        if (tab.bindEvents) {
+            tab.bindEvents();
+        }
+
+        var title =  tab.getTitle();
+        var content = tab.getContent();
+   
+        var first = true;
+        var reqName = 'PersonalData.AddTabRequest';
+        var reqBuilder = sandbox.getRequestBuilder(reqName);
+  
+        var req = reqBuilder(title, content, first);
+        sandbox.request(this, req);
     },
     /**
      * @method stop

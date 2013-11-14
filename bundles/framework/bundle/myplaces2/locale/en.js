@@ -12,6 +12,37 @@ Oskari.registerLocalization({
     "guest": {
       "loginShort": "Log in to use"
     },
+    "tab": {
+        "title": "Places",
+        "nocategories": "You have not yet saved the places.",
+        "publishCategory": {
+            "privateTooltip": "The map layer is private. Click the map layer to make it public.",
+            "publicTooltip": "The map layer is public. Click the map layer to make it private."
+        },
+        "editCategory": "Edit map layer",
+        "deleteCategory": "Delete map layer",
+        "edit": "Edit",
+        "delete": "Delete",
+        "grid": {
+          "name": "Name",
+          "desc": "Description",
+          "createDate": "Created",
+          "updateDate": "Updated",
+          "edit": " ",
+          "delete": " "
+        },
+        "notification": {
+          "delete": {
+            "title": "Delete place",
+            "confirm": "Do you want to delete this place?",
+            "btnDelete": "Delete",
+            "btnCancel": "Cancel",
+            "success": "The place has been deleted.",
+            "error": "The place could not be deleted. Please try again later.",
+            "cancel": "The object has not been deleted."
+          }
+        }
+    },
     "tools": {
       "point": {
         "tooltip": "Add point",

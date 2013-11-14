@@ -115,7 +115,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 this.plugin.startPlugin(this.instance.sandbox);
                 this.plugin.setLocation(this.plugin.conf.location);
             } else {
-                this.plugin.stopPlugin(this.instance.sandbox);
+                if (this.isEnabled()) {
+                    this.plugin.stopPlugin(this.instance.sandbox);
+                }
             }
         },
         /**
