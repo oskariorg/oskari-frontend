@@ -108,6 +108,8 @@ Oskari.registerLocalization({
             "addOrganizationNameTitle": "Name of the organization",
             "addNewClass": "Add new class",
             "addNewLayer": "Add new layer",
+            "addNewGroupLayer": "Add new group layer",
+            "addNewBaseLayer": "Add new base layer",
             "addNewOrganization": "Add new organization",
             "addInspireThemes": "Add class",
             "addInspireThemesDesc": "Add classes (Inspire themes)",

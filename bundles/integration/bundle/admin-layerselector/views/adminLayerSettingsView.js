@@ -189,13 +189,10 @@ define([
                         max: 100,
                         value: opacity,
                         slide: function (event, ui) {
-                            console.log("Slider changed");
                             jQuery(ui.handle).parents('.left-tools').find("#opacity-slider").val(ui.value);
                         }
                     });
-                    console.log(me.$el.find("#opacity-slider"));
                     me.$el.find("#opacity-slider").on('change paste keyup', function () {
-                        console.log("Value changed");
                         var sldr = me.$el.find('.layout-slider');
                         sldr.slider('value', jQuery(this).val());
                     });

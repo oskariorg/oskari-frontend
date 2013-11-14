@@ -108,6 +108,8 @@ Oskari.registerLocalization({
             "addOrganizationNameTitle": "Tiedontuottajan nimi",
             "addNewClass": "Lisää uusi teema",
             "addNewLayer": "Lisää uusi karttataso",
+            "addNewGroupLayer": "Lisää uusi ryhmätaso",
+            "addNewBaseLayer": "Lisää uusi taustataso",
             "addNewOrganization": "Lisää uusi tiedontuottaja",
             "addInspireTheme": "Lisää aihe",
             "addInspireThemeDesc": "Lisää InspireTheme:n mukaiset aiheet",
