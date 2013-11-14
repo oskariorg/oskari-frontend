@@ -731,7 +731,12 @@ function(config, locale) {
             if (indicatorMeta) {
                 //if fetch returned something we create drop down selector
                 me.createIndicatorInfoButton(container, indicatorMeta);
-                me.createDemographicsSelects(container, indicatorMeta);
+
+                if (me._hasMunicipalityValues(indicatorMeta)) {
+                    me.createDemographicsSelects(container, indicatorMeta);
+                } else {
+                    me._warnOfInvalidIndicator(container, indicatorMeta);
+                }
             } else {
                 me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorMetaError);
             }
@@ -741,6 +746,43 @@ function(config, locale) {
             me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorMetaXHRError);
         });
 
+    },
+    /**
+     * Checks if the indicator has municipality based values.
+     * If it does not, we cannot display it in the grid at the moment.
+     *
+     * @method _hasMunicipalityValues
+     * @param  {Object} metadata indicator metadata from SOTKAnet
+     * @return {Boolean}
+     */
+    _hasMunicipalityValues: function(metadata) {
+        var regions = metadata.classifications,
+            regions = regions && regions.region,
+            regions = regions && regions.values,
+            regions = regions || [],
+            rLen = regions.length,
+            i;
+
+        for (i = 0; i < rLen; ++i) {
+            if (regions[i].toLowerCase() === 'kunta') return true;
+        }
+        return false;
+    },
+    /**
+     * Displays a warning of invalid indicator for the grid
+     * if the indicator does not have municipality based values.
+     *
+     * @method _warnOfInvalidIndicator
+     * @param  {jQuery} container
+     * @param  {Object} metadata
+     * @return {undefined}
+     */
+    _warnOfInvalidIndicator: function(container, metadata) {
+        var selectors = container.find('.selectors-container'),
+            parameters = jQuery('<div class="parameters-cont"></div>');
+
+        parameters.html(this._locale.cannotDisplayIndicator);
+        selectors.append(parameters);
     },
     /**
      * Create indicator meta info button

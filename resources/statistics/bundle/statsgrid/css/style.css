@@ -182,15 +182,13 @@
   text-align: center; }
 
 div.filter-region-select select {
-  width: 350px;
-}
+  width: 350px; }
 div.filter-region-select ul {
-  margin: 0 !important;
-}
+  margin: 0 !important; }
+
 .statsgrid-remove-indicator {
   position: absolute;
   top: 5px;
   right: 5px;
   width: 16px !important;
-  height: 16px !important;
-}
+  height: 16px !important; }

@@ -172,19 +172,26 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 container = view.getEl();
             var layer = this.sandbox.findMapLayerFromAllAvailable(state.layerId);
 
+            this.state = jQuery.extend({}, {
+                indicators: [],
+                layerId: null
+            }, state);
+
+            // We need to notify the grid of the current state so it can load the right indicators.
+            me.gridPlugin.setState(this.state);
+            // Reset the classify plugin
+            me.classifyPlugin.resetUI();
+
             if (!layer) {
                 return;
             }
-
-            // We need to notify the grid of the current state so it can load the right indicators.
-            me.gridPlugin.setState(state);
 
             // Load the mode and show content if not loaded already.
             if (!view.isVisible) {
                 view.prepareMode(true, layer);
             } else {
                 // Otherwise just load the indicators in the state.
-                me.gridPlugin.loadStateIndicators(state, container);
+                me.gridPlugin.loadStateIndicators(this.state, container);
             }
         },
         getState: function () {

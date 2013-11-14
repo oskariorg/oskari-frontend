@@ -24,7 +24,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 title: me.getTitle()
             }, this.instance);
 
-
             this.requestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.StatsGridRequestHandler', me);
             sandbox.addRequestHandler('StatsGrid.StatsGridRequest', this.requestHandler);
 
@@ -55,7 +54,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                     me.instance.gridPlugin.setLayer(layer);
                     // Save the changed layer to the state.
                     me.instance.state.layerId = me._layer.getId();
-                    me.toolbar.changeName(me._layer.getName());
+                    me.toolbar.changeName(me.instance.getLocalization('tile').title + ' - ' + me._layer.getName());
                 }
                 // use default layer if we're showing the UI and don't have a layer
                 var layerAdded = me.isVisible && me._layer === null || me._layer === undefined;
@@ -73,8 +72,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                         me.instance.gridPlugin.setLayer(me._layer);
                         // Save the changed layer to the state.
                         me.instance.state.layerId = me._layer.getId();
-                        me.toolbar.changeName(me._layer.getName());
+                        me.toolbar.changeName(me.instance.getLocalization('tile').title + ' - ' + me._layer.getName());
                     }
+                } else if(!me.isVisible && me._layer != null) {
+                    me._layer = null;
                 }
 
                 var toggle = function () {
