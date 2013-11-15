@@ -41,6 +41,8 @@ function(config) {
         "connection_not_available" : { limit: 1, count: 0 },
         "connection_broken" : { limit: 1, count: 0 },
     };
+    
+    this.activeHighlightLayers = [];
 
     /* templates */
     this.template = {};
@@ -389,13 +391,24 @@ function(config) {
         // update zoomLevel and highlight pictures
         if(this.zoomLevel != zoom) {
             this.zoomLevel = zoom;
+
+
+            // TODO 472: if no connection or the layer is not registered, get highlight with URL
+            for (var x = 0; x < this.activeHighlightLayers.length; ++x) {
+                if(this.getConnection().isLazy() && !this.getConnection().isConnected() || 
+                    !this.getSandbox().findMapLayerFromSelectedMapLayers(this.activeHighlightLayers[x].getId())) {
+                    var srs = this.getSandbox().getMap().getSrsName();
+                    var bbox = this.getSandbox().getMap().getExtent();
+                    var zoom = this.getSandbox().getMap().getZoom();
+                    var fids = this.activeHighlightLayers[x].getClickedFeatureListIds();
+                    this.removeHighlightImages(this.activeHighlightLayers[x]);
+                    this.getHighlightImage(this.activeHighlightLayers[x], srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom, fids);
+                }
+            }
+
             for (var j = 0; j < layers.length; ++j) {
                 if (layers[j].hasFeatureData()) {
-                    // get all feature ids
-                    var fids = layers[j].getClickedFeatureIds().slice(0);
-                    for(var k = 0; k < layers[j].getSelectedFeatures().length; ++k) {
-                        fids.push(layers[j].getSelectedFeatures()[k][0]);
-                    }
+                    var fids = this.getAllFeatureIds(layers[j]);
                     this.removeHighlightImages(layers[j]);
                     this.getIO().highlightMapLayerFeatures(layers[j].getId(), fids, false);
                 }
@@ -499,6 +512,7 @@ function(config) {
                 var srs = this.getSandbox().getMap().getSrsName();
                 var bbox = this.getSandbox().getMap().getExtent();
                 var zoom = this.getSandbox().getMap().getZoom();
+                layer.setClickedFeatureListIds(event.getWfsFeatureIds());
                 this.getHighlightImage(layer, srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom, event.getWfsFeatureIds());
             }
 
@@ -1430,7 +1444,21 @@ function(config) {
     },
 
     /**
+     * @method getAllFeatureIds
+     *
+     * @param {Object} layer
+     */
+    getAllFeatureIds : function(layer) {
+        var fids = layer.getClickedFeatureIds().slice(0);
+        for(var k = 0; k < layer.getSelectedFeatures().length; ++k) {
+            fids.push(layer.getSelectedFeatures()[k][0]);
+        }
+        return fids;
+    },
+
+    /**
      * @method getHighlightImage
+     *
      * @param {Number} layerId
      * @param {String} srs
      * @param {Number[]} bbox
@@ -1440,25 +1468,36 @@ function(config) {
      * sends message to /highlight*
      */
     getHighlightImage : function(layer, srs, bbox, zoom, featureIds) {
+
+        // helper function for visibleFields
+        var contains = function(a, obj) {
+            for(var i = 0; i < a.length; i++) {
+                if(a[i] == obj)
+                    return true;
+            }
+            return false;
+        }
+
+        if(!contains(this.activeHighlightLayers, layer)) {
+            this.activeHighlightLayers.push(layer);
+        }
+
         var imageSize = {
             width : this.getSandbox().getMap().getWidth(), 
             height : this.getSandbox().getMap().getHeight()
         };
 
         var params = "?layerId=" + layer.getId() + 
-            "&srs=" + srs + 
-            "&bbox=" + 
-                bbox[0] + "," +
-                bbox[1] + "," +
-                bbox[2] + "," +
-                bbox[3] +
-            "&zoom=" + zoom +
-            "&featureIds=" + featureIds +
             "&session=" + this.getIO().getSessionID() +
+            "&type=" + "highlight" +
+            "&srs=" + srs + 
+            "&bbox=" + bbox.join(",") +
+            "&zoom=" + zoom +
+            "&featureIds=" + featureIds.join(",") +
             "&width=" + imageSize.width +
             "&height=" + imageSize.height;
 
-        var imageUrl = this.getIO().getRootURL() + "/highlight" + params;
+        var imageUrl = this.getIO().getRootURL() + "/image" + params;
 
         // send as an event forward to WFSPlugin (draws)
         var event = this.getSandbox().getEventBuilder("WFSImageEvent")(layer, imageUrl, bbox, imageSize, "highlight", false, false);
