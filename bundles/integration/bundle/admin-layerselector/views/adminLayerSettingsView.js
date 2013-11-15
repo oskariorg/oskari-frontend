@@ -529,10 +529,18 @@ define([
 
                         } else {
                             //problem
-                            alert("Saving layer didn't work");
+                            if (resp && resp.error) {
+                                alert(me.instance.getLocalization('admin')[resp.error] || resp.error);
+                            } else {
+                                alert("Saving layer didn't work");
+                            }
+                        }
+                        if (resp && resp.warn) {
+                            alert(me.instance.getLocalization('admin')[resp.warn] || resp.warn);
                         }
                     },
                     error: function (jqXHR, textStatus) {
+                        console.log(jqXHR, textStatus);
                         if (jqXHR.status !== 0) {
                             alert("Saving layer didn't work");
                         }

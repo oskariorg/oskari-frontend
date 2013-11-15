@@ -159,7 +159,8 @@ Oskari.registerLocalization({
 
             "interfaceAddress": "Gränssnitten address",
             "interfaceAddressDesc": "WMS address för lager definitionen",
-            "viewingRightsRoles": "Kollar rättigheter roller"
+            "viewingRightsRoles": "Kollar rättigheter roller",
+            "metadataReadFailure": "Fetching layer metadata failed."
         },
         "cancel": "Tillbaka",
         "add": "Tillägg",
