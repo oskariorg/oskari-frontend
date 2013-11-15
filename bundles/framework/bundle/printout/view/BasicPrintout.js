@@ -755,7 +755,6 @@ function(instance, localization, backendConfiguration) {
         var maplinkArgs = selections.maplinkArgs;
         var pageSizeArgs = "&pageSize=" + selections.pageSize;
         var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
-
         var contentOptions = [];
         for (var p in this.contentOptionsMap ) {
             if (selections[p]) {

@@ -350,6 +350,17 @@ function() {
         var map = jQuery('#contentMap');
         var tools = jQuery('#maptools');
 
+        // check if statsgrid mode is on
+        // -> disable statsgrid mode
+        selectedLayers = me.sandbox.findAllSelectedMapLayers();
+        for (i = 0; i < selectedLayers.length; i += 1) {
+            layer = selectedLayers[i];
+            if (layer.getLayerType() === "stats") {
+                request = me.sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, layer);
+                me.sandbox.request(me.getName(), request);
+                break;
+            }
+        }
         if (blnEnabled == true) {
 
             //me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
