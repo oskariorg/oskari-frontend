@@ -38,6 +38,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         me.templateButtonsDiv = jQuery('<div class="buttons"></div>');
         me.templateHelp = jQuery('<div class="help icon-info"></div>');
         me.templateTool = jQuery('<div class="tool ">' + '<input type="checkbox"/>' + '<span></span></div>');
+        me.templateToolOptions = jQuery('<div class="tool-options"></div>');
+        me.templateToolOption = jQuery('<div class="tool-option"><input type="checkbox" /><span></span></div>');
         me.templateLayout = jQuery('<div class="tool "><label><input type="radio" name="toolLayout" /><span></span></label></div>');
         me.templateData = jQuery('<div class="data ">' + '<input type="checkbox"/>' + '<label></label></div>');
         me.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
@@ -119,6 +121,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 }
             }
         }, {
+            "id": "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin",
+            "selected": false,
+            "lefthanded": "top right",
+            "righthanded": "top left",
+            "config": {
+                "location": {
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "classes": "top right"
+                }
+            }
+        }, {
             "id": "Oskari.mapframework.mapmodule.ControlsPlugin",
             "selected": true
         }, {
@@ -128,6 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 "infoBox": true
             }
         }];
+
 
         // map tool indices so we don't have to go through the list every time...
         me.toolIndices = {};
@@ -528,15 +545,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             for (i = 0; i < this.tools.length; i += 1) {
                 toolContainer = this.templateTool.clone();
-                pluginKey = this.tools[i].id;
+                var tool = this.tools[i];
+                pluginKey = tool.id;
                 pluginKey = pluginKey.substring(pluginKey.lastIndexOf('.') + 1);
                 toolname = this.loc.tools[pluginKey];
                 toolContainer.find('span').append(toolname);
-                if (this.tools[i].selected) {
+                if (tool.selected) {
                     toolContainer.find('input').attr('checked', 'checked');
                 }
+                tool.publisherPluginContainer = toolContainer;
                 contentPanel.append(toolContainer);
-                toolContainer.find('input').change(closureMagic(this.tools[i]));
+                toolContainer.find('input').change(closureMagic(tool));
             }
 
             return panel;
@@ -731,6 +750,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          * @param {Boolean} enabled, true to enable plugin, false to disable
          */
         _activatePreviewPlugin: function (tool, enabled) {
+            var me = this,
+                sandbox = me.instance.getSandbox();
             // FIXME set layout classes on startPlugin
             if (!tool.plugin && enabled) {
                 var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -741,16 +762,74 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 // plugin not created -> nothing to do
                 return;
             }
+
+            var _toggleToolOption = function (toolName, groupName, toolOption) {
+                return function () {
+                    var checkbox = jQuery(this),
+                        isChecked = checkbox.is(':checked');
+                    tool.selected = isChecked;
+                    //TODO send toolbar request!
+
+                    var requester = tool.plugin;
+                    if(isChecked) {
+                        var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+                        sandbox.request(requester, reqBuilder(toolName, buttonGroup.name, toolOption));
+                    } else {
+                        var reqBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
+                        sandbox.request(requester, reqBuilder(toolName, buttonGroup.name));                        
+                    }
+                };
+            };
+
+
+
+
             if (enabled) {
                 tool.plugin.startPlugin(this.instance.sandbox);
                 tool._isPluginStarted = true;
+                //atm. this is using toolsplugin's button structure
+                var toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions(): null;
+                if(toolOptions){
+                    debugger;
+                    
+                    var options = me.templateToolOptions.clone();
+                    tool.publisherPluginContainer.append(options);
+                    for(var i in toolOptions){
+                        var buttonGroup = toolOptions[i];
+                        for(var toolName in buttonGroup.buttons ) {
+                            var toolButton = buttonGroup.buttons[toolName];
+
+                            toolButton.selectTool = me.templateToolOption.clone();
+                            toolButton.selectTool.find('span').append(toolName);
+                            if (toolButton.selected) {
+                                toolButton.selectTool.find('input').attr('checked', 'checked');
+                            }
+
+                            toolButton.selectTool.find('input').change(_toggleToolOption(toolName, buttonGroup.name, toolButton));
+                            options.append(toolButton.selectTool);
+                        }
+                    }
+                }
             } else {
                 if (tool._isPluginStarted) {
+                    var toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions(): null;
+                    if(toolOptions){
+                        var optionContainer = tool.publisherPluginContainer.find('.tool-options');
+                        var toolOptionCheckboxes = optionContainer.find('input').off( "change", me._toggleToolOption);
+debugger;
+                        toolOptionCheckboxes.remove();
+                        optionContainer.remove();
+                    }
                     tool._isPluginStarted = false;
                     tool.plugin.stopPlugin(this.instance.sandbox);
                 }
             }
         },
+        /**
+         * @method _toggleToolOption
+         * @private
+         * Sends addToolbarButton requests when tools are selected to PublisherToolsPlugin
+         */
         /**
          * @method _getButtons
          * @private

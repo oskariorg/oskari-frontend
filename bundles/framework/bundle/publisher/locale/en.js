@@ -51,7 +51,8 @@ Oskari.registerLocalization({
                 "Portti2Zoombar": "Scale scrollbar",
                 "ControlsPlugin": "Panning on",
                 "SearchPlugin": "Address and place name search",
-                "GetInfoPlugin": "Query tool for place data"
+                "GetInfoPlugin": "Query tool for place data",
+                "PublisherToolbarPlugin": "map tools"
             },
             "toollayout": {
                 "label": "Tool layout",
