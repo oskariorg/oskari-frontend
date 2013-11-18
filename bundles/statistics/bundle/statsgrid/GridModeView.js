@@ -122,8 +122,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
 
             var mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule'),
                 map = mapModule.getMap(),
-                elCenter,
-                elLeft;
+                elCenter = this.getCenterColumn(),
+                elLeft = this.getLeftColumn();
 
             if (isShown) {
                 /** ENTER The Mode */
@@ -137,14 +137,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 var leftWidth = 40;
 
                 /** show our mode view - view hacks */
-                elCenter = this.getCenterColumn();
                 elCenter.removeClass('span12');
                 elCenter.width((100 - leftWidth) + '%');
                 // remove toolbar's height
                 jQuery('#mapdiv').height(jQuery(window).height() - jQuery('#contentMap').find('.oskariui-menutoolbar').height());
                 //window resize is handled in mapfull - instance.js
-
-                elLeft = this.getLeftColumn();
                 elLeft.empty();
                 elLeft.removeClass('oskari-closed');
                 elLeft.width(leftWidth + '%');
@@ -153,8 +150,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                     handles: "e",
                     resize: function (event, ui) {
                         elCenter.width(jQuery('.row-fluid').width() - elLeft.width());
-                        map.updateSize();
                         me.instance.gridPlugin.grid.resizeCanvas();
+                    },
+                    stop: function(event, ui) {
+                        var difference = ui.size.width - ui.originalSize.width;
+                        var slickHeader = jQuery('div.slick-header-columns');
+                        slickHeader.width(slickHeader.width() + difference);
+
+                        map.updateSize();
                     }
                 });
 
@@ -167,12 +170,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 jQuery('#contentMap').removeClass('statsgrid-contentMap');
                 jQuery('.oskariui-mode-content').removeClass('statsgrid-mode');
 
-                elCenter = jQuery('.oskariui-center');
                 // remove width from center-div
                 elCenter.width('').addClass('span12');
                 jQuery('#mapdiv').height(jQuery(window).height());
 
-                elLeft = jQuery('.oskariui-left');
+                elLeft.resizable().resizable('destroy');
                 elLeft.addClass('oskari-closed');
                 // remove width from left-div
                 elLeft.width(''); //removeClass('span7');
