@@ -96,7 +96,6 @@ define([
                 } else {
                     // otherwise create a new layer
                     // add html template
-                    //console.dir(this.options.instance);
                     me.$el.html(me.typeSelectTemplate({
                         model: me.model,
                         instance: me.options.instance,
@@ -212,7 +211,6 @@ define([
                     newModel = {};
                     me.model = newModel;
                 }
-                //console.log(newModel);
                 newModel.locales = [];
                 if (!newModel.names) {
                     for (i = 0; i < supportedLanguages.length; i += 1) {
@@ -374,9 +372,6 @@ define([
                     url,
                     createLayer;
 
-                //console.log("element: ", element);
-                //console.log("form: ", form);
-
                 // If this is a sublayer the layer class id should be of its base layer's
                 if (me.options.baseLayerId) {
                     lcId = me.options.baseLayerId;
@@ -400,12 +395,10 @@ define([
 
                 form.find('[id$=-name]').filter('[id^=add-layer-]').each(function (index) {
                     lang = this.id.substring(10, this.id.indexOf("-name"));
-                    //console.log(lang, this.value);
                     data.names[lang] = this.value;
                 });
                 form.find('[id$=-title]').filter('[id^=add-layer-]').each(function (index) {
                     lang = this.id.substring(10, this.id.indexOf("-title"));
-                    //console.log(lang, this.value);
                     data.title[lang] = this.value;
                 });
 
@@ -529,10 +522,18 @@ define([
 
                         } else {
                             //problem
-                            alert("Saving layer didn't work");
+                            if (resp && resp.error) {
+                                alert(me.instance.getLocalization('admin')[resp.error] || resp.error);
+                            } else {
+                                alert("Saving layer didn't work");
+                            }
+                        }
+                        if (resp && resp.warn) {
+                            alert(me.instance.getLocalization('admin')[resp.warn] || resp.warn);
                         }
                     },
                     error: function (jqXHR, textStatus) {
+                        console.log(jqXHR, textStatus);
                         if (jqXHR.status !== 0) {
                             alert("Saving layer didn't work");
                         }
@@ -563,7 +564,6 @@ define([
 
                 addClass.find('[id$=-name]').filter('[id^=add-group-]').each(function (index) {
                     lang = this.id.substring(10, this.id.indexOf("-name"));
-                    //console.log(lang, this.value);
                     params += "&sub_name_" + lang + "=" + this.value;
                 });
 
@@ -599,13 +599,11 @@ define([
                         // Load the map layers again, since we want the newly created
                         // group/base layer to show as a map layer, not as a layer class.
                         if (!me.model || !me.model.getId) {
-                            //console.log('addGroup');
                             accordion.trigger({
                                 type: "adminAction",
                                 command: 'addGroup'
                             });
                         } else {
-                            //console.log('editGroup');
                             accordion.trigger({
                                 type: "adminAction",
                                 command: 'editGroup',
@@ -614,7 +612,7 @@ define([
                         }
                     },
                     error: function (jqXHR, textStatus) {
-                        alert(' false ');
+                        alert('Failed to save group');
                     }
                 });
             },
@@ -683,13 +681,13 @@ define([
                     },
                     error: function (jqXHR, textStatus) {
                         if (jqXHR.status !== 0) {
-                            alert(' false ');
+                            alert(me.instance.getLocalization('admin').metadataReadFailure);
                         }
                     }
                 });
 
 
-            },
+            },    
             /**
              * Add capabilities as a drop down list if AJAX call returned any
              *
@@ -698,6 +696,7 @@ define([
             addCapabilitySelect: function (capability, me, element) {
                 var select = '<select id="admin-select-capability">',
                     layers,
+                    topLayer,
                     i;
                 me.capabilities = this.getValue(capability);
                 // if returned data does not contain capability section
@@ -709,7 +708,11 @@ define([
                 // This might be more elegant as its own template
 
                 select += '<option value="" selected="selected">' + this.options.instance.getLocalization('admin').selectLayer + '</option>';
-                layers = this.getValue(this.capabilities, 'Capability').Layer.Layer;
+                topLayer = this.getValue(this.capabilities, 'Capability').Layer;
+                if (topLayer.Title) {
+                    select += '<option value="' + "-1" + '">' + topLayer.Title + '</option>';
+                }
+                layers = topLayer.Layer;
                 for (i = layers.length - 1; i >= 0; i -= 1) {
                     select += '<option value="' + i + '">' + layers[i].Title + '</option>';
                 }
@@ -744,7 +747,11 @@ define([
                     return;
                 }
                 capability = me.getValue(me.capabilities, 'Capability');
-                selectedLayer = capability.Layer.Layer[selected];
+                if (selected > -1) {
+                    selectedLayer = capability.Layer.Layer[selected];
+                } else {
+                    selectedLayer = capability.Layer;
+                }
 
                 jQuery('#admin-select-sublayer').remove();
                 if (selectedLayer.Layer) {
@@ -837,10 +844,10 @@ define([
                     jQuery('#add-layer-srsname').val(srsName);
                 }
 
-                // GFI Type
-                if (!capability.Request.GetFeatureInfo) {
+                if (capability.Request.GetFeatureInfo) {
                     gfiType = capability.Request.GetFeatureInfo.Format;
                     gfiTypeSelect = jQuery('#add-layer-responsetype');
+                    gfiTypeSelect.append('<option value="" selected="selected">' + '' + '</option>');
                     for (i = 0; i < gfiType.length; i += 1) {
                         gfiTypeSelect.append('<option>' + gfiType[i] + '</option>');
                     }
@@ -893,15 +900,20 @@ define([
              * @method getValue
              */
             getValue: function (object, key) {
-                var k;
+                var k,
+                    ret;
                 if (key && object[key]) {
-                    return object[key];
+                    ret = object[key];
                 }
-                for (k in object) {
-                    if (object.hasOwnProperty(k)) {
-                        return object[k];
+                if (!ret) {
+                    for (k in object) {
+                        if (object.hasOwnProperty(k)) {
+                            ret = object[k];
+                            break;
+                        }
                     }
                 }
+                return ret;
             },
             clearInput: function (e) {
                 var element = jQuery(e.currentTarget),

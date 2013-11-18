@@ -129,7 +129,7 @@ Oskari.registerLocalization({
             "legendImage": "Legenda-kuvan osoite",
             "legendImageDesc": "Legenda-kuvan osoite",
             "legendImagePlaceholder": "Legenda-kuvan osoite",
-            "gsandbox.getRequefiResponseType": "GFI vastauksen tyyppi",
+            "gfiResponseType": "GFI vastauksen tyyppi",
             "gfiResponseTypeDesc": "Vastauksen tyyppi eli Get Feature Info (GFI)",
             "gfiStyle": "GFI:n tyyli",
             "gfiStyleDesc": "GFI:n tyyli (XSLT)",
@@ -159,7 +159,8 @@ Oskari.registerLocalization({
 
             "interfaceAddress": "Rajapinnan osoite",
             "interfaceAddressDesc": "WMS&shy;-tasomäärittelyjen osoite",
-            "viewingRightsRoles": "Katseluoikeudet rooleille"
+            "viewingRightsRoles": "Katseluoikeudet rooleille",
+            "metadataReadFailure": "Tason metatiedon haku epäonnistui."
         },
         "cancel": "Peruuta",
         "add": "Tallenna",

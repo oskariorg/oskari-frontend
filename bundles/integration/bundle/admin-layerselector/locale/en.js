@@ -159,7 +159,8 @@ Oskari.registerLocalization({
 
             "interfaceAddress": "interface URL",
             "interfaceAddressDesc": "URL for WMS layer definitions",
-            "viewingRightsRoles": "Viewing Rights roles"
+            "viewingRightsRoles": "Viewing Rights roles",
+            "metadataReadFailure": "Fetching layer metadata failed."
         },
         "cancel": "Cancel",
         "add": "Add",

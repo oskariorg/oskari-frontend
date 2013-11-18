@@ -204,7 +204,9 @@
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">
-            <label for="add-layer-responsetype" class="add-layer-label" title="<%= instance.getLocalization('admin').gfiResponseTypeDesc %>"><%= instance.getLocalization('admin').gfiResponseType %></label>
+            <label for="add-layer-responsetype" class="add-layer-label" title="<%= instance.getLocalization('admin').gfiResponseTypeDesc %>">
+                <%= instance.getLocalization('admin').gfiResponseType %>
+            </label>
         </div>
         <div class="add-layer-input-area">
             <% if(model != null && model.admin.gfiType) { %>
