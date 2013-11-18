@@ -30,65 +30,68 @@
 			"metadata": {
 				"Import-Bundle": {
 					"mapwmts": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"mapwfs2": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"mapstats": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"mapanalysis": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-					"service-base": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"event-map-layer": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"request-map-layer": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"mapmodule-plugin": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"event-base": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"mapfull": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"core-base": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"oskariui": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"request-base": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"domain": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"core-map": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"request-map": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"sandbox-base": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"service-map": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"sandbox-map": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
-					"event-map": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					}
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "mapwfs2": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "mapstats": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "mapanalysis": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "service-base": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "event-map-layer": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "request-map-layer": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "mapmodule-plugin": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "event-base": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "mapfull": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "core-base": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "oskariui": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "request-base": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "domain": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "core-map": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "request-map": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "sandbox-base": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "service-map": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "sandbox-map": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "event-map": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
+	                "ui-components": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                }
 				},
 				"Require-Bundle-Instance": []
 			}
