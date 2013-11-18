@@ -167,7 +167,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
          *
          */
         addToolbarContainer: function (tbid, pdata) {
-debugger;
             var tbcontainer = pdata.toolbarContainer;
             tbcontainer.append(jQuery(this.templates.addedToolbar));
             this.toolbars[tbid] = tbcontainer;
@@ -177,12 +176,12 @@ debugger;
             if (pdata.title) {
                 tbcontainer.find(".oskariui-toolbar-title p").append(pdata.title);
             }
-            if (pdata.show) {
+/*            if (pdata.show) {
                 tbcontainer.removeClass('oskari-closed');
             } else {
                 tbcontainer.addClass('oskari-closed');                
             }
-
+*/
             return c;
         },
         changeMenuToolbarTitle: function (title) {
@@ -201,7 +200,7 @@ debugger;
 
             if (c === undefined && this.menutoolbarcontainer && !data.toolbarContainer) {
                 c = this.createMenuToolbarContainer(tbid, data);
-            } else if (c === undefined && data.toolbarContainer) {
+            } else if ((c === undefined || c.parents('body').length == 0) && data && data.toolbarContainer) {
                 c = this.addToolbarContainer(tbid, data);
             }
 
@@ -364,7 +363,6 @@ debugger;
             // this.toolbars[tbid] = undefined;
             // tb.remove();
             // delete this.toolbars[tbid];
-
             tb.remove();
             this.toolbars[tbid] = undefined;
             delete this.toolbars[tbid];

@@ -25,7 +25,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
     }, {
 
         templates: {
-            main: jQuery('<div class="mapplugin tools"><div class="tools-container"></div></div>')
+/*            main: jQuery(
+                "<div class='mapplugin menuplugin'>" +
+                    "<div class='icon'></div>" +
+                    "<div class='menucontainer'>" +
+                        "<div class='olPopupContent'>" +
+                            "<div class='menuTopArrow'></div>" +
+                            "<div class='menuContent' >" +
+                            "</div>" +
+                        "</div>" +
+                    "</div>" +
+                "</div>"
+            ),
+*/
+            main: jQuery(
+                '<div class="mapplugin tools">'+
+                    "<div class='icon'></div>" +
+                    "<div class='tools-container'>" +
+                        "<div class='olPopupContent'>" +
+                            "<div class='tools-top-arrow'></div>" +
+                            "<div class='tools-content' >" +
+                            "</div>" +
+                        "</div>" +
+                    "</div>" +
+                '</div>'),
+            container: jQuery("<div></div>")
         },
 
         /** @static @property __name plugin name */
@@ -73,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          *          reference to application sandbox
          */
         init: function (sandbox) {
-//FIXME localizations to the file!!!!!
+//FIXME localizations to the files!!!!!
             var me = this;
             var pluginLoc = me.getMapModule().getLocalization('plugin', true);
             me.localization = pluginLoc[me.__name];
@@ -169,8 +193,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     me._sandbox.unregisterFromEventByName(me, p);
                 }
             }
-debugger;
-me.destroy();
+            me.destroy();
             me._sandbox.unregister(me);
             me._map = null;
             me._sandbox = null;
@@ -235,7 +258,8 @@ me.destroy();
                 sandbox = me._sandbox,
                 content,
                 containerClasses = 'top left',
-                position = 1;
+                position = 1,
+                containers = ((me.conf && me.conf.containers)? me.conf.containers : []);
 
 
             // if (this.conf && this.conf.toolStyle) {
@@ -244,14 +268,30 @@ me.destroy();
             // } else {
             //     content = this.template.clone();
             // }
-            content = this.template.clone();
-            this.element = content;
+//            content = this.template.clone();
+//            this.element = content;
+
+
+
+            if (!me.element) {
+                me.element = me.template.clone();
+                var wrapper = me.element.find('div.tools-content');
+                for (var i = 0, ilen = containers.length; i < ilen; i++) {
+                    // create configured containers
+                    me.templates.container
+                        .clone()
+                        .attr("id", containers[i])
+                        .appendTo(wrapper)
+                }
+            }
+
+
 
             if (me.conf && me.conf.location) {
                 containerClasses = me.conf.location.classes || containerClasses;
                 position = me.conf.location.position || position;
             }
-            me.getMapModule().setMapControlPlugin(content, containerClasses, position);
+            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
 
             // if (me.conf && me.conf.font) {
             //     me.changeFont(me.conf.font, content);
@@ -262,11 +302,25 @@ me.destroy();
             sandbox.requestByName(me, 'Toolbar.ToolbarRequest', [me.toolbarId, 'add', {
                 title : me.localization.title,
                 show : false,
-                toolbarContainer: me.element.find('.tools-container'),
+                toolbarContainer: me.element.find('.tools-content'),
                 closeBoxCallback : function() {
                     view.prepareMode(false);
                 }
             }]);
+
+
+
+            // hide container
+            toolscontainer = me.element.find('.tools-container');
+            toolscontainer.hide();
+
+            icon = me.element.find('div.icon');
+            icon.on('click', function () {
+                toolscontainer.toggle();
+            });
+
+
+
 
         },
         getToolOptions: function() {

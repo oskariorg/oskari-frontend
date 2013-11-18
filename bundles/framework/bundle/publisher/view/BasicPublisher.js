@@ -790,7 +790,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 //atm. this is using toolsplugin's button structure
                 var toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions(): null;
                 if(toolOptions){
-                    debugger;
                     
                     var options = me.templateToolOptions.clone();
                     tool.publisherPluginContainer.append(options);
@@ -814,12 +813,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 if (tool._isPluginStarted) {
                     var toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions(): null;
                     if(toolOptions){
+
+                        for(var i in toolOptions){
+                            var buttonGroup = toolOptions[i];
+                            for(var toolName in buttonGroup.buttons ) {
+                                var toolButton = buttonGroup.buttons[toolName];
+
+                                var reqBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
+                                sandbox.request(tool.plugin, reqBuilder(toolName, buttonGroup.name));
+                            }
+                        }
+
                         var optionContainer = tool.publisherPluginContainer.find('.tool-options');
                         var toolOptionCheckboxes = optionContainer.find('input').off( "change", me._toggleToolOption);
-debugger;
                         toolOptionCheckboxes.remove();
                         optionContainer.remove();
                     }
+
+
+
                     tool._isPluginStarted = false;
                     tool.plugin.stopPlugin(this.instance.sandbox);
                 }

@@ -1,0 +1,83 @@
+$iconHeight: 35px;
+$iconWidth: $iconHeight;
+
+.tools {
+
+	display: block;
+	z-index: 100000000 !important;
+	text-align: left;
+	
+	.icon {
+		background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/maptools/images/menu-button-rounded-dark.png');
+		display: inline-block;
+		height: $iconHeight;
+		width: $iconWidth;
+		vertical-align: bottom;
+	}
+
+	.tools-container {
+		height: auto;
+		background-color: transparent;
+		height: auto;
+		min-height: 60px;
+		z-index: 16000;
+
+		.tools-top-arrow {
+			width: 0;
+			height: 0;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-bottom: 10px solid #424343;
+			display: inline-block;
+		}
+
+		.tools-content {
+			background-color: #424343;
+			color: #FFFFFF;
+			border-radius: 6px;
+			display: inline-block;
+			width: 100%;
+		}
+
+		.tool-group-title {
+			font-weight: bold;
+		}
+	}
+}
+.mapplugins.left {
+	.tools {
+		.icon {
+			float: left;
+		}
+		.tools-container {
+			.tools-top-arrow {
+				float: left;
+				margin-left: ($iconWidth / 2 - 10);
+			}
+		}
+	}
+}
+.mapplugins.right {
+	.tools {
+		.icon {
+			float: right;
+		}
+		.tools-container {
+			.tools-top-arrow {
+				float: right;
+				margin-right: ($iconWidth / 2 - 10);
+			}
+		}
+	}
+}
+
+
+#toolbarcontent {
+	div.toolrow {
+		div.tool {
+			display: inline-block;
+			cursor: pointer;
+		}
+	}
+
+}
