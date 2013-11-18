@@ -25,19 +25,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
     }, {
 
         templates: {
-/*            main: jQuery(
-                "<div class='mapplugin menuplugin'>" +
-                    "<div class='icon'></div>" +
-                    "<div class='menucontainer'>" +
-                        "<div class='olPopupContent'>" +
-                            "<div class='menuTopArrow'></div>" +
-                            "<div class='menuContent' >" +
-                            "</div>" +
-                        "</div>" +
-                    "</div>" +
-                "</div>"
-            ),
-*/
             main: jQuery(
                 '<div class="mapplugin tools">'+
                     "<div class='icon'></div>" +
