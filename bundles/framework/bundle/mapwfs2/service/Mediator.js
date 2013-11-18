@@ -18,15 +18,33 @@ function(config, plugin) {
     this.cometd = this.connection.get();
     this.layerProperties = {};
 
-
     this.rootURL = location.protocol + "//" +
             this.config.hostname + this.config.port  +
             this.config.contextPath;
             
-    this.session = null;
+    this.session = {
+        session: jQuery.cookie('JSESSIONID') || "",
+        route: jQuery.cookie('ROUTEID') || ""
+    };
+
     this._previousTimer = null;
     this._featureUpdateFrequence = 200;
 }, {
+
+    /**
+     * @method getSessionID
+     */
+    getSessionID : function() {
+        return this.session.session;
+    },
+
+    /**
+     * @method getRootURL
+     */
+    getRootURL : function() {
+        return this.rootURL;
+    },
+    
     /**
      * @method subscribe
      *
@@ -73,6 +91,10 @@ function(config, plugin) {
         if (session) {// use objects session if not defined as parameter
             this.session = session;
         }
+
+        // update session and route
+        this.session.session = jQuery.cookie('JSESSIONID') || "";
+        this.session.route = jQuery.cookie('ROUTEID') || "";
 
         var layers = this.plugin.getSandbox().findAllSelectedMapLayers(); // get array of AbstractLayer (WFS|WMS..)
         var initLayers = {};
@@ -265,11 +287,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         } catch(error) {
             this.plugin.getSandbox().printDebug(error);
         }
-        var layerType = data.data.type;
+        var layerType = data.data.type; // "highlight" | "normal"
         var boundaryTile = data.data.boundaryTile;
-        // "highlight" | "normal"
         var keepPrevious = data.data.keepPrevious;
-        // true | false
         var size = {
             width : data.data.width,
             height : data.data.height
@@ -352,10 +372,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
 
     /**
      * @method setLocation
+     * @param {Number} layerId
      * @param {String} srs
      * @param {Number[]} bbox
      * @param {Number} zoom
      * @param {Object} grid
+     * @param {Object} tiles
      *
      * sends message to /service/wfs/setLocation
      */
@@ -376,7 +398,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
      * @method setMapSize
      * @param {Number} width
      * @param {Number} height
-     * @param {Object} grid
      *
      * sends message to /service/wfs/setMapSize
      */

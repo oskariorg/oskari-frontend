@@ -17,10 +17,10 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-interface" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').interfaceAddress %>" <% if(model != null && model.admin.wmsUrl) { %>value="<%= model.admin.wmsUrl %>"<% } %> />
+                <input type="text" id="add-layer-interface" class="add-layer-input mid" placeholder="<%= instance.getLocalization('admin').interfaceAddress %>" <% if(model != null && model.admin.wmsUrl) { %>value="<%= model.admin.wmsUrl %>"<% } %> />
                 <div class="icon-close"></div>
             </div>
-            <br /><button id="add-layer-wms-button" class="fetch-wms-button"><%= instance.getLocalization('admin').getInfo %></button><br/>
+            <button id="add-layer-wms-button" class="fetch-wms-button"><%= instance.getLocalization('admin').getInfo %></button>
         </div>
     </div>
 
@@ -41,7 +41,7 @@
             <label for="add-layer-wms-url" class="add-layer-label" title="<%= instance.getLocalization('admin').wmsInterfaceAddressDesc %>"><%= instance.getLocalization('admin').wmsInterfaceAddress %></label>
         </div>
         <div class="add-layer-input-area">
-            <textarea rows="2" cols="40" id="add-layer-wms-url" class="add-layer-input" ><% if(model != null && model.admin.wmsUrl) { %><%= model.admin.wmsUrl %><% } %></textarea>
+            <textarea rows="3" cols="40" id="add-layer-wms-url" class="add-layer-input long" ><% if(model != null && model.admin.wmsUrl) { %><%= model.admin.wmsUrl %><% } %></textarea>
         </div>
     </div>
 
@@ -51,7 +51,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-metadataid" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').wmsServiceMetaIdDesc %>" />
+                <input type="text" id="add-layer-metadataid" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').wmsServiceMetaIdDesc %>" />
                 <div class="icon-close"></div>
             </div>
         </div>
@@ -86,7 +86,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-datauuid" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').metaInfoIdDesc %>" <% if(model != null && model.admin.dataUrl != null) { %> value="<%= model.admin.dataUrl %>" <% } %> />
+                <input type="text" id="add-layer-datauuid" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').metaInfoIdDesc %>" <% if(model != null && model.admin.dataUrl != null) { %> value="<%= model.admin.dataUrl %>" <% } %> />
                 <div class="icon-close"></div>
             </div>
         </div>
@@ -98,7 +98,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-wms-id" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').wmsName %>" <% if(model != null && model.admin.wmsName != null) { %> value="<%= model.admin.wmsName %>" <% } %> />
+                <input type="text" id="add-layer-wms-id" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').wmsName %>" <% if(model != null && model.admin.wmsName != null) { %> value="<%= model.admin.wmsName %>" <% } %> />
                 <div class="icon-close"></div>
             </div>
         </div>
@@ -160,7 +160,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-minscale" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').minScalePlaceholder %>" <% if(model != null && model.admin.minScale) { %>value="<%= model.admin.minScale %>"<% } %> required />
+                <input type="text" id="add-layer-minscale" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').minScalePlaceholder %>" <% if(model != null && model.admin.minScale) { %>value="<%= model.admin.minScale %>"<% } %> required />
                 <div class="icon-close"></div>
             </div>
         </div>
@@ -172,7 +172,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-maxscale" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').maxScalePlaceholder %>" <% if(model != null && model.admin.maxScale) { %>value="<%= model.admin.maxScale %>"<% } %> required />
+                <input type="text" id="add-layer-maxscale" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').maxScalePlaceholder %>" <% if(model != null && model.admin.maxScale) { %>value="<%= model.admin.maxScale %>"<% } %> required />
                 <div class="icon-close"></div>
             </div>
         </div>
@@ -184,7 +184,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-srsname" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').srsNamePlaceholder %>" <% if(model != null && model.admin.epsg) { %>value="<%= model.admin.epsg %>"<% } %> required />
+                <input type="text" id="add-layer-srsname" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').srsNamePlaceholder %>" <% if(model != null && model.admin.epsg) { %>value="<%= model.admin.epsg %>"<% } %> required />
                 <div class="icon-close"></div>
             </div>
         </div>
@@ -196,7 +196,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-legendImage" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').legendImagePlaceholder %>" <% if(model != null && model.admin.legendImage) { %>value="<%= model.admin.legendImage %>"<% } %>/>
+                <input type="text" id="add-layer-legendImage" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').legendImagePlaceholder %>" <% if(model != null && model.admin.legendImage) { %>value="<%= model.admin.legendImage %>"<% } %>/>
                 <div class="icon-close"></div>
             </div>
         </div>
@@ -204,7 +204,9 @@
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">
-            <label for="add-layer-responsetype" class="add-layer-label" title="<%= instance.getLocalization('admin').gfiResponseTypeDesc %>"><%= instance.getLocalization('admin').gfiResponseType %></label>
+            <label for="add-layer-responsetype" class="add-layer-label" title="<%= instance.getLocalization('admin').gfiResponseTypeDesc %>">
+                <%= instance.getLocalization('admin').gfiResponseType %>
+            </label>
         </div>
         <div class="add-layer-input-area">
             <% if(model != null && model.admin.gfiType) { %>
@@ -224,7 +226,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <textarea rows="2" cols="40" id="add-layer-xslt" class="add-layer-input" ><% if(model != null && model.admin.xslt_decoded) { %><%= model.admin.xslt_decoded %><% } %></textarea>
+                <textarea rows="3" cols="40" id="add-layer-xslt" class="add-layer-input long" ><% if(model != null && model.admin.xslt_decoded) { %><%= model.admin.xslt_decoded %><% } %></textarea>
             </div>
         </div>
     </div>
@@ -238,7 +240,7 @@
         <div class="add-class-input-area">
              <% for(var i = 0; i < roles.length; i++) { %>
              <div class="input-controls">
-                <%= roles[i].name %>  <input type="checkbox" id="layer-view-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" />
+                <label><%= roles[i].name %>  <input type="checkbox" id="layer-view-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" /></label>
              </div>
             <% } %>
         </div>

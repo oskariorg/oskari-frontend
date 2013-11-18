@@ -108,6 +108,8 @@ Oskari.registerLocalization({
             "addOrganizationNameTitle": "Data&shy;producentens namn",
             "addNewClass": "Tillägg nytt teema",
             "addNewLayer": "Tillägg nytt kartlager",
+            "addNewGroupLayer": "Tillägg nytt gruppnivå",
+            "addNewBaseLayer": "Tillägg nytt bakgrundsnivå",
             "addNewOrganization": "Tillägg ny dataproducent",
             "addInspireThemes": "Tillägg ämne",
             "addInspireThemesDesc": "Tillägg ämnen enligt InspireTheme",
@@ -157,7 +159,8 @@ Oskari.registerLocalization({
 
             "interfaceAddress": "Gränssnitten address",
             "interfaceAddressDesc": "WMS address för lager definitionen",
-            "viewingRightsRoles": "Kollar rättigheter roller"
+            "viewingRightsRoles": "Kollar rättigheter roller",
+            "metadataReadFailure": "Fetching layer metadata failed."
         },
         "cancel": "Tillbaka",
         "add": "Tillägg",
