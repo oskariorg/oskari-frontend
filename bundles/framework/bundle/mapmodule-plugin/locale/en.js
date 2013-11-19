@@ -59,6 +59,11 @@ Oskari.registerLocalization({
       },
       "PublisherToolbarPlugin": {
         "test": "test",
+        "history": {
+          "reset": "Return to default view",
+          "back": "Back",
+          "next": "Next"
+        },
         "measure": {
           "line": "Measure distance",
           "area": "Measure area"

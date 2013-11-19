@@ -193,7 +193,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                     }
                 }
                 if(count == 0){
-debugger;
                     group.remove();
                     this.buttons[prefixedGroup] = null;
                     delete this.buttons[prefixedGroup];                    

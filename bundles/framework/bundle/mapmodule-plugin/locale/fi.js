@@ -59,6 +59,11 @@ Oskari.registerLocalization({
       },
       "PublisherToolbarPlugin": {
         "test": "testi",
+        "history": {
+          "reset": "Paluu oletusnäkymään",
+          "back": "Takaisin",
+          "next": "Eteenpäin"
+        },
         "measure": {
           "line": "Mittaa etäisyys",
           "area": "Mittaa alue"

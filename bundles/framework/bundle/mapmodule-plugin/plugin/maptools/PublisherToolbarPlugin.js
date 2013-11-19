@@ -97,16 +97,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             me.buttonGroups = 
             [
                 {
-                    'name' : 'test-tools',
+                    'name' : 'history',
                     'buttons': {
-                        'testTool' : {
+                        'history_back' : {
                             toolbarid : me.toolbarId,
-                            iconCls : 'selection-square',
-                            tooltip : me.localization.test, 
-                            sticky : false,
-                            toggleSelection : true,
-                            callback : function() {
-                                alert('test');
+                            iconCls: 'tool-history-back',
+                            tooltip: me.localization.history.back,
+                            prepend: true,
+                            sticky: false,
+                            callback: function () {
+                                me._sandbox.request(me, reqBuilder('map_control_tool_prev'));
+                            }
+                        },
+                        'history_forward' : {
+                            toolbarid : me.toolbarId,
+                            iconCls: 'tool-history-forward',
+                            tooltip: me.localization.history.next,
+                            sticky: false,
+                            callback: function () {
+                                me._sandbox.request(me, reqBuilder('map_control_tool_next'));
                             }
                         }
                     }
@@ -139,6 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     }
                 }
             ];
+
         },
         /**
          * @method register
