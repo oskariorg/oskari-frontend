@@ -66,7 +66,7 @@
 					me._dialog.close(true);
 				});
 
-				dialog.moveTo('#toolbar div.toolrow[tbgroup=basictools]', 'top');
+				dialog.moveTo('#toolbar div.toolrow[tbgroup=default-basictools]', 'top');
 				me._content = jQuery("<div></div>");
 				dialog.setContent(me._content);
 				me._dialogShown = true;

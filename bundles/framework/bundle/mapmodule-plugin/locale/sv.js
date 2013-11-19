@@ -58,7 +58,11 @@ Oskari.registerLocalization({
         "name": "Namn"
       },
       "PublisherToolbarPlugin": {
-        "test": "test"
+        "test": "test",
+        "measure": {
+          "line": "Mät avstånd",
+          "area": "Mät areal"
+        }
       }
     }
   }

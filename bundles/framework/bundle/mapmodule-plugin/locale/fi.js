@@ -58,7 +58,11 @@ Oskari.registerLocalization({
         "name": "Nimi"
       },
       "PublisherToolbarPlugin": {
-        "test": "testi"
+        "test": "testi",
+        "measure": {
+          "line": "Mittaa etäisyys",
+          "area": "Mittaa alue"
+        }
       }
     }
   }
