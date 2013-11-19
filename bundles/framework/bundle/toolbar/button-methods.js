@@ -179,6 +179,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 this.buttons[pGroup][pId] = null;
                 delete this.buttons[pGroup][pId];
                 // TODO: check if no buttons left -> delete group also?
+                var count = 0
+                for (var key in this.buttons[pGroup]) {
+                    if (this.buttons[pGroup].hasOwnProperty(key)) { 
+                        count++;
+                    }
+                }
+                if(count == 0){
+                    delete this.buttons[pGroup];                    
+                }
             } else {
                 // delete whole group
                 group.remove();

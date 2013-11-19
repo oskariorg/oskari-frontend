@@ -123,16 +123,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
                     "src": "../../../../resources/framework/bundle/mapmodule-plugin/plugin/logo/css/logoplugin.css"
                 },
                 /**
-                 * Menu plugin
-                 */
-                {
-                    "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/menu/MenuPlugin.js"
-                }, {
-                    "type": "text/css",
-                    "src": "../../../../resources/framework/bundle/mapmodule-plugin/plugin/menu/css/menuplugin.css"
-                },
-                /**
                  * Data Source plugin
                  */
                 {
@@ -160,6 +150,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
                 }, {
                     "type": "text/css",
                     "src": "../../../../resources/framework/bundle/mapmodule-plugin/plugin/scalebar/css/scalebar.css"
+                },
+                /**
+                 * PublisherToolbarPlugin plugin
+                 */
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/maptools/PublisherToolbarPlugin.js"
+                }, {
+                    "type": "text/css",
+                    "src": "../../../../resources/framework/bundle/mapmodule-plugin/plugin/maptools/css/maptools.css"
                 },
 
                 // FullScreen

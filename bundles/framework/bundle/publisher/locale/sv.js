@@ -51,7 +51,8 @@ Oskari.registerLocalization({
                 "Portti2Zoombar": "Skalans glidreglage",
                 "ControlsPlugin": "Panorering på",
                 "SearchPlugin": "Adress- och ortnamnssökning",
-                "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet"
+                "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet",
+                "PublisherToolbarPlugin": "Kartverktygen"
             },
             "toollayout": {
                 "label": "Verktyg applikation",

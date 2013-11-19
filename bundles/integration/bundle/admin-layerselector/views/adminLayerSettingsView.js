@@ -687,7 +687,7 @@ define([
                 });
 
 
-            },
+            },    
             /**
              * Add capabilities as a drop down list if AJAX call returned any
              *
@@ -844,10 +844,10 @@ define([
                     jQuery('#add-layer-srsname').val(srsName);
                 }
 
-                // GFI Type
-                if (!capability.Request.GetFeatureInfo) {
+                if (capability.Request.GetFeatureInfo) {
                     gfiType = capability.Request.GetFeatureInfo.Format;
                     gfiTypeSelect = jQuery('#add-layer-responsetype');
+                    gfiTypeSelect.append('<option value="" selected="selected">' + '' + '</option>');
                     for (i = 0; i < gfiType.length; i += 1) {
                         gfiTypeSelect.append('<option>' + gfiType[i] + '</option>');
                     }

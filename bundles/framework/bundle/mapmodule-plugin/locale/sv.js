@@ -51,11 +51,14 @@ Oskari.registerLocalization({
       },
       "GetInfoPlugin": {
         "title": "Objektuppgifter",
-		"layer": "Lagret",
-		"places": "Object",
-		"description": "Beskrivning",
-		"link": "URL-address",
-		"name": "Namn"
+        "layer": "Lagret",
+        "places": "Object",
+        "description": "Beskrivning",
+        "link": "URL-address",
+        "name": "Namn"
+      },
+      "PublisherToolbarPlugin": {
+        "test": "test"
       }
     }
   }
