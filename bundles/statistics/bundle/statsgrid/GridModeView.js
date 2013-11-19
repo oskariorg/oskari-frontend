@@ -128,8 +128,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
             if (isShown) {
                 /** ENTER The Mode */
 
-                /** Set zoom to min **/
-                mapModule.zoomTo(0);
+                /** Center Finland and set zoom to min **/
+                var newCenter = new OpenLayers.LonLat(520000, 7250000);
+                mapModule.centerMap(newCenter,0);
 
                 jQuery('#contentMap').addClass('statsgrid-contentMap');
                 jQuery('.oskariui-mode-content').addClass('statsgrid-mode');
