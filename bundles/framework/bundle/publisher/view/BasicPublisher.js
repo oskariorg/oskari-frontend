@@ -121,6 +121,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 }
             }
         }, {
+            "id": "Oskari.mapframework.mapmodule.ControlsPlugin",
+            "selected": true
+        }, {
+            "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
+            "selected": true,
+            "config": {
+                "infoBox": true
+            }
+        }];
+/*
+// ADD this to get PublisherToolbarPlugin visible at publisher
+
+        }, {
             "id": "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin",
             "selected": false,
             "lefthanded": "top right",
@@ -134,19 +147,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     "classes": "top right"
                 }
             }
-        }, {
-            "id": "Oskari.mapframework.mapmodule.ControlsPlugin",
-            "selected": true
-        }, {
-            "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
-            "selected": true,
-            "config": {
-                "infoBox": true
-            }
-        }];
-/*
-// ADD this to get PublisherToolbarPlugin visible at publisher
-
 
 */
 
