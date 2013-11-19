@@ -176,12 +176,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             if (pdata.title) {
                 tbcontainer.find(".oskariui-toolbar-title p").append(pdata.title);
             }
-/*            if (pdata.show) {
-                tbcontainer.removeClass('oskari-closed');
-            } else {
-                tbcontainer.addClass('oskari-closed');                
-            }
-*/
             return c;
         },
         changeMenuToolbarTitle: function (title) {

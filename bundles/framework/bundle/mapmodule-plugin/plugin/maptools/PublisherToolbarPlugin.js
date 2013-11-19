@@ -20,10 +20,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
         //FIXME conffiin?
         this.toolbarId = 'publishedMap';
-//        this.instance = instance;
 
     }, {
-
+        // templates for tools-mapplugin
         templates: {
             main: jQuery(
                 '<div class="mapplugin tools">'+
@@ -84,12 +83,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          *          reference to application sandbox
          */
         init: function (sandbox) {
-//FIXME localizations to the files!!!!!
             var me = this;
             var pluginLoc = me.getMapModule().getLocalization('plugin', true);
             me.localization = pluginLoc[me.__name];
             me.template = jQuery(me.templates.main);
 
+            /////////////////////////////////
+            // ADD TOOL CONFIGURATION HERE //
+            /////////////////////////////////
             me.buttonGroups = [{
                 'name' : 'test-tools',
                 'buttons': {
@@ -221,10 +222,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             return this.eventHandlers[event.getName()].apply(this, [event]);
         },
 
-//////////////////////////////////////////////////////////////////////
-// toolbar related functions
-//////////////////////////////////////////////////////////////////////
-
         show : function(isShown) {
             var showHide = isShown ? 'show' : 'hide';
             this._sandbox.requestByName(this, 'Toolbar.ToolbarRequest', [this.toolbarId, showHide]);
@@ -247,18 +244,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 containerClasses = 'top left',
                 position = 1,
                 containers = ((me.conf && me.conf.containers)? me.conf.containers : []);
-
-
-            // if (this.conf && this.conf.toolStyle) {
-            //     content = this.styledTemplate.clone();
-            //     this.changeToolStyle(this.conf.toolStyle, content);
-            // } else {
-            //     content = this.template.clone();
-            // }
-//            content = this.template.clone();
-//            this.element = content;
-
-
+            // TODO: containers? 
+            // I guess the idea is to have some kind of toolbar container vs. tool's content container
 
             if (!me.element) {
                 me.element = me.template.clone();
@@ -272,20 +259,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 }
             }
 
-
-
+            // add classes (top, bottom, left, right, center)
             if (me.conf && me.conf.location) {
                 containerClasses = me.conf.location.classes || containerClasses;
                 position = me.conf.location.position || position;
             }
             me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
 
-            // if (me.conf && me.conf.font) {
-            //     me.changeFont(me.conf.font, content);
-            // }
-
-
-//FIXME localization?
+            // add toolbar
             sandbox.requestByName(me, 'Toolbar.ToolbarRequest', [me.toolbarId, 'add', {
                 title : me.localization.title,
                 show : false,
@@ -294,8 +275,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     view.prepareMode(false);
                 }
             }]);
-
-
 
             // hide container
             toolscontainer = me.element.find('.tools-container');
@@ -306,10 +285,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 toolscontainer.toggle();
             });
 
-
-
-
         },
+        /**
+         * @method getToolOptions
+         * Function to return plugin options
+         * Currently, this needs more work to make it more general solution
+         */
         getToolOptions: function() {
             var me = this;
             return me.buttonGroups;

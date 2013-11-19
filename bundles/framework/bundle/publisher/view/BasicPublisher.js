@@ -121,6 +121,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 }
             }
         }, {
+            "id": "Oskari.mapframework.mapmodule.ControlsPlugin",
+            "selected": true
+        }, {
+            "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
+            "selected": true,
+            "config": {
+                "infoBox": true
+            }
+        }];
+/*
+THIS IS NOT READY YET! NEEDS SOME CLEANING & COMMENTING
+        }, {
             "id": "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin",
             "selected": false,
             "lefthanded": "top right",
@@ -134,17 +146,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     "classes": "top right"
                 }
             }
-        }, {
-            "id": "Oskari.mapframework.mapmodule.ControlsPlugin",
-            "selected": true
-        }, {
-            "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
-            "selected": true,
-            "config": {
-                "infoBox": true
-            }
-        }];
 
+
+*/
 
         // map tool indices so we don't have to go through the list every time...
         me.toolIndices = {};
@@ -781,29 +785,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 };
             };
 
-
-
-
             if (enabled) {
                 tool.plugin.startPlugin(this.instance.sandbox);
                 tool._isPluginStarted = true;
+
                 //atm. this is using toolsplugin's button structure
                 var toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions(): null;
                 if(toolOptions){
                     
                     var options = me.templateToolOptions.clone();
                     tool.publisherPluginContainer.append(options);
+                    //loop through button groups and buttons
                     for(var i in toolOptions){
                         var buttonGroup = toolOptions[i];
                         for(var toolName in buttonGroup.buttons ) {
                             var toolButton = buttonGroup.buttons[toolName];
-
+                            // create checkbox
                             toolButton.selectTool = me.templateToolOption.clone();
                             toolButton.selectTool.find('span').append(toolName);
                             if (toolButton.selected) {
                                 toolButton.selectTool.find('input').attr('checked', 'checked');
                             }
-
+                            //toggle toolbar tool. i.e. send requests
                             toolButton.selectTool.find('input').change(_toggleToolOption(toolName, buttonGroup.name, toolButton));
                             options.append(toolButton.selectTool);
                         }
@@ -811,9 +814,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 }
             } else {
                 if (tool._isPluginStarted) {
+                    //remove buttons
                     var toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions(): null;
                     if(toolOptions){
-
+                        //remove toolbar tools
                         for(var i in toolOptions){
                             var buttonGroup = toolOptions[i];
                             for(var toolName in buttonGroup.buttons ) {
@@ -823,9 +827,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                                 sandbox.request(tool.plugin, reqBuilder(toolName, buttonGroup.name));
                             }
                         }
-
+                        //remove eventlisteners
                         var optionContainer = tool.publisherPluginContainer.find('.tool-options');
                         var toolOptionCheckboxes = optionContainer.find('input').off( "change", me._toggleToolOption);
+                        //remove dom elements
                         toolOptionCheckboxes.remove();
                         optionContainer.remove();
                     }

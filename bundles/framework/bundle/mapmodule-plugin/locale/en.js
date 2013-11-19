@@ -51,11 +51,14 @@ Oskari.registerLocalization({
       },
       "GetInfoPlugin": {
         "title": "Map layers",
-		"layer": "Layer",
-		"places": "Places",
-		"description": "Description",
-		"link": "URL-address",
-		"name": "Name"
+        "layer": "Layer",
+        "places": "Places",
+        "description": "Description",
+        "link": "URL-address",
+        "name": "Name"
+      },
+      "PublisherToolbarPlugin": {
+        "test": "test"
       }
     }
   }
