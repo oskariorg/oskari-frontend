@@ -131,7 +131,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
         }];
 /*
-THIS IS NOT READY YET! NEEDS SOME CLEANING & COMMENTING
+// ADD this to get PublisherToolbarPlugin visible at publisher
         }, {
             "id": "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin",
             "selected": false,
