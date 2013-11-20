@@ -813,7 +813,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                                     toolButton = buttonGroup.buttons[toolName];
                                     // create checkbox
                                     toolButton.selectTool = me.templateToolOption.clone();
-                                    toolButton.selectTool.find('span').append(this.loc.toolbarToolNames[toolName]));
+                                    toolButton.selectTool.find('span').append(this.loc.toolbarToolNames[toolName]);
                                     if (toolButton.selected) {
                                         toolButton.selectTool.find('input').attr('checked', 'checked');
                                     }
