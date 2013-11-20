@@ -121,19 +121,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 }
             }
         }, {
-            "id": "Oskari.mapframework.mapmodule.ControlsPlugin",
-            "selected": true
-        }, {
-            "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
-            "selected": true,
-            "config": {
-                "infoBox": true
-            }
-        }];
-/*
-// ADD this to get PublisherToolbarPlugin visible at publisher
-
-        }, {
             "id": "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin",
             "selected": false,
             "lefthanded": "top right",
@@ -147,6 +134,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     "classes": "top right"
                 }
             }
+        }, {
+            "id": "Oskari.mapframework.mapmodule.ControlsPlugin",
+            "selected": true
+        }, {
+            "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
+            "selected": true,
+            "config": {
+                "infoBox": true
+            }
+        }];
+/*
+// ADD this to get PublisherToolbarPlugin visible at publisher
+
 
 */
 
@@ -801,7 +801,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                             var toolButton = buttonGroup.buttons[toolName];
                             // create checkbox
                             toolButton.selectTool = me.templateToolOption.clone();
-                            toolButton.selectTool.find('span').append(toolName);
+                            toolButton.selectTool.find('span').append(this.loc.toolbarToolNames[toolName]);
                             if (toolButton.selected) {
                                 toolButton.selectTool.find('input').attr('checked', 'checked');
                             }
