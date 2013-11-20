@@ -130,7 +130,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 "infoBox": true
             }
         }];
-/*
+        /*
 // ADD this to get PublisherToolbarPlugin visible at publisher
 
         }, {
@@ -250,7 +250,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         me.mainPanel = null;
         me.normalMapPlugins = [];
         me.logoPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin', {
-            "location" : {
+            "location": {
                 "classes": me.logoPluginClasses.classes
             }
         });
@@ -770,65 +770,82 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             var _toggleToolOption = function (toolName, groupName, toolOption) {
                 return function () {
                     var checkbox = jQuery(this),
-                        isChecked = checkbox.is(':checked');
+                        isChecked = checkbox.is(':checked'),
+                        reqBuilder;
                     tool.selected = isChecked;
                     //TODO send toolbar request!
                     var requester = tool.plugin;
-                    if(isChecked) {
-                        var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+                    if (isChecked) {
+                        reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
                         sandbox.request(requester, reqBuilder(toolName, groupName, toolOption));
                     } else {
-                        var reqBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
-                        sandbox.request(requester, reqBuilder(toolName, groupName, toolOption.toolbarid));                        
+                        reqBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
+                        sandbox.request(requester, reqBuilder(toolName, groupName, toolOption.toolbarid));
                     }
                 };
             };
+
+            var toolOptions,
+                i,
+                buttonGroup,
+                toolName,
+                toolButton,
+                reqBuilder;
 
             if (enabled) {
                 tool.plugin.startPlugin(this.instance.sandbox);
                 tool._isPluginStarted = true;
 
+                toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions() : null;
+
                 //atm. this is using toolsplugin's button structure
-                var toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions(): null;
-                if(toolOptions){
-                    
-                    var options = me.templateToolOptions.clone();
+                var options;
+                if (toolOptions) {
+
+                    options = me.templateToolOptions.clone();
                     tool.publisherPluginContainer.append(options);
                     //loop through button groups and buttons
-                    for(var i in toolOptions){
-                        var buttonGroup = toolOptions[i];
-                        for(var toolName in buttonGroup.buttons ) {
-                            var toolButton = buttonGroup.buttons[toolName];
-                            // create checkbox
-                            toolButton.selectTool = me.templateToolOption.clone();
-                            toolButton.selectTool.find('span').append(toolName);
-                            if (toolButton.selected) {
-                                toolButton.selectTool.find('input').attr('checked', 'checked');
+                    for (i in toolOptions) {
+                        if (toolOptions.hasOwnProperty(i)) {
+                            buttonGroup = toolOptions[i];
+                            for (toolName in buttonGroup.buttons) {
+                                if (buttonGroup.buttons.hasOwnProperty(toolName)) {
+                                    toolButton = buttonGroup.buttons[toolName];
+                                    // create checkbox
+                                    toolButton.selectTool = me.templateToolOption.clone();
+                                    toolButton.selectTool.find('span').append(toolName);
+                                    if (toolButton.selected) {
+                                        toolButton.selectTool.find('input').attr('checked', 'checked');
+                                    }
+                                    //toggle toolbar tool. i.e. send requests
+                                    toolButton.selectTool.find('input').change(_toggleToolOption(toolName, buttonGroup.name, toolButton));
+                                    options.append(toolButton.selectTool);
+                                }
                             }
-                            //toggle toolbar tool. i.e. send requests
-                            toolButton.selectTool.find('input').change(_toggleToolOption(toolName, buttonGroup.name, toolButton));
-                            options.append(toolButton.selectTool);
                         }
                     }
                 }
             } else {
                 if (tool._isPluginStarted) {
                     //remove buttons
-                    var toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions(): null;
-                    if(toolOptions){
+                    toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions() : null;
+                    if (toolOptions) {
                         //remove toolbar tools
-                        for(var i in toolOptions){
-                            var buttonGroup = toolOptions[i];
-                            for(var toolName in buttonGroup.buttons ) {
-                                var toolButton = buttonGroup.buttons[toolName];
-
-                                var reqBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
-                                sandbox.request(tool.plugin, reqBuilder(toolName, buttonGroup.name, toolButton.toolbarid));
+                        for (i in toolOptions) {
+                            if (toolOptions.hasOwnProperty(i)) {
+                                buttonGroup = toolOptions[i];
+                                for (toolName in buttonGroup.buttons) {
+                                    if (buttonGroup.buttons.hasOwnProperty(toolName)) {
+                                        toolButton = buttonGroup.buttons[toolName];
+                                        reqBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
+                                        sandbox.request(tool.plugin, reqBuilder(toolName, buttonGroup.name, toolButton.toolbarid));
+                                    }
+                                }
                             }
                         }
                         //remove eventlisteners
-                        var optionContainer = tool.publisherPluginContainer.find('.tool-options');
-                        var toolOptionCheckboxes = optionContainer.find('input').off( "change", me._toggleToolOption);
+                        var optionContainer = tool.publisherPluginContainer.find('.tool-options'),
+                            toolOptionCheckboxes = optionContainer.find('input').off("change", me._toggleToolOption);
                         //remove dom elements
                         toolOptionCheckboxes.remove();
                         optionContainer.remove();
@@ -1086,8 +1103,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 url = sandbox.getAjaxUrl();
             // Total width for map and grid. Used to calculate the iframe size.
             var totalWidth = (me.isDataVisible ?
-                    (selections.size.width + me._calculateGridWidth()) :
-                    selections.size.width);
+                    (selections.size.width + me._calculateGridWidth()) : selections.size.width);
             var errorHandler = function () {
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                     okBtn = dialog.createCloseButton(me.loc.buttons.ok);
@@ -1172,7 +1188,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 p,
                 plugin,
                 i;
-
             for (p in plugins) {
                 if (plugins.hasOwnProperty(p)) {
                     plugin = plugins[p];
@@ -1233,6 +1248,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             // notify openlayers that size has changed
             mapModule.updateSize();
 
+            // stop our logoplugin
+            mapModule.unregisterPlugin(this.logoPlugin);
+            this.logoPlugin.stopPlugin(me.instance.sandbox);
+
             // resume normal plugins
             for (i = 0; i < this.normalMapPlugins.length; i += 1) {
                 plugin = this.normalMapPlugins[i];
@@ -1241,8 +1260,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
             // reset listing
             this.normalMapPlugins = [];
-            mapModule.unregisterPlugin(this.logoPlugin);
-            this.logoPlugin.stopPlugin(me.instance.sandbox);
         },
         /**
          * @method setEnabled
