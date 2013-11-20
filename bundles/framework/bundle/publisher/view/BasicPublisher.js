@@ -132,7 +132,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         }];
         /*
 // ADD this to get PublisherToolbarPlugin visible at publisher
-
         }, {
             "id": "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin",
             "selected": false,
@@ -147,6 +146,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     "classes": "top right"
                 }
             }
+
 
 */
 
@@ -813,7 +813,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                                     toolButton = buttonGroup.buttons[toolName];
                                     // create checkbox
                                     toolButton.selectTool = me.templateToolOption.clone();
-                                    toolButton.selectTool.find('span').append(toolName);
+                                    toolButton.selectTool.find('span').append(this.loc.toolbarToolNames[toolName]));
                                     if (toolButton.selected) {
                                         toolButton.selectTool.find('input').attr('checked', 'checked');
                                     }

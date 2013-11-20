@@ -148,7 +148,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     }
                 }
             ];
-
         },
         /**
          * @method register
