@@ -132,6 +132,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         }];
 /*
 // ADD this to get PublisherToolbarPlugin visible at publisher
+
         }, {
             "id": "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin",
             "selected": false,
@@ -146,7 +147,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     "classes": "top right"
                 }
             }
-
 
 */
 
@@ -773,14 +773,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                         isChecked = checkbox.is(':checked');
                     tool.selected = isChecked;
                     //TODO send toolbar request!
-
                     var requester = tool.plugin;
                     if(isChecked) {
                         var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-                        sandbox.request(requester, reqBuilder(toolName, buttonGroup.name, toolOption));
+                        sandbox.request(requester, reqBuilder(toolName, groupName, toolOption));
                     } else {
                         var reqBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
-                        sandbox.request(requester, reqBuilder(toolName, buttonGroup.name));                        
+                        sandbox.request(requester, reqBuilder(toolName, groupName, toolOption.toolbarid));                        
                     }
                 };
             };
@@ -824,7 +823,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                                 var toolButton = buttonGroup.buttons[toolName];
 
                                 var reqBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
-                                sandbox.request(tool.plugin, reqBuilder(toolName, buttonGroup.name));
+                                sandbox.request(tool.plugin, reqBuilder(toolName, buttonGroup.name, toolButton.toolbarid));
                             }
                         }
                         //remove eventlisteners

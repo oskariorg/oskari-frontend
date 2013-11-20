@@ -83,29 +83,71 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          *          reference to application sandbox
          */
         init: function (sandbox) {
-            var me = this;
-            var pluginLoc = me.getMapModule().getLocalization('plugin', true);
+            var me = this,
+                pluginLoc = me.getMapModule().getLocalization('plugin', true),
+                reqBuilder = me._sandbox.getRequestBuilder('ToolSelectionRequest'),
+                gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest',
+                gfiReqBuilder = me._sandbox.getRequestBuilder(gfiRn);
             me.localization = pluginLoc[me.__name];
             me.template = jQuery(me.templates.main);
 
             /////////////////////////////////
             // ADD TOOL CONFIGURATION HERE //
             /////////////////////////////////
-            me.buttonGroups = [{
-                'name' : 'test-tools',
-                'buttons': {
-                    'testTool' : {
-                        toolbarid : me.toolbarId,
-                        iconCls : 'selection-square',
-                        tooltip : me.localization.test, 
-                        sticky : false,
-                        toggleSelection : true,
-                        callback : function() {
-                            alert('test');
+            me.buttonGroups = 
+            [
+                {
+                    'name' : 'history',
+                    'buttons': {
+                        'history_back' : {
+                            toolbarid : me.toolbarId,
+                            iconCls: 'tool-history-back',
+                            tooltip: me.localization.history.back,
+                            prepend: true,
+                            sticky: false,
+                            callback: function () {
+                                me._sandbox.request(me, reqBuilder('map_control_tool_prev'));
+                            }
+                        },
+                        'history_forward' : {
+                            toolbarid : me.toolbarId,
+                            iconCls: 'tool-history-forward',
+                            tooltip: me.localization.history.next,
+                            sticky: false,
+                            callback: function () {
+                                me._sandbox.request(me, reqBuilder('map_control_tool_next'));
+                            }
+                        }
+                    }
+                },
+                {
+                    'name' : 'basictools',
+                    'buttons': {
+                        'measureline' : {
+                            toolbarid : me.toolbarId,
+                            iconCls: 'tool-measure-line',
+                            tooltip: me.localization.measure.line,
+                            sticky: true,
+                            callback: function () {
+                                rn = 'map_control_measure_tool';
+                                me._sandbox.request(me, gfiReqBuilder(false));
+                                me._sandbox.request(me, reqBuilder(rn));
+                            }
+                        },
+                        'measurearea' : {
+                            toolbarid : me.toolbarId,
+                            iconCls: 'tool-measure-area',
+                            tooltip: me.localization.measure.area,
+                            sticky: true,
+                            callback: function () {
+                                rn = 'map_control_measure_area_tool';
+                                me._sandbox.request(me, gfiReqBuilder(false));
+                                me._sandbox.request(me, reqBuilder(rn));
+                            }
                         }
                     }
                 }
-            }];
+            ];
 
         },
         /**

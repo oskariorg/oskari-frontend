@@ -13,7 +13,8 @@
     background-color: transparent;
     height: auto;
     min-height: 60px;
-    z-index: 16000; }
+    z-index: 16000;
+    clear: both; }
     .tools .tools-container .tools-top-arrow {
       width: 0;
       height: 0;
@@ -25,8 +26,20 @@
       background-color: #424343;
       color: #FFFFFF;
       border-radius: 6px;
-      display: inline-block;
-      width: 100%; }
+      padding-bottom: 3px;
+      display: block;
+      width: 100%;
+      clear: both; }
+      .tools .tools-container .tools-content div.toolrow {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0px 10px; }
+        .tools .tools-container .tools-content div.toolrow div.tool {
+          display: inline-block;
+          cursor: pointer; }
+        .tools .tools-container .tools-content div.toolrow div.tool.selected, .tools .tools-container .tools-content div.toolrow div.tool:hover:not(.disabled), .tools .tools-container .tools-content div.toolrow div.tool:active:not(.disabled) {
+          background-color: #212121; }
+      .tools .tools-container .tools-content div.toolrow:first-child {
+        border-top: none; }
     .tools .tools-container .tool-group-title {
       font-weight: bold; }
 
@@ -41,7 +54,3 @@
 .mapplugins.right .tools .tools-container .tools-top-arrow {
   float: right;
   margin-right: 7.5px; }
-
-#toolbarcontent div.toolrow div.tool {
-  display: inline-block;
-  cursor: pointer; }

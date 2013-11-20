@@ -21,24 +21,25 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         var me = this;
         var toolbar = this.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig);
         var group = null;
-        if (!this.buttons[pGroup]) {
+        var prefixedGroup = (pConfig ? pConfig.toolbarid ? pConfig.toolbarid : 'default' : 'default') + '-' + pGroup;
+        if (!this.buttons[prefixedGroup]) {
             // create group if not existing
-            this.buttons[pGroup] = {};
+            this.buttons[prefixedGroup] = {};
             group = this.templateGroup.clone();
-            group.attr('tbgroup', pGroup);
+            group.attr('tbgroup', prefixedGroup);
             toolbar.append(group);
-            this.groupsToToolbars[pGroup] = pConfig ? pConfig.toolbarid : null;
+            this.groupsToToolbars[prefixedGroup] = pConfig ? pConfig.toolbarid : null;
         } else {
-            group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
+            group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
         }
 
-        if (this.buttons[pGroup][pId]) {
+        if (this.buttons[prefixedGroup][pId]) {
             // button already added, dont add again
             return;
         }
 
         // create button to requested group with requested id
-        this.buttons[pGroup][pId] = pConfig;
+        this.buttons[prefixedGroup][pId] = pConfig;
         var button = this.templateTool.clone();
         button.attr('tool', pId);
         button.attr('title', pConfig.tooltip);
@@ -48,7 +49,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         if (this.selectedButton) {
             // FIXME use ===
             if (this.selectedButton.id == pId &&
-                this.selectedButton.group == pGroup) {
+                this.selectedButton.group == prefixedGroup) {
                 button.addClass('selected');
                 pConfig.callback();
             }
@@ -57,7 +58,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 button.addClass('selected');
                 this.selectedButton = {
                     id: pId,
-                    group: pGroup
+                    group: prefixedGroup
                 };
             }
         }
@@ -65,11 +66,11 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         if (pConfig.selected) {
             this.defaultButton = {
                 id: pId,
-                group: pGroup
+                group: prefixedGroup
             };
         }
         button.bind('click', function (event) {
-            me._clickButton(pId, pGroup);
+            me._clickButton(pId, prefixedGroup);
         });
 
         /* add first or last to group (default last)*/
@@ -166,33 +167,41 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * Removes a button from the toolbar all whole group of buttons if pId is not defined.
      * Triggered usually by sending Oskari.mapframework.bundle.toolbar.request.RemoveToolButtonRequest.
      */
-    removeToolButton: function (pId, pGroup) {
+    removeToolButton: function (pId, pGroup, pToolbarId) {
         if (!pGroup) {
             return;
         }
-        if (this.buttons[pGroup]) {
-            var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
-            var group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
+        var prefixedGroup = pGroup;
+        if(pToolbarId) {
+            prefixedGroup = pToolbarId + '-' + prefixedGroup;
+        } else  {
+            prefixedGroup = 'default-' + prefixedGroup;            
+        }
+        if (this.buttons[prefixedGroup]) {
+            var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]);
+            var group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
             if (pId) {
                 var button = group.find('div.tool[tool=' + pId + ']');
                 button.remove();
-                this.buttons[pGroup][pId] = null;
-                delete this.buttons[pGroup][pId];
+                this.buttons[prefixedGroup][pId] = null;
+                delete this.buttons[prefixedGroup][pId];
                 // TODO: check if no buttons left -> delete group also?
                 var count = 0
-                for (var key in this.buttons[pGroup]) {
-                    if (this.buttons[pGroup].hasOwnProperty(key)) { 
+                for (var key in this.buttons[prefixedGroup]) {
+                    if (this.buttons[prefixedGroup].hasOwnProperty(key)) { 
                         count++;
                     }
                 }
                 if(count == 0){
-                    delete this.buttons[pGroup];                    
+                    group.remove();
+                    this.buttons[prefixedGroup] = null;
+                    delete this.buttons[prefixedGroup];                    
                 }
             } else {
                 // delete whole group
                 group.remove();
-                this.buttons[pGroup] = null;
-                delete this.buttons[pGroup];
+                this.buttons[prefixedGroup] = null;
+                delete this.buttons[prefixedGroup];
             }
         }
     },
