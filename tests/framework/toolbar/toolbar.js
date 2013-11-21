@@ -107,7 +107,7 @@ describe('Test suite for Toolbar bundle', function () {
             toolbarModule.addToolButton(testButtonId, testButtonGroup, testButtonConf);
 
             $toolbarContainer = toolbarModule.getToolbarContainer();
-            var testToolRow = $toolbarContainer.find('div.toolrow[tbgroup=' + testButtonGroup + ']');
+            var testToolRow = $toolbarContainer.find('div.toolrow[tbgroup=default-' + testButtonGroup + ']');
             var testButton = $toolbarContainer.find('div.tool[tool="' + testButtonId + '"]');
 
             expect(testToolRow.length).to.equal(1);
@@ -121,7 +121,7 @@ describe('Test suite for Toolbar bundle', function () {
             toolbarModule.addToolButton(testButtonId, testButtonGroup, testButtonConf);
 
             $toolbarContainer = toolbarModule.getToolbarContainer();
-            var testToolRow = $toolbarContainer.find('div.toolrow[tbgroup=' + testButtonGroup + ']');
+            var testToolRow = $toolbarContainer.find('div.toolrow[tbgroup=default-' + testButtonGroup + ']');
             var testButton = $toolbarContainer.find('div.tool[tool="' + testButtonId + '"]');
 
             expect(testToolRow.length).to.equal(1);

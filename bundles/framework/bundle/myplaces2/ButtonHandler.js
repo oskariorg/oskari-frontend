@@ -189,7 +189,7 @@ function(instance) {
 
     	dialog.show(title, message, buttons);
     	dialog.addClass('myplaces2');
-    	dialog.moveTo('#toolbar div.toolrow[tbgroup=myplaces]', 'top');
+    	dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
     },
     /**
      * @method sendStopDrawRequest
@@ -291,7 +291,7 @@ function(instance) {
                     var areaDialogContent = loc[event.getDrawingMode()]['next'];
                     if (this.dialog.getContent() !== areaDialogContent) {
                         this.dialog.setContent(areaDialogContent);
-                        this.dialog.moveTo('#toolbar div.toolrow[tbgroup=myplaces]', 'top');
+                        this.dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
                     }
                 }
             }
