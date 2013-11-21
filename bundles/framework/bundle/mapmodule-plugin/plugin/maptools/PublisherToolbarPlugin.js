@@ -288,6 +288,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             // TODO: containers? 
             // I guess the idea is to have some kind of toolbar container vs. tool's content container
 
+
             if (!me.element) {
                 me.element = me.template.clone();
                 var wrapper = me.element.find('div.tools-content');
@@ -298,6 +299,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                         .attr("id", containers[i])
                         .appendTo(wrapper)
                 }
+            }
+
+            if (this.conf && this.conf.toolStyle) {
+                this.changeToolStyle(this.conf.toolStyle, me.element);
             }
 
             // add classes (top, bottom, left, right, center)
@@ -335,8 +340,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         getToolOptions: function() {
             var me = this;
             return me.buttonGroups;
-        }
+        },
+        /**
+         * Changes the tool style of the plugin
+         *
+         * @method changeToolStyle
+         * @param {Object} style
+         * @param {jQuery} div
+         */
+        changeToolStyle: function (style, div) {
+            div = div || this.element;
 
+            if (!style || !div) {
+                return;
+            }
+
+            var resourcesPath = this.getMapModule().getImageUrl(),
+                imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/maptools/images/',
+                styledImg = imgPath + 'menu-' + style + '.png',                
+                icon = div.find('.icon');
+
+            icon.css({
+                'background-image': 'url("' + styledImg + '")'
+            });
+        }
 
 
     }, {
