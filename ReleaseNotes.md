@@ -75,6 +75,10 @@ Removed myplacestab (is now in myplaces bundle).
 
 Added optional feature to enable localization on layer name, description, inspire name and organization name. The properties can now be set as objects containing language id as keys f.ex "en". For example layer.getName() now returns language version based on Oskari.getLang() if an object has been set with setName({ "en" : "layername" }). Alternatively another language version can be requested with for example getName("en").
 
+### Openlayers update
+
+Updated Openlayers 2.12 -> 2.13.1 for bundles openlayers/bundle/openlayers-full-map and openlayers/bundle/openlayers-published-map
+
 ## 1.15
 
 ### **Breaking changes**
