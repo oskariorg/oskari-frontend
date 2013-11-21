@@ -913,7 +913,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             for (i = 0; i < layerList.length; i++) {
                 layer = layerList[i];
-                if (layer.getId()  + '' === id + '') {
+                if (layer.getId() + '' === id + '') {
                     return layer;
                 }
 

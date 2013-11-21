@@ -5,13 +5,13 @@
  * the class itself.
  */
 Oskari.clazz.category('Oskari.mapframework.core.Core', 'feature-key-listener-methods', {
-    
+
     /**
      * @method handleCtrlKeyDownRequest
      * Sets flag to show that CTRL key is pressed down
      * @private
      */
-    _handleCtrlKeyDownRequest : function() {
+    _handleCtrlKeyDownRequest: function () {
         this._ctrlKeyDown = true;
     },
     /**
@@ -19,7 +19,7 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'feature-key-listener-met
      * Sets flag to show that CTRL key is released
      * @private
      */
-    _handleCtrlKeyUpRequest : function() {
+    _handleCtrlKeyUpRequest: function () {
         this._ctrlKeyDown = false;
     },
     /**
@@ -27,7 +27,7 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'feature-key-listener-met
      * Returns true if CTRL key is down
      * @return {Boolean} true if CTRL key is down
      */
-    isCtrlKeyDown : function() {
+    isCtrlKeyDown: function () {
         return this._ctrlKeyDown;
     }
 });

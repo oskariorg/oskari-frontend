@@ -17,55 +17,54 @@ Oskari.registerLocalization({
                 "label": "Method",
                 "tooltip": "Select first data and after that the method",
                 "options": [{
-                        "id": "oskari_analyse_buffer",
-                        "label": "Buffer",
-                        "classForMethod": "buffer",
-                        "selected": true,
-                        "tooltip": ""
-                    }, {
-                        "id": "oskari_analyse_aggregate",
-                        "label": "Aggregate",
-                        "classForPreview": "aggregate",
-                        "tooltip": ""
-                    }, {
-                        "id": "oskari_analyse_union",
-                        "label": "Union",
-                        "classForPreview": "union",
-                        "tooltip": ""
-                    }, {
-                        "id": "oskari_analyse_intersect",
-                        "label": "Intersect",
-                        "classForPreview": "intersect",
-                        "tooltip": ""
-                    }, {
-                        "id": "oskari_analyse_layer_union",
-                        "label": "Union of analyse layers",
-                        "classForPreview": "layer_union",
-                        "tooltip": "Unifies analyse layers with the same feature fields"
-                    }
-                ]
-            },
-            "aggregate" : {
-                "label" : "Aggregate function",
-                "options" : [{
-                    "id" : "oskari_analyse_Count",
-                    "label" : "Count",
-                    "selected" : true
-                },{
-                    "id" : "oskari_analyse_Sum",
-                    "label" : "Sum"
+                    "id": "oskari_analyse_buffer",
+                    "label": "Buffer",
+                    "classForMethod": "buffer",
+                    "selected": true,
+                    "tooltip": ""
                 }, {
-                    "id" : "oskari_analyse_Min",
-                    "label" : "Minimum"
-                },{
-                    "id" : "oskari_analyse_Max",
-                    "label" : "Maximum"
-                },{
-                    "id" : "oskari_analyse_Average",
-                    "label" : "Average"
-                },{
-                    "id" : "oskari_analyse_StdDev",
-                    "label" : "Standard deviation"
+                    "id": "oskari_analyse_aggregate",
+                    "label": "Aggregate",
+                    "classForPreview": "aggregate",
+                    "tooltip": ""
+                }, {
+                    "id": "oskari_analyse_union",
+                    "label": "Union",
+                    "classForPreview": "union",
+                    "tooltip": ""
+                }, {
+                    "id": "oskari_analyse_intersect",
+                    "label": "Intersect",
+                    "classForPreview": "intersect",
+                    "tooltip": ""
+                }, {
+                    "id": "oskari_analyse_layer_union",
+                    "label": "Union of analyse layers",
+                    "classForPreview": "layer_union",
+                    "tooltip": "Unifies analyse layers with the same feature fields"
+                }]
+            },
+            "aggregate": {
+                "label": "Aggregate function",
+                "options": [{
+                    "id": "oskari_analyse_Count",
+                    "label": "Count",
+                    "selected": true
+                }, {
+                    "id": "oskari_analyse_Sum",
+                    "label": "Sum"
+                }, {
+                    "id": "oskari_analyse_Min",
+                    "label": "Minimum"
+                }, {
+                    "id": "oskari_analyse_Max",
+                    "label": "Maximum"
+                }, {
+                    "id": "oskari_analyse_Average",
+                    "label": "Average"
+                }, {
+                    "id": "oskari_analyse_StdDev",
+                    "label": "Standard deviation"
                 }],
                 "attribute": "Choose an attribute"
             },
@@ -84,52 +83,52 @@ Oskari.registerLocalization({
             "intersect": {
                 "label": "Intersecting layer"
             },
-            "union" : {
-                "label" : "Second layer for union input"
+            "union": {
+                "label": "Second layer for union input"
             },
-            "layer_union" : {
-                "label" : "Chosen layers for union input",
+            "layer_union": {
+                "label": "Chosen layers for union input",
                 "notAnalyseLayer": "Choose an analysis layer",
                 "noLayersAvailable": "No layers found with the same feature fields"
             },
-            "spatial" : {
-                "label" : "Spatial operator",
-                "options" : [{
-                    "id" : "oskari_analyse_intersect",
-                    "label" : "Intersect",
-                    "selected" : true
+            "spatial": {
+                "label": "Spatial operator",
+                "options": [{
+                    "id": "oskari_analyse_intersect",
+                    "label": "Intersect",
+                    "selected": true
                 }, {
-                    "id" : "oskari_analyse_contains",
-                    "label" : "Contains"
-                }  ]
-            },
-            "params" : {
-                "label" : "Selected columns",
-                "tooltip" : "",
-                "options" : [{
-                    "id" : "oskari_analyse_all",
-                    "selected" : true,
-                    "label" : "All"
-                }, {
-                    "id" : "oskari_analyse_none",
-                    "label" : "None"
-                }, {
-                    "id" : "oskari_analyse_select",
-                    "label" : "Choose.."
+                    "id": "oskari_analyse_contains",
+                    "label": "Contains"
                 }]
             },
-            "output" : {
-                "label" : "Layout",
-                "color_label" : "Select colors:",
-                "colorset_tooltip" : "Modify colors",
-                "tooltip" : "Setup colors for analysis layout",
+            "params": {
+                "label": "Selected columns",
+                "tooltip": "",
+                "options": [{
+                    "id": "oskari_analyse_all",
+                    "selected": true,
+                    "label": "All"
+                }, {
+                    "id": "oskari_analyse_none",
+                    "label": "None"
+                }, {
+                    "id": "oskari_analyse_select",
+                    "label": "Choose.."
+                }]
+            },
+            "output": {
+                "label": "Layout",
+                "color_label": "Select colors:",
+                "colorset_tooltip": "Modify colors",
+                "tooltip": "Setup colors for analysis layout",
                 "random_color_label": "Random colors"
             },
-            "buttons" : {
-                "save" : "Save",
-                "analyse" : "Analyse",
-                "data" : "Add data",
-                "cancel" : "Cancel",
+            "buttons": {
+                "save": "Save",
+                "analyse": "Analyse",
+                "data": "Add data",
+                "cancel": "Cancel",
                 "ok": "OK"
             },
             "filter": {
@@ -166,7 +165,7 @@ Oskari.registerLocalization({
                     "boolean_operator_missing": "Logical operator missing"
                 }
             },
-            "help" : "Help",
+            "help": "Help",
             "success": {
                 "layerAdded": {
                     "title": "Map layer {layer} added",
@@ -180,10 +179,10 @@ Oskari.registerLocalization({
                 "noLayer": "No layer / features selected",
                 "noAnalyseUnionLayer": "Choose at least another analyse layer",
                 "invalidMethod": "Unknown method: ",
-                "bufferSize" : "Error in buffer size",
-                "illegalCharacters" : "No alfabets - use digits",
-                "nohelp" : "No guide found",
-                "saveFailed" : "Storing analysis failed. Try again a little later.",
+                "bufferSize": "Error in buffer size",
+                "illegalCharacters": "No alfabets - use digits",
+                "nohelp": "No guide found",
+                "saveFailed": "Storing analysis failed. Try again a little later.",
                 "loadLayersFailed": "Analysis layer load failed",
                 "loadLayerTypesFailed": "Analysis or WFS layer field types request failed"
             }
@@ -228,23 +227,23 @@ Oskari.registerLocalization({
                 "cancel": "Back"
             }
         },
-        "personalDataTab" : {
-            "grid" : {
-                "name" : "Name",
+        "personalDataTab": {
+            "grid": {
+                "name": "Name",
                 "delete": " "
             },
-            "title" : "Analysis",
-            "confirmDeleteMsg" : "Do you want to delete:",
-            "buttons" : {
+            "title": "Analysis",
+            "confirmDeleteMsg": "Do you want to delete:",
+            "buttons": {
                 "ok": "OK",
-                "cancel" : "Cancel",
-                "delete" : "Delete"
+                "cancel": "Cancel",
+                "delete": "Delete"
             },
             "notification": {
                 "deletedTitle": "Delete map layer",
                 "deletedMsg": "Map layer deleted"
             },
-            "error" : {
+            "error": {
                 "title": "Error!",
                 "generic": "System error. Please try again later."
             }
