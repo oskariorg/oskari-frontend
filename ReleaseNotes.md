@@ -79,6 +79,10 @@ Added optional feature to enable localization on layer name, description, inspir
 
 Updated Openlayers 2.12 -> 2.13.1 for bundles openlayers/bundle/openlayers-full-map and openlayers/bundle/openlayers-published-map
 
+### Oskari.userinterface.component.Popup
+
+moveTo-function now checks if given selector matches an element before trying to place the popup to prevent "element is undefined" errors.
+
 ## 1.15
 
 ### **Breaking changes**
