@@ -229,7 +229,7 @@ function(instance) {
         
         dialog.show(title, message, buttons);
         dialog.addClass('myplaces2');
-        dialog.moveTo('#toolbar div.toolrow[tbgroup=myplaces]', 'top');
+        dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
     },
         
     /**
@@ -300,7 +300,7 @@ function(instance) {
         
     	dialog.show(title, message, buttons);
     	dialog.addClass('myplaces2');
-    	dialog.moveTo('#toolbar div.toolrow[tbgroup=myplaces]', 'top');
+    	dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
     },
     /**
      * @method sendStopDrawRequest

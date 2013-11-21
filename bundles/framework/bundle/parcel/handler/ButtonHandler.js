@@ -182,7 +182,7 @@ function(instance) {
 
         dialog.show(title, message, buttons);
         dialog.addClass('parcel');
-        dialog.moveTo('#toolbar div.toolrow[tbgroup=parcel]', 'top');
+        dialog.moveTo('#toolbar div.toolrow[tbgroup=default-parcel]', 'top');
     },
     /**
      * @method sendStopDrawRequest
