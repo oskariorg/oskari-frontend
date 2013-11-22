@@ -248,7 +248,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             this._getFeatureControlHover.deactivate();
             this._getFeatureControlSelect.deactivate();
         },
-
         /**
          * Handle _afterMapLayerAddEvent
          * @private
@@ -325,6 +324,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             this._highlightCtrl = new OpenLayers.Control.SelectFeature(this._statsDrawLayer, {
                 hover: true,
                 highlightOnly: true,
+                outFeature: function (feature) {  me._highlightCtrl.unhighlight(feature); me._removePopup();},
                 renderIntent: "temporary"
             });
             this._map.addControl(this._highlightCtrl);

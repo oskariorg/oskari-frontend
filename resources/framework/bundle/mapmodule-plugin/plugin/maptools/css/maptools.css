@@ -1,0 +1,56 @@
+.tools {
+  display: block;
+  z-index: 100000000 !important;
+  text-align: left; }
+  .tools .icon {
+    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/maptools/images/menu-rounded-dark.png');
+    display: inline-block;
+    height: 35px;
+    width: 35px;
+    vertical-align: bottom; }
+  .tools .tools-container {
+    height: auto;
+    background-color: transparent;
+    height: auto;
+    min-height: 60px;
+    z-index: 16000;
+    clear: both; }
+    .tools .tools-container .tools-top-arrow {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid #424343;
+      display: inline-block; }
+    .tools .tools-container .tools-content {
+      background-color: #424343;
+      color: #FFFFFF;
+      border-radius: 6px;
+      padding-bottom: 3px;
+      display: block;
+      width: 100%;
+      clear: both; }
+      .tools .tools-container .tools-content div.toolrow {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0px 10px; }
+        .tools .tools-container .tools-content div.toolrow div.tool {
+          display: inline-block;
+          cursor: pointer; }
+        .tools .tools-container .tools-content div.toolrow div.tool.selected, .tools .tools-container .tools-content div.toolrow div.tool:hover:not(.disabled), .tools .tools-container .tools-content div.toolrow div.tool:active:not(.disabled) {
+          background-color: #212121; }
+      .tools .tools-container .tools-content div.toolrow:first-child {
+        border-top: none; }
+    .tools .tools-container .tool-group-title {
+      font-weight: bold; }
+
+.mapplugins.left .tools .icon {
+  float: left; }
+.mapplugins.left .tools .tools-container .tools-top-arrow {
+  float: left;
+  margin-left: 7.5px; }
+
+.mapplugins.right .tools .icon {
+  float: right; }
+.mapplugins.right .tools .tools-container .tools-top-arrow {
+  float: right;
+  margin-right: 7.5px; }

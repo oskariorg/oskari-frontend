@@ -5,13 +5,13 @@
  * the class itself.
  */
 Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'key-listener-methods', {
-    
+
     /**
      * @method isCtrlKeyDown
      * Returns true if CTRL key is down
      * @return {Boolean} true if CTRL key is down
      */
-    isCtrlKeyDown : function() {
+    isCtrlKeyDown: function () {
         return this._core.isCtrlKeyDown();
     }
-}); 
+});

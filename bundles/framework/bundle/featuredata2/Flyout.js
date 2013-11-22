@@ -369,6 +369,7 @@ function(instance) {
             hiddenFields.push("__fid");
             hiddenFields.push("__centerX");
             hiddenFields.push("__centerY");
+            hiddenFields.push("geometry");
 
             // check if properties (fields or locales) have changed
             if(!panel.fields || 

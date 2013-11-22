@@ -188,10 +188,11 @@ define([
                         max: 100,
                         value: opacity,
                         slide: function (event, ui) {
-                            jQuery(ui.handle).parents('.left-tools').find("#opacity-slider").val(ui.value);
+                            var input = jQuery(ui.handle).parents('.left-tools').find("input.opacity-slider.opacity");
+                            input.val(ui.value);
                         }
                     });
-                    me.$el.find("#opacity-slider").on('change paste keyup', function () {
+                    me.$el.find("input.opacity-slider.opacity").on('change paste keyup', function () {
                         var sldr = me.$el.find('.layout-slider');
                         sldr.slider('value', jQuery(this).val());
                     });
@@ -687,7 +688,7 @@ define([
                 });
 
 
-            },    
+            },
             /**
              * Add capabilities as a drop down list if AJAX call returned any
              *
@@ -784,6 +785,7 @@ define([
              * @method updateLayerValues
              * @param {Object} selectedLayer
              * @param {Object} capability
+             * @param {Object} container
              */
             updateLayerValues: function (selectedLayer, capability, container) {
                 // Clear out the old values
@@ -805,8 +807,14 @@ define([
                     gfiTypeSelect,
                     wmsMetadataId,
                     uuid,
-                    idx;
+                    idx,
+                    opacityInput = container.find(".opacity-slider.opacity"),
+                    opacity = opacityInput.val();
+
                 this.clearAllFields();
+                container.find(".opacity-slider.opacity").val(opacity);
+                container.find('.layout-slider').slider('value', opacity);
+
                 wmsurlField.text(wmsurl);
                 //title
                 jQuery('#add-layer-' + defaultLanguage + '-name').val(selectedLayer.Title);
@@ -847,7 +855,7 @@ define([
                 if (capability.Request.GetFeatureInfo) {
                     gfiType = capability.Request.GetFeatureInfo.Format;
                     gfiTypeSelect = jQuery('#add-layer-responsetype');
-                    gfiTypeSelect.append('<option value="" selected="selected">' + '' + '</option>');
+                    gfiTypeSelect.append('<option value="" selected="selected"></option>');
                     for (i = 0; i < gfiType.length; i += 1) {
                         gfiTypeSelect.append('<option>' + gfiType[i] + '</option>');
                     }
@@ -937,7 +945,9 @@ define([
                 jQuery('#add-layer-responsetype').empty();
                 // Empty the layer style select
                 jQuery('#add-layer-style').empty();
-
+                // opacity has to be set to 100
+                this.$el.find(".admin-add-layer .opacity-slider.opacity").val(100);
+                this.$el.find('.layout-slider').slider('value', 100);
             },
 
             /**

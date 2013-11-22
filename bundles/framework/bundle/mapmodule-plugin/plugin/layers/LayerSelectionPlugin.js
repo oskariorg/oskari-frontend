@@ -413,7 +413,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             // remove text if nothing to select 
             var baseLayersDiv = this.element.find('div.content div.baselayers'),
                 baseLayers = baseLayersDiv.find('div.layer');
-debugger;
             if (baseLayers.length === 0) {
                 var baselayerHeader = this.element.find('div.content div.baseLayerHeader');
                 baselayerHeader.remove();

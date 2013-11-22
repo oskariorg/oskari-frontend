@@ -229,7 +229,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             }
             //parentContainer.append(me.element);
             me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
-
             link = me.element.find('div.icon');
             if (mapUrl) {
                 link.bind('click', function () {

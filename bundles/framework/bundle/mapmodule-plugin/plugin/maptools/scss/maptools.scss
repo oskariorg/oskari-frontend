@@ -1,0 +1,95 @@
+$iconHeight: 35px;
+$iconWidth: $iconHeight;
+
+.tools {
+
+	display: block;
+	z-index: 100000000 !important;
+	text-align: left;
+	
+	.icon {
+		background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/maptools/images/menu-rounded-dark.png');
+		display: inline-block;
+		height: $iconHeight;
+		width: $iconWidth;
+		vertical-align: bottom;
+	}
+	.tools-container {
+		height: auto;
+		background-color: transparent;
+		height: auto;
+		min-height: 60px;
+		z-index: 16000;
+		clear: both;
+
+		.tools-top-arrow {
+			width: 0;
+			height: 0;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-bottom: 10px solid #424343;
+			display: inline-block;
+		}
+
+		.tools-content {
+			background-color: #424343;
+			color: #FFFFFF;
+			border-radius: 6px;
+			padding-bottom: 3px;
+			display: block;
+			width: 100%;
+			clear:both;
+
+			div.toolrow {
+				border-top: 1px solid rgba(255,255,255, 0.1);
+				padding: 0px 10px;
+				div.tool {
+					display: inline-block;
+					cursor: pointer;
+				}
+				div.tool.selected, 
+				div.tool:hover:not(.disabled), 
+				div.tool:active:not(.disabled) {
+					background-color: #212121;
+				}
+			}
+			div.toolrow:first-child {
+				border-top: none;			
+			}
+		}
+
+		.tool-group-title {
+			font-weight: bold;
+		}
+	}
+}
+.mapplugins.left {
+	.tools {
+		.icon {
+			float: left;
+		}
+		.tools-container {
+			.tools-top-arrow {
+				float: left;
+				margin-left: ($iconWidth / 2 - 10);
+			}
+		}
+	}
+}
+.mapplugins.right {
+	.tools {
+		.icon {
+			float: right;
+		}
+		.tools-container {
+			.tools-top-arrow {
+				float: right;
+				margin-right: ($iconWidth / 2 - 10);
+			}
+		}
+	}
+}
+
+
+.tools-content {
+}
