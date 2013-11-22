@@ -98,6 +98,8 @@ function(drawPlugin) {
         var parcelLayer = this.drawPlugin.drawLayer;
         var editLayer = this.drawPlugin.editLayer;
 
+        var attributes = {};
+
         this.map.moveActiveMarker = function(evt) {
             var lonlat = this.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y));
             lonlat.lon -= this.activeMarker.markerMouseOffset.lon;
@@ -271,6 +273,7 @@ function(drawPlugin) {
         var baseMultiPolygon = parcelLayer.features[0];
         if (baseMultiPolygon.geometry.CLASS_NAME !== "OpenLayers.Geometry.MultiPolygon") return;
         this.drawPlugin.backupFeatures = [baseMultiPolygon.clone()];
+        attributes = parcelLayer.features[0].attributes;
 
         // Trivial split
         if (trivial) {
@@ -295,6 +298,9 @@ function(drawPlugin) {
         switch (operatingFeature.geometry.CLASS_NAME) {
             case "OpenLayers.Geometry.Polygon":
                 this.splitHole(baseMultiPolygon,operatingFeature);
+                for (var i = 0; i < this.drawPlugin.drawLayer.features.length; i++) {
+                    this.drawPlugin.drawLayer.features[i].attributes = {name : attributes.tekstiKartalla};
+                }
                 break;
             case "OpenLayers.Geometry.LineString":
                 var newFeatures = this.splitLine(baseMultiPolygon,operatingFeature);
@@ -302,6 +308,7 @@ function(drawPlugin) {
                 for (var i = 0; i < newFeatures[0].geometry.components.length; i++) {
                     this.drawPlugin.drawLayer.addFeatures(new OpenLayers.Feature.Vector(newFeatures[0].geometry.components[i]));
                     this.drawPlugin.drawLayer.features[i].style = this.drawPlugin.basicStyle;
+                    this.drawPlugin.drawLayer.features[i].attributes = {name : attributes.tekstiKartalla};
                 }
                 this.drawPlugin.editLayer.addFeatures(newFeatures[1]);
                 break;

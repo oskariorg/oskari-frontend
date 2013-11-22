@@ -389,7 +389,9 @@ function(instance) {
 		for (var i = 0; i < features.length; i++) {
 			polygons.push(features[i].geometry);
 		}
-		this.drawLayer.addFeatures([new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(polygons))]);
+        var newFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(polygons));
+        newFeature.attributes = features[0].attributes;
+		this.drawLayer.addFeatures([newFeature]);
 
 		this.currentFeatureType = featureType;
 		// Zoom to the loaded feature.
@@ -634,12 +636,9 @@ function(instance) {
 	 * @method updateInfobox
 	 */
 	updateInfobox : function() {
-
 		if (this.selectedFeature > -1) {
-
 			// Set selected
 			this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
-
 		} else {
 			var features = this.drawLayer.features;
 			if (features) {
@@ -651,9 +650,7 @@ function(instance) {
 				this.drawLayer.redraw();
 				this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
 			}
-
 		}
-
 	}
 }, {
 	'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
