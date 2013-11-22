@@ -18,20 +18,20 @@
 
 .piLabel {
   font-weight: bold;
-  padding: 5px 10px 5px 10px;
+  padding: 5px 5px 5px 10px;
   text-align: left; }
 
 .piLabelValue {
   text-align: left;
-  padding: 5px 10px 5px 10px;
+  padding: 5px 5px 5px 10px;
 }
 
 .piValue {
   text-align: right;
-  padding: 5px 10px 5px 10px;
+  padding: 5px 5px 5px 5px;
 }
 
 .piUnit {
   text-align: left;
-  padding: 5px 10px 5px 10px;
+  padding: 5px 10px 5px 5px;
 }
