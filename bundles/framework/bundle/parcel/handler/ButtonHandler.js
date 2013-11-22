@@ -23,7 +23,6 @@ function(instance) {
     this.buttons = {
         'line' : {
             iconCls : 'parcel-draw-line',
-            //iconCls : 'tool-link',
             tooltip : '',
             sticky : true,
             callback : function() {
@@ -182,7 +181,7 @@ function(instance) {
 
         dialog.show(title, message, buttons);
         dialog.addClass('parcel');
-        dialog.moveTo('#toolbar div.toolrow[tbgroup=parcel]', 'top');
+        dialog.moveTo('#toolbar div.toolrow[tbgroup=default-parcel]', 'top');
     },
     /**
      * @method sendStopDrawRequest
