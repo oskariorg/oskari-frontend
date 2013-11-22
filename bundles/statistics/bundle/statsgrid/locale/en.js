@@ -11,6 +11,14 @@ Oskari.registerLocalization({
             "title": "Patio",
             "message": "patiopoc"
         },
+        "tab": {
+            "title": "Indicators",
+            "grid": {
+                "name": "Title",
+                "description": "Description"
+            },
+            "newIndicator": "New indicator"
+        },
         "gender": "Gender",
         "genders": {
             "male": "men",

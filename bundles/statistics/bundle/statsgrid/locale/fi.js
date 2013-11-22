@@ -11,6 +11,14 @@ Oskari.registerLocalization({
 			"title": "Patio",
 			"message": "patiopoc"
 		},
+		"tab": {
+			"title": "Indikaattorit",
+			"grid": {
+				"name": "Otsikko",
+				"description": "Kuvaus"
+			},
+			"newIndicator": "Uusi indikaattori"
+		},
 		"gender": "Sukupuoli",
 		"genders": {
 			"male": "miehet",
