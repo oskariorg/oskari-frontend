@@ -685,7 +685,7 @@ function(drawPlugin) {
                                     olPoints.push(new OpenLayers.Geometry.Point(clipPoint.X/scale, clipPoint.Y/scale));
                                     lastIndex = olPoints.length-1;
                                     olPoints[lastIndex].references = [];
-                                    olPoints[lastIndex].markerPoint = false;
+                                    olPoints[lastIndex].markerPoint = -1;
                                     olPoints[lastIndex].boundaryPoint = false;
                                     olLinearRingPoints.push(olPoints[lastIndex]);
                                 }
@@ -849,7 +849,8 @@ function(drawPlugin) {
                             p: []
                         }
                     };
-                    olEndPoints[k][l].markerPoint = true;
+
+                    olEndPoints[k][l].markerPoint = this.drawPlugin.markerLayer.markers.length+1;
 
                     // References
                     marker.markerMouseOffset = new OpenLayers.LonLat(0,0);
@@ -941,7 +942,7 @@ function(drawPlugin) {
             for (i = 0; i < olNewFeatures[0].geometry.components.length; i++) {
                 var olNewPoints = olNewFeatures[0].geometry.components[i].components[0].components;
                 for (j = 0; j < olNewPoints.length; j++) {
-                   if ((olNewPoints[j].references.length == 1) || (olNewPoints[j].markerPoint)) {
+                   if ((olNewPoints[j].references.length == 1) || (olNewPoints[j].markerPoint >= 0)) {
                        olNewPoints[j].boundaryPoint = true;
                    }
                 }
@@ -1086,6 +1087,7 @@ function(drawPlugin) {
         var p0Ind = -1;
         var i, j, k, l, m, n;
         var marker = this.map.activeMarker;
+        var markers = this.drawPlugin.markerLayer.markers;
         var markerIndexes = [[],[]];
 
         // Search the correct point
@@ -1129,9 +1131,16 @@ function(drawPlugin) {
                 } else {
                     continue;
                 }
-
-            } else if (features[fInd].geometry.components[0].components[i].id === p0[p0Ind].id) { // Marker
-                mInd = i;
+            } else {
+                if (features[fInd].geometry.components[0].components[i].id === p0[p0Ind].id) { // Marker
+                    mInd = i;
+                }
+                // Collect marker indexes
+/*                for (j=0; j<markers.length; j++) {
+                    if (j === features[fInd].geometry.components[0].components[i].markerPoint) {
+                        markerIndexes[0].push([features[fInd].geometry.components[0].components[i].markerPoint,i]);
+                    }
+                }*/
                 if (removed) break;
             }
             i = i+1;
@@ -1151,11 +1160,20 @@ function(drawPlugin) {
                     var prevInd = -1;
                     var nextInd = -1;
                     for (k=0; k<features[j].geometry.components[0].components.length-1; k++) {
-                        if (features[j].geometry.components[0].components[k].id === p0[p0Ind].id) {
-                            cornerInd = k;
-                            prevInd = (k === 0) ? features[j].geometry.components[0].components.length-2 : k-1;
-                            nextInd = (k === features[j].geometry.components[0].components.length-2) ? 0 : k+1;
-                            break;
+                        var markerFound = false;
+                        if (!markerFound) {
+                            if (features[j].geometry.components[0].components[k].id === p0[p0Ind].id) {
+                                cornerInd = k;
+                                prevInd = (k === 0) ? features[j].geometry.components[0].components.length-2 : k-1;
+                                nextInd = (k === features[j].geometry.components[0].components.length-2) ? 0 : k+1;
+                                markerFound = true;
+                            }
+                            // Collect marker indexes
+/*                            for (l=0; l<markers.length; l++) {
+                                if (l === features[j].geometry.components[0].components[k].markerPoint) {
+                                    markerIndexes[1].push([features[j].geometry.components[0].components[k].markerPoint,k]);
+                                }
+                            } */
                         }
                     }
                     if (features[j].geometry.components[0].components[prevInd].boundaryPoint) {
@@ -1171,20 +1189,28 @@ function(drawPlugin) {
                         }
                     }
                     p[pInd].references = [addPolygon.id];
+/*                    for (k=0; k<markerIndexes[1].length; k++) {
+                        if (markerIndexes[1][k][0].id !== features[j].geometry.components[0].components[markerIndexes[1][k][1]]) {
+                            markerIndexes[1][k][0] = features[j].geometry.components[0].components[markerIndexes[1][k][1]+1];
+                        }
+                    }*/
                     break addPoint;
                 }
             }
         }
 
         // Update marker references
-        var markers = this.drawPlugin.markerLayer.markers;
         for (i=0; i<markers.length; i++) {
             marker = markers[i];
+
+            // Marker is always shared by two polygons
             for (k=0; k<2; k++) {
                 var refPoints = null;
                 var markerInd = -1;
                 refPoints = features[k].geometry.components[0].components;
 
+
+                // TODO: Use the markerIndexes array instead of this slow loop
                 for (l=0; l<refPoints.length; l++) {
                     if (refPoints[l].id === marker.reference.point.id) {
                         markerInd = l;
