@@ -1,6 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.service.ParcelWfst
  *
+ *
  * Transforms OpenLayers geometry to WFS Transactions.
  * Also, provides functions to load feature data from the server.
  *
@@ -10,6 +11,7 @@
  * Notice, if queryUrl and transaction Url differ, WFST uses INSERT, otherwise UPDATE.
  * Also, FID is parced to be only a number for WFST action.
  */
+//TODO: refactor with Oskari.mapframework.bundle.parcel.service.PreParcelWFSTStore
 Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelWfst',
 
 /**
@@ -95,7 +97,7 @@ function(instance) {
      * @param {Fuction} cb Requires information about the success as boolean parameter.
      */
     saveRegisterUnit : function(feature, placeName, placeDescription, cb) {
-        this._commitFeature(feature, placeName, placeDescription, this.protocols['registerUnitCommit'], cb);
+     // no use ?   this._commitFeature(feature, placeName, placeDescription, this.protocols['registerUnitCommit'], cb);
     },
 
     /**

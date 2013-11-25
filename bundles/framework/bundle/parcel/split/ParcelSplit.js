@@ -299,7 +299,7 @@ function(drawPlugin) {
             case "OpenLayers.Geometry.Polygon":
                 this.splitHole(baseMultiPolygon,operatingFeature);
                 for (var i = 0; i < this.drawPlugin.drawLayer.features.length; i++) {
-                    this.drawPlugin.drawLayer.features[i].attributes = {name : attributes.tekstiKartalla};
+                    this.drawPlugin.drawLayer.features[i].attributes = {name : attributes.tekstiKartalla, quality : attributes.lahdeaineisto};
                 }
                 break;
             case "OpenLayers.Geometry.LineString":
@@ -308,7 +308,7 @@ function(drawPlugin) {
                 for (var i = 0; i < newFeatures[0].geometry.components.length; i++) {
                     this.drawPlugin.drawLayer.addFeatures(new OpenLayers.Feature.Vector(newFeatures[0].geometry.components[i]));
                     this.drawPlugin.drawLayer.features[i].style = this.drawPlugin.basicStyle;
-                    this.drawPlugin.drawLayer.features[i].attributes = {name : attributes.tekstiKartalla};
+                    this.drawPlugin.drawLayer.features[i].attributes = {name : attributes.tekstiKartalla, quality : attributes.lahdeaineisto};
                 }
                 this.drawPlugin.editLayer.addFeatures(newFeatures[1]);
                 break;

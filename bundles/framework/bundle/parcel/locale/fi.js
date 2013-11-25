@@ -41,8 +41,11 @@ Oskari.registerLocalization({
           "placename": {
               "placeholder": "Määräalan tunnus"
           },
-          "subtitle": {
+          "ptitle": {
               "placeholder": "Piirroksen otsikko"
+          },
+          "subtitle": {
+              "placeholder": "Piirroksen alaotsikko"
           },
           "description": {
               "placeholder": "Yleiskuvaus"
@@ -51,7 +54,7 @@ Oskari.registerLocalization({
               "placeholder": "Kantatilan tunnus"
           },
           "parent_property_quality": {
-              "placeholder": "Kantatilan sijaintitarkkuus"
+              "placeholder": "Kantatilan lähdeaineisto"
           },
           "reporter": {
               "placeholder": "Määräalan laatija"
