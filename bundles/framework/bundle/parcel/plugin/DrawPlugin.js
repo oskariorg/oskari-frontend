@@ -534,6 +534,24 @@ function(instance) {
 
 		}
 	},
+        /**
+         * Returns the parcel geometry from the draw layer
+         * @method
+         */
+        getParcelGeometry : function() {
+            if (this.drawLayer.features.length === 0) return null;
+            var cur = 0;
+            if (this.selectedFeature > -1) cur = this.selectedFeature;
+            return this.drawLayer.features[cur].geometry;
+        },
+        /**
+         * Returns the boundary geometry from the edit layer
+         * @method
+         */
+        getBoundaryGeometry : function() {
+            if (this.editLayer.features.length === 0) return null;
+            return this.editLayer.features[0].geometry;
+        },
 	/**
 	 * @param {String} featureType The feature type of the parcel feature. This is used when feature is commited to the server.
 	 * @method setFeatureType
