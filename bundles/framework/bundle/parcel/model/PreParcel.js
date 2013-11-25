@@ -1,301 +1,111 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory
+ * @class Oskari.mapframework.bundle.parcel.model.PreParcel
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory', 
+Oskari.clazz.define('Oskari.mapframework.bundle.parcel.model.PreParcel',
 
-/**
- * @method create called automatically on construction
- * @static
- */
-function() {
-    this.id = undefined;
-    this.name = undefined;
-    this._isDefault = false;
-    this._isPublic = false;
-    this.lineStyle = '';
-    this.lineCap = 0;
-    this.lineCorner = 0;
-    this.lineWidth = 1;
-    this.lineColor = '3233ff';
-    this.areaLineWidth = 1;
-    this.areaLineCorner = 0;
-    this.areaLineStyle = '';
-    this.areaLineColor = '000000';
-    this.areaFillColor = 'ffde00';
-    this.areaFillStyle = -1;
-    this.dotShape = 1;
-    this.dotSize = 3;
-    this.dotColor = '000000';
-    this.uuid = undefined;
-}, {
     /**
-     * @method setId 
-     * @param {Number} value
+     * @method create called automatically on construction
+     * @static
      */
-    setId : function(value) {
-        this.id = value;
-    },
-    /**
-     * @method getId 
-     * @return {Number} 
-     */
-    getId : function() {
-        return this.id;
-    },
-    /**
-     * @method setName 
-     * @param {String} value
-     */
-    setName : function(value) {
-        this.name = value;
-    },
-    /**
-     * @method getName 
-     * @return {String} 
-     */
-    getName : function() {
-        return this.name;
-    },
-    /**
-     * @method setDefault 
-     * @param {Boolean} value
-     */
-    setDefault : function(value) {
-        this._isDefault = (value == true);
-    },
-    /**
-     * @method isDefault
-     * @return {Boolean}
-     */
-    isDefault : function() {
-        return (this._isDefault == true);
-    },
-    /**
-     * @method setPublic 
-     * @param {Boolean} value
-     */
-    setPublic : function(value) {
-        this._isPublic = (value == true);
-    },
-    /**
-     * @method isPublic
-     * @return {Boolean}
-     */
-    isPublic : function() {
-        return (this._isPublic == true);
-    },
-    /**
-     * @method setLineStyle
-     * @param {Number} value
-     */
-    setLineStyle : function(value) {
-        this.lineStyle = value;
-    },
-    /**
-     * @method getLineStyle
-     * @return {Number}
-     */
-    getLineStyle : function() {
-        return this.lineStyle;
-    },
-    /**
-     * @method setLineCap
-     * @param {Number} value
-     */
-    setLineCap : function(value) {
-        this.lineCap = value;
-    },
-    /**
-     * @method getLineCap
-     * @return {Number}
-     */
-    getLineCap : function() {
-        return this.lineCap;
-    },
-    /**
-     * @method setLineCorner
-     * @param {Number} value
-     */
-    setLineCorner : function(value) {
-        this.lineCorner = value;
-    },
-    /**
-     * @method getLineCorner
-     * @return {Number}
-     */
-    getLineCorner : function() {
-        return this.lineCorner;
-    },
-    /**
-     * @method setLineWidth
-     * @param {Number} value
-     */
-    setLineWidth : function(value) {
-        this.lineWidth = value;
-    },
-    /**
-     * @method getLineWidth 
-     * @return {Number}
-     */
-    getLineWidth : function() {
-        return this.lineWidth;
-    }, 
-    /**
-     * @method setLineColor 
-     * @param {String} value color as hex string 
-     */
-    setLineColor : function(value) {
-        this.lineColor = value;
-    },
-    /**
-     * @method getLineColor 
-     * Returns color as hex string 
-     * @return {String}
-     */
-    getLineColor : function() {
-        return this.lineColor;
-    },
-    /**
-     * @method setAreaLineWidth
-     * @param {Number} value
-     */
-    setAreaLineWidth : function(value) {
-        this.areaLineWidth = value;
-    },
-    /**
-     * @method getAreaLineWidth 
-     * @return {Number}
-     */
-    getAreaLineWidth : function() {
-        return this.areaLineWidth;
-    }, 
-    /**
-     * @method setAreaLineCorner
-     * @param {Number} value
-     */
-    setAreaLineCorner : function(value) {
-        this.areaLineCorner = value;
-    },
-    /**
-     * @method getAreaLineCorner
-     * @return {Number}
-     */
-    getAreaLineCorner : function() {
-        return this.areaLineCorner;
-    },
-    /**
-     * @method setAreaLineStyle
-     * @param {Number} value
-     */
-    setAreaLineStyle : function(value) {
-        this.areaLineStyle = value;
-    },
-    /**
-     * @method getAreaLineStyle
-     * @return {Number}
-     */
-    getAreaLineStyle : function() {
-        return this.areaLineStyle;
-    },
-    /**
-     * @method setAreaLineColor 
-     * @param {String} value color as hex string 
-     */
-    setAreaLineColor : function(value) {
-        this.areaLineColor = value;
-    },
-    /**
-     * @method getAreaLineColor 
-     * Returns color as hex string 
-     * @return {String}
-     */
-    getAreaLineColor : function() {
-        return this.areaLineColor;
-    },
-    /**
-     * @method setAreaFillColor
-     * @param {String} value color as hex string 
-     */
-    setAreaFillColor : function(value) {
-        this.areaFillColor = value;
-    },
-    /**
-     * @method getAreaFillColor
-     * Returns color as hex string 
-     * @return {String} 
-     */
-    getAreaFillColor : function() {
-        return this.areaFillColor;
-    },
-    /**
-     * @method setAreaFillStyle
-     * @param {String} value
-     */
-    setAreaFillStyle : function(value) {
-        this.areaFillStyle = value;
-    },
-    /**
-     * @method getAreaFillStyle
-     * @return {String}
-     */
-    getAreaFillStyle : function() {
-        return this.areaFillStyle;
-    },
-    /**
-     * @method setDotShape
-     * @param {Number} value
-     */
-    setDotShape : function(value) {
-        this.dotShape = value;
-    },
-    /**
-     * @method getDotShape
-     * @return {Number}
-     */
-    getDotShape : function() {
-        return this.dotShape;
-    },
-    /**
-     * @method setDotSize
-     * @param {Number} value
-     */
-    setDotSize : function(value) {
-        this.dotSize = value;
-    },
-    /**
-     * @method getDotSize 
-     * @return {Number}
-     */
-    getDotSize : function() {
-        return this.dotSize;
-    }, 
-    /**
-     * @method setDotColor 
-     * @param {String} value color as hex string 
-     */
-    setDotColor : function(value) {
-        this.dotColor = value;
-    },
-    /**
-     * @method getDotColor 
-     * Returns color as hex string 
-     * @return {String}
-     */
-    getDotColor : function() {
-        return this.dotColor;
-    },
-    /**
-     * @method setUUID 
-     * @param {String} value
-     */
-    setUUID : function(value) {
-        this.uuid = value;
-    },
-    /**
-     * @method getUUID 
-     * @return {String} 
-     */
-    getUUID : function() {
-        return this.uuid;
-    }
-});
+        function () {
+        this.id = undefined;
+        this.uuid = undefined;
+        this.kvp_uid = undefined;
+        this.preparcel_id = undefined;
+        this.title = undefined;
+        this.subtitle = undefined;
+        this.description = undefined;
+        this.parent_property_id = undefined;
+        this.parent_property_quality = undefined;
+        this.reporter = undefined;
+        this.area = 0;
+        this.area_unit = undefined;
+
+    }, {
+        // Generated by http://www.kjetil-hartveit.com/blog/1/setter-and-getter-generator-for-php-javascript-c%2B%2B-and-csharp
+        /*    id bigserial NOT NULL, -- Kohteen yksilöivä id
+         uuid character varying(64),
+         preparcel_id character varying(64) NOT NULL,
+         title text,
+         subtitle text,
+         description text,
+         parent_property_id character varying(64),
+         parent_property_quality character varying(10),
+         reporter character varying(128),
+         area numeric,
+         area_unit character varying(10),  */
+        setId: function (id) {
+            this.id = id;
+        },
+        getId: function () {
+            return this.id;
+        },
+        setUuid: function (uuid) {
+            this.uuid = uuid;
+        },
+        getUuid: function () {
+            return this.uuid;
+        },
+        setKvp_uid: function (kvp_uid) {
+            this.uuid = kvp_uid;
+        },
+        getKvp_uid: function () {
+            return this.kvp_uid;
+        },
+        setPreparcel_id: function (preparcel_id) {
+            this.preparcel_id = preparcel_id;
+        },
+        getPreparcel_id: function () {
+            return this.preparcel_id;
+        },
+        setTitle: function (title) {
+            this.title = title;
+        },
+        getTitle: function () {
+            return this.title;
+        },
+        setSubtitle: function (subtitle) {
+            this.subtitle = subtitle;
+        },
+        getSubtitle: function () {
+            return this.subtitle;
+        },
+        setDescription: function (description) {
+            this.description = description;
+        },
+        getDescription: function () {
+            return this.description;
+        },
+        setParent_property_id: function (parent_property_id) {
+            this.parent_property_id = parent_property_id;
+        },
+        getParent_property_id: function () {
+            return this.parent_property_id;
+        },
+        setParent_property_quality: function (parent_property_quality) {
+            this.parent_property_quality = parent_property_quality;
+        },
+        getParent_property_quality: function () {
+            return this.parent_property_quality;
+        },
+        setReporter: function (reporter) {
+            this.reporter = reporter;
+        },
+        getReporter: function () {
+            return this.reporter;
+        },
+        setArea: function (area) {
+            this.area = area;
+        },
+        getArea: function () {
+            return this.area;
+        },
+        setArea_unit: function (area_unit) {
+            this.area_unit = area_unit;
+        },
+        getArea_unit: function () {
+            return this.area_unit;
+        }
+
+
+    });

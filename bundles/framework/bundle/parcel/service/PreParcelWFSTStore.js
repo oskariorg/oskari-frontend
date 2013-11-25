@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore
+ * @class Oskari.mapframework.bundle.parcel.service.PreParcelWFSTStore
  *
  * Transforms Ext Model & OpenLayers geometry to WFS Transactions
  *
@@ -9,30 +9,28 @@
  *
  * Sample Usage:
  *
- * service = Oskari.bundle_manager.instances[12].impl.myPlacesService; // TEMP
- *
- * storE =
- * Oskari.clazz.create('Oskari.mapframework.service.MyPlacesWFSTStore','http://tiuhti.nls.fi/geoserver/wfs','1234');
- * storE.connect(); storE.getCategories(service); storE.getMyPlaces(service);
  *
  *
- * @TODO DELETE
  *
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore', 
+Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.PreParcelWFSTStore',
 
 /**
  * @method create called automatically on construction
  * @static
- * @param {String} url
- * @param {String} uuid current users uuid
- * @param {String} featureNS
+ * @param {} parcel instance
  */
-function(url, uuid, featureNS) {
-    this.uuid = uuid;
+function(instance) {
+    this.instance = instance;
+    var conf = instance.conf ;
+    this.featureNS = (conf ? conf.wfstFeatureNS : null) || 'http://www.oskari.org';
+    var user = instance.getSandbox().getUser();
+    //TODO: use KVP uuidia
+    this.uuid = user.getUuid();
+
     this.protocols = {};
-    this.url = url;
-    this.featureNS = featureNS;
+    this.url = conf.wfstUrl;
+    this.featureNS =(conf ? conf.wfstFeatureNS : null) || 'http://www.oskari.org';
 }, {
 
     /**
@@ -42,56 +40,56 @@ function(url, uuid, featureNS) {
      */
     connect : function() {
         var url = this.url;
-        this.protocols['categories'] = new OpenLayers.Protocol.WFS({
+        this.protocols['preparcel'] = new OpenLayers.Protocol.WFS({
             version : '1.1.0',
             srsName : 'EPSG:3067',
-            featureType : 'categories',
+            featureType : 'preparcel',
             featureNS : this.featureNS,
             url : url
         });
-        this.protocols['my_places'] = new OpenLayers.Protocol.WFS({
+        this.protocols['preparcel_data'] = new OpenLayers.Protocol.WFS({
             version : '1.1.0',
             srsName : 'EPSG:3067',
             geometryName : 'geometry',
-            featureType : 'my_places',
+            featureType : 'preparcel_data',
             featureNS : this.featureNS,
             url : url
         });
     },
 
     /**
-     * @method getCategories
+     * @method getPreParcels
      *
-     * loads categories from backend to given service filters by
-     * initialised user uuid
+     * loads preparcels from backend to given service filters by
+     * initialised user uuid  ( kvp uuid)
      */
-    getCategories : function(cb) {
+    getPreParcels : function(cb) {
         var uuid = this.uuid;
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
             property : "uuid",
             value : uuid
         });
-        var p = this.protocols['categories'];
+        var p = this.protocols['preparcel'];
 
         var me = this;
 
         p.read({
             filter : uuidFilter,
             callback : function(response) {
-                me._handleCategoriesResponse(response, cb);
+                me._handlePreParcelResponse(response, cb);
             }
         })
 
     },
 
     /**
-     * @method _handleCategoriesResponse
+     * @method _handlePreParcelResponse
      *
-     * processes ajax response from backend adds categories to
+     * processes ajax response from backend adds preparcel to
      * given service
      */
-    _handleCategoriesResponse : function(response, cb) {
+    _handlePreParcelResponse: function (response, cb) {
         var uuid = this.uuid;
         var feats = response.features;
         // if nothing found, stop here and make the callback
@@ -103,37 +101,29 @@ function(url, uuid, featureNS) {
         }
         var list = [];
 
-        // found categories, proceed normally
+        // found preparcel, proceed normally
         for (var n = 0; n < feats.length; n++) {
             var f = feats[n];
             var featAtts = f.attributes;
 
             var id = this._parseNumericId(f.fid);
 
-            var category = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
-            category.setId(id);
-            category.setName(featAtts['category_name']);
-            category.setDefault("true" === featAtts['default']);
-            category.setLineWidth(featAtts['stroke_width']);
-            category.setLineStyle(featAtts['stroke_dasharray']);
-            category.setLineCap(featAtts['stroke_linecap']);
-            category.setLineCorner(featAtts['stroke_linejoin']);
-            category.setLineColor(this._formatColorFromServer(featAtts['stroke_color']));
-            category.setAreaLineWidth(featAtts['border_width']);
-            category.setAreaLineStyle(featAtts['border_dasharray']);
-            category.setAreaLineCorner(featAtts['border_linejoin']);
-            category.setAreaLineColor(this._formatColorFromServer(featAtts['border_color']));
-            category.setAreaFillColor(this._formatColorFromServer(featAtts['fill_color']));
-            category.setAreaFillStyle(featAtts['fill_pattern']);
-            category.setDotShape(featAtts['dot_shape']);
-            category.setDotColor(this._formatColorFromServer(featAtts['dot_color']));
-            category.setDotSize(featAtts['dot_size']);
-            category.setUUID(uuid);
-            if(featAtts['publisher_name']) {
-                category.setPublic(true);
-            }
+            var preparcel = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcel');
+            preparcel.setId(id);
+            preparcel.setUuid(featAtts['uuid']);
+            preparcel.setKvp_uid(featAtts['kvp_uid']);
+            preparcel.setPreparcel_id(featAtts['preparcel_id']);
+            preparcel.setTitle(featAtts['title']);
+            preparcel.setSubtitle(featAtts['subtitle']);
+            preparcel.setDescription(featAtts['description']);
+            preparcel.setParent_property_id(featAtts['parent_property_id']);
+            preparcel.setParent_property_quality(featAtts['parent_property_quality']);
+            preparcel.setReporter(featAtts['reporter']);
+            preparcel.setArea(featAtts['area']);
+            preparcel.setArea_unit(featAtts['area_unit']);
 
-            list.push(category);
+
+            list.push(preparcel);
         }
 
         if (cb) {
@@ -141,72 +131,52 @@ function(url, uuid, featureNS) {
         }
 
     },
-    /**
-     * @method  _formatColorFromServer
-     * @private
-     * Removes prefix #-character if present
-     */
-    _formatColorFromServer : function(color) {
-    	if(color.charAt(0) == '#') {
-    		return color.substring(1);
-    	}
-    	return color;
-  	},
-    /**
-     * @method  _prefixColorForServer
-     * @private
-     * Adds prefix #-character if not present
-     */
-    _prefixColorForServer : function(color) {
-    	if(color.charAt(0) != '#') {
-    		return '#' + color;
-    	}
-    	return color;
-  	},
+        /**
+         * @method savePreParcel
+         *
+         * handles insert & update (NO delete here see next moethd)
+         */
+        savePreParcelSet: function (preparcel,ppdataList, callback) {
+            this.commitPreParcel([preparcel], callback);
+        },
 
     /**
-     * @method commitCategories
+     * @method commitPreParcel
      *
      * handles insert & update (NO delete here see next moethd)
      */
-    commitCategories : function(list, callback) {
+    commitPreParcel: function (list, callback) {
         var uuid = this.uuid;
-        var p = this.protocols['categories'];
+        var p = this.protocols['preparcel'];
         var me = this;
 
         var features = [];
         for (var l = 0; l < list.length; l++) {
-            var m = list[l];
-            var m_id = m.getId();
+            var preparcel = list[l];
+            var p_id = preparcel.getId();
 
-            // TODO: also prefix colors with # so server doesn't need to (handle it on load also)?
             var featAtts = {
-                'category_name' : m.getName(),
-                'default' : m.isDefault(),
-                'stroke_width' : m.getLineWidth(),
-                'stroke_dasharray' : m.getLineStyle(),
-                'stroke_linecap' : m.getLineCap(),
-                'stroke_linejoin' : m.getLineCorner(),
-                'stroke_color' : this._prefixColorForServer(m.getLineColor()),
-                'border_width' : m.getAreaLineWidth(),
-                'border_dasharray' : m.getAreaLineStyle(),
-                'border_linejoin' : m.getAreaLineCorner(),
-                'border_color' : this._prefixColorForServer(m.getAreaLineColor()),
-                'fill_color' : this._prefixColorForServer(m.getAreaFillColor()),
-                'fill_pattern' : m.getAreaFillStyle(),
-                'dot_color' : this._prefixColorForServer(m.getDotColor()),
-                'dot_size' : m.getDotSize(),
-                'dot_shape' : m.getDotShape(),
-                'uuid' : uuid
-            };
-            var feat = new OpenLayers.Feature.Vector(null, featAtts);
+                    'uuid': uuid,
+                    'kvp_uid':  preparcel.getKvp_uid(),
+                    'preparcel_id': preparcel.getPreparcel_id(),
+                    'title': preparcel.getTitle(),
+                    'subtitle': preparcel.getSubtitle(),
+                    'description': preparcel.getDescription(),
+                    'parent_property_id': preparcel.getParent_property_id(),
+                    'parent_property_quality': preparcel.getParent_property_quality(),
+                    'reporter': preparcel.getReporter(),
+                    'area': preparcel.getArea(),
+                    'area_unit': preparcel.getArea_unit()
+                };
 
-            // console.log('saving category - id: ' + m_id);
-            if (!m_id) {
-                feat.toState(OpenLayers.State.INSERT);
-            } else {
-                feat.fid = p.featureType + '.' + m_id;
-                // toState handles some workflow stuff and doesn't work here
+        var feat = new OpenLayers.Feature.Vector(null, featAtts);
+
+        // console.log('saving preparcel - id: ' + m_id);
+        if (!p_id) {
+            feat.toState(OpenLayers.State.INSERT);
+        } else {
+            feat.fid = p.featureType + '.' + p_id;
+            // toState handles some workflow stuff and doesn't work here
                 feat.state = OpenLayers.State.UPDATE;
             }
             features.push(feat);
@@ -214,17 +184,17 @@ function(url, uuid, featureNS) {
         p.commit(features, {
             callback : function(response) {
 
-                me._handleCommitCategoriesResponse(response, list, callback);
+                me._handleCommitPreParcelResponse(response, list, callback);
             }
         });
 
     },
 
     /**
-     * @method _handleCommitCategoriesResponse
+     * @method _handleCommitPreParcelResponse
      *
      */
-    _handleCommitCategoriesResponse : function(response, list, cb) {
+    _handleCommitPreParcelResponse : function(response, list, cb) {
 
         if (response.success()) {
 
@@ -258,12 +228,12 @@ function(url, uuid, featureNS) {
     },
 
     /*
-     * @method deleteCategories
+     * @method deletePreParcel
      *
-     * delete a list of categories from backend
+     * delete a list of preparcel from backend
      */
-    deleteCategories : function(list, callback) {
-        var p = this.protocols['categories'];
+    deletePreParcel : function(list, callback) {
+        var p = this.protocols['preparcel'];
         var uuid = this.uuid;
         var features = [];
         for (var l = 0; l < list.length; l++) {
@@ -288,16 +258,16 @@ function(url, uuid, featureNS) {
         var me = this;
         p.commit(features, {
             callback : function(response) {
-                me._handleDeleteCategoriesResponse(response, list, callback);
+                me._handleDeletePreParcelResponse(response, list, callback);
             }
         });
     },
 
     /**
-     * @method handleDeleteCategoriesResponse
+     * @method handleDeletePreParcelResponse
      *
      */
-    _handleDeleteCategoriesResponse : function(response, list, cb) {
+    _handleDeletePreParcelResponse : function(response, list, cb) {
 
         /**
          * Let's call service
@@ -325,13 +295,13 @@ function(url, uuid, featureNS) {
     },
 
     /**
-     * @method getPlaces
+     * @method getPreParcelData
      *
      * loads places from backend to given service filters by
      * initialised user uuid
      *
      */
-    getMyPlaces : function(cb) {
+    getPreParcel : function(cb) {
         var uuid = this.uuid;
 
         var uuidFilter = new OpenLayers.Filter.Comparison({
@@ -340,25 +310,25 @@ function(url, uuid, featureNS) {
             value : uuid
         });
 
-        var p = this.protocols['my_places'];
+        var p = this.protocols['preparcel_data'];
 
         var me = this;
         p.read({
             filter : uuidFilter,
             callback : function(response) {
-                me._handleMyPlacesResponse(response, cb);
+                me._handlePreParcelDataResponse(response, cb);
             }
         })
 
     },
 
     /**
-     * @method _handleMyPlacesResponse
+     * @method _handlePreParcelDataResponse
      * processes ajax response from backend
      * @param response server response
      * @param cb callback to call with the model list as param
      */
-    _handleMyPlacesResponse : function(response, cb) {
+    _handlePreParcelDataResponse : function(response, cb) {
         var uuid = this.uuid;
         var list = [];
         var feats = response.features;
@@ -374,20 +344,16 @@ function(url, uuid, featureNS) {
             var featAtts = f.attributes;
 
             var id = this._parseNumericId(f.fid);
-            var place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlace');
-            place.setId(id);
-            place.setName(featAtts['name']);
-            place.setDescription(featAtts['place_desc']);
-            place.setLink(featAtts['link']);
-            place.setImageLink(featAtts['image_url']);
-            place.setCategoryID(featAtts['category_id']);
-            place.setCreateDate(featAtts['created']);
-            place.setUpdateDate(featAtts['updated']);
-            place.setGeometry(f.geometry);
-            place.setUUID(uuid);
+            var ppdata = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');
+            ppdata.setId(id);
+            ppdata.setPreparcel_id(featAtts['preparcel_id']);
+            ppdata.setGeom_type(featAtts['geom_type']);
+            ppdata.setCreated(featAtts['created']);
+            ppdata.setGeometry(f.geometry);
+            ppdata.setUpdated(featAtts['updated']);
+            ppdata.setUuid(uuid);
 
-            list.push(place);
-            //service._addMyPlace(place);
+            list.push(ppdata);
         }
 
         if (cb) {
@@ -397,15 +363,15 @@ function(url, uuid, featureNS) {
     },
 
     /**
-     * @method getMyPlacesByIdList
-     * @param idList array of my place ids to be loaded
+     * @method getPreParcelByIdList
+     * @param idList array of pre-parcel ids to be loaded
      * @param cb callback that will receive a list of loaded models as param
      *
      * load places with an id list
      */
-    getMyPlacesByIdList : function(idList, cb) {
+    getPreParcelByIdList : function(idList, cb) {
         var uuid = this.uuid;
-        var p = this.protocols['my_places'];
+        var p = this.protocols['preparcel'];
         //var geoserverId = p.featureType + '.' + idList[0];
 
         var filter = new OpenLayers.Filter.Logical({
@@ -423,18 +389,18 @@ function(url, uuid, featureNS) {
         p.read({
             filter : filter,
             callback : function(response) {
-                me._handleMyPlacesResponse(response, cb);
+                me._handlePreParcelResponse(response, cb);
             }
         })
     },
 
     /**
-     * @method commitPlaces
+     * @method commitPreParcelData
      *
      * handles insert & update (NO delete here see next moethd)
      */
-    commitMyPlaces : function(list, callback) {
-        var p = this.protocols['my_places'];
+    commitPreParcelData : function(list, callback) {
+        var p = this.protocols['preparcel_data'];
         var uuid = this.uuid;
         var features = [];
         for (var l = 0; l < list.length; l++) {
@@ -443,11 +409,8 @@ function(url, uuid, featureNS) {
             var geom = m.getGeometry();
 
             var featAtts = {
-                'name' : m.getName(),
-                'place_desc' : m.getDescription(),
-                'link' : m.getLink(),
-                'image_url': m.getImageLink(),
-                'category_id' : m.getCategoryID(),
+                'geom_type': m.getGeom_type(),
+                'preparcel_id' : m.getPreparcel_id(),
                 'uuid' : uuid
             };
 
@@ -466,17 +429,17 @@ function(url, uuid, featureNS) {
         var me = this;
         p.commit(features, {
             callback : function(response) {
-                me._handleCommitMyPlacesResponse(response, list, callback);
+                me._handleCommitPreParcelDataResponse(response, list, callback);
             }
         });
     },
 
     /**
-     * @method handleCommitMyPlacesResponse
+     * @method handleCommitPreParcelResponse
      *
      * fix ids to model in this response handler
      */
-    _handleCommitMyPlacesResponse : function(response, list, cb) {
+    _handleCommitPreParcelDataResponse : function(response, list, cb) {
         if (response.success()) {
 
             var features = response.reqFeatures;
@@ -508,7 +471,7 @@ function(url, uuid, featureNS) {
                 if (pList.length < 1)cb(false, pList);
                 else cb(true, pList);
             };
-            this.getMyPlacesByIdList(formattedIdList, modelUpdateCb);
+            this.getPreParcelByIdList(formattedIdList, modelUpdateCb);
 
         } else {
 
@@ -517,12 +480,12 @@ function(url, uuid, featureNS) {
     },
 
     /*
-     * @method deleteMyPlaces
+     * @method deletePreParcel
      *
-     * delete a list of my places from backend
+     * delete a list of preparcel_data from backend
      */
-    deleteMyPlaces : function(list, callback) {
-        var p = this.protocols['my_places'];
+    deletePreParcelData : function(list, callback) {
+        var p = this.protocols['preparcel_data'];
         var uuid = this.uuid;
         var features = [];
         for (var l = 0; l < list.length; l++) {
@@ -538,7 +501,7 @@ function(url, uuid, featureNS) {
 
             var feat = new OpenLayers.Feature.Vector(null, featAtts);
 
-            // console.log('Deleting place - id: ' + m_id);
+            // console.log('Deleting preparcel_data - id: ' + m_id);
 
             feat.fid = p.featureType + '.' + m_id;
 
@@ -549,17 +512,17 @@ function(url, uuid, featureNS) {
         var me = this;
         p.commit(features, {
             callback : function(response) {
-                me._handleDeleteMyPlacesResponse(response, list, callback);
+                me._handleDeletePreParcelDataResponse(response, list, callback);
             }
         });
     },
 
     /**
-     * @method handleDeleteMyPlacesResponse
+     * @method handleDeletePreParcelDataResponse
      *
      * update state to local models
      */
-    _handleDeleteMyPlacesResponse : function(response, list, cb) {
+    _handleDeletePreParcelDataResponse : function(response, list, cb) {
 
         /**
          * Let's call service
