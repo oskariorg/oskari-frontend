@@ -225,7 +225,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         }
         if (this.buttons[pGroup]) {
             var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]),
-                group = toolbar.find('div.toolrow[tbgroup=default-' + pGroup + ']'),
+                group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']'),
                 button,
                 buttonContainers,
                 b;

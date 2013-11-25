@@ -5,7 +5,6 @@
  * Oskari.mapframework.gridcalc.QueuedTile objects
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.domain.TileQueue",
-
     /**
      * @method create called automatically on construction
      * @static

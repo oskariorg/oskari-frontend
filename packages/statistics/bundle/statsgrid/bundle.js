@@ -23,7 +23,6 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
 
         "protocol": ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
         "source": {
-
             "scripts": [{
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/bundle/statsgrid/instance.js"
@@ -81,6 +80,12 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/bundle/statsgrid/service/StatisticsService.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/bundle/statsgrid/service/UserIndicatorsService.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/bundle/statsgrid/UserIndicatorsTab.js"
             }, {
                 "type": "text/css",
                 "src": "../../../../resources/statistics/bundle/statsgrid/css/style.css"
@@ -192,7 +197,6 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "Bundle-Verspation": "1.0.0",
                 "Import-Namespace": ["Oskari"],
                 "Import-Bundle": {}
-
             }
         },
 

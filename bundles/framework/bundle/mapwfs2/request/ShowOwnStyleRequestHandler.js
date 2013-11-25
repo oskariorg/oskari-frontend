@@ -4,7 +4,6 @@
  * Handles map selection popup functionality.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequestHandler",
-
     /**
      * @method create called automatically on construction
      * @static

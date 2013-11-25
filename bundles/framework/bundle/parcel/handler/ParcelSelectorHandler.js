@@ -62,8 +62,8 @@ function(instance) {
     loadParcel : function (fid) {
         var me = this;
         me.instance.getService().loadParcel(fid, function(feature) {
-                        me._loadCallback.call(me, feature, me.instance.conf.parcelFeatureType);
-                    });
+            me._loadCallback.call(me, feature, me.instance.conf.parcelFeatureType);
+        });
     },
     /**
      * @property {Object} eventHandlers

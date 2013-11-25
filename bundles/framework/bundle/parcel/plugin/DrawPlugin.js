@@ -197,6 +197,11 @@ function(instance) {
             }
         };
 
+        // handles toolbar buttons related to parcels
+		this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.ButtonHandler", this.instance);
+		this.buttons.start();
+        this.buttons.setEnabled(false);
+
 		this.basicStyle = OpenLayers.Util.applyDefaults(this.basicStyle, OpenLayers.Feature.Vector.style['default']);
 		this.basicStyle.fillColor = "#bbbb00";
 		this.basicStyle.fillOpacity = 0.4;
@@ -389,12 +394,17 @@ function(instance) {
 		for (var i = 0; i < features.length; i++) {
 			polygons.push(features[i].geometry);
 		}
-		this.drawLayer.addFeatures([new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(polygons))]);
+        var newFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(polygons));
+        newFeature.attributes = features[0].attributes;
+		this.drawLayer.addFeatures([newFeature]);
 
 		this.currentFeatureType = featureType;
 		// Zoom to the loaded feature.
 		this._map.zoomToExtent(this.drawLayer.getDataExtent());
 
+        this.buttons.setEnabled(true);
+
+/*
 		// Show tool buttons only after the parcel has been loaded.
 		// Because parcel may be removed only by loading a new one.
 		// The buttons can be shown after this. If a new parcel is loaded,
@@ -404,6 +414,7 @@ function(instance) {
 			this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.ButtonHandler", this.instance);
 			this.buttons.start();
 		}
+*/
 	},
 	/**
 	 * Enables the draw control for given params.drawMode.
@@ -534,6 +545,24 @@ function(instance) {
 
 		}
 	},
+        /**
+         * Returns the parcel geometry from the draw layer
+         * @method
+         */
+        getParcelGeometry : function() {
+            if (this.drawLayer.features.length === 0) return null;
+            var cur = 0;
+            if (this.selectedFeature > -1) cur = this.selectedFeature;
+            return this.drawLayer.features[cur].geometry;
+        },
+        /**
+         * Returns the boundary geometry from the edit layer
+         * @method
+         */
+        getBoundaryGeometry : function() {
+            if (this.editLayer.features.length === 0) return null;
+            return this.editLayer.features[0].geometry;
+        },
 	/**
 	 * @param {String} featureType The feature type of the parcel feature. This is used when feature is commited to the server.
 	 * @method setFeatureType
@@ -612,6 +641,12 @@ function(instance) {
 		var trivialSplit = ( typeof trivial === "undefined" ? false : trivial);
 		var operatingFeature = this.splitter.split(trivialSplit);
 		if (operatingFeature != undefined) {
+
+            this.buttons.setButtonEnabled("line",false);
+            this.buttons.setButtonEnabled("area",false);
+            this.buttons.setButtonEnabled("selector",false);
+            this.buttons.setButtonEnabled("save",true);
+
 			this.controls.select.select(operatingFeature);
 			this.controls.modify.selectFeature(operatingFeature);
 			this.controls.modify.activate();
@@ -628,18 +663,16 @@ function(instance) {
             jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); // IE8
 		}
 	},
+
 	/**
 	 * Updates feature info in info box.
 	 * If there is not a feature in selected state, then 1st feature in drawLayer is selected and updated
 	 * @method updateInfobox
 	 */
 	updateInfobox : function() {
-
 		if (this.selectedFeature > -1) {
-
 			// Set selected
 			this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
-
 		} else {
 			var features = this.drawLayer.features;
 			if (features) {
@@ -651,9 +684,7 @@ function(instance) {
 				this.drawLayer.redraw();
 				this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
 			}
-
 		}
-
 	}
 }, {
 	'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
