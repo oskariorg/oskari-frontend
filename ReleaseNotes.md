@@ -29,6 +29,8 @@ MyPlaces prefix was changed to DrawPlugin. Affected changes are:
 
 Myplaces2 now uses AreaForm, PointForm and LineForm from under divmanazer (VisualizationForm)
 
+Toolbar has changed so that toolbar group has now always toolbar-id prefixed in the name. (Default prefix being 'default-'[buttongroup])
+
 ### Statsgrid
 
 Municipality code was removed from the columns.
