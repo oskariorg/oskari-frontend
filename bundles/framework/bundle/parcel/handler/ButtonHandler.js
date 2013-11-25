@@ -23,7 +23,6 @@ function(instance) {
     this.buttons = {
         'line' : {
             iconCls : 'parcel-draw-line',
-            //iconCls : 'tool-link',
             tooltip : '',
             sticky : true,
             callback : function() {

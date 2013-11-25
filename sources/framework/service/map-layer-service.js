@@ -815,9 +815,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layerModel
          * @param {Object} jsonLayer JSON presentation for the maplayer
+         * @param {Oskari.mapframework.domain.Style} defaultStyle
          * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} returns the same layer object with populated styles for convenience
          */
-        populateStyles: function (layer, jsonLayer) {
+        populateStyles: function (layer, jsonLayer, defaultStyle) {
 
             var styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style'),
                 i,
@@ -854,14 +855,18 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             // Create empty style that works as default if none available
-            if (layer.getStyles().length === 0) {
-
-                style = styleBuilder();
-                style.setName("");
-                style.setTitle("");
-                style.setLegend("");
-                layer.addStyle(style);
-                layer.selectStyle("");
+            if (layer.getStyles().length == 0) {
+                if(defaultStyle) {
+                    layer.addStyle(defaultStyle);
+                    layer.selectStyle(defaultStyle.getName());
+                } else {
+                    style = styleBuilder();
+                    style.setName("");
+                    style.setTitle("");
+                    style.setLegend("");
+                    layer.addStyle(style);
+                    layer.selectStyle("");
+                }
             }
 
             layer.setLegendImage(jsonLayer.legendImage);
@@ -913,7 +918,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             for (i = 0; i < layerList.length; i++) {
                 layer = layerList[i];
-                if (layer.getId()  + '' === id + '') {
+                if (layer.getId() + '' === id + '') {
                     return layer;
                 }
 
