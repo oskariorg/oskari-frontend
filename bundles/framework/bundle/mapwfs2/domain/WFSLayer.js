@@ -22,6 +22,8 @@ function() {
     this._propertyTypes = {}; // name and describeFeatureType type (hashmap, json)
     this._styles = []; /* Array of styles that this layer supports */
     this._customStyle = null;
+
+    this.localization = Oskari.getLocalization('MapWfs2');
 }, {
    /* Layer type specific functions */
 
@@ -202,9 +204,10 @@ function() {
      */
     getStyles : function() {
         if(this.getCustomStyle()) {
+            var locOwnStyle = this.localization['own-style'];
             var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
             style.setName("oskari_custom");
-            style.setTitle("custom");
+            style.setTitle(locOwnStyle);
             style.setLegend("");
             return this._styles.concat([style]);
         }
