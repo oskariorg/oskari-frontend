@@ -1,18 +1,21 @@
 /*
  * @class
  */
-Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', function() {
+Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', function () {
 
 }, {
     /**
      * parses any additional fields to model
      */
-    parseLayerData : function(layer, mapLayerJson, maplayerService) {
-
+    parseLayerData: function (layer, mapLayerJson, maplayerService) {
+        var i,
+            ii,
+            style,
+            wmsUrls;
         layer.setWmtsName(mapLayerJson.wmsName);
         if (mapLayerJson.wmsUrl) {
-            var wmsUrls = mapLayerJson.wmsUrl.split(",");
-            for (var i = 0; i < wmsUrls.length; i++) {
+            wmsUrls = mapLayerJson.wmsUrl.split(",");
+            for (i = 0; i < wmsUrls.length; i++) {
                 layer.addWmtsUrl(wmsUrls[i]);
             }
         }
@@ -21,9 +24,9 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
 
         var styleSpec;
 
-        for (var i = 0, ii = mapLayerJson.styles.length; i < ii; ++i) {
+        for (i = 0, ii = mapLayerJson.styles.length; i < ii; ++i) {
             styleSpec = mapLayerJson.styles[i];
-            var style = styleBuilder();
+            style = styleBuilder();
             style.setName(styleSpec.identifier);
             style.setTitle(styleSpec.identifier);
 
@@ -57,11 +60,12 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
 
             }
 
-            
+
             var wmtsLayerName = layer.getWmtsName();
-            var wmtsLayersArr = mapLayerJson.tileMatrixSetData.contents.layers;
-            for (var n = 0; n < wmtsLayersArr.length; n++) {
-                if (wmtsLayersArr[n].identifier == wmtsLayerName) {
+            var wmtsLayersArr = mapLayerJson.tileMatrixSetData.contents.layers,
+                n;
+            for (n = 0; n < wmtsLayersArr.length; n++) {
+                if (wmtsLayersArr[n].identifier === wmtsLayerName) {
                     layer.setWmtsLayerDef(wmtsLayersArr[n]);
                     break;
                 }

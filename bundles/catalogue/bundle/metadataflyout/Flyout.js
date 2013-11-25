@@ -9,132 +9,143 @@
  */
 Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
 
-/**
- * @method create called automatically on construction
- * @static
- *
- * Always extend this class, never use as is.
- */
-function(instance, locale) {
+    /**
+     * @method create called automatically on construction
+     * @static
+     *
+     * Always extend this class, never use as is.
+     */
 
-	/* @property instance bundle instance */
-	this.instance = instance;
+    function (instance, locale) {
 
-	/* @property locale locale for this */
-	this.locale = locale;
+        /* @property instance bundle instance */
+        this.instance = instance;
 
-	/* @property container the DIV element */
-	this.container = null;
+        /* @property locale locale for this */
+        this.locale = locale;
 
-	this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
+        /* @property container the DIV element */
+        this.container = null;
 
-	/* @property accordion */
-	this.accordion = null;
-	this.pages = {};
+        this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
 
-}, {
-	getName : function() {
-		return 'Oskari.catalogue.bundle.metadataflyout.Flyout';
-	},
-	setEl : function(el, width, height) {
-		this.container = jQuery(el);
-	},
-	startPlugin : function() {
-		var locale = this.locale;
+        /* @property accordion */
+        this.accordion = null;
+        this.pages = {};
 
-		var me = this;
+    }, {
+        getName: function () {
+            return 'Oskari.catalogue.bundle.metadataflyout.Flyout';
+        },
+        setEl: function (el, width, height) {
+            this.container = jQuery(el);
+        },
+        startPlugin: function () {
+            var me = this;
+            var locale = me.locale;
+            var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+            me.accordion = accordion;
 
-		var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-		this.accordion = accordion;
+            accordion.insertTo(me.container);
 
-		accordion.insertTo(this.container);
+        },
+        stopPlugin: function () {
+            var p;
+            for (p in this.pages) {
+                if (this.pages.hasOwnProperty(p)) {
+                    this.pages[p].destroy();
+                    delete this.pages[p];
+                }
+            }
+            this.container.empty();
+        },
+        getTitle: function () {
+            return this.locale.title;
+        },
+        getDescription: function () {
 
-	},
-	stopPlugin : function() {
-		for(p in this.pages ) {
-			this.pages[p].destroy();
-			delete this.pages[p];
-		}
-		this.container.empty();
-	},
-	getTitle : function() {
-		return this.locale.title;
-	},
-	getDescription : function() {
+        },
+        getOptions: function () {
 
-	},
-	getOptions : function() {
+        },
+        setState: function (state) {
+            this.state = state;
 
-	},
-	setState : function(state) {
-		this.state = state;
+        },
+        /**
+         * @method scheduleShowMetadata
+         *
+         * this 'schedules' asyncronous loading
+         */
+        scheduleShowMetadata: function (allMetadata) {
 
-	},
-	/**
-	 * @method scheduleShowMetadata
-	 *
-	 * this 'schedules' asyncronous loading
-	 */
-	scheduleShowMetadata : function(allMetadata) {
-		
-		var accordion = this.accordion;
-		for(p in this.pages ) {
-			var pageInfo = this.pages[p];
-			if( !pageInfo ) {	
-				continue;
-			}
-			this.pages[p] = null;
-			pageInfo.page.destroy();
-			accordion.removePanel(pageInfo.panel);			
-		}
+            var accordion = this.accordion,
+                p,
+                pageInfo,
+                n,
+                data,
+                page,
+                panel;
 
-			
-		for(var n = 0; n < allMetadata.length; n++) {
-			var data = allMetadata[n];
-			var page = Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage', this.instance, this.locale);
-			page.init();
-			var panel = page.getPanel();
-			accordion.addPanel(panel)
-			if( n == 0) {
-				panel.open();
-			}
-			this.pages[data.uuid||(data.RS_Identifier_CodeSpace+":"+data.RS_Identifier_Code)] = {
-				page: page,
-				panel: panel,
-				data: data
-			}; 
-		}
-		
-		for(p in this.pages ) {
-			var pageInfo = this.pages[p];
-			if( !pageInfo ) {	
-				continue;
-			}
-			var data = pageInfo.data;
-			var page = pageInfo.page
-			page.scheduleShowMetadata(data.uuid, data.RS_Identifier_Code, data.RS_Identifier_CodeSpace);
-		}
-	},
-	/**
-	 * @method setContentState
+            for (p in this.pages) {
+                if (this.pages.hasOwnProperty(p)) {
+                    pageInfo = this.pages[p];
+                    if (pageInfo) {
+                        this.pages[p] = null;
+                        pageInfo.page.destroy();
+                        accordion.removePanel(pageInfo.panel);
+                    }
+                }
+            }
 
-	 * restore state from store
-	 */
-	setContentState : function(contentState) {
-		this.contentState = contentState;
 
-	},
-	/**
-	 * @method getContentState
-	 *
-	 * get state for store
-	 */
-	getContentState : function() {
-		return this.contentState;
-	},
-	resetContentState : function() {
-		this.contentState = {};
-	}
-}, {
-	'protocol' : ['Oskari.userinterface.Flyout']
-});
+            for (n = 0; n < allMetadata.length; n++) {
+                data = allMetadata[n];
+                page = Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage', this.instance, this.locale);
+                page.init();
+                panel = page.getPanel();
+                accordion.addPanel(panel);
+                if (n === 0) {
+                    panel.open();
+                }
+                this.pages[data.uuid || (data.RS_Identifier_CodeSpace + ":" + data.RS_Identifier_Code)] = {
+                    page: page,
+                    panel: panel,
+                    data: data
+                };
+            }
+
+            for (p in this.pages) {
+                if (this.pages.hasOwnProperty(p)) {
+                    pageInfo = this.pages[p];
+                    if (pageInfo) {
+                        data = pageInfo.data;
+                        page = pageInfo.page;
+                        page.scheduleShowMetadata(data.uuid, data.RS_Identifier_Code, data.RS_Identifier_CodeSpace);
+                    }
+                }
+            }
+        },
+        /**
+         * @method setContentState
+         
+         * restore state from store
+         */
+        setContentState: function (contentState) {
+            this.contentState = contentState;
+
+        },
+        /**
+         * @method getContentState
+         *
+         * get state for store
+         */
+        getContentState: function () {
+            return this.contentState;
+        },
+        resetContentState: function () {
+            this.contentState = {};
+        }
+    }, {
+        'protocol': ['Oskari.userinterface.Flyout']
+    });

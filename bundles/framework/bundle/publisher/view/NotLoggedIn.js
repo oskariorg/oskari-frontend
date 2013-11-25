@@ -29,8 +29,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.NotLoggedIn',
          */
         render: function (container) {
             var me = this,
-            	conf = me.instance.conf,
-            	sandbox = me.instance.getSandbox(),
+                conf = me.instance.conf,
+                sandbox = me.instance.getSandbox(),
                 content = me.template.clone(),
                 login = me.loginTemplate.clone(),
                 loginUrl = null,
@@ -40,8 +40,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.NotLoggedIn',
                 registerTmp = register.find("a");
 
             if (conf) {
-            	loginUrl = sandbox.getLocalizedProperty(conf.loginUrl);
-            	registerUrl = sandbox.getLocalizedProperty(conf.registerUrl);
+                loginUrl = sandbox.getLocalizedProperty(conf.loginUrl);
+                registerUrl = sandbox.getLocalizedProperty(conf.registerUrl);
             }
             content.append(me.loc.text);
             container.append(content);

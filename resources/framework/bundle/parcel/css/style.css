@@ -5,6 +5,10 @@ div.parcelform div.help {
 div.parcelform div.field {
   padding-bottom: 10px; }
 
+div.parcelform {
+  width: 300px;
+  height: 500px}
+
 div.parcelform input {
   width: 80%; }
 
@@ -25,6 +29,4 @@ circle.parceleditor {
   cursor: move; }
 
 #contentMap div.basic_printout {
-  left: auto ! important;
-}
-
+  left: auto !important; }

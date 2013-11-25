@@ -23,15 +23,12 @@
 
 .piLabelValue {
   text-align: left;
-  padding: 2px 5px 5px 2px;
-}
+  padding: 2px 5px 5px 2px; }
 
 .piValue {
   text-align: right;
-  padding: 5px 5px 5px 5px;
-}
+  padding: 5px 5px 5px 5px; }
 
 .piUnit {
   text-align: left;
-  padding: 5px 10px 5px 5px;
-}
+  padding: 5px 10px 5px 5px; }
