@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         // templates for tools-mapplugin
         templates: {
             main: jQuery(
-                '<div class="mapplugin tools">'+
+                '<div class="mapplugin tools">' +
                     "<div class='icon'></div>" +
                     "<div class='tools-container'>" +
                         "<div class='olPopupContent'>" +
@@ -297,7 +297,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     me.templates.container
                         .clone()
                         .attr("id", containers[i])
-                        .appendTo(wrapper)
+                        .appendTo(wrapper);
                 }
             }
 
