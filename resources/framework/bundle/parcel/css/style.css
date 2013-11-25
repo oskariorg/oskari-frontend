@@ -5,12 +5,12 @@ div.parcelform div.help {
 div.parcelform div.field {
   padding-bottom: 10px; }
 
-div.parcelform  {
+div.parcelform {
   width: 300px;
-  height: 450px}
+  height: 450px; }
 
 div.parcelform input {
-    width: 80%; }
+  width: 80%; }
 
 div.parcelform textarea, div.parcelform select {
   width: 80%; }
@@ -23,12 +23,10 @@ div.parcel div.buttons div.button {
   box-shadow: 5px 5px 5px #888; }
 
 .divmanazerpopup.parcel {
-  max-width:260px; }
+  max-width: 260px; }
 
 circle.parceleditor {
   cursor: move; }
 
 #contentMap div.basic_printout {
-  left: auto ! important;
-}
-
+  left: auto !important; }
