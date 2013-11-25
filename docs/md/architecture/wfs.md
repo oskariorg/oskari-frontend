@@ -112,6 +112,7 @@ Service channels are implemented so that every channel does just one specific ta
 8. /service/wfs/setFilter
 9. /service/wfs/setMapLayerVisibility
 10. /service/wfs/highlightFeatures
+11. /service/wfs/setMapLayerCustomStyle
 
 #### /service/wfs/init
 
@@ -638,6 +639,120 @@ Sends only image
 
 - /wfs/image
 - /error
+
+
+#### /service/wfs/setMapLayerCustomStyle
+
+##### Parameters
+
+<table>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
+		<td>fill_color</td>
+		<td>String</td>
+		<td>area fill color</td>
+	</tr>
+	<tr>
+		<td>fill_pattern</td>
+		<td>int</td>
+		<td>area fill style</td>
+	</tr>
+	<tr>
+		<td>border_color</td>
+		<td>String</td>
+		<td>area line color</td>
+	</tr>
+	<tr>
+		<td>border_linejoin</td>
+		<td>String</td>
+		<td>area line corner</td>
+	</tr>
+	<tr>
+		<td>border_dasharray</td>
+		<td>String</td>
+		<td>area line style</td>
+	</tr>
+	<tr>
+		<td>border_width</td>
+		<td>int</td>
+		<td>area line width</td>
+	</tr>
+	<tr>
+		<td>stroke_linecap</td>
+		<td>String</td>
+		<td>line cap</td>
+	</tr>
+	<tr>
+		<td>stroke_color</td>
+		<td>String</td>
+		<td>line color</td>
+	</tr>
+	<tr>
+		<td>stroke_linejoin</td>
+		<td>String</td>
+		<td>line corner</td>
+	</tr>
+	<tr>
+		<td>stroke_dasharray</td>
+		<td>String</td>
+		<td>line style</td>
+	</tr>
+	<tr>
+		<td>stroke_width</td>
+		<td>int</td>
+		<td>line width</td>
+	</tr>
+	<tr>
+		<td>dot_color</td>
+		<td>String</td>
+		<td>point color</td>
+	</tr>
+	<tr>
+		<td>dot_shape</td>
+		<td>int</td>
+		<td>point shape</td>
+	</tr>
+	<tr>
+		<td>dot_size</td>
+		<td>int</td>
+		<td>point size</td>
+	</tr>
+</table>
+
+##### Example
+
+```javascript
+{
+		"layerId":216,
+		"fill_color":"ffde00",
+		"fill_pattern":-1,
+		"border_color":"000000",
+		"border_linejoin":"mitre",
+		"border_dasharray":"",
+		"border_width":1,
+		"stroke_linecap":"butt",
+		"stroke_color":"3233ff",
+		"stroke_linejoin":"mitre",
+		"stroke_dasharray":"",
+		"stroke_width":1,
+		"dot_color":"000000",
+		"dot_shape":1,
+		"dot_size":3
+}
+```
+
+##### Response channels
+
+Doesn't return anything
 
 
 ### Client channels
