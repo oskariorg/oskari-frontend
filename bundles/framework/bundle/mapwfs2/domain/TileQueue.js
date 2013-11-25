@@ -12,7 +12,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.domain.TileQueue",
  */
 function() {
     /** @property {Oskari.mapframework.gridcalc.QueuedTile[]} queue
-     *  	tile queue
+     *      tile queue
      */
     this.queue = [];
 }, {

@@ -148,7 +148,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     }
                 }
             ];
-
         },
         /**
          * @method register
@@ -289,6 +288,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             // TODO: containers? 
             // I guess the idea is to have some kind of toolbar container vs. tool's content container
 
+
             if (!me.element) {
                 me.element = me.template.clone();
                 var wrapper = me.element.find('div.tools-content');
@@ -299,6 +299,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                         .attr("id", containers[i])
                         .appendTo(wrapper)
                 }
+            }
+
+            if (this.conf && this.conf.toolStyle) {
+                this.changeToolStyle(this.conf.toolStyle, me.element);
             }
 
             // add classes (top, bottom, left, right, center)
@@ -336,9 +340,67 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         getToolOptions: function() {
             var me = this;
             return me.buttonGroups;
+        },
+        /**
+         * Changes the tool style of the plugin
+         *
+         * @method changeToolStyle
+         * @param {Object} style
+         * @param {jQuery} div
+         */
+        changeToolStyle: function (style, div) {
+            div = div || this.element;
+            var me = this;
+
+            if (!style || !div) {
+                return;
+            }
+
+            var resourcesPath = this.getMapModule().getImageUrl(),
+                imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/maptools/images/',
+                styledImg = imgPath + 'menu-' + style + '.png',                
+                icon = div.find('.icon'),
+                toolsContent = div.find('.tools-content'),
+                blackOrWhite = style.split("-")[1];
+
+            icon.css({
+                'background-image': 'url("' + styledImg + '")'
+            });
+
+            if(blackOrWhite == "dark") {
+                toolsContent.removeClass('light').addClass('dark');//css({'background-color': '#424343'})                
+            } else {
+                toolsContent.removeClass('dark').addClass('light')//css({'background-color': '#ffffff'})
+            }
+
+            var toolbarContent = me.element.find('.tools-content');
+            for (var key in me.buttonGroups) {
+                var confGroup = me.buttonGroups[key];
+                var domGroup = toolbarContent.find('div.toolrow[tbgroup='+me.toolbarId + '-' +confGroup.name+']');
+                for(var buttonKey in confGroup.buttons) {
+                    var confButton = confGroup.buttons[buttonKey];
+                    var iconClassParts = confButton.iconCls.split("-");
+                    var iconClass = iconClassParts[0];
+                    var lastInd = iconClassParts.length - 1;
+                    if(!(iconClassParts[lastInd] == "dark" || iconClassParts[lastInd] == "light")) {
+                        iconClassParts.push('dark');
+                        lastInd++;
+                    }
+                    for(var i = 1; i < iconClassParts.length; i++) {
+                        if(i < lastInd) {
+                            iconClass += '-' + iconClassParts[i];
+                        } else {
+                            iconClass += '-' + blackOrWhite; //i.e. "rounded-light"
+                        }
+                    }
+                    //var color = iconClass[iconClass.length-1];
+                    var domButton = domGroup.find('.'+confButton.iconCls)
+                        .removeClass(confButton.iconCls)
+                        .addClass(iconClass);
+                    confButton.iconCls = iconClass;
+                }
+            }
         }
-
-
 
     }, {
         /**

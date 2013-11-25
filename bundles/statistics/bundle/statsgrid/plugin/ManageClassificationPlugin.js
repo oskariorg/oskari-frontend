@@ -1014,7 +1014,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
             me.dialog.addClass('tools_selection');
             me.dialog.show(this._locale.colorset.themeselection, me.content, [cancelBtn]);
-            //dialog.moveTo('#toolbar div.toolrow[tbgroup=selectiontools]', 'top');
+            //dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
         },
         /**
          * @method  _createColorTable

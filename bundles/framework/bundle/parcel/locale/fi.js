@@ -24,8 +24,9 @@ Oskari.registerLocalization({
           "tooltip": "Tyhjennä"
       },
       "save": {
-          "tooltip": "Tulosta piirros ja/tai tallenna määräala"
-      }
+          "tooltip": "Tee piirros ja tulosta"
+      },
+      "tooltip": "Hae ensin kiinteistöä"
     },
     "buttons": {
       "ok": "OK",

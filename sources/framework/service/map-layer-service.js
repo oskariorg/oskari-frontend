@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         this._mapLayerUrl = mapLayerUrl;
         this._sandbox = sandbox;
         this._allLayersAjaxLoaded = false;
-        this._loadedLayersList = new Array();
+        this._loadedLayersList = [];
         // used to detect duplicate ids since looping through the list is slow
         this._reservedLayerIds = {};
         // used to store sticky layer ids - key = layer id, value = true if sticky (=layer cant be removed)
@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         this.typeMapping = {
             wmslayer: 'Oskari.mapframework.domain.WmsLayer',
             vectorlayer: 'Oskari.mapframework.domain.VectorLayer'
-        },
+        };
 
         /**
          * @property modelBuilderMapping
@@ -104,7 +104,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         addSubLayer: function (parentLayerId, layerModel, suppressEvent) {
             var parentLayer = this.findMapLayer(parentLayerId),
-                subLayers, len, i;
+                subLayers,
+                len,
+                i;
 
             if (parentLayer && (parentLayer.isBaseLayer() || parentLayer.isGroupLayer())) {
                 subLayers = parentLayer.getSubLayers();
@@ -119,8 +121,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
                 if (suppressEvent !== true) {
                     // notify components of added layer if not suppressed
-                    var event = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
-                    this._sandbox.notifyAll(event);
+                    var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
+                    this._sandbox.notifyAll(evt);
                 }
             }
         },
@@ -135,9 +137,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            true to not send event (should only be used on test cases to avoid unnecessary events)
          */
         removeLayer: function (layerId, suppressEvent) {
-            var layer = null;
-            for (var i = 0; i < this._loadedLayersList.length; i++) {
-                if (this._loadedLayersList[i].getId() == layerId) {
+            var layer = null,
+                i;
+            for (i = 0; i < this._loadedLayersList.length; i++) {
+                if ((this._loadedLayersList[i].getId() + '') === (layerId + '')) {
                     layer = this._loadedLayersList[i];
                     this._loadedLayersList.splice(i, 1);
                     break;
@@ -145,8 +148,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             if (layer && suppressEvent !== true) {
                 // notify components of layer removal
-                var event = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'remove');
-                this._sandbox.notifyAll(event);
+                var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'remove');
+                this._sandbox.notifyAll(evt);
             }
             this._reservedLayerIds[layerId] = false;
             // TODO: notify if layer not found?
@@ -164,7 +167,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         removeSubLayer: function (parentLayerId, layerId, suppressEvent) {
             var parentLayer = this.findMapLayer(parentLayerId),
-                subLayers, subLayer, len, i;
+                subLayers,
+                subLayer,
+                len,
+                i;
 
             if (parentLayer && (parentLayer.isBaseLayer() || parentLayer.isGroupLayer())) {
                 subLayers = parentLayer.getSubLayers();
@@ -197,7 +203,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         updateLayer: function (layerId, newLayerConf) {
             //console.log("MapLayerService: updateLayer");
-            var layer = this.findMapLayer(layerId);
+            var layer = this.findMapLayer(layerId),
+                i;
             if (layer) {
                 //console.log("New layer config:");
                 //console.log(newLayerConf);
@@ -266,19 +273,21 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
 
                 if (newLayerConf.wmsUrl) {
-                    layer.setWmsUrl(newLayerConf.wmsUrl);
+                    layer.setWmsUrls(newLayerConf.wmsUrl.split(','));
                 }
 
-                for (var i in newLayerConf.admin) {
-                    if (newLayerConf.admin[i]) {
-                        layer.admin[i] = newLayerConf.admin[i];
+                for (i in newLayerConf.admin) {
+                    if (newLayerConf.admin.hasOwnProperty(i)) {
+                        if (newLayerConf.admin[i]) {
+                            layer.admin[i] = newLayerConf.admin[i];
+                        }
                     }
                 }
 
                 //console.log(layer);
                 // notify components of layer update
-                var event = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
-                this._sandbox.notifyAll(event);
+                var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
+                this._sandbox.notifyAll(evt);
             }
             // TODO: notify if layer not found?
         },
@@ -298,8 +307,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (layer) {
                 layer.setSticky(isSticky);
                 // notify components of layer update
-                var event = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'sticky');
-                this._sandbox.notifyAll(event);
+                var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'sticky');
+                this._sandbox.notifyAll(evt);
             }
             // TODO: notify if layer not found?
         },
@@ -330,7 +339,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     me._loadAllLayersAjaxCallBack(pResp, callbackSuccess);
                 },
                 error: function (jqXHR, textStatus) {
-                    if (callbackFailure && jqXHR.status != 0) {
+                    if (callbackFailure && jqXHR.status !== 0) {
                         callbackFailure();
                     }
                 }
@@ -344,39 +353,46 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @private
          */
         _loadAllLayersAjaxCallBack: function (pResp, callbackSuccess) {
-            var allLayers = pResp.layers;
+            var allLayers = pResp.layers,
+                i,
+                mapLayer,
+                existingLayer,
+                exSubLayers,
+                mapSubLayers,
+                subI,
+                existingSubLayer;
 
-            
-            for (var i = 0; i < allLayers.length; i++) {
 
-                var mapLayer = this.createMapLayer(allLayers[i]);
+            for (i = 0; i < allLayers.length; i++) {
+
+                mapLayer = this.createMapLayer(allLayers[i]);
 
                 if (this._reservedLayerIds[mapLayer.getId()] !== true) {
                     this.addLayer(mapLayer, true);
                 } else {
                     // Set additional data to an existing layer.
-                    var existingLayer = this.findMapLayer(mapLayer.getId());
+                    existingLayer = this.findMapLayer(mapLayer.getId());
 
-                    if (allLayers[i].admin != null) {
+                    if (allLayers[i].admin !== null && allLayers[i].admin !== undefined) {
                         existingLayer.admin = allLayers[i].admin;
                     }
                     if (allLayers[i].names) {
                         existingLayer.names = allLayers[i].names;
                     }
 
-                    if (existingLayer.getSubLayers() != null) { // Set additional data to an sublayers
+                    if (existingLayer.getSubLayers() !== null && existingLayer.getSubLayers() !== undefined) { // Set additional data to an sublayers
 
-                        var exSubLayers = existingLayer.getSubLayers(); 
-                        var mapSubLayers = mapLayer.getSubLayers();
+                        exSubLayers = existingLayer.getSubLayers();
+                        mapSubLayers = mapLayer.getSubLayers();
 
-                        for (var subI = 0; subI < exSubLayers.length; subI++) { 
-                           
-                           var existingSubLayer = exSubLayers[subI]; 
-                            if (exSubLayers[subI].admin != null) { 
+                        for (subI = 0; subI < exSubLayers.length; subI++) {
+
+                            existingSubLayer = exSubLayers[subI];
+                            if (exSubLayers[subI].admin !== null && exSubLayers[subI].admin !== undefined) {
                                 existingSubLayer.admin = mapSubLayers[subI].admin;
                             }
-                            if (exSubLayers[subI].names) { 
-                                existingSubLayer.names = mapSubLayers[subI].names; 
+                            if (exSubLayers[subI].names) {
+                                existingSubLayer.names = mapSubLayers[subI].names;
                             }
                         }
                     }
@@ -384,8 +400,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             // notify components of added layer if not suppressed
             this._allLayersAjaxLoaded = true;
-            var event = this._sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
-            this._sandbox.notifyAll(event);
+            var evt = this._sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
+            this._sandbox.notifyAll(evt);
             if (callbackSuccess) {
                 callbackSuccess();
             }
@@ -416,9 +432,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
          */
         getAllLayersByMetaType: function (type) {
-            var list = [];
-            for (var i = 0; i < this._loadedLayersList.length; ++i) {
-                var layer = this._loadedLayersList[i];
+            var list = [],
+                i,
+                layer;
+            for (i = 0; i < this._loadedLayersList.length; ++i) {
+                layer = this._loadedLayersList[i];
                 if (layer.getMetaType && layer.getMetaType() === type) {
                     list.push(layer);
                 }
@@ -434,9 +452,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
          */
         getLayersOfType: function (type) {
-            var list = [];
-            for (var i = 0; i < this._loadedLayersList.length; ++i) {
-                var layer = this._loadedLayersList[i];
+            var list = [],
+                i,
+                layer;
+            for (i = 0; i < this._loadedLayersList.length; ++i) {
+                layer = this._loadedLayersList[i];
                 if (layer.isLayerOfType(type)) {
                     list.push(layer);
                 }
@@ -508,10 +528,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         createMapLayer: function (mapLayerJson) {
 
             var mapLayer = null;
-            if (mapLayerJson.type == 'base') {
+            if (mapLayerJson.type === 'base') {
                 // base map layer, create base map and its sublayers
                 mapLayer = this._createGroupMapLayer(mapLayerJson, true);
-            } else if (mapLayerJson.type == 'groupMap') {
+            } else if (mapLayerJson.type === 'groupMap') {
                 mapLayer = this._createGroupMapLayer(mapLayerJson, false);
             } else {
                 // create map layer
@@ -519,10 +539,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             // Set additional data
-            if (mapLayer && mapLayerJson.admin != null) {
+            if (mapLayer && mapLayerJson.admin !== null && mapLayerJson.admin !== undefined) {
                 mapLayer.admin = mapLayerJson.admin;
             }
-            if (mapLayer && mapLayerJson.names != null) {
+            if (mapLayer && mapLayerJson.names !== null && mapLayerJson.names !== undefined) {
                 mapLayer.names = mapLayerJson.names;
             }
 
@@ -547,7 +567,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         _createGroupMapLayer: function (baseMapJson, isBase) {
 
-            var baseLayer = this.createLayerTypeInstance('wmslayer'); 
+            var baseLayer = this.createLayerTypeInstance('wmslayer'),
+                tempPartsForMetadata,
+                perm,
+                i,
+                subLayer,
+                subLayerOpacity;
             //Oskari.clazz.create('Oskari.mapframework.domain.WmsLayer');
             if (isBase) {
                 baseLayer.setAsBaseLayer();
@@ -566,8 +591,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             baseLayer.setDataUrl(baseMapJson.dataUrl);
             baseLayer.setMetadataIdentifier(baseMapJson.dataUrl_uuid);
             if (!baseLayer.getMetadataIdentifier() && baseLayer.getDataUrl()) {
-                var tempPartsForMetadata = baseLayer.getDataUrl().split("uuid=");
-                if (tempPartsForMetadata.length == 2) {
+                tempPartsForMetadata = baseLayer.getDataUrl().split("uuid=");
+                if (tempPartsForMetadata.length === 2) {
                     baseLayer.setMetadataIdentifier(tempPartsForMetadata[1]);
                 }
             }
@@ -589,15 +614,17 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             baseLayer.setQueryable(false);
 
             if (baseMapJson.permissions) {
-                for (var perm in baseMapJson.permissions) {
-                    baseLayer.addPermission(perm, baseMapJson.permissions[perm]);
+                for (perm in baseMapJson.permissions) {
+                    if (baseMapJson.permissions.hasOwnProperty(perm)) {
+                        baseLayer.addPermission(perm, baseMapJson.permissions[perm]);
+                    }
                 }
             }
 
             if (baseMapJson.subLayer) {
-                for (var i = 0; i < baseMapJson.subLayer.length; i++) {
+                for (i = 0; i < baseMapJson.subLayer.length; i++) {
                     // Notice that we are adding layers to baselayers sublayers array
-                    var subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
+                    subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
 
                     //if (baseMapJson.subLayer[i].admin) {
                     subLayer.admin = baseMapJson.subLayer[i].admin || {};
@@ -607,11 +634,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
             }
             // Opacity
-            if (baseMapJson.opacity != null) {
+            if (baseMapJson.opacity !== null && baseMapJson.opacity !== undefined) {
                 baseLayer.setOpacity(baseMapJson.opacity);
             } else if (baseLayer.getSubLayers().length > 0) {
-                var subLayerOpacity = baseLayer.getSubLayers()[0].getOpacity();
-                if (subLayerOpacity != null) {
+                subLayerOpacity = baseLayer.getSubLayers()[0].getOpacity();
+                if (subLayerOpacity !== null && subLayerOpacity !== undefined) {
                     baseLayer.setOpacity(subLayerOpacity);
                 } else {
                     baseLayer.setOpacity(100);
@@ -626,7 +653,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         /**
          * Creates an empty domain object instance for given type. Passes params and options to constructor.
          * Given type should match a key in typeMapping, otherwise [null] is returned
-         * 
+         *
          * @method createLayerTypeInstance
          *
          * @param {String} type type of the layer (should match something on the typeMapping)
@@ -653,7 +680,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            parsed layer model that can be added with #addLayer()
          */
         _createActualMapLayer: function (mapLayerJson) {
-            if(!mapLayerJson) {
+            if (!mapLayerJson) {
                 // sandbox.printDebug
                 /*
                  * console.log("[LayersService] " + "Trying to create mapLayer
@@ -662,14 +689,15 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return null;
             }
 
-            var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options);
+            var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options),
+                perm;
             if (!layer) {
                 throw "Unknown layer type '" + mapLayerJson.type + "'";
             }
             //these may be implemented as jsonHandler
-            if (mapLayerJson.type == 'wmslayer') {
+            if (mapLayerJson.type === 'wmslayer') {
                 this._populateWmsMapLayerAdditionalData(layer, mapLayerJson);
-            } else if (mapLayerJson.type == 'vectorlayer') {
+            } else if (mapLayerJson.type === 'vectorlayer') {
                 layer.setStyledLayerDescriptor(mapLayerJson.styledLayerDescriptor);
             }
 
@@ -682,7 +710,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             layer.setId(mapLayerJson.id);
             layer.setName(mapLayerJson.name);
 
-            if (mapLayerJson.opacity != null) {
+            if (mapLayerJson.opacity !== null && mapLayerJson.opacity !== undefined) {
                 layer.setOpacity(mapLayerJson.opacity);
             } else {
                 layer.setOpacity(100);
@@ -698,7 +726,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             layer.setMetadataIdentifier(mapLayerJson.dataUrl_uuid);
             if (!layer.getMetadataIdentifier() && layer.getDataUrl()) {
                 var tempPartsForMetadata = layer.getDataUrl().split("uuid=");
-                if (tempPartsForMetadata.length == 2) {
+                if (tempPartsForMetadata.length === 2) {
                     layer.setMetadataIdentifier(tempPartsForMetadata[1]);
                 }
             }
@@ -729,8 +757,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             // permissions
             if (mapLayerJson.permissions) {
-                for (var perm in mapLayerJson.permissions) {
-                    layer.addPermission(perm, mapLayerJson.permissions[perm]);
+                for (perm in mapLayerJson.permissions) {
+                    if (mapLayerJson.permissions.hasOwnProperty(perm)) {
+                        layer.addPermission(perm, mapLayerJson.permissions[perm]);
+                    }
                 }
             }
 
@@ -762,10 +792,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Oskari.mapframework.domain.WmsLayer} returns the same layer object with populated values for convenience
          */
         _populateWmsMapLayerAdditionalData: function (layer, jsonLayer) {
+            var wmsUrls,
+                i;
             layer.setWmsName(jsonLayer.wmsName);
             if (jsonLayer.wmsUrl) {
-                var wmsUrls = jsonLayer.wmsUrl.split(",");
-                for (var i = 0; i < wmsUrls.length; i++) {
+                wmsUrls = jsonLayer.wmsUrl.split(",");
+                for (i = 0; i < wmsUrls.length; i++) {
                     layer.addWmsUrl(wmsUrls[i]);
                 }
             }
@@ -783,25 +815,30 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layerModel
          * @param {Object} jsonLayer JSON presentation for the maplayer
+         * @param {Oskari.mapframework.domain.Style} defaultStyle
          * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} returns the same layer object with populated styles for convenience
          */
-        populateStyles: function (layer, jsonLayer) {
+        populateStyles: function (layer, jsonLayer, defaultStyle) {
 
-            var styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style');
+            var styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style'),
+                i,
+                styleJson,
+                blnMultipleStyles,
+                style;
 
             if (jsonLayer.styles) {
                 // has styles
-                for (var i = 0; i < jsonLayer.styles.length; i++) {
+                for (i = 0; i < jsonLayer.styles.length; i++) {
 
-                    var styleJson = jsonLayer.styles;
+                    styleJson = jsonLayer.styles;
                     // TODO: can be removed if impl now returns
                     // an array always so loop works properly
-                    var blnMultipleStyles = !(isNaN(i));
+                    blnMultipleStyles = !(isNaN(i));
                     if (blnMultipleStyles) {
                         styleJson = jsonLayer.styles[i];
                     }
 
-                    var style = styleBuilder();
+                    style = styleBuilder();
                     style.setName(styleJson.name);
                     style.setTitle(styleJson.title);
                     style.setLegend(styleJson.legend);
@@ -819,13 +856,17 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             // Create empty style that works as default if none available
             if (layer.getStyles().length == 0) {
-
-                var style = styleBuilder();
-                style.setName("");
-                style.setTitle("");
-                style.setLegend("");
-                layer.addStyle(style);
-                layer.selectStyle("");
+                if(defaultStyle) {
+                    layer.addStyle(defaultStyle);
+                    layer.selectStyle(defaultStyle.getName());
+                } else {
+                    style = styleBuilder();
+                    style.setName("");
+                    style.setTitle("");
+                    style.setLegend("");
+                    layer.addStyle(style);
+                    layer.selectStyle("");
+                }
             }
 
             layer.setLegendImage(jsonLayer.legendImage);
@@ -868,23 +909,27 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *  layerModel if found matching id or null if not found
          */
         findMapLayer: function (id, layerList) {
+            var i,
+                layer,
+                subLayers,
+                subLayer;
             if (!layerList) {
                 layerList = this._loadedLayersList;
             }
-            for (var i = 0; i < layerList.length; i++) {
-                var layer = layerList[i];
-                if (layer.getId() == id) {
+            for (i = 0; i < layerList.length; i++) {
+                layer = layerList[i];
+                if (layer.getId() + '' === id + '') {
                     return layer;
                 }
 
             }
             // didnt find layer from base level, try sublayers
-            for (var i = 0; i < layerList.length; i++) {
-                var layer = layerList[i];
+            for (i = 0; i < layerList.length; i++) {
+                layer = layerList[i];
                 // recurse to sublayers
-                var subLayers = layer.getSubLayers();
-                var subLayer = this.findMapLayer(id, subLayers);
-                if (subLayer != null) {
+                subLayers = layer.getSubLayers();
+                subLayer = this.findMapLayer(id, subLayers);
+                if (subLayer !== null && subLayer !== undefined) {
                     return subLayer;
                 }
             }

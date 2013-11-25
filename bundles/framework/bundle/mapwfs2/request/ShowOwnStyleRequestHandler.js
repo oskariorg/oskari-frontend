@@ -11,8 +11,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
  * @param {Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin} plugin
  */
 function(plugin) {
-	this.plugin = plugin;
-	this.localization = plugin.getLocalization('popup');
+    this.plugin = plugin;
+    this.localization = plugin.getLocalization('popup');
     this.visualizationForm = this.plugin.getVisualizationForm();
 
     /* templates */

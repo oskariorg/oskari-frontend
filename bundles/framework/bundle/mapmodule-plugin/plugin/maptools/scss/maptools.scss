@@ -8,7 +8,7 @@ $iconWidth: $iconHeight;
 	text-align: left;
 	
 	.icon {
-		background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/maptools/images/menu-button-rounded-dark.png');
+		background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/maptools/images/menu-rounded-dark.png');
 		display: inline-block;
 		height: $iconHeight;
 		width: $iconWidth;
@@ -57,6 +57,27 @@ $iconWidth: $iconHeight;
 				border-top: none;			
 			}
 		}
+		.tools-content.dark {
+			background-color: #424343;
+			border: none;
+
+			div.toolrow	div.tool.selected, 
+			div.toolrow	div.tool:hover:not(.disabled), 
+			div.toolrow	div.tool:active:not(.disabled) {
+				background-color: #212121;
+			}
+
+		}
+		.tools-content.light {
+			background-color: #ffffff;
+			border: 1px solid #888;
+
+			div.toolrow	div.tool.selected, 
+			div.toolrow	div.tool:hover:not(.disabled), 
+			div.toolrow	div.tool:active:not(.disabled) {
+				background-color: #eeeeee;
+			}
+		}
 
 		.tool-group-title {
 			font-weight: bold;
@@ -89,7 +110,51 @@ $iconWidth: $iconHeight;
 		}
 	}
 }
-
-
-.tools-content {
+.tool-history-back-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/maptools/images/tool-history-back-dark.png') !important;
+    background-repeat: no-repeat !important;
+}
+.tool-history-back-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/maptools/images/tool-history-back-light.png') !important;
+    background-repeat: no-repeat !important;
+}
+.tool-history-forward-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/maptools/images/tool-history-forward-dark.png') !important;
+    background-repeat: no-repeat !important;
+}
+.tool-history-forward-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/maptools/images/tool-history-forward-light.png') !important;
+    background-repeat: no-repeat !important;
+}
+.tool-measure-line-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/maptools/images/tool-measure-line-dark.png') !important;
+    background-repeat: no-repeat !important;
+}
+.tool-measure-line-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/maptools/images/tool-measure-line-light.png') !important;
+    background-repeat: no-repeat !important;
+}
+.tool-measure-area-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/maptools/images/tool-measure-area-dark.png') !important;
+    background-repeat: no-repeat !important;
+}
+.tool-measure-area-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/maptools/images/tool-measure-area-light.png') !important;
+    background-repeat: no-repeat !important;
 }
