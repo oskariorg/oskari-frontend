@@ -350,6 +350,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          */
         changeToolStyle: function (style, div) {
             div = div || this.element;
+            var me = this;
 
             if (!style || !div) {
                 return;
@@ -358,13 +359,48 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             var resourcesPath = this.getMapModule().getImageUrl(),
                 imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/maptools/images/',
                 styledImg = imgPath + 'menu-' + style + '.png',                
-                icon = div.find('.icon');
+                icon = div.find('.icon'),
+                toolsContent = div.find('.tools-content'),
+                blackOrWhite = style.split("-")[1];
 
             icon.css({
                 'background-image': 'url("' + styledImg + '")'
             });
-        }
 
+            if(blackOrWhite == "dark") {
+                toolsContent.removeClass('light').addClass('dark');//css({'background-color': '#424343'})                
+            } else {
+                toolsContent.removeClass('dark').addClass('light')//css({'background-color': '#ffffff'})
+            }
+
+            var toolbarContent = me.element.find('.tools-content');
+            for (var key in me.buttonGroups) {
+                var confGroup = me.buttonGroups[key];
+                var domGroup = toolbarContent.find('div.toolrow[tbgroup='+me.toolbarId + '-' +confGroup.name+']');
+                for(var buttonKey in confGroup.buttons) {
+                    var confButton = confGroup.buttons[buttonKey];
+                    var iconClassParts = confButton.iconCls.split("-");
+                    var iconClass = iconClassParts[0];
+                    var lastInd = iconClassParts.length - 1;
+                    if(!(iconClassParts[lastInd] == "dark" || iconClassParts[lastInd] == "light")) {
+                        iconClassParts.push('dark');
+                        lastInd++;
+                    }
+                    for(var i = 1; i < iconClassParts.length; i++) {
+                        if(i < lastInd) {
+                            iconClass += '-' + iconClassParts[i];
+                        } else {
+                            iconClass += '-' + blackOrWhite; //i.e. "rounded-light"
+                        }
+                    }
+                    //var color = iconClass[iconClass.length-1];
+                    var domButton = domGroup.find('.'+confButton.iconCls)
+                        .removeClass(confButton.iconCls)
+                        .addClass(iconClass);
+                    confButton.iconCls = iconClass;
+                }
+            }
+        }
 
     }, {
         /**
