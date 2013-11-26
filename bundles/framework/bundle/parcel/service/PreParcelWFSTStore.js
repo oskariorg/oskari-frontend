@@ -40,14 +40,14 @@ function(instance) {
      */
     connect : function() {
         var url = this.url;
-        this.protocols['preparcel'] = new OpenLayers.Protocol.WFS({
+        this.protocols.preparcel = new OpenLayers.Protocol.WFS({
             version : '1.1.0',
             srsName : 'EPSG:3067',
             featureType : 'preparcel',
             featureNS : this.featureNS,
             url : url
         });
-        this.protocols['preparcel_data'] = new OpenLayers.Protocol.WFS({
+        this.protocols.preparcel_data = new OpenLayers.Protocol.WFS({
             version : '1.1.0',
             srsName : 'EPSG:3067',
             geometryName : 'geometry',
@@ -62,6 +62,7 @@ function(instance) {
      *
      * loads preparcels from backend to given service filters by
      * initialised user uuid  ( kvp uuid)
+     * TODO: add kvp_uid filter
      */
     getPreParcels : function(cb) {
         var uuid = this.uuid;
@@ -70,7 +71,7 @@ function(instance) {
             property : "uuid",
             value : uuid
         });
-        var p = this.protocols['preparcel'];
+        var p = this.protocols.preparcel;
 
         var me = this;
 
@@ -147,7 +148,7 @@ function(instance) {
      */
     commitPreParcel: function (list, callback) {
         var uuid = this.uuid;
-        var p = this.protocols['preparcel'];
+        var p = this.protocols.preparcel;
         var me = this;
 
         var features = [];
@@ -233,7 +234,7 @@ function(instance) {
      * delete a list of preparcel from backend
      */
     deletePreParcel : function(list, callback) {
-        var p = this.protocols['preparcel'];
+        var p = this.protocols.preparcel;
         var uuid = this.uuid;
         var features = [];
         for (var l = 0; l < list.length; l++) {
@@ -297,24 +298,24 @@ function(instance) {
     /**
      * @method getPreParcelData
      *
-     * loads places from backend to given service filters by
+     * loads preparcel geometries from backend to given service filters by
      * initialised user uuid
      *
      */
-    getPreParcel : function(cb) {
-        var uuid = this.uuid;
+    getPreParcelData : function(parcel_id, cb) {
 
-        var uuidFilter = new OpenLayers.Filter.Comparison({
+
+        var parcelidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "uuid",
-            value : uuid
+            property : "parcel_id",
+            value : parcel_id
         });
 
-        var p = this.protocols['preparcel_data'];
+        var p = this.protocols.preparcel_data;
 
         var me = this;
         p.read({
-            filter : uuidFilter,
+            filter : parcelidFilter,
             callback : function(response) {
                 me._handlePreParcelDataResponse(response, cb);
             }
@@ -363,44 +364,12 @@ function(instance) {
     },
 
     /**
-     * @method getPreParcelByIdList
-     * @param idList array of pre-parcel ids to be loaded
-     * @param cb callback that will receive a list of loaded models as param
-     *
-     * load places with an id list
-     */
-    getPreParcelByIdList : function(idList, cb) {
-        var uuid = this.uuid;
-        var p = this.protocols['preparcel'];
-        //var geoserverId = p.featureType + '.' + idList[0];
-
-        var filter = new OpenLayers.Filter.Logical({
-            type : OpenLayers.Filter.Logical.AND,
-            filters : [new OpenLayers.Filter.Comparison({
-                type : OpenLayers.Filter.Comparison.EQUAL_TO,
-                property : "uuid",
-                value : uuid
-            }), new OpenLayers.Filter.FeatureId({
-                fids : idList
-            })]
-        });
-
-        var me = this;
-        p.read({
-            filter : filter,
-            callback : function(response) {
-                me._handlePreParcelResponse(response, cb);
-            }
-        })
-    },
-
-    /**
      * @method commitPreParcelData
      *
      * handles insert & update (NO delete here see next moethd)
      */
     commitPreParcelData : function(list, callback) {
-        var p = this.protocols['preparcel_data'];
+        var p = this.protocols.preparcel_data;
         var uuid = this.uuid;
         var features = [];
         for (var l = 0; l < list.length; l++) {
@@ -416,7 +385,7 @@ function(instance) {
 
             var feat = new OpenLayers.Feature.Vector(geom, featAtts);
 
-            // console.log('saving place - id: ' + m_id);
+            // console.log('saving parcel - id: ' + m_id);
             if (!m_id) {
                 feat.toState(OpenLayers.State.INSERT);
             } else {
@@ -437,7 +406,7 @@ function(instance) {
     /**
      * @method handleCommitPreParcelResponse
      *
-     * fix ids to model in this response handler
+     * NO we need this - only preparcel list is needed
      */
     _handleCommitPreParcelDataResponse : function(response, list, cb) {
         if (response.success()) {
@@ -457,7 +426,7 @@ function(instance) {
                         feature.fid = insertIds[i];
                         feature.attributes.id = feature.fid;
                         var id = this._parseNumericId(feature.fid);
-                        list[i].setId(id);
+                        //list[i].setId(id);
                         formattedIdList.push(id);
                     } else {
                         formattedIdList.push(list[i].getId());
@@ -465,14 +434,7 @@ function(instance) {
                     feature.state = null;
                 }
             }
-            // make another roundtrip to get the updated models from server
-            // to get the create/update date
-            var modelUpdateCb = function(pList) {
-                if (pList.length < 1)cb(false, pList);
-                else cb(true, pList);
-            };
-            this.getPreParcelByIdList(formattedIdList, modelUpdateCb);
-
+            cb(true, list);
         } else {
 
             cb(false, list);
@@ -485,7 +447,7 @@ function(instance) {
      * delete a list of preparcel_data from backend
      */
     deletePreParcelData : function(list, callback) {
-        var p = this.protocols['preparcel_data'];
+        var p = this.protocols.preparcel_data;
         var uuid = this.uuid;
         var features = [];
         for (var l = 0; l < list.length; l++) {
