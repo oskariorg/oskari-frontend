@@ -309,33 +309,21 @@ function(config, locale) {
     },
 
     setRegionCategories: function(regionData) {
-        var rLen = regionData.length,
-            i, region;
+        var me = this,
+            lang = Oskari.getLang();
 
-        for (i = 0; i < rLen; ++i) {
-            region = regionData[i];
-            if (this._isAcceptedRegionCategory(region)) {
-                if (!this.regionCategories[region.category]) {
-                    this.regionCategories[region.category] = [];
-                }
-                this.regionCategories[region.category].push({
+        this.regionCategories = _.foldl(regionData, function(result, region) {
+            if (_.contains(me._acceptedRegionCategories, region.category)) {
+                result[region.category] || (result[region.category] = []);
+
+                result[region.category].push({
                     id: region.id,
                     code: region.code,
-                    title: region.title[Oskari.getLang()]
+                    title: region.title[lang]
                 });
             }
-        }
-    },
-
-    _isAcceptedRegionCategory: function(region) {
-        var catLen = this._acceptedRegionCategories.length,
-            i, category;
-
-        for (i = 0; i < catLen; ++i) {
-            category = this._acceptedRegionCategories[i];
-            if (category === region.category) return true;
-        }
-        return false;
+            return result;
+        }, this.regionCategories || {});
     },
 
     /**
@@ -365,12 +353,7 @@ function(config, locale) {
             name : this._locale['sotka'].municipality,
             field : "municipality",
             sortable : true
-        }
-        /*, {
-            id : "code",
-            name : this._locale['sotka'].code,
-            field : "code"
-        }*/];
+        }];
         // options
         var options = {
             enableCellNavigation : true,
@@ -379,25 +362,19 @@ function(config, locale) {
             showHeaderRow: true,
             headerRowHeight: 97
         };
-        var data = [];
-        var rowId = 0;
-        // loop through regiondata and find all the municipalities
-        for (var i = 0; i < regiondata.length; i++) {
-            var indicData = regiondata[i];
 
-            if (indicData["category"] == 'KUNTA') {
-                // add new row with id and name of municipality
-                data[rowId] = {
-                    id : indicData.id,
-                    code : indicData.code,
-                    municipality : indicData.title[Oskari.getLang()],
-                    memberOf: indicData.memberOf,
-                    sel : 'checked'
-                }
-                rowId++;
+        var data = _.foldl(regiondata, function(result, indicator) {
+            if (indicator.category === 'KUNTA') {
+                result.push({
+                    id: indicator.id,
+                    code: indicator.code,
+                    municipality: indicator.title[Oskari.getLang()],
+                    memberOf: indicator.memberOf,
+                    sel: 'checked'
+                });
             }
-
-        }
+            return result;
+        }, []);
         // metadata provider for data view
         var groupItemMetadataProvider = new Slick.Data.GroupItemMetadataProvider();
         // dataview for the grid
@@ -610,11 +587,7 @@ function(config, locale) {
         }
         if (returnItem) {
             var row = this.dataView.getRowById(returnItem.id);
-            if(row){
-                return row;
-            } else {
-                return -1;
-            }
+            return ( row || -1);
         } else {
             return null;
         }
