@@ -3,17 +3,17 @@
 		{
 			"instanceProps": {},
 			"title": "OpenLayers",
-			"bundleinstancename": "openlayers-2_13_1-full-map",
+			"bundleinstancename": "openlayers-default-theme",
 			"fi": "OpenLayers",
 			"sv": "?",
 			"en": "OpenLayers",
-			"bundlename": "openlayers-2_13_1-full-map",
+			"bundlename": "openlayers-default-theme",
 			"metadata": {
 				"Import-Bundle": {
 					"openlayers-default-theme": {
 						"bundlePath": "../../packages/openlayers/bundle/"
 					},
-					"openlayers-2_13_1-full-map": {
+					"openlayers-full-map": {
 						"bundlePath": "../../packages/openlayers/bundle/"
 					}
 				},
