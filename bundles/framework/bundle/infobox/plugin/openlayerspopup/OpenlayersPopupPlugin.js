@@ -6,7 +6,7 @@ jQuery.fn.outerHTML = function (arg) {
 
     // If no items in the collection, return
     if (!this.length) {
-        return typeof val === "undefined" ? this : null;
+        return val === undefined || val === null ? this : null;
     }
     // Getter overload (no argument passed)
     if (!arg) {
@@ -149,7 +149,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             headerWrapper.append(closeButton);
 
             for (var i = 0; i < contentData.length; i++) {
-                if (i != 0) {
+                if (i !== 0) {
                     contentDiv.append(this._contentSeparator.clone());
                 }
                 var html = contentData[i].html;
@@ -190,7 +190,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 contentDiv.outerHTML(),
                 false);
             popup.moveTo = function (px) {
-                if ((px != null) && (this.div != null)) {
+                if ((px !== null && px !== undefined) && (this.div !== null && this.div !== undefined)) {
                     this.div.style.left = px.x + "px";
                     var topy = px.y - 20;
                     this.div.style.top = topy + "px";
@@ -333,7 +333,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             else if (pixels.y < 25) {
                 pany = 25;
             }
-            if (panx != 0 || pany != 0) {
+            if (panx !== 0 || pany !== 0) {
                 this.getMapModule().panMapByPixels(-panx, -pany);
             }
         },
@@ -381,7 +381,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
             layerHeader.find('div.getinforesult_header_title').css({
                 'color': colourScheme.titleColour
-            })
+            });
 
             featureHeader.css({
                 'color': colourScheme.headerColour

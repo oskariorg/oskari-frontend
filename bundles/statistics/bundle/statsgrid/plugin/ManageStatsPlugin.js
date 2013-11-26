@@ -1713,7 +1713,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // lets create a menu when user clicks the button.
             headerMenuPlugin.onBeforeMenuShow.subscribe(function (e, args) {
                 var menu = args.menu,
-                    i;
+                    i,
+                    input;
                 if (args.column.id == 'municipality') {
                     menu.items = [];
                     for (i = 0; i < me.conf.statistics.length; i++) {
@@ -1721,7 +1722,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         var elems = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-total-selects');
 
                         // create input element with localization
-                        var input = elems.find('input').attr({
+                        input = elems.find('input').attr({
                             'id': 'statistics_' + statistic.id
                         });
                         // if variable is visible => check the checkbox
@@ -1729,13 +1730,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             'checked': 'checked'
                         });
                         // create label with localization
-                        elems.find('label').attr('for', 'statistics_' + statistic.id).text(me._locale['statistic'][statistic.id]);
+                        elems.find('label').attr('for', 'statistics_' + statistic.id).text(me._locale.statistic[statistic.id]);
                         // add item to menu
                         menu.items.push({
                             element: elems,
                             command: statistic.id
                         });
-                    };
+                    }
 
                     // check if select rows checkbox should be checked
                     // we need to do something with current state of MVC which is non-existent
@@ -1750,14 +1751,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     // create checkbox for selecting rows toggle
                     var showRows = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-row-selects');
                     // create input element with localization
-                    var input = showRows.find('input').attr({
+                    input = showRows.find('input').attr({
                         'id': 'statsgrid-show-row-selects'
                     });
                     if (selectRowsChecked) {
                         input.attr('checked', 'checked');
                     }
                     // create label with localization
-                    showRows.find('label').attr('for', 'statsgrid-show-row-selects').text(me._locale['selectRows']);
+                    showRows.find('label').attr('for', 'statsgrid-show-row-selects').text(me._locale.selectRows);
                     menu.items.push({
                         element: showRows,
                         command: 'selectRows'
@@ -1792,9 +1793,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 } else if (args.command == 'filterByRegion') {
                     me._createFilterByRegionPopup(args.column, this);
                 } else {
-
                     for (i = 0; i < me.conf.statistics.length; i++) {
-                        var statistic = me.conf.statistics[i]
+                        var statistic = me.conf.statistics[i];
                         if (statistic.id == args.command) {
                             statistic.visible = !statistic.visible;
                             break;
@@ -1823,33 +1823,33 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         _createFilterPopup: function (column, headerMenuPlugin) {
             var me = this;
             var popup = jQuery(me.templates.filterPopup);
-            popup.find('.filter-desc').text(me._locale['indicatorFilterDesc']);
+            popup.find('.filter-desc').text(me._locale.indicatorFilterDesc);
 
             //labels for condition
             var labels = jQuery(me.templates.filterRow);
-            labels.find('.filter-label').text(me._locale['filterIndicator']);
+            labels.find('.filter-label').text(me._locale.filterIndicator);
             labels.find('.filter-value').text(column.name);
             popup.find('.filter-container').append(labels);
 
             // condition (dropdown list of different types of filters + value)
             var condition = jQuery(me.templates.filterRow);
-            condition.find('.filter-label').text(me._locale['filterCondition']);
+            condition.find('.filter-label').text(me._locale.filterCondition);
             var selectCont = jQuery(me.templates.filterSelect);
             var select = selectCont.find('.filter-select');
             select.append(jQuery(me.templates.filterOption).val('')
-                .text(me._locale['filterSelectCondition']));
+                .text(me._locale.filterSelectCondition));
             select.append(jQuery(me.templates.filterOption).val('>')
-                .text(me._locale['filterGT']));
+                .text(me._locale.filterGT));
             select.append(jQuery(me.templates.filterOption).val('>=')
-                .text(me._locale['filterGTOE']));
+                .text(me._locale.filterGTOE));
             select.append(jQuery(me.templates.filterOption).val('=')
-                .text(me._locale['filterE']));
+                .text(me._locale.filterE));
             select.append(jQuery(me.templates.filterOption).val('<=')
-                .text(me._locale['filterLTOE']));
+                .text(me._locale.filterLTOE));
             select.append(jQuery(me.templates.filterOption).val('<')
-                .text(me._locale['filterLT']));
+                .text(me._locale.filterLT));
             select.append(jQuery(me.templates.filterOption).val('...')
-                .text(me._locale['filterBetween']));
+                .text(me._locale.filterBetween));
             condition.find('.filter-value').append(selectCont);
 
             // changing condition should show more input options
