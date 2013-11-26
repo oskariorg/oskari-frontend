@@ -454,26 +454,7 @@ define([
                 if (lcId) {
                     url += "&lcId=" + lcId;
                 }
-/*
-                url += "&type=" + data.type +
-                    "&wmsName=" + data.wmsName +
-                    "&wmsUrl=" + encodeURIComponent(data.wmsUrl) +
-                    "&opacity=" + data.opacity +
-                    "&style=" + data.style +
-                    "&minScale=" + data.minScale +
-                    "&maxScale=" + data.maxScale +
-                    "&epsg=" + data.epsg +
-                    "&orderNumber=" + data.orderNumber +
-                    "&layerType=" + data.layerType +
-                    "&version=" + data.version +
-                    "&legendImage=" + encodeURIComponent(data.legendImage) +
-                    "&inspireTheme=" + data.inspireTheme +
-                    "&dataUrl=" + encodeURIComponent(data.dataUrl) +
-                    "&xslt=" + data.xslt +
-                    "&gfiType=" + data.gfiType +
-                    "&viewPermissions=" + data.viewPermissions +
-                    "&metadataUrl=" + encodeURIComponent(data.metadataUrl);
-                    */
+                
                 for (lang in data.names) {
                     if (data.names.hasOwnProperty(lang)) {
                         //url += "&name" + lang.charAt(0).toUpperCase() + lang.substring(1) + "=" + data.names[lang];
