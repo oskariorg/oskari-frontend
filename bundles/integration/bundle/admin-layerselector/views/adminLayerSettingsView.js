@@ -168,15 +168,18 @@ define([
                 // add it to the DOM
                 if (!me.$el.hasClass('show-edit-layer')) {
                     // decode xslt
+                    // TODO: no longer encoding - remove decoded handling
                     if (me.model && me.model.admin.xslt && !me.model.admin.xslt_decoded) {
-                        me.model.admin.xslt_decoded = me.classes.decode64(me.model.admin.xslt);
+                        //me.model.admin.xslt_decoded = me.classes.decode64(me.model.admin.xslt);
+                        me.model.admin.xslt_decoded = me.model.admin.xslt;
                     }
                     if (me.model &&
                             !me.model.admin.style_decoded &&
                             me.model.admin.style) {
 
-                        styles.push(me.classes.decode64(me.model.admin.style));
-                        me.model.admin.style_decoded = styles;
+                            //styles.push(me.classes.decode64(me.model.admin.style));
+                            styles.push(me.model.admin.style);
+                            me.model.admin.style_decoded = styles;
                     }
                     // add opacity
                     if (me.model && me.model.admin && me.model.admin.opacity !== null && me.model.admin.opacity !== undefined) {
@@ -411,7 +414,7 @@ define([
                 data.opacity = form.find('#opacity-slider').val();
 
                 data.style = form.find('#add-layer-style').val();
-                data.style = me.classes.encode64(data.style); //me.layerGroupingModel.encode64(data.style);
+                //data.style = jQuery.base64.encode(data.style); //me.layerGroupingModel.encode64(data.style);
 
                 if (!data.style) {
                     data.style = '';
@@ -429,7 +432,7 @@ define([
                 data.dataUrl = form.find('#add-layer-datauuid').val();
                 data.metadataUrl = form.find('#add-layer-metadataid').val();
                 data.xslt = form.find('#add-layer-xslt').val();
-                data.xslt = me.classes.encode64(data.xslt); //me.layerGroupingModel.encode64(data.xslt);
+                //data.xslt = me.classes.encode64(data.xslt); //me.layerGroupingModel.encode64(data.xslt);
                 data.gfiType = form.find('#add-layer-responsetype').val();
 
                 if (!data.gfiType) {
@@ -451,7 +454,7 @@ define([
                 if (lcId) {
                     url += "&lcId=" + lcId;
                 }
-
+/*
                 url += "&type=" + data.type +
                     "&wmsName=" + data.wmsName +
                     "&wmsUrl=" + encodeURIComponent(data.wmsUrl) +
@@ -470,26 +473,29 @@ define([
                     "&gfiType=" + data.gfiType +
                     "&viewPermissions=" + data.viewPermissions +
                     "&metadataUrl=" + encodeURIComponent(data.metadataUrl);
+                    */
                 for (lang in data.names) {
                     if (data.names.hasOwnProperty(lang)) {
-                        url += "&name" + lang.charAt(0).toUpperCase() + lang.substring(1) + "=" + data.names[lang];
+                        //url += "&name" + lang.charAt(0).toUpperCase() + lang.substring(1) + "=" + data.names[lang];
+                        data["name" + lang.charAt(0).toUpperCase() + lang.substring(1)] = data.names[lang];
                     }
                 }
+                data.names = undefined;
+                delete data.names;
                 for (lang in data.title) {
                     if (data.title.hasOwnProperty(lang)) {
-                        url += "&title" + lang.charAt(0).toUpperCase() + lang.substring(1) + "=" + data.title[lang];
+                        //url += "&title" + lang.charAt(0).toUpperCase() + lang.substring(1) + "=" + data.title[lang];
+                        data["title" + lang.charAt(0).toUpperCase() + lang.substring(1)] = data.title[lang];
                     }
                 }
+                data.title = undefined;
+                delete data.title;
 
                 jQuery.ajax({
-                    type: "GET",
+                    type: "POST",
+                    data : data,
                     dataType: 'json',
                     //data: {'layer': postData}, // New way
-                    beforeSend: function (x) {
-                        if (x && x.overrideMimeType) {
-                            x.overrideMimeType("application/j-son;charset=UTF-8");
-                        }
-                    },
                     url: url,
                     success: function (resp) {
                         if ((idValue && !resp) ||
@@ -502,8 +508,8 @@ define([
                                 createLayer.find('.admin-add-layer-btn').attr('title', me.instance.getLocalization('admin').addLayerDesc);
                             }
                             form.remove();
-                            resp.admin.style = me.classes.encode64(resp.admin.style);
-                            if (!me.model) {
+                            //resp.admin.style = me.classes.encode64(resp.admin.style);
+                            if (!me.model.getId || !me.model.getId()) {
                                 //trigger event to View.js so that it can act accordingly
                                 accordion.trigger({
                                     type: "adminAction",
