@@ -125,6 +125,27 @@ Oskari.registerLocalization({
 		    "SAIRAANHOITOPIIRI" 	: "Sairaanhoitopiiri",
 		    "SEUTUKUNTA" 			: "Seutukunta",
 		    "SUURALUE" 				: "Suuralue"
-		}
+		},
+		"addDataButton" 			: "Lisää oma",
+		"addDataTitle" 				: "Lisää oma indikaattori",		
+		"openImportDataButton" 		: "Tuo arvot",
+		"addDataMetaTitle" 			: "Otsikko",
+		"addDataMetaTitlePH" 		: "Indikaattorin otsikko",
+		"addDataMetaSources" 		: "Lähde",
+		"addDataMetaSourcesPH" 		: "Datan lähdeviittaus",
+		"addDataMetaDescription" 	: "Kuvaus",
+		"addDataMetaDescriptionPH" 	: "Kuvaus",
+		"addDataMetaReferenceLayer" : "Aineisto",
+		"addDataMetaYear" 			: "Vuosi",
+		"addDataMetaYearPH" 		: "Data on vuodelta",
+		"addDataMetaPublicity" 		: "Julkaistavissa",
+		"municipalityHeader" 		: "Kunnat",
+		"municipalityPlaceHolder"	: "Anna arvo",
+		"formCancel" 				: "Peruuta",
+		"formSubmit" 				: "Tallenna",
+		"cancelButton" 				: "Peruuta",
+		"importDataButton" 			: "Tallenna arvot",
+		"popupTitle" 				: "Tuo arvot",
+		"importDataDescription" 	: "Voit tuoda kunta - arvo -pareja kopioimalla ne tekstikenttään. <br>Jokainen kunta omalle rivilleen ja erottimeksi käy tabulaattori, ':' ja ','<br>Esimerkki 1: Alajärvi, 1234<br>Esimerkki 2: 009	2100"
 	}
 });

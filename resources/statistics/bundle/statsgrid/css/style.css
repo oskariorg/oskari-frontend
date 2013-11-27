@@ -49,7 +49,8 @@
   -moz-box-sizing: border-box;
   -ie-box-sizing: border-box;
   -o-box-sizing: border-box;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  min-width: 470px; }
 
 .statsgrid-csv-button {
   position: absolute;
@@ -73,6 +74,13 @@
 
 .statsgrid .selector-cont select.indi {
   width: 200px; }
+
+.statsgrid .selectors-container .new-indicator-cont {
+  float: left;
+  padding-left: 10px; }
+  .statsgrid .selectors-container .new-indicator-cont input {
+    float: right;
+    margin: 0px; }
 
 .statsgrid .parameters-cont {
   min-height: 115px;
@@ -192,3 +200,62 @@ div.filter-region-select ul {
   right: 5px;
   width: 16px !important;
   height: 16px !important; }
+
+.statsgrid .form-cont {
+  height: 100%;
+  position: relative; }
+  .statsgrid .form-cont .form-head {
+    padding: 5px 10px; }
+  .statsgrid .form-cont .form-show-import {
+    float: right;
+    margin-top: 15px; }
+    .statsgrid .form-cont .form-show-import .import-buton {
+      margin-right: 0px; }
+  .statsgrid .form-cont .form-meta label {
+    display: inline-block;
+    padding-left: 10px;
+    width: 150px;
+    font-size: 14px; }
+  .statsgrid .form-cont .form-meta span {
+    display: inline-block;
+    line-height: 25px;
+    font-size: 14px;
+    font-weight: bold; }
+  .statsgrid .form-cont .municipality-header {
+    margin-top: 30px;
+    padding-left: 10px; }
+    .statsgrid .form-cont .municipality-header label {
+      font-size: 16px;
+      font-weight: bold; }
+    .statsgrid .form-cont .municipality-header hr {
+      border: solid 1px black;
+      margin: 10px 0; }
+  .statsgrid .form-cont .municipalities {
+    position: absolute;
+    bottom: 40px;
+    top: 325px;
+    left: 0px;
+    width: 100%;
+    overflow: auto; }
+    .statsgrid .form-cont .municipalities .municipality-row label {
+      display: inline-block;
+      padding-left: 10px;
+      width: 150px;
+      font-weight: bold;
+      font-size: 14px; }
+  .statsgrid .form-cont .form-submit {
+    height: 40px;
+    position: absolute;
+    bottom: 0px;
+    right: 15px; }
+    .statsgrid .form-cont .form-submit .submit-form-button {
+      float: right;
+      margin: 5px; }
+    .statsgrid .form-cont .form-submit .cancel-form-button {
+      float: right;
+      margin: 5px; }
+
+.import-data-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 10px; }

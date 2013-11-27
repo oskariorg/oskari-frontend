@@ -1,39 +1,30 @@
 div.parcelselectorBase {
-    min-width: 250px;
-}
+  min-width: 250px; }
 
 div.parcelselector {
-    padding: 5px;
-}
+  padding: 5px; }
 
 div.parcelSearchContainer {
-    clear: both;
-    margin-left: 0;
-    position: relative;
-    left: 0;
-    top: 0;
-    overflow: auto;
-    padding: 10px 10px 10px 10px;
-}
+  clear: both;
+  margin-left: 0;
+  position: relative;
+  left: 0;
+  top: 0;
+  overflow: auto;
+  padding: 10px 10px 10px 10px; }
 
 label.parcelSearchType {
-    padding: 0 10px 0 5px;
-}
+  padding: 0 10px 0 5px; }
 
 div.parcelSearchControls {
-    overflow: auto;
-    margin-bottom: 5px;
-    margin-top: 15px;
-}
+  overflow: auto;
+  margin-bottom: 5px;
+  margin-top: 15px; }
 
 div.parcelSearchField {
-    float:left;
-    width:200px;
-}
+  float: left;
+  width: 200px; }
 
 div.parcelSearchButton {
-    float:left;
-    width:50px;
-}
-
-
+  float: left;
+  width: 50px; }

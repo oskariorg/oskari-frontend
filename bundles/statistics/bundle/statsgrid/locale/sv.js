@@ -126,6 +126,7 @@ Oskari.registerLocalization({
             "SAIRAANHOITOPIIRI"     : "Sairaanhoitopiiri",
             "SEUTUKUNTA"            : "Seutukunta",
             "SUURALUE"              : "Suuralue"
-        }
+        },
+        "addDataButton" : "Lisää oma"
     }
 });
