@@ -100,8 +100,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.Flyout',
         createUi: function () {
             var me = this;
 
-            var flyout = jQuery(this.container);
-
             this.view = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.StartView',
                 this.instance,
                 this.instance.getLocalization('StartView'));
@@ -110,6 +108,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.Flyout',
         refresh: function () {
             var flyout = jQuery(this.container);
             flyout.empty();
+            var sandbox = this.instance.getSandbox();
+
+            if (!sandbox.getUser().isLoggedIn()) {
+                this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer',
+                this.instance.getLocalization('notLoggedIn'));
+                this.tabsContainer.insertTo(flyout);
+                return;
+            }
             // Show info or not
             if (jQuery.cookie('analyse_info_seen') !== '1') {
                 this.view.render(flyout);

@@ -6,6 +6,7 @@ Oskari.registerLocalization({
         "flyouttitle": "Analysis",
         "desc": "",
         "btnTooltip": "Analysis",
+        "notLoggedIn": "Only logged user can create analysis. <a href='/web/en/login'>Log in</a>.",
         "AnalyseView": {
             "title": "Analysis",
             "content": {

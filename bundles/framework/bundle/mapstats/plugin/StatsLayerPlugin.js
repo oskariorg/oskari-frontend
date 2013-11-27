@@ -324,6 +324,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 })
             });
             this._map.addLayers([this._statsDrawLayer]);
+
+            // FIXME: this is needed because PorttiMouse isn't handling map moves when dragging started on selected feature
+            // OpenLayers.Control.Navigation below is added because of this and we need to notify that the map has moved manually because of that
             this._statsDrawLayer.events.register("moveend", this._statsDrawLayer, function () {
                 me.mapModule.notifyMoveEnd();
             });
@@ -341,6 +344,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             this._highlightCtrl.activate();
 
             // Navigation also for hovered and selected areas
+            // FIXME: this is only needed because PorttiMouse doesn't work when drag is started on selected feature
             this._navCtrl = new OpenLayers.Control.Navigation();
             this._map.addControl(this._navCtrl);
             var queryableMapLayers = [openLayer];
