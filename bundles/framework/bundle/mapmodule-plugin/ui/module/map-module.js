@@ -554,6 +554,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 projection: this._options.srsName,
                 isBaseLayer: true,
                 center: lonlat,
+                // https://github.com/openlayers/openlayers/blob/master/notes/2.13.md#map-property-fallthrough-defaults-to-false
+                // fallThrough: true is needed for statsgrid drag resizing
+                fallThrough : true,
                 theme: null,
                 zoom: 0,
                 zoomMethod: null
