@@ -124,27 +124,8 @@ if(indicatorData != null) {
         var submit = formSubmit.find('.submit-form-button');
         submit.append(me.localization.formSubmit);
         submit.click(function(e) {
-            var indicatorData = me._gatherData();
-//            var data = me._handleSubmit(e, me)
-            if(indicatorData != null) {
-                $.ajax({
-                    url : me.sandbox.getAjaxUrl() + 'action_route=SaveUserIndicator',
-                    type: "POST",
-                    data : indicatorData,
-                    success: function(data, textStatus, jqXHR){
-                        //data - response from server
-                        me.container.find('.form-cont').remove();
-                        me.container.find('.selectors-container').show();
-                        me.container.find('#municipalGrid').show();
-//TODO testi
-callback(indicatorData);
-//                        callback(indicatorData);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert(textStatus);
-                    }
-                });
-            }
+//            var indicatorData = me._gatherData();
+            me._handleSubmit(e, me, callback);
         })
 
         formCont
@@ -182,34 +163,28 @@ callback(indicatorData);
         me.container.find('.selectors-container').show();
         me.container.find('#municipalGrid').show();
     },
-/*    _handleSubmit: function(e, me) {
-        var data = me._gatherData();
+    _handleSubmit: function(e, me, callback) {
+        var indicatorData = me._gatherData();
 
-        //ToDo send ajax!
-        // 
-
-
-        if(data != null) {
+        if(indicatorData != null) {
             $.ajax({
                 url : me.sandbox.getAjaxUrl() + 'action_route=SaveUserIndicator',
                 type: "POST",
-                data : data,
+                data : indicatorData,
                 success: function(data, textStatus, jqXHR){
                     //data - response from server
                     me.container.find('.form-cont').remove();
                     me.container.find('.selectors-container').show();
                     me.container.find('#municipalGrid').show();
-                    return data;
+                    callback(indicatorData);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                         
+                    alert(me.localization.connectionProblem);
                 }
             });
-
         }
-        return null;
     },
-*/
+
     _parseData: function(e, me, dialog) {
         var inputArray = [];
         var divmanazerpopup = jQuery(e.target)
@@ -278,6 +253,13 @@ callback(indicatorData);
         var json = {};
         var emptyFields = [];
 
+        // IE8 fix
+        if(typeof String.prototype.trim !== 'function') {
+            String.prototype.trim = function() {
+                return this.replace(/^\s+|\s+$/g, ''); 
+            }
+        }
+
         var title = me.container.find('.form-meta .title').find('input').val();
         if(title == null || title.trim() == "") {
             emptyFields.push(me.container.find('.form-meta .title').find('label').text());
@@ -333,15 +315,6 @@ callback(indicatorData);
                     });
                 }
             };
-/*
-
-gender: "total"
-indicator: "127"
-primary value: "8834"
-region: "355"
-year: "2012"
-*/
-
             return json;
         }
     },

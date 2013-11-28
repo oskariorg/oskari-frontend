@@ -127,6 +127,29 @@ Oskari.registerLocalization({
             "SEUTUKUNTA"            : "Seutukunta",
             "SUURALUE"              : "Suuralue"
         },
-        "addDataButton" : "Add indicator"
+        "addDataButton"             : "Add indicator",
+        "addDataTitle"              : "Add your own indicator",
+        "openImportDialogTip"       : "Import data from clipboard",
+        "openImportDataButton"      : "Import data",
+        "addDataMetaTitle"          : "Title",
+        "addDataMetaTitlePH"        : "Indicator's title",
+        "addDataMetaSources"        : "Source",
+        "addDataMetaSourcesPH"      : "Data source",
+        "addDataMetaDescription"    : "Description",
+        "addDataMetaDescriptionPH"  : "Description",
+        "addDataMetaReferenceLayer" : "Reference layer",
+        "addDataMetaYear"           : "Year",
+        "addDataMetaYearPH"         : "Year",
+        "addDataMetaPublicity"      : "Publishable",
+        "municipalityHeader"        : "Municipalities",
+        "municipalityPlaceHolder"   : "Give value",
+        "formCancel"                : "Cancel",
+        "formSubmit"                : "Submit",
+        "cancelButton"              : "Cancel",
+        "importDataButton"          : "Import",
+        "popupTitle"                : "Import data",
+        "importDataDescription"     : "You can bring region value duples by copying them to the textarea. <br>Place every municipality to their own row. You can separate the values with tabulator, ':' or ','<br>Example 1: Alajärvi, 1234<br>Example 2: 009    2100",
+        "failedSubmit"              : "Add indicator's metadata: ",
+        "connectionProblem"         : "We could not save the data due to connection problems"
     }
 });
