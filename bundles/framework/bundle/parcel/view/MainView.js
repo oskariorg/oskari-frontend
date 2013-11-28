@@ -312,7 +312,7 @@ function(instance) {
      * @private
      * @param {Object} values place properties
      */
-    _loadPreParcel : function(values) {
+    _loadPreParcel : function() {
         var me = this;
         // Callback handles the end of the asynchronous operation.
         var serviceCallback = function(blnSuccess, model) {
@@ -322,7 +322,7 @@ function(instance) {
                 me.instance.showMessage('Error in loading preparcel');
             }
         };
-        this.instance.getService().loadPreParcel(me.drawPlugin, values, serviceCallback);
+        this.instance.getService().loadPreParcel(me.drawPlugin, serviceCallback);
     },
 
     /**

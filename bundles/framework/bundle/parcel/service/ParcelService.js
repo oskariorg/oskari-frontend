@@ -187,7 +187,7 @@ function(instance) {
         return mylist;
     },
 
-     loadPreParcel : function(drawplugin, values, cb) {
+     loadPreParcel : function(drawplugin, cb) {
         var me = this;
         var loadedPreParcels = false;
 
