@@ -274,37 +274,56 @@ function(instance) {
         var description = values ? values.desc : undefined;
         this.instance.getService().printPlace(this.drawPlugin.getDrawing(), this.drawPlugin.getFeatureType(), name, description, serviceCallback);
     },
-        /**
-         * @method __savePlace
-         * Handles save place.
-         * @private
-         * @param {Object} values place properties
-         */
-        __savePlace : function(values) {
-            var me = this;
-            // form not open, nothing to do
-            if (!values) {
-                // should not happen
-                var loc = me.instance.getLocalization('notification')['error'];
-                me.instance.showMessage(loc.title, loc.savePlace);
-                return;
-            }
-
-            // Callback handles the end of the asynchronous operation.
-            var serviceCallback = function(blnSuccess, model, blnNew) {
-                if (blnSuccess) {
-                   //  me._cleanupPopup();
+    /**
+     * @method __savePlace
+     * Handles save place.
+     * @private
+     * @param {Object} values place properties
+     */
+    __savePlace : function(values) {
+        var me = this;
+        // form not open, nothing to do
+        if (!values) {
+            // should not happen
+            var loc = me.instance.getLocalization('notification')['error'];
+            me.instance.showMessage(loc.title, loc.savePlace);
+            return;
+        }
+        // Callback handles the end of the asynchronous operation.
+        var serviceCallback = function(blnSuccess, model, blnNew) {
+            if (blnSuccess) {
+                me._cleanupPopup();
+            } else {
+                // blnNew should always be true since we are adding a preparcel
+                if (blnNew) {
+                    me.instance.showMessage('Error in inserting preparcel');
                 } else {
-                    // blnNew should always be true since we are adding a preparcel
-                    if (blnNew) {
-                        me.instance.showMessage('Error in inserting preparcel');
-                    } else {
-                        me.instance.showMessage('Error in modifying preparcel');
-                    }
+                    me.instance.showMessage('Error in modifying preparcel');
                 }
             }
-            this.instance.getService().savePlace(me.drawPlugin, values, serviceCallback);
-        },
+        }
+        this.instance.getService().savePlace(me.drawPlugin, values, serviceCallback);
+    },
+
+    /**
+     * @method __loadPlace
+     * Handles load place.
+     * @private
+     * @param {Object} values place properties
+     */
+    _loadPreParcel : function() {
+        var me = this;
+        // Callback handles the end of the asynchronous operation.
+        var serviceCallback = function(blnSuccess, model) {
+            if (blnSuccess) {
+                me._cleanupPopup();
+            } else {
+                me.instance.showMessage('Error in loading preparcel');
+            }
+        };
+        this.instance.getService().loadPreParcel(me.drawPlugin, serviceCallback);
+    },
+
     /**
      * @method _cleanupPopup
      * Cancels operations:

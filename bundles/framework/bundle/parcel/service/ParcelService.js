@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelService',
  */
 function(instance) {
     this._instance = instance;
+    this._preParcelsList = [];
     this._wfst = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelWfst', instance);
     this._wfst2 = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.PreParcelWFSTStore', instance);
     this._plot = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelPlot', instance);
@@ -98,59 +99,59 @@ function(instance) {
         	this._plot.plotParcel(feature, placeName, placeDescription, cb);
         }
     },
-        /**
-         * @method savePlace
-         * Saves preparcel features to the server asynchronously and gives the success information via callback.
-         * @param {obj} drawplugin instance for wfst features
-         * @param {obj/json} values feature attributes
-         * @param {Fuction} cb Requires information about the success as boolean parameter.
-         */
-        savePlace : function(drawplugin, values, cb) {
-
-                var me = this;
-                var isNew = !(values.id);
-                var feature = drawplugin.getDrawing();
-                var callBackWrapper = function (success, list) {
-                    if (isNew && success) {
-                        me.savePlaceData(drawplugin, values, list, cb);
-                    } else {
-                        if (list.length < 1) {
-                            // couldn't parse preparcel featurecollection
-                            success = false;
-                        }
-                        else {
-                            // update models updateDate in store
-
-                        }
-                    }
-
-                    cb(success, list[0], isNew);
-                };
-
-            if (feature) {
-                this._wfst2.commitPreParcel(this.getPreParcelFromFormValues(values), callBackWrapper);
-            }
-
-
-        },
-        /**
-         * @method savePlaceData
-         * Saves preparcel data features to the server asynchronously and gives the success information via callback.
-         * @param {obj} drawplugin instance for wfst features
-         * @param {obj/json} values feature attributes
-         * @param {Fuction} cb Requires information about the success as boolean parameter.
-         */
-        savePlaceData : function(drawplugin, values, list, cb) {
+    /**
+     * @method savePlace
+     * Saves preparcel features to the server asynchronously and gives the success information via callback.
+     * @param {obj} drawplugin instance for wfst features
+     * @param {obj/json} values feature attributes
+     * @param {Fuction} cb Requires information about the success as boolean parameter.
+     */
+    savePlace : function(drawplugin, values, cb) {
 
             var me = this;
             var isNew = !(values.id);
             var feature = drawplugin.getDrawing();
-            if (feature) {
-                this._wfst2.commitPreParcelData(this.getPreParcelData(list, drawplugin), cb);
-            }
+            var callBackWrapper = function (success, list) {
+                if (isNew && success) {
+                    me.savePlaceData(drawplugin, values, list, cb);
+                } else {
+                    if (list.length < 1) {
+                        // couldn't parse preparcel featurecollection
+                        success = false;
+                    }
+                    else {
+                        // update models updateDate in store
+
+                    }
+                }
+
+                cb(success, list[0], isNew);
+            };
+
+        if (feature) {
+            this._wfst2.commitPreParcel(this.getPreParcelFromFormValues(values), callBackWrapper);
+        }
 
 
-        },
+    },
+    /**
+     * @method savePlaceData
+     * Saves preparcel data features to the server asynchronously and gives the success information via callback.
+     * @param {obj} drawplugin instance for wfst features
+     * @param {obj/json} values feature attributes
+     * @param {Function} cb Requires information about the success as boolean parameter.
+     */
+    savePlaceData : function(drawplugin, values, list, cb) {
+
+        var me = this;
+        var isNew = !(values.id);
+        var feature = drawplugin.getDrawing();
+        if (feature) {
+            this._wfst2.commitPreParcelData(this.getPreParcelData(list, drawplugin), cb);
+        }
+
+
+    },
         getPreParcelFromFormValues : function(values) {
             var mylist = [];
             var preparcel = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcel');
@@ -188,6 +189,27 @@ function(instance) {
 
             return mylist;
         },
+
+     loadPreParcel : function(drawplugin, cb) {
+        var me = this;
+        var loadedPreParcels = false;
+
+        var allLoaded = function () {
+            // when preparcels have been loaded, notify that the data has changed
+            if (loadedPreParcels) {
+                // me._notifyDataChanged();
+            }
+        };
+
+        var initialLoadCallBackPreParcels = function (preParcels) {
+            if (preParcels) {
+                me._preParcelsList = preParcels;
+            }
+            loadedPreParcels = true;
+            allLoaded();
+        };
+        this._wfst2.getPreParcels(initialLoadCallBackPreParcels);
+     },
     /**
      * @method clearParcelMap
      * Remove openlayers graphics of parcel Map
