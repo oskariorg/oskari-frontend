@@ -17,6 +17,7 @@ function(instance) {
     this._wfst = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelWfst', instance);
     this._wfst2 = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.PreParcelWFSTStore', instance);
     this._plot = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelPlot', instance);
+    this.kvp_uid = '12345'; // TODO: get that from url params or via sandbox.user
 }, {
     /**
      * @return {String} Serive class name. 
@@ -154,7 +155,7 @@ function(instance) {
             var mylist = [];
             var preparcel = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcel');
             //preparcel.setId(id); insert automatic when undefined
-            preparcel.setKvp_uid('kvp_uuid'); // values.kvp_uuid
+            preparcel.setKvp_uid(this.kvp_uid);
             preparcel.setPreparcel_id(values.name);
             preparcel.setTitle(values.title);
             preparcel.setSubtitle(values.subtitle);
@@ -174,12 +175,14 @@ function(instance) {
             //ppdata.setId(id); insert automatic when undefined
             if(list)ppoldata.setPreparcel_id(list[0].id);
             ppoldata.setGeom_type('parcel');
+            ppoldata.setUuid(this.kvp_uid);
             ppoldata.setGeometry(drawplugin.getParcelGeometry());
             mylist.push(ppoldata);
             var pboundary = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');
             //pboundary.setId(id); insert automatic when undefined
             if(list)pboundary.setPreparcel_id(list[0].id);
             pboundary.setGeom_type('boundary');
+            pboundary.setUuid(this.kvp_uid);
             pboundary.setGeometry(drawplugin.getBoundaryGeometry());
             mylist.push(pboundary);
 
