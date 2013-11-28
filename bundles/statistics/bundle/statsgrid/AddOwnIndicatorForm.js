@@ -343,6 +343,7 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
                     });
                 }
             };
+debugger;
             return json;
         }
     },
