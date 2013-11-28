@@ -149,6 +149,8 @@ Oskari.registerLocalization({
 		"popupTitle" 				: "Tuo arvot",
 		"importDataDescription" 	: "Voit tuoda kunta - arvo -pareja kopioimalla ne tekstikenttään. <br>Jokainen kunta omalle rivilleen ja erottimeksi käy tabulaattori, ':' ja ','<br>Esimerkki 1: Alajärvi, 1234<br>Esimerkki 2: 009	2100",
         "failedSubmit"              : "Lisää indikaattorin metatiedot: ",
-        "connectionProblem"         : "Dataa ei voitu tallentaa yhteysongelman takia."
+        "connectionProblem"         : "Dataa ei voitu tallentaa yhteysongelman takia.",
+        "parsedDataInfo"            : "Tuotuja alueita oli yhteensä",
+        "parsedDataUnrecognized"    : "Tunnistamattomia alueita"
 	}
 });

@@ -42,7 +42,7 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
             formSubmit = jQuery(me.template.formSubmit).clone();
 
         me.container = container;
-
+        // add localizations
         var title = formMeta.find('.title');
         title.find('label').append(this.localization.addDataMetaTitle);
         title.find('input').attr('placeholder', this.localization.addDataMetaTitlePH);
@@ -69,6 +69,7 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
 
         formHead.find('h2').append(me.localization.addDataTitle);
 
+        // add import button (popup)
         var importButton = formShowImport.find('.import-button');
         importButton.append(me.localization.openImportDataButton);
         importButton.attr('title', me.localization.openImportDialogTip);
@@ -110,21 +111,16 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
 
         formMunicipalityHeader.find('label').append(me.localization.municipalityHeader);
 
+        // add cancel data submit
         var cancel = formSubmit.find('.cancel-form-button');
         cancel.append(me.localization.formCancel);
         cancel.click(function(e) {
-//TODO testi
-var indicatorData = me._gatherData();
-if(indicatorData != null) {
-    callback(indicatorData);
-}
             me._handleCancel(e, me);
-
         })
+        // add data submit
         var submit = formSubmit.find('.submit-form-button');
         submit.append(me.localization.formSubmit);
         submit.click(function(e) {
-//            var indicatorData = me._gatherData();
             me._handleSubmit(e, me, callback);
         })
 
@@ -136,6 +132,7 @@ if(indicatorData != null) {
             .append(formMunicipalities)
             .append(formSubmit);
 
+        // add municipalities
         for (var i = 0; i < me.municipalities.length; i++) {
             var municipality = me.municipalities[i];
             var formMunicipalityRow = jQuery(me.template.formMunicipalityRow).clone();
@@ -158,11 +155,21 @@ if(indicatorData != null) {
         container.append(formCont);
 
 	},
+    /**
+     * @method _handleCancel
+     * @private 
+     * Remove form and show grid
+     */
     _handleCancel: function(e, me) {
         me.container.find('.form-cont').remove();
         me.container.find('.selectors-container').show();
         me.container.find('#municipalGrid').show();
     },
+    /**
+     * @method _handleSubmit
+     * @private 
+     * Send data to backend and remove form.
+     */
     _handleSubmit: function(e, me, callback) {
         var indicatorData = me._gatherData();
 
@@ -176,23 +183,33 @@ if(indicatorData != null) {
                     me.container.find('.form-cont').remove();
                     me.container.find('.selectors-container').show();
                     me.container.find('#municipalGrid').show();
-                    callback(indicatorData);
+                    if(data.id != null) {
+                        indicatorData.indicatorId = 'user_'+data.id;
+                        callback(indicatorData);                        
+                    }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    //TODO some better way of showing errors?
                     alert(me.localization.connectionProblem);
                 }
             });
         }
     },
 
+    /**
+     * @method _parseData
+     * @private 
+     * Parse data from dialog (it is pasted from clipboard)
+     */
     _parseData: function(e, me, dialog) {
         var inputArray = [];
         var divmanazerpopup = jQuery(e.target)
             .parents('.divmanazerpopup');
 
         var data = divmanazerpopup.find('textarea').val();
-
-        var updateRegion = function(name, value) {
+        //update form regions / municipalities
+        var updateValue = function(name, value) {
+            //if code instead of name...
             if(/^\d+$/.test(value)) {
                 var rows = me.container.find('.municipality-row');
                 for (var i = 0; i < rows.length; i++) {
@@ -212,42 +229,45 @@ if(indicatorData != null) {
             return false;
         }
         var lines = data.match(/[^\r\n]+/g);
-        var matchCount = 0;
-        var unknown = [];
+        var updated = 0;
+        var unrecognized = [];
+        //loop through all the lines and parse municipalities (name or code)
         _.each(lines, function(line) {
             var area,
                 value;
 
-            var matches = line.split("\t");
-            if (matches.length > 1) {
-                area = matches[0];
-                value = matches[1];
-            } else {
-                matches = line.match(/(.*) *[\t:,]+ *(.*)/);
-                if (matches && matches.length === 3) {
-                    area = matches[1];
-                    value = matches[2]
-                }
+            //separator can be tabulator, comma or colon
+            var matches = line.match(/(.*) *[\t:,]+ *(.*)/);
+            if (matches && matches.length === 3) {
+                area = matches[1];
+                value = matches[2]
             }
-
-            if (updateRegion($.trim(area), $.trim(value)))
-                matchCount++;
+            // update municipality values
+            if (updateValue(jQuery.trim(area), jQuery.trim(value)))
+                updated++;
             else if (value && value.length > 0)
-                unknown.push(area)
+                unrecognized.push(area);
         });
         var openImport = me.container.find('.import-button');
 
-        var unknownText = "";
-        if (unknown.length > 0) {
-            unknownText = '<br>Tunnistamattomia alueita: ' + unknown.length;
+        // alert user of unrecognized lines
+        var unrecognizedInfo = "";
+        if (unrecognized.length > 0) {
+            unknownText = '<br>'+me.localization.parsedDataUnrecognized+': ' + unrecognized.length;
         }
-        var infoText = 'Tuotuja alueita oli yhteensä: <span style="font-size: 1.2em; font-weight: bold;">' + matchCount + '</span> ' + unknownText;
-        openImport.tooltip({ content: infoText, position: { my: "right-10 center", at: "left center" } });
+        // Tell user about how many regions were imported
+        var info = me.localization.parsedDataInfo+': <span class="import-indicator-bold">' + updated + '</span> ' + unrecognizedInfo;
+        openImport.tooltip({ content: info, position: { my: "right-10 center", at: "left center" } });
         openImport.tooltip( "open" );
 
         dialog.close(true);
 
     },
+    /**
+     * @method _parseData
+     * @private 
+     * Parse data from dialog (it is pasted from clipboard)
+     */
     _gatherData : function() {
         var me = this;
         var json = {};
@@ -259,7 +279,7 @@ if(indicatorData != null) {
                 return this.replace(/^\s+|\s+$/g, ''); 
             }
         }
-
+        // Get indicator title or push it to the unrecognized areas array
         var title = me.container.find('.form-meta .title').find('input').val();
         if(title == null || title.trim() == "") {
             emptyFields.push(me.container.find('.form-meta .title').find('label').text());
@@ -279,7 +299,14 @@ if(indicatorData != null) {
         json.description = JSON.stringify({'fi': description});
 
         var year = me.container.find('.form-meta .year').find('input').val();
-        if(year == null || year.trim() == "") {
+        var text = /^[0-9]+$/;
+        var currentYear = new Date().getFullYear();
+        if(year == null || year.trim() == "" || 
+            ((year != "") && (!text.test(year))) || 
+            year.length != 4 || 
+            year < 1900 || 
+            year > currentYear) {
+
             emptyFields.push(me.container.find('.form-meta .year').find('label').text());
         }
         json.year = year;
@@ -290,6 +317,7 @@ if(indicatorData != null) {
 
         json.data = [];
 
+        // if there was empty fields 
         if(emptyFields.length > 0) {
             var submitBtn = me.container.find('.submit-form-button');
             var failedSubmit = me.localization.failedSubmit +'<br>'+ emptyFields.join(", ");
@@ -302,7 +330,7 @@ if(indicatorData != null) {
             }, 1500);
             return null;
         } else {
-
+            // loop through all the regions and gather data 
             var municipalityRows = me.container.find('.municipality-row');
             for (var i = 0; i < municipalityRows.length; i++) {
                 var row = jQuery(municipalityRows[i]);
@@ -319,6 +347,10 @@ if(indicatorData != null) {
         }
     },
 
+    /**
+     * @method validateYear
+     * Validate year (keypress & blur)
+     */
     validateYear: function(year,e) {
         var text = /^[0-9]+$/;
         if(e.type=="blur" || 

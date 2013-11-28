@@ -706,8 +706,10 @@ function(config, locale) {
         // if we want to select some special indicator..
         //sel.find('option[value="127"]').prop('selected', true);
 
-        var paramCont = selectorsContainer.find('.parameters-cont');
-        me._addOwnIndicatorButton(paramCont, container);
+        if(me._sandbox && me._sandbox.getUser().isLoggedIn()) {
+            var paramCont = selectorsContainer.find('.parameters-cont');
+            me._addOwnIndicatorButton(paramCont, container);
+        }
 
         // we use chosen to create autocomplete version of indicator select element.
         sel.chosen({
@@ -989,7 +991,6 @@ _addUserIndicatorToGrid : function(data, container, me) {
                     if (me._state.indicators == null) {
                         me._state.indicators = [];
                     }
-debugger;
                     me._state.indicators.push({indicator: indicatorId, year: year, gender: gndrs});
                     // Show the data in the grid.
                     me.addIndicatorDataToGrid(container, indicatorId, gndrs, year, data, me.indicators[me.indicators.length -1]);
