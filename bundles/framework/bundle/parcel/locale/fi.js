@@ -60,7 +60,7 @@ Oskari.registerLocalization({
               "placeholder": "Määräalan laatija"
           },
           "area": {
-              "placeholder": "Pinta-ala (m-2)"
+              "placeholder": "Pinta-ala (m²)"
           }
       },
     "notification": {

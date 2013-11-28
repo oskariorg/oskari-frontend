@@ -152,8 +152,8 @@ function() {
 			OpenLayers.ProxyHost = me.conf.proxyUrl;
 		}
         // Test
-        me.conf.wfstFeatureNS = 'http://www.oskari.org';
-        me.conf.wfstUrl =  '/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=PreParcel';
+        // me.conf.wfstFeatureNS = 'http://www.oskari.org';
+        // me.conf.wfstUrl =  '/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=PreParcel';
 
         if(me.conf && me.conf.stickyLayerIds) {
 			// Layer switch off disable

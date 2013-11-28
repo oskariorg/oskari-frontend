@@ -203,11 +203,11 @@ function(instance) {
         this.buttons.setEnabled(false);
 
 		this.basicStyle = OpenLayers.Util.applyDefaults(this.basicStyle, OpenLayers.Feature.Vector.style['default']);
-		this.basicStyle.fillColor = "#bbbb00";
+		this.basicStyle.fillColor = "#ff0000";
 		this.basicStyle.fillOpacity = 0.4;
 
 		this.selectStyle = OpenLayers.Util.applyDefaults(this.selectStyle, OpenLayers.Feature.Vector.style['default']);
-		this.selectStyle.fillColor = "#ff0000";
+		this.selectStyle.fillColor = "#bbbb00";
 		this.selectStyle.fillOpacity = 0.4;
 
 		// This layer will contain markers which show the points where the operation line
