@@ -1002,6 +1002,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             if (me.data && me.data.id) {
                 selections.id = me.data.id;
             }
+            /* Example, groups should match default-buttons.js
+            selections.toolbar = {
+                'history': {
+                    'reset': true
+                }
+            };*/
 
             for (i = 0; i < me.tools.length; i += 1) {
                 if (me.tools[i].selected) {
