@@ -707,7 +707,7 @@ function(config, locale) {
         //sel.find('option[value="127"]').prop('selected', true);
 
         var paramCont = selectorsContainer.find('.parameters-cont');
-        me._addOwnIndicatorButton(paramCont);
+        me._addOwnIndicatorButton(paramCont, container);
 
         // we use chosen to create autocomplete version of indicator select element.
         sel.chosen({
@@ -722,7 +722,7 @@ function(config, locale) {
 /**
  *
  */
-_addOwnIndicatorButton: function(paramCont) {
+_addOwnIndicatorButton: function(paramCont, container) {
     var me = this;
     var button = jQuery(me.templates.addOwnIndicator);
     var container = paramCont.parents('div.statsgrid');
@@ -734,12 +734,20 @@ _addOwnIndicatorButton: function(paramCont) {
         container.find('.selectors-container').hide();
         container.find('#municipalGrid').hide();
         form.createUI(container, function(data) {
-            me._addUserIndicatorToGrid(data);
+            me._addUserIndicatorToGrid(data, container, me);
         });
     });
 },
-_addUserIndicatorToGrid : function(data) {
-    alert(JSON.stringify(data));
+_addUserIndicatorToGrid : function(data, container, me) {
+    var indicator = {};
+    indicator.title = JSON.parse(data.title);
+    indicator.organization = {'title': { 'fi' : 'Käyttäjän tuomaa dataa'}};
+    indicator.description = JSON.parse(data.title);
+    me.indicators.push(indicator);
+
+    // Show the data in the grid.
+    me.addIndicatorDataToGrid(container, new Date().getTime(), 'total', data.year, data.data, me.indicators[me.indicators.length -1]);
+//FIXME indicatorId instead of timestamp
 },
     /**
      * Get Sotka indicator meta data
@@ -981,6 +989,7 @@ _addUserIndicatorToGrid : function(data) {
                     if (me._state.indicators == null) {
                         me._state.indicators = [];
                     }
+debugger;
                     me._state.indicators.push({indicator: indicatorId, year: year, gender: gndrs});
                     // Show the data in the grid.
                     me.addIndicatorDataToGrid(container, indicatorId, gndrs, year, data, me.indicators[me.indicators.length -1]);

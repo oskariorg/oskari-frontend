@@ -113,27 +113,35 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
         var cancel = formSubmit.find('.cancel-form-button');
         cancel.append(me.localization.formCancel);
         cancel.click(function(e) {
+//TODO testi
+var indicatorData = me._gatherData();
+if(indicatorData != null) {
+    callback(indicatorData);
+}
             me._handleCancel(e, me);
+
         })
         var submit = formSubmit.find('.submit-form-button');
         submit.append(me.localization.formSubmit);
         submit.click(function(e) {
-            var data = me._gatherData();
+            var indicatorData = me._gatherData();
 //            var data = me._handleSubmit(e, me)
-            if(data != null) {
+            if(indicatorData != null) {
                 $.ajax({
                     url : me.sandbox.getAjaxUrl() + 'action_route=SaveUserIndicator',
                     type: "POST",
-                    data : data,
+                    data : indicatorData,
                     success: function(data, textStatus, jqXHR){
                         //data - response from server
                         me.container.find('.form-cont').remove();
                         me.container.find('.selectors-container').show();
                         me.container.find('#municipalGrid').show();
-                        callback(data);
+//TODO testi
+callback(indicatorData);
+//                        callback(indicatorData);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        alert("vituiks män");
+                        alert(textStatus);
                     }
                 });
             }
@@ -154,6 +162,7 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
             formMunicipalityRow
                 .attr('data-name', m)
                 .attr('data-code', municipality.code)
+                .attr('data-id', municipality.id)                
                 .find('label')
                 .attr('for', 'municipality_'+ m)
                 .append(municipality.municipality + " (" + municipality.code + ")");
@@ -269,32 +278,35 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
         var json = {};
         var emptyFields = [];
 
-        json.title = me.container.find('.form-meta .title').find('input').val();
-        if(json.title == null || json.title.trim() == "") {
+        var title = me.container.find('.form-meta .title').find('input').val();
+        if(title == null || title.trim() == "") {
             emptyFields.push(me.container.find('.form-meta .title').find('label').text());
         }
+        json.title = JSON.stringify({'fi': title});
 
-        json.source = me.container.find('.form-meta .sources').find('input').val();
-        if(json.source == null || json.source.trim() == "") {
+        var source = me.container.find('.form-meta .sources').find('input').val();
+        if(source == null || source.trim() == "") {
             emptyFields.push(me.container.find('.form-meta .sources').find('label').text());
         }
+        json.source = JSON.stringify({'fi': source});
 
-        json.description = me.container.find('.form-meta .description').find('input').val();
-        if(json.description == null || json.description.trim() == "") {
+        var description = me.container.find('.form-meta .description').find('input').val();
+        if(description == null || description.trim() == "") {
             emptyFields.push(me.container.find('.form-meta .description').find('label').text());
         }
+        json.description = JSON.stringify({'fi': description});
 
-        json.year = me.container.find('.form-meta .year').find('input').val();
-        if(json.year == null || json.year.trim() == "") {
+        var year = me.container.find('.form-meta .year').find('input').val();
+        if(year == null || year.trim() == "") {
             emptyFields.push(me.container.find('.form-meta .year').find('label').text());
         }
+        json.year = year;
 
         json.material = me.layerId; //reference layer
 
         json.published = me.container.find('.form-meta .publicity').find('input').prop('checked');
 
-        json.data = {};
-        json.data.municipalities = [];
+        json.data = [];
 
         if(emptyFields.length > 0) {
             var submitBtn = me.container.find('.submit-form-button');
@@ -315,12 +327,21 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
                 var input = row.find('input');
                 var value = input.val();
                 if(value != null && value.trim() != "") {
-                    json.data.municipalities.push({
-                        'municipality': row.attr('data-name'),
-                        'value' : value
+                    json.data.push({
+                        'region': row.attr('data-id'),
+                        'primary value' : value
                     });
                 }
             };
+/*
+
+gender: "total"
+indicator: "127"
+primary value: "8834"
+region: "355"
+year: "2012"
+*/
+
             return json;
         }
     },
