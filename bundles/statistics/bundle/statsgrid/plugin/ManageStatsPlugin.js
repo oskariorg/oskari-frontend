@@ -730,7 +730,7 @@ _addOwnIndicatorButton: function(paramCont) {
     paramCont.append(button);
     button.find('input').click(function(e){
         var items = me.dataView ? me.dataView.getItems() : null;
-        var form = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm', me._sandbox, me._locale, items, me._layer.getWmsName());
+        var form = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm', me._sandbox, me._locale, items, me._layer.getWmsName(), me._layer.getId());
         container.find('.selectors-container').hide();
         container.find('#municipalGrid').hide();
         form.createUI(container, function(data) {

@@ -7,22 +7,23 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
  * @param {Object} localization
  * @param {Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance} instance
  */
-function(sandbox, localization, municipalityData, layerWMSName) {
+function(sandbox, localization, municipalityData, layerWMSName, layerId) {
     this.sandbox = sandbox;
     this.localization = localization;
     this.municipalities = municipalityData;
     this.layerWMSName = layerWMSName;
+    this.layerId = layerId;
 
     this.template = {
         'formCont' : '<div class="form-cont"></div>',
         'formHead' : '<div class="form-head"><h2></h2></div>',
         'formShowImport' : '<div class="form-show-import"><button class="import-button"></button></div>',
         'formImport' : '<div class="form-import"><textarea class="import-textarea"></textarea><button class="start-import"></button></div>',
-        'formMeta' : '<div class="form-meta"><div class="title"><label></label><input type="text"></div><div class="sources"><label></label><input type="text"></div><div class="description"><label></label><input type="text"></div><div class="year"><label></label><input type="text" ></div><div class="reference-layer"><label></label><span></span></div><div class="publicity"><label></label><input type="checkbox"></div></div>',
+        'formMeta' : '<div class="form-meta"><div class="title"><label></label><input type="text" required></div><div class="sources"><label></label><input type="text" required></div><div class="description"><label></label><input type="text" required></div><div class="year"><label></label><input type="text" required></div><div class="reference-layer"><label></label><span></span></div><div class="publicity"><label></label><input type="checkbox"></div></div>',
         'formMunicipalities': '<div class="municipalities"></div>',
         'formMunicipalityHeader': '<div class="municipality-header"><label></label><hr></div>',
         'formMunicipalityRow': '<div class="municipality-row"><label></label><input type="text"></div>',
-        'formSubmit':'<div class="form-submit"><button class="submit-form-button"></button><button class="cancel-form-button"></button></div>',
+        'formSubmit':'<div class="form-submit"><button class="submit-form-button" title=""></button><button class="cancel-form-button"></button></div>',
         'importDataPopup' : '<div class="import-data-popup"><p class="import-data-desc"></p><div class="import-container"><textarea class="import-data-textarea"></textarea></div></div>'
     }
 }, {
@@ -70,7 +71,7 @@ function(sandbox, localization, municipalityData, layerWMSName) {
 
         var importButton = formShowImport.find('.import-button');
         importButton.append(me.localization.openImportDataButton);
-importButton.attr('title', "jepa");
+        importButton.attr('title', me.localization.openImportDialogTip);
         importButton.click(function(e) {
             var popup = jQuery(me.template.importDataPopup);
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -80,6 +81,11 @@ importButton.attr('title', "jepa");
             cancelBtn.setTitle(me.localization.cancelButton);
             cancelBtn.setHandler(function() {
                 dialog.close(true);
+                me.container.find('.import-button')
+                    .tooltip({ 
+                        content: me.localization.openImportDialogTip, 
+                        position: { my: "right-10 center", at: "left center" } 
+                    });
             });
 
             // add
@@ -112,7 +118,25 @@ importButton.attr('title', "jepa");
         var submit = formSubmit.find('.submit-form-button');
         submit.append(me.localization.formSubmit);
         submit.click(function(e) {
-            callback(me._handleSubmit(e, me));
+            var data = me._gatherData();
+//            var data = me._handleSubmit(e, me)
+            if(data != null) {
+                $.ajax({
+                    url : me.sandbox.getAjaxUrl() + 'action_route=SaveUserIndicator',
+                    type: "POST",
+                    data : data,
+                    success: function(data, textStatus, jqXHR){
+                        //data - response from server
+                        me.container.find('.form-cont').remove();
+                        me.container.find('.selectors-container').show();
+                        me.container.find('#municipalGrid').show();
+                        callback(data);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("vituiks män");
+                    }
+                });
+            }
         })
 
         formCont
@@ -149,16 +173,34 @@ importButton.attr('title', "jepa");
         me.container.find('.selectors-container').show();
         me.container.find('#municipalGrid').show();
     },
-    _handleSubmit: function(e, me) {
+/*    _handleSubmit: function(e, me) {
         var data = me._gatherData();
 
         //ToDo send ajax!
         // 
-        me.container.find('.form-cont').remove();
-        me.container.find('.selectors-container').show();
-        me.container.find('#municipalGrid').show();
-        return data;
+
+
+        if(data != null) {
+            $.ajax({
+                url : me.sandbox.getAjaxUrl() + 'action_route=SaveUserIndicator',
+                type: "POST",
+                data : data,
+                success: function(data, textStatus, jqXHR){
+                    //data - response from server
+                    me.container.find('.form-cont').remove();
+                    me.container.find('.selectors-container').show();
+                    me.container.find('#municipalGrid').show();
+                    return data;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                         
+                }
+            });
+
+        }
+        return null;
     },
+*/
     _parseData: function(e, me, dialog) {
         var inputArray = [];
         var divmanazerpopup = jQuery(e.target)
@@ -216,7 +258,7 @@ importButton.attr('title', "jepa");
             unknownText = '<br>Tunnistamattomia alueita: ' + unknown.length;
         }
         var infoText = 'Tuotuja alueita oli yhteensä: <span style="font-size: 1.2em; font-weight: bold;">' + matchCount + '</span> ' + unknownText;
-        openImport.tooltip({ content: infoText, position: { my: "right-10 center", at: "left center" } })
+        openImport.tooltip({ content: infoText, position: { my: "right-10 center", at: "left center" } });
         openImport.tooltip( "open" );
 
         dialog.close(true);
@@ -225,48 +267,62 @@ importButton.attr('title', "jepa");
     _gatherData : function() {
         var me = this;
         var json = {};
+        var emptyFields = [];
 
         json.title = me.container.find('.form-meta .title').find('input').val();
-        if(json.title == null) {
-            return null;
+        if(json.title == null || json.title.trim() == "") {
+            emptyFields.push(me.container.find('.form-meta .title').find('label').text());
         }
 
-        json.sources = me.container.find('.form-meta .sources').find('input').val();
-        if(json.sources == null) {
-            return null;
+        json.source = me.container.find('.form-meta .sources').find('input').val();
+        if(json.source == null || json.source.trim() == "") {
+            emptyFields.push(me.container.find('.form-meta .sources').find('label').text());
         }
 
         json.description = me.container.find('.form-meta .description').find('input').val();
-        if(json.description == null) {
-            return null;
+        if(json.description == null || json.description.trim() == "") {
+            emptyFields.push(me.container.find('.form-meta .description').find('label').text());
         }
 
         json.year = me.container.find('.form-meta .year').find('input').val();
-        if(json.year == null) {
-            return null;
+        if(json.year == null || json.year.trim() == "") {
+            emptyFields.push(me.container.find('.form-meta .year').find('label').text());
         }
 
-        json.referenceLayer = me.layerWMSName;
+        json.material = me.layerId; //reference layer
 
-        json.publicity = me.container.find('.form-meta .publicity').find('input').prop('checked');
+        json.published = me.container.find('.form-meta .publicity').find('input').prop('checked');
 
-        json.municipalities = [];
+        json.data = {};
+        json.data.municipalities = [];
 
-        var municipalityRows = me.container.find('.municipality-row');
-        for (var i = 0; i < municipalityRows.length; i++) {
-            var row = jQuery(municipalityRows[i]);
-            var input = row.find('input');
-            var value = input.val();
-            if(value != null && value.trim() != "") {
-                json.municipalities.push({
-                    'municipality': row.attr('data-name'),
-                    'value' : value
-                });
-            }
-        };
+        if(emptyFields.length > 0) {
+            var submitBtn = me.container.find('.submit-form-button');
+            var failedSubmit = me.localization.failedSubmit +'<br>'+ emptyFields.join(", ");
+            submitBtn.attr('title', failedSubmit);
+            submitBtn.tooltip({ content: failedSubmit, position: { my: "right bottom-10", at: "right top" } });
+            submitBtn.tooltip( "open" );
+            setTimeout(function() {
+                submitBtn.tooltip("destroy");
+                submitBtn.attr('title', '');
+            }, 1500);
+            return null;
+        } else {
 
-
-        return json;
+            var municipalityRows = me.container.find('.municipality-row');
+            for (var i = 0; i < municipalityRows.length; i++) {
+                var row = jQuery(municipalityRows[i]);
+                var input = row.find('input');
+                var value = input.val();
+                if(value != null && value.trim() != "") {
+                    json.data.municipalities.push({
+                        'municipality': row.attr('data-name'),
+                        'value' : value
+                    });
+                }
+            };
+            return json;
+        }
     },
 
     validateYear: function(year,e) {
