@@ -15,6 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelService',
 function(instance) {
     this._instance = instance;
     this._preParcelsList = [];
+    this._preParcelDataList = [];
     this._wfst = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelWfst', instance);
     this._wfst2 = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.PreParcelWFSTStore', instance);
     this._plot = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelPlot', instance);
@@ -208,7 +209,29 @@ function(instance) {
             loadedPreParcels = true;
             allLoaded();
         };
-        this._wfst2.getPreParcels(initialLoadCallBackPreParcels);
+        this._wfst2.getPreParcels(this.kvp_uid, initialLoadCallBackPreParcels);
+     },
+
+     loadPreParcelData : function(parcel_id,drawplugin, cb) {
+        var me = this;
+        var loadedPreParcelData = false;
+
+        var allLoaded = function () {
+            // when preparcels have been loaded, notify that the data has changed
+            if (loadedPreParcelData) {
+                // me._notifyDataChanged();
+            }
+        };
+
+        var initialLoadCallBackPreParcelData = function (preParcelData) {
+            if (preParcelData) {
+                me._preParcelDataList = preParcelData;
+            }
+            loadedPreParcelData = true;
+            allLoaded();
+        };
+
+        this._wfst2.getPreParcelData(parcel_id, initialLoadCallBackPreParcelData);
      },
     /**
      * @method clearParcelMap

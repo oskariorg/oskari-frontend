@@ -306,10 +306,9 @@ function(instance) {
     },
 
     /**
-     * @method __loadPlace
-     * Handles load place.
+     * @method _loadPreParcel
+     * Handles preparcel loading.
      * @private
-     * @param {Object} values place properties
      */
     _loadPreParcel : function() {
         var me = this;
@@ -322,6 +321,25 @@ function(instance) {
             }
         };
         this.instance.getService().loadPreParcel(me.drawPlugin, serviceCallback);
+    },
+
+    /**
+     * @method _loadPreParcelData
+     * Handles geometry data of place loading.
+     * @param {String} parcel_id parcel identification
+     * @private
+     */
+    _loadPreParcelData : function(parcel_id) {
+        var me = this;
+        // Callback handles the end of the asynchronous operation.
+        var serviceCallback = function(blnSuccess, model) {
+            if (blnSuccess) {
+                me._cleanupPopup();
+            } else {
+                me.instance.showMessage('Error in loading preparcel');
+            }
+        };
+        this.instance.getService().loadPreParcelData(parcel_id, me.drawPlugin, serviceCallback);
     },
 
     /**
