@@ -83,8 +83,7 @@ jQuery(document).ready(function() {
 
 
     jQuery.ajax({
-        type: 'GET',
-//        type: 'POST',
+        type: 'POST',
         dataType: 'json',
         beforeSend: function(x) {
             if (x && x.overrideMimeType) {
@@ -92,8 +91,7 @@ jQuery(document).ready(function() {
             }
         },
         data : getAppSetupParams,
-        url : '/Oskari/applications/paikkatietoikkuna.fi/full-map_guest/publisherAppSetup',
-//        url: ajaxUrl + 'action_route=GetAppSetup',
+        url: ajaxUrl + 'action_route=GetAppSetup',
         success: function(app) {
             console.log('got app', app, app.startupSequence, app.configuration);
             if (app.startupSequence && app.configuration) {
