@@ -185,7 +185,7 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
                     me.container.find('#municipalGrid').show();
                     if(data.id != null) {
                         indicatorData.indicatorId = 'user_'+data.id;
-                        callback(indicatorData);                        
+                        callback(indicatorData);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -343,7 +343,7 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
                     });
                 }
             };
-debugger;
+            json.data = JSON.stringify(json.data);
             return json;
         }
     },

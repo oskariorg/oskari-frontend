@@ -746,6 +746,7 @@ _addUserIndicatorToGrid : function(data, container, me) {
     indicator.organization = {'title': { 'fi' : 'Käyttäjän tuomaa dataa'}};
     indicator.description = JSON.parse(data.title);
     me.indicators.push(indicator);
+    data.data = JSON.parse(data.data);
 
     // Show the data in the grid.
     me.addIndicatorDataToGrid(container, new Date().getTime(), 'total', data.year, data.data, me.indicators[me.indicators.length -1]);
