@@ -338,7 +338,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 return;
             }
 
-            var slider = me._adjustClassificationSlider(params.CHECKED_COUNT),
+            // var slider = me._adjustClassificationSlider(params.CHECKED_COUNT),
+            var slider = me._adjustClassificationSlider(params.COL_VALUES.length),
                 sliderDisabled = slider.slider("option", "disabled");
 
             // if slider is disabled don't show classification but help / guide
