@@ -132,7 +132,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     "bottom": "",
                     "left": "",
                     "classes": "top right"
-                }
+                },
+                "toolbarId" : "PublisherToolbar"
             }
         }, {
             "id": "Oskari.mapframework.mapmodule.ControlsPlugin",

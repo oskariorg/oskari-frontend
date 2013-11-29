@@ -93,7 +93,6 @@ jQuery(document).ready(function() {
         data : getAppSetupParams,
         url: ajaxUrl + 'action_route=GetAppSetup',
         success: function(app) {
-            console.log('got app', app, app.startupSequence, app.configuration);
             if (app.startupSequence && app.configuration) {
               var appSetup = {
                 "startupSequence": app.startupSequence
