@@ -181,7 +181,7 @@ function(instance) {
             ppoldata.setGeometry(drawplugin.getParcelGeometry());
             mylist.push(ppoldata);
 
-            //Draw layer
+/*            //Draw layer
             var drawlayer = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');
             //ppdata.setId(id); insert automatic when undefined
             if (list) drawlayer.setPreparcel_id(list[0].id);
@@ -206,7 +206,7 @@ function(instance) {
             markerlayer.setGeom_type('markerlayer');
             markerlayer.setUuid(this.kvp_uid);
             markerlayer.setGeometry(drawplugin.markerLayer);
-            mylist.push(markerlayer);
+            mylist.push(markerlayer); */
 
             var pboundary = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');
             //pboundary.setId(id); insert automatic when undefined
