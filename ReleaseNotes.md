@@ -1,4 +1,8 @@
 # Release Notes
+## 1.17
+### Statsgrid
+Added posibility to add indicator data through data import (localization is still work in progress)
+
 ## 1.16
 
 ### **Breaking changes**
@@ -28,6 +32,8 @@ MyPlaces prefix was changed to DrawPlugin. Affected changes are:
 'MyPlaces.AddedFeatureEvent' --> 'DrawPlugin.AddedFeatureEvent'
 
 Myplaces2 now uses AreaForm, PointForm and LineForm from under divmanazer (VisualizationForm)
+
+Toolbar has changed so that toolbar group has now always toolbar-id prefixed in the name. (Default prefix being 'default-'[buttongroup])
 
 ### Statsgrid
 

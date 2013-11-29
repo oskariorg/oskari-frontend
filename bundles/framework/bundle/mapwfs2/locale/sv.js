@@ -5,7 +5,8 @@ Oskari.registerLocalization({
         "title" : "MapWfs2",
         "desc" : "",
         "object-data": "Objektuppgifter",
-        "own-style": "Own style",
+        "default-style": "Standard stil",
+        "own-style": "Egen stil",
         "tile" : {
             "title" : "MapWfs2"
         },
@@ -29,10 +30,10 @@ Oskari.registerLocalization({
             "edit": "Redigera"
         },
         "popup": {
-            "title": "Own style",
+            "title": "Egen stil",
             "button": {
-                "cancel": "Cancel",
-                "save": "Save"
+                "cancel": "Avbryt",
+                "save": "Lagra"
             }
         }
     }

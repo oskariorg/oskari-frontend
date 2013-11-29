@@ -1,21 +1,21 @@
 /**
  * @class Oskari.mapframework.bundle.myplaces2.plugin.HoverPlugin
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.HoverPlugin', function() {
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.HoverPlugin', function () {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
 }, {
-    __name : 'MyPlaces.HoverPlugin',
+    __name: 'MyPlaces.HoverPlugin',
 
-    getName : function() {
+    getName: function () {
         return this.pluginName;
     },
-    getMapModule : function() {
+    getMapModule: function () {
         return this.mapModule;
     },
-    setMapModule : function(mapModule) {
+    setMapModule: function (mapModule) {
         this.mapModule = mapModule;
         this._map = mapModule.getMap();
         this.pluginName = mapModule.getName() + this.__name;
@@ -26,78 +26,78 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.HoverPlugin', f
      * @param sandbox reference to Oskari sandbox
      * @method
      */
-    init : function(sandbox) {
+    init: function (sandbox) {
         var me = this;
-			
-			
-        OpenLayers.Control.Hover = OpenLayers.Class(OpenLayers.Control, {                
+
+
+        OpenLayers.Control.Hover = OpenLayers.Class(OpenLayers.Control, {
             defaultHandlerOptions: {
                 'delay': 500,
                 'pixelTolerance': null,
                 'stopMove': false
             },
 
-            initialize: function(options) {
-                this.handlerOptions = OpenLayers.Util.extend(
-                    {}, this.defaultHandlerOptions
-                );
+            initialize: function (options) {
+                this.handlerOptions = OpenLayers.Util.extend({}, this.defaultHandlerOptions);
                 OpenLayers.Control.prototype.initialize.apply(
-                    this, arguments
-                ); 
+                    this,
+                    arguments
+                );
                 this.handler = new OpenLayers.Handler.Hover(
                     this,
-                    {'pause': this.onPause, 'move': this.onMove},
+                    {
+                        'pause': this.onPause,
+                        'move': this.onMove
+                    },
                     this.handlerOptions
                 );
-            }, 
-
-            onPause: function(evt) {
             },
 
-            onMove: function(evt) {
+            onPause: function (evt) {},
+
+            onMove: function (evt) {
                 // if this control sent an Ajax request (e.g. GetFeatureInfo) when
                 // the mouse pauses the onMove callback could be used to abort that
                 // request.
             }
         });
-        
+
         this.hoverControl = new OpenLayers.Control.Hover({
             handlerOptions: {
                 'delay': 500,
                 'pixelTolerance': 6
             },
-            
-            onPause: function(evt) {
-            	var lonlat = me._map.getLonLatFromPixel(evt.xy);
-		        var event = sandbox.getEventBuilder('MyPlaces.MyPlaceHoverEvent')(lonlat, evt, me._map.getZoom());
-		        sandbox.notifyAll(event);
+
+            onPause: function (evt) {
+                var lonlat = me._map.getLonLatFromPixel(evt.xy);
+                var event = sandbox.getEventBuilder('MyPlaces.MyPlaceHoverEvent')(lonlat, evt, me._map.getZoom());
+                sandbox.notifyAll(event);
             }
         });
         this._map.addControl(this.hoverControl);
 
     },
     // should activate when omat paikat layer is shown
-    activate : function() {
+    activate: function () {
         this.hoverControl.activate();
 
     },
     // should activate when omat paikat layer is not shown
-    deactivate : function() {
+    deactivate: function () {
         this.hoverControl.deactivate();
     },
-    
-    register : function() {
+
+    register: function () {
 
     },
-    unregister : function() {
-    },
-    startPlugin : function(sandbox) {
+    unregister: function () {},
+    startPlugin: function (sandbox) {
         this._sandbox = sandbox;
 
         sandbox.register(this);
 
     },
-    stopPlugin : function(sandbox) {
+    stopPlugin: function (sandbox) {
 
         sandbox.unregister(this);
 
@@ -107,15 +107,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.HoverPlugin', f
     /* @method start
      * called from sandbox
      */
-    start : function(sandbox) {
-    },
+    start: function (sandbox) {},
     /**
      * @method stop
      * called from sandbox
      *
      */
-    stop : function(sandbox) {
-    }
+    stop: function (sandbox) {}
 }, {
-    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });

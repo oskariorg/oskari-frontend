@@ -1,20 +1,19 @@
 Oskari.clazz
-        .define(
-                'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.request.StopDrawingRequest',
-                function(isCancel) {
-                    this._creator = null;
-                	this._isCancel = (isCancel == true);
-                }, {
-                    __name : "DrawPlugin.StopDrawingRequest",
-                    getName : function() {
-                        return this.__name;
-                    },
-                    isCancel : function() {
-                        return (this._isCancel === true);
-                    }
-                },
-                {
-                    'protocol' : ['Oskari.mapframework.request.Request']
-                });
+    .define(
+        'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.request.StopDrawingRequest',
+        function (isCancel) {
+            this._creator = null;
+            this._isCancel = (isCancel == true);
+        }, {
+            __name: "DrawPlugin.StopDrawingRequest",
+            getName: function () {
+                return this.__name;
+            },
+            isCancel: function () {
+                return (this._isCancel === true);
+            }
+        }, {
+            'protocol': ['Oskari.mapframework.request.Request']
+        });
 
 /* Inheritance */

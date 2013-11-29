@@ -64,13 +64,6 @@ table.search-results th {
     z-index: 10001;
 }
 */
-div.icon-close  {
-    display: inline-block;
-    position: relative;
-    left: -60px;
-    margin-left: 0px;
-    top: 10px;
-}
 div.published-search-div {
   position: relative; }
 
