@@ -18,6 +18,32 @@ function(instance) {
     __name: "StatsGrid.UserIndicatorsService",
     __qname : "Oskari.statistics.bundle.statsgrid.UserIndicatorsService",
 
+    userIndicators: [
+        {
+            "id": 1,
+            "title": {
+                "fi": "Testi 1"
+            },
+            "description": {
+                "fi": "Testi-indikaattori no. 1"
+            },
+            "organization": {
+                "fi": "Testi inc."
+            },
+            "public": true,
+            "layerId": 519,
+            "year": 2013,
+            "data": [
+                {"region": 2, "code": "005", "primary value": "1.0"},
+                {"region": 4, "code": "009", "primary value": "2.0"},
+                {"region": 5, "code": "010", "primary value": "2.3"},
+                {"region": 9, "code": "016", "primary value": "1.1"},
+                {"region": 11, "code": "018", "primary value": "0.4"},
+                {"region": 12, "code": "019", "primary value": "6.2"}
+            ]
+        }
+    ],
+
     getQName : function() {
         return this.__qname;
     },
@@ -35,18 +61,18 @@ function(instance) {
 
     getUserIndicators: function(successCb, errorCb) {
         var url = this.sandbox.getAjaxUrl() + 'action_route=GetUserIndicators';
-
-        this._get(url, successCb, errorCb);
+        successCb(this.userIndicators);
+        //this._get(url, successCb, errorCb);
     },
 
     getUserIndicator: function(indicatorId, successCb, errorCb) {
         var url = this.sandbox.getAjaxUrl() + 'action_route=GetUserIndicators&id=' + indicatorId;
-
-        this._get(url, successCb, errorCb);
+        successCb(this.userIndicators[0]);
+        //this._get(url, successCb, errorCb);
     },
 
     saveUserIndicator: function(indicator, successCb, errorCb) {
-        var url = this.sandbox.getAjaxUrl() + 'action_route=saveUserIndicator';
+        var url = this.sandbox.getAjaxUrl() + 'action_route=SaveUserIndicator';
 
         this._post(url, indicator, successCb, errorCb);
     },

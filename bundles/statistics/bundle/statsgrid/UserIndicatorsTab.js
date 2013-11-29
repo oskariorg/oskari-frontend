@@ -70,6 +70,7 @@ function(instance, localization) {
             me._renderIndicators(indicators);
         }, function() {
             // error :(
+            alert("Couldn't load indicators");
         });
     },
     /**
@@ -151,10 +152,12 @@ function(instance, localization) {
      */
     _showUserIndicator: function(indicatorId) {
         var me = this,
-            service = this.instance.getUserIndicatorsService();
+            instance = this.instance;
+            service = instance.getUserIndicatorsService();
 
         service.getUserIndicator(indicatorId, function(indicator) {
             // TODO: go to the thematic maps mode
+            instance.addUserIndicator(me._normalizeIndicator(indicator));
         }, function() {
             // error :(
         });
@@ -182,6 +185,26 @@ function(instance, localization) {
     _showAddIndicatorForm: function() {
         // TODO: create a form to create a new indicator and display it to the user.
         alert('Not implemented yet');
+    },
+
+    /**
+     * Normalizes the indicator to be used as a sotkanet indicator.
+     *
+     * @method _normalizeIndicator
+     * @param  {Object} indicator
+     * @return {Object}
+     */
+    _normalizeIndicator: function(indicator) {
+        indicator.ownIndicator = true;
+        indicator.gender = 'total';
+        indicator.organization = {
+            'title': indicator.organization
+        };
+        indicator.meta = {
+            'title': indicator.title
+        };
+
+        return indicator;
     },
 
     /**

@@ -68,7 +68,8 @@ function(config, locale) {
         'NUTS1',
         'SAIRAANHOITOPIIRI',
         'SEUTUKUNTA',
-        'SUURALUE'
+        'SUURALUE',
+        'KUNTA'
     ];
 }, {
     /** 
@@ -575,16 +576,8 @@ function(config, locale) {
      * @param {String} code
      */
     getIdxByCode: function(code) {
-        var items = this.dataView ? this.dataView.getItems() : [],
-            returnItem = null,
-            i;
+        var returnItem = this.getItemByCode(code);
 
-        for (i = 0; i < items.length; ++i) {
-            if (items[i].code === code) {
-                returnItem = items[i];
-                break;
-            }
-        }
         if (returnItem) {
             var row = this.dataView.getRowById(returnItem.id);
             return ( row || -1);
@@ -594,21 +587,11 @@ function(config, locale) {
     },
 
     getItemByCode: function(code) {
-        var items = this.dataView ? this.dataView.getItems() : [],
-            returnItem = null,
-            i;
+        var items = this.dataView ? this.dataView.getItems() : [];
 
-        for (i = 0; i < items.length; ++i) {
-            if (items[i].code === code) {
-                returnItem = items[i];
-                break;
-            }
-        }
-        if (returnItem) {
-            return this.dataView.getItemById(returnItem.id);
-        } else {
-            return null;
-        }
+        return _.find(items, function(item) {
+            return code === item.code;
+        });
     },
 
     /**
@@ -1024,18 +1007,11 @@ function(config, locale) {
 
         // loop through data and get the values
         for (var i = 0; i < data.length; i++) {
-            var indicData = data[i];
-            var regionId = "";
-            var value = "";
-            for (var key in indicData) {
-                if (key == "region") {
-                    regionId = indicData[key];
-                } else if (key == "primary value") {
-                    value = indicData[key];
-                    value = value.replace(',', '.');
-                }
-            }
-            if (!!regionId) {
+            var indicData = data[i],
+                regionId = indicData['region'],
+                value = indicData['primary value'].replace(',', '.');
+
+            if (regionId != null) {
                 // find region
                 var item = me.dataView.getItemById(regionId);
                 if (item) {
@@ -1046,13 +1022,6 @@ function(config, locale) {
                 ii++;
             }
         }
-        var items = me.dataView.getItems();
-        for (var i = items.length - 1; i >= 0; i--) {
-            var item = items[i];
-            if (item[columnId] == null) {
-                item[columnId] = null;
-            }
-        };
 
         // create all the aggregators we need
         var aggregators = [];
@@ -1073,8 +1042,6 @@ function(config, locale) {
         me.dataView.setTotalsCallback(function(groups) {
             me._updateTotals(groups);
         });
-
-
 
         me.dataView.endUpdate();
         me.dataView.refresh();
@@ -1443,11 +1410,23 @@ function(config, locale) {
         // First, let's clear out the old data from the grid.
         me.clearDataFromGrid();
 
-        if(state.indicators && state.indicators.length > 0){
+        var indicators = _.groupBy(state.indicators || [], function(indicator) {
+            return ( indicator.ownIndicator ? 'user' : 'sotka' );
+        });
+
+        // Add user's own indicators to grid.
+        _.each(indicators.user, function(indicator) {
+            me.addIndicatorDataToGrid(null, indicator.id, indicator.gender, indicator.year, indicator.data, {
+                'title': indicator.title
+            });
+            me.addIndicatorMeta(indicator);
+        });
+
+        if(indicators.sotka && indicators.sotka.length > 0){
             //send ajax calls and build the grid
-            me.getSotkaIndicatorsMeta(container, state.indicators, function(){
+            me.getSotkaIndicatorsMeta(container, indicators.sotka, function(){
                 //send ajax calls and build the grid
-                me.getSotkaIndicatorsData(container, state.indicators, function(){
+                me.getSotkaIndicatorsData(container, indicators.sotka, function(){
 
                     if(state.currentColumn != null) {
                         if(classifyPlugin) {
