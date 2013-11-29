@@ -1,4 +1,3 @@
-
 Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.model.MyPlace', 
 
 /**

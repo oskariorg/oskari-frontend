@@ -108,7 +108,7 @@ function() {
     /**
      * @method getDrawPlugin
      * Returns reference to the draw plugin
-     * @return {Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin}
+     * @return {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin}
      */
     getDrawPlugin : function() {
         return this.view.drawPlugin;

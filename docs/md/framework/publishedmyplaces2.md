@@ -1,17 +1,18 @@
-# My Places
+# Published My Places
 
 <table>
   <tr>
-    <td>ID</td><td>myplaces2</td>
+    <td>ID</td><td>publishedmyplaces2</td>
   </tr>
   <tr>
-    <td>API</td><td>[link here](<%= apiurl %>Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance.html)</td>
+    <td>API</td><td>[link here](<%= apiurl %>Oskari.mapframework.bundle.publishedmyplaces2.PublishedMyPlacesBundleInstance.html)</td>
   </tr>
 </table>
 
 ## Description
 
-My places functionality.
+My places functionality for a published map.
+Editing is not included, only creation and the default layer needs to be created by other means. Initial implementation and further development follows.
 
 External graphic can be activated by changing OpenLayers bundle version to openlayers-graphic-fill and giving new style as additional parameter to the Drawin plugin.
 Adding external graphics in DrawPlugin.js:
@@ -109,18 +110,6 @@ No statehandling has been implemented.
   </tr>
   <tr>
     <td>DrawPlugin.StopDrawingRequest</td><td>Tells drawing plugin to stop listening</td>
-  </tr>
-  <tr>
-    <td>MyPlaces.EditCategoriesRequest</td><td>Edit category</td>
-  </tr>
-  <tr>
-    <td>MyPlaces.DeleteCategoryRequest</td><td>Shows the corfirm delete -functionality</td>
-  </tr>
-  <tr>
-    <td>MyPlaces.PublishCategoryRequest</td><td>Shows the corfirm publish -functionality</td>
-  </tr>
-  <tr>
-    <td>MyPlaces.EditPlacesRequest</td><td>Shows place form</td>
   </tr>
 </table>
 
