@@ -78,12 +78,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                     '<div class="search-textarea-and-button">' +
                    
                     '<input placeholder="' + me.loc.placeholder + '" type="text" />' +
-                    '<div class="close icon-close" title="' + me.loc.close + '"></div>' +
-                   
-                    '<input type="button" value="' + me.loc.search + '" name="search" />' +
+            
+                   '<input type="button" value="' + me.loc.search + '" name="search" />' +
                     '</div>' +
                     '<div class="results">' +
                     '<div class="header">' + 
+                    '<div class="close icon-close" title="' + me.loc.close + '"></div>' +
                     '</div>' +
                     '<div class="content">&nbsp;</div>' +
                     '</div>' +

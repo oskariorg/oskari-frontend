@@ -1,10 +1,10 @@
 /**
  * @class Oskari.userinterface.bundle.bootstrap.UserInterfaceBundleInstance
  *
- * Alternate DIV Manager implementation handles menu tiles in toolbar like fashion 
+ * Alternate DIV Manager implementation handles menu tiles in toolbar like fashion
  * shows detached DIVs. handles hiding showing DIVS.
  * Draggability is enabled in top-border element when DIV is detached
- * 
+ *
  * This overrides HTML templates with bootstrap 3 compatible ones.
  *
  */
@@ -15,7 +15,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.bootstrap.UserInterfaceBundleIn
      */
 
     function () {
-        
+
     }, {
 
         /**
@@ -50,6 +50,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.bootstrap.UserInterfaceBundleIn
         }
     }, {
         "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Stateful'],
-        "extend" : ["Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"]
-        
+        "extend": ["Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"]
+
     });

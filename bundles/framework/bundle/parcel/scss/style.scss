@@ -5,6 +5,9 @@ div.parcelform div.help {
 div.parcelform div.field {
 	padding-bottom:10px;
 }
+div.parcelform  {
+  width: 300px;
+  height: 500px}
 div.parcelform input {
 	width:80%;
 }
@@ -13,7 +16,7 @@ div.parcelform textarea, div.parcelform select {
 }
 div.parcel div.buttons div.button {
 	margin:10px;
-	padding:10px;
+	padding: 10px;
 	border:1px solid;
 	border-radius:5px;
 	box-shadow:5px 5px 5px #888;

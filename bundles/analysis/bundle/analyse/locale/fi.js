@@ -6,6 +6,7 @@ Oskari.registerLocalization({
         "flyouttitle": "Analyysi",
         "desc": "",
         "btnTooltip": "Analyysi",
+        "notLoggedIn": "Vain kirjautunut käyttäjä voi tehdä WFS tasoille analyysejä. <a href='/web/fi/login'>Kirjaudu palveluun</a>.",
         "AnalyseView": {
             "title": "Analyysi",
             "content": {

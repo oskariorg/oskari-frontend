@@ -1265,10 +1265,10 @@ function(config) {
                     var tile = row[iCol];
 
                     // if failed grid
-                    if(typeof tile.bounds.left == "undefined" ||
-                        typeof tile.bounds.bottom == "undefined" ||
-                        typeof tile.bounds.right == "undefined" ||
-                        typeof tile.bounds.top == "undefined") {
+                    if(typeof tile.bounds.left === "undefined" ||
+                        typeof tile.bounds.bottom === "undefined" ||
+                        typeof tile.bounds.right === "undefined" ||
+                        typeof tile.bounds.top === "undefined") {
                         return null;
                     }
 

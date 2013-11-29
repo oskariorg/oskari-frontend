@@ -23,9 +23,12 @@ No configuration is required, but setting selectionTools to true will add a new 
 
 Using selection tools the user can get wfs grid data from smaller area than whole screen.
 
+Selection tool can be simplified by setting singleSelection to true. This makes the dialog more simple and selection tool makes the filtering straight after defining the geometry. Only single geometry can be given per filter with this option.
+
 ```javascript
 {
-  "selectionTools" : true
+  "selectionTools" : true,
+  "singleSelection" : true
 }
 ```
 
