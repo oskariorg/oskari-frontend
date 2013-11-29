@@ -747,7 +747,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             });
 
             var selectorsContainer = container.find('.selectors-container');
-            selectorsContainer.append(indi);
+            selectorsContainer.append(indi).append('<div class="parameters-cont"></div>');
             // if we want to select some special indicator..
             //sel.find('option[value="127"]').prop('selected', true);
 
@@ -789,11 +789,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             indicator.title = JSON.parse(data.title);
             indicator.organization = {'title': { 'fi' : 'Käyttäjän tuomaa dataa'}};
             indicator.description = JSON.parse(data.title);
-            me.indicators.push(indicator);
+//            me.indicators.push(indicator);
             data.data = JSON.parse(data.data);
 
             // Show the data in the grid.
-            me.addIndicatorDataToGrid(container, data.indicatorId, 'total', data.year, data.data, me.indicators[me.indicators.length -1]);
+            me.addIndicatorDataToGrid(container, data.indicatorId, 'total', data.year, data.data, indicator);
         },
         /**
          * Get Sotka indicator meta data
@@ -864,10 +864,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          */
         _warnOfInvalidIndicator: function (container, metadata) {
             var selectors = container.find('.selectors-container'),
-                parameters = jQuery('<div class="parameters-cont"></div>');
+                parameters = selectors.find('.parameters-cont');
 
             parameters.html(this._locale.cannotDisplayIndicator);
-            selectors.append(parameters);
         },
         /**
          * Create indicator meta info button
@@ -909,19 +908,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             var selectors = container.find('.selectors-container');
             // year & gender are in a different container than indicator select
-            var parameters = jQuery('<div class="parameters-cont"></div>');
+            var parameters = selectors.find('.parameters-cont');
+            var newIndicator = parameters.find('.new-indicator-cont');
             var year = null,
                 gender = null;
 
             // if there is a range we can create year select
             if (indicator.range !== null && indicator.range !== undefined) {
-                parameters.append(this.getYearSelectorHTML(indicator.range.start, indicator.range.end));
+                newIndicator.before(this.getYearSelectorHTML(indicator.range.start, indicator.range.end));
                 // by default the last value is selected in getYearSelectorHTML
                 year = indicator.range.end;
             }
             // if there is a classification.sex we can create gender select
             if (indicator.classifications && indicator.classifications.sex) {
-                parameters.append(this.getGenderSelectorHTML(indicator.classifications.sex.values));
+                newIndicator.before(this.getGenderSelectorHTML(indicator.classifications.sex.values));
                 // by default the last value is selected in getGenderSelectorHTML
                 gender = indicator.classifications.sex.values[indicator.classifications.sex.values.length - 1];
             }
@@ -934,11 +934,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var fetchButton = jQuery('<button class="fetch-data' + (includedInGrid ? ' hidden' : '') + '">' + this._locale.addColumn + '</button>');
             var removeButton = jQuery('<button class="remove-data' + (includedInGrid ? '' : ' hidden') + '">' + this._locale.removeColumn + '</button>');
 
-            parameters.append(fetchButton);
-            parameters.append(removeButton);
+            newIndicator.before(fetchButton);
+            newIndicator.before(removeButton);
 
-            selectors.find('.parameters-cont').remove();
-            selectors.append(parameters);
+            selectors.find('.indicator-cont').after(parameters);
 
             // click listener
             fetchButton.click(function (e) {
@@ -964,7 +963,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         },
 
         deleteDemographicsSelect: function (container) {
-            container.find('.parameters-cont').remove();
+        container.find('.parameters-cont').find('.selector-cont').remove();
+        container.find('.parameters-cont').find('.selector-button').remove();
         },
 
         /**
