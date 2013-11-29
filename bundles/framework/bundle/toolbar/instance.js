@@ -194,7 +194,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
 
             if (c === undefined && this.menutoolbarcontainer && !data.toolbarContainer) {
                 c = this.createMenuToolbarContainer(tbid, data);
-            } else if ((c === undefined || c.parents('body').length == 0) && data && data.toolbarContainer) {
+            } else if ((c === undefined || c.parents('body').length === 0) && data && data.toolbarContainer) {
                 c = this.addToolbarContainer(tbid, data);
             }
 
@@ -360,7 +360,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             tb.remove();
             this.toolbars[tbid] = undefined;
             delete this.toolbars[tbid];
-            
+
         },
 
         /**

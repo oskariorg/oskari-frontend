@@ -144,25 +144,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 "infoBox": true
             }
         }];
-        /*
-// ADD this to get PublisherToolbarPlugin visible at publisher
-        }, {
-            "id": "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin",
-            "selected": false,
-            "lefthanded": "top right",
-            "righthanded": "top left",
-            "config": {
-                "location": {
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "classes": "top right"
-                }
-            }
-
-
-*/
 
         // map tool indices so we don't have to go through the list every time...
         me.toolIndices = {};
@@ -185,6 +166,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             "righthanded": "top left",
             "classes": "top right"
         };
+
+        me.toolbarConfig = {};
 
         me.toolLayouts = ["lefthanded", "righthanded"];
 
@@ -792,9 +775,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     if (isChecked) {
                         reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
                         sandbox.request(requester, reqBuilder(toolName, groupName, toolOption));
+                        if (!me.toolbarConfig[groupName]) {
+                            me.toolbarConfig[groupName] = {};
+                        }
+                        me.toolbarConfig[groupName][toolName] = true;
                     } else {
                         reqBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
                         sandbox.request(requester, reqBuilder(toolName, groupName, toolOption.toolbarid));
+                        if (me.toolbarConfig[groupName]) {
+                            delete me.toolbarConfig[groupName][toolName];
+                        }
                     }
                 };
             };
@@ -873,7 +863,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
         },
         /**
-         * @method _toggleToolOption
+         * @method _getButtons
          * @private
          * Sends addToolbarButton requests when tools are selected to PublisherToolsPlugin
          */
@@ -1001,6 +991,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             if (me.data && me.data.id) {
                 selections.id = me.data.id;
+            }
+            // get toolbar config
+            // inactive buttons don't have to be sent
+            // if there's no active buttons, don't send toolbar config at all
+            if (me.toolbarConfig) {
+                var hasActiveTools = false;
+                for (i in me.toolbarConfig) {
+                    if (me.toolbarConfig.hasOwnProperty(i)) {
+                        for (j in me.toolbarConfig[i]) {
+                            if (me.toolbarConfig[i].hasOwnProperty(j) && me.toolbarConfig[i][j]) {
+                                hasActiveTools = true;
+                                break;
+                            }
+                        }
+                        if (hasActiveTools) {
+                            break;
+                        }
+                    }
+                }
+                if (hasActiveTools) {
+                    selections.toolbar = me.toolbarConfig;
+                }
             }
 
             for (i = 0; i < me.tools.length; i += 1) {

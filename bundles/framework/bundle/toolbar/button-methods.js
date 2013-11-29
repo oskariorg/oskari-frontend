@@ -18,45 +18,45 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             // no config -> do nothing
             return;
         }
-        var me = this;
-        var toolbar = this.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig);
-        var group = null;
-        var prefixedGroup = (pConfig ? pConfig.toolbarid ? pConfig.toolbarid : 'default' : 'default') + '-' + pGroup;
-        if (!this.buttons[prefixedGroup]) {
+        var me = this,
+            toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
+            group = null,
+            prefixedGroup = (pConfig ? pConfig.toolbarid ? pConfig.toolbarid : 'default' : 'default') + '-' + pGroup;
+        if (!me.buttons[prefixedGroup]) {
             // create group if not existing
-            this.buttons[prefixedGroup] = {};
-            group = this.templateGroup.clone();
+            me.buttons[prefixedGroup] = {};
+            group = me.templateGroup.clone();
             group.attr('tbgroup', prefixedGroup);
             toolbar.append(group);
-            this.groupsToToolbars[prefixedGroup] = pConfig ? pConfig.toolbarid : null;
+            me.groupsToToolbars[prefixedGroup] = pConfig ? pConfig.toolbarid : null;
         } else {
             group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
         }
 
-        if (this.buttons[prefixedGroup][pId]) {
+        if (me.buttons[prefixedGroup][pId]) {
             // button already added, dont add again
             return;
         }
 
         // create button to requested group with requested id
-        this.buttons[prefixedGroup][pId] = pConfig;
-        var button = this.templateTool.clone();
+        me.buttons[prefixedGroup][pId] = pConfig;
+        var button = me.templateTool.clone();
         button.attr('tool', pId);
         button.attr('title', pConfig.tooltip);
         button.addClass(pConfig.iconCls);
 
         // handling for state setting if the button was not yet on toolbar on setState
-        if (this.selectedButton) {
+        if (me.selectedButton) {
             // FIXME use ===
-            if (this.selectedButton.id == pId &&
-                this.selectedButton.group == prefixedGroup) {
+            if (me.selectedButton.id === pId &&
+                    me.selectedButton.group === prefixedGroup) {
                 button.addClass('selected');
                 pConfig.callback();
             }
         } else {
             if (pConfig.selected) {
                 button.addClass('selected');
-                this.selectedButton = {
+                me.selectedButton = {
                     id: pId,
                     group: prefixedGroup
                 };
@@ -64,7 +64,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         }
         // if button config states this to be selected -> use as default button
         if (pConfig.selected) {
-            this.defaultButton = {
+            me.defaultButton = {
                 id: pId,
                 group: prefixedGroup
             };
@@ -152,8 +152,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * Clears selection from all tools to make room for a new selection
      */
     _removeToolSelections: function (pGroup) {
-        var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
-        var tools = toolbar.find('div.tool');
+        var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]),
+            tools = toolbar.find('div.tool');
         tools.removeClass('selected');
     },
     /**
@@ -172,30 +172,31 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             return;
         }
         var prefixedGroup = pGroup;
-        if(pToolbarId) {
+        if (pToolbarId) {
             prefixedGroup = pToolbarId + '-' + prefixedGroup;
-        } else  {
-            prefixedGroup = 'default-' + prefixedGroup;            
+        } else {
+            prefixedGroup = 'default-' + prefixedGroup;
         }
         if (this.buttons[prefixedGroup]) {
-            var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]);
-            var group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
+            var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]),
+                group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
             if (pId) {
                 var button = group.find('div.tool[tool=' + pId + ']');
                 button.remove();
                 this.buttons[prefixedGroup][pId] = null;
                 delete this.buttons[prefixedGroup][pId];
                 // TODO: check if no buttons left -> delete group also?
-                var count = 0
-                for (var key in this.buttons[prefixedGroup]) {
-                    if (this.buttons[prefixedGroup].hasOwnProperty(key)) { 
+                var count = 0,
+                    key;
+                for (key in this.buttons[prefixedGroup]) {
+                    if (this.buttons[prefixedGroup].hasOwnProperty(key)) {
                         count++;
                     }
                 }
-                if(count == 0){
+                if (count === 0) {
                     group.remove();
                     this.buttons[prefixedGroup] = null;
-                    delete this.buttons[prefixedGroup];                    
+                    delete this.buttons[prefixedGroup];
                 }
             } else {
                 // delete whole group
@@ -224,7 +225,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         }
         if (this.buttons[pGroup]) {
             var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]),
-                group = toolbar.find('div.toolrow[tbgroup=default-' + pGroup + ']'),
+                group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']'),
                 button,
                 buttonContainers,
                 b;

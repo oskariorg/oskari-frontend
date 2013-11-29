@@ -81,10 +81,10 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         init: function (sandbox) {
 
             var sandboxName = (this.config ? this.config.sandbox : null) || 'sandbox';
-            var sandbox = Oskari.getSandbox(sandboxName);
+            var sb = Oskari.getSandbox(sandboxName);
 
             // register domain builder
-            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            var mapLayerService = sb.getService('Oskari.mapframework.service.MapLayerService');
             if (mapLayerService) {
                 mapLayerService.registerLayerModel('arcgislayer', 'Oskari.arcgis.bundle.maparcgis.domain.ArcGisLayer');
             }
@@ -102,10 +102,13 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             this._map = this.getMapModule().getMap();
 
             sandbox.register(this);
+            var p;
             for (p in this.eventHandlers) {
-                sandbox.registerForEventByName(this, p);
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(this, p);
+                }
             }
-            
+
         },
         /**
          * @method stopPlugin
@@ -115,9 +118,11 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          *          reference to application sandbox
          */
         stopPlugin: function (sandbox) {
-
+            var p;
             for (p in this.eventHandlers) {
-                sandbox.unregisterFromEventByName(this, p);
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.unregisterFromEventByName(this, p);
+                }
             }
 
             sandbox.unregister(this);
@@ -158,7 +163,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             'AfterChangeMapLayerStyleEvent': function (event) {
                 //this._afterChangeMapLayerStyleEvent(event);
             },
-            'AfterMapMoveEvent' : function (event) {
+            'AfterMapMoveEvent': function (event) {
                 this._afterMapMoveEvent(event);
             }
         },
@@ -179,16 +184,18 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          */
         preselectLayers: function (layers) {
 
-            var sandbox = this._sandbox;
-            for (var i = 0; i < layers.length; i++) {
-                var layer = layers[i];
-                var layerId = layer.getId();
+            var sandbox = this._sandbox,
+                i,
+                layer,
+                layerId;
+            for (i = 0; i < layers.length; i++) {
+                layer = layers[i];
+                layerId = layer.getId();
 
-                if (!layer.isLayerOfType(this._layerType)) {
-                    continue;
+                if (layer.isLayerOfType(this._layerType)) {
+                    sandbox.printDebug("preselecting " + layerId);
+                    this._addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
-                sandbox.printDebug("preselecting " + layerId);
-                this._addMapLayerToMap(layer, true, layer.isBaseLayer());
             }
 
         },
@@ -200,9 +207,12 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          *            event
          */
         _afterMapMoveEvent: function (event) {
-            //TODO: not exceltent solution, but close enough
-            for(var id in this._layer) {
-                this._layer[id].redraw();    
+            //TODO: not an excellent solution, but close enough
+            var id;
+            for (id in this._layer) {
+                if (this._layer.hasOwnProperty(id)) {
+                    this._layer[id].redraw();
+                }
             }
         },
 
@@ -230,9 +240,10 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 return;
             }
 
-            var markerLayer = this._map.getLayersByName("Markers");
+            var markerLayer = this._map.getLayersByName("Markers"),
+                mlIdx;
             if (markerLayer) {
-                for (var mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
+                for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
                     if (markerLayer[mlIdx]) {
                         this._map.removeLayer(markerLayer[mlIdx], false);
                     }
@@ -241,40 +252,39 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
             var jsonp = new OpenLayers.Protocol.Script();
             jsonp.createRequest(layer.getLayerUrls()[0], {
-                f: 'json', 
+                f: 'json',
                 pretty: 'true'
-            },  function initMap(layerInfo) {
-                    //TODO: this fixing 3 errors
-                    layerInfo.spatialReference.wkid = me._map.projection.substr(me._map.projection.indexOf(':')+1);
-                    var openLayer = new OpenLayers.Layer.ArcGISCache("arcgislayer_"+layer.getId(), layer.getLayerUrls()[0], {
-                        layerInfo: layerInfo
-                    });
+            }, function initMap(layerInfo) {
+                //TODO: this fixing 3 errors
+                layerInfo.spatialReference.wkid = me._map.projection.substr(me._map.projection.indexOf(':') + 1);
+                var openLayer = new OpenLayers.Layer.ArcGISCache("arcgislayer_" + layer.getId(), layer.getLayerUrls()[0], {
+                    layerInfo: layerInfo
+                });
 
-                    me._layer[layer.getId()] = openLayer;
+                me._layer[layer.getId()] = openLayer;
 
-                    openLayer.opacity = layer.getOpacity() / 100;
-                    me._map.addLayer(openLayer);
+                openLayer.opacity = layer.getOpacity() / 100;
+                me._map.addLayer(openLayer);
 
-                    if (keepLayerOnTop) {
-                        me._map.setLayerIndex(openLayer, me._map.layers.length);
-                    } else {
-                        me._map.setLayerIndex(openLayer, 0);
-                    }
-                    if (markerLayer) {
-                        for (var mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                            if (markerLayer[mlIdx]) {
-                                me._map.addLayer(markerLayer[mlIdx]);
-                            }
+                if (keepLayerOnTop) {
+                    me._map.setLayerIndex(openLayer, me._map.layers.length);
+                } else {
+                    me._map.setLayerIndex(openLayer, 0);
+                }
+                if (markerLayer) {
+                    for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
+                        if (markerLayer[mlIdx]) {
+                            me._map.addLayer(markerLayer[mlIdx]);
                         }
                     }
                 }
-            );
+            });
 
             //this._map.addLayer(openLayer);
 
             this._sandbox.printDebug("#!#! CREATED OPENLAYER.LAYER.ArcGis for ArcGisLayer " + layer.getId());
 
-            
+
         },
 
         /**
@@ -291,7 +301,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 return;
             }
             this._removeMapLayerFromMap(layer);
-            
+
         },
 
         /**
@@ -302,8 +312,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          */
         _removeMapLayerFromMap: function (layer) {
 
-           /* This should free all memory */
-           this._layer[layer.getId()].destroy();
+            /* This should free all memory */
+            this._layer[layer.getId()].destroy();
         },
         /**
          * @method getOLMapLayers
@@ -330,11 +340,12 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         _afterChangeMapLayerOpacityEvent: function (event) {
             var layer = event.getMapLayer();
 
-            if (!layer.isLayerOfType(this._layerType))
+            if (!layer.isLayerOfType(this._layerType)) {
                 return;
+            }
 
             this._sandbox.printDebug("Setting Layer Opacity for " + layer.getId() + " to " + layer.getOpacity());
-            if (this._layer[layer.getId()] != null) {
+            if (this._layer[layer.getId()] !== null && this._layer[layer.getId()] !== undefined) {
                 this._layer[layer.getId()].setOpacity(layer.getOpacity() / 100);
             }
         },

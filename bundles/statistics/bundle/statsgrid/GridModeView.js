@@ -47,8 +47,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 me.isVisible = (isShown == true);
 
                 // Update the layer if current layer is null or if the layer has changed.
-                if ((layer != null && me._layer == null) ||
-                        (layer != null && me._layer.getId() != layer.getId())) {
+                if ((layer && (me._layer === null || me._layer === undefined)) ||
+                    (layer && me._layer.getId() + '' !== layer.getId() + '')) {
                     me._layer = layer;
                     // Notify the grid plugin of the changed layer.
                     me.instance.gridPlugin.setLayer(layer);
@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                         me.instance.state.layerId = me._layer.getId();
                         me.toolbar.changeName(me.instance.getLocalization('tile').title + ' - ' + me._layer.getName());
                     }
-                } else if(!me.isVisible && me._layer != null) {
+                } else if (!me.isVisible && me._layer) {
                     me._layer = null;
                 }
 
@@ -130,7 +130,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
 
                 /** Center Finland and set zoom to min **/
                 var newCenter = new OpenLayers.LonLat(520000, 7250000);
-                mapModule.centerMap(newCenter,0);
+                mapModule.centerMap(newCenter, 0);
 
                 jQuery('#contentMap').addClass('statsgrid-contentMap');
                 jQuery('.oskariui-mode-content').addClass('statsgrid-mode');
@@ -153,7 +153,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                         elCenter.width(jQuery('.row-fluid').width() - elLeft.width());
                         me.instance.gridPlugin.grid.resizeCanvas();
                     },
-                    stop: function(event, ui) {
+                    stop: function (event, ui) {
                         var difference = ui.size.width - ui.originalSize.width;
                         var slickHeader = jQuery('div.slick-header-columns');
                         slickHeader.width(slickHeader.width() + difference);

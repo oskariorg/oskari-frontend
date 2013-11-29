@@ -3,55 +3,55 @@
  */
 Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Tile',
 
-/**
- * @method create called automatically on construction
- * @static
- *
- * Always extend this class, never use as is.
- */
-function(instance,locale) {
-	
-	this.instance = instance;
-	this.locale = locale;
-	this.container = null;
-	this.template = null;
-}, {
-	getName : function() {
-		return 'Oskari.catalogue.bundle.metadataflyout.Tile';
-	},
-	setEl : function(el, width, height) {
-		this.container = $(el);
-	},
-	startPlugin : function() {
-		this.refresh();
-	},
-	stopPlugin : function() {
-		this.container.empty();
-	},
-	getTitle : function() {
-		return this.locale['title'];
-	},
-	getDescription : function() {
-	},
-	getOptions : function() {
+    /**
+     * @method create called automatically on construction
+     * @static
+     *
+     * Always extend this class, never use as is.
+     */
 
-	},
-	setState : function(state) {
-		this.state = state;
-	},
-	refresh : function() {
-		var me = this;
-		var instance = me.instance;
-		var cel = this.container;
-		var tpl = this.template;
-		var sandbox = instance.getSandbox();
-		
-		/*var status = cel.children('.oskari-tile-status');*/
-		/*status.empty();*/
+    function (instance, locale) {
 
-		/*status.append('(' + layers.length + ')');*/
+        this.instance = instance;
+        this.locale = locale;
+        this.container = null;
+        this.template = null;
+    }, {
+        getName: function () {
+            return 'Oskari.catalogue.bundle.metadataflyout.Tile';
+        },
+        setEl: function (el, width, height) {
+            this.container = $(el);
+        },
+        startPlugin: function () {
+            this.refresh();
+        },
+        stopPlugin: function () {
+            this.container.empty();
+        },
+        getTitle: function () {
+            return this.locale.title;
+        },
+        getDescription: function () {},
+        getOptions: function () {
 
-	}
-}, {
-	'protocol' : ['Oskari.userinterface.Tile']
-});
+        },
+        setState: function (state) {
+            this.state = state;
+        },
+        refresh: function () {
+            var me = this;
+            var instance = me.instance;
+            var cel = this.container;
+            var tpl = this.template;
+            var sandbox = instance.getSandbox();
+
+            /*var status = cel.children('.oskari-tile-status');*/
+            /*status.empty();*/
+
+            /*status.append('(' + layers.length + ')');*/
+
+        }
+    }, {
+        'protocol': ['Oskari.userinterface.Tile']
+    });

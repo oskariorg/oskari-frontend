@@ -132,7 +132,8 @@ define([
                     // decode styles
                     if (me.model.admin && (me.model.admin.style_decoded === null || me.model.admin.style_decoded === undefined) && me.model.admin.style !== null && me.model.admin.style !== undefined) {
                         var styles = [];
-                        styles.push(me.options.layerTabModel.decode64(me.model.admin.style));
+                        //styles.push(me.options.layerTabModel.decode64(me.model.admin.style));
+                        styles.push(me.model.admin.style);
                         me.model.admin.style_decoded = styles;
                     }
                     // create AdminLayerSettingsView
@@ -168,7 +169,8 @@ define([
                     // decode styles
                     if (subLayer && subLayer.admin && (subLayer.admin.style_decoded === null || subLayer.admin.style_decoded === undefined) && subLayer.admin.style !== null && subLayer.admin.style !== undefined) {
                         var styles = [];
-                        styles.push(this.options.layerTabModel.decode64(subLayer.admin.style));
+                        styles.push(subLayer.admin.style);
+//                        styles.push(this.options.layerTabModel.decode64(subLayer.admin.style));
                         subLayer.admin.style_decoded = styles;
                     }
                     var baseLayerId;
