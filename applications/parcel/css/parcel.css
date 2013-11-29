@@ -88,3 +88,8 @@ div.oskari-flyouttoolbar {
 .oskari-tile {
   border-color: #cccccc !important;
 }
+
+/* divman */
+.oskari-tile-status {
+  color : #ffffff !important;
+}
