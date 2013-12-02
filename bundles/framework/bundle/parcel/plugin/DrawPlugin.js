@@ -23,6 +23,7 @@ function(instance) {
 	this.markerLayer = null;
 	this.currentDrawMode = null;
 	this.currentFeatureType = null;
+    this._oldPreParcel = null;   // old preparcel attributes
 	// Created in init
 	this.splitter = null;
 	this.backupFeatures = [];
@@ -590,6 +591,13 @@ function(instance) {
 	getFeatureType : function() {
 		return this.currentFeatureType;
 	},
+        /**
+         * Returns attributes of old stored preparcel
+         * @returns {*}
+         */
+        getOldPreParcel: function () {
+            return this._oldPreParcel;
+        },
 	/**
 	 * @method getSandbox
      * @return {Oskari.mapframework.sandbox.Sandbox}
@@ -680,9 +688,13 @@ function(instance) {
             jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); // IE8
     },
 
-    createEditor : function(features) {
+    createEditor : function(features, preparcel) {
         this.clear();
         var attributes = {};
+        this.currentFeatureType = this.instance.conf.registerUnitFeatureType;
+        this._oldPreParcel = preparcel;
+        var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')([this.getDrawingLayer(), this.getEditLayer()]);
+        this._sandbox.notifyAll(event);
         var selectedFeature = 0;
         var partInd = 0;
 
@@ -693,7 +705,7 @@ function(instance) {
                 case "partparcel":
                     this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Polygon(features[i].geometry.components[0])));
                     this.drawLayer.features[partInd].style = this.basicStyle;
-//                  this.drawLayer.features[partInd].attributes = {name : attributes.tekstiKartalla, quality : attributes.lahdeaineisto};
+                    this.drawLayer.features[partInd].attributes = {name : preparcel.preparcel_id, quality : preparcel.parent_property_quality};
                     partInd = partInd+1;
                     break;
                 case "boundary":

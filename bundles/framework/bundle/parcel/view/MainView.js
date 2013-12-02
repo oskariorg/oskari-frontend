@@ -142,7 +142,8 @@ function(instance) {
                 defaultValues.place.parent_property_id = feature.attributes.name;
                 defaultValues.place.parent_property_quality = feature.attributes.quality;
             }
-            else if (oldpreparcel)
+            // Override if old values available
+            if (oldpreparcel)
             {
                 defaultValues.place.name = oldpreparcel.preparcel_id;
                 defaultValues.place.title = oldpreparcel.title;

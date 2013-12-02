@@ -146,7 +146,6 @@ function(instance) {
         for (var n = 0; n < feats.length; n++) {
             var f = feats[n];
             var featAtts = f.attributes;
-
             var id = this._parseNumericId(f.fid);
 
             var preparcel = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcel');
