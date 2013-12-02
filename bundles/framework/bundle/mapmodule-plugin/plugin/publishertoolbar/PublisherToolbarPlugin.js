@@ -316,19 +316,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             }
             me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
 
-            if (me.toolbarId && (me.toolbarContent)) {
-                // add toolbar when toolbarId and target container is configured
-                // We assume the first container is intended for the toolbar
-                sandbox.requestByName(me, 'Toolbar.ToolbarRequest', [me.toolbarId, 'add', {
-                    title : me.localization.title,
-                    show : false,
-                    toolbarContainer: me.element.find('.' + me.toolbarContent),
-                    closeBoxCallback : function() {
-                        view.prepareMode(false);
-                    }
-                }]);
-            }
-
             // hide container
             toolscontainer = me.element.find('.' + me.toolbarContainer);
             toolscontainer.hide();
@@ -338,6 +325,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 toolscontainer.toggle();
             });
 
+        },
+        setToolbarContainer : function() {
+            var me = this,
+                sandbox = me._sandbox;
+debugger;
+            var builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
+            if (me.toolbarId && (me.toolbarContent) && builder != null) {
+                // add toolbar when toolbarId and target container is configured
+                // We assume the first container is intended for the toolbar
+                sandbox.requestByName(me, 'Toolbar.ToolbarRequest', [me.toolbarId, 'add', {
+                    title : me.localization.title,
+                    show : false,
+                    toolbarContainer: me.element.find('.' + me.toolbarContent),
+                    closeBoxCallback : function() {
+                        // this is useless, I guess.  
+                        //view.prepareMode(false);
+                    }
+                }]);
+            }            
         },
         /**
          * @method getToolOptions

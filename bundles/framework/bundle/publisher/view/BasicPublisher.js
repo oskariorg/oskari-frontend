@@ -168,7 +168,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             "classes": "top right"
         };
 
-        me.toolbarConfig = {};
+        me.toolbarConfig = {
+            'defaultToolbarContainer' : '.publishedToolbarContent'
+        };
 
         me.toolLayouts = ["lefthanded", "righthanded"];
 
@@ -609,7 +611,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             contentPanel.append(tooltipCont);
 
 
-
             // content
             for (i = 0; i < me.toolLayouts.length; i += 1) {
                 layoutContainer = me.templateLayout.clone();
@@ -800,6 +801,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             if (enabled) {
                 tool.plugin.startPlugin(this.instance.sandbox);
                 tool._isPluginStarted = true;
+                // toolbar (bundle) needs to be notified
+debugger;
+                if(tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
+                    tool.plugin.setToolbarContainer();
+                }
 
                 toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions() : null;
 
@@ -855,8 +861,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                         toolOptionCheckboxes.remove();
                         optionContainer.remove();
                     }
-
-
 
                     tool._isPluginStarted = false;
                     tool.plugin.stopPlugin(this.instance.sandbox);
@@ -993,6 +997,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             if (me.data && me.data.id) {
                 selections.id = me.data.id;
             }
+debugger;
             // get toolbar config
             // inactive buttons don't have to be sent
             // if there's no active buttons, don't send toolbar config at all
