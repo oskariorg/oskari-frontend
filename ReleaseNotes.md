@@ -1,7 +1,12 @@
 # Release Notes
+
 ## 1.17
+
 ### Statsgrid
+
 Added posibility to add indicator data through data import (localization is still work in progress)
+
+Adds a tab to personaldata from which users can access their own saved indicators.
 
 ## 1.16
 
