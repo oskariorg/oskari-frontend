@@ -546,6 +546,19 @@ function(instance) {
 		}
 	},
         /**
+         * Returns the index of selected feature
+         *
+         * @return index of selected feature
+         * @method getIndexOfSelectedFeature
+         */
+        getIndexOfSelectedFeature : function() {
+            if (this.selectedFeature > -1) {
+
+                return this.selectedFeature;
+
+            } else return 0;
+        },
+        /**
          * Returns the parcel geometry from the draw layer
          * @method
          */
