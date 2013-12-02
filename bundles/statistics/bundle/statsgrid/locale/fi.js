@@ -17,7 +17,10 @@ Oskari.registerLocalization({
 				"name": "Otsikko",
 				"description": "Kuvaus"
 			},
-			"newIndicator": "Uusi indikaattori"
+			"newIndicator": "Uusi indikaattori",
+			"error": "Virhe",
+			"indicatorsError": "Virhe indikaattorien latauksessa. Yritä myöhemmin uudelleen",
+			"indicatorError": "Virhe indikaattorin latauksessa. Yritä myöhemmin uudelleen"
 		},
 		"gender": "Sukupuoli",
 		"genders": {

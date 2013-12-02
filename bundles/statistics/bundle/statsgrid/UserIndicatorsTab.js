@@ -20,7 +20,7 @@ function(instance, localization) {
     this.template = jQuery(
         '<div class="userIndicatorsList">' +
             '<div class="indicatorsGrid"></div>' +
-            '<button id="createNewIndicator">' + this.loc.newIndicator + '</button>' +
+            //'<button id="createNewIndicator">' + this.loc.newIndicator + '</button>' +
         '</div>'
     );
 
@@ -62,7 +62,7 @@ function(instance, localization) {
         this.bindEvents();
         this.container = this.template.clone();
         // Bind the "Add new indicator" button to show the form
-        this._bindAddNewIndicator(this.container);
+        //this._bindAddNewIndicator(this.container);
         // Retrieve the indicators from the service
         var service = this.instance.getUserIndicatorsService();
         service.getUserIndicators(function(indicators) {
@@ -70,7 +70,7 @@ function(instance, localization) {
             me._renderIndicators(indicators);
         }, function() {
             // error :(
-            alert("Couldn't load indicators");
+            me.showMessage(me.loc.error.title, me.loc.error.indicatorsError);
         });
     },
     /**
@@ -156,10 +156,10 @@ function(instance, localization) {
             service = instance.getUserIndicatorsService();
 
         service.getUserIndicator(indicatorId, function(indicator) {
-            // TODO: go to the thematic maps mode
             instance.addUserIndicator(me._normalizeIndicator(indicator));
         }, function() {
             // error :(
+            me.showMessage(me.loc.error.title, me.loc.error.indicatorError);
         });
     },
     /**
@@ -245,5 +245,24 @@ function(instance, localization) {
         for (p in this.eventHandlers) {
             sandbox.unregisterFromEventByName(this, p);
         }
-    }
+    },
+
+    /**
+     * @method showMessage
+     * Shows user a message with ok button
+     * @param {String} title popup title
+     * @param {String} message popup message
+     */
+    showMessage: function (title, message) {
+        var loc = this.instance.getLocalization(),
+            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        
+        okBtn.setTitle(loc.buttons.ok);
+        okBtn.addClass('primary');
+        okBtn.setHandler(function () {
+            dialog.close(true);
+        });
+        dialog.show(title, message, [okBtn]);
+    },
 });

@@ -61,14 +61,12 @@ function(instance) {
 
     getUserIndicators: function(successCb, errorCb) {
         var url = this.sandbox.getAjaxUrl() + 'action_route=GetUserIndicators';
-        successCb(this.userIndicators);
-        //this._get(url, successCb, errorCb);
+        this._get(url, successCb, errorCb);
     },
 
     getUserIndicator: function(indicatorId, successCb, errorCb) {
         var url = this.sandbox.getAjaxUrl() + 'action_route=GetUserIndicators&id=' + indicatorId;
-        successCb(this.userIndicators[0]);
-        //this._get(url, successCb, errorCb);
+        this._get(url, successCb, errorCb);
     },
 
     saveUserIndicator: function(indicator, successCb, errorCb) {

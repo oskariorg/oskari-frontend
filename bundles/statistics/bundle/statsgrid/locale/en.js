@@ -17,7 +17,10 @@ Oskari.registerLocalization({
                 "name": "Title",
                 "description": "Description"
             },
-            "newIndicator": "New indicator"
+            "newIndicator": "New indicator",
+            "error": "Error",
+            "indicatorsError": "Error occurred whilst loading the indicators. Please try again later",
+            "indicatorError": "Error occurred whilst loading an indicator. Please try again later"
         },
         "gender": "Gender",
         "genders": {
