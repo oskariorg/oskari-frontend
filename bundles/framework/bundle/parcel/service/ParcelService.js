@@ -173,13 +173,18 @@ function(instance) {
 
         getPreParcelData : function(list, drawplugin) {
             var mylist = [];
+            var features = drawplugin.getDrawingLayer().features;
+            for ( i = 0; i < features.length; i++) {
             var ppoldata = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');
             //ppdata.setId(id); insert automatic when undefined
+            var gtype = 'partparcel';
+            if (drawplugin.getIndexOfSelectedFeature() === i) gtype = 'selectedpartparcel';
             if(list)ppoldata.setPreparcel_id(list[0].id);
-            ppoldata.setGeom_type('parcel');
+            ppoldata.setGeom_type(gtype);
             ppoldata.setUuid(this.kvp_uid);
-            ppoldata.setGeometry(drawplugin.getParcelGeometry());
+            ppoldata.setGeometry(features[i].geometry);
             mylist.push(ppoldata);
+            }
 
 /*            //Draw layer
             var drawlayer = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');

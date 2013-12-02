@@ -292,6 +292,7 @@ function(instance) {
         // Callback handles the end of the asynchronous operation.
         var serviceCallback = function(blnSuccess, model, blnNew) {
             if (blnSuccess) {
+                me.instance.showMessage('Tallennus onnistui');
                 me._cleanupPopup();
             } else {
                 // blnNew should always be true since we are adding a preparcel
