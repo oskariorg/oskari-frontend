@@ -18,7 +18,7 @@
         <div class="add-layer-input-area">
             <div class="input-controls">
                 <input type="text" id="add-layer-interface" class="add-layer-input mid" placeholder="<%= instance.getLocalization('admin').interfaceAddress %>" <% if(model != null && model.admin.wmsUrl) { %>value="<%= model.admin.wmsUrl %>"<% } %> />
-                <div class="icon-close"></div>
+                <div class="icon-close mid"></div>
             </div>
             <button id="add-layer-wms-button" class="fetch-wms-button"><%= instance.getLocalization('admin').getInfo %></button>
         </div>
@@ -68,11 +68,11 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-<%= locale.lang %>-name" class="add-layer-input" placeholder="<%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].placeholder : instance.getLocalization('admin')['generic'].placeholder.replace('{0}', locale.lang) %>" <% if(model != null && model.admin.name != null && model.admin.name[locale.lang] != null) { %> value="<%= model.admin.name[locale.lang] %>" <% } %>  />
+                <input type="text" id="add-layer-<%= locale.lang %>-name" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].placeholder : instance.getLocalization('admin')['generic'].placeholder.replace('{0}', locale.lang) %>" <% if(model != null && model.admin.name != null && model.admin.name[locale.lang] != null) { %> value="<%= model.admin.name[locale.lang] %>" <% } %>  />
                 <div class="icon-close"></div>
             </div>
             <div class="input-controls">
-                <input type="text" id="add-layer-<%= locale.lang %>-title" class="add-layer-input" placeholder="<%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].descplaceholder : instance.getLocalization('admin')['generic'].descplaceholder.replace('{0}', locale.lang) %>" <% if(model != null && model.admin.title != null && model.admin.title[locale.lang] != null) { %> value="<%= model.admin.title[locale.lang] %>" <% } %> />
+                <input type="text" id="add-layer-<%= locale.lang %>-title" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].descplaceholder : instance.getLocalization('admin')['generic'].descplaceholder.replace('{0}', locale.lang) %>" <% if(model != null && model.admin.title != null && model.admin.title[locale.lang] != null) { %> value="<%= model.admin.title[locale.lang] %>" <% } %> />
                 <div class="icon-close"></div>
             </div>
         </div>
@@ -196,8 +196,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-legendImage" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').legendImagePlaceholder %>" <% if(model != null && model.admin.legendImage) { %>value="<%= model.admin.legendImage %>"<% } %>/>
-                <div class="icon-close"></div>
+                <textarea rows="3" cols="50" id="add-layer-legendImage" class="add-layer-input long"><% if(model != null && model.admin.legendImage) { %><%= model.admin.legendImage %><% } %></textarea>
             </div>
         </div>
     </div>
@@ -226,7 +225,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <textarea rows="3" cols="40" id="add-layer-xslt" class="add-layer-input long" ><% if(model != null && model.admin.xslt_decoded) { %><%= model.admin.xslt_decoded %><% } %></textarea>
+                <textarea rows="3" cols="50" id="add-layer-xslt" class="add-layer-input long" ><% if(model != null && model.admin.xslt_decoded) { %><%= model.admin.xslt_decoded %><% } %></textarea>
             </div>
         </div>
     </div>
