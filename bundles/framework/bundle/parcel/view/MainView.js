@@ -134,12 +134,24 @@ function(instance) {
             place : {}
         };
         var feature = this.drawPlugin.getDrawing();
+        var oldpreparcel = this.drawPlugin.getOldPreParcel();
         if (feature) {
             defaultValues.place.area = this.drawPlugin.getParcelGeometry().getArea().toFixed(0);
             if (feature.attributes) {
                 defaultValues.place.name = feature.attributes.name+'-M';
                 defaultValues.place.parent_property_id = feature.attributes.name;
                 defaultValues.place.parent_property_quality = feature.attributes.quality;
+            }
+            else if (oldpreparcel)
+            {
+                defaultValues.place.name = oldpreparcel.preparcel_id;
+                defaultValues.place.title = oldpreparcel.title;
+                defaultValues.place.subtitle = oldpreparcel.subtitle;
+                defaultValues.place.desc = oldpreparcel.description;
+                defaultValues.place.parent_property_id = oldpreparcel.parent_property_id;
+                defaultValues.place.parent_property_quality = oldpreparcel.parent_property_quality;
+                defaultValues.place.reporter= oldpreparcel.reporter;
+                defaultValues.place.area_unit = oldpreparcel.area_unit;
             }
         }
         // Set the default values for the form.
