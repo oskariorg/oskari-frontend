@@ -1,4 +1,8 @@
 # Release Notes
+## 1.17
+### Statsgrid
+Added posibility to add indicator data through data import (localization is still work in progress)
+
 ## 1.16
 
 ### **Breaking changes**

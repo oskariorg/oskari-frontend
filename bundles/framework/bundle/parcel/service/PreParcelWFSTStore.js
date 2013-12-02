@@ -4,7 +4,7 @@
  * Transforms Ext Model & OpenLayers geometry to WFS Transactions
  *
  *
- * NEEDS: URL to WFS service UUID for storing to some speficic user
+ * NEEDS: URL to WFS service and KVP_UID for storing to some speficic kvp user
  *
  *
  * Sample Usage:
@@ -62,21 +62,24 @@ function(instance) {
      *
      * loads preparcels from backend to given service filters by
      * initialised user uuid  ( kvp uuid)
+     *
+     * @param kvp_uid
+     * @param cb
      * TODO: add kvp_uid filter
      */
-    getPreParcels : function(cb) {
-        var uuid = this.uuid;
-        var uuidFilter = new OpenLayers.Filter.Comparison({
+    getPreParcels : function(kvp_uid, cb) {
+        var kvp_uid = this.uuid;
+        var kvp_uidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "uuid",
-            value : uuid
+            property : "kvp_uid",
+            value : kvp_uid
         });
         var p = this.protocols.preparcel;
 
         var me = this;
 
         p.read({
-            filter : uuidFilter,
+            filter : kvp_uidFilter,
             callback : function(response) {
                 me._handlePreParcelResponse(response, cb);
             }
@@ -148,6 +151,7 @@ function(instance) {
      */
     commitPreParcel: function (list, callback) {
         var uuid = this.uuid;
+        var kvp_uid = this.kvp_uid;
         var p = this.protocols.preparcel;
         var me = this;
 
@@ -158,7 +162,7 @@ function(instance) {
 
             var featAtts = {
                     'uuid': uuid,
-                    'kvp_uid':  preparcel.getKvp_uid(),
+                    'kvp_uid':  kvp_uid,
                     'preparcel_id': preparcel.getPreparcel_id(),
                     'title': preparcel.getTitle(),
                     'subtitle': preparcel.getSubtitle(),
@@ -299,7 +303,7 @@ function(instance) {
      * @method getPreParcelData
      *
      * loads preparcel geometries from backend to given service filters by
-     * initialised user uuid
+     * parcel_id (preparcel.id)
      *
      */
     getPreParcelData : function(parcel_id, cb) {
@@ -352,7 +356,7 @@ function(instance) {
             ppdata.setCreated(featAtts['created']);
             ppdata.setGeometry(f.geometry);
             ppdata.setUpdated(featAtts['updated']);
-            ppdata.setUuid(uuid);
+            ppdata.setUuid(featAtts['uuid']);
 
             list.push(ppdata);
         }
@@ -380,7 +384,7 @@ function(instance) {
             var featAtts = {
                 'geom_type': m.getGeom_type(),
                 'preparcel_id' : m.getPreparcel_id(),
-                'uuid' : uuid
+                'uuid' : m.getUuid()
             };
 
             var feat = new OpenLayers.Feature.Vector(geom, featAtts);
