@@ -691,7 +691,7 @@ function(instance) {
                 case "selectedpartparcel":
                     selectedFeature = partInd;
                 case "partparcel":
-                    this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(features[i].geometry.components[0]));
+                    this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Polygon(features[i].geometry.components[0])));
                     this.drawLayer.features[partInd].style = this.basicStyle;
 //                  this.drawLayer.features[partInd].attributes = {name : attributes.tekstiKartalla, quality : attributes.lahdeaineisto};
                     partInd = partInd+1;
@@ -702,6 +702,7 @@ function(instance) {
             }
         }
 
+        this._map.zoomToExtent(this.drawLayer.getDataExtent());
         OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
         this.drawLayer.features[0].style = this.selectStyle;
         this.selectedFeature = selectedFeature;

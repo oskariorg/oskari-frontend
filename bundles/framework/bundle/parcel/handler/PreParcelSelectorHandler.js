@@ -87,10 +87,14 @@ function(instance) {
             //  error message
         }
         else if (preparcel.preparcel && preparcel.data) {
+
+            this.instance.getDrawPlugin().createEditor(preparcel.data);
+
             // preparcel.preparcel; common preparcel attributes
             // preparcel.data geom features
             // Create editor
-            this.instance.getDrawPlugin().createEditor(preparcel.data);
+            this.instance.getDrawPlugin().createEditor(preparcel.data, preparcel.preparcel);
+
 
         }
     }
