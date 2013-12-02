@@ -654,7 +654,11 @@ function(instance) {
 		var trivialSplit = ( typeof trivial === "undefined" ? false : trivial);
 		var operatingFeature = this.splitter.split(trivialSplit);
 		if (operatingFeature != undefined) {
+            this.initControls(operatingFeature);
+		}
+	},
 
+    initControls : function(operatingFeature) {
             this.buttons.setButtonEnabled("line",false);
             this.buttons.setButtonEnabled("area",false);
             this.buttons.setButtonEnabled("selector",false);
@@ -674,8 +678,37 @@ function(instance) {
             // Reproduce the original OL 2.12 behaviour
             jQuery('svg').find('circle').css('cursor', 'move');
             jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); // IE8
-		}
-	},
+    },
+
+    createEditor : function(features) {
+        this.clear();
+        var attributes = {};
+        var selectedFeature = 0;
+        var partInd = 0;
+
+        for (var i=0; i<features.length; i++) {
+            switch (features[i].geom_type) {
+                case "selectedpartparcel":
+                    selectedFeature = partInd;
+                case "partparcel":
+                    this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(features[i].geometry.components[0]));
+                    this.drawLayer.features[partInd].style = this.basicStyle;
+//                  this.drawLayer.features[partInd].attributes = {name : attributes.tekstiKartalla, quality : attributes.lahdeaineisto};
+                    partInd = partInd+1;
+                    break;
+                case "boundary":
+                    this.editLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(features[i].geometry)));
+                    break;
+            }
+        }
+
+        OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
+        this.drawLayer.features[0].style = this.selectStyle;
+        this.selectedFeature = selectedFeature;
+        this.drawLayer.redraw();
+        this.editLayer.redraw();
+        this.initControls(this.editLayer.features[0]);
+    },
 
 	/**
 	 * Updates feature info in info box.
