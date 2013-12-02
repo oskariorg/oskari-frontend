@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.parcel.handler.ParcelSelectorHandler
+ * @class Oskari.mapframework.bundle.parcel.handler.PreParcelSelectorHandler
  *
- * Handles ParcelSelector events that are used to inform that feature with given fid should be loaded.
+ * Handles PreParcelSelector events that are used to inform that feature with given fid should be loaded.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.parcel.handler.ParcelSelectorHandler",
+Oskari.clazz.define("Oskari.mapframework.bundle.parcel.handler.PreParcelSelectorHandler",
 
 /**
  * @method create called automatically on construction
@@ -18,7 +18,7 @@ function(instance) {
      * @return {String} the name for the component
      */
     getName : function() {
-        return 'ParcelSelectorHandler';
+        return 'PreParcelSelectorHandler';
     },
     /**
      * @method init
@@ -59,10 +59,10 @@ function(instance) {
         }
         return handler.apply(this, [event]);
     },
-    loadParcel : function (fid) {
+    loadPreParcel : function (fid) {
         var me = this;
-        me.instance.getService().loadParcel(fid, function(feature) {
-            me._loadCallback.call(me, feature, me.instance.conf.parcelFeatureType);
+        me.instance.getService().loadPreParcelById(fid, function(preparcel) {
+            me._loadCallback.call(me, preparcel);
         });
     },
     /**
@@ -70,36 +70,28 @@ function(instance) {
      * @static
      */
     eventHandlers : {
-        'ParcelSelector.ParcelSelectedEvent' : function(event) {
-            var me = this;
-            if (!me.ignoreEvents) {
-                if (event && event.getFid()) {
-                    me.loadParcel(event.getFid());
-                }
-            }
-        },
-        'ParcelSelector.RegisterUnitSelectedEvent' : function(event) {
-            var me = this;
-            if (!me.ignoreEvents) {
-                if (event && event.getFid()) {
-                    me.instance.getService().loadRegisterUnit(event.getFid(), function(feature) {
-                        me._loadCallback.call(me, feature, me.instance.conf.registerUnitFeatureType);
-                    });
-                }
-            }
-        }
+
     },
     /**
      * @method _loadCallback
      * @private
-     * Callback function that gets the loaded feature and its feature type.
-     * Calls the {Oskari.mapframework.bundle.parcel.plugin.DrawPlugin} to draw the feature into the UI.
-     * @param {OpenLayers.Feature.Vector} Feature that has been loaded.
+     * Callback function that gets the loaded preparcel with geometries
+     * Calls the ....
+     * @param {} preparcel.preparcel (attributes) and preparcel.data  (geom features)
      * @param {String} featureType Feature type of the feature.
      */
-    _loadCallback : function(feature, featureType) {
-        if (feature) {
-            this.instance.getDrawPlugin().drawFeature(feature, featureType);
+    _loadCallback : function(preparcel) {
+        var me =this;
+        if (jQuery.isEmptyObject(preparcel))
+        {
+            //  error message
+        }
+        else if (preparcel.preparcel && preparcel.data) {
+            // preparcel.preparcel; common preparcel attributes
+            // preparcel.data geom features
+            this.instance.getDrawPlugin().drawFeature(preparcel.data, me.instance.conf.registerUnitFeatureType);
+            // Create editor
+            // ???
         }
     }
 }, {

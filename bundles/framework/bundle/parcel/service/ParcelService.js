@@ -223,6 +223,24 @@ function(instance) {
 
             return mylist;
         },
+        loadPreParcelById: function (preparcelRef, cb) {
+            var me = this;
+            var preparcel = {};
+            var callBackWrapper = function (list) {
+                var me2 = me;
+                if (list && list.length > 0) {
+                    preparcel.preparcel = list[0];
+                    // get geom features
+                    var cbWrapper2 = function (list2) {
+                        preparcel.data = list2;
+                        cb(preparcel);
+                    };
+                    me2._wfst2.getPreParcelData(preparcel.preparcel.id, cbWrapper2);
+                }
+            };
+
+            this._wfst2.getPreParcelById(this.kvp_uid, preparcelRef, callBackWrapper);
+        },
 
      loadPreParcel : function(drawplugin, cb) {
         var me = this;

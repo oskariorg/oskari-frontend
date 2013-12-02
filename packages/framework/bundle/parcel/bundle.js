@@ -149,6 +149,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingTool",
                 },
                 {
                     "type": "text/javascript",
+                    "src": "../../../../bundles/framework/bundle/parcel/handler/PreParcelSelectorHandler.js"
+                },
+                {
+                    "type": "text/javascript",
                     "src": "../../../../bundles/framework/bundle/parcel/instance.js"
                 },
                 // css
