@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin
- * Provides map tools container
+ * Provides publisher toolbar container
  * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePublisherToolbarPlugin
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
@@ -11,16 +11,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
     function (conf) {
         var me = this;
-        me.conf = conf;
+        me.conf = conf || {};
         me.element = null;
         me.mapModule = null;
         me.pluginName = null;
         me._sandbox = null;
         me._map = null;
         me._scalebar = null;
-
-        //FIXME conffiin?
-        this.toolbarId = 'publishedMap';
+        me.toolbarId = me.conf.toolbarId;
+        me.toolbarContent = 'publishedToolbarContent';
+        me.toolbarPopupContent = 'publishedToolbarPopupContent';
+        me.toolbarContainer = 'publishedToolbarContainer'; // Note! this needs to match styles and templates
 
     }, {
         // templates for tools-mapplugin
@@ -28,16 +29,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             main: jQuery(
                 '<div class="mapplugin tools">' +
                     "<div class='icon'></div>" +
-                    "<div class='tools-container'>" +
-                    "<div class='olPopupContent'>" +
-                    "<div class='tools-top-arrow'></div>" +
-                    "<div class='tools-content' >" +
+                    "<div class='publishedToolbarContainer'>" +
+                        "<div class='tools-top-arrow'></div>" +
                     "</div>" +
-                    "</div>" +
-                    "</div>" +
-                    '</div>'
-            ),
-            container: jQuery("<div></div>")
+                '</div>'),
+            container: jQuery("<div></div>"),
+            publishedToolbarPopupContent: jQuery('<div class="publishedToolPopupContent"><h3></h3><div class="content"></div><div class="actions"></div></div>')
         },
 
         /** @static @property __name plugin name */
@@ -149,6 +146,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                         }
                     }
                 ];
+
+            this.requestHandlers = {
+                toolContainerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler', me),
+            };            
         },
         /**
          * @method register
@@ -203,6 +204,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     me._sandbox.registerForEventByName(me, p);
                 }
             }
+
+            me._sandbox.addRequestHandler('Toolbar.ToolContainerRequest', this.requestHandlers.toolContainerRequestHandler);
 
             me._createUI();
         },
@@ -281,26 +284,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          */
         _createUI: function () {
             var me = this,
+                toolscontainer,
                 sandbox = me._sandbox,
+                container,
                 content,
                 containerClasses = 'top left',
                 position = 1,
-                containers = ((me.conf && me.conf.containers) ? me.conf.containers : []);
-            // TODO: containers? 
-            // I guess the idea is to have some kind of toolbar container vs. tool's content container
-
+                containers = [me.toolbarContent, me.toolbarPopupContent];
 
             if (!me.element) {
                 me.element = me.template.clone();
-                var wrapper = me.element.find('div.tools-content'),
-                    i,
-                    ilen;
-                for (i = 0, ilen = containers.length; i < ilen; i++) {
+                container = me.element.find('.' + me.toolbarContainer);
+
+                for (var i = 0, ilen = containers.length; i < ilen; i++) {
                     // create configured containers
                     me.templates.container
                         .clone()
-                        .attr("id", containers[i])
-                        .appendTo(wrapper);
+                        .attr("class", containers[i])
+                        .appendTo(container)
                 }
             }
 
@@ -315,18 +316,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             }
             me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
 
-            // add toolbar
-            sandbox.requestByName(me, 'Toolbar.ToolbarRequest', [me.toolbarId, 'add', {
-                title: me.localization.title,
-                show: false,
-                toolbarContainer: me.element.find('.tools-content'),
-                closeBoxCallback: function () {
-                    view.prepareMode(false);
-                }
-            }]);
+            if (me.toolbarId && (me.toolbarContent)) {
+                // add toolbar when toolbarId and target container is configured
+                // We assume the first container is intended for the toolbar
+                sandbox.requestByName(me, 'Toolbar.ToolbarRequest', [me.toolbarId, 'add', {
+                    title : me.localization.title,
+                    show : false,
+                    toolbarContainer: me.element.find('.' + me.toolbarContent),
+                    closeBoxCallback : function() {
+                        view.prepareMode(false);
+                    }
+                }]);
+            }
 
             // hide container
-            var toolscontainer = me.element.find('.tools-container');
+            toolscontainer = me.element.find('.' + me.toolbarContainer);
             toolscontainer.hide();
 
             var icon = me.element.find('div.icon');
@@ -352,18 +356,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          * @param {jQuery} div
          */
         changeToolStyle: function (style, div) {
-            div = div || this.element;
             var me = this;
+            div = div || me.element;
 
             if (!style || !div) {
                 return;
             }
 
-            var resourcesPath = this.getMapModule().getImageUrl(),
-                imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/maptools/images/',
-                styledImg = imgPath + 'menu-' + style + '.png',
+            var resourcesPath = me.getMapModule().getImageUrl(),
+                imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/',
+                styledImg = imgPath + 'menu-' + style + '.png',                
                 icon = div.find('.icon'),
-                toolsContent = div.find('.tools-content'),
+                toolsContent = div.find('.' + me.toolbarContent),
                 blackOrWhite = style.split("-")[1];
 
             icon.css({
@@ -376,7 +380,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 toolsContent.removeClass('dark').addClass('light'); //css({'background-color': '#ffffff'})
             }
 
-            var toolbarContent = me.element.find('.tools-content'),
+            var toolbarContent = me.element.find('.' + me.toolbarContent),
                 key,
                 buttonKey,
                 i;
@@ -410,6 +414,85 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     }
                 }
             }
+        },
+
+        /**
+         * Set tool content container content based on the passed in data values.
+         * data contains:
+         * {String} data.class class definitions for the container
+         * {String} data.title title for the container
+         * {String} data.content content for the container
+         * {Oskari.userinterface.component.Button[]} data.buttons buttons to show on dialog
+         *
+         * Note button handlers seem to malfunction if removed and reattached, therefore buttons are not reused.
+         * className, title, and content can be reused.
+         *
+         * @method setToolContent
+         * @param {Object} data
+         */
+        setToolContent: function (data){
+            var me = this,
+                className = data.className || "", // defaults to empty
+                title = data.title || "", // defaults to empty
+                content = data.content || "", // defaults to empty
+                buttons = data.buttons || [], // defaults to empty
+                toolbarDiv = me.element.find('.' + me.toolbarContent),
+                contentDiv = me.element.find('.' + className),
+                appendContentDiv = false,
+                actionDiv,
+                i,
+                contentHeight,
+                reasonableHeight;
+                
+            if (contentDiv.length === 0) {
+                // no container found, clone a new one
+                contentDiv = me.templates.publishedToolbarPopupContent.clone();
+                appendContentDiv = true;
+            }
+            contentDiv.find('h3').html(title);
+            contentDiv.find('.content').html(content);
+
+            if (className) {
+                contentDiv.removeClass();
+                contentDiv.addClass("publishedToolPopupContent " + className);
+            }
+
+            // buttons cannot be reattached so that they are functional, it also requires some other stuff, hence the TODO
+            if (appendContentDiv && buttons && buttons.length > 0) {
+                actionDiv = contentDiv.find('.actions');
+                // TODO: save button references and clean up previous buttons
+                actionDiv.empty();
+                for (i = 0; i < buttons.length; i += 1) {
+                    buttons[i].insertTo(actionDiv);
+                }
+            } else if (appendContentDiv) {
+                // if no actions, the user can click on tool content to close it
+                contentDiv.bind('click', function () {
+                    me.resetToolContent();
+                });
+            }
+
+            // attach to container
+            if (appendContentDiv) {
+                me.element.find('.' + me.toolbarPopupContent).append(contentDiv);
+                toolbarDiv.hide();
+            }
+
+            return contentDiv;
+        },
+
+        /**
+         * Set tool content container content based on the passed in values.
+         */
+        resetToolContent: function (data) {
+            // clear and show toolbar
+            var me = this,
+                className = data.className || "publishedToolPopupContent", // defaults to publishedToolbarPopupContent
+                toolbarDiv = me.element.find('.' + me.toolbarContent),
+                contentDiv = me.element.find('.' + className);
+
+            contentDiv.remove();
+            toolbarDiv.show();
         }
 
     }, {

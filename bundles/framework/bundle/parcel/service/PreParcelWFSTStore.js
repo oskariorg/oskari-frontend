@@ -63,12 +63,12 @@ function(instance) {
      * loads preparcels from backend to given service filters by
      * initialised user uuid  ( kvp uuid)
      *
-     * @param kvp_uid
+     * @param uid
      * @param cb
      * TODO: add kvp_uid filter
      */
-    getPreParcels : function(kvp_uid, cb) {
-        var kvp_uid = this.uuid;
+    getPreParcels : function(uid, cb) {
+        var kvp_uid = (typeof uid !== "undefined") ? uid : this.uuid;
         var kvp_uidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
             property : "kvp_uid",
@@ -151,7 +151,7 @@ function(instance) {
      */
     commitPreParcel: function (list, callback) {
         var uuid = this.uuid;
-        var kvp_uid = this.kvp_uid;
+        var kvp_uid = "12345"; //this.kvp_uid;
         var p = this.protocols.preparcel;
         var me = this;
 
@@ -306,13 +306,11 @@ function(instance) {
      * parcel_id (preparcel.id)
      *
      */
-    getPreParcelData : function(parcel_id, cb) {
-
-
+    getPreParcelData : function(preparcel_id, cb) {
         var parcelidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "parcel_id",
-            value : parcel_id
+            property : "preparcel_id",
+            value : preparcel_id
         });
 
         var p = this.protocols.preparcel_data;
