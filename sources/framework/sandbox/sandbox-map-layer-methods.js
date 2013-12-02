@@ -5,16 +5,16 @@
  * were in the class itself.
  */
 Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-layer-methods', {
-    
+
     /**
      * @method findMapLayerFromAllAvailable
      * Finds map layer from all available. Uses Oskari.mapframework.service.MapLayerService.
      *
      * @param {String} id of the layer to get
-     * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} 
+     * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object}
      *  layer domain object if found matching id or null if not found
      */
-    findMapLayerFromAllAvailable : function(id) {
+    findMapLayerFromAllAvailable: function (id) {
         var layer = this._core.findMapLayerFromAllAvailable(id);
         return layer;
     },
@@ -24,7 +24,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-layer-methods'
      * Returns all currently selected map layers
      * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
      */
-    findAllSelectedMapLayers : function() {
+    findAllSelectedMapLayers: function () {
         var layersList = this._core.getAllSelectedLayers();
         // copy the array so changing it wont change the core data
         return layersList.slice(0);
@@ -35,10 +35,10 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-layer-methods'
      * Returns the layer domain object matching the id if it is added to map
      *
      * @param {String} id of the layer to get
-     * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} 
+     * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object}
      *  layer domain object if found matching id or null if not found
      */
-    findMapLayerFromSelectedMapLayers : function(layerId) {
+    findMapLayerFromSelectedMapLayers: function (layerId) {
         var layer = this._core.findMapLayerFromSelectedMapLayers(layerId);
         return layer;
     },
@@ -50,7 +50,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-layer-methods'
      * @param {String} id of the layer to check
      * @return {Boolean} true if the layer is added to map
      */
-    isLayerAlreadySelected : function(id) {
+    isLayerAlreadySelected: function (id) {
         return this._core.isLayerAlreadySelected(id);
     },
 
@@ -59,7 +59,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-layer-methods'
      * Returns all currently highlighted map layers
      * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
      */
-    findAllHighlightedLayers : function() {
+    findAllHighlightedLayers: function () {
         var layer = this._core.getAllHighlightedMapLayers();
         return layer;
     },
@@ -71,10 +71,11 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-layer-methods'
      * @param {String} id of the layer to check
      * @return {Boolean} true if the layer is highlighted
      */
-    isMapLayerHighLighted : function(id) {
-        var highlighted = this.findAllHighlightedLayers();
-        for (var i = 0; i < highlighted.length; i++) {
-            if (highlighted[i].getId() == id) {
+    isMapLayerHighLighted: function (id) {
+        var highlighted = this.findAllHighlightedLayers(),
+            i;
+        for (i = 0; i < highlighted.length; i++) {
+            if (highlighted[i].getId() + '' === id + '') {
                 return true;
             }
         }
@@ -87,7 +88,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-layer-methods'
      *
      * @param {Boolean} allow - true to allow, false to restrict to one highlight at a time
      */
-    allowMultipleHighlightLayers : function(allow) {
+    allowMultipleHighlightLayers: function (allow) {
         this._core.allowMultipleHighlightLayers(allow);
     }
 });

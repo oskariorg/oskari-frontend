@@ -137,7 +137,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 containerDiv.addClass(containerClasses[i]);
                 mapDiv.append(containerDiv);
             }
-            
+
 
         },
         /**
@@ -172,7 +172,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                     curr = $(this);
                     // if plugin's slot isn't bigger (or smaller for bottom corners) than ours, store it to precedingPlugin
                     if ((!inverted && curr.attr('data-position') <= pos) ||
-                            (inverted && curr.attr('data-position') > pos)) {
+                        (inverted && curr.attr('data-position') > pos)) {
                         precedingPlugin = curr;
                     }
                 });
@@ -458,7 +458,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         setStealth: function (bln) {
             // FIXME only accept Boolean
-            this._stealth = (bln == true);
+            this._stealth = !!bln;
         },
         /**
          * @method notifyAll
@@ -532,20 +532,34 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             var mapExtent = new OpenLayers.Bounds(0, 0, 10000000, 10000000);
             // FIXME use some cleaner check
-            if (this._options != null && this._options.maxExtent != null && this._options.maxExtent.left != null && this._options.maxExtent.bottom != null && this._options.maxExtent.right != null && this._options.maxExtent.top != null) {
+            if (this._options !== null &&
+                    this._options !== undefined &&
+                    this._options.maxExtent !== null &&
+                    this._options.maxExtent !== undefined &&
+                    this._options.maxExtent.left !== null &&
+                    this._options.maxExtent.left !== undefined &&
+                    this._options.maxExtent.bottom !== null &&
+                    this._options.maxExtent.bottom !== undefined &&
+                    this._options.maxExtent.right !== null &&
+                    this._options.maxExtent.right !== undefined &&
+                    this._options.maxExtent.top !== null &&
+                    this._options.maxExtent.top !== undefined) {
                 mapExtent = new OpenLayers.Bounds(this._options.maxExtent.left, this._options.maxExtent.bottom, this._options.maxExtent.right, this._options.maxExtent.top);
             }
             this._map = new OpenLayers.Map({
-                controls : [],
-                units : this._options.units, //'m',
-                maxExtent : mapExtent,
-                resolutions : this._options.resolutions,
-                projection : this._options.srsName,
-                isBaseLayer : true,
-                center : lonlat,
-                theme : null,
-                zoom : 0,
-                zoomMethod : null
+                controls: [],
+                units: this._options.units, //'m',
+                maxExtent: mapExtent,
+                resolutions: this._options.resolutions,
+                projection: this._options.srsName,
+                isBaseLayer: true,
+                center: lonlat,
+                // https://github.com/openlayers/openlayers/blob/master/notes/2.13.md#map-property-fallthrough-defaults-to-false
+                // fallThrough: true is needed for statsgrid drag resizing
+                fallThrough : true,
+                theme: null,
+                zoom: 0,
+                zoomMethod: null
             });
 
             return this._map;
@@ -556,7 +570,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Currently always 'EPSG:3067'
          * @return {String}
          */
-        getProjection : function () {
+        getProjection: function () {
             return this._options.srsName;
         },
         /**
@@ -990,7 +1004,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 i;
             for (i = 0; i < this._mapScales.length; i++) {
                 if ((!minScale || minScale >= this._mapScales[i]) &&
-                        (!maxScale || maxScale <= this._mapScales[i])) {
+                    (!maxScale || maxScale <= this._mapScales[i])) {
                     layerScales.push(this._mapScales[i]);
                 }
             }
@@ -1009,7 +1023,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 i;
             for (i = 0; i < this._mapScales.length; i++) {
                 if ((!minScale || minScale >= this._mapScales[i]) &&
-                        (!maxScale || maxScale <= this._mapScales[i])) {
+                    (!maxScale || maxScale <= this._mapScales[i])) {
                     // resolutions are in the same order as scales so just use them
                     layerResolutions.push(this._options.resolutions[i]);
                 }
@@ -1188,7 +1202,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 results = [];
             // let the actual layerplugins find the layer since the name depends on
             // type
-            for (var p in lps) {
+            for (p in lps) {
                 if (lps.hasOwnProperty(p)) {
                     layersPlugin = lps[p];
                     // find the actual openlayers layers (can be many)

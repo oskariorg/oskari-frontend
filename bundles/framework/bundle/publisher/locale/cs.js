@@ -60,7 +60,10 @@ Oskari.registerLocalization({
                 "label": "Tool layout",
                 "tooltip": "Choose a layout for the tools shown on the map",
                 "lefthanded": "Lefthanded",
-                "righthanded": "Righthanded"
+                "righthanded": "Righthanded",
+                "userlayout" : "Move tools",
+                "usereditmode": "Switch edit mode on",
+                "usereditmodeoff": "Switch edit mode off"
             },
             "data": {
                 "label": "Statistics",
@@ -85,7 +88,8 @@ Oskari.registerLocalization({
                 "saveNew": "Uložit novou",
                 "ok": "OK",
                 "replace": "Nahradit",
-                "cancel": "Storno"
+                "cancel": "Storno",
+                "add": "Přidat mapovou vrstvu"
             },
             "confirm": {
                 "replace": {

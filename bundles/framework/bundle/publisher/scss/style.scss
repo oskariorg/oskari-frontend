@@ -13,7 +13,6 @@ div.publisher {
 div.publisher div.startview div.icon-info, div.basic_publisher div.icon-info {
 	float : right;
 }
-
 div.publisher div.startview div.content {
     margin-top: 5px;
 }
@@ -37,7 +36,6 @@ div.publisher div.startview ul {
 div.publisher div.startview div.error ul li {
 	color : red;
 }
-
 #contentMap div.basic_publisher {
 	background : white;
 	position : absolute;
@@ -81,6 +79,9 @@ div.basic_publisher > div.content {
 
 div.basic_publisher div.tool {
 	margin: 5px;
+}
+div.basic_publisher div.tool-options {
+  padding-left: 23px;
 }
 
 div.basic_publisher div.tool input,
@@ -226,4 +227,8 @@ div.basic_publisher {
       margin-left: -1.3em;
     }
   }
+}
+
+.maincontainer .block {
+  display: block;
 }

@@ -24,25 +24,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
         me.plugin = null;
         me.isDataVisible = false;
 
-        me.templateHelp     = jQuery('<div class="help icon-info"></div>');
-        me.templateTool     = jQuery('<div class="tool"><input type="checkbox"/><label></label></div>');
-        me.templateList     = jQuery('<ul class="selectedLayersList sortable" ' + 'data-sortable=\'{' + 'itemCss: "li.layer.selected", ' + 'handleCss: "div.layer-title" ' + '}\'></ul>');
+        me.templateHelp = jQuery('<div class="help icon-info"></div>');
+        me.templateTool = jQuery('<div class="tool"><input type="checkbox"/><label></label></div>');
+        me.templateList = jQuery('<ul class="selectedLayersList sortable" ' + 'data-sortable=\'{' + 'itemCss: "li.layer.selected", ' + 'handleCss: "div.layer-title" ' + '}\'></ul>');
         //me.templateLayer    = jQuery('<li class="tool"><input type="checkbox"/><label></label></li>');
-        me.templateLayer    = jQuery('<li class="layer selected">' + '<div class="layer-info">' + '<div class="layer-tool-remove icon-close"></div>' + '<div class="layer-title"><h4></h4></div>' + '</div>' + '<div class="layer-tools volatile">' + '</div>' + '</li>');
+        me.templateLayer = jQuery('<li class="layer selected">' + '<div class="layer-info">' + '<div class="layer-tool-remove icon-close"></div>' + '<div class="layer-title"><h4></h4></div>' + '</div>' + '<div class="layer-tools volatile">' + '</div>' + '</li>');
         // footers are changed based on layer state
         var layerLoc = me.instance.getLocalization('layer');
-        me.templateLayerFooterTools = 
-            jQuery('<div class="left-tools">' + '<div class="layer-visibility">' + 
-            '<a href="JavaScript:void(0);">' + layerLoc['hide'] + '</a>' + 
-            '&nbsp;' + '<span class="temphidden" ' + 'style="display: none;">' + layerLoc['hidden'] + '</span>' + 
-            '</div>' + '<div class="oskariui layer-opacity">' + 
-            '<div class="layout-slider" id="layout-slider">' + '</div> ' + 
-            '<div class="opacity-slider" style="display:inline-block">' + 
-            '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + 
-            '</div> <br/><input class="baselayer" type="checkbox"/><label>'+layerLoc['selectAsBaselayer']+'</label>' + '</div>' + 
-            '<div class="right-tools">' + '<div class="layer-rights"></div>' + 
-            '<div class="object-data"></div>' + '<div class="layer-description">' + '</div></div>');
-        me.templateLayerFooterHidden = jQuery('<p class="layer-msg">' + '<a href="JavaScript:void(0);">' + layerLoc['show'] + '</a> ' + layerLoc['hidden'] + '</p>');
+        me.templateLayerFooterTools =
+            jQuery('<div class="left-tools">' + '<div class="layer-visibility">' +
+                '<a href="JavaScript:void(0);">' + layerLoc.hide + '</a>' +
+                '&nbsp;' + '<span class="temphidden" ' + 'style="display: none;">' + layerLoc.hidden + '</span>' +
+                '</div>' + '<div class="oskariui layer-opacity">' +
+                '<div class="layout-slider" id="layout-slider">' + '</div> ' +
+                '<div class="opacity-slider" style="display:inline-block">' +
+                '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' +
+                '</div> <br/><input class="baselayer" type="checkbox"/><label>' + layerLoc.selectAsBaselayer + '</label>' + '</div>' +
+                '<div class="right-tools">' + '<div class="layer-rights"></div>' +
+                '<div class="object-data"></div>' + '<div class="layer-description">' + '</div></div>');
+        me.templateLayerFooterHidden = jQuery('<p class="layer-msg">' + '<a href="JavaScript:void(0);">' + layerLoc.show + '</a> ' + layerLoc.hidden + '</p>');
+        me.templateButtonsDiv = jQuery('<div class="buttons"></div>');
 
         me.config = {
             layers: {
@@ -70,7 +71,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 this.panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                 this.panel.setTitle(this.loc.layers.label);
             }
-            //this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin', this.pluginConfig);
+            this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin', this.pluginConfig);
         },
 
         /**
@@ -114,7 +115,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 this.plugin.startPlugin(this.instance.sandbox);
                 this.plugin.setLocation(this.plugin.conf.location);
             } else {
-                this.plugin.stopPlugin(this.instance.sandbox);
+                if (this.isEnabled()) {
+                    this.plugin.stopPlugin(this.instance.sandbox);
+                }
             }
         },
         /**
@@ -267,7 +270,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 if (!layer.isSticky()) {
                     layerContainer.find('div.layer-tool-remove').addClass('icon-close');
 
-                    layerContainer.find('div.layer-tool-remove').bind('click', function(e) {
+                    layerContainer.find('div.layer-tool-remove').bind('click', function (e) {
                         var reqName = 'RemoveMapLayerRequest';
                         var builder = sandbox.getRequestBuilder(reqName);
                         var request = builder(jQuery(e.currentTarget).parents('.layer').attr('data-id'));
@@ -306,17 +309,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             }
             contentPanel.append(listContainer);
             listContainer.sortable({
-                stop : function(event, ui) {
+                stop: function (event, ui) {
                     var item = ui.item;
-                    me._layerOrderChanged(item)
+                    me._layerOrderChanged(item);
                 }
             });
 
+            var buttonCont = me.templateButtonsDiv.clone();
+            var addBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            addBtn.setTitle(me.loc.buttons.add);
+            addBtn.addClass('block');
+            addBtn.insertTo(buttonCont);
+
+            var add = function () {
+                me._openExtension('LayerSelector');
+            };
+            addBtn.setHandler(function () {
+                add();
+            });
+
+
+            contentPanel.append(buttonCont);
             // There will be a button for adding more layers
             //            if (this.config.layers.promote && this.config.layers.promote.length > 0) {
             //                this._populateLayerPromotion(contentPanel);
             //            }
         },
+
         /**
          * Populates the layer promotion part of the map layers panel in publisher
          *
@@ -395,10 +414,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
         },
         /**
          * Clears previous layer listing and renders a new one to the view.
-         * 
+         *
          * @method handleLayerSelectionChanged
          */
-        handleLayerSelectionChanged : function() {
+        handleLayerSelectionChanged: function () {
             this._populateMapLayerPanel();
         },
         /**
@@ -407,12 +426,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          * Notify Oskari that layer order should be changed
          * @param {Number} newIndex index where the moved layer is now
          */
-        _layerOrderChanged : function(item) {
-            var allNodes = jQuery(this.container).find('.selectedLayersList li');
-            var movedId = item.attr('data-id');
-            var newIndex = -1;
-            allNodes.each(function(index, el) {
-                if ($(this).attr('data-id') == movedId) {
+        _layerOrderChanged: function (item) {
+            var allNodes = jQuery(this.container).find('.selectedLayersList li'),
+                movedId = item.attr('data-id'),
+                newIndex = -1;
+            allNodes.each(function (index, el) {
+                if ($(this).attr('data-id') === movedId) {
                     newIndex = index;
                     return false;
                 }
@@ -422,10 +441,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 // the layer order is reversed in presentation
                 // the lowest layer has the highest index
                 newIndex = (allNodes.length - 1) - newIndex;
-                var sandbox = this.instance.getSandbox();
-                var reqName = 'RearrangeSelectedMapLayerRequest';
-                var builder = sandbox.getRequestBuilder(reqName);
-                var request = builder(movedId, newIndex);
+                var sandbox = this.instance.getSandbox(),
+                    reqName = 'RearrangeSelectedMapLayerRequest',
+                    builder = sandbox.getRequestBuilder(reqName),
+                    request = builder(movedId, newIndex);
                 sandbox.request(this.instance.getName(), request);
             }
         },
@@ -439,7 +458,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          *
          * Handles slider/input field for opacity on this flyout/internally
          */
-        _layerOpacityChanged : function(layer, newOpacity) {
+        _layerOpacityChanged: function (layer, newOpacity) {
             var sandbox = this.instance.getSandbox();
             var reqName = 'ChangeMapLayerOpacityRequest';
             var requestBuilder = sandbox.getRequestBuilder(reqName);
@@ -463,7 +482,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          * @param {Boolean} isGeometryMatch true if layers geometry is in map
          * viewport
          */
-        handleLayerVisibilityChanged : function(layer, isInScale, isGeometryMatch) {
+        handleLayerVisibilityChanged: function (layer, isInScale, isGeometryMatch) {
             var me = this;
             var sandbox = me.instance.getSandbox();
             var lyrSel = 'li.layer.selected[data-id=' + layer.getId() + ']';
@@ -492,7 +511,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          *
          * Creates a footer for the given layer with the usual tools (opacity etc)
          */
-        _createLayerFooter : function(layer, layerDiv, isChecked) {
+        _createLayerFooter: function (layer, layerDiv, isChecked) {
             var me = this;
             var sandbox = me.instance.getSandbox();
             // layer footer
@@ -501,7 +520,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             var visReqName = 'MapModulePlugin.MapLayerVisibilityRequest';
             var visibilityRequestBuilder = sandbox.getRequestBuilder(visReqName);
 
-            tools.find('div.layer-visibility a').bind('click', function() {
+            tools.find('div.layer-visibility a').bind('click', function () {
                 // send request to hide map layer
                 var request = visibilityRequestBuilder(layer.getId(), false);
                 sandbox.request(me.instance.getName(), request);
@@ -523,12 +542,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             };
 
 
-                var input = tools.find('input.baselayer');
-                input.attr('id', 'checkbox' + layer.getId());
-                if(isChecked) {
-                    input.attr('checked', 'checked');
-                }
-                input.change(closureMagic(layer));
+            var input = tools.find('input.baselayer');
+            input.attr('id', 'checkbox' + layer.getId());
+            if (isChecked) {
+                input.attr('checked', 'checked');
+            }
+            input.change(closureMagic(layer));
 
 
             return tools;
@@ -543,14 +562,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          *
          * Creates footer for the given invisible layer
          */
-        _createLayerFooterHidden : function(layer) {
+        _createLayerFooterHidden: function (layer) {
             var me = this;
             var sandbox = me.instance.getSandbox();
             var msg = this.templateLayerFooterHidden.clone();
             msg.addClass("layer-msg-for-hidden");
             var reqName = 'MapModulePlugin.MapLayerVisibilityRequest';
             var visibilityRequestBuilder = sandbox.getRequestBuilder(reqName);
-            msg.find('a').bind('click', function() {
+            msg.find('a').bind('click', function () {
                 // send request to show map layer
                 var request = visibilityRequestBuilder(layer.getId(), true);
                 sandbox.request(me.instance.getName(), request);
@@ -565,11 +584,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          * @param
          * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object}
          * layer
-         * @param {boolean} isChecked states if the layer is checked as possible base layer 
-         * 
+         * @param {boolean} isChecked states if the layer is checked as possible base layer
+         *
          * Appends layer footer to layer in publisher's manipulation panel
          */
-        _appendLayerFooter : function(layerDiv, layer, isChecked) {
+        _appendLayerFooter: function (layerDiv, layer, isChecked) {
             var toolsDiv = layerDiv.find('div.layer-tools');
 
             /* fix: we need this at anytime for slider to work */
@@ -602,26 +621,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object}
          * layer
          * @param {Object} container div
-         * 
+         *
          * Adds slider to layer's footer to change layer opacity
          */
-        _addSlider : function(layer, layerDiv) {
+        _addSlider: function (layer, layerDiv) {
             var me = this;
             var lyrId = layer.getId();
             var opa = layer.getOpacity();
 
             var sliderEl = layerDiv.find('.layout-slider');
             var slider = sliderEl.slider({
-                min : 0,
-                max : 100,
-                value : opa,
+                min: 0,
+                max: 100,
+                value: opa,
                 /*change: function(event,ui) {
                  me._layerOpacityChanged(layer, ui.value);
                  },*/
-                slide : function(event, ui) {
+                slide: function (event, ui) {
                     me._layerOpacityChanged(layer, ui.value);
                 },
-                stop : function(event, ui) {
+                stop: function (event, ui) {
                     me._layerOpacityChanged(layer, ui.value);
                 }
             });
@@ -629,6 +648,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             me._sliders[lyrId] = slider;
 
             return slider;
+        },
+        _getFakeExtension: function (name) {
+            return {
+                getName: function () {
+                    return name;
+                }
+            };
+        },
+        _openExtension: function (name) {
+            var extension = this._getFakeExtension(name);
+            var rn = 'userinterface.UpdateExtensionRequest';
+            this.instance.getSandbox().postRequestByName(rn, [extension, 'attach', rn, "10", "405"]);
         }
 
     });

@@ -98,6 +98,12 @@ function() {
             "src" : "../../../../libraries/slickgrid/plugins/slick.headermenu2.css",
             "type" : "text/css"
         }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.headerbuttons.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.headerbuttons.css",
+            "type" : "text/css"
+        }, {
             "src" : "../../../../libraries/slickgrid/plugins/slick.rowselectionmodel.js",
             "type" : "text/javascript"
         }, {

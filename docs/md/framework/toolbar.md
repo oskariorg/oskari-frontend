@@ -128,8 +128,6 @@ Currently default buttons send out requests but these should be defined in bundl
   </tr>
 </table>
 
-This bundle doesn't send out any requests.
-
 ## Events the bundle listens to
 
 This bundle doesn't listen to any events.

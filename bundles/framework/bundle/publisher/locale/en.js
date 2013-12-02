@@ -51,7 +51,14 @@ Oskari.registerLocalization({
                 "Portti2Zoombar": "Scale scrollbar",
                 "ControlsPlugin": "Panning on",
                 "SearchPlugin": "Address and place name search",
-                "GetInfoPlugin": "Query tool for place data"
+                "GetInfoPlugin": "Query tool for place data",
+                "PublisherToolbarPlugin": "map tools"
+            },
+            "toolbarToolNames": {  
+                "history_back" : "Move backward",
+                "history_forward" : "Move forward",
+                "measureline" : "Measure distance",
+                "measurearea" : "Measure area"
             },
             "toollayout": {
                 "label": "Tool layout",
@@ -128,7 +135,8 @@ Oskari.registerLocalization({
                 "saveNew": "Save new",
                 "ok": "OK",
                 "replace": "Replace",
-                "cancel": "Cancel"
+                "cancel": "Cancel",
+                "add": "add map layer"
             },
             "confirm": {
                 "replace": {

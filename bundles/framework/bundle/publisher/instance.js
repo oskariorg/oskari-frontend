@@ -142,7 +142,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
              * Calls flyouts handleLayerSelectionChanged() method
              */
             'AfterMapLayerRemoveEvent': function (event) {
-                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+                if (jQuery('#contentMap') && jQuery('#contentMap').hasClass('mapPublishMode')) {
+                    this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+                }
             },
             /**
              * @method AfterMapLayerAddEvent
@@ -151,14 +153,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
              * Calls flyouts handleLayerSelectionChanged() method
              */
             'AfterMapLayerAddEvent': function (event) {
-                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+                if (jQuery('#contentMap') && jQuery('#contentMap').hasClass('mapPublishMode')) {
+                    this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+                }
             },
             /**
              * @method MapLayerEvent
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              */
             'MapLayerEvent': function (event) {
-                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+                if (jQuery('#contentMap') && jQuery('#contentMap').hasClass('mapPublishMode')) {
+                    this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+                }
             },
             /**
              * @method Publisher.MapPublishedEvent
@@ -219,8 +225,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
             /**
              * @method MapLayerVisibilityChangedEvent
              */
-            'MapLayerVisibilityChangedEvent' : function(event) {
-                if(this.publisher) {
+            'MapLayerVisibilityChangedEvent': function (event) {
+                if (this.publisher) {
                     this.publisher.maplayerPanel.handleLayerVisibilityChanged(event.getMapLayer(), event.isInScale(), event.isGeometryMatch());
                 }
             }
@@ -333,7 +339,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     break;
                 }
             }
-            // FIXME make sure blnEnabled is a boolean and use ===
+            // FIXME make sure blnEnabled is a boolean and use (blnEnabled)
             if (blnEnabled == true) {
                 me.disabledLayers = deniedLayers;
                 me.oskariLang = Oskari.getLang();

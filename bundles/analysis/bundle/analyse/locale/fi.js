@@ -6,6 +6,7 @@ Oskari.registerLocalization({
         "flyouttitle": "Analyysi",
         "desc": "",
         "btnTooltip": "Analyysi",
+        "notLoggedIn": "Vain kirjautunut käyttäjä voi tehdä WFS tasoille analyysejä. <a href='/web/fi/login'>Kirjaudu palveluun</a>.",
         "AnalyseView": {
             "title": "Analyysi",
             "content": {
@@ -16,52 +17,55 @@ Oskari.registerLocalization({
                 "label": "Menetelmä",
                 "tooltip": "Vyöhyke-menetelmä: Lisää valittujen kohteiden ympärille vyöhykkeet ja käyttää näitä vyöhyke-geometrioita (buffer) analyysissä -+- Koostetyökalu: Laskee kohteen ominaisuuksille aggregointiominaisuuksia esim. summat -+- Unioni: kohteiden yhdistäminen taulukosta valitsemalla tai yhteisten ominaisuustietoarvojen perusteella -+- Leikkaus: Valitaan uudet kohteet leikkaamalla leikkaavan tason kohteilla leikattavaa tasoa",
                 "options": [{
-                        "id": "oskari_analyse_buffer",
-                        "label": "Vyöhyke",
-                        "classForMethod": "buffer",
-                        "selected": true,
-                        "tooltip": "Lisää valittujen kohteiden ympärille vyöhykkeet ja käyttää näitä vyöhyke-geometrioita (buffer) analyysissä"
-                    }, {
-                        "id": "oskari_analyse_aggregate",
-                        "label": "Kooste",
-                        "classForPreview": "aggregate",
-                        "tooltip": "Laskee kohteen ominaisuuksille aggregointiominaisuuksia esim. summat"
-                    }, {
-                        "id": "oskari_analyse_union",
-                        "label": "Yhdiste",
-                        "classForPreview": "union",
-                        "tooltip": "Kohteiden yhdistäminen taulukosta valitsemalla tai yhteisten ominaisuustietoarvojen perusteella"
-                    }, {
-                        "id": "oskari_analyse_intersect",
-                        "label": "Leikkaavien kohteiden suodatus",
-                        "classForPreview": "intersect",
-                        "tooltip": "Valitaan uudet kohteet leikkaamalla leikkaavan tason kohteilla leikattavaa tasoa"
-                    }
-                ]
+                    "id": "oskari_analyse_buffer",
+                    "label": "Vyöhyke",
+                    "classForMethod": "buffer",
+                    "selected": true,
+                    "tooltip": "Lisää valittujen kohteiden ympärille vyöhykkeet ja käyttää näitä vyöhyke-geometrioita (buffer) analyysissä"
+                }, {
+                    "id": "oskari_analyse_aggregate",
+                    "label": "Kooste",
+                    "classForPreview": "aggregate",
+                    "tooltip": "Laskee kohteen ominaisuuksille aggregointiominaisuuksia esim. summat"
+                }, {
+                    "id": "oskari_analyse_union",
+                    "label": "Yhdiste",
+                    "classForPreview": "union",
+                    "tooltip": "Kohteiden yhdistäminen taulukosta valitsemalla tai yhteisten ominaisuustietoarvojen perusteella"
+                }, {
+                    "id": "oskari_analyse_intersect",
+                    "label": "Leikkaavien kohteiden suodatus",
+                    "classForPreview": "intersect",
+                    "tooltip": "Valitaan uudet kohteet leikkaamalla leikkaavan tason kohteilla leikattavaa tasoa"
+                }, {
+                    "id": "oskari_analyse_layer_union",
+                    "label": "Analyysitasojen yhdiste",
+                    "classForPreview": "layer_union",
+                    "tooltip": "Yhdistää analyysitasoja, joilla on samat ominaisuustietokentät"
+                }]
             },
-          "aggregate" : {
-                "label" : "Aggregointifunktio",
-                "options" : [ {
-                    "id" : "oskari_analyse_Count",
-                    "label" : "Lukumäärä",
-                    "selected" : true
-                },{
-                    "id" : "oskari_analyse_Sum",
-                    "label" : "Summa"
-                },{
-                    "id" : "oskari_analyse_Min",
-                    "label" : "Minimi"
+            "aggregate": {
+                "label": "Aggregointifunktio",
+                "options": [{
+                    "id": "oskari_analyse_Count",
+                    "label": "Lukumäärä",
+                    "selected": true
                 }, {
-                    "id" : "oskari_analyse_Max",
-                    "label" : "Maksimi"
+                    "id": "oskari_analyse_Sum",
+                    "label": "Summa"
                 }, {
-                    "id" : "oskari_analyse_Average",
-                    "label" : "Keskiarvo"
+                    "id": "oskari_analyse_Min",
+                    "label": "Minimi"
                 }, {
-                    "id" : "oskari_analyse_StdDev",
-                    "label" : "Keskihajonta"
-                }
-                ],
+                    "id": "oskari_analyse_Max",
+                    "label": "Maksimi"
+                }, {
+                    "id": "oskari_analyse_Average",
+                    "label": "Keskiarvo"
+                }, {
+                    "id": "oskari_analyse_StdDev",
+                    "label": "Keskihajonta"
+                }],
                 "attribute": "Valitse ominaisuustieto"
             },
             "buffer_size": {
@@ -79,46 +83,52 @@ Oskari.registerLocalization({
             "intersect": {
                 "label": "Leikkaava taso"
             },
-            "union" : {
-                "label" : "Valittu yhdistettävä taso"
+            "union": {
+                "label": "Valittu yhdistettävä taso"
             },
-            "spatial" : {
-                "label" : "Spatiaalinen operaattori",
-                "options" : [{
-                    "id" : "oskari_analyse_intersect",
-                    "label" : "Leikkaa",
-                    "selected" : true
+            "layer_union": {
+                "label": "Valitut yhdistettävät tasot",
+                "notAnalyseLayer": "Valitse jokin analyysitaso",
+                "noLayersAvailable": "Tasoja, joilla on samat ominaisuustietokentät ei löytynyt"
+            },
+            "spatial": {
+                "label": "Spatiaalinen operaattori",
+                "options": [{
+                    "id": "oskari_analyse_intersect",
+                    "label": "Leikkaa",
+                    "selected": true
                 }, {
-                    "id" : "oskari_analyse_contains",
-                    "label" : "Sisältää"
+                    "id": "oskari_analyse_contains",
+                    "label": "Sisältää"
                 }]
             },
-            "params" : {
-                "label" : "Säilytettävät ominaisuustiedot",
-                "tooltip" : "",
-                "options" : [{
-                    "id" : "oskari_analyse_all",
-                    "selected" : true,
-                    "label" : "Kaikki"
+            "params": {
+                "label": "Säilytettävät ominaisuustiedot",
+                "tooltip": "",
+                "options": [{
+                    "id": "oskari_analyse_all",
+                    "selected": true,
+                    "label": "Kaikki"
                 }, {
-                    "id" : "oskari_analyse_none",
-                    "label" : "Ei mitään"
+                    "id": "oskari_analyse_none",
+                    "label": "Ei mitään"
                 }, {
-                    "id" : "oskari_analyse_select",
-                    "label" : "Valitse listalta"
+                    "id": "oskari_analyse_select",
+                    "label": "Valitse listalta"
                 }]
             },
-            "output" : {
-                "label" : "Ulkoasu",
-                "color_label" : "Valitse tyylit:",
-                "colorset_tooltip" : "Valitse tyylit eri geometria tyyleille",
-                "tooltip" : "Voit valita analyysin tuloksille sivuillesi sopivan tyylimaailman"
+            "output": {
+                "label": "Ulkoasu",
+                "color_label": "Valitse tyylit:",
+                "colorset_tooltip": "Valitse tyylit eri geometria tyyleille",
+                "tooltip": "Voit valita analyysin tuloksille sivuillesi sopivan tyylimaailman",
+                "random_color_label": "Satunnaiset värit"
             },
-            "buttons" : {
-                "save" : "Tallenna",
-                "analyse" : "Jatka analyysia",
-                "data" : "Päivitä tietoaineisto",
-                "cancel" : "Poistu",
+            "buttons": {
+                "save": "Tallenna",
+                "analyse": "Jatka analyysia",
+                "data": "Päivitä tietoaineisto",
+                "cancel": "Poistu",
                 "ok": "OK"
             },
             "filter": {
@@ -155,7 +165,7 @@ Oskari.registerLocalization({
                     "boolean_operator_missing": "Looginen operaattori puuttuu"
                 }
             },
-            "help" : "Ohje",
+            "help": "Ohje",
             "success": {
                 "layerAdded": {
                     "title": "Karttataso {layer} lisätty",
@@ -167,6 +177,7 @@ Oskari.registerLocalization({
                 "invalidSetup": "Virheellisiä parametrejä",
                 "noParameters": "Ei parametrejä",
                 "noLayer": "Ei valittua tasoa",
+                "noAnalyseUnionLayer": "Valitse ainakin toinen analyysitaso",
                 "invalidMethod": "Tuntematon menetelmä: ",
                 "bufferSize": "Virhe vyöhykkeen koossa",
                 "illegalCharacters": "ei kirjaimia - käytä numeroita",
@@ -174,7 +185,7 @@ Oskari.registerLocalization({
                 "saveFailed": "Analyysin tallennus epäonnistui. Yritä myöhemmin uudelleen.",
                 "loadLayersFailed": "Analyysitasojen lataus epäonnistui. Yritä myöhemmin uudelleen.",
                 "loadLayerTypesFailed": "Analyysi- tai WFS-tason tietotyyppien haku epäonnistui "
-             
+
             }
         },
         "StartView": {
@@ -217,23 +228,23 @@ Oskari.registerLocalization({
                 "cancel": "Peruuta"
             }
         },
-        "personalDataTab" : {
-            "grid" : {
-                "name" : "Nimi",
+        "personalDataTab": {
+            "grid": {
+                "name": "Nimi",
                 "delete": " "
             },
-            "title" : "Analyysit",
-            "confirmDeleteMsg" : "Haluatko poistaa analyysin:",
-            "buttons" : {
+            "title": "Analyysit",
+            "confirmDeleteMsg": "Haluatko poistaa analyysin:",
+            "buttons": {
                 "ok": "OK",
-                "cancel" : "Peruuta",
-                "delete" : "Poista"
+                "cancel": "Peruuta",
+                "delete": "Poista"
             },
             "notification": {
                 "deletedTitle": "Karttatason poisto",
                 "deletedMsg": "Karttataso poistettu."
             },
-            "error" : {
+            "error": {
                 "title": "Virhe!",
                 "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin."
             }

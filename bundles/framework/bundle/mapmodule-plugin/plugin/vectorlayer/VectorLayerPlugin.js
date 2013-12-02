@@ -2,16 +2,17 @@
  * @class Oskari.mapframework.mapmodule.VectorLayerPlugin
  */
 Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorLayerPlugin', function() {
-	this.mapModule = null;
-	this.pluginName = null;
-	this._sandbox = null;
-	this._map = null;
-	this._supportedFormats = {};
-	this._sldFormat = new OpenLayers.Format.SLD({
-		multipleSymbolizers : false,
-		namedLayersAsArray : true
-	});
-}, {
+        this.mapModule = null;
+        this.pluginName = null;
+        this._sandbox = null;
+        this._map = null;
+        this._supportedFormats = {};
+        this._sldFormat = new OpenLayers.Format.SLD({
+            multipleSymbolizers : false,
+            namedLayersAsArray : true
+        });
+    },
+    {
 	__name : 'VectorLayerPlugin',
 
 	getName : function() {
@@ -51,6 +52,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorLayerPlugin', function(
 		this.registerVectorFormats();
 
 		sandbox.register(this);
+        var p;
 		for (p in this.eventHandlers) {
 			sandbox.registerForEventByName(this, p);
 		}
@@ -103,8 +105,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorLayerPlugin', function(
 	 *
 	 */
 	preselectLayers : function(layers) {
-		var sandbox = this._sandbox;
-		for (var i = 0; i < layers.length; i++) {
+		var sandbox = this._sandbox,
+            i, ilen;
+		for (i = 0, ilen = layers.length; i < ilen; i++) {
 			var layer = layers[i];
 			var layerId = layer.getId();
 
@@ -114,7 +117,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorLayerPlugin', function(
 			sandbox.printDebug("preselecting " + layerId);
 			this.addMapLayerToMap(layer, true, layer.isBaseLayer());
 		}
-
 	},
 
 	/***********************************************************
@@ -124,7 +126,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorLayerPlugin', function(
 	 *            event
 	 */
 	afterMapLayerAddEvent : function(event) {
-		this.addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
+		this.addMapLayerToMap(event.getMapLayer(),
+            event.getKeepLayersOrder(), event.isBasemap());
 	},
 
 	/**
@@ -138,12 +141,15 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorLayerPlugin', function(
 	 * registers default vector formats
 	 */
 	registerVectorFormats : function() {
-		this.registerVectorFormat("application/json", new OpenLayers.Format.GeoJSON({}));
-		this.registerVectorFormat("application/nlsfi-x-openlayers-feature", new function() {
-		this.read = function(data) {
-		return data;
-		};
-		});
+		this.registerVectorFormat("application/json",
+            new OpenLayers.Format.GeoJSON({}));
+		this.registerVectorFormat("application/nlsfi-x-openlayers-feature", 
+            function() {
+        		this.read = function(data) {
+            		return data;
+                };
+            }
+        );
 	},
 
 	/**
@@ -170,7 +176,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorLayerPlugin', function(
 			this._sandbox.printDebug(sldSpec);
 			var styleInfo = this._sldFormat.read(sldSpec);
 
-			window.styleInfo = styleInfo;
 			var styles = styleInfo.namedLayers[0].userStyles;
 
 			var style = styles[0];

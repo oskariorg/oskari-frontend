@@ -85,7 +85,8 @@ Oskari.registerLocalization({
                 "saveNew": "Guardar nuevo",
                 "ok": "Hecho",
                 "replace": "Reemplazar",
-                "cancel": "Cancelar"
+                "cancel": "Cancelar",
+                "add": "añadir capa"
             },
             "confirm": {
                 "replace": {

@@ -2,9 +2,9 @@
 /* this is based on Navigation Control with Hover handler instead of MouseDefaults and some other stuff */
 
 /* Copyright (c) 2006-2011 by OpenLayers Contributors (see authors.txt for
-* full list of contributors). Published under the Clear BSD license.
-* See http://svn.openlayers.org/trunk/openlayers/license.txt for the
-* full text of the license. */
+ * full list of contributors). Published under the Clear BSD license.
+ * See http://svn.openlayers.org/trunk/openlayers/license.txt for the
+ * full text of the license. */
 
 /**
  * @requires OpenLayers/Control/ZoomBox.js
@@ -14,9 +14,9 @@
  */
 
 /* Attempting to replace previous PorttiMouse implementation with OpenLayers.Control.Navigation
-* with added Hover and Drag handler in a supporting role.
-*
-*/
+ * with added Hover and Drag handler in a supporting role.
+ *
+ */
 
 /**
  * Class: OpenLayers.Control.Navigation
@@ -291,8 +291,9 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 			/* minor hack to support IE performance */
 			passesTolerance : function(px) {
 			var passes = true;
-			if( me.panned ) 
+			if( me.panned ) {
 				return false;
+			}
 			if(this.pixelTolerance && this.px) {
 				var dpx = Math.sqrt(Math.pow(this.px.x - px.x, 2) + Math.pow(this.px.y - px.y, 2));
 

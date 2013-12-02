@@ -135,7 +135,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var me = this,
                 p;
             for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
+                if (me.eventHandlers.hasOwnProperty(p) && me._sandbox) {
                     me._sandbox.unregisterFromEventByName(me, p);
                 }
             }
@@ -370,6 +370,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             div.find('span').before(input);
 
+
             var baseLayersDiv = this.element.find('div.content div.baselayers');
             // add text if first selection available
             if (baseLayersDiv.find('div.layer').length === 0) {
@@ -394,9 +395,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             div.remove();
 
             var input = div.find('input');
+            var isActive = input.is(':checked');
             input.remove();
             input = this.templates.checkbox.clone();
             input.attr('value', layer.getId());
+            if (isActive) {
+                input.attr('checked', 'checked');
+            }
             this._bindCheckbox(input, layer);
             div.find('span').before(input);
 
@@ -436,7 +441,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             for (i = 0; i < values.baseLayers.length; i += 1) {
                 layerId = values.baseLayers[i];
                 layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-                if(layer != null) {
+                if (layer !== null && layer !== undefined) {
                     // Numeric layer IDs are Numbers for some reason...
                     me._setLayerVisible(layer, (values.defaultBaseLayer + '' === layerId + ''));
                 }
@@ -545,7 +550,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (!me.element) {
                 me.element = me.templates.main.clone();
             }
-
             var pluginLoc = me.getMapModule().getLocalization('plugin', true),
                 myLoc = pluginLoc[me.__name],
                 header = me.element.find('div.header');

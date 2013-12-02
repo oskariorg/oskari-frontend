@@ -1,5 +1,39 @@
 # Release Notes
+## 1.17
+### Statsgrid
+Added posibility to add indicator data through data import (localization is still work in progress)
+
 ## 1.16
+
+### **Breaking changes**
+
+MyPlaces prefix was changed to DrawPlugin. Affected changes are:
+'Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin' --> 'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin'
+
+'MyPlaces.GetGeometryRequest' --> 'DrawPlugin.GetGeometryRequest'
+
+'MyPlaces.GetGeometryRequestHandler' --> 'DrawPlugin.GetGeometryRequestHandler'
+
+'MyPlaces.StartDrawingRequest' --> 'DrawPlugin.StartDrawingRequest'
+
+'MyPlaces.StartDrawingRequestHandler' --> 'DrawPlugin.StaǥrtDrawingRequestHandler'
+
+'MyPlaces.StopDrawingRequest' --> 'DrawPlugin.StopDrawingRequest'
+
+'MyPlaces.StopDrawingRequestHandler' --> 'DrawPlugin.StopDrawingRequestHandler'
+
+'Oskari.mapframework.bundle.myplaces2.event.MyPlaceSelectedEvent' --> 'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.SelectedDrawingEvent'
+'MyPlaces.MyPlaceSelectedEvent' --> 'DrawPlugin.SelectedDrawingEvent'
+
+'Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent' --> 'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.FinishedDrawingEvent'
+'MyPlaces.FinishedDrawingEvent' --> 'DrawPlugin.FinishedDrawingEvent'
+
+'Oskari.mapframework.bundle.myplaces2.event.AddedFeatureEvent' --> 'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.AddedFeatureEvent'
+'MyPlaces.AddedFeatureEvent' --> 'DrawPlugin.AddedFeatureEvent'
+
+Myplaces2 now uses AreaForm, PointForm and LineForm from under divmanazer (VisualizationForm)
+
+Toolbar has changed so that toolbar group has now always toolbar-id prefixed in the name. (Default prefix being 'default-'[buttongroup])
 
 ### Statsgrid
 
@@ -9,6 +43,10 @@ Users can now select the class limits mode from distinct and discontinuous.
 
 The map link now gets the class limits mode and colour selections as parameters.
 
+Removing indicator from the grid is now easier with a close icon on the top-right corner of each indicator
+
+Added area based filtering, which allows users to filter municipalities based on different regions in which they belong
+
 ### mapmodule-plugin/LogoPlugin
 
 Added a new link next to EULA which shows the data sources for map layers and open statistics indicators.
@@ -17,13 +55,39 @@ Added a new link next to EULA which shows the data sources for map layers and op
 
 Added a new bundle which imports user interface components from under divmanazer.
 
+### mapmodule-plugin/DrawPlugin
+
+Refactored DrawPlugin from myplaces2 as an independent plugin.
+
 ### myplaces2
 
 Added new configuration option 'layerDefaults' which can be used to override default values found in code. See bundle documentation for details.
+Refactored DrawPlugin to mapmodule-plugin/DrawPlugin.
+Moved myplacestab from personaldata to myplaces bundle. Refactored adding to use addTabRequest.
+
+### divmanazer/VisualizationForm
+
+New component which defines functionality to create geometry visualizations for eg. myplaces2 bundle.
 
 ### publisher
 
-Added possibility to change order of the layer as well as its opacity. Also removing layer is now possible.
+Added possibility to change order of the layer as well as its opacity. Also removing and adding new layers is now possible.
+
+### personaldata
+
+Removed myplacestab (is now in myplaces bundle).
+
+### Core/AbstractLayer/MapLayerService
+
+Added optional feature to enable localization on layer name, description, inspire name and organization name. The properties can now be set as objects containing language id as keys f.ex "en". For example layer.getName() now returns language version based on Oskari.getLang() if an object has been set with setName({ "en" : "layername" }). Alternatively another language version can be requested with for example getName("en").
+
+### Openlayers update
+
+Updated Openlayers 2.12 -> 2.13.1 for bundles openlayers/bundle/openlayers-full-map and openlayers/bundle/openlayers-published-map
+
+### Oskari.userinterface.component.Popup
+
+moveTo-function now checks if given selector matches an element before trying to place the popup to prevent "element is undefined" errors.
 
 ## 1.15
 

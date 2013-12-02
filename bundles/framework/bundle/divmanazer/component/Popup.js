@@ -134,8 +134,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 align = 'right',
                 //get the position of the target element
                 tar = jQuery(target),
-                pos = tar.offset(),
-                targetWidth = tar.outerWidth(),
+                pos = tar.offset();
+
+            if(!tar || tar.length === 0 || !pos) {
+                // couldn't find target - aborting
+                return;
+            }
+
+            var targetWidth = tar.outerWidth(),
                 targetHeight = tar.outerHeight(),
                 dialogWidth = me.dialog.outerWidth(),
                 dialogHeight = me.dialog.outerHeight(),
