@@ -880,8 +880,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
             var includedInGrid = this.isIndicatorInGrid(columnId);
 
-            var fetchButton = jQuery('<button class="fetch-data' + (includedInGrid ? ' hidden' : '') + '">' + this._locale.addColumn + '</button>');
-            var removeButton = jQuery('<button class="remove-data' + (includedInGrid ? '' : ' hidden') + '">' + this._locale.removeColumn + '</button>');
+            var fetchButton = jQuery('<button class="fetch-data' + (includedInGrid ? ' hidden' : '') + ' selector-button">' + this._locale.addColumn + '</button>');
+            var removeButton = jQuery('<button class="remove-data' + (includedInGrid ? '' : ' hidden') + ' selector-button">' + this._locale.removeColumn + '</button>');
 
             newIndicator.before(fetchButton);
             newIndicator.before(removeButton);
