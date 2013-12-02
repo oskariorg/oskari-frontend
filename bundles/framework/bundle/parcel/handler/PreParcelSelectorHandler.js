@@ -89,7 +89,7 @@ function(instance) {
         else if (preparcel.preparcel && preparcel.data) {
             // preparcel.preparcel; common preparcel attributes
             // preparcel.data geom features
-            this.instance.getDrawPlugin().drawFeature(preparcel.data, me.instance.conf.registerUnitFeatureType);
+           // test this.instance.getDrawPlugin().drawFeature(preparcel.data, me.instance.conf.registerUnitFeatureType);
             // Create editor
             // ???
         }
