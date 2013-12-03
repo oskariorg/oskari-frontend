@@ -237,8 +237,6 @@ function(drawPlugin) {
                 p : [],
                 p0 : []
             };
-            var parcelLayer = this.getLayersByName("Parcel Draw Layer")[0];
-            //var activeMarker = me.map.activeMarker;
             var point = {x: refLonlat.lon, y: refLonlat.lat};
             var projPoints = [];
             var distances = [];
@@ -397,7 +395,7 @@ function(drawPlugin) {
          * @param {} line
          * @return {}
          */
-        splitLine : function(polygons,line) {
+        splitLine : function(polygons,splitLine) {
             // Transform and scale coordinates
             var origin = new OpenLayers.Geometry.Point(0.0, 0.0);
             var reference = [polygons.geometry.components[0].components[0].components[0].x,
@@ -405,6 +403,16 @@ function(drawPlugin) {
             var scaleFactor = 10000.0;
             polygons.geometry.move(-reference[0],-reference[1]);
             polygons.geometry.resize(scaleFactor,origin);
+
+            // Splitting line
+            var splitPoints = [];
+            for (var ind=0; ind < splitLine.geometry.components.length; ind++) {
+                var x = splitLine.geometry.components[ind].x;
+                var y = splitLine.geometry.components[ind].y;
+                splitPoints.push(new OpenLayers.Geometry.Point(x,y));
+            }
+            var line = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(splitPoints));
+
             line.geometry.move(-reference[0],-reference[1]);
             line.geometry.resize(scaleFactor,origin);
 

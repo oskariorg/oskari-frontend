@@ -32,6 +32,7 @@ function(instance) {
 	this.selectStyle = null;
 	this.selectedFeature = -2;
 	this.selectInfoControl = null;
+    this.operatingFeature = null;
 }, {
 	/**
 	 * @method getName
@@ -46,13 +47,12 @@ function(instance) {
 	},
 
     processFeatures : function() {
+        if (!((this.drawLayer.features.length > 1)&&(this.operatingFeature === null))) return; // Nothing to process
         var me = this;
         // Make sure that all the component states are in sync, such as dialogs.
         var event = me._sandbox.getEventBuilder('Parcel.FinishedDrawingEvent')();
         me._sandbox.notifyAll(event);
         // Disable all draw controls.
-        // Then, the user needs to reselect what to do next.
-        // At the moment, this creates some consistency in the usability.
         me.toggleControl();
         // Because a new feature was added, do splitting.
         me.splitFeature();
@@ -577,6 +577,13 @@ function(instance) {
             if (this.editLayer.features.length === 0) return null;
             return this.editLayer.features[0].geometry;
         },
+        /**
+         * Returns the operating geometry
+         * @method
+         */
+        getOperatingGeometry : function() {
+            return this.operatingFeature.geometry;
+        },
 	/**
 	 * @param {String} featureType The feature type of the parcel feature. This is used when feature is commited to the server.
 	 * @method setFeatureType
@@ -660,16 +667,18 @@ function(instance) {
 	 */
 	splitFeature : function(trivial) {
 		var trivialSplit = ( typeof trivial === "undefined" ? false : trivial);
-		var operatingFeature = this.splitter.split(trivialSplit);
-		if (operatingFeature != undefined) {
-            this.initControls(operatingFeature);
+		var editFeature = this.splitter.split(trivialSplit);
+		if (editFeature !== undefined) {
+            this.initControls(editFeature);
 		}
 	},
 
     initControls : function(operatingFeature) {
+            this.buttons.setEnabled(true);
             this.buttons.setButtonEnabled("line",false);
             this.buttons.setButtonEnabled("area",false);
             this.buttons.setButtonEnabled("selector",false);
+            this.buttons.setButtonEnabled("clear",true);
             this.buttons.setButtonEnabled("save",true);
 
 			this.controls.select.select(operatingFeature);
@@ -688,39 +697,33 @@ function(instance) {
             jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); // IE8
     },
 
-    createEditor : function(features, preparcel) {
-        this.clear();
-        var attributes = {};
-        this.currentFeatureType = this.instance.conf.registerUnitFeatureType;
-        this._oldPreParcel = preparcel;
-        var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')([this.getDrawingLayer(), this.getEditLayer()]);
-        this._sandbox.notifyAll(event);
-        var selectedFeature = 0;
+    createEditor : function(features, data, preparcel) {
+        var polygons = [];
+        var boundary = null;
         var partInd = 0;
+        var selectedFeature = 0;
+        var i;
+        this.clear();
 
-        for (var i=0; i<features.length; i++) {
-            switch (features[i].geom_type) {
+        for (i=0; i<features.length; i++) {
+            polygons.push(features[i].geometry);
+        }
+        this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(polygons)));
+
+        for (i=0; i<data.length; i++) {
+            switch (data[i].geom_type) {
                 case "selectedpartparcel":
                     selectedFeature = partInd;
                 case "partparcel":
-                    this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Polygon(features[i].geometry.components[0])));
-                    this.drawLayer.features[partInd].style = this.basicStyle;
-                    this.drawLayer.features[partInd].attributes = {name : preparcel.preparcel_id, quality : preparcel.parent_property_quality};
+                    polygons.push(data[i].geometry);
                     partInd = partInd+1;
                     break;
                 case "boundary":
-                    this.editLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(features[i].geometry)));
+                    boundary = data[i].geometry;
                     break;
             }
         }
-
-        this._map.zoomToExtent(this.drawLayer.getDataExtent());
-        OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
-        this.drawLayer.features[0].style = this.selectStyle;
-        this.selectedFeature = selectedFeature;
-        this.drawLayer.redraw();
-        this.editLayer.redraw();
-        this.initControls(this.editLayer.features[0]);
+        this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(boundary));
     },
 
 	/**
