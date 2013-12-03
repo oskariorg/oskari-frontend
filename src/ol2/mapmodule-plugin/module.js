@@ -5,7 +5,7 @@ define([
 	"../../mapping/mapmodule-plugin/map-module",
 	"../../mapping/mapmodule-plugin/plugin/MapPlugin",
 	"../../mapping/mapmodule-plugin/plugin/MapLayerPlugin",
-	"../../mapping/mapmodule-plugin/plugin/panbuttons/PanButtons",
+	"./plugin/panbuttons/PanButtons",
 	"../../mapping/mapmodule-plugin/plugin/layers/LayersPlugin",
 	"bundles/framework/bundle/mapmodule-plugin/request/MapLayerVisibilityRequest",
 	"../../mapping/mapmodule-plugin/request/MapLayerVisibilityRequestHandler",

@@ -8,6 +8,8 @@ define([
 	"bundles/framework/bundle/mapfull/request/MapResizeEnabledRequestHandler",
 	"bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequest",
 	"bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequestHandler",
+	"bundles/framework/bundle/mapstats/module",
+	"bundles/framework/bundle/mapwfs/module",
 	"css!resources/framework/bundle/mapfull/css/style.css"
 ], function(Oskari, jQuery) {
 	Oskari.bundleCls('oskariui');

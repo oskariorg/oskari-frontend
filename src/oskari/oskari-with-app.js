@@ -147,7 +147,6 @@ define([
      *   var evt = evtCls.create({ 'prop': 'value' }); 
      *   Oskari.getSandbox().notifyAll(evt);  
      */ 
-    */
     Oskari.Event = Oskari.cls('Oskari.event.Event',function(instanceProps) {
         for (ip in instanceProps) {
             if (instanceProps.hasOwnProperty(ip)) {

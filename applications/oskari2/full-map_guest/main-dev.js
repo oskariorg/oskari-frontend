@@ -1,11 +1,11 @@
 require(["mainConfig"], function() {
 
     /* loading base requirements */
-    require(["jquery", "oskari","domReady"],
+    require(["jquery", "oskari-with-app", "domReady"],
     /**
      * ... now we have jQuery and Oskari
      */
-    function($, Oskari) {
+    function(jQuery, Oskari) {
 
         function getURLParameter(name) {
             var re = name + '=' + '([^&]*)(&|$)';
@@ -48,7 +48,7 @@ require(["mainConfig"], function() {
 
         /* loading configuration */
         require([config, 
-            "bundles/oskari/bundle/map-openlayers/module"], function(appSetup) {
+            "map"], function(appSetup) {
             Oskari.setLang(language);
             var appConfig = appSetup.configuration;
             appConfig.promote = {
@@ -95,9 +95,9 @@ require(["mainConfig"], function() {
             Oskari.setConfiguration(appConfig);
 
             /* loading main map and divmanazer */
-            require(["bundles/framework/bundle/mapfull/module",
-                "bundles/framework/bundle/mapmodule-plugin/module",
-                "bundles/framework/bundle/divmanazer/module"], function(mapfull, mapmodule, divmanazer) {
+            require(["mapfull",
+                "mapmodule-plugin",
+                "divmanazer"], function(mapfull, mapmodule, divmanazer) {
 
                 /* starting to show user that something or another is happening */
                 mapfull.start();
@@ -112,6 +112,9 @@ require(["mainConfig"], function() {
                         bundles.push("bundles/statistics/bundle/" + bundle + "/module");
                     } else if (bundle === "metadataflyout") {
                         bundles.push("bundles/catalogue/bundle/" + bundle + "/module");
+                    } else if (bundle === "guidedtour") {
+                        console.log('relocating guidedtour')
+                        bundles.push("src/framework/" + bundle + "/module");
                     } else {
                         bundles.push("bundles/framework/bundle/" + bundle + "/module");
                     }

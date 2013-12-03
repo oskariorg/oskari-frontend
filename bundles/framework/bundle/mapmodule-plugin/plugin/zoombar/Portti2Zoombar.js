@@ -45,6 +45,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * @return {Oskari.mapframework.ui.module.common.MapModule}
          */
         getMapModule: function () {
+            console.log('getting', this.mapModule);
             return this.mapModule;
         },
         /**

@@ -1,7 +1,7 @@
 require.config({
   baseUrl: "/Oskari/", // the base is set to requirejs lib to help requiring 3rd party libs
   paths: { // some path shortcuts to ease declarations
-    oskari: "src/oskari/oskari-with-app",
+    oskari: "src/oskari/oskari",
     "oskari-with-app": "src/oskari/oskari-with-app",
     "oskari-with-loader": "src/oskari/oskari-with-loader",
     jquery: "http://code.jquery.com/jquery-1.9.1",
@@ -27,13 +27,15 @@ require.config({
       "infobox": "src/leaflet/infobox/module",
       "search": "bundles/framework/bundle/search/module",
       "layerselector2": "bundles/framework/bundle/layerselector2/module",
-      "layerselection2": "bundles/framework/bundle/layerselection2/module",
+      "layerselection2": "src/framework/layerselection2/module",
       "personaldata": "bundles/framework/bundle/personaldata/module",
       "maplegend": "bundles/framework/bundle/maplegend/module",
       "userguide": "bundles/framework/bundle/userguide/module",
       "backendstatus": "bundles/framework/bundle/backendstatus/module",
       "postprocessor": "bundles/framework/bundle/postprocessor/module",
-      "statsgrid": "bundles/statistics/bundle/statsgrid/module",
+      "publisher": "bundles/framework/bundle/publisher/module",
+      "guidedtour": "bundles/framework/bundle/guidedtour/module",
+      "statsgrid": "src/statistics/statsgrid/module",
       "promote": "bundles/framework/bundle/promote/module"
     },
 

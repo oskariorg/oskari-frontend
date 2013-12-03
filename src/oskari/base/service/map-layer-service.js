@@ -92,6 +92,39 @@ function(mapLayerUrl, sandbox) {
         }
     },
     /**
+     * @method addSubLayer
+     * Adds the layer to parent layer's sublayer list
+     * @param {String} parentLayerId the id of the parent layer to which we're adding the layerModel.
+     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layerModel
+     *            parsed layer model to be added (must be of type declared in #typeMapping)
+     * @param {Boolean} suppressEvent (optional)
+     *            true to not send event (should only be used on initial load to avoid unnecessary events)
+     */
+    addSubLayer: function (parentLayerId, layerModel, suppressEvent) {
+        var parentLayer = this.findMapLayer(parentLayerId),
+            subLayers,
+            len,
+            i;
+
+        if (parentLayer && (parentLayer.isBaseLayer() || parentLayer.isGroupLayer())) {
+            subLayers = parentLayer.getSubLayers();
+
+            for (i = 0, len = subLayers.length; i < len; ++i) {
+                if (subLayers[i].getId() === layerModel.getId()) {
+                    return false;
+                }
+            }
+
+            subLayers.push(layerModel);
+
+            if (suppressEvent !== true) {
+                // notify components of added layer if not suppressed
+                var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
+                this._sandbox.notifyAll(evt);
+            }
+        }
+    },
+    /**
      * @method removeLayer
      * Removes the layer from internal layerlist and
      * sends out a MapLayerEvent if it was found & removed
@@ -111,11 +144,46 @@ function(mapLayerUrl, sandbox) {
         }
         if(layer && suppressEvent !== true) {
             // notify components of layer removal
-            var event = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'remove');
-            this._sandbox.notifyAll(event);
+            var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'remove');
+            this._sandbox.notifyAll(evt);
         }
         this._reservedLayerIds[layerId] = false;
         // TODO: notify if layer not found?
+    },
+    /**
+     * @method removeSubLayer
+     * Removes the layer from parent layer's sublayers and
+     * sends out a MapLayerEvent if it was found & removed
+     * @param {String} parentLayerId
+     * @param {String} layerId
+     *            id for the layer to be removed
+     * @param {Boolean} suppressEvent (optional)
+     *            true to not send event (should only be used on test cases to avoid unnecessary events)
+     */
+    removeSubLayer: function (parentLayerId, layerId, suppressEvent) {
+        var parentLayer = this.findMapLayer(parentLayerId),
+            subLayers,
+            subLayer,
+            len,
+            i;
+
+        if (parentLayer && (parentLayer.isBaseLayer() || parentLayer.isGroupLayer())) {
+            subLayers = parentLayer.getSubLayers();
+
+            for (i = 0, len = subLayers.length; i < len; ++i) {
+                if (subLayers[i].getId() === layerId) {
+                    subLayer = subLayers[i];
+                    subLayers.splice(i, 1);
+                    break;
+                }
+            }
+
+            if (subLayer && suppressEvent !== true) {
+                // notify components of added layer if not suppressed
+                var event = this._sandbox.getEventBuilder('MapLayerEvent')(subLayer.getId(), 'remove');
+                this._sandbox.notifyAll(event);
+            }
+        }
     },
     /**
      * @method updateLayer
@@ -130,11 +198,50 @@ function(mapLayerUrl, sandbox) {
     updateLayer : function(layerId, newLayerConf) {
         var layer = this.findMapLayer(layerId);
         if(layer) {
-            layer.setName(newLayerConf.name);
+
+            if (newLayerConf.dataUrl) {
+                layer.setDataUrl(newLayerConf.dataUrl);
+            }
+
+            if (newLayerConf.legendImage) {
+                layer.setLegendImage(newLayerConf.legendImage);
+            }
+
+            if (newLayerConf.minScale) {
+                layer.setMinScale(newLayerConf.minScale);
+            }
+
+            if (newLayerConf.maxScale) {
+                layer.setMaxSclae(newLayerConf.maxScale);
+            }
+
+            if (newLayerConf.name) {
+                layer.setName(newLayerConf.name);
+            }
+
+            if (newLayerConf.type) {
+                layer.setType(newLayerConf.type);
+            }
+
+            if (newLayerConf.wmsName) {
+                layer.setWmsName(newLayerConf.wmsName);
+            }
+
+            if (newLayerConf.wmsUrl) {
+                layer.setWmsUrls(newLayerConf.wmsUrl.split(','));
+            }
+
+            for (i in newLayerConf.admin) {
+                if (newLayerConf.admin.hasOwnProperty(i)) {
+                    if (newLayerConf.admin[i]) {
+                        layer.admin[i] = newLayerConf.admin[i];
+                    }
+                }
+            }
 
             // notify components of layer update
-            var event = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
-            this._sandbox.notifyAll(event);
+            var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
+            this._sandbox.notifyAll(evt);
         }
         // TODO: notify if layer not found?
     },
@@ -154,8 +261,8 @@ function(mapLayerUrl, sandbox) {
         if(layer) {
             layer.setSticky(isSticky);
             // notify components of layer update
-            var event = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'sticky');
-            this._sandbox.notifyAll(event);
+            var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'sticky');
+            this._sandbox.notifyAll(evt);
         }
         // TODO: notify if layer not found?
     },
@@ -168,6 +275,10 @@ function(mapLayerUrl, sandbox) {
      */
     loadAllLayersAjax : function(callbackSuccess, callbackFailure) {
         var me = this;
+        // Used to bypass browsers' cache especially in IE, which seems to cause
+        // problems with displaying publishing permissions in some situations.
+        var timeStamp = new Date().getTime();
+
         jQuery.ajax({
             type : "GET",
             dataType: 'json',
@@ -176,7 +287,7 @@ function(mapLayerUrl, sandbox) {
                x.overrideMimeType("application/j-son;charset=UTF-8");
               }
              },
-            url : this._mapLayerUrl,
+            url : this._mapLayerUrl + '&timestamp=' + timeStamp + '&',
             success : function(pResp) {
                 me._loadAllLayersAjaxCallBack(pResp, callbackSuccess);
             },
@@ -195,24 +306,55 @@ function(mapLayerUrl, sandbox) {
      * @private
      */
     _loadAllLayersAjaxCallBack : function(pResp, callbackSuccess) {
-        var allLayers = pResp.layers;
-        for(var i = 0; i < allLayers.length; i++) {
-            
-            var mapLayer = this.createMapLayer(allLayers[i]);
-            if( !mapLayer ) {
-            	continue;
-            }	
-            if(allLayers[i].admin != null) {
-                mapLayer.admin = allLayers[i].admin;                
-            }
-            if(this._reservedLayerIds[mapLayer.getId()] !== true) {
+        var allLayers = pResp.layers,
+            i,
+            mapLayer,
+            existingLayer,
+            exSubLayers,
+            mapSubLayers,
+            subI,
+            existingSubLayer;
+
+
+        for (i = 0; i < allLayers.length; i++) {
+
+            mapLayer = this.createMapLayer(allLayers[i]);
+
+            if (this._reservedLayerIds[mapLayer.getId()] !== true) {
                 this.addLayer(mapLayer, true);
+            } else {
+                // Set additional data to an existing layer.
+                existingLayer = this.findMapLayer(mapLayer.getId());
+
+                if (allLayers[i].admin !== null && allLayers[i].admin !== undefined) {
+                    existingLayer.admin = allLayers[i].admin;
+                }
+                if (allLayers[i].names) {
+                    existingLayer.names = allLayers[i].names;
+                }
+
+                if (existingLayer.getSubLayers() !== null && existingLayer.getSubLayers() !== undefined) { // Set additional data to an sublayers
+
+                    exSubLayers = existingLayer.getSubLayers();
+                    mapSubLayers = mapLayer.getSubLayers();
+
+                    for (subI = 0; subI < exSubLayers.length; subI++) {
+
+                        existingSubLayer = exSubLayers[subI];
+                        if (exSubLayers[subI].admin !== null && exSubLayers[subI].admin !== undefined) {
+                            existingSubLayer.admin = mapSubLayers[subI].admin;
+                        }
+                        if (exSubLayers[subI].names) {
+                            existingSubLayer.names = mapSubLayers[subI].names;
+                        }
+                    }
+                }
             }
         }
         // notify components of added layer if not suppressed
         this._allLayersAjaxLoaded = true;
-        var event = this._sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
-        this._sandbox.notifyAll(event);
+        var evt = this._sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
+        this._sandbox.notifyAll(evt);
         this._resetStickyLayers();
         if(callbackSuccess) {
             callbackSuccess();
@@ -248,6 +390,26 @@ function(mapLayerUrl, sandbox) {
         for(var i = 0; i < this._loadedLayersList.length; ++i) {
             var layer = this._loadedLayersList[i];
             if(layer.getMetaType && layer.getMetaType() === type) {
+                list.push(layer);
+            }
+        }
+        return list;
+    },
+    /**
+     * @method getLayersOfType
+     * Returns an array of layers added to the service that are of given type (layer.isLayerOfType(type)).
+     *
+     * @param {String} type
+     *            type to filter the layers with
+     * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
+     */
+    getLayersOfType: function (type) {
+        var list = [],
+            i,
+            layer;
+        for (i = 0; i < this._loadedLayersList.length; ++i) {
+            layer = this._loadedLayersList[i];
+            if (layer.isLayerOfType(type)) {
                 list.push(layer);
             }
         }
@@ -327,6 +489,19 @@ function(mapLayerUrl, sandbox) {
             // create map layer
             mapLayer = this._createActualMapLayer(mapLayerJson);
         }
+
+        // Set additional data
+        if (mapLayer && mapLayerJson.admin !== null && mapLayerJson.admin !== undefined) {
+            mapLayer.admin = mapLayerJson.admin;
+        }
+        if (mapLayer && mapLayerJson.names !== null && mapLayerJson.names !== undefined) {
+            mapLayer.names = mapLayerJson.names;
+        }
+
+        if (this._stickyLayerIds[mapLayer.getId()]) {
+            mapLayer.setSticky(true);
+        }
+
         return mapLayer;
     },
     /**
@@ -388,15 +563,19 @@ function(mapLayerUrl, sandbox) {
         
         if(baseMapJson.permissions) {
             for(var perm in baseMapJson.permissions) {
-                baseLayer.addPermission(perm, baseMapJson.permissions[perm]);   
+                if (baseMapJson.permissions.hasOwnProperty(perm)) {
+                    baseLayer.addPermission(perm, baseMapJson.permissions[perm]);
+                }
             }
         }
 
-        for(var i = 0; i < baseMapJson.subLayer.length; i++) {
-            // Notice that we are adding layers to baselayers sublayers array
-            var subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
-            
-            baseLayer.getSubLayers().push(subLayer);
+        if (baseMapJson.subLayer) {
+            for(var i = 0; i < baseMapJson.subLayer.length; i++) {
+                // Notice that we are adding layers to baselayers sublayers array
+                var subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
+                subLayer.admin = baseMapJson.subLayer[i].admin || {};
+                baseLayer.getSubLayers().push(subLayer);
+            }
         }
         
         // Opacity
@@ -414,8 +593,25 @@ function(mapLayerUrl, sandbox) {
             baseLayer.setOpacity(100);
         }
 
-
         return baseLayer;
+    },
+    /**
+     * Creates an empty domain object instance for given type. Passes params and options to constructor.
+     * Given type should match a key in typeMapping, otherwise [null] is returned
+     *
+     * @method createLayerTypeInstance
+     *
+     * @param {String} type type of the layer (should match something on the typeMapping)
+     * @param {Object} params object for constructor (optional)
+     * @param {Object} options object for constructor (optional)
+     * @return {Oskari.mapframework.domain.AbstractLayer} empty layer model for the layer type
+     */
+    createLayerTypeInstance: function (type, params, options) {
+        var clazz = this.typeMapping[type];
+        if (!clazz) {
+            return null;
+        }
+        return Oskari.clazz.create(clazz, params, options);
     },
     /**
      * @method _createActualMapLayer
@@ -429,15 +625,20 @@ function(mapLayerUrl, sandbox) {
      *            parsed layer model that can be added with #addLayer()
      */
     _createActualMapLayer : function(mapLayerJson) {
-        var layer = null;
-        var mapLayerId = mapLayerJson.id;
+        if (!mapLayerJson) {
+            // sandbox.printDebug
+            /*
+             * console.log("[LayersService] " + "Trying to create mapLayer
+             * without " + "backing JSON data - id: " +mapLayerId);
+             */
+            return null;
+        }
 
-        if(mapLayerJson != null) {
-            if(!this.typeMapping[mapLayerJson.type]) {
-                //throw "Unknown layer type '" + mapLayerJson.type + "'";
-                return null;
-            }
-            layer = Oskari.clazz.create(this.typeMapping[mapLayerJson.type], mapLayerJson.params, mapLayerJson.options);
+        var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options),
+            perm;
+        if (!layer) {
+            throw "Unknown layer type '" + mapLayerJson.type + "'";
+        }
 
             //these may be implemented as jsonHandler
             if(mapLayerJson.type == 'wmslayer') {
@@ -452,13 +653,12 @@ function(mapLayerUrl, sandbox) {
 
             // set common map layer data
             layer.setAsNormalLayer();
-            layer.setId(mapLayerId);
+            layer.setId(mapLayerJson.id);
             layer.setName(mapLayerJson.name);
             
             if(mapLayerJson.opacity != null) {
                 layer.setOpacity(mapLayerJson.opacity);
-            }
-            else {
+            } else {
                 layer.setOpacity(100);
             }
             layer.setMaxScale(mapLayerJson.maxScale);
@@ -472,7 +672,7 @@ function(mapLayerUrl, sandbox) {
             layer.setMetadataIdentifier(mapLayerJson.dataUrl_uuid);
             if( !layer.getMetadataIdentifier() && layer.getDataUrl() ) {
                 var tempPartsForMetadata = layer.getDataUrl().split("uuid=");
-                if( tempPartsForMetadata.length == 2 ) {
+                if( tempPartsForMetadata.length === 2 ) {
                     layer.setMetadataIdentifier(tempPartsForMetadata[1]);
                 }
             }
@@ -485,15 +685,13 @@ function(mapLayerUrl, sandbox) {
             // for grouping: organisation and inspire 
             if(mapLayerJson.orgName) {
                 layer.setOrganizationName(mapLayerJson.orgName);
-            }
-            else {
+            } else {
                 layer.setOrganizationName("");
             }
             
             if(mapLayerJson.inspire) {
                 layer.setInspireName(mapLayerJson.inspire);
-            }
-            else {
+            } else {
                 layer.setInspireName("");
             }
             layer.setVisible(true);
@@ -506,22 +704,25 @@ function(mapLayerUrl, sandbox) {
             // permissions
             if(mapLayerJson.permissions) {
                 for(var perm in mapLayerJson.permissions) {
-                    layer.addPermission(perm, mapLayerJson.permissions[perm]);  
+                    if (mapLayerJson.permissions.hasOwnProperty(perm)) {
+                        layer.addPermission(perm, mapLayerJson.permissions[perm]);
+                    }
                 }
+            }
+
+            if (mapLayerJson.url) {
+                layer.addLayerUrl(mapLayerJson.url);
+            }
+
+            if (mapLayerJson.localization) {
+                // overrides name/desc/inspire/organization if defined!!
+                layer.setLocalization(mapLayerJson.localization);
             }
 
             var builder = this.modelBuilderMapping[mapLayerJson.type];
             if(builder) {
                 builder.parseLayerData(layer, mapLayerJson, this);
             }
-
-        } else {
-            // sandbox.printDebug
-            /*
-             * console.log("[LayersService] " + "Trying to create mapLayer
-             * without " + "backing JSON data - id: " +mapLayerId);
-             */
-        }
 
         return layer;
     },
@@ -560,7 +761,7 @@ function(mapLayerUrl, sandbox) {
      * @param {Object} jsonLayer JSON presentation for the maplayer
      * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} returns the same layer object with populated styles for convenience
      */
-    _populateStyles : function(layer, jsonLayer) {
+    _populateStyles : function(layer, jsonLayer, defaultStyle) {
 
         var styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style');
 
@@ -594,13 +795,17 @@ function(mapLayerUrl, sandbox) {
 
         // Create empty style that works as default if none available
         if(layer.getStyles().length == 0) {
-
+            if(defaultStyle) {
+                layer.addStyle(defaultStyle);
+                layer.selectStyle(defaultStyle.getName());
+            } else {
             var style = styleBuilder();
             style.setName("");
             style.setTitle("");
             style.setLegend("");
             layer.addStyle(style);
             layer.selectStyle("");
+            }
         }
 
         layer.setLegendImage(jsonLayer.legendImage);
@@ -634,7 +839,6 @@ function(mapLayerUrl, sandbox) {
      * @method _resetStickyLayers
      * Reset sticky layers 
      *
-   
      */
     _resetStickyLayers : function() {
         

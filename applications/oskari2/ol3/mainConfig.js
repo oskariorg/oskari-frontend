@@ -2,6 +2,7 @@ require.config({
   baseUrl: "/Oskari/", // the base is set to requirejs lib to help requiring 3rd party libs
   paths: { // some path shortcuts to ease declarations
     oskari: "src/oskari/oskari",
+    "oskari-with-app": "src/oskari/oskari-with-app",
     "oskari-with-loader": "src/oskari/oskari-with-loader",
     jquery: "http://code.jquery.com/jquery-1.9.1",
     "jquery-migrate": "libraries/jquery/jquery-migrate-1.2.1-modified",
@@ -15,10 +16,27 @@ require.config({
     // '*' means all modules will get 'jquery-private'
     // for their 'jquery' dependency.
     "*": {
+      "oskari": "oskari-with-app",
       "jquery": "jquery-migrate",
-      "map": "src/oskari/bundle/map-ol3/module",
-      "mapmodule-plugin": "src/ol3/bundle/mapmodule-plugin/module",
-      "mapfull": "src/ol3/bundle/mapfull/module"      
+      "map": "src/oskari/map-ol3/module",
+      "mapmodule-plugin": "src/ol3/mapmodule-plugin/module",
+      "mapfull": "src/ol3/mapfull/module",
+      "divmanazer": "src/framework/divmanazer/module",
+      "toolbar": "bundles/framework/bundle/toolbar/module",
+      "statehandler": "bundles/framework/bundle/statehandler/module",
+      "infobox": "bundles/framework/bundle/infobox/module",
+      "search": "bundles/framework/bundle/search/module",
+      "layerselector2": "bundles/framework/bundle/layerselector2/module",
+      "layerselection2": "src/framework/layerselection2/module",
+      "personaldata": "bundles/framework/bundle/personaldata/module",
+      "maplegend": "bundles/framework/bundle/maplegend/module",
+      "userguide": "bundles/framework/bundle/userguide/module",
+      "backendstatus": "bundles/framework/bundle/backendstatus/module",
+      "postprocessor": "bundles/framework/bundle/postprocessor/module",
+      "publisher": "bundles/framework/bundle/publisher/module",
+      "guidedtour": "bundles/framework/bundle/guidedtour/module",
+      "statsgrid": "src/statistics/statsgrid/module",
+      "promote": "bundles/framework/bundle/promote/module"
     },
 
     // 'jquery-private' wants the real jQuery module

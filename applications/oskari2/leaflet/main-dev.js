@@ -6,7 +6,7 @@ require(["mainConfig"], function() {
          * ... now we have jQuery and Oskari
          */
 
-        function($, Oskari) {
+        function(jQuery, Oskari) {
 
             function getURLParameter(name) {
                 var re = name + '=' + '([^&]*)(&|$)';

@@ -250,6 +250,22 @@
         }
     }, {
         "instanceProps": {},
+        "title": "Guided Tour",
+        "bundleinstancename": "guidedtour",
+        "fi": "guidedtour",
+        "sv": "guidedtour",
+        "en": "guidedtour",
+        "bundlename": "guidedtour",
+        "metadata": {
+            "Import-Bundle": {
+                "guidedtour": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
         "title": "backendstatus",
         "fi": "backendstatus",
         "bundleinstancename": "backendstatus",
@@ -364,6 +380,10 @@
                 }, {
                     "id": "Oskari.ol3.mapmodule.plugin.WmtsLayerPlugin"
                 }, {
+                    "id": "Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin"
+                }, {
                     "id": "Oskari.ol3.mapmodule.plugin.PanButtons"
                 }],
                 "layers": [{
@@ -386,11 +406,11 @@
                     "name": "Taustakartta",
                     "inspire": "Taustakartta",
                     "orgName": "Maanmittauslaitos",
+                    "styles": [{
+                        "isDefault": true,
+                        "identifier": "default"
+                    }],
                     "tileLayerData": {
-                        "styles": [{
-                            "isDefault": true,
-                            "identifier": "default"
-                        }],
                         "formats": ["image/png"],
                         "dimensions": [],
                         "tileMatrixSetLinks": [{
@@ -852,11 +872,11 @@
                     "name": "maastokartta",
                     "inspire": "maastokartta",
                     "orgName": "Maanmittauslaitos",
+                    "styles": [{
+                        "isDefault": true,
+                        "identifier": "default"
+                    }],
                     "tileLayerData": {
-                        "styles": [{
-                            "isDefault": true,
-                            "identifier": "default"
-                        }],
                         "formats": ["image/png"],
                         "dimensions": [],
                         "tileMatrixSetLinks": [{
@@ -1313,13 +1333,14 @@
                 }],
                 "imageLocation": "/Oskari/resources",
                 "user": {
-                    "userID": 10110,
+                    "userID": 10110123214353465,
                     "lastName": "",
                     "nickName": "10110",
                     "userUUID": "",
                     "firstName": "",
                     "loginName": "default@maanmittauslaitos.fi"
                 },
+                "test" : "test",
                 "mapOptions": {
                     "resolutions": [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5],
                     "maxExtent": {
@@ -1432,10 +1453,6 @@
                 }
             }
         },
-        "openlayers-default-theme": {
-            "state": {},
-            "conf": {}
-        },
         "search": {
             "state": {},
             "conf": {
@@ -1446,7 +1463,7 @@
             "state": {},
             "conf": {}
         },
-        "divmanazer": {
+        "guidedtour": {
             "state": {},
             "conf": {}
         },

@@ -132,33 +132,15 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultFlyout.js"
-        },{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedFlyout.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultExtension.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedExtension.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultView.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultLayout.js"
-        },  {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedTile.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedFlyout.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedExtension.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedView.js"
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/divmanazer/css/divman.css"

@@ -241,6 +241,22 @@
         }
     }, {
         "instanceProps": {},
+        "title": "Guided Tour",
+        "bundleinstancename": "guidedtour",
+        "fi": "guidedtour",
+        "sv": "guidedtour",
+        "en": "guidedtour",
+        "bundlename": "guidedtour",
+        "metadata": {
+            "Import-Bundle": {
+                "guidedtour": {
+                    "bundlePath": "/Oskari/packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
         "title": "backendstatus",
         "fi": "backendstatus",
         "bundleinstancename": "backendstatus",
@@ -356,7 +372,9 @@
                 }, {
                     "id": "Oskari.ol2.mapmodule.WmtsLayerPlugin"
                 }, {
-                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
+                    "id": "Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin"
                 }],
                 "layers": [{
                     "wmsName": "taustakartta",
@@ -1225,6 +1243,10 @@
             "conf": {}
         },
         "statehandler": {
+            "state": {},
+            "conf": {}
+        },
+        "guidedtour": {
             "state": {},
             "conf": {}
         },

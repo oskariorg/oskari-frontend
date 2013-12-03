@@ -1,11 +1,11 @@
 require(["mainConfig"], function() {
 
     /* loading base requirements */
-    require(["jquery", "oskari","domReady"],
+    require(["jquery", "oskari-with-app", "domReady"],
     /**
      * ... now we have jQuery and Oskari
      */
-    function($, Oskari) {
+    function(jQuery, Oskari) {
 
         function getURLParameter(name) {
             var re = name + '=' + '([^&]*)(&|$)';
@@ -93,11 +93,11 @@ require(["mainConfig"], function() {
                 };
 
             Oskari.setConfiguration(appConfig);
+
             /* loading main map and divmanazer */
             require(["mapfull",
                 "mapmodule-plugin",
-                "bundles/framework/bundle/divmanazer/module"
-                ], function(mapfull, mapmodule, divmanazer) {
+                "divmanazer"], function(mapfull, mapmodule, divmanazer) {
 
                 /* starting to show user that something or another is happening */
                 mapfull.start();
@@ -108,14 +108,10 @@ require(["mainConfig"], function() {
                 for (bundle in appConfig) {
                     if ((bundle === "mapfull") || (bundle === "divmanazer") || (bundle === "openlayers-default-theme")) {
                         // already loaded
-                    } else if (bundle === "statsgrid") {
-                        bundles.push("bundles/statistics/bundle/" + bundle + "/module");
                     } else if (bundle === "metadataflyout") {
                         bundles.push("bundles/catalogue/bundle/" + bundle + "/module");
-                    } else if (bundle === "infobox") {
-                        bundles.push("src/ol3/bundle/" + bundle + "/module");
                     } else {
-                        bundles.push("bundles/framework/bundle/" + bundle + "/module");
+                        bundles.push(bundle);
                     }
                 }
 
