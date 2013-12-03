@@ -190,7 +190,7 @@ function(instance) {
             if(list)pboundary.setPreparcel_id(list[0].id);
             pboundary.setGeom_type('boundary');
             pboundary.setUuid(this.kvp_uid);
-            pboundary.setGeometry(drawplugin.operatingFeature.geometry);
+            pboundary.setGeometry(drawplugin.getOperatingGeometry());
             mylist.push(pboundary);
 
             return mylist;
