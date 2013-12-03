@@ -138,7 +138,7 @@ function(instance) {
         if (feature) {
             defaultValues.place.area = this.drawPlugin.getParcelGeometry().getArea().toFixed(0);
             if (feature.attributes) {
-                defaultValues.place.name = feature.attributes.name+'-M';
+                defaultValues.place.name = feature.attributes.name+'-K';
                 defaultValues.place.parent_property_id = feature.attributes.name;
                 defaultValues.place.parent_property_quality = feature.attributes.quality;
             }
