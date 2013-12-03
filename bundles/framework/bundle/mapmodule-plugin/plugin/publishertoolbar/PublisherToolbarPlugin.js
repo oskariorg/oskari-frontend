@@ -100,9 +100,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                         'buttons': {
                             'history_back': {
                                 toolbarid: me.toolbarId,
-                                iconCls: 'tool-history-back',
+                                iconCls: 'tool-history-back-dark',
                                 tooltip: me.localization.history.back,
                                 prepend: true,
+                                enabled: false,
                                 sticky: false,
                                 callback: function () {
                                     me._sandbox.request(me, reqBuilder('map_control_tool_prev'));
@@ -110,8 +111,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             },
                             'history_forward': {
                                 toolbarid: me.toolbarId,
-                                iconCls: 'tool-history-forward',
+                                iconCls: 'tool-history-forward-dark',
                                 tooltip: me.localization.history.next,
+                                enabled: false,
                                 sticky: false,
                                 callback: function () {
                                     me._sandbox.request(me, reqBuilder('map_control_tool_next'));
@@ -123,8 +125,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                         'buttons': {
                             'measureline': {
                                 toolbarid: me.toolbarId,
-                                iconCls: 'tool-measure-line',
+                                iconCls: 'tool-measure-line-dark',
                                 tooltip: me.localization.measure.line,
+                                enabled: false,
                                 sticky: true,
                                 callback: function () {
                                     var rn = 'map_control_measure_tool';
@@ -134,8 +137,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             },
                             'measurearea': {
                                 toolbarid: me.toolbarId,
-                                iconCls: 'tool-measure-area',
+                                iconCls: 'tool-measure-area-dark',
                                 tooltip: me.localization.measure.area,
+                                enabled: false,
                                 sticky: true,
                                 callback: function () {
                                     var rn = 'map_control_measure_area_tool';
@@ -329,7 +333,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         setToolbarContainer : function() {
             var me = this,
                 sandbox = me._sandbox;
-debugger;
             var builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
             if (me.toolbarId && (me.toolbarContent) && builder != null) {
                 // add toolbar when toolbarId and target container is configured
@@ -374,6 +377,7 @@ debugger;
                 styledImg = imgPath + 'menu-' + style + '.png',                
                 icon = div.find('.icon'),
                 toolsContent = div.find('.' + me.toolbarContent),
+                toolsPopupContent = div.find('.' + me.toolbarPopupContent)
                 blackOrWhite = style.split("-")[1];
 
             icon.css({
@@ -381,15 +385,20 @@ debugger;
             });
 
             if (blackOrWhite === "dark") {
-                toolsContent.removeClass('light').addClass('dark'); //css({'background-color': '#424343'})                
+                toolsContent.removeClass('light').addClass('dark');
+                toolsPopupContent.removeClass('light').addClass('dark');
             } else {
-                toolsContent.removeClass('dark').addClass('light'); //css({'background-color': '#ffffff'})
+                toolsContent.removeClass('dark').addClass('light');
+                toolsPopupContent.removeClass('dark').addClass('light');
             }
 
             var toolbarContent = me.element.find('.' + me.toolbarContent),
                 key,
                 buttonKey,
                 i;
+            // TODO
+            // ridiculous way of manipulating dom objects based on configs
+            // it would be so much better if all the tools would know their own view
             for (key in me.buttonGroups) {
                 if (me.buttonGroups.hasOwnProperty(key)) {
                     var confGroup = me.buttonGroups[key];
@@ -499,6 +508,26 @@ debugger;
 
             contentDiv.remove();
             toolbarDiv.show();
+        },
+        getToolConfs : function() {
+            var me = this,
+                confs = {};
+            for (var i in me.buttonGroups) {
+                if (me.buttonGroups.hasOwnProperty(i)) {
+                    var confGroup = me.buttonGroups[i];
+                    // create button groups for confs
+                    confs[confGroup.name] = {};
+
+                    for (var j in confGroup.buttons) {
+                        if (confGroup.buttons.hasOwnProperty(j)) {
+                            var confButton = confGroup.buttons[j];
+                            // create buttons and add necessary confs
+                            confs[confGroup.name][j] = {'iconCls': confButton.iconCls};
+                        }
+                    }
+                }
+            }
+            return confs;
         }
 
     }, {

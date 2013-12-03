@@ -347,6 +347,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 me._removeLayers();
 
                 map.addClass('mapPublishMode');
+                me.sandbox.mapMode = 'mapPublishMode';
                 // close all flyouts - TODO: how about popups/gfi?
 
                 //postRequestByName brakes mode change functionality! me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
@@ -387,7 +388,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 }
                 // first return all needed plugins before adding the layers back
                 map.removeClass('mapPublishMode');
-                me._addLayers();
+                if(me.sandbox._mapMode === 'mapPublishMode') {
+                    delete me.sandbox._mapMode;
+                }
+                 me._addLayers();
             }
             // publishing mode should be sent to mapfull to disable resizing
             requestBuilder = me.sandbox.getRequestBuilder('MapFull.MapResizeEnabledRequest');

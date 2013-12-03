@@ -168,9 +168,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             "classes": "top right"
         };
 
-        me.toolbarConfig = {
-            'defaultToolbarContainer' : '.publishedToolbarContent'
-        };
+        me.toolbarConfig = {};
 
         me.toolLayouts = ["lefthanded", "righthanded"];
 
@@ -755,7 +753,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         _activatePreviewPlugin: function (tool, enabled) {
             var me = this,
                 sandbox = me.instance.getSandbox();
-            // FIXME set layout classes on startPlugin
             if (!tool.plugin && enabled) {
                 var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
                 tool.plugin = Oskari.clazz.create(tool.id, tool.config);
@@ -801,10 +798,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             if (enabled) {
                 tool.plugin.startPlugin(this.instance.sandbox);
                 tool._isPluginStarted = true;
+
                 // toolbar (bundle) needs to be notified
-debugger;
                 if(tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
+                    me.toolbarConfig = {
+                        'toolbarId' : 'PublisherToolbar',
+                        'defaultToolbarContainer' : '.publishedToolbarContent',
+                        'hasContentContainer': true,
+                        'classes' : {}
+                    };
+
                     tool.plugin.setToolbarContainer();
+                    me.toolbarConfig.classes = tool.plugin.getToolConfs();
                 }
 
                 toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions() : null;
@@ -837,6 +842,10 @@ debugger;
                     }
                 }
             } else {
+                // toolbar (bundle) needs to be notified
+                if(tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
+                    me.toolbarConfig = {};
+                }
                 if (tool._isPluginStarted) {
                     //remove buttons
                     toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions() : null;
@@ -997,7 +1006,6 @@ debugger;
             if (me.data && me.data.id) {
                 selections.id = me.data.id;
             }
-debugger;
             // get toolbar config
             // inactive buttons don't have to be sent
             // if there's no active buttons, don't send toolbar config at all
@@ -1430,7 +1438,8 @@ debugger;
 
             var styleConfig,
                 i,
-                tool;
+                tool,
+                me = this;
 
             // Set the toolStyle to the config of each tool
             // and change the style immedately. 
@@ -1454,6 +1463,12 @@ debugger;
                 }
                 if (tool._isPluginStarted && tool.plugin.changeToolStyle) {
                     tool.plugin.changeToolStyle(styleConfig);
+                }
+                // tools in toolbar plugin needs to be configured
+                if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
+                    if (me.toolbarConfig && me.toolbarConfig.classes) {
+                        me.toolbarConfig.classes = tool.plugin.getToolConfs();
+                    }
                 }
             }
 
