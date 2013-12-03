@@ -12,6 +12,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.view.PlaceForm",
 function(instance) {
     this.instance = instance;
     this.initialValues = undefined;
+    this._formUi = undefined;
     
     var loc = instance.getLocalization('placeform');
 
@@ -20,7 +21,7 @@ function(instance) {
         '<div class="help icon-info" ' +
         'title="' + loc.tooltip + '"></div>' +
         '<label>' + loc.placename.placeholder + '</label>' +
-        '<input type="text" name="placename" placeholder="' + loc.placename.placeholder + '"/>' +
+        '<input type="text" name="placename" disabled="disabled" placeholder="' + loc.placename.placeholder + '"/>' +
         '</div>' +
         '<div class="field">' +
         '<label>' + loc.ptitle.placeholder + '</label>' +
@@ -37,11 +38,11 @@ function(instance) {
         '</div>' +
         '<div class="field">' +
         '<label>' + loc.parent_property_id.placeholder + '</label>' +
-        '<input type="text" name="parent_property_id" placeholder="' + loc.parent_property_id.placeholder + '"/>' +
+        '<input type="text" name="parent_property_id" disabled="disabled" placeholder="' + loc.parent_property_id.placeholder + '"/>' +
         '</div>' +
         '<div class="field">' +
         '<label>' + loc.parent_property_quality.placeholder + '</label>' +
-        '<input type="text" name="parent_property_quality" placeholder="' + loc.parent_property_quality.placeholder + '"/>' +
+        '<input type="text" name="parent_property_quality" disabled="disabled" placeholder="' + loc.parent_property_quality.placeholder + '"/>' +
         '</div>' +
         '<div class="field">' +
         '<label>' + loc.area.placeholder + '</label>' +
@@ -70,6 +71,7 @@ function(instance) {
             ui.find('input[name=area]').attr('value',this.initialValues.place.area);
             ui.find('input[name=reporter]').attr('value',this.initialValues.place.reporter);
         }
+        this._formUi = ui;
         return ui;
     },
     /**
@@ -133,6 +135,9 @@ function(instance) {
         
         this.initialValues = data;
     },
+        enableDisableFields : function() {
+          if(this._formUi) this._formUi.find('input[name=placename]').removeAttr('disabled');
+        },
     /**
      * @method destroy
      * Removes eventlisteners 

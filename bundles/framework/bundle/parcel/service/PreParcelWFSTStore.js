@@ -516,6 +516,25 @@ function(instance) {
             }
         });
     },
+        /*
+         * @method deletePreParcel by preparcel.id
+         *
+         * delete preparcel_data of preparcel
+         */
+        deletePreParcelDataById : function(id, callback) {
+            var p = this.protocols.preparcel_data;
+            var deleFilter = new OpenLayers.Filter.Comparison({
+                type : OpenLayers.Filter.Comparison.EQUAL_TO,
+                property : "preparcel_id",
+                value : id
+            });
+
+            p.filterDelete(deleFilter, {
+                callback : function(response) {
+                    me._handleDeletePreParcelDataResponse(response, list, callback);
+                }
+            });
+        },
 
     /**
      * @method handleDeletePreParcelDataResponse

@@ -122,7 +122,8 @@ function(instance) {
                     }
                     else {
                         // update models updateDate in store
-
+                        // me.updatePlaceData(drawplugin, values, list, cb);
+                        cb(success, list[0], isNew);
                     }
                 }
 
@@ -135,7 +136,27 @@ function(instance) {
 
 
     },
-    /**
+        /**
+         * @method updatePlaceData
+         * deletes first old geometriy features and saves new preparcel data
+         * features to the server asynchronously and gives the success information via callback.
+         * @param {obj} drawplugin instance for wfst features
+         * @param {obj/json} values feature attributes
+         * @param {Function} cb Requires information about the success as boolean parameter.
+         */
+        updatePlaceData: function (drawplugin, values, list, cb) {
+            var me = this;
+            var cbWrap = function (success) {
+                if (success) {
+                    me.savePlaceData(drawplugin, values, list, cb);
+                } else {
+                    cb(success, list[0], isNew);
+                }
+            };
+            if(values && values.id)
+            this._wfst2.deletePreParcelDataById(values.id, cbWrap);
+        },
+        /**
      * @method savePlaceData
      * Saves preparcel data features to the server asynchronously and gives the success information via callback.
      * @param {obj} drawplugin instance for wfst features

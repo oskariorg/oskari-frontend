@@ -108,7 +108,7 @@ function(instance) {
                 // preparcel.preparcel; common preparcel attributes
                 // preparcel.data geom features
                 // Create editor
-                this.instance.getDrawPlugin().createEditor(feature, preparcel.data, preparcel.preparcel);
+                this.instance.getDrawPlugin().createEditor(preparcel.data, preparcel.preparcel);
 
 
             }
