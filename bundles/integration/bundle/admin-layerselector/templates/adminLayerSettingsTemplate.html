@@ -236,7 +236,7 @@
         <div class="add-class-label-area">
             <label for="add-layer-view-roles" class="add-class-label" title="<%= instance.getLocalization('admin').roles_for_admin %>"><%= instance.getLocalization('admin').viewingRightsRoles %></label>
         </div>
-        <div class="add-class-input-area">
+        <div class="add-class-input-area adjacent">
              <% for(var i = 0; i < roles.length; i++) { %>
              <div class="input-controls">
                 <label><%= roles[i].name %>  <input type="checkbox" id="layer-view-roles-<%= roles[i].id %>"  class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" /></label>

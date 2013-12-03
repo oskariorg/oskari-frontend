@@ -219,6 +219,8 @@ div.admin-layerselector {
     div.admin-layerselector .input-controls .admin-add-class-cancel, div.admin-layerselector .input-controls .admin-add-layer-cancel {
       float: right;
       margin-right: 10px; }
+  div.admin-layerselector .adjacent .input-controls {
+    float: left; }
   div.admin-layerselector .icon-close {
     display: inline-block;
     opacity: 0;
