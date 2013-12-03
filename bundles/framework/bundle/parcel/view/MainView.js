@@ -134,12 +134,26 @@ function(instance) {
             place : {}
         };
         var feature = this.drawPlugin.getDrawing();
+        var oldpreparcel = this.drawPlugin.getOldPreParcel();
         if (feature) {
             defaultValues.place.area = this.drawPlugin.getParcelGeometry().getArea().toFixed(0);
             if (feature.attributes) {
-                defaultValues.place.name = feature.attributes.name+'-M';
+                defaultValues.place.name = feature.attributes.name+'-K';
                 defaultValues.place.parent_property_id = feature.attributes.name;
-                defaultValues.place.parent_property_quality = feature.attributes.quality;
+                defaultValues.place.parent_property_quality = this._decodeQuality('q'+feature.attributes.quality);
+            }
+            // Override if old values available
+            if (oldpreparcel)
+            {
+                defaultValues.place.id = oldpreparcel.id;
+                defaultValues.place.name = oldpreparcel.preparcel_id;
+                defaultValues.place.title = oldpreparcel.title;
+                defaultValues.place.subtitle = oldpreparcel.subtitle;
+                defaultValues.place.desc = oldpreparcel.description;
+                defaultValues.place.parent_property_id = oldpreparcel.parent_property_id;
+                defaultValues.place.parent_property_quality = oldpreparcel.parent_property_quality;
+                defaultValues.place.reporter= oldpreparcel.reporter;
+                defaultValues.place.area_unit = oldpreparcel.area_unit;
             }
         }
         // Set the default values for the form.
@@ -342,7 +356,16 @@ function(instance) {
         };
         this.instance.getService().loadPreParcelData(parcel_id, me.drawPlugin, serviceCallback);
     },
+        /**
+         * Decode the quality code to locale description
+         * @param quality_code  (lahdeaineisto property in KTJ WFS schema)
+         * @private
+         */
+        _decodeQuality : function(quality_code) {
+            var codes = this.instance.getLocalization().qualitycodes;
+            return codes.quality_code;
 
+        },
     /**
      * @method _cleanupPopup
      * Cancels operations:
