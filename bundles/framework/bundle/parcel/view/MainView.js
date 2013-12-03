@@ -145,6 +145,7 @@ function(instance) {
             // Override if old values available
             if (oldpreparcel)
             {
+                defaultValues.place.id = oldpreparcel.id;
                 defaultValues.place.name = oldpreparcel.preparcel_id;
                 defaultValues.place.title = oldpreparcel.title;
                 defaultValues.place.subtitle = oldpreparcel.subtitle;

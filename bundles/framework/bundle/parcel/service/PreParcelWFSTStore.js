@@ -155,7 +155,7 @@ function(instance) {
             preparcel.setPreparcel_id(featAtts['preparcel_id']);
             preparcel.setTitle(featAtts['title']);
             preparcel.setSubtitle(featAtts['subtitle']);
-            preparcel.setDescription(featAtts['description']);
+            preparcel.setDescription(featAtts['desc']);  // OL mixes description named attribute
             preparcel.setParent_property_id(featAtts['parent_property_id']);
             preparcel.setParent_property_quality(featAtts['parent_property_quality']);
             preparcel.setReporter(featAtts['reporter']);
@@ -202,7 +202,7 @@ function(instance) {
                     'preparcel_id': preparcel.getPreparcel_id(),
                     'title': preparcel.getTitle(),
                     'subtitle': preparcel.getSubtitle(),
-                    'description': preparcel.getDescription(),
+                    'desc': preparcel.getDescription(),
                     'parent_property_id': preparcel.getParent_property_id(),
                     'parent_property_quality': preparcel.getParent_property_quality(),
                     'reporter': preparcel.getReporter(),

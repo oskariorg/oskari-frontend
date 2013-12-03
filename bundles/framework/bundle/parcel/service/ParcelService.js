@@ -156,7 +156,7 @@ function(instance) {
         getPreParcelFromFormValues : function(values) {
             var mylist = [];
             var preparcel = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcel');
-            //preparcel.setId(id); insert automatic when undefined
+            preparcel.setId(values.id); // insert automatic when undefined - update in other case
             preparcel.setKvp_uid(this.kvp_uid);
             preparcel.setPreparcel_id(values.name);
             preparcel.setTitle(values.title);

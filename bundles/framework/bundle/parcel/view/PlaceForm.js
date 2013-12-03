@@ -93,7 +93,10 @@ function(instance) {
             var parent_property_quality = onScreenForm.find('input[name=parent_property_quality]').val();
             var area = onScreenForm.find('input[name=area]').val();
             var reporter = onScreenForm.find('input[name=reporter]').val();
+            var id = undefined;
+            if(this.initialValues.place.id) id = this.initialValues.place.id;
             values.place = {
+                id: id,
                 name: placeName,
                 desc: description,
                 title: ptitle,
