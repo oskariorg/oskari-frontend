@@ -48,10 +48,8 @@
                 this.$element.on(eventOut, this.options.selector, $.proxy(this.leave, this));
             }
             if (this.options.selector) {
-                this._options = $.extend(
-                    {},
-                    this.options,
-                    {
+                this._options = $.extend({},
+                    this.options, {
                         trigger: 'manual',
                         selector: ''
                     }

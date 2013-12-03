@@ -5,11 +5,19 @@ Oskari.registerLocalization({
         "title": "patiopoc",
         "desc": "",
         "tile": {
-            "title": "Tematisk kartor"
+            "title": "Tematiska kartor"
         },
         "view": {
             "title": "patiopoc",
             "message": "patiopoc"
+        },
+        "tab": {
+            "title": "Indikatorer",
+            "grid": {
+                "name": "Titeln",
+                "description": "Beskrivning"
+            },
+            "newIndicator": "Ny indikator"
         },
         "gender": "Kön",
         "genders": {
@@ -20,6 +28,7 @@ Oskari.registerLocalization({
         "addColumn": "Hämta data",
         "removeColumn": "Radera",
         "indicators": "Indikator",
+        "cannotDisplayIndicator": "Indikaattorilla ei ole kuntapohjaisia arvoja, joten sitä ei voi näyttää taulukossa.",
         "year": "År",
         "buttons": {
             "ok": "OK",
@@ -54,7 +63,12 @@ Oskari.registerLocalization({
             "manualRangeError": "Det bör vara minst {min} och högst {max} siffror!",
             "nanError": "Ett värde var inte ett nummer!",
             "infoTitle": "Manuell klassificering",
-            "info": "Ange siffrorna separerade med kommatecken. Punkt fungerar som ett decimaltecken. Först in den nedre gränsen, då gränserna klass och slutligen den övre gränsen. T.ex. genom att skriva \"0, 10,5, 24, 30,2, 57, 73,1\" du får fem klasser med nedre och övre gränsen satt till 0 och 73,1 och klass gränser mellan dem. Värden kvar utanför gränserna kommer att uteslutas."
+            "info": "Ange siffrorna separerade med kommatecken. Punkt fungerar som ett decimaltecken. Först in den nedre gränsen, då gränserna klass och slutligen den övre gränsen. T.ex. genom att skriva \"0, 10,5, 24, 30,2, 57, 73,1\" du får fem klasser med nedre och övre gränsen satt till 0 och 73,1 och klass gränser mellan dem. Värden kvar utanför gränserna kommer att uteslutas.",
+            "mode": "Klass gränsen",
+            "modes": {
+                "distinct": "Kontinuerlig",
+                "discontinuous": "Diskontinuerlig"
+            }
         },
         "colorset": {
             "button": "Färger",
@@ -85,18 +99,33 @@ Oskari.registerLocalization({
         "not_included": "Inte inlcuded kommuner",
         "noMatch": "Inga matchade indikatorer",
         "selectIndicator": "Välja en indikator",
-        "filterTitle": "Filtrera kolumndata",
-        "indicatorFilterDesc": "Filtrerade värdena kommer att väljas i tabellen. Du kan ställa in filtrering separat för varje kolumn.",
-        "filterIndicator": "Indikator:",
-        "filterCondition": "Filter:",
-        "filterSelectCondition": "välj filter",
-        "filterGT": "Större (>)",
-        "filterGTOE": "Större än eller lika med (>=)",
-        "filterE": "Lika med (=)",
-        "filterLTOE": "Mindre än eller lika med (<=)",
-        "filterLT": "Mindre (<)",
-        "filterBetween": "Värdeintervallet",
-        "filter": "Filter"
+        "filterTitle"           : "Filtrera kolumndata",
+        "indicatorFilterDesc"   : "Filtrerade värdena kommer att väljas i tabellen. Du kan ställa in filtrering separat för varje kolumn.",
+        "filterIndicator"       : "Indikator:",
+        "filterCondition"       : "Filter:",
+        "filterSelectCondition" : "välj filter",
+        "filterGT"              : "Större (>)",
+        "filterGTOE"            : "Större än eller lika med (>=)",
+        "filterE"               : "Lika med (=)",
+        "filterLTOE"            : "Mindre än eller lika med (<=)",
+        "filterLT"              : "Mindre (<)",
+        "filterBetween"         : "Värdeintervallet",
+        "filter"                : "Filter",
+        "filterByValue"         : "Med värde",
+        "filterByRegion"        : "Med region",
 
+        "selectRegionCategory"  : "Aluejako:",
+        "regionCatPlaceholder"  : "Valitse aluejako",
+        "selectRegion"          : "Alue:",
+        "chosenRegionText"      : "Valitse alueita",
+        "noRegionFound"         : "Aluetta ei löytynyt",
+        "regionCategories"      : {
+            "ALUEHALLINTOVIRASTO"   : "Aluehallintovirasto",
+            "MAAKUNTA"              : "Maakunta",
+            "NUTS1"                 : "Manner-Suomi ja Ahvenanmaa",
+            "SAIRAANHOITOPIIRI"     : "Sairaanhoitopiiri",
+            "SEUTUKUNTA"            : "Seutukunta",
+            "SUURALUE"              : "Suuralue"
+        }
     }
 });

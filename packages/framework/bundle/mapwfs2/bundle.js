@@ -60,6 +60,12 @@ function() {
             "src" : "../../../../bundles/framework/bundle/mapwfs2/event/WFSPropertiesEvent.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapwfs2/request/ShowOwnStyleRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapwfs2/request/ShowOwnStyleRequestHandler.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapwfs2/domain/QueuedTile.js"
         }, {
             "type" : "text/javascript",

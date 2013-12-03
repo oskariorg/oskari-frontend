@@ -51,7 +51,14 @@ Oskari.registerLocalization({
                 "Portti2Zoombar": "Skalans glidreglage",
                 "ControlsPlugin": "Panorering på",
                 "SearchPlugin": "Adress- och ortnamnssökning",
-                "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet"
+                "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet",
+                "PublisherToolbarPlugin": "Kartverktygen"
+            },
+            "toolbarToolNames": {  
+                "history_back" : "Gå bakåt",
+                "history_forward" : "Gå framåt",
+                "measureline" : "Mäta avstånd",
+                "measurearea" : "Mäta område"
             },
             "toollayout": {
                 "label": "Verktyg applikation",
@@ -129,7 +136,8 @@ Oskari.registerLocalization({
                 "saveNew": "Lagra ny",
                 "ok": "OK",
                 "replace": "Ersätt",
-                "cancel": "Avbryt"
+                "cancel": "Avbryt",
+                "add": "lägg kartan lager"
             },
             "confirm": {
                 "replace": {
@@ -184,6 +192,17 @@ Oskari.registerLocalization({
                 "notfound": "Användningsvillkor kan inte hittas",
                 "reject": "Avvisa",
                 "accept": "Acceptera"
+            }
+        },
+        "layer": {
+            "show": "Visa",
+            "hide": "Göm",
+            "hidden": "Kartan är tillfälligt gömd.",
+            "rights": {
+                "can_be_published_map_user": {
+                    "label": "Får publiceras",
+                    "tooltip": "Kartlagret får publiceras i ett inbäddat kartfönster. Antalet användare per vecka kan vara begränsat."
+                }
             }
         }
     }

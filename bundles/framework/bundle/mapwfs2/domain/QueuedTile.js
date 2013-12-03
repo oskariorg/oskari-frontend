@@ -4,7 +4,7 @@
  * TODO: check doc
  * This class provides Tile information
  * bounds classs member is a json object with
- * 	left,bottom,right,top properties
+ *  left,bottom,right,top properties
  *
  *
  */

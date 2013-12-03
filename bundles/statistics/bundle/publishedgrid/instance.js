@@ -28,7 +28,6 @@ function() {
 
     start: function() {
         var me = this;
-
         // Do not start if we can't get the state.
         if (!me.state) {
             return;
@@ -61,6 +60,12 @@ function() {
         var statsService = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService', me);
         sandbox.registerService(statsService);
         this.statsService = statsService;
+
+        var tooltipRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.TooltipContentRequestHandler', this);
+        sandbox.addRequestHandler('StatsGrid.TooltipContentRequest', tooltipRequestHandler);
+
+        var indicatorRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.IndicatorsRequestHandler', this);
+        sandbox.addRequestHandler('StatsGrid.IndicatorsRequest', indicatorRequestHandler);
 
         // Get the stats layer.
         var statsLayer = me.sandbox.findMapLayerFromAllAvailable(me.state.layerId);
@@ -122,6 +127,26 @@ function() {
         me.gridPlugin.createStatsOut(me.container);
         me._adjustDataContainer();
         me._adjustMapPluginLocations();
+    },
+
+    /**
+     * Gets the instance sandbox.
+     *
+     * @method getSandbox
+     * @return {Object} return the sandbox associated with this instance
+     */
+    getSandbox: function() {
+        return this.sandbox;
+    },
+
+    /**
+     * Returns the open indicators of the instance's grid plugin.
+     *
+     * @method getGridIndicators
+     * @return {Object/null} returns the open indicators of the grid plugin, or null if no grid plugin
+     */
+    getGridIndicators: function() {
+        return ( this.gridPlugin ? this.gridPlugin.indicatorsMeta : null );
     },
 
     /**

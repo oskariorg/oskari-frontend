@@ -1,17 +1,16 @@
-div.pzbDiv.mapplugin {
-    top : 140px;
-    right : 64px;
+$zoombarWidth: 18px;
+div.mapplugin.zoombar {
     background : transparent;
-    z-index: 15000;
+    width : $zoombarWidth;
 
 	div.pzbDiv-plus {
-		width : 18px;
+		width : $zoombarWidth;
 		height : 46px;
 		background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_plus_patched.png');
 	}
 
 	div.pzbDiv-minus {
-		width : 18px;
+		width : $zoombarWidth;
 		height : 18px;
 		background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_minus.png');
 	}
@@ -20,39 +19,8 @@ div.pzbDiv.mapplugin {
 		background-color : transparent;
 		background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar.png');
 		height : 148px;
-		width : 18px;
+		width : $zoombarWidth;
 		border : 0;
 		margin : 0;
 	}
-
-	&.top {
-		bottom: auto;
-		top: 10px;
-	}
-
-	&.left {
-		left: 10px;
-		right: auto;
-	}
-
-	&.right {
-		left: auto;
-		right: 10px;
-	}
-	/* Remember to removeClass */
-	&.with-panbuttons {
-		&.top {
-			/* Add panbuttons' height and top to top */
-			top: 110px !important;
-		}
-
-		&.left {
-			left: 45px !important;
-		}
-
-		&.right {
-			right: 43px !important;
-		}
-	}
-	
 }

@@ -96,14 +96,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
         init: function (sandbox) {
 
             var sandboxName = (this.config ? this.config.sandbox : null) || 'sandbox';
-            var sandbox = Oskari.getSandbox(sandboxName);
+            var sbx = Oskari.getSandbox(sandboxName);
 
             // register domain builder
-            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            var mapLayerService = sbx.getService('Oskari.mapframework.service.MapLayerService');
             if (mapLayerService) {
                 mapLayerService.registerLayerModel('statslayer', 'Oskari.mapframework.bundle.mapstats.domain.StatsLayer');
 
-                var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder', sandbox);
+                var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder', sbx);
                 mapLayerService.registerLayerModelBuilder('statslayer', layerModelBuilder);
             }
         },
@@ -119,8 +119,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             this._map = this.getMapModule().getMap();
 
             sandbox.register(this);
+            var p;
             for (p in this.eventHandlers) {
-                sandbox.registerForEventByName(this, p);
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(this, p);
+                }
             }
             if (!this.ajaxUrl) {
                 this.ajaxUrl = sandbox.getAjaxUrl() + 'action_route=GetStatsTile';
@@ -134,9 +137,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
          *          reference to application sandbox
          */
         stopPlugin: function (sandbox) {
-
+            var p;
             for (p in this.eventHandlers) {
-                sandbox.unregisterFromEventByName(this, p);
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.unregisterFromEventByName(this, p);
+                }
             }
 
             sandbox.unregister(this);
@@ -214,17 +219,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
          */
         preselectLayers: function (layers) {
 
-            var sandbox = this._sandbox;
-            for (var i = 0; i < layers.length; i++) {
-                var layer = layers[i];
-                var layerId = layer.getId();
+            var sandbox = this._sandbox,
+                i,
+                layer,
+                layerId;
+            for (i = 0; i < layers.length; i++) {
+                layer = layers[i];
+                layerId = layer.getId();
 
-                if (!layer.isLayerOfType(this._layerType)) {
-                    continue;
+                if (layer.isLayerOfType(this._layerType)) {
+                    sandbox.printDebug("preselecting " + layerId);
+                    this._addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
-
-                sandbox.printDebug("preselecting " + layerId);
-                this._addMapLayerToMap(layer, true, layer.isBaseLayer());
             }
 
         },
@@ -248,7 +254,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             this._getFeatureControlHover.deactivate();
             this._getFeatureControlSelect.deactivate();
         },
-
         /**
          * Handle _afterMapLayerAddEvent
          * @private
@@ -275,9 +280,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 return;
             }
 
-            var markerLayer = this._map.getLayersByName("Markers");
+            var markerLayer = this._map.getLayersByName("Markers"),
+                mlIdx;
             if (markerLayer) {
-                for (var mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
+                for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
                     if (markerLayer[mlIdx]) {
                         this._map.removeLayer(markerLayer[mlIdx], false);
                     }
@@ -318,21 +324,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 })
             });
             this._map.addLayers([this._statsDrawLayer]);
-            this._statsDrawLayer.events.register("moveend", this._statsDrawLayer, function () {
-                me.mapModule.notifyMoveEnd();
-            });
+
+            // FIXME: this is needed because PorttiMouse isn't handling map moves when dragging started on selected feature
+            // OpenLayers.Control.Navigation below is added because of this and we need to notify that the map has moved manually because of that
+//            this._statsDrawLayer.events.register("moveend", this._statsDrawLayer, function () {
+//                me.mapModule.notifyMoveEnd();
+//            });
             // Hover control
             this._highlightCtrl = new OpenLayers.Control.SelectFeature(this._statsDrawLayer, {
                 hover: true,
                 highlightOnly: true,
+                outFeature: function (feature) {
+                    me._highlightCtrl.unhighlight(feature);
+                    me._removePopup();
+                },
                 renderIntent: "temporary"
             });
             this._map.addControl(this._highlightCtrl);
             this._highlightCtrl.activate();
 
             // Navigation also for hovered and selected areas
-            this._navCtrl = new OpenLayers.Control.Navigation();
-            this._map.addControl(this._navCtrl);
+            // FIXME: this is only needed because PorttiMouse doesn't work when drag is started on selected feature
+//            this._navCtrl = new OpenLayers.Control.Navigation();
+//            this._map.addControl(this._navCtrl);
             var queryableMapLayers = [openLayer];
 
             this._getFeatureControlHover = new OpenLayers.Control.WMSGetFeatureInfo({
@@ -348,18 +362,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 layers: queryableMapLayers,
                 eventListeners: {
                     getfeatureinfo: function (event) {
-                        var drawLayer = me._map.getLayersByName("Stats Draw Layer")[0];
-                        if (typeof drawLayer === "undefined") return;
+                        var drawLayer = me._map.getLayersByName("Stats Draw Layer")[0],
+                            i;
+                        if (typeof drawLayer === "undefined") {
+                            return;
+                        }
                         if (event.features.length === 0) {
-                            for (var i = 0; i < drawLayer.features.length; i++) {
-                                if (!drawLayer.features[i].selected) drawLayer.removeFeatures([drawLayer.features[i]]);
+                            for (i = 0; i < drawLayer.features.length; i++) {
+                                if (!drawLayer.features[i].selected) {
+                                    drawLayer.removeFeatures([drawLayer.features[i]]);
+                                }
                             }
                             me._removePopup();
                             return;
                         }
                         var found = false;
                         var attrText = "kuntakoodi";
-                        for (var i = 0; i < drawLayer.features.length; i++) {
+                        for (i = 0; i < drawLayer.features.length; i++) {
                             if (drawLayer.features[i].attributes[attrText] === event.features[0].attributes[attrText]) {
                                 found = true;
                             } else if (!drawLayer.features[i].selected) {
@@ -401,13 +420,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 layers: queryableMapLayers,
                 eventListeners: {
                     getfeatureinfo: function (event) {
-                        if (event.features.length === 0) return;
+                        if (event.features.length === 0) {
+                            return;
+                        }
                         var newFeature = event.features[0];
                         var drawLayer = me._map.getLayersByName("Stats Draw Layer")[0];
-                        if (typeof drawLayer === "undefined") return;
+                        if (typeof drawLayer === "undefined") {
+                            return;
+                        }
                         var foundInd = -1;
-                        var attrText = "kuntakoodi";
-                        for (var i = 0; i < drawLayer.features.length; i++) {
+                        var attrText = "kuntakoodi",
+                            i;
+                        for (i = 0; i < drawLayer.features.length; i++) {
                             if (drawLayer.features[i].attributes[attrText] === event.features[0].attributes[attrText]) {
                                 foundInd = i;
                                 break;
@@ -467,7 +491,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 this._map.setLayerIndex(openLayer, 0);
             }
             if (markerLayer) {
-                for (var mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
+                for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
                     if (markerLayer[mlIdx]) {
                         this._map.addLayer(markerLayer[mlIdx]);
                     }
@@ -504,9 +528,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
          * @param {Oskari.statistics.bundle.statsgrid.event.ClearHilightsEvent} event
          */
         _clearHilights: function (event) {
-            var drawLayer = this._map.getLayersByName("Stats Draw Layer")[0];
+            var drawLayer = this._map.getLayersByName("Stats Draw Layer")[0],
+                i;
             if (drawLayer) {
-                for (var i = 0; i < drawLayer.features.length; i++) {
+                for (i = 0; i < drawLayer.features.length; i++) {
                     //clear style
                     drawLayer.features[i].style = null;
                     // notify highlight control
@@ -531,7 +556,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             var drawLayer = this._map.getLayersByName("Stats Draw Layer")[0];
 
             //drawLayer can not be undefined
-            if (typeof drawLayer === "undefined") return;
+            if (typeof drawLayer === "undefined") {
+                return;
+            }
             var attrText = "kuntakoodi";
 
             //add hilight feature style
@@ -542,12 +569,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             featureStyle.fillOpacity = 0.2;
 
             // loop through codes and features to find out if feature should be hilighted
-            for (var key in codes) {
-                for (var i = 0; i < drawLayer.features.length; i++) {
-                    if (drawLayer.features[i].attributes[attrText] === key && codes[key]) {
-                        drawLayer.features[i].style = featureStyle;
-                        this._highlightCtrl.highlight(drawLayer.features[i]);
-                        break;
+            var key,
+                i;
+            for (key in codes) {
+                if (codes.hasOwnProperty(key)) {
+                    for (i = 0; i < drawLayer.features.length; i++) {
+                        if (drawLayer.features[i].attributes[attrText] === key && codes[key]) {
+                            drawLayer.features[i].style = featureStyle;
+                            this._highlightCtrl.highlight(drawLayer.features[i]);
+                            break;
+                        }
                     }
                 }
             }
@@ -571,7 +602,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             this._getFeatureControlHover.deactivate();
             this._getFeatureControlSelect.deactivate();
             this._map.removeControl(this._highlightCtrl);
-            this._map.removeControl(this._navCtrl);
+//            this._map.removeControl(this._navCtrl);
             this._map.removeControl(this._getFeatureControlHover);
             this._map.removeControl(this._getFeatureControlSelect);
             this._map.removeLayer(this._statsDrawLayer);
@@ -585,7 +616,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
          */
         _mapLayerVisibilityChangedEvent: function (event) {
             var mapLayer = event.getMapLayer();
-            if (mapLayer._layerType !== "STATS") return;
+            if (mapLayer._layerType !== "STATS") {
+                return;
+            }
             this._statsDrawLayer.setVisibility(mapLayer.isVisible());
 
             // Do nothing if not in statistics mode.
@@ -654,12 +687,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
          * @param {OpenLayers.Event} event event with xy and feature information
          */
         _addPopup: function (event) {
-            var content = event.features[0].attributes['kuntanimi'];
+            var content = event.features[0].attributes.kuntanimi;
             this._popup = new OpenLayers.Popup('mapstatsHover',
                 this._map.getLonLatFromPixel(new OpenLayers.Pixel(event.xy.x + 5, event.xy.y + 5)),
                 new OpenLayers.Size(100, 100),
                 content
-            );
+                );
             this._popup.autoSize = true;
             this._popup.opacity = 0.8;
             this._map.addPopup(this._popup);
@@ -695,12 +728,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
         _afterChangeMapLayerOpacityEvent: function (event) {
             var layer = event.getMapLayer();
 
-            if (!layer.isLayerOfType(this._layerType))
+            if (!layer.isLayerOfType(this._layerType)) {
                 return;
+            }
 
             this._sandbox.printDebug("Setting Layer Opacity for " + layer.getId() + " to " + layer.getOpacity());
             var mapLayer = this.getOLMapLayers(layer);
-            if (mapLayer[0] != null) {
+            if (mapLayer[0] !== null && mapLayer[0] !== undefined) {
                 mapLayer[0].setOpacity(layer.getOpacity() / 100);
             }
         },
@@ -727,12 +761,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
         */
             // Change selected layer style to defined style
             var mapLayer = this.getOLMapLayers(layer);
-            if (mapLayer != null) {
+            if (mapLayer !== null && mapLayer !== undefined) {
                 mapLayer[0].mergeNewParams({
                     // TODO: check if we want to generate SLD from DB with VIS_ID 
                     VIS_ID: layer.getCurrentStyle().getName(),
                     // OR generate from given params (VIS_ID should be -1 or undefined if we go here)
-                    VIS_NAME: "ows:Kunnat2013",
+                    VIS_NAME: "oskari:Kunnat2013",
                     VIS_ATTR: "Kuntakoodi",
                     VIS_CLASSES: "020,091|186,086,982|111,139,740",
                     VIS_COLORS: "choro:ccffcc|99cc99|669966"
@@ -745,7 +779,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             var params = event.getParams();
             var mapLayer = this.getOLMapLayers(layer);
 
-            if (mapLayer != null) {
+            if (mapLayer !== null && mapLayer !== undefined) {
                 mapLayer[0].mergeNewParams({
                     VIS_ID: params.VIS_ID,
                     VIS_NAME: params.VIS_NAME,

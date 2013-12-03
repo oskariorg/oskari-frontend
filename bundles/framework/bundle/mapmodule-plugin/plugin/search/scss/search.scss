@@ -1,18 +1,18 @@
-div.mapplugin.search-div {
+div.mapplugin.search {
   top: 10px;
   right: 10px; }
 
-div.search-div div.close {
+div.search div.close {
   float: right; }
 
-div.search-div input[type=text] {
+div.search input[type=text] {
   width: 124px !important; }
 
-div.search-div input[type=button] {
+div.search input[type=button] {
   width: 35px;
   margin-left: 3px; }
 
-div.search-div div.results {
+div.search div.results {
   border: 1px solid #f3f3f3;
   background: white;
   max-width: 350px;
@@ -22,15 +22,15 @@ div.search-div div.results {
   margin-top: 5px;
 }
 
-div.search-div div.results div.header {
+div.search div.results div.header {
   background: #DDDDDD; }
 
-div.search-div div.results div.content table {
+div.search div.results div.content table {
   width: 100%;
   text-align: center;
   border-spacing: 2px; }
 
-div.search-div div.results div.content table tr {
+div.search div.results div.content table tr {
   cursor: pointer; }
 
 /* IE8 Cleared */
@@ -79,7 +79,7 @@ div.published-search-div div.search-area-div div.search-left, div.published-sear
   height: 38px; }
 
 div.published-search-div div.search-area-div div.search-middle {
-  width: 180px; }
+  min-width: 180px; }
 
 div.published-search-div div.search-area-div div.search-right {
   cursor: pointer; }
@@ -91,6 +91,7 @@ div.published-search-div div.search-area-div input.search-input {
   background-image: none;
   width: 145px;
   float: left;
+  padding: 8px 0px 8px 0px;
   outline: none; }
 
 div.published-search-div div.published-search-results {

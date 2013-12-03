@@ -19,6 +19,8 @@ Grid section: selected municipalities will be visualized on the map.
 Map section: selected municipalities are hilighted in the grid.
 Select hilighted mode: selected municipalities (map) are also selected in the grid.
 
+Each data column has a menu from where the user can filter the values in the grid and on the map. Filtering is possible based on values (equals, greater than etc.) or regions (at the moment regions from the SOTKANet service are supported. Refer to the REST API documentation [here](http://uusi.sotkanet.fi/portal/pls/portal/!PORTAL.wwpob_page.show?_docname=26001.HTML) (only in Finnish)).
+
 ## TODO
 
 * remove hilighted borders when going away from select hilighted mode

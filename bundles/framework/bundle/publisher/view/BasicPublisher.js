@@ -38,6 +38,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         me.templateButtonsDiv = jQuery('<div class="buttons"></div>');
         me.templateHelp = jQuery('<div class="help icon-info"></div>');
         me.templateTool = jQuery('<div class="tool ">' + '<input type="checkbox"/>' + '<span></span></div>');
+        me.templateToolOptions = jQuery('<div class="tool-options"></div>');
+        me.templateToolOption = jQuery('<div class="tool-option"><input type="checkbox" /><span></span></div>');
         me.templateLayout = jQuery('<div class="tool "><label><input type="radio" name="toolLayout" /><span></span></label></div>');
         me.templateData = jQuery('<div class="data ">' + '<input type="checkbox"/>' + '<label></label></div>');
         me.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
@@ -128,6 +130,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 "infoBox": true
             }
         }];
+        /*
+// ADD this to get PublisherToolbarPlugin visible at publisher
+        }, {
+            "id": "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin",
+            "selected": false,
+            "lefthanded": "top right",
+            "righthanded": "top left",
+            "config": {
+                "location": {
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "classes": "top right"
+                }
+            }
+
+
+*/
 
         // map tool indices so we don't have to go through the list every time...
         me.toolIndices = {};
@@ -229,7 +250,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         me.mainPanel = null;
         me.normalMapPlugins = [];
         me.logoPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin', {
-            "location" : {
+            "location": {
                 "classes": me.logoPluginClasses.classes
             }
         });
@@ -528,21 +549,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             for (i = 0; i < this.tools.length; i += 1) {
                 toolContainer = this.templateTool.clone();
-                pluginKey = this.tools[i].id;
+                var tool = this.tools[i];
+                pluginKey = tool.id;
                 pluginKey = pluginKey.substring(pluginKey.lastIndexOf('.') + 1);
                 toolname = this.loc.tools[pluginKey];
                 toolContainer.find('span').append(toolname);
-                if (this.tools[i].selected) {
+                if (tool.selected) {
                     toolContainer.find('input').attr('checked', 'checked');
                 }
+                tool.publisherPluginContainer = toolContainer;
                 contentPanel.append(toolContainer);
-                toolContainer.find('input').change(closureMagic(this.tools[i]));
+                toolContainer.find('input').change(closureMagic(tool));
             }
 
             return panel;
-        },
-        _panButtonsIsActive: function () {
-            return this.tools[this.toolIndices["Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"]]._isPluginStarted;
         },
         _changeToolLayout: function (layout) {
             // iterate plugins
@@ -555,11 +575,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 tool = tools[i];
                 if (tool[layout]) {
                     tool.config.location.classes = tool[layout];
-                    if (tool.id === "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar") {
-                        if (me._panButtonsIsActive()) {
-                            tool.config.location.classes += " with-panbuttons";
-                        }
-                    }
                     if (tool.plugin) {
                         if (tool.plugin.setLocation) {
                             tool.plugin.setLocation(tool.config.location);
@@ -573,23 +588,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 me.logoPlugin.setLocation(me.logoPluginClasses);
             }
             me.layerSelectionClasses.classes = me.layerSelectionClasses[layout];
-            if (me.maplayerPanel.isEnabled()) {
-//                console.log("lsp enabled, setting layout to ", me.layerSelectionClasses);
-                me.maplayerPanel.plugin.setLocation(me.layerSelectionClasses);
-            } else {
-//                console.log("lsp disabled, setting layout to ", me.layerSelectionClasses);
-                if (!me.maplayerPanel.plugin.conf) {
-                    me.maplayerPanel.plugin.conf = {
-                        "location": {
-                            "classes": me.layerSelectionClasses.classes
-                        }
-                    };
-                } else {
-                    me.maplayerPanel.plugin.conf.location = {
-                        "classes": me.layerSelectionClasses.classes
-                    };
-                }
-            }
+            me.maplayerPanel.plugin.setLocation(me.layerSelectionClasses);
         },
         _createToolLayoutPanel: function () {
             var me = this,
@@ -755,6 +754,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          * @param {Boolean} enabled, true to enable plugin, false to disable
          */
         _activatePreviewPlugin: function (tool, enabled) {
+            var me = this,
+                sandbox = me.instance.getSandbox();
             // FIXME set layout classes on startPlugin
             if (!tool.plugin && enabled) {
                 var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -765,18 +766,103 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 // plugin not created -> nothing to do
                 return;
             }
+
+            var _toggleToolOption = function (toolName, groupName, toolOption) {
+                return function () {
+                    var checkbox = jQuery(this),
+                        isChecked = checkbox.is(':checked'),
+                        reqBuilder;
+                    tool.selected = isChecked;
+                    //TODO send toolbar request!
+                    var requester = tool.plugin;
+                    if (isChecked) {
+                        reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+                        sandbox.request(requester, reqBuilder(toolName, groupName, toolOption));
+                    } else {
+                        reqBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
+                        sandbox.request(requester, reqBuilder(toolName, groupName, toolOption.toolbarid));
+                    }
+                };
+            };
+
+            var toolOptions,
+                i,
+                buttonGroup,
+                toolName,
+                toolButton,
+                reqBuilder;
+
             if (enabled) {
                 tool.plugin.startPlugin(this.instance.sandbox);
                 tool._isPluginStarted = true;
+
+                toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions() : null;
+
+                //atm. this is using toolsplugin's button structure
+                var options;
+                if (toolOptions) {
+
+                    options = me.templateToolOptions.clone();
+                    tool.publisherPluginContainer.append(options);
+                    //loop through button groups and buttons
+                    for (i in toolOptions) {
+                        if (toolOptions.hasOwnProperty(i)) {
+                            buttonGroup = toolOptions[i];
+                            for (toolName in buttonGroup.buttons) {
+                                if (buttonGroup.buttons.hasOwnProperty(toolName)) {
+                                    toolButton = buttonGroup.buttons[toolName];
+                                    // create checkbox
+                                    toolButton.selectTool = me.templateToolOption.clone();
+                                    toolButton.selectTool.find('span').append(this.loc.toolbarToolNames[toolName]);
+                                    if (toolButton.selected) {
+                                        toolButton.selectTool.find('input').attr('checked', 'checked');
+                                    }
+                                    //toggle toolbar tool. i.e. send requests
+                                    toolButton.selectTool.find('input').change(_toggleToolOption(toolName, buttonGroup.name, toolButton));
+                                    options.append(toolButton.selectTool);
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
                 if (tool._isPluginStarted) {
+                    //remove buttons
+                    toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions() : null;
+                    if (toolOptions) {
+                        //remove toolbar tools
+                        for (i in toolOptions) {
+                            if (toolOptions.hasOwnProperty(i)) {
+                                buttonGroup = toolOptions[i];
+                                for (toolName in buttonGroup.buttons) {
+                                    if (buttonGroup.buttons.hasOwnProperty(toolName)) {
+                                        toolButton = buttonGroup.buttons[toolName];
+                                        reqBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
+                                        sandbox.request(tool.plugin, reqBuilder(toolName, buttonGroup.name, toolButton.toolbarid));
+                                    }
+                                }
+                            }
+                        }
+                        //remove eventlisteners
+                        var optionContainer = tool.publisherPluginContainer.find('.tool-options'),
+                            toolOptionCheckboxes = optionContainer.find('input').off("change", me._toggleToolOption);
+                        //remove dom elements
+                        toolOptionCheckboxes.remove();
+                        optionContainer.remove();
+                    }
+
+
+
                     tool._isPluginStarted = false;
                     tool.plugin.stopPlugin(this.instance.sandbox);
                 }
             }
-            //console.log("_adjustMapNavigationLocation", tool, enabled);
-            this._adjustMapNavigationLocation(tool, enabled);
         },
+        /**
+         * @method _toggleToolOption
+         * @private
+         * Sends addToolbarButton requests when tools are selected to PublisherToolsPlugin
+         */
         /**
          * @method _getButtons
          * @private
@@ -1006,36 +1092,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         },
 
         /**
-         * Adjust the location of the zoombar in case the panbuttons tool is selected.
-         *
-         * @method _adjustMapNavigationLocation
-         * @private
-         * @param {Object} tool
-         * @param {Boolean} enabled
-         */
-        _adjustMapNavigationLocation: function (tool, enabled) {
-            /* TODO check that changing tool styles works with this.. I'm not sure if it changes tool size */
-            if (tool && tool.id === 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons') {
-                var zoombar = this.tools[this.toolIndices['Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar']],
-                    zbClasses = zoombar.config.location.classes.split(" "),
-                    withIndex = jQuery.inArray("with-panbuttons", zbClasses);
-                if (enabled) {
-                    if (withIndex < 0) {
-                        zbClasses.push("with-panbuttons");
-                    }
-                } else {
-                    if (withIndex > -1) {
-                        zbClasses.splice(withIndex, 1);
-                    }
-                }
-                zoombar.config.location.classes = zbClasses.join(" ");
-                if (zoombar._isPluginStarted && zoombar.setLocation) {
-                    zoombar.plugin.setLocation(zoombar.config.location);
-                }
-            }
-        },
-
-        /**
          * @method _publishMap
          * @private
          * Sends the gathered map data to the server to save them/publish the map.
@@ -1047,8 +1103,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 url = sandbox.getAjaxUrl();
             // Total width for map and grid. Used to calculate the iframe size.
             var totalWidth = (me.isDataVisible ?
-                    (selections.size.width + me._calculateGridWidth()) :
-                    selections.size.width);
+                    (selections.size.width + me._calculateGridWidth()) : selections.size.width);
             var errorHandler = function () {
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                     okBtn = dialog.createCloseButton(me.loc.buttons.ok);
@@ -1133,7 +1188,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 p,
                 plugin,
                 i;
-
             for (p in plugins) {
                 if (plugins.hasOwnProperty(p)) {
                     plugin = plugins[p];
@@ -1194,6 +1248,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             // notify openlayers that size has changed
             mapModule.updateSize();
 
+            // stop our logoplugin
+            mapModule.unregisterPlugin(this.logoPlugin);
+            this.logoPlugin.stopPlugin(me.instance.sandbox);
+
             // resume normal plugins
             for (i = 0; i < this.normalMapPlugins.length; i += 1) {
                 plugin = this.normalMapPlugins[i];
@@ -1202,8 +1260,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
             // reset listing
             this.normalMapPlugins = [];
-            mapModule.unregisterPlugin(this.logoPlugin);
-            this.logoPlugin.stopPlugin(me.instance.sandbox);
         },
         /**
          * @method setEnabled

@@ -11,6 +11,14 @@ Oskari.registerLocalization({
 			"title": "Patio",
 			"message": "patiopoc"
 		},
+		"tab": {
+			"title": "Indikaattorit",
+			"grid": {
+				"name": "Otsikko",
+				"description": "Kuvaus"
+			},
+			"newIndicator": "Uusi indikaattori"
+		},
 		"gender": "Sukupuoli",
 		"genders": {
 			"male": "miehet",
@@ -20,6 +28,7 @@ Oskari.registerLocalization({
 		"addColumn": "Hae data",
 		"removeColumn": "Poista",
 		"indicators": "Indikaattorit",
+		"cannotDisplayIndicator": "Indikaattorilla ei ole kuntapohjaisia arvoja, joten sitä ei voi näyttää taulukossa.",
 		"year": "Vuosi",
 		"buttons": {
 			"ok": "OK",
@@ -53,7 +62,12 @@ Oskari.registerLocalization({
 			"manualRangeError": "Lukuja tulee olla vähintään {min} ja enintään {max}!",
 			"nanError": "Syöttämäsi arvo ei ole luku!",
 			"infoTitle": "Luokittelu käsin",
-			"info": "Voit syöttää oman luokittelun pilkuilla erotettuna. Desimaalierottimena toimii piste. Syötä ensin alaraja, sitten luokkarajat ja lopuksi yläraja. Esimerkiksi syöttämällä \"0, 10.5, 24, 30.2, 57, 73.1\" saat viisi luokkaa, jonka ylä- ja alarajat ovat 0 ja 73,1 ja luokkarajat väliin jäävät arvot. Rajojen ulkopuolelle jäävät arvot jätetään huomiotta."
+			"info": "Voit syöttää oman luokittelun pilkuilla erotettuna. Desimaalierottimena toimii piste. Syötä ensin alaraja, sitten luokkarajat ja lopuksi yläraja. Esimerkiksi syöttämällä \"0, 10.5, 24, 30.2, 57, 73.1\" saat viisi luokkaa, jonka ylä- ja alarajat ovat 0 ja 73,1 ja luokkarajat väliin jäävät arvot. Rajojen ulkopuolelle jäävät arvot jätetään huomiotta.",
+			"mode": "Luokkarajat",
+			"modes": {
+				"distinct": "Jatkuva",
+				"discontinuous": "Epäjatkuva"
+			}
 		},
 		"colorset": {
 			"button": "Värit",
@@ -84,17 +98,33 @@ Oskari.registerLocalization({
 		"showSelected": "Näytä vain valitut alueet taulukossa",
 		"noMatch": "Indikaattoria ei löytynyt",
 		"selectIndicator": "Valitse indikaattori",
-		"filterTitle": "Suodata sarakkeen arvoja",
-		"indicatorFilterDesc": "Suodattamalla halutut tilastoyksiköt korostuvat taulukossa. Voit asettaa suodatuksen jokaiselle sarakkeelle erikseen.",
-		"filterIndicator": "Muuttuja:",
-		"filterCondition": "Ehto:",
-		"filterSelectCondition": "Valitse ehto",
-		"filterGT": "Suurempi (>)",
-		"filterGTOE": "Suurempi tai yhtäsuuri (>=)",
-		"filterE": "Yhtäsuuri (=)",
-		"filterLTOE": "Pienempi tai yhtäsuuri (<=)",
-		"filterLT": "Pienempi (<)",
-		"filterBetween": "Arvoväli",
-		"filter": "Suodata"
+		"filterTitle" 			: "Suodata sarakkeen arvoja",
+		"indicatorFilterDesc" 	: "Suodattamalla halutut tilastoyksiköt korostuvat taulukossa. Voit asettaa suodatuksen jokaiselle sarakkeelle erikseen.",
+		"filterIndicator" 		: "Muuttuja:",
+		"filterCondition"		: "Ehto:",
+		"filterSelectCondition" : "Valitse ehto",
+		"filterGT" 				: "Suurempi (>)",
+		"filterGTOE" 			: "Suurempi tai yhtäsuuri (>=)",
+		"filterE" 				: "Yhtäsuuri (=)",
+		"filterLTOE" 			: "Pienempi tai yhtäsuuri (<=)",
+		"filterLT" 				: "Pienempi (<)",
+		"filterBetween" 		: "Arvoväli",
+		"filter" 				: "Suodata",
+		"filterByValue" 		: "Arvoilla",
+		"filterByRegion" 		: "Alueilla",
+
+		"selectRegionCategory" 	: "Aluejako:",
+		"regionCatPlaceholder"	: "Valitse aluejako",
+		"selectRegion"			: "Alue:",
+		"chosenRegionText" 		: "Valitse alueita",
+		"noRegionFound"			: "Aluetta ei löytynyt",
+		"regionCategories"      : {
+		    "ALUEHALLINTOVIRASTO" 	: "Aluehallintovirasto",
+		    "MAAKUNTA" 				: "Maakunta",
+		    "NUTS1" 				: "Manner-Suomi ja Ahvenanmaa",
+		    "SAIRAANHOITOPIIRI" 	: "Sairaanhoitopiiri",
+		    "SEUTUKUNTA" 			: "Seutukunta",
+		    "SUURALUE" 				: "Suuralue"
+		}
 	}
 });

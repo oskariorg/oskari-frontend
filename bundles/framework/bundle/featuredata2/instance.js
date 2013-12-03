@@ -81,8 +81,7 @@ function() {
 
         me.started = true;
 
-        var conf = this.conf;
-        var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
+        var sandboxName = (this.conf ? this.conf.sandbox : null) || 'sandbox';
         var sandbox = Oskari.getSandbox(sandboxName);
 
         me.sandbox = sandbox;
@@ -112,7 +111,7 @@ function() {
                 tooltip: localization.tools.select.tooltip,
                 sticky: false,
                 callback: function() {
-                    me.popupHandler.showSelectionTools();
+                    me.popupHandler.showSelectionTools(me.conf.singleSelection);
                 }
             };
 
@@ -248,6 +247,25 @@ function() {
             } else {
                 plugin.setEnabled(true);
             }
+        },
+
+        /**
+         * @method FeatureData.FinishedDrawingEvent
+         */
+        'FeatureData.FinishedDrawingEvent': function(event) {
+            if(!this.conf.singleSelection) {
+                return;
+            }
+
+            var features = this.selectionPlugin.getFeaturesAsGeoJSON();
+            this.selectionPlugin.stopDrawing();
+
+            this.popupHandler.showSelectionTools(true);
+
+            var event = this.sandbox.getEventBuilder("WFSSetFilter")(features);
+            this.sandbox.notifyAll(event);
+
+            this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'detach']);
         }
     },
 

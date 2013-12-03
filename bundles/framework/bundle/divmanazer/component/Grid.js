@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         "use strict";
         this.model = null;
         var columnSelectorButtonTitle = "";
-        if (typeof columnSelectorTooltip !== "undefined") {
+        if (columnSelectorTooltip !== null && columnSelectorTooltip !== undefined) {
             columnSelectorButtonTitle = columnSelectorTooltip;
         }
         this.template = jQuery('<table class="oskari-grid"><thead><tr></tr></thead><tbody></tbody></table>');
@@ -33,11 +33,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.templateColumnSelector = jQuery('<div/>', {});
         this.templateColumnSelectorList = jQuery('<ul/>', {});
         this.templateColumnSelectorListItem = jQuery('<li>' +
-                '<div>' +
-                '<input type="checkbox"/>' +
-                '<label></label>' +
-                '</div>' +
-                '</li>'
+            '<div>' +
+            '<input type="checkbox"/>' +
+            '<label></label>' +
+            '</div>' +
+            '</li>'
             );
         this.templateColumnSelectorClose = jQuery('<div class="icon-close close-selector-button"></div>');
         this.table = null;
@@ -213,10 +213,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
 
             // format array
-            if(jQuery.isArray(data)) {
+            if (jQuery.isArray(data)) {
                 var valueDiv = this.templateDiv.clone();
-                for(var i=0; i < data.length;++i) {
-                    var innerTable = this._renderAdditionalData(data[i]);
+                for (i = 0; i < data.length; ++i) {
+                    innerTable = this._renderAdditionalData(data[i]);
                     valueDiv.append(innerTable);
                 }
                 return valueDiv;
@@ -240,7 +240,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             valueCell.append(innerTable);
                         } else if (type !== 'function') {
                             valueCell.append(value);
-                        }/* else {
+                        }
+                        /* else {
                             // we have a problem, debug
                             //alert(type + ':\r\n' +JSON.stringify(data));
                         }*/
@@ -262,7 +263,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         _renderHeader: function (table, fieldNames) {
             "use strict";
             var me = this,
-            // print header
+                // print header
                 headerContainer = table.find('thead tr'),
                 bodyContainer = table.find('tbody'),
                 i,
@@ -340,7 +341,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         _renderBody: function (table, fieldNames) {
             "use strict";
             var me = this,
-            // print data
+                // print data
                 body = table.find('tbody'),
                 dataArray = this.model.getData(),
                 i,
@@ -461,6 +462,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 });
 
                 // Update visible fields after checkbox change
+                // FIXME create function outside the loop
                 checkboxInput.change(function () {
                     var fieldSelectors = jQuery('input.column-selector-list-item'),
                         oldFields = me.model.getFields(),
@@ -565,7 +567,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             if (this.showColumnSelector) {
                 this._renderColumnSelector(table, fieldNames);
                 container.append(this.visibleColumnSelector);
-                if (state !== null && typeof state !== 'undefined' && state.columnSelector === 'open') {
+                if (state !== null && state !== undefined && state.columnSelector === 'open') {
                     this.visibleColumnSelector.find('.column-selector').css('visibility', 'visible');
                 }
             }

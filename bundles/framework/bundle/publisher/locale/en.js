@@ -51,7 +51,14 @@ Oskari.registerLocalization({
                 "Portti2Zoombar": "Scale scrollbar",
                 "ControlsPlugin": "Panning on",
                 "SearchPlugin": "Address and place name search",
-                "GetInfoPlugin": "Query tool for place data"
+                "GetInfoPlugin": "Query tool for place data",
+                "PublisherToolbarPlugin": "map tools"
+            },
+            "toolbarToolNames": {  
+                "history_back" : "Move backward",
+                "history_forward" : "Move forward",
+                "measureline" : "Measure distance",
+                "measurearea" : "Measure area"
             },
             "toollayout": {
                 "label": "Tool layout",
@@ -128,7 +135,8 @@ Oskari.registerLocalization({
                 "saveNew": "Save new",
                 "ok": "OK",
                 "replace": "Replace",
-                "cancel": "Cancel"
+                "cancel": "Cancel",
+                "add": "add map layer"
             },
             "confirm": {
                 "replace": {
@@ -183,6 +191,17 @@ Oskari.registerLocalization({
                 "notfound": "Can not find Terms of Use",
                 "reject": "Reject",
                 "accept": "Accept"
+            }
+        },
+        "layer": {
+            "show": "Show",
+            "hide": "Hide",
+            "hidden": "The map has been temporarily hidden.",
+            "rights": {
+                "can_be_published_map_user": {
+                    "label": "Publication permitted",
+                    "tooltip": "The map layer can be published in an embedded map window and the number of users per week may be limited."
+                }
             }
         }
     }

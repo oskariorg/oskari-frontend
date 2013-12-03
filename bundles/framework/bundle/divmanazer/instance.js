@@ -259,7 +259,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
             flyoutPlugin = plugins['Oskari.userinterface.Flyout'];
             flyout = null;
             el = null;
-            if (flyoutPlugin !== null && typeof flyoutPlugin !== 'undefined') {
+            if (flyoutPlugin !== null && flyoutPlugin !== undefined) {
                 flyout = me.createFlyout(extension, flyoutPlugin, count, extensionInfo);
 
                 me._applyDraggableToFlyout(flyout, extensionInfo, '.oskari-flyouttoolbar');
@@ -279,7 +279,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
 
             tilePlugin = plugins['Oskari.userinterface.Tile'];
             tile = null;
-            if (tilePlugin !== null && typeof tilePlugin !== 'undefined') {
+            if (tilePlugin !== null && tilePlugin !== undefined) {
                 tile = me.createTile(extension, tilePlugin, count, extensionInfo);
 
                 tilePlugin.startPlugin();
@@ -291,7 +291,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
 
             viewPlugin = plugins['Oskari.userinterface.View'];
             view = null;
-            if (viewPlugin !== null && typeof viewPlugin !== 'undefined') {
+            if (viewPlugin !== null && viewPlugin !== undefined) {
                 view = me.createView(extension, viewPlugin, count, extensionInfo);
                 el = view;
                 viewPlugin.setEl(el.get());
@@ -412,7 +412,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
                 //container = jQuery('#menubar'),
                 tile = this.compiledTemplates['Oskari.userinterface.Tile'].clone(true, true),
                 title = tile.children('.oskari-tile-title');
-                //status;
+            //status;
             title.append(plugin.getTitle());
             //status = tile.children('.oskari-tile-status');
 
@@ -553,12 +553,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
             after = [];
 
             for (n = 0, len = extensions.length; n < len; n += 1) {
-                if (extensions[n] === extensionInfo) {
-                    continue;
+                if (extensions[n] !== extensionInfo) {
+                    after.push(extensions[n]);
                 }
-
-                after.push(extensions[n]);
-
             }
 
             me.extensions = after;
@@ -635,6 +632,26 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
 
             /* opening  flyouts 'attached' closes previously attachily opened  flyout(s) */
             if (state === 'attach' && flyoutInfo) {
+                var extTop = null,
+                    extLeft = null;
+
+                if (request.getExtensionLocation().top || request.getExtensionLocation().left) {
+                    me.origExtensionLocation = {};
+                }
+
+                var extLocation = function (request, me, axis) {
+                    if (me.origExtensionLocation) {
+                        if (request.getExtensionLocation()[axis]) {
+                            me.origExtensionLocation[axis] = jQuery(flyoutInfo.el).css(axis);
+                            jQuery(flyoutInfo.el).css(axis, request.getExtensionLocation()[axis] + 'px');
+                        } else if (me.origExtensionLocation[axis]) {
+                            jQuery(flyoutInfo.el).css(axis, me.origExtensionLocation[axis]);
+                        }
+                    }
+                };
+                extLocation(request, me, 'top');
+                extLocation(request, me, 'left');
+
                 ops = me.flyoutOps;
                 closeOp = ops.close;
                 for (n = 0, len = extensions.length; n < len; n += 1) {
@@ -1048,11 +1065,10 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
                 if (me.extensionsByName.hasOwnProperty(e)) {
                     extensionInfo = me.extensionsByName[e];
                     restoredState = divmanazerState.extensionStatesByName[e];
-                    if (!restoredState) {
-                        continue;
+                    if (restoredState) {
+                        extensionInfo.state = restoredState.state;
+                        extensionInfo.viewState = restoredState.viewState || {};
                     }
-                    extensionInfo.state = restoredState.state;
-                    extensionInfo.viewState = restoredState.viewState || {};
                 }
             }
 

@@ -20,7 +20,10 @@ Oskari.registerLocalization({
     },
     "plugin": {
       "LogoPlugin": {
-        "terms": "Käyttöehdot"
+        "terms": "Käyttöehdot",
+        "dataSources": "Tietolähteet",
+        "layersHeader": "Karttatasot",
+        "indicatorsHeader": "Indikaattorit"
       },
       "DataSourcePlugin": {
         "link": "Aineistolähde",
@@ -48,11 +51,23 @@ Oskari.registerLocalization({
       },
       "GetInfoPlugin": {
         "title": "Kohdetiedot",
-		"layer": "Taso",
-		"places": "Kohteet",
-		"description": "Kuvaus",
-		"link": "URL-osoite",
-		"name": "Nimi"
+        "layer": "Taso",
+        "places": "Kohteet",
+        "description": "Kuvaus",
+        "link": "URL-osoite",
+        "name": "Nimi"
+      },
+      "PublisherToolbarPlugin": {
+        "test": "testi",
+        "history": {
+          "reset": "Paluu oletusnäkymään",
+          "back": "Takaisin",
+          "next": "Eteenpäin"
+        },
+        "measure": {
+          "line": "Mittaa etäisyys",
+          "area": "Mittaa alue"
+        }
       }
     }
   }

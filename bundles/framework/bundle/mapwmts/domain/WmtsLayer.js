@@ -77,6 +77,26 @@ function() {
      */
     getWmtsUrls : function() {
         return this._WmtsUrls;
+    },
+    /**
+     * @method getZoomOffset
+     * @return {Number}
+     */
+    getZoomOffset: function() {
+        return this._zoomOffSet;
+    },
+    /**
+     * TODO: figure out some sensible way to set this.
+     * We need to know the number of scales for the layer,
+     * number of resolutions for the map and the sign of the zoom offset,
+     * that is, should we drop the smallest or the largest scales.
+     * Right now it's hard coded to 2.
+     *
+     * @method setZoomOffset
+     * @param {Number} offSet
+     */
+    setZoomOffset: function(offSet) {
+        this._zoomOffSet = 2;
     }
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]

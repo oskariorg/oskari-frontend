@@ -251,7 +251,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             },
             'MapLayerEvent': function (event) {
                 // FIXME use ===
-                if (!(event.getLayerId() == null && event.getOperation() == 'add')) {
+                if (!((event.getLayerId() === null || event.getLayerId() === undefined) && event.getOperation() === 'add')) {
                     return;
                 }
 
@@ -414,7 +414,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
 
             var backendStatusArr = resp.backendstatus;
             // FIXME use ===
-            if (!backendStatusArr || backendStatusArr.length == undefined) {
+            if (!backendStatusArr || backendStatusArr.length === undefined) {
                 sandbox.printDebug("[BackendStatus] backendStatus NO data");
                 return;
             }
@@ -439,8 +439,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                     };
                     extendedStatuses[layerId] = data;
                     /*sandbox.printDebug("[BackendStatus] "+layerId+" new alert");*/
-                // FIXME use !==
-                } else if (this.backendStatus[layerId].status != data.status) {
+                    // FIXME use !==
+                } else if (this.backendStatus[layerId].status !== data.status) {
                     changeNotifications[layerId] = {
                         status: data.status,
                         changed: true
@@ -459,7 +459,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             for (p in me.backendStatus) {
                 if (me.backendStatus.hasOwnProperty(p)) {
                     // FIXME use !==
-                    if (!changeNotifications[p] && this.backendStatus[p].status != null) {
+                    if (!changeNotifications[p] && this.backendStatus[p].status !== null && this.backendStatus[p].status !== undefined) {
                         changeNotifications[p] = {
                             status: null,
                             changed: true
@@ -478,14 +478,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                     this.backendStatus[p] = changeNotifications[p];
 
                     var maplayer = sandbox.findMapLayerFromAllAvailable(p);
-                    if (!maplayer) {
-                        continue;
-                    }
-                    maplayer.setBackendStatus(this.backendStatus[p].status);
-
-                    /* forcing DOWN to be notified - we do not know if layerselector2 has shown the msg or not...*/
-                    if (changeNotifications[p].changed || "DOWN" === maplayer.getBackendStatus()) {
-                        maplayers[p] = maplayer;
+                    if (maplayer) {
+                        maplayer.setBackendStatus(this.backendStatus[p].status);
+                        /* forcing DOWN to be notified - we do not know if layerselector2 has shown the msg or not...*/
+                        if (changeNotifications[p].changed || "DOWN" === maplayer.getBackendStatus()) {
+                            maplayers[p] = maplayer;
+                        }
                     }
                 }
             }

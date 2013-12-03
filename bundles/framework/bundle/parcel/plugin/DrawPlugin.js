@@ -82,7 +82,7 @@ function(instance) {
                             dialog.close();
                         },200);
                     } else {
-                        me.processFeatures()
+                        me.processFeatures();
                     }
 				}
 			}
@@ -100,7 +100,10 @@ function(instance) {
                     } else {
                         this.updateHole(event.feature);
                     }
-        			this.redraw();
+                    // Reproduce the original OL 2.12 behaviour
+                    jQuery('svg').find('circle').css('cursor', 'move');
+                    jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); // IE8
+          			this.redraw();
 		        	me.drawLayer.redraw();
 				}
 			}
@@ -169,7 +172,11 @@ function(instance) {
 						lineString.components[lastIndex].y = lineString.components[lastIndex].y0;
 					}
 					// Updates middle points
+                    me.controls.modify.deactivate();
+                    me.controls.modify.activate();
 					me.controls.modify.selectFeature(operatingFeature);
+                    me.controls.modify.clickout = false;
+                    me.controls.modify.toggle = false;
 				}
 
 				this.refresh();
@@ -189,6 +196,11 @@ function(instance) {
                 lineFeature.numPoints = points.length;
             }
         };
+
+        // handles toolbar buttons related to parcels
+		this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.ButtonHandler", this.instance);
+		this.buttons.start();
+        this.buttons.setEnabled(false);
 
 		this.basicStyle = OpenLayers.Util.applyDefaults(this.basicStyle, OpenLayers.Feature.Vector.style['default']);
 		this.basicStyle.fillColor = "#bbbb00";
@@ -211,7 +223,7 @@ function(instance) {
 		this.selectInfoControl = new OpenLayers.Control.SelectFeature(me.drawLayer);
 		this._map.addControl(this.selectInfoControl);
 
-		var modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer);
+		var modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer, {clickout:false, toggle:false});
 		this._map.addControl(modifyEditControl);
 
 		this.controls = {
@@ -382,12 +394,17 @@ function(instance) {
 		for (var i = 0; i < features.length; i++) {
 			polygons.push(features[i].geometry);
 		}
-		this.drawLayer.addFeatures([new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(polygons))]);
+        var newFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(polygons));
+        newFeature.attributes = features[0].attributes;
+		this.drawLayer.addFeatures([newFeature]);
 
 		this.currentFeatureType = featureType;
 		// Zoom to the loaded feature.
 		this._map.zoomToExtent(this.drawLayer.getDataExtent());
 
+        this.buttons.setEnabled(true);
+
+/*
 		// Show tool buttons only after the parcel has been loaded.
 		// Because parcel may be removed only by loading a new one.
 		// The buttons can be shown after this. If a new parcel is loaded,
@@ -397,6 +414,7 @@ function(instance) {
 			this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.ButtonHandler", this.instance);
 			this.buttons.start();
 		}
+*/
 	},
 	/**
 	 * Enables the draw control for given params.drawMode.
@@ -527,6 +545,24 @@ function(instance) {
 
 		}
 	},
+        /**
+         * Returns the parcel geometry from the draw layer
+         * @method
+         */
+        getParcelGeometry : function() {
+            if (this.drawLayer.features.length === 0) return null;
+            var cur = 0;
+            if (this.selectedFeature > -1) cur = this.selectedFeature;
+            return this.drawLayer.features[cur].geometry;
+        },
+        /**
+         * Returns the boundary geometry from the edit layer
+         * @method
+         */
+        getBoundaryGeometry : function() {
+            if (this.editLayer.features.length === 0) return null;
+            return this.editLayer.features[0].geometry;
+        },
 	/**
 	 * @param {String} featureType The feature type of the parcel feature. This is used when feature is commited to the server.
 	 * @method setFeatureType
@@ -582,6 +618,7 @@ function(instance) {
 	 */
 	clear : function() {
 		// remove possible old drawing
+        this.controls.modify.deactivate();
 		this.drawLayer.removeAllFeatures();
 		this.editLayer.removeAllFeatures();
 		var startIndex = this.markerLayer.markers.length - 1;
@@ -593,7 +630,7 @@ function(instance) {
 		this.splitSelection = false;
 		// Clear parcel map layers
 		this.instance.getService().clearParcelMap();
-		
+
 	},
 	/**
 	 * Handles the splitting of the parcel feature
@@ -604,29 +641,38 @@ function(instance) {
 		var trivialSplit = ( typeof trivial === "undefined" ? false : trivial);
 		var operatingFeature = this.splitter.split(trivialSplit);
 		if (operatingFeature != undefined) {
+
+            this.buttons.setButtonEnabled("line",false);
+            this.buttons.setButtonEnabled("area",false);
+            this.buttons.setButtonEnabled("selector",false);
+            this.buttons.setButtonEnabled("save",true);
+
 			this.controls.select.select(operatingFeature);
 			this.controls.modify.selectFeature(operatingFeature);
 			this.controls.modify.activate();
+            this.controls.modify.clickout = false;
+            this.controls.modify.toggle = false;
 			//this.drawLayer.features[0].style = this.selectStyle;
 			//this.selectedFeature = 0;
 			// Make sure the marker layer is topmost (previous activations push the vector layer too high)
 			var index = Math.max(this._map.Z_INDEX_BASE['Feature'], this.markerLayer.getZIndex()) + 1;
 			this.markerLayer.setZIndex(index);
 			this.updateInfobox();
+            // Reproduce the original OL 2.12 behaviour
+            jQuery('svg').find('circle').css('cursor', 'move');
+            jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); // IE8
 		}
 	},
+
 	/**
 	 * Updates feature info in info box.
 	 * If there is not a feature in selected state, then 1st feature in drawLayer is selected and updated
 	 * @method updateInfobox
 	 */
 	updateInfobox : function() {
-
 		if (this.selectedFeature > -1) {
-
 			// Set selected
 			this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
-
 		} else {
 			var features = this.drawLayer.features;
 			if (features) {
@@ -638,9 +684,7 @@ function(instance) {
 				this.drawLayer.redraw();
 				this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
 			}
-
 		}
-
 	}
 }, {
 	'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]

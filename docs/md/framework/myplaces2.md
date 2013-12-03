@@ -64,7 +64,32 @@ Adding external graphics in DrawPlugin.js:
 
 ## Bundle configuration
 
-No configuration is required
+```javascript
+{
+    "queryUrl" : "[REPLACED BY HANDLER(url for wfst operations)]",
+    "featureNS" : "http://www.oskari.org",
+    "layerDefaults" : {
+      "wmsName" : "oskari:my_places_categories"
+    },
+    "wmsUrl" : "/maptiles/myplaces?myCat="
+}
+```
+* queryUrl is the url for WFST operations, if you are using oskari-server it will be resolved by the server
+* featureNS is the namespace defined for geoserver for myplaces
+* layerDefaults is an optional configuration that can be used to override some or all myplaces-layer defaults in code:
+```javascript
+{
+    wmsName: 'ows:my_places_categories',
+    type: "wmslayer",
+    isQueryable: true,
+    opacity: 90,
+    metaType: this.instance.idPrefix,
+    orgName: catLoc.organization,
+    inspire: catLoc.inspire
+}
+```
+Note! Changing metaType may result in unexpected behavior
+* wmsUrl is the base url which returns images (myplaces category id is added to the end automatically/layer)
 
 ## Bundle state
 
@@ -77,25 +102,25 @@ No statehandling has been implemented.
     <th>Request</th><th>How does the bundle react</th>
   </tr>
   <tr>
-    <td>GetGeometryRequest</td><td>Returns drawing as a callback parameter</td>
+    <td>DrawPlugin.StartDrawingRequest</td><td>Returns drawing as a callback parameter</td>
   </tr>
   <tr>
-    <td>StartDrawingRequest</td><td>Tells drawing plugin to start listening</td>
+    <td>DrawPlugin.StartDrawingRequest</td><td>Tells drawing plugin to start listening</td>
   </tr>
   <tr>
-    <td>StopDrawingRequest</td><td>Tells drawing plugin to stop listening</td>
+    <td>DrawPlugin.StopDrawingRequest</td><td>Tells drawing plugin to stop listening</td>
   </tr>
   <tr>
-    <td>EditCategoriesRequest</td><td>Edit category</td>
+    <td>MyPlaces.EditCategoriesRequest</td><td>Edit category</td>
   </tr>
   <tr>
-    <td>DeleteCategoryRequest</td><td>Shows the corfirm delete -functionality</td>
+    <td>MyPlaces.DeleteCategoryRequest</td><td>Shows the corfirm delete -functionality</td>
   </tr>
   <tr>
-    <td>PublishCategoryRequest</td><td>Shows the corfirm publish -functionality</td>
+    <td>MyPlaces.PublishCategoryRequest</td><td>Shows the corfirm publish -functionality</td>
   </tr>
   <tr>
-    <td>EditPlacesRequest</td><td>Shows place form</td>
+    <td>MyPlaces.EditPlacesRequest</td><td>Shows place form</td>
   </tr>
 </table>
 
@@ -121,10 +146,10 @@ This bundle doesn't listen to any events.
     <th> Event </th><th> When it is triggered/what it tells other components</th>
   </tr>
   <tr>
-    <td> AddedFeatureEvent </td><td> Sent when a feature has been added</td>
+    <td> DrawPlugin.AddedFeatureEvent </td><td> Sent when a feature has been added</td>
   </tr>
   <tr>
-    <td> FinishedDrawingEvent </td><td> Sent when a drawing has been finished</td>
+    <td> DrawPlugin.FinishedDrawingEvent </td><td> Sent when a drawing has been finished</td>
   </tr>
 </table>
 

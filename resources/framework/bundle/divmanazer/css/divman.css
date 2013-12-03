@@ -194,8 +194,10 @@ body {
   font-size: 11px;
   font-weight: bold;
   height: 19px !important;
+  line-height: 19px;
   width: 20px !important;
   margin: 1px;
+  margin-top: 6px;
   padding: 1px; }
 
 .oskari-tile-close {

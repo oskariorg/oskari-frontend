@@ -4,8 +4,7 @@
  * This category class adds state methods to Oskari sandbox as they were in
  * the class itself.
  */
-Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'state-methods',
-{
+Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'state-methods', {
     /**
      * @method registerAsStateful
      * Registers given bundle instance to sandbox as stateful
@@ -16,7 +15,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'state-methods',
      * @param {Oskari.bundle.BundleInstance}
      *            pInstance reference to actual bundle instance
      */
-    registerAsStateful : function(pBundleId, pInstance) {
+    registerAsStateful: function (pBundleId, pInstance) {
         this._statefuls[pBundleId] = pInstance;
     },
 
@@ -27,7 +26,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'state-methods',
      * @param {String}
      *            pBundleId bundle instance id which to unregister
      */
-    unregisterStateful : function(pBundleId) {
+    unregisterStateful: function (pBundleId) {
         this._statefuls[pBundleId] = null;
         delete this._statefuls[pBundleId];
     },
@@ -40,7 +39,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'state-methods',
      * reference to the stateful component.
      * @return {Object}
      */
-    getStatefulComponents : function() {
+    getStatefulComponents: function () {
         return this._statefuls;
     },
 
@@ -48,28 +47,30 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'state-methods',
      * @method resetState
      * Resets the application state to the initial state provided by GetAppSetup action route.
      */
-    resetState: function() {
+    resetState: function () {
         var initialConf = Oskari.app.getConfiguration(), // conf got loaded when application started
             statefuls = this.getStatefulComponents(),
             initialState,
-            bundle;
+            bundle,
+            b;
 
         // Let's loop trough all the stateful bundles.
-        for (var b in statefuls) {
-            bundle = statefuls[b];
-            // initialConf has all the states gotten from GetAppSetup.
-            initialState = initialConf[b].state;
+        for (b in statefuls) {
+            if (statefuls.hasOwnProperty(b)) {
+                bundle = statefuls[b];
+                // initialConf has all the states gotten from GetAppSetup.
+                initialState = initialConf[b].state;
 
-            // Double check that the bundle really is stateful
-            if (bundle.setState) {
-                // If it has a default state that's not empty
-                if (!jQuery.isEmptyObject(initialState)) {
-                    // reset to the default state
-                    bundle.setState(initialState);
-                }
-                // otherwise just set an empty state.
-                else {
-                    bundle.setState();
+                // Double check that the bundle really is stateful
+                if (bundle.setState) {
+                    // If it has a default state that's not empty
+                    if (!jQuery.isEmptyObject(initialState)) {
+                        // reset to the default state
+                        bundle.setState(initialState);
+                    } else {
+                        // otherwise just set an empty state.
+                        bundle.setState();
+                    }
                 }
             }
         }
