@@ -156,7 +156,7 @@ function(instance) {
         getPreParcelFromFormValues : function(values) {
             var mylist = [];
             var preparcel = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcel');
-            //preparcel.setId(id); insert automatic when undefined
+            preparcel.setId(values.id); // insert automatic when undefined - update in other case
             preparcel.setKvp_uid(this.kvp_uid);
             preparcel.setPreparcel_id(values.name);
             preparcel.setTitle(values.title);
@@ -174,44 +174,17 @@ function(instance) {
         getPreParcelData : function(list, drawplugin) {
             var mylist = [];
             var features = drawplugin.getDrawingLayer().features;
-            for ( i = 0; i < features.length; i++) {
-            var ppoldata = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');
-            //ppdata.setId(id); insert automatic when undefined
-            var gtype = 'partparcel';
-            if (drawplugin.getIndexOfSelectedFeature() === i) gtype = 'selectedpartparcel';
-            if(list)ppoldata.setPreparcel_id(list[0].id);
-            ppoldata.setGeom_type(gtype);
-            ppoldata.setUuid(this.kvp_uid);
-            ppoldata.setGeometry(features[i].geometry);
-            mylist.push(ppoldata);
+            for (var i = 0; i < features.length; i++) {
+                var ppoldata = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');
+                //ppdata.setId(id); insert automatic when undefined
+                var gtype = 'partparcel';
+                if (drawplugin.getIndexOfSelectedFeature() === i) gtype = 'selectedpartparcel';
+                if(list)ppoldata.setPreparcel_id(list[0].id);
+                ppoldata.setGeom_type(gtype);
+                ppoldata.setUuid(this.kvp_uid);
+                ppoldata.setGeometry(features[i].geometry);
+                mylist.push(ppoldata);
             }
-
-/*            //Draw layer
-            var drawlayer = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');
-            //ppdata.setId(id); insert automatic when undefined
-            if (list) drawlayer.setPreparcel_id(list[0].id);
-            drawlayer.setGeom_type('drawlayer');
-            drawlayer.setUuid(this.kvp_uid);
-            drawlayer.setGeometry(drawplugin.drawLayer);
-            mylist.push(drawlayer);
-
-            //Edit layer
-            var editlayer = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');
-            //ppdata.setId(id); insert automatic when undefined
-            if (list) drawlayer.setPreparcel_id(list[0].id);
-            editlayer.setGeom_type('editlayer');
-            editlayer.setUuid(this.kvp_uid);
-            editlayer.setGeometry(drawplugin.editLayer);
-            mylist.push(editlayer);
-
-            //Marker layer
-            var markerlayer = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');
-            //ppdata.setId(id); insert automatic when undefined
-            if (list) drawlayer.setPreparcel_id(list[0].id);
-            markerlayer.setGeom_type('markerlayer');
-            markerlayer.setUuid(this.kvp_uid);
-            markerlayer.setGeometry(drawplugin.markerLayer);
-            mylist.push(markerlayer); */
 
             var pboundary = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');
             //pboundary.setId(id); insert automatic when undefined
@@ -223,8 +196,26 @@ function(instance) {
 
             return mylist;
         },
+        loadPreParcelById: function (preparcelRef, cb) {
+            var me = this;
+            var preparcel = {};
+            var callBackWrapper = function (list) {
+                var me2 = me;
+                if (list && list.length > 0) {
+                    preparcel.preparcel = list[0];
+                    // get geom features
+                    var cbWrapper2 = function (list2) {
+                        preparcel.data = list2;
+                        cb(preparcel);
+                    };
+                    me2._wfst2.getPreParcelData(preparcel.preparcel.id, cbWrapper2);
+                }
+            };
 
-     loadPreParcel : function(drawplugin, cb) {
+            this._wfst2.getPreParcelById(this.kvp_uid, preparcelRef, callBackWrapper);
+        },
+
+     loadPreParcel : function(parcel_id,drawplugin, cb) {
         var me = this;
         var loadedPreParcels = false;
 
@@ -242,7 +233,7 @@ function(instance) {
             loadedPreParcels = true;
             allLoaded();
         };
-        this._wfst2.getPreParcels(this.kvp_uid, initialLoadCallBackPreParcels);
+        this._wfst2.getPreParcels(parcel_id, initialLoadCallBackPreParcels);
      },
 
      loadPreParcelData : function(parcel_id,drawplugin, cb) {
@@ -252,7 +243,7 @@ function(instance) {
         var allLoaded = function () {
             // when preparcels have been loaded, notify that the data has changed
             if (loadedPreParcelData) {
-                // me._notifyDataChanged();
+                drawplugin.createEditor(me._preParcelDataList);
             }
         };
 

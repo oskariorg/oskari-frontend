@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.model.PreParcel',
             return this.uuid;
         },
         setKvp_uid: function (kvp_uid) {
-            this.uuid = kvp_uid;
+            this.kvp_uid = kvp_uid;
         },
         getKvp_uid: function () {
             return this.kvp_uid;
