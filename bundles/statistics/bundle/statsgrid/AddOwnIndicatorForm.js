@@ -179,7 +179,7 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
                 me.container.find('.form-cont').remove();
                 me.container.find('.selectors-container').show();
                 me.container.find('#municipalGrid').show();
-                if(data.id != null) {
+                if(indicator.id != null) {
                     indicatorData.indicatorId = 'user_'+indicator.id;
                     callback(indicatorData);
                 }
