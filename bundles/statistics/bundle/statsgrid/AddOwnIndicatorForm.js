@@ -175,7 +175,6 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
             indicatorData = me._gatherData();
 
         if(indicatorData != null && service != null) {
-debugger;
             if(this.sandbox && this.sandbox.getUser().isLoggedIn()) {
                 service.saveUserIndicator(indicatorData, function(indicator) {
                     me.container.find('.form-cont').remove();
