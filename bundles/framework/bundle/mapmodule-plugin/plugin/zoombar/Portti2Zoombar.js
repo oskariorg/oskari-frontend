@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             var inputId = 'pzb-input-' + me.getName(),
                 sliderId = 'pzb-slider-' + me.getName(),
                 sliderEl = me.element.find('div.slider'),
-                containerClasses = 'top right',
+                containerClasses = 'top left',
                 position = 2;
 
             me.element.find('input').attr('id', inputId);
