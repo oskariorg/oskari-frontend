@@ -122,7 +122,7 @@ function(instance) {
                     }
                     else {
                         // update models updateDate in store
-                        // me.updatePlaceData(drawplugin, values, list, cb);
+                        me.updatePlaceData(drawplugin, values, list, cb);
                         cb(success, list[0], isNew);
                     }
                 }
@@ -154,7 +154,7 @@ function(instance) {
                 }
             };
             if(values && values.id)
-            this._wfst2.deletePreParcelDataById(values.id, cbWrap);
+            this._wfst2.deletePreParcelDataById(values.id, list, cbWrap);
         },
         /**
      * @method savePlaceData
@@ -213,6 +213,14 @@ function(instance) {
             pboundary.setUuid(this.kvp_uid);
             pboundary.setGeometry(drawplugin.getOperatingGeometry());
             mylist.push(pboundary);
+
+            var pnewboundary = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');
+            //pboundary.setId(id); insert automatic when undefined
+            if(list)pnewboundary.setPreparcel_id(list[0].id);
+            pnewboundary.setGeom_type('newboundary');
+            pnewboundary.setUuid(this.kvp_uid);
+            pnewboundary.setGeometry(drawplugin. getBoundaryGeometry());
+            mylist.push(pnewboundary);
 
             return mylist;
         },

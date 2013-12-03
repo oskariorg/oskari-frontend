@@ -101,14 +101,14 @@ function(instance) {
         }
 
         },
-        _loadCallback2 : function(feature, preparcel, feaType) {
+        _loadCallback2 : function(features, preparcel, feaType) {
             var me = this;
-            if (feature) {
+            if (features) {
 
                 // preparcel.preparcel; common preparcel attributes
                 // preparcel.data geom features
                 // Create editor
-                this.instance.getDrawPlugin().createEditor(preparcel.data, preparcel.preparcel);
+                this.instance.getDrawPlugin().createEditor(features, preparcel.data, preparcel.preparcel);
 
 
             }

@@ -722,7 +722,6 @@ function(instance) {
                     break;
                 case "boundary":
                     boundary = data[i].geometry;
-                    this.operatingFeature = boundary;
                     break;
             }
         }

@@ -521,7 +521,8 @@ function(instance) {
          *
          * delete preparcel_data of preparcel
          */
-        deletePreParcelDataById : function(id, callback) {
+        deletePreParcelDataById : function(id,list, callback) {
+            var me = this;
             var p = this.protocols.preparcel_data;
             var deleFilter = new OpenLayers.Filter.Comparison({
                 type : OpenLayers.Filter.Comparison.EQUAL_TO,
@@ -531,7 +532,7 @@ function(instance) {
 
             p.filterDelete(deleFilter, {
                 callback : function(response) {
-                    me._handleDeletePreParcelDataResponse(response, list, callback);
+                    me._handleDeletePreParcelDataByIdResponse(response, list, callback);
                 }
             });
         },
@@ -554,12 +555,29 @@ function(instance) {
         }
 
     },
+        /**
+         * @method handleDeletePreParcelDataByIdResponse
+         *
+         * update state to local models
+         */
+        _handleDeletePreParcelDataByIdResponse : function(response, list, cb) {
 
-    /*
-     * @method disconnect
-     *
-     * 'disconnects' from store (does not but might)
-     */
+            /**
+             * Let's call service
+             */
+            if (response.statusText == "OK") {
+                cb(true, list);
+
+            } else {
+                cb(false, list);
+            }
+
+        },
+        /*
+         * @method disconnect
+         *
+         * 'disconnects' from store (does not but might)
+         */
     disconnect : function() {
 
     }
