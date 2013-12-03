@@ -143,7 +143,6 @@ function(instance) {
      * @param {Function} cb Requires information about the success as boolean parameter.
      */
     savePlaceData : function(drawplugin, values, list, cb) {
-drawplugin.operatingFeature.geometry
         var me = this;
         var isNew = !(values.id);
         var feature = drawplugin.getDrawing();
@@ -191,7 +190,7 @@ drawplugin.operatingFeature.geometry
             if(list)pboundary.setPreparcel_id(list[0].id);
             pboundary.setGeom_type('boundary');
             pboundary.setUuid(this.kvp_uid);
-            pboundary.setGeometry(drawplugin.getBoundaryGeometry());
+            pboundary.setGeometry(drawplugin.operatingFeature.geometry);
             mylist.push(pboundary);
 
             return mylist;

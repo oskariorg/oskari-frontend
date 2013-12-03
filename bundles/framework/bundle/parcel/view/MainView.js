@@ -140,7 +140,7 @@ function(instance) {
             if (feature.attributes) {
                 defaultValues.place.name = feature.attributes.name+'-K';
                 defaultValues.place.parent_property_id = feature.attributes.name;
-                defaultValues.place.parent_property_quality = feature.attributes.quality;
+                defaultValues.place.parent_property_quality = this._decodeQuality('q'+feature.attributes.quality);
             }
             // Override if old values available
             if (oldpreparcel)
@@ -356,7 +356,16 @@ function(instance) {
         };
         this.instance.getService().loadPreParcelData(parcel_id, me.drawPlugin, serviceCallback);
     },
+        /**
+         * Decode the quality code to locale description
+         * @param quality_code  (lahdeaineisto property in KTJ WFS schema)
+         * @private
+         */
+        _decodeQuality : function(quality_code) {
+            var codes = this.instance.getLocalization().qualitycodes;
+            return codes.quality_code;
 
+        },
     /**
      * @method _cleanupPopup
      * Cancels operations:
