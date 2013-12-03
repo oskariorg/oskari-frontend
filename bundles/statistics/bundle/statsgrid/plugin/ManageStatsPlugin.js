@@ -700,10 +700,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // if we want to select some special indicator..
             //sel.find('option[value="127"]').prop('selected', true);
 
-            if(me._sandbox && me._sandbox.getUser().isLoggedIn()) {
-                var paramCont = selectorsContainer.find('.parameters-cont');
-                me._addOwnIndicatorButton(paramCont, container);
-            }
+            var paramCont = selectorsContainer.find('.parameters-cont');
+            me._addOwnIndicatorButton(paramCont, container);
 
             // we use chosen to create autocomplete version of indicator select element.
             sel.chosen({

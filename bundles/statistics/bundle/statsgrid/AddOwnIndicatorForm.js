@@ -175,18 +175,27 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
             indicatorData = me._gatherData();
 
         if(indicatorData != null && service != null) {
-            service.saveUserIndicator(indicatorData, function(indicator) {
+debugger;
+            if(this.sandbox && this.sandbox.getUser().isLoggedIn()) {
+                service.saveUserIndicator(indicatorData, function(indicator) {
+                    me.container.find('.form-cont').remove();
+                    me.container.find('.selectors-container').show();
+                    me.container.find('#municipalGrid').show();
+                    if(indicator.id != null) {
+                        indicatorData.indicatorId = 'user_'+indicator.id;
+                        callback(indicatorData);
+                    }
+                }, function(jqXHR, textStatus) {
+                    //TODO some better way of showing errors?
+                    alert(me.localization.connectionProblem);
+                });
+            } else {
                 me.container.find('.form-cont').remove();
                 me.container.find('.selectors-container').show();
                 me.container.find('#municipalGrid').show();
-                if(indicator.id != null) {
-                    indicatorData.indicatorId = 'user_'+indicator.id;
-                    callback(indicatorData);
-                }
-            }, function(jqXHR, textStatus) {
-                //TODO some better way of showing errors?
-                alert(me.localization.connectionProblem);
-            });
+                indicatorData.indicatorId = 'user_'+ new Date().getTime();
+                callback(indicatorData);
+            }
         }
     },
 
