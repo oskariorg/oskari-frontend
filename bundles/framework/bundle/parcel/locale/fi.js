@@ -63,6 +63,14 @@ Oskari.registerLocalization({
               "placeholder": "Pinta-ala (m²)"
           }
       },
+      "qualitycodes": {
+          "q0": "(Tuntematon)",
+          "q4": "Kuvamittaus",
+          "q14": "Digitointi",
+          "q20": "Maastomittaus",
+          "q30": "Kiinteistötoimitus",
+          "q50": "Kaavalaskenta"
+      },
     "notification": {
       "placeLoading": {
         "title": "Kohdetta ladataan",

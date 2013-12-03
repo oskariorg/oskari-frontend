@@ -126,7 +126,7 @@ function(instance) {
                     }
                 }
 
-                cb(success, list[0], isNew);
+             //   cb(success, list[0], isNew);
             };
 
         if (feature) {
@@ -143,7 +143,7 @@ function(instance) {
      * @param {Function} cb Requires information about the success as boolean parameter.
      */
     savePlaceData : function(drawplugin, values, list, cb) {
-
+drawplugin.operatingFeature.geometry
         var me = this;
         var isNew = !(values.id);
         var feature = drawplugin.getDrawing();

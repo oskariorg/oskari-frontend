@@ -72,6 +72,16 @@ function(instance) {
     eventHandlers : {
 
     },
+        /**
+         * Get original parcel
+         * @param fid
+         */
+        loadParceland : function (fid, preparcel) {
+            var me = this;
+            me.instance.getService().loadParcel(fid, function(feature) {
+                me._loadCallback2.call(me, feature, preparcel, me.instance.conf.parcelFeatureType);
+            });
+        },
     /**
      * @method _loadCallback
      * @private
@@ -87,16 +97,24 @@ function(instance) {
             //  error message
         }
         else if (preparcel.preparcel && preparcel.data) {
-
-            // preparcel.preparcel; common preparcel attributes
-            // preparcel.data geom features
-            // Create editor
-            this.instance.getDrawPlugin().createEditor(preparcel.data, preparcel.preparcel);
-
-
+            me.loadParceland(preparcel.preparcel.parent_property_id, preparcel)
         }
+
+        },
+        _loadCallback2 : function(feature, preparcel, feaType) {
+            var me = this;
+            if (feature) {
+
+                // preparcel.preparcel; common preparcel attributes
+                // preparcel.data geom features
+                // Create editor
+                this.instance.getDrawPlugin().createEditor(feature, preparcel.data, preparcel.preparcel);
+
+
+            }
     }
-}, {
+},
+    {
     /**
      * @property {String[]} protocol
      * @static
