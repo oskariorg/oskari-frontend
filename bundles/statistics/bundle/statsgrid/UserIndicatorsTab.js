@@ -195,6 +195,7 @@ function(instance, localization) {
      * @return {Object}
      */
     _normalizeIndicator: function(indicator) {
+        indicator.id = 'user_' + indicator.id;
         indicator.ownIndicator = true;
         indicator.gender = 'total';
         indicator.organization = {

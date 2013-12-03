@@ -50,6 +50,14 @@
       border: 1px solid #888; }
       .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool.selected, .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool:hover:not(.disabled), .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool:active:not(.disabled) {
         background-color: #eeeeee; }
+    .tools .publishedToolbarContainer .publishedToolbarPopupContent.dark .publishedToolPopupContent {
+      background-color: #424343;
+      color: #FFFFFF;
+      border: none; }
+    .tools .publishedToolbarContainer .publishedToolbarPopupContent.light .publishedToolPopupContent {
+      background-color: #FFFFFF;
+      color: #424343;
+      border: 1px solid #888; }
     .tools .publishedToolbarContainer .publishedToolPopupContent {
       background-color: #424343;
       color: #FFFFFF;
@@ -60,6 +68,13 @@
       clear: both; }
       .tools .publishedToolbarContainer .publishedToolPopupContent .actions {
         padding-top: 5px; }
+    .tools .publishedToolbarContainer .publishedToolPopupContent.measureline {
+      width: auto; }
+      .tools .publishedToolbarContainer .publishedToolPopupContent.measureline .content div {
+        text-align: center; }
+      .tools .publishedToolbarContainer .publishedToolPopupContent.measureline .actions input {
+        margin: 2px auto;
+        display: block; }
     .tools .publishedToolbarContainer .publishedToolPopupContent.dark {
       background-color: #424343;
       border: none; }

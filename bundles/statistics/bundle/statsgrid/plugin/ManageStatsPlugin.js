@@ -700,10 +700,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // if we want to select some special indicator..
             //sel.find('option[value="127"]').prop('selected', true);
 
-            if(me._sandbox && me._sandbox.getUser().isLoggedIn()) {
-                var paramCont = selectorsContainer.find('.parameters-cont');
-                me._addOwnIndicatorButton(paramCont, container);
-            }
+            var paramCont = selectorsContainer.find('.parameters-cont');
+            me._addOwnIndicatorButton(paramCont, container);
 
             // we use chosen to create autocomplete version of indicator select element.
             sel.chosen({
@@ -2351,12 +2349,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // push the indicator title and organization to the meta data hash
             var me = this,
                 lang = Oskari.getLang(),
-                indiMeta = me.indicatorsMeta[indicator.id];
+                indiId = indicator.id,
+                indiMeta = me.indicatorsMeta[indiId];
 
             if (indiMeta) {
                 indiMeta.count += 1
             } else {
-                me.indicatorsMeta[indicator.id] = {
+                me.indicatorsMeta[indiId] = {
                     count: 1,
                     title: indicator.title[lang],
                     organization: indicator.organization.title[lang]

@@ -62,11 +62,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             userIndicatorsService.init();
             this.userIndicatorsService = userIndicatorsService;
 
-            var userIndicatorsTab = Oskari.clazz.create(
-                'Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
-                this, locale.tab
-            );
-            this.userIndicatorsTab = userIndicatorsTab;
+            if (sandbox.getUser().isLoggedIn()) {
+                var userIndicatorsTab = Oskari.clazz.create(
+                    'Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
+                    this, locale.tab
+                );
+                this.userIndicatorsTab = userIndicatorsTab;
+            }
 
             // Register stats plugin for map which creates
             // - the indicator selection UI (unless 'published' param in the conf is true)

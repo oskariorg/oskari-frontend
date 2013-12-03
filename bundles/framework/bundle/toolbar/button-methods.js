@@ -43,11 +43,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         var button = me.templateTool.clone();
         button.attr('tool', pId);
         button.attr('title', pConfig.tooltip);
-        button.addClass(pConfig.iconCls);
+        if(me.conf.classes && me.conf.classes[pGroup] && me.conf.classes[pGroup][pId]) {
+            button.addClass(me.conf.classes[pGroup][pId].iconCls);
+        } else {
+            button.addClass(pConfig.iconCls);    
+        }
+
 
         // handling for state setting if the button was not yet on toolbar on setState
         if (me.selectedButton) {
-            // FIXME use ===
             if (me.selectedButton.id === pId &&
                     me.selectedButton.group === prefixedGroup) {
                 button.addClass('selected');
@@ -97,9 +101,16 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      */
     _clickButton: function (pId, pGroup) {
         if (!pId) {
-            // use default button if ID param not given
-            pId = this.defaultButton.id;
-            pGroup = this.defaultButton.group;
+            if(this.defaultButton) {
+                // use default button if ID param not given
+                pId = this.defaultButton.id;
+                pGroup = this.defaultButton.group;
+            } else {
+                var e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
+                this.sandbox.notifyAll(e);
+                this.container.find('.tool.selected').removeClass('selected');
+                return;
+            }
         }
 
         var btn = this.buttons[pGroup][pId],
