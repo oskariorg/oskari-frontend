@@ -86,6 +86,43 @@ function(instance) {
         })
 
     },
+        /**
+         * @method getPreParcelById
+         *
+         * loads preparcel from backend to given service filters by
+         * initialised user uuid  ( kvp uuid) and preparcel ref
+         *
+         * @param uid
+         * @param ref  preparcel reference id
+         * @param cb
+         */
+        getPreParcelById : function(uid, ppref, cb) {
+            var kvp_uid = (typeof uid !== "undefined") ? uid : this.uuid;
+            var refFilter = new OpenLayers.Filter.Logical({
+                type: OpenLayers.Filter.Logical.AND,
+                filters: [
+                    new OpenLayers.Filter.Comparison({
+                        type : OpenLayers.Filter.Comparison.EQUAL_TO,
+                        property : "kvp_uid",
+                        value : kvp_uid
+                    }),
+                    new OpenLayers.Filter.Comparison({
+                        type : OpenLayers.Filter.Comparison.EQUAL_TO,
+                        property : "preparcel_id",
+                        value : ppref
+                    })]});
+            var p = this.protocols.preparcel;
+
+            var me = this;
+
+            p.read({
+                filter : refFilter,
+                callback : function(response) {
+                    me._handlePreParcelResponse(response, cb);
+                }
+            })
+
+        },
 
     /**
      * @method _handlePreParcelResponse
@@ -109,7 +146,6 @@ function(instance) {
         for (var n = 0; n < feats.length; n++) {
             var f = feats[n];
             var featAtts = f.attributes;
-
             var id = this._parseNumericId(f.fid);
 
             var preparcel = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcel');
@@ -119,7 +155,7 @@ function(instance) {
             preparcel.setPreparcel_id(featAtts['preparcel_id']);
             preparcel.setTitle(featAtts['title']);
             preparcel.setSubtitle(featAtts['subtitle']);
-            preparcel.setDescription(featAtts['description']);
+            preparcel.setDescription(featAtts['desc']);  // OL mixes description named attribute
             preparcel.setParent_property_id(featAtts['parent_property_id']);
             preparcel.setParent_property_quality(featAtts['parent_property_quality']);
             preparcel.setReporter(featAtts['reporter']);
@@ -166,7 +202,7 @@ function(instance) {
                     'preparcel_id': preparcel.getPreparcel_id(),
                     'title': preparcel.getTitle(),
                     'subtitle': preparcel.getSubtitle(),
-                    'description': preparcel.getDescription(),
+                    'desc': preparcel.getDescription(),
                     'parent_property_id': preparcel.getParent_property_id(),
                     'parent_property_quality': preparcel.getParent_property_quality(),
                     'reporter': preparcel.getReporter(),
@@ -395,7 +431,7 @@ function(instance) {
                 // toState handles some workflow stuff and doesn't work here
                 feat.state = OpenLayers.State.UPDATE;
             }
-            features.push(feat);
+           if(geom) features.push(feat);
         }
         var me = this;
         p.commit(features, {

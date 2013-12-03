@@ -1109,8 +1109,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             // if data grid is enabled
             if (me.isDataVisible) {
                 // get state of statsgrid
-                var statsGrid = me.sandbox.getStatefulComponents().statsgrid;
-                selections.gridState = statsGrid.state;
+                var statsGrid = me.sandbox.getStatefulComponents().statsgrid,
+                    statsGridState = me._filterIndicators(_.clone(statsGrid.state, true));
+
+                selections.gridState = statsGridState;
             }
 
             var mapFullState = sandbox.getStatefulComponents().mapfull.getState();
@@ -1381,7 +1383,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 locale = Oskari.getLocalization('StatsGrid'), // Let's use statsgrid's locale files.
                 showGrid = true, //me.conf ? me.conf.gridShown : true; // Show the grid on startup, defaults to true.
                 sandboxName = 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName);
+                sandbox = Oskari.getSandbox(sandboxName),
+                statsGridState;
             me.sandbox = sandbox;
             sandbox.register(me.instance);
 
@@ -1398,12 +1401,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             if (statsGrid && statsGrid.state && showGrid) {
                 //me.createUI(statsGrid.state);
                 //me.publisher.
-
+                statsGridState = me._filterIndicators(_.clone(statsGrid.state, true));
                 // Register grid plugin to the map.
                 var gridConf = {
                     'published': true,
                     'layer': layer,
-                    'state': statsGrid.state
+                    'state': statsGridState
                 };
                 var gridPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin', gridConf, locale);
                 me.mapModule.registerPlugin(gridPlugin);
@@ -1423,6 +1426,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 me.gridPlugin.createStatsOut(me.statsContainer);
 
             }
+        },
+
+        /**
+         * Filters out user's indicators which aren't allowed to be published.
+         *
+         * @method _filterIndicators
+         * @param  {Object} statsGridState
+         * @return {Object} filtered state
+         */
+        _filterIndicators: function(statsGridState) {
+            statsGridState.indicators = _.filter(statsGridState.indicators, function(indicator) {
+                return (
+                    // sotka indicators
+                    (!indicator.ownIndicator) ||
+                    // own indicators
+                    (indicator.ownIndicator && indicator['public'])
+                );
+            });
+            return statsGridState;
         },
 
         /**

@@ -293,17 +293,17 @@ function(drawPlugin) {
 
         var featureInd = parcelLayer.features.length-1;
         if (featureInd < 1) return;
-        var operatingFeature = parcelLayer.features[featureInd];
+        this.drawPlugin.operatingFeature = parcelLayer.features[featureInd];
 
-        switch (operatingFeature.geometry.CLASS_NAME) {
+        switch (this.drawPlugin.operatingFeature.geometry.CLASS_NAME) {
             case "OpenLayers.Geometry.Polygon":
-                this.splitHole(baseMultiPolygon,operatingFeature);
+                this.splitHole(baseMultiPolygon,this.drawPlugin.operatingFeature);
                 for (var i = 0; i < this.drawPlugin.drawLayer.features.length; i++) {
                     this.drawPlugin.drawLayer.features[i].attributes = {name : attributes.tekstiKartalla, quality : attributes.lahdeaineisto};
                 }
                 break;
             case "OpenLayers.Geometry.LineString":
-                var newFeatures = this.splitLine(baseMultiPolygon,operatingFeature);
+                var newFeatures = this.splitLine(baseMultiPolygon,this.drawPlugin.operatingFeature);
                 this.drawPlugin.drawLayer.removeAllFeatures();
                 for (var i = 0; i < newFeatures[0].geometry.components.length; i++) {
                     this.drawPlugin.drawLayer.addFeatures(new OpenLayers.Feature.Vector(newFeatures[0].geometry.components[i]));

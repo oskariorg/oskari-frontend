@@ -23,6 +23,7 @@ function(instance) {
 	this.markerLayer = null;
 	this.currentDrawMode = null;
 	this.currentFeatureType = null;
+    this._oldPreParcel = null;   // old preparcel attributes
 	// Created in init
 	this.splitter = null;
 	this.backupFeatures = [];
@@ -590,6 +591,13 @@ function(instance) {
 	getFeatureType : function() {
 		return this.currentFeatureType;
 	},
+        /**
+         * Returns attributes of old stored preparcel
+         * @returns {*}
+         */
+        getOldPreParcel: function () {
+            return this._oldPreParcel;
+        },
 	/**
 	 * @method getSandbox
      * @return {Oskari.mapframework.sandbox.Sandbox}
@@ -654,7 +662,11 @@ function(instance) {
 		var trivialSplit = ( typeof trivial === "undefined" ? false : trivial);
 		var operatingFeature = this.splitter.split(trivialSplit);
 		if (operatingFeature != undefined) {
+            this.initControls(operatingFeature);
+		}
+	},
 
+    initControls : function(operatingFeature) {
             this.buttons.setButtonEnabled("line",false);
             this.buttons.setButtonEnabled("area",false);
             this.buttons.setButtonEnabled("selector",false);
@@ -674,8 +686,42 @@ function(instance) {
             // Reproduce the original OL 2.12 behaviour
             jQuery('svg').find('circle').css('cursor', 'move');
             jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); // IE8
-		}
-	},
+    },
+
+    createEditor : function(features, preparcel) {
+        this.clear();
+        var attributes = {};
+        this.currentFeatureType = this.instance.conf.registerUnitFeatureType;
+        this._oldPreParcel = preparcel;
+        var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')([this.getDrawingLayer(), this.getEditLayer()]);
+        this._sandbox.notifyAll(event);
+        var selectedFeature = 0;
+        var partInd = 0;
+
+        for (var i=0; i<features.length; i++) {
+            switch (features[i].geom_type) {
+                case "selectedpartparcel":
+                    selectedFeature = partInd;
+                case "partparcel":
+                    this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Polygon(features[i].geometry.components[0])));
+                    this.drawLayer.features[partInd].style = this.basicStyle;
+                    this.drawLayer.features[partInd].attributes = {name : preparcel.preparcel_id, quality : preparcel.parent_property_quality};
+                    partInd = partInd+1;
+                    break;
+                case "boundary":
+                    this.editLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(features[i].geometry)));
+                    break;
+            }
+        }
+
+        this._map.zoomToExtent(this.drawLayer.getDataExtent());
+        OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
+        this.drawLayer.features[0].style = this.selectStyle;
+        this.selectedFeature = selectedFeature;
+        this.drawLayer.redraw();
+        this.editLayer.redraw();
+        this.initControls(this.editLayer.features[0]);
+    },
 
 	/**
 	 * Updates feature info in info box.

@@ -2351,12 +2351,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // push the indicator title and organization to the meta data hash
             var me = this,
                 lang = Oskari.getLang(),
-                indiMeta = me.indicatorsMeta[indicator.id];
+                indiId = indicator.id,
+                indiMeta = me.indicatorsMeta[indiId];
 
             if (indiMeta) {
                 indiMeta.count += 1
             } else {
-                me.indicatorsMeta[indicator.id] = {
+                me.indicatorsMeta[indiId] = {
                     count: 1,
                     title: indicator.title[lang],
                     organization: indicator.organization.title[lang]
