@@ -609,7 +609,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             contentPanel.append(tooltipCont);
 
 
-
             // content
             for (i = 0; i < me.toolLayouts.length; i += 1) {
                 layoutContainer = me.templateLayout.clone();
@@ -754,7 +753,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         _activatePreviewPlugin: function (tool, enabled) {
             var me = this,
                 sandbox = me.instance.getSandbox();
-            // FIXME set layout classes on startPlugin
             if (!tool.plugin && enabled) {
                 var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
                 tool.plugin = Oskari.clazz.create(tool.id, tool.config);
@@ -801,6 +799,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 tool.plugin.startPlugin(this.instance.sandbox);
                 tool._isPluginStarted = true;
 
+                // toolbar (bundle) needs to be notified
+                if(tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
+                    me.toolbarConfig = {
+                        'toolbarId' : 'PublisherToolbar',
+                        'defaultToolbarContainer' : '.publishedToolbarContent',
+                        'hasContentContainer': true,
+                        'classes' : {}
+                    };
+
+                    tool.plugin.setToolbarContainer();
+                    me.toolbarConfig.classes = tool.plugin.getToolConfs();
+                }
+
                 toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions() : null;
 
                 //atm. this is using toolsplugin's button structure
@@ -831,6 +842,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     }
                 }
             } else {
+                // toolbar (bundle) needs to be notified
+                if(tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
+                    me.toolbarConfig = {};
+                }
                 if (tool._isPluginStarted) {
                     //remove buttons
                     toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions() : null;
@@ -855,8 +870,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                         toolOptionCheckboxes.remove();
                         optionContainer.remove();
                     }
-
-
 
                     tool._isPluginStarted = false;
                     tool.plugin.stopPlugin(this.instance.sandbox);
@@ -1425,7 +1438,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             var styleConfig,
                 i,
-                tool;
+                tool,
+                me = this;
 
             // Set the toolStyle to the config of each tool
             // and change the style immedately. 
@@ -1449,6 +1463,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 }
                 if (tool._isPluginStarted && tool.plugin.changeToolStyle) {
                     tool.plugin.changeToolStyle(styleConfig);
+                }
+                // tools in toolbar plugin needs to be configured
+                if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
+                    if (me.toolbarConfig && me.toolbarConfig.classes) {
+                        me.toolbarConfig.classes = tool.plugin.getToolConfs();
+                    }
                 }
             }
 
