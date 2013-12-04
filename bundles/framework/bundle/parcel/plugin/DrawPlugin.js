@@ -33,6 +33,7 @@ function(instance) {
 	this.selectedFeature = -2;
 	this.selectInfoControl = null;
     this.operatingFeature = null;
+    this.hotspot = null;
 }, {
 	/**
 	 * @method getName
@@ -111,11 +112,11 @@ function(instance) {
 		});
 
 		this.editLayer.updateLine = function() {
-			var operatingFeature = this.features[0];
-			if (operatingFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiLineString") {
+			var editFeature = this.features[0];
+			if (editFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiLineString") {
 				// Handles the point added into the line
-				for (var i = 0; i < operatingFeature.geometry.components.length; i++) {
-					var lineString = operatingFeature.geometry.components[i];
+				for (var i = 0; i < editFeature.geometry.components.length; i++) {
+					var lineString = editFeature.geometry.components[i];
 					for (var k = 0; k < lineString.components.length; k++) {
 						var point = lineString.components[k];
 						var newReferences = [];
@@ -175,7 +176,7 @@ function(instance) {
 					// Updates middle points
                     me.controls.modify.deactivate();
                     me.controls.modify.activate();
-					me.controls.modify.selectFeature(operatingFeature);
+					me.controls.modify.selectFeature(editFeature);
                     me.controls.modify.clickout = false;
                     me.controls.modify.toggle = false;
 				}
@@ -671,9 +672,28 @@ function(instance) {
 		if (editFeature !== undefined) {
             this.initControls(editFeature);
 		}
+
+        // Set selected parcel
+        if (this.hotspot !== null) {
+            var centroids = [];
+            var minDist = Number.POSITIVE_INFINITY;
+            for (var i=0; i<this.drawLayer.features.length; i++) {
+                centroids.push(this.drawLayer.features[i].geometry.getCentroid());
+            }
+            var selectedInd = 0;
+            for (i=0; i<centroids.length; i++) {
+                var dist = this.hotspot.point.distanceTo(centroids[i]);
+                // Todo: Improve this
+                if ((dist < minDist)||((dist === minDist)&&((new Boolean(this.hotspot.inside)).toString() === (new Boolean(this.drawLayer.features[i].geometry.containsPoint(centroids[i]))).toString()))) {
+                    minDist = dist;
+                    selectedInd = i;
+                }
+            }
+            this.selectedFeature = selectedInd;
+        }
 	},
 
-    initControls : function(operatingFeature) {
+    initControls : function(editingFeature) {
             this.buttons.setEnabled(true);
             this.buttons.setButtonEnabled("line",false);
             this.buttons.setButtonEnabled("area",false);
@@ -681,8 +701,8 @@ function(instance) {
             this.buttons.setButtonEnabled("clear",true);
             this.buttons.setButtonEnabled("save",true);
 
-			this.controls.select.select(operatingFeature);
-			this.controls.modify.selectFeature(operatingFeature);
+			this.controls.select.select(editingFeature);
+			this.controls.modify.selectFeature(editingFeature);
 			this.controls.modify.activate();
             this.controls.modify.clickout = false;
             this.controls.modify.toggle = false;
@@ -710,6 +730,9 @@ function(instance) {
         }
         this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(polygons)));
 
+		var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')([this.getDrawingLayer(), this.getEditLayer()]);
+		this._sandbox.notifyAll(event);
+
         for (i=0; i<data.length; i++) {
             switch (data[i].geom_type) {
                 case "selectedpartparcel":
@@ -723,6 +746,12 @@ function(instance) {
                     break;
             }
         }
+        var centroid = polygons[selectedFeature].getCentroid();
+        var isInside = polygons[selectedFeature].containsPoint(centroid);
+        this.hotspot = {
+            point: centroid,
+            inside: isInside
+        };
         this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(boundary));
     },
 
@@ -739,7 +768,7 @@ function(instance) {
 			var features = this.drawLayer.features;
 			if (features) {
 				this.selectedFeature = 0;
-				for ( i = 0; i < features.length; i++) {
+				for (var i = 0; i < features.length; i++) {
 					this.drawLayer.features[i].style = (i === this.selectedFeature) ? this.selectStyle : this.basicStyle;
 				}
 				//me.editLayer.redraw();
