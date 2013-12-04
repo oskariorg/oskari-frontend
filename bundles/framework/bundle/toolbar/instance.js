@@ -311,12 +311,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 // get references
                 var tool = state.selected.id;
                 var group = state.selected.group;
+                var groupName = group.split('-');
+                if (groupName < 2) {
+                    // old configs don't have the toolbar id prefixed
+                    group = 'default-' + group;
+                }
                 var toolbar = this.getToolbarContainer();
 
                 // remove any old selection
                 this._removeToolSelections();
 
-                var groupContainer = toolbar.find('div.toolrow[tbgroup=default-' + group + ']');
+                var groupContainer = toolbar.find('div.toolrow[tbgroup=' + group + ']');
                 if (groupContainer.length > 0) {
                     var button = groupContainer.find('div.tool[tool=' + tool + ']');
                     if (button.length > 0) {
