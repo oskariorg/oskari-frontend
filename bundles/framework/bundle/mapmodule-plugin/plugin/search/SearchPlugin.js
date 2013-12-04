@@ -240,7 +240,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             var me = this,
                 sandbox = me._sandbox,
                 content,
-                containerClasses = 'top right',
+                containerClasses = 'top left',
                 position = 1;
 
             if (this.conf && this.conf.toolStyle) {

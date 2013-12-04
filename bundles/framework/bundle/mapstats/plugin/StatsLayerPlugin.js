@@ -327,9 +327,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
 
             // FIXME: this is needed because PorttiMouse isn't handling map moves when dragging started on selected feature
             // OpenLayers.Control.Navigation below is added because of this and we need to notify that the map has moved manually because of that
-            this._statsDrawLayer.events.register("moveend", this._statsDrawLayer, function () {
-                me.mapModule.notifyMoveEnd();
-            });
+//            this._statsDrawLayer.events.register("moveend", this._statsDrawLayer, function () {
+//                me.mapModule.notifyMoveEnd();
+//            });
             // Hover control
             this._highlightCtrl = new OpenLayers.Control.SelectFeature(this._statsDrawLayer, {
                 hover: true,
@@ -345,8 +345,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
 
             // Navigation also for hovered and selected areas
             // FIXME: this is only needed because PorttiMouse doesn't work when drag is started on selected feature
-            this._navCtrl = new OpenLayers.Control.Navigation();
-            this._map.addControl(this._navCtrl);
+//            this._navCtrl = new OpenLayers.Control.Navigation();
+//            this._map.addControl(this._navCtrl);
             var queryableMapLayers = [openLayer];
 
             this._getFeatureControlHover = new OpenLayers.Control.WMSGetFeatureInfo({
@@ -602,7 +602,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             this._getFeatureControlHover.deactivate();
             this._getFeatureControlSelect.deactivate();
             this._map.removeControl(this._highlightCtrl);
-            this._map.removeControl(this._navCtrl);
+//            this._map.removeControl(this._navCtrl);
             this._map.removeControl(this._getFeatureControlHover);
             this._map.removeControl(this._getFeatureControlSelect);
             this._map.removeLayer(this._statsDrawLayer);
