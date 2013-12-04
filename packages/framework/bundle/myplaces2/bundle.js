@@ -127,10 +127,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
            // NOTE! EXTERNAL LIBRARY!
             "type" : "text/javascript",
             "src" : "../../../../libraries/jscolor/jscolor.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/jquery/plugins/jquery.svg.package-1.4.5/jquery.svg.js"
-		},
+        },
 		// css
 		{
             "type" : "text/css",
