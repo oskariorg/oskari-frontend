@@ -141,6 +141,7 @@ function(instance) {
                 defaultValues.place.name = feature.attributes.name+'-K';
                 defaultValues.place.parent_property_id = feature.attributes.name;
                 defaultValues.place.parent_property_quality = this._decodeQuality('q'+feature.attributes.quality);
+
             }
             // Override if old values available
             if (oldpreparcel)
@@ -158,6 +159,8 @@ function(instance) {
         }
         // Set the default values for the form.
         this.form.setValues(defaultValues);
+
+
 
         var content = [{
             html : me.form.getForm(),
@@ -180,6 +183,9 @@ function(instance) {
         content[0].actions[loc.buttons.save] = function() {
             me._saveForm();
         };
+
+        // Enable / disable input fields
+        if (!oldpreparcel)me.form.enableDisableFields();
 
         var request = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, loc.placeform.title, content, location, true);
         sandbox.request(me.getName(), request);
@@ -363,7 +369,9 @@ function(instance) {
          */
         _decodeQuality : function(quality_code) {
             var codes = this.instance.getLocalization().qualitycodes;
-            return codes.quality_code;
+            var quali = codes[quality_code];
+            if(!quali) quali = codes['q0'];
+            return quali;
 
         },
     /**

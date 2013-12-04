@@ -724,6 +724,8 @@ function(instance) {
         var selectedFeature = 0;
         var i;
         this.clear();
+        this.currentFeatureType = this.instance.conf.registerUnitFeatureType;
+        this._oldPreParcel = preparcel;
 
         for (i=0; i<features.length; i++) {
             polygons.push(features[i].geometry);

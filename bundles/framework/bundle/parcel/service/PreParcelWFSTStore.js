@@ -516,6 +516,26 @@ function(instance) {
             }
         });
     },
+        /*
+         * @method deletePreParcel by preparcel.id
+         *
+         * delete preparcel_data of preparcel
+         */
+        deletePreParcelDataById : function(id,list, callback) {
+            var me = this;
+            var p = this.protocols.preparcel_data;
+            var deleFilter = new OpenLayers.Filter.Comparison({
+                type : OpenLayers.Filter.Comparison.EQUAL_TO,
+                property : "preparcel_id",
+                value : id
+            });
+
+            p.filterDelete(deleFilter, {
+                callback : function(response) {
+                    me._handleDeletePreParcelDataByIdResponse(response, list, callback);
+                }
+            });
+        },
 
     /**
      * @method handleDeletePreParcelDataResponse
@@ -535,12 +555,29 @@ function(instance) {
         }
 
     },
+        /**
+         * @method handleDeletePreParcelDataByIdResponse
+         *
+         * update state to local models
+         */
+        _handleDeletePreParcelDataByIdResponse : function(response, list, cb) {
 
-    /*
-     * @method disconnect
-     *
-     * 'disconnects' from store (does not but might)
-     */
+            /**
+             * Let's call service
+             */
+            if (response.statusText == "OK") {
+                cb(true, list);
+
+            } else {
+                cb(false, list);
+            }
+
+        },
+        /*
+         * @method disconnect
+         *
+         * 'disconnects' from store (does not but might)
+         */
     disconnect : function() {
 
     }
