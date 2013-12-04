@@ -6,35 +6,36 @@
  *
  * @class Oskari.statistics.bundle.statsgrid.request.TooltipContentRequest
  */
-Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.request.TooltipContentRequest', 
-/**
- * @method create called automatically on construction
- * @static
- *
- */
-function(feature) {
-    this._feature = feature
-}, {
-    /** @static @property __name request name */
-    __name : "StatsGrid.TooltipContentRequest",
+Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.request.TooltipContentRequest',
     /**
-     * @method getName
-     * @return {String} request name
-     */
-    getName : function() {
-        return this.__name;
-    },
-    /**
-     * @method getLayer
-     * @return {Object} request layer
-     */
-    getFeature : function() {
-        return this._feature;
-    }
-}, {
-    /**
-     * @property {String[]} protocol array of superclasses as {String}
+     * @method create called automatically on construction
      * @static
+     *
      */
-    'protocol' : ['Oskari.mapframework.request.Request']
-});
+
+    function (feature) {
+        this._feature = feature
+    }, {
+        /** @static @property __name request name */
+        __name: "StatsGrid.TooltipContentRequest",
+        /**
+         * @method getName
+         * @return {String} request name
+         */
+        getName: function () {
+            return this.__name;
+        },
+        /**
+         * @method getLayer
+         * @return {Object} request layer
+         */
+        getFeature: function () {
+            return this._feature;
+        }
+    }, {
+        /**
+         * @property {String[]} protocol array of superclasses as {String}
+         * @static
+         */
+        'protocol': ['Oskari.mapframework.request.Request']
+    });

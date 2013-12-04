@@ -18,9 +18,85 @@ JSON handling is partly done with CometDs parameter handling but mostly with Jac
 
 WFS2 backend is hosted with Jetty. CometDs Websocket is supported from Jetty 7. WFS2 doesn't make any other restrictions for choosing platform than what CometD needs.
 
-## Interfaces (API channels)
+## Interfaces
 
 The channels have been separated so that all the information coming to the server go through service channels and information to the clients are sent through normal channels. Service channels are sort of 'setters' and client channels are 'getters'. Also Bayeux protocol adds additional meta channels that send information about the client's connection state.
+
+### Service routes
+
+#### /image
+
+Client can make a HTTP request to get an image in png format with this route. Mainly the images are fetched from cache and returned only if found except for highlight images with featureIds that will be rendered if not found from cache.
+
+##### Parameters
+
+<table>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>session</td>
+		<td>String</td>
+		<td>Liferay portlet's JSESSIONID</td>
+	</tr>
+	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
+		<td>type</td>
+		<td>String</td>
+		<td>Image type eg. "normal" or "highlight". Defaults to "normal".</td>
+	</tr>
+	<tr>
+		<td>style</td>
+		<td>String</td>
+		<td>Layer's style. Defaults to "default".</td>
+	</tr>
+	<tr>
+		<td>srs</td>
+		<td>String</td>
+		<td>Spatial reference system eg. EPSG:3067</td>
+	</tr>
+	<tr>
+		<td>bbox</td>
+		<td>ArrayList&lt;Double&gt;</td>
+		<td>Bounding box values in order: left, bottom, right, top</td>
+	</tr>
+	<tr>
+		<td>zoom</td>
+		<td>long</td>
+		<td>zoom level</td>
+	</tr>
+	<tr>
+		<td>featureIds</td>
+		<td>ArrayList&lt;String&gt;</td>
+		<td>FeatureIds that need to be highlighted</td>
+	</tr>
+	<tr>
+		<td>width</td>
+		<td>int</td>
+		<td>map width in pixels</td>
+	</tr>
+	<tr>
+		<td>height</td>
+		<td>int</td>
+		<td>map height in pixels</td>
+	</tr>
+</table>
+
+##### Example
+
+###### normal image (cached)
+
+/image?session=test&layerId=216&style=default&srs=EPSG:3067&bbox=386560.0,6671360.0,389120.0,6673920.0&zoom=7
+
+###### highlight image
+
+/image?session=test&layerId=142&type=highlight&srs=EPSG:3067&bbox=375584.224,6677855.5745,377311.224,6678850.5745&zoom=10&featureIds=FI.KTJkii-PalstanTietoja-15254706720131115,FI.KTJkii-PalstanTietoja-15254745920131115,FI.KTJkii-PalstanTietoja-15254746020131115,FI.KTJkii-PalstanTietoja-15254845120131115,FI.KTJkii-PalstanTietoja-15254845620131115&width=1727&height=995
 
 ### Service channels
 
@@ -36,6 +112,7 @@ Service channels are implemented so that every channel does just one specific ta
 8. /service/wfs/setFilter
 9. /service/wfs/setMapLayerVisibility
 10. /service/wfs/highlightFeatures
+11. /service/wfs/setMapLayerCustomStyle
 
 #### /service/wfs/init
 
@@ -562,6 +639,120 @@ Sends only image
 
 - /wfs/image
 - /error
+
+
+#### /service/wfs/setMapLayerCustomStyle
+
+##### Parameters
+
+<table>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
+		<td>fill_color</td>
+		<td>String</td>
+		<td>area fill color</td>
+	</tr>
+	<tr>
+		<td>fill_pattern</td>
+		<td>int</td>
+		<td>area fill style</td>
+	</tr>
+	<tr>
+		<td>border_color</td>
+		<td>String</td>
+		<td>area line color</td>
+	</tr>
+	<tr>
+		<td>border_linejoin</td>
+		<td>String</td>
+		<td>area line corner</td>
+	</tr>
+	<tr>
+		<td>border_dasharray</td>
+		<td>String</td>
+		<td>area line style</td>
+	</tr>
+	<tr>
+		<td>border_width</td>
+		<td>int</td>
+		<td>area line width</td>
+	</tr>
+	<tr>
+		<td>stroke_linecap</td>
+		<td>String</td>
+		<td>line cap</td>
+	</tr>
+	<tr>
+		<td>stroke_color</td>
+		<td>String</td>
+		<td>line color</td>
+	</tr>
+	<tr>
+		<td>stroke_linejoin</td>
+		<td>String</td>
+		<td>line corner</td>
+	</tr>
+	<tr>
+		<td>stroke_dasharray</td>
+		<td>String</td>
+		<td>line style</td>
+	</tr>
+	<tr>
+		<td>stroke_width</td>
+		<td>int</td>
+		<td>line width</td>
+	</tr>
+	<tr>
+		<td>dot_color</td>
+		<td>String</td>
+		<td>point color</td>
+	</tr>
+	<tr>
+		<td>dot_shape</td>
+		<td>int</td>
+		<td>point shape</td>
+	</tr>
+	<tr>
+		<td>dot_size</td>
+		<td>int</td>
+		<td>point size</td>
+	</tr>
+</table>
+
+##### Example
+
+```javascript
+{
+		"layerId":216,
+		"fill_color":"ffde00",
+		"fill_pattern":-1,
+		"border_color":"000000",
+		"border_linejoin":"mitre",
+		"border_dasharray":"",
+		"border_width":1,
+		"stroke_linecap":"butt",
+		"stroke_color":"3233ff",
+		"stroke_linejoin":"mitre",
+		"stroke_dasharray":"",
+		"stroke_width":1,
+		"dot_color":"000000",
+		"dot_shape":1,
+		"dot_size":3
+}
+```
+
+##### Response channels
+
+Doesn't return anything
 
 
 ### Client channels

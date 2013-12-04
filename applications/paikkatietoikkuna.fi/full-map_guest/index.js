@@ -106,6 +106,7 @@ jQuery(document).ready(function() {
             }
         },
         error: function(jqXHR, textStatus) {
+            console.log('error got', jqXHR, textStatus);
             if (jqXHR.status != 0) {
                 jQuery('#mapdiv').append('Unable to start');
             }

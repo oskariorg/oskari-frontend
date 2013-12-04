@@ -117,7 +117,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
         templates: {
             group: '<div class="toolrow"></div>',
             tool: '<div class="tool"></div>',
-            menutoolbar: '<div class="oskari-closed oskariui-menutoolbar"><div class="oskariui-menutoolbar-modetitle"><div class="oskariui-menutoolbar-title"><p></p></div></div><div class="oskariui-menutoolbar-container"><div class="oskariui-menutoolbarbuttongroup"></div></div><div class="oskariui-menutoolbar-closebox"><div class="icon-close-white"></div></div></div>'
+            menutoolbar: '<div class="oskari-closed oskariui-menutoolbar"><div class="oskariui-menutoolbar-modetitle"><div class="oskariui-menutoolbar-title"><p></p></div></div><div class="oskariui-menutoolbar-container"><div class="oskariui-menutoolbarbuttongroup"></div></div><div class="oskariui-menutoolbar-closebox"><div class="icon-close-white"></div></div></div>',
+            addedToolbar: '<div class="oskariui-toolbar-title"><p></p></div><div class="oskariui-toolbar-container"><div class="oskariui-toolbarbuttongroup"></div></div>'
         },
 
         /**
@@ -161,6 +162,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
 
             return c;
         },
+        /**
+         * @method createToolbarContainer
+         *
+         */
+        addToolbarContainer: function (tbid, pdata) {
+            var tbcontainer = pdata.toolbarContainer;
+            tbcontainer.append(jQuery(this.templates.addedToolbar));
+            this.toolbars[tbid] = tbcontainer;
+            var c = tbcontainer.find(".oskariui-toolbarbuttongroup");
+            this.containers[tbid] = c;
+
+            if (pdata.title) {
+                tbcontainer.find(".oskariui-toolbar-title p").append(pdata.title);
+            }
+            return c;
+        },
         changeMenuToolbarTitle: function (title) {
             if (title) {
                 this.menutoolbarcontainer.find(".oskariui-menutoolbar-title p").html(title);
@@ -175,8 +192,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             var tbid = ptbid || 'default';
             var c = this.containers[tbid];
 
-            if (c === undefined && this.menutoolbarcontainer) {
+            if (c === undefined && this.menutoolbarcontainer && !data.toolbarContainer) {
                 c = this.createMenuToolbarContainer(tbid, data);
+            } else if ((c === undefined || c.parents('body').length === 0) && data && data.toolbarContainer) {
+                c = this.addToolbarContainer(tbid, data);
             }
 
             return c;
@@ -297,7 +316,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 // remove any old selection
                 this._removeToolSelections();
 
-                var groupContainer = toolbar.find('div.toolrow[tbgroup=' + group + ']');
+                var groupContainer = toolbar.find('div.toolrow[tbgroup=default-' + group + ']');
                 if (groupContainer.length > 0) {
                     var button = groupContainer.find('div.tool[tool=' + tool + ']');
                     if (button.length > 0) {
@@ -334,9 +353,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
          */
         _removeToolbar: function (tbid) {
             var tb = this.toolbars[tbid];
-            this.toolbars[tbid] = undefined;
+            // WTF!!!!
+            // this.toolbars[tbid] = undefined;
+            // tb.remove();
+            // delete this.toolbars[tbid];
             tb.remove();
+            this.toolbars[tbid] = undefined;
             delete this.toolbars[tbid];
+
         },
 
         /**

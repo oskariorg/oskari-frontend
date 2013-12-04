@@ -15,9 +15,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.RemoveToolButton
  * @param {String}
  *            group identifier for organizing buttons
  */
-function(id, group) {
+function(id, group, toolbarId) {
     this._id = id;
     this._group = group;
+    this._toolbarId = toolbarId;
 }, {
     /** @static @property __name request name */
     __name : "Toolbar.RemoveToolButtonRequest",
@@ -41,6 +42,13 @@ function(id, group) {
      */
     getGroup : function() {
         return this._group;
+    },
+    /**
+     * @method getGroup
+     * @return {String} identifier for organizing buttons
+     */
+    getToolbarId : function() {
+        return this._toolbarId;
     }
 }, {
     'protocol' : ['Oskari.mapframework.request.Request']

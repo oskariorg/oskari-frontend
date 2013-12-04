@@ -9,42 +9,43 @@
  */
 Oskari.clazz.define('Oskari.mapframework.event.common.AfterDimMapLayerEvent',
 
-/**
- * @method create called automatically on construction
- * @static
- *
- * @param
- * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
- *            mapLayer dimmed maplayer
- */
-function(mapLayer) {
-    this._creator = null;
-    this._mapLayer = mapLayer;
-}, {
-    /** @static @property __name event name */
-    __name : "AfterDimMapLayerEvent",
     /**
-     * @method getName
-     * @return {String} event name
-     */
-    getName : function() {
-        return this.__name;
-    },
-    /**
-     * @method getMapLayer
-     * @return
-     * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
-     * dimmed maplayer
-     */
-    getMapLayer : function() {
-        return this._mapLayer;
-    }
-}, {
-    /**
-     * @property {String[]} protocol array of superclasses as {String}
+     * @method create called automatically on construction
      * @static
+     *
+     * @param
+     * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
+     *            mapLayer dimmed maplayer
      */
-    'protocol' : ['Oskari.mapframework.event.Event']
-});
+
+    function (mapLayer) {
+        this._creator = null;
+        this._mapLayer = mapLayer;
+    }, {
+        /** @static @property __name event name */
+        __name: "AfterDimMapLayerEvent",
+        /**
+         * @method getName
+         * @return {String} event name
+         */
+        getName: function () {
+            return this.__name;
+        },
+        /**
+         * @method getMapLayer
+         * @return
+         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
+         * dimmed maplayer
+         */
+        getMapLayer: function () {
+            return this._mapLayer;
+        }
+    }, {
+        /**
+         * @property {String[]} protocol array of superclasses as {String}
+         * @static
+         */
+        'protocol': ['Oskari.mapframework.event.Event']
+    });
 
 /* Inheritance */

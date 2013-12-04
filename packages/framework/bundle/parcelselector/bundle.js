@@ -38,9 +38,6 @@ function() {
             "src" : "../../../../bundles/framework/bundle/parcelselector/Tile.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelselector/view/ParcelsTab.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcelselector/event/ParcelSelectedEvent.js"
         }, {
             "type" : "text/javascript",

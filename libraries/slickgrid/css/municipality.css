@@ -9,7 +9,7 @@
     padding: 0;
 }
 .statsgrid li {
-    background: url("/Oskari/libraries/slickgrid/images/arrow_right_spearmint.png") no-repeat scroll left center transparent;
+    /*background: url("/Oskari/libraries/slickgrid/images/arrow_right_spearmint.png") no-repeat scroll left center transparent;*/
     list-style: none outside none;
     margin: 0;
     padding: 0 0 0 14px;

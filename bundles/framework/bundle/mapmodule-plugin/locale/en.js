@@ -51,11 +51,23 @@ Oskari.registerLocalization({
       },
       "GetInfoPlugin": {
         "title": "Map layers",
-		"layer": "Layer",
-		"places": "Places",
-		"description": "Description",
-		"link": "URL-address",
-		"name": "Name"
+        "layer": "Layer",
+        "places": "Places",
+        "description": "Description",
+        "link": "URL-address",
+        "name": "Name"
+      },
+      "PublisherToolbarPlugin": {
+        "test": "test",
+        "history": {
+          "reset": "Return to default view",
+          "back": "Back",
+          "next": "Next"
+        },
+        "measure": {
+          "line": "Measure distance",
+          "area": "Measure area"
+        }
       }
     }
   }

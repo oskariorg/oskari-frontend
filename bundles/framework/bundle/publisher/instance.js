@@ -142,7 +142,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
              * Calls flyouts handleLayerSelectionChanged() method
              */
             'AfterMapLayerRemoveEvent': function (event) {
-                if(jQuery('#contentMap') && jQuery('#contentMap').hasClass('mapPublishMode')) {
+                if (jQuery('#contentMap') && jQuery('#contentMap').hasClass('mapPublishMode')) {
                     this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
                 }
             },
@@ -153,7 +153,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
              * Calls flyouts handleLayerSelectionChanged() method
              */
             'AfterMapLayerAddEvent': function (event) {
-                if(jQuery('#contentMap') && jQuery('#contentMap').hasClass('mapPublishMode')) {
+                if (jQuery('#contentMap') && jQuery('#contentMap').hasClass('mapPublishMode')) {
                     this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
                 }
             },
@@ -162,7 +162,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              */
             'MapLayerEvent': function (event) {
-                if(jQuery('#contentMap') && jQuery('#contentMap').hasClass('mapPublishMode')) {
+                if (jQuery('#contentMap') && jQuery('#contentMap').hasClass('mapPublishMode')) {
                     this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
                 }
             },
@@ -225,8 +225,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
             /**
              * @method MapLayerVisibilityChangedEvent
              */
-            'MapLayerVisibilityChangedEvent' : function(event) {
-                if(this.publisher) {
+            'MapLayerVisibilityChangedEvent': function (event) {
+                if (this.publisher) {
                     this.publisher.maplayerPanel.handleLayerVisibilityChanged(event.getMapLayer(), event.isInScale(), event.isGeometryMatch());
                 }
             }
@@ -339,7 +339,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     break;
                 }
             }
-            // FIXME make sure blnEnabled is a boolean and use ===
+            // FIXME make sure blnEnabled is a boolean and use (blnEnabled)
             if (blnEnabled == true) {
                 me.disabledLayers = deniedLayers;
                 me.oskariLang = Oskari.getLang();
@@ -347,6 +347,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 me._removeLayers();
 
                 map.addClass('mapPublishMode');
+                me.sandbox.mapMode = 'mapPublishMode';
                 // close all flyouts - TODO: how about popups/gfi?
 
                 //postRequestByName brakes mode change functionality! me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
@@ -387,7 +388,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 }
                 // first return all needed plugins before adding the layers back
                 map.removeClass('mapPublishMode');
-                me._addLayers();
+                if(me.sandbox._mapMode === 'mapPublishMode') {
+                    delete me.sandbox._mapMode;
+                }
+                 me._addLayers();
             }
             // publishing mode should be sent to mapfull to disable resizing
             requestBuilder = me.sandbox.getRequestBuilder('MapFull.MapResizeEnabledRequest');

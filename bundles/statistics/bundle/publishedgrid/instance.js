@@ -28,7 +28,6 @@ function() {
 
     start: function() {
         var me = this;
-
         // Do not start if we can't get the state.
         if (!me.state) {
             return;

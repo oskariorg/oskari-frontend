@@ -45,7 +45,7 @@ function(toolbar) {
     },
     _handleRemove : function(sandbox, request) {
         this._toolbar.removeToolButton(
-            request.getId(), request.getGroup());
+            request.getId(), request.getGroup(), request.getToolbarId());
     },
     _handleState : function(sandbox, request) {
         this._toolbar.changeToolButtonState(

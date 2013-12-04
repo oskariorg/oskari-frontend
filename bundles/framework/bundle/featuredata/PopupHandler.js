@@ -113,7 +113,7 @@ function(instance) {
 
         dialog.addClass('tools_selection');
         dialog.show(popupLoc, content, [cancelBtn]);
-        dialog.moveTo('#toolbar div.toolrow[tbgroup=selectiontools]', 'top');
+        dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
     },
 
     /**
@@ -181,6 +181,6 @@ function(instance) {
         });
 
         editDialog.show(title, dialogContent, [cancelBtn, showSelectionsBtn]);
-        editDialog.moveTo('#toolbar div.toolrow[tbgroup=selectiontools]', 'top');
+        editDialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
     }
 });

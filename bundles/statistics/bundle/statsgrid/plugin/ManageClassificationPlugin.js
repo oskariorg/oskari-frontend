@@ -220,9 +220,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
              * Removes the layer from selection
              */
             'AfterMapLayerRemoveEvent': function (event) {
-                // Hide Classify dialog
+                // Reset the UI and hide the dialog
                 if (event.getMapLayer()._layerType === "STATS") {
-                    this._visibilityOff();
+                    this.resetUI();
                 }
             },
             /**
@@ -288,8 +288,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 //params eg. CUL_COL:"indicator..." , VIS_NAME: "ows:kunnat2013", VIS_ATTR: "kuntakoodi", VIS_CODES: munArray, COL_VALUES: statArray
                 this._params = event.getParams();
                 // Classify data
-                this.classifyData(event);
-
+                if (this._params && this._params.COL_VALUES && this._params.COL_VALUES.length === 0) {
+                    // If the values are empty, just send the empty values to visualization
+                    this.sendEmptyValues(event);
+                } else {
+                    // Else classify data
+                    this.classifyData(event);
+                }
             }
         },
 
@@ -333,7 +338,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 return;
             }
 
-            var slider = me._adjustClassificationSlider(params.CHECKED_COUNT),
+            // var slider = me._adjustClassificationSlider(params.CHECKED_COUNT),
+            var slider = me._adjustClassificationSlider(params.COL_VALUES.length),
                 sliderDisabled = slider.slider("option", "disabled");
 
             // if slider is disabled don't show classification but help / guide
@@ -461,30 +467,31 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 return ret;
             };
 
-            var colors = me._getColors(this.currentColorSet, me.colorsetIndex, classes - 2);
+            colors = me._getColors(this.currentColorSet, me.colorsetIndex, classes - 2);
             // If true, reverses the color "array"
             if (me.colorsFlipped) {
                 colors = colors.split(',').reverse().join(',');
             }
-            var colorArr = colors.split(",");
+            colorArr = colors.split(",");
 
             /*document.getElementById("mover").style.backgroundColor = currentColor;*/
 
-            for ( i = 0; i < colorArr.length; i++)
+            for (i = 0; i < colorArr.length; i++) {
                 colorArr[i] = '#' + colorArr[i];
+            }
             gstats.setColors(colorArr);
 
-            var manualBreaksInput = this.element.find('.manualBreaks').find('input[name=breaksInput]').val();
-            var colors = colors.replace(/,/g, '|');
+            manualBreaksInput = this.element.find('.manualBreaks').find('input[name=breaksInput]').val();
+            colors = colors.replace(/,/g, '|');
             var classificationMode = me.element.find('select.classification-mode').val();
 
-            var returnObject = {
+            returnObject = {
                 //instance.js - state handling: method
-                methodId : method,
+                methodId: method,
                 //instance.js - state handling: number of classes
-                numberOfClasses : classes,
+                numberOfClasses: classes,
                 //instance.js - state handling: input string of manual classification method
-                manualBreaksInput : manualBreaksInput.toString(),
+                manualBreaksInput: manualBreaksInput.toString(),
                 //instance.js - state handling: input object for colors
                 colors: {
                     set: me.currentColorSet,
@@ -493,20 +500,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 },
                 // instance.js - state handling: classification mode
                 classificationMode: classificationMode,
-                VIS_ID : -1,
-                VIS_NAME : params.VIS_NAME,
-                VIS_ATTR : params.VIS_ATTR,
-                VIS_CLASSES : classString,
-                VIS_COLORS : "choro:" + colors
+                VIS_ID: -1,
+                VIS_NAME: params.VIS_NAME,
+                VIS_ATTR: params.VIS_ATTR,
+                VIS_CLASSES: classString,
+                VIS_COLORS: "choro:" + colors
             };
             // Send the data out for visualization.
             this.statsService.sendVisualizationData(layer, returnObject);
 
-            var legendRounder = function(i) {
-                if (i % 1 === 0)
+            legendRounder = function (i) {
+                if (i % 1 === 0) {
                     return i;
-                else
+                } else {
                     return (Math.round(i * 10) / 10);
+                }
             };
 
             var colortab = gstats.getHtmlLegend(null, sortcol.name, true, legendRounder, classificationMode);
@@ -523,6 +531,36 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
 
         /**
+         * Sends empty values for visualization. Used because #classifyData
+         * does a whole lot of other things besides just sending the values.
+         *
+         * @method sendEmptyValues
+         * @param  {Object} event The event with layer and params
+         * @return {undefined}
+         */
+        sendEmptyValues: function (event) {
+            var layer = event.getLayer(),
+                params = event.getParams();
+
+            this.statsService.sendVisualizationData(layer, {
+                VIS_ID: -1,
+                VIS_NAME: params.VIS_NAME,
+                VIS_ATTR: params.VIS_ATTR,
+                VIS_CLASSES: "",
+                VIS_COLORS: "choro:"
+            });
+        },
+        /**
+         * Creates UI again from scratch
+         *
+         * @method resetUI
+         * @return {undefined}
+         */
+        resetUI: function () {
+            this.element = null;
+            this._createUI();
+        },
+        /**
          * @method  _createUI
          * Creates classification UI (method select, class count, colors)
          
@@ -530,9 +568,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
          */
         _createUI: function () {
             var me = this;
-            if (!this.element) {
-                this.element = this.classify_temp.clone();
-            }
+
+            // destroy the old plugin from the map
+            jQuery('div.manageClassificationPlugin').remove();
+            this.element = this.classify_temp.clone();
             // Classify html header
             var header = this.element.find('div.classheader');
             header.append(this._locale.classify.classify);
@@ -582,9 +621,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             // HTML for the manual classification method.
             var manualcls = jQuery(
                 '<div class="manualBreaks">' +
-                    '<input type="text" name="breaksInput" placeholder="' + this._locale.classify.manualPlaceholder + '"></input>' +
-                    '<div class="icon-info"></div>' +
-                    '</div>'
+                '<input type="text" name="breaksInput" placeholder="' + this._locale.classify.manualPlaceholder + '"></input>' +
+                '<div class="icon-info"></div>' +
+                '</div>'
             );
             manualcls.find('input[type=button]').click(function (event) {
                 me._createColorDialog();
@@ -608,34 +647,34 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             manualcls.hide();
 
             // Classification mode selector
-            
+
             var modeSelector = jQuery(
                 '<div>' +
-                    this._locale.classify.mode + '<br />' +
-                    '<select class="classification-mode"></select><br />' +
+                this._locale.classify.mode + '<br />' +
+                '<select class="classification-mode"></select><br />' +
                 '</div>'
             );
             var modes = ['distinct', 'discontinuous'];
-            jQuery.each(modes, function(i, val) {
+            jQuery.each(modes, function (i, val) {
                 modeSelector.find('select.classification-mode').append(
                     '<option value="' + val + '">' +
-                        me._locale.classify.modes[val] +
+                    me._locale.classify.modes[val] +
                     '</option>'
                 );
             });
-            modeSelector.find('select.classification-mode').change(function(e) {
+            modeSelector.find('select.classification-mode').change(function (e) {
                 me.classifyData();
             });
 
             // Colours selectors
 
             var colorsButton = jQuery('<input type="button" value="' + me._locale.colorset.button + '" />');
-            colorsButton.click(function(event) {
+            colorsButton.click(function (event) {
                 me._createColorDialog();
             });
 
             var flipColorsButton = jQuery('<input type="button" value="' + me._locale.colorset.flipButton + '" />');
-            flipColorsButton.click(function(e) {
+            flipColorsButton.click(function (e) {
                 me._flipCurrentColors();
             });
 
@@ -646,9 +685,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             classify.append(flipColorsButton);
             content.append(classify);
             // Toggle content HTML
-            header.click(function() {
+            header.click(function () {
                 content.animate({
-                    height : 'toggle'
+                    height: 'toggle'
                 }, 500);
 
             });
@@ -658,7 +697,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
             // add always as first plugin
             var existingPlugins = parentContainer.find('div');
-            if (!existingPlugins || existingPlugins.length == 0) {
+            if (!existingPlugins || existingPlugins.length === 0) {
                 // no existing plugins -> just put it there
                 parentContainer.append(this.element);
             } else {
@@ -978,7 +1017,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
             me.dialog.addClass('tools_selection');
             me.dialog.show(this._locale.colorset.themeselection, me.content, [cancelBtn]);
-            //dialog.moveTo('#toolbar div.toolrow[tbgroup=selectiontools]', 'top');
+            //dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
         },
         /**
          * @method  _createColorTable

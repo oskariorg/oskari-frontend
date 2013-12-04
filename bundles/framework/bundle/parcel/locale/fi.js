@@ -25,24 +25,52 @@ Oskari.registerLocalization({
       },
       "save": {
           "tooltip": "Tee piirros ja tulosta"
-      }
+      },
+      "tooltip": "Hae ensin kiinteistöä"
     },
     "buttons": {
       "ok": "OK",
       "cancel": "Peruuta",
-      "save": "Tulosta",
+      "print": "Tulosta",
+      "save": "Tallenna",
       "movePlaces": "Siirrä kohteet ja poista"
     },
-    "placeform": {
-      "title": "Kohteen tiedot",
-      "tooltip": "Anna kohteelle nimi ja kuvaus. Kohteen data tallennetaan palvelimelle.",
-      "placename": {
-        "placeholder": "Anna kohteelle nimi"
+      "placeform": {
+          "title": "Määräalan tiedot",
+          "tooltip": "Anna määräalan tiedot ja tulosta tai tallenna",
+          "placename": {
+              "placeholder": "Määräalan tunnus"
+          },
+          "ptitle": {
+              "placeholder": "Piirroksen otsikko"
+          },
+          "subtitle": {
+              "placeholder": "Piirroksen alaotsikko"
+          },
+          "description": {
+              "placeholder": "Yleiskuvaus"
+          },
+          "parent_property_id": {
+              "placeholder": "Kantatilan tunnus"
+          },
+          "parent_property_quality": {
+              "placeholder": "Kantatilan lähdeaineisto"
+          },
+          "reporter": {
+              "placeholder": "Määräalan laatija"
+          },
+          "area": {
+              "placeholder": "Pinta-ala (m²)"
+          }
       },
-      "placedesc": {
-        "placeholder": "Kuvaile kohdetta"
-      }
-    },
+      "qualitycodes": {
+          "q0": "(Tuntematon)",
+          "q4": "Kuvamittaus",
+          "q14": "Digitointi",
+          "q20": "Maastomittaus",
+          "q30": "Kiinteistötoimitus",
+          "q50": "Kaavalaskenta"
+      },
     "notification": {
       "placeLoading": {
         "title": "Kohdetta ladataan",

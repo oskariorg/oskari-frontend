@@ -77,7 +77,7 @@ function(instance) {
 	 * @method showSelectionTools
 	 * Handles tool button click -> opens selection tool dialog
 	 */
-	"showSelectionTools" : function() {
+	"showSelectionTools" : function(singleSelection) {
         var me = this;
 
         // close popup so we can update the selection geometry
@@ -90,8 +90,9 @@ function(instance) {
 
         		me.buttons[tool].callback();
         		dialog.close();
-                me._selectionStarted();
-
+                if(!singleSelection) {
+                    me._selectionStarted();
+                }
         	};
         }
 
@@ -118,7 +119,7 @@ function(instance) {
 
         dialog.addClass('tools_selection');
         dialog.show(popupLoc, content, [cancelBtn]);
-        dialog.moveTo('#toolbar div.toolrow[tbgroup=selectiontools]', 'top');
+        dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
 	},
 
     /**
@@ -187,6 +188,6 @@ function(instance) {
         });
 
         editDialog.show(title, dialogContent, [cancelBtn, showSelectionsBtn]);
-        editDialog.moveTo('#toolbar div.toolrow[tbgroup=selectiontools]', 'top');
+        editDialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
 	}
 });

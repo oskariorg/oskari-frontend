@@ -51,7 +51,14 @@ Oskari.registerLocalization({
                 "Portti2Zoombar": "Mittakaavasäädin",
                 "ControlsPlugin": "Kartan liikuttaminen",
                 "SearchPlugin": "Osoite- ja paikannimihaku",
-                "GetInfoPlugin": "Kohdetietojen kyselytyökalu"
+                "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
+                "PublisherToolbarPlugin": "Karttatyökalut"
+            },
+            "toolbarToolNames": {  
+                "history_back" : "Siirry taaksepäin",
+                "history_forward" : "Siirry eteenpäin",
+                "measureline" : "Mittaa etäisyyttä",
+                "measurearea" : "Mittaa aluetta"
             },
             "toollayout": {
                 "label": "Työkalujen asettelu",

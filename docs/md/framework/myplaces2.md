@@ -55,7 +55,7 @@ Adding external graphics in DrawPlugin.js:
 
         // rewrite creation of drawPlugin in the start-function
         // register plugin for map (drawing for my places)
-        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', newStyle);
+        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin', newStyle);
 ```
 
 ## TODO

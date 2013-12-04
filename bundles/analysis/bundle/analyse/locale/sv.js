@@ -6,6 +6,7 @@ Oskari.registerLocalization({
         "flyouttitle": "Analys",
         "desc": "",
         "btnTooltip": "Analys",
+        "notLoggedIn": "Endast loggad andvändare can göra analys . <a href='/web/sv/login'>Logga in</a>.",
         "AnalyseView": {
             "title": "Analys",
             "content": {
@@ -16,55 +17,54 @@ Oskari.registerLocalization({
                 "label": "Metod",
                 "tooltip": "Väljä först material och efter det metods är till hands",
                 "options": [{
-                        "id": "oskari_analyse_buffer",
-                        "label": "zon",
-                        "classForMethod": "buffer",
-                        "selected": true,
-                        "tooltip": ""
-                    }, {
-                        "id": "oskari_analyse_aggregate",
-                        "label": "Sammandrag",
-                        "classForPreview": "aggregate",
-                        "tooltip": ""
-                    }, {
-                        "id": "oskari_analyse_union",
-                        "label": "Union",
-                        "classForPreview": "union",
-                        "tooltip": ""
-                    }, {
-                        "id": "oskari_analyse_intersect",
-                        "label": "Sektion",
-                        "classForPreview": "intersect",
-                        "tooltip": ""
-                    }, {
-                        "id": "oskari_analyse_layer_union",
-                        "label": "Analyysitasojen yhdiste",
-                        "classForPreview": "layer_union",
-                        "tooltip": "Yhdistää analyysitasoja, joilla on samat ominaisuustietokentät"
-                    }
-                ]
-            },
-             "aggregate" : {
-                 "label" : "Aggregate funktion",
-                "options" : [{
-                    "id" : "oskari_analyse_Count",
-                    "label" : "Antal",
-                    "selected" : true
-                },{
-                    "id" : "oskari_analyse_Sum",
-                    "label" : "Summa"
+                    "id": "oskari_analyse_buffer",
+                    "label": "zon",
+                    "classForMethod": "buffer",
+                    "selected": true,
+                    "tooltip": ""
                 }, {
-                    "id" : "oskari_analyse_Min",
-                    "label" : "Minimum"
-                },{
-                    "id" : "oskari_analyse_Max",
-                    "label" : "Maximum"
-                },{
-                    "id" : "oskari_analyse_Average",
-                    "label" : "Medeltal"
-                },{
-                    "id" : "oskari_analyse_StdDev",
-                    "label" : "Medel spridning"
+                    "id": "oskari_analyse_aggregate",
+                    "label": "Sammandrag",
+                    "classForPreview": "aggregate",
+                    "tooltip": ""
+                }, {
+                    "id": "oskari_analyse_union",
+                    "label": "Union",
+                    "classForPreview": "union",
+                    "tooltip": ""
+                }, {
+                    "id": "oskari_analyse_intersect",
+                    "label": "Sektion",
+                    "classForPreview": "intersect",
+                    "tooltip": ""
+                }, {
+                    "id": "oskari_analyse_layer_union",
+                    "label": "Analyysitasojen yhdiste",
+                    "classForPreview": "layer_union",
+                    "tooltip": "Yhdistää analyysitasoja, joilla on samat ominaisuustietokentät"
+                }]
+            },
+            "aggregate": {
+                "label": "Aggregate funktion",
+                "options": [{
+                    "id": "oskari_analyse_Count",
+                    "label": "Antal",
+                    "selected": true
+                }, {
+                    "id": "oskari_analyse_Sum",
+                    "label": "Summa"
+                }, {
+                    "id": "oskari_analyse_Min",
+                    "label": "Minimum"
+                }, {
+                    "id": "oskari_analyse_Max",
+                    "label": "Maximum"
+                }, {
+                    "id": "oskari_analyse_Average",
+                    "label": "Medeltal"
+                }, {
+                    "id": "oskari_analyse_StdDev",
+                    "label": "Medel spridning"
                 }],
                 "attribute": "Välj ett attribut"
             },
@@ -83,40 +83,39 @@ Oskari.registerLocalization({
             "intersect": {
                 "label": "Intersect lag"
             },
-             "union" : {
-                "label" : "Andra lag för union input"
+            "union": {
+                "label": "Andra lag för union input"
             },
-            "layer_union" : {
-                "label" : "Andra lager för union input",
+            "layer_union": {
+                "label": "Andra lager för union input",
                 "notAnalyseLayer": "Välj ett analys lag",
                 "noLayersAvailable": "Tasoja, joilla on samat ominaisuustietokentät ei löytynyt"
             },
-            "spatial" : {
-                "label" : "Spatial operator",
-                "options" : [{
-                    "id" : "oskari_analyse_intersect",
-                    "label" : "Klip",
-                    "selected" : true
+            "spatial": {
+                "label": "Spatial operator",
+                "options": [{
+                    "id": "oskari_analyse_intersect",
+                    "label": "Klip",
+                    "selected": true
                 }, {
-                    "id" : "oskari_analyse_contains",
-                    "label" : "Inkludera"
-                }  ]
+                    "id": "oskari_analyse_contains",
+                    "label": "Inkludera"
+                }]
             },
             "params": {
                 "label": "Väljad attribut data",
                 "tooltip": "",
                 "options": [{
-                        "id": "oskari_analyse_all",
-                        "selected": true,
-                        "label": "alla"
-                    }, {
-                        "id": "oskari_analyse_none",
-                        "label": "Ingenting"
-                    }, {
-                        "id": "oskari_analyse_select",
-                        "label": "Använda list"
-                    }
-                ]
+                    "id": "oskari_analyse_all",
+                    "selected": true,
+                    "label": "alla"
+                }, {
+                    "id": "oskari_analyse_none",
+                    "label": "Ingenting"
+                }, {
+                    "id": "oskari_analyse_select",
+                    "label": "Använda list"
+                }]
             },
             "output": {
                 "label": "Layout",
@@ -125,11 +124,11 @@ Oskari.registerLocalization({
                 "tooltip": "Passa färg för analys layout",
                 "random_color_label": "Satunnaiset värit"
             },
-            "buttons" : {
-                "save" : "Lagra",
-                "analyse" : "Fortsätta analys",
-                "data" : "Öka data",
-                "cancel" : "Avbryta",
+            "buttons": {
+                "save": "Lagra",
+                "analyse": "Fortsätta analys",
+                "data": "Öka data",
+                "cancel": "Avbryta",
                 "ok": "OK"
             },
             "filter": {
@@ -166,7 +165,7 @@ Oskari.registerLocalization({
                     "boolean_operator_missing": "Looginen operaattori puuttuu"
                 }
             },
-            "help" : "Anvisning",
+            "help": "Anvisning",
             "success": {
                 "layerAdded": {
                     "title": "Karttataso {layer} lisätty",
@@ -185,8 +184,7 @@ Oskari.registerLocalization({
                 "noParameters": "Ei parametrejä",
                 "noLayer": "Ei valittua tasoa",
                 "noAnalyseUnionLayer": "Valitse ainakin toinen analyysitaso",
-                "invalidMethod": "Tuntematon menetelmä: ",
-                "bufferSize": "Virhe vyöhykkeen koossa"
+                "invalidMethod": "Tuntematon menetelmä: "
             }
 
         },
@@ -230,23 +228,23 @@ Oskari.registerLocalization({
                 "cancel": "Tillbaka"
             }
         },
-        "personalDataTab" : {
-            "grid" : {
-                "name" : "Namn",
+        "personalDataTab": {
+            "grid": {
+                "name": "Namn",
                 "delete": " "
             },
-            "title" : "Analyser",
-            "confirmDeleteMsg" : "Vill du ta bort:",
-            "buttons" : {
+            "title": "Analyser",
+            "confirmDeleteMsg": "Vill du ta bort:",
+            "buttons": {
                 "ok": "OK",
-                "cancel" : "Avbryta",
-                "delete" : "Ta bort"
+                "cancel": "Avbryta",
+                "delete": "Ta bort"
             },
             "notification": {
                 "deletedTitle": "Ta bort kartlager",
                 "deletedMsg": "Kartlagret borttaget"
             },
-            "error" : {
+            "error": {
                 "title": "Fel!",
                 "generic": "Systemfel. Försök på nytt senare."
             }

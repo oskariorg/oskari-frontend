@@ -49,6 +49,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
             header = panel.getHeader();
             if (first) {
                 headerContainer.prepend(header);
+                this.select(panel);
             } else {
                 headerContainer.append(header);
             }

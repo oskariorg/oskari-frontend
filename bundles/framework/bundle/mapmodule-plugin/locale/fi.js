@@ -51,11 +51,23 @@ Oskari.registerLocalization({
       },
       "GetInfoPlugin": {
         "title": "Kohdetiedot",
-		"layer": "Taso",
-		"places": "Kohteet",
-		"description": "Kuvaus",
-		"link": "URL-osoite",
-		"name": "Nimi"
+        "layer": "Taso",
+        "places": "Kohteet",
+        "description": "Kuvaus",
+        "link": "URL-osoite",
+        "name": "Nimi"
+      },
+      "PublisherToolbarPlugin": {
+        "test": "testi",
+        "history": {
+          "reset": "Paluu oletusnäkymään",
+          "back": "Takaisin",
+          "next": "Eteenpäin"
+        },
+        "measure": {
+          "line": "Mittaa etäisyys",
+          "area": "Mittaa alue"
+        }
       }
     }
   }

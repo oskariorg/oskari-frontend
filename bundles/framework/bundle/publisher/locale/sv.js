@@ -51,7 +51,14 @@ Oskari.registerLocalization({
                 "Portti2Zoombar": "Skalans glidreglage",
                 "ControlsPlugin": "Panorering på",
                 "SearchPlugin": "Adress- och ortnamnssökning",
-                "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet"
+                "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet",
+                "PublisherToolbarPlugin": "Kartverktygen"
+            },
+            "toolbarToolNames": {  
+                "history_back" : "Gå bakåt",
+                "history_forward" : "Gå framåt",
+                "measureline" : "Mäta avstånd",
+                "measurearea" : "Mäta område"
             },
             "toollayout": {
                 "label": "Verktyg applikation",

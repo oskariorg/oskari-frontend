@@ -7,7 +7,7 @@
  *
  */
 
-Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', function(mapLayerService) {
+Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', function (mapLayerService) {
     this.mapLayerService = mapLayerService;
     this.capabilities = {};
     //this.capabilitiesClazz = Oskari.clazz.create("Oskari.openlayers.Patch.WMTSCapabilities_v1_0_0");
@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     /**
      * TEmp
      */
-    setCapabilities : function(name, caps) {
+    setCapabilities: function (name, caps) {
         this.capabilities[name] = caps;
 
     },
@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     /**
      * Temp
      */
-    getCapabilities : function(name) {
+    getCapabilities: function (name) {
         return this.capabilities[name];
     },
 
@@ -32,19 +32,19 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
      * read in backend
      *
      */
-    readWMTSCapabilites : function(wmtsName, capsPath, matrixSet, cb,conf) {
+    readWMTSCapabilites: function (wmtsName, capsPath, matrixSet, cb, conf) {
 
         var me = this;
         var format = new OpenLayers.Format.WMTSCapabilities();
 
         var httpGetConf = OpenLayers.Util.extend({
-            url : capsPath,
-            params : {
-                SERVICE : "WMTS",
-                VERSION : "1.0.0",
-                REQUEST : "GetCapabilities"
+            url: capsPath,
+            params: {
+                SERVICE: "WMTS",
+                VERSION: "1.0.0",
+                REQUEST: "GetCapabilities"
             },
-            success : function(request) {
+            success: function (request) {
                 var doc = request.responseXML;
                 if (!doc || !doc.documentElement) {
                     doc = request.responseText;
@@ -54,18 +54,18 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 me.setCapabilities(wmtsName, caps);
                 var layersCreated = me.parseCapabilitiesToLayers(wmtsName, caps, matrixSet);
                 if (cb) {
-                    cb.apply(this,[layersCreated, caps]);
+                    cb.apply(this, [layersCreated, caps]);
                 }
 
             },
-            failure : function() {
+            failure: function () {
                 alert("Trouble getting capabilities doc");
                 OpenLayers.Console.error.apply(OpenLayers.Console, arguments);
             }
-        }, conf||{});
-        
+        }, conf || {});
+
         console.log(httpGetConf);
-        
+
         OpenLayers.Request.GET(httpGetConf);
 
     },
@@ -74,9 +74,9 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
      * read in backend
      *
      */
-    parseCapabilitiesToLayers : function(wmtsName, caps, matrixSet) {
+    parseCapabilitiesToLayers: function (wmtsName, caps, matrixSet) {
 
-        
+
         var me = this;
         var mapLayerService = this.mapLayerService;
         var getTileUrl = null;
@@ -87,39 +87,50 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         }
         var capsLayers = caps.contents.layers;
         var contents = caps.contents;
-        var matrixSet = contents.tileMatrixSets[matrixSet];
-        var layersCreated = [];
+        var ms = contents.tileMatrixSets[matrixSet];
+        var layersCreated = [],
+            n,
+            spec,
+            mapLayerId,
+            mapLayerName,
+            mapLayerJson,
+            layer,
+            styleBuilder,
+            styleSpec,
+            style,
+            i,
+            ii;
 
-        for (var n = 0; n < capsLayers.length; n++) {
+        for (n = 0; n < capsLayers.length; n++) {
 
-            var spec = capsLayers[n];
+            spec = capsLayers[n];
 
-            var mapLayerId = spec.identifier;
-            var mapLayerName = spec.identifier;
+            mapLayerId = spec.identifier;
+            mapLayerName = spec.identifier;
             /*
              * hack
              */
-            var mapLayerJson = {
-                wmtsName : mapLayerId,
-                descriptionLink : "",
-                orgName : wmtsName,
-                type : "wmtslayer",
-                legendImage : "",
-                formats : {
-                    value : "text/html"
+            mapLayerJson = {
+                wmtsName: mapLayerId,
+                descriptionLink: "",
+                orgName: wmtsName,
+                type: "wmtslayer",
+                legendImage: "",
+                formats: {
+                    value: "text/html"
                 },
-                isQueryable : true,
+                isQueryable: true,
                 //minScale : 4 * 4 * 4 * 4 * 40000,
-                style : "",
-                dataUrl : "",
+                style: "",
+                dataUrl: "",
 
-                name : mapLayerId,
-                opacity : 100,
-                inspire : wmtsName, //"WMTS",
-                maxScale : 1
+                name: mapLayerId,
+                opacity: 100,
+                inspire: wmtsName, //"WMTS",
+                maxScale: 1
             };
 
-            var layer = Oskari.clazz.create('Oskari.mapframework.wmts.domain.WmtsLayer');
+            layer = Oskari.clazz.create('Oskari.mapframework.wmts.domain.WmtsLayer');
 
             layer.setAsNormalLayer();
             layer.setId(mapLayerId.split('.').join('_'));
@@ -132,19 +143,17 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
             layer.setDataUrl(mapLayerJson.dataUrl);
             layer.setOrganizationName(mapLayerJson.orgName);
             layer.setInspireName(mapLayerJson.inspire);
-            layer.setWmtsMatrixSet(matrixSet)
+            layer.setWmtsMatrixSet(ms);
             layer.setWmtsLayerDef(spec);
             layer.setVisible(true);
 
             layer.addWmtsUrl(getTileUrl);
 
-            var styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style');
+            styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style');
 
-            var styleSpec;
-
-            for (var i = 0, ii = spec.styles.length; i < ii; ++i) {
+            for (i = 0, ii = spec.styles.length; i < ii; ++i) {
                 styleSpec = spec.styles[i];
-                var style = styleBuilder();
+                style = styleBuilder();
                 style.setName(styleSpec.identifier);
                 style.setTitle(styleSpec.identifier);
 

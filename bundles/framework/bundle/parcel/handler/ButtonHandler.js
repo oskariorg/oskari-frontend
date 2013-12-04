@@ -23,7 +23,6 @@ function(instance) {
     this.buttons = {
         'line' : {
             iconCls : 'parcel-draw-line',
-            //iconCls : 'tool-link',
             tooltip : '',
             sticky : true,
             callback : function() {
@@ -60,7 +59,12 @@ function(instance) {
             callback : function() {
                 var drawPlugin = me.instance.view.drawPlugin;
                 drawPlugin.clear();
+                drawPlugin.operatingFeature = null;
                 drawPlugin.drawLayer.addFeatures(drawPlugin.backupFeatures);
+                me.setButtonEnabled("line",true);
+                me.setButtonEnabled("area",true);
+                me.setButtonEnabled("selector",true);
+                me.setButtonEnabled("save",false);
             }
         },
         'save' : {
@@ -85,11 +89,7 @@ function(instance) {
      * Implements Module protocol init method.
      */
     init : function() {
-        var loc = this.instance.getLocalization('tools');
-        for (var tool in this.buttons) {
-            var tooltip = loc[tool]['tooltip'];
-            this.buttons[tool].tooltip = tooltip;
-        }
+
     },
     /**
      * @method start
@@ -109,6 +109,64 @@ function(instance) {
         for (var tool in this.buttons) {
             sandbox.request(this, reqBuilder(tool, this.buttonGroup, this.buttons[tool]));
         }
+    },
+
+    /**
+     * @method setEnabled
+     * Enables or disables parcel editor buttons.
+     * @param {boolean} enabled
+     */
+    setEnabled : function(enabled) {
+        var tool;
+        var tooltip;
+        var loc = this.instance.getLocalization('tools');
+
+        if (enabled) {
+            this.enableButtons();
+            for (tool in this.buttons) {
+                tooltip = loc[tool]['tooltip'];
+                this.buttons[tool].tooltip = tooltip;
+                jQuery("div.tool."+this.buttons[tool].iconCls).attr("title",tooltip);
+            }
+        } else {
+            this.disableButtons();
+            for (tool in this.buttons) {
+                tooltip = loc.tooltip;
+                jQuery("div.tool."+this.buttons[tool].iconCls).attr("title",tooltip);
+            }
+        }
+    },
+
+    /**
+     * Sets the button enabled or disabled
+     * @method setButtonEnabled
+	 * @param {String} button
+     */
+    setButtonEnabled : function(button, enabled) {
+        var sandbox = this.instance.sandbox;
+        var stateReqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
+        sandbox.request(this, stateReqBuilder(button, "default-"+this.buttonGroup, enabled));
+    },
+
+    /**
+     * @method disableButtons
+     * Enables draw buttons
+     */
+    enableButtons : function() {
+        var sandbox = this.instance.sandbox;
+        var stateReqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
+        sandbox.request(this, stateReqBuilder(undefined, "default-"+this.buttonGroup, true));
+    },
+
+
+    /**
+     * @method disableButtons
+     * Disables draw buttons
+     */
+    disableButtons : function() {
+        var sandbox = this.instance.sandbox;
+        var stateReqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
+        sandbox.request(this, stateReqBuilder(undefined, "default-"+this.buttonGroup, false));
     },
 
     /**
@@ -182,7 +240,7 @@ function(instance) {
 
         dialog.show(title, message, buttons);
         dialog.addClass('parcel');
-        dialog.moveTo('#toolbar div.toolrow[tbgroup=parcel]', 'top');
+        dialog.moveTo('#toolbar div.toolrow[tbgroup=default-parcel]', 'top');
     },
     /**
      * @method sendStopDrawRequest
