@@ -45,6 +45,7 @@ Oskari.registerLocalization({
       },
     "tools": {
       "point": {
+        "title": "",
         "tooltip": "Tillägg punkt",
         "add": "Tillägg punkt genom att klicka på kartan.",
         "next": "Du kan lagra eller tillägga fler punkter till samma området.",
@@ -52,6 +53,7 @@ Oskari.registerLocalization({
         "save": "Lagra läge"
       },
       "line": {
+        "title": "",
         "tooltip": "Tillägg linje",
         "add": "Tillägg en brytningspunkt på linjen genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'.",
         "next": "Du kan lagra eller tillägga fler linjer till samma området.",
@@ -59,6 +61,7 @@ Oskari.registerLocalization({
         "save": "Lagra form"
       },
       "area": {
+        "title": "",
         "tooltip": "Tillägg område",
         "add": "Tillägg områdets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'. Håll ned Alt-tangenten för att skapa hål i polygonerna.",
         "next": "Du kan lagra eller tillägga fler polygoner till samma området.",

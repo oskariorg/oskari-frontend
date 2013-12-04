@@ -45,6 +45,7 @@ Oskari.registerLocalization({
     },
     "tools": {
       "point": {
+        "title": "Pisteen lisäys",
         "tooltip": "Lisää piste",
         "add": "Lisää piste klikkaamalla karttaa.",
         "next": "Voit tallentaa tai piirtää pisteitä samaan kohteeseen.",
@@ -52,6 +53,7 @@ Oskari.registerLocalization({
         "save": "Tallenna sijainti"
       },
       "line": {
+        "title": "Viivan lisäys",
         "tooltip": "Lisää viiva",
         "add": "Lisää viivan taitepiste klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'.",
         "next": "Voit tallentaa tai piirtää lisää viivoja samaan kohteeseen.",
@@ -59,6 +61,7 @@ Oskari.registerLocalization({
         "save": "Tallenna muoto"
       },
       "area": {
+        "title": "Alueen lisäys",
         "tooltip": "Lisää alue",
         "add": "Lisää alueen taitepisteet klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'. Voit piirtää alueeseen reiän pitämällä pohjassa Alt-näppäintä.",
         "next": "Voit tallentaa tai piirtää lisää alueita samaan kohteeseen.",

@@ -151,8 +151,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
      */
     toggleControl: function (drawMode) {
         this.currentDrawMode = drawMode;
-        var key,
-            control;
+        var key, control, activeDrawing, event;
+
         for (key in this.drawControls) {
             if (this.drawControls.hasOwnProperty(key)) {
                 control = this.drawControls[key];
@@ -199,11 +199,22 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
             point: new OpenLayers.Control.DrawFeature(me.drawLayer,
                 OpenLayers.Handler.Point),
             line: new OpenLayers.Control.DrawFeature(me.drawLayer,
-                OpenLayers.Handler.Path),
+                OpenLayers.Handler.Path, {
+                    callbacks: {
+                        modify: function(geom, feature) {
+                            me._sendActiveGeometry(feature.geometry, 'line');
+                        }
+                    }
+                }),
             area: new OpenLayers.Control.DrawFeature(me.drawLayer,
                 OpenLayers.Handler.Polygon, {
                     handlerOptions: {
                         holeModifier: "altKey"
+                    },
+                    callbacks: {
+                        modify: function(geom, feature) {
+                            me._sendActiveGeometry(feature.geometry, 'area');
+                        }
                     }
                 }),
             /*cut : new OpenLayers.Control.DrawFeature(me.drawLayer,
@@ -312,6 +323,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
             }
         }
         return activeDrawControls;
+    },
+
+    _sendActiveGeometry: function(geometry, drawMode) {
+        var eventBuilder = this._sandbox.getEventBuilder('DrawPlugin.ActiveDrawingEvent'),
+            event;
+
+        if (eventBuilder) {
+            event = eventBuilder(geometry, drawMode);
+            this._sandbox.notifyAll(event);
+        }
     },
 
     register: function () {

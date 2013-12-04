@@ -65,6 +65,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             '<div class="finish button"></div>' +
             '</div>' +
             '</div>');
+
+        this.templateHelper = jQuery(
+            '<div class="drawHelper">' +
+                '<div class="infoText"></div>' +
+                '<div class="measurementResult"></div>' +
+            '</div>'
+        );
     }, {
         __name: 'MyPlacesButtonHandler',
         /**
@@ -173,7 +180,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             // show help popup with cancel and finished buttons
             var locTool = this.instance.getLocalization('tools')[drawMode];
             var locBtns = this.instance.getLocalization('buttons');
-            var title = this.instance.getLocalization('title');
+            var title = locTool['title'];
             var message = locTool.add;
 
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -198,7 +205,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             });
             buttons.push(finishBtn);
 
-            dialog.show(title, message, buttons);
+            var content = this.templateHelper.clone();
+            content.find('div.infoText').html(message);
+
+            var measureResult = content.find('div.measurementResult');
+            if (drawMode === 'point') {
+                // No need to show the measurement result for a point
+                measureResult.remove();
+            } else {
+                // but for line and area, it's udeful and fun
+                measureResult.html();
+            }
+
+            dialog.show(title, content, buttons);
             dialog.addClass('myplaces2');
             dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
         },
@@ -305,6 +324,23 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                             this.dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
                         }
                     }
+                }
+            },
+
+            'DrawPlugin.ActiveDrawingEvent': function(event) {
+                var geom = event.getDrawing(),
+                    mode = event.getDrawMode(),
+                    resultText;
+
+                if (mode === 'area') {
+                    resultText = geom.getArea() + ' m2';
+                } else if (mode === 'line') {
+                    resultText = geom.getLength() + ' m';
+                }
+
+                if (this.dialog) {
+                    var content = this.dialog.getJqueryContent();
+                    content.find('div.measurementResult').html(resultText);
                 }
             }
         }
