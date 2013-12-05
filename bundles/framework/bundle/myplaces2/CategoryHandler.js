@@ -233,7 +233,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.CategoryHandler",
         _getMapLayerJsonBase: function () {
             var catLoc = this.instance.getLocalization('category');
             var json = {
-                wmsName: 'ows:my_places_categories',
+                wmsName: 'oskari:my_places_categories',
                 type: "wmslayer",
                 isQueryable: true,
                 opacity: 90,
