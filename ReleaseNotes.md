@@ -2,6 +2,9 @@
 
 ## 1.17
 
+### publishedstatehandler
+Added statehandler functions to published maps. It is also now possible to add map tools plugin in Publisher mode to new maps.
+
 ### Statsgrid
 
 Added posibility to add indicator data through data import (localization is still work in progress)
