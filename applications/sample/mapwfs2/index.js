@@ -70,6 +70,13 @@ jQuery(document).ready(function() {
     function start(appSetup, appConfig, cb) {
         var app = Oskari.app;
 
+        appConfig.mapfull.conf.plugins.push({
+            "id" : "Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayerPlugin"
+        });
+        appSetup.startupSequence[1].metadata["Import-Bundle"]["mapmyplaces"] = {
+            bundlePath : '/Oskari/packages/framework/bundle/'
+        };
+
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
         app.startApplication(function(startupInfos) {

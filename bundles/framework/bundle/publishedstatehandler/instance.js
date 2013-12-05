@@ -103,13 +103,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
         "stop": function () {
             var sandbox = this.sandbox(),
                 p;
-//FIXME
             // sends a request that removes button described in config
             var rb = sandbox.getRequestBuilder('MapControls.ToolButtonRequest');
             if (rb) {
                 sandbox.request(this, rb(this.toolbar.config, 'remove'));
             }
-//
 
             for (p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
