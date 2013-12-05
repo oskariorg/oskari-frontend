@@ -57,8 +57,3 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
     }
 });
 Oskari.bundle_manager.installBundleClass("publishedstatehandler", "Oskari.mapframework.bundle.publishedstatehandler.PublishedStateHandlerBundle");
-/*
-        },{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/publishedstatehandler/state-methods.js"
-*/
