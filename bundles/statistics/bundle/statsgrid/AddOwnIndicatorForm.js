@@ -251,11 +251,11 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
                 unrecognized.push(area);
         });
         var openImport = me.container.find('.import-button');
-
+debugger;
         // alert user of unrecognized lines
         var unrecognizedInfo = "";
         if (unrecognized.length > 0) {
-            unknownText = '<br>'+me.localization.parsedDataUnrecognized+': ' + unrecognized.length;
+            unrecognizedInfo = '<br>'+me.localization.parsedDataUnrecognized+': ' + unrecognized.length;
         }
         // Tell user about how many regions were imported
         var info = me.localization.parsedDataInfo+': <span class="import-indicator-bold">' + updated + '</span> ' + unrecognizedInfo;

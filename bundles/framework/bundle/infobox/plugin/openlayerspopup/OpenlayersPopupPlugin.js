@@ -277,6 +277,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             var maxWidth = viewport.width() * 0.7;
             var maxHeight = viewport.height() * 0.7;
             var wrapper = content.find('.contentWrapper');
+            popup.css({
+                'height': 'auto',
+                'width': 'auto',
+                'min-width': '256px',
+                'max-width': maxWidth + 'px',
+                'min-height': '200px',
+                'max-height': maxHeight + 'px',
+                'left': left + 'px',
+                'z-index': '16000'
+            });
             if (jQuery.browser.msie) {
                 // allow scrolls to appear in IE, but not in any other browser
                 // instead add some padding to the wrapper to make it look better
@@ -291,16 +301,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 });
             }
 
-            popup.css({
-                'height': 'auto',
-                'width': 'auto',
-                'min-width': '256px',
-                'max-width': maxWidth + 'px',
-                'min-height': '200px',
-                'max-height': maxHeight + 'px',
-                'left': left + 'px',
-                'z-index': '16000'
-            });
             //        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'left': left+'px'});
 
         },

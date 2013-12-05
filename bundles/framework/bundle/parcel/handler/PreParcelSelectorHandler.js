@@ -112,12 +112,68 @@ function(instance) {
 
 
             }
-    }
-},
+    },
+        _testExtendGeom: function (geom) {
+
+            var line = geom;
+            if (geom) {
+
+                if (geom.CLASS_NAME == "OpenLayers.Geometry.LineString") {
+
+                    var geometry = geom;
+                    var nodes = geometry.getVertices();
+                    var lonlast = nodes[nodes.length - 1].x;
+                    var latlast = nodes[nodes.length - 1].y;
+                    var lonlast2 = nodes[nodes.length - 2].x;
+                    var latlast2 = nodes[nodes.length - 2].y;
+                    var dx = lonlast - lonlast2;
+                    var dy = latlast - latlast2;
+                    var seglen = Math.sqrt((dx * dx) + (dy * dy));
+                    var newlonlast = lonlast + ((dx / seglen) * 1.0);
+                    var newlatlast = latlast + ((dy / seglen) * 1.0);
+
+                    var lon1st = nodes[0].x;
+                    var lat1st = nodes[0].y;
+                    var lon2nd = nodes[1].x;
+                    var lat2nd = nodes[1].y;
+                    var dx = lon1st - lon2nd;
+                    var dy = lat1st - lat2nd;
+                    var seglen = Math.sqrt((dx * dx) + (dy * dy));
+                    var newlon1st = lon1st + ((dx / seglen) * 1.0);
+                    var newlat1st = lat1st + ((dy / seglen) * 1.0);
+
+                    points = [];
+
+                    for (var j = 0; j < nodes.length; j++) {
+                        var lon = nodes[j].x;
+                        var lat = nodes[j].y;
+                        if (j == 0) {
+                            lon = newlon1st;
+                            lat = newlat1st;
+                        }
+                        else if (j == nodes.length - 1) {
+                            lon = newlonlast;
+                            lat = newlatlast;
+                        }
+                        var point = new OpenLayers.Geometry.Point(lon, lat);
+
+                        points.push(point);
+
+
+                    }
+                    line = new OpenLayers.Geometry.LineString(points);
+                }
+
+
+            }
+            return line;
+
+        }
+    },
     {
-    /**
-     * @property {String[]} protocol
-     * @static
-     */
-    protocol : ['Oskari.mapframework.module.Module']
-});
+        /**
+         * @property {String[]} protocol
+         * @static
+         */
+        protocol: ['Oskari.mapframework.module.Module']
+    });
