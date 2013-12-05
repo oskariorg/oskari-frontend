@@ -666,7 +666,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                         pluginLoc = this.getMapModule().getLocalization('plugin', true);
                         myLoc = pluginLoc[this.__name];
                         localizedAttr = myLoc[objAttr];
-                        value.append(localizedAttr ? localizedAttr : objAttr);
+                        value.append(localizedAttr || objAttr);
                         value.append(": ");
                         value.append(innerValue);
                         value.append('<br/>');
@@ -695,15 +695,17 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                 return null;
             }
 
-            var me = this;
-
-            var response = me.template.wrapper.clone();
-            var html = '';
-            var contentType = (typeof datum.content);
-            var hasHtml = false;
+            var me = this,
+                response = me.template.wrapper.clone(),
+                html = '',
+                contentType = (typeof datum.content),
+                hasHtml = false;
             if (contentType === 'string') {
-                hasHtml = (datum.content.indexOf('<html>') >= 0);
-                hasHtml = hasHtml || (datum.content.indexOf('<HTML>') >= 0);
+                hasHtml = (datum.content.indexOf('<html') >= 0);
+                hasHtml = hasHtml || (datum.content.indexOf('<HTML') >= 0);
+                /*if (hasHtml) {
+                    console.log("hasHTML");
+                }*/
             }
             if (datum.presentationType === 'JSON' || (datum.content && datum.content.parsed)) {
                 // This is for my places info popup
@@ -711,9 +713,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                     return me._formatMyPlacesGfi(datum);
                 }
 
-                var even = false;
-                var rawJsonData = datum.content.parsed;
-                var dataArray = [];
+                var even = false,
+                    rawJsonData = datum.content.parsed,
+                    dataArray = [];
                 if (Object.prototype.toString.call(rawJsonData) === '[object Array]') {
                     dataArray = rawJsonData;
                 } else {
@@ -742,7 +744,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                         var pluginLoc = this.getMapModule().getLocalization('plugin', true);
                         var myLoc = pluginLoc[this.__name];
                         var localizedAttr = myLoc[attr];
-                        labelCell.append(localizedAttr ? localizedAttr : attr);
+                        labelCell.append(localizedAttr || attr);
                         row.append(labelCell);
                         var valueCell = me.template.tableCell.clone();
                         valueCell.append(value);
@@ -751,11 +753,26 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                     response.append(table);
                 }
                 return response;
+            }
+            if (hasHtml) {
+                // html has to be put inside a container so jquery behaves
+                var parsedHTML = jQuery("<div></div>").append(datum.content);
+                //console.log("Parsed: ", parsedHTML);
+                // Remove stuff from head etc. that we don't need/want
+                parsedHTML.find("link").remove();
+                parsedHTML.find("meta").remove();
+                parsedHTML.find("script").remove();
+                parsedHTML.find("style").remove();
+                parsedHTML.find("title").remove();
+                // Add getinforesult class so the table is styled properly
+                parsedHTML.find("table").addClass('getinforesult_table');
+                //console.log("Stripped: ", parsedHTML);
+                //console.log("Inner:", parsedHTML.html());
+                response.append(parsedHTML.html());
             } else {
                 response.append(datum.content);
-                return response;
             }
-            return html;
+            return response;
         },
 
         /**
@@ -813,18 +830,17 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
             if (node === null || node === undefined) {
                 return '';
             }
-            var even = true;
-
-            var html = this.template.getinfo_result_table.clone();
-            var row = null;
-            var keyColumn = null;
-            var valColumn = null,
+            var even = true,
+                html = this.template.getinfo_result_table.clone(),
+                row = null,
+                keyColumn = null,
+                valColumn = null,
                 key;
             for (key in node) {
-                var value = node[key];
-                var vType = (typeof value).toLowerCase();
-                var vPres = '';
-                var valpres;
+                var value = node[key],
+                    vType = (typeof value).toLowerCase(),
+                    vPres = '',
+                    valpres;
                 switch (vType) {
                 case 'string':
                     if (value.indexOf('http://') === 0) {
