@@ -35,7 +35,7 @@
 	                "mapwfs2": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
-                    "mapamyplaces": {
+                    "mapmyplaces": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
 	                "mapstats": {

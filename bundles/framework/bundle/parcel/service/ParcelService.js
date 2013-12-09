@@ -206,14 +206,6 @@ function(instance) {
                 mylist.push(ppoldata);
             }
 
-            var pboundary = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');
-            //pboundary.setId(id); insert automatic when undefined
-            if(list)pboundary.setPreparcel_id(list[0].id);
-            pboundary.setGeom_type('boundary');
-            pboundary.setUuid(this.kvp_uid);
-            pboundary.setGeometry(drawplugin.getOperatingGeometry());
-            mylist.push(pboundary);
-
             var pnewboundary = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcelData');
             //pboundary.setId(id); insert automatic when undefined
             if(list)pnewboundary.setPreparcel_id(list[0].id);

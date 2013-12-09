@@ -329,6 +329,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 toolscontainer.toggle();
             });
 
+            if (me.conf && me.conf.font) {
+                me.changeFont(me.conf.font, content);
+            }
+
         },
         setToolbarContainer : function() {
             var me = this,
@@ -429,6 +433,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     }
                 }
             }
+        },
+
+        /**
+         * Changes the font used by plugin by adding a CSS class to its DOM elements.
+         *
+         * @method changeFont
+         * @param {String} fontId
+         * @param {jQuery} div
+         */
+        changeFont: function (fontId, div) {
+            div = div || this.element;
+
+            if (!div || !fontId) {
+                return;
+            }
+
+            // The elements where the font style should be applied to.
+            var elements = [];
+            elements.push(div.find('.publishedToolbarPopupContent'));
+
+            var classToAdd = 'oskari-publisher-font-' + fontId,
+                testRegex = /oskari-publisher-font-/;
+            this.getMapModule().changeCssClasses(classToAdd, testRegex, elements);
         },
 
         /**
