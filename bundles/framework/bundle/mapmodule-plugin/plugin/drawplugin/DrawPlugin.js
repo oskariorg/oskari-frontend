@@ -192,7 +192,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
                     // send an event that the drawing has been completed
                     me.finishedDrawing();
                 },
-                'featuremodified': function(event) {
+                'vertexmodified': function(event) {
                     me._sendActiveGeometry(event.feature.geometry);
                 }
             }
