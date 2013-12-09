@@ -28,6 +28,7 @@ Oskari.registerLocalization({
           "desc": "Kuvaus",
           "createDate": "Luotu",
           "updateDate": "Päivitetty",
+          "measurement": "Pituus/pinta-ala",
           "edit": " ",
           "delete": " "
         },
@@ -91,6 +92,10 @@ Oskari.registerLocalization({
       },
       "placedesc": {
         "placeholder": "Kuvaile kohdetta"
+      },
+      "measurement": {
+        "line": "Viivan pituus: ",
+        "area": "Alueen pinta-ala: "
       },
       "category": {
         "label": "Karttataso",

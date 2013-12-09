@@ -319,8 +319,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                     if (event.getDrawingMode() !== null) {
                         var loc = this.instance.getLocalization('tools');
                         var areaDialogContent = loc[event.getDrawingMode()].next;
-                        if (this.dialog.getContent() !== areaDialogContent) {
-                            this.dialog.setContent(areaDialogContent);
+                        var content = this.dialog.getJqueryContent();
+                        if (content.find('div.infoText') !== areaDialogContent) {
+                            content.find('div.infoText').html(areaDialogContent);
                             this.dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
                         }
                     }
@@ -330,13 +331,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             'DrawPlugin.ActiveDrawingEvent': function(event) {
                 var geom = event.getDrawing(),
                     mode = event.getDrawMode(),
-                    resultText;
-
-                if (mode === 'area') {
-                    resultText = geom.getArea() + ' m2';
-                } else if (mode === 'line') {
-                    resultText = geom.getLength() + ' m';
-                }
+                    resultText = this.instance.formatMeasurementResult(geom, mode);
 
                 if (this.dialog) {
                     var content = this.dialog.getJqueryContent();

@@ -164,6 +164,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                 this.form.setValues(param);
             }
 
+            var drawing = this.drawPlugin.getDrawing();
+            if (drawing) {
+                if (drawing.CLASS_NAME === 'OpenLayers.Geometry.MultiLineString') {
+                    this.form.setMeasurementResult(drawing, 'line');
+                } else if (drawing.CLASS_NAME === 'OpenLayers.Geometry.MultiPolygon') {
+                    this.form.setMeasurementResult(drawing, 'area');
+                }
+            }
+
             var content = [{
                 html: me.form.getForm(categories),
                 useButtons: true,
