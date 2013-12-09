@@ -142,7 +142,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
             "selected": true,
             "config": {
-                "infoBox": true
+                "ignoredLayerTypes" : ["WFS"], 
+                "infoBox": false
             }
         }];
 
