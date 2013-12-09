@@ -169,8 +169,8 @@ Oskari.registerLocalization({
             "help": "Help",
             "success": {
                 "layerAdded": {
-                    "title": "Map layer {layer} added",
-                    "message": "Löydät tason Aineisto-paneelista - EN"
+                    "title": "Analysis OK",
+                    "message": "New analyse layer {layer} added"
                 }
             },
             "error": {
