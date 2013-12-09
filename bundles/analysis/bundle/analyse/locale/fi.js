@@ -168,8 +168,8 @@ Oskari.registerLocalization({
             "help": "Ohje",
             "success": {
                 "layerAdded": {
-                    "title": "Karttataso {layer} lisätty",
-                    "message": "Löydät tason Aineisto-paneelista"
+                    "title": "Analyysi OK",
+                    "message": "Lisätty uusi analyysitaso -- {layer} --"
                 }
             },
             "error": {
