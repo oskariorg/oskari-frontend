@@ -116,7 +116,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             "methodOptionTool": '<div class="tool ">' + '<input type="radio" name="method" />' + '<label></label></div>',
             "featureListSelect": '<div class="analyse-select-featurelist"><a href="#">...</a></div>',
             "featureList": '<div class="analyse-featurelist"><ul></ul></div>',
-            "featureListElement": '<li><input type="checkbox"></input><label></label></li>'
+            "featureListElement": '<li><input type="checkbox"/><label></label></li>'
 
         },
         /**
@@ -497,6 +497,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                             layers.push(layer);
                         }
 
+
                     }
                 }
             }
@@ -616,7 +617,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 icons;
             // request updates for map tiles
             for (i = 0; i < layers.length; i++) {
-                if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS')) {
+              if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS') || layers[i].isLayerOfType('MYPLACES')) {
                     option = {
                         id: me.id_prefix + 'layer_' + layers[i].getId(),
                         label: layers[i].getName()

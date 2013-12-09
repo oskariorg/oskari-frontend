@@ -158,5 +158,21 @@
             "Require-Bundle-Instance": []
         },
         "instanceProps": {}
+    }, {
+        "title" : "publishedstatehandler",
+        "fi" : "publishedstatehandler",
+        "sv" : "publishedstatehandler",
+        "en" : "publishedstatehandler",
+        "bundlename" : "publishedstatehandler",
+        "bundleinstancename" : "publishedstatehandler",
+        "metadata" : {
+            "Import-Bundle" : {
+                "publishedstatehandler" : {
+                    "bundlePath" : "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance" : []
+        },
+        "instanceProps" : {}
     }]
 }

@@ -312,7 +312,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 var tool = state.selected.id;
                 var group = state.selected.group;
                 var groupName = group.split('-');
-                if (groupName < 2) {
+                if (groupName.length < 2) {
                     // old configs don't have the toolbar id prefixed
                     group = 'default-' + group;
                 }
