@@ -172,6 +172,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                 measurementWithUnit = this.instance.formatMeasurementResult(geometry, drawMode);
 
             this.measurementResult = loc.measurement[drawMode] + measurementWithUnit;
+
+            this._getOnScreenForm().
+                find('div.measurementResult').
+                html(this.measurementResult);
         },
         /**
          * @method _bindCategoryChange

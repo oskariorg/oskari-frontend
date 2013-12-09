@@ -276,11 +276,11 @@ function() {
         var measurement, unit;
 
         if (drawMode === 'area') {
-            measurement = geometry.getArea();
+            measurement = (Math.round(100 * geometry.getArea())/100);
             unit = ' m²';
             // 1 000 000 m² === 1 km²
             if (measurement >= 1000000) {
-                measurement = (measurement/1000000);
+                measurement = (Math.round(measurement)/1000000);
                 unit = ' km²';
             }
         } else if (drawMode === 'line') {

@@ -121,6 +121,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
              */
             'DrawPlugin.FinishedDrawingEvent': function (event) {
                 this._handleFinishedDrawingEvent(event);
+            },
+            'DrawPlugin.ActiveDrawingEvent': function(event) {
+                if (this.form) {
+                    this.form.setMeasurementResult(event.getDrawing(), event.getDrawMode());
+                }
             }
         },
         /**

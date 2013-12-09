@@ -191,6 +191,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
                 "featuresadded": function (layer) {
                     // send an event that the drawing has been completed
                     me.finishedDrawing();
+                },
+                'featuremodified': function(event) {
+                    me._sendActiveGeometry(event.feature.geometry);
                 }
             }
         });
@@ -202,7 +205,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
                 OpenLayers.Handler.Path, {
                     callbacks: {
                         modify: function(geom, feature) {
-                            me._sendActiveGeometry(feature.geometry, 'line');
+                            me._sendActiveGeometry(me.getActiveDrawing(feature.geometry), 'line');
                         }
                     }
                 }),
@@ -213,7 +216,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
                     },
                     callbacks: {
                         modify: function(geom, feature) {
-                            me._sendActiveGeometry(feature.geometry, 'area');
+                            me._sendActiveGeometry(me.getActiveDrawing(feature.geometry), 'area');
                         }
                     }
                 }),
@@ -309,6 +312,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
     },
 
     /**
+     * Clones the drawing on the map and adds the geometry
+     * currently being drawn to it.
+     *
+     * @method getActiveDrawing
+     * @param  {OpenLayers.Geometry} geometry
+     * @return {OpenLayers.Geometry}
+     */
+    getActiveDrawing: function(geometry) {
+        var prevGeom = this.getDrawing(),
+            composedGeom;
+
+        if (prevGeom != null) {
+            composedGeom = prevGeom.clone();
+            composedGeom.addComponent(geometry);
+            return composedGeom;
+        }
+        return geometry;
+    },
+
+    /**
      * Returns active draw control names
      * @method
      */
@@ -327,7 +350,23 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
 
     _sendActiveGeometry: function(geometry, drawMode) {
         var eventBuilder = this._sandbox.getEventBuilder('DrawPlugin.ActiveDrawingEvent'),
-            event;
+            event, featClass;
+
+        if (drawMode == null) {
+            featClass = geometry.CLASS_NAME;
+            switch (featClass) {
+            case "OpenLayers.Geometry.LineString":
+            case "OpenLayers.Geometry.MultiLineString":
+                drawMode = 'line';
+                break;
+            case "OpenLayers.Geometry.Polygon":
+            case "OpenLayers.Geometry.MultiPolygon":
+                drawMode = 'area';
+                break;
+            default:
+                return;
+            }
+        }
 
         if (eventBuilder) {
             event = eventBuilder(geometry, drawMode);

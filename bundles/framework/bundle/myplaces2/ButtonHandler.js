@@ -213,8 +213,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                 // No need to show the measurement result for a point
                 measureResult.remove();
             } else {
-                // but for line and area, it's udeful and fun
-                measureResult.html();
+                measureResult.html(locTool.noResult);
             }
 
             dialog.show(title, content, buttons);
