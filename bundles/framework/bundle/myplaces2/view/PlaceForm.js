@@ -28,6 +28,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
             '<textarea name="placedesc" placeholder="' + loc.placedesc.placeholder + '">' +
             '</textarea>' +
             '</div>' +
+            '<div class="field measurementResult">' +
+            '</div>' +
             '<div class="field">' +
             '<input type="text" name="placelink" placeholder="' + loc.placelink.placeholder + '"/>' +
             '</div>' +
@@ -92,6 +94,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                 ui.find('input[name=placelink]').attr('value', this.initialValues.place.link);
                 ui.find('input[name=imagelink]').attr('value', this.initialValues.place.imageLink);
             }
+
+            var measurementDiv = ui.find('div.measurementResult')
+            if (this.measurementResult) {
+                measurementDiv.html(this.measurementResult);
+            } else {
+                measurementDiv.remove();
+            }
+
             return ui;
         },
         /**
@@ -156,6 +166,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
             }
 
             this.initialValues = data;
+        },
+        setMeasurementResult: function(geometry, drawMode) {
+            var loc = this.instance.getLocalization('placeform'),
+                measurementWithUnit = this.instance.formatMeasurementResult(geometry, drawMode);
+
+            this.measurementResult = loc.measurement[drawMode] + measurementWithUnit;
+
+            this._getOnScreenForm().
+                find('div.measurementResult').
+                html(this.measurementResult);
         },
         /**
          * @method _bindCategoryChange

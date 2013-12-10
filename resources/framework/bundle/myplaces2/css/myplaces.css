@@ -55,3 +55,7 @@ div.simpleColorChooser {
 div.imagePreview img {
   max-height: 350px;
   max-width: 350px; }
+
+div.drawHelper div.measurementResult {
+  margin-top: 5px;
+}
