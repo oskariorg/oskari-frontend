@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
      */
 
     function (columnSelectorTooltip) {
-        "use strict";
         this.model = null;
         var columnSelectorButtonTitle = "";
         if (columnSelectorTooltip !== null && columnSelectorTooltip !== undefined) {
@@ -60,7 +59,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {Oskari.userinterface.component.GridModel} pData
          */
         setDataModel: function (pData) {
-            "use strict";
             this.model = pData;
         },
         /**
@@ -69,7 +67,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @return {Oskari.userinterface.component.GridModel}
          */
         getDataModel: function () {
-            "use strict";
             return this.model;
         },
 
@@ -79,7 +76,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {Boolean} newShowColumnSelector truth value for showing a column selector
          */
         setColumnSelector: function (newShowColumnSelector) {
-            "use strict";
             this.showColumnSelector = newShowColumnSelector;
         },
         /**
@@ -88,7 +84,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {Boolean} newResizableColumns truth value for column resizability
          */
         setResizableColumns: function (newResizableColumns) {
-            "use strict";
             this.resizableColumns = newResizableColumns;
         },
         /**
@@ -99,7 +94,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String} uiName field name we want to use instead in UI
          */
         setColumnUIName: function (fieldName, uiName) {
-            "use strict";
             this.uiNames[fieldName] = uiName;
         },
         /**
@@ -115,7 +109,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String} renderer function that will process the value
          */
         setColumnValueRenderer: function (fieldName, renderer) {
-            "use strict";
             this.valueRenderer[fieldName] = renderer;
         },
         /**
@@ -124,7 +117,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String[]} pFieldNames fieldnames that should be rendered from data
          */
         setVisibleFields: function (pFieldNames) {
-            "use strict";
             this.fieldNames = pFieldNames;
         },
         /**
@@ -135,7 +127,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {function} pCallback callback to call when a row has been selected
          */
         addSelectionListener: function (pCallback) {
-            "use strict";
             this.selectionListeners.push(pCallback);
         },
         /**
@@ -146,7 +137,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {function} handler callback to call when the link is clicked
          */
         setAdditionalDataHandler: function (title, handler) {
-            "use strict";
             this.additionalDataHandler = {
                 title: title,
                 handler: handler
@@ -162,7 +152,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @return (jQuery) reference to rendered content
          */
         _createAdditionalDataField: function (data) {
-            "use strict";
             var me = this,
                 content = this._renderAdditionalData(data),
                 link;
@@ -189,7 +178,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @return (jQuery) reference to rendered content
          */
         _renderAdditionalData: function (data) {
-            "use strict";
             var table = this.template.clone(),
                 body = table.find('tbody'),
                 value,
@@ -261,7 +249,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String[]} fieldNames names of the fields to render in render order
          */
         _renderHeader: function (table, fieldNames) {
-            "use strict";
             var me = this,
                 // print header
                 headerContainer = table.find('thead tr'),
@@ -339,7 +326,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String[]} fieldNames names of the fields to render in render order
          */
         _renderBody: function (table, fieldNames) {
-            "use strict";
             var me = this,
                 // print data
                 body = table.find('tbody'),
@@ -399,7 +385,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String[]} fieldNames names of the fields to select visible
          */
         _renderColumnSelector: function (table, fieldNames) {
-            "use strict";
             // Utilize the templates
             this.visibleColumnSelector = this.templateColumnSelectorButtonWrapper.clone();
             var me = this,
@@ -501,7 +486,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * Enables column resizing functionality
          */
         _enableColumnResizer: function () {
-            "use strict";
             var pressed = false,
                 start,
                 startX,
@@ -546,7 +530,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * (e.g. columnSelector: open tells that we want to show columnselector)
          */
         renderTo: function (container, state) {
-            "use strict";
             container.empty();
             var fieldNames = this.fieldNames,
                 table = this.template.clone();
@@ -585,7 +568,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {String} dataId id for the selected data
          */
         _dataSelected: function (dataId) {
-            "use strict";
             var i;
             for (i = 0; i < this.selectionListeners.length; i += 1) {
                 this.selectionListeners[i](this, dataId);
@@ -602,7 +584,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {Boolean} keepPrevious true to keep previous selection, false to clear before selecting
          */
         select: function (value, keepPrevious) {
-            "use strict";
             var key = this.model.getIdField(),
                 dataArray = this.model.getData(),
                 index,
@@ -626,7 +607,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @method removeSelections
          */
         removeSelections: function () {
-            "use strict";
             var rows = this.table.find('tbody tr');
             rows.removeClass('selected');
         },
@@ -637,7 +617,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @return {Object[]} subset of #getDataModel() that is currently selected in grid
          */
         getSelection: function () {
-            "use strict";
             var dataArray = this.model.getData(),
                 selection = [],
                 rows = this.table.find('tbody tr'),
@@ -658,7 +637,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @return {Object} table for the grid data
          */
         getTable: function () {
-            "use strict";
             return this.table;
         },
 
@@ -670,7 +648,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {Boolean} pDescending true if sort direction is descending
          */
         _sortBy: function (pAttribute, pDescending) {
-            "use strict";
             var me = this,
                 dataArray = me.model.getData();
             if (dataArray.length === 0) {
@@ -696,7 +673,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param {Boolean} pDescending true if sort direction is descending
          */
         _sortComparator: function (a, b, pAttribute, pDescending) {
-            "use strict";
             var nameA,
                 nameB,
                 value;

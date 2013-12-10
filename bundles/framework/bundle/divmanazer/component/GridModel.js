@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
      */
 
     function () {
-        "use strict";
         this.fields = [];
         this.data = [];
         this.idField = null;
@@ -23,7 +22,6 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
          * @param {String} field name for a field in data objects
          */
         _addField: function (field) {
-            "use strict";
             if (!this.idField) {
                 // default to first field
                 this.idField = field;
@@ -36,7 +34,6 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
          * @return {String[]}
          */
         getFields: function () {
-            "use strict";
             return this.fields;
         },
         /**
@@ -45,7 +42,6 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
          * @param {String} pField name of the field that will be used as an id field
          */
         setIdField: function (pField) {
-            "use strict";
             this.idField = pField;
         },
         /**
@@ -54,7 +50,6 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
          * @return {String}
          */
         getIdField: function () {
-            "use strict";
             return this.idField;
         },
         /**
@@ -63,7 +58,6 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
          * @param {Object} pData
          */
         addData: function (pData) {
-            "use strict";
             var key;
             // populate fields array if first data
             if (this.fields.length === 0) {
@@ -81,7 +75,6 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
          * @return {Object[]}
          */
         getData: function () {
-            "use strict";
             return this.data;
         }
     });

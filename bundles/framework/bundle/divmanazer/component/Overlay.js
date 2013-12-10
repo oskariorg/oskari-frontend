@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
      */
 
     function () {
-        "use strict";
         this.template = jQuery('<div class="oskarioverlay transparent"></div>');
         this._overlay = null;
         this._targetSelector = null;
@@ -22,7 +21,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
          * @param {String} elementSelector, selector for element to overlay
          */
         overlay: function (elementSelector) {
-            "use strict";
             var me = this,
                 target;
             me._overlay = this.template.clone();
@@ -38,7 +36,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             });
         },
         _setupSizeAndLocation: function () {
-            "use strict";
             var me = this,
                 target = jQuery(this._targetSelector);
             me._overlay.css({
@@ -49,13 +46,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             });
         },
         resize: function () {
-            "use strict";
             var tmp = jQuery(this._targetSelector);
             this._overlay.height(tmp.height());
             this._overlay.width(tmp.width());
         },
         followResizing: function (useWindow) {
-            "use strict";
             var me = this;
             if (useWindow) {
                 jQuery(window).resize(function () {
@@ -69,14 +64,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             }
         },
         close: function () {
-            "use strict";
             this._overlay.remove();
             if (this._resizingWorkaround) {
                 clearTimeout(this._resizingWorkaround);
             }
         },
         bindClickToClose: function () {
-            "use strict";
             var me = this;
             me._overlay.bind('click', function () {
                 me.close();
