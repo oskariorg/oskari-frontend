@@ -193,7 +193,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
                     me.finishedDrawing();
                 },
                 'vertexmodified': function(event) {
-                    me._sendActiveGeometry(event.feature.geometry);
+                    me._sendActiveGeometry(me.getDrawing());
                 }
             }
         });
