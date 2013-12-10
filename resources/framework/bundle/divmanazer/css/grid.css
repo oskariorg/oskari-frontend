@@ -54,3 +54,7 @@ div.column-selector ul.column-selector-list {
 
 div.column-selector label.column-label {
   padding-left: 5px; }
+
+table.oskari-grid td {
+  padding: 5px;
+}

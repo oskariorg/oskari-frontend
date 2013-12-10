@@ -179,6 +179,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', this.instance.sandbox);
             helper.processHelpLinks(this.loc.help, content, this.loc.error.title, this.loc.error.nohelp);
 
+            /* progress */
+            me.progressSpinner.insertTo(container);
+
         },
         /**
          * @method _createContentPanel
@@ -1496,10 +1499,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
                 // Send the data for analysis to the backend
+                me.progressSpinner.start();
                 me.instance.analyseService.sendAnalyseData(data,
                     // Success callback
 
                     function (response) {
+                        me.progressSpinner.stop();
                         if (response) {
                             me._handleAnalyseMapResponse(response);
                         }
@@ -1507,7 +1512,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     // Error callback
 
                     function (jqXHR, textStatus, errorThrown) {
-                        me.instance.showMessage(me.loc.error.title, me.loc.error.saveFailed);
+                        me.progressSpinner.stop();
+
                     });
             }
 
