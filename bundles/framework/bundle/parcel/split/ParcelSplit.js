@@ -595,16 +595,14 @@ function(drawPlugin) {
                                 clipPoint = new ClipperLib.IntPoint(olPoints[k].x, olPoints[k].y);
                                 clipHole.push(clipPoint);
                             }
-                            clipSourcePolygons[i].push(clipHole);
+                            clipSourcePolygons[l].push(clipHole);
                         }
                         // Scaling for integer operations
                         l = clipSourcePolygons.length-1;
                         clipSourcePolygons[l] = this.scaleup(clipSourcePolygons[l], scale);
                         if (multi) {
                             m = m+1;
-                            if (m < olOldFeatures[i].components.length-1) {
-//                                m = m+1;
-                            } else {
+                            if (m === olOldFeatures[i].components.length) {
                                 finished = true;
                             }
                         } else {
@@ -649,13 +647,8 @@ function(drawPlugin) {
                     // Scaling for integer operations
                     clipTargetPolygons = this.scaleup(clipTargetPolygons, scale);
                     cpr = new ClipperLib.Clipper();
-                    if (jstsLine !== null) {
-                        cpr.AddPolygons(clipSourcePolygons[i], ClipperLib.PolyType.ptSubject);
-                    } else {
-                        //todo: check this
-                        for (k=0; k < clipSourcePolygons.length; k++) {
-                            cpr.AddPolygons(clipSourcePolygons[0], ClipperLib.PolyType.ptSubject);
-                        }
+                    for (k=0; k < clipSourcePolygons.length; k++) {
+                        cpr.AddPolygons(clipSourcePolygons[k], ClipperLib.PolyType.ptSubject);
                     }
                     cpr.AddPolygons(clipTargetPolygons, ClipperLib.PolyType.ptClip);
 
