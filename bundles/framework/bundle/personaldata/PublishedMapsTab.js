@@ -306,6 +306,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                     var req = publishMapEditorRequestBuilder(data);
                     sandbox.request(instance, req);
                 }
+                var closeFlyoutRequestBuilder = sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')
+                if (closeFlyoutRequestBuilder) {
+                    var closeFlyoutRequest = closeFlyoutRequestBuilder(me.instance, 'close', me.instance.getName());
+                    sandbox.request(me.instance.getName(), closeFlyoutRequest);
+                }
             };
 
             //sending a request to publisher for editing view

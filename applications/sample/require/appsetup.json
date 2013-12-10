@@ -304,50 +304,7 @@
             },
             "Require-Bundle-Instance" : [  ]
         }
-      },{ 
-        "title" : "My4th",
-        "en" : "My4th",
-        "fi" : "My4th",
-        "sv" : "My4th",
-        "bundleinstancename" : "slickgrid",
-        "bundlename" : "slickgrid",
-        "instanceProps" : {  },
-        "metadata" : { 
-            "Import-Bundle" : { 
-                "slickgrid" : { "bundlePath" : "../../../packages/visualisation/bundle/" } 
-            },
-            "Require-Bundle-Instance" : [  ]
-        }
-      }, {
-        "title" : "My4th",
-        "en" : "My4th",
-        "fi" : "My4th",
-        "sv" : "My4th",
-        "bundleinstancename" : "slickgridpoc",
-        "bundlename" : "slickgridpoc",
-        "instanceProps" : {  },
-        "metadata" : { 
-            "Import-Bundle" : { 
-                "slickgridpoc" : { "bundlePath" : "../../../packages/visualisation/bundle/" } 
-            },
-            "Require-Bundle-Instance" : [  ]
-        }
-      },      
-      { 
-        "title" : "My4th",
-        "en" : "My4th",
-        "fi" : "My4th",
-        "sv" : "My4th",
-        "bundleinstancename" : "patiopoc",
-        "bundlename" : "patiopoc",
-        "instanceProps" : {  },
-        "metadata" : { 
-            "Import-Bundle" : { 
-                "patiopoc" : { "bundlePath" : "../../../packages/patio/bundle/" },
-                "geostats" : { "bundlePath" : "../../../packages/libraries/bundle/" }
-            },
-            "Require-Bundle-Instance" : [  ]
-        }
       }
+      
   ]
 }
