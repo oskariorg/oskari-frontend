@@ -28,9 +28,9 @@ Oskari.clazz.define(
      * @static
      */
 
-    function () {
+    function (locale) {
         this.sandbox = null;
-        this._localization = null;
+        this._localization = locale;
         this.mediator = null;
         this.guideStep = 0;
     },
@@ -55,7 +55,7 @@ Oskari.clazz.define(
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            return this.getLocalization('title');
+            return this._localization['title'];
         },
 
         /**
@@ -64,7 +64,7 @@ Oskari.clazz.define(
          * @return {String} localized text for the description of the component
          */
         getDescription: function () {
-            return this.getLocalization('desc');
+            return this._localization['desc'];
         },
 
         /**
@@ -83,32 +83,14 @@ Oskari.clazz.define(
         update: function () {},
 
         /**
-         * @method getLocalization
-         * Convenience method to call from Tile and Flyout
-         * Returns JSON presentation of bundles localization data for
-         * current language. If key-parameter is not given, returns
-         * the whole localization data.
-         *
-         * @param {String} key (optional) if given, returns the value for key
-         * @return {String/Object} returns single localization string or
-         *      JSON object for complete data depending on localization
-         *      structure and if parameter key is given
-         */
-        getLocalization: function (key) {
-            if (!this._localization) {
-                this._localization = Oskari.getLocalization(this.getName());
-            }
-            if (key) {
-                return this._localization[key];
-            }
-            return this._localization;
-        },
-
-        /**
          * @method start
          * BundleInstance protocol method
          */
         start: function () {
+            if (!this._localization) {
+                this._localization = Oskari.getLocalization(this.getName());
+            }
+
             // Check cookie 'pti_tour_seen'. Value '1' means that tour 
             // is not to be started
             // jQuery cookie plugin: 
@@ -120,7 +102,6 @@ Oskari.clazz.define(
                     sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                     sandbox = Oskari.getSandbox(sandboxName);
                 me.sandbox = sandbox;
-                me.localization = Oskari.getLocalization(me.getName());
                 // register to sandbox as a module
                 sandbox.register(me);
                 me._startGuide();
@@ -143,13 +124,11 @@ Oskari.clazz.define(
                 this.ref = inst;
             },
             getTitle: function () {
-                return this.ref.getLocalization('page1').title;
+                return this.ref._localization['page1'].title;
             },
             getContent: function () {
-                var me = this.ref;
-                var loc = me.getLocalization('page1');
                 var content = jQuery('<div></div>');
-                content.append(this.ref.getLocalization('page1').message);
+                content.append(this.ref._localization['page1'].message);
                 return content;
             }
         }, {
@@ -158,13 +137,13 @@ Oskari.clazz.define(
             },
             getTitle: function () {
                 return '' +
-                    this.ref.getLocalization('page2').title +
+                    this.ref._localization['page2'].title +
                     '<span>1/8</span>';
             },
             getContent: function () {
                 var me = this.ref;
                 me._openExtension('Search');
-                var loc = me.getLocalization('page2');
+                var loc = me._localization['page2'];
                 var content = jQuery('<div></div>');
                 content.append(loc.message);
                 var linkTemplate = jQuery('<a href="#"></a>');
@@ -192,7 +171,7 @@ Oskari.clazz.define(
                 return content;
             } //,
             // getPositionRef : function () {
-            //   var loc = this.ref.getLocalization('page2');
+            //   var loc = this.ref._localization('page2');
             //   var tt = "'" + loc.tileText + "'";
             //   var sel = "div.oskari-tile-title:contains(" + tt + ")";
             //   return jQuery(sel);
@@ -203,13 +182,13 @@ Oskari.clazz.define(
                 this.ref = inst;
             },
             getTitle: function () {
-                var p3 = this.ref.getLocalization('page3').title;
+                var p3 = this.ref._localization['page3'].title;
                 return p3 + '<span>2/8</span>';
             },
             getContent: function () {
                 var me = this.ref;
                 me._openExtension('LayerSelector');
-                var loc = me.getLocalization('page3');
+                var loc = me._localization['page3'];
                 var content = jQuery('<div></div>');
                 content.append(loc.message);
                 var linkTemplate = jQuery('<a href="#"></a>');
@@ -237,7 +216,7 @@ Oskari.clazz.define(
                 return content;
             } //,
             // getPositionRef : function () {
-            //     var loc = this.ref.getLocalization('page3');
+            //     var loc = this.ref._localization('page3');
             //     var sel = 
             //     return jQuery("div.oskari-tile-title:contains('" + 
             //                   loc.tileText + "')");
@@ -248,13 +227,13 @@ Oskari.clazz.define(
                 this.ref = inst;
             },
             getTitle: function () {
-                var p4 = this.ref.getLocalization('page4').title;
+                var p4 = this.ref._localization['page4'].title;
                 return p4 + '<span>3/8</span>';
             },
             getContent: function () {
                 var me = this.ref;
                 me._openExtension('LayerSelection');
-                var loc = me.getLocalization('page4');
+                var loc = me._localization['page4'];
                 var content = jQuery('<div></div>');
                 content.append(loc.message);
                 var linkTemplate = jQuery('<a href="#"></a>');
@@ -282,7 +261,7 @@ Oskari.clazz.define(
                 return content;
             } //,
             // getPositionRef : function () {
-            //     var loc = this.ref.getLocalization('page4');
+            //     var loc = this.ref._localization('page4');
             //     return jQuery("div.oskari-tile-title:contains('" + 
             //                   loc.tileText + "')");
             // },
@@ -292,13 +271,13 @@ Oskari.clazz.define(
                 this.ref = inst;
             },
             getTitle: function () {
-                var p5 = this.ref.getLocalization('page5').title;
+                var p5 = this.ref._localization['page5'].title;
                 return p5 + '<span>4/8</span>';
             },
             getContent: function () {
                 var me = this.ref;
                 me._openExtension('PersonalData');
-                var loc = me.getLocalization('page5');
+                var loc = me._localization['page5'];
                 var content = jQuery('<div></div>');
                 content.append(loc.message);
                 var linkTemplate = jQuery('<a href="#"></a>');
@@ -326,7 +305,7 @@ Oskari.clazz.define(
                 return content;
             } //,
             // getPositionRef : function () {
-            //     var loc = this.ref.getLocalization('page5');
+            //     var loc = this.ref._localization('page5');
             //     return jQuery("div.oskari-tile-title:contains('" + 
             //                   loc.tileText + "')");
             // },
@@ -336,13 +315,13 @@ Oskari.clazz.define(
                 this.ref = inst;
             },
             getTitle: function () {
-                var p6 = this.ref.getLocalization('page6').title;
+                var p6 = this.ref._localization['page6'].title;
                 return p6 + '<span>5/8</span>';
             },
             getContent: function () {
                 var me = this.ref;
                 me._openExtension('Publisher');
-                var loc = me.getLocalization('page6');
+                var loc = me._localization['page6'];
                 var content = jQuery('<div></div>');
                 content.append(loc.message);
                 var linkTemplate = jQuery('<a href="#"></a>');
@@ -370,7 +349,7 @@ Oskari.clazz.define(
                 return content;
             } //),
             // getPositionRef : function () {
-            //     var loc = this.ref.getLocalization('page6');
+            //     var loc = this.ref._localization('page6');
             //     return jQuery("div.oskari-tile-title:contains('" + 
             //                   loc.tileText + "')");
             // },
@@ -380,13 +359,13 @@ Oskari.clazz.define(
                 this.ref = inst;
             },
             getTitle: function () {
-                var p7 = this.ref.getLocalization('page7').title;
+                var p7 = this.ref._localization['page7'].title;
                 return p7 + '<span>6/8</span>';
             },
             getContent: function () {
                 var me = this.ref;
                 me._closeExtension('Publisher');
-                var loc = me.getLocalization('page7');
+                var loc = me._localization['page7'];
                 var content = jQuery('<div></div>');
                 content.append(loc.message);
                 return content;
@@ -401,12 +380,12 @@ Oskari.clazz.define(
                 this.ref = inst;
             },
             getTitle: function () {
-                var p8 = this.ref.getLocalization('page8').title;
+                var p8 = this.ref._localization['page8'].title;
                 return p8 + '<span>7/8</span>';
             },
             getContent: function () {
                 var me = this.ref;
-                var loc = me.getLocalization('page8');
+                var loc = me._localization['page8'];
                 var content = jQuery('<div></div>');
                 content.append(loc.message);
                 return content;
@@ -423,12 +402,12 @@ Oskari.clazz.define(
                 this.ref = inst;
             },
             getTitle: function () {
-                var p9 = this.ref.getLocalization('page9').title;
+                var p9 = this.ref._localization['page9'].title;
                 return p9 + '<span>8/8</span>';
             },
             getContent: function () {
                 var me = this.ref;
-                var loc = me.getLocalization('page9');
+                var loc = me._localization['page9'];
                 var content = jQuery('<div></div>');
                 content.append(loc.message);
                 return content;
@@ -453,7 +432,7 @@ Oskari.clazz.define(
                 var labelTemplate =
                     jQuery('<label for="pti_tour_seen"></label>');
                 var label = labelTemplate.clone();
-                label.append(this.getLocalization('tourseen').label);
+                label.append(this._localization['tourseen'].label);
                 checkbox.bind(
                     'change',
                     function () {
@@ -504,25 +483,15 @@ Oskari.clazz.define(
         _getDialogButton: function (dialog) {
             var me = this,
                 buttons = [],
-                closeTxt = '!button.close!',
-                bn;
-            if (this.localization &&
-                this.localization.button &&
-                this.localization.button.previous) {
-                closeTxt = this.localization.button.close;
-            }
+                bn,
+                closeTxt = me._localization['button']['close'];
             var closeBtn = dialog.createCloseButton(closeTxt);
             buttons.push(closeBtn);
 
             if (this.guideStep > 1) {
                 bn = 'Oskari.userinterface.component.Button';
                 var prevBtn = Oskari.clazz.create(bn);
-                var prevTxt = '!button.previous!';
-                if (this.localization &&
-                    this.localization.button &&
-                    this.localization.button.previous) {
-                    prevTxt = this.localization.button.previous;
-                }
+                var prevTxt = me._localization['button']['previous'];
                 prevBtn.setTitle(prevTxt);
                 prevBtn.setHandler(
                     function () {
@@ -536,12 +505,7 @@ Oskari.clazz.define(
             if (this.guideStep === 0) {
                 bn = 'Oskari.userinterface.component.Button';
                 var startBtn = Oskari.clazz.create(bn);
-                var startTxt = '!button.start!';
-                if (this.localization &&
-                    this.localization.button &&
-                    this.localization.button.start) {
-                    startTxt = this.localization.button.start;
-                }
+                var startTxt = me._localization['button']['start'];
                 startBtn.setTitle(startTxt);
                 startBtn.setHandler(
                     function () {
@@ -556,12 +520,7 @@ Oskari.clazz.define(
             else if (this.guideStep < this._guideSteps.length - 1) {
                 bn = 'Oskari.userinterface.component.Button';
                 var nextBtn = Oskari.clazz.create(bn);
-                var nextTxt = '!button.next!';
-                if (this.localization &&
-                    this.localization.button &&
-                    this.localization.button.start) {
-                    nextTxt = this.localization.button.next;
-                }
+                var nextTxt = me._localization['button']['next'];
                 nextBtn.setTitle(nextTxt);
                 nextBtn.setHandler(
                     function () {
@@ -573,12 +532,7 @@ Oskari.clazz.define(
                 // custom class for positioned popups
                 dialog.addClass('bluetitle');
             } else if (this.guideStep === this._guideSteps.length - 1) {
-                var finishTxt = '!button.finish!';
-                if (this.localization &&
-                    this.localization.button &&
-                    this.localization.button.start) {
-                    finishTxt = this.localization.button.finish;
-                }
+                var finishTxt = me._localization['button']['finish'];
                 var finishBtn = dialog.createCloseButton(finishTxt);
                 buttons.push(finishBtn);
             }

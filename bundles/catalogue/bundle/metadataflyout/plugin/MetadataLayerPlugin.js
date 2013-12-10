@@ -200,7 +200,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
                 this._sandbox.printDebug(sldSpec);
                 var styleInfo = this._sldFormat.read(sldSpec);
 
-                window.styleInfo = styleInfo;
                 var styles = styleInfo.namedLayers[0].userStyles;
 
                 var style = styles[0];

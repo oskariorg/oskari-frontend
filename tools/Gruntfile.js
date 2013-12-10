@@ -81,6 +81,9 @@ module.exports = function (grunt) {
                     outputFile: 'test-results.xml'
                 },
                 singleRun: true
+            },
+            test: {
+                configFile: 'src.conf.js'
             }
         },
         clean: {
@@ -117,6 +120,248 @@ module.exports = function (grunt) {
             target: {
                 src: ['../{bundles,packages}/**/*.js']
             }
+        },
+        modulizeAll: {
+          'admin-layerrights': '../packages/framework/bundle/admin-layerrights',
+          'backendstatus': '../packages/framework/bundle/backendstatus',
+          'coordinatedisplay': '../packages/framework/bundle/coordinatedisplay',
+// Manual modification          'divmanazer': '../packages/framework/bundle/divmanazer',
+          'featuredata': '../packages/framework/bundle/featuredata',
+          'featuredata2': '../packages/framework/bundle/featuredata2',
+// Manual modification          'guidedtour': '../packages/framework/bundle/guidedtour',
+          'infobox': '../packages/framework/bundle/infobox',
+// Manual modification          'layerselection2': '../packages/framework/bundle/layerselection2',
+          'layerselector2': '../packages/framework/bundle/layerselector2',
+          'mapanalysis': '../packages/framework/bundle/mapanalysis',
+          'mapfull': '../packages/framework/bundle/mapfull',
+          'maplegend': '../packages/framework/bundle/maplegend',
+// Manual replaced by src/mapping/mapmodule-plugin          'mapmodule-plugin': '../packages/framework/bundle/mapmodule-plugin',
+          'mapstats': '../packages/framework/bundle/mapstats',
+          'mapwfs': '../packages/framework/bundle/mapwfs',
+          'mapwfs2': '../packages/framework/bundle/mapwfs2',
+          'mapwmts': '../packages/framework/bundle/mapwmts',
+          'metadata': '../packages/framework/bundle/metadata',
+          'myplaces2': '../packages/framework/bundle/myplaces2',
+// Manual modification          'oskariui': '../packages/framework/bundle/oskariui',
+          'parcel': '../packages/framework/bundle/parcel',
+          'parcelinfo': '../packages/framework/bundle/parcelinfo',
+          'parcelselector': '../packages/framework/bundle/parcelselector',
+          'personaldata': '../packages/framework/bundle/personaldata',
+          'postprocessor': '../packages/framework/bundle/postprocessor',
+          'printout': '../packages/framework/bundle/printout',
+          'promote': '../packages/framework/bundle/promote',
+          'publisher': '../packages/framework/bundle/publisher',
+          'search': '../packages/framework/bundle/search',
+          'statehandler': '../packages/framework/bundle/statehandler',
+          'toolbar': '../packages/framework/bundle/toolbar',
+          'usagetracker': '../packages/framework/bundle/usagetracker',
+          'userguide': '../packages/framework/bundle/userguide'
+        },
+        minifyAll: {
+            options: {
+                baseUrl : "../",
+                paths: {
+                    jquery: "empty:",
+                    oskari: "empty:",
+                    css: "libraries/requirejs/lib/css",
+                    json: "libraries/requirejs/lib/json",
+                    domReady: "libraries/requirejs/lib/domReady",
+                    normalize: "libraries/requirejs/lib/normalize",
+                    i18n: "libraries/requirejs/lib/i18n",
+                    'css-builder': "libraries/requirejs/lib/css-builder"
+                },
+                optimizeAllPluginResources: true,
+                findNestedDependencies: true,
+                preserveLicenseComments: true
+            },
+            'admin-layerrights': {
+                name: "src/framework/admin-layerrights/module",
+                out: "../src/framework/admin-layerrights/minified.js"
+            },
+            'backendstatus': {
+                name: "src/framework/backendstatus/module",
+                out: "../src/framework/backendstatus/minified.js"
+            },
+            'coordinatedisplay': {
+                name: "src/framework/coordinatedisplay/module",
+                out: "../src/framework/coordinatedisplay/minified.js"
+            },
+            'divmanazer': {
+                name: "src/framework/divmanazer/module",
+                out: "../src/framework/divmanazer/minified.js"
+            },
+            'featuredata': {
+                name: "src/framework/featuredata/module",
+                out: "../src/framework/featuredata/minified.js"
+            },
+            'featuredata2': {
+                name: "src/framework/featuredata2/module",
+                out: "../src/framework/featuredata2/minified.js"
+            },
+            'guidedtour': {
+                name: "src/framework/guidedtour/module",
+                out: "../src/framework/guidedtour/minified.js"
+            },
+            'infobox': {
+                name: "src/framework/infobox/module",
+                out: "../src/framework/infobox/minified.js"
+            },
+            'layerselection2': {
+                name: "src/framework/layerselection2/module",
+                out: "../src/framework/layerselection2/minified.js"
+            },
+            'layerselector2': {
+                name: "src/framework/layerselector2/module",
+                out: "../src/framework/layerselector2/minified.js"
+            },
+            'mapanalysis': {
+                name: "src/framework/mapanalysis/module",
+                out: "../src/framework/mapanalysis/minified.js"
+            },
+            'mapfull': {
+                name: "src/framework/mapfull/module",
+                out: "../src/framework/mapfull/minified.js"
+            },
+            'maplegend': {
+                name: "src/framework/maplegend/module",
+                out: "../src/framework/maplegend/minified.js"
+            },
+            'mapstats': {
+                name: "src/framework/mapstats/module",
+                out: "../src/framework/mapstats/minified.js"
+            },
+            'mapwfs': {
+                name: "src/framework/mapwfs/module",
+                out: "../src/framework/mapwfs/minified.js"
+            },
+            'mapwfs2': {
+                name: "src/framework/mapwfs2/module",
+                out: "../src/framework/mapwfs2/minified.js"
+            },
+            'mapwmts': {
+                name: "src/framework/mapwmts/module",
+                out: "../src/framework/mapwmts/minified.js"
+            },
+            'metadata': {
+                name: "src/framework/metadata/module",
+                out: "../src/framework/metadata/minified.js"
+            },
+            'myplaces2': {
+                name: "src/framework/myplaces2/module",
+                out: "../src/framework/myplaces2/minified.js"
+            },
+            'oskariui': {
+                name: "src/framework/oskariui/module",
+                out: "../src/framework/oskariui/minified.js"
+            },
+            'parcel': {
+                name: "src/framework/parcel/module",
+                out: "../src/framework/parcel/minified.js"
+            },
+            'parcelinfo': {
+                name: "src/framework/parcelinfo/module",
+                out: "../src/framework/parcelinfo/minified.js"
+            },
+            'parcelselector': {
+                name: "src/framework/parcelselector/module",
+                out: "../src/framework/parcelselector/minified.js"
+            },
+            'personaldata': {
+                name: "src/framework/personaldata/module",
+                out: "../src/framework/personaldata/minified.js"
+            },
+            'postprocessor': {
+                name: "src/framework/postprocessor/module",
+                out: "../src/framework/postprocessor/minified.js"
+            },
+            'printout': {
+                name: "src/framework/printout/module",
+                out: "../src/framework/printout/minified.js"
+            },
+            'promote': {
+                name: "src/framework/promote/module",
+                out: "../src/framework/promote/minified.js"
+            },
+            'publisher': {
+                name: "src/framework/publisher/module",
+                out: "../src/framework/publisher/minified.js"
+            },
+            'search': {
+                name: "src/framework/search/module",
+                out: "../src/framework/search/minified.js"
+            },
+            'statehandler': {
+                name: "src/framework/statehandler/module",
+                out: "../src/framework/statehandler/minified.js"
+            },
+            'toolbar': {
+                name: "src/framework/toolbar/module",
+                out: "../src/framework/toolbar/minified.js"
+            },
+            'usagetracker': {
+                name: "src/framework/usagetracker/module",
+                out: "../src/framework/usagetracker/minified.js"
+            },
+            'userguide': {
+                name: "src/framework/userguide/module",
+                out: "../src/framework/userguide/minified.js"
+            }
+        },
+        requirejs: {
+          oskari: {
+            options: {
+                baseUrl : "../",
+                paths: {
+                    jquery: "empty:"
+                },
+                optimizeAllPluginResources: true,
+                findNestedDependencies: true,
+                preserveLicenseComments: true,
+                name: "bundles/oskari/oskari",
+                version: "2.0.0",
+                out: "../libraries/oskari/oskari-<%= requirejs.oskari.options.version %>.min.js"
+            }
+          },
+          'oskari-with-loader': {
+            options: {
+                baseUrl : "../",
+                paths: {
+                    jquery: "empty:",
+                    oskari: "bundles/oskari/oskari",
+                    css: "libraries/requirejs/lib/css",
+                    json: "libraries/requirejs/lib/json",
+                    domReady: "libraries/requirejs/lib/domReady",
+                    normalize: "libraries/requirejs/lib/normalize",
+                    'css-builder': "libraries/requirejs/lib/css-builder"                    
+                },
+                optimizeAllPluginResources: true,
+                findNestedDependencies: true,
+                preserveLicenseComments: true,
+                version: "1.13",
+                name: "bundles/oskari/oskari-with-loader",
+                out: "../libraries/oskari/oskari-<%= requirejs['oskari-with-loader'].options.version %>.min.js"
+            }
+          },
+          'full-map_guest': {
+            options: {
+                mainConfigFile: "../applications/oskari2/full-map_guest/build.js"
+            }
+          },
+          'leaflet': {
+            options: {
+                mainConfigFile: "../applications/oskari2/leaflet/build.js"
+            }
+          },
+          'ol3': {
+            options: {
+                mainConfigFile: "../applications/oskari2/ol3/build.js"
+            }
+          },
+          'ol2': {
+            options: {
+                mainConfigFile: "../applications/oskari2/ol2/build.js"
+            }
+          }
         }
     });
 
@@ -129,6 +374,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
 
     // Default task(s).
     grunt.registerTask('default', ['karma:dev', 'compileAppSetupToStartupSequence', 'compileDev', 'karma:dev:run', 'watch']);
@@ -636,4 +882,15 @@ module.exports = function (grunt) {
         }
         this.minifyCSS(cssfiles, options.dest + 'oskari.min.css');
     });
+
+    grunt.registerMultiTask("modulizeAll", "Convert all bundles to modules", function () {
+        grunt.task.run('bundle2module:' + this.data);
+    });
+
+    grunt.registerMultiTask("minifyAll", "Minify all modules", function () {
+        var options = this.options(this.data);
+        grunt.config.set('requirejs.' + this.target + '.options', options);
+        grunt.task.run('requirejs:' + this.target);
+    });
+
 };

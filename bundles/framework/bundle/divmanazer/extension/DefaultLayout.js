@@ -15,7 +15,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
      */
 
     function (instance, locale) {
-        "use strict";
 
         /* @property extension instance */
         this.instance = instance;
@@ -32,7 +31,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
          * @return {String} implementation name
          */
         getName: function () {
-            "use strict";
             return 'Oskari.userinterface.extension.DefaultLayout';
         },
 
@@ -41,7 +39,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
          * called by host to set DOM element for this Layouts content
          */
         setEl: function (el) {
-            "use strict";
             this.container = jQuery(el);
         },
 
@@ -50,7 +47,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
          * @return {jQuery Object} wrapped DOM element for this Layout's contents
          */
         getEl: function () {
-            "use strict";
             return this.container;
         },
 
@@ -59,7 +55,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
          * called by host to start layout operations
          */
         startPlugin: function () {
-            "use strict";
         },
 
         /**
@@ -67,7 +62,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
          * called by host to stop layout operations
          */
         stopPlugin: function () {
-            "use strict";
         },
 
         /**
@@ -75,7 +69,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
          * @return {String} called by host to get a localised layout title
          */
         getTitle: function () {
-            "use strict";
             return this.locale.title;
         },
         /**
@@ -83,7 +76,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
          * @return {String} called by host to get a localised layout description
          */
         getDescription: function () {
-            "use strict";
             return this.locale.description;
         },
 
@@ -92,7 +84,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
          * @param {JSON} sets state
          */
         setState: function (state) {
-            "use strict";
             this.state = state;
         },
 
@@ -101,7 +92,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
          * @return {JSON} returns state
          */
         getState: function () {
-            "use strict";
             return this.state;
         },
 
@@ -110,7 +100,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
          * @return JSON localisation subset 'layout'
          */
         getLocalization: function () {
-            "use strict";
             return this.locale;
         }
 
