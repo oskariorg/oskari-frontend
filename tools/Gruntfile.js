@@ -512,7 +512,7 @@ module.exports = function (grunt) {
             files.push({
                 "expand": true,
                 "cwd": "../",
-                "src": ["resources/**", "libraries/**", "bundles/**", "packages/**"],
+                "src": ["resources/**", "libraries/**", "bundles/**", "packages/**", "src/**", "applications/**"],
                 "dest": "../dist/"
             });
 
