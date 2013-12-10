@@ -266,6 +266,8 @@ function(instance) {
 			},
 
 			trigger : function(e) {
+                // Trigger disabled if popup visible
+                if (jQuery("div#parcelForm").length > 0) return;
 				var lonlat = me._map.getLonLatFromPixel(e.xy);
 				var point = new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat);
 				var i;
@@ -282,7 +284,7 @@ function(instance) {
 						}
 					}
 					if (i === features.length - 1)
-						me.selectedFeature = -2;
+						me.selectedFeature = oldSelectedFeature;
 				}
 				if (oldSelectedFeature != me.selectedFeature) {
 					for ( i = 0; i < features.length; i++) {
@@ -675,20 +677,25 @@ function(instance) {
 
         // Set selected parcel
         if (this.hotspot !== null) {
-            var centroids = [];
             var minDist = Number.POSITIVE_INFINITY;
-            for (var i=0; i<this.drawLayer.features.length; i++) {
-                centroids.push(this.drawLayer.features[i].geometry.getCentroid());
-            }
             var selectedInd = 0;
-            for (i=0; i<centroids.length; i++) {
-                var dist = this.hotspot.point.distanceTo(centroids[i]);
-                if ((dist < minDist)||((dist === minDist)&&(this.hotspot.inside === this.drawLayer.features[i].geometry.containsPoint(centroids[i])))) {
+            for (i=0; i<this.drawLayer.features.length; i++) {
+                var centroid = this.drawLayer.features[i].geometry.getCentroid();
+                var dist = this.hotspot.point.distanceTo(centroid);
+                if ((dist < minDist)||((dist === minDist)&&(this.hotspot.inside === this.drawLayer.features[i].geometry.containsPoint(centroid)))) {
                     minDist = dist;
                     selectedInd = i;
                 }
             }
-            this.selectedFeature = selectedInd;
+
+            if (this.selectedFeature !== selectedInd) {
+                this.drawLayer.features[this.selectedFeature].style = this.basicStyle;
+                this.selectedFeature = selectedInd;
+                this.drawLayer.features[this.selectedFeature].style = this.selectStyle;
+                this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
+                this.drawLayer.redraw();
+                this.editLayer.redraw();
+            }
         }
 	},
 
@@ -719,7 +726,6 @@ function(instance) {
     createEditor : function(features, data, preparcel) {
         var newPolygons = [];
         var originalPolygons = [];
-        // var boundary = null;
         var partInd = 0;
         var selectedFeature = 0;
         var i;
@@ -752,7 +758,14 @@ function(instance) {
         };
         this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(newPolygons)));
         this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(originalPolygons)));
-    },
+
+        // Update the name field
+        for (i=0; i<this.drawLayer.features.length; i++) {
+            this.drawLayer.features[i].attributes.name = features[0].attributes.tekstiKartalla;
+        }
+        this.updateInfobox();
+		// Zoom to the loaded feature.
+		this._map.zoomToExtent(this.drawLayer.getDataExtent());    },
 
 	/**
 	 * Updates feature info in info box.
