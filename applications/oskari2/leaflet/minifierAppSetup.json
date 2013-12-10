@@ -277,22 +277,13 @@
             "Require-Bundle-Instance": []
         },
         "instanceProps": {}
-    }, {
-        "bundleinstancename": "statsgrid",
-        "bundlename": "statsgrid",
-        "metadata": {
-            "Import-Bundle": {
-                "statsgrid": {
-                    "bundlePath": "/Oskari/packages/statistics/bundle/"
-                },
-                "geostats": {
-                    "bundlePath": "/Oskari/packages/libraries/bundle/"
-                }
-            }
-        }
     }],
     "configuration": {
         "backendstatus": {
+            "state": {},
+            "conf": {}
+        },
+        "guidedtour": {
             "state": {},
             "conf": {}
         },
@@ -300,12 +291,17 @@
             "state": {
                 "selected": {
                     "id": "select",
-                    "group": "basictools"
+                    "group": "default-basictools"
                 }
             },
             "conf": {
                 "viewtools": {
                     "print": false
+                },
+                "mapUrlPrefix": {
+                    "fi": "http://www.paikkatietoikkuna.fi/web/fi/kartta?",
+                    "sv": "http://www.paikkatietoikkuna.fi/web/sv/kartfonstret?",
+                    "en": "http://www.paikkatietoikkuna.fi/web/en/map-window?"
                 }
             }
         },
@@ -318,12 +314,16 @@
             "conf": {}
         },
         "statsgrid": {
-            "state": {},
+            "state": {
+                "indicators": [],
+                "layerId": null
+            },
             "conf": {
                 "stateful": true,
                 "viewClazz": "Oskari.statistics.bundle.statsgrid.StatsView",
                 "sandbox": "sandbox",
-                "name": "StatsGrid"
+                "name": "StatsGrid",
+                "tileClazz": "Oskari.statistics.bundle.statsgrid.Tile"
             }
         },
         "layerselector2": {
@@ -332,18 +332,20 @@
                 "filter": "",
                 "groups": []
             },
-            "conf": {}
+            "conf": {
+                "showSearchSuggestions": true
+            }
         },
         "mapfull": {
             "state": {
                 "selectedLayers": [{
                     "id": "base_35",
-                    "opacity": 100
+                    "opacity": 80
                 }],
-                "zoom": 1,
+                "zoom": 5,
                 "srs": "EPSG:3067",
-                "north": 6935042,
-                "east": 540620
+                "north": 6673843,
+                "east": 383341
             },
             "conf": {
                 "globalMapAjaxUrl": "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&",
@@ -414,6 +416,10 @@
                     "name": "Taustakartta",
                     "inspire": "Taustakartta",
                     "orgName": "Maanmittauslaitos",
+                    "styles": [{
+                        "isDefault": true,
+                        "identifier": "default"
+                    }],
                     "tileLayerData": {
                         "styles": [{
                             "isDefault": true,
@@ -880,6 +886,10 @@
                     "name": "maastokartta",
                     "inspire": "maastokartta",
                     "orgName": "Maanmittauslaitos",
+                    "styles": [{
+                        "isDefault": true,
+                        "identifier": "default"
+                    }],
                     "tileLayerData": {
                         "styles": [{
                             "isDefault": true,
@@ -1344,6 +1354,10 @@
                     "userID": 10110,
                     "lastName": "",
                     "nickName": "10110",
+                    "roles": [{
+                        "id": 10114,
+                        "name": "Guest"
+                    }],
                     "userUUID": "",
                     "firstName": "",
                     "loginName": "default@maanmittauslaitos.fi"
@@ -1466,9 +1480,7 @@
         },
         "search": {
             "state": {},
-            "conf": {
-                "url": "/ajax?action_route=GetSearchResult&"
-            }
+            "conf": {}
         },
         "maplegend": {
             "state": {},

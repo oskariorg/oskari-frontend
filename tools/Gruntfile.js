@@ -125,24 +125,24 @@ module.exports = function (grunt) {
           'admin-layerrights': '../packages/framework/bundle/admin-layerrights',
           'backendstatus': '../packages/framework/bundle/backendstatus',
           'coordinatedisplay': '../packages/framework/bundle/coordinatedisplay',
-          'divmanazer': '../packages/framework/bundle/divmanazer',
+// Manual modification          'divmanazer': '../packages/framework/bundle/divmanazer',
           'featuredata': '../packages/framework/bundle/featuredata',
           'featuredata2': '../packages/framework/bundle/featuredata2',
-          'guidedtour': '../packages/framework/bundle/guidedtour',
+// Manual modification          'guidedtour': '../packages/framework/bundle/guidedtour',
           'infobox': '../packages/framework/bundle/infobox',
-          'layerselection2': '../packages/framework/bundle/layerselection2',
+// Manual modification          'layerselection2': '../packages/framework/bundle/layerselection2',
           'layerselector2': '../packages/framework/bundle/layerselector2',
           'mapanalysis': '../packages/framework/bundle/mapanalysis',
           'mapfull': '../packages/framework/bundle/mapfull',
           'maplegend': '../packages/framework/bundle/maplegend',
-// Manual modification          'mapmodule-plugin': '../packages/framework/bundle/mapmodule-plugin',
+// Manual replaced by src/mapping/mapmodule-plugin          'mapmodule-plugin': '../packages/framework/bundle/mapmodule-plugin',
           'mapstats': '../packages/framework/bundle/mapstats',
           'mapwfs': '../packages/framework/bundle/mapwfs',
           'mapwfs2': '../packages/framework/bundle/mapwfs2',
           'mapwmts': '../packages/framework/bundle/mapwmts',
           'metadata': '../packages/framework/bundle/metadata',
           'myplaces2': '../packages/framework/bundle/myplaces2',
-          'oskariui': '../packages/framework/bundle/oskariui',
+// Manual modification          'oskariui': '../packages/framework/bundle/oskariui',
           'parcel': '../packages/framework/bundle/parcel',
           'parcelinfo': '../packages/framework/bundle/parcelinfo',
           'parcelselector': '../packages/framework/bundle/parcelselector',
@@ -167,6 +167,7 @@ module.exports = function (grunt) {
                     json: "libraries/requirejs/lib/json",
                     domReady: "libraries/requirejs/lib/domReady",
                     normalize: "libraries/requirejs/lib/normalize",
+                    i18n: "libraries/requirejs/lib/i18n",
                     'css-builder': "libraries/requirejs/lib/css-builder"
                 },
                 optimizeAllPluginResources: true,
@@ -174,140 +175,136 @@ module.exports = function (grunt) {
                 preserveLicenseComments: true
             },
             'admin-layerrights': {
-                name: "bundles/framework/bundle/admin-layerrights/module",
-                out: "../bundles/framework/bundle/admin-layerrights/minified.js"
+                name: "src/framework/admin-layerrights/module",
+                out: "../src/framework/admin-layerrights/minified.js"
             },
             'backendstatus': {
-                name: "bundles/framework/bundle/backendstatus/module",
-                out: "../bundles/framework/bundle/backendstatus/minified.js"
+                name: "src/framework/backendstatus/module",
+                out: "../src/framework/backendstatus/minified.js"
             },
             'coordinatedisplay': {
-                name: "bundles/framework/bundle/coordinatedisplay/module",
-                out: "../bundles/framework/bundle/coordinatedisplay/minified.js"
+                name: "src/framework/coordinatedisplay/module",
+                out: "../src/framework/coordinatedisplay/minified.js"
             },
             'divmanazer': {
-                name: "bundles/framework/bundle/divmanazer/module",
-                out: "../bundles/framework/bundle/divmanazer/minified.js"
+                name: "src/framework/divmanazer/module",
+                out: "../src/framework/divmanazer/minified.js"
             },
             'featuredata': {
-                name: "bundles/framework/bundle/featuredata/module",
-                out: "../bundles/framework/bundle/featuredata/minified.js"
+                name: "src/framework/featuredata/module",
+                out: "../src/framework/featuredata/minified.js"
             },
             'featuredata2': {
-                name: "bundles/framework/bundle/featuredata2/module",
-                out: "../bundles/framework/bundle/featuredata2/minified.js"
+                name: "src/framework/featuredata2/module",
+                out: "../src/framework/featuredata2/minified.js"
             },
             'guidedtour': {
-                name: "bundles/framework/bundle/guidedtour/module",
-                out: "../bundles/framework/bundle/guidedtour/minified.js"
+                name: "src/framework/guidedtour/module",
+                out: "../src/framework/guidedtour/minified.js"
             },
             'infobox': {
-                name: "bundles/framework/bundle/infobox/module",
-                out: "../bundles/framework/bundle/infobox/minified.js"
+                name: "src/framework/infobox/module",
+                out: "../src/framework/infobox/minified.js"
             },
             'layerselection2': {
-                name: "bundles/framework/bundle/layerselection2/module",
-                out: "../bundles/framework/bundle/layerselection2/minified.js"
+                name: "src/framework/layerselection2/module",
+                out: "../src/framework/layerselection2/minified.js"
             },
             'layerselector2': {
-                name: "bundles/framework/bundle/layerselector2/module",
-                out: "../bundles/framework/bundle/layerselector2/minified.js"
+                name: "src/framework/layerselector2/module",
+                out: "../src/framework/layerselector2/minified.js"
             },
             'mapanalysis': {
-                name: "bundles/framework/bundle/mapanalysis/module",
-                out: "../bundles/framework/bundle/mapanalysis/minified.js"
+                name: "src/framework/mapanalysis/module",
+                out: "../src/framework/mapanalysis/minified.js"
             },
             'mapfull': {
-                name: "bundles/framework/bundle/mapfull/module",
-                out: "../bundles/framework/bundle/mapfull/minified.js"
+                name: "src/framework/mapfull/module",
+                out: "../src/framework/mapfull/minified.js"
             },
             'maplegend': {
-                name: "bundles/framework/bundle/maplegend/module",
-                out: "../bundles/framework/bundle/maplegend/minified.js"
-            },
-            'mapmodule-plugin': {
-                name: "bundles/framework/bundle/mapmodule-plugin/module",
-                out: "../bundles/framework/bundle/mapmodule-plugin/minified.js"
+                name: "src/framework/maplegend/module",
+                out: "../src/framework/maplegend/minified.js"
             },
             'mapstats': {
-                name: "bundles/framework/bundle/mapstats/module",
-                out: "../bundles/framework/bundle/mapstats/minified.js"
+                name: "src/framework/mapstats/module",
+                out: "../src/framework/mapstats/minified.js"
             },
             'mapwfs': {
-                name: "bundles/framework/bundle/mapwfs/module",
-                out: "../bundles/framework/bundle/mapwfs/minified.js"
+                name: "src/framework/mapwfs/module",
+                out: "../src/framework/mapwfs/minified.js"
             },
             'mapwfs2': {
-                name: "bundles/framework/bundle/mapwfs2/module",
-                out: "../bundles/framework/bundle/mapwfs2/minified.js"
+                name: "src/framework/mapwfs2/module",
+                out: "../src/framework/mapwfs2/minified.js"
             },
             'mapwmts': {
-                name: "bundles/framework/bundle/mapwmts/module",
-                out: "../bundles/framework/bundle/mapwmts/minified.js"
+                name: "src/framework/mapwmts/module",
+                out: "../src/framework/mapwmts/minified.js"
             },
             'metadata': {
-                name: "bundles/framework/bundle/metadata/module",
-                out: "../bundles/framework/bundle/metadata/minified.js"
+                name: "src/framework/metadata/module",
+                out: "../src/framework/metadata/minified.js"
             },
             'myplaces2': {
-                name: "bundles/framework/bundle/myplaces2/module",
-                out: "../bundles/framework/bundle/myplaces2/minified.js"
+                name: "src/framework/myplaces2/module",
+                out: "../src/framework/myplaces2/minified.js"
             },
             'oskariui': {
-                name: "bundles/framework/bundle/oskariui/module",
-                out: "../bundles/framework/bundle/oskariui/minified.js"
+                name: "src/framework/oskariui/module",
+                out: "../src/framework/oskariui/minified.js"
             },
             'parcel': {
-                name: "bundles/framework/bundle/parcel/module",
-                out: "../bundles/framework/bundle/parcel/minified.js"
+                name: "src/framework/parcel/module",
+                out: "../src/framework/parcel/minified.js"
             },
             'parcelinfo': {
-                name: "bundles/framework/bundle/parcelinfo/module",
-                out: "../bundles/framework/bundle/parcelinfo/minified.js"
+                name: "src/framework/parcelinfo/module",
+                out: "../src/framework/parcelinfo/minified.js"
             },
             'parcelselector': {
-                name: "bundles/framework/bundle/parcelselector/module",
-                out: "../bundles/framework/bundle/parcelselector/minified.js"
+                name: "src/framework/parcelselector/module",
+                out: "../src/framework/parcelselector/minified.js"
             },
             'personaldata': {
-                name: "bundles/framework/bundle/personaldata/module",
-                out: "../bundles/framework/bundle/personaldata/minified.js"
+                name: "src/framework/personaldata/module",
+                out: "../src/framework/personaldata/minified.js"
             },
             'postprocessor': {
-                name: "bundles/framework/bundle/postprocessor/module",
-                out: "../bundles/framework/bundle/postprocessor/minified.js"
+                name: "src/framework/postprocessor/module",
+                out: "../src/framework/postprocessor/minified.js"
             },
             'printout': {
-                name: "bundles/framework/bundle/printout/module",
-                out: "../bundles/framework/bundle/printout/minified.js"
+                name: "src/framework/printout/module",
+                out: "../src/framework/printout/minified.js"
             },
             'promote': {
-                name: "bundles/framework/bundle/promote/module",
-                out: "../bundles/framework/bundle/promote/minified.js"
+                name: "src/framework/promote/module",
+                out: "../src/framework/promote/minified.js"
             },
             'publisher': {
-                name: "bundles/framework/bundle/publisher/module",
-                out: "../bundles/framework/bundle/publisher/minified.js"
+                name: "src/framework/publisher/module",
+                out: "../src/framework/publisher/minified.js"
             },
             'search': {
-                name: "bundles/framework/bundle/search/module",
-                out: "../bundles/framework/bundle/search/minified.js"
+                name: "src/framework/search/module",
+                out: "../src/framework/search/minified.js"
             },
             'statehandler': {
-                name: "bundles/framework/bundle/statehandler/module",
-                out: "../bundles/framework/bundle/statehandler/minified.js"
+                name: "src/framework/statehandler/module",
+                out: "../src/framework/statehandler/minified.js"
             },
             'toolbar': {
-                name: "bundles/framework/bundle/toolbar/module",
-                out: "../bundles/framework/bundle/toolbar/minified.js"
+                name: "src/framework/toolbar/module",
+                out: "../src/framework/toolbar/minified.js"
             },
             'usagetracker': {
-                name: "bundles/framework/bundle/usagetracker/module",
-                out: "../bundles/framework/bundle/usagetracker/minified.js"
+                name: "src/framework/usagetracker/module",
+                out: "../src/framework/usagetracker/minified.js"
             },
             'userguide': {
-                name: "bundles/framework/bundle/userguide/module",
-                out: "../bundles/framework/bundle/userguide/minified.js"
+                name: "src/framework/userguide/module",
+                out: "../src/framework/userguide/minified.js"
             }
         },
         requirejs: {

@@ -22,10 +22,30 @@ define([
 	"bundles/framework/bundle/mapmodule-plugin/request/MapMoveByLayerContentRequest",
 	"bundles/framework/bundle/mapmodule-plugin/request/MapMoveByLayerContentRequestHandler",
 	"bundles/framework/bundle/mapmodule-plugin/event/MapLayerVisibilityChangedEvent",
+
+	/* WmsLayer */
 	"./plugin/wmslayer/WmsLayerPlugin",
+
+	/* WmtsLayer */
 	"./plugin/wmtslayer/WmtsLayerPlugin",
 	"./plugin/wmtslayer/WmtsLayer",
 	"./plugin/wmtslayer/WmtsLayerModelBuilder",
+
+	/* StatsLayer */
+	"./plugin/statslayer/StatsLayerPlugin",
+	"bundles/framework/bundle/mapstats/domain/StatsLayer",
+	"bundles/framework/bundle/mapstats/domain/StatsLayerModelBuilder",
+	"bundles/framework/bundle/mapstats/event/StatsVisualizationChangeEvent",
+	"bundles/framework/bundle/mapstats/event/FeatureHighlightedEvent",
+	"bundles/framework/bundle/mapstats/event/HoverTooltipContentEvent",
+	"css!resources/framework/bundle/mapstats/css/mapstats.css",
+	"bundles/framework/bundle/mapstats/locale/fi",
+	"bundles/framework/bundle/mapstats/locale/sv",
+	"bundles/framework/bundle/mapstats/locale/en",
+
+	/* WFSLayer */
+	"mapwfs",
+
 	"bundles/framework/bundle/mapmodule-plugin/request/ToolSelectionRequest",
 	"bundles/framework/bundle/mapmodule-plugin/plugin/controls/ToolSelectionHandler",
 	"bundles/framework/bundle/mapmodule-plugin/request/MapLayerUpdateRequest",

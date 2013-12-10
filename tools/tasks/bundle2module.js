@@ -24,7 +24,10 @@ module.exports = function(grunt) {
         }
 
         if (!target) {
-            target = origin.replace('packages', 'bundles').replace('bundle.js', 'module.js');
+            // change packages folder to src
+            // change bundle.js to module.js
+            // remove bundle folder as unnecessary
+            target = origin.replace('/packages/', '/src/').replace('bundle.js', 'module.js').replace('/bundle/', '/');
         }
 
         function modifyPath4require(src) {

@@ -1,7 +1,7 @@
 define([
 	"src/oskari/oskari",
 	"jquery",
-	"bundles/framework/bundle/oskariui/module",
+	"src/framework/oskariui/module",
 	"./instance",
 	"bundles/framework/bundle/mapfull/enhancement/start-map-with-link-enhancement",
 	"bundles/framework/bundle/mapfull/request/MapResizeEnabledRequest",

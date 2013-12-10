@@ -2,7 +2,7 @@ define([
 	"oskari",
 	"jquery",
 	"libraries/proj4js-1.0.1/proj4js-compressed",
-	"libraries/OpenLayers/OpenLayers-2.12-patched",
+	"libraries/OpenLayers/OpenLayers.2_13_1-full-map",
 	"css!resources/openlayers/theme/default/style.css"
 ], function(Oskari, jQuery) {
 	return Oskari.bundleCls("ol2").category({

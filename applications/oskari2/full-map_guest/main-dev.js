@@ -108,15 +108,10 @@ require(["mainConfig"], function() {
                 for (bundle in appConfig) {
                     if ((bundle === "mapfull") || (bundle === "divmanazer") || (bundle === "openlayers-default-theme")) {
                         // already loaded
-                    } else if (bundle === "statsgrid") {
-                        bundles.push("bundles/statistics/bundle/" + bundle + "/module");
                     } else if (bundle === "metadataflyout") {
                         bundles.push("bundles/catalogue/bundle/" + bundle + "/module");
-                    } else if (bundle === "guidedtour") {
-                        console.log('relocating guidedtour')
-                        bundles.push("src/framework/" + bundle + "/module");
                     } else {
-                        bundles.push("bundles/framework/bundle/" + bundle + "/module");
+                        bundles.push(bundle);
                     }
                 }
 

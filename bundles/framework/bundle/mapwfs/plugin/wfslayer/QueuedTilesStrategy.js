@@ -145,6 +145,8 @@ Oskari.clazz.define("Oskari.mapframework.gridcalc.QueuedTilesStrategy",
 			 * new data must be incondtionally read.
 			 */
 			update : function(options) {
+				// TODO: write map engine independent or specific, depending on what is possible
+				return;
 				var mapBounds = this.layer.map.getExtent();
 				this.grid.moveTo(mapBounds, true);
 				this.flushTileQueue();

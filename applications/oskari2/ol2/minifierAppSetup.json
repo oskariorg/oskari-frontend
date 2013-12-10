@@ -10,10 +10,10 @@
         "metadata": {
             "Import-Bundle": {
                 "openlayers-default-theme": {
-                    "bundlePath": "../../packages/openlayers/bundle/"
+                    "bundlePath": "/Oskari/packages/openlayers/bundle/"
                 },
                 "openlayers-single-full": {
-                    "bundlePath": "../../packages/openlayers/bundle/"
+                    "bundlePath": "/Oskari/packages/openlayers/bundle/"
                 }
             },
             "Require-Bundle-Instance": []
@@ -288,6 +288,10 @@
         },
         "instanceProps": {}
     }, {
+        "title": "statsgrid",
+        "fi": "statsgrid",
+        "sv": "statsgrid",
+        "en": "statsgrid",
         "bundleinstancename": "statsgrid",
         "bundlename": "statsgrid",
         "metadata": {
@@ -310,13 +314,28 @@
             "state": {
                 "selected": {
                     "id": "select",
-                    "group": "basictools"
+                    "group": "default-basictools"
                 }
             },
             "conf": {
                 "viewtools": {
                     "print": false
+                },
+                "mapUrlPrefix": {
+                    "fi": "http://www.paikkatietoikkuna.fi/web/fi/kartta?",
+                    "sv": "http://www.paikkatietoikkuna.fi/web/sv/kartfonstret?",
+                    "en": "http://www.paikkatietoikkuna.fi/web/en/map-window?"
                 }
+            }
+        },
+        "layerselector2": {
+            "state": {
+                "tab": "Aiheittain",
+                "filter": "",
+                "groups": []
+            },
+            "conf": {
+                "showSearchSuggestions": true
             }
         },
         "layerselection2": {
@@ -328,21 +347,17 @@
             "conf": {}
         },
         "statsgrid": {
-            "state": {},
+            "state": {
+                "indicators": [],
+                "layerId": null
+            },
             "conf": {
                 "stateful": true,
                 "viewClazz": "Oskari.statistics.bundle.statsgrid.StatsView",
                 "sandbox": "sandbox",
-                "name": "StatsGrid"
+                "name": "StatsGrid",
+                "tileClazz": "Oskari.statistics.bundle.statsgrid.Tile"
             }
-        },
-        "layerselector2": {
-            "state": {
-                "tab": "Aiheittain",
-                "filter": "",
-                "groups": []
-            },
-            "conf": {}
         },
         "mapfull": {
             "state": {
@@ -351,6 +366,7 @@
                     "opacity": 80
                 }],
                 "zoom": 5,
+                "srs": "EPSG:3067",
                 "east": 383341,
                 "north": 6673843
             },
@@ -371,10 +387,6 @@
                     "id": "Oskari.ol2.mapmodule.WmsLayerPlugin"
                 }, {
                     "id": "Oskari.ol2.mapmodule.WmtsLayerPlugin"
-                }, {
-                    "id": "Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin"
-                }, {
-                    "id": "Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin"
                 }],
                 "layers": [{
                     "wmsName": "taustakartta",
@@ -1108,6 +1120,10 @@
                     "userID": 10110,
                     "lastName": "",
                     "nickName": "10110",
+                    "roles": [{
+                        "id": 10114,
+                        "name": "Guest"
+                    }],
                     "userUUID": "",
                     "firstName": "",
                     "loginName": "default@maanmittauslaitos.fi"
@@ -1254,6 +1270,47 @@
             "state": {},
             "conf": {
                 "adaptable": true
+            }
+        },
+        "promote": {
+            "state": {},
+            "conf": {
+                "__name": "Promote",
+                "title": {
+                    "fi": "Otsikko tileen",
+                    "en": "Title for Tile"
+                },
+                "desc": {
+                    "fi": "Voit käyttää julkaisutoimintoa kirjauduttuasi palveluun.",
+                    "en": "You need to log in before using the embedding function."
+                },
+                "signup": {
+                    "fi": "Kirjaudu sisään",
+                    "en": "Log in"
+                },
+                "signupUrl": {
+                    "fi": "/web/fi/login",
+                    "en": "/web/en/login"
+                },
+                "register": {
+                    "fi": "Rekisteröidy",
+                    "en": "Register"
+                },
+                "registerUrl": {
+                    "fi": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account",
+                    "en": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+                },
+                "test_toolbarButtons": {
+                    "buttonGrp": {
+                        "buttonId": {
+                            "iconCls": "tool-reset",
+                            "tooltip": {
+                                "fi": "jee",
+                                "en": "jee en"
+                            }
+                        }
+                    }
+                }
             }
         }
     }
