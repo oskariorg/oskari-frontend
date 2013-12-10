@@ -17,7 +17,12 @@ Oskari.registerLocalization({
                 "name": "Titeln",
                 "description": "Beskrivning"
             },
-            "newIndicator": "Ny indikator"
+            "newIndicator": "Ny indikator",
+            "error": {
+                "title": "Fel",
+                "indicatorsError": "Virhe indikaattorien latauksessa. Yritä myöhemmin uudelleen",
+                "indicatorError": "Virhe indikaattorin latauksessa. Yritä myöhemmin uudelleen"
+            }
         },
         "gender": "Kön",
         "genders": {

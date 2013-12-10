@@ -31,7 +31,8 @@ Optional configuration to show published layers tab:
 ```javascript
 {
   "conf": {
-    "showPublishedTab" : true
+    "showPublishedTab" : true,
+    showSearchSuggestions : true     // if keyword search on, if needed
   }
 }
 ```

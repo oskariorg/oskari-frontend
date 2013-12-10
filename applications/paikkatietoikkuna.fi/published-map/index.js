@@ -70,6 +70,30 @@ jQuery(document).ready(function() {
           if (cb) {
               cb(instance);
           }
+/*
+
+             var ugStartup = {
+                title : 'publishedstatehandler',
+                fi : 'publishedstatehandler',
+                sv : 'publishedstatehandler',
+                en : 'publishedstatehandler',
+                bundlename : 'publishedstatehandler',
+                bundleinstancename : 'publishedstatehandler',
+                metadata : {
+                    "Import-Bundle" : {
+                        "publishedstatehandler" : {
+                            bundlePath : '/Oskari/packages/framework/bundle/'
+                        }
+                    },
+                    "Require-Bundle-Instance" : []
+                },
+                instanceProps : {}
+            };
+
+            Oskari.bundle_facade.playBundle(ugStartup, function() {
+            });
+*/
+
         });
     }
     

@@ -175,9 +175,14 @@ function() {
 		// handles selection events related to parcels
 		me.parcelSelectorHandler = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.ParcelSelectorHandler", me);
 		me.parcelSelectorHandler.start();
+        me.preparcelSelectorHandler = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.PreParcelSelectorHandler", me);
+        me.preparcelSelectorHandler.start();
 		if (me.state && me.state.initRef) {
 			me.parcelSelectorHandler.loadParcel(me.state.initRef);
 		}
+        else if (me.state && me.state.initPreParcelRef) {
+            me.preparcelSelectorHandler.loadPreParcel(me.state.initPreParcelRef);
+        }
 	},
 	/**
 	 * @method stop

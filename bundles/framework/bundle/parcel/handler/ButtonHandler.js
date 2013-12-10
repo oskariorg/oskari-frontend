@@ -59,6 +59,7 @@ function(instance) {
             callback : function() {
                 var drawPlugin = me.instance.view.drawPlugin;
                 drawPlugin.clear();
+                drawPlugin.operatingFeature = null;
                 drawPlugin.drawLayer.addFeatures(drawPlugin.backupFeatures);
                 me.setButtonEnabled("line",true);
                 me.setButtonEnabled("area",true);

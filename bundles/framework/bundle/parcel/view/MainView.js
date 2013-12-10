@@ -134,16 +134,33 @@ function(instance) {
             place : {}
         };
         var feature = this.drawPlugin.getDrawing();
+        var oldpreparcel = this.drawPlugin.getOldPreParcel();
         if (feature) {
             defaultValues.place.area = this.drawPlugin.getParcelGeometry().getArea().toFixed(0);
             if (feature.attributes) {
-                defaultValues.place.name = feature.attributes.name+'-M';
+                defaultValues.place.name = feature.attributes.name+'-K';
                 defaultValues.place.parent_property_id = feature.attributes.name;
-                defaultValues.place.parent_property_quality = feature.attributes.quality;
+                defaultValues.place.parent_property_quality = this._decodeQuality('q'+feature.attributes.quality);
+
+            }
+            // Override if old values available
+            if (oldpreparcel)
+            {
+                defaultValues.place.id = oldpreparcel.id;
+                defaultValues.place.name = oldpreparcel.preparcel_id;
+                defaultValues.place.title = oldpreparcel.title;
+                defaultValues.place.subtitle = oldpreparcel.subtitle;
+                defaultValues.place.desc = oldpreparcel.description;
+                defaultValues.place.parent_property_id = oldpreparcel.parent_property_id;
+                defaultValues.place.parent_property_quality = oldpreparcel.parent_property_quality;
+                defaultValues.place.reporter= oldpreparcel.reporter;
+                defaultValues.place.area_unit = oldpreparcel.area_unit;
             }
         }
         // Set the default values for the form.
         this.form.setValues(defaultValues);
+
+
 
         var content = [{
             html : me.form.getForm(),
@@ -166,6 +183,9 @@ function(instance) {
         content[0].actions[loc.buttons.save] = function() {
             me._saveForm();
         };
+
+        // Enable / disable input fields
+        if (!oldpreparcel)me.form.enableDisableFields();
 
         var request = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, loc.placeform.title, content, location, true);
         sandbox.request(me.getName(), request);
@@ -292,6 +312,7 @@ function(instance) {
         // Callback handles the end of the asynchronous operation.
         var serviceCallback = function(blnSuccess, model, blnNew) {
             if (blnSuccess) {
+                me.instance.showMessage('Tallennus onnistui');
                 me._cleanupPopup();
             } else {
                 // blnNew should always be true since we are adding a preparcel
@@ -341,7 +362,18 @@ function(instance) {
         };
         this.instance.getService().loadPreParcelData(parcel_id, me.drawPlugin, serviceCallback);
     },
+        /**
+         * Decode the quality code to locale description
+         * @param quality_code  (lahdeaineisto property in KTJ WFS schema)
+         * @private
+         */
+        _decodeQuality : function(quality_code) {
+            var codes = this.instance.getLocalization().qualitycodes;
+            var quali = codes[quality_code];
+            if(!quali) quali = codes['q0'];
+            return quali;
 
+        },
     /**
      * @method _cleanupPopup
      * Cancels operations:

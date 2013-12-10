@@ -142,7 +142,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
             "selected": true,
             "config": {
-                "infoBox": true
+                "ignoredLayerTypes" : ["WFS"], 
+                "infoBox": false
             }
         }];
 
@@ -152,6 +153,56 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         for (i = me.tools.length - 1; i > -1; i -= 1) {
             me.toolIndices[this.tools[i].id] = i;
         }
+
+        me.toolDropRules = {
+            "Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin": {
+                "allowedLocations": ['bottom left', 'bottom right'],
+                "allowedSiblings": ["Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin", "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"],
+                "groupedSiblings": false
+            },
+
+            "Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin": {
+                "allowedLocations": ['bottom left', 'bottom right'],
+                "allowedSiblings": ["Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin", "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"],
+                "groupedSiblings": false
+            },
+
+            "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin" : {
+                "alloweLocations": ['bottom left', 'bottom right'],
+                "allowedSiblings": ["Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin", "Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin"],
+                "groupedSiblings": false
+            },
+
+            "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons": {
+                "allowedLocations": ['top left', 'top right', 'bottom left', 'bottom right'],
+                "allowedSiblings": ["Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"],
+                "groupedSiblings": true
+            },
+
+            "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar": {
+                "allowedLocations": ['top left', 'top right', 'bottom left', 'bottom right'],
+                "allowedSiblings": ["Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"],
+                "groupedSiblings": true
+            },
+
+            "Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin": {
+                "allowedLocations": ['top left', 'top center', 'top right'],
+                "allowedSiblings": ['Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin'],
+                "groupedSiblings": false
+            },
+
+            "Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin": {
+                "allowedLocations": ['top left', 'top center', 'top right'],
+                "allowedSiblings": ['Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin'],
+                "groupedSiblings": false
+            },
+
+            "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin": {
+                "allowedLocations": ['top left', 'top right'],
+                "allowedSiblings": [],
+                "groupedSiblings": false
+            }
+        };
 
         // TODO see if this and layerselection could be moved to tools...
         // just ignore them on ui creation or smthn
@@ -609,7 +660,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             contentPanel.append(tooltipCont);
 
 
-
             // content
             for (i = 0; i < me.toolLayouts.length; i += 1) {
                 layoutContainer = me.templateLayout.clone();
@@ -754,7 +804,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         _activatePreviewPlugin: function (tool, enabled) {
             var me = this,
                 sandbox = me.instance.getSandbox();
-            // FIXME set layout classes on startPlugin
             if (!tool.plugin && enabled) {
                 var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
                 tool.plugin = Oskari.clazz.create(tool.id, tool.config);
@@ -801,6 +850,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 tool.plugin.startPlugin(this.instance.sandbox);
                 tool._isPluginStarted = true;
 
+                // toolbar (bundle) needs to be notified
+                if (tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
+                    me.toolbarConfig = {
+                        'toolbarId' : 'PublisherToolbar',
+                        'defaultToolbarContainer' : '.publishedToolbarContent',
+                        'hasContentContainer': true,
+                        'classes' : {}
+                    };
+
+                    tool.plugin.setToolbarContainer();
+                    me.toolbarConfig.classes = tool.plugin.getToolConfs();
+                }
+
                 toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions() : null;
 
                 //atm. this is using toolsplugin's button structure
@@ -831,6 +893,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     }
                 }
             } else {
+                // toolbar (bundle) needs to be notified
+                if (tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
+                    me.toolbarConfig = {};
+                }
                 if (tool._isPluginStarted) {
                     //remove buttons
                     toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions() : null;
@@ -855,8 +921,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                         toolOptionCheckboxes.remove();
                         optionContainer.remove();
                     }
-
-
 
                     tool._isPluginStarted = false;
                     tool.plugin.stopPlugin(this.instance.sandbox);
@@ -1096,8 +1160,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             // if data grid is enabled
             if (me.isDataVisible) {
                 // get state of statsgrid
-                var statsGrid = me.sandbox.getStatefulComponents().statsgrid;
-                selections.gridState = statsGrid.state;
+                var statsGrid = me.sandbox.getStatefulComponents().statsgrid,
+                    statsGridState = me._filterIndicators(_.clone(statsGrid.state, true));
+
+                selections.gridState = statsGridState;
             }
 
             var mapFullState = sandbox.getStatefulComponents().mapfull.getState();
@@ -1368,7 +1434,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 locale = Oskari.getLocalization('StatsGrid'), // Let's use statsgrid's locale files.
                 showGrid = true, //me.conf ? me.conf.gridShown : true; // Show the grid on startup, defaults to true.
                 sandboxName = 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName);
+                sandbox = Oskari.getSandbox(sandboxName),
+                statsGridState;
             me.sandbox = sandbox;
             sandbox.register(me.instance);
 
@@ -1385,12 +1452,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             if (statsGrid && statsGrid.state && showGrid) {
                 //me.createUI(statsGrid.state);
                 //me.publisher.
-
+                statsGridState = me._filterIndicators(_.clone(statsGrid.state, true));
                 // Register grid plugin to the map.
                 var gridConf = {
                     'published': true,
                     'layer': layer,
-                    'state': statsGrid.state
+                    'state': statsGridState
                 };
                 var gridPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin', gridConf, locale);
                 me.mapModule.registerPlugin(gridPlugin);
@@ -1413,6 +1480,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         },
 
         /**
+         * Filters out user's indicators which aren't allowed to be published.
+         *
+         * @method _filterIndicators
+         * @param  {Object} statsGridState
+         * @return {Object} filtered state
+         */
+        _filterIndicators: function (statsGridState) {
+            statsGridState.indicators = _.filter(statsGridState.indicators, function (indicator) {
+                return (
+                    // sotka indicators
+                    (!indicator.ownIndicator) ||
+                    // own indicators
+                    (indicator.ownIndicator && indicator['public'])
+                );
+            });
+            return statsGridState;
+        },
+
+        /**
          * Changes the style of each tool, if the tool's plugin supports it.
          *
          * @method changeToolStyles
@@ -1425,7 +1511,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             var styleConfig,
                 i,
-                tool;
+                tool,
+                me = this;
 
             // Set the toolStyle to the config of each tool
             // and change the style immedately. 
@@ -1449,6 +1536,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 }
                 if (tool._isPluginStarted && tool.plugin.changeToolStyle) {
                     tool.plugin.changeToolStyle(styleConfig);
+                }
+                // tools in toolbar plugin needs to be configured
+                if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
+                    if (me.toolbarConfig && me.toolbarConfig.classes) {
+                        me.toolbarConfig.classes = tool.plugin.getToolConfs();
+                    }
                 }
             }
 
@@ -1616,5 +1709,144 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
 
             return layoutConf;
+        },
+        /**
+         * @method _getActivePlugins Returns all active plugins in the whitelist
+         * @param  {Array} whitelist Array of plugin classes to examine
+         * @return {Array}           Array of plugin classes
+         */
+        _getActivePlugins: function (whitelist) {
+            var ret = [],
+                i;
+            for (i = 0; i < this.tools.length; i++) {
+                if (this.tools[i].plugin && this.tools[i].plugin.selected && jQuery.inArray(this.tools[i].plugin.id, whitelist)) {
+                    ret.push(this.tools[i].id);
+                }
+            }
+            return ret;
+        },
+
+        /**
+         * @method _getDraggedPlugins Returns all plugins that should be included in the drag
+         * @param  {String} plugin    Plugin class
+         * @return {Array}            Array of plugin classes
+         */
+        _getDraggedPlugins: function (plugin) {
+            var ret;
+            if (this.toolDropRules[plugin].groupedSiblings) {
+                ret = this._getActivePlugins(this.toolDropRules[plugin].allowedSiblings);
+                ret.push(plugin);
+            } else {
+                ret = [plugin];
+            }
+            return ret;
+        },
+
+        /**
+         * @method _getDropzonePlugins Returns all active plugins in given dropzone
+         * @param  {Object} dropzone   jQuery object of the dropzone
+         * @return {Array}             Array of plugin classes
+         */
+        _getDropzonePlugins: function (dropzone) {
+            var ret = [],
+                i;
+            for (i = 0; i < this.tools.length; i++) {
+                if (this._toolInDropZone(this.tools[i], dropzone)) {
+                    ret.push(this.tools[i].id);
+                }
+            }
+            // There's no such structure for LogoPlugin so we have to build it...
+            var tmpTool = {
+                "config": {
+                    "location": {
+                        "classes": this.logoPluginClasses.classes
+                    }
+                },
+                "plugin": this.logoPlugin
+            };
+            // LogoPlugin
+            if (this._toolInDropZone(tmpTool, dropzone)) {
+                ret.push("Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin");
+            }
+            // LayerSelectionPlugin
+            tmpTool.config.location.classes = this.layerSelectionClasses.classes;
+            tmpTool.plugin = this.maplayerPanel.plugin;
+            if (this._toolInDropZone(tmpTool, dropzone)) {
+                ret.push("Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin");
+            }
+            return ret;
+        },
+
+        /**
+         * @method _toolInDropZone    Determines if the tool is active and in the dropzone
+         * @param  {Object}  tool     Tool instance, containing plugin and config
+         * @param  {Object}  dropzone jQuery object of the dropzone
+         * @return {Boolean}          True if tool is active and in the dropzone
+         */
+        _toolInDropZone: function (tool, dropzone) {
+            var ret = false;
+            // TODO check that selected tells us if the plugin is active...
+            if (tool && tool.plugin && tool.plugin.selected) {
+                //    check if in this dropzone (nasty class check)
+                ret = dropzone.is("." + tool.config.location.classes.split(' ').join("."));
+            }
+            return ret;
+        },
+
+        /**
+         * @method _locationAllowed           Is the dropzone in the plugin's allowed locations
+         * @param  {Array}   allowedLocations Array of allowed locations for the plugin
+         * @param  {Object}  dropzone         jQuery object of the dropzone
+         * @return {Boolean}                  True if dropzone is allowed for plugin
+         */
+        _locationAllowed: function (allowedLocations, dropzone) {
+            var isAllowedLocation,
+                i,
+                j;
+            for (i = 0; i < allowedLocations.length; i++) {
+                isAllowedLocation = dropzone.is("." + allowedLocations[i].split(' ').join("."));
+                if (isAllowedLocation) {
+                    break;
+                }
+            }
+            return isAllowedLocation;
+        },
+
+        /**
+         * @method _showDroppable  Shows dropzones where the given plugin can be dropped in green
+         * @param  {String} plugin Plugin class
+         */
+        _showDroppable: function (plugin) {
+            var me = this,
+                allowedLocation,
+                dropzone,
+                siblings,
+                i;
+            jQuery('div.mapplugins').each(function () {
+                dropzone = jQuery(this);
+                allowedLocation = me._locationAllowed(me.toolDropRules[plugin].allowedLocations, dropzone);
+                if (allowedLocation) {
+                    // check if siblings are allowed
+                    siblings = me._getDropzonePlugins(dropzone);
+                    for (i = 0; i < siblings.length; i++) {
+                        allowedLocation = jQuery.inArray(siblings[i], me.toolDropRules[plugin].allowedSiblings) > -1;
+                        if (!allowedLocation) {
+                            break;
+                        }
+                    }
+                    if (allowedLocation) {
+                        // TODO these should be removed at some stage...
+                        // paint it green, plugin can be dropped here
+                        dropzone.addClass("allowed");
+                    } else {
+                        // paint it red, plugins already in the dropzone aren't allowed siblings for this plugin
+                        // we could also try to move them somewhere?
+                        dropzone.addClass("disallowed");
+                    }
+                } else {
+                    // paint it red, this isn't an allowed dropzone for the plugin
+                    dropzone.addClass("disallowed");
+                }
+            });
         }
     });

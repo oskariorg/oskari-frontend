@@ -63,9 +63,11 @@ div.admin-layerselector {
             width: 140px;
             height: 16px;
             margin: 0;
+            margin-bottom: 4px;
 
             &.mid {
                 width: 217px;
+                float: left;
             }
 
             &.long {
@@ -319,7 +321,7 @@ div.admin-layerselector {
     }
     .input-controls {
         position: relative;
-        float: left;
+        /*float: left;*/
         margin-right: 5px;
 
         input.add-class-input.mid {
@@ -333,6 +335,10 @@ div.admin-layerselector {
         }
     }
 
+    .adjacent .input-controls {
+        float: left;
+    }
+
     .icon-close {
         display: inline-block;
         opacity: 0;
@@ -342,6 +348,10 @@ div.admin-layerselector {
         right: 10px;
         margin-left: 0px;
         cursor: pointer;
+
+        &.mid {
+            right: 90px;
+        }
     }
     .input-controls:hover .icon-close,
     .layer:hover button.admin-arrange-layers {

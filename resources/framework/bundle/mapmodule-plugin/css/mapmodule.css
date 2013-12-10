@@ -109,3 +109,7 @@ div.mapplugins {
 
 .oskari-publisher-font-georgia {
   font-family: Georgia, serif !important; }
+
+div.mapplugins.right div.mapplugin.indexmap .indexmapToggle {
+  float: right;
+}

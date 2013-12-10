@@ -171,28 +171,30 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
      * Send data to backend and remove form.
      */
     _handleSubmit: function(e, me, callback) {
-        var indicatorData = me._gatherData();
+        var service = this.sandbox.getService('Oskari.statistics.bundle.statsgrid.UserIndicatorsService'),
+            indicatorData = me._gatherData();
 
-        if(indicatorData != null) {
-            $.ajax({
-                url : me.sandbox.getAjaxUrl() + 'action_route=SaveUserIndicator',
-                type: "POST",
-                data : indicatorData,
-                success: function(data, textStatus, jqXHR){
-                    //data - response from server
+        if(indicatorData != null && service != null) {
+            if(this.sandbox && this.sandbox.getUser().isLoggedIn()) {
+                service.saveUserIndicator(indicatorData, function(indicator) {
                     me.container.find('.form-cont').remove();
                     me.container.find('.selectors-container').show();
                     me.container.find('#municipalGrid').show();
-                    if(data.id != null) {
-                        indicatorData.indicatorId = 'user_'+data.id;
+                    if(indicator.id != null) {
+                        indicatorData.indicatorId = 'user_'+indicator.id;
                         callback(indicatorData);
                     }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
+                }, function(jqXHR, textStatus) {
                     //TODO some better way of showing errors?
                     alert(me.localization.connectionProblem);
-                }
-            });
+                });
+            } else {
+                me.container.find('.form-cont').remove();
+                me.container.find('.selectors-container').show();
+                me.container.find('#municipalGrid').show();
+                indicatorData.indicatorId = 'user_'+ new Date().getTime();
+                callback(indicatorData);
+            }
         }
     },
 
@@ -249,11 +251,11 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
                 unrecognized.push(area);
         });
         var openImport = me.container.find('.import-button');
-
+debugger;
         // alert user of unrecognized lines
         var unrecognizedInfo = "";
         if (unrecognized.length > 0) {
-            unknownText = '<br>'+me.localization.parsedDataUnrecognized+': ' + unrecognized.length;
+            unrecognizedInfo = '<br>'+me.localization.parsedDataUnrecognized+': ' + unrecognized.length;
         }
         // Tell user about how many regions were imported
         var info = me.localization.parsedDataInfo+': <span class="import-indicator-bold">' + updated + '</span> ' + unrecognizedInfo;
@@ -284,18 +286,21 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
         if(title == null || title.trim() == "") {
             emptyFields.push(me.container.find('.form-meta .title').find('label').text());
         }
+        // TODO: real localized title
         json.title = JSON.stringify({'fi': title});
 
         var source = me.container.find('.form-meta .sources').find('input').val();
         if(source == null || source.trim() == "") {
             emptyFields.push(me.container.find('.form-meta .sources').find('label').text());
         }
+        // TODO: real localized source
         json.source = JSON.stringify({'fi': source});
 
         var description = me.container.find('.form-meta .description').find('input').val();
         if(description == null || description.trim() == "") {
             emptyFields.push(me.container.find('.form-meta .description').find('label').text());
         }
+        // TODO: real localized description
         json.description = JSON.stringify({'fi': description});
 
         var year = me.container.find('.form-meta .year').find('input').val();

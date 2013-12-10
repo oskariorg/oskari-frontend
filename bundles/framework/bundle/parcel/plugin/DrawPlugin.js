@@ -23,6 +23,7 @@ function(instance) {
 	this.markerLayer = null;
 	this.currentDrawMode = null;
 	this.currentFeatureType = null;
+    this._oldPreParcel = null;   // old preparcel attributes
 	// Created in init
 	this.splitter = null;
 	this.backupFeatures = [];
@@ -31,6 +32,8 @@ function(instance) {
 	this.selectStyle = null;
 	this.selectedFeature = -2;
 	this.selectInfoControl = null;
+    this.operatingFeature = null;
+    this.hotspot = null;
 }, {
 	/**
 	 * @method getName
@@ -45,13 +48,12 @@ function(instance) {
 	},
 
     processFeatures : function() {
+        if (!((this.drawLayer.features.length > 1)&&(this.operatingFeature === null))) return; // Nothing to process
         var me = this;
         // Make sure that all the component states are in sync, such as dialogs.
         var event = me._sandbox.getEventBuilder('Parcel.FinishedDrawingEvent')();
         me._sandbox.notifyAll(event);
         // Disable all draw controls.
-        // Then, the user needs to reselect what to do next.
-        // At the moment, this creates some consistency in the usability.
         me.toggleControl();
         // Because a new feature was added, do splitting.
         me.splitFeature();
@@ -110,11 +112,11 @@ function(instance) {
 		});
 
 		this.editLayer.updateLine = function() {
-			var operatingFeature = this.features[0];
-			if (operatingFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiLineString") {
+			var editFeature = this.features[0];
+			if (editFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiLineString") {
 				// Handles the point added into the line
-				for (var i = 0; i < operatingFeature.geometry.components.length; i++) {
-					var lineString = operatingFeature.geometry.components[i];
+				for (var i = 0; i < editFeature.geometry.components.length; i++) {
+					var lineString = editFeature.geometry.components[i];
 					for (var k = 0; k < lineString.components.length; k++) {
 						var point = lineString.components[k];
 						var newReferences = [];
@@ -174,7 +176,7 @@ function(instance) {
 					// Updates middle points
                     me.controls.modify.deactivate();
                     me.controls.modify.activate();
-					me.controls.modify.selectFeature(operatingFeature);
+					me.controls.modify.selectFeature(editFeature);
                     me.controls.modify.clickout = false;
                     me.controls.modify.toggle = false;
 				}
@@ -264,6 +266,8 @@ function(instance) {
 			},
 
 			trigger : function(e) {
+                // Trigger disabled if popup visible
+                if (jQuery("div#parcelForm").length > 0) return;
 				var lonlat = me._map.getLonLatFromPixel(e.xy);
 				var point = new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat);
 				var i;
@@ -280,7 +284,7 @@ function(instance) {
 						}
 					}
 					if (i === features.length - 1)
-						me.selectedFeature = -2;
+						me.selectedFeature = oldSelectedFeature;
 				}
 				if (oldSelectedFeature != me.selectedFeature) {
 					for ( i = 0; i < features.length; i++) {
@@ -546,6 +550,19 @@ function(instance) {
 		}
 	},
         /**
+         * Returns the index of selected feature
+         *
+         * @return index of selected feature
+         * @method getIndexOfSelectedFeature
+         */
+        getIndexOfSelectedFeature : function() {
+            if (this.selectedFeature > -1) {
+
+                return this.selectedFeature;
+
+            } else return 0;
+        },
+        /**
          * Returns the parcel geometry from the draw layer
          * @method
          */
@@ -563,6 +580,13 @@ function(instance) {
             if (this.editLayer.features.length === 0) return null;
             return this.editLayer.features[0].geometry;
         },
+        /**
+         * Returns the operating geometry
+         * @method
+         */
+        getOperatingGeometry : function() {
+            return this.operatingFeature.geometry;
+        },
 	/**
 	 * @param {String} featureType The feature type of the parcel feature. This is used when feature is commited to the server.
 	 * @method setFeatureType
@@ -577,6 +601,13 @@ function(instance) {
 	getFeatureType : function() {
 		return this.currentFeatureType;
 	},
+        /**
+         * Returns attributes of old stored preparcel
+         * @returns {*}
+         */
+        getOldPreParcel: function () {
+            return this._oldPreParcel;
+        },
 	/**
 	 * @method getSandbox
      * @return {Oskari.mapframework.sandbox.Sandbox}
@@ -639,16 +670,45 @@ function(instance) {
 	 */
 	splitFeature : function(trivial) {
 		var trivialSplit = ( typeof trivial === "undefined" ? false : trivial);
-		var operatingFeature = this.splitter.split(trivialSplit);
-		if (operatingFeature != undefined) {
+		var editFeature = this.splitter.split(trivialSplit);
+		if (editFeature !== undefined) {
+            this.initControls(editFeature);
+		}
 
+        // Set selected parcel
+        if (this.hotspot !== null) {
+            var minDist = Number.POSITIVE_INFINITY;
+            var selectedInd = 0;
+            for (i=0; i<this.drawLayer.features.length; i++) {
+                var centroid = this.drawLayer.features[i].geometry.getCentroid();
+                var dist = this.hotspot.point.distanceTo(centroid);
+                if ((dist < minDist)||((dist === minDist)&&(this.hotspot.inside === this.drawLayer.features[i].geometry.containsPoint(centroid)))) {
+                    minDist = dist;
+                    selectedInd = i;
+                }
+            }
+
+            if (this.selectedFeature !== selectedInd) {
+                this.drawLayer.features[this.selectedFeature].style = this.basicStyle;
+                this.selectedFeature = selectedInd;
+                this.drawLayer.features[this.selectedFeature].style = this.selectStyle;
+                this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
+                this.drawLayer.redraw();
+                this.editLayer.redraw();
+            }
+        }
+	},
+
+    initControls : function(editingFeature) {
+            this.buttons.setEnabled(true);
             this.buttons.setButtonEnabled("line",false);
             this.buttons.setButtonEnabled("area",false);
             this.buttons.setButtonEnabled("selector",false);
+            this.buttons.setButtonEnabled("clear",true);
             this.buttons.setButtonEnabled("save",true);
 
-			this.controls.select.select(operatingFeature);
-			this.controls.modify.selectFeature(operatingFeature);
+			this.controls.select.select(editingFeature);
+			this.controls.modify.selectFeature(editingFeature);
 			this.controls.modify.activate();
             this.controls.modify.clickout = false;
             this.controls.modify.toggle = false;
@@ -661,8 +721,51 @@ function(instance) {
             // Reproduce the original OL 2.12 behaviour
             jQuery('svg').find('circle').css('cursor', 'move');
             jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); // IE8
-		}
-	},
+    },
+
+    createEditor : function(features, data, preparcel) {
+        var newPolygons = [];
+        var originalPolygons = [];
+        var partInd = 0;
+        var selectedFeature = 0;
+        var i;
+        this.clear();
+        this.currentFeatureType = this.instance.conf.registerUnitFeatureType;
+        this._oldPreParcel = preparcel;
+
+        for (i=0; i<features.length; i++) {
+            originalPolygons.push(features[i].geometry);
+        }
+
+		var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')([this.getDrawingLayer(), this.getEditLayer()]);
+		this._sandbox.notifyAll(event);
+
+        for (i=0; i<data.length; i++) {
+            switch (data[i].geom_type) {
+                case "selectedpartparcel":
+                    selectedFeature = partInd;
+                case "partparcel":
+                    newPolygons.push(data[i].geometry);
+                    partInd = partInd+1;
+                    break;
+            }
+        }
+        var centroid = newPolygons[selectedFeature].getCentroid();
+        var isInside = newPolygons[selectedFeature].containsPoint(centroid);
+        this.hotspot = {
+            point: centroid,
+            inside: isInside
+        };
+        this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(newPolygons)));
+        this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(originalPolygons)));
+
+        // Update the name field
+        for (i=0; i<this.drawLayer.features.length; i++) {
+            this.drawLayer.features[i].attributes.name = features[0].attributes.tekstiKartalla;
+        }
+        this.updateInfobox();
+		// Zoom to the loaded feature.
+		this._map.zoomToExtent(this.drawLayer.getDataExtent());    },
 
 	/**
 	 * Updates feature info in info box.
@@ -677,7 +780,7 @@ function(instance) {
 			var features = this.drawLayer.features;
 			if (features) {
 				this.selectedFeature = 0;
-				for ( i = 0; i < features.length; i++) {
+				for (var i = 0; i < features.length; i++) {
 					this.drawLayer.features[i].style = (i === this.selectedFeature) ? this.selectStyle : this.basicStyle;
 				}
 				//me.editLayer.redraw();

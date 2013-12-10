@@ -544,7 +544,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         _createUI: function () {
             var me = this,
-                containerClasses = 'top right',
+                containerClasses = 'top left',
                 position = 3;
 
             if (!me.element) {

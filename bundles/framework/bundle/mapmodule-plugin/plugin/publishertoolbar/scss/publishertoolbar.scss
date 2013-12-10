@@ -35,6 +35,7 @@ $iconWidth: $iconHeight;
 			background-color: #424343;
 			color: #FFFFFF;
 			border-radius: 6px;
+			padding-top: 3px;
 			padding-bottom: 3px;
 			display: block;
 			width: 100%;
@@ -79,6 +80,22 @@ $iconWidth: $iconHeight;
 			}
 		}
 
+
+		.publishedToolbarPopupContent.dark {
+			.publishedToolPopupContent {
+				background-color: #424343;
+				color: #FFFFFF;
+				border: none;
+			}		
+		}
+		.publishedToolbarPopupContent.light {
+			.publishedToolPopupContent {
+				background-color: #FFFFFF;
+				color: #424343;
+				border: 1px solid #888;
+			}
+		}
+
 		.publishedToolPopupContent {
 			background-color: #424343;
 			color: #FFFFFF;
@@ -92,6 +109,17 @@ $iconWidth: $iconHeight;
 				padding-top: 5px;
 			}
 		}
+		.publishedToolPopupContent.measureline {
+			width: auto;
+
+			.content div {
+				text-align: center;
+			}
+			.actions input {
+				margin: 2px auto;
+				display: block;
+			}
+		}		
 		.publishedToolPopupContent.dark {
 			background-color: #424343;
 			border: none;
