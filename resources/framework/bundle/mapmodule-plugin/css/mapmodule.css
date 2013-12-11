@@ -103,13 +103,11 @@ div.mapplugins {
       div.mapplugins.right.center .mappluginsContainer {
         display: table-cell;
         vertical-align: middle; }
+    div.mapplugins.right .mapplugin.indexmap .indexmapToggle {
+      float: right; }
 
 .oskari-publisher-font-arial {
   font-family: Arial, sans-serif !important; }
 
 .oskari-publisher-font-georgia {
   font-family: Georgia, serif !important; }
-
-div.mapplugins.right div.mapplugin.indexmap .indexmapToggle {
-  float: right;
-}

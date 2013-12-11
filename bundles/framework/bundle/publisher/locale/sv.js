@@ -67,9 +67,10 @@ Oskari.registerLocalization({
                 "righthanded": "Högerhänt"
             },
             "data": {
-                "label": "Statistik",
-                "tooltip": "Show the data related to map.",
-                "grid": "Visa statistik bord"
+                "label":                "Statistik",
+                "tooltip":              "Show the data related to map.",
+                "grid":                 "Visa statistik bord",
+                "allowClassification":  "Möjliggöra klassificering"
             },
             "layout": {
                 "label": "Layout",

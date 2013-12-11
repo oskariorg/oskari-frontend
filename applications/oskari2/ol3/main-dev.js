@@ -43,7 +43,7 @@ require(["mainConfig"], function() {
                 }
             }
 
-            //config = "json!/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&&action_route=GetAppSetup" + getAppSetupParams;
+            config = "json!" + window.ajaxUrl + "action_route=GetAppSetup" + getAppSetupParams;
         }
 
         /* loading configuration */

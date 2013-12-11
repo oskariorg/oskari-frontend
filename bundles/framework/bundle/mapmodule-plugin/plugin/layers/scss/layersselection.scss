@@ -146,3 +146,16 @@ div.mapplugin.layerselection {
   top: 44px !important;
   right: 0px !important;
 }
+/* Hacketyhack, we need to keep the popup on screen */
+.mapplugins.left {
+  div.mapplugin.layerselection {
+    div.published-styled-layerselector-content {
+      left: 0px !important;
+      right: auto !important;
+      div.styled-header-arrow {
+        margin-left: 12px !important;
+      }
+    }
+  }
+}
+
