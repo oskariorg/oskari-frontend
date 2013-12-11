@@ -82,6 +82,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
         this.regionCategories = {};
         this._selectedRegionCategory = undefined;
+        this._defaultRegionCategory = 'KUNTA';
     }, {
         /** 
          * @property __name module name
@@ -366,7 +367,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             container.find('.municipal-grid').remove();
             container.append(gridContainer);
             // set initially selected region category
-            this._selectedRegionCategory = 'KUNTA';
+            this._selectedRegionCategory = this._state.regionCategory || this._defaultRegionCategory;
+            this._setLayerToCategory(this._selectedRegionCategory);
             // add initial columns
 
             //This modified plugin adds checkboxes to grid
@@ -1855,15 +1857,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 }
             });
 
-            categoryMappings = me._layer.getCategoryMappings();
-            me._layer.setWmsName(categoryMappings.wmsNames[category]);
-            me._layer.setFilterPropertyName(categoryMappings.filterProperties[category]);
+            me._setLayerToCategory(category);
 
             // send the stats parameters for the visualization
             if (me._state.currentColumn) {
                 currColumn = me._getColumnById(me._state.currentColumn);
                 me.sendStatsData(currColumn);
             }
+        },
+
+        _setLayerToCategory: function(category) {
+            var layer = this.getLayer(),
+                categoryMappings = layer.getCategoryMappings();
+
+            layer.setWmsName(categoryMappings.wmsNames[category]);
+            layer.setFilterPropertyName(categoryMappings.filterProperties[category]);
         },
 
         /**
@@ -1878,6 +1886,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 columns = this.grid.getColumns(),
                 categoryName = this._locale.regionCategories[category];
 
+            this._state.regionCategory = category;
             this._selectedRegionCategory = category;
             column.name = categoryName;
             this.grid.setColumns(columns);
