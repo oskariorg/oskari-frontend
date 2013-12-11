@@ -240,6 +240,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         setState: function (state) {
             this._state = state;
         },
+        getState: function () {
+            return this._state;
+        },
 
         /**
          * @method createStatsOut
@@ -1527,37 +1530,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     me.getSotkaIndicatorsData(container, indicators.sotka, function(){
 
                         if(state.currentColumn != null) {
-                            if(classifyPlugin) {
-                                if (state.classificationMode) {
-                                    classifyPlugin.classificationMode = state.classificationMode;
-                                    var modeSelect = classifyPlugin.element.find('.classification-mode');
-                                    modeSelect.val(state.classificationMode);
-                                }
-                                if (state.colors) {
-                                    classifyPlugin.currentColorSet = state.colors.set;
-                                    classifyPlugin.colorsetIndex = state.colors.index;
-                                    classifyPlugin.colorsFlipped = state.colors.flipped;
-                                }
-                                if(state.methodId != null && state.methodId > 0) {
-                                    var select = classifyPlugin.element.find('.classificationMethod').find('.method');
-                                    select.val(state.methodId);
-                                    // The manual breaks method:
-                                    if(state.methodId == 4 && state.manualBreaksInput) {
-                                        var manualInput = classifyPlugin.element.find('.manualBreaks').find('input[name=breaksInput]');
-                                        manualInput.val(state.manualBreaksInput);
-                                        classifyPlugin.element.find('.classCount').hide();
-                                        classifyPlugin.element.find('.manualBreaks').show();
-                                    }
-                                }
-                                if (state.numberOfClasses != null && state.numberOfClasses > 0) {
-                                    var slider = classifyPlugin.rangeSlider;
-                                    if (slider != null) {
-                                        slider.slider("value", state.numberOfClasses);
-                                        slider.parent().find('input#amount_class').val(state.numberOfClasses);
-                                    }
-                                }
-                            }
-
                             if (state.municipalities) {
                                 me._showSelectedAreas(state.municipalities);
                             }
