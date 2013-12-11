@@ -124,6 +124,7 @@ Oskari.registerLocalization({
 		"chosenRegionText" 		: "Valitse alueita",
 		"noRegionFound"			: "Aluetta ei löytynyt",
 		"regionCategories"      : {
+			"KUNTA"					: "Kunta",
 		    "ALUEHALLINTOVIRASTO" 	: "Aluehallintovirasto",
 		    "MAAKUNTA" 				: "Maakunta",
 		    "NUTS1" 				: "Manner-Suomi ja Ahvenanmaa",
