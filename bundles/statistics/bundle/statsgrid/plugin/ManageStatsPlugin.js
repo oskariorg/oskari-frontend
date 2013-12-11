@@ -73,7 +73,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             'filterByRegion': '<div id="statsgrid-filter-by-region"><p class="filter-desc"></p><div class="filter-container"></div></div>',
             'regionCatSelect': '<div class="filter-region-category-select"><select></select></div>',
             'regionSelect': '<div class="filter-region-select"><select class="filter-region-select" multiple tabindex="3"></select></div>',
-            'addOwnIndicator'   : '<div class="new-indicator-cont"><input type="button"/></div>'
+            'addOwnIndicator'   : '<div class="new-indicator-cont"><input type="button"/></div>',
+            'cannotDisplayIndicator' : '<p class="cannot-display-indicator"></p>'
         };
 
         this.regionCategories = {};
@@ -815,8 +816,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         _warnOfInvalidIndicator: function (container, metadata) {
             var selectors = container.find('.selectors-container'),
                 parameters = selectors.find('.parameters-cont');
-
-            parameters.html(this._locale.cannotDisplayIndicator);
+            this.deleteDemographicsSelect(container);
+            parameters.prepend(jQuery(this.templates.cannotDisplayIndicator).append(this._locale.cannotDisplayIndicator));
         },
         /**
          * Create indicator meta info button
@@ -915,6 +916,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         deleteDemographicsSelect: function (container) {
             container.find('.parameters-cont').find('.selector-cont').remove();
             container.find('.parameters-cont').find('.selector-button').remove();
+            container.find('.parameters-cont').find('.cannot-display-indicator').remove();            
         },
 
         /**
