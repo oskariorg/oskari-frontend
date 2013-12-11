@@ -141,6 +141,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             }
             me.statsService = me._sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
 
+            me._initState();
+            me._createUI();
+        },
+        /**
+         * @method _initState
+         * @private
+         * initializes state params since it might be possible
+         * that there is not all the data included
+         */
+        _initState : function() {
             if(this._state.methodId == null || this._state.methodId < 1) {
                 this._state.methodId = '1';
             }
@@ -151,11 +161,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             if(this._state.numberOfClasses == null || this._state.numberOfClasses < 3) {
                 this._state.numberOfClasses = 2;
             }
-
-            // colors ?
-            // manualbreaksinput ?
-
-            me._createUI();
         },
         /**
          * @method stopPlugin
@@ -322,6 +327,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
          */
         setState: function (state) {
             this._state = state;
+            this._initState();
         },
 
         /**
@@ -345,6 +351,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             if (!me._layer) {
                 return;
             }
+            this._initState();
+
             // Current Oskari layer
             var layer = this._layer;
             //params eg. CUL_COL:"indicator..." , VIS_NAME: "ows:kunnat2013", VIS_ATTR: "kuntakoodi", VIS_CODES: munArray, COL_VALUES: statArray
@@ -382,6 +390,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
             // Get classification method
             var method = me._state.methodId;
+
             // Get class count
             var classes = me._state.numberOfClasses;
                 gcol_data = params.COL_VALUES;
