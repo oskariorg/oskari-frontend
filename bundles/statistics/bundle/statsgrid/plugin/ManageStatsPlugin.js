@@ -1785,7 +1785,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     args.grid.setColumns(newColumns);
 
                 } else if (/^category_/.test(args.command)) {
-                    me._changeGridRegion(_.last(args.command.split('_')));
+                    me.changeGridRegion(_.last(args.command.split('_')));
                 } else if (args.command == 'filter') {
                     me._createFilterPopup(args.column, this);
                 } else if (args.command == 'filterByRegion') {
@@ -1819,11 +1819,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          * Changes the values of the region column in the grid
          * and updates each indicator column's values.
          *
-         * @method _changeGridRegion
+         * @method changeGridRegion
          * @param  {String} category category name from SOTKAnet
          * @return {undefined}
          */
-        _changeGridRegion: function(category) {
+        changeGridRegion: function(category) {
             var me = this,
                 dataView = this.dataView,
                 grid = this.grid,
