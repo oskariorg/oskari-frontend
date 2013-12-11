@@ -30,7 +30,7 @@
                 "mapwmts": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
-                "mapwfs": {
+                "mapwfs2": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
                 "mapstats": {

@@ -15,7 +15,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultView',
      */
 
     function (instance, locale) {
-        "use strict";
 
         /* @property extension instance */
         this.instance = instance;
@@ -32,7 +31,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultView',
          * @return {String} implementation name
          */
         getName: function () {
-            "use strict";
             return 'Oskari.userinterface.extension.DefaultView';
         },
 
@@ -41,7 +39,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultView',
          * called by host to set DOM element for this Views content
          */
         setEl: function (el) {
-            "use strict";
             this.container = jQuery(el);
         },
 
@@ -50,7 +47,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultView',
          * @return {jQuery Object} wrapped DOM element for this View's contents
          */
         getEl: function () {
-            "use strict";
             return this.container;
         },
 
@@ -59,7 +55,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultView',
          * called by host to start view operations
          */
         startPlugin: function () {
-            "use strict";
         },
 
         /**
@@ -67,7 +62,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultView',
          * called by host to stop view operations
          */
         stopPlugin: function () {
-            "use strict";
         },
 
         /**
@@ -75,7 +69,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultView',
          * @return {String} called by host to get a localised view title
          */
         getTitle: function () {
-            "use strict";
             return this.locale.title;
         },
         /**
@@ -83,7 +76,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultView',
          * @return {String} called by host to get a localised view description
          */
         getDescription: function () {
-            "use strict";
             return this.locale.description;
         },
 
@@ -92,7 +84,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultView',
          * @param {JSON} sets state
          */
         setState: function (state) {
-            "use strict";
             this.state = state;
         },
 
@@ -101,7 +92,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultView',
          * @return {JSON} returns state
          */
         getState: function () {
-            "use strict";
             return this.state;
         },
 
@@ -110,7 +100,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultView',
          * @return JSON localisation subset 'view'
          */
         getLocalization: function () {
-            "use strict";
             return this.locale;
         }
 

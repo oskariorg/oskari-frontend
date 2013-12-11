@@ -10,13 +10,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
      */
 
     function () {
-        "use strict";
         this.template = jQuery('<div class="oskariform"></div>');
         this._form = this.template.clone();
         this.fields = [];
     }, {
         addField: function (field) {
-            "use strict";
             this.fields.push(field);
         },
         /**
@@ -25,7 +23,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
          * @return {jQuery
          */
         getForm: function (elementSelector) {
-            "use strict";
             var i;
             this._form = this.template.clone();
             for (i = 0; i < this.fields.length; i += 1) {
@@ -39,7 +36,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
          * @return {jQuery
          */
         validate: function (elementSelector) {
-            "use strict";
             var errors = [],
                 i;
             for (i = 0; i < this.fields.length; i += 1) {
@@ -48,7 +44,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
             return errors;
         },
         showErrors: function () {
-            "use strict";
             var i,
                 errors;
             // TODO : maybe not validate again
@@ -58,7 +53,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
             }
         },
         clearErrors: function () {
-            "use strict";
             var i;
             for (i = 0; i < this.fields.length; i += 1) {
                 this.fields[i].clearErrors();

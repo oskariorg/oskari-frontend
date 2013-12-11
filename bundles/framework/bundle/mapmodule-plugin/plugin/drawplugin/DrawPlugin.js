@@ -151,8 +151,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
      */
     toggleControl: function (drawMode) {
         this.currentDrawMode = drawMode;
-        var key,
-            control;
+        var key, control, activeDrawing, event;
+
         for (key in this.drawControls) {
             if (this.drawControls.hasOwnProperty(key)) {
                 control = this.drawControls[key];
@@ -191,6 +191,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
                 "featuresadded": function (layer) {
                     // send an event that the drawing has been completed
                     me.finishedDrawing();
+                },
+                'vertexmodified': function(event) {
+                    me._sendActiveGeometry(me.getDrawing());
                 }
             }
         });
@@ -199,11 +202,22 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
             point: new OpenLayers.Control.DrawFeature(me.drawLayer,
                 OpenLayers.Handler.Point),
             line: new OpenLayers.Control.DrawFeature(me.drawLayer,
-                OpenLayers.Handler.Path),
+                OpenLayers.Handler.Path, {
+                    callbacks: {
+                        modify: function(geom, feature) {
+                            me._sendActiveGeometry(me.getActiveDrawing(feature.geometry), 'line');
+                        }
+                    }
+                }),
             area: new OpenLayers.Control.DrawFeature(me.drawLayer,
                 OpenLayers.Handler.Polygon, {
                     handlerOptions: {
                         holeModifier: "altKey"
+                    },
+                    callbacks: {
+                        modify: function(geom, feature) {
+                            me._sendActiveGeometry(me.getActiveDrawing(feature.geometry), 'area');
+                        }
                     }
                 }),
             /*cut : new OpenLayers.Control.DrawFeature(me.drawLayer,
@@ -298,6 +312,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
     },
 
     /**
+     * Clones the drawing on the map and adds the geometry
+     * currently being drawn to it.
+     *
+     * @method getActiveDrawing
+     * @param  {OpenLayers.Geometry} geometry
+     * @return {OpenLayers.Geometry}
+     */
+    getActiveDrawing: function(geometry) {
+        var prevGeom = this.getDrawing(),
+            composedGeom;
+
+        if (prevGeom != null) {
+            composedGeom = prevGeom.clone();
+            composedGeom.addComponent(geometry);
+            return composedGeom;
+        }
+        return geometry;
+    },
+
+    /**
      * Returns active draw control names
      * @method
      */
@@ -312,6 +346,32 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
             }
         }
         return activeDrawControls;
+    },
+
+    _sendActiveGeometry: function(geometry, drawMode) {
+        var eventBuilder = this._sandbox.getEventBuilder('DrawPlugin.ActiveDrawingEvent'),
+            event, featClass;
+
+        if (drawMode == null) {
+            featClass = geometry.CLASS_NAME;
+            switch (featClass) {
+            case "OpenLayers.Geometry.LineString":
+            case "OpenLayers.Geometry.MultiLineString":
+                drawMode = 'line';
+                break;
+            case "OpenLayers.Geometry.Polygon":
+            case "OpenLayers.Geometry.MultiPolygon":
+                drawMode = 'area';
+                break;
+            default:
+                return;
+            }
+        }
+
+        if (eventBuilder) {
+            event = eventBuilder(geometry, drawMode);
+            this._sandbox.notifyAll(event);
+        }
     },
 
     register: function () {

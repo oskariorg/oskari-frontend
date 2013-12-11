@@ -19,7 +19,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
      */
 
     function (instance, locale) {
-        "use strict";
         /**
          * @property locale localisation for this tile
          */
@@ -38,7 +37,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          * @return {String} tile implementation name
          */
         getName: function () {
-            "use strict";
             return 'Oskari.userinterface.extension.DefaultTile';
         },
 
@@ -48,7 +46,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          * tile is to be rendered
          */
         setEl: function (el, width, height) {
-            "use strict";
             this.container = $(el);
         },
 
@@ -58,7 +55,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          * f.ex to provide some kind of active visualisations.
          */
         startPlugin: function () {
-            "use strict";
         },
 
         /**
@@ -66,7 +62,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          * called by host when the tile is to be removed
          */
         stopPlugin: function () {
-            "use strict";
         },
 
         /**
@@ -75,16 +70,14 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          *
          */
         getTitle: function () {
-            "use strict";
             return this.locale.title;
         },
 
-        /** 
+        /**
          * @method getDescription
          * @return {String} called by host to get a longer description for display
          */
         getDescription: function () {
-            "use strict";
             return this.locale.description;
         },
 
@@ -93,15 +86,13 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          * @return {JSON} a placeholder for future implementations
          */
         getOptions: function () {
-            "use strict";
         },
 
-        /** 
+        /**
          * @method setState
          * placeholder for future implementations
          */
         setState: function (state) {
-            "use strict";
             this.state = state;
         },
 
@@ -110,7 +101,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          * @return {JSON} placeholder for future implementations
          */
         getState: function (state) {
-            "use strict";
             return this.state;
         }
 

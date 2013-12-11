@@ -114,10 +114,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             if (blnEnabled) {
                 this.plugin.startPlugin(this.instance.sandbox);
                 this.plugin.setLocation(this.plugin.conf.location);
-            } else {
-                if (this.isEnabled()) {
-                    this.plugin.stopPlugin(this.instance.sandbox);
-                }
+            } else if (this.isEnabled()) {
+                this.plugin.stopPlugin(this.instance.sandbox);
             }
         },
         /**
@@ -239,10 +237,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             contentPanel.append(toolContainer);
             contentPanel.append(this.loc.layerselection.info);
             toolContainer.find('input').attr('id', 'show-map-layers-checkbox').change(function () {
-                var checkbox = jQuery(this);
-                var isChecked = checkbox.is(':checked');
-                me.showLayerSelection = isChecked;
+                var checkbox = jQuery(this),
+                    isChecked = checkbox.is(':checked');
                 me.enablePlugin(isChecked);
+                me.showLayerSelection = isChecked;
                 contentPanel.empty();
                 me._populateMapLayerPanel();
             });
@@ -254,7 +252,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 i,
                 listContainer = this.templateList.clone(),
                 layer,
-                input;
+                input,
+                shouldPreselectLayer = function (layerId) {
+                    var isFound = jQuery.inArray('' + layerId, me.config.layers.preselect);
+                    return isFound !== -1;
+                };
 
             for (i = 0; i < layers.length; i++) {
 
@@ -270,13 +272,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 if (!layer.isSticky()) {
                     layerContainer.find('div.layer-tool-remove').addClass('icon-close');
 
+                    // FIXME create function outside loop. Just have to figure out a way to access the layer...
                     layerContainer.find('div.layer-tool-remove').bind('click', function (e) {
-                        var reqName = 'RemoveMapLayerRequest';
-                        var builder = sandbox.getRequestBuilder(reqName);
-                        var request = builder(jQuery(e.currentTarget).parents('.layer').attr('data-id'));
-
-                        var checkbox = jQuery(e.currentTarget).parents('.layer').find('.baselayer');
-                        var isChecked = checkbox.is(':checked');
+                        var reqName = 'RemoveMapLayerRequest',
+                            builder = sandbox.getRequestBuilder(reqName),
+                            request = builder(jQuery(e.currentTarget).parents('.layer').attr('data-id')),
+                            checkbox = jQuery(e.currentTarget).parents('.layer').find('.baselayer'),
+                            isChecked = checkbox.is(':checked');
                         layer.selected = isChecked;
                         if (isChecked) {
                             me.plugin.removeBaseLayer(layer);
@@ -284,17 +286,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                         sandbox.request(me.instance.getName(), request);
 
                     });
-
                 }
 
                 // footer tools
                 me._appendLayerFooter(layerContainer, layer, layer.selected);
-
-                var shouldPreselectLayer = function (layerId) {
-                    var isFound = jQuery.inArray('' + layerId, me.config.layers.preselect);
-                    return isFound !== -1;
-                };
-
                 input = layerContainer.find('input.baselayer');
                 input.attr('id', 'checkbox' + layer.getId());
 
@@ -303,7 +298,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                     layer.selected = true;
                     this.plugin.addBaseLayer(layer);
                 }
-
 
                 listContainer.prepend(layerContainer);
             }
@@ -315,8 +309,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 }
             });
 
-            var buttonCont = me.templateButtonsDiv.clone();
-            var addBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var buttonCont = me.templateButtonsDiv.clone(),
+                addBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             addBtn.setTitle(me.loc.buttons.add);
             addBtn.addClass('block');
             addBtn.insertTo(buttonCont);
@@ -459,15 +453,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          * Handles slider/input field for opacity on this flyout/internally
          */
         _layerOpacityChanged: function (layer, newOpacity) {
-            var sandbox = this.instance.getSandbox();
-            var reqName = 'ChangeMapLayerOpacityRequest';
-            var requestBuilder = sandbox.getRequestBuilder(reqName);
-            var request = requestBuilder(layer.getId(), newOpacity);
+            var sandbox = this.instance.getSandbox(),
+                reqName = 'ChangeMapLayerOpacityRequest',
+                requestBuilder = sandbox.getRequestBuilder(reqName),
+                request = requestBuilder(layer.getId(), newOpacity);
             sandbox.request(this.instance.getName(), request);
 
-            var lyrSel = 'li.layer.selected[data-id=' + layer.getId() + ']';
-            var layerDiv = jQuery(this.container).find(lyrSel);
-            var opa = layerDiv.find('div.layer-opacity input.opacity');
+            var lyrSel = 'li.layer.selected[data-id=' + layer.getId() + ']',
+                layerDiv = jQuery(this.container).find(lyrSel),
+                opa = layerDiv.find('div.layer-opacity input.opacity');
             opa.attr('value', layer.getOpacity());
         },
         /**
@@ -483,16 +477,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          * viewport
          */
         handleLayerVisibilityChanged: function (layer, isInScale, isGeometryMatch) {
-            var me = this;
-            var sandbox = me.instance.getSandbox();
-            var lyrSel = 'li.layer.selected[data-id=' + layer.getId() + ']';
-
-            var layerDiv = jQuery(this.container).find(lyrSel);
-            var loc = this.instance.getLocalization('layer');
-
-            // teardown previous footer & layer state classes
-            var footer = layerDiv.find('div.layer-tools');
-            var isChecked = footer.find('.baselayer').is(':checked');
+            var me = this,
+                sandbox = me.instance.getSandbox(),
+                lyrSel = 'li.layer.selected[data-id=' + layer.getId() + ']',
+                layerDiv = jQuery(this.container).find(lyrSel),
+                loc = this.instance.getLocalization('layer'),
+                footer = layerDiv.find('div.layer-tools'), // teardown previous footer & layer state classes
+                isChecked = footer.find('.baselayer').is(':checked');
             footer.empty();
 
             layerDiv.removeClass('hidden-layer');
@@ -512,13 +503,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          * Creates a footer for the given layer with the usual tools (opacity etc)
          */
         _createLayerFooter: function (layer, layerDiv, isChecked) {
-            var me = this;
-            var sandbox = me.instance.getSandbox();
-            // layer footer
-            var tools = this.templateLayerFooterTools.clone();
-            var loc = this.instance.getLocalization('layer');
-            var visReqName = 'MapModulePlugin.MapLayerVisibilityRequest';
-            var visibilityRequestBuilder = sandbox.getRequestBuilder(visReqName);
+            var me = this,
+                sandbox = me.instance.getSandbox(),
+                tools = this.templateLayerFooterTools.clone(), // layer footer
+                loc = this.instance.getLocalization('layer'),
+                visReqName = 'MapModulePlugin.MapLayerVisibilityRequest',
+                visibilityRequestBuilder = sandbox.getRequestBuilder(visReqName);
 
             tools.find('div.layer-visibility a').bind('click', function () {
                 // send request to hide map layer
@@ -530,8 +520,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             // if layer selection = ON -> show content
             var closureMagic = function (layer) {
                 return function () {
-                    var checkbox = jQuery(this);
-                    var isChecked = checkbox.is(':checked');
+                    var checkbox = jQuery(this),
+                        isChecked = checkbox.is(':checked');
                     layer.selected = isChecked;
                     if (isChecked) {
                         me.plugin.addBaseLayer(layer);
@@ -563,12 +553,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          * Creates footer for the given invisible layer
          */
         _createLayerFooterHidden: function (layer) {
-            var me = this;
-            var sandbox = me.instance.getSandbox();
-            var msg = this.templateLayerFooterHidden.clone();
+            var me = this,
+                sandbox = me.instance.getSandbox(),
+                msg = this.templateLayerFooterHidden.clone(),
+                reqName = 'MapModulePlugin.MapLayerVisibilityRequest',
+                visibilityRequestBuilder = sandbox.getRequestBuilder(reqName);
             msg.addClass("layer-msg-for-hidden");
-            var reqName = 'MapModulePlugin.MapLayerVisibilityRequest';
-            var visibilityRequestBuilder = sandbox.getRequestBuilder(reqName);
             msg.find('a').bind('click', function () {
                 // send request to show map layer
                 var request = visibilityRequestBuilder(layer.getId(), true);
@@ -606,9 +596,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
 
             toolsDiv.append(footer);
 
-            var slider = this._addSlider(layer, layerDiv);
-
-            var opa = layerDiv.find('div.layer-opacity input.opacity');
+            var slider = this._addSlider(layer, layerDiv),
+                opa = layerDiv.find('div.layer-opacity input.opacity');
             opa.attr('value', layer.getOpacity());
 
         },
@@ -625,25 +614,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          * Adds slider to layer's footer to change layer opacity
          */
         _addSlider: function (layer, layerDiv) {
-            var me = this;
-            var lyrId = layer.getId();
-            var opa = layer.getOpacity();
-
-            var sliderEl = layerDiv.find('.layout-slider');
-            var slider = sliderEl.slider({
-                min: 0,
-                max: 100,
-                value: opa,
-                /*change: function(event,ui) {
-                 me._layerOpacityChanged(layer, ui.value);
-                 },*/
-                slide: function (event, ui) {
-                    me._layerOpacityChanged(layer, ui.value);
-                },
-                stop: function (event, ui) {
-                    me._layerOpacityChanged(layer, ui.value);
-                }
-            });
+            var me = this,
+                lyrId = layer.getId(),
+                opa = layer.getOpacity(),
+                sliderEl = layerDiv.find('.layout-slider'),
+                slider = sliderEl.slider({
+                    min: 0,
+                    max: 100,
+                    value: opa,
+                    /*change: function(event,ui) {
+                     me._layerOpacityChanged(layer, ui.value);
+                     },*/
+                    slide: function (event, ui) {
+                        me._layerOpacityChanged(layer, ui.value);
+                    },
+                    stop: function (event, ui) {
+                        me._layerOpacityChanged(layer, ui.value);
+                    }
+                });
 
             me._sliders[lyrId] = slider;
 
@@ -657,8 +645,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             };
         },
         _openExtension: function (name) {
-            var extension = this._getFakeExtension(name);
-            var rn = 'userinterface.UpdateExtensionRequest';
+            var extension = this._getFakeExtension(name),
+                rn = 'userinterface.UpdateExtensionRequest';
             this.instance.getSandbox().postRequestByName(rn, [extension, 'attach', rn, "10", "405"]);
         }
 

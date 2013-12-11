@@ -1,0 +1,15 @@
+.oskari-datasource .link {
+  background-color: none;
+  background-repeat: no-repeat;
+  display:block;
+  font-size: 13px;
+  position: fixed;
+  bottom:15px;
+  right:70px;
+  z-index:100000000 !important;
+  filter: unquote("alpha(opacity=80);");
+  opacity: 0.8 !important;
+}
+.oskari-datasource a, .oskari-datasource a:hover, .oskari-datasource:active, .oskari-datasource a:visited {
+    color: blue !important;
+}

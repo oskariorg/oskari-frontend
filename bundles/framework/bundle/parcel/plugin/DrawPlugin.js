@@ -266,6 +266,8 @@ function(instance) {
 			},
 
 			trigger : function(e) {
+                // Trigger disabled if popup visible
+                if (jQuery("div#parcelForm").length > 0) return;
 				var lonlat = me._map.getLonLatFromPixel(e.xy);
 				var point = new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat);
 				var i;
@@ -282,7 +284,7 @@ function(instance) {
 						}
 					}
 					if (i === features.length - 1)
-						me.selectedFeature = -2;
+						me.selectedFeature = oldSelectedFeature;
 				}
 				if (oldSelectedFeature != me.selectedFeature) {
 					for ( i = 0; i < features.length; i++) {
@@ -675,21 +677,25 @@ function(instance) {
 
         // Set selected parcel
         if (this.hotspot !== null) {
-            var centroids = [];
             var minDist = Number.POSITIVE_INFINITY;
-            for (var i=0; i<this.drawLayer.features.length; i++) {
-                centroids.push(this.drawLayer.features[i].geometry.getCentroid());
-            }
             var selectedInd = 0;
-            for (i=0; i<centroids.length; i++) {
-                var dist = this.hotspot.point.distanceTo(centroids[i]);
-                // Todo: Improve this
-                if ((dist < minDist)||((dist === minDist)&&((new Boolean(this.hotspot.inside)).toString() === (new Boolean(this.drawLayer.features[i].geometry.containsPoint(centroids[i]))).toString()))) {
+            for (i=0; i<this.drawLayer.features.length; i++) {
+                var centroid = this.drawLayer.features[i].geometry.getCentroid();
+                var dist = this.hotspot.point.distanceTo(centroid);
+                if ((dist < minDist)||((dist === minDist)&&(this.hotspot.inside === this.drawLayer.features[i].geometry.containsPoint(centroid)))) {
                     minDist = dist;
                     selectedInd = i;
                 }
             }
-            this.selectedFeature = selectedInd;
+
+            if (this.selectedFeature !== selectedInd) {
+                this.drawLayer.features[this.selectedFeature].style = this.basicStyle;
+                this.selectedFeature = selectedInd;
+                this.drawLayer.features[this.selectedFeature].style = this.selectStyle;
+                this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
+                this.drawLayer.redraw();
+                this.editLayer.redraw();
+            }
         }
 	},
 
@@ -718,8 +724,8 @@ function(instance) {
     },
 
     createEditor : function(features, data, preparcel) {
-        var polygons = [];
-        var boundary = null;
+        var newPolygons = [];
+        var originalPolygons = [];
         var partInd = 0;
         var selectedFeature = 0;
         var i;
@@ -728,9 +734,8 @@ function(instance) {
         this._oldPreParcel = preparcel;
 
         for (i=0; i<features.length; i++) {
-            polygons.push(features[i].geometry);
+            originalPolygons.push(features[i].geometry);
         }
-        this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(polygons)));
 
 		var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')([this.getDrawingLayer(), this.getEditLayer()]);
 		this._sandbox.notifyAll(event);
@@ -740,22 +745,27 @@ function(instance) {
                 case "selectedpartparcel":
                     selectedFeature = partInd;
                 case "partparcel":
-                    polygons.push(data[i].geometry);
+                    newPolygons.push(data[i].geometry);
                     partInd = partInd+1;
-                    break;
-                case "boundary":
-                    boundary = data[i].geometry;
                     break;
             }
         }
-        var centroid = polygons[selectedFeature].getCentroid();
-        var isInside = polygons[selectedFeature].containsPoint(centroid);
+        var centroid = newPolygons[selectedFeature].getCentroid();
+        var isInside = newPolygons[selectedFeature].containsPoint(centroid);
         this.hotspot = {
             point: centroid,
             inside: isInside
         };
-        this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(boundary));
-    },
+        this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(newPolygons)));
+        this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(originalPolygons)));
+
+        // Update the name field
+        for (i=0; i<this.drawLayer.features.length; i++) {
+            this.drawLayer.features[i].attributes.name = features[0].attributes.tekstiKartalla;
+        }
+        this.updateInfobox();
+		// Zoom to the loaded feature.
+		this._map.zoomToExtent(this.drawLayer.getDataExtent());    },
 
 	/**
 	 * Updates feature info in info box.

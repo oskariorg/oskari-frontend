@@ -3021,6 +3021,9 @@ Oskari = (function () {
         setPreloaded: function (usep) {
             _preloaded = usep;
         },
+        setInstTs: function(x) {
+            instTs = x;
+        },
         /**
          * @static
          * @method Oskari.registerLocalization
