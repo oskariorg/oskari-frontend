@@ -67,9 +67,10 @@ Oskari.registerLocalization({
                 "righthanded": "Oikeakätinen"
             },
             "data": {
-                "label": "Tilastot",
-                "tooltip": "Näytä karttaan liittyvä taulukko.",
-                "grid": "Näytä tilastotaulukko"
+                "label":                "Tilastot",
+                "tooltip":              "Näytä karttaan liittyvä taulukko.",
+                "grid":                 "Näytä tilastotaulukko",
+                "allowClassification":  "Salli luokittelu"
             },
             "layout": {
                 "label": "Ulkoasu",

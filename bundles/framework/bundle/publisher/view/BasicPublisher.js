@@ -39,7 +39,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         me.templateToolOptions = jQuery('<div class="tool-options"></div>');
         me.templateToolOption = jQuery('<div class="tool-option"><input type="checkbox" /><span></span></div>');
         me.templateLayout = jQuery('<div class="tool "><label><input type="radio" name="toolLayout" /><span></span></label></div>');
-        me.templateData = jQuery('<div class="data ">' + '<input type="checkbox"/>' + '<label></label></div>');
+        me.templateData = jQuery('<div class="data ">' + 
+                '<input class="show-grid" type="checkbox"/>' + 
+                '<label class="show-grid-label"></label>' + '<br />' +
+                '<input class="allow-classification" type="checkbox"/>' + 
+                '<label class="allow-classification-label"></label>' + 
+            '</div>');
         me.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
         me.templateCustomSize = jQuery('<div class="customsize">' + '<input type="text" name="width" ' +
             'placeholder="' + localization.sizes.width + '"/> x ' +
@@ -358,6 +363,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 }
             }
             if (showStats) {
+                me.showStats = true;
                 // Find the map module.
                 var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
                 me.mapModule = mapModule;
@@ -691,18 +697,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             contentPanel.append(tooltipCont);
 
             var dataContainer = me.templateData.clone();
-            dataContainer.find('input').attr('id', 'show-grid-checkbox').change(function () {
-                var checkbox = jQuery(me),
+            dataContainer.find('input.show-grid').attr('id', 'show-grid-checkbox').change( function (e) {
+                var checkbox = jQuery(e.target),
                     isChecked = checkbox.is(':checked');
                 me.isDataVisible = isChecked;
                 me.adjustDataContainer();
                 // Update the size labels
                 me._setSizeLabels();
             });
-            dataContainer.find('label').attr('for', 'show-grid-checkbox').append(me.loc.data.grid);
+            dataContainer.find('label.show-grid-label').attr('for', 'show-grid-checkbox').append(me.loc.data.grid);
+
+            dataContainer.find('input.allow-classification').attr('id', 'allow-classification-checkbox').change(function (e) {
+                var checkbox = jQuery(e.target),
+                    isChecked = checkbox.is(':checked');
+                    me.classifyPlugin.showClassificationOptions(isChecked);
+            });
+            dataContainer.find('label.allow-classification-label').attr('for', 'allow-classification-checkbox').append(me.loc.data.allowClassification);
 
             if (me.grid.selected) {
-                dataContainer.find('input').attr('checked', 'checked');
+                dataContainer.find('input#show-grid-checkbox').attr('checked', 'checked');
                 me.isDataVisible = me.grid.selected;
                 me.adjustDataContainer();
             }
@@ -1165,17 +1178,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 }
             });
             // if data grid is enabled
-            if (me.isDataVisible) {
+            if (me.showStats) {
                 // get state of statsgrid
-                var statsGrid = me.sandbox.getStatefulComponents().statsgrid,
-                    statsGridState = me._filterIndicators(_.clone(statsGrid.state, true));
-
+                // TODO? for some reason original state has been cloned
+                // real / live state can be found from plugins...
+                var statsGridState = me.gridPlugin.getState(),//me.sandbox.getStatefulComponents().statsgrid,
+                    statsGridState = me._filterIndicators(_.clone(statsGridState, true));
+                    statsGridState.gridShown = me.isDataVisible;
                 selections.gridState = statsGridState;
             }
 
             var mapFullState = sandbox.getStatefulComponents().mapfull.getState();
             selections.mapstate = mapFullState;
-
 
             // saves possible open gfi popups
             if (sandbox.getStatefulComponents().infobox) {
@@ -1471,7 +1485,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 me.gridPlugin = gridPlugin;
 
                 // Register classification plugin to the map.
-                var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', conf, locale);
+                gridConf.state.allowClassification = false;
+
+                var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', gridConf, locale);
                 me.mapModule.registerPlugin(classifyPlugin);
                 me.mapModule.startPlugin(classifyPlugin);
                 me.classifyPlugin = classifyPlugin;

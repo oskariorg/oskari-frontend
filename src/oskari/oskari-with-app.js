@@ -50,8 +50,6 @@ define([
 
 //            Dynamic values cannot be optimized, change to static for optimization by listing the array values.
 //            Log the modules and temporarily replace startupSequence with the console output or include all necessary modules in the build.
-//            FIXME: remove testmodule
-            modules.push("src/framework/testmodule/module");
             console.log('modules', modules);
 
             require(modules, function() {

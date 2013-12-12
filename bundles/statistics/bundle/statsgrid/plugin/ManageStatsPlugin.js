@@ -73,7 +73,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             'filterByRegion': '<div id="statsgrid-filter-by-region"><p class="filter-desc"></p><div class="filter-container"></div></div>',
             'regionCatSelect': '<div class="filter-region-category-select"><select></select></div>',
             'regionSelect': '<div class="filter-region-select"><select class="filter-region-select" multiple tabindex="3"></select></div>',
-            'addOwnIndicator'   : '<div class="new-indicator-cont"><input type="button"/></div>'
+            'addOwnIndicator'   : '<div class="new-indicator-cont"><input type="button"/></div>',
+            'cannotDisplayIndicator' : '<p class="cannot-display-indicator"></p>'
         };
 
         this.regionCategories = {};
@@ -239,6 +240,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
         setState: function (state) {
             this._state = state;
+        },
+        getState: function () {
+            return this._state;
         },
 
         /**
@@ -812,8 +816,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         _warnOfInvalidIndicator: function (container, metadata) {
             var selectors = container.find('.selectors-container'),
                 parameters = selectors.find('.parameters-cont');
-
-            parameters.html(this._locale.cannotDisplayIndicator);
+            this.deleteDemographicsSelect(container);
+            parameters.prepend(jQuery(this.templates.cannotDisplayIndicator).append(this._locale.cannotDisplayIndicator));
         },
         /**
          * Create indicator meta info button
@@ -912,6 +916,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         deleteDemographicsSelect: function (container) {
             container.find('.parameters-cont').find('.selector-cont').remove();
             container.find('.parameters-cont').find('.selector-button').remove();
+            container.find('.parameters-cont').find('.cannot-display-indicator').remove();            
         },
 
         /**
@@ -1527,37 +1532,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     me.getSotkaIndicatorsData(container, indicators.sotka, function(){
 
                         if(state.currentColumn != null) {
-                            if(classifyPlugin) {
-                                if (state.classificationMode) {
-                                    classifyPlugin.classificationMode = state.classificationMode;
-                                    var modeSelect = classifyPlugin.element.find('.classification-mode');
-                                    modeSelect.val(state.classificationMode);
-                                }
-                                if (state.colors) {
-                                    classifyPlugin.currentColorSet = state.colors.set;
-                                    classifyPlugin.colorsetIndex = state.colors.index;
-                                    classifyPlugin.colorsFlipped = state.colors.flipped;
-                                }
-                                if(state.methodId != null && state.methodId > 0) {
-                                    var select = classifyPlugin.element.find('.classificationMethod').find('.method');
-                                    select.val(state.methodId);
-                                    // The manual breaks method:
-                                    if(state.methodId == 4 && state.manualBreaksInput) {
-                                        var manualInput = classifyPlugin.element.find('.manualBreaks').find('input[name=breaksInput]');
-                                        manualInput.val(state.manualBreaksInput);
-                                        classifyPlugin.element.find('.classCount').hide();
-                                        classifyPlugin.element.find('.manualBreaks').show();
-                                    }
-                                }
-                                if (state.numberOfClasses != null && state.numberOfClasses > 0) {
-                                    var slider = classifyPlugin.rangeSlider;
-                                    if (slider != null) {
-                                        slider.slider("value", state.numberOfClasses);
-                                        slider.parent().find('input#amount_class').val(state.numberOfClasses);
-                                    }
-                                }
-                            }
-
                             if (state.municipalities) {
                                 me._showSelectedAreas(state.municipalities);
                             }

@@ -85,6 +85,8 @@
 .statsgrid .parameters-cont {
   min-height: 115px;
   float: left; }
+.statsgrid .parameters-cont .cannot-display-indicator {
+    margin-left: 10px; }
 
 .statsgrid .selector-cont {
   clear: both; }

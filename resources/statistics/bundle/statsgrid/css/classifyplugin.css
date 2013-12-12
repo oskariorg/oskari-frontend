@@ -37,7 +37,8 @@
     background-color: black !important;
     padding: 4px; }
   .manageClassificationPlugin div.classificationMethod {
-    margin: 4px; }
+    margin: 4px;
+    min-width: 160px; }
   .manageClassificationPlugin div.content {
     color: black;
     background-color: white !important; }
