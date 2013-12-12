@@ -123,6 +123,9 @@ Oskari.registerLocalization({
                 "defaultLayer": "(Default layer)",
                 "useAsDefaultLayer": "Use as default layer"
             },
+            "myplaces": {
+                "label": "My layers"
+            },
             "sizes": {
                 "small": "Small",
                 "medium": "Medium",

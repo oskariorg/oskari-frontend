@@ -123,6 +123,9 @@ Oskari.registerLocalization({
                 "defaultLayer": "(Oletusvalinta)",
                 "useAsDefaultLayer": "Käytä oletuksena"
             },
+            "myplaces": {
+                "label": "Omat tasot"
+            },
             "sizes": {
                 "small": "Pieni",
                 "medium": "Keskikokoinen",

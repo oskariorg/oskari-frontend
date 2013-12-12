@@ -124,6 +124,9 @@ Oskari.registerLocalization({
                 "defaultLayer": "(Förvald kartlager)",
                 "useAsDefaultLayer": "Använd som förvald kartlager"
             },
+            "myplaces": {
+                "label": "Mina kartlager"
+            },
             "sizes": {
                 "small": "Liten",
                 "medium": "Medelstor",
