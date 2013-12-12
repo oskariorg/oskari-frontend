@@ -54,11 +54,11 @@ Oskari.registerLocalization({
                 "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet",
                 "PublisherToolbarPlugin": "Kartverktygen"
             },
-            "toolbarToolNames": {  
-                "history_back" : "Gå bakåt",
-                "history_forward" : "Gå framåt",
-                "measureline" : "Mäta avstånd",
-                "measurearea" : "Mäta område"
+            "toolbarToolNames": {
+                "history_back": "Gå bakåt",
+                "history_forward": "Gå framåt",
+                "measureline": "Mäta avstånd",
+                "measurearea": "Mäta område"
             },
             "toollayout": {
                 "label": "Verktyg applikation",

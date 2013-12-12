@@ -54,11 +54,11 @@ Oskari.registerLocalization({
                 "GetInfoPlugin": "Query tool for place data",
                 "PublisherToolbarPlugin": "map tools"
             },
-            "toolbarToolNames": {  
-                "history_back" : "Move backward",
-                "history_forward" : "Move forward",
-                "measureline" : "Measure distance",
-                "measurearea" : "Measure area"
+            "toolbarToolNames": {
+                "history_back": "Move backward",
+                "history_forward": "Move forward",
+                "measureline": "Measure distance",
+                "measurearea": "Measure area"
             },
             "toollayout": {
                 "label": "Tool layout",
