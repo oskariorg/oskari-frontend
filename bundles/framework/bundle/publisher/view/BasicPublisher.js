@@ -47,112 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             'placeholder="' + localization.sizes.width + '"/> x ' +
             '<input type="text" name="height" placeholder="' + localization.sizes.height + '"/></div>');
 
-        /**
-         * @property tools
-         */
-        me.tools = [{
-            "id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin",
-            "selected": false,
-            "lefthanded": "bottom left",
-            "righthanded": "bottom right",
-            "config": {
-                "location": {
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "classes": "bottom left"
-                }
-            }
-        }, {
-            "id": "Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin",
-            "selected": false,
-            "lefthanded": "bottom right",
-            "righthanded": "bottom left",
-            "config": {
-                "location": {
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "classes": "bottom right"
-                }
-            }
-        }, {
-            "id": "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons",
-            "selected": false,
-            "lefthanded": "top left",
-            "righthanded": "top right",
-            "config": {
-                "location": {
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "classes": "top left"
-                }
-            }
-        }, {
-            "id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar",
-            "selected": true,
-            "lefthanded": "top left",
-            "righthanded": "top right",
-            "config": {
-                "location": {
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "classes": "top left"
-                }
-            }
-        }, {
-            "id": "Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin",
-            "selected": false,
-            "lefthanded": "top right",
-            "righthanded": "top left",
-            "config": {
-                "location": {
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "classes": "top right"
-                }
-            }
-        }, {
-            "id": "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin",
-            "selected": false,
-            "lefthanded": "top right",
-            "righthanded": "top left",
-            "config": {
-                "location": {
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "classes": "top right"
-                },
-                "toolbarId" : "PublisherToolbar"
-            }
-        }, {
-            "id": "Oskari.mapframework.mapmodule.ControlsPlugin",
-            "selected": true
-        }, {
-            "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
-            "selected": true,
-            "config": {
-                "ignoredLayerTypes" : ["WFS"],
-                "infoBox": false
-            }
-        }];
-
-        // map tool indices so we don't have to go through the list every time...
-        me.toolIndices = {};
-        var i;
-        for (i = me.tools.length - 1; i > -1; i -= 1) {
-            me.toolIndices[this.tools[i].id] = i;
-        }
+        this.normalMapPlugins = [];
 
         me.toolDropRules = {
             "Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin": {
@@ -302,7 +197,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
         me.maplayerPanel = null;
         me.mainPanel = null;
-        me.normalMapPlugins = [];
         me.logoPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin', {
             "location": {
                 "classes": me.logoPluginClasses.classes
@@ -402,16 +296,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             // 7th panel: map layer panel
             accordion.addPanel(me.maplayerPanel.getPanel());
 
-/*            // Add the layout panel to the accordion.
-            me.myplacesPanel = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.publisher.view.PublisherMyPlacesForm',
-                me.loc,
-                me
-            );
-            me.myplacesPanel.init();
-            // 8th panel: layout panel
-            accordion.addPanel(me.myplacesPanel.getPanel());
-*/
             accordion.insertTo(contentDiv);
 
             // buttons
@@ -587,45 +471,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          * @return {jQuery} Returns the created panel
          */
         _createToolsPanel: function () {
-/*            var me = this,
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-            panel.setTitle(this.loc.tools.label);
-            var contentPanel = panel.getContainer(),
-                tooltipCont = this.templateHelp.clone(), // tooltip
-                i,
-                toolContainer,
-                pluginKey,
-                toolname;
-            tooltipCont.attr('title', this.loc.tools.tooltip);
-            contentPanel.append(tooltipCont);
-
-            // content
-            var closureMagic = function (tool) {
-                return function () {
-                    var checkbox = jQuery(this),
-                        isChecked = checkbox.is(':checked');
-                    tool.selected = isChecked;
-                    me._activatePreviewPlugin(tool, isChecked);
-                };
-            };
-
-            for (i = 0; i < this.tools.length; i += 1) {
-                toolContainer = this.templateTool.clone();
-                var tool = this.tools[i];
-                pluginKey = tool.id;
-                pluginKey = pluginKey.substring(pluginKey.lastIndexOf('.') + 1);
-                toolname = this.loc.tools[pluginKey];
-                toolContainer.find('span').append(toolname);
-                if (tool.selected) {
-                    toolContainer.find('input').attr('checked', 'checked');
-                }
-                tool.publisherPluginContainer = toolContainer;
-                contentPanel.append(toolContainer);
-                toolContainer.find('input').change(closureMagic(tool));
-            }
-
-            return panel;
-*/
             var me = this;
             // Add the layout panel to the accordion.
             me.toolsPanel = Oskari.clazz.create(
@@ -633,8 +478,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 me.loc,
                 me
             );
+            me.tools = me.toolsPanel.getTools();
             me.toolsPanel.init();
-            // 8th panel: layout panel
             return me.toolsPanel.getPanel();
         },
         _changeToolLayout: function (layout) {
@@ -1178,10 +1023,95 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          */
         setEnabled: function (isEnabled) {
             if (isEnabled) {
-                this.toolsPanel.enablePreview();
+                this._enablePreview();
             } else {
-                this.toolsPanel.disablePreview();
+                this._disablePreview();
             }
+        },
+        /**
+         * @method _enablePreview
+         * @private
+         * Modifies the main map to show what the published map would look like
+         */
+        _enablePreview: function () {
+            var me = this,
+                mapModule = me.instance.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                plugins = mapModule.getPluginInstances(),
+                p,
+                plugin,
+                i;
+            for (p in plugins) {
+                if (plugins.hasOwnProperty(p)) {
+                    plugin = plugins[p];
+                    if (plugin.hasUI && plugin.hasUI()) {
+                        plugin.stopPlugin(me.instance.sandbox);
+                        mapModule.unregisterPlugin(plugin);
+                        me.normalMapPlugins.push(plugin);
+                    }
+                }
+            }
+
+            me.maplayerPanel.start();
+            if (me.data && me.data.hasLayerSelectionPlugin) {
+                // sets up initial data when editing published map
+                me.maplayerPanel.useConfig(me.data.hasLayerSelectionPlugin);
+            }
+
+            me._setSelectedSize();
+
+            for (i = 0; i < this.tools.length; i += 1) {
+                if (this.tools[i].selected) {
+                    me.toolsPanel.activatePreviewPlugin(this.tools[i], true);
+                }
+            }
+            mapModule.registerPlugin(me.logoPlugin);
+            this.logoPlugin.startPlugin(me.instance.sandbox);
+        },
+        /**
+         * @method _disablePreview
+         * @private
+         * Returns the main map from preview to normal state
+         */
+        _disablePreview: function () {
+            var me = this,
+                mapModule = me.instance.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                plugins = mapModule.getPluginInstances(),
+                plugin,
+                i;
+            // teardown preview plugins
+            for (i = 0; i < me.tools.length; i += 1) {
+                if (me.tools[i].plugin) {
+                    me.toolsPanel.activatePreviewPlugin(me.tools[i], false);
+                    mapModule.unregisterPlugin(me.tools[i].plugin);
+                    me.tools[i].plugin = undefined;
+                    delete me.tools[i].plugin;
+                }
+            }
+            me.maplayerPanel.stop();
+
+            me.layoutPanel.stop();
+
+            // return map size to normal
+            var mapElement = jQuery(mapModule.getMap().div);
+            // remove width definition to resume size correctly
+            mapElement.width('');
+            mapElement.height(jQuery(window).height());
+
+            // notify openlayers that size has changed
+            mapModule.updateSize();
+
+            // stop our logoplugin
+            mapModule.unregisterPlugin(me.logoPlugin);
+            me.logoPlugin.stopPlugin(me.instance.sandbox);
+
+            // resume normal plugins
+            for (i = 0; i < me.normalMapPlugins.length; i += 1) {
+                plugin = me.normalMapPlugins[i];
+                mapModule.registerPlugin(plugin);
+                plugin.startPlugin(me.instance.sandbox);
+            }
+            // reset listing
+            me.normalMapPlugins = [];
         },
         /**
          * @method destroy
