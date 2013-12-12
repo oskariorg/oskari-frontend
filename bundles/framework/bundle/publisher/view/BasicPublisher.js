@@ -39,11 +39,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         me.templateToolOptions = jQuery('<div class="tool-options"></div>');
         me.templateToolOption = jQuery('<div class="tool-option"><input type="checkbox" /><span></span></div>');
         me.templateLayout = jQuery('<div class="tool "><label><input type="radio" name="toolLayout" /><span></span></label></div>');
-        me.templateData = jQuery('<div class="data ">' + 
-                '<input class="show-grid" type="checkbox"/>' + 
+        me.templateData = jQuery('<div class="data ">' +
+                '<input class="show-grid" type="checkbox"/>' +
                 '<label class="show-grid-label"></label>' + '<br />' +
-                '<input class="allow-classification" type="checkbox"/>' + 
-                '<label class="allow-classification-label"></label>' + 
+                '<input class="allow-classification" type="checkbox"/>' +
+                '<label class="allow-classification-label"></label>' +
             '</div>');
         me.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
         me.templateCustomSize = jQuery('<div class="customsize">' + '<input type="text" name="width" ' +
@@ -697,7 +697,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             contentPanel.append(tooltipCont);
 
             var dataContainer = me.templateData.clone();
-            dataContainer.find('input.show-grid').attr('id', 'show-grid-checkbox').change( function (e) {
+            dataContainer.find('input.show-grid').attr('id', 'show-grid-checkbox').change(function (e) {
                 var checkbox = jQuery(e.target),
                     isChecked = checkbox.is(':checked');
                 me.isDataVisible = isChecked;
@@ -710,7 +710,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             dataContainer.find('input.allow-classification').attr('id', 'allow-classification-checkbox').change(function (e) {
                 var checkbox = jQuery(e.target),
                     isChecked = checkbox.is(':checked');
-                    me.classifyPlugin.showClassificationOptions(isChecked);
+                me.classifyPlugin.showClassificationOptions(isChecked);
             });
             dataContainer.find('label.allow-classification-label').attr('for', 'allow-classification-checkbox').append(me.loc.data.allowClassification);
 
@@ -1182,9 +1182,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 // get state of statsgrid
                 // TODO? for some reason original state has been cloned
                 // real / live state can be found from plugins...
-                var statsGridState = me.gridPlugin.getState(),//me.sandbox.getStatefulComponents().statsgrid,
-                    statsGridState = me._filterIndicators(_.clone(statsGridState, true));
-                    statsGridState.gridShown = me.isDataVisible;
+                var statsGridState = me.gridPlugin.getState(); //me.sandbox.getStatefulComponents().statsgrid,
+                statsGridState = me._filterIndicators(_.clone(statsGridState, true));
+                statsGridState.gridShown = me.isDataVisible;
                 selections.gridState = statsGridState;
             }
 
@@ -1869,6 +1869,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     // paint it red, this isn't an allowed dropzone for the plugin
                     dropzone.addClass("disallowed");
                 }
+            });
+        },
+
+        /**
+         * Hides dropzones
+         */
+        _hideDroppable: function () {
+            jQuery('div.mapplugins').removeClass("allowed", "disallowed").each(function () {
+                // remove droppable functionality
             });
         }
     });
