@@ -290,9 +290,7 @@ function(instance) {
                 me._cleanupPopup();
             }
         }
-        var name = values ? values.name : undefined;
-        var description = values ? values.desc : undefined;
-        this.instance.getService().printPlace(this.drawPlugin.getDrawing(), this.drawPlugin.getFeatureType(), name, description, serviceCallback);
+        this.instance.getService().printPlace(this.drawPlugin.getDrawing(), this.drawPlugin.getFeatureType(), values, serviceCallback);
     },
     /**
      * @method __savePlace

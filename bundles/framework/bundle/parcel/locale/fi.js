@@ -39,7 +39,7 @@ Oskari.registerLocalization({
           "title": "Määräalan tiedot",
           "tooltip": "Anna määräalan tiedot ja tulosta tai tallenna",
           "placename": {
-              "placeholder": "Määräalan tunnus"
+              "placeholder": "Tunnus"
           },
           "ptitle": {
               "placeholder": "Piirroksen otsikko"
@@ -57,7 +57,7 @@ Oskari.registerLocalization({
               "placeholder": "Kantatilan lähdeaineisto"
           },
           "reporter": {
-              "placeholder": "Määräalan laatija"
+              "placeholder": "Laatija"
           },
           "area": {
               "placeholder": "Pinta-ala (m²)"

@@ -71,13 +71,13 @@ function(instance) {
      * @param {String} placeDescription Description of the place.
      * @param {Fuction} cb Requires information about the success as boolean parameter.
      */
-    printPlace : function(feature, featureType, placeName, placeDescription, cb) {
+    printPlace : function(feature, featureType, values, cb) {
         if (feature && featureType) {
             if (featureType === this._instance.conf.parcelFeatureType) {
-                this._plotParcel(feature, placeName, placeDescription, cb);
+                this._plotParcel(feature, values, cb);
 
             } else if (featureType === this._instance.conf.registerUnitFeatureType) {
-                this._plotParcel(feature, placeName, placeDescription, cb);
+                this._plotParcel(feature, values, cb);
 
             } else {
                 cb();
@@ -95,9 +95,9 @@ function(instance) {
      * @param {String} placeDescription Description of the place.
      * @param {Fuction} cb Requires information about the success as boolean parameter.
      */
-    _plotParcel : function(feature, placeName, placeDescription, cb) {
+    _plotParcel : function(feature, values, cb) {
         if (feature) {
-        	this._plot.plotParcel(feature, placeName, placeDescription, cb);
+        	this._plot.plotParcel(feature, values, cb);
         }
     },
     /**

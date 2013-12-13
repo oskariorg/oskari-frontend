@@ -267,8 +267,32 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 if (tileData && layerId) {
                     this.tileData[layerId] = tileData;
                 }
+            },
+            /**
+             * Bundles could plot directly via this event
+             * @method Printout.PrintWithoutUIEvent
+             * @param {Object} event
+             */
+            'Printout.PrintWithoutUIEvent': function (event) {
+                var me= this;
+                var contentId = event.getContentId(),
+                    printParams = event.getPrintParams(),
+                    geoJson = event.getGeoJsonData();
+                if (geoJson) {
+                    me.geoJson = geoJson;
+                }
+                //Request pdf
+                if (!me.printout) {
+                    var map = jQuery('#contentMap');
+                    me.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.backendConfiguration);
+                    this.printout.render(map);
+                    this.printout.setEnabled(false);
+                    this.printout.hide();
+                }
+                me.printout.printMap(printParams);
             }
         },
+
         /**
          * @method stop
          * Implements BundleInstance protocol stop method
