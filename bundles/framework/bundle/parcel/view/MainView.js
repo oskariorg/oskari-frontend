@@ -145,6 +145,9 @@ function(instance) {
                     // Should never be here in KVP use
                     defaultValues.place.name = feature.attributes.name + '-K';
                 }
+                if (this.instance.conf.printContent) {
+                    defaultValues.place.desc = this.instance.conf.printContent;
+                }
                 defaultValues.place.parent_property_id = feature.attributes.name;
                 defaultValues.place.parent_property_quality = this._decodeQuality('q' + feature.attributes.quality);
 
