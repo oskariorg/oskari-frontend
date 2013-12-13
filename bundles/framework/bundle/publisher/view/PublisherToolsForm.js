@@ -109,7 +109,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     "left": "",
                     "classes": "top right"
                 },
-                "toolbarId" : "PublisherToolbar"
+                "toolbarId": "PublisherToolbar"
             }
         }, {
             "id": "Oskari.mapframework.mapmodule.ControlsPlugin",
@@ -118,11 +118,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
             "selected": true,
             "config": {
-                "ignoredLayerTypes" : ["WFS"],
+                "ignoredLayerTypes": ["WFS"],
                 "infoBox": false
             }
         }];
-/*
+        /*
         // map tool indices so we don't have to go through the list every time...
         me.toolIndices = {};
         var i;
@@ -131,13 +131,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
         }
 */
         this.templates = {
-            'help' :        '<div class="help icon-info"></div>',
-            'tool' :        '<div class="tool ">' + '<input type="checkbox"/>' + '<span></span></div>',
-            'toolOptions':  '<div class="tool-options"></div>',
-            'toolOption' :  '<div class="tool-option"><input type="checkbox" /><span></span></div>',            
-            'layerSelect':      '<select class="publisher-select-layer"></select>',
-            'layerSelectOption':'<option></option>'
-        }
+            'help': '<div class="help icon-info"></div>',
+            'tool': '<div class="tool ">' + '<input type="checkbox"/>' + '<span></span></div>',
+            'toolOptions': '<div class="tool-options"></div>',
+            'toolOption': '<div class="tool-option"><input type="checkbox" /><span></span></div>',
+            'layerSelect': '<select class="publisher-select-layer"></select>',
+            'layerSelectOption': '<option></option>'
+        };
     }, {
         /**
          * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and
@@ -149,17 +149,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
         init: function (pData) {
             var me = this,
                 sandbox = me._publisher.instance.getSandbox(),
-                selectedLayers = sandbox.findAllSelectedMapLayers();
+                selectedLayers = sandbox.findAllSelectedMapLayers(),
+                i,
+                layer;
 
-            for (var i = 0; i < selectedLayers.length; i += 1) {
-                var layer = selectedLayers[i];
+            for (i = 0; i < selectedLayers.length; i += 1) {
+                layer = selectedLayers[i];
                 if (layer.getLayerType() === "myplaces") {
                     me.myplaces.push(layer);
                 }
             }
 
         },
-        getTools: function() {
+        getTools: function () {
             return this.tools;
         },
         /**
@@ -215,7 +217,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             return panel;
 
 
-/*            var layerSelect = jQuery(me.templates.layerSelect).clone();
+            /*            var layerSelect = jQuery(me.templates.layerSelect).clone();
             var layerSelectOption = jQuery(me.templates.layerSelectOption).clone();
             layerSelectOption.attr('value', 'nolayer').append(mylayers[i].getName());
             layerSelect.append(layerSelectOption);
@@ -228,7 +230,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             contentPanel.append(layerSelect);
 
             return panel;
-*/            
+*/
         },
         /**
          * Returns the selections the user has done with the form inputs.
@@ -325,10 +327,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 // toolbar (bundle) needs to be notified
                 if (tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
                     me.toolbarConfig = {
-                        'toolbarId' : 'PublisherToolbar',
-                        'defaultToolbarContainer' : '.publishedToolbarContent',
+                        'toolbarId': 'PublisherToolbar',
+                        'defaultToolbarContainer': '.publishedToolbarContent',
                         'hasContentContainer': true,
-                        'classes' : {}
+                        'classes': {}
                     };
 
                     tool.plugin.setToolbarContainer();
