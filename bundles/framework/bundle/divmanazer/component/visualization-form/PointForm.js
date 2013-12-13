@@ -38,185 +38,58 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.PointForm
         this.basicColors = ["#ffffff", "#666666", "#ffde00", "#f8931f", "#ff3334", "#bf2652",
             "#000000", "#cccccc", "#652d90", "#3233ff", "#26bf4b", "#00ff01"
             ];
+        this.paper = null;
         this.activeColorCell = 6;
 
         this.symbolButtons = {
             'square': {
                 iconCls: 'marker-square',
                 iconId: 1,
+                offset: [5,36],
+                scale: 2
                 //            tooltip : loc.tooltip, //todo
-                shape: {
-                    data: {
-                        paths: [],
-                        polygons: [
-                            [
-                                [310, 68],
-                                [112, 68],
-                                [112, 266],
-                                [166.615, 266],
-                                [210.583, 335.832],
-                                [254.551, 266],
-                                [310, 266]
-                            ]
-                        ],
-                        circles: []
-                    },
-                    offset: [210.583, 335.832]
-                }
             },
             'dot': {
                 iconCls: 'marker-dot',
                 iconId: 5,
+                offset: [5,30],
+                scale: 0
                 //            tooltip : loc.tooltip, //todo
-                shape: {
-                    data: {
-                        paths: [],
-                        polygons: [],
-                        circles: [{
-                            cx: 195.782,
-                            cy: 185.718,
-                            r: 93.782
-                        }]
-                    },
-                    offset: [195.782, 185.718]
-                }
             },
             'arrow': {
                 iconCls: 'marker-arrow',
                 iconId: 6,
+                offset: [5,35],
+                scale: 2
                 //            tooltip : loc.tooltip, //todo
-                shape: {
-                    data: {
-                        paths: [],
-                        polygons: [
-                            [
-                                [249, 214],
-                                [249, 69],
-                                [162, 69],
-                                [162, 214],
-                                [101.123, 214],
-                                [205.25, 331.832],
-                                [309.377, 214]
-                            ]
-                        ],
-                        circles: []
-                    },
-                    offset: [205.25, 331.832]
-                }
             },
             'pin': {
                 iconCls: 'marker-pin',
                 iconId: 3,
+                offset: [2,35],
+                scale: 2
                 //            tooltip : loc.tooltip, //todo
-                shape: {
-                    data: {
-                        paths: [],
-                        polygons: [
-                            [
-                                [183.893, 323],
-                                [210.506, 212.198],
-                                [191.684, 208.229],
-                                [164.713, 323]
-                            ]
-                        ],
-                        circles: [{
-                            cx: 217.199,
-                            cy: 131,
-                            r: 68
-                        }]
-                    },
-                    offset: [174.303, 323]
-                }
             },
             'pin2': {
                 iconCls: 'marker-pin2',
                 iconId: 2,
+                offset: [5,35],
+                scale: 2
                 //            tooltip : loc.tooltip, //todo
-                shape: {
-                    data: {
-                        paths: [
-                            [
-                                ["move", [197.282, 57.936], false],
-                                ["curveC", [-51.795, 0, -93.782, 41.988, -93.782, 93.782], true],
-                                ["curveC", [0, 51.795, 93.782, 174.782, 93.782, 174.782], true],
-                                ["smoothC", [93.782, -122.987, 93.782, -174.782], true],
-                                ["curveC", [291.064, 99.923, 249.076, 57.936, 197.282, 57.936], false],
-                                ["close", "", ""]
-                            ],
-                            [
-                                ["move", [197.5, 190.5], false],
-                                ["curveC", [-21.263, 0, -38.5, -17.236, -38.5, -38.5], true],
-                                ["smoothC", [17.237, -38.5, 38.5, -38.5], true],
-                                ["smoothC", [236, 130.736, 236, 152], false],
-                                ["smoothC", [218.763, 190.5, 197.5, 190.5], false],
-                                ["close", "", ""]
-                            ]
-                        ],
-                        polygons: [],
-                        circles: []
-                    },
-                    offset: [197.282, 57.936]
-                }
             },
             'stud': {
                 iconCls: 'marker-stud',
                 iconId: 0,
+                offset: [2,35],
+                scale: 2
                 //            tooltip : loc.tooltip, //todo
-                shape: {
-                    data: {
-                        paths: [
-                            [
-                                ["move", [228.465, 61.808], false],
-                                ["curveC", [-34.129, -6.2, -74.84, 2.725, -67.242, 18.748], true],
-                                ["curveC", [10.313, 21.754, 18.316, 38.636, 24.535, 51.754], true],
-                                ["curveC", [-13.525, 13.08, -32.082, 31.028, -57.578, 55.687], true],
-                                ["curveC", [-15.447, 14.94, 26.929, 42.415, 68.291, 49.929], true],
-                                ["curveC", [41.36, 7.514, 90.696, -3.301, 81.49, -22.719], true],
-                                ["curveC", [-15.194, -32.051, -26.254, -55.379, -34.314, -72.38], true],
-                                ["curveC", [10.436, -10.093, 23.865, -23.081, 41.171, -39.818], true],
-                                ["curveC", [297.564, 90.681, 262.596, 68.009, 228.465, 61.808], false],
-                                ["close", "", ""]
-                            ]
-                        ],
-                        polygons: [
-                            [
-                                [187.893, 328],
-                                [201.506, 253.198],
-                                [182.684, 249.229],
-                                [168.713, 328]
-                            ]
-                        ],
-                        circles: []
-                    },
-                    offset: [178.303, 328]
-                }
             },
             'flag': {
                 iconCls: 'marker-flag',
                 iconId: 4,
+                offset: [9,35],
+                scale: 2
                 //            tooltip : loc.tooltip, //todo
-                shape: {
-                    data: {
-                        paths: [],
-                        polygons: [
-                            [
-                                [270.732, 341],
-                                [333.817, 76.259],
-                                [313.429, 76.248],
-                                [250.647, 341]
-                            ],
-                            [
-                                [117.579, 76],
-                                [144.322, 145.722],
-                                [85, 215],
-                                [265.541, 215],
-                                [298.314, 76]
-                            ]
-                        ],
-                        circles: []
-                    },
-                    offset: [260.6895, 341]
-                }
             }
         };
 
@@ -321,8 +194,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.PointForm
                     }
                     // FIXME create function outside loop
                     btnContainer.click(function () {
-                        // FIXME add radix
-                        me.values.shape = parseInt(jQuery(this).attr('id').charAt(0));
+                        me.values.shape = parseInt(jQuery(this).attr('id').charAt(0),10);
                         me._selectButton(me.values.shape);
                         me._updatePreview(dialogContent);
                     });
@@ -493,9 +365,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.PointForm
                 me._updatePreview();
             });
 
-            if (this._supportsSVG()) {
-                this._updatePreview(dialogContent);
-            }
+            this._updatePreview(dialogContent);
 
             var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             saveBtn.setTitle(me.loc.buttons.save);
@@ -540,109 +410,48 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.PointForm
             }
         },
 
-        // Väliaikaisesti näin
         _updatePreview: function (dialog) {
             var me = this;
             var view = dialog === undefined || dialog === null ? jQuery(".pointform") : dialog;
             var content = view.find('.preview');
-            var scaleFactor = me.values.size / 35;
-            var svgOriginalSize = 400;
-            var svgNewSize = svgOriginalSize * scaleFactor;
-            var offset = 0.5 * (me.previewSize - svgNewSize);
-            var options = {
-                fill: "#" + me.values.color
-            };
-            var coords = [];
+            var preview;
+            if (content.length > 0) {
+                preview = content.get(0);
+                if (preview.children.length === 0) {
+                    this.paper = Raphael(preview,50,50);
+                }
+            } else {
+                return;
+            }
 
-            content.svg('destroy');
-            content.svg({
-                onLoad: function (svg) {
-                    var shapes = null,
-                        buttonName,
-                        button,
-                        i,
-                        j,
-                        k,
-                        cx,
-                        cy,
-                        r,
-                        path,
-                        renderPath,
-                        item;
-                    for (buttonName in me.symbolButtons) {
-                        if (me.symbolButtons.hasOwnProperty(buttonName)) {
-                            button = me.symbolButtons[buttonName];
-                            if (button.iconId.toString() === me.values.shape.toString()) {
-                                shapes = button.shape.data;
-                                break;
-                            }
-                        }
-                    }
-                    // Polygons
-                    for (i = 0; i < shapes.polygons.length; i++) {
-                        coords = [];
-                        for (j = 0; j < shapes.polygons[i].length; j++) {
-                            coords.push([]);
-                            for (k = 0; k < 2; k++) {
-                                coords[j][k] = scaleFactor * shapes.polygons[i][j][k] + offset;
-                            }
-                        }
-                        svg.polygon(coords, options);
-                    }
-                    // Circles
-                    for (i = 0; i < shapes.circles.length; i++) {
-                        cx = scaleFactor * shapes.circles[i].cx + offset;
-                        cy = scaleFactor * shapes.circles[i].cy + offset;
-                        r = scaleFactor * shapes.circles[i].r;
-                        svg.circle(cx, cy, r, options);
-                    }
-
-                    if (shapes.paths.length > 0) {
-                        path = svg.createPath();
-                        renderPath = path.move(0, 0, false);
-                        // Paths
-                        for (i = 0; i < shapes.paths.length; i++) {
-                            for (j = 0; j < shapes.paths[i].length; j++) {
-                                item = shapes.paths[i][j];
-                                coords = [];
-                                for (k = 0; k < item[1].length; k++) {
-                                    coords[k] = scaleFactor * item[1][k];
-                                    if (!item[2]) {
-                                        coords[k] = coords[k] + offset;
-                                    }
-                                }
-                                switch (item[0]) {
-                                case "move":
-                                    renderPath.move(coords[0], coords[1], item[2]);
-                                    break;
-                                case "curveC":
-                                    renderPath.curveC(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5], item[2]);
-                                    break;
-                                case "smoothC":
-                                    renderPath.smoothC(coords[0], coords[1], coords[2], coords[3], item[2]);
-                                    break;
-                                case "close":
-                                    renderPath.close();
-                                    break;
-                                }
-                            }
-                        }
-                        svg.path(renderPath, options);
+            var charIndex = 0;
+            var offset = [0,0];
+            var scale = 0;
+            for (var buttonName in me.symbolButtons) {
+                if (me.symbolButtons.hasOwnProperty(buttonName)) {
+                    var button = me.symbolButtons[buttonName];
+                    if (button.iconId.toString() === me.values.shape.toString()) {
+                        charIndex = button.iconId;
+                        offset = button.offset;
+                        scale = button.scale;
+                        break;
                     }
                 }
-            });
+            }
+            // Preview uses icons from the JSON based font below. A copy of identical ttf
+            // file is needed by back end renderer (e.g. GeoServer). Conversion from
+            // ttf to js is achieved by cufon at http://cufon.shoqolate.com/generate/.
+            Raphael.registerFont({"w":512,"face":{"font-family":"dot-markers","font-weight":400,"font-stretch":"normal","units-per-em":"512","panose-1":"2 0 5 3 0 0 0 0 0 0","ascent":"480","descent":"-32","bbox":"0 -480 512 32","underline-thickness":"0","underline-position":"0","unicode-range":"U+E000-U+F000"},"glyphs":{" ":{},"\ue000":{"d":"288,-426v-21,-4,-35,-2,-42,5v-2,2,-2,4,-1,7v2,5,5,10,9,18v4,8,6,13,7,15v-3,3,-9,9,-18,17v-13,12,-13,12,-19,18v-7,7,-1,15,18,24v8,4,17,7,26,8v23,5,39,3,49,-5v3,-3,4,-6,3,-9r-9,-18v-4,-9,-4,-10,-8,-18v-3,-6,-4,-9,-5,-11v2,-2,2,-3,11,-11v9,-8,9,-8,15,-14v6,-5,1,-12,-15,-20v-7,-3,-14,-5,-21,-6xm262,-256r9,-48r-12,-2r-9,50r12,0"},"\ue001":{"d":"320,-427r-127,0r0,126r35,0r28,45r28,-45r36,0r0,-126"},"\ue002":{"d":"256,-429v-17,0,-30,5,-42,17v-12,12,-18,26,-18,43v0,10,5,24,15,43v10,19,20,35,30,48r15,21v40,-53,60,-90,60,-112v0,-17,-6,-31,-18,-43v-12,-12,-25,-17,-42,-17xm256,-344v-7,0,-12,-2,-17,-7v-5,-5,-7,-10,-7,-17v0,-7,2,-13,7,-18v5,-5,10,-7,17,-7v7,0,13,2,18,7v5,5,7,11,7,18v0,7,-2,12,-7,17v-5,5,-11,7,-18,7"},"\ue003":{"d":"262,-257r17,-71r-12,-2r-17,73r12,0xm240,-380v0,12,4,22,12,31v8,9,19,13,31,13v12,0,22,-4,31,-13v9,-9,13,-19,13,-31v0,-12,-4,-22,-13,-30v-9,-8,-19,-13,-31,-13v-12,0,-23,5,-31,13v-8,8,-12,18,-12,30"},"\ue004":{"d":"262,-257r41,-169r-13,0r-40,169r12,0xm164,-427r18,45r-38,44r115,0r21,-89r-116,0"},"\ue005":{"d":"196,-256v0,17,6,30,18,42v12,12,25,18,42,18v17,0,30,-6,42,-18v12,-12,18,-25,18,-42v0,-17,-6,-30,-18,-42v-12,-12,-25,-18,-42,-18v-17,0,-30,6,-42,18v-12,12,-18,25,-18,42"},"\ue006":{"d":"284,-331r0,-93r-56,0r0,93r-39,0r67,75r67,-75r-39,0"},"\uf000":{"d":"0,-480r512,512r-512,0r0,-512","w":0},"\u00a0":{}}});
+            var font = this.paper.getFont("dot-markers");
+            var baseFontIndex = 57344;
+            this.paper.clear();
+            var x = offset[0]-this.values.size*5;
+            var y = offset[1]+this.values.size*scale;
+            var size = 40+this.values.size*10;
+            this.paper.print(x,y,String.fromCharCode(charIndex+baseFontIndex),font,size).attr({"stroke-width": 1, fill: "#"+me.values.color, "stroke": "#b4b4b4"});
+            this.paper.circle(0,0,0); // IE8 refresh work-around
         },
 
-
-        /**
-         * @method destroy
-         * Removes eventlisteners
-         */
-        /*    destroy : function() {
-        // unbind live bindings
-        var onScreenForm = this._getOnScreenForm();
-        onScreenForm.find('select[name=pointform]').die();
-    }, */
         /**
          * @method _getOnScreenForm
          * Returns reference to the on screen version shown by OpenLayers
@@ -650,39 +459,6 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.PointForm
          */
         _getOnScreenForm: function () {
             return jQuery('div.renderdialog');
-        },
-
-        /**
-         * @method getValues
-         * Returns form values as an object
-         * @return {Object}
-         */
-        /*
-    getValues : function() {
-        var newShape = null;
-        for (var buttonName in this.symbolButtons) {
-            var button = this.symbolButtons[buttonName];
-            if (button.iconId.toString() === this.values.shape.toString()) {
-                newShape = button.iconId;
-                break;
-            }
-        }
-        return {
-          color: this.values.color,
-          size: this.values.size,
-          shape: newShape
-//          shape: this.symbolButtons[this.values.shape].iconId
-        };
-    },
-    */
-
-        /**
-         * @method _getOnScreenForm
-         * Check if the SVG graphics is supported by the browser
-         * @private
-         */
-        _supportsSVG: function () {
-            return !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', "svg").createSVGRect;
         }
 
     });
