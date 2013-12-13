@@ -138,14 +138,19 @@ function(instance) {
         if (feature) {
             defaultValues.place.area = this.drawPlugin.getParcelGeometry().getArea().toFixed(0);
             if (feature.attributes) {
-                defaultValues.place.name = feature.attributes.name+'-K';
+                if (this.instance.conf.pid) {
+                    defaultValues.place.name = this.instance.conf.pid;
+                }
+                else {
+                    // Should never be here in KVP use
+                    defaultValues.place.name = feature.attributes.name + '-K';
+                }
                 defaultValues.place.parent_property_id = feature.attributes.name;
-                defaultValues.place.parent_property_quality = this._decodeQuality('q'+feature.attributes.quality);
+                defaultValues.place.parent_property_quality = this._decodeQuality('q' + feature.attributes.quality);
 
             }
             // Override if old values available
-            if (oldpreparcel)
-            {
+            if (oldpreparcel) {
                 defaultValues.place.id = oldpreparcel.id;
                 defaultValues.place.name = oldpreparcel.preparcel_id;
                 defaultValues.place.title = oldpreparcel.title;
@@ -153,7 +158,7 @@ function(instance) {
                 defaultValues.place.desc = oldpreparcel.description;
                 defaultValues.place.parent_property_id = oldpreparcel.parent_property_id;
                 defaultValues.place.parent_property_quality = oldpreparcel.parent_property_quality;
-                defaultValues.place.reporter= oldpreparcel.reporter;
+                defaultValues.place.reporter = oldpreparcel.reporter;
                 defaultValues.place.area_unit = oldpreparcel.area_unit;
             }
         }
@@ -310,14 +315,15 @@ function(instance) {
         // Callback handles the end of the asynchronous operation.
         var serviceCallback = function(blnSuccess, model, blnNew) {
             if (blnSuccess) {
+                me._success2Url(values);
                 me.instance.showMessage('Tallennus onnistui');
                 me._cleanupPopup();
             } else {
                 // blnNew should always be true since we are adding a preparcel
                 if (blnNew) {
-                    me.instance.showMessage('Error in inserting preparcel');
+                    me.instance.showMessage('Tallennusvirhe - kohdetunnus tod. on jo käytössä');
                 } else {
-                    me.instance.showMessage('Error in modifying preparcel');
+                    me.instance.showMessage('Muokkausvirhe');
                 }
             }
         }
@@ -390,7 +396,18 @@ function(instance) {
         this.form.destroy();
         this.form = undefined;
         sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
-    }
+    },
+        _success2Url : function(values) {
+            // form not open, nothing to do
+            if (!values || !this.instance.conf.successUrl) {
+                return;
+            }
+            var url = this.instance.conf.successUrl;
+            if(url.indexOf('?') < 0) url = url + '?';
+            else  url = url + '&';
+
+            window.location.assign(this.instance.conf.successUrl + url+'parcel.area='+values.area);
+        }
 }, {
     /**
      * @property {String[]} protocol

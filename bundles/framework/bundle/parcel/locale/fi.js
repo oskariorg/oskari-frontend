@@ -57,7 +57,7 @@ Oskari.registerLocalization({
               "placeholder": "Kantatilan lähdeaineisto"
           },
           "reporter": {
-              "placeholder": "Laatija"
+              "placeholder": "Piirroksen laatija"
           },
           "area": {
               "placeholder": "Pinta-ala (m²)"
@@ -86,7 +86,7 @@ Oskari.registerLocalization({
       },
       "error": {
         "title": "Virhe!",
-        "savePlace": "Kohteen tallentaminen ei onnistunut.",
+        "savePlace": "Tallennusvirhe - kohdetunnus on jo tod. käytössä",
         "loadPlace": "Kohteen lataaminen ei onnistunut"
       }
     },

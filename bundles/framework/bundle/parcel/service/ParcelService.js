@@ -123,7 +123,7 @@ function(instance) {
                     else {
                         // update models updateDate in store
                         me.updatePlaceData(drawplugin, values, list, cb);
-                        cb(success, list[0], isNew);
+                       // cb(success, list[0], isNew);
                     }
                 }
 
