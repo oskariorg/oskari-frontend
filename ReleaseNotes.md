@@ -15,6 +15,10 @@ Adds a tab to personaldata from which users can access their own saved indicator
 
 Measurements of places (area or length depending on the type) are now shown in the myplaces tab and whilst drawing a new place or editing an old one.
 
+### divmanazer/VisualizationForm
+
+Visualization previews are now compatible also with Internet Explorer 8.
+
 ### Work in progress
 
 We are preparing the next major release of Oskari. Oskari 2.0 will utilize RequireJS for resource loading instead of oskari-loader. Migration tools and documentation are developed and improved as the work progresses. These changes are unstable (i.e. they will change) and placed into the src-folder.
