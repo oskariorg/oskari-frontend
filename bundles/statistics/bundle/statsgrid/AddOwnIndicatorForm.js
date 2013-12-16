@@ -7,12 +7,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
  * @param {Object} localization
  * @param {Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance} instance
  */
-function(sandbox, localization, municipalityData, layerWMSName, layerId) {
+function(sandbox, localization, municipalityData, layerWMSName, layerId, regionCategory) {
     this.sandbox = sandbox;
     this.localization = localization;
     this.municipalities = municipalityData;
     this.layerWMSName = layerWMSName;
     this.layerId = layerId;
+    this.regionCategory = regionCategory;
 
     this.template = {
         'formCont' : '<div class="form-cont"></div>',
@@ -109,7 +110,7 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
 
         });
 
-        formMunicipalityHeader.find('label').append(me.localization.municipalityHeader);
+        formMunicipalityHeader.find('label').append(me.localization.regionCategories[me.regionCategory]);
 
         // add cancel data submit
         var cancel = formSubmit.find('.cancel-form-button');
@@ -251,7 +252,6 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId) {
                 unrecognized.push(area);
         });
         var openImport = me.container.find('.import-button');
-debugger;
         // alert user of unrecognized lines
         var unrecognizedInfo = "";
         if (unrecognized.length > 0) {
@@ -319,6 +319,8 @@ debugger;
         json.material = me.layerId; //reference layer
 
         json.published = me.container.find('.form-meta .publicity').find('input').prop('checked');
+
+        json.category = me.regionCategory;
 
         json.data = [];
 

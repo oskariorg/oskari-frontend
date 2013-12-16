@@ -177,11 +177,13 @@ function() {
 		me.parcelSelectorHandler.start();
         me.preparcelSelectorHandler = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.PreParcelSelectorHandler", me);
         me.preparcelSelectorHandler.start();
-		if (me.state && me.state.initRef) {
-			me.parcelSelectorHandler.loadParcel(me.state.initRef);
+        // predefined parcel id
+		if (me.conf && me.conf.initRef) {
+			me.parcelSelectorHandler.loadParcel(me.conf.initRef);
 		}
-        else if (me.state && me.state.initPreParcelRef) {
-            me.preparcelSelectorHandler.loadPreParcel(me.state.initPreParcelRef);
+        // predefined part parcel (preparcel) plot id
+        else if (me.conf && me.conf.pid) {
+            me.preparcelSelectorHandler.loadPreParcel(me.conf.pid);
         }
 	},
 	/**

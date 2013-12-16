@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             this.gridPlugin = gridPlugin;
 
             // Register classification plugin for map.
-            var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', conf, locale);
+            var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', { 'state' : me.getState()}, locale);
             mapModule.registerPlugin(classifyPlugin);
             mapModule.startPlugin(classifyPlugin);
             this.classifyPlugin = classifyPlugin;
@@ -182,6 +182,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
         getUserIndicatorsService: function() {
             return this.userIndicatorsService;
         },
+        /**
+         * @method addUserIndicator
+         * @param {Object} indicator
+         */
         addUserIndicator: function(indicator) {
             var view = this.getView(),
                 state = this.getState();
@@ -190,12 +194,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             state.indicators.push(indicator);
 
             if (view.isVisible) {
+                this.gridPlugin.changeGridRegion(indicator.category);
                 this.gridPlugin.addIndicatorDataToGrid(
                     null, indicator.id, indicator.gender, indicator.year, indicator.data, indicator.meta
                 );
                 this.gridPlugin.addIndicatorMeta(indicator);
             } else {
                 state.layerId = indicator.layerId || state.layerId;
+                state.regionCategory = indicator.category;
                 this.setState(state);
             }
         },
@@ -220,8 +226,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
 
             // We need to notify the grid of the current state so it can load the right indicators.
             me.gridPlugin.setState(this.state);
+            me.classifyPlugin.setState(this.state);
             // Reset the classify plugin
-            me.classifyPlugin.resetUI();
+            me.classifyPlugin.resetUI(this.state);
 
             if (!layer) {
                 return;
@@ -278,11 +285,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 colorsValues = null,
                 state = this.state,
                 colors = state.colors || {},
-                keys = ['layerId', 'currentColumn', 'methodId', 'numberOfClasses', 'classificationMode', 'manualBreaksInput'],
+                keys = ['layerId', 'currentColumn', 'methodId', 'numberOfClasses', 'classificationMode', 'manualBreaksInput', 'allowClassification'],
                 colorKeys = ['set', 'index', 'flipped'],
                 indicators = state.indicators || [],
                 value;
-
+debugger;
             // Note! keys needs to be handled in the backend as well.
             // Therefore the key order is important as well as actual values.
             // 'classificationMode' can be an empty string but it must be the fifth value.

@@ -15,9 +15,9 @@ Bundle fetches data from the SotkaNET statistics and indicator bank (www.sotkane
 
 The grid and the classifier are initialized as plugins so they can be used individually as well. They both use the StatisticsService to send events and make the actual AJAX calls to fetch the data.
 
-Grid section: selected municipalities will be visualized on the map.
-Map section: selected municipalities are hilighted in the grid.
-Select hilighted mode: selected municipalities (map) are also selected in the grid.
+Grid section: selected regions will be visualized on the map.
+Map section: selected regions are hilighted in the grid.
+Select hilighted mode: selected regions (map) are also selected in the grid.
 
 Each data column has a menu from where the user can filter the values in the grid and on the map. Filtering is possible based on values (equals, greater than etc.) or regions (at the moment regions from the SOTKANet service are supported. Refer to the REST API documentation [here](http://uusi.sotkanet.fi/portal/pls/portal/!PORTAL.wwpob_page.show?_docname=26001.HTML) (only in Finnish)).
 
@@ -61,7 +61,8 @@ state : {
   currentColumn : "<selected indicator>",
   methodId : "<id of the selected classification method>",
   numberOfClasses : "<number of classification classes>",
-  manualBreaksInput : "<input string for the manual breaks classification method>"
+  manualBreaksInput : "<input string for the manual breaks classification method>",
+  regionCategory : "<selected region category, eg. municipalities>"
 }
 ```
 
@@ -77,7 +78,7 @@ state : {
   </tr>
   <tr>
     <td>StatsGrid.TooltipContentRequest</td>
-    <td>Sends tooltip info for currently hovered municipality.</td>
+    <td>Sends tooltip info for currently hovered region.</td>
   </tr>
 </table>
 

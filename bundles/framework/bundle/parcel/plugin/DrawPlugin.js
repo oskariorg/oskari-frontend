@@ -74,6 +74,9 @@ function(instance) {
 		this.drawLayer = new OpenLayers.Layer.Vector("Parcel Draw Layer", {
 			eventListeners : {
 				"featuresadded" : function(layer) {
+                    if (layer.features[0].length === 0) {
+                        return;
+                    }
                     if (layer.features[0].geometry.CLASS_NAME === "OpenLayers.Geometry.LineString") {
                         var loc = me.instance.getLocalization('notification').calculating;
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -707,8 +710,10 @@ function(instance) {
             this.buttons.setButtonEnabled("clear",true);
             this.buttons.setButtonEnabled("save",true);
 
-			this.controls.select.select(editingFeature);
-			this.controls.modify.selectFeature(editingFeature);
+            if (editingFeature !== null) {
+			    this.controls.select.select(editingFeature);
+			    this.controls.modify.selectFeature(editingFeature);
+            }
 			this.controls.modify.activate();
             this.controls.modify.clickout = false;
             this.controls.modify.toggle = false;
