@@ -29,7 +29,6 @@ module.exports = function (grunt) {
             'jquery.base64.min.js',
             'jquery.cookie.js',
             'jquery.event.drag-2.0.min.js',
-            'jquery.svg.js',
             'jquery-ui-1.9.1.custom.min.js',
             'jscolor.js',
             'lodash.js',

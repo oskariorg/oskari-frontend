@@ -18,18 +18,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
      */
 
     function (instance, localization) {
-        this.instance = instance;
-        this.template = jQuery("<div class='startview'>" + "<div class='content'></div>" +
+        var me = this;
+        me.instance = instance;
+        me.template = jQuery("<div class='startview'>" + "<div class='content'></div>" +
             "<div class='tou'><a href='JavaScript:void(0;)'></a></div>" +
             "<div class='buttons'></div>" + "</div>");
-        this.templateLayerList = jQuery("<div class='layerlist'>" + "<h4></h4>" + "<ul></ul>" + "</div>");
-        this.templateListItem = jQuery("<li></li>");
-        this.templateError = jQuery('<div class="error"><ul></ul></div>');
-        this.templateInfo = jQuery("<div class='icon-info'></div>");
-        this.loc = localization;
-        this.content = undefined;
-        this.buttons = {};
-        this.hasAcceptedTou = false;
+        me.templateLayerList = jQuery("<div class='layerlist'>" + "<h4></h4>" + "<ul></ul>" + "</div>");
+        me.templateListItem = jQuery("<li></li>");
+        me.templateError = jQuery('<div class="error"><ul></ul></div>');
+        me.templateInfo = jQuery("<div class='icon-info'></div>");
+        me.loc = localization;
+        me.content = undefined;
+        me.buttons = {};
+        me.hasAcceptedTou = false;
     }, {
         /**
          * Renders view to given DOM element
@@ -40,14 +41,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
          */
         render: function (container) {
             var me = this,
-                content = this.template.clone();
-            this.content = content;
+                content = me.template.clone();
+            me.content = content;
 
-            content.find('div.content').before(this.loc.text);
+            content.find('div.content').before(me.loc.text);
             container.append(content);
 
             var touContentLink = content.find('div.tou a');
-            touContentLink.append(this.loc.touLink);
+            touContentLink.append(me.loc.touLink);
             touContentLink.bind('click', function () {
                 me._showTermsOfUse();
                 return false;
@@ -62,22 +63,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
                 var layers = me.instance.getLayersWithoutPublishRights();
                 me.instance.setPublishMode(true, layers);
             });
-            this.buttons['continue'] = continueButton;
-            this._updateContinueButton();
+            me.buttons['continue'] = continueButton;
+            me._updateContinueButton();
             continueButton.insertTo(content.find('div.buttons'));
 
             var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            cancelButton.setTitle(this.loc.buttons.cancel);
+            cancelButton.setTitle(me.loc.buttons.cancel);
             cancelButton.setHandler(function () {
                 me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
             });
-            this.buttons.cancel = cancelButton;
+            me.buttons.cancel = cancelButton;
 
             cancelButton.insertTo(content.find('div.buttons'));
 
-            this._renderLayerLists();
+            me._renderLayerLists();
 
-            this._checkTouAccepted();
+            me._checkTouAccepted();
         },
         /**
          * Checks currently selected layers for publish permissions renders
@@ -89,11 +90,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
          */
         _renderLayerLists: function () {
             // empty any current lists
-
-            var container = this.content.find('div.content'),
+            var me = this,
+                container = me.content.find('div.content'),
                 layers = [], // resolve layers
                 deniedLayers = [],
-                selectedLayers = this.instance.sandbox.findAllSelectedMapLayers(),
+                selectedLayers = me.instance.sandbox.findAllSelectedMapLayers(),
                 i,
                 layer,
                 layersList,
@@ -103,7 +104,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
             container.find('div.layerlist').remove();
             for (i = 0; i < selectedLayers.length; ++i) {
                 layer = selectedLayers[i];
-                if (!this.instance.hasPublishRight(layer) &&
+                if (!me.instance.hasPublishRight(layer) &&
                         layer.getId().toString().indexOf('myplaces_') < 0) {
                     deniedLayers.push(layer);
                 } else {
@@ -112,39 +113,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
             }
             // render list of layers with publication rights
             if (layers.length > 0) {
-                layersList = this._getRenderedLayerList(layers);
+                layersList = me._getRenderedLayerList(layers);
                 heading = layersList.find('h4');
                 txt = 'loc.layerlist_title';
-                if (this.loc && this.loc.layerlist_title) {
-                    txt = this.loc.layerlist_title;
+                if (me.loc && me.loc.layerlist_title) {
+                    txt = me.loc.layerlist_title;
                 }
                 heading.append(txt);
                 container.append(layersList);
 
-                // enable/disable this.buttons['continue']
-                this.buttons['continue'].setEnabled(true);
+                // enable/disable me.buttons['continue']
+                me.buttons['continue'].setEnabled(true);
 
                 // render list of layers that cannot be published
                 if (deniedLayers.length > 0) {
-                    var deniedLayersList = this._getRenderedLayerList(deniedLayers);
+                    var deniedLayersList = me._getRenderedLayerList(deniedLayers);
                     heading = deniedLayersList.find('h4');
                     heading.append(this.loc.layerlist_denied);
                     // add tooltip
-                    var tooltip = this.templateInfo.clone();
-                    tooltip.attr('title', this.loc.denied_tooltip);
+                    var tooltip = me.templateInfo.clone();
+                    tooltip.attr('title', me.loc.denied_tooltip);
                     heading.before(tooltip);
                     container.append(deniedLayersList);
                 }
             } else {
                 // write a message that
-                var errorsList = this.templateError.clone(),
-                    error = this.templateListItem.clone();
-                error.append(this.loc.layerlist_empty);
+                var errorsList = me.templateError.clone(),
+                    error = me.templateListItem.clone();
+                error.append(me.loc.layerlist_empty);
                 errorsList.find('ul').append(error);
                 container.append(errorsList);
 
-                // disable this.buttons['continue']
-                this.buttons['continue'].setEnabled(false);
+                // disable me.buttons['continue']
+                me.buttons['continue'].setEnabled(false);
             }
 
         },
@@ -193,7 +194,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
          */
         _showTermsOfUse: function () {
             var me = this;
-            if (!this.termsOfUse) {
+            if (!me.termsOfUse) {
                 // load the article first
                 var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', me.instance.sandbox);
                 helper.getHelpArticle('termsofuse, mappublication, ' + Oskari.getLang(), function (success, response) {
@@ -206,8 +207,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
                 return;
             }
 
-            var dlg = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var closeBtn = dlg.createCloseButton(this.loc.buttons.close);
+            var dlg = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                closeBtn = dlg.createCloseButton(me.loc.buttons.close);
             dlg.show(me.termsOfUse.title, me.termsOfUse.body, [closeBtn]);
         },
         /**
@@ -247,12 +248,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
          * @private
          */
         _updateContinueButton: function () {
-
-            if (this.hasAcceptedTou) {
-                this.buttons['continue'].setTitle(this.loc.buttons['continue']);
-            } else {
-                this.buttons['continue'].setTitle(this.loc.buttons.continueAndAccept);
-            }
+            this.buttons['continue'].setTitle(this.hasAcceptedTou ? this.loc.buttons['continue'] : this.loc.buttons.continueAndAccept);
         },
         /**
          * Requests that the backend mark the current logged in user as having

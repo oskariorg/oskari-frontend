@@ -54,11 +54,11 @@ Oskari.registerLocalization({
                 "GetInfoPlugin": "Query tool for place data",
                 "PublisherToolbarPlugin": "map tools"
             },
-            "toolbarToolNames": {  
-                "history_back" : "Move backward",
-                "history_forward" : "Move forward",
-                "measureline" : "Measure distance",
-                "measurearea" : "Measure area"
+            "toolbarToolNames": {
+                "history_back": "Move backward",
+                "history_forward": "Move forward",
+                "measureline": "Measure distance",
+                "measurearea": "Measure area"
             },
             "toollayout": {
                 "label": "Tool layout",
@@ -122,6 +122,9 @@ Oskari.registerLocalization({
                 "label": "Map layers",
                 "defaultLayer": "(Default layer)",
                 "useAsDefaultLayer": "Use as default layer"
+            },
+            "myplaces": {
+                "label": "My layers"
             },
             "sizes": {
                 "small": "Small",

@@ -95,6 +95,9 @@ Oskari.registerLocalization({
       "placedesc": {
         "placeholder": "Describe the place"
       },
+      "placeAttention": {
+            "placeholder": "Attention text"
+      },
       "measurement": {
         "line": "Line length: ",
         "area": "Area: "

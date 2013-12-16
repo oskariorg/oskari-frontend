@@ -560,7 +560,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             window.open('about:blank', 'map_popup_111', wopParm);
             me.mainPanel.find('#oskari_print_formID').submit();
         },
-
+        /**
+         * @method printMap
+         * Sends the gathered map data to the server to save them/publish the map.
+         * @param {Object} printParams, parameters for printing pdf via print service
+         */
+        printMap: function (printParams) {
+            var me = this;
+            me._printMap(printParams, null);
+        },
         /**
          * @method _printMap
          * @private
@@ -578,6 +586,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var maplinkArgs = selections.maplinkArgs;
             var pageSizeArgs = "&pageSize=" + selections.pageSize;
             var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
+            var saveFileArgs = "";
+            if(selections.saveFile) saveFileArgs = "&saveFile=" + selections.saveFile;
 
             var contentOptions = [],
                 p;
@@ -591,7 +601,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var contentOptionArgs = contentOptions.join('');
             var formatArgs = "&format=" + selections.format;
 
-            var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs;
+            var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs + saveFileArgs;
             url = url + parameters;
 
             // We need to use the POST method if there's GeoJSON or tile data.

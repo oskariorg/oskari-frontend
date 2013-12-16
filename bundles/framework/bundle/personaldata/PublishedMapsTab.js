@@ -46,8 +46,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          * where the tab should be added
          */
         addTabContent: function (container) {
-            var me = this;
-            var content = me.template.clone();
+            var me = this,
+                content = me.template.clone();
             me.container = container;
             container.append(content);
             me._refreshViewsList();
@@ -60,16 +60,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          * @private
          */
         _renderViewsList: function (views) {
-
             if (!views) {
                 views = [];
             }
-            var me = this;
-            var listContainer = me.container.find('.viewsList');
+            var me = this,
+                listContainer = me.container.find('.viewsList');
             listContainer.empty();
             this.viewData = views;
-            var model = this._getGridModel(views);
-            var grid = this._getGrid(model);
+            var model = this._getGridModel(views),
+                grid = this._getGrid(model);
             grid.renderTo(listContainer);
         },
 
@@ -81,8 +80,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          * @private
          */
         _refreshViewsList: function () {
-            var me = this;
-            var service = me.instance.getViewService();
+            var me = this,
+                service = me.instance.getViewService();
             service.loadViews('PUBLISHED', function (isSuccess, response) {
                 if (isSuccess) {
                     me._renderViewsList(response.views);
@@ -306,7 +305,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                     var req = publishMapEditorRequestBuilder(data);
                     sandbox.request(instance, req);
                 }
-                var closeFlyoutRequestBuilder = sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')
+                var closeFlyoutRequestBuilder = sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest');
                 if (closeFlyoutRequestBuilder) {
                     var closeFlyoutRequest = closeFlyoutRequestBuilder(me.instance, 'close', me.instance.getName());
                     sandbox.request(me.instance.getName(), closeFlyoutRequest);

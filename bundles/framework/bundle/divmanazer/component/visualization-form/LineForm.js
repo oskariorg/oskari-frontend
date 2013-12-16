@@ -30,6 +30,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
         this.basicColors = ["#ffffff", "#666666", "#ffde00", "#f8931f", "#ff3334", "#bf2652",
             "#000000", "#cccccc", "#652d90", "#3233ff", "#26bf4b", "#00ff01"
             ];
+        this.paper = null;
         this.activeColorCell = -1;
         // Default color
         var i;
@@ -189,8 +190,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
                 }
                 // FIXME create function outside loop
                 styleBtnContainer.click(function () {
-                    // FIXME add radix
-                    newValue = parseInt(jQuery(this).attr('id').charAt(0));
+                    newValue = parseInt(jQuery(this).attr('id').charAt(0),10);
                     me._selectButton("style", newValue);
                     me.values.style = newValue;
                     me._updatePreview(dialogContent);
@@ -383,8 +383,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
                 values[2] = jQuery('input.custom-color.custom-blue-value').val();
                 // From integer to hex values
                 for (i = 0; i < 3; i++) {
-                    // FIXME add radix
-                    intValue = parseInt(values[i]);
+                    intValue = parseInt(values[i],10);
                     if ((intValue < 0) || (intValue > 255)) {
                         return;
                     }
@@ -397,9 +396,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
                 me._updatePreview();
             });
 
-            if (this._supportsSVG()) {
-                this._updatePreview(dialogContent);
-            }
+            this._updatePreview(dialogContent);
 
             var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             saveBtn.setTitle(me.loc.buttons.save);
@@ -439,58 +436,54 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             var me = this;
             var view = dialog === undefined || dialog === null ? jQuery(".lineform") : dialog;
             var content = view.find('.preview');
-            content.svg('destroy');
-            content.svg({
-                onLoad: function (svg) {
-                    var path = svg.createPath();
-                    var g = svg.group({
-                        stroke: "#" + me.values.color,
-                        fill: "none",
-                        strokeWidth: me.values.width,
-                        strokeLineJoin: me.values.corner === 0 ? "miter" : "round",
-                        strokeLineCap: me.values.cap === 0 ? "butt" : "round",
-                        strokeDashArray: me.values.style === 1 ? [3, 2 + 0.25 * me.values.width] : null
-                    });
-                    var p1 = [10, 15];
-                    var p2 = [20, 35];
-                    var p3 = [40, 25];
-                    if (me.values.style !== 2) {
-                        svg.path(g, path.move(p1[0], p1[1], false).line([p2, p3]));
-                    } else {
-                        // double line
-                        var d = 1.5 + 0.5 * me.values.width;
-                        var p1a = [p1[0] + 2 * d / Math.sqrt(5), p1[1] - d / Math.sqrt(5)];
-                        var p1b = [p1[0] - 2 * d / Math.sqrt(5), p1[1] + d / Math.sqrt(5)];
-
-                        var p2a = [];
-                        p2a[0] = p2[0] + 0.5 * d * (Math.sqrt(3) - 1);
-                        p2a[1] = p2[1] - 0.5 * d * (Math.sqrt(3) + 1);
-
-                        var p2b = [];
-                        p2b[0] = p2[0] - 0.5 * d * (Math.sqrt(3) - 1);
-                        p2b[1] = p2[1] + 0.5 * d * (Math.sqrt(3) + 1);
-
-                        var p3a = [p3[0] - d / Math.sqrt(5), p3[1] - 2 * d / Math.sqrt(5)];
-                        var p3b = [p3[0] + d / Math.sqrt(5), p3[1] + 2 * d / Math.sqrt(5)];
-
-                        svg.path(g, path.move(p1a[0], p1a[1], false).line([p2a, p3a]).move(p1b[0], p1b[1], false).line([p2b, p3b]));
-                    }
-
-
+            var preview;
+            if (content.length > 0) {
+                preview = content.get(0);
+                if (preview.children.length === 0) {
+                    this.paper = Raphael(preview,50,50);
                 }
-            });
+            } else {
+                return;
+            }
+
+            var attributes = {
+                "stroke": "#" + me.values.color,
+                "fill": "none",
+                "stroke-width": me.values.width,
+                "stroke-linejoin": me.values.corner === 0 ? "miter" : "round",
+                "stroke-linecap": me.values.cap === 0 ? "butt" : "round",
+                //"stroke-dasharray": me.values.style === 1 ? "3 "+ (2 + 0.25 * me.values.width) : ""
+                // Raphael.js without patch:
+                "stroke-dasharray": me.values.style === 1 ? "- " : ""
+            };
+
+            var p1 = [10, 15];
+            var p2 = [20, 35];
+            var p3 = [40, 25];
+            this.paper.clear();
+            if (me.values.style !== 2) {
+                this.paper.path("M"+p1[0]+","+p1[1]+"L"+p2+","+p3).attr(attributes);
+            } else {
+                // double line
+                var d = 1.5 + 0.5 * me.values.width;
+                var p1a = [p1[0] + 2 * d / Math.sqrt(5), p1[1] - d / Math.sqrt(5)];
+                var p1b = [p1[0] - 2 * d / Math.sqrt(5), p1[1] + d / Math.sqrt(5)];
+
+                var p2a = [];
+                p2a[0] = p2[0] + 0.5 * d * (Math.sqrt(3) - 1);
+                p2a[1] = p2[1] - 0.5 * d * (Math.sqrt(3) + 1);
+
+                var p2b = [];
+                p2b[0] = p2[0] - 0.5 * d * (Math.sqrt(3) - 1);
+                p2b[1] = p2[1] + 0.5 * d * (Math.sqrt(3) + 1);
+
+                var p3a = [p3[0] - d / Math.sqrt(5), p3[1] - 2 * d / Math.sqrt(5)];
+                var p3b = [p3[0] + d / Math.sqrt(5), p3[1] + 2 * d / Math.sqrt(5)];
+                this.paper.path("M"+p1a[0]+","+p1a[1]+"L"+p2a+","+p3a+"M"+p1b[0]+","+p1b[1]+"L"+p2b+","+p3b).attr(attributes);
+                this.paper.circle(0,0,0); // IE8 refresh work-around
+            }
         },
 
-
-        /**
-         * @method destroy
-         * Removes eventlisteners
-         */
-        /*    destroy : function() {
-        // unbind live bindings
-        var onScreenForm = this._getOnScreenForm();
-        onScreenForm.find('select[name=lineform]').die();
-    }, */
         /**
          * @method _getOnScreenForm
          * Returns reference to the on screen version shown by OpenLayers
@@ -499,31 +492,6 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
         _getOnScreenForm: function () {
             return jQuery('div.renderdialog');
         },
-
-        /**
-         * @method getValues
-         * Returns form values as an object
-         * @return {Object}
-         */
-        /*
-    getValues : function() {
-        var newShape = null;
-        for (var buttonName in this.symbolButtons) {
-            var button = this.symbolButtons[buttonName];
-            if (button.iconId.toString() === this.values.shape.toString()) {
-                newShape = button.iconId;
-                break;
-            }
-        }
-
-        return {
-          color: this.values.color,
-          width: this.values.size,
-          shape: newShape
-//          shape: this.symbolButtons[this.values.shape].iconId
-        };
-    },
-    */
 
         /**
          * @method _styleSelectedButton
@@ -543,14 +511,5 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
         _styleUnselectedButton: function (unselectedButton) {
             unselectedButton.css("border", "1px solid");
             unselectedButton.css("background-color", "transparent");
-        },
-
-        /**
-         * @method _getOnScreenForm
-         * Check if the SVG graphics is supported by the browser
-         * @private
-         */
-        _supportsSVG: function () {
-            return !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', "svg").createSVGRect;
         }
     });
