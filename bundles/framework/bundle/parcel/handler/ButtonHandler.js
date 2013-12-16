@@ -58,9 +58,18 @@ function(instance) {
             sticky : true,
             callback : function() {
                 var drawPlugin = me.instance.view.drawPlugin;
+                if (drawPlugin.backupFeatures.length === 0) {
+                    drawPlugin.backupFeatures = drawPlugin.drawLayer.features[0];
+                }
                 drawPlugin.clear();
                 drawPlugin.operatingFeature = null;
                 drawPlugin.drawLayer.addFeatures(drawPlugin.backupFeatures);
+                drawPlugin.drawLayer.setVisibility(true);
+                drawPlugin.editLayer.setVisibility(true);
+                drawPlugin.markerLayer.setVisibility(true);
+                drawPlugin.drawLayer.redraw();
+                drawPlugin.editLayer.redraw();
+                drawPlugin.markerLayer.redraw();
                 me.setButtonEnabled("line",true);
                 me.setButtonEnabled("area",true);
                 me.setButtonEnabled("selector",true);
@@ -74,7 +83,16 @@ function(instance) {
             callback : function() {
                 me._saveDrawing();
             }
-        }
+        }/*,
+        'debug' : {
+            iconCls : 'icon-arrow-right',
+            tooltip : '',
+            sticky : true,
+            callback : function() {
+                var drawPlugin = me.instance.view.drawPlugin;
+                debugger;
+            }
+        }*/
     };
 }, {
     /**
