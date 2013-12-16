@@ -75,7 +75,7 @@ Oskari.registerLocalization({
      "buttons": {
       "ok": "OK",
       "cancel": "Peruuta",
-      "finish": "Lopeta piirto",
+      "finish": "Tallenna piirto",
       "save": "Tallenna",
       "movePlaces": "Siirrä kohteet ja poista",
       "deleteCategory": "Poista",

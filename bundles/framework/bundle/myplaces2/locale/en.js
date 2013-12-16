@@ -75,7 +75,7 @@ Oskari.registerLocalization({
     "buttons": {
       "ok": "OK",
       "cancel": "Cancel",
-      "finish": "Finish drawing",
+      "finish": "Save drawing",
       "save": "Save",
       "movePlaces": "Move places and delete",
       "deleteCategory": "Delete",

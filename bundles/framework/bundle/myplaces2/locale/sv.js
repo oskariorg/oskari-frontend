@@ -75,7 +75,7 @@ Oskari.registerLocalization({
     "buttons": {
       "ok": "OK",
       "cancel": "Tillbaka",
-      "finish": "Sluta rita",
+      "finish": "Lagra rita",
       "save": "Lagra",
       "movePlaces": "Flytta objekt och ta bort",
       "deleteCategory": "Ta bort",
