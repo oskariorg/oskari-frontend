@@ -27,6 +27,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         this.statsService = null;
         // indicators (meta data)
         this.indicators = [];
+        // object to hold the data for each indicators.
+        // Used in case the user changes the region category.
+        this.indicatorsData = {};
         // indicators meta for data sources
         this.indicatorsMeta = {};
         this.selectedMunicipalities = {};
@@ -78,14 +81,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         };
 
         this.regionCategories = {};
-        this._acceptedRegionCategories = [
-            'ALUEHALLINTOVIRASTO',
-            'MAAKUNTA',
-            'NUTS1',
-            'SAIRAANHOITOPIIRI',
-            'SEUTUKUNTA',
-            'SUURALUE'
-        ];
+        this._selectedRegionCategory = undefined;
+        this._defaultRegionCategory = 'KUNTA';
     }, {
         /** 
          * @property __name module name
@@ -251,6 +248,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          * @param {Object} container to where slick grid and pull downs will be appended
          */
         createStatsOut: function (container) {
+            var layer = this.getLayer();
+            if (layer == null) return;
+
+            this._acceptedRegionCategories = layer.getCategoryMappings().categories;
             // indicator params are select-elements
             // (indicator drop down select and year & gender selects)
             this.prepareIndicatorParams(container);
@@ -334,16 +335,19 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
         setRegionCategories: function(regionData) {
             var me = this,
-                lang = Oskari.getLang();
+                lang = Oskari.getLang(),
+                categories = me._acceptedRegionCategories;
 
             this.regionCategories = _.foldl(regionData, function(result, region) {
-                if (_.contains(me._acceptedRegionCategories, region.category)) {
+                if (_.contains(categories, region.category)) {
                     result[region.category] || (result[region.category] = []);
 
                     result[region.category].push({
                         id: region.id,
                         code: region.code,
-                        title: region.title[lang]
+                        title: region.title[lang],
+                        municipality: region.title[lang],
+                        memberOf: region.memberOf
                     });
                 }
                 return result;
@@ -362,6 +366,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // clear and append municipal-grid container
             container.find('.municipal-grid').remove();
             container.append(gridContainer);
+            // set initially selected region category
+            this._selectedRegionCategory = this._state.regionCategory || this._defaultRegionCategory;
+            this._setLayerToCategory(this._selectedRegionCategory);
             // add initial columns
 
             //This modified plugin adds checkboxes to grid
@@ -374,7 +381,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var columns = [me.checkboxSelector.getColumnDefinition(),
             {
                 id : "municipality",
-                name : this._locale['sotka'].municipality,
+                name : this._locale.regionCategories[this._selectedRegionCategory],
                 field : "municipality",
                 sortable : true
             }];
@@ -388,7 +395,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             };
 
             var data = _.foldl(regiondata, function(result, indicator) {
-                if (indicator.category === 'KUNTA') {
+                if (indicator.category === me._selectedRegionCategory) {
                     result.push({
                         id: indicator.id,
                         code: indicator.code,
@@ -431,7 +438,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 formatter: function (g) {
                     //a hack to name the groups
                     var text = (g.groupingKey === "checked" ?
-                            me._locale.municipality :
+                            me._locale.included :
                             me._locale.not_included) + " (" + g.count + ")";
                     return "<span style='color:green'>" + text + "</span>";
                 },
@@ -727,7 +734,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             paramCont.append(button);
             button.find('input').click(function(e){
                 var items = me.dataView ? me.dataView.getItems() : null;
-                var form = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm', me._sandbox, me._locale, items, me._layer.getWmsName(), me._layer.getId());
+                var form = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
+                    me._sandbox, me._locale, items, me._layer.getWmsName(), me._layer.getId(), me._selectedRegionCategory);
                 container.find('.selectors-container').hide();
                 container.find('#municipalGrid').hide();
                 form.createUI(container, function(data) {
@@ -765,7 +773,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         //if fetch returned something we create drop down selector
                         me.createIndicatorInfoButton(container, indicatorMeta);
 
-                        if (me._hasMunicipalityValues(indicatorMeta)) {
+                        if (me._hasRegionCategoryValues(indicatorMeta)) {
                             me.createDemographicsSelects(container, indicatorMeta);
                         } else {
                             me._warnOfInvalidIndicator(container, indicatorMeta);
@@ -782,23 +790,24 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
         },
         /**
-         * Checks if the indicator has municipality based values.
+         * Checks if the indicator has values on the current category.
          * If it does not, we cannot display it in the grid at the moment.
          *
-         * @method _hasMunicipalityValues
+         * @method _hasRegionCategoryValues
          * @param  {Object} metadata indicator metadata from SOTKAnet
          * @return {Boolean}
          */
-        _hasMunicipalityValues: function (metadata) {
+        _hasRegionCategoryValues: function (metadata) {
             var regions = metadata.classifications;
             regions = regions && regions.region;
             regions = regions && regions.values;
             regions = regions || [];
             var rLen = regions.length,
+                currentCategory = this._selectedRegionCategory.toLowerCase(),
                 i;
 
             for (i = 0; i < rLen; ++i) {
-                if (regions[i].toLowerCase() === 'kunta') {
+                if (regions[i].toLowerCase() === currentCategory) {
                     return true;
                 }
             }
@@ -806,7 +815,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         },
         /**
          * Displays a warning of invalid indicator for the grid
-         * if the indicator does not have municipality based values.
+         * if the indicator does not have values on the current category.
          *
          * @method _warnOfInvalidIndicator
          * @param  {jQuery} container
@@ -1042,7 +1051,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var columns = me.grid.getColumns();
             var indicatorName = meta.title[Oskari.getLang()];
 
-            columnId = "indicator" + indicatorId + year + gender;
             if (me.isIndicatorInGrid(columnId)) {
                 return false;
             }
@@ -1097,7 +1105,25 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             me.grid.setColumns(columns);
 
-            var columnData = [];
+            me.indicatorsData[columnId] = data;
+
+            me._updateIndicatorDataToGrid(columnId, data, columns);
+
+            if (silent != true) {
+                // Show classification
+                me.sendStatsData(columns[columns.length - 1]);
+            }
+
+            me.updateDemographicsButtons(indicatorId, gender, year);
+            me.grid.setSortColumn(me._state.currentColumn, true);
+
+        },
+
+        _updateIndicatorDataToGrid: function(columnId, data, columns) {
+            var me = this;
+            data = data || me.indicatorsData[columnId];
+            columns = columns || me.grid.getColumns();
+
             me.dataView.beginUpdate();
 
             // loop through data and get the values
@@ -1141,15 +1167,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             me.dataView.refresh();
             me.grid.invalidateAllRows();
             me.grid.render();
-
-            if (silent != true) {
-                // Show classification
-                me.sendStatsData(columns[columns.length - 1]);
-            }
-
-            me.updateDemographicsButtons(indicatorId, gender, year);
-            me.grid.setSortColumn(me._state.currentColumn, true);
-
         },
 
         /**
@@ -1201,6 +1218,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             // remove from metadata hash as well
             this.removeIndicatorMeta(indicatorId);
+
+            delete this.indicatorsData[columnId];
 
             this.updateDemographicsButtons(indicatorId, gender, year);
 
@@ -1659,6 +1678,37 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     input;
                 if (args.column.id == 'municipality') {
                     menu.items = [];
+
+                    menu.items.push({
+                        element: '<div class="header-menu-subheading">' + me._locale.regionCategories.title + '</div>',
+                        disabled: true
+                    });
+                    // Region category selects
+                    _.each(me._acceptedRegionCategories, function(category) {
+                        var categorySelector = jQuery('<li><input type="radio" name="categorySelector"></input><label></label></li>');
+                        categorySelector.
+                            find('input').
+                                attr({
+                                    'id': 'category_' + category,
+                                    'checked': (category === me._selectedRegionCategory ? 'checked' : false)
+                                }).
+                            end().
+                            find('label').
+                                attr({
+                                    'for': 'category_' + category
+                                }).
+                                html(me._locale.regionCategories[category]);
+                        menu.items.push({
+                            element: categorySelector,
+                            command: 'category_' + category
+                        });
+                    });
+
+                    menu.items.push({
+                        element: '<div class="header-menu-subheading subheading-middle">' + me._locale.statistic.title + '</div>',
+                        disabled: true
+                    });
+                    // Statistical variables
                     for (i = 0; i < me.conf.statistics.length; i++) {
                         var statistic = me.conf.statistics[i];
                         var elems = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-total-selects');
@@ -1730,6 +1780,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
                     args.grid.setColumns(newColumns);
 
+                } else if (/^category_/.test(args.command)) {
+                    me.changeGridRegion(_.last(args.command.split('_')));
                 } else if (args.command == 'filter') {
                     me._createFilterPopup(args.column, this);
                 } else if (args.command == 'filterByRegion') {
@@ -1758,6 +1810,84 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             });
             grid.registerPlugin(headerMenuPlugin);
         },
+
+        /**
+         * Changes the values of the region column in the grid
+         * and updates each indicator column's values.
+         *
+         * @method changeGridRegion
+         * @param  {String} category category name from SOTKAnet
+         * @return {undefined}
+         */
+        changeGridRegion: function(category) {
+            var me = this,
+                dataView = this.dataView,
+                grid = this.grid,
+                regions = _.clone(this.regionCategories[category], true),
+                currColumn, categoryMappings;
+
+            _.each(regions, function(item) {
+                item.sel = 'checked'
+            });
+
+            this._setSelectedRegionCategory(category);
+
+            // notify dataview that we are starting to update data
+            dataView.beginUpdate();
+            // empty the data view
+            dataView.setItems([]);
+            grid.invalidateAllRows();
+            // set municipality data
+            dataView.setItems(regions);
+            // notify data view that we have updated data
+            dataView.endUpdate();
+            // invalidate() -> the values in the grid are not correct -> invalidate
+            grid.invalidate();
+            // render the grid
+            grid.render();
+
+            // update the data according to the current region category
+            _.each(grid.getColumns(), function(column) {
+                if (column.id.indexOf('indicator') >= 0) {
+                    me._updateIndicatorDataToGrid(column.id);
+                }
+            });
+
+            me._setLayerToCategory(category);
+
+            // send the stats parameters for the visualization
+            if (me._state.currentColumn) {
+                currColumn = me._getColumnById(me._state.currentColumn);
+                me.sendStatsData(currColumn);
+            }
+        },
+
+        _setLayerToCategory: function(category) {
+            var layer = this.getLayer(),
+                categoryMappings = layer.getCategoryMappings();
+
+            layer.setWmsName(categoryMappings.wmsNames[category]);
+            layer.setFilterPropertyName(categoryMappings.filterProperties[category]);
+        },
+
+        /**
+         * Sets the selected region category to the one given
+         * and changes the name of the region column.
+         *
+         * @method _setSelectedRegionCategory
+         * @param {String} category category name from SOTKAnet
+         */
+        _setSelectedRegionCategory: function(category) {
+            var column = this._getColumnById('municipality'),
+                columns = this.grid.getColumns(),
+                categoryName = this._locale.regionCategories[category];
+
+            this._state.regionCategory = category;
+            this._selectedRegionCategory = category;
+            column.name = categoryName;
+            this.grid.setColumns(columns);
+        },
+
         /**
          * Creates filter popup
          * @private _createFilterPopup
@@ -2119,14 +2249,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         _featureHighlightedEvent: function (event) {
             var featureAtts = event.getFeature().attributes,
                 isHighlighted = event.isHighlighted(),
-                idx = this.getIdxByCode(featureAtts.kuntakoodi),
-                cssKey = 'highlight-row-' + featureAtts.kuntakoodi,
+                property = this._getHilightPropertyName(),
+                idx = this.getIdxByCode(featureAtts[property]),
+                cssKey = 'highlight-row-' + featureAtts[property],
                 cssHash = {};
             // if we have grid and idx => remembe selected area
             if (this.grid && idx) {
                 // if we there are no checked areas => do nothing
                 if (this.getItemsByGroupingKey('checked').length > 0) {
-                    this.selectedMunicipalities[featureAtts.kuntakoodi] = isHighlighted;
+                    this.selectedMunicipalities[featureAtts[property]] = isHighlighted;
 
                     if (isHighlighted) {
                         //if a row is found => hilight it
@@ -2156,11 +2287,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         _featureSelectedEvent: function (event) {
             var featureAtts = event.getFeature().attributes,
                 isHighlighted = event.isHighlighted(),
-                item = this.getItemByCode(featureAtts.kuntakoodi);
+                property = this._getHilightPropertyName(),
+                item = this.getItemByCode(featureAtts[property]);
 
             if (this.grid && item) {
                 //if area is hilighted => remember it and change grid item to 'checked' state
-                this.selectedMunicipalities[featureAtts.kuntakoodi] = isHighlighted;
+                this.selectedMunicipalities[featureAtts[property]] = isHighlighted;
                 if (isHighlighted) {
                     item.sel = 'checked';
                 } else {
@@ -2173,6 +2305,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 var column = this._getColumnById(this._state.currentColumn);
                 this.sendStatsData(column);
             }
+        },
+
+        _getHilightPropertyName: function() {
+            var layer = this.getLayer(),
+                categoryMappings = layer.getCategoryMappings() || {},
+                propertyMappings = categoryMappings.filterProperties || {},
+                property = propertyMappings[this._selectedRegionCategory || 'KUNTA'];
+
+            return (property || 'kuntakoodi');
         },
 
         /**
@@ -2287,11 +2428,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          * @param {OpenLayers.Feature} feature
          */
         sendTooltipData: function (feature) {
-            var featAtts = feature.attributes;
-            var eventBuilder = this._sandbox.getEventBuilder('MapStats.HoverTooltipContentEvent');
-            var currColumn = this._state.currentColumn;
-            var item = this.getItemByCode(featAtts.kuntakoodi);
-            var content = '<p>' + item.municipality;
+            var featAtts = feature.attributes,
+                eventBuilder = this._sandbox.getEventBuilder('MapStats.HoverTooltipContentEvent'),
+                currColumn = this._state.currentColumn,
+                property = this._getHilightPropertyName(),
+                item = this.getItemByCode(featAtts[property]),
+                content = '<p>' + item.municipality;
+
             content += ((currColumn && item[currColumn] != null) ? '<br />' + item[currColumn] : '');
             content += '</p>';
 

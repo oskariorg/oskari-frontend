@@ -10,20 +10,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
      */
 
     function (config) {
-        var me = this;
-        me.mapModule = null;
-        me.pluginName = null;
-        me._sandbox = null;
-        me._map = null;
-        me._supportedFormats = {};
-        me._statsDrawLayer = null;
-        me._highlightCtrl = null;
-        me._navCtrl = null;
-        me._getFeatureControlHover = null;
-        me._getFeatureControlSelect = null;
-        me._modeVisible = false;
-        me.config = config;
-        me.ajaxUrl = null;
+        this.mapModule = null;
+        this.pluginName = null;
+        this._sandbox = null;
+        this._map = null;
+        this._supportedFormats = {};
+        this._statsDrawLayer = null;
+        this._highlightCtrl = null;
+        this._navCtrl = null;
+        this._getFeatureControlHover = null;
+        this._getFeatureControlSelect = null;
+        this._modeVisible = false;
+        this.config = config;
+        this.ajaxUrl = null;
+        this.featureAttribute = 'kuntakoodi';
         if (config && config.ajaxUrl) {
             me.ajaxUrl = config.ajaxUrl;
         }
@@ -182,7 +182,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 this._afterChangeMapLayerOpacityEvent(event);
             },
             'AfterChangeMapLayerStyleEvent': function (event) {
-                //this._afterChangeMapLayerStyleEvent(event);
             },
             'MapStats.StatsVisualizationChangeEvent': function (event) {
                 this._afterStatsVisualizationChangeEvent(event);
@@ -375,7 +374,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                             return;
                         }
                         var found = false,
-                            attrText = "kuntakoodi";
+                            attrText = me.featureAttribute;
+
                         for (i = 0; i < drawLayer.features.length; i++) {
                             if (drawLayer.features[i].attributes[attrText] === event.features[0].attributes[attrText]) {
                                 found = true;
@@ -426,10 +426,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                         if (typeof drawLayer === "undefined") {
                             return;
                         }
-                        var foundInd = -1,
-                            attrText = "kuntakoodi",
+                        var foundInd = -1;
+                        var attrText = me.featureAttribute,
                             i,
                             featureStyle;
+
                         for (i = 0; i < drawLayer.features.length; i++) {
                             if (drawLayer.features[i].attributes[attrText] === event.features[0].attributes[attrText]) {
                                 foundInd = i;
@@ -558,8 +559,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             if (typeof drawLayer === "undefined") {
                 return;
             }
-            var attrText = "kuntakoodi",
+
+            var attrText = this.featureAttribute,
                 featureStyle;
+
 
             // add hilight feature style
             featureStyle = OpenLayers.Util.applyDefaults(featureStyle, OpenLayers.Feature.Vector.style['default']);
@@ -739,46 +742,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 mapLayer[0].setOpacity(layer.getOpacity() / 100);
             }
         },
-        /**
-         * Handle AfterChangeMapLayerStyleEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterChangeMapLayerStyleEvent}
-         *            event
-         */
-        _afterChangeMapLayerStyleEvent: function (event) {
-            var layer = event.getMapLayer();
-
-            /*
-        TileHandler recognizes these parameters:
-        // to get from DB
-        VIS_ID="1" 
-        // to construct from given data (no DB involved)
-        VIS_NAME="ows:Kunnat2013"
-        VIS_ATTR="Kuntakoodi"
-        VIS_CLASSES="020,091|186,086,982|111,139,740"
-        VIS_COLORS="vis=choro:ccffcc|99cc99|669966"
-
-        These should be given in the event to update 
-        */
-            // Change selected layer style to defined style
-            var mapLayer = this.getOLMapLayers(layer);
-            if (mapLayer !== null && mapLayer !== undefined) {
-                mapLayer[0].mergeNewParams({
-                    // TODO: check if we want to generate SLD from DB with VIS_ID 
-                    VIS_ID: layer.getCurrentStyle().getName(),
-                    // OR generate from given params (VIS_ID should be -1 or undefined if we go here)
-                    VIS_NAME: "oskari:Kunnat2013",
-                    VIS_ATTR: "Kuntakoodi",
-                    VIS_CLASSES: "020,091|186,086,982|111,139,740",
-                    VIS_COLORS: "choro:ccffcc|99cc99|669966"
-                });
-            }
-        },
 
         _afterStatsVisualizationChangeEvent: function (event) {
             var layer = event.getLayer(),
                 params = event.getParams(),
                 mapLayer = this.getOLMapLayers(layer);
+
+            this.featureAttribute = params.VIS_ATTR;
 
             if (mapLayer !== null && mapLayer !== undefined) {
                 mapLayer[0].mergeNewParams({
@@ -786,7 +756,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                     VIS_NAME: params.VIS_NAME,
                     VIS_ATTR: params.VIS_ATTR,
                     VIS_CLASSES: params.VIS_CLASSES,
-                    VIS_COLORS: params.VIS_COLORS
+                    VIS_COLORS: params.VIS_COLORS,
+                    LAYERS: params.VIS_NAME
                 });
             }
         }
