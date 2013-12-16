@@ -14,7 +14,6 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
      */
 
     function (name, flyoutClazz, tileClazz, viewClazz) {
-        "use strict";
         this.sandbox = null;
         this.plugins = {};
         this._localization = null;
@@ -31,7 +30,6 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            "use strict";
             return this.getLocalization('title');
         },
         /**
@@ -40,7 +38,6 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * @return {String} localized text for the description of the component
          */
         getDescription: function () {
-            "use strict";
             return this.getLocalization('desc');
         },
         /**
@@ -49,7 +46,6 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * @return {Oskari.mapframework.sandbox.Sandbox}
          */
         getSandbox: function () {
-            "use strict";
             return this.sandbox;
         },
         /**
@@ -57,7 +53,6 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * BundleInstance protocol method
          */
         update: function () {
-            "use strict";
         },
         /**
          * @method getLocalization
@@ -71,7 +66,6 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          *      structure and if parameter key is given
          */
         getLocalization: function (key) {
-            "use strict";
             if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
             }
@@ -85,7 +79,6 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * BundleInstance protocol method
          */
         start: function () {
-            "use strict";
             var me = this,
                 conf = this.conf,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
@@ -111,7 +104,6 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * BundleInstance protocol method
          */
         stop: function () {
-            "use strict";
             var sandbox = this.sandbox,
                 /* sandbox cleanup */
                 request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
@@ -127,7 +119,6 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * Extension protocol method
          */
         startExtension: function () {
-            "use strict";
             var me = this,
                 sandbox = me.sandbox,
                 p,
@@ -164,7 +155,6 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * Extension protocol method
          */
         stopExtension: function () {
-            "use strict";
             var me = this,
                 sandbox = me.sandbox,
                 p,
@@ -187,11 +177,9 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * Extension protocol method
          */
         getPlugins: function () {
-            "use strict";
             return this.plugins;
         },
         "init": function () {
-            "use strict";
             return null;
         },
         /**
@@ -199,14 +187,12 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * Module protocol method
          */
         getName: function () {
-            "use strict";
             return this.conf.name;
         },
         /**
          * @method getConfiguration
          */
         getConfiguration: function () {
-            "use strict";
             return this.conf;
         },
 
@@ -224,7 +210,6 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-            "use strict";
             var me = this,
                 handler = me.eventHandlers[event.getName()];
             if (!handler) {
@@ -239,7 +224,6 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          *
          */
         "getLang": function () {
-            "use strict";
             return Oskari.getLang();
         }
     }, {

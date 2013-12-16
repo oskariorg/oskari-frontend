@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
      */
 
     function (sandbox) {
-        "use strict";
         this.sandbox = sandbox;
     }, {
         /**
@@ -23,7 +22,6 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
          * @param {String} errorMsg - message if help article is not found
          */
         processHelpLinks: function (title, content, errorTitle, errorMsg) {
-            "use strict";
             if (!content) {
                 return;
             }
@@ -64,7 +62,6 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
          *   boolean that indicates success, second parameter is the loaded content if it was successfully loaded
          */
         getHelpArticle: function (taglist, callback) {
-            "use strict";
             var me = this;
             jQuery.ajax({
                 url: me.sandbox.getAjaxUrl() + 'action_route=GetArticlesByTag',

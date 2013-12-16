@@ -33,7 +33,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -66,7 +66,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
          * @method start
          * Implements BundleInstance protocol start method
          */
-        "start": function () {
+        start: function () {
             var me = this,
                 conf = me.conf,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
@@ -108,14 +108,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
          * @method init
          * Implements Module protocol init method - does nothing atm
          */
-        "init": function () {
+        init: function () {
             return null;
         },
         /**
          * @method update
          * Implements BundleInstance protocol update method - does nothing atm
          */
-        "update": function () {
+        update: function () {
 
         },
         /**
@@ -236,7 +236,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
          * @method stop
          * Implements BundleInstance protocol stop method
          */
-        "stop": function () {
+        stop: function () {
             var sandbox = this.sandbox(),
                 request,
                 p;
@@ -339,8 +339,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     break;
                 }
             }
-            // FIXME make sure blnEnabled is a boolean and use (blnEnabled)
-            if (blnEnabled == true) {
+            if (blnEnabled) {
                 me.disabledLayers = deniedLayers;
                 me.oskariLang = Oskari.getLang();
                 // remove denied
@@ -388,10 +387,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 }
                 // first return all needed plugins before adding the layers back
                 map.removeClass('mapPublishMode');
-                if(me.sandbox._mapMode === 'mapPublishMode') {
+                if (me.sandbox._mapMode === 'mapPublishMode') {
                     delete me.sandbox._mapMode;
                 }
-                 me._addLayers();
+                me._addLayers();
             }
             // publishing mode should be sent to mapfull to disable resizing
             requestBuilder = me.sandbox.getRequestBuilder('MapFull.MapResizeEnabledRequest');

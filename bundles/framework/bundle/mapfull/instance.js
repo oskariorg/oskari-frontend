@@ -297,6 +297,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 layer;
             me._teardownState(mapmodule);
 
+            // map location needs to be set before layers are added
+            // otherwise f.ex. wfs layers break on add
+            if (state.east && ignoreLocation !== true) {
+                me.sandbox.getMap().moveTo(
+                    state.east,
+                    state.north,
+                    state.zoom
+                );
+            }
+
+            me.sandbox.syncMapState(true);
+
             // setting state
             if (state.selectedLayers) {
                 rbAdd = me.sandbox.getRequestBuilder('AddMapLayerRequest');
@@ -317,16 +329,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 }
             }
 
-
-            if (state.east && ignoreLocation !== true) {
-                me.sandbox.getMap().moveTo(
-                    state.east,
-                    state.north,
-                    state.zoom
-                );
-            }
-
-            me.sandbox.syncMapState(true);
         },
         /**
          * @method getState

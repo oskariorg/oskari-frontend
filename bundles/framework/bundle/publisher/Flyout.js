@@ -19,7 +19,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.Flyout',
         this.instance = instance;
         this.container = null;
         this.state = null;
-
         this.template = null;
         this.view = null;
     }, {

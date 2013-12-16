@@ -2,7 +2,6 @@
  * @class Oskari.userinterface.request.UpdateExtensionRequest
  */
 Oskari.clazz.define('Oskari.userinterface.request.UpdateExtensionRequest', function (extension, state, extensionName, extensionTop, extensionLeft) {
-    "use strict";
     this._extension = extension;
     this._state = state;
     this._extensionName = extensionName;
@@ -12,19 +11,15 @@ Oskari.clazz.define('Oskari.userinterface.request.UpdateExtensionRequest', funct
 }, {
     __name: "userinterface.UpdateExtensionRequest",
     getName: function () {
-        "use strict";
         return this.__name;
     },
     getExtension: function () {
-        "use strict";
         return this._extension;
     },
     getState: function () {
-        "use strict";
         return this._state;
     },
     getExtensionName: function () {
-        "use strict";
         return this._extensionName;
     },
     getExtensionLocation: function() {
@@ -32,5 +27,5 @@ Oskari.clazz.define('Oskari.userinterface.request.UpdateExtensionRequest', funct
     }
 
 }, {
-    'protocol': ['Oskari.mapframework.request.Request']
+	'protocol' : ['Oskari.mapframework.request.Request']
 });

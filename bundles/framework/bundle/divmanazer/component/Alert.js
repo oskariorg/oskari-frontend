@@ -13,7 +13,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Alert',
      */
 
     function () {
-        "use strict";
         this.compiledTemplates = {};
         this.compileTemplates();
         this.ui = null;
@@ -26,7 +25,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Alert',
             "info": '<div class="oskari-alert oskari-alert-info"><div class="oskari-alert-icon-close"><div class="icon-close"></div></div></div>'
         },
         compileTemplates: function () {
-            "use strict";
             var p;
             for (p in this.templates) {
                 if (this.templates.hasOwnProperty(p)) {
@@ -35,22 +33,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Alert',
             }
         },
         insertTo: function (container) {
-            "use strict";
             this.container = container;
         },
-        setContent: function (pContent, status, cannotClose) {
-            "use strict";
+        setContent: function (pContent, status, excludeCloseButton) {
             if (this.ui) {
                 this.ui.remove();
                 this.ui = null;
             }
             var me = this,
-                txtdiv = me.compiledTemplates[status || 'default'].clone();
+                txtdiv = me.compiledTemplates[status || 'default'].clone(),
+                includeCloseButton = !excludeCloseButton;
             txtdiv.append(pContent);
             me.container.prepend(txtdiv);
             me.ui = txtdiv;
 
-            if (!cannotClose) {
+            if (includeCloseButton) {
                 txtdiv.children('.oskari-alert-icon-close').click(function () {
                     me.hide();
                 });
@@ -59,7 +56,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Alert',
             }
         },
         hide: function () {
-            "use strict";
             if (this.ui) {
                 this.ui.remove();
                 this.ui = null;

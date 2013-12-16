@@ -1,5 +1,5 @@
 /*
- * css.normalize.js
+ * css.normalize.js https://raw.github.com/guybedford/require-css/master/normalize.js
  *
  * CSS Normalization
  *
@@ -40,14 +40,24 @@ define(['require', 'module'], function(require, module) {
   }
 
   // given a relative URI, and two absolute base URIs, convert it from one base to another
+  var protocolRegEx = /[^\:\/]*:\/\/([^\/])*/
   function convertURIBase(uri, fromBase, toBase) {
     if(uri.indexOf("data:") === 0)
       return uri;
     uri = removeDoubleSlashes(uri);
     // absolute urls are left in tact
-    if (uri.match(/^\/|([^\:\/]*:)/))
+    if (uri.match(/^\//) || uri.match(protocolRegEx))
       return uri;
-    return relativeURI(absoluteURI(uri, fromBase), toBase);
+    // if toBase specifies a protocol path, ensure this is the same protocol as fromBase, if not
+    // use absolute path at fromBase
+    var toBaseProtocol = toBase.match(protocolRegEx);
+    var fromBaseProtocol = fromBase.match(protocolRegEx);
+    if (fromBaseProtocol && (!toBaseProtocol || toBaseProtocol[1] != fromBaseProtocol[1] || toBaseProtocol[2] != fromBaseProtocol[2]))
+      return absoluteURI(uri, fromBase);
+    
+    else {
+      return relativeURI(absoluteURI(uri, fromBase), toBase);
+    }
   };
   
   // given a relative URI, calculate the absolute URI
@@ -99,7 +109,7 @@ define(['require', 'module'], function(require, module) {
     return out.substr(0, out.length - 1);
   };
   
-  var normalizeCSS = function(source, fromBase, toBase) {
+  var normalizeCSS = function(source, fromBase, toBase, cssBase) {
 
     fromBase = removeDoubleSlashes(fromBase);
     toBase = removeDoubleSlashes(toBase);
@@ -109,7 +119,11 @@ define(['require', 'module'], function(require, module) {
 
     while (result = urlRegEx.exec(source)) {
       url = result[3] || result[2] || result[5] || result[6] || result[4];
-      var newUrl = convertURIBase(url, fromBase, toBase);
+      var newUrl;
+      if (cssBase && url.substr(0, 1) == '/')
+        newUrl = cssBase + url;
+      else
+        newUrl = convertURIBase(url, fromBase, toBase);
       var quoteLen = result[5] || result[6] ? 1 : 0;
       source = source.substr(0, urlRegEx.lastIndex - url.length - quoteLen - 1) + newUrl + source.substr(urlRegEx.lastIndex - quoteLen - 1);
       urlRegEx.lastIndex = urlRegEx.lastIndex + (newUrl.length - url.length);

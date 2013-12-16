@@ -300,6 +300,7 @@ function(drawPlugin) {
                     this.drawPlugin.drawLayer.features[i].attributes = {name : attributes.tekstiKartalla, quality : attributes.lahdeaineisto};
                 }
                 break;
+            case "OpenLayers.Geometry.MultiPolygon":
             case "OpenLayers.Geometry.LineString":
                 var newFeatures = this.splitLine(baseMultiPolygon,this.drawPlugin.operatingFeature);
                 this.drawPlugin.drawLayer.removeAllFeatures();
@@ -392,10 +393,10 @@ function(drawPlugin) {
          * @method splitLine
          *
          * @param {} polygon
-         * @param {} line
+         * @param {} splitGeom
          * @return {}
          */
-        splitLine : function(polygons,splitLine) {
+        splitLine : function(polygons,splitGeom) {
             // Transform and scale coordinates
             var origin = new OpenLayers.Geometry.Point(0.0, 0.0);
             var reference = [polygons.geometry.components[0].components[0].components[0].x,
@@ -404,21 +405,12 @@ function(drawPlugin) {
             polygons.geometry.move(-reference[0],-reference[1]);
             polygons.geometry.resize(scaleFactor,origin);
 
-            // Splitting line
-            var splitPoints = [];
-            for (var ind=0; ind < splitLine.geometry.components.length; ind++) {
-                var x = splitLine.geometry.components[ind].x;
-                var y = splitLine.geometry.components[ind].y;
-                splitPoints.push(new OpenLayers.Geometry.Point(x,y));
-            }
-            var line = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(splitPoints));
-
-            line.geometry.move(-reference[0],-reference[1]);
-            line.geometry.resize(scaleFactor,origin);
+            splitGeom.geometry.move(-reference[0],-reference[1]);
+            splitGeom.geometry.resize(scaleFactor,origin);
 
             // OpenLayers variables
             var lineStyle = { strokeColor: '#0000ff', strokeOpacity: 1, strokeWidth: 2};
-            var olOldFeatures = polygons.geometry.components.concat(line.geometry);
+            var olOldFeatures = polygons.geometry.components.concat(splitGeom.geometry);
             var olNewFeatures = [new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon()),
                                  new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(),null,lineStyle)];
             var olSolutionPolygons = olNewFeatures[0].geometry.components;
@@ -448,8 +440,6 @@ function(drawPlugin) {
             var clipPoint, clipPoints;
             var clipPolygon, clipHole;
             var clipValidationTarget = [];
-            // var clipValidationSource;
-            // var clipValidationResult;
             var clipSourcePolygons = [];
             var clipSubjectPolygons = [];
             var clipTargetPolygons = [];
@@ -460,7 +450,7 @@ function(drawPlugin) {
             var success;
             var clipType;
 
-            var union;
+            var union = null;
             var polygonizer;
 
             var polygonIndexes = [];
@@ -468,6 +458,7 @@ function(drawPlugin) {
             var sharedEdge = false;
             var crossRing = false;
             var found = false;
+            var finished = false;
 
             var i, j, k, l, m, n, o, p;
             var lastIndex;
@@ -479,7 +470,6 @@ function(drawPlugin) {
             // Scaling factor for integer operations
             var scale = 1;
             var marker;
-            var logText = "";
 
             // IE8 compatibility
             if (!Array.prototype.indexOf) {
@@ -561,91 +551,95 @@ function(drawPlugin) {
             }
 
             // Input data
-            for (i=0; i<olOldFeatures.length; i++) {
+            m = 0;
+            for (i=olOldFeatures.length-1; i>=0; i--) {
                 if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
-                    jstsOldPolygon = jstsParser.read(olOldFeatures[i]);
-                    if (!jstsOldPolygon.isValid()) {
-                        //console.log("Invalid geometry.");
-                        return -1+logText;
+                    var multi = (olOldFeatures[i].id.indexOf("Multi") !== -1);
+                    if (!multi) {
+                        jstsOldPolygon = jstsParser.read(olOldFeatures[i]);
+                        if (!jstsOldPolygon.isValid()) {
+                            return -1;
+                        }
+                        jstsOldPolygons.push(jstsOldPolygon);
                     }
-                    jstsOldPolygons.push(jstsOldPolygon);
-                    clipPolygon = new ClipperLib.Polygon();
-                    olLinearRings = olOldFeatures[i].components;
-                    if (olLinearRings[0].getArea() >= 0.0) {
-                        olPoints = olLinearRings[0].components;
-                    } else {
-                        olPoints = olLinearRings[0].components.reverse();
-                    }
-                    for (j=0; j<olPoints.length-1; j++) {
-                        clipPoint = new ClipperLib.IntPoint(olPoints[j].x, olPoints[j].y);
-                        clipPolygon.push(clipPoint);
-                    }
-                    l = clipSourcePolygons.length;
-                    clipSourcePolygons[l] = [];
-                    clipSourcePolygons[l].push(clipPolygon);
-                    for (j=1; j<olLinearRings.length; j++) {
-                        clipHole = new ClipperLib.Polygon();
-                        if (olLinearRings[j].getArea() <= 0.0) {
-                            olPoints = olLinearRings[j].components;
+
+                    finished = (m > 0);
+                    while (!finished) {
+                        clipPolygon = new ClipperLib.Polygon();
+                        if (multi) {
+                            olLinearRings = olOldFeatures[i].components[m].components;
                         } else {
-                            olPoints = olLinearRings[j].components.reverse();
+                            olLinearRings = olOldFeatures[i].components;
                         }
-                        for(k=0; k<olPoints.length-1; k++) {
-                            clipPoint = new ClipperLib.IntPoint(olPoints[k].x, olPoints[k].y);
-                            clipHole.push(clipPoint);
+                        if (olLinearRings[0].getArea() >= 0.0) {
+                            olPoints = olLinearRings[0].components;
+                        } else {
+                            olPoints = olLinearRings[0].components.reverse();
                         }
-                        clipSourcePolygons[i].push(clipHole);
+                        for (j=0; j<olPoints.length-1; j++) {
+                            clipPoint = new ClipperLib.IntPoint(olPoints[j].x, olPoints[j].y);
+                            clipPolygon.push(clipPoint);
+                        }
+
+                        l = clipSourcePolygons.length;
+                        clipSourcePolygons[l] = [];
+                        clipSourcePolygons[l].push(clipPolygon);
+                        for (j=1; j<olLinearRings.length; j++) {
+                            clipHole = new ClipperLib.Polygon();
+                            if (olLinearRings[j].getArea() <= 0.0) {
+                                olPoints = olLinearRings[j].components;
+                            } else {
+                                olPoints = olLinearRings[j].components.reverse();
+                            }
+                            for(k=0; k<olPoints.length-1; k++) {
+                                clipPoint = new ClipperLib.IntPoint(olPoints[k].x, olPoints[k].y);
+                                clipHole.push(clipPoint);
+                            }
+                            clipSourcePolygons[l].push(clipHole);
+                        }
+                        // Scaling for integer operations
+                        l = clipSourcePolygons.length-1;
+                        clipSourcePolygons[l] = this.scaleup(clipSourcePolygons[l], scale);
+                        if (multi) {
+                            m = m+1;
+                            if (m === olOldFeatures[i].components.length) {
+                                finished = true;
+                            }
+                        } else {
+                            finished = true;
+                        }
                     }
-                    // Scaling for integer operations
-                    l = clipSourcePolygons.length-1;
-                    clipSourcePolygons[l] = this.scaleup(clipSourcePolygons[l], scale);
                 } else if (olOldFeatures[i].id.indexOf("LineString") !== -1) {
                     jstsLine = jstsParser.read(olOldFeatures[i]);
                 }
             }
 
-            // Debugging info
-            logText += " olOldFeatures ";
-            logText += olOldFeatures;
-            logText += " clipSourcePolygons ";
-            logText += clipSourcePolygons;
-            logText += " jstsOldPolygons ";
-            logText += jstsOldPolygons ;
-            logText += " jstsLine ";
-            logText += jstsLine;
-
-            // Handle cases with no divisions
-            if (jstsLine === null) {
-                return [olOldFeatures];
-            }
-
             // Splitting
+            union = null;
             for (i=0; i<jstsOldPolygons.length; i++) {
-                logText += " i ";
-                logText += i.toString()+" / "+jstsOldPolygons.length;
                 if (jstsLine !== null) {
                     union = jstsOldPolygons[i].getExteriorRing().union(jstsLine);
                 } else {
-                    union = jstsOldPolygons[i];
+                    if (union === null) {
+                        union = jstsOldPolygons[i].getExteriorRing();
+                    } else {
+                        union = jstsOldPolygons[i].getExteriorRing().union(union);
+                    }
+                    if (i<jstsOldPolygons.length-1) continue;
+
                 }
                 polygonizer = new jsts.operation.polygonize.Polygonizer();
                 polygonizer.add(union);
                 jstsNewPolygons = polygonizer.getPolygons();
 
-                logText += " jstsNewPolygons ";
-                logText += jstsNewPolygons;
-
                 clipPoints = [];
                 olPoints = [];
                 olNewLineStrings = [];
                 for (j=0; j<jstsNewPolygons.array.length; j++) {
-                    logText += "j";
-                    logText += j+" / "+jstsNewPolygons.array.length;
-
                     clipTargetPolygons = [];
                     clipPolygon = new ClipperLib.Polygon();
                     jstsPoints = jstsNewPolygons.array[j].shell.points;
-                    for(k=0; k<jstsPoints.length-1; k++) {
+                    for (k=0; k<jstsPoints.length-1; k++) {
                         clipPoint = new ClipperLib.IntPoint(jstsPoints[k].x, jstsPoints[k].y);
                         clipPolygon.push(clipPoint);
                     }
@@ -653,22 +647,16 @@ function(drawPlugin) {
                     // Scaling for integer operations
                     clipTargetPolygons = this.scaleup(clipTargetPolygons, scale);
                     cpr = new ClipperLib.Clipper();
-                    cpr.AddPolygons(clipSourcePolygons[i], ClipperLib.PolyType.ptSubject);
+                    for (k=0; k < clipSourcePolygons.length; k++) {
+                        cpr.AddPolygons(clipSourcePolygons[k], ClipperLib.PolyType.ptSubject);
+                    }
                     cpr.AddPolygons(clipTargetPolygons, ClipperLib.PolyType.ptClip);
 
                     clipSolutionPolygons = new ClipperLib.Polygons();
                     clipType = ClipperLib.ClipType.ctIntersection;
-
                     // Cut intersections
                     success = cpr.Execute(clipType, clipSolutionPolygons);
-                    if (!success) return -2+logText;
-
-                    logText += " clipSourcePolygons[i] ";
-                    logText += clipSourcePolygons[i];
-                    logText += " clipTargetPolygons ";
-                    logText += clipTargetPolygons;
-                    logText += " clipSolutionPolygons ";
-                    logText += clipSolutionPolygons;
+                    if (!success) return -2;
 
                     if (clipSolutionPolygons.length === 0) continue;
 
@@ -714,19 +702,8 @@ function(drawPlugin) {
                         }
                     }
 
-                    // Debug info
-                    logText += " olPoints ";
-                    logText += olPoints;
-                    logText += " olLinearRingPoints ";
-                    logText += olLinearRingPoints;
-                    logText += " olNewPolygons ";
-                    logText += olNewPolygons;
-
                     // Holes to OpenLayers format
                     for (k=0; k<clipSolutionPolygons.length; k++) {
-                        logText += " Holes k ";
-                        logText += k+" / "+clipSolutionPolygons.length;
-
                         if (cpr.Area(clipSolutionPolygons[k]) < 0.0) {
                             clipTargetPolygons = [];
                             clipTargetPolygons.push(clipSolutionPolygons[k]);
@@ -741,15 +718,7 @@ function(drawPlugin) {
                                 clipSolutionHoles = new ClipperLib.Polygons();
                                 clipType = ClipperLib.ClipType.ctIntersection;
                                 success = cpr.Execute(clipType, clipSolutionHoles);
-                                if (!success) return -3+logText;
-
-                                // Debugging info
-                                logText += " clipSubjectPolygons ";
-                                logText += clipSubjectPolygons;
-                                logText += " clipTargetPolygons ";
-                                logText += clipTargetPolygons;
-                                logText += " clipSolutionHoles ";
-                                logText += clipSolutionHoles;
+                                if (!success) return -3;
 
                                 if (clipSolutionHoles.length > 0) {
                                     clipHole = clipSolutionPolygons[k];
@@ -764,8 +733,6 @@ function(drawPlugin) {
                             }
                         }
                     }
-                    logText += " olNewPolygons ";
-                    logText += olNewPolygons;
                     for (k=0; k<olNewPolygons.length; k++) {
                         olSolutionPolygons.push(olNewPolygons[k]);
                     }
@@ -962,34 +929,6 @@ function(drawPlugin) {
                    }
                 }
             }
-
-            /* // Checking if everything is correct
-            success = false;
-            clipValidationSource = [];
-            for (i=0; i<clipSourcePolygons.length; i++) {
-                for (j=0; j<clipSourcePolygons[i].length; j++) {
-                     clipValidationSource.push(clipSourcePolygons[i][j]);
-                }
-            }
-
-            for (i=0; i<clipValidationTarget.length; i++) {
-                cpr = new ClipperLib.Clipper();
-                var cl = [];
-                cl.push(clipValidationTarget[i]);
-                cpr.AddPolygons(clipValidationSource, ClipperLib.PolyType.ptSubject);
-                cpr.AddPolygons(cl, ClipperLib.PolyType.ptClip);
-                clipType = ClipperLib.ClipType.ctXor;
-                clipValidationResult = new ClipperLib.Polygons();
-                success = cpr.Execute(clipType, clipValidationResult);
-                clipValidationSource = clipValidationResult;
-            }
-            success = (clipValidationSource.length === 0);
-
-            if (success) {
-                split.addFeatures(olNewFeatures);
-            } else {
-                return -10+logText;
-            } */
 
             return olNewFeatures;
         },

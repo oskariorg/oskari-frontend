@@ -65,6 +65,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             '<div class="finish button"></div>' +
             '</div>' +
             '</div>');
+
+        this.templateHelper = jQuery(
+            '<div class="drawHelper">' +
+                '<div class="infoText"></div>' +
+                '<div class="measurementResult"></div>' +
+            '</div>'
+        );
     }, {
         __name: 'MyPlacesButtonHandler',
         /**
@@ -173,7 +180,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             // show help popup with cancel and finished buttons
             var locTool = this.instance.getLocalization('tools')[drawMode];
             var locBtns = this.instance.getLocalization('buttons');
-            var title = this.instance.getLocalization('title');
+            var title = locTool['title'];
             var message = locTool.add;
 
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -198,7 +205,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             });
             buttons.push(finishBtn);
 
-            dialog.show(title, message, buttons);
+            var content = this.templateHelper.clone();
+            content.find('div.infoText').html(message);
+
+            var measureResult = content.find('div.measurementResult');
+            if (drawMode === 'point') {
+                // No need to show the measurement result for a point
+                measureResult.remove();
+            } else {
+                measureResult.html(locTool.noResult);
+            }
+
+            dialog.show(title, content, buttons);
             dialog.addClass('myplaces2');
             dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
         },
@@ -300,11 +318,23 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                     if (event.getDrawingMode() !== null) {
                         var loc = this.instance.getLocalization('tools');
                         var areaDialogContent = loc[event.getDrawingMode()].next;
-                        if (this.dialog.getContent() !== areaDialogContent) {
-                            this.dialog.setContent(areaDialogContent);
+                        var content = this.dialog.getJqueryContent();
+                        if (content.find('div.infoText') !== areaDialogContent) {
+                            content.find('div.infoText').html(areaDialogContent);
                             this.dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
                         }
                     }
+                }
+            },
+
+            'DrawPlugin.ActiveDrawingEvent': function(event) {
+                var geom = event.getDrawing(),
+                    mode = event.getDrawMode(),
+                    resultText = this.instance.formatMeasurementResult(geom, mode);
+
+                if (this.dialog) {
+                    var content = this.dialog.getJqueryContent();
+                    content.find('div.measurementResult').html(resultText);
                 }
             }
         }

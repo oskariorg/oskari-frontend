@@ -116,7 +116,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             "methodOptionTool": '<div class="tool ">' + '<input type="radio" name="method" />' + '<label></label></div>',
             "featureListSelect": '<div class="analyse-select-featurelist"><a href="#">...</a></div>',
             "featureList": '<div class="analyse-featurelist"><ul></ul></div>',
-            "featureListElement": '<li><input type="checkbox"></input><label></label></li>'
+            "featureListElement": '<li><input type="checkbox"/><label></label></li>'
 
         },
         /**
@@ -178,6 +178,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // bind help tags
             var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', this.instance.sandbox);
             helper.processHelpLinks(this.loc.help, content, this.loc.error.title, this.loc.error.nohelp);
+
+            /* progress */
+            me.progressSpinner.insertTo(container);
 
         },
         /**
@@ -497,6 +500,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                             layers.push(layer);
                         }
 
+
                     }
                 }
             }
@@ -616,7 +620,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 icons;
             // request updates for map tiles
             for (i = 0; i < layers.length; i++) {
-                if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS')) {
+              if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS') || layers[i].isLayerOfType('MYPLACES')) {
                     option = {
                         id: me.id_prefix + 'layer_' + layers[i].getId(),
                         label: layers[i].getName()
@@ -1495,10 +1499,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
                 // Send the data for analysis to the backend
+                me.progressSpinner.start();
                 me.instance.analyseService.sendAnalyseData(data,
                     // Success callback
 
                     function (response) {
+                        me.progressSpinner.stop();
                         if (response) {
                             me._handleAnalyseMapResponse(response);
                         }
@@ -1506,7 +1512,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     // Error callback
 
                     function (jqXHR, textStatus, errorThrown) {
-                        me.instance.showMessage(me.loc.error.title, me.loc.error.saveFailed);
+                        me.progressSpinner.stop();
+
                     });
             }
 

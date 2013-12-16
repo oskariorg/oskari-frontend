@@ -213,3 +213,8 @@ div.linevisualization {
 
 div.areavisualization {
   width: 650px; }
+
+div.pointform div.sizer {
+   margin-left: 7px;
+   margin-top: 6px;
+}

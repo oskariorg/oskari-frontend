@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>ol3-oskari</title>
+		<link type="text/css" rel="stylesheet"
+		href="http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic,800,800italic,600italic,600">
+        <link rel="stylesheet" type="text/css"
+        href="http://demo.paikkatietoikkuna.fi/mml-2.0-theme/css/base.css" />
+        <link rel="stylesheet" type="text/css" href="/Oskari/applications/oskari2/ol3/css/icons.css" />
+        <link rel="stylesheet" type="text/css" href="/Oskari/applications/oskari2/ol3/css/forms.css" />
+        <link rel="stylesheet" type="text/css" href="/Oskari/applications/oskari2/ol3/css/portal.css" />
+        <link rel="stylesheet" type="text/css" href="/Oskari/applications/oskari2/ol3/css/overwritten.css" />
+        <link rel="stylesheet" type="text/css" href="/Oskari/applications/oskari2/ol3/style.css" />
+        <!-- jQuery is needed globally -->
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="http://code.jquery.com/jquery-migrate-1.1.1.min.js"></script>
+		
+	</head>
+	<body>
+		<div id="maptools">
+			<div id="loginbar"></div>
+			<div id="menubar"></div>
+			<div id="divider"></div>
+			<div id="toolbar"></div>
+		</div>
+        <div id="contentMap" class="oskariui container-fluid">
+            <div id="menutoolbar" class="container-fluid"></div>
+            <div class="row-fluid" style="height: 100%;">
+                <div class="oskariui-left"></div>
+                <div class="span12 oskariui-center" style="height: 100%; margin: 0;">
+                    <div id="mapdiv"><div class="mapplugins left"></div></div>
+                </div>
+                <div class="oskari-closed oskariui-right">
+                    <div id="mapdivB"></div>
+                </div>
+            </div>
+        </div>
+        <!--  OSKARI -->
+        <script type="text/javascript">
+            var language = "fi";
+        </script>
+        <script type="text/javascript" data-main="main.js" src="../../../libraries/requirejs/require-2.1.9.js"></script>
+    </body>
+</html>
