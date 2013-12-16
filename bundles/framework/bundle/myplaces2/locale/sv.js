@@ -95,6 +95,9 @@ Oskari.registerLocalization({
       "placedesc": {
         "placeholder": "Beskriv objektet"
       },
+      "placeAttention": {
+            "placeholder": "Obs tekst"
+      },
       "measurement": {
         "line": "Linjelängd: ",
         "area": "Area: "
