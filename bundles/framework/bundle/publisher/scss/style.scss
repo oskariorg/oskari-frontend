@@ -1,17 +1,24 @@
 
 div.notLoggedIn {
-	padding: 10px;
+  padding: 10px;
 }
 
 div.publisher {
     
 }
 
-#contentMap.mapPublishMode {
-    margin-left: 365px;
+#contentMap.mapPublishMode > #mapdiv {
+  position: relative;
+  left: 212px
 }
+
+#contentMap.mapPublishMode > div.row-fluid {
+  position: relative;
+  left: 212px
+}
+
 div.publisher div.startview div.icon-info, div.basic_publisher div.icon-info {
-	float : right;
+  float : right;
 }
 div.publisher div.startview div.content {
     margin-top: 5px;
@@ -21,12 +28,12 @@ div.publisher div.startview div.tou {
 }
 
 div.publisher div.startview div.layerlist {
-	border : 1px solid;
-	padding : 10px;
+  border : 1px solid;
+  padding : 10px;
 }
 div.publisher div.startview div.layerlist h4 {
-	font-size : 14px;
-	line-height: 15px;
+  font-size : 14px;
+  line-height: 15px;
     padding-bottom: 5px;
 }
 div.publisher div.startview ul {
@@ -34,14 +41,14 @@ div.publisher div.startview ul {
     padding : 5px;
 }
 div.publisher div.startview div.error ul li {
-	color : red;
+  color : red;
 }
 #contentMap div.basic_publisher {
-	background : white;
-	position : absolute;
+  background : white;
+  position : absolute;
     height: 100%;
     top : 0;
-    left : 40px;
+    left : 0;
     /* sidebar has 3, we want to open it on top of this */
     z-index : 2;
     width : 365px;
@@ -67,18 +74,18 @@ div.basic_publisher div.customsize input.error {
 div.basic_publisher div.form div.field input, div.field select {
     width : 100%;
     width: unquote("80%\0/"); /* unquote for libsass bug */
-	background-color: unquote("white\0/"); /* unquote for libsass */
-	filter:unquote("Alpha(opacity=100)\0/") !important;
+  background-color: unquote("white\0/"); /* unquote for libsass */
+  filter:unquote("Alpha(opacity=100)\0/") !important;
     font-weight: bolder;
 }
 
 div.basic_publisher > div.content {
     overflow: auto;
-	height: 89%;
+  height: 89%;
 }
 
 div.basic_publisher div.tool {
-	margin: 5px;
+  margin: 5px;
 }
 div.basic_publisher div.tool-options {
   padding-left: 23px;
@@ -91,8 +98,8 @@ div.basic_publisher div.data input {
 
 /* Buttons */
 div.basic_publisher div.buttons, div.publisher div.startview div.buttons {
-	text-align : center;
-	margin-top : 10px;
+  text-align : center;
+  margin-top : 10px;
 }
 
 div.basic_publisher div.buttons input, div.publisher div.startview div.buttons input {

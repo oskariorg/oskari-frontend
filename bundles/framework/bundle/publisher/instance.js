@@ -370,7 +370,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 jQuery('.oskariui-left')
                     .css({
                         'width': '',
-                        'height': '100%',
+                        'height': '',
                         'float': ''
                     })
                     .removeClass('published-grid-left')
