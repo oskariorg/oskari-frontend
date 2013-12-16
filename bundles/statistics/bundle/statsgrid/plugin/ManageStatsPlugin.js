@@ -438,7 +438,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 formatter: function (g) {
                     //a hack to name the groups
                     var text = (g.groupingKey === "checked" ?
-                            me._locale.municipality :
+                            me._locale.included :
                             me._locale.not_included) + " (" + g.count + ")";
                     return "<span style='color:green'>" + text + "</span>";
                 },
@@ -634,22 +634,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             });
         },
 
-        _createRegionSelector: function() {
-            var me = this,
-                regionCategories = this._acceptedRegionCategories,
-                regionNames = this._locale.regionCategories,
-                regionList = _.foldl(regionCategories, function(list, category) {
-                        list.append(
-                            me.templates.gridHeaderMenu.clone().
-                                find('input').attr('value', category).end().
-                                find('label').html(regionNames[category])
-                        );
-                        return list;
-                    }, jQuery('<ul></ul>'));
-
-            return jQuery('<div></div>').append(regionList);
-        },
-
         /**
          * Fetch all Sotka indicators
          *
@@ -750,7 +734,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             paramCont.append(button);
             button.find('input').click(function(e){
                 var items = me.dataView ? me.dataView.getItems() : null;
-                var form = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm', me._sandbox, me._locale, items, me._layer.getWmsName(), me._layer.getId());
+                var form = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
+                    me._sandbox, me._locale, items, me._layer.getWmsName(), me._layer.getId(), me._selectedRegionCategory);
                 container.find('.selectors-container').hide();
                 container.find('#municipalGrid').hide();
                 form.createUI(container, function(data) {
@@ -788,7 +773,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         //if fetch returned something we create drop down selector
                         me.createIndicatorInfoButton(container, indicatorMeta);
 
-                        if (me._hasMunicipalityValues(indicatorMeta)) {
+                        if (me._hasRegionCategoryValues(indicatorMeta)) {
                             me.createDemographicsSelects(container, indicatorMeta);
                         } else {
                             me._warnOfInvalidIndicator(container, indicatorMeta);
@@ -805,20 +790,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
         },
         /**
-         * Checks if the indicator has municipality based values.
+         * Checks if the indicator has values on the current category.
          * If it does not, we cannot display it in the grid at the moment.
          *
-         * @method _hasMunicipalityValues
+         * @method _hasRegionCategoryValues
          * @param  {Object} metadata indicator metadata from SOTKAnet
          * @return {Boolean}
          */
-        _hasMunicipalityValues: function (metadata) {
+        _hasRegionCategoryValues: function (metadata) {
             var regions = metadata.classifications;
             regions = regions && regions.region;
             regions = regions && regions.values;
             regions = regions || [];
             var rLen = regions.length,
-                currentCategory = this._selectedRegionCategory,
+                currentCategory = this._selectedRegionCategory.toLowerCase(),
                 i;
 
             for (i = 0; i < rLen; ++i) {
@@ -830,7 +815,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         },
         /**
          * Displays a warning of invalid indicator for the grid
-         * if the indicator does not have municipality based values.
+         * if the indicator does not have values on the current category.
          *
          * @method _warnOfInvalidIndicator
          * @param  {jQuery} container
@@ -1693,6 +1678,37 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     input;
                 if (args.column.id == 'municipality') {
                     menu.items = [];
+
+                    menu.items.push({
+                        element: '<div class="header-menu-subheading">' + me._locale.regionCategories.title + '</div>',
+                        disabled: true
+                    });
+                    // Region category selects
+                    _.each(me._acceptedRegionCategories, function(category) {
+                        var categorySelector = jQuery('<li><input type="radio" name="categorySelector"></input><label></label></li>');
+                        categorySelector.
+                            find('input').
+                                attr({
+                                    'id': 'category_' + category,
+                                    'checked': (category === me._selectedRegionCategory ? 'checked' : false)
+                                }).
+                            end().
+                            find('label').
+                                attr({
+                                    'for': 'category_' + category
+                                }).
+                                html(me._locale.regionCategories[category]);
+                        menu.items.push({
+                            element: categorySelector,
+                            command: 'category_' + category
+                        });
+                    });
+
+                    menu.items.push({
+                        element: '<div class="header-menu-subheading subheading-middle">' + me._locale.statistic.title + '</div>',
+                        disabled: true
+                    });
+                    // Statistical variables
                     for (i = 0; i < me.conf.statistics.length; i++) {
                         var statistic = me.conf.statistics[i];
                         var elems = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-total-selects');
@@ -1738,26 +1754,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     menu.items.push({
                         element: showRows,
                         command: 'selectRows'
-                    });
-
-                    _.each(me._acceptedRegionCategories, function(category) {
-                        var categorySelector = jQuery('<li><input type="radio" name="categorySelector"></input><label></label></li>');
-                        categorySelector.
-                            find('input').
-                                attr({
-                                    'id': 'category_' + category,
-                                    'checked': (category === me._selectedRegionCategory ? 'checked' : false)
-                                }).
-                            end().
-                            find('label').
-                                attr({
-                                    'for': 'category_' + category
-                                }).
-                                html(me._locale.regionCategories[category]);
-                        menu.items.push({
-                            element: categorySelector,
-                            command: 'category_' + category
-                        });
                     });
                 }
 

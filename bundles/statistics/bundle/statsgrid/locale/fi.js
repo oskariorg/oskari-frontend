@@ -33,7 +33,7 @@ Oskari.registerLocalization({
 		"addColumn": "Hae data",
 		"removeColumn": "Poista",
 		"indicators": "Indikaattorit",
-		"cannotDisplayIndicator": "Indikaattorilla ei ole kuntapohjaisia arvoja, joten sitä ei voi näyttää taulukossa.",
+		"cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voi näyttää taulukossa.",
 		"year": "Vuosi",
 		"buttons": {
 			"ok": "OK",
@@ -87,6 +87,7 @@ Oskari.registerLocalization({
 
 		},
 		"statistic": {
+			"title": "Tilastomuuttujat",
 			"avg": "Keskiarvo",
 			"max": "Suurin arvo",
 			"mde": "Moodi",
@@ -96,6 +97,7 @@ Oskari.registerLocalization({
 			"sum": "Yhteensä"
 		},
 		"values": "arvoa",
+		"included": "Arvot",
 		"municipality": "Kunnat",
 		"not_included": "Poistettu laskuista",
 		"selectRows": "Valitse rivit",
@@ -124,6 +126,7 @@ Oskari.registerLocalization({
 		"chosenRegionText" 		: "Valitse alueita",
 		"noRegionFound"			: "Aluetta ei löytynyt",
 		"regionCategories"      : {
+			"title"					: "Aluejaot",
 			"KUNTA"					: "Kunta",
 		    "ALUEHALLINTOVIRASTO" 	: "Aluehallintovirasto",
 		    "MAAKUNTA" 				: "Maakunta",

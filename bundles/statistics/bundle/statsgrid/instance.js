@@ -182,6 +182,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
         getUserIndicatorsService: function() {
             return this.userIndicatorsService;
         },
+        /**
+         * @method addUserIndicator
+         * @param {Object} indicator
+         */
         addUserIndicator: function(indicator) {
             var view = this.getView(),
                 state = this.getState();
@@ -190,12 +194,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             state.indicators.push(indicator);
 
             if (view.isVisible) {
+                this.gridPlugin.changeGridRegion(indicator.category);
                 this.gridPlugin.addIndicatorDataToGrid(
                     null, indicator.id, indicator.gender, indicator.year, indicator.data, indicator.meta
                 );
                 this.gridPlugin.addIndicatorMeta(indicator);
             } else {
                 state.layerId = indicator.layerId || state.layerId;
+                state.regionCategory = indicator.category;
                 this.setState(state);
             }
         },
