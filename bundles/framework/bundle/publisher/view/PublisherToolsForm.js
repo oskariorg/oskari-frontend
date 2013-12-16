@@ -114,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     "left": "",
                     "classes": "top right"
                 },
-                "toolbarId" : "PublisherToolbar"
+                "toolbarId": "PublisherToolbar"
             }
         }, {
             "id": "Oskari.mapframework.mapmodule.ControlsPlugin",
@@ -123,11 +123,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
             "selected": true,
             "config": {
-                "ignoredLayerTypes" : ["WFS"],
+                "ignoredLayerTypes": ["WFS"],
                 "infoBox": false
             }
         }];
-/*
+        /*
         // map tool indices so we don't have to go through the list every time...
         me.toolIndices = {};
         var i;
@@ -136,14 +136,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
         }
 */
         this.templates = {
-            'help' :        '<div class="help icon-info"></div>',
-            'tool' :        '<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>',
-            'toolOptions':  '<div class="tool-options"></div>',
-            'toolOption' :  '<div class="tool-option"><input type="checkbox" /><label></label></div>',
-            'toolOptionSettings':  '<div class="tool-option-settings"></div>',
-            'toolOptionSetting' :  '<div class="tool-option-setting"></div>',
+            'help' : '<div class="help icon-info"></div>',
+            'tool' : '<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>',
+            'toolOptions': '<div class="tool-options"></div>',
+            'toolOption' : '<div class="tool-option"><input type="checkbox" /><label></label></div>',
+            'toolOptionSettings': '<div class="tool-option-settings"></div>',
+            'toolOptionSetting' : '<div class="tool-option-setting"></div>',
             'toolOptionSettingInput' : '<input type="checkbox" /><label></label>',
-            'layerSelect':      '<select class="publisher-select-layer"></select>',
+            'layerSelect': '<select class="publisher-select-layer"></select>',
             'layerSelectOption':'<option></option>'
         }
     }, {
@@ -163,7 +163,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             me.myplaces = myplaces;
             me._sandbox = sandbox;
         },
-        getTools: function() {
+        getTools: function () {
             return this.tools;
         },
         /**
@@ -368,10 +368,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 // toolbar (bundle) needs to be notified
                 if (tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
                     me.toolbarConfig = {
-                        'toolbarId' : 'PublisherToolbar',
-                        'defaultToolbarContainer' : '.publishedToolbarContent',
+                        'toolbarId': 'PublisherToolbar',
+                        'defaultToolbarContainer': '.publishedToolbarContent',
                         'hasContentContainer': true,
-                        'classes' : {}
+                        'classes': {}
                     };
 
                     tool.plugin.setToolbarContainer();

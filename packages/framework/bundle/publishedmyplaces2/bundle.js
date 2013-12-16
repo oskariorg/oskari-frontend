@@ -126,7 +126,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
             "src" : "../../../../libraries/jscolor/jscolor.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../libraries/jquery/plugins/jquery.svg.package-1.4.5/jquery.svg.js"
+            "src" : "../../../../libraries/raphaeljs/raphael.min.js"
 		},
 		// css
 		{

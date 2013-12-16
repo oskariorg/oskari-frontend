@@ -95,6 +95,9 @@ Oskari.registerLocalization({
       "placedesc": {
         "placeholder": "Kuvaile kohdetta"
       },
+      "placeAttention": {
+        "placeholder": "Huomioteksti"
+      },
       "measurement": {
         "line": "Viivan pituus: ",
         "area": "Alueen pinta-ala: "

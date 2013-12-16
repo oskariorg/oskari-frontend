@@ -104,15 +104,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
             "src" : "../../../../bundles/framework/bundle/myplaces2/view/PlaceForm.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/myplaces2/view/PointForm.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/myplaces2/view/LineForm.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/myplaces2/view/AreaForm.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/myplaces2/view/CategoryForm.js"
         }, {
             "type" : "text/javascript",

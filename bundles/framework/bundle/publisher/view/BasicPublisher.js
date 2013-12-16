@@ -155,7 +155,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             var sizeIsSet = false,
                 initWidth = me.data.state.mapfull.config.size.width,
                 initHeight = me.data.state.mapfull.config.size.height,
-                option;
+                option,
+                i;
             for (i = 0; i < me.sizeOptions.length; i += 1) {
                 option = me.sizeOptions[i];
                 if (initWidth === option.width && initHeight === option.height) {
