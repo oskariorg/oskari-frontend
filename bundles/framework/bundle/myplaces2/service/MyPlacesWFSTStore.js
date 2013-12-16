@@ -399,6 +399,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 place.setId(id);
                 place.setName(featAtts.name);
                 place.setDescription(featAtts.place_desc);
+                place.setAttention_text(featAtts.attention_text);
                 place.setLink(featAtts.link);
                 place.setImageLink(featAtts.image_url);
                 place.setCategoryID(featAtts.category_id);
@@ -472,6 +473,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 featAtts = {
                     'name': m.getName(),
                     'place_desc': m.getDescription(),
+                    'attention_text': m.getAttention_text(),
                     'link': m.getLink(),
                     'image_url': m.getImageLink(),
                     'category_id': m.getCategoryID(),
