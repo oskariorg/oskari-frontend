@@ -410,8 +410,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         }
                     }
 
-//FIXME this is a hack
+//FIXME when myplaces works on published maps
 //////////////////////////////////////////////////////////////////////////////
+/*
                     // create option for adding drawing tools
                     options = jQuery(me.templates.toolOptions).clone();
                     tool.publisherPluginContainer.append(options);
@@ -426,6 +427,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                             me._toggleDrawTools(e, 'drawTools', 'myplaces', {})
                         });
                 options.append(selectTool);
+*/
 ///////////////////////////////////////////////////////////////////////////////
 
                 }
