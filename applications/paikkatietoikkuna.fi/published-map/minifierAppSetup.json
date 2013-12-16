@@ -185,7 +185,7 @@
         "metadata" : {
             "Import-Bundle" : {
                 "publishedmyplaces2" : {
-                    "bundlePath" : "/Oskari/packages/framework/bundle/"
+                    "bundlePath" : "../../../packages/framework/bundle/"
                 }
             },
             "Require-Bundle-Instance" : []
