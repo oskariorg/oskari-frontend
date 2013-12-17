@@ -19,6 +19,7 @@ require.config({
     "*": {
       "oskari": "oskari-with-app",
       "jquery": "jquery-migrate",
+      "ol3": "src/oskari/map-ol3/module",
       "map": "src/oskari/map-ol3/module",
       "mapmodule-plugin": "src/ol3/mapmodule-plugin/module",
       "mapfull": "src/ol3/mapfull/module",

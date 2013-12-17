@@ -6,6 +6,10 @@ define([
 	"css!resources/openlayers/theme/default/style.css"
 ], function(Oskari, jQuery) {
 	return Oskari.bundleCls("ol2").category({
+		'__name': 'lib-ol2',
+		getName: function() {
+			return this.__name;
+		},
 		create: function() {
 			return this;
 		},

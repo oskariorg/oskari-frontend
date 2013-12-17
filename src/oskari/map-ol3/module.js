@@ -7,7 +7,12 @@ define([
 	"libraries/proj4js-1.0.1/proj4js-compressed",
 	"css!resources/ol3/bundle/ol3-default/css/ol.css"
 ], function(Oskari, jQuery) {
+	console.log('here');
 	return Oskari.bundleCls("ol3").category({
+		'__name': 'lib-ol3',
+		getName: function() {
+			return this.__name;
+		},
 		create: function() {
 			return this;
 		},

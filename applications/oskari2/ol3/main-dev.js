@@ -47,79 +47,47 @@ require(["mainConfig"], function() {
         }
 
         /* loading configuration */
+        require([config], function(appSetup) {
+            console.log(appSetup);
+
+            Oskari.setLang(language);
+
+            window.debugApp = Oskari.Application
+                .create()
+                .setStartupSequence(appSetup.startupSequence)
+                .setConfiguration(appSetup.configuration)
+                .start()
+                .success(function() { console.log("ALL DONE");});
+
+
+        /* loading configuration *
         require([config, 
             "map"], function(appSetup) {
             Oskari.setLang(language);
             var appConfig = appSetup.configuration;
-            appConfig.promote = {
-                    "conf": {
-                        "__name": "Promote",
-                        "title": {
-                            "fi": "Otsikko tileen",
-                            "en": "Title for Tile"
-                        },
-                        "desc": {
-                            "fi": "Voit käyttää julkaisutoimintoa kirjauduttuasi palveluun.",
-                            "en": "You need to log in before using the embedding function."
-                        },
-                        "signup": {
-                            "fi": "Kirjaudu sisään",
-                            "en": "Log in"
-                        },
-                        "signupUrl": {
-                            "fi": "/web/fi/login",
-                            "en": "/web/en/login"
-                        },
-                        "register": {
-                            "fi": "Rekisteröidy",
-                            "en": "Register"
-                        },
-                        "registerUrl": {
-                            "fi": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account",
-                            "en": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
-                        },
-                        "test_toolbarButtons": {
-                            "buttonGrp": {
-                                "buttonId": {
-                                    "iconCls": "tool-reset",
-                                    "tooltip": {
-                                        "fi": "jee",
-                                        "en": "jee en"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                };
 
             Oskari.setConfiguration(appConfig);
 
-            /* loading main map and divmanazer */
+            /* loading main map and divmanazer *
             require(["mapfull",
                 "mapmodule-plugin",
                 "divmanazer"], function(mapfull, mapmodule, divmanazer) {
 
-                /* starting to show user that something or another is happening */
+                /* starting to show user that something or another is happening *
                 mapfull.start();
                 divmanazer.start();
 
                 var bundles = [];
 
                 for (bundle in appConfig) {
-                    if ((bundle === "mapfull") || (bundle === "divmanazer") || (bundle === "openlayers-default-theme")) {
-                        // already loaded
-                    } else if (bundle === "metadataflyout") {
-                        bundles.push("bundles/catalogue/bundle/" + bundle + "/module");
-                    } else {
-                        bundles.push(bundle);
-                    }
+                    bundles.push(bundle);
                 }
 
 //                console.log('bundles', bundles);
 
                 require(bundles, function () {
 
-/*                require([
+/                require([
                     "bundles/framework/bundle/backendstatus/module",
                     "bundles/framework/bundle/guidedtour/module",
                     "bundles/framework/bundle/toolbar/module",
@@ -136,7 +104,7 @@ require(["mainConfig"], function() {
                     "bundles/framework/bundle/statehandler/module",
                     "bundles/framework/bundle/infobox/module",
                     "bundles/framework/bundle/coordinatedisplay/module",
-                    "bundles/framework/bundle/promote/module"], function () {*/
+                    "bundles/framework/bundle/promote/module"], function () {
                         for(var i = 0, ilen = arguments.length; i < ilen; i++) {
                             arguments[i].start();
                         }
@@ -145,7 +113,7 @@ require(["mainConfig"], function() {
                         gfiParamHandler(sb);
                     }
                 );
-            });
+            });*/
         });
     });
 });
