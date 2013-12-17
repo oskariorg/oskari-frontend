@@ -52,47 +52,6 @@ require(["mainConfig"], function() {
             "map"], function(appSetup) {
             Oskari.setLang(language);
             var appConfig = appSetup.configuration;
-            appConfig.promote = {
-                    "conf": {
-                        "__name": "Promote",
-                        "title": {
-                            "fi": "Otsikko tileen",
-                            "en": "Title for Tile"
-                        },
-                        "desc": {
-                            "fi": "Voit käyttää julkaisutoimintoa kirjauduttuasi palveluun.",
-                            "en": "You need to log in before using the embedding function."
-                        },
-                        "signup": {
-                            "fi": "Kirjaudu sisään",
-                            "en": "Log in"
-                        },
-                        "signupUrl": {
-                            "fi": "/web/fi/login",
-                            "en": "/web/en/login"
-                        },
-                        "register": {
-                            "fi": "Rekisteröidy",
-                            "en": "Register"
-                        },
-                        "registerUrl": {
-                            "fi": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account",
-                            "en": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
-                        },
-                        "test_toolbarButtons": {
-                            "buttonGrp": {
-                                "buttonId": {
-                                    "iconCls": "tool-reset",
-                                    "tooltip": {
-                                        "fi": "jee",
-                                        "en": "jee en"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                };
-
             Oskari.setConfiguration(appConfig);
 
             /* loading main map and divmanazer */

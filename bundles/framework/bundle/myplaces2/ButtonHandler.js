@@ -13,6 +13,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
     function (instance) {
         this.instance = instance;
         this.buttonGroup = 'myplaces';
+        this.measureButtonGroup = 'basictools';
         this.ignoreEvents = false;
         this.dialog = null;
         var me = this;
@@ -110,7 +111,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             var me = this;
             var sandbox = me.instance.sandbox,
                 p,
-                tool;
+                tool,
+                measureTool;
             sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
@@ -123,6 +125,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             for (tool in this.buttons) {
                 if (this.buttons.hasOwnProperty(tool)) {
                     sandbox.request(this, reqBuilder(tool, this.buttonGroup, this.buttons[tool]));
+
+                    // for logged-in-user: add line & area buttons
+                    if (sandbox.getUser().isLoggedIn()) {
+                        if(tool === 'line') {
+                            measureTool = jQuery.extend(true, {}, this.buttons[tool]);
+                            measureTool.iconCls = 'tool-measure-line';
+                            sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
+                        }
+                        if(tool === 'area') {
+                            measureTool = jQuery.extend(true, {}, this.buttons[tool]);
+                            measureTool.iconCls = 'tool-measure-area';
+                            sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
+                        }
+                    }
                 }
             }
 

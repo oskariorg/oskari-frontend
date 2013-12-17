@@ -50,9 +50,9 @@ define([
 
 //            Dynamic values cannot be optimized, change to static for optimization by listing the array values.
 //            Log the modules and temporarily replace startupSequence with the console output or include all necessary modules in the build.
-            console.log('modules', modules);
+//            console.log('modules', modules);
 
-            require(modules, function() {
+            require(modules, function(item) {
                 var module = null,
                     instance = null,
                     identifier = null;

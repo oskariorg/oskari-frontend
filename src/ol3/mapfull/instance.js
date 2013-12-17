@@ -12,6 +12,7 @@ Oskari.clazz.define("Oskari.ol3.bundle.mapfull.MapFullBundleInstance",
  * @static
  */
 function() {
+  this.__name = "mapfull-ol3";
 	this.map = null;
 	this.core = null;
 	this.sandbox = null;
@@ -25,6 +26,14 @@ function() {
 	this.mapDivId = "mapdiv";
     this.contentMapDivId = 'contentMap';
 }, {
+  /**
+   * @method getName
+   * Module protocol method
+   */
+  getName: function () {
+      return this.__name;
+  },
+
 	/**
 	 * @method getMapModule
 	 * Returns reference to the map module

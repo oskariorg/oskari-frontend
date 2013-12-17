@@ -41,8 +41,32 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
          */
 
         layer.setFeatureInfoEnabled(true);
-        layer.setWmtsMatrixSet(mapLayerJson.tileMatrixSetData);
-        layer.setWmtsLayerDef(mapLayerJson.tileLayerData);
+        if (mapLayerJson.tileMatrixSetData && mapLayerJson.tileLayerData) {
+            /* ver 2 */
+            layer.setWmtsMatrixSet(mapLayerJson.tileMatrixSetData);
+            layer.setWmtsLayerDef(mapLayerJson.tileLayerData);
+        } else if (mapLayerJson.tileMatrixSetData && mapLayerJson.tileMatrixSetId) {
+            /* ver 1 */
+            var tileMatrixSetId = mapLayerJson.tileMatrixSetId;
+            if (mapLayerJson.tileMatrixSetData.contents && mapLayerJson.tileMatrixSetData.contents.tileMatrixSets) {
+                var tileMatrixSet = mapLayerJson.tileMatrixSetData.contents.tileMatrixSets[tileMatrixSetId];
+                layer.setWmtsMatrixSet(tileMatrixSet);
+
+            }
+
+            
+            var wmtsLayerName = layer.getWmtsName();
+            var wmtsLayersArr = mapLayerJson.tileMatrixSetData.contents.layers;
+            for (var n = 0; n < wmtsLayersArr.length; n++) {
+                if (wmtsLayersArr[n].identifier == wmtsLayerName) {
+                    layer.setWmtsLayerDef(wmtsLayersArr[n]);
+                    break;
+                }
+
+            }
+
+        }
+        
         layer._data = mapLayerJson;
         layer.setWmtsCaps(mapLayerJson.caps);
 

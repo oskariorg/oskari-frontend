@@ -193,8 +193,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             isBaseLayer: layer.isBaseLayer(),
             buffer: 0,
             serverResolutions: serverResolutions,
-            /*minScale : layer.getMinScale(),
-             maxScale : layer.getMaxScale(),*/
+            visibility : layer.isInScale(sandbox.getMap().getScale()),
             layerDef: layerDef,
             zoomOffset: layer.getZoomOffset()
         };

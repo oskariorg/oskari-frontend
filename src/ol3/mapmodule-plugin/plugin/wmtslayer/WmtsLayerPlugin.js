@@ -43,7 +43,9 @@ function() {
         for (var i = 0, ilen = layers.length; i < ilen; i++) {
             var _layer = layers[i];
 
-            var wmtsUrl = _layer.getWmtsUrls()[0][0].url;
+            var layerDef = _layer.getWmtsLayerDef();
+            var wmtsUrl = //layer.getWmtsUrls()[0]; 
+                layerDef.resourceUrl ? (layerDef.resourceUrl.tile ? layerDef.resourceUrl.tile.template : undefined) : undefined;
             var matrixSet = _layer.getWmtsMatrixSet();
             var matrixSetId = matrixSet.identifier;
             var layerName = _layer.getWmtsName();
@@ -68,6 +70,7 @@ function() {
 
             var wmtsCaps = _layer.getWmtsCaps();
             var wmtsOpts = ol.source.WMTS.optionsFromCapabilities(wmtsCaps, layerName);
+            wmtsOpts.url = wmtsUrl;
 
             var layerImpl = new ol.layer.Tile({
                 opacity : 1.0,

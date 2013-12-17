@@ -40,18 +40,21 @@ function() {
 
             // default params and options
             var defaultParams = {
-                layers : _layer.getWmsName(),
-                transparent : true,
-                id : _layer.getId(),
-                styles : _layer.getCurrentStyle().getName(),
-                format : "image/png"
-            }, defaultOptions = {
-                layerId : _layer.getWmsName(),
-                isBaseLayer : false,
-                displayInLayerSwitcher : false,
-                visibility : true,
-                buffer : 0
-            }, layerParams = _layer.getParams(), layerOptions = _layer.getOptions();
+                    layers : _layer.getWmsName(),
+                    transparent : true,
+                    id : _layer.getId(),
+                    styles : _layer.getCurrentStyle().getName(),
+                    format : "image/png"
+                },
+                defaultOptions = {
+                    layerId : _layer.getWmsName(),
+                    isBaseLayer : false,
+                    displayInLayerSwitcher : false,
+                    visibility : true,
+                    buffer : 0
+                },
+                layerParams = _layer.getParams(),
+                layerOptions = _layer.getOptions();
             if (_layer.getMaxScale() || _layer.getMinScale()) {
                 // use resolutions instead of scales to minimize chance of transformation errors
                 var layerResolutions = this.getMapModule().calculateLayerResolutions(_layer.getMaxScale(), _layer.getMinScale());

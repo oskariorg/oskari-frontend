@@ -1,5 +1,5 @@
 define([
-	"src/oskari/oskari",
+	"oskari",
 	/* leaflet */
 	"libraries/leaflet/leaflet-src",
 	"libraries/leaflet/leaflet-ol2-compatibility",

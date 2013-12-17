@@ -163,6 +163,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                         link: place.getLink(),
                         imageLink: place.getImageLink(),
                         desc: place.getDescription(),
+                        attention_text: place.getAttention_text(),
                         category: place.getCategoryID()
                     }
                 };
@@ -323,6 +324,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             place.setLink(values.link);
             place.setImageLink(values.imageLink);
             place.setDescription(values.desc);
+            place.setAttention_text(values.attention_text);
             place.setCategoryID(values.category);
             // fetch the latest geometry if edited after FinishedDrawingEvent
             place.setGeometry(this.drawPlugin.getDrawing());

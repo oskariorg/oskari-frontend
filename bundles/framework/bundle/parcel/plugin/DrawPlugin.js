@@ -74,6 +74,9 @@ function(instance) {
 		this.drawLayer = new OpenLayers.Layer.Vector("Parcel Draw Layer", {
 			eventListeners : {
 				"featuresadded" : function(layer) {
+                    if (layer.features[0].length === 0) {
+                        return;
+                    }
                     if (layer.features[0].geometry.CLASS_NAME === "OpenLayers.Geometry.LineString") {
                         var loc = me.instance.getLocalization('notification').calculating;
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -104,7 +107,8 @@ function(instance) {
                     }
                     // Reproduce the original OL 2.12 behaviour
                     jQuery('svg').find('circle').css('cursor', 'move');
-                    jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); // IE8
+                    jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); //
+
           			this.redraw();
 		        	me.drawLayer.redraw();
 				}
@@ -113,6 +117,7 @@ function(instance) {
 
 		this.editLayer.updateLine = function() {
 			var editFeature = this.features[0];
+            var endPoints = [];
 			if (editFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiLineString") {
 				// Handles the point added into the line
 				for (var i = 0; i < editFeature.geometry.components.length; i++) {
@@ -161,6 +166,7 @@ function(instance) {
 								}
 							}
 							point.references = newReferences;
+                            point.short = -1;
 						}
 					}
 					// Fixed start and end points of the line
@@ -173,12 +179,24 @@ function(instance) {
 						lineString.components[lastIndex].x = lineString.components[lastIndex].x0;
 						lineString.components[lastIndex].y = lineString.components[lastIndex].y0;
 					}
+
 					// Updates middle points
                     me.controls.modify.deactivate();
                     me.controls.modify.activate();
 					me.controls.modify.selectFeature(editFeature);
                     me.controls.modify.clickout = false;
                     me.controls.modify.toggle = false;
+
+                    endPoints.push(lineString.components[0].id);
+                    endPoints.push(lineString.components[lastIndex].id);
+
+                    if (lineString.components.length === 2) {
+                        lineString.components[0].short = i;
+                        lineString.components[1].short = i;
+                    } else {
+                        lineString.components[0].short = -1;
+                        lineString.components[lastIndex].short = -1;
+                    }
 				}
 
 				this.refresh();
@@ -188,6 +206,11 @@ function(instance) {
 				// me.controls.select.select(me.getDrawing());
 
 			}
+  		    // Hidden start and end points of the line
+            for (i=0; i<endPoints.length; i++) {
+                jQuery("#"+endPoints[i]).css("display","none");
+            }
+
 		};
 
      	this.editLayer.updateHole = function(lineFeature) {
@@ -697,6 +720,7 @@ function(instance) {
                 this.editLayer.redraw();
             }
         }
+        this.editLayer.updateLine();
 	},
 
     initControls : function(editingFeature) {
@@ -707,8 +731,10 @@ function(instance) {
             this.buttons.setButtonEnabled("clear",true);
             this.buttons.setButtonEnabled("save",true);
 
-			this.controls.select.select(editingFeature);
-			this.controls.modify.selectFeature(editingFeature);
+            if (editingFeature !== null) {
+			    this.controls.select.select(editingFeature);
+			    this.controls.modify.selectFeature(editingFeature);
+            }
 			this.controls.modify.activate();
             this.controls.modify.clickout = false;
             this.controls.modify.toggle = false;
