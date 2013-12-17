@@ -3,6 +3,7 @@
 ## 1.17
 
 ### publishedstatehandler
+
 Added statehandler functions to published maps. It is also now possible to add map tools plugin in Publisher mode to new maps.
 
 ### Statsgrid
@@ -10,6 +11,8 @@ Added statehandler functions to published maps. It is also now possible to add m
 Added posibility to add indicator data through data import (localization is still work in progress)
 
 Adds a tab to personaldata from which users can access their own saved indicators.
+
+The region category can now be changed from municipality to any other category SOTKAnet API has to offer.
 
 ### myplaces2
 

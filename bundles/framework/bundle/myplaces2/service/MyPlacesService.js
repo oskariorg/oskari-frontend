@@ -578,6 +578,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                             // update values
                             myplace.setName(myplaceModel.getName());
                             myplace.setDescription(myplaceModel.getDescription());
+                            myplace.setAttention_text(myplaceModel.getAttention_text());
                             myplace.setLink(myplaceModel.getLink());
                             myplace.setCategoryID(myplaceModel.getCategoryID());
                             myplace.setGeometry(myplaceModel.getGeometry());

@@ -52,13 +52,18 @@ Oskari.registerLocalization({
                 "ControlsPlugin": "Kartan liikuttaminen",
                 "SearchPlugin": "Osoite- ja paikannimihaku",
                 "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
-                "PublisherToolbarPlugin": "Karttatyökalut"
+                "PublisherToolbarPlugin": "Karttatyökalut",
+                "drawPoints" : "Salli pisteet",
+                "drawLines" : "Salli viivat",
+                "drawAreas" : "Salli alueet",
+                "selectDrawLayer" : "Valitse piirtotaso"
             },
             "toolbarToolNames": {
                 "history_back": "Siirry taaksepäin",
                 "history_forward": "Siirry eteenpäin",
                 "measureline": "Mittaa etäisyyttä",
-                "measurearea": "Mittaa aluetta"
+                "measurearea": "Mittaa aluetta",
+                "drawTools" : "Piirtotyökalut"
             },
             "toollayout": {
                 "label": "Työkalujen asettelu",

@@ -52,7 +52,11 @@ Oskari.registerLocalization({
                 "ControlsPlugin": "Panorering på",
                 "SearchPlugin": "Adress- och ortnamnssökning",
                 "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet",
-                "PublisherToolbarPlugin": "Kartverktygen"
+                "PublisherToolbarPlugin": "Kartverktygen",
+                "drawPoints" : "Tillåter poäng",
+                "drawLines" : "Tillåter linjer",
+                "drawAreas" : "Tillåter områden",
+                "selectDrawLayer" : "Väljer ritning lager"
             },
             "toolbarToolNames": {
                 "history_back": "Gå bakåt",

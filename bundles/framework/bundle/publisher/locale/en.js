@@ -52,7 +52,11 @@ Oskari.registerLocalization({
                 "ControlsPlugin": "Panning on",
                 "SearchPlugin": "Address and place name search",
                 "GetInfoPlugin": "Query tool for place data",
-                "PublisherToolbarPlugin": "map tools"
+                "PublisherToolbarPlugin": "map tools",
+                "drawPoints" : "Allow points",
+                "drawLines" : "Allow lines",
+                "drawAreas" : "Allow areas",
+                "selectDrawLayer" : "Select draw layer"
             },
             "toolbarToolNames": {
                 "history_back": "Move backward",
