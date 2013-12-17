@@ -18,7 +18,6 @@
  * limitations under the License.
  * ========================================================== */
 ! function ($) {
-    "use strict";
 
     /* TOOLTIP PUBLIC CLASS DEFINITION
      * =============================== */
@@ -48,10 +47,8 @@
                 this.$element.on(eventOut, this.options.selector, $.proxy(this.leave, this));
             }
             if (this.options.selector) {
-                this._options = $.extend(
-                    {},
-                    this.options,
-                    {
+                this._options = $.extend({},
+                    this.options, {
                         trigger: 'manual',
                         selector: ''
                     }

@@ -11,7 +11,6 @@ Oskari.clazz
          */
 
         function () {
-            "use strict";
             this.compiledTemplates = {};
             this.compileTemplates();
             this.ui = null;
@@ -26,7 +25,6 @@ Oskari.clazz
                 "inverse": '<span class="oskari-badge oskari-badge-inverse"></span>'
             },
             compileTemplates: function () {
-                "use strict";
                 var p;
                 for (p in this.templates) {
                     if (this.templates.hasOwnProperty(p)) {
@@ -35,11 +33,9 @@ Oskari.clazz
                 }
             },
             insertTo: function (container) {
-                "use strict";
                 this.container = container;
             },
             setContent: function (pContent, status) {
-                "use strict";
                 if (this.ui) {
                     this.ui.remove();
                     this.ui = null;
@@ -51,7 +47,6 @@ Oskari.clazz
                 this.ui = txtspan;
             },
             hide: function () {
-                "use strict";
                 if (this.ui) {
                     this.ui.remove();
                     this.ui = null;

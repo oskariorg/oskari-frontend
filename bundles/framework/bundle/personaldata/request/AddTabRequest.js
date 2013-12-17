@@ -15,7 +15,7 @@ function(title, content, first) {
     this._title = title;
     this._content = content;
     this._first = !!first;
-}, {
+},{
     /** @static @property __name request name */
     __name : "PersonalData.AddTabRequest",
     /**
@@ -29,16 +29,16 @@ function(title, content, first) {
      * @method getTitle
      * @return {String} tab title
      */
-    getTitle : function() {
-        return this._title;
-    },
+   getTitle : function() {
+       return this._title;
+   },
     /**
      * @method getContent
      * @return {String} content for the tab to be added
      */
-    getContent : function() {
-        return this._content;
-    },
+  getContent : function() {
+       return this._content;
+  },
     /**
      * @method isFirst
      * @return {Boolean} is tab added as first

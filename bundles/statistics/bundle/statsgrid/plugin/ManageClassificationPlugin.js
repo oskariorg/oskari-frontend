@@ -23,6 +23,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         this._map = null;
         this.element = undefined;
         this.conf = config;
+        this._state = null;
         this._locale = locale || Oskari.getLocalization("StatsGrid");
         this.initialSetup = true;
         this.colorsets_div = null;
@@ -37,6 +38,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         this._params = null;
         this.minClassNum = 2;
         this.maxClassNum = 9;
+        this.numberOfClasses = 5;
         this.isSelectHilightedMode = false;
 
         this.templates = {
@@ -131,6 +133,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             me._sandbox = sandbox || me.getMapModule().getSandbox();
             me._map = me.getMapModule().getMap();
             me._sandbox.register(me);
+            this._state = (this.conf.state || {});
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     sandbox.registerForEventByName(me, p);
@@ -138,7 +141,26 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             }
             me.statsService = me._sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
 
+            me._initState();
             me._createUI();
+        },
+        /**
+         * @method _initState
+         * @private
+         * initializes state params since it might be possible
+         * that there is not all the data included
+         */
+        _initState : function() {
+            if(this._state.methodId == null || this._state.methodId < 1) {
+                this._state.methodId = '1';
+            }
+            var cmode = this._state.classificationMode;
+            if(cmode == null) {
+                cmode = '';
+            }
+            if(this._state.numberOfClasses == null || this._state.numberOfClasses < 3) {
+                this._state.numberOfClasses = 2;
+            }
         },
         /**
          * @method stopPlugin
@@ -220,9 +242,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
              * Removes the layer from selection
              */
             'AfterMapLayerRemoveEvent': function (event) {
-                // Hide Classify dialog
+                // Reset the UI and hide the dialog
                 if (event.getMapLayer()._layerType === "STATS") {
-                    this._visibilityOff();
+                    this.resetUI();
                 }
             },
             /**
@@ -288,9 +310,24 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 //params eg. CUL_COL:"indicator..." , VIS_NAME: "ows:kunnat2013", VIS_ATTR: "kuntakoodi", VIS_CODES: munArray, COL_VALUES: statArray
                 this._params = event.getParams();
                 // Classify data
-                this.classifyData(event);
-
+                if (this._params && this._params.COL_VALUES && this._params.COL_VALUES.length === 0) {
+                    // If the values are empty, just send the empty values to visualization
+                    this.sendEmptyValues(event);
+                } else {
+                    // Else classify data
+                    this.classifyData(event);
+                }
             }
+        },
+
+        /**
+         * @method setState
+         * @param state Statsgrid state object
+         * Set the state object of statsgrid to this plugin too.
+         */
+        setState: function (state) {
+            this._state = state;
+            this._initState();
         },
 
         /**
@@ -314,6 +351,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             if (!me._layer) {
                 return;
             }
+            this._initState();
+
             // Current Oskari layer
             var layer = this._layer;
             //params eg. CUL_COL:"indicator..." , VIS_NAME: "ows:kunnat2013", VIS_ATTR: "kuntakoodi", VIS_CODES: munArray, COL_VALUES: statArray
@@ -333,12 +372,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 return;
             }
 
-            var slider = me._adjustClassificationSlider(params.CHECKED_COUNT),
-                sliderDisabled = slider.slider("option", "disabled");
+            var classificationCount = me._checkClassCount(params.COL_VALUES.length);
 
             // if slider is disabled don't show classification but help / guide
             // that you should select more municipalities
-            if (sliderDisabled) {
+            if (classificationCount.max <= classificationCount.min) {
                 classify = me.element.find('.classificationMethod');
                 classify.find('.block').remove();
                 block = jQuery(me.templates.block);
@@ -351,9 +389,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             }
 
             // Get classification method
-            var method = me.element.find('.classificationMethod').find('.method').val();
+            var method = me._state.methodId;
+
             // Get class count
-            var classes = Number(me.element.find('.classificationMethod').find('.classCount').find('#amount_class').val()),
+            var classes = me._state.numberOfClasses;
                 gcol_data = params.COL_VALUES;
             gcol_data = gcol_data.slice(0);
             var codes = params.VIS_CODES;
@@ -419,15 +458,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             }
             var colorArr = colors.split(",");
 
-            /*document.getElementById("mover").style.backgroundColor = currentColor;*/
-
             for (i = 0; i < colorArr.length; i++) {
                 colorArr[i] = '#' + colorArr[i];
             }
             gstats.setColors(colorArr);
 
-            var manualBreaksInput = this.element.find('.manualBreaks').find('input[name=breaksInput]').val();
+            me._state.manualBreaksInput = me._state.manualBreaksInput != null ? me._state.manualBreaksInput.toString() : "";
             colors = colors.replace(/,/g, '|');
+            var classificationMode = me._state.classificationMode;
 
             var returnObject = {
                 //instance.js - state handling: method
@@ -435,13 +473,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 //instance.js - state handling: number of classes
                 numberOfClasses: classes,
                 //instance.js - state handling: input string of manual classification method
-                manualBreaksInput: manualBreaksInput.toString(),
+                manualBreaksInput: me._state.manualBreaksInput,
                 //instance.js - state handling: input object for colors
                 colors: {
                     set: me.currentColorSet,
                     index: me.colorsetIndex,
                     flipped: me.colorsFlipped
                 },
+                classificationMode: classificationMode,
                 VIS_ID: -1,
                 VIS_NAME: params.VIS_NAME,
                 VIS_ATTR: params.VIS_ATTR,
@@ -461,54 +500,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 return ret;
             };
 
-            var colors = me._getColors(this.currentColorSet, me.colorsetIndex, classes - 2);
-            // If true, reverses the color "array"
-            if (me.colorsFlipped) {
-                colors = colors.split(',').reverse().join(',');
-            }
-            var colorArr = colors.split(",");
-
-            /*document.getElementById("mover").style.backgroundColor = currentColor;*/
-
-            for ( i = 0; i < colorArr.length; i++)
-                colorArr[i] = '#' + colorArr[i];
-            gstats.setColors(colorArr);
-
-            var manualBreaksInput = this.element.find('.manualBreaks').find('input[name=breaksInput]').val();
-            var colors = colors.replace(/,/g, '|');
-            var classificationMode = me.element.find('select.classification-mode').val();
-
-            var returnObject = {
-                //instance.js - state handling: method
-                methodId : method,
-                //instance.js - state handling: number of classes
-                numberOfClasses : classes,
-                //instance.js - state handling: input string of manual classification method
-                manualBreaksInput : manualBreaksInput.toString(),
-                //instance.js - state handling: input object for colors
-                colors: {
-                    set: me.currentColorSet,
-                    index: me.colorsetIndex,
-                    flipped: me.colorsFlipped
-                },
-                // instance.js - state handling: classification mode
-                classificationMode: classificationMode,
-                VIS_ID : -1,
-                VIS_NAME : params.VIS_NAME,
-                VIS_ATTR : params.VIS_ATTR,
-                VIS_CLASSES : classString,
-                VIS_COLORS : "choro:" + colors
-            };
-            // Send the data out for visualization.
-            this.statsService.sendVisualizationData(layer, returnObject);
-
-            var legendRounder = function(i) {
-                if (i % 1 === 0)
-                    return i;
-                else
-                    return (Math.round(i * 10) / 10);
-            };
-
             var colortab = gstats.getHtmlLegend(null, sortcol.name, true, legendRounder, classificationMode);
             classify = me.element.find('.classificationMethod');
             classify.find('.block').remove();
@@ -523,6 +514,36 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
 
         /**
+         * Sends empty values for visualization. Used because #classifyData
+         * does a whole lot of other things besides just sending the values.
+         *
+         * @method sendEmptyValues
+         * @param  {Object} event The event with layer and params
+         * @return {undefined}
+         */
+        sendEmptyValues: function (event) {
+            var layer = event.getLayer(),
+                params = event.getParams();
+
+            this.statsService.sendVisualizationData(layer, {
+                VIS_ID: -1,
+                VIS_NAME: params.VIS_NAME,
+                VIS_ATTR: params.VIS_ATTR,
+                VIS_CLASSES: "",
+                VIS_COLORS: "choro:"
+            });
+        },
+        /**
+         * Creates UI again from scratch
+         *
+         * @method resetUI
+         * @return {undefined}
+         */
+        resetUI: function () {
+            this.element = null;
+            this._createUI();
+        },
+        /**
          * @method  _createUI
          * Creates classification UI (method select, class count, colors)
          
@@ -530,125 +551,138 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
          */
         _createUI: function () {
             var me = this;
-            if (!this.element) {
-                this.element = this.classify_temp.clone();
-            }
+
+            // destroy the old plugin from the map
+            jQuery('div.manageClassificationPlugin').remove();
+            this.element = this.classify_temp.clone();
             // Classify html header
             var header = this.element.find('div.classheader');
             header.append(this._locale.classify.classify);
 
             // Content HTML / Method select HTML
             var content = me.element.find('div.content'),
-                classify = jQuery('<div class="classificationMethod"><br>' + this._locale.classify.classifymethod + '<br><select class="method"></select><br></div>'),
-                sel = classify.find('select'),
+                classify = jQuery('<div class="classificationMethod"><div class="classificationOptions"></div></div>'),
+                classifyOptions = classify.find('.classificationOptions'),
                 methods = [this._locale.classify.jenks, this._locale.classify.quantile, this._locale.classify.eqinterval, this._locale.classify.manual],
                 i,
                 opt;
-            for (i = 0; i < methods.length; i++) {
-                opt = jQuery('<option value="' + (i + 1) + '">' + methods[i] + '</option>');
-                sel.append(opt);
-            }
 
-            sel.change(function (e) {
-                if (jQuery(this).val() === '4') {
-                    jQuery('.classCount').hide();
-                    jQuery('.manualBreaks').show();
-                } else {
-                    jQuery('.manualBreaks').hide();
-                    jQuery('.classCount').show();
-                    // Classify current columns, if any
-                    me.classifyData();
+            // do not show classification option if it is not allowed - published map
+            if(me._state.allowClassification !== false) {
+                classifyOptions.append(this._locale.classify.classifymethod + '<br><select class="method"></select><br>');
+                var sel = classifyOptions.find('select');
+                for (i = 0; i < methods.length; i++) {
+                    opt = jQuery('<option value="' + (i + 1) + '">' + methods[i] + '</option>');
+                    sel.append(opt);
                 }
-            });
-            // Content HTML / class count input HTML
-            //var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="spinner" value="6" /></div>');
 
-            var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="amount_class" readonly="readonly" value="5" /><div id="slider-range-max"></div>');
+                sel.change(function (e) {
+                    me._state.methodId = jQuery(this).val();
+                    if (me._state.methodId === '4') {
+                        jQuery('.classCount').hide();
+                        jQuery('.manualBreaks').show();
+                    } else {
+                        jQuery('.manualBreaks').hide();
+                        jQuery('.classCount').show();
+                        // Classify current columns, if any
+                        me.classifyData();
+                    }
+                });
+                // Content HTML / class count input HTML
+                //var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="spinner" value="6" /></div>');
+                var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="amount_class" readonly="readonly" value="5" /><div id="slider-range-max"></div>');
 
-            var slider = classcnt.find('#slider-range-max').slider({
-                range: "min",
-                min: me.minClassNum,
-                max: me.maxClassNum,
-                value: 5,
-                slide: function (event, ui) {
-                    jQuery('input#amount_class').val(ui.value);
-                    jQuery(this).slider('option', 'value', ui.value);
-                    // Classify again
-                    me.classifyData(event);
-                }
-            });
-            this.rangeSlider = slider;
+                var slider = classcnt.find('#slider-range-max').slider({
+                    range: "min",
+                    min: me.minClassNum,
+                    max: me.maxClassNum,
+                    value: me._state.numberOfClasses,
+                    slide: function (event, ui) {
+                        me._state.numberOfClasses = ui.value;
+                        jQuery('input#amount_class').val(ui.value);
+                        jQuery(this).slider('option', 'value', ui.value);
+                        // Classify again
+                        me.classifyData(event);
+                    }
+                });
+                this.rangeSlider = slider;
 
-            // HTML for the manual classification method.
-            var manualcls = jQuery(
-                '<div class="manualBreaks">' +
+                // HTML for the manual classification method.
+                var manualcls = jQuery(
+                    '<div class="manualBreaks">' +
                     '<input type="text" name="breaksInput" placeholder="' + this._locale.classify.manualPlaceholder + '"></input>' +
                     '<div class="icon-info"></div>' +
                     '</div>'
-            );
-            manualcls.find('input[type=button]').click(function (event) {
-                me._createColorDialog();
-            });
-            manualcls.find('input[name=breaksInput]').keypress(function (evt) {
-                // FIXME use ===
-                if (evt.which == 13) {
-                    me.classifyData();
-                }
-            }).focus(function () {
-                me._sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
-            }).blur(function () {
-                me._sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
-            });
-            manualcls.find('.icon-info').click(function (event) {
-                // open helpityhelp...
-                var desc =
-                    '<p>' + me._locale.classify.info + '</p>';
-                me.showMessage(me._locale.classify.infoTitle, desc);
-            });
-            manualcls.hide();
+                );
+                manualcls.find('input[type=button]').click(function (event) {
+                    me._createColorDialog();
+                });
+                manualcls.find('input[name=breaksInput]').keypress(function (evt) {
+                    // FIXME use ===
+                    if (evt.which == 13) {
+                        me._state.manualBreaksInput = me.element.find('.manualBreaks').find('input[name=breaksInput]').val();
+                        me.classifyData();
+                    }
+                }).focus(function () {
+                    me._sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+                }).blur(function () {
+                    me._sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+                });
+                manualcls.find('.icon-info').click(function (event) {
+                    // open helpityhelp...
+                    var desc =
+                        '<p>' + me._locale.classify.info + '</p>';
+                    me.showMessage(me._locale.classify.infoTitle, desc);
+                });
+                manualcls.hide();
 
-            // Classification mode selector
-            
-            var modeSelector = jQuery(
-                '<div>' +
+                // Classification mode selector
+
+                var modeSelector = jQuery(
+                    '<div>' +
                     this._locale.classify.mode + '<br />' +
                     '<select class="classification-mode"></select><br />' +
-                '</div>'
-            );
-            var modes = ['distinct', 'discontinuous'];
-            jQuery.each(modes, function(i, val) {
-                modeSelector.find('select.classification-mode').append(
-                    '<option value="' + val + '">' +
-                        me._locale.classify.modes[val] +
-                    '</option>'
+                    '</div>'
                 );
-            });
-            modeSelector.find('select.classification-mode').change(function(e) {
-                me.classifyData();
-            });
+                var modes = ['distinct', 'discontinuous'];
+                jQuery.each(modes, function (i, val) {
+                    modeSelector.find('select.classification-mode').append(
+                        '<option value="' + val + '">' +
+                        me._locale.classify.modes[val] +
+                        '</option>'
+                    );
+                });
+                modeSelector.find('select.classification-mode').change(function (e) {
+                    me._state.classificationMode = jQuery(e.target).val();
+                    me.classifyData();
+                });
 
-            // Colours selectors
+                // Colours selectors
 
-            var colorsButton = jQuery('<input type="button" value="' + me._locale.colorset.button + '" />');
-            colorsButton.click(function(event) {
-                me._createColorDialog();
-            });
+                var colorsButton = jQuery('<input type="button" value="' + me._locale.colorset.button + '" />');
+                colorsButton.click(function (event) {
+                    me._createColorDialog();
+                });
 
-            var flipColorsButton = jQuery('<input type="button" value="' + me._locale.colorset.flipButton + '" />');
-            flipColorsButton.click(function(e) {
-                me._flipCurrentColors();
-            });
+                var flipColorsButton = jQuery('<input type="button" value="' + me._locale.colorset.flipButton + '" />');
+                flipColorsButton.click(function (e) {
+                    me._flipCurrentColors();
+                });
 
-            classify.append(classcnt);
-            classify.append(manualcls);
-            classify.append(modeSelector);
-            classify.append(colorsButton);
-            classify.append(flipColorsButton);
+                classifyOptions.append(classcnt);
+                classifyOptions.append(manualcls);
+                classifyOptions.append(modeSelector);
+                classifyOptions.append(colorsButton);
+                classifyOptions.append(flipColorsButton);
+            }
             content.append(classify);
+
+            me._loadStateVariables();
+
             // Toggle content HTML
-            header.click(function() {
+            header.click(function () {
                 content.animate({
-                    height : 'toggle'
+                    height: 'toggle'
                 }, 500);
 
             });
@@ -658,7 +692,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
             // add always as first plugin
             var existingPlugins = parentContainer.find('div');
-            if (!existingPlugins || existingPlugins.length == 0) {
+            if (!existingPlugins || existingPlugins.length === 0) {
                 // no existing plugins -> just put it there
                 parentContainer.append(this.element);
             } else {
@@ -704,7 +738,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         setManualBreaks: function (gstats) {
             var me = this,
                 limits = [],
-                manBreaks = this.element.find('.classificationMethod').find('.manualBreaks').find('input[name=breaksInput]').val().split(','),
+                manBreaks = this._state.manualBreaksInput.split(','),//element.find('.classificationMethod').find('.manualBreaks').find('input[name=breaksInput]').val().split(','),
                 dialog,
                 msg;
 
@@ -978,7 +1012,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
             me.dialog.addClass('tools_selection');
             me.dialog.show(this._locale.colorset.themeselection, me.content, [cancelBtn]);
-            //dialog.moveTo('#toolbar div.toolrow[tbgroup=selectiontools]', 'top');
+            //dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
         },
         /**
          * @method  _createColorTable
@@ -1230,9 +1264,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             var slider = jQuery('#slider-range-max');
             var selectedVal = slider.slider('option', 'value');
 
-            var max = checkedItemsCount < this.maxClassNum ? checkedItemsCount > 2 ? checkedItemsCount : 3 : this.maxClassNum;
-            max--;
-            selectedVal = max > selectedVal ? selectedVal > 2 ? selectedVal : 2 : max;
+            var sliderSettings = this._checkClassCount(checkedItemsCount);
+            var max = sliderSettings.max;
+            var selectedVal = sliderSettings.val;
 
             slider.slider('option', 'min', 2);
             slider.slider('option', 'max', max);
@@ -1246,6 +1280,79 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             }
             jQuery('input#amount_class').val(selectedVal);
             return slider;
+        },
+
+        /**
+         * @method _checkClassCount
+         * @private
+         * 
+         * Check class count and limints.
+         */
+         _checkClassCount: function(checkedItemsCount) {
+            var max = checkedItemsCount < this.maxClassNum ? checkedItemsCount > 2 ? checkedItemsCount : 3 : this.maxClassNum;
+            max--;
+            var selectedVal = max > selectedVal ? selectedVal > 2 ? selectedVal : 2 : max;
+            return {'min' : 2, 'max': max, 'value' : selectedVal}
+        },
+
+        /**
+         * @method _loadStateVariables
+         * @private
+         * 
+         * Set state of classification options to correct one.
+         */
+        _loadStateVariables: function() {
+            var me = this,
+                state = this._state;
+            if (state.colors) {
+                me.currentColorSet  = state.colors.set;
+                me.colorsetIndex    = state.colors.index;
+                me.colorsFlipped    = state.colors.flipped;
+            }
+            // if user is not able to set different classification options
+            // there is no need to set them to state
+            if(me._state.allowClassification !== false){
+                // distinct, discontinuous etc.
+                if (state.classificationMode) {
+                    var modeSelect = me.element.find('.classification-mode');
+                    modeSelect.val(state.classificationMode);
+                }
+                // jenks, quantiles, eq interval, manual breaks
+                if(state.methodId != null && state.methodId > 0) {
+                    var select = me.element.find('.classificationMethod').find('.method');
+                    select.val(state.methodId);
+                    // The manual breaks method:
+                    if(state.methodId == 4 && state.manualBreaksInput) {
+                        var manualInput = me.element.find('.manualBreaks').find('input[name=breaksInput]');
+                        manualInput.val(state.manualBreaksInput);
+                        me.element.find('.classCount').hide();
+                        me.element.find('.manualBreaks').show();
+                    }
+                }
+                // how many different groups there will be
+                if (state.numberOfClasses != null && 
+                    state.numberOfClasses > 0) {
+
+                    var slider = me.rangeSlider;
+                    if (slider != null) {
+                        slider.slider("value", state.numberOfClasses);
+                        slider.parent().find('input#amount_class').val(state.numberOfClasses);
+                    }
+                }
+            }
+        },
+
+        /**
+         * @method showClassificationOptions
+         * 
+         * Show classification options if allowed. 
+         * i.e. draw UI and send request to geostat
+         */
+        showClassificationOptions: function(isAllowed) {
+            this._state.allowClassification = isAllowed;
+            this.resetUI();
+            this.classifyData();
+            this._visibilityOn();
         }
 
     }, {

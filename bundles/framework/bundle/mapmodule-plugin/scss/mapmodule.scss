@@ -32,8 +32,7 @@ div.mapplugins {
                 &.zoombar {
                     margin-top: $pluginMargin;
                     margin-bottom: $pluginMargin;
-                }
-                
+                }                
             }
         }
     }
@@ -260,6 +259,14 @@ div.mapplugins {
                 }
             }
         }
+<<<<<<< HEAD
+=======
+
+        .mapplugin.indexmap .indexmapToggle {
+            float: right;
+        }
+
+>>>>>>> develop
     }
 }
 

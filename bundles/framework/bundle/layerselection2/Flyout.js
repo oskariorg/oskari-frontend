@@ -69,7 +69,7 @@ function(instance) {
 		this.templateLayer = jQuery('<li class="layer selected">' + '<div class="layer-info">' + '<div class="layer-icon"></div>' + '<div class="layer-tool-remove"></div>' + '<div class="layer-title"><h4></h4></div>' + '</div>' + '<div class="stylesel">' + '<label for="style">' + loc['style'] + '</label>' + '<select name="style"></select></div>' + '<div class="layer-tools volatile">' + '</div>' + '</li>');
 
 		// footers are changed based on layer state
-		this.templateLayerFooterTools = jQuery('<div class="left-tools">' + '<div class="layer-visibility">' + '<a href="JavaScript:void(0);">' + loc['hide'] + '</a>' + '&nbsp;' + '<span class="temphidden" ' + 'style="display: none;">' + loc['hidden'] + '</span>' + '</div>' + '<div class="oskariui layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + '<div class="opacity-slider" style="display:inline-block">' + '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + '</div>' + '</div>' + '<div class="right-tools">' + '<div class="layer-rights"></div>' + '<div class="object-data"></div>' + '<div class="layer-description">' + '<div class="icon-info"></div>' + '</div></div>');
+		this.templateLayerFooterTools = jQuery('<div class="right-tools">' + '<div class="layer-rights"></div>' + '<div class="object-data"></div>' + '<div class="layer-description">' + '<div class="icon-info"></div>' + '</div></div>' + '<div class="left-tools">' + '<div class="layer-visibility">' + '<a href="JavaScript:void(0);">' + loc['hide'] + '</a>' + '&nbsp;' + '<span class="temphidden" ' + 'style="display: none;">' + loc['hidden'] + '</span>' + '</div>' + '<div class="oskariui layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + '<div class="opacity-slider" style="display:inline-block">' + '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + '</div>' + '</div>');
 
 		this.templateLayerFooterHidden = jQuery('<p class="layer-msg">' + '<a href="JavaScript:void(0);">' + loc['show'] + '</a> ' + loc['hidden'] + '</p>');
 
@@ -255,6 +255,53 @@ function(instance) {
 			sandbox.request(this.instance.getName(), request);
 		}
 	},
+
+	/**
+	 * @method _createLayerContainer
+	 * @private
+	 * Creates the layer containers
+	 * @param
+	 * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object}
+	 * layer to render
+	 * @return {jQuery} reference to the created layer container
+	 */
+	_updateStyles : function(layer, layerDiv) {
+		var me = this;
+		var sandbox = me.instance.getSandbox();
+
+		var stylesel = layerDiv.find('div.stylesel');
+		stylesel.hide();
+
+		if (layer.getStyles && layer.getStyles().length > 1) {
+			var hasOpts = false;
+			var styles = layer.getStyles();
+			var sel = stylesel.find('select');
+			sel.empty();
+			for (var i = 0; i < styles.length; i++) {
+				if (styles[i].getName()) {
+					var opt = jQuery('<option value="' + styles[i].getName() + '">' + styles[i].getTitle() + '</option>');
+					sel.append(opt);
+					hasOpts = true;
+				}
+			}
+			if(!sel.hasClass("binded")) {
+				sel.change(function(e) {
+					var val = sel.find('option:selected').val();
+					layer.selectStyle(val);
+					var builder = sandbox.getRequestBuilder("ChangeMapLayerStyleRequest");
+					var req = builder(layer.getId(), val);
+					sandbox.request(me.instance.getName(), req);
+				});
+				sel.addClass("binded");
+			}
+			if (hasOpts) {
+				if(layer.getCurrentStyle()) sel.val(layer.getCurrentStyle().getName());
+				sel.trigger("change");
+				stylesel.show();
+			}
+		}
+	},
+
 	/**
 	 * @method _createLayerContainer
 	 * @private
@@ -280,33 +327,7 @@ function(instance) {
 		layerDiv.find('div.layer-title h4').append(layer.getName());
 		layerDiv.find('div.layer-title').append(layer.getDescription());
 
-		var stylesel = layerDiv.find('div.stylesel');
-		stylesel.hide();
-
-		if (layer.getStyles && layer.getStyles().length > 1) {
-			var hasOpts = false;
-			var styles = layer.getStyles();
-			var sel = stylesel.find('select');
-			for (var i = 0; i < styles.length; i++) {
-				if (styles[i].getName()) {
-					var opt = jQuery('<option value="' + styles[i].getName() + '">' + styles[i].getTitle() + '</option>');
-					sel.append(opt);
-					hasOpts = true;
-				}
-			}
-			sel.change(function(e) {
-				var val = sel.find('option:selected').val();
-				layer.selectStyle(val);
-				var reqName = 'ChangeMapLayerStyleRequest';
-				var builder = sandbox.getRequestBuilder(reqName);
-				var req = builder(layer.getId(), val);
-				sandbox.request(me.instance.getName(), req);
-			});
-			if (hasOpts) {
-				if(layer.getCurrentStyle()) sel.val(layer.getCurrentStyle().getName());
-				stylesel.show();
-			}
-		}
+		this._updateStyles(layer, layerDiv);
 
 		// setup icon
 		var tooltips = this.instance.getLocalization('layer').tooltip;
@@ -707,6 +728,7 @@ function(instance) {
 		var me = this;
 		var layerDiv = jQuery(this.container).find('li[layer_id=' + layer.getId() + ']');
 		jQuery(layerDiv).find('.layer-title h4').html(layer.getName());
+		this._updateStyles(layer, layerDiv);
 		var footer = layerDiv.find('div.layer-tools');
 		this._updatePublishPermissionText(layer, footer);
 	},

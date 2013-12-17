@@ -6,25 +6,25 @@
  * directly
  */
 Oskari.clazz.define('Oskari.mapframework.event.common.AfterHideMapMarkerEvent',
-/**
- * @method create called automatically on construction
- * @static
- */
-function() {
-}, {
-    /** @static @property __name event name */
-    __name : "AfterHideMapMarkerEvent",
     /**
-     * @method getName
-     * @return {String} event name
-     */
-    getName : function() {
-        return this.__name;
-    }
-}, {
-    /**
-     * @property {String[]} protocol array of superclasses as {String}
+     * @method create called automatically on construction
      * @static
      */
-    'protocol' : ['Oskari.mapframework.event.Event']
-});
+
+    function () {}, {
+        /** @static @property __name event name */
+        __name: "AfterHideMapMarkerEvent",
+        /**
+         * @method getName
+         * @return {String} event name
+         */
+        getName: function () {
+            return this.__name;
+        }
+    }, {
+        /**
+         * @property {String[]} protocol array of superclasses as {String}
+         * @static
+         */
+        'protocol': ['Oskari.mapframework.event.Event']
+    });

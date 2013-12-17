@@ -20,6 +20,7 @@ function(instance) {
 	this.boundaryLayer = null;
 	this.pointLayer = null;
 	this._map = null;
+    this.geoJson = null;
 
 	// Default style for new parcel polygons in parcel application (parcel view)
 	var smPolygon = new OpenLayers.StyleMap({
@@ -92,15 +93,30 @@ function(instance) {
 	 * @param {String} placeDescription Description of the place.
 	 * @param {Function} cb Requires information about the success as boolean parameter.
 	 */
-	plotParcel : function(feature, placeName, placeDescription, cb) {
-		this._plotNewParcel(feature, placeName, placeDescription, cb);
-		this._plotNewBoundary(feature, cb);
-		cb(true);
-		// Create geojson graphics for print
-		this._createGeoJSON();
-		// Trigger plot dialog
-		this.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'attach', 'Printout'])
-		// $('.tool-print').trigger('click');
+    plotParcel: function (feature, values, cb) {
+
+        this._plotNewParcel(feature, values.name, values.desc, cb);
+        this._plotNewBoundary(feature, cb);
+
+        cb(true);
+        // Create geojson graphics for print
+        var geojsCollection = this._createGeoJSON();
+
+        // Center map to feature
+        this._centerMap2Parcel(feature, values);
+
+        var printParams = this._getPrintParams(values);
+        // Trigger plot dialog
+        // this.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'attach', 'Printout'])
+        // $('.tool-print').trigger('click');
+
+        // Print pdf
+        var eventBuilder = this.instance.sandbox.getEventBuilder('Printout.PrintWithoutUIEvent');
+        if (eventBuilder) {
+            // Send print params and GeoJSON for printing
+            var event = eventBuilder(this.instance.getName(), printParams, geojsCollection);
+            this.instance.sandbox.notifyAll(event);
+        }
 	},
 
 	/**
@@ -170,7 +186,8 @@ function(instance) {
 			var features = [feature];
 			this.parcelLayer.addFeatures(features);
 			// Remove orig graphics
-			drawplug.drawLayer.removeAllFeatures();
+			// drawplug.drawLayer.removeAllFeatures();
+            drawplug.drawLayer.setVisibility(false);
 			this.parcelLayer.redraw();
 
 		}
@@ -284,8 +301,10 @@ function(instance) {
 			}
 		}
 		// Remove orig graphics
-		drawplug.getEditLayer().removeAllFeatures();
-		drawplug.getMarkerLayer().clearMarkers();
+		//drawplug.getEditLayer().removeAllFeatures();
+		//drawplug.getMarkerLayer().clearMarkers();
+        drawplug.getEditLayer().setVisibility(false);
+        drawplug.getMarkerLayer().setVisibility(false);
 	},
 	/**
 	 /**
@@ -371,13 +390,7 @@ function(instance) {
 		geojs.styles.push(this._getDefaultStyle(this.pointLayer.styleMap));
 		geojsCollection.push(geojs);
 
-		// Send the GeoJSON to printout bundle.
-		var eventBuilder = this.instance.sandbox.getEventBuilder('Printout.PrintableContentEvent');
-		if (eventBuilder) {
-			// Send no layer or tile data, just the GeoJSON.
-			var event = eventBuilder(this.instance.getName(), null, null, geojsCollection);
-			this.instance.sandbox.notifyAll(event);
-		}
+		return geojsCollection;
 	},
 	/**
 	 * @method _getDefaultStyle
@@ -399,6 +412,58 @@ function(instance) {
 		printStyle.styleMap["default"] = this._cleanStyle(style, ['labelXOffset', 'labelYOffset']);
 		return printStyle;
 	},
+        /**
+         *  Get / define plot attributes
+         * @param values new part parcel and plot attributes
+         * @private
+         */
+        _getPrintParams: function (values) {
+
+            var sandbox = this.instance.getSandbox();
+
+            var maplinkArgs = sandbox.generateMapLinkParameters();
+
+            var selections = {
+                pageTitle: "Määräalakartta / Emäkiinteistö: "+ values.parent_property_id,
+                pageSize: values.size,
+                maplinkArgs: maplinkArgs,
+                format: "application/pdf",
+                pageDate: true,
+                pageLogo: true,
+                pageScale: true,
+                saveFile: values.name
+            };
+
+            return selections;
+
+        },
+        _setEditsVisible : function() {
+            var drawplug = this.instance.getDrawPlugin();
+            drawplug.drawLayer.setVisibility(true);
+            drawplug.getEditLayer().setVisibility(true);
+            drawplug.getMarkerLayer().setVisibility(true);
+
+        },
+        /**
+         *  Center map middle point to parcel bbox middle point and set page orientation
+         * @param feature Parcel feature
+         * @param values new part parcel and plot attributes
+         * @private
+         */
+        _centerMap2Parcel: function (feature, values) {
+            var size = "A4";
+            if (feature && feature.geometry && feature.geometry.bounds) {
+                var mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule');
+                var mywidth = feature.geometry.bounds.right - feature.geometry.bounds.left;
+                var myheight = feature.geometry.bounds.top - feature.geometry.bounds.bottom;
+                var mycx = (feature.geometry.bounds.right + feature.geometry.bounds.left) / 2.0;
+                var mycy = (feature.geometry.bounds.top + feature.geometry.bounds.bottom) / 2.0;
+                var myCenter = new OpenLayers.LonLat(mycx, mycy);
+                mapModule.centerMap(myCenter, mapModule.getMap().getZoom());
+                if (mywidth > myheight) size = "A4_Landscape";
+            }
+            values["size"] = size;
+        },
 	/**
 	 * @method _cleanStyle
 	 * remove given parameters out of style

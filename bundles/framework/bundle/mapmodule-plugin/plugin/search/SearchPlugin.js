@@ -76,11 +76,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             me.template = jQuery(
                 '<div class="mapplugin search">' +
                     '<div class="search-textarea-and-button">' +
+                   
                     '<input placeholder="' + me.loc.placeholder + '" type="text" />' +
-                    '<input type="button" value="' + me.loc.search + '" name="search" />' +
+            
+                   '<input type="button" value="' + me.loc.search + '" name="search" />' +
                     '</div>' +
                     '<div class="results">' +
-                    '<div class="header">' +
+                    '<div class="header">' + 
                     '<div class="close icon-close" title="' + me.loc.close + '"></div>' +
                     '</div>' +
                     '<div class="content">&nbsp;</div>' +
@@ -267,7 +269,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             var me = this,
                 sandbox = me._sandbox,
                 content,
-                containerClasses = 'top right',
+                containerClasses = 'top left',
                 position = 1;
 
             if (this.conf && this.conf.toolStyle) {
@@ -311,6 +313,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             content.find('div.close').click(function (event) {
                 if(!me.isInLayerToolsEditMode){
                     me._hideSearch();
+                     inputField.val('');
                     // TODO: this should also unbind the TR tag click listeners?
                 }
             });
@@ -517,7 +520,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * Hides the search result and sends out Oskari.mapframework.request.common.HideMapMarkerRequest
          */
         _hideSearch: function () {
-
             this.element.find('div.results').hide();
             // Send hide marker request
             this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('HideMapMarkerRequest')());
@@ -538,7 +540,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             }
 
             // Remove the old unstyled search box and create a new one.
-            if (div.hasClass('search-div')) {
+            if (div.hasClass('mapplugin search')) {
                 div.remove();
                 this._createUI();
                 return;

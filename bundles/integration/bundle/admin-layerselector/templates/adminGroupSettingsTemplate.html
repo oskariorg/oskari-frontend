@@ -10,7 +10,7 @@
             </div>
             <div  class="add-class-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-group-<%= locale.lang %>-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].placeholder : instance.getLocalization('admin')['generic'].placeholder.replace('{0}', locale.lang) %>"  <% if(locale != null  && locale.name != null) { %>value="<%= locale.name %>"  <% } %> />
+                    <input type="text" id="add-group-<%= locale.lang %>-name" class="add-class-input mid" placeholder="<%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].placeholder : instance.getLocalization('admin')['generic'].placeholder.replace('{0}', locale.lang) %>"  <% if(locale != null  && locale.name != null) { %>value="<%= locale.name %>"  <% } %> />
                     <div class="icon-close"></div>
                 </div>
             </div>
@@ -31,12 +31,12 @@
         <!-- roles -->
         <div class="add-class-record">
             <div class="add-class-label-area">
-                <label for="add-class-en-name" class="add-class-label" title="<%= instance.getLocalization('admin').roles_for_admin %>"><%= instance.getLocalization('admin').viewingRightsRoles %></label>
+                <label for="" class="add-class-label" title="<%= instance.getLocalization('admin').roles_for_admin %>"><%= instance.getLocalization('admin').viewingRightsRoles %></label>
             </div>
-            <div class="add-class-input-area">
+            <div class="add-class-input-area adjacent">
                  <% for(var i = 0; i < roles.length; i++) { %>
                  <div class="input-controls">
-                    <%= roles[i].name %> <input type="checkbox" class="add-class-input layer-view-role" data-role-id="<%= roles[i].id %>" placeholder="placeholder"  value="<%= roles[i].id %>" />
+                    <label><%= roles[i].name %> <input type="checkbox" class="add-class-input layer-view-role" data-role-id="<%= roles[i].id %>" placeholder="placeholder"  value="<%= roles[i].id %>" /></label>
                  </div>
                 <% } %>
             </div>
@@ -46,7 +46,7 @@
         <div class="add-group-send">
             <div class="add-class-button-area">
                 <div class="input-controls">
-                    <button class="add-class-btn admin-add-group-ok" title="<%= instance.getLocalization('admin').addNewOrganization %>"><%= instance.getLocalization('add') %></button>
+                    <button class="add-class-btn admin-add-group-ok" title="<%= groupTitle === 'baseName' ? instance.getLocalization('admin').addNewBaseLayer : instance.getLocalization('admin').addNewGroupLayer %>"><%= instance.getLocalization('add') %></button>
                     <button class="add-class-btn admin-remove-group" <% if(model != null && model.id != null) { %> data-id="<%= model.id %>" <% } %> <% if(model != null && model.parentid != null) { %> data-parent-id="<%= model.parentid %>" <% } %> title="<%= instance.getLocalization('delete') %>"><%= instance.getLocalization('delete') %></button>
                     <button class="add-class-btn admin-add-group-cancel" title="<%= instance.getLocalization('cancel') %>"><%= instance.getLocalization('cancel') %></button>
                 </div>

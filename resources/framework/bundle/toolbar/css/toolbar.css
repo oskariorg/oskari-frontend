@@ -1,7 +1,6 @@
 #toolbar {
   margin-top: 30px;
-  width: 100%;
-  height: 160px; }
+  width: 100%; }
 
 #toolbar div.toolrow {
   border-top: 1px solid;
@@ -51,7 +50,7 @@
 
 .oskariui-menutoolbar-modetitle {
   display: inline-block;
-  width: 250px; }
+  width: 300px; }
 
 .oskariui-menutoolbar .oskariui-menutoolbar-closebox {
   position: absolute;

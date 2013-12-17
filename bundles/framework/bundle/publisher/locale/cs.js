@@ -60,7 +60,10 @@ Oskari.registerLocalization({
                 "label": "Tool layout",
                 "tooltip": "Choose a layout for the tools shown on the map",
                 "lefthanded": "Lefthanded",
-                "righthanded": "Righthanded"
+                "righthanded": "Righthanded",
+                "userlayout": "Move tools",
+                "usereditmode": "Switch edit mode on",
+                "usereditmodeoff": "Switch edit mode off"
             },
             "data": {
                 "label": "Statistics",
@@ -152,6 +155,6 @@ Oskari.registerLocalization({
                     "tooltip": "Mapová vrstva může být publikována ve vloženém mapovém okně a počet uživatelů za týden může být omezen."
                 }
             }
-        }        
+        }
     }
 });

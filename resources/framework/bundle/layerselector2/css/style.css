@@ -118,6 +118,7 @@ div.layerselector2 div.layer div.backendstatus-maintenance {
 div.layerselector2 div.layer div.backendstatus-ok {
   height: 20px !important;
   margin-bottom: 2px;
+  margin-top: -2px;
   cursor: pointer; }
 
 div.layerselector2 div.layer div.backendstatus-unknown {

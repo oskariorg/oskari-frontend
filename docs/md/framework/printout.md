@@ -83,6 +83,8 @@ No statehandling has been implemented.
   </tr>
   <tr>
     <td>MapLayerVisibilityChangedEvent</td><td>Refresh printable map if event received</td>
+    <td>PrintableContentEvent</td><td>Set data for print legend, etc</td>
+    <td>PrintWithoutUIEvent</td>Print pdf/png with predefined params without UI</td>
   </tr>
 </table>
 

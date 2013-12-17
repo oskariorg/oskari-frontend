@@ -6,37 +6,6 @@ Oskari.registerLocalization({
     "desc": "Mis datos",
     "notLoggedIn": "En Mis datos, puede guardar vistas y navegar por los mapas que haya incorporado en otros portales web. <a href='/web/en/login'>Acceder</a>.",
     "tabs": {
-      "myplaces": {
-        "title": "Sitios",
-        "nocategories": "Todavía no ha guardado los sitios.",
-        "publishCategory": {
-            "privateTooltip": "La capa es privada. Pulse en la capa para publicarla.",
-            "publicTooltip": "La capa es pública. Pulse en la capa para despublicarla."
-        },
-        "editCategory": "Editar capa",
-        "deleteCategory": "Borrar capa",
-        "edit": "Editar",
-        "delete": "Borrar",
-        "grid": {
-          "name": "Nombre",
-          "desc": "Descripción",
-          "createDate": "Creada",
-          "updateDate": "Actualizada",
-          "edit": " ",
-          "delete": " "
-        },
-        "notification": {
-          "delete": {
-            "title": "Borrar sitio",
-            "confirm": "¿Desea borrar este sitio?",
-            "btnDelete": "Borrar",
-            "btnCancel": "Cancelar",
-            "success": "Se ha borrado el sitio.",
-            "error": "El sitio no puede borrarse. Por favor, inténtelo más tarde.",
-            "cancel": "No se ha borrado el objeto."
-          }
-        }
-      },
       "myviews": {
         "title": "Mis vistas",
         "edit": "Editar",

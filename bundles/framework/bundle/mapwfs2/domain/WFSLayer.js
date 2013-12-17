@@ -20,6 +20,10 @@ function() {
     this._clickedFeatureIds = []; // clicked feature ids (map)
     this._clickedFeatureListIds = []; // clicked feature ids (list)
     this._propertyTypes = {}; // name and describeFeatureType type (hashmap, json)
+    this._styles = []; /* Array of styles that this layer supports */
+    this._customStyle = null;
+
+    this.localization = Oskari.getLocalization('MapWfs2');
 }, {
    /* Layer type specific functions */
 
@@ -150,7 +154,8 @@ function() {
     setClickedFeatureListIds : function(ids) {
         this._clickedFeatureListIds = ids;
     },
-      /**
+
+    /**
      * @method setPropertyTypes
      * @param {json} propertyTypes
      */
@@ -174,7 +179,40 @@ function() {
      */
     getLegendImage : function() {
         return null;
-    }
+    },
+
+    /**
+     * @method setCustomStyle
+     * @param {json} customStyle
+     */
+    setCustomStyle : function(customStyle) {
+        this._customStyle = customStyle;
+    },
+
+    /**
+     * @method getCustomStyle
+     * @return {json} customStyle
+     */
+    getCustomStyle : function() {
+        return this._customStyle;
+    },
+
+    /**
+     * @method getStyles
+     * @return {Oskari.mapframework.domain.Style[]}
+     * Gets layer styles
+     */
+    getStyles : function() {
+        if(this.getCustomStyle()) {
+            var locOwnStyle = this.localization['own-style'];
+            var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
+            style.setName("oskari_custom");
+            style.setTitle(locOwnStyle);
+            style.setLegend("");
+            return this._styles.concat([style]);
+        }
+        return this._styles;
+    },
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]
 });

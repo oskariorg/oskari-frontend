@@ -11,6 +11,19 @@ Oskari.registerLocalization({
 			"title": "Patio",
 			"message": "patiopoc"
 		},
+		"tab": {
+			"title": "Indikaattorit",
+			"grid": {
+				"name": "Otsikko",
+				"description": "Kuvaus"
+			},
+			"newIndicator": "Uusi indikaattori",
+			"error": {
+				"title": "Virhe",
+				"indicatorsError": "Virhe indikaattorien latauksessa. Yritä myöhemmin uudelleen",
+				"indicatorError": "Virhe indikaattorin latauksessa. Yritä myöhemmin uudelleen"
+			}
+		},
 		"gender": "Sukupuoli",
 		"genders": {
 			"male": "miehet",
@@ -20,6 +33,7 @@ Oskari.registerLocalization({
 		"addColumn": "Hae data",
 		"removeColumn": "Poista",
 		"indicators": "Indikaattorit",
+		"cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voi näyttää taulukossa.",
 		"year": "Vuosi",
 		"buttons": {
 			"ok": "OK",
@@ -73,6 +87,7 @@ Oskari.registerLocalization({
 
 		},
 		"statistic": {
+			"title": "Tilastomuuttujat",
 			"avg": "Keskiarvo",
 			"max": "Suurin arvo",
 			"mde": "Moodi",
@@ -82,6 +97,7 @@ Oskari.registerLocalization({
 			"sum": "Yhteensä"
 		},
 		"values": "arvoa",
+		"included": "Arvot",
 		"municipality": "Kunnat",
 		"not_included": "Poistettu laskuista",
 		"selectRows": "Valitse rivit",
@@ -89,17 +105,61 @@ Oskari.registerLocalization({
 		"showSelected": "Näytä vain valitut alueet taulukossa",
 		"noMatch": "Indikaattoria ei löytynyt",
 		"selectIndicator": "Valitse indikaattori",
-		"filterTitle": "Suodata sarakkeen arvoja",
-		"indicatorFilterDesc": "Suodattamalla halutut tilastoyksiköt korostuvat taulukossa. Voit asettaa suodatuksen jokaiselle sarakkeelle erikseen.",
-		"filterIndicator": "Muuttuja:",
-		"filterCondition": "Ehto:",
-		"filterSelectCondition": "Valitse ehto",
-		"filterGT": "Suurempi (>)",
-		"filterGTOE": "Suurempi tai yhtäsuuri (>=)",
-		"filterE": "Yhtäsuuri (=)",
-		"filterLTOE": "Pienempi tai yhtäsuuri (<=)",
-		"filterLT": "Pienempi (<)",
-		"filterBetween": "Arvoväli",
-		"filter": "Suodata"
+		"filterTitle" 			: "Suodata sarakkeen arvoja",
+		"indicatorFilterDesc" 	: "Suodattamalla halutut tilastoyksiköt korostuvat taulukossa. Voit asettaa suodatuksen jokaiselle sarakkeelle erikseen.",
+		"filterIndicator" 		: "Muuttuja:",
+		"filterCondition"		: "Ehto:",
+		"filterSelectCondition" : "Valitse ehto",
+		"filterGT" 				: "Suurempi (>)",
+		"filterGTOE" 			: "Suurempi tai yhtäsuuri (>=)",
+		"filterE" 				: "Yhtäsuuri (=)",
+		"filterLTOE" 			: "Pienempi tai yhtäsuuri (<=)",
+		"filterLT" 				: "Pienempi (<)",
+		"filterBetween" 		: "Arvoväli",
+		"filter" 				: "Suodata",
+		"filterByValue" 		: "Arvoilla",
+		"filterByRegion" 		: "Alueilla",
+
+		"selectRegionCategory" 	: "Aluejako:",
+		"regionCatPlaceholder"	: "Valitse aluejako",
+		"selectRegion"			: "Alue:",
+		"chosenRegionText" 		: "Valitse alueita",
+		"noRegionFound"			: "Aluetta ei löytynyt",
+		"regionCategories"      : {
+			"title"					: "Aluejaot",
+			"KUNTA"					: "Kunta",
+		    "ALUEHALLINTOVIRASTO" 	: "Aluehallintovirasto",
+		    "MAAKUNTA" 				: "Maakunta",
+		    "NUTS1" 				: "Manner-Suomi ja Ahvenanmaa",
+		    "SAIRAANHOITOPIIRI" 	: "Sairaanhoitopiiri",
+		    "SEUTUKUNTA" 			: "Seutukunta",
+		    "SUURALUE" 				: "Suuralue"
+		},
+		"addDataButton" 			: "Lisää oma",
+		"addDataTitle" 				: "Lisää oma indikaattori",
+        "openImportDialogTip"		: "Tuo arvot leikepöydältä.",
+		"openImportDataButton" 		: "Tuo arvot",
+		"addDataMetaTitle" 			: "Otsikko",
+		"addDataMetaTitlePH" 		: "Indikaattorin otsikko",
+		"addDataMetaSources" 		: "Lähde",
+		"addDataMetaSourcesPH" 		: "Datan lähdeviittaus",
+		"addDataMetaDescription" 	: "Kuvaus",
+		"addDataMetaDescriptionPH" 	: "Kuvaus",
+		"addDataMetaReferenceLayer" : "Aineisto",
+		"addDataMetaYear" 			: "Vuosi",
+		"addDataMetaYearPH" 		: "Data on vuodelta",
+		"addDataMetaPublicity" 		: "Julkaistavissa",
+		"municipalityHeader" 		: "Kunnat",
+		"municipalityPlaceHolder"	: "Anna arvo",
+		"formCancel" 				: "Peruuta",
+		"formSubmit" 				: "Tallenna",
+		"cancelButton" 				: "Peruuta",
+		"importDataButton" 			: "Tallenna arvot",
+		"popupTitle" 				: "Tuo arvot",
+		"importDataDescription" 	: "Voit tuoda kunta - arvo -pareja kopioimalla ne tekstikenttään. <br>Jokainen kunta omalle rivilleen ja erottimeksi käy tabulaattori, kaksoispiste ja pilkku.<br>Esimerkki 1: Alajärvi, 1234<br>Esimerkki 2: 009	2100",
+        "failedSubmit"              : "Lisää indikaattorin metatiedot: ",
+        "connectionProblem"         : "Dataa ei voitu tallentaa yhteysongelman takia.",
+        "parsedDataInfo"            : "Tuotuja alueita oli yhteensä",
+        "parsedDataUnrecognized"    : "Tunnistamattomia alueita"
 	}
 });

@@ -137,7 +137,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var sb = sandbox ? sandbox : this._sandbox;
 
             for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
+                if (me.eventHandlers.hasOwnProperty(p) && sb) {
                     sb.unregisterFromEventByName(me, p);
                 }
             }
@@ -401,7 +401,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             input.remove();
             input = this.templates.checkbox.clone();
             input.attr('value', layer.getId());
-            if(isActive){
+            if (isActive) {
                 input.attr('checked', 'checked');
             }
             this._bindCheckbox(input, layer);
@@ -443,7 +443,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             for (i = 0; i < values.baseLayers.length; i += 1) {
                 layerId = values.baseLayers[i];
                 layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-                if(layer != null) {
+                if (layer !== null && layer !== undefined) {
                     // Numeric layer IDs are Numbers for some reason...
                     me._setLayerVisible(layer, (values.defaultBaseLayer + '' === layerId + ''));
                 }
@@ -546,7 +546,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         _createUI: function () {
             var me = this,
-                containerClasses = 'top right',
+                containerClasses = 'top left',
                 position = 3;
 
             if (!me.element) {

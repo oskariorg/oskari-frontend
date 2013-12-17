@@ -116,6 +116,18 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             "src" : "../../../../bundles/framework/bundle/divmanazer/component/ProgressSpinner.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/component/VisualizationForm.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/component/visualization-form/AreaForm.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/component/visualization-form/LineForm.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/component/visualization-form/PointForm.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultTile.js"
         }, {
             "type" : "text/javascript",
@@ -129,18 +141,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultLayout.js"
-        },  {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedTile.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedFlyout.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedExtension.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedView.js"
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/divmanazer/css/divman.css"
@@ -176,11 +176,42 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             "src" : "../../../../resources/framework/bundle/divmanazer/css/overlay.css"
         }, {
             "type" : "text/css",
+            "src" : "../../../../resources/framework/bundle/divmanazer/css/visualizationform.css"
+        }, {
+            "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/divmanazer/css/popover.css"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/raphaeljs/raphael.min.js"
         }/*, {
          "type" : "text/javascript",
          "src" : "../../../../resources/framework/bundle/divmanazer/js/jquery.event.drag-1.5.min.js"
-         }*/]
+         }*/],
+        "locales" : [{
+            "lang" : "fi",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/locale/fi.js"
+        }, {
+            "lang" : "sv",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/locale/sv.js"
+        }, {
+            "lang" : "en",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/locale/en.js"
+        }, {
+            "lang" : "cs",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/locale/cs.js"
+        }, {
+            "lang" : "de",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/locale/de.js"
+        }, {
+            "lang" : "es",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/locale/es.js"
+        }]
     },
     "bundle" : {
         /**

@@ -146,6 +146,8 @@ div.mapplugins {
           margin-top: 10px;
           margin-right: 10px;
           margin-left: 10px; }
+    div.mapplugins.right .mapplugin.indexmap .indexmapToggle {
+      float: right; }
 
 .oskari-publisher-font-arial {
   font-family: Arial, sans-serif !important; }

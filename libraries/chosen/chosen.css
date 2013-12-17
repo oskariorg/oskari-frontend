@@ -119,6 +119,9 @@
   -moz-background-clip   : padding;
   -webkit-background-clip: padding-box;
   background-clip        : padding-box;
+  margin-top: 0px;
+  border-top: 1px solid #ccc;
+  border-top-right-radius: 4px;
 }
 /* @end */
 
@@ -336,6 +339,8 @@
   -moz-border-radius-bottomright: 0;
   border-bottom-left-radius : 0;
   border-bottom-right-radius: 0;
+  border-bottom: 1px solid #fff;
+  z-index: 1012;
 }
 .chzn-container-active .chzn-single-with-drop div {
   background: transparent;

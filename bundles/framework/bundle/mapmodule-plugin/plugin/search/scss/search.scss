@@ -65,15 +65,15 @@ table.search-results th {
     z-index: 10001;
 }
 */
-div.published-search {
+div.published-search-div {
   position: relative; }
 
-div.published-search div.search-area-div {
+div.published-search-div div.search-area-div {
   min-width: 180px;
   display: block;
   float: right; }
 
-div.published-search div.search-area-div div.search-left, div.published-search div.search-area-div div.search-middle, div.published-search div.search-area-div div.search-right {
+div.published-search-div div.search-area-div div.search-left, div.published-search-div div.search-area-div div.search-middle, div.published-search-div div.search-area-div div.search-right {
   display: inline-block;
   float: left;
   height: 38px; }
@@ -81,10 +81,10 @@ div.published-search div.search-area-div div.search-left, div.published-search d
 div.published-search-div div.search-area-div div.search-middle {
   min-width: 180px; }
 
-div.published-search div.search-area-div div.search-right {
+div.published-search-div div.search-area-div div.search-right {
   cursor: pointer; }
 
-div.published-search div.search-area-div input.search-input {
+div.published-search-div div.search-area-div input.search-input {
   background-color: transparent;
   border: none;
   box-shadow: none;
@@ -94,7 +94,7 @@ div.published-search div.search-area-div input.search-input {
   padding: 8px 0px 8px 0px;
   outline: none; }
 
-div.published-search div.published-search-results {
+div.published-search-div div.published-search-results {
   width: 316px;
   max-height: 320px;
   clear: both;
@@ -107,18 +107,18 @@ div.published-search div.published-search-results {
   background-color: #FFFFFF;
   border: 1px solid black; }
 
-div.published-search div.published-search-results table.search-results {
+div.published-search-div div.published-search-results table.search-results {
   float: left;
   width: 316px;
   margin: 0 0 10px 0; }
-div.published-search div.published-search-results table.search-results thead {
+div.published-search-div div.published-search-results table.search-results thead {
   float: left;
 }
-div.published-search div.published-search-results table.search-results thead tr {
+div.published-search-div div.published-search-results table.search-results thead tr {
   display: block;
 }
 
-div.published-search div.published-search-results table.search-results tbody {
+div.published-search-div div.published-search-results table.search-results tbody {
   overflow: hidden;
   overflow-y: auto;
   float: left;
@@ -128,54 +128,54 @@ div.published-search div.published-search-results table.search-results tbody {
   min-height: 30px;
 }
 
-div.published-search div.published-search-results table.search-results thead tr th {
+div.published-search-div div.published-search-results table.search-results thead tr th {
   padding: 5px;
   background-color: #efefef;
   width: 110px;
 }
-div.published-search div.published-search-results table.search-results thead tr th + th {
+div.published-search-div div.published-search-results table.search-results thead tr th + th {
   width: 70px;
 }
-div.published-search div.published-search-results table.search-results thead tr th + th + th {
+div.published-search-div div.published-search-results table.search-results thead tr th + th + th {
   width: 106px;
 }
-div.published-search .oskari-publisher-search-results-rounded-dark div.published-search-results table.search-results thead tr th:first-child,
-div.published-search .oskari-publisher-search-results-rounded-light div.published-search-results table.search-results thead tr th:first-child {
+div.published-search-div .oskari-publisher-search-results-rounded-dark div.published-search-results table.search-results thead tr th:first-child,
+div.published-search-div .oskari-publisher-search-results-rounded-light div.published-search-results table.search-results thead tr th:first-child {
   border-radius: 15px 0 0 0;
   -moz-border-radius: 15px 0 0 0;
   -webkit-border-radius: 15px 0 0 0;
 }
-div.published-search .oskari-publisher-search-results-rounded-dark div.published-search-results table.search-results thead tr th:last-child,
-div.published-search .oskari-publisher-search-results-rounded-light div.published-search-results table.search-results thead tr th:last-child {
+div.published-search-div .oskari-publisher-search-results-rounded-dark div.published-search-results table.search-results thead tr th:last-child,
+div.published-search-div .oskari-publisher-search-results-rounded-light div.published-search-results table.search-results thead tr th:last-child {
   border-radius: 0 15px 0 0;
   -moz-border-radius: 0 15px 0 0;
   -webkit-border-radius: 0 15px 0 0;
 }
-div.published-search .oskari-publisher-search-results-sharp-dark div.published-search-results table.search-results thead tr th:first-child,
-div.published-search .oskari-publisher-search-results-sharp-light div.published-search-results table.search-results thead tr th:first-child {
+div.published-search-div .oskari-publisher-search-results-sharp-dark div.published-search-results table.search-results thead tr th:first-child,
+div.published-search-div .oskari-publisher-search-results-sharp-light div.published-search-results table.search-results thead tr th:first-child {
   border-radius: 0;
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
 }
-div.published-search .oskari-publisher-search-results-sharp-dark div.published-search-results table.search-results thead tr th:last-child,
-div.published-search .oskari-publisher-search-results-sharp-light div.published-search-results table.search-results thead tr th:last-child {
+div.published-search-div .oskari-publisher-search-results-sharp-dark div.published-search-results table.search-results thead tr th:last-child,
+div.published-search-div .oskari-publisher-search-results-sharp-light div.published-search-results table.search-results thead tr th:last-child {
   border-radius: 0;
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
 }
-div.published-search .oskari-publisher-search-results-3d-dark div.published-search-results table.search-results thead tr th:first-child,
-div.published-search .oskari-publisher-search-results-3d-light div.published-search-results table.search-results thead tr th:first-child {
+div.published-search-div .oskari-publisher-search-results-3d-dark div.published-search-results table.search-results thead tr th:first-child,
+div.published-search-div .oskari-publisher-search-results-3d-light div.published-search-results table.search-results thead tr th:first-child {
   border-radius: 3px 0 0 0;
   -moz-border-radius: 3px 0 0 0;
   -webkit-border-radius: 3px 0 0 0;
 }
-div.published-search .oskari-publisher-search-results-3d-dark div.published-search-results table.search-results thead tr th:last-child,
-div.published-search .oskari-publisher-search-results-3d-light div.published-search-results table.search-results thead tr th:last-child {
+div.published-search-div .oskari-publisher-search-results-3d-dark div.published-search-results table.search-results thead tr th:last-child,
+div.published-search-div .oskari-publisher-search-results-3d-light div.published-search-results table.search-results thead tr th:last-child {
   border-radius: 0 3px 0 0;
   -moz-border-radius: 0 3px 0 0;
   -webkit-border-radius: 0 3px 0 0;
 }
-div.published-search div.published-search-results table.search-results tbody td {
+div.published-search-div div.published-search-results table.search-results tbody td {
   display: inline-block;
   overflow: hidden;
   padding: 2px 0 2px 5px;
@@ -183,53 +183,53 @@ div.published-search div.published-search-results table.search-results tbody td 
   max-width: 115px;
   width: 115px;
 }
-div.published-search div.published-search-results table.search-results tbody td + td {
+div.published-search-div div.published-search-results table.search-results tbody td + td {
   max-width: 75px;
   width: 75px;
 }
-div.published-search div.published-search-results table.search-results tbody td + td + td {
+div.published-search-div div.published-search-results table.search-results tbody td + td + td {
   max-width: 95px;
   width: 95px;
 }
 
-div.published-search .oskari-publisher-search-results-rounded-dark, div.published-search .oskari-publisher-search-results-rounded-light {
+div.published-search-div .oskari-publisher-search-results-rounded-dark, div.published-search-div .oskari-publisher-search-results-rounded-light {
   border-radius: 15px;
   -moz-border-radius: 15px;
   -webkit-border-radius: 15px; }
 
-div.published-search .oskari-publisher-search-results-sharp-dark, div.published-search .oskari-publisher-search-results-sharp-light {
+div.published-search-div .oskari-publisher-search-results-sharp-dark, div.published-search-div .oskari-publisher-search-results-sharp-light {
   border-radius: 0px;
   -moz-border-radius: 0px;
   -webkit-border-radius: 0px; }
 
-div.published-search .oskari-publisher-search-results-3d-dark, div.published-search .oskari-publisher-search-results-3d-light {
+div.published-search-div .oskari-publisher-search-results-3d-dark, div.published-search-div .oskari-publisher-search-results-3d-light {
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px; }
 
-div.published-search div.search-middle div.close-results {
+div.published-search-div div.search-middle div.close-results {
   margin-right: 5px;
   display: inline-block;
   float: right;
   cursor: pointer;
 }
 
-div.published-search .oskari-publisher-search-results-rounded-dark, div.published-search .oskari-publisher-search-results-rounded-light {
+div.published-search-div .oskari-publisher-search-results-rounded-dark, div.published-search-div .oskari-publisher-search-results-rounded-light {
   border-radius: 15px;
   -moz-border-radius: 15px;
   -webkit-border-radius: 15px; }
 
-div.published-search .oskari-publisher-search-results-sharp-dark, div.published-search .oskari-publisher-search-results-sharp-light {
+div.published-search-div .oskari-publisher-search-results-sharp-dark, div.published-search-div .oskari-publisher-search-results-sharp-light {
   border-radius: 0px;
   -moz-border-radius: 0px;
   -webkit-border-radius: 0px; }
 
-div.published-search .oskari-publisher-search-results-3d-dark, div.published-search .oskari-publisher-search-results-3d-light {
+div.published-search-div .oskari-publisher-search-results-3d-dark, div.published-search-div .oskari-publisher-search-results-3d-light {
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px; }
 
-div.published-search div.search-middle div.close-results {
+div.published-search-div div.search-middle div.close-results {
   margin-right: 5px;
   display: inline-block;
   float: right;

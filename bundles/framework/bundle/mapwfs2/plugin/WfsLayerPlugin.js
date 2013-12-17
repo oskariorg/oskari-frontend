@@ -41,6 +41,8 @@ function(config) {
         "connection_not_available" : { limit: 1, count: 0 },
         "connection_broken" : { limit: 1, count: 0 },
     };
+    
+    this.activeHighlightLayers = [];
 
     /* templates */
     this.template = {};
@@ -125,6 +127,8 @@ function(config) {
         // data for tiles - key: layerId + bbox
         this._tileData = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache");
         this._tileDataTemp = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache");
+
+        this._visualizationForm = Oskari.clazz.create("Oskari.userinterface.component.VisualizationForm");
     },
 
     /**
@@ -158,6 +162,12 @@ function(config) {
         for (p in this.eventHandlers) {
             sandbox.registerForEventByName(this, p);
         }
+
+        this.requestHandlers = {
+            showOwnStyleHandler : Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequestHandler', this)
+        };
+
+        sandbox.addRequestHandler('ShowOwnStyleRequest', this.requestHandlers.showOwnStyleHandler);
     },
 
     /**
@@ -210,6 +220,14 @@ function(config) {
      */
     getIO: function() {
         return this._io;
+    },
+
+    /**
+     * @method getVisualizationForm
+     * @return {Object} io
+     */
+    getVisualizationForm: function() {
+        return this._visualizationForm;
     },
 
     /**
@@ -373,13 +391,24 @@ function(config) {
         // update zoomLevel and highlight pictures
         if(this.zoomLevel != zoom) {
             this.zoomLevel = zoom;
+
+
+            // TODO 472: if no connection or the layer is not registered, get highlight with URL
+            for (var x = 0; x < this.activeHighlightLayers.length; ++x) {
+                if(this.getConnection().isLazy() && !this.getConnection().isConnected() || 
+                    !this.getSandbox().findMapLayerFromSelectedMapLayers(this.activeHighlightLayers[x].getId())) {
+                    var srs = this.getSandbox().getMap().getSrsName();
+                    var bbox = this.getSandbox().getMap().getExtent();
+                    var zoom = this.getSandbox().getMap().getZoom();
+                    var fids = this.activeHighlightLayers[x].getClickedFeatureListIds();
+                    this.removeHighlightImages(this.activeHighlightLayers[x]);
+                    this.getHighlightImage(this.activeHighlightLayers[x], srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom, fids);
+                }
+            }
+
             for (var j = 0; j < layers.length; ++j) {
                 if (layers[j].hasFeatureData()) {
-                    // get all feature ids
-                    var fids = layers[j].getClickedFeatureIds().slice(0);
-                    for(var k = 0; k < layers[j].getSelectedFeatures().length; ++k) {
-                        fids.push(layers[j].getSelectedFeatures()[k][0]);
-                    }
+                    var fids = this.getAllFeatureIds(layers[j]);
                     this.removeHighlightImages(layers[j]);
                     this.getIO().highlightMapLayerFeatures(layers[j].getId(), fids, false);
                 }
@@ -450,7 +479,6 @@ function(config) {
      */
     featuresSelectedHandler : function(event) {
         if(event.getMapLayer().hasFeatureData()) {
-            //var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getMapLayer().getId());
             var layer = event.getMapLayer();
             var ids = layer.getClickedFeatureListIds();
             var tmpIds = event.getWfsFeatureIds();
@@ -476,6 +504,16 @@ function(config) {
             // remove highlight image
             if(!event.isKeepSelection()) {
                 this.removeHighlightImages();
+            }
+
+            // TODO 472: if no connection or the layer is not registered, get highlight with URl
+            if(this.getConnection().isLazy() && !this.getConnection().isConnected() || 
+                !this.getSandbox().findMapLayerFromSelectedMapLayers(layer.getId())) {
+                var srs = this.getSandbox().getMap().getSrsName();
+                var bbox = this.getSandbox().getMap().getExtent();
+                var zoom = this.getSandbox().getMap().getZoom();
+                layer.setClickedFeatureListIds(event.getWfsFeatureIds());
+                this.getHighlightImage(layer, srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom, event.getWfsFeatureIds());
             }
 
             this.getIO().highlightMapLayerFeatures(layer.getId(), event.getWfsFeatureIds(), event.isKeepSelection());
@@ -596,6 +634,15 @@ function(config) {
 
         this.getIO().setFilter(event.getGeoJson());
     },
+
+    /**
+     * @method setCustomStyle
+     */
+    setCustomStyle : function(layerId, values) {
+        // convert values to send (copy the values - don't edit the original)
+        this.getIO().setMapLayerCustomStyle(layerId, values);
+    },
+
 
     /**
      * @method clearConnectionErrorTriggers
@@ -1002,17 +1049,17 @@ function(config) {
             var bboxKey = BBOX.join(",");
 
             var style = layer.getCurrentStyle().getName();
-            var tileToUpdate = this._tilesToUpdate.mget(layer.getId(), bboxKey, "");
-                   
+            var tileToUpdate = this._tilesToUpdate.mget(layer.getId(), "", bboxKey);
+            
             // put the data in cache      
             if(!boundaryTile) { // normal case and cached
-                this._tileData.mput(layer.getId(), bboxKey, style, imageUrl);
+                this._tileData.mput(layer.getId(), style, bboxKey, imageUrl);
             } else { // temp cached and redrawn if gotten better
-                var dataForTileTemp = this._tileDataTemp.mget(layer.getId(), bboxKey, style);
+                var dataForTileTemp = this._tileDataTemp.mget(layer.getId(), style, bboxKey);
                 if (dataForTileTemp) {
                     return;
                 }
-                this._tileDataTemp.mput(layer.getId(), bboxKey, style, imageUrl);
+                this._tileDataTemp.mput(layer.getId(), style, bboxKey, imageUrl);
             }
 
             if (tileToUpdate) {
@@ -1055,14 +1102,15 @@ function(config) {
                 
                 var layer = this._plugin.getSandbox().findMapLayerFromSelectedMapLayers(this.layerId);
                 var style = layer.getCurrentStyle().getName();
-                var dataForTile = this._plugin._tileData.mget(this.layerId, bboxKey, style);
+                var dataForTile = this._plugin._tileData.mget(this.layerId, style, bboxKey);
                 if (dataForTile) {
-                     this._plugin._tilesToUpdate.mdel(this.layerId, bboxKey, ""); // remove from drawing
+                     this._plugin._tilesToUpdate.mdel(this.layerId, "", bboxKey); // remove from drawing
                 } else {
                     // temp cache
-                    dataForTile = this._plugin._tileDataTemp.mget(this.layerId, bboxKey, style);
+                    dataForTile = this._plugin._tileDataTemp.mget(this.layerId, style, bboxKey);
 
-                    this._plugin._tilesToUpdate.mput(this.layerId, bboxKey, "", theTile); // put in drawing
+                    this._plugin._tilesToUpdate.mput(this.layerId, "", bboxKey, theTile); // put in drawing
+
                     // DEBUG image (red)
                     //dataForTile = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
                 }
@@ -1113,7 +1161,7 @@ function(config) {
                 var bboxKey = BBOX.join(",");
                 var layer = this._plugin.getSandbox().findMapLayerFromSelectedMapLayers(this.layerId);
                 var style = layer.getCurrentStyle().getName();
-                this._plugin._tilesToUpdate.mput(this.layerId, bboxKey, "", tile);
+                this._plugin._tilesToUpdate.mput(this.layerId, "", bboxKey, tile);
 
                 tile.events.register("beforedraw", this, this.queueTileDraw);
                 return tile;
@@ -1217,10 +1265,10 @@ function(config) {
                     var tile = row[iCol];
 
                     // if failed grid
-                    if(typeof tile.bounds.left == "undefined" ||
-                        typeof tile.bounds.bottom == "undefined" ||
-                        typeof tile.bounds.right == "undefined" ||
-                        typeof tile.bounds.top == "undefined") {
+                    if(typeof tile.bounds.left === "undefined" ||
+                        typeof tile.bounds.bottom === "undefined" ||
+                        typeof tile.bounds.right === "undefined" ||
+                        typeof tile.bounds.top === "undefined") {
                         return null;
                     }
 
@@ -1279,13 +1327,23 @@ function(config) {
         var result = [];
         for(var i = 0; i < grid.bounds.length; i++) {
             var bboxKey = grid.bounds[i].join(",");
-            var dataForTile = this._tileData.mget(layerId, bboxKey, style);
+            var dataForTile = this._tileData.mget(layerId, style, bboxKey);
             if(!dataForTile) {
                 result.push(grid.bounds[i]);
             }
         }
-
         return result;
+    },
+
+    /*
+     * @method deleteTileCache
+     *
+     * @param layerId
+     * @param styleName
+     */
+    deleteTileCache : function(layerId, styleName) {
+        this._tileData.mdel(layerId, styleName);
+        this._tileDataTemp.mdel(layerId, styleName);
     },
 
     /*
@@ -1383,7 +1441,68 @@ function(config) {
         dialog.addClass("error_handling");
         dialog.show(popupLoc, content, [okBtn]);
         dialog.fadeout(5000);
-    }
+    },
+
+    /**
+     * @method getAllFeatureIds
+     *
+     * @param {Object} layer
+     */
+    getAllFeatureIds : function(layer) {
+        var fids = layer.getClickedFeatureIds().slice(0);
+        for(var k = 0; k < layer.getSelectedFeatures().length; ++k) {
+            fids.push(layer.getSelectedFeatures()[k][0]);
+        }
+        return fids;
+    },
+
+    /**
+     * @method getHighlightImage
+     *
+     * @param {Number} layerId
+     * @param {String} srs
+     * @param {Number[]} bbox
+     * @param {Number} zoom
+     * @param {String[]} featureIds
+     *
+     * sends message to /highlight*
+     */
+    getHighlightImage : function(layer, srs, bbox, zoom, featureIds) {
+
+        // helper function for visibleFields
+        var contains = function(a, obj) {
+            for(var i = 0; i < a.length; i++) {
+                if(a[i] == obj)
+                    return true;
+            }
+            return false;
+        }
+
+        if(!contains(this.activeHighlightLayers, layer)) {
+            this.activeHighlightLayers.push(layer);
+        }
+
+        var imageSize = {
+            width : this.getSandbox().getMap().getWidth(), 
+            height : this.getSandbox().getMap().getHeight()
+        };
+
+        var params = "?layerId=" + layer.getId() + 
+            "&session=" + this.getIO().getSessionID() +
+            "&type=" + "highlight" +
+            "&srs=" + srs + 
+            "&bbox=" + bbox.join(",") +
+            "&zoom=" + zoom +
+            "&featureIds=" + featureIds.join(",") +
+            "&width=" + imageSize.width +
+            "&height=" + imageSize.height;
+
+        var imageUrl = this.getIO().getRootURL() + "/image" + params;
+
+        // send as an event forward to WFSPlugin (draws)
+        var event = this.getSandbox().getEventBuilder("WFSImageEvent")(layer, imageUrl, bbox, imageSize, "highlight", false, false);
+        this.getSandbox().notifyAll(event);
+    },
 
 }, {
     "protocol" : [ "Oskari.mapframework.module.Module",

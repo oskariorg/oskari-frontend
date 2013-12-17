@@ -108,7 +108,7 @@ function() {
     /**
      * @method getDrawPlugin
      * Returns reference to the draw plugin
-     * @return {Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin}
+     * @return {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin}
      */
     getDrawPlugin : function() {
         return this.view.drawPlugin;
@@ -134,6 +134,12 @@ function() {
      * implements BundleInstance protocol update method - does nothing atm
      */
     update : function() {
+    },
+     /**
+     * @method init
+     * implements Module protocol init method
+     */
+    init : function() {
     },
     /**
      * @method start
@@ -164,6 +170,8 @@ function() {
             // guest users don't need anything else
             return;
         }
+
+        sandbox.register(me);
         // handles category related logic - syncs categories to my places map layers etc
         this.categoryHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.CategoryHandler', this);
         this.categoryHandler.start();        
@@ -190,6 +198,26 @@ function() {
         sandbox.addRequestHandler('MyPlaces.EditCategoryRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.DeleteCategoryRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.PublishCategoryRequest', this.editRequestHandler);
+       
+        var tabLocalization = this.getLocalization('tab');
+
+        tab = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.MyPlacesTab', this, tabLocalization);
+  
+        tab.initContainer();
+         // binds tab to events
+        if (tab.bindEvents) {
+            tab.bindEvents();
+        }
+
+        var title =  tab.getTitle();
+        var content = tab.getContent();
+   
+        var first = true;
+        var reqName = 'PersonalData.AddTabRequest';
+        var reqBuilder = sandbox.getRequestBuilder(reqName);
+  
+        var req = reqBuilder(title, content, first);
+        sandbox.request(this, req);
     },
     /**
      * @method stop
@@ -200,39 +228,74 @@ function() {
     },
 
     _getCategoryDefaults : function() {
-         var defaults = {
-             name: this.getLocalization('category').defaultName,
-             point: {
-                 shape: 1,
-                 color: "000000",
-                 size: 3
-             },
-             line: {
-                 style: "",
-                 cap: 0,
-                 corner: 0,
-                 width: 1,
-                 color: "3233ff"
-             },
-             area: {
-                 linestyle: "",
-                 linecorner: 0,
-                 linewidth: 1,
-                 linecolor: "000000",
-                 color: "ffde00",
-                 fill: -1
+        var defaults = {
+            name: this.getLocalization('category').defaultName,
+            point: {
+                shape: 1,
+                color: "000000",
+                size: 3
+            },
+            line: {
+                style: "",
+                cap: 0,
+                corner: 0,
+                width: 1,
+                color: "3233ff"
+            },
+            area: {
+                linestyle: "",
+                linecorner: 0,
+                linewidth: 1,
+                linecolor: "000000",
+                color: "ffde00",
+                fill: -1
+            }
+        };
+        if (!this.conf) return defaults;
+        if (!this.conf.defaults) return defaults;
+        for (var prop in defaults) {
+            if(this.conf.defaults[prop]) {
+                defaults[prop] = this.conf.defaults[prop];
+            }
+        }
+        return defaults;
+    },
 
-             }
-         };
-         if (!this.conf) return defaults;
-         if (!this.conf.defaults) return defaults;
-         for (var prop in defaults) {
-             if(this.conf.defaults[prop]) {
-                 defaults[prop] = this.conf.defaults[prop];
-             }
-         }
-         return defaults;
-     },
+    /**
+     * Formats the measurement of the geometry.
+     * Returns a string with the measurement and
+     * an appropriate unit (m/km or m²/km²)
+     * or an empty string for point.
+     *
+     * @method formatMeasurementResult
+     * @param  {OpenLayers.Geometry} geometry
+     * @param  {String} drawMode
+     * @return {String}
+     */
+    formatMeasurementResult: function(geometry, drawMode) {
+        var measurement, unit;
+
+        if (drawMode === 'area') {
+            measurement = (Math.round(100 * geometry.getArea())/100);
+            unit = ' m²';
+            // 1 000 000 m² === 1 km²
+            if (measurement >= 1000000) {
+                measurement = (Math.round(measurement)/1000000);
+                unit = ' km²';
+            }
+        } else if (drawMode === 'line') {
+            measurement = (Math.round(100 * geometry.getLength())/100);
+            unit = ' m';
+            // 1 000 m === 1 km
+            if (measurement >= 1000) {
+                measurement = (Math.round(measurement)/1000);
+                unit = ' km';
+            }
+        } else {
+            return '';
+        }
+        return (measurement + unit).replace('.', ',');
+    },
 
     /**
      * Convert hexadecimal color values to decimal values (255,255,255)

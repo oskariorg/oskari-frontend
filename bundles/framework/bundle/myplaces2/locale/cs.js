@@ -12,6 +12,37 @@ Oskari.registerLocalization({
     "guest": {
       "loginShort": "Pro použití se přihlašte"
     },
+    "tab": {
+        "title": "Místa",
+        "nocategories": "Místa jste ještě neuložil.",
+        "publishCategory": {
+            "privateTooltip": "Mapa je soukromá| Klikněte na mapovou vrstvu pro její veřejné zpřístupnění.",
+            "publicTooltip": "Mapa je veřejná| Klikněte na mapovou vrstvu pro její změnu na soukromou."
+        },
+        "editCategory": "Upravit mapovou vrstvu",
+        "deleteCategory": "Smazat mapovou vrstvu",
+        "edit": "Upravit",
+        "delete": "Smazat",
+        "grid": {
+          "name": "Jméno",
+          "desc": "Popis",
+          "createDate": "Vytvořeno",
+          "updateDate": "Aktualizováno",
+          "edit": " ",
+          "delete": " "
+        },
+        "notification": {
+          "delete": {
+            "title": "Smazat místo",
+            "confirm": "Chcete toto místo smazat?",
+            "btnDelete": "Smazat",
+            "btnCancel": "Storno",
+            "success": "Místo bylo smazáno.",
+            "error": "Místo nelze smazat, zkuste to prosím později.",
+            "cancel": "Tento objekt nebyl smazán."
+          }
+        }
+      },
     "tools": {
       "point": {
         "tooltip": "Přidat bod",

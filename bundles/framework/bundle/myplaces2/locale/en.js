@@ -12,8 +12,41 @@ Oskari.registerLocalization({
     "guest": {
       "loginShort": "Log in to use"
     },
+    "tab": {
+        "title": "Places",
+        "nocategories": "You have not yet saved the places.",
+        "publishCategory": {
+            "privateTooltip": "The map layer is private. Click the map layer to make it public.",
+            "publicTooltip": "The map layer is public. Click the map layer to make it private."
+        },
+        "editCategory": "Edit map layer",
+        "deleteCategory": "Delete map layer",
+        "edit": "Edit",
+        "delete": "Delete",
+        "grid": {
+          "name": "Name",
+          "desc": "Description",
+          "createDate": "Created",
+          "updateDate": "Updated",
+          "measurement": "Length/area",
+          "edit": " ",
+          "delete": " "
+        },
+        "notification": {
+          "delete": {
+            "title": "Delete place",
+            "confirm": "Do you want to delete this place?",
+            "btnDelete": "Delete",
+            "btnCancel": "Cancel",
+            "success": "The place has been deleted.",
+            "error": "The place could not be deleted. Please try again later.",
+            "cancel": "The object has not been deleted."
+          }
+        }
+    },
     "tools": {
       "point": {
+        "title": "Adding point",
         "tooltip": "Add point",
         "add": "Add point by clicking the map.",
         "next": "You can save or draw more points into the same drawing.",
@@ -21,24 +54,28 @@ Oskari.registerLocalization({
         "save": "Save location"
       },
       "line": {
+        "title": "Adding line",
         "tooltip": "Add line",
         "add": "Add a break point on the line by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'.",
         "next": "You can save or draw more lines into the same drawing.",
         "edit": "Edit the line by clicking and dragging its break points.",
-        "save": "Save shape"
+        "save": "Save shape",
+        "noResult": "0 m"
       },
       "area": {
+        "title": "Adding area",
         "tooltip": "Add area",
         "add": "Add break points to your area polygon by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'. To create holes in polygons, hold down the Alt key.",
         "next": "You can save or draw more polygons into the same drawing.",
         "edit": "Edit the shape of the area by clicking and dragging the break points on its edge line.",
-        "save": "Save shape"
+        "save": "Save shape",
+        "noResult": "0 m²"
       }
     },
     "buttons": {
       "ok": "OK",
       "cancel": "Cancel",
-      "finish": "Finish drawing",
+      "finish": "Save drawing",
       "save": "Save",
       "movePlaces": "Move places and delete",
       "deleteCategory": "Delete",
@@ -57,6 +94,13 @@ Oskari.registerLocalization({
       },
       "placedesc": {
         "placeholder": "Describe the place"
+      },
+      "placeAttention": {
+            "placeholder": "Attention text"
+      },
+      "measurement": {
+        "line": "Line length: ",
+        "area": "Area: "
       },
       "category": {
         "label": "Map layer",

@@ -28,7 +28,6 @@ function() {
 
     start: function() {
         var me = this;
-
         // Do not start if we can't get the state.
         if (!me.state) {
             return;
@@ -39,14 +38,15 @@ function() {
         // Let's use statsgrid's locale files.
         // They are linked from the bundle.js file.
         var locale = Oskari.getLocalization('StatsGrid');
-        // Show the grid on startup, defaults to true.
-        var showGrid = ( (conf && conf.gridShown !== undefined) ? conf.gridShown : true );
         var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox';
         var sandbox = Oskari.getSandbox(sandboxName);
         this.sandbox = sandbox;
         sandbox.register(this);
 
         sandbox.registerAsStateful(this.mediator.bundleId, this);
+
+        // Show the grid on startup, defaults to true.
+        var showGrid = ( (me.state && me.state.gridShown !== undefined) ? me.state.gridShown : true );
 
         // Find the map module.
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -86,19 +86,17 @@ function() {
         this.gridPlugin = gridPlugin;
 
         // Register classification plugin to the map.
-        var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', conf ,locale);
+        var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', {'state' : me.getState()}, locale);
         mapModule.registerPlugin(classifyPlugin);
         mapModule.startPlugin(classifyPlugin);
         this.classifyPlugin = classifyPlugin;
 
-        if(showGrid) {
-            var statsLayerPlugin = sandbox.findRegisteredModuleInstance('MainMapModuleStatsLayerPlugin');
-            if (statsLayerPlugin) {
-                // A sort of a hack to enable the hover and select controls in a published map.
-                statsLayerPlugin._modeVisible = true;
-            }
-            me.createUI();
+        var statsLayerPlugin = sandbox.findRegisteredModuleInstance('MainMapModuleStatsLayerPlugin');
+        if (statsLayerPlugin) {
+            // A sort of a hack to enable the hover and select controls in a published map.
+            statsLayerPlugin._modeVisible = true;
         }
+        me.createUI();
     },
 
     setState: function(state) {
@@ -119,11 +117,13 @@ function() {
         var me = this;
         
         // Makes some room in the DOM for the grid.
-        me._toggleGrid(true);
+        me._toggleGrid(me.state.gridShown);
 
-        // Create the show/hide toggle button for the grid.
-        me._createShowHideButton(me.container);
-
+        // don't print this if there is no grid to be shown
+        if(me.state.gridShown) {
+            // Create the show/hide toggle button for the grid.
+            me._createShowHideButton(me.container);
+        }
         // Initialize the grid
         me.gridPlugin.createStatsOut(me.container);
         me._adjustDataContainer();
@@ -170,7 +170,9 @@ function() {
             elCenter.width('').addClass('span12');
             elLeft.addClass('oskari-closed');
             elLeft.width('');
-            elLeft.remove(me.container);
+            if(!elLeft.is(":empty")) {
+                elLeft.remove(me.container);
+            }
         }
 
         me.gridVisible = show;

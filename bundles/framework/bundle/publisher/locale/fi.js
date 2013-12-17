@@ -51,7 +51,19 @@ Oskari.registerLocalization({
                 "Portti2Zoombar": "Mittakaavasäädin",
                 "ControlsPlugin": "Kartan liikuttaminen",
                 "SearchPlugin": "Osoite- ja paikannimihaku",
-                "GetInfoPlugin": "Kohdetietojen kyselytyökalu"
+                "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
+                "PublisherToolbarPlugin": "Karttatyökalut",
+                "drawPoints" : "Salli pisteet",
+                "drawLines" : "Salli viivat",
+                "drawAreas" : "Salli alueet",
+                "selectDrawLayer" : "Valitse piirtotaso"
+            },
+            "toolbarToolNames": {
+                "history_back": "Siirry taaksepäin",
+                "history_forward": "Siirry eteenpäin",
+                "measureline": "Mittaa etäisyyttä",
+                "measurearea": "Mittaa aluetta",
+                "drawTools" : "Piirtotyökalut"
             },
             "toollayout": {
                 "label": "Työkalujen asettelu",
@@ -63,9 +75,10 @@ Oskari.registerLocalization({
                 "usereditmodeoff": "Poistu editointitilasta"
             },
             "data": {
-                "label": "Tilastot",
-                "tooltip": "Näytä karttaan liittyvä taulukko.",
-                "grid": "Näytä tilastotaulukko"
+                "label":                "Tilastot",
+                "tooltip":              "Näytä karttaan liittyvä taulukko.",
+                "grid":                 "Näytä tilastotaulukko",
+                "allowClassification":  "Salli luokittelu"
             },
             "layout": {
                 "label": "Ulkoasu",
@@ -117,6 +130,9 @@ Oskari.registerLocalization({
                 "label": "Karttatasot",
                 "defaultLayer": "(Oletusvalinta)",
                 "useAsDefaultLayer": "Käytä oletuksena"
+            },
+            "myplaces": {
+                "label": "Omat tasot"
             },
             "sizes": {
                 "small": "Pieni",

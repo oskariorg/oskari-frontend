@@ -399,7 +399,8 @@ updateWfsImages : function(creator) {
     },
     afterAfterMapMoveEvent : function() {
         this.tileStrategy.update();
-        this._tilesLayer.redraw();
+// TODO: fixme
+//        this._tilesLayer.redraw();
     	this.updateWfsImages(this.getName());
     	this.service.processHighlightQueue();
     },
@@ -430,6 +431,9 @@ updateWfsImages : function(creator) {
                         this.tileQueue = tileQueue;
                         this.tileStrategy = strategy;
                         
+                        var styles;
+/* FIXME: Removed for debugging/development
+ TODO: implement using various map engines
                         var styles = new OpenLayers.StyleMap({
                             "default": new OpenLayers.Style({
                                 pointRadius: 3,
@@ -448,6 +452,7 @@ updateWfsImages : function(creator) {
                                 strokeColor: "#3399ff"
                             })
                         });
+
                         
                         this._tilesLayer = new OpenLayers.Layer.Vector(
                                 "Tiles Layer", {
@@ -457,6 +462,7 @@ updateWfsImages : function(creator) {
                                 });
                         this._map.addLayer(this._tilesLayer);
                         this._tilesLayer.setOpacity(0.3);
+                        */
                         
                     },
                     getTileQueue: function() {

@@ -29,7 +29,6 @@ function(drawPlugin) {
     */
     this.intersectionPoints = [];
 
-
    /**
     * @property markerSize
     *
@@ -99,16 +98,21 @@ function(drawPlugin) {
         var parcelLayer = this.drawPlugin.drawLayer;
         var editLayer = this.drawPlugin.editLayer;
 
+        var attributes = {};
+
         this.map.moveActiveMarker = function(evt) {
-            var lonlat = this.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y))
+            var lonlat = this.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y));
             lonlat.lon -= this.activeMarker.markerMouseOffset.lon;
             lonlat.lat -= this.activeMarker.markerMouseOffset.lat;
 
-            this.activeMarker.lonlat = this.activeMarkerProjection(lonlat);
+            var projection = this.activeMarkerProjection(lonlat);
+            this.activeMarker.lonlat = projection.lonlat;
             this.activeMarker.reference.point.x = this.activeMarker.lonlat.lon;
             this.activeMarker.reference.point.x0 = this.activeMarker.lonlat.lon;
             this.activeMarker.reference.point.y = this.activeMarker.lonlat.lat;
             this.activeMarker.reference.point.y0 = this.activeMarker.lonlat.lat;
+
+            if (projection.p.length > 0) me.updatePolygons(projection.p,projection.p0);
 
             editLayer.updateLine();
             editLayer.redraw();
@@ -124,11 +128,12 @@ function(drawPlugin) {
             this.events.unregister("mouseup",this,this.freezeActiveMarker);
             OpenLayers.Event.stop(evt);
 
-            var lonlat = this.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y))
+            var lonlat = this.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y));
             lonlat.lon -= this.activeMarker.markerMouseOffset.lon;
             lonlat.lat -= this.activeMarker.markerMouseOffset.lat;
 
-            this.activeMarker.lonlat = this.activeMarkerProjection(lonlat);
+            var projection = this.activeMarkerProjection(lonlat);
+            this.activeMarker.lonlat = projection.lonlat;
             this.activeMarker.reference.point.x = this.activeMarker.lonlat.lon;
             this.activeMarker.reference.point.x0 = this.activeMarker.lonlat.lon;
             this.activeMarker.reference.point.y = this.activeMarker.lonlat.lat;
@@ -138,6 +143,10 @@ function(drawPlugin) {
             editLayer.redraw();
             parcelLayer.redraw();
             me.drawPlugin.updateInfobox();
+
+            // Reproduce the original OL 2.12 behaviour
+            jQuery('svg').find('circle').css('cursor', 'move');
+            jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); // IE8
         };
 
         this.map.pointProjection = function(q,p0,p1) {
@@ -223,38 +232,46 @@ function(drawPlugin) {
 
 
         this.map.activeMarkerProjection  = function(refLonlat) {
-            var parcelLayer = this.getLayersByName("Parcel Draw Layer")[0];
-            //var activeMarker = me.map.activeMarker;
+            var projection = {
+                lonlat : null,
+                p : [],
+                p0 : []
+            };
             var point = {x: refLonlat.lon, y: refLonlat.lat};
             var projPoints = [];
             var distances = [];
             var segments = this.activeMarker.reference.segments;
             var minDistInd = 0;
             for (var i = 0; i < segments.polygons.length; i++) {
-                for (var j = 0; j < parcelLayer.features.length; j++) {
-                    if (parcelLayer.features[j].geometry.CLASS_NAME === "OpenLayers.Geometry.Polygon") {
-                        if (parcelLayer.features[j].geometry.id === segments.polygons[i]) {
-                            var points = parcelLayer.features[j].geometry.components[0].components;
-                            break;
+                for (var j = 0; j < segments.p[i].length; j++) {
+                    var sp = [segments.p[i][j][0],segments.p[i][j][1]];
+                    if (!((sp[0].boundaryPoint)&&(sp[1].boundaryPoint))) continue;
+                    var p1 = {x: sp[0].x, y: sp[0].y};
+                    var p2 = {x: sp[1].x, y: sp[1].y};
+                    projPoints.push(this.pointProjection(point,p1,p2));
+                    var lastIndex = projPoints.length-1;
+                    distances.push(this.distance(point,projPoints[lastIndex]));
+                    if ((distances[lastIndex] < distances[minDistInd])||(projection.lonlat === null)) {
+                        minDistInd = lastIndex;
+                        projection.lonlat = new OpenLayers.LonLat(projPoints[minDistInd].x,projPoints[minDistInd].y);
+                        if (j === 0) {
+                            projection.p0 = [];
+                            projection.p = [];
+                        } else {
+                            projection.p0 = segments.p[i][0];
+                            projection.p = segments.p[i][j];
                         }
-
                     }
                 }
-                var p1 = {x: segments.p[0][i].x, y: segments.p[0][i].y};
-                var p2 = {x: segments.p[1][i].x, y: segments.p[1][i].y};
-
-                projPoints.push(this.pointProjection(point,p1,p2));
-                distances.push(this.distance(point,projPoints[i]));
-                var lastIndex = distances.length-1;
-                if (distances[lastIndex] < distances[minDistInd]) minDistInd = lastIndex;
             }
-            return (new OpenLayers.LonLat(projPoints[minDistInd].x,projPoints[minDistInd].y));
+            return projection;
         };
 
         this.drawPlugin.splitSelection = true;
         var baseMultiPolygon = parcelLayer.features[0];
         if (baseMultiPolygon.geometry.CLASS_NAME !== "OpenLayers.Geometry.MultiPolygon") return;
         this.drawPlugin.backupFeatures = [baseMultiPolygon.clone()];
+        attributes = parcelLayer.features[0].attributes;
 
         // Trivial split
         if (trivial) {
@@ -274,18 +291,23 @@ function(drawPlugin) {
 
         var featureInd = parcelLayer.features.length-1;
         if (featureInd < 1) return;
-        var operatingFeature = parcelLayer.features[featureInd];
+        this.drawPlugin.operatingFeature = parcelLayer.features[featureInd];
 
-        switch (operatingFeature.geometry.CLASS_NAME) {
+        switch (this.drawPlugin.operatingFeature.geometry.CLASS_NAME) {
             case "OpenLayers.Geometry.Polygon":
-                this.splitHole(baseMultiPolygon,operatingFeature);
+                this.splitHole(baseMultiPolygon,this.drawPlugin.operatingFeature);
+                for (var i = 0; i < this.drawPlugin.drawLayer.features.length; i++) {
+                    this.drawPlugin.drawLayer.features[i].attributes = {name : attributes.tekstiKartalla, quality : attributes.lahdeaineisto};
+                }
                 break;
+            case "OpenLayers.Geometry.MultiPolygon":
             case "OpenLayers.Geometry.LineString":
-                var newFeatures = this.splitLine(baseMultiPolygon,operatingFeature);
+                var newFeatures = this.splitLine(baseMultiPolygon,this.drawPlugin.operatingFeature);
                 this.drawPlugin.drawLayer.removeAllFeatures();
                 for (var i = 0; i < newFeatures[0].geometry.components.length; i++) {
                     this.drawPlugin.drawLayer.addFeatures(new OpenLayers.Feature.Vector(newFeatures[0].geometry.components[i]));
                     this.drawPlugin.drawLayer.features[i].style = this.drawPlugin.basicStyle;
+                    this.drawPlugin.drawLayer.features[i].attributes = {name : attributes.tekstiKartalla, quality : attributes.lahdeaineisto};
                 }
                 this.drawPlugin.editLayer.addFeatures(newFeatures[1]);
                 break;
@@ -371,10 +393,10 @@ function(drawPlugin) {
          * @method splitLine
          *
          * @param {} polygon
-         * @param {} line
+         * @param {} splitGeom
          * @return {}
          */
-        splitLine : function(polygons,line) {
+        splitLine : function(polygons,splitGeom) {
             // Transform and scale coordinates
             var origin = new OpenLayers.Geometry.Point(0.0, 0.0);
             var reference = [polygons.geometry.components[0].components[0].components[0].x,
@@ -382,12 +404,13 @@ function(drawPlugin) {
             var scaleFactor = 10000.0;
             polygons.geometry.move(-reference[0],-reference[1]);
             polygons.geometry.resize(scaleFactor,origin);
-            line.geometry.move(-reference[0],-reference[1]);
-            line.geometry.resize(scaleFactor,origin);
+
+            splitGeom.geometry.move(-reference[0],-reference[1]);
+            splitGeom.geometry.resize(scaleFactor,origin);
 
             // OpenLayers variables
             var lineStyle = { strokeColor: '#0000ff', strokeOpacity: 1, strokeWidth: 2};
-            var olOldFeatures = polygons.geometry.components.concat(line.geometry);
+            var olOldFeatures = polygons.geometry.components.concat(splitGeom.geometry);
             var olNewFeatures = [new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon()),
                                  new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(),null,lineStyle)];
             var olSolutionPolygons = olNewFeatures[0].geometry.components;
@@ -402,8 +425,8 @@ function(drawPlugin) {
             var olLinearRingPoints = [];
             var olLinearRings;
             var olLineStringPoints = [];
-            var olLineString;
             var olPolygon;
+            var olComponents = [];
 
             // JSTS variables
             var jstsParser = new jsts.io.OpenLayersParser();
@@ -417,8 +440,6 @@ function(drawPlugin) {
             var clipPoint, clipPoints;
             var clipPolygon, clipHole;
             var clipValidationTarget = [];
-            // var clipValidationSource;
-            // var clipValidationResult;
             var clipSourcePolygons = [];
             var clipSubjectPolygons = [];
             var clipTargetPolygons = [];
@@ -429,7 +450,7 @@ function(drawPlugin) {
             var success;
             var clipType;
 
-            var union;
+            var union = null;
             var polygonizer;
 
             var polygonIndexes = [];
@@ -437,6 +458,7 @@ function(drawPlugin) {
             var sharedEdge = false;
             var crossRing = false;
             var found = false;
+            var finished = false;
 
             var i, j, k, l, m, n, o, p;
             var lastIndex;
@@ -448,7 +470,6 @@ function(drawPlugin) {
             // Scaling factor for integer operations
             var scale = 1;
             var marker;
-            var logText = "";
 
             // IE8 compatibility
             if (!Array.prototype.indexOf) {
@@ -530,91 +551,95 @@ function(drawPlugin) {
             }
 
             // Input data
-            for (i=0; i<olOldFeatures.length; i++) {
+            m = 0;
+            for (i=olOldFeatures.length-1; i>=0; i--) {
                 if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
-                    jstsOldPolygon = jstsParser.read(olOldFeatures[i]);
-                    if (!jstsOldPolygon.isValid()) {
-                        //console.log("Invalid geometry.");
-                        return -1+logText;
+                    var multi = (olOldFeatures[i].id.indexOf("Multi") !== -1);
+                    if (!multi) {
+                        jstsOldPolygon = jstsParser.read(olOldFeatures[i]);
+                        if (!jstsOldPolygon.isValid()) {
+                            return -1;
+                        }
+                        jstsOldPolygons.push(jstsOldPolygon);
                     }
-                    jstsOldPolygons.push(jstsOldPolygon);
-                    clipPolygon = new ClipperLib.Polygon();
-                    olLinearRings = olOldFeatures[i].components;
-                    if (olLinearRings[0].getArea() >= 0.0) {
-                        olPoints = olLinearRings[0].components;
-                    } else {
-                        olPoints = olLinearRings[0].components.reverse();
-                    }
-                    for (j=0; j<olPoints.length-1; j++) {
-                        clipPoint = new ClipperLib.IntPoint(olPoints[j].x, olPoints[j].y);
-                        clipPolygon.push(clipPoint);
-                    }
-                    l = clipSourcePolygons.length;
-                    clipSourcePolygons[l] = [];
-                    clipSourcePolygons[l].push(clipPolygon);
-                    for (j=1; j<olLinearRings.length; j++) {
-                        clipHole = new ClipperLib.Polygon();
-                        if (olLinearRings[j].getArea() <= 0.0) {
-                            olPoints = olLinearRings[j].components;
+
+                    finished = (m > 0);
+                    while (!finished) {
+                        clipPolygon = new ClipperLib.Polygon();
+                        if (multi) {
+                            olLinearRings = olOldFeatures[i].components[m].components;
                         } else {
-                            olPoints = olLinearRings[j].components.reverse();
+                            olLinearRings = olOldFeatures[i].components;
                         }
-                        for(k=0; k<olPoints.length-1; k++) {
-                            clipPoint = new ClipperLib.IntPoint(olPoints[k].x, olPoints[k].y);
-                            clipHole.push(clipPoint);
+                        if (olLinearRings[0].getArea() >= 0.0) {
+                            olPoints = olLinearRings[0].components;
+                        } else {
+                            olPoints = olLinearRings[0].components.reverse();
                         }
-                        clipSourcePolygons[i].push(clipHole);
+                        for (j=0; j<olPoints.length-1; j++) {
+                            clipPoint = new ClipperLib.IntPoint(olPoints[j].x, olPoints[j].y);
+                            clipPolygon.push(clipPoint);
+                        }
+
+                        l = clipSourcePolygons.length;
+                        clipSourcePolygons[l] = [];
+                        clipSourcePolygons[l].push(clipPolygon);
+                        for (j=1; j<olLinearRings.length; j++) {
+                            clipHole = new ClipperLib.Polygon();
+                            if (olLinearRings[j].getArea() <= 0.0) {
+                                olPoints = olLinearRings[j].components;
+                            } else {
+                                olPoints = olLinearRings[j].components.reverse();
+                            }
+                            for(k=0; k<olPoints.length-1; k++) {
+                                clipPoint = new ClipperLib.IntPoint(olPoints[k].x, olPoints[k].y);
+                                clipHole.push(clipPoint);
+                            }
+                            clipSourcePolygons[l].push(clipHole);
+                        }
+                        // Scaling for integer operations
+                        l = clipSourcePolygons.length-1;
+                        clipSourcePolygons[l] = this.scaleup(clipSourcePolygons[l], scale);
+                        if (multi) {
+                            m = m+1;
+                            if (m === olOldFeatures[i].components.length) {
+                                finished = true;
+                            }
+                        } else {
+                            finished = true;
+                        }
                     }
-                    // Scaling for integer operations
-                    l = clipSourcePolygons.length-1;
-                    clipSourcePolygons[l] = this.scaleup(clipSourcePolygons[l], scale);
-                } else if (olOldFeatures[i].id.indexOf("OpenLayers.Geometry.LineString") !== -1) {
+                } else if (olOldFeatures[i].id.indexOf("LineString") !== -1) {
                     jstsLine = jstsParser.read(olOldFeatures[i]);
                 }
             }
 
-            // Debugging info
-            logText += " olOldFeatures ";
-            logText += olOldFeatures;
-            logText += " clipSourcePolygons ";
-            logText += clipSourcePolygons;
-            logText += " jstsOldPolygons ";
-            logText += jstsOldPolygons ;
-            logText += " jstsLine ";
-            logText += jstsLine;
-
-            // Handle cases with no divisions
-            if (jstsLine === null) {
-                return [olOldFeatures];
-            }
-
             // Splitting
+            union = null;
             for (i=0; i<jstsOldPolygons.length; i++) {
-                logText += " i ";
-                logText += i.toString()+" / "+jstsOldPolygons.length;
                 if (jstsLine !== null) {
                     union = jstsOldPolygons[i].getExteriorRing().union(jstsLine);
                 } else {
-                    union = jstsOldPolygons[i];
+                    if (union === null) {
+                        union = jstsOldPolygons[i].getExteriorRing();
+                    } else {
+                        union = jstsOldPolygons[i].getExteriorRing().union(union);
+                    }
+                    if (i<jstsOldPolygons.length-1) continue;
+
                 }
                 polygonizer = new jsts.operation.polygonize.Polygonizer();
                 polygonizer.add(union);
                 jstsNewPolygons = polygonizer.getPolygons();
 
-                logText += " jstsNewPolygons ";
-                logText += jstsNewPolygons;
-
                 clipPoints = [];
                 olPoints = [];
                 olNewLineStrings = [];
                 for (j=0; j<jstsNewPolygons.array.length; j++) {
-                    logText += "j";
-                    logText += j+" / "+jstsNewPolygons.array.length;
-
                     clipTargetPolygons = [];
                     clipPolygon = new ClipperLib.Polygon();
                     jstsPoints = jstsNewPolygons.array[j].shell.points;
-                    for(k=0; k<jstsPoints.length-1; k++) {
+                    for (k=0; k<jstsPoints.length-1; k++) {
                         clipPoint = new ClipperLib.IntPoint(jstsPoints[k].x, jstsPoints[k].y);
                         clipPolygon.push(clipPoint);
                     }
@@ -622,22 +647,16 @@ function(drawPlugin) {
                     // Scaling for integer operations
                     clipTargetPolygons = this.scaleup(clipTargetPolygons, scale);
                     cpr = new ClipperLib.Clipper();
-                    cpr.AddPolygons(clipSourcePolygons[i], ClipperLib.PolyType.ptSubject);
+                    for (k=0; k < clipSourcePolygons.length; k++) {
+                        cpr.AddPolygons(clipSourcePolygons[k], ClipperLib.PolyType.ptSubject);
+                    }
                     cpr.AddPolygons(clipTargetPolygons, ClipperLib.PolyType.ptClip);
 
                     clipSolutionPolygons = new ClipperLib.Polygons();
                     clipType = ClipperLib.ClipType.ctIntersection;
-
                     // Cut intersections
                     success = cpr.Execute(clipType, clipSolutionPolygons);
-                    if (!success) return -2+logText;
-
-                    logText += " clipSourcePolygons[i] ";
-                    logText += clipSourcePolygons[i];
-                    logText += " clipTargetPolygons ";
-                    logText += clipTargetPolygons;
-                    logText += " clipSolutionPolygons ";
-                    logText += clipSolutionPolygons;
+                    if (!success) return -2;
 
                     if (clipSolutionPolygons.length === 0) continue;
 
@@ -669,6 +688,8 @@ function(drawPlugin) {
                                     olPoints.push(new OpenLayers.Geometry.Point(clipPoint.X/scale, clipPoint.Y/scale));
                                     lastIndex = olPoints.length-1;
                                     olPoints[lastIndex].references = [];
+                                    olPoints[lastIndex].markerPoint = -1;
+                                    olPoints[lastIndex].boundaryPoint = false;
                                     olLinearRingPoints.push(olPoints[lastIndex]);
                                 }
                             }
@@ -681,19 +702,8 @@ function(drawPlugin) {
                         }
                     }
 
-                    // Debug info
-                    logText += " olPoints ";
-                    logText += olPoints;
-                    logText += " olLinearRingPoints ";
-                    logText += olLinearRingPoints;
-                    logText += " olNewPolygons ";
-                    logText += olNewPolygons;
-
                     // Holes to OpenLayers format
                     for (k=0; k<clipSolutionPolygons.length; k++) {
-                        logText += " Holes k ";
-                        logText += k+" / "+clipSolutionPolygons.length;
-
                         if (cpr.Area(clipSolutionPolygons[k]) < 0.0) {
                             clipTargetPolygons = [];
                             clipTargetPolygons.push(clipSolutionPolygons[k]);
@@ -708,15 +718,7 @@ function(drawPlugin) {
                                 clipSolutionHoles = new ClipperLib.Polygons();
                                 clipType = ClipperLib.ClipType.ctIntersection;
                                 success = cpr.Execute(clipType, clipSolutionHoles);
-                                if (!success) return -3+logText;
-
-                                // Debugging info
-                                logText += " clipSubjectPolygons ";
-                                logText += clipSubjectPolygons;
-                                logText += " clipTargetPolygons ";
-                                logText += clipTargetPolygons;
-                                logText += " clipSolutionHoles ";
-                                logText += clipSolutionHoles;
+                                if (!success) return -3;
 
                                 if (clipSolutionHoles.length > 0) {
                                     clipHole = clipSolutionPolygons[k];
@@ -731,8 +733,6 @@ function(drawPlugin) {
                             }
                         }
                     }
-                    logText += " olNewPolygons ";
-                    logText += olNewPolygons;
                     for (k=0; k<olNewPolygons.length; k++) {
                         olSolutionPolygons.push(olNewPolygons[k]);
                     }
@@ -814,6 +814,38 @@ function(drawPlugin) {
             }
 
             for (k = 0; k < olSolutionLineStrings.length; k++) {
+                // Add middle point
+                olComponents = olSolutionLineStrings[k].components;
+                if (olComponents.length === 2) {
+                    olPoint = new OpenLayers.Geometry.Point(0.5*(olComponents[0].x+olComponents[1].x),0.5*(olComponents[0].y+olComponents[1].y));
+                    olPoint.references = olComponents[0].references;
+                    olPoint.markerPoint = -2;
+                    olPoint.boundaryPoint = false;
+                    olSolutionLineStrings[k].components.splice(1,0,olPoint);
+                }
+                var prevPoint = olComponents[0];
+                var nextPoint = olComponents[2];
+                for (l = 0; l < olSolutionPolygons.length; l++) {
+                    var polygon = olSolutionPolygons[l];
+                    for (p = 0; p < olComponents[0].references.length; p++) {
+                        if (olComponents[0].references[p] === polygon.id) {
+                            var points = polygon.components[0].components;
+                            var polyLength = points.length - 1;
+                            for (m = 0; m < polyLength; m++) {
+                                n = m + 1;
+                                if ((points[m] === prevPoint) && (points[n] === nextPoint)) {
+                                    points.splice(n, 0, olPoint);
+                                    break;
+                                }
+                                if ((points[n] === prevPoint) && (points[m] === nextPoint)) {
+                                    points.splice(n, 0, olPoint);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // Markers
                 intersections:
                 for (l = 0; l < 2; l++) {
@@ -828,9 +860,11 @@ function(drawPlugin) {
                         point : olEndPoints[k][l],
                         segments : {
                             polygons : [],
-                            p: [[],[]]
+                            p: []
                         }
                     };
+
+                    olEndPoints[k][l].markerPoint = this.drawPlugin.markerLayer.markers.length+1;
 
                     // References
                     marker.markerMouseOffset = new OpenLayers.LonLat(0,0);
@@ -898,8 +932,14 @@ function(drawPlugin) {
                                         }
                                         if (!sharedEdge) {
                                             marker.reference.segments.polygons.push(olPolygon.id);
-                                            marker.reference.segments.p[0].push(olPoints[o]);
-                                            marker.reference.segments.p[1].push(olPoints[lastIndex]);
+                                            var refSegments = [[]];
+                                            refSegments[0][0] = olPoints[o];
+                                            refSegments[0][1] = olPoints[lastIndex];
+                                            var inds = (o < lastIndex) ? [o,lastIndex] : [lastIndex,o];
+                                            // Adjacent marker segments
+                                            refSegments.push([(inds[0] > 0) ? olPoints[inds[0]-1] : olPoints[olPoints.length-2],olPoints[inds[0]]]);
+                                            refSegments.push([(inds[1] < olPoints.length-1) ? olPoints[inds[1]+1] : olPoints[0],olPoints[inds[1]]]);
+                                            marker.reference.segments.p.push(refSegments);
                                         }
                                     }
                                 }
@@ -912,33 +952,43 @@ function(drawPlugin) {
                 }
             }
 
-            /* // Checking if everything is correct
-            success = false;
-            clipValidationSource = [];
-            for (i=0; i<clipSourcePolygons.length; i++) {
-                for (j=0; j<clipSourcePolygons[i].length; j++) {
-                     clipValidationSource.push(clipSourcePolygons[i][j]);
+/*
+
+            // Remove middle points
+            olComponents = olNewFeatures[0].geometry.components;
+            for (i = 0; i < olComponents.length; i++) {
+                for (j = 0; j < olComponents[i].components.length; j++) {
+                    k = 0;
+                    while (k < olComponents[i].components[j].components.length-1) {
+                        olPoint = olComponents[i].components[j].components[k];
+                        if (olPoint.markerPoint === -2) {
+                            olNewFeatures[0].geometry.components[i].components[j].components.splice(k,1);
+                        } else {
+                            k = k+1;
+                        }
+                    }
                 }
             }
-
-            for (i=0; i<clipValidationTarget.length; i++) {
-                cpr = new ClipperLib.Clipper();
-                var cl = [];
-                cl.push(clipValidationTarget[i]);
-                cpr.AddPolygons(clipValidationSource, ClipperLib.PolyType.ptSubject);
-                cpr.AddPolygons(cl, ClipperLib.PolyType.ptClip);
-                clipType = ClipperLib.ClipType.ctXor;
-                clipValidationResult = new ClipperLib.Polygons();
-                success = cpr.Execute(clipType, clipValidationResult);
-                clipValidationSource = clipValidationResult;
+            olComponents = olNewFeatures[1].geometry.components;
+            for (i = 0; i < olComponents.length; i++) {
+                for (j = 0; j < olComponents[i].components.length; j++) {
+                    olPoint = olComponents[i].components[j];
+                    if (olPoint.markerPoint === -2) {
+                        olNewFeatures[1].geometry.components[i].components.splice(j,1);
+                        break;
+                    }
+                }
             }
-            success = (clipValidationSource.length === 0);
-
-            if (success) {
-                split.addFeatures(olNewFeatures);
-            } else {
-                return -10+logText;
-            } */
+*/
+            // Update boundary info
+            for (i = 0; i < olNewFeatures[0].geometry.components.length; i++) {
+                var olNewPoints = olNewFeatures[0].geometry.components[i].components[0].components;
+                for (j = 0; j < olNewPoints.length; j++) {
+                   if ((olNewPoints[j].references.length === 1) || (olNewPoints[j].markerPoint >= 0)) {
+                       olNewPoints[j].boundaryPoint = true;
+                   }
+                }
+            }
 
             return olNewFeatures;
         },
@@ -983,6 +1033,7 @@ function(drawPlugin) {
     /*
      * @method segmentIntersects
      *
+     * @param {}
      * @param {}
      */
     segmentIntersects: function(segment,segments){
@@ -1037,6 +1088,235 @@ function(drawPlugin) {
           }
        }
        return true;
-    }
+    },
 
+    /*
+     * @method updatePolygons
+     *
+     * @param {}
+     * @param {}
+     */
+    updatePolygons: function(p,p0) {
+        var pInd = -1;
+        var p0Ind = -1;
+        var i, j, k, l, m, n;
+        var marker = this.map.activeMarker;
+        var markers = this.drawPlugin.markerLayer.markers;
+        var markerIndexes = [[],[]];
+
+        // Search the correct point
+        pLoop:
+        for (i=0; i<2; i++) {
+            for (j=0; j<2; j++) {
+                if (p[i].id === p0[j].id) {
+                    pInd = i;
+                    p0Ind = (j+1)%2;
+                    break pLoop;
+                }
+            }
+        }
+        if (pInd < 0) return; // This should not happen
+        var remPolygon = null;
+
+        // Remove the point from old polygon
+        var features = this.drawPlugin.drawLayer.features;
+        var fInd;
+        for (i=0; i<features.length; i++) {
+            if (features[i].geometry.id === p[pInd].references[0]) {
+                remPolygon = features[i].geometry;
+                fInd = i;
+                break;
+            }
+        }
+
+        var mInd = -1;
+        i = 0;
+        var removed = false;
+        while (i < features[fInd].geometry.components[0].components.length) {
+            if (features[fInd].geometry.components[0].components[i].id === p[pInd].id) { // Removable point
+                features[fInd].geometry.components[0].components.splice(i,1);
+                if (i==0) {
+                    features[fInd].geometry.components[0].components.splice(features[fInd].geometry.components[0]-1,1);
+                    features[fInd].geometry.components[0].components.push(features[fInd].geometry.components[0].components[0]);
+                }
+                removed = true;
+                if (mInd >= 0) {
+                    break;
+                } else {
+                    continue;
+                }
+            } else {
+                if (features[fInd].geometry.components[0].components[i].id === p0[p0Ind].id) { // Marker
+                    mInd = i;
+                }
+                // Collect marker indexes
+/*                for (j=0; j<markers.length; j++) {
+                    if (j === features[fInd].geometry.components[0].components[i].markerPoint) {
+                        markerIndexes[0].push([features[fInd].geometry.components[0].components[i].markerPoint,i]);
+                    }
+                }*/
+                if (removed) break;
+            }
+            i = i+1;
+        }
+        // Add the point to new polygon
+        var point = p[pInd];
+        addPoint:
+        for (i=0; i<2; i++) {
+            if (p0[p0Ind].references[i] === p[pInd].references[0]) {
+                continue;
+            }
+            var addPolygon;
+            for (j=0; j<features.length; j++) {
+                if (features[j].geometry.id === p0[p0Ind].references[i]) {
+                    addPolygon = features[j].geometry;
+                    var cornerInd = -1;
+                    var prevInd = -1;
+                    var nextInd = -1;
+                    for (k=0; k<features[j].geometry.components[0].components.length-1; k++) {
+                        var markerFound = false;
+                        if (!markerFound) {
+                            if (features[j].geometry.components[0].components[k].id === p0[p0Ind].id) {
+                                cornerInd = k;
+                                prevInd = (k === 0) ? features[j].geometry.components[0].components.length-2 : k-1;
+                                nextInd = (k === features[j].geometry.components[0].components.length-2) ? 0 : k+1;
+                                markerFound = true;
+                            }
+                            // Collect marker indexes
+/*                            for (l=0; l<markers.length; l++) {
+                                if (l === features[j].geometry.components[0].components[k].markerPoint) {
+                                    markerIndexes[1].push([features[j].geometry.components[0].components[k].markerPoint,k]);
+                                }
+                            } */
+                        }
+                    }
+                    if (features[j].geometry.components[0].components[prevInd].boundaryPoint) {
+                        features[j].geometry.components[0].components.splice(prevInd+1,0,point);
+                        if (cornerInd !== 0) {
+                            cornerInd = cornerInd+1;
+                        }
+                    } else {
+                        if (nextInd !== 0) {
+                            features[j].geometry.components[0].components.splice(nextInd,0,point);
+                        } else {
+                            features[j].geometry.components[0].components.splice(features[j].geometry.components[0].components.length-1,0,point);
+                        }
+                    }
+                    p[pInd].references = [addPolygon.id];
+/*                    for (k=0; k<markerIndexes[1].length; k++) {
+                        if (markerIndexes[1][k][0].id !== features[j].geometry.components[0].components[markerIndexes[1][k][1]]) {
+                            markerIndexes[1][k][0] = features[j].geometry.components[0].components[markerIndexes[1][k][1]+1];
+                        }
+                    }*/
+                    break addPoint;
+                }
+            }
+        }
+
+        // Update marker references
+        for (i=0; i<markers.length; i++) {
+            marker = markers[i];
+
+            k = 0;
+            for (m=0; m < features.length; m++) {
+                var refPoints = null;
+                var markerInd = -1;
+                refPoints = features[m].geometry.components[0].components;
+
+                // TODO: Use the markerIndexes array instead of this slow loop
+                for (l=0; l<refPoints.length; l++) {
+                    if (refPoints[l].id === marker.reference.point.id) {
+                        markerInd = l;
+                        break;
+                    }
+                }
+
+
+                if (markerInd === -1) {
+                    continue;
+                }
+
+
+                marker.reference.segments.p[k][0][0] = refPoints[markerInd];
+                if (refPoints[markerInd+1].boundaryPoint) {
+                    marker.reference.segments.p[k][0][1] = refPoints[markerInd+1];
+                    var newInd1;
+                    if (markerInd === refPoints.length-2) {
+                        newInd1 = 1;
+                    } else if (markerInd === refPoints.length-1) {
+                        newInd1 = 2;
+                    } else {
+                      newInd1 = markerInd+2;
+                    }
+                    marker.reference.segments.p[k][1][0] = refPoints[newInd1];
+                    marker.reference.segments.p[k][1][1] = refPoints[markerInd+1];
+
+                    var newInd2 = (markerInd === 0) ? refPoints.length-2 : markerInd-1;
+                    marker.reference.segments.p[k][2][0] = refPoints[newInd2];
+                    marker.reference.segments.p[k][2][1] = refPoints[markerInd];
+                } else {
+                    var newInd3 = (markerInd === 0) ? refPoints.length-2 : markerInd-1;
+                    marker.reference.segments.p[k][0][1] = refPoints[newInd3];
+
+                    var newInd4 = (newInd3 === 0 ) ? refPoints.length-2 : newInd3-1;
+                    marker.reference.segments.p[k][1][0] = refPoints[newInd4];
+                    marker.reference.segments.p[k][1][1] = refPoints[newInd3];
+
+                    marker.reference.segments.p[k][2][0] = refPoints[markerInd+1];
+                    marker.reference.segments.p[k][2][1] = refPoints[markerInd];
+                }
+                // Marker is always shared by two polygons
+                if (k === 1) {
+                    break;
+                } else {
+                    k = k+1;
+                }
+            }
+        }
+
+
+
+/*
+        for (k=0; k<2; k++) {
+            var id = p0[p0Ind].references[k];
+            var refPoints = null;
+            var markerInd = -1;
+            if (id === remPolygon.id) {
+                markerInd = mInd;
+            } else {
+                markerInd = cornerInd;
+            }
+            refPoints = features[k].geometry.components[0].components;
+            marker.reference.segments.p[k][0][0] = refPoints[markerInd];
+            if (refPoints[markerInd+1].boundaryPoint) {
+                marker.reference.segments.p[k][0][1] = refPoints[markerInd+1];
+                var newInd1;
+                if (markerInd === refPoints.length-2) {
+                    newInd1 = 1;
+                } else if (markerInd === refPoints.length-1) {
+                    newInd1 = 2;
+                } else {
+                  newInd1 = markerInd+2;
+                }
+                marker.reference.segments.p[k][1][0] = refPoints[newInd1];
+                marker.reference.segments.p[k][1][1] = refPoints[markerInd+1];
+
+                var newInd2 = (markerInd === 0) ? refPoints.length-2 : markerInd-1;
+                marker.reference.segments.p[k][2][0] = refPoints[newInd2];
+                marker.reference.segments.p[k][2][1] = refPoints[markerInd];
+            } else {
+                var newInd3 = (markerInd === 0) ? refPoints.length-2 : markerInd-1;
+                marker.reference.segments.p[k][0][1] = refPoints[newInd3];
+
+                var newInd4 = (newInd3 === 0 ) ? refPoints.length-2 : newInd3-1;
+                marker.reference.segments.p[k][1][0] = refPoints[newInd4];
+                marker.reference.segments.p[k][1][1] = refPoints[newInd3];
+
+                marker.reference.segments.p[k][2][0] = refPoints[markerInd+1];
+                marker.reference.segments.p[k][2][1] = refPoints[markerInd];
+            }
+        }
+*/
+
+    }
 });
