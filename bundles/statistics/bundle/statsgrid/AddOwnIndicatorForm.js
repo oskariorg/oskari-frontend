@@ -213,7 +213,7 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
         //update form regions / municipalities
         var updateValue = function(name, value) {
             //if code instead of name...
-            if(/^\d+$/.test(value)) {
+            if(/^\d+$/.test(name)) {
                 var rows = me.container.find('.municipality-row');
                 for (var i = 0; i < rows.length; i++) {
                     var row = jQuery(rows[i]);
