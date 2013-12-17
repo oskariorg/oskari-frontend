@@ -323,7 +323,6 @@ function(config) {
             
             if (feature.attention_text) {
                 name = feature.attention_text;
-                console.log('name:', name); 
             }
 
             if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiPoint") {
