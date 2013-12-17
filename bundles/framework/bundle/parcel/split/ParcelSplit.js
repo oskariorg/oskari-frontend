@@ -112,7 +112,17 @@ function(drawPlugin) {
             this.activeMarker.reference.point.y = this.activeMarker.lonlat.lat;
             this.activeMarker.reference.point.y0 = this.activeMarker.lonlat.lat;
 
-            if (projection.p.length > 0) me.updatePolygons(projection.p,projection.p0);
+            if (projection.p.length > 0) {
+                var lines = editLayer.features[0].geometry.components;
+                for (var i=0; i < lines.length; i++) {
+                    // Two point lines
+                    if (lines[i].components.length === 2) {
+                        lines[i].components[0].short = i;
+                        lines[i].components[1].short = i;
+                    }
+                }
+                me.updatePolygons(projection.p,projection.p0);
+            }
 
             editLayer.updateLine();
             editLayer.redraw();
@@ -246,6 +256,7 @@ function(drawPlugin) {
                 for (var j = 0; j < segments.p[i].length; j++) {
                     var sp = [segments.p[i][j][0],segments.p[i][j][1]];
                     if (!((sp[0].boundaryPoint)&&(sp[1].boundaryPoint))) continue;
+                    if ((sp[0].short >= 0)&&(sp[0].short === sp[1].short)) continue;
                     var p1 = {x: sp[0].x, y: sp[0].y};
                     var p2 = {x: sp[1].x, y: sp[1].y};
                     projPoints.push(this.pointProjection(point,p1,p2));
@@ -315,6 +326,7 @@ function(drawPlugin) {
         OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
         this.drawPlugin.drawLayer.features[0].style = this.drawPlugin.selectStyle;
         this.drawPlugin.selectedFeature = 0;
+        this.map.editLayer = editLayer;
         parcelLayer.redraw();
         editLayer.redraw();
         return editLayer.features[0];
@@ -690,6 +702,7 @@ function(drawPlugin) {
                                     olPoints[lastIndex].references = [];
                                     olPoints[lastIndex].markerPoint = -1;
                                     olPoints[lastIndex].boundaryPoint = false;
+                                    olPoints[lastIndex].short = -1;
                                     olLinearRingPoints.push(olPoints[lastIndex]);
                                 }
                             }
@@ -815,7 +828,7 @@ function(drawPlugin) {
 
             for (k = 0; k < olSolutionLineStrings.length; k++) {
                 // Add middle point
-                olComponents = olSolutionLineStrings[k].components;
+/*                olComponents = olSolutionLineStrings[k].components;
                 if (olComponents.length === 2) {
                     olPoint = new OpenLayers.Geometry.Point(0.5*(olComponents[0].x+olComponents[1].x),0.5*(olComponents[0].y+olComponents[1].y));
                     olPoint.references = olComponents[0].references;
@@ -824,7 +837,9 @@ function(drawPlugin) {
                     olSolutionLineStrings[k].components.splice(1,0,olPoint);
                 }
                 var prevPoint = olComponents[0];
+//olComponents[0].single = true;
                 var nextPoint = olComponents[2];
+//olComponents[2].single = true;
                 for (l = 0; l < olSolutionPolygons.length; l++) {
                     var polygon = olSolutionPolygons[l];
                     for (p = 0; p < olComponents[0].references.length; p++) {
@@ -835,17 +850,19 @@ function(drawPlugin) {
                                 n = m + 1;
                                 if ((points[m] === prevPoint) && (points[n] === nextPoint)) {
                                     points.splice(n, 0, olPoint);
+olSolutionPolygons[l].middle = {index:[m,n],id:[prevPoint.id,nextPoint.id]};
                                     break;
                                 }
                                 if ((points[n] === prevPoint) && (points[m] === nextPoint)) {
                                     points.splice(n, 0, olPoint);
+olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
                                     break;
                                 }
                             }
                         }
                     }
                 }
-
+*/
                 // Markers
                 intersections:
                 for (l = 0; l < 2; l++) {
@@ -858,6 +875,7 @@ function(drawPlugin) {
                     marker = new OpenLayers.Marker(new OpenLayers.LonLat(olEndPoints[k][l].x,olEndPoints[k][l].y),this.markerIcon.clone());
                     marker.reference = {
                         point : olEndPoints[k][l],
+                        line : k,
                         segments : {
                             polygons : [],
                             p: []
@@ -952,8 +970,8 @@ function(drawPlugin) {
                 }
             }
 
-/*
 
+/*
             // Remove middle points
             olComponents = olNewFeatures[0].geometry.components;
             for (i = 0; i < olComponents.length; i++) {
@@ -980,6 +998,8 @@ function(drawPlugin) {
                 }
             }
 */
+
+
             // Update boundary info
             for (i = 0; i < olNewFeatures[0].geometry.components.length; i++) {
                 var olNewPoints = olNewFeatures[0].geometry.components[i].components[0].components;
@@ -1006,6 +1026,17 @@ function(drawPlugin) {
             this.map.activeMarker = evt.object;
             this.map.activeMarker.markerMouseOffset.lon = xyLonLat.lon-this.map.activeMarker.lonlat.lon;
             this.map.activeMarker.markerMouseOffset.lat = xyLonLat.lat-this.map.activeMarker.lonlat.lat;
+            // Two point lines
+            var lines = this.map.editLayer.features[0].geometry.components;
+            for (var i=0; i < lines.length; i++) {
+                if (lines[i].components.length === 2) {
+                    lines[i].components[0].short = i;
+                    lines[i].components[1].short = i;
+                } else {
+                    lines[i].components[0].short = -1;
+                    lines[i].components[lines[i].components.length-1].short = -1;
+                }
+            }
             this.map.events.register("mouseup", this.map, this.map.freezeActiveMarker);
             this.map.events.register("mousemove", this.map, this.map.moveActiveMarker);
         },
@@ -1190,7 +1221,7 @@ function(drawPlugin) {
                             } */
                         }
                     }
-                    if (features[j].geometry.components[0].components[prevInd].boundaryPoint) {
+                    if ((features[j].geometry.components[0].components[prevInd].boundaryPoint)&&(features[j].geometry.components[0].components[prevInd].short < 0)) {
                         features[j].geometry.components[0].components.splice(prevInd+1,0,point);
                         if (cornerInd !== 0) {
                             cornerInd = cornerInd+1;
@@ -1238,7 +1269,7 @@ function(drawPlugin) {
 
 
                 marker.reference.segments.p[k][0][0] = refPoints[markerInd];
-                if (refPoints[markerInd+1].boundaryPoint) {
+                if ((refPoints[markerInd+1].boundaryPoint)&&(refPoints[markerInd+1].short !== marker.reference.line)) {
                     marker.reference.segments.p[k][0][1] = refPoints[markerInd+1];
                     var newInd1;
                     if (markerInd === refPoints.length-2) {
