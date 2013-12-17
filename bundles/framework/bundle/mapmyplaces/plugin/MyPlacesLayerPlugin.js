@@ -320,32 +320,33 @@ function(config) {
                 
         _.forEach(features, function(feature) {
             var name = feature.name 
+            
             if (feature.attention_text) {
-                name = feature.attention_text; 
+                name = feature.attention_text;
             }
 
             if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiPoint") {
                 _.forEach(feature.geometry.components, function(component) {
-                    vectorLayer.addFeatures(me._createFeature(feature.name, component, category.dotColor, category.dotSize*4));
+                    vectorLayer.addFeatures(me._createFeature(name, component, category.dotColor, category.dotSize*4));
                 });
             } else if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiPolygon"){
                 _.forEach(feature.geometry.components, function(component) {
                     var rightMostPoint = _.max(component.components[0].components, function(chr) {
                         return chr.x;
                     });
-                    vectorLayer.addFeatures(me._createFeature(feature.name, rightMostPoint, category.dotColor, 5));
+                    vectorLayer.addFeatures(me._createFeature(name, rightMostPoint, category.dotColor, 5));
                 });
             } else if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.LineString") {
                 var rightMostPoint = _.max(feature.geometry.components, function(chr) {
                         return chr.x;
                 });
-                vectorLayer.addFeatures(me._createFeature(feature.name, rightMostPoint, category.dotColor, 5));
+                vectorLayer.addFeatures(me._createFeature(name, rightMostPoint, category.dotColor, 5));
             } else if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.Polygon") {
                _.forEach(feature.geometry.components, function(component) {
                     var rightMostPoint = _.max(component.components, function(chr) {
                         return chr.x;
                     });
-                    vectorLayer.addFeatures(me._createFeature(feature.name, rightMostPoint, category.dotColor, 5));
+                    vectorLayer.addFeatures(me._createFeature(name, rightMostPoint, category.dotColor, 5));
                 });
             }
             
