@@ -33,7 +33,7 @@ Oskari.registerLocalization({
         "addColumn": "Get data",
         "removeColumn": "Remove",
         "indicators": "Indicators",
-        "cannotDisplayIndicator": "The indicator does not have municipality based values and it cannot be displayed in the grid.",
+        "cannotDisplayIndicator": "The indicator does not have values on the region category selected and it cannot be displayed in the grid.",
         "year": "Year",
         "buttons": {
             "ok": "OK",
@@ -88,6 +88,7 @@ Oskari.registerLocalization({
 
         },
         "statistic": {
+            "title": "Statistical variables",
             "avg": "Average",
             "max": "Maximum value",
             "mde": "Mode",
@@ -97,11 +98,12 @@ Oskari.registerLocalization({
             "sum": "Sum"
         },
         "values": "values",
+        "included": "Values",
         "municipality": "Municipalities",
         "selectRows": "Select rows",
         "select4Municipalities": "Select 4 municipalities",
         "showSelected": "Show only selected areas on the grid",
-        "not_included": "Not included municipalities",
+        "not_included": "Not included",
         "noMatch": "No results matched",
         "selectIndicator": "Select an indicator",
         "filterTitle"           : "Filter out column data",
@@ -125,6 +127,7 @@ Oskari.registerLocalization({
         "chosenRegionText"      : "Choose regions",
         "noRegionFound"         : "Region not found",
         "regionCategories"      : {
+            "title"                 : "Region categories",
             "ALUEHALLINTOVIRASTO"   : "Aluehallintovirasto",
             "MAAKUNTA"              : "Maakunta",
             "NUTS1"                 : "Manner-Suomi ja Ahvenanmaa",

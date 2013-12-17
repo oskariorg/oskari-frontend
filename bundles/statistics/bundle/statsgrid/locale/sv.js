@@ -33,7 +33,7 @@ Oskari.registerLocalization({
         "addColumn": "Hämta data",
         "removeColumn": "Radera",
         "indicators": "Indikator",
-        "cannotDisplayIndicator": "Indikaattorilla ei ole kuntapohjaisia arvoja, joten sitä ei voi näyttää taulukossa.",
+        "cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voi näyttää taulukossa.",
         "year": "År",
         "buttons": {
             "ok": "OK",
@@ -88,6 +88,7 @@ Oskari.registerLocalization({
 
         },
         "statistic": {
+            "title": "Tilastomuuttujat",
             "avg": "genomsnitt",
             "max": "Maximivärde",
             "mde": "Modus",
@@ -97,11 +98,12 @@ Oskari.registerLocalization({
             "sum": "Summa"
         },
         "values": "värden",
+        "included": "Värden",
         "municipality": "Kommuner",
         "selectRows": "Markera rader",
         "select4Municipalities": "Välj minst 4 kommuner",
         "showSelected": "Visa endast utvalda områden på nätet",
-        "not_included": "Inte inlcuded kommuner",
+        "not_included": "Inte inlcuded",
         "noMatch": "Inga matchade indikatorer",
         "selectIndicator": "Välja en indikator",
         "filterTitle"           : "Filtrera kolumndata",
@@ -125,6 +127,7 @@ Oskari.registerLocalization({
         "chosenRegionText"      : "Valitse alueita",
         "noRegionFound"         : "Aluetta ei löytynyt",
         "regionCategories"      : {
+            "title"                 : "Aluejaot",
             "ALUEHALLINTOVIRASTO"   : "Aluehallintovirasto",
             "MAAKUNTA"              : "Maakunta",
             "NUTS1"                 : "Manner-Suomi ja Ahvenanmaa",

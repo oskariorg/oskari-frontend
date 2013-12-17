@@ -91,6 +91,7 @@ jQuery(document).ready(function () {
             if (cb) {
                 cb(instance);
             }
+
             /*
              var ugStartup = {
                 title : 'Analyse',

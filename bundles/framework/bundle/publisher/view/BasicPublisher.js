@@ -114,8 +114,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             "classes": "top right"
         };
 
-        me.toolbarConfig = {};
-
         me.toolLayouts = ["lefthanded", "righthanded"];
 
         me.activeToolLayout = "lefthanded";
@@ -803,28 +801,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
             // get layout
             selections.layout = me.activeToolLayout;
-            // get toolbar config
-            // inactive buttons don't have to be sent
-            // if there's no active buttons, don't send toolbar config at all
-            if (me.toolbarConfig) {
-                var hasActiveTools = false;
-                for (i in me.toolbarConfig) {
-                    if (me.toolbarConfig.hasOwnProperty(i)) {
-                        for (j in me.toolbarConfig[i]) {
-                            if (me.toolbarConfig[i].hasOwnProperty(j) && me.toolbarConfig[i][j]) {
-                                hasActiveTools = true;
-                                break;
-                            }
-                        }
-                        if (hasActiveTools) {
-                            break;
-                        }
-                    }
-                }
-                if (hasActiveTools) {
-                    selections.toolbar = me.toolbarConfig;
-                }
-            }
+            me.toolsPanel.addValues(selections);
 
             for (i = 0; i < me.tools.length; i += 1) {
                 if (me.tools[i].selected) {
@@ -833,27 +810,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     };
                     if (me.tools[i].config) {
                         tmpTool.config = me.tools[i].config;
-                        if (tmpTool.config.location) {
-                            if (tmpTool.config.location.classes) {
-                                classes = tmpTool.config.location.classes;
-                                tmpTool.config.location = {
-                                    "classes": classes
-                                };
-                            } else {
-                                tmpTool.config.location = {};
-                            }
-                        }
                         // Remove unneeded stuff from conf
                         for (j = 0; j < me.toolLayouts.length; j += 1) {
                             tmpTool.config[me.toolLayouts[j]] = null;
                             delete tmpTool.config[me.toolLayouts[j]];
                         }
-
                     }
-
                     selections.plugins.push(tmpTool);
                 }
             }
+
+
             if (size === 'custom') {
                 var width = container.find('div.customsize input[name=width]').val(),
                     height = container.find('div.customsize input[name=height]').val();
@@ -1246,6 +1213,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             return statsGridState;
         },
 
+
+
         /**
          * Changes the style of each tool, if the tool's plugin supports it.
          *
@@ -1287,8 +1256,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 }
                 // tools in toolbar plugin needs to be configured
                 if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
-                    if (me.toolbarConfig && me.toolbarConfig.classes) {
-                        me.toolbarConfig.classes = tool.plugin.getToolConfs();
+                    if (me.toolsPanel.toolbarConfig && me.toolsPanel.toolbarConfig.classes) {
+                        me.toolsPanel.toolbarConfig.classes = tool.plugin.getToolConfs();
                     }
                 }
             }

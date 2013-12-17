@@ -425,8 +425,8 @@ function(drawPlugin) {
             var olLinearRingPoints = [];
             var olLinearRings;
             var olLineStringPoints = [];
-            var olLineString;
             var olPolygon;
+            var olComponents = [];
 
             // JSTS variables
             var jstsParser = new jsts.io.OpenLayersParser();
@@ -814,6 +814,38 @@ function(drawPlugin) {
             }
 
             for (k = 0; k < olSolutionLineStrings.length; k++) {
+                // Add middle point
+                olComponents = olSolutionLineStrings[k].components;
+                if (olComponents.length === 2) {
+                    olPoint = new OpenLayers.Geometry.Point(0.5*(olComponents[0].x+olComponents[1].x),0.5*(olComponents[0].y+olComponents[1].y));
+                    olPoint.references = olComponents[0].references;
+                    olPoint.markerPoint = -2;
+                    olPoint.boundaryPoint = false;
+                    olSolutionLineStrings[k].components.splice(1,0,olPoint);
+                }
+                var prevPoint = olComponents[0];
+                var nextPoint = olComponents[2];
+                for (l = 0; l < olSolutionPolygons.length; l++) {
+                    var polygon = olSolutionPolygons[l];
+                    for (p = 0; p < olComponents[0].references.length; p++) {
+                        if (olComponents[0].references[p] === polygon.id) {
+                            var points = polygon.components[0].components;
+                            var polyLength = points.length - 1;
+                            for (m = 0; m < polyLength; m++) {
+                                n = m + 1;
+                                if ((points[m] === prevPoint) && (points[n] === nextPoint)) {
+                                    points.splice(n, 0, olPoint);
+                                    break;
+                                }
+                                if ((points[n] === prevPoint) && (points[m] === nextPoint)) {
+                                    points.splice(n, 0, olPoint);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // Markers
                 intersections:
                 for (l = 0; l < 2; l++) {
@@ -920,11 +952,39 @@ function(drawPlugin) {
                 }
             }
 
+/*
+
+            // Remove middle points
+            olComponents = olNewFeatures[0].geometry.components;
+            for (i = 0; i < olComponents.length; i++) {
+                for (j = 0; j < olComponents[i].components.length; j++) {
+                    k = 0;
+                    while (k < olComponents[i].components[j].components.length-1) {
+                        olPoint = olComponents[i].components[j].components[k];
+                        if (olPoint.markerPoint === -2) {
+                            olNewFeatures[0].geometry.components[i].components[j].components.splice(k,1);
+                        } else {
+                            k = k+1;
+                        }
+                    }
+                }
+            }
+            olComponents = olNewFeatures[1].geometry.components;
+            for (i = 0; i < olComponents.length; i++) {
+                for (j = 0; j < olComponents[i].components.length; j++) {
+                    olPoint = olComponents[i].components[j];
+                    if (olPoint.markerPoint === -2) {
+                        olNewFeatures[1].geometry.components[i].components.splice(j,1);
+                        break;
+                    }
+                }
+            }
+*/
             // Update boundary info
             for (i = 0; i < olNewFeatures[0].geometry.components.length; i++) {
                 var olNewPoints = olNewFeatures[0].geometry.components[i].components[0].components;
                 for (j = 0; j < olNewPoints.length; j++) {
-                   if ((olNewPoints[j].references.length == 1) || (olNewPoints[j].markerPoint >= 0)) {
+                   if ((olNewPoints[j].references.length === 1) || (olNewPoints[j].markerPoint >= 0)) {
                        olNewPoints[j].boundaryPoint = true;
                    }
                 }
@@ -1157,12 +1217,11 @@ function(drawPlugin) {
         for (i=0; i<markers.length; i++) {
             marker = markers[i];
 
-            // Marker is always shared by two polygons
-            for (k=0; k<2; k++) {
+            k = 0;
+            for (m=0; m < features.length; m++) {
                 var refPoints = null;
                 var markerInd = -1;
-                refPoints = features[k].geometry.components[0].components;
-
+                refPoints = features[m].geometry.components[0].components;
 
                 // TODO: Use the markerIndexes array instead of this slow loop
                 for (l=0; l<refPoints.length; l++) {
@@ -1171,6 +1230,12 @@ function(drawPlugin) {
                         break;
                     }
                 }
+
+
+                if (markerInd === -1) {
+                    continue;
+                }
+
 
                 marker.reference.segments.p[k][0][0] = refPoints[markerInd];
                 if (refPoints[markerInd+1].boundaryPoint) {
@@ -1199,6 +1264,12 @@ function(drawPlugin) {
 
                     marker.reference.segments.p[k][2][0] = refPoints[markerInd+1];
                     marker.reference.segments.p[k][2][1] = refPoints[markerInd];
+                }
+                // Marker is always shared by two polygons
+                if (k === 1) {
+                    break;
+                } else {
+                    k = k+1;
                 }
             }
         }

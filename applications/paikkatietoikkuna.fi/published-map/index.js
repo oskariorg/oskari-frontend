@@ -71,6 +71,28 @@ jQuery(document).ready(function() {
               cb(instance);
           }
 /*
+             var ugStartup = {
+                "title" : "Publishedmyplaces2",
+                "fi" : "publishedmyplaces2",
+                "sv" : "publishedmyplaces2",
+                "en" : "publishedmyplaces2",
+                "bundlename" : "publishedmyplaces2",
+                "bundleinstancename" : "publishedmyplaces2",
+                "metadata" : {
+                    "Import-Bundle" : {
+                        "publishedmyplaces2" : {
+                            "bundlePath" : "/Oskari/packages/framework/bundle/"
+                        }
+                    },
+                    "Require-Bundle-Instance" : []
+                },
+                "instanceProps" : {}
+            };
+
+            Oskari.bundle_facade.playBundle(ugStartup, function() {
+            });
+*/
+/*
 
              var ugStartup = {
                 title : 'publishedstatehandler',

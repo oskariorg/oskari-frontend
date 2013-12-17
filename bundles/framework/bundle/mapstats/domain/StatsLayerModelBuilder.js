@@ -35,6 +35,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
         });
         layer.addTool(tool1);
 
+        // TODO: set this with actual data after structural changes
+        // in map layers have taken place.
+        layer.setCategoryMappings({
+            'categories': [
+                'KUNTA',
+                'ALUEHALLINTOVIRASTO',
+                'MAAKUNTA',
+                'NUTS1',
+                'SAIRAANHOITOPIIRI',
+                //'SUURALUE',
+                'SEUTUKUNTA'
+            ],
+            'wmsNames': {
+                'KUNTA': 'oskari:kunnat2013',
+                'ALUEHALLINTOVIRASTO': 'oskari:avi',
+                'MAAKUNTA': 'oskari:maakunta',
+                'NUTS1': 'oskari:nuts1',
+                'SAIRAANHOITOPIIRI': 'oskari:sairaanhoitopiiri',
+                //'SUURALUE': 'oskari:',
+                'SEUTUKUNTA': 'oskari:seutukunta'
+            },
+            'filterProperties': {
+                'KUNTA': 'kuntakoodi',
+                'ALUEHALLINTOVIRASTO': 'avi_nro',
+                'MAAKUNTA': 'maakuntanro',
+                'NUTS1': 'nuts1',
+                'SAIRAANHOITOPIIRI': 'sairaanhoitopiirinro',
+                //'SUURALUE': '',
+                'SEUTUKUNTA': 'seutukuntanro'
+            }
+        });
+
         // Info
         if (layer.getMetadataIdentifier()) {
             var tool2 = toolBuilder();
