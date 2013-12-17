@@ -523,7 +523,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     var button = target.parents('.tool').find('input#editModeBtn');
                     button.prop('disabled', false);
                     button.removeClass('disabled-button');
-                    me.toolsPanel.editToolLayoutOn();
+                    me._editToolLayoutOn();
                 }
             }
         },
@@ -654,7 +654,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             for(var i = 0; i < me.tools.length; i++) {
                 var tool = me.tools[i];
                 if(tool.id == "Oskari.mapframework.mapmodule.ControlsPlugin") {
-                    me._activatePreviewPlugin(tool, me.isMapControlActive);
+                    me.toolsPanel.activatePreviewPlugin(tool, me.isMapControlActive);
                     delete me.isMapControlActive;
                 }
             }
