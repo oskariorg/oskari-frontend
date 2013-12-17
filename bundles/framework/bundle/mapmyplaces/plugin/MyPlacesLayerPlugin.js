@@ -17,6 +17,7 @@ function(config) {
     this._supportedFormats = {};
     this.config = config;
     this.ajaxUrl = null;
+    this.layers = {};
     if(config && config.ajaxUrl) {
         this.ajaxUrl = config.ajaxUrl;
     }
@@ -218,6 +219,7 @@ function(config) {
      * @param {Boolean} isBaseMap
      */
     _addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
+
         if(!layer.isLayerOfType(this._layerType)) {
             return;
         }
@@ -249,11 +251,42 @@ function(config) {
             singleTile : true,
             buffer : 0
         });
-        
 
+        var attentionLayer = new OpenLayers.Layer.Vector("layer_name_"+layer.getId(), {
+            styleMap: new OpenLayers.StyleMap({'default':{
+                strokeOpacity: 0,
+                fillOpacity: 0.0,
+                pointerEvents: "visiblePainted",
+                label : "${attentionText}",
+                fontColor: "#${color}",
+                labelAlign: "${align}",
+                labelXOffset: "${xOffset}",
+                labelYOffset: "${yOffset}",
+                fontSize: "24px",
+                fontFamily: "Open Sans",
+                fontWeight: "bold",
+                labelOutlineColor: "white",
+                labelOutlineWidth: 3
+            }})
+        });
+
+        var myPlacesService = this._sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
+
+        if (myPlacesService) {
+            this._addAttentionText(myPlacesService, layer.getId(), attentionLayer);
+        }
+
+        attentionLayer.opacity = layer.getOpacity() / 100;
         openLayer.opacity = layer.getOpacity() / 100;
-
+       
         this._map.addLayer(openLayer);
+        this._map.addLayer(attentionLayer);
+
+        var myLayersGroup = [];
+        myLayersGroup.push(openLayer);
+        myLayersGroup.push(attentionLayer);
+
+        this.layers[openLayerId] = myLayersGroup;
 
         this._sandbox.printDebug("#!#! CREATED OPENLAYER.LAYER.WMS for MyPlacesLayer " + layer.getId());
 
@@ -270,7 +303,74 @@ function(config) {
             }
         }  
     },
-    
+    /**
+     * Adds a single  attention text to MyPlaces layer to this map
+     * 
+     * @method _addAttentionText
+     * @private
+     * @param {Oskari.mapframework.bundle.myplaces2.service.MyPlacesService} myPlacesService
+     * @param {String} layerId
+     * @param {OpenLayers.Layer.Vector} vectorLayer
+     */
+    _addAttentionText: function (myPlacesService, layerId, vectorLayer) {
+        var me = this;
+        var categoryId = layerId.split("_")[1]
+        var category = myPlacesService.findCategory(categoryId);
+        var features = myPlacesService.getPlacesInCategory(categoryId);
+                
+        _.forEach(features, function(feature) {
+            var name = feature.name 
+            if (feature.attention_text) {
+                name = feature.attention_text; 
+            }
+
+            if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiPoint") {
+                _.forEach(feature.geometry.components, function(component) {
+                    vectorLayer.addFeatures(me._createFeature(feature.name, component, category.dotColor, category.dotSize*4));
+                });
+            } else if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiPolygon"){
+                _.forEach(feature.geometry.components, function(component) {
+                    var rightMostPoint = _.max(component.components[0].components, function(chr) {
+                        return chr.x;
+                    });
+                    vectorLayer.addFeatures(me._createFeature(feature.name, rightMostPoint, category.dotColor, 5));
+                });
+            } else if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.LineString") {
+                var rightMostPoint = _.max(feature.geometry.components, function(chr) {
+                        return chr.x;
+                });
+                vectorLayer.addFeatures(me._createFeature(feature.name, rightMostPoint, category.dotColor, 5));
+            } else if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.Polygon") {
+               _.forEach(feature.geometry.components, function(component) {
+                    var rightMostPoint = _.max(component.components, function(chr) {
+                        return chr.x;
+                    });
+                    vectorLayer.addFeatures(me._createFeature(feature.name, rightMostPoint, category.dotColor, 5));
+                });
+            }
+            
+        });
+    },
+    /**
+     * Creating new point feature
+     * 
+     * @method _createFeature
+     * @private
+     * @param {String} name
+     * @param {Component} component
+     * @param {String} color
+     * @param {integer} xOffset
+     */
+    _createFeature: function(name, component, color, xOffset) {
+        var pointFeature = new OpenLayers.Feature.Vector(component);
+        pointFeature.attributes = {
+            attentionText: name,
+            color: color,
+            align: "lb",
+            xOffset : xOffset 
+        };
+        return pointFeature;
+    },
     /**
      * Handle AfterMapLayerRemoveEvent
      * 
@@ -299,9 +399,14 @@ function(config) {
             return null;
         }
 
-        var mapLayer = this.getOLMapLayers(layer);
+        var mapLayers = this.getOLMapLayers(layer);
+
+        _.forEach(mapLayers, function(mapLayer) {
+            mapLayer.destroy();
+        });
+
         /* This should free all memory */
-        mapLayer[0].destroy();
+        //mapLayer[0].destroy();
     },
     /**
      * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map. 
@@ -315,7 +420,8 @@ function(config) {
             return null;
         }
 
-        return this._map.getLayersByName('layer_' + layer.getId());
+        //return this._map.getLayersByName('layer_' + layer.getId());
+        return this.layers['layer_' + layer.getId()];
     },
     /**
      * Handle AfterChangeMapLayerOpacityEvent
@@ -333,9 +439,12 @@ function(config) {
         }
 
         var opacity = layer.getOpacity() / 100,
-            openLayer = this.getOLMapLayers(layer);
+            openLayers = this.getOLMapLayers(layer);
 
-        openLayer[0].setOpacity(opacity);
+        _.forEach(openLayers, function(mapLayer) {
+            mapLayer.setOpacity(opacity);
+        });
+        //openLayer[0].setOpacity(opacity);
     }
 }, {
     /**
