@@ -106,7 +106,7 @@ function(instance, localization) {
         grid.setDataModel(model);
 
         grid.setColumnValueRenderer('name', function(name, data) {
-            return jQuery('<div></div>').html(name).
+            return jQuery('<div class="indicator-name-link"></div>').html(name).
                 click(function() {
                     me._showUserIndicator(data.id);
                 });
