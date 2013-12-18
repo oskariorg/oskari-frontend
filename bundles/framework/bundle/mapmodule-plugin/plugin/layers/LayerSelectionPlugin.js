@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         init: function (sandbox) {
             var me = this;
-            me.templates.main = jQuery("<div class='mapplugin layerselection'>" +
+            me.templates.main = jQuery("<div class='mapplugin layerselection' data-clazz='Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin'>" +
                 '<div class="header"><div class="header-icon icon-arrow-white-right"></div></div>' +
                 '<div class="content"><div class="layers"></div><div class="baselayers"></div></div>' +
                 "</div>");
@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         stopPlugin: function (sandbox) {
             var me = this,
                 p;
-            var sb = sandbox ? sandbox : this._sandbox;
+            var sb = sandbox || this._sandbox;
 
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p) && sb) {

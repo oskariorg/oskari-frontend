@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             var me = this,
                 ppid = (new Date()).getTime().toString();
             // templates
-            this.templates.main = jQuery('<div class="mapplugin panbuttonDiv panbuttons">' +
+            this.templates.main = jQuery('<div class="mapplugin panbuttonDiv panbuttons" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.PanButtons">' +
                 '<div>' +
                 '  <img class="panbuttonDivImg" usemap="#panbuttons_' + ppid + '">' +
                 '    <map name="panbuttons_' + ppid + '">' +

@@ -13,6 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
      * @param {Object} localization
      *      localization data in JSON format
      */
+
     function (instance, localization, data) {
 
         var me = this;
@@ -37,10 +38,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         me.templateHelp = jQuery('<div class="help icon-info"></div>');
         me.templateLayout = jQuery('<div class="tool "><label><input type="radio" name="toolLayout" /><span></span></label></div>');
         me.templateData = jQuery('<div class="data ">' +
-                '<input class="show-grid" type="checkbox"/>' +
-                '<label class="show-grid-label"></label>' + '<br />' +
-                '<input class="allow-classification" type="checkbox"/>' +
-                '<label class="allow-classification-label"></label>' +
+            '<input class="show-grid" type="checkbox"/>' +
+            '<label class="show-grid-label"></label>' + '<br />' +
+            '<input class="allow-classification" type="checkbox"/>' +
+            '<label class="allow-classification-label"></label>' +
             '</div>');
         me.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
         me.templateCustomSize = jQuery('<div class="customsize">' + '<input type="text" name="width" ' +
@@ -62,8 +63,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 "groupedSiblings": false
             },
 
-            "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin" : {
-                "alloweLocations": ['bottom left', 'bottom right'],
+            "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin": {
+                "allowedLocations": ['bottom left', 'bottom right'],
                 "allowedSiblings": ["Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin", "Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin"],
                 "groupedSiblings": false
             },
@@ -486,14 +487,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             var me = this,
                 tools = me.tools,
                 i,
-                tool;
+                tool,
+                target,
+                button;
             // store location so we have easy access to it on save
             me.activeToolLayout = layout;
-            if(layout != "userlayout") {
+            if (layout !== "userlayout") {
                 // set location for all tools
                 for (i = tools.length - 1; i > -1; i -= 1) {
                     tool = tools[i];
                     if (tool[layout]) {
+                        if (!tool.config) {
+                            tool.config = {};
+                        }
+                        if (!tool.config.location) {
+                            tool.config.location = {};
+                        }
                         tool.config.location.classes = tool[layout];
                         if (tool.plugin) {
                             if (tool.plugin.setLocation) {
@@ -510,17 +519,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 me.layerSelectionClasses.classes = me.layerSelectionClasses[layout];
                 me.maplayerPanel.plugin.setLocation(me.layerSelectionClasses.classes);
 
-                if(event) {
-                    var target = jQuery(event.currentTarget);
-                    var button = target.parents('.content').find('input#editModeBtn');
+                if (event) {
+                    target = jQuery(event.currentTarget);
+                    button = target.parents('.content').find('input#editModeBtn');
                     button.prop('disabled', true);
                     button.addClass('disabled-button');
                     me._editToolLayoutOff();
                 }
             } else {
-                if(event) {
-                    var target = jQuery(event.currentTarget);
-                    var button = target.parents('.tool').find('input#editModeBtn');
+                if (event) {
+                    target = jQuery(event.currentTarget);
+                    button = target.parents('.tool').find('input#editModeBtn');
                     button.prop('disabled', false);
                     button.removeClass('disabled-button');
                     me._editToolLayoutOn();
@@ -547,7 +556,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             tooltipCont.attr('title', this.loc.toollayout.tooltip);
             contentPanel.append(tooltipCont);
 
-
             // content
             for (i = 0; i < me.toolLayouts.length; i += 1) {
                 layoutContainer = me.templateLayout.clone();
@@ -563,13 +571,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 }
                 layoutContainer.find("span").html(this.loc.toollayout[me.toolLayouts[i]] || me.toolLayouts[i]);
                 contentPanel.append(layoutContainer);
-                if(me.toolLayouts[i] == "userlayout") {
+                if (me.toolLayouts[i] === "userlayout") {
                     var editBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
                     editBtn.setTitle(me.loc.toollayout.usereditmode);
+                    // FIXME create function outside loop
                     editBtn.setHandler(function () {
-                        //user is in edit mode
-                        if(jQuery(editBtn.getButton()).val() == me.loc.toollayout.usereditmodeoff) {
-                            //remove edit mode
+                        // user is in edit mode
+                        if (jQuery(editBtn.getButton()).val() === me.loc.toollayout.usereditmodeoff) {
+                            // remove edit mode
                             me._editToolLayoutOff();
                         } else {
                             me._editToolLayoutOn();
@@ -586,7 +595,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
         },
 
-        _editToolLayoutOn: function(){
+        _editToolLayoutOn: function () {
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
             me.toolLayoutEditMode = true;
@@ -595,24 +604,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             var droppables = jQuery('.mappluginsContent').sortable({
                 connectWith: ".mappluginsContent",
-                items: "> div.mapplugin"
+                items: "> div.mapplugin",
+                start: function (event, ui) {
+                    me._showDroppable(ui.item.attr('data-clazz'));
+                },
+                receive: function (event, ui) {
+                    if (ui.item.parent().hasClass("disallowed")) {
+                        ui.sender.sortable("cancel");
+                    }
+                },
+                stop: function (event, ui) {
+                    me._hideDroppable();
+                }
             }).disableSelection();
-            droppables.css({'min-width': '100px', 'min-height': '100px','border':"3px dashed #666", 'border-radius': "20px", "background-color": "rgba(255,255,255,0.5)"});
+            droppables.css({
+                'min-width': '100px',
+                'min-height': '100px',
+                'border': "3px dashed #666",
+                'border-radius': "20px",
+                "background-color": "rgba(255,255,255,0.5)"
+            });
             var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(true);
             sandbox.notifyAll(event);
 
             // remove map controls when editing tool layout
-            var tools = me.tools;
-            for(var i = 0; i < me.tools.length; i++) {
-                var tool = me.tools[i];
-                if(tool.id == "Oskari.mapframework.mapmodule.ControlsPlugin") {
+            var tools = me.tools,
+                tool,
+                i;
+            for (i = 0; i < me.tools.length; i++) {
+                tool = me.tools[i];
+                if (tool.id === "Oskari.mapframework.mapmodule.ControlsPlugin") {
                     me.isMapControlActive = tool.selected;
                     me.toolsPanel.activatePreviewPlugin(tool, false);
                 }
             }
         },
 
-        _editToolLayoutOff: function(){
+        _editToolLayoutOff: function () {
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
             me.toolLayoutEditMode = false;
@@ -620,40 +648,49 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             jQuery('.mapplugin').removeClass('toollayoutedit');
 
             var droppables = jQuery('.mappluginsContent');
-            droppables.each(function(){
+            droppables.each(function () {
                 //it is not certain that all the elements are yet droppable
-                  if(jQuery(this).is('.ui-sortable')) {
+                if (jQuery(this).is('.ui-sortable')) {
                     jQuery('.mappluginsContent')
-                        .css({'min-width': '', 'min-height': '', 'border': '', 'border-radius': '', 'background-color': ''})
-                        .sortable( "destroy" );//draggable( "destroy" );
+                        .css({
+                            'min-width': '',
+                            'min-height': '',
+                            'border': '',
+                            'border-radius': '',
+                            'background-color': ''
+                        })
+                        .sortable("destroy"); //draggable( "destroy" );
                 }
             });
-            var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(false);
+            var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(false),
+                plugin,
+                i;
             sandbox.notifyAll(event);
 
             //these events does not work properly... 
             // so lets do all the necessary config adjustments here.
-            for(var i = 0; i < me.tools.length; i++) {
-                var plugin = this.tools[i].plugin;
-                if(plugin && plugin.hasUI && plugin.hasUI() && plugin.element){
+            for (i = 0; i < me.tools.length; i++) {
+                plugin = this.tools[i].plugin;
+                if (plugin && plugin.hasUI && plugin.hasUI() && plugin.element) {
                     plugin.setLocation(plugin.element.parents('.mapplugins').attr('data-location'));
                 }
             }
             // Set logoplugin and layerselection as well
-            if(me.logoPlugin) {
+            if (me.logoPlugin) {
                 me.logoPluginClasses.classes = me.logoPlugin.element.parents('.mapplugins').attr('data-location');
                 me.logoPlugin.setLocation(me.logoPluginClasses.classes);
             }
-            if(me.maplayerPanel.plugin && me.maplayerPanel.plugin.element) {
+            if (me.maplayerPanel.plugin && me.maplayerPanel.plugin.element) {
                 me.layerSelectionClasses.classes = me.maplayerPanel.plugin.element.parents('.mapplugins').attr('data-location');
                 me.maplayerPanel.plugin.setLocation(me.layerSelectionClasses.classes);
             }
 
             // set map controls back to original settings after editing tool layout
-            var tools = me.tools;
-            for(var i = 0; i < me.tools.length; i++) {
-                var tool = me.tools[i];
-                if(tool.id == "Oskari.mapframework.mapmodule.ControlsPlugin") {
+            var tools = me.tools,
+                tool;
+            for (i = 0; i < me.tools.length; i++) {
+                tool = me.tools[i];
+                if (tool.id === "Oskari.mapframework.mapmodule.ControlsPlugin") {
                     me.toolsPanel.activatePreviewPlugin(tool, me.isMapControlActive);
                     delete me.isMapControlActive;
                 }
@@ -1023,8 +1060,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 sandbox = me.instance.getSandbox(),
                 url = sandbox.getAjaxUrl();
             // Total width for map and grid. Used to calculate the iframe size.
-            var totalWidth = (me.isDataVisible ?
-                    (selections.size.width + me._calculateGridWidth()) : selections.size.width);
+            var totalWidth = (me.isDataVisible ? (selections.size.width + me._calculateGridWidth()) : selections.size.width);
             var errorHandler = function () {
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                     okBtn = dialog.createCloseButton(me.loc.buttons.ok);
@@ -1482,14 +1518,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             return infoPlugin;
         },
-        _getInitialPluginLocation: function(data, pluginName) {
-            var plugins = this.data.state.mapfull.config.plugins;
-            for (var i = 0; i < plugins.length; i++) {
+        _getInitialPluginLocation: function (data, pluginName) {
+            var plugins = this.data.state.mapfull.config.plugins,
+                plugin,
+                i;
+            for (i = 0; i < plugins.length; i++) {
                 plugin = plugins[i];
-                if(plugin.id == pluginName && plugin.config && plugin.config.location) {
+                if (plugin.id === pluginName && plugin.config && plugin.config.location) {
                     return plugin.config.location.classes;
                 }
-            };
+            }
             return null;
         },
 
@@ -1557,12 +1595,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          */
         _getActivePlugins: function (whitelist) {
             var ret = [],
+                clazz,
                 i;
-            for (i = 0; i < this.tools.length; i++) {
-                if (this.tools[i].plugin && this.tools[i].plugin.selected && jQuery.inArray(this.tools[i].plugin.id, whitelist)) {
-                    ret.push(this.tools[i].id);
+            jQuery(".mapplugins .mapplugin").each(function () {
+                clazz = jQuery(this).attr("data-clazz");
+                if (jQuery.inArray(clazz, whitelist) > -1) {
+                    ret.push(clazz);
                 }
-            }
+            });
             return ret;
         },
 
@@ -1589,47 +1629,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          */
         _getDropzonePlugins: function (dropzone) {
             var ret = [],
-                i;
-            for (i = 0; i < this.tools.length; i++) {
-                if (this._toolInDropZone(this.tools[i], dropzone)) {
-                    ret.push(this.tools[i].id);
+                clazz;
+            dropzone.find(".mapplugin").each(function () {
+                // ignore undefined...
+                clazz = jQuery(this).attr("data-clazz");
+                if (clazz) {
+                    ret.push(clazz);
                 }
-            }
-            // There's no such structure for LogoPlugin so we have to build it...
-            var tmpTool = {
-                "config": {
-                    "location": {
-                        "classes": this.logoPluginClasses.classes
-                    }
-                },
-                "plugin": this.logoPlugin
-            };
-            // LogoPlugin
-            if (this._toolInDropZone(tmpTool, dropzone)) {
-                ret.push("Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin");
-            }
-            // LayerSelectionPlugin
-            tmpTool.config.location.classes = this.layerSelectionClasses.classes;
-            tmpTool.plugin = this.maplayerPanel.plugin;
-            if (this._toolInDropZone(tmpTool, dropzone)) {
-                ret.push("Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin");
-            }
-            return ret;
-        },
-
-        /**
-         * @method _toolInDropZone    Determines if the tool is active and in the dropzone
-         * @param  {Object}  tool     Tool instance, containing plugin and config
-         * @param  {Object}  dropzone jQuery object of the dropzone
-         * @return {Boolean}          True if tool is active and in the dropzone
-         */
-        _toolInDropZone: function (tool, dropzone) {
-            var ret = false;
-            // TODO check that selected tells us if the plugin is active...
-            if (tool && tool.plugin && tool.plugin.selected) {
-                //    check if in this dropzone (nasty class check)
-                ret = dropzone.is("." + tool.config.location.classes.split(' ').join("."));
-            }
+            });
             return ret;
         },
 
@@ -1641,8 +1648,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          */
         _locationAllowed: function (allowedLocations, dropzone) {
             var isAllowedLocation,
-                i,
-                j;
+                i;
+            if (!allowedLocations || !dropzone) {
+                return false;
+            }
             for (i = 0; i < allowedLocations.length; i++) {
                 isAllowedLocation = dropzone.is("." + allowedLocations[i].split(' ').join("."));
                 if (isAllowedLocation) {
@@ -1653,6 +1662,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         },
 
         /**
+         * Checks if plugins in dropzone are allowed siblings for given plugin
+         * @param  {String} plugin   Plugin clazz
+         * @param  {Object} dropzone jQuery object for dropzone
+         * @return {Boolean}         True if dropzone's plugins are allowed siblings fo given plugin 
+         */
+        _siblingsAllowed: function (plugin, dropzone) {
+            var siblings = this._getDropzonePlugins(dropzone),
+                i;
+            for (i = 0; i < siblings.length; i++) {
+                if (jQuery.inArray(siblings[i], this.toolDropRules[plugin].allowedSiblings) < 0 && plugin !== siblings[i]) {
+                    return false;
+                }
+            }
+            return true;
+        },
+
+        /**
          * @method _showDroppable  Shows dropzones where the given plugin can be dropped in green
          * @param  {String} plugin Plugin class
          */
@@ -1660,33 +1686,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             var me = this,
                 allowedLocation,
                 dropzone,
-                siblings,
                 i;
+            if (!plugin) {
+                return;
+            }
             jQuery('div.mapplugins').each(function () {
                 dropzone = jQuery(this);
-                allowedLocation = me._locationAllowed(me.toolDropRules[plugin].allowedLocations, dropzone);
+                var al = me.toolDropRules[plugin].allowedLocations;
+                allowedLocation = me._locationAllowed(al, dropzone);
                 if (allowedLocation) {
-                    // check if siblings are allowed
-                    siblings = me._getDropzonePlugins(dropzone);
-                    for (i = 0; i < siblings.length; i++) {
-                        allowedLocation = jQuery.inArray(siblings[i], me.toolDropRules[plugin].allowedSiblings) > -1;
-                        if (!allowedLocation) {
-                            break;
-                        }
-                    }
-                    // TODO apply class to actual dropzone element instead of the container root
+                    allowedLocation = me._siblingsAllowed(plugin, dropzone);
+
+                    // TODO use classes instead of inline css
                     if (allowedLocation) {
-                        // TODO these should be removed at some stage...
                         // paint it green, plugin can be dropped here
-                        dropzone.addClass("allowed");
+                        dropzone.find(".mappluginsContent").addClass("allowed").css("background-color", "rgba(0, 255, 0, 0.5)");
                     } else {
                         // paint it red, plugins already in the dropzone aren't allowed siblings for this plugin
                         // we could also try to move them somewhere?
-                        dropzone.addClass("disallowed");
+                        dropzone.find(".mappluginsContent").addClass("disallowed").css("background-color", "rgba(255, 0, 0, 0.5)");
                     }
                 } else {
                     // paint it red, this isn't an allowed dropzone for the plugin
-                    dropzone.addClass("disallowed");
+                    dropzone.find(".mappluginsContent").addClass("disallowed").css("background-color", "rgba(255, 0, 0, 0.5)");
                 }
             });
         },
@@ -1695,8 +1717,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          * Hides dropzones
          */
         _hideDroppable: function () {
-            jQuery('div.mapplugins').removeClass("allowed", "disallowed").each(function () {
-                // remove droppable functionality
-            });
+            jQuery('div.mapplugins .mappluginsContent').removeClass("allowed").removeClass("disallowed").css("background-color", "rgba(255, 255, 255, 0.5)");
         }
     });

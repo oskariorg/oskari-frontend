@@ -27,12 +27,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         // templates for tools-mapplugin
         templates: {
             main: jQuery(
-                '<div class="mapplugin tools">' +
+                '<div class="mapplugin tools" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin">' +
                     "<div class='icon'></div>" +
                     "<div class='publishedToolbarContainer'>" +
-                        "<div class='tools-top-arrow'></div>" +
+                    "<div class='tools-top-arrow'></div>" +
                     "</div>" +
-                '</div>'),
+                    '</div>'
+            ),
             container: jQuery("<div></div>"),
             publishedToolbarPopupContent: jQuery('<div class="publishedToolPopupContent"><h3></h3><div class="content"></div><div class="actions"></div></div>')
         },
@@ -93,67 +94,66 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             /////////////////////////////////
             // ADD TOOL CONFIGURATION HERE //
             /////////////////////////////////
-            me.buttonGroups =
-                [
-                    {
-                        'name': 'history',
-                        'buttons': {
-                            'history_back': {
-                                toolbarid: me.toolbarId,
-                                iconCls: 'tool-history-back-dark',
-                                tooltip: me.localization.history.back,
-                                prepend: true,
-                                enabled: false,
-                                sticky: false,
-                                callback: function () {
-                                    me._sandbox.request(me, reqBuilder('map_control_tool_prev'));
-                                }
-                            },
-                            'history_forward': {
-                                toolbarid: me.toolbarId,
-                                iconCls: 'tool-history-forward-dark',
-                                tooltip: me.localization.history.next,
-                                enabled: false,
-                                sticky: false,
-                                callback: function () {
-                                    me._sandbox.request(me, reqBuilder('map_control_tool_next'));
-                                }
+            me.buttonGroups = [
+                {
+                    'name': 'history',
+                    'buttons': {
+                        'history_back': {
+                            toolbarid: me.toolbarId,
+                            iconCls: 'tool-history-back-dark',
+                            tooltip: me.localization.history.back,
+                            prepend: true,
+                            enabled: false,
+                            sticky: false,
+                            callback: function () {
+                                me._sandbox.request(me, reqBuilder('map_control_tool_prev'));
                             }
-                        }
-                    }, {
-                        'name': 'basictools',
-                        'buttons': {
-                            'measureline': {
-                                toolbarid: me.toolbarId,
-                                iconCls: 'tool-measure-line-dark',
-                                tooltip: me.localization.measure.line,
-                                enabled: false,
-                                sticky: true,
-                                callback: function () {
-                                    var rn = 'map_control_measure_tool';
-                                    me._sandbox.request(me, gfiReqBuilder(false));
-                                    me._sandbox.request(me, reqBuilder(rn));
-                                }
-                            },
-                            'measurearea': {
-                                toolbarid: me.toolbarId,
-                                iconCls: 'tool-measure-area-dark',
-                                tooltip: me.localization.measure.area,
-                                enabled: false,
-                                sticky: true,
-                                callback: function () {
-                                    var rn = 'map_control_measure_area_tool';
-                                    me._sandbox.request(me, gfiReqBuilder(false));
-                                    me._sandbox.request(me, reqBuilder(rn));
-                                }
+                        },
+                        'history_forward': {
+                            toolbarid: me.toolbarId,
+                            iconCls: 'tool-history-forward-dark',
+                            tooltip: me.localization.history.next,
+                            enabled: false,
+                            sticky: false,
+                            callback: function () {
+                                me._sandbox.request(me, reqBuilder('map_control_tool_next'));
                             }
                         }
                     }
-                ];
+                }, {
+                    'name': 'basictools',
+                    'buttons': {
+                        'measureline': {
+                            toolbarid: me.toolbarId,
+                            iconCls: 'tool-measure-line-dark',
+                            tooltip: me.localization.measure.line,
+                            enabled: false,
+                            sticky: true,
+                            callback: function () {
+                                var rn = 'map_control_measure_tool';
+                                me._sandbox.request(me, gfiReqBuilder(false));
+                                me._sandbox.request(me, reqBuilder(rn));
+                            }
+                        },
+                        'measurearea': {
+                            toolbarid: me.toolbarId,
+                            iconCls: 'tool-measure-area-dark',
+                            tooltip: me.localization.measure.area,
+                            enabled: false,
+                            sticky: true,
+                            callback: function () {
+                                var rn = 'map_control_measure_area_tool';
+                                me._sandbox.request(me, gfiReqBuilder(false));
+                                me._sandbox.request(me, reqBuilder(rn));
+                            }
+                        }
+                    }
+                }
+            ];
 
             this.requestHandlers = {
-                toolContainerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler', me),
-            };            
+                toolContainerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler', me)
+            };
         },
         /**
          * @method register
@@ -294,18 +294,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 content,
                 containerClasses = 'top left',
                 position = 1,
-                containers = [me.toolbarContent, me.toolbarPopupContent];
+                containers = [me.toolbarContent, me.toolbarPopupContent],
+                i,
+                ilen;
 
             if (!me.element) {
                 me.element = me.template.clone();
                 container = me.element.find('.' + me.toolbarContainer);
 
-                for (var i = 0, ilen = containers.length; i < ilen; i++) {
+                for (i = 0, ilen = containers.length; i < ilen; i++) {
                     // create configured containers
                     me.templates.container
                         .clone()
                         .attr("class", containers[i])
-                        .appendTo(container)
+                        .appendTo(container);
                 }
             }
 
@@ -334,23 +336,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             }
 
         },
-        setToolbarContainer : function() {
+        setToolbarContainer: function () {
             var me = this,
                 sandbox = me._sandbox;
             var builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
+            // FIXME use !==
             if (me.toolbarId && (me.toolbarContent) && builder != null) {
                 // add toolbar when toolbarId and target container is configured
                 // We assume the first container is intended for the toolbar
                 sandbox.requestByName(me, 'Toolbar.ToolbarRequest', [me.toolbarId, 'add', {
-                    title : me.localization.title,
-                    show : false,
+                    title: me.localization.title,
+                    show: false,
                     toolbarContainer: me.element.find('.' + me.toolbarContent),
-                    closeBoxCallback : function() {
+                    closeBoxCallback: function () {
                         // this is useless, I guess.  
                         //view.prepareMode(false);
                     }
                 }]);
-            }            
+            }
         },
         /**
          * @method getToolOptions
@@ -378,10 +381,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             var resourcesPath = me.getMapModule().getImageUrl(),
                 imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/',
-                styledImg = imgPath + 'menu-' + style + '.png',                
+                styledImg = imgPath + 'menu-' + style + '.png',
                 icon = div.find('.icon'),
                 toolsContent = div.find('.' + me.toolbarContent),
-                toolsPopupContent = div.find('.' + me.toolbarPopupContent)
+                toolsPopupContent = div.find('.' + me.toolbarPopupContent),
                 blackOrWhite = style.split("-")[1];
 
             icon.css({
@@ -472,7 +475,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          * @method setToolContent
          * @param {Object} data
          */
-        setToolContent: function (data){
+        setToolContent: function (data) {
             var me = this,
                 className = data.className || "", // defaults to empty
                 title = data.title || "", // defaults to empty
@@ -485,7 +488,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 i,
                 contentHeight,
                 reasonableHeight;
-                
+
             if (contentDiv.length === 0) {
                 // no container found, clone a new one
                 contentDiv = me.templates.publishedToolbarPopupContent.clone();
@@ -536,20 +539,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             contentDiv.remove();
             toolbarDiv.show();
         },
-        getToolConfs : function() {
+        getToolConfs: function () {
             var me = this,
-                confs = {};
-            for (var i in me.buttonGroups) {
+                confs = {},
+                i,
+                confGroup,
+                j,
+                confButton;
+            for (i in me.buttonGroups) {
                 if (me.buttonGroups.hasOwnProperty(i)) {
-                    var confGroup = me.buttonGroups[i];
+                    confGroup = me.buttonGroups[i];
                     // create button groups for confs
                     confs[confGroup.name] = {};
 
-                    for (var j in confGroup.buttons) {
+                    for (j in confGroup.buttons) {
                         if (confGroup.buttons.hasOwnProperty(j)) {
-                            var confButton = confGroup.buttons[j];
+                            confButton = confGroup.buttons[j];
                             // create buttons and add necessary confs
-                            confs[confGroup.name][j] = {'iconCls': confButton.iconCls};
+                            confs[confGroup.name][j] = {
+                                'iconCls': confButton.iconCls
+                            };
                         }
                     }
                 }

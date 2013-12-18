@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
         me._indexMapUrl = '/framework/bundle/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
     }, {
         templates: {
-            main: jQuery('<div class="mapplugin indexmap"></div>'),
+            main: jQuery('<div class="mapplugin indexmap" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin"></div>'),
             toggle: jQuery('<div class="indexmapToggle"></div>')
         },
 
@@ -185,7 +185,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             var toggleButton = me.templates.toggle.clone();
             // add toggle functionality to button
             toggleButton.click(function () {
-                if(!me.isInLayerToolsEditMode){
+                if (!me.isInLayerToolsEditMode) {
                     me.element.find('.olControlOverviewMapElement').toggle();
                 }
             });
@@ -245,10 +245,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
                     this._indexMap.update();
                 }
             },
-            'LayerToolsEditModeEvent' : function(event) {
+            'LayerToolsEditModeEvent': function (event) {
                 if (this._sandbox) {
                     this.isInLayerToolsEditMode = event.isInMode();
-                    if(this.isInLayerToolsEditMode == false) {
+                    if (this.isInLayerToolsEditMode == false) {
                         this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
                     }
                 }

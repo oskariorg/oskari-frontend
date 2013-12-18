@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
 
         templates: {
             main: jQuery(
-                "<div class='mapplugin logoplugin'>" +
+                "<div class='mapplugin logoplugin' data-clazz='Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin'>" +
                     "<div class='icon'></div>" +
                     "<div class='terms'><a href='JavaScript:void(0);'></a></div>" +
                     "<div class='data-sources'></div>" +

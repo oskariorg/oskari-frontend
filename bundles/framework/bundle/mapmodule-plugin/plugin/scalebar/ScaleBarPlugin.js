@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
     }, {
 
         templates: {
-            main: jQuery('<div class="mapplugin scalebar"></div>')
+            main: jQuery('<div class="mapplugin scalebar" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"></div>')
         },
 
         /** @static @property __name plugin name */

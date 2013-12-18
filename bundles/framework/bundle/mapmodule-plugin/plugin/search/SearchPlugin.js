@@ -74,15 +74,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             me.loc = pluginLoc[me.__name];
 
             me.template = jQuery(
-                '<div class="mapplugin search">' +
+                '<div class="mapplugin search" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin">' +
                     '<div class="search-textarea-and-button">' +
-                   
+
                     '<input placeholder="' + me.loc.placeholder + '" type="text" />' +
-            
-                   '<input type="button" value="' + me.loc.search + '" name="search" />' +
+
+                    '<input type="button" value="' + me.loc.search + '" name="search" />' +
                     '</div>' +
                     '<div class="results">' +
-                    '<div class="header">' + 
+                    '<div class="header">' +
                     '<div class="close icon-close" title="' + me.loc.close + '"></div>' +
                     '</div>' +
                     '<div class="content">&nbsp;</div>' +
@@ -200,31 +200,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * @static
          */
         eventHandlers: {
-            'LayerToolsEditModeEvent' : function(event) {
+            'LayerToolsEditModeEvent': function (event) {
                 this._setLayerToolsEditMode(event.isInMode());
-                if(this.isInLayerToolsEditMode == false) {
+                if (this.isInLayerToolsEditMode == false) {
                     this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
                 }
             }
         },
 
-        _setLayerToolsEditMode: function(isInEditMode) {
+        _setLayerToolsEditMode: function (isInEditMode) {
             this.isInLayerToolsEditMode = isInEditMode;
-            if(this.isInLayerToolsEditMode) {
-                this._inputField.prop( "disabled", true );
-                this._searchButton.prop( "disabled", true );
+            if (this.isInLayerToolsEditMode) {
+                this._inputField.prop("disabled", true);
+                this._searchButton.prop("disabled", true);
 
                 var overlay = jQuery('<div class="search-editmode-overlay">');
                 this.element.find('.search-textarea-and-button')
-                    .css({'position':'relative'})
+                    .css({
+                        'position': 'relative'
+                    })
                     .append(overlay);
-                overlay.mousedown(function(e){
+                overlay.mousedown(function (e) {
                     e.preventDefault();
-                }); 
+                });
 
             } else {
-                this._inputField.prop( "disabled", false );
-                this._searchButton.prop( "disabled", false );
+                this._inputField.prop("disabled", false);
+                this._searchButton.prop("disabled", false);
                 this.element.find('.search-editmode-overlay').remove();
             }
         },
@@ -294,31 +296,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             });
 
             me._inputField = inputField.keypress(function (event) {
-                if(!me.isInLayerToolsEditMode){
+                if (!me.isInLayerToolsEditMode) {
                     me._checkForEnter(event);
                 }
             });
             // to search button
             me._searchButton = content.find('input[type=button]').click(function (event) {
-                if(!me.isInLayerToolsEditMode){
+                if (!me.isInLayerToolsEditMode) {
                     me._doSearch();
                 }
             });
             content.find('div.search-right').click(function (event) {
-                if(!me.isInLayerToolsEditMode){
+                if (!me.isInLayerToolsEditMode) {
                     me._doSearch();
                 }
             });
             // to close button
             content.find('div.close').click(function (event) {
-                if(!me.isInLayerToolsEditMode){
+                if (!me.isInLayerToolsEditMode) {
                     me._hideSearch();
-                     inputField.val('');
+                    inputField.val('');
                     // TODO: this should also unbind the TR tag click listeners?
                 }
             });
             content.find('div.close-results').click(function (event) {
-                if(!me.isInLayerToolsEditMode){
+                if (!me.isInLayerToolsEditMode) {
                     me._hideSearch();
                     inputField.val('');
                 }
