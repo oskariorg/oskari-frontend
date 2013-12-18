@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             me.loc = pluginLoc[me.__name];
 
             me.template = jQuery(
-                '<div class="mapplugin search" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin">' +
+                '<div class="mapplugin search default-search-div" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin">' +
                     '<div class="search-textarea-and-button">' +
 
                     '<input placeholder="' + me.loc.placeholder + '" type="text" />' +
@@ -91,8 +91,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             );
 
             me.styledTemplate = jQuery(
-                '<div class="published-search-div">' +
-                    '<div class="search-area-div">' +
+                '<div class="mapplugin search published-search-div">' +
+                    '<div class="search-area-div search-textarea-and-button">' +
                     '<div class="search-left"></div>' +
                     '<div class="search-middle">' +
                     '<input class="search-input" placeholder="' + me.loc.placeholder + '" type="text" />' +
@@ -202,6 +202,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         eventHandlers: {
             'LayerToolsEditModeEvent': function (event) {
                 this._setLayerToolsEditMode(event.isInMode());
+                // FIXME make sure isInLayerToolsEditMode and use !isInLayerToolsEditMode
                 if (this.isInLayerToolsEditMode == false) {
                     this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
                 }
@@ -542,13 +543,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             }
 
             // Remove the old unstyled search box and create a new one.
-            if (div.hasClass('mapplugin search')) {
+            if (div.hasClass('default-search-div')) {
                 div.remove();
                 this._createUI();
                 return;
             }
 
-            var resourcesPath = this.getMapModule().getImageUrl(),
+            var me = this,
+                resourcesPath = this.getMapModule().getImageUrl(),
                 imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/search/images/',
                 styleName = style.val,
                 bgLeft = imgPath + 'search-tool-' + styleName + '_01.png',
@@ -602,6 +604,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                     'color': ''
                 });
             }
+
+            me._setLayerToolsEditMode(me.getMapModule().isInLayerToolsEditMode());
+
         },
 
         /**
