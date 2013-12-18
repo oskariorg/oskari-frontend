@@ -53,42 +53,34 @@ function(instance) {
     },
 
     _get: function(url, successCb, errorCb) {
-        jQuery.ajax({
-            type : "GET",
-            dataType : 'json',
-            beforeSend : function(x) {
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
-                }
-            },
-            url : url,
-            success : function(response) {
-                if (typeof successCb === 'function') successCb(response);
-            },
-            error : function(jqXHR, textStatus) {
-                if (typeof errorCb === 'function' && jqXHR.status != 0) errorCb(jqXHR, textStatus);
-            }
-        });
+        this._ajax("GET", url, successCb, errorCb);
     },
 
     _post: function(url, data, successCb, errorCb) {
-        jQuery.ajax({
-            type : "POST",
-            data: data,
+        this._ajax("POST", url, successCb, errorCb, data);
+    },
+
+    _ajax: function(method, url, successCb, errorCb, data) {
+        var params = {
+            url : url,
+            type : method,
             dataType : 'json',
             beforeSend : function(x) {
                 if (x && x.overrideMimeType) {
                     x.overrideMimeType("application/j-son;charset=UTF-8");
                 }
             },
-            url : url,
             success : function(response) {
                 if (typeof successCb === 'function') successCb(response);
             },
             error : function(jqXHR, textStatus) {
                 if (typeof errorCb === 'function' && jqXHR.status != 0) errorCb(jqXHR, textStatus);
             }
-        });
+        };
+
+        if (data) params.data = data;
+
+        jQuery.ajax(params);
     }
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']

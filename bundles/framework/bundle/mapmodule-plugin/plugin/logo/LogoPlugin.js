@@ -256,8 +256,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             } else {
                 dataSources.html(myLoc.dataSources);
                 dataSources.click(function (e) {
-                    me._openDataSourcesDialog(e.target);
-                    me._requestDataSources();
+                    if (me.dataSourcesDialog == null) {
+                        me._openDataSourcesDialog(e.target);
+                        me._requestDataSources();
+                    }
                 });
             }
         },
