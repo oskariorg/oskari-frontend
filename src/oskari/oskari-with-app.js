@@ -105,7 +105,7 @@ define([
         extend: function(props) {
             // Bundles are structured to modules, however the refactoring is done gradually.
             // TODO: Change Oskari.bundleCls to Oskari.moduleClass
-            var moduleClass = Oskari.bundleCls();
+            var moduleClass = Oskari.bundleCls(props.identifier);
 
             moduleClass.category(props);
             moduleClass.category({
