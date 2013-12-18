@@ -161,6 +161,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         eventHandlers: {
             'StatsGrid.IndicatorsEvent': function (event) {
                 this._addIndicatorsToDataSourcesDialog(event.getIndicators());
+            },
+            'MapSizeChangedEvent' : function (event) {
+                if (this.dataSourcesDialog) {
+                    var target = jQuery('div.logoplugin div.data-sources');
+                    if (target) this.dataSourcesDialog.moveTo(target, 'top');
+                }
             }
         },
 
