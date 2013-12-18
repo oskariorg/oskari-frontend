@@ -7,13 +7,6 @@ define([
      *
      */
     var EnhancedExtension = BaseExtension.extend({
-        /**
-         * @method getName
-         * @return {String} tile implementation name
-         */
-        getName: function() {
-            return 'Oskari.userinterface.extension.EnhancedExtension';
-        },
         /* O2 helpers */
 
         getTile: function() {
