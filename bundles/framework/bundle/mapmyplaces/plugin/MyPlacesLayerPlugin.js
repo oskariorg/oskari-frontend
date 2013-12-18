@@ -98,6 +98,76 @@ function(config) {
             var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayerModelBuilder', sandbox);
             mapLayerService.registerLayerModelBuilder('myplaceslayer', layerModelBuilder);
         }
+
+        if (jQuery.browser.msie && jQuery.browser.version < 9) { //TODO: fix me fast
+            this._ieHack(); 
+        }
+    },
+    _ieHack: function() {
+        OpenLayers.Renderer.VML.prototype.drawText = function(featureId, style, location) {
+            var label = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX, "olv:rect");
+            var textbox = this.nodeFactory(featureId + this.LABEL_ID_SUFFIX + "_textbox", "olv:textbox");
+            
+            var resolution = this.getResolution();
+            label.style.left = (((location.x - this.featureDx)/resolution - this.offset.x) | 0) + "px";
+            label.style.top = ((location.y/resolution - this.offset.y) | 0) + "px";
+            label.style.flip = "y";
+
+            textbox.innerText = style.label;
+
+            if (style.cursor != "inherit" && style.cursor != null) {
+                textbox.style.cursor = style.cursor;
+            }
+            if (style.fontColor) {
+                textbox.style.color = style.fontColor;
+            }
+            
+            if (style.fontOpacity) {
+                textbox.style.filter = 'alpha(opacity=' + (style.fontOpacity * 100) + ')';
+            }
+            if (style.fontFamily) {
+                textbox.style.fontFamily = style.fontFamily;
+            }
+            if (style.fontSize) {
+                var fontSizeNum = style.fontSize.split("px")[0];
+                if (fontSizeNum > 18) {
+                    style.fontSize = '18px';    
+                }
+                textbox.style.fontSize = style.fontSize;
+            }
+            if (style.fontWeight) {
+                textbox.style.fontWeight = style.fontWeight;
+            }
+            if (style.fontStyle) {
+                textbox.style.fontStyle = style.fontStyle;
+            }
+            if(style.labelSelect === true) {
+                label._featureId = featureId;
+                textbox._featureId = featureId;
+                textbox._geometry = location;
+                textbox._geometryClass = location.CLASS_NAME;
+            }
+            textbox.style.whiteSpace = "nowrap";
+            // fun with IE: IE7 in standards compliant mode does not display any
+            // text with a left inset of 0. So we set this to 1px and subtract one
+            // pixel later when we set label.style.left
+            textbox.inset = "1px,0px,0px,0px";
+            
+            label.appendChild(textbox);
+            this.textRoot.appendChild(label);
+            
+            var align = style.labelAlign || "cm";
+            if (align.length == 1) {
+                align += "m";
+            }
+            var xshift = textbox.clientWidth *
+                (OpenLayers.Renderer.VML.LABEL_SHIFT[align.substr(0,1)]);
+            var yshift = textbox.clientHeight *
+                (OpenLayers.Renderer.VML.LABEL_SHIFT[align.substr(1,1)]);
+            label.style.left = parseInt(label.style.left)-xshift-1+"px";
+            label.style.top = parseInt(label.style.top)+yshift+"px";
+            
+        };
     },
     /**
      * Interface method for the plugin protocol.
@@ -252,10 +322,13 @@ function(config) {
             buffer : 0
         });
 
+        var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
+            renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
+
         var attentionLayer = new OpenLayers.Layer.Vector("layer_name_"+layer.getId(), {
             styleMap: new OpenLayers.StyleMap({'default':{
-                strokeOpacity: 0,
-                fillOpacity: 0.0,
+                strokeOpacity: 1,
+                fillOpacity: 1.0,
                 pointerEvents: "visiblePainted",
                 label : "${attentionText}",
                 fontColor: "#${color}",
@@ -267,9 +340,10 @@ function(config) {
                 fontWeight: "bold",
                 labelOutlineColor: "white",
                 labelOutlineWidth: 3
-            }})
-        });
+            }}), renderers: renderer
+        } );
 
+         
         var myPlacesService = this._sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
 
         if (myPlacesService) {
