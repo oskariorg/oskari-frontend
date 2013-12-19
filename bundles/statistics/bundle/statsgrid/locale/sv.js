@@ -33,7 +33,8 @@ Oskari.registerLocalization({
         "addColumn": "Hämta data",
         "removeColumn": "Radera",
         "indicators": "Indikator",
-        "cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voi näyttää taulukossa.",
+        "cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voida näyttää taulukossa.",
+        "availableRegions": " Arvot löytyvät seuraaville aluejaoille: ",
         "year": "År",
         "buttons": {
             "ok": "OK",

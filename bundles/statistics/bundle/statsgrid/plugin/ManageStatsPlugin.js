@@ -828,9 +828,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          */
         _warnOfInvalidIndicator: function (container, metadata) {
             var selectors = container.find('.selectors-container'),
-                parameters = selectors.find('.parameters-cont');
+                parameters = selectors.find('.parameters-cont'),
+                regions = metadata.classifications,
+                regions = regions && regions.region,
+                regions = regions && regions.title,
+                regions = regions && regions[Oskari.getLang()],
+                warnTxt = this._locale.cannotDisplayIndicator;
+
+            if (regions) {
+                warnTxt += (this._locale.availableRegions + regions);
+            }
+
             this.deleteDemographicsSelect(container);
-            parameters.prepend(jQuery(this.templates.cannotDisplayIndicator).append(this._locale.cannotDisplayIndicator));
+            parameters.
+                prepend(jQuery(this.templates.cannotDisplayIndicator).
+                append(warnTxt));
         },
         /**
          * Create indicator meta info button
