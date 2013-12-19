@@ -27,6 +27,7 @@ function(instance) {
 	// Created in init
 	this.splitter = null;
 	this.backupFeatures = [];
+	this.originalFeatures = [];
 	this.splitSelection = false;
 	this.basicStyle = null;
 	this.selectStyle = null;
@@ -751,18 +752,32 @@ function(instance) {
 
     createEditor : function(features, data, preparcel) {
         var newPolygons = [];
+        var referencePolygons = [];
         var originalPolygons = [];
+        var originalLinearRings = [];
+        var originalPoints = [];
         var partInd = 0;
         var selectedFeature = 0;
-        var i;
+        var i, j,k;
         this.clear();
         this.currentFeatureType = this.instance.conf.registerUnitFeatureType;
         this._oldPreParcel = preparcel;
 
+        // Original geometry reference
         for (i=0; i<features.length; i++) {
+            referencePolygons.push(features[i].geometry);
             originalPolygons.push(features[i].geometry);
+            originalLinearRings = [];
+            for (j=0; j<features[i].geometry.components.length; j++) {
+                originalPoints = [];
+                for (k=0; k<features[i].geometry.components[j].components.length; k++) {
+                    originalPoints.push(new OpenLayers.Geometry.Point(features[i].geometry.components[j].components[k].x,features[i].geometry.components[j].components[k].y));
+                }
+                originalLinearRings.push(new OpenLayers.Geometry.LinearRing(originalPoints));
+            }
+            originalPolygons.push(new OpenLayers.Geometry.Polygon(originalLinearRings));
         }
-
+        this.originalFeatures = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(originalPolygons));
 		var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')([this.getDrawingLayer(), this.getEditLayer()]);
 		this._sandbox.notifyAll(event);
 
@@ -783,7 +798,7 @@ function(instance) {
             inside: isInside
         };
         this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(newPolygons)));
-        this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(originalPolygons)));
+        this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(referencePolygons)));
 
         // Update the name field
         for (i=0; i<this.drawLayer.features.length; i++) {

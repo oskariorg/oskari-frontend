@@ -58,8 +58,12 @@ function(instance) {
             sticky : true,
             callback : function() {
                 var drawPlugin = me.instance.view.drawPlugin;
-                if (drawPlugin.backupFeatures.length === 0) {
-                    drawPlugin.backupFeatures = drawPlugin.drawLayer.features[0];
+                if (drawPlugin.originalFeatures.length === 0) {
+                    if (drawPlugin.backupFeatures.length === 0) {
+                        drawPlugin.backupFeatures = drawPlugin.drawLayer.features[0];
+                    }
+                } else {
+                    drawPlugin.backupFeatures = drawPlugin.originalFeatures;
                 }
                 drawPlugin.clear();
                 drawPlugin.operatingFeature = null;
