@@ -86,7 +86,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                 data,
                 page,
                 panel;
-
+                
             for (p in this.pages) {
                 if (this.pages.hasOwnProperty(p)) {
                     pageInfo = this.pages[p];
@@ -98,9 +98,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                 }
             }
 
-
             for (n = 0; n < allMetadata.length; n++) {
                 data = allMetadata[n];
+                if (data.uuid == null && data.RS_Identifier_Code == null && data.RS_Identifier_CodeSpace ==null){
+                    continue;
+                }
                 page = Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage', this.instance, this.locale);
                 page.init();
                 panel = page.getPanel();
