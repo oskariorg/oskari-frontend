@@ -86,7 +86,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                 data,
                 page,
                 panel;
-
+                
             for (p in this.pages) {
                 if (this.pages.hasOwnProperty(p)) {
                     pageInfo = this.pages[p];
@@ -97,7 +97,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                     }
                 }
             }
-
 
             for (n = 0; n < allMetadata.length; n++) {
                 data = allMetadata[n];

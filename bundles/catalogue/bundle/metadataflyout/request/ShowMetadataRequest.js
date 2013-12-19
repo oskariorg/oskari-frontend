@@ -20,7 +20,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.request.ShowMetadata
         this._additionalMetadata = additionalMetadata;
 
         this._allMetadata = [];
-        this._allMetadata.push(config);
+        if (!(config.uuid == null && config.RS_Identifier_Code == null && console.RS_Identifier_CodeSpace ==null) ){
+            this._allMetadata.push(config);
+        }
         if (additionalMetadata) {
             this._additionalMetadata = additionalMetadata;
             var n;

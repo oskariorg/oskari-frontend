@@ -14,6 +14,8 @@ Adds a tab to personaldata from which users can access their own saved indicator
 
 The region category can now be changed from municipality to any other category SOTKAnet API has to offer.
 
+The column widths are now set automatically to take the space available when resizing the grid and when adding/removing indicators. Grid width is split equally to each column.
+
 ### myplaces2
 
 Measurements of places (area or length depending on the type) are now shown in the myplaces tab and whilst drawing a new place or editing an old one.

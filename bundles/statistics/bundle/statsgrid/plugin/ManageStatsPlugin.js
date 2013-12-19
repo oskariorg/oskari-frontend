@@ -421,6 +421,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             dataView.onRowsChanged.subscribe(function (e, args) {
                 grid.invalidateRows(args.rows);
                 grid.render();
+                grid.updateRowCount();
+                grid.resizeCanvas();
             });
 
             // To use aggregators we need to define a group
@@ -582,6 +584,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             me.grid = grid;
             me.dataView = dataView;
 
+            me.autosizeColumns();
             me.setGridHeight();
 
             //window resize!
@@ -1126,6 +1129,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             me._updateIndicatorDataToGrid(columnId, data, columns);
 
+            me.autosizeColumns();
+
             // TODO do we still need this stuff?
 
             if (silent) {
@@ -1233,6 +1238,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 this.grid.setColumns(allOtherColumns);
                 this.grid.render();
                 this.dataView.refresh();
+                this.autosizeColumns();
             }
 
             // remove indicator also from to the state!
@@ -1260,6 +1266,19 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 this._setLayerVisibility(false);
                 this._state.currentColumn = null;
             }
+        },
+
+        autosizeColumns: function() {
+            var grid = this.grid,
+                columns = grid.getColumns();
+
+            _.each(columns, function(column) {
+                if (column.id !== '_checkbox_selector') {
+                    column.width = 80;
+                }
+            });
+
+            grid.autosizeColumns();
         },
 
         /**
