@@ -183,7 +183,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             var toggleButton = me.templates.toggle.clone();
             // add toggle functionality to button
             toggleButton.click(function (event) {
-                console.log("clicketyClick");
                 event.preventDefault();
                 var mappy = me.element.find('.olControlOverviewMapElement');
                 mappy.toggle();
