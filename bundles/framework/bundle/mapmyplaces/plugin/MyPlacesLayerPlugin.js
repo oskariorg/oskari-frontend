@@ -319,7 +319,7 @@ function(config) {
             displayInLayerSwitcher : false,
             visibility : true,
             singleTile : true,
-            buffer : 0
+            transitionEffect: null
         });
 
         var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
@@ -388,12 +388,12 @@ function(config) {
      */
     _addAttentionText: function (myPlacesService, layerId, vectorLayer) {
         var me = this;
-        var categoryId = layerId.split("_")[1]
+        var categoryId = layerId.split("_")[1];
         var category = myPlacesService.findCategory(categoryId);
         var features = myPlacesService.getPlacesInCategory(categoryId);
-                
+
         _.forEach(features, function(feature) {
-            var name = feature.name 
+            var name = feature.name;
             
             if (feature.attention_text) {
                 name = feature.attention_text;
