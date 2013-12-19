@@ -182,8 +182,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             me.getMapModule().addMapControl('overviewMap', me._indexMap);
             var toggleButton = me.templates.toggle.clone();
             // add toggle functionality to button
-            toggleButton.click(function () {
-                me.element.find('.olControlOverviewMapElement').toggle();
+            toggleButton.click(function (event) {
+                console.log("clicketyClick");
+                event.preventDefault();
+                var mappy = me.element.find('.olControlOverviewMapElement');
+                mappy.toggle();
             });
             // button has to be added separately so the element order is correct...
             me.element.append(toggleButton);

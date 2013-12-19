@@ -33,7 +33,8 @@ Oskari.registerLocalization({
         "addColumn": "Get data",
         "removeColumn": "Remove",
         "indicators": "Indicators",
-        "cannotDisplayIndicator": "The indicator does not have values on the region category selected and it cannot be displayed in the grid.",
+        "cannotDisplayIndicator": "The indicator does not have values on the selected region category so it cannot be displayed in the grid.",
+        "availableRegions": " The following region categories have values on the indicator: ",
         "year": "Year",
         "buttons": {
             "ok": "OK",
