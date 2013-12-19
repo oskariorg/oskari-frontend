@@ -112,7 +112,7 @@ function(id, imageUrl, options) {
             console.log("MOVEEND", e, extent, center, zoom, lonlat);
 
             me._updateDomain();
-            var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getZoom(), false, me.getMapScale());
+            var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.x, lonlat.y, map.getZoom(), false, me.getMapScale());
             sandbox.notifyAll(sboxevt);
 
         });
