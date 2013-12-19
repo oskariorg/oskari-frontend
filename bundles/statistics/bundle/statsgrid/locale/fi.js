@@ -33,7 +33,8 @@ Oskari.registerLocalization({
 		"addColumn": "Hae data",
 		"removeColumn": "Poista",
 		"indicators": "Indikaattorit",
-		"cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voi näyttää taulukossa.",
+		"cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voida näyttää taulukossa.",
+		"availableRegions": " Arvot löytyvät seuraaville aluejaoille: ",
 		"year": "Vuosi",
 		"buttons": {
 			"ok": "OK",
