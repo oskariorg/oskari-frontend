@@ -421,6 +421,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             dataView.onRowsChanged.subscribe(function (e, args) {
                 grid.invalidateRows(args.rows);
                 grid.render();
+                grid.updateRowCount();
+                grid.resizeCanvas();
             });
 
             // To use aggregators we need to define a group
