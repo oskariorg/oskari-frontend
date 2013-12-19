@@ -336,7 +336,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to move
          */
         addBaseLayer: function (layer) {
-            if (!layer || !layer.getId) {
+            if (!layer || !layer.getId || !this.element) {
                 return;
             }
             var div = this.layerRefs[layer.getId()];
