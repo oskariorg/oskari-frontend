@@ -7,7 +7,6 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.request.AddExtensionRequestH
 
 }, {
 	handleRequest : function(core, request) {
-
 		var extension = request.getExtension();
 
 		this.ui.addExtension(extension);

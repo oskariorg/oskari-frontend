@@ -289,7 +289,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 colorKeys = ['set', 'index', 'flipped'],
                 indicators = state.indicators || [],
                 value;
-debugger;
             // Note! keys needs to be handled in the backend as well.
             // Therefore the key order is important as well as actual values.
             // 'classificationMode' can be an empty string but it must be the fifth value.
