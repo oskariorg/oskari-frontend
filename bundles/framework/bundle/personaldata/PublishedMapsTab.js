@@ -479,7 +479,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 textarea,
                 content;
             okBtn.addClass('primary');
-//            url = this.instance.getSandbox().getLocalizedProperty(me.instance.conf.publishedMapUrl) + event.getId();
 
             iframeCode = '<iframe src="' + url + '" width="' + size.width +
                 '" height="' + size.height + '"></iframe>';
@@ -490,6 +489,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             content = loc.published.desc + '<br/>' + textarea;
 
             dialog.makeModal();
+            dialog.stopKeydownPropagation();
             dialog.show(name, content, [okBtn]);
 
         }
