@@ -47,7 +47,11 @@
 	
 	div.classificationMethod {
 		margin: 4px;
-		min-width: 160px;
+		min-width: 168px;
+
+		div.classificationOptions {
+			margin: 4px;
+		}
 	}
 	
 	div.content {

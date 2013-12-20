@@ -52,8 +52,7 @@ div.column-selector {
       padding-left: 5px; }
 
 table.oskari-grid td {
-  min-width: 75px;
+  max-width: 110px;
   overflow: hidden;
   padding: 5px;
-  text-overflow: ellipsis;
-  word-break: break-all; }
+  text-overflow: ellipsis; }
