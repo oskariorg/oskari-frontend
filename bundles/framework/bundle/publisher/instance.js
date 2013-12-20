@@ -142,8 +142,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
              * Calls flyouts handleLayerSelectionChanged() method
              */
             'AfterMapLayerRemoveEvent': function (event) {
-                if (jQuery('#contentMap') && jQuery('#contentMap').hasClass('mapPublishMode')) {
-                    this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+                //update maplayerPanel in publisher too.
+                if (this.publisher) {
+                    this.publisher.maplayerPanel.handleLayerSelectionChanged();
                 }
             },
             /**
@@ -153,8 +155,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
              * Calls flyouts handleLayerSelectionChanged() method
              */
             'AfterMapLayerAddEvent': function (event) {
-                if (jQuery('#contentMap') && jQuery('#contentMap').hasClass('mapPublishMode')) {
-                    this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+
+                if (this.publisher) {
+                    this.publisher.maplayerPanel.handleLayerSelectionChanged();
                 }
             },
             /**
@@ -162,8 +166,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              */
             'MapLayerEvent': function (event) {
-                if (jQuery('#contentMap') && jQuery('#contentMap').hasClass('mapPublishMode')) {
-                    this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+                if (this.publisher) {
+                    this.publisher.maplayerPanel.handleLayerSelectionChanged();
                 }
             },
             /**

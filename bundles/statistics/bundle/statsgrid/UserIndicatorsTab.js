@@ -188,7 +188,7 @@ function(instance, localization) {
     },
 
     /**
-     * Normalizes the indicator to be used as a sotkanet indicator.
+     * Normalizes the indicator to be used like a sotkanet indicator in statsplugin.
      *
      * @method _normalizeIndicator
      * @param  {Object} indicator

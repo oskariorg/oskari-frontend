@@ -161,6 +161,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         eventHandlers: {
             'StatsGrid.IndicatorsEvent': function (event) {
                 this._addIndicatorsToDataSourcesDialog(event.getIndicators());
+            },
+            'MapSizeChangedEvent' : function (event) {
+                if (this.dataSourcesDialog) {
+                    var target = jQuery('div.logoplugin div.data-sources');
+                    if (target) this.dataSourcesDialog.moveTo(target, 'top');
+                }
             }
         },
 
@@ -256,8 +262,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             } else {
                 dataSources.html(myLoc.dataSources);
                 dataSources.click(function (e) {
-                    me._openDataSourcesDialog(e.target);
-                    me._requestDataSources();
+                    if (me.dataSourcesDialog == null) {
+                        me._openDataSourcesDialog(e.target);
+                        me._requestDataSources();
+                    }
                 });
             }
         },

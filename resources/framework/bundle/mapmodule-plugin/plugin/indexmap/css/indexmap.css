@@ -6,14 +6,20 @@ div.mapplugin.indexmap .olControlOverviewMapElement {
   border-left-width: 2px;
   border-style: solid;
   border-top-width: 2px;
-  padding: 5px; }
+  padding: 5px;
+  margin-bottom: -46px; }
 div.mapplugin.indexmap .indexmapToggle {
   width: 46px !important;
   height: 46px !important;
+  position: relative;
+  float: left;
   cursor: default;
   background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap.png') 0px 0px !important; }
   div.mapplugin.indexmap .indexmapToggle:hover {
     background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png') !important; }
+
+.right div.mapplugin.indexmap .indexmapToggle {
+  float: right; }
 
 .olControlOverviewMapContainer .olControlOverviewMapElement {
   padding: 5px !important;

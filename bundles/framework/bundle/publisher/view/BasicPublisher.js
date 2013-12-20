@@ -141,6 +141,108 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             "maxHeight": 2000
         }];
 
+
+        /**
+         * @property tools
+         */
+        this.tools = [{
+            "id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin",
+            "selected": false,
+            "lefthanded": "bottom left",
+            "righthanded": "bottom right",
+            "config": {
+                "location": {
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "classes": "bottom left"
+                }
+            }
+        }, {
+            "id": "Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin",
+            "selected": false,
+            "lefthanded": "bottom right",
+            "righthanded": "bottom left",
+            "config": {
+                "location": {
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "classes": "bottom right"
+                }
+            }
+        }, {
+            "id": "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons",
+            "selected": false,
+            "lefthanded": "top left",
+            "righthanded": "top right",
+            "config": {
+                "location": {
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "classes": "top left"
+                }
+            }
+        }, {
+            "id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar",
+            "selected": true,
+            "lefthanded": "top left",
+            "righthanded": "top right",
+            "config": {
+                "location": {
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "classes": "top left"
+                }
+            }
+        }, {
+            "id": "Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin",
+            "selected": false,
+            "lefthanded": "top right",
+            "righthanded": "top left",
+            "config": {
+                "location": {
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "classes": "top right"
+                }
+            }
+        }, {
+            "id": "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin",
+            "selected": false,
+            "lefthanded": "top right",
+            "righthanded": "top left",
+            "config": {
+                "location": {
+                    "top": "",
+                    "right": "",
+                    "bottom": "",
+                    "left": "",
+                    "classes": "top right"
+                },
+                "toolbarId": "PublisherToolbar"
+            }
+        }, {
+            "id": "Oskari.mapframework.mapmodule.ControlsPlugin",
+            "selected": true
+        }, {
+            "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
+            "selected": true,
+            "config": {
+                "ignoredLayerTypes": ["WFS"],
+                "infoBox": false
+            }
+        }];
+
+
         me.grid = {};
         me.grid.selected = true;
 

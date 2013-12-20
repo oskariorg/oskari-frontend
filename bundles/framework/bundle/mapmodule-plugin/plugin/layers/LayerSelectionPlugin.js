@@ -187,6 +187,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
              */
             'AfterMapLayerAddEvent': function (event) {
                 this.addLayer(event.getMapLayer());
+                this._checkBaseLayers(event.getMapLayer());
             },
 
             /**
@@ -204,24 +205,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
              * Adds the layer to selection
              */
             'AfterMapMoveEvent': function (event) {
-                var i,
-                    layer;
-                // setup initial state here since we are using selected layers to create ui
-                // and plugin is started before any layers have been added
-                if (this.initialSetup) {
-                    this.initialSetup = false;
-
-                    // reacting to conf
-                    if (this.conf && this.conf.baseLayers) {
-                        for (i = 0; i < this.conf.baseLayers.length; i += 1) {
-                            layer = this._sandbox.findMapLayerFromSelectedMapLayers(this.conf.baseLayers[i]);
-                            this.addBaseLayer(layer);
-                        }
-                        if (this.conf.defaultBaseLayer) {
-                            this.selectBaseLayer(this.conf.defaultBaseLayer);
-                        }
-                    }
-                }
+                this._checkBaseLayers();
             }
         },
 
@@ -352,7 +336,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to move
          */
         addBaseLayer: function (layer) {
-            if (!layer || !layer.getId) {
+            if (!layer || !layer.getId || !this.element) {
                 return;
             }
             var div = this.layerRefs[layer.getId()];
@@ -546,7 +530,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var me = this,
                 containerClasses = 'top left',
                 position = 3;
-
             if (!me.element) {
                 me.element = me.templates.main.clone();
             }
@@ -711,6 +694,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 testRegex = /oskari-publisher-font-/;
 
             this.getMapModule().changeCssClasses(classToAdd, testRegex, [div]);
+        },
+        _checkBaseLayers : function(layer) {
+            var i,
+                layer = layer;
+            // reacting to conf
+            if (this.conf && this.conf.baseLayers) {
+                // setup initial state here since we are using selected layers to create ui
+                // and plugin is started before any layers have been added
+                if (this.initialSetup && layer == null) {
+                    this.initialSetup = false;
+
+                    for (i = 0; i < this.conf.baseLayers.length; i += 1) {
+                        layer = this._sandbox.findMapLayerFromSelectedMapLayers(this.conf.baseLayers[i]);
+                        this.addBaseLayer(layer);
+                    }
+                    if (this.conf.defaultBaseLayer) {
+                        this.selectBaseLayer(this.conf.defaultBaseLayer);
+                    }
+                } else if(layer != null) {
+                    for (i = 0; i < this.conf.baseLayers.length; i++) {
+                        if(this.conf.baseLayers[i] == layer.getId()){
+                            this.addBaseLayer(layer);
+                        }
+                    }
+                    if (this.conf.defaultBaseLayer == layer.getId()) {
+                        this.selectBaseLayer(this.conf.defaultBaseLayer);
+                    }
+                }
+            } 
         }
     }, {
         /**

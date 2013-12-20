@@ -106,6 +106,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if (this.overlay) {
                 this.overlay.close();
             }
+            if(this.hasKeydownListener) {
+                jQuery(this.dialog).off("keydown", this._stopKeydownPropagation);
+            }
             if (noAnimation) {
                 me.dialog.remove();
             } else {
@@ -203,6 +206,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             overlay.overlay('body');
             this.overlay = overlay;
             overlay.followResizing(true);
+        },
+        /**
+         * @method stopKeypressPropagation
+         * Stops keypress events from bubbling outside of popup
+         */
+        stopKeydownPropagation: function () {
+            jQuery(this.dialog).keydown(this._stopKeydownPropagation);
+            this.hasKeydownListener = true;
+        },
+        _stopKeydownPropagation : function(e) {
+            e.stopPropagation();
         },
 
         /** 
