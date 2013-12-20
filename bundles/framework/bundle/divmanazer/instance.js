@@ -413,7 +413,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
 
             tile.click(function () {
                 //plugin.setExtensionState();
-
                 me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
             });
 
@@ -687,6 +686,11 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
             if (flyoutInfo) {
                 flyoutPlugin = flyoutInfo.plugin;
                 flyout = flyoutInfo.el;
+
+                //if flyout plugin has a lazyRender created, use it.
+                if(state === 'attach' && flyoutPlugin.lazyRender) {
+                    flyoutPlugin.lazyRender();
+                }
 
                 /**
                  * do the op for this extension

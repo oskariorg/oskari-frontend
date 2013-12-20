@@ -5,7 +5,8 @@ Oskari.registerLocalization({
         "title": "Kartlager",
         "desc": "",
         "flyout": {
-            "title": "admin: Kartlager"
+            "title": "admin: Kartlager",
+            "fetchingLayers" : "Laddar lager."
         },
         "tile": {
             "title": "A: Kartlager",
