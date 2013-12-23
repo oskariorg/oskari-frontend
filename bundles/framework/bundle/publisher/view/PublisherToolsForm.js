@@ -45,8 +45,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             'toolOptionSetting' : '<div class="tool-option-setting"></div>',
             'toolOptionSettingInput' : '<input type="checkbox" /><label></label>',
             'layerSelect': '<select class="publisher-select-layer"></select>',
-            'layerSelectOption':'<option></option>'
-        }
+            'layerSelectOption': '<option></option>'
+        };
     }, {
         /**
          * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and
@@ -107,14 +107,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 pluginKey = tool.id;
                 pluginKey = pluginKey.substring(pluginKey.lastIndexOf('.') + 1);
                 toolname = this.loc.tools[pluginKey];
-                toolContainer.find('label').attr('for', 'tool-'+pluginKey).append(toolname);
+                toolContainer.find('label').attr('for', 'tool-' + pluginKey).append(toolname);
                 if (tool.selected) {
                     toolContainer.find('input').attr('checked', 'checked');
                 }
                 tool.publisherPluginContainer = toolContainer;
                 contentPanel.append(toolContainer);
                 toolContainer.find('input')
-                    .attr('id', 'tool-'+pluginKey)
+                    .attr('id', 'tool-' + pluginKey)
                     .change(closureMagic(tool));
             }
 
@@ -156,7 +156,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     selections.toolbar = toolbarConfig;
                 }
             }
-
+            var classes;
             for (i = 0; i < me.tools.length; i += 1) {
                 if (me.tools[i].selected) {
                     tmpTool = {
@@ -179,20 +179,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 }
             }
 
-            if(me.selectedDrawingLayer.point === true ||
-                me.selectedDrawingLayer.line === true ||
-                me.selectedDrawingLayer.area === true ) {
+            if (me.selectedDrawingLayer.point === true ||
+                    me.selectedDrawingLayer.line === true ||
+                    me.selectedDrawingLayer.area === true) {
 
                 var alreadySelected = false;
-                for (var i = 0; i < selectedLayers.length; i++) {
-                    if(selectedLayers[i].getId() == me.selectedDrawingLayer.layer.getId() ){
+                for (i = 0; i < selectedLayers.length; i++) {
+                    if (selectedLayers[i].getId() === me.selectedDrawingLayer.layer.getId()) {
                         alreadySelected = true;
                     }
-                };
-                if(!alreadySelected) {
+                }
+                if (!alreadySelected) {
                     me._sandbox.postRequestByName('AddMapLayerRequest', [me.selectedDrawingLayer.layer.getId(), false, me.selectedDrawingLayer.layer.isBaseLayer()]);
                 }
-                selections.publishedMyPlaces = me.selectedDrawingLayer;                
+                selections.publishedMyPlaces = me.selectedDrawingLayer;
             }
 
             //sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), false, layer.isBaseLayer()]);
@@ -297,13 +297,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                                     // create checkbox
                                     toolButton.selectTool = jQuery(me.templates.toolOption).clone();
                                     toolButton.selectTool.find('label')
-                                        .attr('for', 'tool-opt-'+toolName).append(this.loc.toolbarToolNames[toolName]);
+                                        .attr('for', 'tool-opt-' + toolName).append(this.loc.toolbarToolNames[toolName]);
                                     if (toolButton.selected) {
                                         toolButton.selectTool.find('input').attr('checked', 'checked');
                                     }
                                     //toggle toolbar tool. i.e. send requests
                                     toolButton.selectTool.find('input')
-                                        .attr('id', 'tool-opt-'+toolName)
+                                        .attr('id', 'tool-opt-' + toolName)
                                         .change(_toggleToolOption(toolName, buttonGroup.name, toolButton));
                                     options.append(toolButton.selectTool);
                                 }
@@ -373,27 +373,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 checkbox = jQuery(event.target),
                 isChecked = checkbox.is(':checked'),
                 mylayers = me.myplaces;
-            if(isChecked){
-                var layerSelect = jQuery(me.templates.layerSelect).clone();
-                for(var i = 0; i < mylayers.length; i++) {
-                    var layerSelectOption = jQuery(me.templates.layerSelectOption).clone();
+            if (isChecked) {
+                var layerSelect = jQuery(me.templates.layerSelect).clone(),
+                    i,
+                    layerSelectOption;
+                for (i = 0; i < mylayers.length; i++) {
+                    layerSelectOption = jQuery(me.templates.layerSelectOption).clone();
                     layerSelectOption.attr('value', mylayers[i].getId()).append(mylayers[i].getName());
                     // select correct layer
-                    if(me.selectedDrawingLayer.layer != null && 
-                        mylayers[i].getId() === me.selectedDrawingLayer.layer.getId()) {
+                    if (me.selectedDrawingLayer.layer !== null && me.selectedDrawingLayer.layer !== undefined &&
+                            mylayers[i].getId() === me.selectedDrawingLayer.layer.getId()) {
                         layerSelectOption.prop('selected', true);
                     }
                     layerSelect.append(layerSelectOption);
                 }
                 // select default
-                if(me.selectedDrawingLayer.layer == null) {
+                if (me.selectedDrawingLayer.layer === null || me.selectedDrawingLayer.layer === undefined) {
                     me.selectedDrawingLayer.layer = mylayers[0];
                 }
-                layerSelect.change(function(e){
+                layerSelect.change(function (e) {
                     var target = jQuery(e.target),
-                        value = target.val();
-                    for(var i = 0; i < mylayers.length; i++) {
-                        if(mylayers[i].getId() === value) {
+                        value = target.val(),
+                        i;
+                    for (i = 0; i < mylayers.length; i++) {
+                        if (mylayers[i].getId() === value) {
                             me.selectedDrawingLayer.layer = mylayers[i];
                         }
                     }
@@ -409,7 +412,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     osAreaInput  = jQuery(me.templates.toolOptionSettingInput).clone();
 
                 //add select for drawlayer
-                optionSetting.append('<span>'+me.loc.tools.selectDrawLayer+'</span><br/>');
+                optionSetting.append('<span>' + me.loc.tools.selectDrawLayer + '</span><br/>');
                 optionSetting.append(layerSelect);
                 //add different settings
                 checkbox.parent()
@@ -418,12 +421,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         .append(osPoint.append(osPointInput))
                         .append(osLine.append(osLineInput))
                         .append(osArea.append(osAreaInput))
-                    );
+                        );
 
                 osPoint.find('label').attr('for', 'option-point').append(me.loc.tools.drawPoints);
                 osPoint.find('input')
                     .attr('id', 'option-point')
-                    .change(function(e) {
+                    .change(function (e) {
                         var cbPoint = jQuery(e.target);
                         me.selectedDrawingLayer.point = cbPoint.is(':checked');
                     });
@@ -431,7 +434,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 osLine.find('label').attr('for', 'option-line').append(me.loc.tools.drawLines);
                 osLine.find('input')
                     .attr('id', 'option-line')
-                    .change(function(e) {
+                    .change(function (e) {
                         var cbLine = jQuery(e.target);
                         me.selectedDrawingLayer.line = cbLine.is(':checked');
                     });
@@ -439,13 +442,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 osArea.find('label').attr('for', 'option-area').append(me.loc.tools.drawAreas);
                 osArea.find('input')
                     .attr('id', 'option-area')
-                    .change(function(e) {
+                    .change(function (e) {
                         var cbArea = jQuery(e.target);
                         me.selectedDrawingLayer.area = cbArea.is(':checked');
                     });
 
             } else {
-                checkbox.parent().find('.tool-option-settings').remove();                
+                checkbox.parent().find('.tool-option-settings').remove();
             }
         }
     });

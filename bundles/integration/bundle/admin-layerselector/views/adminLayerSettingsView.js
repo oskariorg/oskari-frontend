@@ -176,7 +176,7 @@ define([
                     if (me.model &&
                             !me.model.admin.style_decoded &&
                             me.model.admin.style) {
-
+                            debugger;
                             //styles.push(me.classes.decode64(me.model.admin.style));
                             styles.push(me.model.admin.style);
                             me.model.admin.style_decoded = styles;

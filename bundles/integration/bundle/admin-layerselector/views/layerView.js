@@ -133,6 +133,7 @@ define([
                     if (me.model.admin && (me.model.admin.style_decoded === null || me.model.admin.style_decoded === undefined) && me.model.admin.style !== null && me.model.admin.style !== undefined) {
                         var styles = [];
                         //styles.push(me.options.layerTabModel.decode64(me.model.admin.style));
+                        debugger;
                         styles.push(me.model.admin.style);
                         me.model.admin.style_decoded = styles;
                     }

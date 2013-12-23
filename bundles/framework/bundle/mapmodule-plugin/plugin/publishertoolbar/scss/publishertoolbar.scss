@@ -17,10 +17,10 @@ $iconWidth: $iconHeight;
 	.publishedToolbarContainer {
 		height: auto;
 		background-color: transparent;
-		height: auto;
 		min-height: 60px;
 		z-index: 16000;
-		clear: both;
+		position: absolute;
+		top: 10px + $iconHeight;
 
 		.tools-top-arrow {
 			width: 0;
@@ -136,10 +136,12 @@ $iconWidth: $iconHeight;
 }
 .mapplugins.left {
 	.tools {
+		float: left;
 		.icon {
 			float: left;
 		}
 		.publishedToolbarContainer {
+			left: 10px;
 			.tools-top-arrow {
 				float: left;
 				margin-left: ($iconWidth / 2 - 10);
@@ -149,10 +151,12 @@ $iconWidth: $iconHeight;
 }
 .mapplugins.right {
 	.tools {
+		float: right;
 		.icon {
 			float: right;
 		}
 		.publishedToolbarContainer {
+			right: 10px;
 			.tools-top-arrow {
 				float: right;
 				margin-right: ($iconWidth / 2 - 10);

@@ -362,7 +362,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             // this.toolbars[tbid] = undefined;
             // tb.remove();
             // delete this.toolbars[tbid];
-            tb.remove();
+            if (tb) {
+                tb.remove();
+            }
             this.toolbars[tbid] = undefined;
             delete this.toolbars[tbid];
 

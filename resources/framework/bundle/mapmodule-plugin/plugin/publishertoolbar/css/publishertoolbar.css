@@ -11,10 +11,10 @@
   .tools .publishedToolbarContainer {
     height: auto;
     background-color: transparent;
-    height: auto;
     min-height: 60px;
     z-index: 16000;
-    clear: both; }
+    position: absolute;
+    top: 45px; }
     .tools .publishedToolbarContainer .tools-top-arrow {
       width: 0;
       height: 0;
@@ -85,17 +85,25 @@
     .tools .publishedToolbarContainer .tool-group-title {
       font-weight: bold; }
 
-.mapplugins.left .tools .icon {
+.mapplugins.left .tools {
   float: left; }
-.mapplugins.left .tools .publishedToolbarContainer .tools-top-arrow {
-  float: left;
-  margin-left: 7.5px; }
+  .mapplugins.left .tools .icon {
+    float: left; }
+  .mapplugins.left .tools .publishedToolbarContainer {
+    left: 10px; }
+    .mapplugins.left .tools .publishedToolbarContainer .tools-top-arrow {
+      float: left;
+      margin-left: 7.5px; }
 
-.mapplugins.right .tools .icon {
+.mapplugins.right .tools {
   float: right; }
-.mapplugins.right .tools .publishedToolbarContainer .tools-top-arrow {
-  float: right;
-  margin-right: 7.5px; }
+  .mapplugins.right .tools .icon {
+    float: right; }
+  .mapplugins.right .tools .publishedToolbarContainer {
+    right: 10px; }
+    .mapplugins.right .tools .publishedToolbarContainer .tools-top-arrow {
+      float: right;
+      margin-right: 7.5px; }
 
 .tool-history-back-dark {
   width: 32px;
