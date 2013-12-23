@@ -5,7 +5,8 @@ Oskari.registerLocalization({
         "title": "admin: Map layers",
         "desc": "",
         "flyout": {
-            "title": "admin: Map layers"
+            "title": "admin: Map layers",
+            "fetchingLayers" : "Fetching layers."
         },
         "tile": {
             "title": "A: Map layers",

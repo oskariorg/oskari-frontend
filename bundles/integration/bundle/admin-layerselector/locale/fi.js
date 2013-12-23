@@ -5,7 +5,8 @@ Oskari.registerLocalization({
         "title": "admin: Karttatasot",
         "desc": "",
         "flyout": {
-            "title": "admin: karttatasot"
+            "title": "admin: karttatasot",
+            "fetchingLayers" : "Haetaan tasoja."
         },
         "tile": {
             "title": "A: karttatasot",

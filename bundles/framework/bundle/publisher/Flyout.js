@@ -123,9 +123,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.Flyout',
         handleLayerSelectionChanged: function () {
             if (this.view && this.view.handleLayerSelectionChanged) {
                 this.view.handleLayerSelectionChanged();
-//                if (this.instance.publisher) {
-//                    this.instance.publisher.maplayerPanel.handleLayerSelectionChanged();
-//                }
             }
         }
     }, {
