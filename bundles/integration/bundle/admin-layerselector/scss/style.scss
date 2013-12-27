@@ -141,6 +141,7 @@ div.admin-layerselector {
             -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
             -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
             box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+            display: block;
         }
 
         textarea.add-layer-input {
@@ -263,6 +264,7 @@ div.admin-layerselector {
         height: auto;
         width: 100%;
         overflow: hidden;
+        clear: right;
     }
     .admin-add-class {
         padding: 0px 10px;

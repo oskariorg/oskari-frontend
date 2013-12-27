@@ -421,8 +421,8 @@ define([
                 }
 
 
-                data.minScale = form.find('#add-layer-minscale').val() || 16000000;
-                data.maxScale = form.find('#add-layer-maxscale').val() || 1;
+                data.minScale = form.find('#add-layer-minscale').val();// || 16000000;
+                data.maxScale = form.find('#add-layer-maxscale').val();// || 1;
                 data.epsg = form.find('#add-layer-srsname').val();
                 data.epsg = Number(data.epsg.replace('EPSG:', ''));
 

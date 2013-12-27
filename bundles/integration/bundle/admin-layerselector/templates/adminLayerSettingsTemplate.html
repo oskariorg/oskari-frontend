@@ -17,10 +17,18 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-interface" class="add-layer-input mid" placeholder="<%= instance.getLocalization('admin').interfaceAddress %>" <% if(model != null && model.admin.wmsUrl) { %>value="<%= model.admin.wmsUrl %>"<% } %> />
-                <div class="icon-close mid"></div>
+                <input type="text" id="add-layer-interface" class="add-layer-input 
+                    <% if(model && model.getId) { %>long
+                    <% } else { %>mid
+                    <% } %>" placeholder="<%= instance.getLocalization('admin').interfaceAddress %>" <% if(model != null && model.admin.wmsUrl) { %>value="<%= model.admin.wmsUrl %>"<% } %> />
+                <div class="icon-close 
+                    <% if(model && model.getId) { %>long
+                    <% } else { %>mid
+                    <% } %>"></div>
             </div>
-            <button id="add-layer-wms-button" class="fetch-wms-button"><%= instance.getLocalization('admin').getInfo %></button>
+            <% if(model && !model.getId){ %>
+                    <button id="add-layer-wms-button" class="fetch-wms-button"><%= instance.getLocalization('admin').getInfo %></button>
+             <% } %>
         </div>
     </div>
 
@@ -225,7 +233,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <textarea rows="3" cols="50" id="add-layer-xslt" class="add-layer-input long" ><% if(model != null && model.admin.xslt_decoded) { %><%= model.admin.xslt_decoded %><% } %></textarea>
+                <textarea rows="3" cols="50" id="add-layer-xslt" class="add-layer-input long" ><% if(model != null && model.admin.xslt) { %><%= model.admin.xslt %><% } %></textarea>
             </div>
         </div>
     </div>

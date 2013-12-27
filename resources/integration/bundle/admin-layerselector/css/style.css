@@ -95,7 +95,8 @@ div.admin-layerselector {
       padding: 8px 10px 8px 10px;
       -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
       -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); }
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+      display: block; }
     div.admin-layerselector div.layer textarea.add-layer-input, div.admin-layerselector div.create-layer textarea.add-layer-input {
       padding: 10px;
       width: 157px;
@@ -169,7 +170,8 @@ div.admin-layerselector {
     padding: 10px 0px;
     height: auto;
     width: 100%;
-    overflow: hidden; }
+    overflow: hidden;
+    clear: right; }
   div.admin-layerselector .admin-add-class {
     padding: 0px 10px;
     overflow: hidden;
