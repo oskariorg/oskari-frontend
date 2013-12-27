@@ -66,8 +66,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
          * @param {Function} success2 the success callback
          * @param {Function} failure the failure callback
          */
-        _getAnalysisLayers: function (success2, failure) {
-return;
+        _getAnalysisLayers: function (mysuccess, failure) {
+
             var url = this.sandbox.getAjaxUrl() + 'action_route=GetAnalysisLayers';
             jQuery.ajax({
                 type: 'GET',
@@ -78,7 +78,7 @@ return;
                         x.overrideMimeType("application/j-son;charset=UTF-8");
                     }
                 },
-                success: success2,
+                success: mysuccess,
                 error: failure
             });
         },

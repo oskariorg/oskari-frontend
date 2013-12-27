@@ -30,9 +30,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 '<div class="mapplugin tools">' +
                     "<div class='icon'></div>" +
                     "<div class='publishedToolbarContainer'>" +
-                        "<div class='tools-top-arrow'></div>" +
+                    "<div class='tools-top-arrow'></div>" +
                     "</div>" +
-                '</div>'),
+                    '</div>'
+            ),
             container: jQuery("<div></div>"),
             publishedToolbarPopupContent: jQuery('<div class="publishedToolPopupContent"><h3></h3><div class="content"></div><div class="actions"></div></div>')
         },
@@ -120,7 +121,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                                 }
                             }
                         }
-                    }, {
+                    },
+                    {
                         'name': 'basictools',
                         'buttons': {
                             'measureline': {
@@ -152,8 +154,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 ];
 
             this.requestHandlers = {
-                toolContainerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler', me),
-            };            
+                toolContainerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler', me)
+            };
         },
         /**
          * @method register
@@ -181,8 +183,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                me.insertToMap();
+                // re-enable tools (use toolbarconfig?)
             }
         },
 
@@ -292,20 +294,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 sandbox = me._sandbox,
                 container,
                 content,
-                containerClasses = 'top left',
-                position = 1,
                 containers = [me.toolbarContent, me.toolbarPopupContent];
 
             if (!me.element) {
                 me.element = me.template.clone();
                 container = me.element.find('.' + me.toolbarContainer);
-
-                for (var i = 0, ilen = containers.length; i < ilen; i++) {
+                var i,
+                    ilen;
+                for (i = 0, ilen = containers.length; i < ilen; i++) {
                     // create configured containers
                     me.templates.container
                         .clone()
                         .attr("class", containers[i])
-                        .appendTo(container)
+                        .appendTo(container);
                 }
             }
 
@@ -313,12 +314,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 this.changeToolStyle(this.conf.toolStyle, me.element);
             }
 
-            // add classes (top, bottom, left, right, center)
-            if (me.conf && me.conf.location) {
-                containerClasses = me.conf.location.classes || containerClasses;
-                position = me.conf.location.position || position;
-            }
-            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
+            me.insertToMap();
 
             // hide container
             toolscontainer = me.element.find('.' + me.toolbarContainer);
@@ -334,23 +330,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             }
 
         },
-        setToolbarContainer : function() {
+
+        insertToMap: function () {
+            var me = this,
+                containerClasses = 'top left',
+                position = 0;
+            // add classes (top, bottom, left, right, center)
+            if (me.conf && me.conf.location) {
+                containerClasses = me.conf.location.classes || containerClasses;
+                position = me.conf.location.position || position;
+            }
+            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
+        },
+
+        setToolbarContainer: function () {
             var me = this,
                 sandbox = me._sandbox;
             var builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
-            if (me.toolbarId && (me.toolbarContent) && builder != null) {
+            if (me.toolbarId && (me.toolbarContent) && builder !== null && builder !== undefined) {
                 // add toolbar when toolbarId and target container is configured
                 // We assume the first container is intended for the toolbar
                 sandbox.requestByName(me, 'Toolbar.ToolbarRequest', [me.toolbarId, 'add', {
-                    title : me.localization.title,
-                    show : false,
+                    title: me.localization.title,
+                    show: false,
                     toolbarContainer: me.element.find('.' + me.toolbarContent),
-                    closeBoxCallback : function() {
+                    closeBoxCallback: function () {
                         // this is useless, I guess.  
                         //view.prepareMode(false);
                     }
                 }]);
-            }            
+            }
         },
         /**
          * @method getToolOptions
@@ -378,10 +387,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             var resourcesPath = me.getMapModule().getImageUrl(),
                 imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/',
-                styledImg = imgPath + 'menu-' + style + '.png',                
+                styledImg = imgPath + 'menu-' + style + '.png',
                 icon = div.find('.icon'),
                 toolsContent = div.find('.' + me.toolbarContent),
-                toolsPopupContent = div.find('.' + me.toolbarPopupContent)
+                toolsPopupContent = div.find('.' + me.toolbarPopupContent),
                 blackOrWhite = style.split("-")[1];
 
             icon.css({
@@ -472,7 +481,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          * @method setToolContent
          * @param {Object} data
          */
-        setToolContent: function (data){
+        setToolContent: function (data) {
             var me = this,
                 className = data.className || "", // defaults to empty
                 title = data.title || "", // defaults to empty
@@ -485,7 +494,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 i,
                 contentHeight,
                 reasonableHeight;
-                
+
             if (contentDiv.length === 0) {
                 // no container found, clone a new one
                 contentDiv = me.templates.publishedToolbarPopupContent.clone();
@@ -536,20 +545,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             contentDiv.remove();
             toolbarDiv.show();
         },
-        getToolConfs : function() {
+        getToolConfs: function () {
             var me = this,
-                confs = {};
-            for (var i in me.buttonGroups) {
+                confs = {},
+                confGroup,
+                i,
+                j,
+                confButton;
+            for (i in me.buttonGroups) {
                 if (me.buttonGroups.hasOwnProperty(i)) {
-                    var confGroup = me.buttonGroups[i];
+                    confGroup = me.buttonGroups[i];
                     // create button groups for confs
                     confs[confGroup.name] = {};
 
-                    for (var j in confGroup.buttons) {
+                    for (j in confGroup.buttons) {
                         if (confGroup.buttons.hasOwnProperty(j)) {
-                            var confButton = confGroup.buttons[j];
+                            confButton = confGroup.buttons[j];
                             // create buttons and add necessary confs
-                            confs[confGroup.name][j] = {'iconCls': confButton.iconCls};
+                            confs[confGroup.name][j] = {
+                                'iconCls': confButton.iconCls
+                            };
                         }
                     }
                 }
