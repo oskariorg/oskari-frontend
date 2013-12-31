@@ -10,10 +10,9 @@
              *
              * @method initialize
              */
-            initialize: function(models, title) {
+            initialize: function(models,title) {
                 this.name = title; 
                 this.searchIndex = {};
-
             },
 
             /**
@@ -38,8 +37,12 @@
              * @param {LayerModel} layer
              */
             addLayer : function(layerModel) {
-                this.add(layerModel, {silent: true});
-                this.searchIndex[layerModel.getId()] = this._getSearchIndex(layerModel);
+                var tmpModel = this.get(layerModel);
+                if(!tmpModel)  {
+                    this.add(layerModel, {silent: true});
+                    this.searchIndex[layerModel.getId()] = this._getSearchIndex(layerModel);
+                }
+
             },
             /**
              * removes a layer with given id

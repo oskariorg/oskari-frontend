@@ -404,34 +404,26 @@ define([
                 var me = this,
                     element = jQuery(e.currentTarget),
                     addClass = element.parents('.admin-add-class');
-                // url for backend action_route
-                var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
-                    action_route = "&action_route=SaveOrganization",
-                    id = "&layerclass_id=",
-                    // id = "&layercl_id=", // this param is used in remove 
-                    lcId = element.parents('.accordion').attr('lcid'),
-                    parentId = "&parent_id=",
-                    names = '';
+
+                var data = {
+                    id : element.parents('.accordion').attr('lcid')
+                };
 
                 addClass.find('[id$=-name]').filter('[id^=add-class-]').each(function (index) {
                     lang = this.id.substring(10, this.id.indexOf("-name"));
-                    names += "&name_" + lang + "=" + this.value;
+                    //names += "&name_" + lang + "=" + this.value;
+                    data["name_" + lang] = this.value;
                 });
-                var url = baseUrl + action_route + id;
-                //add id of layer class
-                if (lcId != null) {
-                    url += lcId;
-                }
-                url += parentId + names;
-                // make AJAX call
-                me._save(e, url, function (response) {
-                    //console.log("Save...");
-                    // callback functionality
-                    me.layerGroupingModel.getClasses(me.options.instance.getSandbox().getAjaxUrl(), "&action_route=GetMapLayerClasses");
+
+                this.layerGroupingModel.save(data, function(err) {
+                    if(err) {
+                        // handle error
+                        alert("Error!! " + err);
+                        return;
+                    }
                     element.parents('.show-add-class').removeClass('show-add-class');
                     addClass.find('.admin-edit-org-btn').html(me.options.instance.getLocalization('edit'))
                 });
-
             },
             /**
              * Save class
@@ -443,43 +435,12 @@ define([
                 alert('Backend component is not ready yet.');
             },
             /**
-             * Save grouping. Do not use this method, but saveOrganization or saveClass
-             *
-             * @method _save
-             */
-            _save: function (e, url, successCallback) {
-                var me = this,
-                    element = jQuery(e.currentTarget),
-                    addClass = element.parents('.admin-add-class');
-
-                jQuery.ajax({
-                    type: "GET",
-                    dataType: 'json',
-                    beforeSend: function (x) {
-                        if (x && x.overrideMimeType) {
-                            x.overrideMimeType("application/j-son;charset=UTF-8");
-                        }
-                    },
-                    url: url,
-                    success: function (resp) {
-                        if (successCallback && resp === null) {
-                            successCallback(resp);
-                        }
-                    },
-                    error: function (jqXHR, textStatus) {
-                        if (jqXHR.status != 0) {
-                            alert(' false ');
-                        }
-                    }
-                });
-
-            },
-            /**
              * Remove organizations
              *
              * @method removeOrganization
              */
             removeOrganization: function (e) {
+                // TODO: MOVE TO layersTabModel - see save for example
                 var me = this,
                     element = jQuery(e.currentTarget);
 
