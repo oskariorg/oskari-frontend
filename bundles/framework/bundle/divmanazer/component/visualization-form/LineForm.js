@@ -159,8 +159,9 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             var me = this;
             if (state !== null && state !== undefined) {
                 jQuery.extend(true, me.values, state.line);
-
-                // TODO: what is the differnece between size & width? why do we need both?
+            }
+            // TODO: what is the differnece between size & width? why do we need both?
+            if(me.values.size) {
                 me.values.width = Number(me.values.size);
             }
 
