@@ -15,13 +15,19 @@ Oskari.registerLocalization({
             "title": "Indicators",
             "grid": {
                 "name": "Title",
-                "description": "Description"
+                "description": "Description",
+                "delete": " "
             },
+            "deleteTitle": "Deleting indicator",
+            "destroyIndicator": "Delete",
+            "cancelDelete": "Cancel",
+            "confirmDelete": "Are you sure you want to delete indicator ",
             "newIndicator": "New indicator",
             "error": {
                 "title": "Error",
                 "indicatorsError": "Error occurred whilst loading the indicators. Please try again later",
-                "indicatorError": "Error occurred whilst loading an indicator. Please try again later"
+                "indicatorError": "Error occurred whilst loading an indicator. Please try again later",
+                "indicatorDeleteError": "Error occurred whilst removing an indicator. Please try again later"
             }
         },
         "gender": "Gender",

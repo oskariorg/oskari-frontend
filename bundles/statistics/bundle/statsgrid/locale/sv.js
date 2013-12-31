@@ -15,13 +15,19 @@ Oskari.registerLocalization({
             "title": "Indikatorer",
             "grid": {
                 "name": "Titeln",
-                "description": "Beskrivning"
+                "description": "Beskrivning",
+                "delete": " "
             },
+            "deleteTitle": "Indikaattorin poistaminen",
+            "destroyIndicator": "Radera",
+            "cancelDelete": "Avsluta",
+            "confirmDelete": "Haluatko varmasti poistaa indikaattorin ",
             "newIndicator": "Ny indikator",
             "error": {
                 "title": "Fel",
                 "indicatorsError": "Virhe indikaattorien latauksessa. Yritä myöhemmin uudelleen",
-                "indicatorError": "Virhe indikaattorin latauksessa. Yritä myöhemmin uudelleen"
+                "indicatorError": "Virhe indikaattorin latauksessa. Yritä myöhemmin uudelleen",
+                "indicatorDeleteError": "Virhe indikaattorin poistossa. Yritä myöhemmin uudelleen"
             }
         },
         "gender": "Kön",

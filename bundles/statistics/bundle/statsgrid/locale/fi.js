@@ -15,13 +15,19 @@ Oskari.registerLocalization({
 			"title": "Indikaattorit",
 			"grid": {
 				"name": "Otsikko",
-				"description": "Kuvaus"
+				"description": "Kuvaus",
+				"delete": " "
 			},
+			"deleteTitle": "Indikaattorin poistaminen",
+			"destroyIndicator": "Poista",
+			"cancelDelete": "Peruuta",
+			"confirmDelete": "Haluatko varmasti poistaa indikaattorin ",
 			"newIndicator": "Uusi indikaattori",
 			"error": {
 				"title": "Virhe",
 				"indicatorsError": "Virhe indikaattorien latauksessa. Yritä myöhemmin uudelleen",
-				"indicatorError": "Virhe indikaattorin latauksessa. Yritä myöhemmin uudelleen"
+				"indicatorError": "Virhe indikaattorin latauksessa. Yritä myöhemmin uudelleen",
+				"indicatorDeleteError": "Virhe indikaattorin poistossa. Yritä myöhemmin uudelleen"
 			}
 		},
 		"gender": "Sukupuoli",
