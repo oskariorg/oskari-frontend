@@ -103,7 +103,6 @@ Oskari.clazz.define('Oskari.userinterface.component.VisualizationForm',
                 formClazzes = this._getFormClazz(),
                 fClazzName,
                 fClazz;
-
             for (fClazzName in formClazzes) {
                 if (formClazzes.hasOwnProperty(fClazzName)) {
                     fClazz = formClazzes[fClazzName];

@@ -309,7 +309,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.CategoryHandler",
                     cap: category.getLineCap(),
                     corner: category.getLineCorner(),
                     style: category.getLineStyle(),
-                    size: category.getLineWidth(),
+                    width: category.getLineWidth(),
                     color: category.getLineColor()
                 },
                 area: {

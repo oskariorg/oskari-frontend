@@ -160,10 +160,6 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             if (state !== null && state !== undefined) {
                 jQuery.extend(true, me.values, state.line);
             }
-            // TODO: what is the differnece between size & width? why do we need both?
-            if(me.values.size) {
-                me.values.width = Number(me.values.size);
-            }
 
             var renderDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
@@ -247,7 +243,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
                     me._updatePreview();
                 }
             });
-            widthSpinner.val(me.values.size !== null && me.values.size !== undefined ? me.values.size : 1);
+            widthSpinner.val(me.values.width !== null && me.values.width !== undefined ? me.values.width : 1);
             content.append(widthSpinner);
 
             var statedChosenColor = false,
@@ -409,6 +405,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(me.loc.buttons.cancel);
             cancelBtn.setHandler(function () {
+                //what is this thing called size???
                 me.values.size = me.defaultValues.size;
                 me.values.color = me.defaultValues.color;
                 me.values.shape = me.defaultValues.shape;
