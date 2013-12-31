@@ -4,11 +4,11 @@ Oskari.registerLocalization({
   "value": {
     "VisualizationForm": {
       "tooltips": {
-        "point": "Editera punktens stil",
+        "dot": "Editera punktens stil",
         "area": "Editera områdets stil",
         "line": "Editera linjens stil"
       },
-      "point": {
+      "dot": {
         "title": "Visualisering av punktobjekt",
         "tooltip": "Punktens stil",
         "symbol": {

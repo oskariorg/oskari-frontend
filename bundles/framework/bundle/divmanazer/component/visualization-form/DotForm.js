@@ -3,7 +3,7 @@
  *
  * Shows a form for point rendering options
  */
-Oskari.clazz.define("Oskari.userinterface.component.visualization-form.PointForm",
+Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
 
     /**
      * @method create called automatically on construction
@@ -189,7 +189,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.PointForm
                     button = this.symbolButtons[buttonName];
                     btnContainer.addClass(button.iconCls);
                     btnContainer.attr('id', button.iconId + "marker");
-                    if (button.iconId === me.values.shape) {
+                    if (button.iconId === parseInt(me.values.shape, 10)) {
                         btnContainer.css("border", "2px solid");
                     }
                     // FIXME create function outside loop

@@ -24,9 +24,9 @@ Oskari.clazz.define('Oskari.userinterface.component.VisualizationForm',
 
         var defaultOptions = {
             // include all forms by default
-            forms: ['point', 'line', 'area'],
+            forms: ['dot', 'line', 'area'],
             formValues: {
-                point: {
+                dot: {
                     shape: 1,
                     color: "000000",
                     size: 3
@@ -53,7 +53,6 @@ Oskari.clazz.define('Oskari.userinterface.component.VisualizationForm',
             }
         };
         options = options || {};
-
         this._options = jQuery.extend({}, defaultOptions, options);
 
         this._formClazzes = this._createFormClazzes(this._options.forms, this._options.formValues);
@@ -84,7 +83,7 @@ Oskari.clazz.define('Oskari.userinterface.component.VisualizationForm',
                 if (formClazzes.hasOwnProperty(formName)) {
                     btnContainer = this.templateRenderButton.clone();
                     btnContainer.attr('title', this._loc.tooltips[formName]);
-                    btnContainer.addClass(this._iconClsPrefix + formName);
+                    btnContainer.addClass(this._iconClsPrefix + (formName === 'dot' ? 'point' : formName));
                     btnContainer.click(me._bindRenderButton(formClazzes[formName]));
                     form.append(btnContainer);
                 }
