@@ -49,7 +49,8 @@ function(instance) {
     },
 
     deleteUserIndicator: function(indicatorId, successCb, errorCb) {
-        // TODO: delete the indicator from the DB
+        var url = this.sandbox.getAjaxUrl() + 'action_route=DeleteUserIndicator&id=' + indicatorId;
+        this._get(url, successCb, errorCb);
     },
 
     _get: function(url, successCb, errorCb) {

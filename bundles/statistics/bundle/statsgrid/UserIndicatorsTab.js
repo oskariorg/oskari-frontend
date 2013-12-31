@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
 function(instance, localization) {
     this.instance = instance;
     this.loc = localization;
-    this.visibleFields = ['name', 'description'];
+    this.visibleFields = ['name', 'description', 'delete'];
     this.grid = null;
     this.container = null;
     this.template = jQuery(
@@ -112,6 +112,13 @@ function(instance, localization) {
                 });
         });
 
+        grid.setColumnValueRenderer('delete', function(name, data) {
+            return jQuery('<div class="indicator-name-link"></div>').html(me.loc.destroyIndicator).
+                click(function() {
+                    me._displayDeleteConfirmation(data);
+                });
+        });
+
         _.each(this.visibleFields, function(field) {
             grid.setColumnUIName(field, me.loc.grid[field]);
         });
@@ -126,7 +133,8 @@ function(instance, localization) {
      * @return {undefined}
      */
     _renderIndicators: function(indicators) {
-        var lang = Oskari.getLang(),
+        var me = this,
+            lang = Oskari.getLang(),
             gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
 
         gridModel.setIdField('id');
@@ -161,6 +169,82 @@ function(instance, localization) {
             // error :(
             me.showMessage(me.loc.error.title, me.loc.error.indicatorError);
         });
+    },
+    /**
+     * Displays a confirmation dialog to delete an indicator.
+     * OK button sends the request.
+     *
+     * @method _displayDeleteConfirmation
+     * @param  {Object} indicator
+     * @return {undefined}
+     */
+    _displayDeleteConfirmation: function(indicator) {
+        var me = this,
+            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+            cancelBtn = dialog.createCloseButton(me.loc.cancelDelete),
+            title = me.loc.deleteTitle,
+            content = me.loc.confirmDelete + indicator.name;
+
+        okBtn.setTitle(me.loc.destroyIndicator);
+        okBtn.addClass('primary');
+
+        okBtn.setHandler(function() {
+            dialog.close();
+            me._deleteUserIndicator(indicator.id);
+        });
+
+        dialog.show(title, content, [cancelBtn, okBtn]);
+        dialog.makeModal();
+    },
+    /**
+     * Destroys the indicator through the service.
+     *
+     * @method _deleteUserIndicator
+     * @param  {Number} indicatorId
+     * @return {undefined}
+     */
+    _deleteUserIndicator: function(indicatorId) {
+        var me = this,
+            instance = this.instance;
+            service = instance.getUserIndicatorsService();
+
+        service.deleteUserIndicator(indicatorId, function() {
+            me._removeIndicatorFromGrid(indicatorId);
+        }, function() {
+            // error :(
+            me.showMessage(me.loc.error.title, me.loc.error.indicatorDeleteError);
+        });
+    },
+    /**
+     * Removes the indicator from the grid.
+     *
+     * @method _removeIndicatorFromGrid
+     * @param  {Number} indicatorId
+     * @return {undefined}
+     */
+    _removeIndicatorFromGrid: function(indicatorId) {
+        // TODO: remove the verbose code after the beef with
+        // lodash/underscore has been settled.
+        //
+        //_.remove(gridData, function(data) {
+        //    return data.id === indicatorId;
+        //});
+        var gridModel = this.grid.getDataModel(),
+            gridData = gridModel.getData() || [],
+            i, gLen, index = null;
+
+        for (i = 0, gLen = gridData.length; i < gLen; ++i) {
+            if (gridData[i].id === indicatorId) {
+                index = i;
+                break;   
+            }
+        }
+
+        if (index) {
+            gridData.splice(index, 1);
+        }
+        this.grid.renderTo(this.container.find('div.indicatorsGrid'));
     },
     /**
      * Binds the action of the "Add new indicator" button.
