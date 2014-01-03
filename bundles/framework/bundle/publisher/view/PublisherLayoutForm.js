@@ -86,6 +86,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
                 val: 'georgia'
             }],
             toolStyles: [{
+                val: 'default',
+                zoombar: {},
+                search: {}
+            }, {
                 val: 'rounded-dark',
                 zoombar: {
                     widthPlus: '22px',
@@ -315,7 +319,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
             this.values.font = jQuery('select[name=publisher-fonts]').val();
             var toolStyleCode = jQuery('select[name=publisher-toolStyles]').val();
             this.values.toolStyle = this._getItemByCode(toolStyleCode, this.initialValues.toolStyles);
-
             return this.values;
         },
 
@@ -782,10 +785,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
         _changeGfiColours: function (selectedColour, container) {
             container = container || jQuery('div#publisher-colour-popup');
 
-            var gfiHeader = container.find('div.popupHeader');
-            var gfiTitle = container.find('div.popupTitle');
-            var featureHeader = container.find('h3.myplaces_header');
-            var closeButton = container.find('div.olPopupCloseBox');
+            var gfiHeader = container.find('div.popupHeader'),
+                gfiTitle = container.find('div.popupTitle'),
+                featureHeader = container.find('h3.myplaces_header'),
+                closeButton = container.find('div.olPopupCloseBox');
 
             gfiHeader.css({
                 'background-color': selectedColour.bgColour
@@ -831,7 +834,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
          * @param {Object} the changed tool style
          */
         _sendToolStyleChangedEvent: function (selectedToolStyle) {
-            this._sendEvent('Publisher.ToolStyleChangedEvent', selectedToolStyle);
+            this._sendEvent('Publisher.ToolStyleChangedEvent', selectedToolStyle || {val: 'default', zoombar: {}, search: {}});
         },
 
         /**

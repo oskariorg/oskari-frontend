@@ -580,7 +580,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         changeToolStyle: function (styleName, div) {
             div = div || this.element;
 
-            if (!div || !styleName) {
+            if (!div) {
+                return;
+            }
+
+            if (styleName === null) {
+                // reset plugin if active
+                if (this.element) {
+                    delete this.conf.toolStyle;
+                    this.stopPlugin();
+                    this.startPlugin();
+                }
                 return;
             }
 
@@ -594,9 +604,49 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/layers/images/',
                 bgImg = imgPath + 'map-layer-button-' + styleName + '.png';
 
-            div.addClass('published-styled-layerselector');
-            content.addClass('published-styled-layerselector-content');
-            header.addClass('published-styled-layerselector-header');
+            header.empty();
+            if (styleName !== null) {
+                div.addClass('published-styled-layerselector');
+                content.addClass('published-styled-layerselector-content');
+                content.addClass('layerselection-styled-content');
+                header.addClass('published-styled-layerselector-header');
+                // Set the styling to the content div based on the tool style.
+                this.getMapModule().changeCssClasses(
+                    'oskari-publisher-layers-' + styleName,
+                    /oskari-publisher-layers-/,
+                    [content]
+                );
+                // Set the styling of the header as well since the border rounding affects them
+                this.getMapModule().changeCssClasses(
+                    'oskari-publisher-layers-header-' + styleName,
+                    /oskari-publisher-layers-header-/,
+                    [contentHeader]
+                );
+                header.css({
+                    'background-image': 'url("' + bgImg + '")'
+                });
+            } else {
+                div.removeClass('published-styled-layerselector');
+                content.removeClass('published-styled-layerselector-content');
+                content.removeClass('layerselection-styled-content');
+                header.removeClass('published-styled-layerselector-header');
+                // Set the styling to the content div based on the tool style.
+                this.getMapModule().changeCssClasses(
+                    '',
+                    /oskari-publisher-layers-/,
+                    [content]
+                );
+                // Set the styling of the header as well since the border rounding affects them
+                this.getMapModule().changeCssClasses(
+                    '',
+                    /oskari-publisher-layers-header-/,
+                    [contentHeader]
+                );
+
+                header.css({
+                    'background-image': ''
+                });
+            }
 
             content.find('div.content-header').remove();
             content.find('div.styled-header-arrow').remove();
@@ -608,25 +658,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 self.closeSelection();
             });
 
-            content.addClass('layerselection-styled-content');
 
-            // Set the styling to the content div based on the tool style.
-            this.getMapModule().changeCssClasses(
-                'oskari-publisher-layers-' + styleName,
-                /oskari-publisher-layers-/,
-                [content]
-            );
-            // Set the styling of the header as well since the border rounding affects them
-            this.getMapModule().changeCssClasses(
-                'oskari-publisher-layers-header-' + styleName,
-                /oskari-publisher-layers-header-/,
-                [contentHeader]
-            );
-
-            header.empty();
-            header.css({
-                'background-image': 'url("' + bgImg + '")'
-            });
 
             // Pretty fugly, but needed here since we're modifying the DOM and
             // all the style changes disappear like Clint Eastwood rides into the sunset.
@@ -695,7 +727,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             this.getMapModule().changeCssClasses(classToAdd, testRegex, [div]);
         },
-        _checkBaseLayers : function(layer) {
+        _checkBaseLayers : function (layer) {
             var i,
                 layer = layer;
             // reacting to conf
@@ -712,9 +744,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     if (this.conf.defaultBaseLayer) {
                         this.selectBaseLayer(this.conf.defaultBaseLayer);
                     }
-                } else if(layer != null) {
+                } else if (layer != null) {
                     for (i = 0; i < this.conf.baseLayers.length; i++) {
-                        if(this.conf.baseLayers[i] == layer.getId()){
+                        if (this.conf.baseLayers[i] == layer.getId()) {
                             this.addBaseLayer(layer);
                         }
                     }
@@ -722,7 +754,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                         this.selectBaseLayer(this.conf.defaultBaseLayer);
                     }
                 }
-            } 
+            }
         }
     }, {
         /**

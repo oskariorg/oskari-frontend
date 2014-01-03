@@ -105,6 +105,7 @@ Oskari.registerLocalization({
                     },
                     "toolStyles": {
                         "label": "Työkalujen tyyli",
+                        "default": "Oletustyyli",
                         "rounded-dark": "Pyöristetty (tumma)",
                         "rounded-light": "Pyöristetty (vaalea)",
                         "sharp-dark": "Kulmikas (tumma)",

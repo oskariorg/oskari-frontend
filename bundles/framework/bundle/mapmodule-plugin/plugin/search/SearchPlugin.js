@@ -495,6 +495,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 return;
             }
 
+            if (style.val === null) {
+                this.conf.toolStyle = null;
+                div.remove();
+                this._createUI();
+                return;
+            }
+
             // Remove the old unstyled search box and create a new one.
             if (div.hasClass('mapplugin search')) {
                 div.remove();
