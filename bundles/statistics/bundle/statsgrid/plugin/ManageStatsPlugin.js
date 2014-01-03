@@ -1149,7 +1149,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 silent,
                 indicatorId,
                 gender,
-                year;
+                year,
+                numValue;
+
             data = data || me.indicatorsData[columnId];
             columns = columns || me.grid.getColumns();
 
@@ -1166,7 +1168,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     var item = me.dataView.getItemById(regionId);
                     if (item) {
                         // update row
-                        item[columnId] = Number(value);
+                        numValue = Number(value);
+                        if (isNaN(numValue)) {
+                            item[columnId] = value;
+                        } else {
+                            item[columnId] = numValue;
+                        }
                         me.dataView.updateItem(item.id, item);
                     }
                 }
@@ -1694,8 +1701,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         value[indicatorId][type] = result[indicatorId];
                         totalsItem = jQuery(this.templates.statsgridTotalsVar);
                         var val = value[columnId][type];
-                        if (!this._isInt(val)) {
+                        if (!isNaN(val) && !this._isInt(val)) {
                             val = val.toFixed(2);
+                        }
+                        if (_.isNaN(val)) {
+                            val = '-';
                         }
                         totalsItem.addClass('statsgrid-' + type).text(val);
                         break;
