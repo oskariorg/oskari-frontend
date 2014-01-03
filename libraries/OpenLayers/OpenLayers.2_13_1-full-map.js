@@ -37535,6 +37535,290 @@ OpenLayers.Filter.Function = OpenLayers.Class(OpenLayers.Filter, {
  * full text of the license. */
 
 /**
+ * @requires OpenLayers/Strategy.js
+ */
+
+/**
+ * Class: OpenLayers.Strategy.Cluster
+ * Strategy for vector feature clustering.
+ *
+ * Inherits from:
+ *  - <OpenLayers.Strategy>
+ */
+OpenLayers.Strategy.Cluster = OpenLayers.Class(OpenLayers.Strategy, {
+    
+    /**
+     * APIProperty: distance
+     * {Integer} Pixel distance between features that should be considered a
+     *     single cluster.  Default is 20 pixels.
+     */
+    distance: 20,
+    
+    /**
+     * APIProperty: threshold
+     * {Integer} Optional threshold below which original features will be
+     *     added to the layer instead of clusters.  For example, a threshold
+     *     of 3 would mean that any time there are 2 or fewer features in
+     *     a cluster, those features will be added directly to the layer instead
+     *     of a cluster representing those features.  Default is null (which is
+     *     equivalent to 1 - meaning that clusters may contain just one feature).
+     */
+    threshold: null,
+    
+    /**
+     * Property: features
+     * {Array(<OpenLayers.Feature.Vector>)} Cached features.
+     */
+    features: null,
+    
+    /**
+     * Property: clusters
+     * {Array(<OpenLayers.Feature.Vector>)} Calculated clusters.
+     */
+    clusters: null,
+    
+    /**
+     * Property: clustering
+     * {Boolean} The strategy is currently clustering features.
+     */
+    clustering: false,
+    
+    /**
+     * Property: resolution
+     * {Float} The resolution (map units per pixel) of the current cluster set.
+     */
+    resolution: null,
+
+    /**
+     * Constructor: OpenLayers.Strategy.Cluster
+     * Create a new clustering strategy.
+     *
+     * Parameters:
+     * options - {Object} Optional object whose properties will be set on the
+     *     instance.
+     */
+    
+    /**
+     * APIMethod: activate
+     * Activate the strategy.  Register any listeners, do appropriate setup.
+     * 
+     * Returns:
+     * {Boolean} The strategy was successfully activated.
+     */
+    activate: function() {
+        var activated = OpenLayers.Strategy.prototype.activate.call(this);
+        if(activated) {
+            this.layer.events.on({
+                "beforefeaturesadded": this.cacheFeatures,
+                "featuresremoved": this.clearCache,
+                "moveend": this.cluster,
+                scope: this
+            });
+        }
+        return activated;
+    },
+    
+    /**
+     * APIMethod: deactivate
+     * Deactivate the strategy.  Unregister any listeners, do appropriate
+     *     tear-down.
+     * 
+     * Returns:
+     * {Boolean} The strategy was successfully deactivated.
+     */
+    deactivate: function() {
+        var deactivated = OpenLayers.Strategy.prototype.deactivate.call(this);
+        if(deactivated) {
+            this.clearCache();
+            this.layer.events.un({
+                "beforefeaturesadded": this.cacheFeatures,
+                "featuresremoved": this.clearCache,
+                "moveend": this.cluster,
+                scope: this
+            });
+        }
+        return deactivated;
+    },
+    
+    /**
+     * Method: cacheFeatures
+     * Cache features before they are added to the layer.
+     *
+     * Parameters:
+     * event - {Object} The event that this was listening for.  This will come
+     *     with a batch of features to be clustered.
+     *     
+     * Returns:
+     * {Boolean} False to stop features from being added to the layer.
+     */
+    cacheFeatures: function(event) {
+        var propagate = true;
+        if(!this.clustering) {
+            this.clearCache();
+            this.features = event.features;
+            this.cluster();
+            propagate = false;
+        }
+        return propagate;
+    },
+    
+    /**
+     * Method: clearCache
+     * Clear out the cached features.
+     */
+    clearCache: function() {
+        if(!this.clustering) {
+            this.features = null;
+        }
+    },
+    
+    /**
+     * Method: cluster
+     * Cluster features based on some threshold distance.
+     *
+     * Parameters:
+     * event - {Object} The event received when cluster is called as a
+     *     result of a moveend event.
+     */
+    cluster: function(event) {
+        if((!event || event.zoomChanged) && this.features) {
+            var resolution = this.layer.map.getResolution();
+            if(resolution != this.resolution || !this.clustersExist()) {
+                this.resolution = resolution;
+                var clusters = [];
+                var feature, clustered, cluster;
+                for(var i=0; i<this.features.length; ++i) {
+                    feature = this.features[i];
+                    if(feature.geometry) {
+                        clustered = false;
+                        for(var j=clusters.length-1; j>=0; --j) {
+                            cluster = clusters[j];
+                            if(this.shouldCluster(cluster, feature)) {
+                                this.addToCluster(cluster, feature);
+                                clustered = true;
+                                break;
+                            }
+                        }
+                        if(!clustered) {
+                            clusters.push(this.createCluster(this.features[i]));
+                        }
+                    }
+                }
+                this.clustering = true;
+                this.layer.removeAllFeatures();
+                this.clustering = false;
+                if(clusters.length > 0) {
+                    if(this.threshold > 1) {
+                        var clone = clusters.slice();
+                        clusters = [];
+                        var candidate;
+                        for(var i=0, len=clone.length; i<len; ++i) {
+                            candidate = clone[i];
+                            if(candidate.attributes.count < this.threshold) {
+                                Array.prototype.push.apply(clusters, candidate.cluster);
+                            } else {
+                                clusters.push(candidate);
+                            }
+                        }
+                    }
+                    this.clustering = true;
+                    // A legitimate feature addition could occur during this
+                    // addFeatures call.  For clustering to behave well, features
+                    // should be removed from a layer before requesting a new batch.
+                    this.layer.addFeatures(clusters);
+                    this.clustering = false;
+                }
+                this.clusters = clusters;
+            }
+        }
+    },
+    
+    /**
+     * Method: clustersExist
+     * Determine whether calculated clusters are already on the layer.
+     *
+     * Returns:
+     * {Boolean} The calculated clusters are already on the layer.
+     */
+    clustersExist: function() {
+        var exist = false;
+        if(this.clusters && this.clusters.length > 0 &&
+           this.clusters.length == this.layer.features.length) {
+            exist = true;
+            for(var i=0; i<this.clusters.length; ++i) {
+                if(this.clusters[i] != this.layer.features[i]) {
+                    exist = false;
+                    break;
+                }
+            }
+        }
+        return exist;
+    },
+    
+    /**
+     * Method: shouldCluster
+     * Determine whether to include a feature in a given cluster.
+     *
+     * Parameters:
+     * cluster - {<OpenLayers.Feature.Vector>} A cluster.
+     * feature - {<OpenLayers.Feature.Vector>} A feature.
+     *
+     * Returns:
+     * {Boolean} The feature should be included in the cluster.
+     */
+    shouldCluster: function(cluster, feature) {
+        var cc = cluster.geometry.getBounds().getCenterLonLat();
+        var fc = feature.geometry.getBounds().getCenterLonLat();
+        var distance = (
+            Math.sqrt(
+                Math.pow((cc.lon - fc.lon), 2) + Math.pow((cc.lat - fc.lat), 2)
+            ) / this.resolution
+        );
+        return (distance <= this.distance);
+    },
+    
+    /**
+     * Method: addToCluster
+     * Add a feature to a cluster.
+     *
+     * Parameters:
+     * cluster - {<OpenLayers.Feature.Vector>} A cluster.
+     * feature - {<OpenLayers.Feature.Vector>} A feature.
+     */
+    addToCluster: function(cluster, feature) {
+        cluster.cluster.push(feature);
+        cluster.attributes.count += 1;
+    },
+    
+    /**
+     * Method: createCluster
+     * Given a feature, create a cluster.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>}
+     *
+     * Returns:
+     * {<OpenLayers.Feature.Vector>} A cluster.
+     */
+    createCluster: function(feature) {
+        var center = feature.geometry.getBounds().getCenterLonLat();
+        var cluster = new OpenLayers.Feature.Vector(
+            new OpenLayers.Geometry.Point(center.lon, center.lat),
+            {count: 1}
+        );
+        cluster.cluster = [feature];
+        return cluster;
+    },
+
+    CLASS_NAME: "OpenLayers.Strategy.Cluster" 
+});
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
  * @requires OpenLayers/BaseTypes/Class.js
  */
 
@@ -44862,258 +45146,6 @@ OpenLayers.Format.WMTSCapabilities = OpenLayers.Class(OpenLayers.Format.XML.Vers
     },
 
     CLASS_NAME: "OpenLayers.Format.WMTSCapabilities"
-
-});
-
-/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Format/WMTSCapabilities.js
- * @requires OpenLayers/Format/OWSCommon/v1_1_0.js
- */
-
-/**
- * Class: OpenLayers.Format.WMTSCapabilities.v1_0_0
- * Read WMTS Capabilities version 1.0.0.
- * 
- * Inherits from:
- *  - <OpenLayers.Format.WMTSCapabilities>
- */
-OpenLayers.Format.WMTSCapabilities.v1_0_0 = OpenLayers.Class(
-    OpenLayers.Format.OWSCommon.v1_1_0, {
-        
-    /**
-     * Property: version
-     * {String} The parser version ("1.0.0").
-     */
-    version: "1.0.0",
-
-    /**
-     * Property: namespaces
-     * {Object} Mapping of namespace aliases to namespace URIs.
-     */
-    namespaces: {
-        ows: "http://www.opengis.net/ows/1.1",
-        wmts: "http://www.opengis.net/wmts/1.0",
-        xlink: "http://www.w3.org/1999/xlink"
-    },    
-    
-    /**
-     * Property: yx
-     * {Object} Members in the yx object are used to determine if a CRS URN
-     *     corresponds to a CRS with y,x axis order.  Member names are CRS URNs
-     *     and values are boolean.  Defaults come from the 
-     *     <OpenLayers.Format.WMTSCapabilities> prototype.
-     */
-    yx: null,
-
-    /**
-     * Property: defaultPrefix
-     * {String} The default namespace alias for creating element nodes.
-     */
-    defaultPrefix: "wmts",
-
-    /**
-     * Constructor: OpenLayers.Format.WMTSCapabilities.v1_0_0
-     * Create a new parser for WMTS capabilities version 1.0.0. 
-     *
-     * Parameters:
-     * options - {Object} An optional object whose properties will be set on
-     *     this instance.
-     */
-    initialize: function(options) {
-        OpenLayers.Format.XML.prototype.initialize.apply(this, [options]);
-        this.options = options;
-        var yx = OpenLayers.Util.extend(
-            {}, OpenLayers.Format.WMTSCapabilities.prototype.yx
-        );
-        this.yx = OpenLayers.Util.extend(yx, this.yx);
-    },
-
-    /**
-     * APIMethod: read
-     * Read capabilities data from a string, and return info about the WMTS.
-     * 
-     * Parameters: 
-     * data - {String} or {DOMElement} data to read/parse.
-     *
-     * Returns:
-     * {Object} Information about the SOS service.
-     */
-    read: function(data) {
-        if(typeof data == "string") {
-            data = OpenLayers.Format.XML.prototype.read.apply(this, [data]);
-        }
-        if(data && data.nodeType == 9) {
-            data = data.documentElement;
-        }
-        var capabilities = {};
-        this.readNode(data, capabilities);
-        capabilities.version = this.version;
-        return capabilities;
-    },
-
-    /**
-     * Property: readers
-     * Contains public functions, grouped by namespace prefix, that will
-     *     be applied when a namespaced node is found matching the function
-     *     name.  The function will be applied in the scope of this parser
-     *     with two arguments: the node being read and a context object passed
-     *     from the parent.
-     */
-    readers: {        
-        "wmts": {
-            "Capabilities": function(node, obj) {
-                this.readChildNodes(node, obj);
-            },
-            "Contents": function(node, obj) {
-                obj.contents = {};                
-                obj.contents.layers = [];
-                obj.contents.tileMatrixSets = {};                
-                this.readChildNodes(node, obj.contents);
-            },
-            "Layer": function(node, obj) {
-                var layer = {
-                    styles: [],
-                    formats: [],
-                    dimensions: [],
-                    tileMatrixSetLinks: []
-                };
-                layer.layers = [];
-                this.readChildNodes(node, layer);
-                obj.layers.push(layer);
-            },
-            "Style": function(node, obj) {
-                var style = {};
-                style.isDefault = (node.getAttribute("isDefault") === "true");
-                this.readChildNodes(node, style);
-                obj.styles.push(style);
-            },
-            "Format": function(node, obj) {
-                obj.formats.push(this.getChildValue(node)); 
-            },
-            "TileMatrixSetLink": function(node, obj) {
-                var tileMatrixSetLink = {};
-                this.readChildNodes(node, tileMatrixSetLink);
-                obj.tileMatrixSetLinks.push(tileMatrixSetLink);
-            },
-            "TileMatrixSet": function(node, obj) {
-                // node could be child of wmts:Contents or wmts:TileMatrixSetLink
-                // duck type wmts:Contents by looking for layers
-                if (obj.layers) {
-                    // TileMatrixSet as object type in schema
-                    var tileMatrixSet = {
-                        matrixIds: []
-                    };
-                    this.readChildNodes(node, tileMatrixSet);
-                    obj.tileMatrixSets[tileMatrixSet.identifier] = tileMatrixSet;
-                } else {
-                    // TileMatrixSet as string type in schema
-                    obj.tileMatrixSet = this.getChildValue(node);
-                }
-            },
-            "TileMatrix": function(node, obj) {
-                var tileMatrix = {
-                    supportedCRS: obj.supportedCRS
-                };
-                this.readChildNodes(node, tileMatrix);
-                obj.matrixIds.push(tileMatrix);
-            },
-            "ScaleDenominator": function(node, obj) {
-                obj.scaleDenominator = parseFloat(this.getChildValue(node)); 
-            },
-            "TopLeftCorner": function(node, obj) {                
-                var topLeftCorner = this.getChildValue(node);
-                var coords = topLeftCorner.split(" ");
-                // decide on axis order for the given CRS
-                var yx;
-                if (obj.supportedCRS) {
-                    // extract out version from URN
-                    var crs = obj.supportedCRS.replace(
-                        /urn:ogc:def:crs:(\w+):.+:(\w+)$/, 
-                        "urn:ogc:def:crs:$1::$2"
-                    );
-                    yx = !!this.yx[crs];
-                }
-                if (yx) {
-                    obj.topLeftCorner = new OpenLayers.LonLat(
-                        coords[1], coords[0]
-                    );
-                } else {
-                    obj.topLeftCorner = new OpenLayers.LonLat(
-                        coords[0], coords[1]
-                    );
-                }
-            },
-            "TileWidth": function(node, obj) {
-                obj.tileWidth = parseInt(this.getChildValue(node)); 
-            },
-            "TileHeight": function(node, obj) {
-                obj.tileHeight = parseInt(this.getChildValue(node)); 
-            },
-            "MatrixWidth": function(node, obj) {
-                obj.matrixWidth = parseInt(this.getChildValue(node)); 
-            },
-            "MatrixHeight": function(node, obj) {
-                obj.matrixHeight = parseInt(this.getChildValue(node)); 
-            },
-            "ResourceURL": function(node, obj) {
-                obj.resourceUrl = obj.resourceUrl || {};
-                var resourceType = node.getAttribute("resourceType");
-                if (!obj.resourceUrls) {
-                    obj.resourceUrls = [];
-                }
-                var resourceUrl = obj.resourceUrl[resourceType] = {
-                    format: node.getAttribute("format"),
-                    template: node.getAttribute("template"),
-                    resourceType: resourceType
-                };
-                obj.resourceUrls.push(resourceUrl);
-            },
-            // not used for now, can be added in the future though
-            /*"Themes": function(node, obj) {
-                obj.themes = [];
-                this.readChildNodes(node, obj.themes);
-            },
-            "Theme": function(node, obj) {
-                var theme = {};                
-                this.readChildNodes(node, theme);
-                obj.push(theme);
-            },*/
-            "WSDL": function(node, obj) {
-                obj.wsdl = {};
-                obj.wsdl.href = node.getAttribute("xlink:href");
-                // TODO: other attributes of <WSDL> element                
-            },
-            "ServiceMetadataURL": function(node, obj) {
-                obj.serviceMetadataUrl = {};
-                obj.serviceMetadataUrl.href = node.getAttribute("xlink:href");
-                // TODO: other attributes of <ServiceMetadataURL> element                
-            },
-            "LegendURL": function(node, obj) {
-                obj.legend = {};
-                obj.legend.href = node.getAttribute("xlink:href");
-                obj.legend.format = node.getAttribute("format");
-            },
-            "Dimension": function(node, obj) {
-                var dimension = {values: []};
-                this.readChildNodes(node, dimension);
-                obj.dimensions.push(dimension);
-            },
-            "Default": function(node, obj) {
-                obj["default"] = this.getChildValue(node);
-            },
-            "Value": function(node, obj) {
-                obj.values.push(this.getChildValue(node));
-            }
-        },
-        "ows": OpenLayers.Format.OWSCommon.v1_1_0.prototype.readers["ows"]
-    },    
-    
-    CLASS_NAME: "OpenLayers.Format.WMTSCapabilities.v1_0_0" 
 
 });
 
