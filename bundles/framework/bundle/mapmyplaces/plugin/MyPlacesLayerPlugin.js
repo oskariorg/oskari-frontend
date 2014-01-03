@@ -348,7 +348,7 @@ function(config) {
         // depending on the number of features they contain.
         var colors = {
             low: "rgb(0, 128, 0)",
-            middle: "rgb(200, 200, 0)",
+            middle: "rgb(0, 0, 128)",
             high: "rgb(128, 0, 0)"
         };
 
@@ -357,7 +357,7 @@ function(config) {
             filter: new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.LESS_THAN,
                 property: "count",
-                value: 5
+                value: 3
             }),
             symbolizer: {
                 fillColor: colors.low,
@@ -377,8 +377,8 @@ function(config) {
             filter: new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.BETWEEN,
                 property: "count",
-                lowerBoundary: 5,
-                upperBoundary: 10
+                lowerBoundary: 3,
+                upperBoundary: 5
             }),
             symbolizer: {
                 fillColor: colors.middle,
@@ -386,7 +386,7 @@ function(config) {
                 strokeColor: colors.middle,
                 strokeOpacity: 0.5,
                 strokeWidth: 12,
-                pointRadius: 15,
+                pointRadius: 17,
                 label: "${count}",
                 labelOutlineWidth: 1,
                 fontColor: "#ffffff",
@@ -398,7 +398,7 @@ function(config) {
             filter: new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.GREATER_THAN,
                 property: "count",
-                value: 10
+                value: 5
             }),
             symbolizer: {
                 fillColor: colors.high,
@@ -406,7 +406,7 @@ function(config) {
                 strokeColor: colors.high,
                 strokeOpacity: 0.5,
                 strokeWidth: 12,
-                pointRadius: 20,
+                pointRadius: 19,
                 label: "${count}",
                 labelOutlineWidth: 1,
                 fontColor: "#ffffff",
@@ -570,14 +570,15 @@ function(config) {
                         var clusters = [];
                         var feature, clustered, cluster;
                         for(var i=0; i<this.features.length; ++i) {
-this.features[i].geometry.nonclustered = true;
+                            this.features[i].geometry.clustered = false;
                             feature = this.features[i];
                             if(feature.geometry) {
                                 clustered = false;
                                 for(var j=clusters.length-1; j>=0; --j) {
                                     cluster = clusters[j];
                                     if(this.shouldCluster(cluster, feature)) {
-this.features[i].geometry.nonclustered = false;
+                                        this.features[i].geometry.clustered = true;
+                                        cluster.cluster[0].geometry.clustered = true;
                                         this.addToCluster(cluster, feature);
                                         clustered = true;
                                         break;
@@ -588,6 +589,7 @@ this.features[i].geometry.nonclustered = false;
                                 }
                             }
                         }
+
                         this.clustering = true;
                         this.layer.removeAllFeatures();
                         this.clustering = false;
@@ -616,12 +618,13 @@ this.features[i].geometry.nonclustered = false;
                         var layerName = this.layer.name;
                         var attentionLayer = this.layer.map.getLayersByName(layerName.substring(0,layerName.length-1))[0];
                         for (var i=0; i<attentionLayer.features.length; i++ ) {
-                            if (attentionLayer.features[i].geometry.nonclustered) {
-                                attentionLayer.features[i].display = "none";
+                            if (attentionLayer.features[i].geometry.clustered) {
+                                  attentionLayer.features[i].style = {display : ""};
                             } else {
-                                attentionLayer.features[i].display = "";
+                                attentionLayer.features[i].style = null;
                             }
                         }
+                        attentionLayer.redraw();
                     }
                 }
             },
