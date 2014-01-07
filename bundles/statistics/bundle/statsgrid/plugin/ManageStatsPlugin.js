@@ -755,8 +755,19 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 }
             };
             indicator.description = JSON.parse(data.title);
-            //            me.indicators.push(indicator);
+            // me.indicators.push(indicator);
             data.data = JSON.parse(data.data);
+
+            var state = me.getState();
+            (state.indicators = state.indicators || []).push({
+                id: data.indicatorId,
+                gender: 'total',
+                year: data.year,
+                data: data.data,
+                title: {
+                    'fi': data.title
+                }
+            });
 
             // Show the data in the grid.
             me.addIndicatorDataToGrid(container, data.indicatorId, 'total', data.year, data.data, indicator);
@@ -1021,7 +1032,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             me._state.indicators = [];
                         }
                         me._state.indicators.push({
-                            indicator: indicatorId,
+                            id: indicatorId,
                             year: year,
                             gender: gndrs
                         });
@@ -1149,7 +1160,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 silent,
                 indicatorId,
                 gender,
-                year;
+                year,
+                numValue;
+
             data = data || me.indicatorsData[columnId];
             columns = columns || me.grid.getColumns();
 
@@ -1166,7 +1179,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     var item = me.dataView.getItemById(regionId);
                     if (item) {
                         // update row
-                        item[columnId] = Number(value);
+                        numValue = Number(value);
+                        if (isNaN(numValue)) {
+                            item[columnId] = value;
+                        } else {
+                            item[columnId] = numValue;
+                        }
                         me.dataView.updateItem(item.id, item);
                     }
                 }
@@ -1245,7 +1263,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             if (this._state.indicators) {
                 for (i = 0, ilen = this._state.indicators.length; i < ilen; i++) {
                     var statedIndicator = this._state.indicators[i];
-                    if ((indicatorId === statedIndicator.indicator) &&
+                    if ((indicatorId === statedIndicator.id) &&
                             (year === statedIndicator.year) &&
                             (gender === statedIndicator.gender)) {
                         this._state.indicators.splice(i, 1);
@@ -1417,7 +1435,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             for (i = 0; i < indicators.length; i++) {
                 var indicatorData = indicators[i],
-                    indicator = indicatorData.indicator;
+                    indicator = indicatorData.id;
 
                 // ajax call
                 me.statsService.fetchStatsData(
@@ -1434,7 +1452,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             var j;
                             for (j = 0; j < indicators.length; j++) {
                                 // FIXME use ===
-                                if (indicators[j].indicator == data.id) {
+                                if (indicators[j].id == data.id) {
                                     me.indicators[j] = data;
                                 }
                             }
@@ -1475,7 +1493,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             for (i = 0; i < indicators.length; i++) {
                 var indicatorData = indicators[i],
-                    indicator = indicatorData.indicator,
+                    indicator = indicatorData.id,
                     year = indicatorData.year,
                     gender = indicatorData.gender || 'total';
 
@@ -1495,11 +1513,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             for (j = 0; j < indicators.length; j++) {
                                 ind = indicators[j];
                                 // FIXME use ===
-                                if (ind.indicator == data[0].indicator &&
+                                if (ind.id == data[0].indicator &&
                                         ind.year == data[0].year &&
                                         ind.gender === data[0].gender) {
 
-                                    indicatorColumnId = me._getIndicatorColumnId(ind.indicator, ind.gender, ind.year);
+                                    indicatorColumnId = me._getIndicatorColumnId(ind.id, ind.gender, ind.year);
                                     indicatorsData[indicatorColumnId] = data;
                                 }
                             }
@@ -1510,9 +1528,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                                 for (j = 0; j < indicators.length; j++) {
                                     ind = indicators[j];
                                     if (ind) {
-                                        indicatorColumnId = me._getIndicatorColumnId(ind.indicator, ind.gender, ind.year);
+                                        indicatorColumnId = me._getIndicatorColumnId(ind.id, ind.gender, ind.year);
                                         var indData = indicatorsData[indicatorColumnId];
-                                        me.addIndicatorDataToGrid(container, ind.indicator, ind.gender, ind.year, indData, me.indicators[j], true);
+                                        me.addIndicatorDataToGrid(container, ind.id, ind.gender, ind.year, indData, me.indicators[j], true);
                                     }
                                 }
                                 callback();
@@ -1694,8 +1712,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         value[indicatorId][type] = result[indicatorId];
                         totalsItem = jQuery(this.templates.statsgridTotalsVar);
                         var val = value[columnId][type];
-                        if (!this._isInt(val)) {
+                        if (!isNaN(val) && !this._isInt(val)) {
                             val = val.toFixed(2);
+                        }
+                        if (_.isNaN(val)) {
+                            val = '-';
                         }
                         totalsItem.addClass('statsgrid-' + type).text(val);
                         break;

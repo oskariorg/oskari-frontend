@@ -14,6 +14,7 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
     this.layerWMSName = layerWMSName;
     this.layerId = layerId;
     this.regionCategory = regionCategory;
+    this.municipalityCategory = 'kunta';
 
     this.template = {
         'formCont' : '<div class="form-cont"></div>',
@@ -214,6 +215,13 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
         var updateValue = function(name, value) {
             //if code instead of name...
             if(/^\d+$/.test(name)) {
+                // add prefix zeros to the code if needed (in case of municipality)
+                if (me.regionCategory.toLowerCase() === me.municipalityCategory) {
+                    if (name.length > 0 && name.length < 3) {
+                        var zeros = (3 - name.length);
+                        while (zeros--) name = '0' + name;
+                    }
+                }
                 var rows = me.container.find('.municipality-row');
                 for (var i = 0; i < rows.length; i++) {
                     var row = jQuery(rows[i]);
@@ -240,10 +248,11 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
                 value;
 
             //separator can be tabulator, comma or colon
-            var matches = line.match(/(.*) *[\t:,]+ *(.*)/);
+            var matches = line.match(/([^\t:,]+) *[\t:,]+ *(.*)/);
+            //var matches = line.match(/(.*) *[\t:,]+ *(.*)/);
             if (matches && matches.length === 3) {
                 area = matches[1];
-                value = matches[2]
+                value = (matches[2] || '').replace(',', '.');
             }
             // update municipality values
             if (updateValue(jQuery.trim(area), jQuery.trim(value)))
