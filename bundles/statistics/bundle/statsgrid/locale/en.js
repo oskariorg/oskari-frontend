@@ -16,6 +16,8 @@ Oskari.registerLocalization({
             "grid": {
                 "name": "Title",
                 "description": "Description",
+                "organization": "Data source",
+                "year": "Year",
                 "delete": " "
             },
             "deleteTitle": "Deleting indicator",

@@ -16,6 +16,8 @@ Oskari.registerLocalization({
             "grid": {
                 "name": "Titeln",
                 "description": "Beskrivning",
+                "organization": "Upphov",
+                "year": "År",
                 "delete": " "
             },
             "deleteTitle": "Indikaattorin poistaminen",

@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
 function(instance, localization) {
     this.instance = instance;
     this.loc = localization;
-    this.visibleFields = ['name', 'description', 'delete'];
+    this.visibleFields = ['name', 'description', 'organization', 'year', 'delete'];
     this.grid = null;
     this.container = null;
     this.template = jQuery(
@@ -142,8 +142,10 @@ function(instance, localization) {
         _.each(indicators, function(indicator) {
             gridModel.addData({
                 'id': indicator.id,
-                'name': indicator.title[lang],
-                'description': indicator.description[lang]
+                'name': ( indicator.title ? indicator.title[lang] : '' ),
+                'description': ( indicator.description ? indicator.description[lang] : '' ),
+                'organization': ( indicator.organization ? indicator.organization[lang] : '' ),
+                'year': (indicator.year || '')
             });
         });
 
