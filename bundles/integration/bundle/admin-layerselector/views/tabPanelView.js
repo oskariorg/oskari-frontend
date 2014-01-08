@@ -129,8 +129,7 @@ define([
                                 visibleLayerCount++;
                                 // Add layerView to group container
                                 groupContainer.append(layerView.$el);
-                                // TODO remove this line
-                                // FIXME why?
+                                // store reference to dom
                                 this.layerContainers[layer.getId()] = layerView;
                             }
                         }
@@ -145,11 +144,9 @@ define([
                             "lcId" : group.id
                         });
                         
-                        var j,
-                            lang,
-                            usedLanguages = {};
+                        var usedLanguages = {};
                         group.locales = [];
-                        for (lang in group.names) {
+                        for (var lang in group.names) {
                             if (group.names.hasOwnProperty(lang)) {
                                 usedLanguages[lang] = true;
                                 group.locales.push({
@@ -162,7 +159,7 @@ define([
                         // Make sure all supported languages are present
                         var supportedLanguages = Oskari.getSupportedLanguages();
                         
-                        for (j = 0; j < supportedLanguages.length; j++) {
+                        for (var j = 0; j < supportedLanguages.length; j++) {
                             if (!usedLanguages[supportedLanguages[j]]) {
                                 group.locales.push({
                                     "lang" : supportedLanguages[j],
@@ -331,8 +328,7 @@ define([
                     // create layer settings view for adding or editing layer
                     var settings = new AdminLayerSettingsView({
                         model: null,
-                        instance: this.options.instance,
-                        classes: this.inspireClasses
+                        instance: this.options.instance
                     });
 
                     layer.append(settings.$el);
@@ -417,7 +413,7 @@ define([
 
                 this.layerGroupingModel.save(data, function(err) {
                     if(err) {
-                        // handle error
+                        // TODO: handle error
                         alert("Error!! " + err);
                         return;
                     }
@@ -444,19 +440,12 @@ define([
                 var me = this,
                     element = jQuery(e.currentTarget);
 
-                var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
-                    action_route = "&action_route=DeleteOrganization",
-                    id = "&layercl_id=",
-                    parentId = "&parent_id=",
-                    idValue = element.attr('data-id'),
-                    parentIdValue = element.attr('data-parent-id');
-
-                idValue = (idValue != null) ? idValue : '';
-                parentIdValue = (parentIdValue != null) ? parentIdValue : '';
-                var url = baseUrl + action_route + id + idValue + parentId + parentIdValue;
-                // make AJAX call
-                me._remove(e, url, function (response) {
-                    me.layerGroupingModel.removeClass(idValue);
+                this.layerGroupingModel.remove(element.attr('data-id'), function(err) {
+                    if(err) {
+                        // TODO: handle error
+                        alert("Error!! " + err);
+                        return;
+                    }
                     element.parents('.accordion').remove();
                 });
             },
@@ -468,36 +457,6 @@ define([
             removeClass: function (e) {
                 //TODO
                 alert('Backend component is not ready yet.');
-            },
-            /**
-             * Remove grouping. Do not use this method, but removeOrganization or removeClass
-             *
-             * @method _remove
-             */
-            _remove: function (e, url, successCallback) {
-                var me = this,
-                    element = jQuery(e.currentTarget),
-                    addClass = element.parents('.admin-add-class');
-                jQuery.ajax({
-                    type: "GET",
-                    dataType: 'json',
-                    beforeSend: function (x) {
-                        if (x && x.overrideMimeType) {
-                            x.overrideMimeType("application/j-son;charset=UTF-8");
-                        }
-                    },
-                    url: url,
-                    success: function (resp) {
-                        if (successCallback && resp === null) {
-                            successCallback(resp);
-                        }
-                    },
-                    error: function (jqXHR, textStatus) {
-                        if (jqXHR.status != 0) {
-                            alert(' false ');
-                        }
-                    }
-                });
             },
 
             /**

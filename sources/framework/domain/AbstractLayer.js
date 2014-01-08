@@ -450,6 +450,9 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          *          0-100 in percents
          */
         getOpacity: function () {
+            if(!this._opacity) {
+                return 100;
+            }
             return this._opacity;
         },
         /**
@@ -575,6 +578,9 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * Gets layer styles
          */
         getStyles: function () {
+            if(!this._styles) {
+                return [];
+            }
             return this._styles;
         },
         /**

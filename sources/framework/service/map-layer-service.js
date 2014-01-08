@@ -689,8 +689,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return null;
             }
 
-            var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options),
-                perm;
+            var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options);
             if (!layer) {
                 throw "Unknown layer type '" + mapLayerJson.type + "'";
             }
@@ -757,7 +756,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             // permissions
             if (mapLayerJson.permissions) {
-                for (perm in mapLayerJson.permissions) {
+                for (var perm in mapLayerJson.permissions) {
                     if (mapLayerJson.permissions.hasOwnProperty(perm)) {
                         layer.addPermission(perm, mapLayerJson.permissions[perm]);
                     }

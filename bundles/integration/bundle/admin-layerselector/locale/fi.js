@@ -58,6 +58,11 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
+            "layertypes" : {
+                "WMS": "WMS Taso",
+                "WFS": "WFS Taso",
+                "WMTS": "WMTS Taso"
+            },
             "selectLayer": "Valitse ylätaso",
             "selectSubLayer": "Valitse alataso",
 
@@ -78,11 +83,11 @@ Oskari.registerLocalization({
             "groupLayer": "Ryhmätaso",
             "interfaceVersion": "Rajapinnan versio",
             "interfaceVersionDesc": "Rajapinnan versio",
-            "wmslayer": "WMS Taso",
+//            "wmslayer": "WMS Taso",
             "wms1_1_1": "WMS 1.1.1",
             "wms1_3_0": "WMS 1.3.0",
-            "wfslayer": "WFS Taso",
-            "wmtslayer": "WMTS Taso",
+//            "wfslayer": "WFS Taso",
+//            "wmtslayer": "WMTS Taso",
             "getInfo": "Hae tiedot",
             "selectClass": "Valitse aihe",
             "selectClassDesc": "Valitse aihe",

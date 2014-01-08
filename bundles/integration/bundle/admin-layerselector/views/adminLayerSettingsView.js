@@ -4,13 +4,15 @@ define([
     'text!_bundle/templates/adminGroupSettingsTemplate.html',
     'text!_bundle/templates/group/subLayerTemplate.html',
     '_bundle/collections/userRoleCollection'
+    '_bundle/models/layerModel'
 ],
     function (
         TypeSelectTemplate,
         LayerSettingsTemplate,
         GroupSettingsTemplate,
         SubLayerTemplate,
-        userRoleCollection
+        userRoleCollection,
+        layerModel
     ) {
         return Backbone.View.extend({
             //<div class="admin-add-layer" data-id="<% if(model != null && model.getId()) { %><%= model.getId() %><% } %>">
@@ -38,7 +40,7 @@ define([
                 "change #add-layer-type": "createLayerSelect",
                 "click .admin-add-group-ok": "saveGroup",
                 "click .admin-add-group-cancel": "hideLayerSettings",
-                "click .admin-remove-group": "removeGroup"
+                "click .admin-remove-group": "removeLayerCollection"
             },
 
             /**
@@ -50,7 +52,8 @@ define([
             initialize: function () {
                 this.instance = this.options.instance;
                 this.model = this.options.model;
-                this.classes = this.options.classes;
+                this.modelObj = layerModel;
+                //this.classes = this.options.classes; // inspire themes can now be referenced with this.instance.models.inspire (layersTabModel)
                 this.typeSelectTemplate = _.template(TypeSelectTemplate);
                 this.layerTemplate = _.template(LayerSettingsTemplate);
                 this.groupTemplate = _.template(GroupSettingsTemplate);
@@ -98,8 +101,7 @@ define([
                     // add html template
                     me.$el.html(me.typeSelectTemplate({
                         model: me.model,
-                        instance: me.options.instance,
-                        classNames: me.classes.getGroupTitles()
+                        localization: me.options.instance.getLocalization('admin')
                     }));
                 }
             },
@@ -138,52 +140,38 @@ define([
             createLayerForm: function (e) {
                 var me = this,
                     supportedLanguages = Oskari.getSupportedLanguages(),
-                    i,
                     opacity = 100,
                     styles = [];
                 if (!me.model) {
-                    me.model = {};
+                    var sandbox = this.instance.sandbox;
+                    var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                    // only supporting WMS for now
+                    me.model = mapLayerService.createLayerTypeInstance('wmslayer');
                 }
-                if (!me.model.admin) {
-                    me.model.admin = {
-                        "locales": []
-                    };
-                    supportedLanguages.sort();
-                    for (i = 0; i < supportedLanguages.length; i += 1) {
-                        me.model.admin.locales.push({
-                            "lang": supportedLanguages[i],
-                            "name": "",
-                            "title": ""
-                        });
-                    }
-                }
+
+
+                // This propably isn't the best way to get reference to inspire themes
+                var inspireGroups = this.instance.models.inspire.getGroupTitles();
                 me.$el.append(me.layerTemplate({
                     model: me.model,
                     instance: me.options.instance,
-                    classNames: me.classes.getGroupTitles(),
+                    classNames: inspireGroups,
                     isSubLayer: me.options.baseLayerId,
                     roles: me.roles
                 }));
                 // if settings are hidden, we need to populate template and
                 // add it to the DOM
                 if (!me.$el.hasClass('show-edit-layer')) {
-                    // decode xslt
-                    // TODO: no longer encoding - remove decoded handling
-                    if (me.model && me.model.admin.xslt && !me.model.admin.xslt_decoded) {
-                        //me.model.admin.xslt_decoded = me.classes.decode64(me.model.admin.xslt);
-                        me.model.admin.xslt_decoded = me.model.admin.xslt;
+                    /*
+                    if (me.model && me.model.style) {
+                        // FIXME: this is the default style, why get it from admin?
+                        styles.push(me.model.style);
+                        me.model.admin.styles = styles;
                     }
-                    if (me.model &&
-                            !me.model.admin.style_decoded &&
-                            me.model.admin.style) {
-                            debugger;
-                            //styles.push(me.classes.decode64(me.model.admin.style));
-                            styles.push(me.model.admin.style);
-                            me.model.admin.style_decoded = styles;
-                    }
-                    // add opacity
-                    if (me.model && me.model.admin && me.model.admin.opacity !== null && me.model.admin.opacity !== undefined) {
-                        opacity = me.model.admin.opacity;
+                    */
+                    // set opacity
+                    if (me.model && me.model.opacity) {
+                        opacity = me.model.opacity;
                     }
                     // FIXME non-unique ID
                     me.$el.find('.layout-slider').slider({
@@ -605,7 +593,10 @@ define([
                 });
             },
 
-            removeGroup: function (e) {
+            removeLayerCollection: function (e) {
+                alert('TODO!! should call delete on layer!');
+                // call action_route=DeleteLayer with baselayers id
+                return;
                 var me = this,
                     element = jQuery(e.currentTarget),
                     editForm = element.parents('.admin-add-layer').attr('data-id'),

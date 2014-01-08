@@ -58,6 +58,11 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
+            "layertypes" : {
+                "WMS": "WMS Lager",
+                "WFS": "WFS Lager",
+                "WMTS": "WMTS Lager"
+            },
             "selectLayer": "Välj nivå",
             "selectSubLayer": "Välj undernivå",
 
@@ -78,11 +83,11 @@ Oskari.registerLocalization({
             "groupLayer": "Gruppnivå",
             "interfaceVersion": "Gränss&shy;nittets version",
             "interfaceVersionDesc": "Gränss&shy;nittets version",
-            "wmslayer": "WMS Lager",
+//            "wmslayer": "WMS Lager",
             "wms1_1_1": "WMS 1.1.1",
             "wms1_3_0": "WMS 1.3.0",
-            "wfslayer": "WFS Lager",
-            "wmtslayer": "WMTS Lager",
+//            "wfslayer": "WFS Lager",
+//            "wmtslayer": "WMTS Lager",
             "getInfo": "Sök data",
             "selectClass": "Välj tema",
             "selectClassDesc": "Välj tema",

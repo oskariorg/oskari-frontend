@@ -119,7 +119,7 @@
                     },
                     error: function (jqXHR, textStatus) {
                         if(callback /* && jqXHR.status !== 0 */) {
-                            callback("Error while retrieving classes" + textStatus);
+                            callback("Error while saving group " + textStatus);
                         }
                     }
                 });
@@ -176,7 +176,6 @@
                 //console.log("loadClasses");
                 var me = this;
                 var groups = me.layerGroups;
-                console.log(groups);
                 var results = classes[this.type];
                 var hasChanges = false;
                 _.each(results, function(item) {
@@ -207,18 +206,14 @@
                 var defaultLanguage = Oskari.getLang();
                 var loadedGroup = me.getGroup(item.id);
                 var hasChanges = false;
-                console.log(loadedGroup);
                 if(!loadedGroup) {
                     // create a new group if not found
                     hasChanges = true;
-                    console.log("Fffuuuuu", item.name[defaultLanguage]);
                     // first param is null because Backbone just works that way
                     loadedGroup = new LayerGroupCollection(null, item.name[defaultLanguage]);
-                    console.log("Jeeeee", loadedGroup);
                     loadedGroup.id = item.id;
                     loadedGroup.names = loadedGroup.names || {};
                     groups.push(loadedGroup);
-                    console.log("Added!!!!", loadedGroup);
                 }
                 // copy names
                 for (var lang in item.name) {
@@ -245,7 +240,7 @@
              */
             _mapLayersForGroup: function (group, groupingMethod) {
                 var me = this;
-                // FIXME: this is epic slow, fix it
+                // FIXME: this needs some performance tuning
                 _.each(this.layers.models, function(layer) {
                     if (layer.getMetaType &&
                         layer.getMetaType() == 'published' ||
@@ -261,12 +256,47 @@
             },
 
             /**
+             * Ajax call to remove a group to backend.
+             *
+             * @method remove
+             * @param {Number} id for the group to remove
+             */
+            remove: function (id, callback) {
+                if(!id) {
+                    if(callback) {
+                        callback('Id missing');
+                    }
+                    return;
+                }
+                var me = this;
+                jQuery.ajax({
+                    type: "POST",
+                    dataType: 'json',
+                    data : {
+                        id : id
+                    },
+                    url: me.baseURL + me.actions.remove + "&iefix=" + (new Date()).getTime(),
+                    success: function (pResp) {
+                        me._removeClass(id);
+                        if(callback) {
+                            callback();
+                        }
+                    },
+                    error: function (jqXHR, textStatus) {
+                        if(callback /* && jqXHR.status !== 0 */) {
+                            callback("Error while removing group " + textStatus);
+                        }
+                    }
+                });
+            },
+            /**
              * Remove a class with given id
              *
              * @method removeClass
              * @param {integer} id of class/organization that needs to be removed
+             * @private
              */
-            removeClass: function (id) {
+            _removeClass: function (id) {
                 var groups = this.layerGroups;
                 for (var i = groups.length - 1; i >= 0; i -= 1) {
                     if (groups[i].id === id) {

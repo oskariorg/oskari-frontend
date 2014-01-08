@@ -127,15 +127,7 @@ define([
                     element = jQuery(e.currentTarget);
                 //show layer settings
                 if (element.parents('.admin-add-layer').length === 0 && !element.find('.admin-add-layer').hasClass('show-edit-layer')) {
-
                     e.stopPropagation();
-                    // decode styles
-                    if (me.model.admin && (me.model.admin.style_decoded === null || me.model.admin.style_decoded === undefined) && me.model.admin.style !== null && me.model.admin.style !== undefined) {
-                        var styles = [];
-                        //styles.push(me.options.layerTabModel.decode64(me.model.admin.style));
-                        styles.push(me.model.admin.style);
-                        me.model.admin.style_decoded = styles;
-                    }
                     // create AdminLayerSettingsView
                     var settings = new AdminLayerSettingsView({
                         model: me.model,
