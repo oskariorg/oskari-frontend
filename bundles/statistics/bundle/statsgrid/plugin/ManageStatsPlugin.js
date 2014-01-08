@@ -764,9 +764,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 gender: 'total',
                 year: data.year,
                 data: data.data,
-                title: {
-                    'fi': data.title
-                }
+                title: JSON.parse(data.title),
+                description: JSON.parse(data.description),
+                organization: {
+                    'title': JSON.parse(data.source)
+                },
+                category: data.category,
+                'public': data.published,
+                ownIndicator: true
             });
 
             // Show the data in the grid.
