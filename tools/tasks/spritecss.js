@@ -56,12 +56,27 @@ module.exports = function(grunt) {
         function readIconDirectory() {
             var files = fs.readdir(iconDirectoryPath, function (err, files) {
                 if (!err) {
-                    filterHoverIcons(files);
+                    filterHoverIcons(filterResultIcon(files));
                 } else {
                     console.log('Directory could not be read.', err);
                     process.exit(0);
                 }
             });
+        }
+
+        function filterResultIcon(files) {
+            var result = [];
+            // assume there is a "/" in the resultImageName
+            var icons = resultImageName.substring(resultImageName.lastIndexOf('/') + 1);
+
+            for(var i = 0, ilen = files.length; i < ilen; i++) {
+                current = files[i];
+                if (current !== icons) {
+                    result.push(current);
+                }
+            }
+            
+            return result;
         }
 
         function filterHoverIcons(files) {
