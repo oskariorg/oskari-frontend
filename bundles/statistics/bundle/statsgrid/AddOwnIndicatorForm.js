@@ -139,6 +139,9 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
             var municipality = me.municipalities[i];
             var formMunicipalityRow = jQuery(me.template.formMunicipalityRow).clone();
             var m = municipality.municipality.toLowerCase();
+            if (me.regionCategory.toLowerCase() === me.municipalityCategory) {
+                m = m.split(' ')[0];
+            }
             formMunicipalityRow
                 .attr('data-name', m)
                 .attr('data-code', municipality.code)
@@ -213,30 +216,29 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
         var data = divmanazerpopup.find('textarea').val();
         //update form regions / municipalities
         var updateValue = function(name, value) {
+            var row;
             //if code instead of name...
-            if(/^\d+$/.test(name)) {
+            if (/^\d+$/.test(name)) {
                 // add prefix zeros to the code if needed (in case of municipality)
                 if (me.regionCategory.toLowerCase() === me.municipalityCategory) {
-                    if (name.length > 0 && name.length < 3) {
-                        var zeros = (3 - name.length);
-                        while (zeros--) name = '0' + name;
-                    }
+                    if (name.length === 1) name = '00' + name;
+                    if (name.length === 2) name = '0' + name;
                 }
-                var rows = me.container.find('.municipality-row');
-                for (var i = 0; i < rows.length; i++) {
-                    var row = jQuery(rows[i]);
-                    var code = row.attr('data-code');
-                    if(code === name) {
-                        row.find('input').val(value);
-                        return true;
-                    }
-                };
+                var row = me.container.find('.municipality-row[data-code=' + name + ']');
+            } else {
+                // Only use the first part of the name in case of a municipality
+                if (me.regionCategory.toLowerCase() === me.municipalityCategory) {
+                    name = name.split(' ')[0];
+                }
+                var row = me.container.find('.municipality-row[data-name=' + name.toLowerCase() + ']');
             }
-            var input = me.container.find('#municipality_'+name.toLowerCase());
-            if(input.length > 0) {
-                input.val(value);
+
+            if (row && row.length) {
+                row.find('input').val(value);
+                row.appendTo(row.parent());
                 return true;
             }
+
             return false;
         }
         var lines = data.match(/[^\r\n]+/g);
@@ -258,7 +260,7 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
             if (updateValue(jQuery.trim(area), jQuery.trim(value)))
                 updated++;
             else if (value && value.length > 0)
-                unrecognized.push(area);
+                unrecognized.push({region: area, value: value});
         });
         var openImport = me.container.find('.import-button');
         // alert user of unrecognized lines
@@ -272,7 +274,6 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
         openImport.tooltip( "open" );
 
         dialog.close(true);
-
     },
     /**
      * @method _parseData
@@ -395,5 +396,4 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
             }
         }
     }
-
 });

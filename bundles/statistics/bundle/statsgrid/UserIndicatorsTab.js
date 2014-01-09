@@ -142,9 +142,9 @@ function(instance, localization) {
         _.each(indicators, function(indicator) {
             gridModel.addData({
                 'id': indicator.id,
-                'name': ( indicator.title ? indicator.title[lang] : '' ),
-                'description': ( indicator.description ? indicator.description[lang] : '' ),
-                'organization': ( indicator.organization ? indicator.organization[lang] : '' ),
+                'name': me._retrieveValue(indicator.title),
+                'description': me._retrieveValue(indicator.description),
+                'organization': me._retrieveValue(indicator.organization),
                 'year': (indicator.year || '')
             });
         });
@@ -152,6 +152,31 @@ function(instance, localization) {
         this.grid = this._createUserIndicatorsGrid(gridModel);
         this.grid.renderTo(this.container.find('div.indicatorsGrid'));
         this._requestToAddTab();
+    },
+    /**
+     * Tries to retrieve value from given object.
+     * First, it tries to get the value for current language,
+     * then the default language ('en') and in case those fail,
+     * the first value it gets from the object. As a final fall through
+     * it returns a string with a single space character (so Oskari grid renders it).
+     *
+     * @method _retrieveValue
+     * @param {Object/null} indicatorField
+     * @return {String}
+     */
+    _retrieveValue: function(indicatorField) {
+        var retValue = ' ',
+            lang = Oskari.getLang(),
+            defaultLang = 'en';
+
+        if (_.isObject(indicatorField)) {
+            retValue =  indicatorField[lang] ||
+                        indicatorField[defaultLang] ||
+                        _.chain(indicatorField).values().first().value() ||
+                        ' ';
+        }
+
+        return retValue;
     },
     /**
      * Retrieves the indicator through the service.
