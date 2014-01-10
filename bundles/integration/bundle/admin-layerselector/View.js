@@ -162,16 +162,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
          */
         if (e.command === "removeLayer") {
             // remove layer from mapLayerService
-            if (e.baseLayerId) {
-                // If this is a sublayer, remove it from its parent's sublayer array
-                // 
-                // FIXME: THIS SHOULDN'T ADD base_ in front!!
-                parentLayerId = 'base_' + e.baseLayerId;
-                mapLayerService.removeSubLayer(parentLayerId, e.modelId);
-            } else {
-                // otherwise just remove it from map layer service.
-                mapLayerService.removeLayer(e.modelId);
-            }
+            mapLayerService.removeLayer(e.modelId);
         } else if (e.command === "addLayer") {
             // add layer into mapLayerService
             var mapLayer = mapLayerService.createMapLayer(e.layerData);

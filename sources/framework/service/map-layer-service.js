@@ -77,6 +77,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @throws error if layer with the same id already exists
          */
         addLayer: function (layerModel, suppressEvent) {
+            // if parent id is present, forward to addSubLayer()
+            if(layerModel.getParentId() != -1) {
+                this.addSubLayer(layerModel.getParentId(), layerModel, suppressEvent);
+                return;
+            }
 
             // throws exception if the id is reserved to existing maplayer
             // we need to check again here
@@ -104,24 +109,20 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         addSubLayer: function (parentLayerId, layerModel, suppressEvent) {
             var parentLayer = this.findMapLayer(parentLayerId),
-                subLayers,
-                len,
-                i;
+                subLayers;
 
             if (parentLayer && (parentLayer.isBaseLayer() || parentLayer.isGroupLayer())) {
+                
+                layerModel.setParentId(parentLayerId);
                 subLayers = parentLayer.getSubLayers();
-
-                for (i = 0, len = subLayers.length; i < len; ++i) {
-                    if (subLayers[i].getId() === layerModel.getId()) {
-                        return false;
-                    }
+                if(!parentLayer.addSubLayer(layerModel)) {
+                    // wasn't added - already added
+                    return;
                 }
-
-                subLayers.push(layerModel);
 
                 if (suppressEvent !== true) {
                     // notify components of added layer if not suppressed
-                    var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
+                    var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'update');
                     this._sandbox.notifyAll(evt);
                 }
             }
@@ -137,22 +138,46 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            true to not send event (should only be used on test cases to avoid unnecessary events)
          */
         removeLayer: function (layerId, suppressEvent) {
-            var layer = null,
-                i;
-            for (i = 0; i < this._loadedLayersList.length; i++) {
-                if ((this._loadedLayersList[i].getId() + '') === (layerId + '')) {
-                    layer = this._loadedLayersList[i];
-                    this._loadedLayersList.splice(i, 1);
+            var layer = this.findMapLayer(layerId),
+                parentLayer = null,
+                evt = null;
+            if(!layer) {
+                // not found in layers OR sublayers!
+                // TODO: should we notify somehow?
+                return;
+            }
+            // default to all layers
+            var layerList = this._loadedLayersList;
+            if(layer.getParentId() != -1) {
+                // referenced layer is a sublayer
+                var parentLayer = this.findMapLayer(layer.getParentId());
+                if(!parentLayer) {
+                    return;
+                }
+                // work on sublayers instead
+                layerList = parentLayer.getSubLayers();
+            }
+
+            for (var i = 0; i < layerList.length; i++) {
+                if ((layerList.getId() + '') === (layerId + '')) {
+                    layerList.splice(i, 1);
                     break;
                 }
             }
             if (layer && suppressEvent !== true) {
                 // notify components of layer removal
-                var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'remove');
+                if(parentLayer) {
+                    // notify a collection layer has been updated
+                    evt = this._sandbox.getEventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
+                }
+                else {
+                    // notify a layer has been removed
+                    evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'remove');
+                    // free up the layerId if actual removal
+                    this._reservedLayerIds[layerId] = false;
+                }
                 this._sandbox.notifyAll(evt);
             }
-            this._reservedLayerIds[layerId] = false;
-            // TODO: notify if layer not found?
         },
 
         /**
@@ -165,7 +190,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Boolean} suppressEvent (optional)
          *            true to not send event (should only be used on test cases to avoid unnecessary events)
          */
+        /*
         removeSubLayer: function (parentLayerId, layerId, suppressEvent) {
+            // this should be removed and only use removeLayer()!
+            alert('deprecated!');
             var parentLayer = this.findMapLayer(parentLayerId),
                 subLayers,
                 subLayer,
@@ -190,7 +218,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
             }
         },
-
+*/
         /**
          * @method updateLayer
          * Updates layer in internal layerlist and
@@ -606,6 +634,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 for (i = 0; i < baseMapJson.subLayer.length; i++) {
                     // Notice that we are adding layers to baselayers sublayers array
                     subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
+                    subLayer.setParentId(baseMapJson.id);
 
                     //if (baseMapJson.subLayer[i].admin) {
                     subLayer.admin = baseMapJson.subLayer[i].admin || {};

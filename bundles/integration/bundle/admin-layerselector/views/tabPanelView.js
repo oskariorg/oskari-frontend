@@ -104,6 +104,7 @@ define([
                             instance: this.options.instance
                         }));
                         var groupContainer = groupPanel.find('.content');
+                        // render layers
                         if (group.models != null) {
                             // Loop through layers in this group
                             for (var n = 0; n < group.models.length; ++n) {
@@ -112,8 +113,8 @@ define([
                                 // create a new layerView with layer model.
                                 var layerView = new LayerView({
                                     model: layer,
-                                    instance: this.options.instance,
-                                    layerTabModel: this.layerGroupingModel
+                                    instance: this.options.instance
+                                    //,layerTabModel: this.layerGroupingModel
                                 });
 
                                 //odds and even rows
@@ -129,7 +130,7 @@ define([
                                 this.layerContainers[layer.getId()] = layerView;
                             }
                         }
-                        // At this point we want to add new grouping button only for organization
+                        // At this point we want to add new layer button only for organization
                         if (this.options.tabId == 'organization') {
                             groupContainer.append(this.addLayerBtnTemplate({
                                 instance: this.options.instance
@@ -140,40 +141,6 @@ define([
                             "lcId" : group.id
                         });
                         
-                        var usedLanguages = {};
-                        group.locales = [];
-                        for (var lang in group.names) {
-                            if (group.names.hasOwnProperty(lang)) {
-                                usedLanguages[lang] = true;
-                                group.locales.push({
-                                    "lang" : lang,
-                                    "name" : group.names[lang]
-                                });
-                            }
-                        }
-                        
-                        // Make sure all supported languages are present
-                        var supportedLanguages = Oskari.getSupportedLanguages();
-                        
-                        for (var j = 0; j < supportedLanguages.length; j++) {
-                            if (!usedLanguages[supportedLanguages[j]]) {
-                                group.locales.push({
-                                    "lang" : supportedLanguages[j],
-                                    "name": ""
-                                });
-                            }
-                        }
-                        /* FIXME test sort, use it
-                        group.locales.sort(function (a, b) {
-                            if (a.lang < b.lang) {
-                                return -1;
-                            }
-                            if (a.lang > b.lang) {
-                                return 1;
-                            }
-                            return 0;
-                        });
-                        */
                         groupPanel.find('.accordion-header').append((this.options.tabId == 'inspire') ?
                             this.addInspireTemplate({
                                 data: group,
@@ -192,17 +159,8 @@ define([
                     this.$el.prepend(this.filterTemplate({
                         instance: this.options.instance
                     }));
-                    var newGroup = {
-                        "locales" : []
-                    };
-                    var supportedLanguages = Oskari.getSupportedLanguages();
-                    supportedLanguages.sort();
-                    for (var i = 0; i < supportedLanguages.length; i++) {
-                        newGroup.locales.push({
-                            "lang" : supportedLanguages[i],
-                            "name" : ""
-                        });
-                    }
+                    
+                    var newGroup = this.layerGroupingModel.getTemplateGroup();
 
                     if (this.options.tabId == 'inspire') {
                         this.$el.find('.oskarifield').append(
@@ -432,17 +390,29 @@ define([
              * @method removeOrganization
              */
             removeOrganization: function (e) {
-                // TODO: MOVE TO layersTabModel - see save for example
                 var me = this,
                     element = jQuery(e.currentTarget);
+                var groupId = element.attr('data-id');
+                var group = this.layerGroupingModel.getGroup(groupId);
+                var layers = group.getLayers();
 
-                this.layerGroupingModel.remove(element.attr('data-id'), function(err) {
+
+                this.layerGroupingModel.remove(groupId, function(err) {
                     if(err) {
                         // TODO: handle error
                         alert("Error!! " + err);
                         return;
                     }
                     element.parents('.accordion').remove();
+                    // remove layers that were under the organization since they are now gone from the DB
+                    _.each(layers, function(layer) {
+                        element.trigger({
+                            type: "adminAction",
+                            command: 'removeLayer',
+                            modelId: layer.getId(),
+                            baseLayerId: me.options.baseLayerId
+                        }); 
+                    });
                 });
             },
             /**

@@ -103,6 +103,8 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
         // Layers service urls
         me._layerUrls = [];
 
+        me._baseLayerId = -1;
+
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -179,6 +181,27 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         getId: function () {
             return this._id;
+        },
+        /**
+         * @method setParentId
+         * @param {String} id
+         *          unique identifier for parent map layer used to reference the layer internally
+         * (e.g. MapLayerService)
+         */
+        setParentId: function (id) {
+            this._baseLayerId = id;
+        },
+        /**
+         * @method getParentId
+         * @return {String}
+         *          unique identifier for parent map layer used to reference the layer internally
+         * (e.g. MapLayerService)
+         */
+        getParentId: function () {
+            if(!this._baseLayerId) {
+                return -1;
+            }
+            return this._baseLayerId;
         },
         /**
          * @method setQueryFormat
@@ -360,7 +383,15 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * purposes and actual map images to show are done with sublayers
          */
         addSubLayer: function (layer) {
-            this._subLayers.push(layer);
+            var sublayers = this.getSubLayers();
+            for (i = 0, len = sublayers.length; i < len; ++i) {
+                if (sublayers[i].getId() === layer.getId()) {
+                    // already added, don't add again
+                    return false;
+                }
+            }
+            sublayers.push(layer);
+            return true;
         },
         /**
          * @method getSubLayers

@@ -24,6 +24,37 @@
                 this.name = value;
             },
             /**
+             * Returns an array of localized names and adds locales for missing, but supported languages.
+             * Usable for editing form
+             * @return {Object[]} object with lang and name properties
+             */
+            getNamesAsList : function() {
+                var names = [];
+                var usedLanguages = {};
+                for (var lang in this.names) {
+                    if (this.names.hasOwnProperty(lang)) {
+                        usedLanguages[lang] = true;
+                        names.push({
+                            "lang" : lang,
+                            "name" : this.names[lang]
+                        });
+                    }
+                }
+                
+                // Make sure all supported languages are present
+                var supportedLanguages = Oskari.getSupportedLanguages();
+                
+                for (var j = 0; j < supportedLanguages.length; j++) {
+                    if (!usedLanguages[supportedLanguages[j]]) {
+                        names.push({
+                            "lang" : supportedLanguages[j],
+                            "name": ""
+                        });
+                    }
+                }
+                return names;
+            },
+            /**
              * Returns title / name of this layerGroup
              * @method getTitle 
              * @return {String}

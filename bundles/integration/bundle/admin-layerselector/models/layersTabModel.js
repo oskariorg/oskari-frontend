@@ -225,6 +225,30 @@
                 }
                 return hasChanges;
             },
+
+            /**
+             * Returns a template group for adding new organization.
+             * @return {Object} object for form template
+             */
+            getTemplateGroup : function() {
+
+                var supportedLanguages = Oskari.getSupportedLanguages();
+                supportedLanguages.sort();
+
+                var names = [];
+                for (var i = 0; i < supportedLanguages.length; i++) {
+                    names.push({
+                        "lang" : supportedLanguages[i],
+                        "name" : ""
+                    });
+                }
+                
+                return {
+                    "getNamesAsList" : function() {
+                        return names;
+                    }
+                };
+            },
             /**
              * returns layer groups so that they are grouped with given grouping method
              *
@@ -291,19 +315,6 @@
              */
             _removeClass: function (id) {
                 var groups = this.layerGroups;
-
-                /*
-                // TODO: layers should be removed from maplayerservice when an organization is removed!!
-                // but not when an inspire theme is removed...
-                var group = this.getGroup(id);
-                var layers = group.getLayers();
-                                element.trigger({
-                                    type: "adminAction",
-                                    command: 'removeLayer',
-                                    modelId: me.model.getId(),
-                                    baseLayerId: me.options.baseLayerId
-                                });
-                */
                 for (var i = groups.length - 1; i >= 0; i -= 1) {
                     /// === wont match it correctly for some reason, maybe string from DOM attribute <> integer
                     if (groups[i].id == id) {
@@ -324,21 +335,6 @@
                 }
                 return null;
             },
-            /**
-             * Removes a layer with given id
-             *
-             * @method removeLayer
-             * @param {integer} groupId
-             * @param {integer} layerId
-             */
-            removeLayer: function (groupId, layerId) {
-                alert('CAN BE REMOVED? not called anywhere?');
-                var group = this.getGroup(groupId);
-                if(group) {
-                    group.removeLayer(layerId);
-                }
-            },
-
             // TODO move encode and decode to model prototype so they're accessible to all models
 
             /**
