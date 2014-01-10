@@ -141,7 +141,7 @@ define([
                     opacity = 100,
                     styles = [];
                 if (!me.model) {
-                    me.model = this._createNewModel();
+                    me.model = this._createNewModel('wmslayer');
                 }
 
 
@@ -184,75 +184,37 @@ define([
                     });
                 }
             },
-            _createNewModel : function() {
+            _createNewModel : function(type) {
                 var sandbox = this.instance.sandbox;
                 var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                // only supporting WMS for now
-                var layer = mapLayerService.createLayerTypeInstance('wmslayer');
+                var layer = null;
+                if(type == 'base' || type == 'groupMap' ) {
+                    layer = mapLayerService.createMapLayer({ 'type' : type });
+                }
+                else {
+                    // only supporting WMS for now
+                    layer = mapLayerService.createLayerTypeInstance(type);
+                }
                 return new this.modelObj(layer);
             },
 
             createGroupForm: function (groupTitle, e) {
 
-                var me = this,
-                    subLayers = (me.model && me.model.getSubLayers ? me.model.getSubLayers() : []),
-                    supportedLanguages = Oskari.getSupportedLanguages(),
-                    locales = {},
-                    i,
-                    lang,
-                    newModel = me.model;
-                if (!newModel) {
-                    newModel = this._createNewModel();
-                    me.model = newModel;
-                }
-                /*
-                // this can be achieved with: var languagesArray = model.getNameLanguages()
-                newModel.locales = [];
-                if (!newModel.names) {
-                    for (i = 0; i < supportedLanguages.length; i += 1) {
-                        newModel.locales.push({
-                            "lang": supportedLanguages[i],
-                            "name": ""
-                        });
+                var me = this;
+                if (!me.model) {
+                    if(groupTitle == 'baseName') {
+                        me.model = this._createNewModel('base');
                     }
-                } else {
-                    for (lang in newModel.names) {
-                        if (newModel.names.hasOwnProperty(lang)) {
-                            locales[lang] = true;
-                            newModel.locales.push({
-                                "lang": lang,
-                                "name": newModel.names[lang]
-                            });
-                        }
-                    }
-
-                    for (i = 0; i < supportedLanguages.length; i += 1) {
-                        lang = supportedLanguages[i];
-                        if (!locales[lang]) {
-                            newModel.locales.push({
-                                "lang": lang,
-                                "name": ""
-                            });
-                        }
+                    else {
+                        me.model = this._createNewModel('groupMap');
                     }
                 }
-
-                newModel.locales.sort(function (a, b) {
-                    if (a.lang < b.lang) {
-                        return -1;
-                    }
-                    if (a.lang > b.lang) {
-                        return 1;
-                    }
-                    return 0;
-                });
-                */
 
                 me.$el.append(me.groupTemplate({
                     model: me.model,
                     instance: me.options.instance,
                     groupTitle: groupTitle,
-                    subLayers: subLayers,
+                    subLayers: me.model.getSubLayers(),
                     subLayerTemplate: me.subLayerTemplate,
                     roles: me.roles
                 }));
