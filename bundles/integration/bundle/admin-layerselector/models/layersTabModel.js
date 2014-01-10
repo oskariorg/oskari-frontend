@@ -39,15 +39,6 @@
             addLayerGroups: function (groups) {
                 this.layerGroups = groups;
             },
-            getGroup: function (groupId) {
-                var groups = this.layerGroups;
-                for (var i = 0; i <  groups.length; ++i) {
-                    if (groups[i].id === groupId) {
-                        return groups[i];
-                    }
-                }
-                return null;
-            },
 
             /**
              * Return all layer groups
@@ -156,6 +147,8 @@
                     dataType: 'json',
                     url: me.baseURL + me.actions.load + "&iefix=" + (new Date()).getTime(),
                     success: function (pResp) {
+                        // cleanup old layer Groups since we always refresh from server for now
+                        me.layerGroups = [];
                         me.loadGroups(pResp, groupingMethod);
                     },
                     error: function (jqXHR, textStatus) {
@@ -298,14 +291,39 @@
              */
             _removeClass: function (id) {
                 var groups = this.layerGroups;
+
+                /*
+                // TODO: layers should be removed from maplayerservice when an organization is removed!!
+                // but not when an inspire theme is removed...
+                var group = this.getGroup(id);
+                var layers = group.getLayers();
+                                element.trigger({
+                                    type: "adminAction",
+                                    command: 'removeLayer',
+                                    modelId: me.model.getId(),
+                                    baseLayerId: me.options.baseLayerId
+                                });
+                */
                 for (var i = groups.length - 1; i >= 0; i -= 1) {
-                    if (groups[i].id === id) {
+                    /// === wont match it correctly for some reason, maybe string from DOM attribute <> integer
+                    if (groups[i].id == id) {
                         groups.splice(i, 1);
                         return;
                     }
                 }
+
             },
 
+            getGroup: function (groupId) {
+                var groups = this.layerGroups;
+                for (var i = 0; i <  groups.length; ++i) {
+                    /// === wont match it correctly for some reason, maybe string from DOM attribute <> integer
+                    if (groups[i].id == groupId) {
+                        return groups[i];
+                    }
+                }
+                return null;
+            },
             /**
              * Removes a layer with given id
              *
@@ -315,7 +333,7 @@
              */
             removeLayer: function (groupId, layerId) {
                 alert('CAN BE REMOVED? not called anywhere?');
-                var group = me.getGroup(groupId);
+                var group = this.getGroup(groupId);
                 if(group) {
                     group.removeLayer(layerId);
                 }

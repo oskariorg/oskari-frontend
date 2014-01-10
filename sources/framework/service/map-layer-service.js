@@ -203,93 +203,74 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         updateLayer: function (layerId, newLayerConf) {
             //console.log("MapLayerService: updateLayer");
-            var layer = this.findMapLayer(layerId),
-                i;
-            if (layer) {
-                //console.log("New layer config:");
-                //console.log(newLayerConf);
-
-                if (newLayerConf.dataUrl) {
-                    layer.setDataUrl(newLayerConf.dataUrl);
-                }
-
-                /*
-            if (newLayerConf.formats) {
-                //layer.set();
+            var layer = this.findMapLayer(layerId);
+            if (!layer) {
+                // couldn't find layer to update
+                // TODO: should we try to insert it or notify if layer not found?
+                return;
             }
-            */
 
-                /*
-            if (newLayerConf.isQueryable) {
-                // layer.set();
+            if (newLayerConf.dataUrl) {
+                layer.setDataUrl(newLayerConf.dataUrl);
             }
-            */
 
-                if (newLayerConf.legendImage) {
-                    layer.setLegendImage(newLayerConf.legendImage);
-                }
+            if (newLayerConf.legendImage) {
+                layer.setLegendImage(newLayerConf.legendImage);
+            }
 
-                if (newLayerConf.minScale) {
-                    layer.setMinScale(newLayerConf.minScale);
-                }
+            if (newLayerConf.minScale) {
+                layer.setMinScale(newLayerConf.minScale);
+            }
 
-                if (newLayerConf.maxScale) {
-                    layer.setMaxScale(newLayerConf.maxScale);
-                }
+            if (newLayerConf.maxScale) {
+                layer.setMaxScale(newLayerConf.maxScale);
+            }
 
-                if (newLayerConf.name) {
-                    layer.setName(newLayerConf.name);
-                }
+            if (newLayerConf.name) {
+                layer.setName(newLayerConf.name);
+            }
 
-                /*
+            if (newLayerConf.subtitle) {
+                layer.setDescription(newLayerConf.subtitle);
+            }
+
             if (newLayerConf.orgName) {
-                // layer.set();
+                layer.setOrganizationName(newLayerConf.orgName);
             }
-            */
-                /*
+            if (newLayerConf.inspire) {
+                layer.setInspireName(newLayerConf.inspire);
+            }
+
+            // wms specific
+            // TODO: we need to figure this out some other way
+            // we could remove the old layer and create a new one in admin bundle
+            if (newLayerConf.version && layer.setVersion) {
+                layer.setVersion(newLayerConf.version);
+            }
+        
             if (newLayerConf.style) {
                 layer.setStyle(newLayerConf.style);
             }
-            */
 
-                /*
-            if (newLayerConf.styles) {
-                // layer.set();
+            if (newLayerConf.wmsName) {
+                layer.setWmsName(newLayerConf.wmsName);
             }
-            */
 
-                if (newLayerConf.type) {
-                    layer.setType(newLayerConf.type);
-                }
-
-                /*
-            if (newLayerConf.updated) {
-                // layer.set();
+            if (newLayerConf.wmsUrl) {
+                layer.setWmsUrls(newLayerConf.wmsUrl.split(','));
             }
-            */
 
-                if (newLayerConf.wmsName) {
-                    layer.setWmsName(newLayerConf.wmsName);
-                }
-
-                if (newLayerConf.wmsUrl) {
-                    layer.setWmsUrls(newLayerConf.wmsUrl.split(','));
-                }
-
-                for (i in newLayerConf.admin) {
-                    if (newLayerConf.admin.hasOwnProperty(i)) {
-                        if (newLayerConf.admin[i]) {
-                            layer.admin[i] = newLayerConf.admin[i];
-                        }
+            for (var i in newLayerConf.admin) {
+                if (newLayerConf.admin.hasOwnProperty(i)) {
+                    if (newLayerConf.admin[i]) {
+                        layer.admin[i] = newLayerConf.admin[i];
                     }
                 }
-
-                //console.log(layer);
-                // notify components of layer update
-                var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
-                this._sandbox.notifyAll(evt);
             }
-            // TODO: notify if layer not found?
+
+            // notify components of layer update
+            var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
+            this._sandbox.notifyAll(evt);
         },
         /**
          * @method makeLayerSticky
