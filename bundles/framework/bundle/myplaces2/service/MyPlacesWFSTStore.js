@@ -453,7 +453,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
         /**
          * @method commitPlaces
          *
-         * handles insert & update (NO delete here see next moethd)
+         * handles insert & update (NO delete here see next method)
          */
         commitMyPlaces: function (list, callback) {
             var p = this.protocols.my_places;

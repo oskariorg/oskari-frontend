@@ -8,7 +8,7 @@ Added statehandler functions to published maps. It is also now possible to add m
 
 ### Statsgrid
 
-Added posibility to add indicator data through data import (localization is still work in progress)
+Added possibility to add indicator data through data import (localization is still work in progress)
 
 Adds a tab to personaldata from which users can access and delete their own saved indicators.
 
@@ -19,6 +19,8 @@ The column widths are now set automatically to take the space available when res
 ### myplaces2
 
 Measurements of places (area or length depending on the type) are now shown in the myplaces tab and whilst drawing a new place or editing an old one.
+
+Dense point data is now aggregated into cluster visualizations.
 
 ### divmanazer/VisualizationForm
 

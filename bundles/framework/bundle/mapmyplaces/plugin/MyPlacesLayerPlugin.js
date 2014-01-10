@@ -347,9 +347,9 @@ function(config) {
         // Define three colors that will be used to style the cluster features
         // depending on the number of features they contain.
         var colors = {
-            low: "rgb(0, 128, 0)",
-            middle: "rgb(0, 0, 128)",
-            high: "rgb(128, 0, 0)"
+            low: "#6baed6",
+            middle: "#3182bd",
+            high: "#08519c"
         };
 
         // Define three rules to style the cluster features.
@@ -357,14 +357,14 @@ function(config) {
             filter: new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.LESS_THAN,
                 property: "count",
-                value: 3
+                value: 5
             }),
             symbolizer: {
                 fillColor: colors.low,
                 fillOpacity: 0.9,
                 strokeColor: colors.low,
                 strokeOpacity: 0.5,
-                strokeWidth: 12,
+                strokeWidth: 6,
                 pointRadius: 10,
                 label: "${count}",
                 labelOutlineWidth: 1,
@@ -377,16 +377,16 @@ function(config) {
             filter: new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.BETWEEN,
                 property: "count",
-                lowerBoundary: 3,
-                upperBoundary: 5
+                lowerBoundary: 5,
+                upperBoundary: 10
             }),
             symbolizer: {
                 fillColor: colors.middle,
                 fillOpacity: 0.9,
                 strokeColor: colors.middle,
                 strokeOpacity: 0.5,
-                strokeWidth: 12,
-                pointRadius: 17,
+                strokeWidth: 6,
+                pointRadius: 13,
                 label: "${count}",
                 labelOutlineWidth: 1,
                 fontColor: "#ffffff",
@@ -398,15 +398,15 @@ function(config) {
             filter: new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.GREATER_THAN,
                 property: "count",
-                value: 5
+                value: 10
             }),
             symbolizer: {
                 fillColor: colors.high,
                 fillOpacity: 0.9,
                 strokeColor: colors.high,
                 strokeOpacity: 0.5,
-                strokeWidth: 12,
-                pointRadius: 19,
+                strokeWidth: 6,
+                pointRadius: 16,
                 label: "${count}",
                 labelOutlineWidth: 1,
                 fontColor: "#ffffff",
