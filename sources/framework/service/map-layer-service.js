@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 subLayers;
 
             if (parentLayer && (parentLayer.isBaseLayer() || parentLayer.isGroupLayer())) {
-                
+
                 layerModel.setParentId(parentLayerId);
                 subLayers = parentLayer.getSubLayers();
                 if(!parentLayer.addSubLayer(layerModel)) {
@@ -159,7 +159,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             for (var i = 0; i < layerList.length; i++) {
-                if ((layerList.getId() + '') === (layerId + '')) {
+                if ((layerList[i].getId() + '') === (layerId + '')) {
                     layerList.splice(i, 1);
                     break;
                 }
