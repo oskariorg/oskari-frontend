@@ -570,7 +570,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * adds style to layer
          */
         addStyle: function (style) {
-            this._styles.push(style);
+            this.getStyles().push(style);
         },
         /**
          * @method getStyles
@@ -579,7 +579,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         getStyles: function () {
             if(!this._styles) {
-                return [];
+                this._styles = [];
             }
             return this._styles;
         },
@@ -589,54 +589,31 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * Selects a #Oskari.mapframework.domain.Style with given name as #getCurrentStyle.
          * If style is not found, assigns an empty #Oskari.mapframework.domain.Style to #getCurrentStyle
          */
-        selectStyle: function (styleName) {
-            var me = this,
-                style = null,
-                i;
-            // Layer have styles
-            if (me.getStyles().length > 0) {
-                // There is default style defined
-                if (styleName !== "") {
-                    for (i = 0; i < me.getStyles().length; i++) {
-                        style = me.getStyles()[i];
-                        if (style.getName() === styleName) {
-                            me._currentStyle = style;
-                            if (style.getLegend() !== "") {
-                                me._legendImage = style.getLegend();
-                            }
-                            return;
-                        }
-                    }
-                } else {
-                    // There is not default style defined
-                    //var style =
-                    // Oskari.clazz.create('Oskari.mapframework.domain.Style');
-                    // Layer have more than one style, set first
-                    // founded style to default
-                    // Because of layer style error this if clause
-                    // must compare at there is more than one style.
-                    if (me.getStyles().length > 1) {
-                        me._currentStyle = me.getStyles()[0];
-                    } else {
-                        // Layer have not styles, add empty style to
-                        // default
-                        style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-                        style.setName("");
-                        style.setTitle("");
-                        style.setLegend("");
-                        me._currentStyle = style;
-                    }
+        selectStyle: function (styleName, preventRecursion) {
+            var me = this;
 
-                    return;
-                }
-            } else {
-                // Layer have not styles
-                style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
+            // Layer doesn't have styles
+            if (me.getStyles().length === 0) {
+                var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
                 style.setName("");
                 style.setTitle("");
                 style.setLegend("");
-                me._currentStyle = style;
-                return;
+                this.addStyle(style);
+            }
+            for (var i = 0; i < me.getStyles().length; i++) {
+                var style = me.getStyles()[i];
+                if (style.getName() === styleName) {
+                    me._currentStyle = style;
+                    if (style.getLegend() !== "") {
+                        me._legendImage = style.getLegend();
+                    }
+                    return;
+                }
+            }
+
+            // didn't match anything select the first one
+            if(!preventRecursion && !me._currentStyle) {
+                this.selectStyle(me.getStyles()[0].getName(), true);
             }
         },
         /**

@@ -66,8 +66,7 @@ define([
                 var tabContent = new TabPanelView({
                     layerGroupingModel: layerGroupingTab,
                     instance: this.instance,
-                    tabId: tabType,
-                    inspire: []
+                    tabId: tabType
                 });
                 //create headers for tabs
                 jQuery('.admin-layerselectorapp').find('.tabsContent').append(tabContent.$el);

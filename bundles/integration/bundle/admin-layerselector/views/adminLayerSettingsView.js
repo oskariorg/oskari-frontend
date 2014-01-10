@@ -3,7 +3,7 @@ define([
     'text!_bundle/templates/adminLayerSettingsTemplate.html',
     'text!_bundle/templates/adminGroupSettingsTemplate.html',
     'text!_bundle/templates/group/subLayerTemplate.html',
-    '_bundle/collections/userRoleCollection'
+    '_bundle/collections/userRoleCollection',
     '_bundle/models/layerModel'
 ],
     function (
@@ -52,8 +52,8 @@ define([
             initialize: function () {
                 this.instance = this.options.instance;
                 this.model = this.options.model;
+                // TODO: could we just call _createNewModel() if(!model)? to initialize an empty model
                 this.modelObj = layerModel;
-                //this.classes = this.options.classes; // inspire themes can now be referenced with this.instance.models.inspire (layersTabModel)
                 this.typeSelectTemplate = _.template(TypeSelectTemplate);
                 this.layerTemplate = _.template(LayerSettingsTemplate);
                 this.groupTemplate = _.template(GroupSettingsTemplate);
@@ -85,15 +85,11 @@ define([
                 }
                 // if editing an existing layer
                 if (me.model) {
-                    if (!me.model.admin) {
-                        me.model.admin = {};
-                    }
-
                     if (me.model.isBaseLayer()) {
                         me.createGroupForm('baseName');
                     } else if (me.model.isGroupLayer()) {
                         me.createGroupForm('groupName');
-                    } else {
+                    } else if(me.model.isLayerOfType('WMS')) {
                         me.createLayerForm();
                     }
                 } else {
@@ -125,6 +121,8 @@ define([
             createLayerSelect: function (e) {
                 jQuery('.add-layer-wrapper').remove();
                 jQuery('.admin-add-group').remove();
+                jQuery('.layer-type-wrapper').remove();
+
 
                 // Create a normal layer
                 if (e.currentTarget.value === 'wmslayer') {
@@ -143,10 +141,7 @@ define([
                     opacity = 100,
                     styles = [];
                 if (!me.model) {
-                    var sandbox = this.instance.sandbox;
-                    var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                    // only supporting WMS for now
-                    me.model = mapLayerService.createLayerTypeInstance('wmslayer');
+                    me.model = this._createNewModel();
                 }
 
 
@@ -189,6 +184,13 @@ define([
                     });
                 }
             },
+            _createNewModel : function() {
+                var sandbox = this.instance.sandbox;
+                var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                // only supporting WMS for now
+                var layer = mapLayerService.createLayerTypeInstance('wmslayer');
+                return new this.modelObj(layer);
+            },
 
             createGroupForm: function (groupTitle, e) {
 
@@ -200,9 +202,11 @@ define([
                     lang,
                     newModel = me.model;
                 if (!newModel) {
-                    newModel = {};
+                    newModel = this._createNewModel();
                     me.model = newModel;
                 }
+                /*
+                // this can be achieved with: var languagesArray = model.getNameLanguages()
                 newModel.locales = [];
                 if (!newModel.names) {
                     for (i = 0; i < supportedLanguages.length; i += 1) {
@@ -242,6 +246,7 @@ define([
                     }
                     return 0;
                 });
+                */
 
                 me.$el.append(me.groupTemplate({
                     model: me.model,
@@ -353,9 +358,6 @@ define([
                     lcId = accordion.attr('lcid'),
                     form = element.parents('.admin-add-layer'),
                     lang,
-                    baseUrl = me.instance.getSandbox().getAjaxUrl(),
-                    action_route = "action_route=SaveLayer",
-                    id = "&layer_id=",
                     idValue = (form.attr('data-id') !== null && form.attr('data-id') !== undefined) ? form.attr('data-id') : '',
                     data = {},
                     wmsVersion = form.find('#add-layer-interface-version').val(),
@@ -379,19 +381,15 @@ define([
 
                 // base and group are always of type wmslayer
                 data.layerType = 'wmslayer';
-
-                data.names = {};
-                data.title = {};
-                data.orderNumber = 1;
                 data.layer_id = idValue;
 
                 form.find('[id$=-name]').filter('[id^=add-layer-]').each(function (index) {
                     lang = this.id.substring(10, this.id.indexOf("-name"));
-                    data.names[lang] = this.value;
+                    data['name_' + lang] = this.value;
                 });
                 form.find('[id$=-title]').filter('[id^=add-layer-]').each(function (index) {
                     lang = this.id.substring(10, this.id.indexOf("-title"));
-                    data.title[lang] = this.value;
+                    data['title_' + lang] = this.value;
                 });
 
                 // type can be either wmslayer, base or groupMap
@@ -402,23 +400,13 @@ define([
                 data.opacity = form.find('#opacity-slider').val();
 
                 data.style = form.find('#add-layer-style').val();
-                //data.style = jQuery.base64.encode(data.style); //me.layerGroupingModel.encode64(data.style);
-
-                if (!data.style) {
-                    data.style = '';
-                }
-
-
                 data.minScale = form.find('#add-layer-minscale').val();// || 16000000;
                 data.maxScale = form.find('#add-layer-maxscale').val();// || 1;
-                data.epsg = form.find('#add-layer-srsname').val();
-                data.epsg = Number(data.epsg.replace('EPSG:', ''));
 
                 //data.descriptionLink = form.find('#add-layer-').val();
                 data.legendImage = form.find('#add-layer-legendImage').val();
                 data.inspireTheme = form.find('#add-layer-inspire-theme').val();
-                data.dataUrl = form.find('#add-layer-datauuid').val();
-                data.metadataUrl = form.find('#add-layer-metadataid').val();
+                data.metadataId = form.find('#add-layer-datauuid').val();
                 data.xslt = form.find('#add-layer-xslt').val();
                 //data.xslt = me.classes.encode64(data.xslt); //me.layerGroupingModel.encode64(data.xslt);
                 data.gfiType = form.find('#add-layer-responsetype').val();
@@ -435,38 +423,20 @@ define([
                 }
 
 
-                // Layer class id aka. orgName id
-                data.lcId = lcId;
+                // Layer class id aka. orgName id aka groupId
+                data.groupId = lcId;
 
-                url = baseUrl + action_route + id + idValue;
                 if (lcId) {
                     url += "&lcId=" + lcId;
                 }
                 
-                for (lang in data.names) {
-                    if (data.names.hasOwnProperty(lang)) {
-                        //url += "&name" + lang.charAt(0).toUpperCase() + lang.substring(1) + "=" + data.names[lang];
-                        data["name" + lang.charAt(0).toUpperCase() + lang.substring(1)] = data.names[lang];
-                    }
-                }
-                data.names = undefined;
-                delete data.names;
-                for (lang in data.title) {
-                    if (data.title.hasOwnProperty(lang)) {
-                        //url += "&title" + lang.charAt(0).toUpperCase() + lang.substring(1) + "=" + data.title[lang];
-                        data["title" + lang.charAt(0).toUpperCase() + lang.substring(1)] = data.title[lang];
-                    }
-                }
-                data.title = undefined;
-                delete data.title;
-
                 jQuery.ajax({
                     type: "POST",
                     data : data,
                     dataType: 'json',
-                    //data: {'layer': postData}, // New way
-                    url: url,
+                    url: me.instance.getSandbox().getAjaxUrl() + "action_route=SaveLayer",
                     success: function (resp) {
+                        // response should be a complete JSON for the new layer
                         if ((idValue && !resp) ||
                                 (resp && resp.admin)) {
                             //close this
@@ -640,21 +610,22 @@ define([
                     input = element.parents('.add-layer-wrapper').find('#add-layer-interface'),
                     wmsurlField = element.parents('.add-layer-wrapper').find('#add-layer-wms-url'),
                     baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
-                    route = "action_route=GetWSCapabilities",
-                    type = "&wmsurl=";
+                    wmsurl = input.val();
 
-                wmsurlField.html(input.val());
-                //add-layer-wms-button
+                wmsurlField.html(wmsurl);
 
                 jQuery.ajax({
-                    type: "GET",
+                    type: "POST",
+                    data : {
+                        wmsurl : wmsurl
+                    },
                     dataType: 'json',
                     beforeSend: function (x) {
                         if (x && x.overrideMimeType) {
                             x.overrideMimeType("application/j-son;charset=UTF-8");
                         }
                     },
-                    url: baseUrl + route + type + encodeURIComponent(input.val()),
+                    url: baseUrl + "action_route=GetWSCapabilities",
                     success: function (resp) {
                         me.addCapabilitySelect(resp, me, element);
                     },

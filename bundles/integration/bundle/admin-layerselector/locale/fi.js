@@ -59,9 +59,9 @@ Oskari.registerLocalization({
         },
         "admin": {
             "layertypes" : {
-                "WMS": "WMS Taso",
-                "WFS": "WFS Taso",
-                "WMTS": "WMTS Taso"
+                "wms": "WMS Taso",
+                "wfs": "WFS Taso",
+                "wmts": "WMTS Taso"
             },
             "selectLayer": "Valitse ylätaso",
             "selectSubLayer": "Valitse alataso",
@@ -121,8 +121,8 @@ Oskari.registerLocalization({
             "addInspireThemeDesc": "Lisää InspireTheme:n mukaiset aiheet",
             "opacity": "Peittävyys",
             "opacityDesc": "Tason peittävyys (arvo 0% tekee tasosta oletuksena näkymättömän)",
-            "style": "Tyyli",
-            "styleDesc": "Tyyli",
+            "style": "Oletustyyli",
+            "styleDesc": "Oletustyyli",
 
             "minScale": "Minimi&shy;mittakaava",
             "minScaleDesc": "Tason minimimittakaava (1:5669294)",

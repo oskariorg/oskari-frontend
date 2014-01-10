@@ -20,16 +20,6 @@
             	return null;
         	},
             /**
-             * Returns version if defined or null if not
-             * @return {String} version as string (f.ex. '1.1.1' or '1.3.0')
-             */
-            getVersion : function() {
-            	if(this.admin) {
-            		return this.admin.version;
-            	}
-            	return null;
-        	},
-            /**
              * Returns language codes for defined names
              * @return {String[]} language codes
              */
@@ -67,6 +57,17 @@
             			langList.push(lang);
             		}
             	});
+            	/*
+            	// TODO: do we need to sort by language?
+                langList.sort(function (a, b) {
+                    if (a < b) {
+                        return -1;
+                    }
+                    if (a > b) {
+                        return 1;
+                    }
+                    return 0;
+                });*/
         		return langList;
         	}
         });

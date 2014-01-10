@@ -164,6 +164,8 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             // remove layer from mapLayerService
             if (e.baseLayerId) {
                 // If this is a sublayer, remove it from its parent's sublayer array
+                // 
+                // FIXME: THIS SHOULDN'T ADD base_ in front!!
                 parentLayerId = 'base_' + e.baseLayerId;
                 mapLayerService.removeSubLayer(parentLayerId, e.modelId);
             } else {
@@ -172,12 +174,12 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             }
         } else if (e.command === "addLayer") {
             // add layer into mapLayerService
-            e.layerData.name = e.layerData.admin.name[Oskari.getDefaultLanguage()];
             var mapLayer = mapLayerService.createMapLayer(e.layerData);
-            mapLayer.admin = e.layerData.admin;
 
             if (e.baseLayerId) {
                 // If this is a sublayer, add it to its parent's sublayer array
+                
+                // FIXME: THIS SHOULDN'T ADD base_ in front!!
                 parentLayerId = 'base_' + e.baseLayerId;
                 mapLayerService.addSubLayer(parentLayerId, mapLayer);
             } else {
@@ -185,12 +187,12 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                 if (mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
                     mapLayerService.addLayer(mapLayer);
                 }
+                else {
+                    // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData); 
+                }
             }
         } else if (e.command === "editLayer") {
             // update layer info
-            //console.log("Editing layer");
-            //console.log(e.layerData.admin);
-            e.layerData.name = e.layerData.admin.name[Oskari.getDefaultLanguage()]; //TODO this should be in mapLayerService
             mapLayerService.updateLayer(e.layerData.id, e.layerData);
         } else if (e.command === "addGroup") {
             /*

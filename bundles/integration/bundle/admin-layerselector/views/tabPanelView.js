@@ -66,9 +66,6 @@ define([
                 this.layerGroupingModel = this.options.layerGroupingModel;
                 // If model triggers change event we need to re-render this view
                 this.layerGroupingModel.on("change:layerGroups", this.render, this);
-                // inspireClasses is needed when creating a new layer
-                this.inspireClasses = (this.options.inspire != null) ?
-                    this.options.inspire : this.layerGroupingModel;
 
                 this.addInspireButtonTemplate = _.template(AdminAddInspireButtonTemplate);
                 this.addInspireTemplate = _.template(AdminAddInspireTemplate);
@@ -116,7 +113,6 @@ define([
                                 var layerView = new LayerView({
                                     model: layer,
                                     instance: this.options.instance,
-                                    classes: this.inspireClasses,
                                     layerTabModel: this.layerGroupingModel
                                 });
 

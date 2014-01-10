@@ -59,9 +59,9 @@ Oskari.registerLocalization({
         },
         "admin": {
             "layertypes" : {
-                "WMS": "WMS layer",
-                "WFS": "WFS layer",
-                "WMTS": "WMTS layer"
+                "wms": "WMS layer",
+                "wfs": "WFS layer",
+                "wmts": "WMTS layer"
             },
             "selectLayer": "Select layer",
             "selectSubLayer": "Select sublayer",
@@ -118,8 +118,8 @@ Oskari.registerLocalization({
             "addInspireThemesDesc": "Add classes (Inspire themes)",
             "opacity": "Opacity",
             "opacityDesc": "Layer opacity (0% will make the layer transparent)",
-            "style": "Style",
-            "styleDesc": "Style",
+            "style": "Default style",
+            "styleDesc": "Default style",
 
             "minScale": "Minimum scale",
             "minScaleDesc": "Layer's minimum scale",

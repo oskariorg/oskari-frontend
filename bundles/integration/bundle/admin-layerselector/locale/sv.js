@@ -59,9 +59,9 @@ Oskari.registerLocalization({
         },
         "admin": {
             "layertypes" : {
-                "WMS": "WMS Lager",
-                "WFS": "WFS Lager",
-                "WMTS": "WMTS Lager"
+                "wms": "WMS Lager",
+                "wfs": "WFS Lager",
+                "wmts": "WMTS Lager"
             },
             "selectLayer": "Välj nivå",
             "selectSubLayer": "Välj undernivå",
@@ -121,8 +121,8 @@ Oskari.registerLocalization({
             "addInspireThemesDesc": "Tillägg ämnen enligt InspireTheme",
             "opacity": "Opacitet",
             "opacityDesc": "Lagrets opacitet (0% gör lagret genomskinligt)",
-            "style": "Stil",
-            "styleDesc": "Stil",
+            "style": "Förvald utseende",
+            "styleDesc": "Förvald utseende",
 
             "minScale": "Minimi&shy;skala",
             "minScaleDesc": "Lagrets minimiskala (1:5669294)",

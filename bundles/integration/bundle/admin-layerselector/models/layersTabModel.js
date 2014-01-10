@@ -301,6 +301,7 @@
                 for (var i = groups.length - 1; i >= 0; i -= 1) {
                     if (groups[i].id === id) {
                         groups.splice(i, 1);
+                        return;
                     }
                 }
             },

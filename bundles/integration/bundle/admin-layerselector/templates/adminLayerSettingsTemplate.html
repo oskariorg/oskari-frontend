@@ -18,15 +18,15 @@
         <div class="add-layer-input-area">
             <div class="input-controls">
                 <input type="text" id="add-layer-interface" class="add-layer-input 
-                    <% if(model && model.getId) { %>long
+                    <% if(model && model.getId()) { %>long
                     <% } else { %>mid
                     <% } %>" placeholder="<%= instance.getLocalization('admin').interfaceAddress %>" <% if(model && model.getWmsUrls) { %>value="<%= model.getWmsUrls().join() %>"<% } %> />
                 <div class="icon-close 
-                    <% if(model && model.getId) { %>long
+                    <% if(model && model.getId()) { %>long
                     <% } else { %>mid
                     <% } %>"></div>
             </div>
-            <% if(model && !model.getId){ %>
+            <% if(model && !model.getId()){ %>
                     <button id="add-layer-wms-button" class="fetch-wms-button"><%= instance.getLocalization('admin').getInfo %></button>
              <% } %>
         </div>
@@ -53,40 +53,28 @@
         </div>
     </div>
 
-    <!-- div class="add-layer-record">
-        <div class="add-layer-label-area">
-            <label for="add-layer-metadataid" class="add-layer-label" title="<%= instance.getLocalization('admin').wmsServiceMetaIdDesc %>"><%= instance.getLocalization('admin').wmsServiceMetaId %></label>
-        </div>
-        <div class="add-layer-input-area">
-            <div class="input-controls">
-                <input type="text" id="add-layer-metadataid" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').wmsServiceMetaIdDesc %>" <% if(model) { %>value="<%= model.getMetadataIdentifier() %>"<% } %> />
-                <div class="icon-close"></div>
-            </div>
-        </div>
-    </div -->
-
     <% if (model && model.getNameLanguages) { %>
-    <div class="add-layer-grouping" title="<%= instance.getLocalization('admin').layerNameAndDesc %>"><%= instance.getLocalization('admin').layerNameAndDesc %></div>
+        <div class="add-layer-grouping" title="<%= instance.getLocalization('admin').layerNameAndDesc %>"><%= instance.getLocalization('admin').layerNameAndDesc %></div>
 
         <% 
         var names = model.getNameLanguages();
         for (var i = 0; i < names.length; i++) {
             var lang = names[i] %>
-        <div class="add-layer-record">
-            <div class="add-layer-label-area">
-                <label for="add-layer-<%= lang %>-name" class="add-layer-label" title="<%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].title : lang %>"><%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].lang : lang + ':' %></label>
-            </div>
-            <div class="add-layer-input-area">
-                <div class="input-controls">
-                    <input type="text" id="add-layer-<%= lang %>-name" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].placeholder : instance.getLocalization('admin')['generic'].placeholder.replace('{0}', lang) %>" value="<%= model.getName(lang) %>"  />
-                    <div class="icon-close"></div>
+            <div class="add-layer-record">
+                <div class="add-layer-label-area">
+                    <label for="add-layer-<%= lang %>-name" class="add-layer-label" title="<%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].title : lang %>"><%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].lang : lang + ':' %></label>
                 </div>
-                <div class="input-controls">
-                    <input type="text" id="add-layer-<%= lang %>-title" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].descplaceholder : instance.getLocalization('admin')['generic'].descplaceholder.replace('{0}', lang) %>" value="<%= model.getDescription(lang) %>" />
-                    <div class="icon-close"></div>
+                <div class="add-layer-input-area">
+                    <div class="input-controls">
+                        <input type="text" id="add-layer-<%= lang %>-name" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].placeholder : instance.getLocalization('admin')['generic'].placeholder.replace('{0}', lang) %>" value="<%= model.getName(lang) %>"  />
+                        <div class="icon-close"></div>
+                    </div>
+                    <div class="input-controls">
+                        <input type="text" id="add-layer-<%= lang %>-title" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].descplaceholder : instance.getLocalization('admin')['generic'].descplaceholder.replace('{0}', lang) %>" value="<%= model.getDescription(lang) %>" />
+                        <div class="icon-close"></div>
+                    </div>
                 </div>
             </div>
-        </div>
         <% } %>
     <% } %>
 
@@ -125,6 +113,7 @@
                 <option value="<%= classNames[i].id %>" <% if(model && model.getInspireName() == classNames[i].name ) { %>selected<% } %> ><%= classNames[i].name %></option>
                 <% } %>
             </select>
+            <%= model.getInspireName() %>
             </div>
         </div>
     </div>
@@ -149,21 +138,25 @@
         </div>
     </div>
 
-
-
+    <% if(model && model.getStyles().length > 0) { %>
     <div class="add-layer-record">
         <div class="add-layer-label-area">
             <label for="add-layer-style" class="add-layer-label" title="<%= instance.getLocalization('admin').styleDesc %>"><%= instance.getLocalization('admin').style %></label>
         </div>
         <div class="add-layer-input-area">
+            <% if(model && model.getStyles().length > 1) { %>
             <select id="add-layer-style">
                  <% for(var i = 0; model != null && i < model.getStyles().length; i++) { %>
                 <option value="<%= model.getStyles()[i].name %>" 
                     <% if(model && model.getCurrentStyle().name == model.getStyles()[i].name ) { %>selected<% } %> ><%= model.getStyles()[i].title %></option>
                 <% } %>
             </select>
+            <% } else { %>
+                <%= model.getCurrentStyle().name %>
+            <% } %>
         </div>
     </div>
+    <% } %>
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">
@@ -219,7 +212,7 @@
             </label>
         </div>
         <div class="add-layer-input-area">
-            <% if(model) { %>
+            <% if(model.getId()) { %>
             <div class="input-controls">
                 <div id="add-layer-responsetype"><%= model.getQueryFormat() %></div>
             </div>
@@ -241,8 +234,8 @@
         </div>
     </div>
 
-    <% if(!model || !model.id) { %>
-    <!-- roles - only for new layers(?) -->
+    <% if(!model || !model.getId()) { %>
+    <!-- roles - only for new layers -->
     <div class="add-class-record">
         <div class="add-class-label-area">
             <label for="add-layer-view-roles" class="add-class-label" title="<%= instance.getLocalization('admin').roles_for_admin %>"><%= instance.getLocalization('admin').viewingRightsRoles %></label>
@@ -262,7 +255,7 @@
             <div class="input-controls">
                 <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-ok' : 'admin-add-layer-ok' %>"
                     title="<%= instance.getLocalization('admin').addNewLayer %>" ><%= instance.getLocalization('add') %></button>
-                <% if(model != null) { %>
+                <% if(!model || !model.getId()) { %>
                 <button class="add-layer-btn <%= isSubLayer ? 'admin-remove-sublayer' : 'admin-remove-layer' %>"
                     title="<%= instance.getLocalization('delete') %>"><%= instance.getLocalization('delete') %></button>
                 <% } %>
