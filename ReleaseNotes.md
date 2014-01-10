@@ -22,6 +22,8 @@ Measurements of places (area or length depending on the type) are now shown in t
 
 Dense point data is now aggregated into cluster visualizations.
 
+Multi-lines are not anymore incorrectly combined when editing them.
+
 ### divmanazer/VisualizationForm
 
 Visualization previews are now compatible also with Internet Explorer 8.

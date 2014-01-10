@@ -38653,6 +38653,51 @@ OpenLayers.Protocol.WFS.v1 = OpenLayers.Class(OpenLayers.Protocol, {
 
 /**
  * @requires OpenLayers/Protocol/WFS/v1.js
+ * @requires OpenLayers/Format/WFST/v1_0_0.js
+ */
+
+/**
+ * Class: OpenLayers.Protocol.WFS.v1_0_0
+ * A WFS v1.0.0 protocol for vector layers.  Create a new instance with the
+ *     <OpenLayers.Protocol.WFS.v1_0_0> constructor.
+ *
+ * Inherits from:
+ *  - <OpenLayers.Protocol.WFS.v1>
+ */
+OpenLayers.Protocol.WFS.v1_0_0 = OpenLayers.Class(OpenLayers.Protocol.WFS.v1, {
+    
+    /**
+     * Property: version
+     * {String} WFS version number.
+     */
+    version: "1.0.0",
+    
+    /**
+     * Constructor: OpenLayers.Protocol.WFS.v1_0_0
+     * A class for giving layers WFS v1.0.0 protocol.
+     *
+     * Parameters:
+     * options - {Object} Optional object whose properties will be set on the
+     *     instance.
+     *
+     * Valid options properties:
+     * featureType - {String} Local (without prefix) feature typeName (required).
+     * featureNS - {String} Feature namespace (optional).
+     * featurePrefix - {String} Feature namespace alias (optional - only used
+     *     if featureNS is provided).  Default is 'feature'.
+     * geometryName - {String} Name of geometry attribute.  Default is 'the_geom'.
+     */
+   
+    CLASS_NAME: "OpenLayers.Protocol.WFS.v1_0_0" 
+});
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Protocol/WFS/v1.js
  * @requires OpenLayers/Format/WFST/v1_1_0.js
  */
 
@@ -42377,6 +42422,200 @@ OpenLayers.Format.GML.Base = OpenLayers.Class(OpenLayers.Format.XML, {
  */
 
 /**
+ * Class: OpenLayers.Format.GML.v2
+ * Parses GML version 2.
+ *
+ * Inherits from:
+ *  - <OpenLayers.Format.GML.Base>
+ */
+OpenLayers.Format.GML.v2 = OpenLayers.Class(OpenLayers.Format.GML.Base, {
+    
+    /**
+     * Property: schemaLocation
+     * {String} Schema location for a particular minor version.
+     */
+    schemaLocation: "http://www.opengis.net/gml http://schemas.opengis.net/gml/2.1.2/feature.xsd",
+
+    /**
+     * Constructor: OpenLayers.Format.GML.v2
+     * Create a parser for GML v2.
+     *
+     * Parameters:
+     * options - {Object} An optional object whose properties will be set on
+     *     this instance.
+     *
+     * Valid options properties:
+     * featureType - {String} Local (without prefix) feature typeName (required).
+     * featureNS - {String} Feature namespace (required).
+     * geometryName - {String} Geometry element name.
+     */
+    initialize: function(options) {
+        OpenLayers.Format.GML.Base.prototype.initialize.apply(this, [options]);
+    },
+
+    /**
+     * Property: readers
+     * Contains public functions, grouped by namespace prefix, that will
+     *     be applied when a namespaced node is found matching the function
+     *     name.  The function will be applied in the scope of this parser
+     *     with two arguments: the node being read and a context object passed
+     *     from the parent.
+     */
+    readers: {
+        "gml": OpenLayers.Util.applyDefaults({
+            "outerBoundaryIs": function(node, container) {
+                var obj = {};
+                this.readChildNodes(node, obj);
+                container.outer = obj.components[0];
+            },
+            "innerBoundaryIs": function(node, container) {
+                var obj = {};
+                this.readChildNodes(node, obj);
+                container.inner.push(obj.components[0]);
+            },
+            "Box": function(node, container) {
+                var obj = {};
+                this.readChildNodes(node, obj);
+                if(!container.components) {
+                    container.components = [];
+                }
+                var min = obj.points[0];
+                var max = obj.points[1];
+                container.components.push(
+                    new OpenLayers.Bounds(min.x, min.y, max.x, max.y)
+                );
+            }
+        }, OpenLayers.Format.GML.Base.prototype.readers["gml"]),
+        "feature": OpenLayers.Format.GML.Base.prototype.readers["feature"],
+        "wfs": OpenLayers.Format.GML.Base.prototype.readers["wfs"]
+    },
+
+    /**
+     * Method: write
+     *
+     * Parameters:
+     * features - {Array(<OpenLayers.Feature.Vector>) | OpenLayers.Feature.Vector}
+     *     An array of features or a single feature.
+     *
+     * Returns:
+     * {String} Given an array of features, a doc with a gml:featureMembers
+     *     element will be returned.  Given a single feature, a doc with a
+     *     gml:featureMember element will be returned.
+     */
+    write: function(features) {
+        var name;
+        if(OpenLayers.Util.isArray(features)) {
+            // GML2 only has abstract feature collections
+            // wfs provides a feature collection from a well-known schema
+            name = "wfs:FeatureCollection";
+        } else {
+            name = "gml:featureMember";
+        }
+        var root = this.writeNode(name, features);
+        this.setAttributeNS(
+            root, this.namespaces["xsi"],
+            "xsi:schemaLocation", this.schemaLocation
+        );
+
+        return OpenLayers.Format.XML.prototype.write.apply(this, [root]);
+    },
+
+    /**
+     * Property: writers
+     * As a compliment to the readers property, this structure contains public
+     *     writing functions grouped by namespace alias and named like the
+     *     node names they produce.
+     */
+    writers: {
+        "gml": OpenLayers.Util.applyDefaults({
+            "Point": function(geometry) {
+                var node = this.createElementNSPlus("gml:Point");
+                this.writeNode("coordinates", [geometry], node);
+                return node;
+            },
+            "coordinates": function(points) {
+                var numPoints = points.length;
+                var parts = new Array(numPoints);
+                var point;
+                for(var i=0; i<numPoints; ++i) {
+                    point = points[i];
+                    if(this.xy) {
+                        parts[i] = point.x + "," + point.y;
+                    } else {
+                        parts[i] = point.y + "," + point.x;
+                    }
+                    if(point.z != undefined) { // allow null or undefined
+                        parts[i] += "," + point.z;
+                    }
+                }
+                return this.createElementNSPlus("gml:coordinates", {
+                    attributes: {
+                        decimal: ".", cs: ",", ts: " "
+                    },
+                    value: (numPoints == 1) ? parts[0] : parts.join(" ")
+                });
+            },
+            "LineString": function(geometry) {
+                var node = this.createElementNSPlus("gml:LineString");
+                this.writeNode("coordinates", geometry.components, node);
+                return node;
+            },
+            "Polygon": function(geometry) {
+                var node = this.createElementNSPlus("gml:Polygon");
+                this.writeNode("outerBoundaryIs", geometry.components[0], node);
+                for(var i=1; i<geometry.components.length; ++i) {
+                    this.writeNode(
+                        "innerBoundaryIs", geometry.components[i], node
+                    );
+                }
+                return node;
+            },
+            "outerBoundaryIs": function(ring) {
+                var node = this.createElementNSPlus("gml:outerBoundaryIs");
+                this.writeNode("LinearRing", ring, node);
+                return node;
+            },
+            "innerBoundaryIs": function(ring) {
+                var node = this.createElementNSPlus("gml:innerBoundaryIs");
+                this.writeNode("LinearRing", ring, node);
+                return node;
+            },
+            "LinearRing": function(ring) {
+                var node = this.createElementNSPlus("gml:LinearRing");
+                this.writeNode("coordinates", ring.components, node);
+                return node;
+            },
+            "Box": function(bounds) {
+                var node = this.createElementNSPlus("gml:Box");
+                this.writeNode("coordinates", [
+                    {x: bounds.left, y: bounds.bottom},
+                    {x: bounds.right, y: bounds.top}
+                ], node);
+                // srsName attribute is optional for gml:Box
+                if(this.srsName) {
+                    node.setAttribute("srsName", this.srsName);
+                }
+                return node;
+            }
+        }, OpenLayers.Format.GML.Base.prototype.writers["gml"]),
+        "feature": OpenLayers.Format.GML.Base.prototype.writers["feature"],
+        "wfs": OpenLayers.Format.GML.Base.prototype.writers["wfs"]
+    },
+    
+    CLASS_NAME: "OpenLayers.Format.GML.v2" 
+
+});
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Format/GML/Base.js
+ */
+
+/**
  * Class: OpenLayers.Format.GML.v3
  * Parses GML version 3.
  *
@@ -45155,6 +45394,258 @@ OpenLayers.Format.WMTSCapabilities = OpenLayers.Class(OpenLayers.Format.XML.Vers
  * full text of the license. */
 
 /**
+ * @requires OpenLayers/Format/WMTSCapabilities.js
+ * @requires OpenLayers/Format/OWSCommon/v1_1_0.js
+ */
+
+/**
+ * Class: OpenLayers.Format.WMTSCapabilities.v1_0_0
+ * Read WMTS Capabilities version 1.0.0.
+ * 
+ * Inherits from:
+ *  - <OpenLayers.Format.WMTSCapabilities>
+ */
+OpenLayers.Format.WMTSCapabilities.v1_0_0 = OpenLayers.Class(
+    OpenLayers.Format.OWSCommon.v1_1_0, {
+        
+    /**
+     * Property: version
+     * {String} The parser version ("1.0.0").
+     */
+    version: "1.0.0",
+
+    /**
+     * Property: namespaces
+     * {Object} Mapping of namespace aliases to namespace URIs.
+     */
+    namespaces: {
+        ows: "http://www.opengis.net/ows/1.1",
+        wmts: "http://www.opengis.net/wmts/1.0",
+        xlink: "http://www.w3.org/1999/xlink"
+    },    
+    
+    /**
+     * Property: yx
+     * {Object} Members in the yx object are used to determine if a CRS URN
+     *     corresponds to a CRS with y,x axis order.  Member names are CRS URNs
+     *     and values are boolean.  Defaults come from the 
+     *     <OpenLayers.Format.WMTSCapabilities> prototype.
+     */
+    yx: null,
+
+    /**
+     * Property: defaultPrefix
+     * {String} The default namespace alias for creating element nodes.
+     */
+    defaultPrefix: "wmts",
+
+    /**
+     * Constructor: OpenLayers.Format.WMTSCapabilities.v1_0_0
+     * Create a new parser for WMTS capabilities version 1.0.0. 
+     *
+     * Parameters:
+     * options - {Object} An optional object whose properties will be set on
+     *     this instance.
+     */
+    initialize: function(options) {
+        OpenLayers.Format.XML.prototype.initialize.apply(this, [options]);
+        this.options = options;
+        var yx = OpenLayers.Util.extend(
+            {}, OpenLayers.Format.WMTSCapabilities.prototype.yx
+        );
+        this.yx = OpenLayers.Util.extend(yx, this.yx);
+    },
+
+    /**
+     * APIMethod: read
+     * Read capabilities data from a string, and return info about the WMTS.
+     * 
+     * Parameters: 
+     * data - {String} or {DOMElement} data to read/parse.
+     *
+     * Returns:
+     * {Object} Information about the SOS service.
+     */
+    read: function(data) {
+        if(typeof data == "string") {
+            data = OpenLayers.Format.XML.prototype.read.apply(this, [data]);
+        }
+        if(data && data.nodeType == 9) {
+            data = data.documentElement;
+        }
+        var capabilities = {};
+        this.readNode(data, capabilities);
+        capabilities.version = this.version;
+        return capabilities;
+    },
+
+    /**
+     * Property: readers
+     * Contains public functions, grouped by namespace prefix, that will
+     *     be applied when a namespaced node is found matching the function
+     *     name.  The function will be applied in the scope of this parser
+     *     with two arguments: the node being read and a context object passed
+     *     from the parent.
+     */
+    readers: {        
+        "wmts": {
+            "Capabilities": function(node, obj) {
+                this.readChildNodes(node, obj);
+            },
+            "Contents": function(node, obj) {
+                obj.contents = {};                
+                obj.contents.layers = [];
+                obj.contents.tileMatrixSets = {};                
+                this.readChildNodes(node, obj.contents);
+            },
+            "Layer": function(node, obj) {
+                var layer = {
+                    styles: [],
+                    formats: [],
+                    dimensions: [],
+                    tileMatrixSetLinks: []
+                };
+                layer.layers = [];
+                this.readChildNodes(node, layer);
+                obj.layers.push(layer);
+            },
+            "Style": function(node, obj) {
+                var style = {};
+                style.isDefault = (node.getAttribute("isDefault") === "true");
+                this.readChildNodes(node, style);
+                obj.styles.push(style);
+            },
+            "Format": function(node, obj) {
+                obj.formats.push(this.getChildValue(node)); 
+            },
+            "TileMatrixSetLink": function(node, obj) {
+                var tileMatrixSetLink = {};
+                this.readChildNodes(node, tileMatrixSetLink);
+                obj.tileMatrixSetLinks.push(tileMatrixSetLink);
+            },
+            "TileMatrixSet": function(node, obj) {
+                // node could be child of wmts:Contents or wmts:TileMatrixSetLink
+                // duck type wmts:Contents by looking for layers
+                if (obj.layers) {
+                    // TileMatrixSet as object type in schema
+                    var tileMatrixSet = {
+                        matrixIds: []
+                    };
+                    this.readChildNodes(node, tileMatrixSet);
+                    obj.tileMatrixSets[tileMatrixSet.identifier] = tileMatrixSet;
+                } else {
+                    // TileMatrixSet as string type in schema
+                    obj.tileMatrixSet = this.getChildValue(node);
+                }
+            },
+            "TileMatrix": function(node, obj) {
+                var tileMatrix = {
+                    supportedCRS: obj.supportedCRS
+                };
+                this.readChildNodes(node, tileMatrix);
+                obj.matrixIds.push(tileMatrix);
+            },
+            "ScaleDenominator": function(node, obj) {
+                obj.scaleDenominator = parseFloat(this.getChildValue(node)); 
+            },
+            "TopLeftCorner": function(node, obj) {                
+                var topLeftCorner = this.getChildValue(node);
+                var coords = topLeftCorner.split(" ");
+                // decide on axis order for the given CRS
+                var yx;
+                if (obj.supportedCRS) {
+                    // extract out version from URN
+                    var crs = obj.supportedCRS.replace(
+                        /urn:ogc:def:crs:(\w+):.+:(\w+)$/, 
+                        "urn:ogc:def:crs:$1::$2"
+                    );
+                    yx = !!this.yx[crs];
+                }
+                if (yx) {
+                    obj.topLeftCorner = new OpenLayers.LonLat(
+                        coords[1], coords[0]
+                    );
+                } else {
+                    obj.topLeftCorner = new OpenLayers.LonLat(
+                        coords[0], coords[1]
+                    );
+                }
+            },
+            "TileWidth": function(node, obj) {
+                obj.tileWidth = parseInt(this.getChildValue(node)); 
+            },
+            "TileHeight": function(node, obj) {
+                obj.tileHeight = parseInt(this.getChildValue(node)); 
+            },
+            "MatrixWidth": function(node, obj) {
+                obj.matrixWidth = parseInt(this.getChildValue(node)); 
+            },
+            "MatrixHeight": function(node, obj) {
+                obj.matrixHeight = parseInt(this.getChildValue(node)); 
+            },
+            "ResourceURL": function(node, obj) {
+                obj.resourceUrl = obj.resourceUrl || {};
+                var resourceType = node.getAttribute("resourceType");
+                if (!obj.resourceUrls) {
+                    obj.resourceUrls = [];
+                }
+                var resourceUrl = obj.resourceUrl[resourceType] = {
+                    format: node.getAttribute("format"),
+                    template: node.getAttribute("template"),
+                    resourceType: resourceType
+                };
+                obj.resourceUrls.push(resourceUrl);
+            },
+            // not used for now, can be added in the future though
+            /*"Themes": function(node, obj) {
+                obj.themes = [];
+                this.readChildNodes(node, obj.themes);
+            },
+            "Theme": function(node, obj) {
+                var theme = {};                
+                this.readChildNodes(node, theme);
+                obj.push(theme);
+            },*/
+            "WSDL": function(node, obj) {
+                obj.wsdl = {};
+                obj.wsdl.href = node.getAttribute("xlink:href");
+                // TODO: other attributes of <WSDL> element                
+            },
+            "ServiceMetadataURL": function(node, obj) {
+                obj.serviceMetadataUrl = {};
+                obj.serviceMetadataUrl.href = node.getAttribute("xlink:href");
+                // TODO: other attributes of <ServiceMetadataURL> element                
+            },
+            "LegendURL": function(node, obj) {
+                obj.legend = {};
+                obj.legend.href = node.getAttribute("xlink:href");
+                obj.legend.format = node.getAttribute("format");
+            },
+            "Dimension": function(node, obj) {
+                var dimension = {values: []};
+                this.readChildNodes(node, dimension);
+                obj.dimensions.push(dimension);
+            },
+            "Default": function(node, obj) {
+                obj["default"] = this.getChildValue(node);
+            },
+            "Value": function(node, obj) {
+                obj.values.push(this.getChildValue(node));
+            }
+        },
+        "ows": OpenLayers.Format.OWSCommon.v1_1_0.prototype.readers["ows"]
+    },    
+    
+    CLASS_NAME: "OpenLayers.Format.WMTSCapabilities.v1_0_0" 
+
+});
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
  * @requires OpenLayers/Format.js
  * @requires OpenLayers/Feature/Vector.js
  * @requires OpenLayers/Geometry/Point.js
@@ -46107,6 +46598,190 @@ OpenLayers.Format.Filter.v1 = OpenLayers.Class(OpenLayers.Format.XML, {
  * full text of the license. */
 
 /**
+ * @requires OpenLayers/Format/GML/v2.js
+ * @requires OpenLayers/Format/Filter/v1.js
+ */
+
+/**
+ * Class: OpenLayers.Format.Filter.v1_0_0
+ * Write ogc:Filter version 1.0.0.
+ * 
+ * Inherits from:
+ *  - <OpenLayers.Format.GML.v2>
+ *  - <OpenLayers.Format.Filter.v1>
+ */
+OpenLayers.Format.Filter.v1_0_0 = OpenLayers.Class(
+    OpenLayers.Format.GML.v2, OpenLayers.Format.Filter.v1, {
+    
+    /**
+     * Constant: VERSION
+     * {String} 1.0.0
+     */
+    VERSION: "1.0.0",
+    
+    /**
+     * Property: schemaLocation
+     * {String} http://www.opengis.net/ogc/filter/1.0.0/filter.xsd
+     */
+    schemaLocation: "http://www.opengis.net/ogc/filter/1.0.0/filter.xsd",
+
+    /**
+     * Constructor: OpenLayers.Format.Filter.v1_0_0
+     * Instances of this class are not created directly.  Use the
+     *     <OpenLayers.Format.Filter> constructor instead.
+     *
+     * Parameters:
+     * options - {Object} An optional object whose properties will be set on
+     *     this instance.
+     */
+    initialize: function(options) {
+        OpenLayers.Format.GML.v2.prototype.initialize.apply(
+            this, [options]
+        );
+    },
+
+    /**
+     * Property: readers
+     * Contains public functions, grouped by namespace prefix, that will
+     *     be applied when a namespaced node is found matching the function
+     *     name.  The function will be applied in the scope of this parser
+     *     with two arguments: the node being read and a context object passed
+     *     from the parent.
+     */
+    readers: {
+        "ogc": OpenLayers.Util.applyDefaults({
+            "PropertyIsEqualTo": function(node, obj) {
+                var filter = new OpenLayers.Filter.Comparison({
+                    type: OpenLayers.Filter.Comparison.EQUAL_TO
+                });
+                this.readChildNodes(node, filter);
+                obj.filters.push(filter);
+            },
+            "PropertyIsNotEqualTo": function(node, obj) {
+                var filter = new OpenLayers.Filter.Comparison({
+                    type: OpenLayers.Filter.Comparison.NOT_EQUAL_TO
+                });
+                this.readChildNodes(node, filter);
+                obj.filters.push(filter);
+            },
+            "PropertyIsLike": function(node, obj) {
+                var filter = new OpenLayers.Filter.Comparison({
+                    type: OpenLayers.Filter.Comparison.LIKE
+                });
+                this.readChildNodes(node, filter);
+                var wildCard = node.getAttribute("wildCard");
+                var singleChar = node.getAttribute("singleChar");
+                var esc = node.getAttribute("escape");
+                filter.value2regex(wildCard, singleChar, esc);
+                obj.filters.push(filter);
+            }
+        }, OpenLayers.Format.Filter.v1.prototype.readers["ogc"]),
+        "gml": OpenLayers.Format.GML.v2.prototype.readers["gml"],
+        "feature": OpenLayers.Format.GML.v2.prototype.readers["feature"]        
+    },
+
+    /**
+     * Property: writers
+     * As a compliment to the readers property, this structure contains public
+     *     writing functions grouped by namespace alias and named like the
+     *     node names they produce.
+     */
+    writers: {
+        "ogc": OpenLayers.Util.applyDefaults({
+            "PropertyIsEqualTo": function(filter) {
+                var node = this.createElementNSPlus("ogc:PropertyIsEqualTo");
+                // no ogc:expression handling for PropertyName for now
+                this.writeNode("PropertyName", filter, node);
+                // handle Literals or Functions for now
+                this.writeOgcExpression(filter.value, node);
+                return node;
+            },
+            "PropertyIsNotEqualTo": function(filter) {
+                var node = this.createElementNSPlus("ogc:PropertyIsNotEqualTo");
+                // no ogc:expression handling for PropertyName for now
+                this.writeNode("PropertyName", filter, node);
+                // handle Literals or Functions for now
+                this.writeOgcExpression(filter.value, node);
+                return node;
+            },
+            "PropertyIsLike": function(filter) {
+                var node = this.createElementNSPlus("ogc:PropertyIsLike", {
+                    attributes: {
+                        wildCard: "*", singleChar: ".", escape: "!"
+                    }
+                });
+                // no ogc:expression handling for now
+                this.writeNode("PropertyName", filter, node);
+                // convert regex string to ogc string
+                this.writeNode("Literal", filter.regex2value(), node);
+                return node;
+            },
+            "BBOX": function(filter) {
+                var node = this.createElementNSPlus("ogc:BBOX");
+                // PropertyName is mandatory in 1.0.0, but e.g. GeoServer also
+                // accepts filters without it. When this is used with
+                // OpenLayers.Protocol.WFS, OpenLayers.Format.WFST will set a
+                // missing filter.property to the geometryName that is
+                // configured with the protocol, which defaults to "the_geom".
+                // So the only way to omit this mandatory property is to not
+                // set the property on the filter and to set the geometryName
+                // on the WFS protocol to null. The latter also happens when
+                // the protocol is configured without a geometryName and a
+                // featureNS.
+                filter.property && this.writeNode("PropertyName", filter, node);
+                var box = this.writeNode("gml:Box", filter.value, node);
+                if(filter.projection) {
+                    box.setAttribute("srsName", filter.projection);
+                }
+                return node;
+            }
+        }, OpenLayers.Format.Filter.v1.prototype.writers["ogc"]),
+        "gml": OpenLayers.Format.GML.v2.prototype.writers["gml"],
+        "feature": OpenLayers.Format.GML.v2.prototype.writers["feature"]
+    },
+
+    /**
+     * Method: writeSpatial
+     *
+     * Read a {<OpenLayers.Filter.Spatial>} filter and converts it into XML.
+     *
+     * Parameters:
+     * filter - {<OpenLayers.Filter.Spatial>} The filter.
+     * name - {String} Name of the generated XML element.
+     *
+     * Returns:
+     * {DOMElement} The created XML element.
+     */
+    writeSpatial: function(filter, name) {
+        var node = this.createElementNSPlus("ogc:"+name);
+        this.writeNode("PropertyName", filter, node);
+        if(filter.value instanceof OpenLayers.Filter.Function) {
+            this.writeNode("Function", filter.value, node);
+        } else {
+        var child;
+        if(filter.value instanceof OpenLayers.Geometry) {
+            child = this.writeNode("feature:_geometry", filter.value).firstChild;
+        } else {
+            child = this.writeNode("gml:Box", filter.value);
+        }
+        if(filter.projection) {
+            child.setAttribute("srsName", filter.projection);
+        }
+        node.appendChild(child);
+        }
+        return node;
+    },
+
+
+    CLASS_NAME: "OpenLayers.Format.Filter.v1_0_0" 
+
+});
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
  * @requires OpenLayers/Format/Filter/v1.js
  * @requires OpenLayers/Format/GML/v3.js
  */
@@ -46804,6 +47479,181 @@ OpenLayers.Format.WFST.v1 = OpenLayers.Class(OpenLayers.Format.XML, {
 
     CLASS_NAME: "OpenLayers.Format.WFST.v1" 
 
+});
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Format/WFST/v1.js
+ * @requires OpenLayers/Format/Filter/v1_0_0.js
+ */
+
+/**
+ * Class: OpenLayers.Format.WFST.v1_0_0
+ * A format for creating WFS v1.0.0 transactions.  Create a new instance with the
+ *     <OpenLayers.Format.WFST.v1_0_0> constructor.
+ *
+ * Inherits from:
+ *  - <OpenLayers.Format.Filter.v1_0_0>
+ *  - <OpenLayers.Format.WFST.v1>
+ */
+OpenLayers.Format.WFST.v1_0_0 = OpenLayers.Class(
+    OpenLayers.Format.Filter.v1_0_0, OpenLayers.Format.WFST.v1, {
+    
+    /**
+     * Property: version
+     * {String} WFS version number.
+     */
+    version: "1.0.0",
+
+    /**
+     * APIProperty: srsNameInQuery
+     * {Boolean} If true the reference system is passed in Query requests
+     *     via the "srsName" attribute to the "wfs:Query" element, this
+     *     property defaults to false as it isn't WFS 1.0.0 compliant.
+     */
+    srsNameInQuery: false,
+    
+    /**
+     * Property: schemaLocations
+     * {Object} Properties are namespace aliases, values are schema locations.
+     */
+    schemaLocations: {
+        "wfs": "http://schemas.opengis.net/wfs/1.0.0/WFS-transaction.xsd"
+    },
+
+    /**
+     * Constructor: OpenLayers.Format.WFST.v1_0_0
+     * A class for parsing and generating WFS v1.0.0 transactions.
+     *
+     * Parameters:
+     * options - {Object} Optional object whose properties will be set on the
+     *     instance.
+     *
+     * Valid options properties:
+     * featureType - {String} Local (without prefix) feature typeName (required).
+     * featureNS - {String} Feature namespace (optional).
+     * featurePrefix - {String} Feature namespace alias (optional - only used
+     *     if featureNS is provided).  Default is 'feature'.
+     * geometryName - {String} Name of geometry attribute.  Default is 'the_geom'.
+     */
+    initialize: function(options) {
+        OpenLayers.Format.Filter.v1_0_0.prototype.initialize.apply(this, [options]);
+        OpenLayers.Format.WFST.v1.prototype.initialize.apply(this, [options]);
+    },
+    
+    /**
+     * Method: readNode
+     * Shorthand for applying one of the named readers given the node
+     *     namespace and local name.  Readers take two args (node, obj) and
+     *     generally extend or modify the second.
+     *
+     * Parameters:
+     * node - {DOMElement} The node to be read (required).
+     * obj - {Object} The object to be modified (optional).
+     * first - {Boolean} Should be set to true for the first node read. This
+     *     is usually the readNode call in the read method. Without this being
+     *     set, auto-configured properties will stick on subsequent reads.
+     *
+     * Returns:
+     * {Object} The input object, modified (or a new one if none was provided).
+     */
+    readNode: function(node, obj, first) {
+        // Not the superclass, only the mixin classes inherit from
+        // Format.GML.v2. We need this because we don't want to get readNode
+        // from the superclass's superclass, which is OpenLayers.Format.XML.
+        return OpenLayers.Format.GML.v2.prototype.readNode.apply(this, arguments);
+    },
+    
+    /**
+     * Property: readers
+     * Contains public functions, grouped by namespace prefix, that will
+     *     be applied when a namespaced node is found matching the function
+     *     name.  The function will be applied in the scope of this parser
+     *     with two arguments: the node being read and a context object passed
+     *     from the parent.
+     */
+    readers: {
+        "wfs": OpenLayers.Util.applyDefaults({
+            "WFS_TransactionResponse": function(node, obj) {
+                obj.insertIds = [];
+                obj.success = false;
+                this.readChildNodes(node, obj);
+            },
+            "InsertResult": function(node, container) {
+                var obj = {fids: []};
+                this.readChildNodes(node, obj);
+                container.insertIds = container.insertIds.concat(obj.fids);
+            },
+            "TransactionResult": function(node, obj) {
+                this.readChildNodes(node, obj);
+            },
+            "Status": function(node, obj) {
+                this.readChildNodes(node, obj);
+            },
+            "SUCCESS": function(node, obj) {
+                obj.success = true;
+            }
+        }, OpenLayers.Format.WFST.v1.prototype.readers["wfs"]),
+        "gml": OpenLayers.Format.GML.v2.prototype.readers["gml"],
+        "feature": OpenLayers.Format.GML.v2.prototype.readers["feature"],
+        "ogc": OpenLayers.Format.Filter.v1_0_0.prototype.readers["ogc"]
+    },
+
+    /**
+     * Property: writers
+     * As a compliment to the readers property, this structure contains public
+     *     writing functions grouped by namespace alias and named like the
+     *     node names they produce.
+     */
+    writers: {
+        "wfs": OpenLayers.Util.applyDefaults({
+            "Query": function(options) {
+                options = OpenLayers.Util.extend({
+                    featureNS: this.featureNS,
+                    featurePrefix: this.featurePrefix,
+                    featureType: this.featureType,
+                    srsName: this.srsName,
+                    srsNameInQuery: this.srsNameInQuery
+                }, options);
+                var prefix = options.featurePrefix;
+                var node = this.createElementNSPlus("wfs:Query", {
+                    attributes: {
+                        typeName: (prefix ? prefix + ":" : "") +
+                            options.featureType
+                    }
+                });
+                if(options.srsNameInQuery && options.srsName) {
+                    node.setAttribute("srsName", options.srsName);
+                }
+                if(options.featureNS) {
+                    node.setAttribute("xmlns:" + prefix, options.featureNS);
+                }
+                if(options.propertyNames) {
+                    for(var i=0,len = options.propertyNames.length; i<len; i++) {
+                        this.writeNode(
+                            "ogc:PropertyName", 
+                            {property: options.propertyNames[i]},
+                            node
+                        );
+                    }
+                }
+                if(options.filter) {
+                    this.setFilterProperty(options.filter);
+                    this.writeNode("ogc:Filter", options.filter, node);
+                }
+                return node;
+            }
+        }, OpenLayers.Format.WFST.v1.prototype.writers["wfs"]),
+        "gml": OpenLayers.Format.GML.v2.prototype.writers["gml"],
+        "feature": OpenLayers.Format.GML.v2.prototype.writers["feature"],
+        "ogc": OpenLayers.Format.Filter.v1_0_0.prototype.writers["ogc"]
+    },
+   
+    CLASS_NAME: "OpenLayers.Format.WFST.v1_0_0" 
 });
 
 /* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
