@@ -146,12 +146,12 @@
             <% if(model && model.getStyles().length > 1) { %>
             <select id="add-layer-style">
                  <% for(var i = 0; model != null && i < model.getStyles().length; i++) { %>
-                <option value="<%= model.getStyles()[i].name %>" 
-                    <% if(model && model.getCurrentStyle().name == model.getStyles()[i].name ) { %>selected<% } %> ><%= model.getStyles()[i].title %></option>
+                <option value="<%= model.getStyles()[i].getName() %>" 
+                    <% if(model && model.getCurrentStyle().getName() == model.getStyles()[i].getName() ) { %>selected<% } %> ><%= model.getStyles()[i].getTitle() %></option>
                 <% } %>
             </select>
             <% } else { %>
-                <%= model.getCurrentStyle().name %>
+                <%= model.getCurrentStyle().getName() %>
             <% } %>
         </div>
     </div>
