@@ -298,7 +298,6 @@ define([
                     accordion = element.parents('.accordion'),
                     lcId = accordion.attr('lcid'),
                     form = element.parents('.admin-add-layer'),
-//                    idValue = (form.attr('data-id') !== null && form.attr('data-id') !== undefined) ? form.attr('data-id') : '',
                     data = {},
                     wmsVersion = form.find('#add-layer-interface-version').val(),
                     createLayer;
