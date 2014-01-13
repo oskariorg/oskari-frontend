@@ -6,6 +6,7 @@ bin/
 dist/
 .idea
 *.iml
+node_modules/
 tools/node_modules
 tools/validation
 tools/coverage

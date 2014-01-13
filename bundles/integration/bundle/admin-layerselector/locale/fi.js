@@ -58,6 +58,11 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
+            "layertypes" : {
+                "wms": "WMS Taso",
+                "wfs": "WFS Taso",
+                "wmts": "WMTS Taso"
+            },
             "selectLayer": "Valitse ylätaso",
             "selectSubLayer": "Valitse alataso",
 
@@ -78,11 +83,11 @@ Oskari.registerLocalization({
             "groupLayer": "Ryhmätaso",
             "interfaceVersion": "Rajapinnan versio",
             "interfaceVersionDesc": "Rajapinnan versio",
-            "wmslayer": "WMS Taso",
+//            "wmslayer": "WMS Taso",
             "wms1_1_1": "WMS 1.1.1",
             "wms1_3_0": "WMS 1.3.0",
-            "wfslayer": "WFS Taso",
-            "wmtslayer": "WMTS Taso",
+//            "wfslayer": "WFS Taso",
+//            "wmtslayer": "WMTS Taso",
             "getInfo": "Hae tiedot",
             "selectClass": "Valitse aihe",
             "selectClassDesc": "Valitse aihe",
@@ -116,8 +121,8 @@ Oskari.registerLocalization({
             "addInspireThemeDesc": "Lisää InspireTheme:n mukaiset aiheet",
             "opacity": "Peittävyys",
             "opacityDesc": "Tason peittävyys (arvo 0% tekee tasosta oletuksena näkymättömän)",
-            "style": "Tyyli",
-            "styleDesc": "Tyyli",
+            "style": "Oletustyyli",
+            "styleDesc": "Oletustyyli",
 
             "minScale": "Minimi&shy;mittakaava",
             "minScaleDesc": "Tason minimimittakaava (1:5669294)",
