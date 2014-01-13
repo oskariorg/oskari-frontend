@@ -309,18 +309,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         changeToolStyle: function (styleName, div) {
             div = div || this.element;
 
-            if (!styleName || !div) {
+            if (!div) {
                 return;
             }
 
-            var resourcesPath = this.getMapModule().getImageUrl(),
-                imgUrl = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/',
-                bgImg = imgUrl + 'panbutton-sprites-' + styleName + '.png',
-                panButtons = div.find('img.panbuttonDivImg');
+            var panButtons = div.find('img.panbuttonDivImg');
+            if (styleName === null) {
+                panButtons.removeAttr('style');
+            } else {
 
-            panButtons.css({
-                'background-image': 'url("' + bgImg + '")'
-            });
+                var resourcesPath = this.getMapModule().getImageUrl(),
+                    imgUrl = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/',
+                    bgImg = imgUrl + 'panbutton-sprites-' + styleName + '.png';
+
+                panButtons.css({
+                    'background-image': 'url("' + bgImg + '")'
+                });
+            }
         }
     }, {
         /**

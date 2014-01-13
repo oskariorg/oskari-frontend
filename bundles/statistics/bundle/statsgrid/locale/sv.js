@@ -16,6 +16,8 @@ Oskari.registerLocalization({
             "grid": {
                 "name": "Titeln",
                 "description": "Beskrivning",
+                "organization": "Upphov",
+                "year": "År",
                 "delete": " "
             },
             "deleteTitle": "Indikaattorin poistaminen",
@@ -135,6 +137,7 @@ Oskari.registerLocalization({
         "noRegionFound"         : "Aluetta ei löytynyt",
         "regionCategories"      : {
             "title"                 : "Aluejaot",
+            "KUNTA"                 : "Kunta",
             "ALUEHALLINTOVIRASTO"   : "Aluehallintovirasto",
             "MAAKUNTA"              : "Maakunta",
             "NUTS1"                 : "Manner-Suomi ja Ahvenanmaa",

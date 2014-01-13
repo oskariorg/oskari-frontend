@@ -16,6 +16,8 @@ Oskari.registerLocalization({
 			"grid": {
 				"name": "Otsikko",
 				"description": "Kuvaus",
+				"organization": "Tietolähde",
+				"year": "Vuosi",
 				"delete": " "
 			},
 			"deleteTitle": "Indikaattorin poistaminen",

@@ -94,6 +94,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/component/visualization-form/DotForm.js"
         }, {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/jquery/plugins/jquery-placeholder/jquery.placeholder.js"
+        }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/divmanazer/css/visualizationform.css"
         }, {

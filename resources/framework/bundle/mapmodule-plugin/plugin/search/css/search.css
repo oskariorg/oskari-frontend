@@ -65,7 +65,11 @@ table.search-results th {
 }
 */
 div.published-search-div {
+  float: left;
   position: relative; }
+
+.right div.published-search-div {
+  float: right; }
 
 div.published-search-div div.search-area-div {
   min-width: 180px;

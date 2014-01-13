@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
 function(instance, localization) {
     this.instance = instance;
     this.loc = localization;
-    this.visibleFields = ['name', 'description', 'delete'];
+    this.visibleFields = ['name', 'description', 'organization', 'year', 'delete'];
     this.grid = null;
     this.container = null;
     this.template = jQuery(
@@ -142,14 +142,41 @@ function(instance, localization) {
         _.each(indicators, function(indicator) {
             gridModel.addData({
                 'id': indicator.id,
-                'name': indicator.title[lang],
-                'description': indicator.description[lang]
+                'name': me._retrieveValue(indicator.title),
+                'description': me._retrieveValue(indicator.description),
+                'organization': me._retrieveValue(indicator.organization),
+                'year': (indicator.year || '')
             });
         });
 
         this.grid = this._createUserIndicatorsGrid(gridModel);
         this.grid.renderTo(this.container.find('div.indicatorsGrid'));
         this._requestToAddTab();
+    },
+    /**
+     * Tries to retrieve value from given object.
+     * First, it tries to get the value for current language,
+     * then the default language ('en') and in case those fail,
+     * the first value it gets from the object. As a final fall through
+     * it returns a string with a single space character (so Oskari grid renders it).
+     *
+     * @method _retrieveValue
+     * @param {Object/null} indicatorField
+     * @return {String}
+     */
+    _retrieveValue: function(indicatorField) {
+        var retValue = ' ',
+            lang = Oskari.getLang(),
+            defaultLang = 'en';
+
+        if (_.isObject(indicatorField)) {
+            retValue =  indicatorField[lang] ||
+                        indicatorField[defaultLang] ||
+                        _.chain(indicatorField).values().first().value() ||
+                        ' ';
+        }
+
+        return retValue;
     },
     /**
      * Retrieves the indicator through the service.

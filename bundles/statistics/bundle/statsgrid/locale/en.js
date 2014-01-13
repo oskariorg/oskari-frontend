@@ -16,6 +16,8 @@ Oskari.registerLocalization({
             "grid": {
                 "name": "Title",
                 "description": "Description",
+                "organization": "Data source",
+                "year": "Year",
                 "delete": " "
             },
             "deleteTitle": "Deleting indicator",
@@ -135,6 +137,7 @@ Oskari.registerLocalization({
         "noRegionFound"         : "Region not found",
         "regionCategories"      : {
             "title"                 : "Region categories",
+            "KUNTA"                 : "Kunta",
             "ALUEHALLINTOVIRASTO"   : "Aluehallintovirasto",
             "MAAKUNTA"              : "Maakunta",
             "NUTS1"                 : "Manner-Suomi ja Ahvenanmaa",
