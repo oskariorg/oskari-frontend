@@ -219,13 +219,29 @@
                     }
                 }
                 // update default name
-                loadedGroup.name = loadedGroup.names[Oskari.getLang()];
+                loadedGroup.name = loadedGroup.names[Oskari.getLang()] || '';
                 if(groupingMethod) {
                     me._mapLayersForGroup(loadedGroup, groupingMethod);
                 }
+                this.sortByName();
                 return hasChanges;
             },
 
+            sortByName : function() {
+                this.layerGroups.sort(function(a,b){
+                    var name_a = a.name; 
+                    if(name_a) {
+                        name_a = name_a.toLowerCase();
+                    }
+                    var name_b = b.name; 
+                    if(name_b) {
+                        name_b = name_b.toLowerCase();
+                    }
+                    if(name_a > name_b) return 1;
+                    if(name_a < name_b) return -1;
+                    return 0;
+                });
+            },
             /**
              * Returns a template group for adding new organization.
              * @return {Object} object for form template

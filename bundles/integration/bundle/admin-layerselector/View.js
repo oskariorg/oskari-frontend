@@ -169,44 +169,22 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
 
             if (e.baseLayerId) {
                 // If this is a sublayer, add it to its parent's sublayer array
-                
-                // FIXME: THIS SHOULDN'T ADD base_ in front!!
-                parentLayerId = 'base_' + e.baseLayerId;
-                mapLayerService.addSubLayer(parentLayerId, mapLayer);
+                mapLayerService.addSubLayer(e.baseLayerId, mapLayer);
             } else {
                 // Otherwise just add it to the map layer service.
                 if (mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
                     mapLayerService.addLayer(mapLayer);
                 }
                 else {
+                    alert('Error!! Inserted a new layer but a layer with same id already existed!!');
                     // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData); 
                 }
             }
         } else if (e.command === "editLayer") {
             // update layer info
             mapLayerService.updateLayer(e.layerData.id, e.layerData);
-        } else if (e.command === "addGroup") {
-            /*
-             ************************
-             * BASE OR GROUP LAYERS *
-             ************************
-             */
-            // load the map layers again
-
-            mapLayerService.loadAllLayersAjax();
-        } else if (e.command === "editGroup") {
-            // Remove the base/group layer from mapLayerService
-            // and load it again from backend, since we edited
-            // the layer class and the changes will not be
-            // reflected to the corresponding map layer directly.
-            mapLayerService.removeLayer(e.id, true);
-            mapLayerService.loadAllLayersAjax();
-        } else if (e.command === "deleteGroup") {
-            mapLayerService.removeLayer(e.id);
         }
     }
-
-
 }, {
     "extend": ["Oskari.integration.bundle.bb.View"]
 });
