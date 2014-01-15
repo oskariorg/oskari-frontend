@@ -177,7 +177,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             if (!me.conf) {
                 me.conf = {};
             }
-            if(!me.conf.location){
+            if (!me.conf.location) {
                 me.conf.location = {};
             }
             me.conf.location.classes = location;

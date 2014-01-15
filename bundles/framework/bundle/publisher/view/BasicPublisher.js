@@ -258,7 +258,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             // 5th panel: tool layout panel
             accordion.addPanel(me._createToolLayoutPanel());
 
-            // TODO we need to have a serious discussion with this one whenever layout is changed or 
+            // TODO we need to have a serious discussion with this one whenever layout is changed or
+            // copy location from config...
+            if (me.data && me.data.hasLayerSelectionPlugin && me.data.hasLayerSelectionPlugin.location) {
+                me.layerSelectionClasses.classes = me.data.hasLayerSelectionPlugin.location.classes;
+            }
+
             me.maplayerPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLayerForm', me.loc, me.instance, {
                 "location": {
                     "classes": me.layerSelectionClasses.classes
@@ -596,12 +601,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                             me._editToolLayoutOn();
                         }
                     });
-                    editBtn.setEnabled(false);
+                    editBtn.setEnabled(me.activeToolLayout === "userlayout");
                     editBtn.getButton().attr('id', 'editModeBtn');
                     editBtn.insertTo(layoutContainer);
                 }
             }
-
 
             return panel;
 
@@ -1069,6 +1073,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 dialog.show(me.loc.error.title, me.loc.error.saveFailed, [okBtn]);
             };
 
+            if (!window.confirm("Publish map?")) {
+                console.log(selections);
+                return;
+            }
+
             // make the ajax call
             jQuery.ajax({
                 url: url + '&action_route=Publish',
@@ -1381,15 +1390,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 return;
             }
 
-            var styleConfig,
+            var me = this,
+                styleConfig,
                 i,
                 tool,
-                me = this;
+                tools = me.toolsPanel.getTools();
 
             // Set the toolStyle to the config of each tool
             // and change the style immedately. 
-            for (i = 0; i < this.tools.length; i += 1) {
-                tool = this.tools[i];
+            for (i = 0; i < tools.length; i += 1) {
+                tool = tools[i];
                 // special object for zoombar
                 if (tool.id.indexOf('Portti2Zoombar') >= 0) {
                     styleConfig = style.zoombar || {};
@@ -1418,7 +1428,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
 
             // Change the style of the layer selection plugin
-            this._setLayerSelectionStyle(style.val);
+            me._setLayerSelectionStyle(style.val);
             // Recreate draggable if need be
             if (me.toolLayoutEditMode) {
                 me._makeDraggable(jQuery('.mapplugin'));
@@ -1467,13 +1477,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             if (!font) {
                 return;
             }
-            var i,
-                tool;
+            var me = this,
+                i,
+                tool,
+                tools = me.toolsPanel.getTools();
 
             // Set the font to the config of each tool
             // and change the font immedately. 
-            for (i = 0; i < this.tools.length; i += 1) {
-                tool = this.tools[i];
+            for (i = 0; i < tools.length; i += 1) {
+                tool = tools[i];
                 if (tool.config) {
                     tool.config.font = font;
                 }
@@ -1483,15 +1495,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
 
             // Change the font of the layer selection plugin
-            this._setLayerSelectionFont(font);
+            me._setLayerSelectionFont(font);
 
             // Change the font of the logo plugin
-            if (this.logoPlugin && this.logoPlugin.changeFont) {
-                this.logoPlugin.changeFont(font);
+            if (me.logoPlugin && me.logoPlugin.changeFont) {
+                me.logoPlugin.changeFont(font);
             }
 
             // Change the font of the info plugin
-            var infoPlugin = this._getGetInfoPlugin();
+            var infoPlugin = me._getGetInfoPlugin();
             if (infoPlugin) {
                 infoPlugin.config = infoPlugin.config || {};
                 infoPlugin.config.font = font;
