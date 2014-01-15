@@ -28,6 +28,20 @@ Multi-lines are not anymore incorrectly combined when editing them.
 
 Visualization previews are now compatible also with Internet Explorer 8.
 
+### Admin-layerrights
+
+Now provides tooltips for checkboxes (permission text) and layername (layertype/inspiretheme/organization)
+
+### Admin-layerselector
+
+Backend API changed and the bundle has been refactored to match the API and the code has been cleaned up on relevant parts.
+
+### Core/MapLayerService
+
+Layer update now copies all the information the user can change on editing a layer. Behavior change: MapLayerEvent with add/remove operation is no longer sent
+if a sublayer is removed/added, but instead it is sent with update operation. Removesublayer method was removed and removelayer handles sublayer removal as well. AddSubLayer method 
+is still available but addLayer will handle adding sublayers if the layer has parentId property.
+
 ### Work in progress
 
 We are preparing the next major release of Oskari. Oskari 2.0 will utilize RequireJS for resource loading instead of oskari-loader. Migration tools and documentation are developed and improved as the work progresses. These changes are unstable (i.e. they will change) and placed into the src-folder.

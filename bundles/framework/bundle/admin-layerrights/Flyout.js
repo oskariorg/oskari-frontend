@@ -228,10 +228,12 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 table += '<th>' + columnHeaders[i].name + '</th>';
             }
             table += "</tr></thead>";
+            var service = this.instance.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
 
             table += "<tbody>";
             for (i = 0; tr < layerRightsJSON.length; tr += 1) {
                 layerRight = layerRightsJSON[tr];
+                var layer = service.findMapLayer(layerRight.id);
 
                 table += "<tr>";
 
@@ -240,13 +242,21 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     header = columnHeaders[i];
                     //select input value based on arrangement of header columns
                     value = layerRight[header.id];
+                    var tooltip = header.name;
 
                     if (header.id === 'name') {
-                        table += '<td><span class="layer-name" data-resource="' + layerRight.resourceName + '" data-namespace="' + layerRight.namespace + '">' + value + '</span></td>';
+                        if(layer) {
+                            tooltip = layer.getLayerType() + '/' + layer.getInspireName() + '/' + layer.getOrganizationName();
+                            //value = '<div class="layer-icon ' + layer.getIconClassname() + '"></div> ' + value;
+                        }
+                        table += '<td><span class="layer-name" data-resource="' + layerRight.resourceName + 
+                            '" data-namespace="' + layerRight.namespace + 
+                            '" title="' + tooltip + 
+                            '">' + value + '</span></td>';
                     } else if (value) {
-                        table += '<td><input type="checkbox" checked="checked" data-right="' + header.id + '" /></td>';
+                        table += '<td><input type="checkbox" checked="checked" data-right="' + header.id + '" title="' + tooltip + '" /></td>';
                     } else {
-                        table += '<td><input type="checkbox" data-right="' + header.id + '" /></td>';
+                        table += '<td><input type="checkbox" data-right="' + header.id + '" title="' + tooltip + '" /></td>';
                     }
                 }
 
