@@ -162,9 +162,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             'StatsGrid.IndicatorsEvent': function (event) {
                 this._addIndicatorsToDataSourcesDialog(event.getIndicators());
             },
-            'LayerToolsEditModeEvent' : function(event) {
+            'LayerToolsEditModeEvent' : function (event) {
                 this.isInLayerToolsEditMode = event.isInMode();
-                if(this.isInLayerToolsEditMode == false) {
+                if (this.isInLayerToolsEditMode == false) {
                     this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
                 }
             }
@@ -194,15 +194,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             if (!me.conf) {
                 me.conf = {};
             }
-            if(!me.conf.location){
+            if (!me.conf.location) {
                 me.conf.location = {};
             }
             me.conf.location.classes = location;
 
-            // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 1);
             }
         },
 
@@ -242,7 +240,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             link = me.element.find('div.icon');
             if (mapUrl) {
                 link.bind('click', function () {
-                    if(!me.isInLayerToolsEditMode){
+                    if (!me.isInLayerToolsEditMode) {
                         linkParams = sandbox.generateMapLinkParameters();
                         mapUrl += linkParams;
                         window.open(mapUrl, '_blank');
@@ -255,7 +253,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             if (termsUrl) {
                 link.append(myLoc.terms);
                 link.bind('click', function () {
-                    if(!me.isInLayerToolsEditMode){
+                    if (!me.isInLayerToolsEditMode) {
                         window.open(termsUrl, '_blank');
                         return false;
                     }
@@ -270,7 +268,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             } else {
                 dataSources.html(myLoc.dataSources);
                 dataSources.click(function (e) {
-                    if(!me.isInLayerToolsEditMode){
+                    if (!me.isInLayerToolsEditMode) {
                         me._openDataSourcesDialog(e.target);
                         me._requestDataSources();
                     }

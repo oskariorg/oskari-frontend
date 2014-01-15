@@ -91,7 +91,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             );
 
             me.styledTemplate = jQuery(
-                '<div class="mapplugin search published-search-div">' +
+                '<div class="mapplugin search published-search-div" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin">' +
                     '<div class="search-area-div search-textarea-and-button">' +
                     '<div class="search-left"></div>' +
                     '<div class="search-middle">' +
@@ -203,7 +203,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             'LayerToolsEditModeEvent': function (event) {
                 this._setLayerToolsEditMode(event.isInMode());
                 // FIXME make sure isInLayerToolsEditMode and use !isInLayerToolsEditMode
-                if (this.isInLayerToolsEditMode == false) {
+                if (!this.isInLayerToolsEditMode) {
                     this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
                 }
             }
@@ -254,12 +254,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             if (!me.conf) {
                 me.conf = {};
             }
+            if (!me.conf.location) {
+                me.conf.location = {};
+            }
             me.conf.location.classes = location;
 
-            // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 1);
             }
         },
         /**
@@ -270,39 +271,48 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          */
         _createUI: function () {
             var me = this,
-                sandbox = me._sandbox,
-                content,
-                containerClasses = 'top left',
-                position = 1;
+                content;
 
-            if (this.conf && this.conf.toolStyle) {
-                content = this.styledTemplate.clone();
-                this.changeToolStyle(this.conf.toolStyle, content);
+            if (me.conf && me.conf.toolStyle) {
+                content = me.styledTemplate.clone();
+                me.element = content;
+                me._inputField = content.find('input[type=text]');
+                me._searchButton = content.find('input[type=button]');
+                me.changeToolStyle(me.conf.toolStyle, content);
             } else {
-                content = this.template.clone();
+                content = me.template.clone();
+                me.element = content;
+                me._inputField = content.find('input[type=text]');
+                me._searchButton = content.find('input[type=button]');
             }
 
-            this.element = content;
-
             // bind events
-            var inputField = content.find('input[type=text]');
+            me._bindUIEvents();
+
+        },
+        _bindUIEvents: function () {
+            var me = this,
+                sandbox = me._sandbox,
+                content = this.element,
+                containerClasses = 'top left',
+                position = 1;
             // to text box
-            inputField.focus(function () {
+            me._inputField.focus(function () {
                 sandbox.request(me.getName(), sandbox.getRequestBuilder('DisableMapKeyboardMovementRequest')());
                 //me._checkForKeywordClear();
             });
-            inputField.blur(function () {
+            me._inputField.blur(function () {
                 sandbox.request(me.getName(), sandbox.getRequestBuilder('EnableMapKeyboardMovementRequest')());
                 //me._checkForKeywordInsert();
             });
 
-            me._inputField = inputField.keypress(function (event) {
+            me._inputField.keypress(function (event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._checkForEnter(event);
                 }
             });
             // to search button
-            me._searchButton = content.find('input[type=button]').click(function (event) {
+            me._searchButton.click(function (event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._doSearch();
                 }
@@ -316,14 +326,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             content.find('div.close').click(function (event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._hideSearch();
-                    inputField.val('');
+                    me._inputField.val('');
                     // TODO: this should also unbind the TR tag click listeners?
                 }
             });
             content.find('div.close-results').click(function (event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._hideSearch();
-                    inputField.val('');
+                    me._inputField.val('');
                 }
             });
             content.find('div.results').hide();
@@ -340,7 +350,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             }
             if (me.conf && me.conf.toolStyle) {
                 // Hide the results if esc was pressed or if the field is empty.
-                inputField.keyup(function (e) {
+                me._inputField.keyup(function (e) {
                     if (e.keyCode === 27 || (e.keyCode === 8 && !jQuery(this).val())) {
                         me._hideSearch();
                     }
@@ -348,7 +358,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             }
             // in case we are already in edit mode when plugin is drawn
             me._setLayerToolsEditMode(me.getMapModule().isInLayerToolsEditMode());
-
         },
         /**
          * @method _checkForEnter
@@ -544,8 +553,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
 
             // Remove the old unstyled search box and create a new one.
             if (div.hasClass('default-search-div')) {
-                div.remove();
-                this._createUI();
+                //div.remove();
+                //this._createUI();
+                // hand replace with styled version so we don't destroy this.element
+                div.removeClass('default-search-div').addClass('published-search-div');
+                div.empty();
+                this.styledTemplate.children().clone().appendTo(div);
+                this.changeToolStyle(this.conf.toolStyle, div);
+                this._bindUIEvents();
                 return;
             }
 

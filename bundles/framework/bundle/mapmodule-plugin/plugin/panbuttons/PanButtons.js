@@ -159,8 +159,9 @@ for (p in me.eventHandlers) {
 
             // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                //me.stopPlugin();
+                //me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 0);
             }
         },
         /**

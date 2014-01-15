@@ -9,14 +9,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Object} localization
-     *       publisher localization data
      * @param {Oskari.mapframework.bundle.publisher.view.BasicPublisher} publisher
      *       publisher reference for language change
+     * @param {Object} enabledPlugins
+     *       map of enabled plugins, pass a null or undefined to use defaults
      */
 
-    function (localization, publisher) {
-        this.loc = localization;
+    function (publisher, enabledPlugins) {
+        this.loc = publisher.loc;
         this._publisher = publisher;
         this._sandbox = null;
 
@@ -127,14 +127,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 "infoBox": false
             }
         }];
-        /*
-        // map tool indices so we don't have to go through the list every time...
-        me.toolIndices = {};
-        var i;
-        for (i = me.tools.length - 1; i > -1; i -= 1) {
-            me.toolIndices[this.tools[i].id] = i;
+        // set enabled plugins if available
+        if (enabledPlugins) {
+            var i,
+                tool;
+            for (i = 0; i < this.tools.length; i++) {
+                tool = this.tools[i];
+                tool.selected = !!enabledPlugins[tool.id];
+            }
         }
-*/
+
         this.templates = {
             'help': '<div class="help icon-info"></div>',
             'tool': '<div class="tool "><label>' + '<input type="checkbox"/>' + '</label></div>',
@@ -199,10 +201,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 };
             };
 
+            // helper map so we can get tool by id...
+            me._toolIndices = {};
+
             for (i = 0; i < this.tools.length; i += 1) {
                 toolContainer = jQuery(this.templates.tool).clone();
                 var tool = this.tools[i];
                 pluginKey = tool.id;
+                me._toolIndices[pluginKey] = i;
                 pluginKey = pluginKey.substring(pluginKey.lastIndexOf('.') + 1);
                 toolname = this.loc.tools[pluginKey];
                 toolContainer.find('label').attr('for', 'tool-' + pluginKey).append(toolname);
@@ -213,18 +219,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 contentPanel.append(toolContainer);
 
                 if (data) {
-                    var classes = me._getInitialPluginLocation(data, this.tools[i].id);
+                    var classes = this._publisher._getInitialPluginLocation(data, this.tools[i].id);
                     if (classes) {
                         this.tools[i].config.location.classes = classes;
                     }
                 }
 
-                toolContainer.find('input')
-                    .attr('id', 'tool-' + pluginKey)
-                    .change(closureMagic(tool));
+                toolContainer.find('input').attr('id', 'tool-' + pluginKey).change(closureMagic(tool));
             }
 
             return panel;
+        },
+
+        getToolById: function (id) {
+            var idx = this._toolIndices[id],
+                ret = null;
+            if (idx !== null && idx !== undefined) {
+                ret = this.tools[idx];
+            }
+            return ret;
         },
         /**
          * Adds the selections the user has done with the form inputs.
@@ -370,6 +383,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
             if (enabled) {
                 tool.plugin.startPlugin(sandbox);
+                if (me._publisher.toolLayoutEditMode && tool.plugin.element) {
+                    me._publisher._makeDraggable(tool.plugin.element);
+                }
                 tool._isPluginStarted = true;
 
                 // toolbar (bundle) needs to be notified

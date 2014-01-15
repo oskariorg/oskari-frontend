@@ -91,11 +91,13 @@
   float: left;
   margin-left: 7.5px; }
 
-.mapplugins.right .tools .icon {
+.mapplugins.right .tools {
   float: right; }
-.mapplugins.right .tools .publishedToolbarContainer .tools-top-arrow {
-  float: right;
-  margin-right: 7.5px; }
+  .mapplugins.right .tools .icon {
+    float: right; }
+  .mapplugins.right .tools .publishedToolbarContainer .tools-top-arrow {
+    float: right;
+    margin-right: 7.5px; }
 
 .tool-history-back-dark {
   width: 32px;

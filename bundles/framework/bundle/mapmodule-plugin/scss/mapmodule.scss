@@ -12,6 +12,31 @@ div.mapplugins {
         margin: 0;
         padding: 0;
         .mappluginsContent {
+
+            &.ui-droppable {
+                background-color: rgba(255, 255, 255, 0.5);
+                border: 3px dashed #666666;
+                border-radius: 20px;
+                min-height: 70px;
+                min-width: 70px;
+                padding: 20px;
+
+                &.allowed {
+                    background-color: rgba(0, 255, 0, 0.3);
+
+                    &.ui-state-highlight {
+                        background-color: rgba(127, 255, 127, 0.5);
+                        border-color: #FFF;
+                    }
+
+                }
+
+                &.disallowed {
+                    background-color: rgba(255, 0, 0, 0.3);
+                }
+
+            }
+
             .mapplugin {
                 margin: 0 auto;
                 z-index: 15000;
@@ -118,14 +143,6 @@ div.mapplugins {
                     &.layerselection, &.search {
                         float: right;
                     }
-                    &.logoplugin.toollayoutedit,
-                    &.scalebar.toollayoutedit {
-                        clear: both;
-                        margin-top: $pluginMargin;
-                        margin-right: $pluginMargin;
-                        margin-left: $pluginMargin;                    
-                    }
-    
                 }
             }
         }
@@ -137,28 +154,10 @@ div.mapplugins {
                     margin-left: 20px;
                     margin-right: $pluginMargin * -1;
                 }
-                &.indexmap.toollayoutedit {
-                    margin-top: $pluginMargin;
-                    margin-left: $pluginMargin * 2.5;
-                    margin-right: $pluginMargin * 2.5;
-                }
                 
                 &.logoplugin {
                     clear: both;
                     margin-right: $pluginMargin * -1;
-                }
-                &.logoplugin.toollayoutedit {
-                    clear: both;
-                    margin-top: $pluginMargin;
-                    margin-left: $pluginMargin;
-                    margin-right: $pluginMargin;
-                }
-                
-                &.scalebar.toollayoutedit {
-                    clear: both;
-                    margin-top: $pluginMargin;
-                    margin-right: $pluginMargin;
-                    margin-left: $pluginMargin;                    
                 }
                 
                 &.indexmap, &.logoplugin, &.scalebar {
@@ -176,28 +175,10 @@ div.mapplugins {
                     margin-right: $pluginMargin * 2;
                     margin-left: $pluginMargin * -1;
                 }
-                &.indexmap.toollayoutedit {
-                    margin-top: $pluginMargin;
-                    margin-right: $pluginMargin * 2.5;
-                    margin-left: $pluginMargin * 2.5;
-                }
                 
                 &.logoplugin {
                     clear: both;
                     margin-left: $pluginMargin * -1;
-                }
-                &.logoplugin.toollayoutedit {
-                    clear: both;
-                    margin-top: $pluginMargin;
-                    margin-right: $pluginMargin;
-                    margin-left: $pluginMargin;
-                }
-                
-                &.scalebar.toollayoutedit {
-                    clear: both;
-                    margin-top: $pluginMargin;
-                    margin-right: $pluginMargin;
-                    margin-left: $pluginMargin;
                 }
                 
                 &.indexmap, &.logoplugin, &.scalebar {
@@ -223,15 +204,6 @@ div.mapplugins {
             .mappluginsContainer {
                 display: table-cell;
                 vertical-align: middle;
-
-                .logoplugin.toollayoutedit,
-                .scalebar.toollayoutedit,
-                .indexmap.toollayoutedit {
-                    clear: both;
-                    margin-top: $pluginMargin;
-                    margin-right: $pluginMargin;
-                    margin-left: $pluginMargin;                    
-                }
             }
         }        
     }
@@ -248,25 +220,12 @@ div.mapplugins {
             .mappluginsContainer {
                 display: table-cell;
                 vertical-align: middle;
-
-                .logoplugin.toollayoutedit,
-                .scalebar.toollayoutedit,
-                .indexmap.toollayoutedit {
-                    clear: both;
-                    margin-top: $pluginMargin;
-                    margin-right: $pluginMargin;
-                    margin-left: $pluginMargin;                    
-                }
             }
         }
-<<<<<<< HEAD
-=======
 
         .mapplugin.indexmap .indexmapToggle {
             float: right;
         }
-
->>>>>>> develop
     }
 }
 

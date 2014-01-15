@@ -527,12 +527,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (!me.conf) {
                 me.conf = {};
             }
+            if (!me.conf.location) {
+                me.conf.location = {};
+            }
             me.conf.location.classes = location;
 
-            // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 3);
             }
         },
 

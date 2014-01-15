@@ -177,12 +177,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
+            if(!me.conf.location){
+                me.conf.location = {};
+            }
+            me.conf.location.classes = location;
 
-            // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 0);
             }
         },
 
@@ -293,7 +294,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 container,
                 content,
                 containerClasses = 'top left',
-                position = 1,
+                position = 0,
                 containers = [me.toolbarContent, me.toolbarPopupContent],
                 i,
                 ilen;

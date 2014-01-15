@@ -96,8 +96,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
 
             // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                //me.stopPlugin();
+                //me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 3);
             }
         },
 

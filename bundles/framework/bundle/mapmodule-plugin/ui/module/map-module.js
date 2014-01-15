@@ -150,7 +150,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         setMapControlPlugin: function (element, containerClasses, position) {
             // Get the container
-            var containerSelector = '.mapplugins.' + containerClasses.split(' ').join('.') + ' .mappluginsContainer .mappluginsContent',
+            var containerSelector = '.mapplugins.' + (containerClasses + " ").split(' ').join('.') + ' .mappluginsContainer .mappluginsContent',
                 container = jQuery(containerSelector),
                 pos = position + '',
                 inverted = /^(?=.*\bbottom\b)((?=.*\bleft\b)|(?=.*\bright\b)).+/.test(containerClasses), // bottom corner container?
@@ -167,13 +167,15 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             // Add slot to element
             element.attr('data-position', position);
+            // Detach element
+            element.detach();
             // Get container's children, iterate through them
             if (position !== null && position !== undefined) {
                 container.find('.mapplugin').each(function () {
                     curr = $(this);
                     // if plugin's slot isn't bigger (or smaller for bottom corners) than ours, store it to precedingPlugin
                     if ((!inverted && curr.attr('data-position') <= pos) ||
-                        (inverted && curr.attr('data-position') > pos)) {
+                            (inverted && curr.attr('data-position') > pos)) {
                         precedingPlugin = curr;
                     }
                 });
@@ -1005,7 +1007,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 i;
             for (i = 0; i < this._mapScales.length; i++) {
                 if ((!minScale || minScale >= this._mapScales[i]) &&
-                    (!maxScale || maxScale <= this._mapScales[i])) {
+                        (!maxScale || maxScale <= this._mapScales[i])) {
                     layerScales.push(this._mapScales[i]);
                 }
             }
@@ -1024,7 +1026,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 i;
             for (i = 0; i < this._mapScales.length; i++) {
                 if ((!minScale || minScale >= this._mapScales[i]) &&
-                    (!maxScale || maxScale <= this._mapScales[i])) {
+                        (!maxScale || maxScale <= this._mapScales[i])) {
                     // resolutions are in the same order as scales so just use them
                     layerResolutions.push(this._options.resolutions[i]);
                 }
@@ -1165,7 +1167,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             'SearchClearedEvent': function (event) {
                 this._removeMarkers();
             },
-            'LayerToolsEditModeEvent' : function(event) {
+            'LayerToolsEditModeEvent' : function (event) {
                 this._isInLayerToolsEditMode = event.isInMode();
             }
         },
@@ -1285,7 +1287,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 el.addClass(classToAdd);
             }
         },
-        isInLayerToolsEditMode : function() {
+        isInLayerToolsEditMode : function () {
             return this._isInLayerToolsEditMode;
         }
     }, {

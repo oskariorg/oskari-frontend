@@ -247,8 +247,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             me.conf.location.classes = location;
             // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                //me.stopPlugin();
+                //me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 2);
             }
         },
 

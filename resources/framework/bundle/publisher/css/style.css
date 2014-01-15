@@ -22,11 +22,10 @@ div.publisher div.startview div.tou {
 div.publisher div.startview div.layerlist {
   border: 1px solid;
   padding: 10px; }
-
-div.publisher div.startview div.layerlist h4 {
-  font-size: 14px;
-  line-height: 15px;
-  padding-bottom: 5px; }
+  div.publisher div.startview div.layerlist h4 {
+    font-size: 14px;
+    line-height: 15px;
+    padding-bottom: 5px; }
 
 div.publisher div.startview ul {
   list-style: disc inside none;
@@ -79,10 +78,12 @@ div.basic_publisher div.tool {
 
 div.basic_publisher div.tool-options {
   padding-left: 23px; }
-
-div.basic_publisher div.tool-options .tool-option-settings {
+  div.basic_publisher div.tool-options .tool-option-settings {
     padding-left: 27px;
     padding-top: 5px; }
+
+div.basic_publisher div.tool label, div.basic_publisher div.data label {
+  margin-right: 10px; }
 
 div.basic_publisher div.tool input, div.basic_publisher div.data input {
   margin-right: 10px; }
