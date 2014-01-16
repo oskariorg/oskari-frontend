@@ -378,17 +378,19 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
 
             var oLayers = this.mapModule.getOLMapLayers(layer.getId());
             if (!oLayers) return;
-
+            var data = {};
             var oLayer = _.first(oLayers),
-                data = [{
+                tile = {
                     // The max extent of the layer
                     bbox: oLayer.maxExtent.toArray(),
                     // URL of the image with current viewport
                     // bounds and all the original parameters
                     url: oLayer.getURL(oLayer.getExtent())
-                }],
+                },
                 retainEvent,
                 eventBuilder;
+            data[layer.getId()]=[];
+            data[layer.getId()].push(tile);
 
             // If the event is already defined, just update the data.
             if (this.printEvent) {
