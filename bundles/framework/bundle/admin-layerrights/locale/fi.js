@@ -16,7 +16,7 @@ Oskari.registerLocalization({
             "rightToPublish"    : "Julkaisuoikeus",
             "rightToView"       : "Katseluoikeus",
             "rightToDownload"   : "Latausoikeus",
-            "rightToPublishView": "Näkymän julkaisuoikeus"
+            "rightToPublishView": "Katseluoikeus julkaistussa kartassa"
         },
         "save" : "Tallenna",
         "selectRole" : "Rooli"

@@ -8,7 +8,7 @@ Added statehandler functions to published maps. It is also now possible to add m
 
 ### Statsgrid
 
-Added posibility to add indicator data through data import (localization is still work in progress)
+Added possibility to add indicator data through data import (localization is still work in progress)
 
 Adds a tab to personaldata from which users can access and delete their own saved indicators.
 
@@ -20,9 +20,27 @@ The column widths are now set automatically to take the space available when res
 
 Measurements of places (area or length depending on the type) are now shown in the myplaces tab and whilst drawing a new place or editing an old one.
 
+Dense point data is now aggregated into cluster visualizations.
+
+Multi-lines are not anymore incorrectly combined when editing them.
+
 ### divmanazer/VisualizationForm
 
 Visualization previews are now compatible also with Internet Explorer 8.
+
+### Admin-layerrights
+
+Now provides tooltips for checkboxes (permission text) and layername (layertype/inspiretheme/organization)
+
+### Admin-layerselector
+
+Backend API changed and the bundle has been refactored to match the API and the code has been cleaned up on relevant parts.
+
+### Core/MapLayerService
+
+Layer update now copies all the information the user can change on editing a layer. Behavior change: MapLayerEvent with add/remove operation is no longer sent
+if a sublayer is removed/added, but instead it is sent with update operation. Removesublayer method was removed and removelayer handles sublayer removal as well. AddSubLayer method 
+is still available but addLayer will handle adding sublayers if the layer has parentId property.
 
 ### Work in progress
 

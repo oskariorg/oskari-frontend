@@ -41,14 +41,14 @@ function(instance) {
     connect : function() {
         var url = this.url;
         this.protocols.preparcel = new OpenLayers.Protocol.WFS({
-            version : '1.1.0',
+            version : '1.0.0',
             srsName : 'EPSG:3067',
             featureType : 'preparcel',
             featureNS : this.featureNS,
             url : url
         });
         this.protocols.preparcel_data = new OpenLayers.Protocol.WFS({
-            version : '1.1.0',
+            version : '1.0.0',
             srsName : 'EPSG:3067',
             geometryName : 'geometry',
             featureType : 'preparcel_data',

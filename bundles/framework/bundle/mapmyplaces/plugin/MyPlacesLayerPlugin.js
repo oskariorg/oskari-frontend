@@ -347,9 +347,9 @@ function(config) {
         // Define three colors that will be used to style the cluster features
         // depending on the number of features they contain.
         var colors = {
-            low: "rgb(0, 128, 0)",
-            middle: "rgb(0, 0, 128)",
-            high: "rgb(128, 0, 0)"
+            low: "#6baed6",
+            middle: "#3182bd",
+            high: "#08519c"
         };
 
         // Define three rules to style the cluster features.
@@ -357,14 +357,14 @@ function(config) {
             filter: new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.LESS_THAN,
                 property: "count",
-                value: 3
+                value: 5
             }),
             symbolizer: {
                 fillColor: colors.low,
                 fillOpacity: 0.9,
                 strokeColor: colors.low,
                 strokeOpacity: 0.5,
-                strokeWidth: 12,
+                strokeWidth: 6,
                 pointRadius: 10,
                 label: "${count}",
                 labelOutlineWidth: 1,
@@ -377,16 +377,16 @@ function(config) {
             filter: new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.BETWEEN,
                 property: "count",
-                lowerBoundary: 3,
-                upperBoundary: 5
+                lowerBoundary: 5,
+                upperBoundary: 10
             }),
             symbolizer: {
                 fillColor: colors.middle,
                 fillOpacity: 0.9,
                 strokeColor: colors.middle,
                 strokeOpacity: 0.5,
-                strokeWidth: 12,
-                pointRadius: 17,
+                strokeWidth: 6,
+                pointRadius: 13,
                 label: "${count}",
                 labelOutlineWidth: 1,
                 fontColor: "#ffffff",
@@ -398,15 +398,15 @@ function(config) {
             filter: new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.GREATER_THAN,
                 property: "count",
-                value: 5
+                value: 10
             }),
             symbolizer: {
                 fillColor: colors.high,
                 fillOpacity: 0.9,
                 strokeColor: colors.high,
                 strokeOpacity: 0.5,
-                strokeWidth: 12,
-                pointRadius: 19,
+                strokeWidth: 6,
+                pointRadius: 16,
                 label: "${count}",
                 labelOutlineWidth: 1,
                 fontColor: "#ffffff",
@@ -563,7 +563,9 @@ function(config) {
              *     result of a moveend event.
              */
             cluster: function(event) {
+                var clusteredFeatures = [];
                 if((!event || event.zoomChanged) && this.features) {
+                    var firstAdded = false;
                     var resolution = this.layer.map.getResolution();
                     if(resolution != this.resolution || !this.clustersExist()) {
                         this.resolution = resolution;
@@ -578,7 +580,12 @@ function(config) {
                                     cluster = clusters[j];
                                     if(this.shouldCluster(cluster, feature)) {
                                         this.features[i].geometry.clustered = true;
-                                        cluster.cluster[0].geometry.clustered = true;
+                                        clusteredFeatures.push(this.features[i].featureId);
+                                        if (!firstAdded ) {
+                                            cluster.cluster[0].geometry.clustered = true;
+                                            clusteredFeatures.push(cluster.cluster[0].featureId);
+                                            firstAdded = true;
+                                        }
                                         this.addToCluster(cluster, feature);
                                         clustered = true;
                                         break;
@@ -619,14 +626,37 @@ function(config) {
                         var attentionLayer = this.layer.map.getLayersByName(layerName.substring(0,layerName.length-1))[0];
                         for (var i=0; i<attentionLayer.features.length; i++ ) {
                             if (attentionLayer.features[i].geometry.clustered) {
-                                  attentionLayer.features[i].style = {display : ""};
+                                attentionLayer.features[i].style = {display : ""};
                             } else {
                                 attentionLayer.features[i].style = null;
                             }
                         }
                         attentionLayer.redraw();
+
+                        var featureFilter = "";
+
+                        for (var i=0; i<clusteredFeatures.length; i++) {
+                            featureFilter = featureFilter+"+AND+id<>'"+clusteredFeatures[i]+"'";
+                        }
+
+                    /*
+                    if (clusteredFeatures > 0) {
+                        var featureFilter = "+AND+NOT+IN(";
+                        for (var i=0; i<clusteredFeatures.length; i++) {
+                            featureFilter = featureFilter+"'"+clusteredFeatures[i]+"'";
+                            if (i < clusteredFeatures.length-1) {
+                                featureFilter = featureFilter+",";
+                            }
+                        }
+                        featureFilter = featureFilter+")";
+                    */
+
+                        var openLayer = this.layer.map.getLayersByName('layer_' + layer.getId())[0];
+                        openLayer.mergeNewParams({'myFeatureNames': featureFilter});
+                        openLayer.redraw();
                     }
                 }
+//              }
             },
 
             /**
@@ -840,17 +870,17 @@ function(config) {
      */
     _addPointClusters: function (myPlacesService, layerId, vectorLayer) {
         var categoryId = layerId.split("_")[1];
-        var category = myPlacesService.findCategory(categoryId);
         var features = myPlacesService.getPlacesInCategory(categoryId);
         var points = [];
         for (var i=0; i<features.length; i++) {
             if (features[i].geometry.CLASS_NAME === "OpenLayers.Geometry.MultiPoint") {
                 for (var j=0; j<features[i].geometry.components.length; j++) {
                     points.push(new OpenLayers.Feature.Vector(features[i].geometry.components[j]));
-                    points[points.length-1].name = features[i].name;
+                    points[points.length-1].featureId = features[i].id;
                 }
             } else if (features[i].geometry.CLASS_NAME === "OpenLayers.Geometry.Point") {
                 points.push(new OpenLayers.Feature.Vector(features[i].geometry));
+                points[points.length-1].featureId = features[i].id;
             }
         }
         vectorLayer.addFeatures(points);
