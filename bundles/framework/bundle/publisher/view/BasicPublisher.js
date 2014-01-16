@@ -1072,11 +1072,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     okBtn = dialog.createCloseButton(me.loc.buttons.ok);
                 dialog.show(me.loc.error.title, me.loc.error.saveFailed, [okBtn]);
             };
-
+            /*
             if (!window.confirm("Publish map?")) {
                 console.log(selections);
                 return;
             }
+            */
 
             // make the ajax call
             jQuery.ajax({
