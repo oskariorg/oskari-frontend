@@ -451,9 +451,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
                 "stroke_dasharray" : style.line.style,
                 "stroke_width" : style.line.width,
 
-                "dot_color" : style.point.color, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
-                "dot_shape" : style.point.shape,
-                "dot_size" : style.point.size,
+                "dot_color" : style.dot.color, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
+                "dot_shape" : style.dot.shape,
+                "dot_size" : style.dot.size,
             });
         }
     },
