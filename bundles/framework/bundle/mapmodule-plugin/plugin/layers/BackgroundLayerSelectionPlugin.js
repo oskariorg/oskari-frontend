@@ -293,7 +293,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 currentBottomId = "",
                 currentSelection = me.element.find('div.currentSelection'),
                 newSelection = me._sandbox.findMapLayerFromSelectedMapLayers(newSelectionId),
-                i;
+                isBaseLayer = true;
             // switch bg layer (no need to call update on ui, we should catch the event)
             // - check if current bottom layer exists & is in our list (if so, remove)
             if (currentBottom) {
@@ -305,9 +305,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             // - check if new selection is already selected, remove if so as rearrange doesn't seem to work
             if (newSelection) {
                 me._sandbox.postRequestByName('RemoveMapLayerRequest', [newSelectionId]);
+            } else {
+                newSelection = me._sandbox.findMapLayerFromAllAvailable(newSelectionId);
+                isBaseLayer = ( newSelection ? newSelection.isBaseLayer() : true );
             }
 
-            me._sandbox.postRequestByName('AddMapLayerRequest', [newSelectionId, false, true]);
+            me._sandbox.postRequestByName('AddMapLayerRequest', [newSelectionId, false, isBaseLayer]);
             // - move new selection to bottom (see layerselection._layerOrderChanged(item))
             me._sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [newSelectionId, 0]);
             // toggle dropdown open/closed.
