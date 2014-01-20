@@ -16,7 +16,7 @@ Oskari.registerLocalization({
             "rightToPublish"    : "Right to publish",
             "rightToView"       : "Right to view",
             "rightToDownload"   : "Right to download",
-            "rightToPublishView": "Right to publish a view"
+            "rightToPublishView": "Right to view in embedded map"
         },
         "save" : "save",
         "selectRole" : "Role"

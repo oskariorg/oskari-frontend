@@ -104,7 +104,7 @@ Oskari.registerLocalization({
                     },
                     "toolStyles": {
                         "label": "Verktygens stil",
-                        "default": "Standard stil",
+                        "default": "Förvald utseende",
                         "rounded-dark": "Avrundad (mörk)",
                         "rounded-light": "Avrundad (ljus)",
                         "sharp-dark": "Kantig (mörk)",

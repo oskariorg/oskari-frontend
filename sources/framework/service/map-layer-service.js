@@ -277,7 +277,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
         
             if (newLayerConf.style) {
-                layer.setStyle(newLayerConf.style);
+                layer.selectStyle(newLayerConf.style);
             }
 
             if (newLayerConf.wmsName) {
