@@ -809,13 +809,9 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         isInScale: function (scale) {
             var _inScale = false,
-                _subLayers = this.getSubLayers(),
-                _sandbox;
+                _subLayers = this.getSubLayers();
 
-            if (!scale) {
-                _sandbox = Oskari.getSandbox();
-                scale = _sandbox.getMap().getScale();
-            }
+            scale = scale || Oskari.getSandbox().getMap().getScale();
 
             if (_subLayers && _subLayers.length) {
                 // Check if any of the sublayers is in scale
