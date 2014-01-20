@@ -390,11 +390,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 layer = null,
                 i = 0,
                 ilen = 0;
-            if(this.mapmodule) {
-                var scales = this.mapmodule.getMapScales();
-                if(scales && scales.length > 0) {
-                    // legacy links don't have zoomLevels param -> backwards compatibility hax
-                    link = 'zoomLevels=' + scales.length + '&' +link;
+            if(this.conf && this.conf.link) {
+                // add additional link params (version etc)
+                for(var key in this.conf.link) {
+                    link = key + '=' + this.conf.link[key] + '&' + link;
                 }
             }
             for (i = 0, ilen = selectedLayers.length; i < ilen; i++) {
