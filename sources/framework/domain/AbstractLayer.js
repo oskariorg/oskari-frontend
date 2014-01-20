@@ -805,22 +805,31 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
         /**
          * @method isInScale
          * @param {Number} scale scale to compare to
-         * @return {Boolean} true if given scale is between this layers min/max scales. Always return true for base-layers.
+         * @return {Boolean} true if given scale is between this layer's or its sublayers' min/max scales.
          */
         isInScale: function (scale) {
-            var _return = this.isBaseLayer();
+            var _inScale = false,
+                _subLayers = this.getSubLayers(),
+                _sandbox;
+
             if (!scale) {
-                var sandbox = Oskari.$().sandbox;
-                scale = sandbox.getMap().getScale();
+                _sandbox = Oskari.getSandbox();
+                scale = _sandbox.getMap().getScale();
             }
 
-            // Check layer scales only normal layers
-            if (!this.isBaseLayer()) {
-                if ((scale > this.getMaxScale() || !this.getMaxScale()) && (scale < this.getMinScale()) || !this.getMinScale()) {
-                    _return = true;
+            if (_subLayers && _subLayers.length) {
+                // Check if any of the sublayers is in scale
+                _inScale = _.any(_subLayers, function(subLayer) {
+                    return subLayer.isInScale(scale);
+                })
+            } else {
+                // Otherwise just check if the scale falls between min/max scales
+                if ((scale > this.getMaxScale() || !this.getMaxScale()) &&
+                    (scale < this.getMinScale()) || !this.getMinScale()) {
+                    _inScale = true;
                 }
             }
-            return _return;
+            return _inScale;
         },
         /**
          * @method getLayerType
