@@ -44,12 +44,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
         connect: function () {
             var url = this.url;
             this.protocols.categories = new OpenLayers.Protocol.WFS({
-                version: '1.0.0',
+                version: '1.1.0',
                 srsName: 'EPSG:3067',
                 featureType: 'categories',
                 featureNS: this.featureNS,
                 url: url
             });
+            // myplaces uses version 1.0.0 since with 1.1.0 geoserver connects
+            // multilines to one continuous line on save
             this.protocols.my_places = new OpenLayers.Protocol.WFS({
                 version: '1.0.0',
                 srsName: 'EPSG:3067',

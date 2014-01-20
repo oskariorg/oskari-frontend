@@ -42,6 +42,18 @@ Layer update now copies all the information the user can change on editing a lay
 if a sublayer is removed/added, but instead it is sent with update operation. Removesublayer method was removed and removelayer handles sublayer removal as well. AddSubLayer method 
 is still available but addLayer will handle adding sublayers if the layer has parentId property.
 
+### mapfull
+
+Configuration can now have additional link params f.ex. to add versioning for links: 
+
+```javascript
+{
+	"link" : {
+		"ver" : "1.17"
+	}
+}
+```
+
 ### Work in progress
 
 We are preparing the next major release of Oskari. Oskari 2.0 will utilize RequireJS for resource loading instead of oskari-loader. Migration tools and documentation are developed and improved as the work progresses. These changes are unstable (i.e. they will change) and placed into the src-folder.
