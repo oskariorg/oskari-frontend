@@ -650,10 +650,11 @@ function(config) {
                         }
                         featureFilter = featureFilter+")";
                     */
-
-                        var openLayer = this.layer.map.getLayersByName('layer_' + layer.getId())[0];
-                        openLayer.mergeNewParams({'myFeatureNames': featureFilter});
-                        openLayer.redraw();
+                        if (featureFilter !== null) {
+                            var openLayer = this.layer.map.getLayersByName('layer_' + layer.getId())[0];
+                            openLayer.mergeNewParams({'myFeatureNames': featureFilter});
+                            openLayer.redraw();
+                        }
                     }
                 }
 //              }
