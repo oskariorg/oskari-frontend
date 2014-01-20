@@ -393,7 +393,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
             if(this.conf && this.conf.link) {
                 // add additional link params (version etc)
                 for(var key in this.conf.link) {
-                    link = key '=' + this.conf.link[key] + '&' + link;
+                    link = key + '=' + this.conf.link[key] + '&' + link;
                 }
             }
             for (i = 0, ilen = selectedLayers.length; i < ilen; i++) {
