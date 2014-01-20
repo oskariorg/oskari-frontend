@@ -481,7 +481,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          *          0-100 in percents
          */
         getOpacity: function () {
-            if(!this._opacity) {
+            if(this._opacity === null || this._opacity === undefined) {
                 return 100;
             }
             return this._opacity;
