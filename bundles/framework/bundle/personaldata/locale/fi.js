@@ -58,6 +58,7 @@ Oskari.registerLocalization({
       "publishedmaps": {
         "title": "Julkaistut kartat",
         "show" : "Näytä kartalla",
+        "getHTML": "HTML-koodi",
         "edit" : "Muokkaa",
         "publish": "Julkaise kartta",
         "unpublish": "Peru julkaisu",
@@ -66,9 +67,13 @@ Oskari.registerLocalization({
           "name": "Nimi",
           "domain": "Kartan tiedot",
           "publish": "Tila",
-          "show" : " ",
+          "show" : "Toiminnot",
+          "html" : " ",
           "edit": " ",
           "delete": " "
+        },
+        "published": {
+            "desc": "Voit liittää kartan internet-sivustollesi lisäämällä sinne alla olevan HTML-koodin:"
         },
         "popup": {
           "edit": "Vaihda kartan nimi",

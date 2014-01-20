@@ -16,7 +16,7 @@ Oskari.registerLocalization({
             "rightToPublish"    : "rätt att publicera",
             "rightToView"       : "rätt att visa",
             "rightToDownload"   : "rätt att ladda ner",
-            "rightToPublishView": "rätt att publicera en vy"
+            "rightToPublishView": "rätt att visa en publicerat vy"
         },
         "save" : "save",
         "selectRole" : "Role"

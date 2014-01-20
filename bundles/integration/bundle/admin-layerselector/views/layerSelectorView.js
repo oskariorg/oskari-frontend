@@ -48,7 +48,7 @@ define([
                 this.el.html(this.appTemplate);
                 // TODO this is empty rendering for inspire tab - instead, we should render
                 // somekind of notification that we are wating for data.
-                this._renderLayerGroups(null, 'inspire');
+                // this._renderLayerGroups(null, 'inspire');
             },
 
             /**
@@ -59,30 +59,22 @@ define([
              * @param {String} tabType - what kind of tab this is (inspire vs. organization)
              */
             _renderLayerGroups: function (layerGroupingTab, tabType) {
-                if (layerGroupingTab != null) {
-
-                    // we need a reference to organization side for selecting themes
-                    // because adminLayerSettings needs to know about all the themes/classes
-                    // defined in inspire tab. This member is set in 'addToCollection'
-                    var inspire = null;
-                    if (tabType == 'organization') {
-                        inspire = this.inspireTabModel;
-                    }
-                    //create tab container
-                    var tabContent = new TabPanelView({
-                        layerGroupingModel: layerGroupingTab,
-                        instance: this.instance,
-                        tabId: tabType,
-                        inspire: inspire
-                    });
-                    //create headers for tabs
-                    jQuery('.admin-layerselectorapp').find('.tabsContent').append(tabContent.$el);
-                    jQuery('.admin-layerselectorapp').find('.tabsHeader ul').append(
-                        this.tabTitleTemplate({
-                            title: tabContent.layerGroupingModel.getTitle(),
-                            tabId: tabType
-                        }));
+                if (!layerGroupingTab) {
+                    return;
                 }
+                //create tab container
+                var tabContent = new TabPanelView({
+                    layerGroupingModel: layerGroupingTab,
+                    instance: this.instance,
+                    tabId: tabType
+                });
+                //create headers for tabs
+                jQuery('.admin-layerselectorapp').find('.tabsContent').append(tabContent.$el);
+                jQuery('.admin-layerselectorapp').find('.tabsHeader ul').append(
+                    this.tabTitleTemplate({
+                        title: tabContent.layerGroupingModel.getTitle(),
+                        tabId: tabType
+                    }));
             },
 
             /**
@@ -92,30 +84,48 @@ define([
              * @param {Array} models which are created from layers.
              */
             addToCollection: function (models) {
-                this.collection = new LayerCollection(models);
-                // Get models grouped by tab type
-                this.inspireGrouping = this.collection.getLayerGroups('getInspireName');
-                this.orgGrouping = this.collection.getLayerGroups('getOrganizationName');
+                var collection = new LayerCollection(models);
                 // clear everything
                 this.el.html(this.appTemplate);
 
                 // create tabModel for inspire classes
                 this.inspireTabModel = new LayersTabModel({
-                    grouping: this.inspireGrouping,
+                    layers: collection,
                     type: 'inspire',
+                    baseUrl : this.instance.getSandbox().getAjaxUrl() + '&action_route=',
+                    actions : {
+                        load : "GetInspireThemes",
+                        save : "Not implemented",
+                        remove : "Not implemented"
+                    },
                     title: this.instance.getLocalization('filter').inspire
                 });
                 // render inspire classes
-                this._renderLayerGroups(this.inspireTabModel, 'inspire', null);
+                this._renderLayerGroups(this.inspireTabModel, 'inspire');
 
                 // create tabModel for organization
                 this.organizationTabModel = new LayersTabModel({
-                    grouping: this.orgGrouping,
+                    layers: collection,
                     type: 'organization',
+                    baseUrl : this.instance.getSandbox().getAjaxUrl() + '&action_route=',
+                    actions : {
+                        load : "GetMapLayerGroups",
+                        save : "SaveOrganization",
+                        remove : "DeleteOrganization"
+                    },
                     title: this.instance.getLocalization('filter').organization
                 });
                 // render organizations
-                this._renderLayerGroups(this.organizationTabModel, 'organization', this.inspireTabModel);
+                this._renderLayerGroups(this.organizationTabModel, 'organization');
+
+                // FIXME: not really comfortable with this but need 
+                // the references on layer forms and instance is available
+                // maybe create a service to store these?
+                this.instance.models = {
+                    "inspire" : this.inspireTabModel,
+                    "organization" : this.organizationTabModel,
+                    "layers" : collection
+                };
 
                 // activate organization tab
                 jQuery('.admin-layerselectorapp .tabsHeader').find('.organization').parent().addClass('active');
@@ -125,8 +135,8 @@ define([
                 // Check that data for classes is fetched
                 // FIXME we shouldn't need to do this everytime, just once?
                 //console.log("Getting inspire themes and map layer classes");
-                this.inspireTabModel.getClasses(this.instance.getSandbox().getAjaxUrl(), "action_route=GetInspireThemes");
-                this.organizationTabModel.getClasses(this.instance.getSandbox().getAjaxUrl(), "&action_route=GetMapLayerClasses");
+                this.inspireTabModel.getClasses('getInspireName');
+                this.organizationTabModel.getClasses('getOrganizationName');
             },
 
             /**
@@ -160,18 +170,6 @@ define([
                 }
 
             },
-            /*        toggleAddOrg : function(e) {
-            var elem = jQuery(e.currentTarget).parent().find('.admin-add-class');
-            if(elem.hasClass('show-add-class')) {
-                elem.removeClass('show-add-class');
-            } else {
-                elem.addClass('show-add-class');
-            }
-        },
-        removeAddOrg : function(e) {
-            jQuery('.admin-add-class').removeClass('show-add-class');
-        },
-*/
 
             /**
              * Catches all the events that try to bubble outside of this admin tool.

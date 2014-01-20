@@ -334,34 +334,60 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
 
             // Used to get the cursor to the right position since
             // it's off by 2 pixels with the 'rounded' style.
-            var isRounded = styleName.match(/^rounded/);
+            var isRounded = styleName && styleName.match(/^rounded/),
+                sliderHeight = this._map.getNumZoomLevels() * style.heightCenter;
 
-            var sliderHeight = this._map.getNumZoomLevels() * style.heightCenter;
-
-            bar.css({
-                'background-image': 'url("' + zoombarImg + '")',
-                'width': style.widthCenter,
-                'margin-left': '0'
-            });
-            cursor.css({
-                'background-image': 'url("' + zoombarCursorImg + '")',
-                'width': style.widthCursor,
-                'height': style.heightCursor,
-                'margin-left': (isRounded ? '2px' : '0')
-            });
-            plus.css({
-                'background-image': 'url("' + zoombarPlusImg + '")',
-                'width': style.widthPlus,
-                'height': style.heightPlus
-            });
-            minus.css({
-                'background-image': 'url("' + zoombarMinusImg + '")',
-                'width': style.widthMinus,
-                'height': style.heightMinus
-            });
-            slider.css({
-                'height': sliderHeight + 'px'
-            });
+            if (style.val === null) {
+                bar.css({
+                    'background-image': '',
+                    'width': '',
+                    'margin-left': ''
+                });
+                cursor.css({
+                    'background-image': '',
+                    'width': '',
+                    'height': '',
+                    'margin-left': ''
+                });
+                plus.css({
+                    'background-image': '',
+                    'width': '',
+                    'height': ''
+                });
+                minus.css({
+                    'background-image': '',
+                    'width': '',
+                    'height': ''
+                });
+                slider.css({
+                    'height': sliderHeight + 'px'
+                });
+            } else {
+                bar.css({
+                    'background-image': 'url("' + zoombarImg + '")',
+                    'width': style.widthCenter,
+                    'margin-left': '0'
+                });
+                cursor.css({
+                    'background-image': 'url("' + zoombarCursorImg + '")',
+                    'width': style.widthCursor,
+                    'height': style.heightCursor,
+                    'margin-left': (isRounded ? '2px' : '0')
+                });
+                plus.css({
+                    'background-image': 'url("' + zoombarPlusImg + '")',
+                    'width': style.widthPlus,
+                    'height': style.heightPlus
+                });
+                minus.css({
+                    'background-image': 'url("' + zoombarMinusImg + '")',
+                    'width': style.widthMinus,
+                    'height': style.heightMinus
+                });
+                slider.css({
+                    'height': sliderHeight + 'px'
+                });
+            }
         }
     }, {
         /**

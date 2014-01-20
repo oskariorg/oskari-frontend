@@ -316,12 +316,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 this.changeToolStyle(this.conf.toolStyle, me.element);
             }
 
-            // add classes (top, bottom, left, right, center)
-            if (me.conf && me.conf.location) {
-                containerClasses = me.conf.location.classes || containerClasses;
-                position = me.conf.location.position || position;
-            }
-            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
+            me.insertToMap();
 
             // hide container
             toolscontainer = me.element.find('.' + me.toolbarContainer);
@@ -337,12 +332,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             }
 
         },
+
+        insertToMap: function () {
+            var me = this,
+                containerClasses = 'top left',
+                position = 0;
+            // add classes (top, bottom, left, right, center)
+            if (me.conf && me.conf.location) {
+                containerClasses = me.conf.location.classes || containerClasses;
+                position = me.conf.location.position || position;
+            }
+            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
+        },
+
         setToolbarContainer: function () {
             var me = this,
                 sandbox = me._sandbox;
             var builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
-            // FIXME use !==
-            if (me.toolbarId && (me.toolbarContent) && builder != null) {
+
+            if (me.toolbarId && (me.toolbarContent) && builder !== null && builder !== undefined) {
                 // add toolbar when toolbarId and target container is configured
                 // We assume the first container is intended for the toolbar
                 sandbox.requestByName(me, 'Toolbar.ToolbarRequest', [me.toolbarId, 'add', {
@@ -376,7 +384,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             var me = this;
             div = div || me.element;
 
-            if (!style || !div) {
+            if (!div) {
                 return;
             }
 
@@ -386,18 +394,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 icon = div.find('.icon'),
                 toolsContent = div.find('.' + me.toolbarContent),
                 toolsPopupContent = div.find('.' + me.toolbarPopupContent),
-                blackOrWhite = style.split("-")[1];
+                blackOrWhite = style ? style.split("-")[1] : 'dark';
 
-            icon.css({
-                'background-image': 'url("' + styledImg + '")'
-            });
-
-            if (blackOrWhite === "dark") {
-                toolsContent.removeClass('light').addClass('dark');
-                toolsPopupContent.removeClass('light').addClass('dark');
+            if (style === null) {
+                icon.removeAttr('style');
+                toolsContent.removeClass('light', 'dark');
+                toolsPopupContent.removeClass('light', 'dark');
             } else {
-                toolsContent.removeClass('dark').addClass('light');
-                toolsPopupContent.removeClass('dark').addClass('light');
+                icon.css({
+                    'background-image': 'url("' + styledImg + '")'
+                });
+
+                if (blackOrWhite === "dark") {
+                    toolsContent.removeClass('light').addClass('dark');
+                    toolsPopupContent.removeClass('light').addClass('dark');
+                } else {
+                    toolsContent.removeClass('dark').addClass('light');
+                    toolsPopupContent.removeClass('dark').addClass('light');
+                }
             }
 
             var toolbarContent = me.element.find('.' + me.toolbarContent),
@@ -409,14 +423,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             // it would be so much better if all the tools would know their own view
             for (key in me.buttonGroups) {
                 if (me.buttonGroups.hasOwnProperty(key)) {
-                    var confGroup = me.buttonGroups[key];
-                    var domGroup = toolbarContent.find('div.toolrow[tbgroup=' + me.toolbarId + '-' + confGroup.name + ']');
+                    var confGroup = me.buttonGroups[key],
+                        domGroup = toolbarContent.find('div.toolrow[tbgroup=' + me.toolbarId + '-' + confGroup.name + ']');
                     for (buttonKey in confGroup.buttons) {
                         if (confGroup.buttons.hasOwnProperty(buttonKey)) {
-                            var confButton = confGroup.buttons[buttonKey];
-                            var iconClassParts = confButton.iconCls.split("-");
-                            var iconClass = iconClassParts[0];
-                            var lastInd = iconClassParts.length - 1;
+                            var confButton = confGroup.buttons[buttonKey],
+                                iconClassParts = confButton.iconCls.split("-"),
+                                iconClass = iconClassParts[0],
+                                lastInd = iconClassParts.length - 1;
                             if (!(iconClassParts[lastInd] === "dark" || iconClassParts[lastInd] === "light")) {
                                 iconClassParts.push('dark');
                                 lastInd++;
@@ -547,6 +561,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 confGroup,
                 j,
                 confButton;
+
             for (i in me.buttonGroups) {
                 if (me.buttonGroups.hasOwnProperty(i)) {
                     confGroup = me.buttonGroups[i];

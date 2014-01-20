@@ -125,7 +125,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             "src" : "../../../../bundles/framework/bundle/divmanazer/component/visualization-form/LineForm.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/visualization-form/PointForm.js"
+"src" : "../../../../bundles/framework/bundle/divmanazer/component/visualization-form/DotForm.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultTile.js"
@@ -183,6 +183,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
         }, {
             "type" : "text/javascript",
             "src" : "../../../../libraries/raphaeljs/raphael.min.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/jquery/plugins/jquery-placeholder/jquery.placeholder.js"
         }/*, {
          "type" : "text/javascript",
          "src" : "../../../../resources/framework/bundle/divmanazer/js/jquery.event.drag-1.5.min.js"

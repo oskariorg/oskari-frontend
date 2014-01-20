@@ -8,11 +8,9 @@ define([
 	"bundles/framework/bundle/mapfull/request/MapResizeEnabledRequestHandler",
 	"bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequest",
 	"bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequestHandler",
-	"mapstats",
-	"mapwfs",
+	"src/ol3/mapmodule-plugin/module",
 	"css!resources/framework/bundle/mapfull/css/style.css"
 ], function(Oskari, jQuery) {
-	console.log('oskariui should be loaded now!');
 	Oskari.bundleCls('oskariui');
 	
 	return Oskari.bundleCls("mapfull").category({

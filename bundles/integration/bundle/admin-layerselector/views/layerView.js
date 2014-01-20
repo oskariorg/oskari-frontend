@@ -21,6 +21,7 @@ define([
                 "click": "toggleLayerSettings",
                 "click .show-edit-layer": "clickLayerSettings",
                 "click .sublayer-name": "toggleSubLayerSettings",
+                "click .admin-add-sublayer-cancel": "toggleSubLayerSettings",
                 "click .admin-add-sublayer": "toggleSubLayerSettings"
             },
 
@@ -127,15 +128,7 @@ define([
                     element = jQuery(e.currentTarget);
                 //show layer settings
                 if (element.parents('.admin-add-layer').length === 0 && !element.find('.admin-add-layer').hasClass('show-edit-layer')) {
-
                     e.stopPropagation();
-                    // decode styles
-                    if (me.model.admin && (me.model.admin.style_decoded === null || me.model.admin.style_decoded === undefined) && me.model.admin.style !== null && me.model.admin.style !== undefined) {
-                        var styles = [];
-                        //styles.push(me.options.layerTabModel.decode64(me.model.admin.style));
-                        styles.push(me.model.admin.style);
-                        me.model.admin.style_decoded = styles;
-                    }
                     // create AdminLayerSettingsView
                     var settings = new AdminLayerSettingsView({
                         model: me.model,
@@ -160,46 +153,35 @@ define([
 
             toggleSubLayerSettings: function (e) {
                 var element = jQuery(e.currentTarget).parents('.add-sublayer-wrapper');
+                var groupElement = jQuery(e.currentTarget).parents('.add-group-wrapper');
+                var groupButtons = groupElement.find('.add-group-send');
+
                 //show layer settings
                 if (!element.hasClass('show-edit-sublayer')) {
                     e.stopPropagation();
+                    groupButtons.hide();
 
                     var subLayerId = element.attr('sublayer-id'),
                         subLayer = this._getSubLayerById(subLayerId);
-                    // decode styles
-                    if (subLayer && subLayer.admin && (subLayer.admin.style_decoded === null || subLayer.admin.style_decoded === undefined) && subLayer.admin.style !== null && subLayer.admin.style !== undefined) {
-                        var styles = [];
-                        styles.push(subLayer.admin.style);
-//                        styles.push(this.options.layerTabModel.decode64(subLayer.admin.style));
-                        subLayer.admin.style_decoded = styles;
-                    }
-                    var baseLayerId;
-                    // Get the parent layer id
-                    if (this.model && (typeof this.model.getId() === 'string')) {
-                        // eg. 'base_36' -> 36
-                        baseLayerId = Number(this.model.getId().replace('base_', ''));
-                    }
+                    var parentId = this.model.getId();
 
                     // create AdminLayerSettingsView
                     var settings = new AdminLayerSettingsView({
                         model: subLayer,
                         instance: this.options.instance,
-                        classes: this.classNames,
                         layerTabModel: this.options.layerTabModel,
-                        baseLayerId: baseLayerId
+                        baseLayerId: parentId
                     });
                     element.append(settings.$el);
 
                     // TODO when backend works and we have new jQuery UI
                     //this.$el.find("#add-layer-inspire-theme").tagit({availableTags: ["Hallinnolliset yksiköt", "Hydrografia", "Kiinteistöt", "Kohteet", "Koordinaattijärjestelmät", "Korkeus", "Liikenneverkot", "Maankäyttö", "Maanpeite","Maaperä","Merialueet", "Metatieto"]});
-
-
                     element.addClass('show-edit-sublayer');
                 } else {
                     //hide layer settings
                     element.removeClass('show-edit-sublayer');
                     element.find('.admin-add-layer').remove();
-
+                    groupButtons.show();
                 }
             },
 
@@ -233,7 +215,7 @@ define([
 
             _getSubLayerById: function (subLayerId) {
                 var mapLayerService = this.instance.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                return mapLayerService.findMapLayer(Number(subLayerId));
+                return mapLayerService.findMapLayer(subLayerId, this.model.getSubLayers());
             }
         });
     });

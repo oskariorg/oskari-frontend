@@ -20,9 +20,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.CategoryForm",
             dotMaxSize = instance.conf.defaults.dotMaxSize;
         }
         var formOptions = {
-            forms: ['point', 'line', 'area'],
+            forms: ['dot', 'line', 'area'],
             formValues: {
-                point: {
+                dot: {
                     size: instance.myPlacesService.defaults.point.size,
                     color: instance.myPlacesService.defaults.point.color,
                     shape: instance.myPlacesService.defaults.point.shape,
@@ -115,7 +115,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.CategoryForm",
                 values._isDefault = this._isDefault || false;
 
                 var formValues = this.visualizationForm.getValues();
-                values.dot = formValues.point;
+                values.dot = formValues.dot;
                 values.line = formValues.line;
                 values.area = formValues.area;
 

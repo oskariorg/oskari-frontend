@@ -3,14 +3,16 @@ define([
     'text!_bundle/templates/adminLayerSettingsTemplate.html',
     'text!_bundle/templates/adminGroupSettingsTemplate.html',
     'text!_bundle/templates/group/subLayerTemplate.html',
-    '_bundle/collections/userRoleCollection'
+    '_bundle/collections/userRoleCollection',
+    '_bundle/models/layerModel'
 ],
     function (
         TypeSelectTemplate,
         LayerSettingsTemplate,
         GroupSettingsTemplate,
         SubLayerTemplate,
-        userRoleCollection
+        userRoleCollection,
+        layerModel
     ) {
         return Backbone.View.extend({
             //<div class="admin-add-layer" data-id="<% if(model != null && model.getId()) { %><%= model.getId() %><% } %>">
@@ -29,16 +31,15 @@ define([
                 "click .admin-add-layer-ok": "addLayer",
                 "click .admin-add-sublayer-ok": "addLayer",
                 "click .admin-add-layer-cancel": "hideLayerSettings",
-                "click .admin-add-sublayer-cancel": "hideSubLayerSettings",
                 "click .admin-remove-layer": "removeLayer",
                 "click .admin-remove-sublayer": "removeLayer",
                 "click .show-edit-layer": "clickLayerSettings",
                 "click #add-layer-wms-button": "fetchCapabilities",
                 "click .icon-close": "clearInput",
                 "change #add-layer-type": "createLayerSelect",
-                "click .admin-add-group-ok": "saveGroup",
+                "click .admin-add-group-ok": "saveCollectionLayer",
                 "click .admin-add-group-cancel": "hideLayerSettings",
-                "click .admin-remove-group": "removeGroup"
+                "click .admin-remove-group": "removeLayerCollection"
             },
 
             /**
@@ -49,8 +50,17 @@ define([
              */
             initialize: function () {
                 this.instance = this.options.instance;
-                this.model = this.options.model;
-                this.classes = this.options.classes;
+                // for new layers/sublayers, model is always null at this point
+                // if we get baseLayerId -> this is a sublayer
+                if(this.options.baseLayerId && this.options.model) {
+                    // wrap existing sublayers with model
+                    this.model = new layerModel(this.options.model)
+                }
+                else {
+                    this.model = this.options.model;
+                }
+                // model to use when creating a new layer
+                this.modelObj = layerModel;
                 this.typeSelectTemplate = _.template(TypeSelectTemplate);
                 this.layerTemplate = _.template(LayerSettingsTemplate);
                 this.groupTemplate = _.template(GroupSettingsTemplate);
@@ -82,15 +92,11 @@ define([
                 }
                 // if editing an existing layer
                 if (me.model) {
-                    if (!me.model.admin) {
-                        me.model.admin = {};
-                    }
-
                     if (me.model.isBaseLayer()) {
                         me.createGroupForm('baseName');
                     } else if (me.model.isGroupLayer()) {
                         me.createGroupForm('groupName');
-                    } else {
+                    } else if(me.model.isLayerOfType('WMS')) {
                         me.createLayerForm();
                     }
                 } else {
@@ -98,8 +104,7 @@ define([
                     // add html template
                     me.$el.html(me.typeSelectTemplate({
                         model: me.model,
-                        instance: me.options.instance,
-                        classNames: me.classes.getGroupTitles()
+                        localization: me.options.instance.getLocalization('admin')
                     }));
                 }
             },
@@ -123,6 +128,8 @@ define([
             createLayerSelect: function (e) {
                 jQuery('.add-layer-wrapper').remove();
                 jQuery('.admin-add-group').remove();
+                jQuery('.layer-type-wrapper').remove();
+
 
                 // Create a normal layer
                 if (e.currentTarget.value === 'wmslayer') {
@@ -138,58 +145,29 @@ define([
             createLayerForm: function (e) {
                 var me = this,
                     supportedLanguages = Oskari.getSupportedLanguages(),
-                    i,
                     opacity = 100,
                     styles = [];
                 if (!me.model) {
-                    me.model = {};
+                    me.model = this._createNewModel('wmslayer');
                 }
-                if (!me.model.admin) {
-                    me.model.admin = {
-                        "locales": []
-                    };
-                    supportedLanguages.sort();
-                    for (i = 0; i < supportedLanguages.length; i += 1) {
-                        me.model.admin.locales.push({
-                            "lang": supportedLanguages[i],
-                            "name": "",
-                            "title": ""
-                        });
-                    }
-                }
+
+                // This propably isn't the best way to get reference to inspire themes
+                var inspireGroups = this.instance.models.inspire.getGroupTitles();
                 me.$el.append(me.layerTemplate({
                     model: me.model,
                     instance: me.options.instance,
-                    classNames: me.classes.getGroupTitles(),
+                    inspireThemes: inspireGroups,
                     isSubLayer: me.options.baseLayerId,
                     roles: me.roles
                 }));
                 // if settings are hidden, we need to populate template and
                 // add it to the DOM
                 if (!me.$el.hasClass('show-edit-layer')) {
-                    // decode xslt
-                    // TODO: no longer encoding - remove decoded handling
-                    if (me.model && me.model.admin.xslt && !me.model.admin.xslt_decoded) {
-                        //me.model.admin.xslt_decoded = me.classes.decode64(me.model.admin.xslt);
-                        me.model.admin.xslt_decoded = me.model.admin.xslt;
-                    }
-                    if (me.model &&
-                            !me.model.admin.style_decoded &&
-                            me.model.admin.style) {
-
-                            //styles.push(me.classes.decode64(me.model.admin.style));
-                            styles.push(me.model.admin.style);
-                            me.model.admin.style_decoded = styles;
-                    }
-                    // add opacity
-                    if (me.model && me.model.admin && me.model.admin.opacity !== null && me.model.admin.opacity !== undefined) {
-                        opacity = me.model.admin.opacity;
-                    }
                     // FIXME non-unique ID
                     me.$el.find('.layout-slider').slider({
                         min: 0,
                         max: 100,
-                        value: opacity,
+                        value: me.model.getOpacity(),
                         slide: function (event, ui) {
                             var input = jQuery(ui.handle).parents('.left-tools').find("input.opacity-slider.opacity");
                             input.val(ui.value);
@@ -201,65 +179,40 @@ define([
                     });
                 }
             },
+            _createNewModel : function(type) {
+                var sandbox = this.instance.sandbox;
+                var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                var layer = null;
+                if(type == 'base' || type == 'groupMap' ) {
+                    layer = mapLayerService.createMapLayer({ 'type' : type });
+                }
+                else {
+                    // only supporting WMS for now
+                    layer = mapLayerService.createLayerTypeInstance(type);
+                }
+                return new this.modelObj(layer);
+            },
 
             createGroupForm: function (groupTitle, e) {
 
-                var me = this,
-                    subLayers = (me.model && me.model.getSubLayers ? me.model.getSubLayers() : []),
-                    supportedLanguages = Oskari.getSupportedLanguages(),
-                    locales = {},
-                    i,
-                    lang,
-                    newModel = me.model;
-                if (!newModel) {
-                    newModel = {};
-                    me.model = newModel;
-                }
-                newModel.locales = [];
-                if (!newModel.names) {
-                    for (i = 0; i < supportedLanguages.length; i += 1) {
-                        newModel.locales.push({
-                            "lang": supportedLanguages[i],
-                            "name": ""
-                        });
+                var me = this;
+                if (!me.model) {
+                    if(groupTitle == 'baseName') {
+                        me.model = this._createNewModel('base');
                     }
-                } else {
-                    for (lang in newModel.names) {
-                        if (newModel.names.hasOwnProperty(lang)) {
-                            locales[lang] = true;
-                            newModel.locales.push({
-                                "lang": lang,
-                                "name": newModel.names[lang]
-                            });
-                        }
-                    }
-
-                    for (i = 0; i < supportedLanguages.length; i += 1) {
-                        lang = supportedLanguages[i];
-                        if (!locales[lang]) {
-                            newModel.locales.push({
-                                "lang": lang,
-                                "name": ""
-                            });
-                        }
+                    else {
+                        me.model = this._createNewModel('groupMap');
                     }
                 }
 
-                newModel.locales.sort(function (a, b) {
-                    if (a.lang < b.lang) {
-                        return -1;
-                    }
-                    if (a.lang > b.lang) {
-                        return 1;
-                    }
-                    return 0;
-                });
-
+                // This propably isn't the best way to get reference to inspire themes
+                var inspireGroups = this.instance.models.inspire.getGroupTitles();
                 me.$el.append(me.groupTemplate({
                     model: me.model,
                     instance: me.options.instance,
                     groupTitle: groupTitle,
-                    subLayers: subLayers,
+                    inspireThemes: inspireGroups,
+                    subLayers: me.model.getSubLayers(),
                     subLayerTemplate: me.subLayerTemplate,
                     roles: me.roles
                 }));
@@ -284,18 +237,6 @@ define([
             },
 
             /**
-             * Hide sublayer settings
-             *
-             * @method hideSubLayerSettings
-             */
-            hideSubLayerSettings: function (e) {
-                e.stopPropagation();
-                var element = jQuery(e.currentTarget);
-                element.parents('.add-sublayer-wrapper').first().removeClass('show-edit-sublayer');
-                element.parents('.add-sublayer-wrapper').first().find('.admin-add-layer').remove();
-            },
-
-            /**
              * Remove layer
              *
              * @method removeLayer
@@ -305,23 +246,16 @@ define([
 
                 var me = this,
                     element = jQuery(e.currentTarget),
-                    addLayerDiv = element.parents('.admin-add-layer'),
-                    id = element.parents('.admin-add-layer').attr('data-id'),
-                    baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
-                    action_route = "action_route=DeleteLayer",
-                    idKey = "&layer_id=",
-                    // create url for action_route
-                    url = baseUrl + action_route + idKey + id;
+                    addLayerDiv = element.parents('.admin-add-layer');
 
+                var sandbox = me.options.instance.getSandbox();
                 jQuery.ajax({
                     type: "GET",
                     dataType: 'json',
-                    beforeSend: function (x) {
-                        if (x && x.overrideMimeType) {
-                            x.overrideMimeType("application/j-son;charset=UTF-8");
-                        }
+                    data : {
+                        layer_id : me.model.getId()
                     },
-                    url: url,
+                    url: sandbox.getAjaxUrl() + "action_route=DeleteLayer",
                     success: function (resp) {
                         if (!resp) {
                             //close this
@@ -364,46 +298,34 @@ define([
                     accordion = element.parents('.accordion'),
                     lcId = accordion.attr('lcid'),
                     form = element.parents('.admin-add-layer'),
-                    lang,
-                    baseUrl = me.instance.getSandbox().getAjaxUrl(),
-                    action_route = "action_route=SaveLayer",
-                    id = "&layer_id=",
-                    idValue = (form.attr('data-id') !== null && form.attr('data-id') !== undefined) ? form.attr('data-id') : '',
                     data = {},
                     wmsVersion = form.find('#add-layer-interface-version').val(),
-                    parts,
-                    i,
-                    url,
                     createLayer;
 
-                // If this is a sublayer the layer class id should be of its base layer's
+                // If this is a sublayer -> setup parent layers id
                 if (me.options.baseLayerId) {
-                    lcId = me.options.baseLayerId;
+                    data.parentId = me.options.baseLayerId;
                 }
 
                 // add layer type and version
                 wmsVersion = (wmsVersion !== "") ? wmsVersion : form.find('#add-layer-interface-version > option').first().val();
 
                 if (wmsVersion.indexOf('WMS') >= 0) {
-                    parts = wmsVersion.split(' ');
+                    var parts = wmsVersion.split(' ');
                     data.version = parts[1];
                 }
 
                 // base and group are always of type wmslayer
                 data.layerType = 'wmslayer';
-
-                data.names = {};
-                data.title = {};
-                data.orderNumber = 1;
-                data.layer_id = idValue;
+                data.layer_id = me.model.getId();
 
                 form.find('[id$=-name]').filter('[id^=add-layer-]').each(function (index) {
-                    lang = this.id.substring(10, this.id.indexOf("-name"));
-                    data.names[lang] = this.value;
+                    var lang = this.id.substring(10, this.id.indexOf("-name"));
+                    data['name_' + lang] = this.value;
                 });
                 form.find('[id$=-title]').filter('[id^=add-layer-]').each(function (index) {
-                    lang = this.id.substring(10, this.id.indexOf("-title"));
-                    data.title[lang] = this.value;
+                    var lang = this.id.substring(10, this.id.indexOf("-title"));
+                    data['title_' + lang] = this.value;
                 });
 
                 // type can be either wmslayer, base or groupMap
@@ -414,25 +336,14 @@ define([
                 data.opacity = form.find('#opacity-slider').val();
 
                 data.style = form.find('#add-layer-style').val();
-                //data.style = jQuery.base64.encode(data.style); //me.layerGroupingModel.encode64(data.style);
-
-                if (!data.style) {
-                    data.style = '';
-                }
-
-
-                data.minScale = form.find('#add-layer-minscale').val() || 16000000;
-                data.maxScale = form.find('#add-layer-maxscale').val() || 1;
-                data.epsg = form.find('#add-layer-srsname').val();
-                data.epsg = Number(data.epsg.replace('EPSG:', ''));
+                data.minScale = form.find('#add-layer-minscale').val();// || 16000000;
+                data.maxScale = form.find('#add-layer-maxscale').val();// || 1;
 
                 //data.descriptionLink = form.find('#add-layer-').val();
                 data.legendImage = form.find('#add-layer-legendImage').val();
                 data.inspireTheme = form.find('#add-layer-inspire-theme').val();
-                data.dataUrl = form.find('#add-layer-datauuid').val();
-                data.metadataUrl = form.find('#add-layer-metadataid').val();
+                data.metadataId = form.find('#add-layer-datauuid').val();
                 data.xslt = form.find('#add-layer-xslt').val();
-                //data.xslt = me.classes.encode64(data.xslt); //me.layerGroupingModel.encode64(data.xslt);
                 data.gfiType = form.find('#add-layer-responsetype').val();
 
                 if (!data.gfiType) {
@@ -440,48 +351,32 @@ define([
                 }
 
                 data.viewPermissions = '';
-                for (i = 0; i < me.roles.length; i += 1) {
+                for (var i = 0; i < me.roles.length; i += 1) {
                     if (form.find('#layer-view-roles-' + me.roles[i].id).is(':checked')) {
                         data.viewPermissions += me.roles[i].id + ',';
                     }
                 }
 
 
-                // Layer class id aka. orgName id
-                data.lcId = lcId;
-
-                url = baseUrl + action_route + id + idValue;
-                if (lcId) {
-                    url += "&lcId=" + lcId;
-                }
-                
-                for (lang in data.names) {
-                    if (data.names.hasOwnProperty(lang)) {
-                        //url += "&name" + lang.charAt(0).toUpperCase() + lang.substring(1) + "=" + data.names[lang];
-                        data["name" + lang.charAt(0).toUpperCase() + lang.substring(1)] = data.names[lang];
-                    }
-                }
-                data.names = undefined;
-                delete data.names;
-                for (lang in data.title) {
-                    if (data.title.hasOwnProperty(lang)) {
-                        //url += "&title" + lang.charAt(0).toUpperCase() + lang.substring(1) + "=" + data.title[lang];
-                        data["title" + lang.charAt(0).toUpperCase() + lang.substring(1)] = data.title[lang];
-                    }
-                }
-                data.title = undefined;
-                delete data.title;
-
+                // Layer class id aka. orgName id aka groupId
+                data.groupId = lcId;
+                var sandbox = me.instance.getSandbox();
                 jQuery.ajax({
                     type: "POST",
                     data : data,
                     dataType: 'json',
-                    //data: {'layer': postData}, // New way
-                    url: url,
+                    url: sandbox.getAjaxUrl() + "action_route=SaveLayer",
                     success: function (resp) {
-                        if ((idValue && !resp) ||
-                                (resp && resp.admin)) {
-                            //close this
+                        // response should be a complete JSON for the new layer
+                        if(!resp) {
+                            alert("Saving layer didn't work");
+                        }
+                        else if(resp.error) {
+                            alert(me.instance.getLocalization('admin')[resp.error] || resp.error);
+                        }
+                        // happy case - we got id
+                        if(resp.id) {
+                            // close this
                             form.removeClass('show-add-layer');
                             createLayer = form.parents('.create-layer');
                             if (createLayer) {
@@ -489,8 +384,7 @@ define([
                                 createLayer.find('.admin-add-layer-btn').attr('title', me.instance.getLocalization('admin').addLayerDesc);
                             }
                             form.remove();
-                            //resp.admin.style = me.classes.encode64(resp.admin.style);
-                            if (!me.model.getId || !me.model.getId()) {
+                            if (!me.model.getId()) {
                                 //trigger event to View.js so that it can act accordingly
                                 accordion.trigger({
                                     type: "adminAction",
@@ -507,16 +401,8 @@ define([
                                     baseLayerId: me.options.baseLayerId
                                 });
                             }
-
-                        } else {
-                            //problem
-                            if (resp && resp.error) {
-                                alert(me.instance.getLocalization('admin')[resp.error] || resp.error);
-                            } else {
-                                alert("Saving layer didn't work");
-                            }
                         }
-                        if (resp && resp.warn) {
+                        if(resp.warn) {
                             alert(me.instance.getLocalization('admin')[resp.warn] || resp.warn);
                         }
                     },
@@ -532,104 +418,96 @@ define([
             /**
              * Save group or base layers
              *
-             * @method saveGroup
+             * @method saveCollectionLayer
              */
-            saveGroup: function (e) {
+            saveCollectionLayer: function (e) {
                 var me = this,
                     element = jQuery(e.currentTarget),
-                    addClass = element.parents('.admin-add-group'),
-                    layerClass = element.parents('.admin-add-layer').attr('data-id'),
-                    accordion = element.parents('.accordion'),
-                    form = element.parents('.admin-add-layer'),
-                    baseUrl = me.options.instance.getSandbox().getAjaxUrl(), // url for backend action_route
-                    action_route = "&action_route=SaveOrganization",
-                    layerType = element.parents('.admin-add-layer').find('#add-layer-type').val(),
-                    parentId = element.parents('.accordion').attr('lcid'),
-                    params = "&parent_id=" + parentId,
-                    checkedPermissions = [],
-                    url,
-                    lang;
+                    groupElement = element.parents('.admin-add-group'),
+                    accordion = element.parents('.accordion');
+/*
+                model.isBaseLayer() <- group vai base + layerType == 'collection'
+                groupId <- organization
+                */
+                var sandbox = me.options.instance.getSandbox();
+                var data = {
+                    layer_id : me.model.getId(),
+                    groupId : accordion.attr('lcid'),
+                    layerType : 'collection',
+                    isBase : me.model.isBaseLayer(),
+                    inspireTheme : groupElement.find('#add-layer-inspire-theme').val()
+                };
 
-                addClass.find('[id$=-name]').filter('[id^=add-group-]').each(function (index) {
-                    lang = this.id.substring(10, this.id.indexOf("-name"));
-                    params += "&sub_name_" + lang + "=" + this.value;
+                groupElement.find('[id$=-name]').filter('[id^=add-group-]').each(function (index) {
+                    var lang = this.id.substring(10, this.id.indexOf("-name"));
+                    data['name_' + lang] = this.value;
                 });
 
-                form.find(".layer-view-role").filter(":checked").each(function (index) {
-                    checkedPermissions.push(jQuery(this).data("role-id"));
-                });
+                // permissions
+                if(!me.model.getId()) {
+                    var checkedPermissions = []
+                    groupElement.find(".layer-view-role").filter(":checked").each(function (index) {
+                        checkedPermissions.push(jQuery(this).data("role-id"));
+                    });
 
-                params += "&viewPermissions=" + checkedPermissions.join();
-
-                if (layerType === 'groupMap' || (me.model && me.model.isGroupLayer && me.model.isGroupLayer())) {
-                    params += "&group_map=" + true;
+                    data.viewPermissions = checkedPermissions.join();
                 }
-
-                if (layerClass) {
-                    params += "&layerclass_id=" + layerClass.replace('base_', '');
-                }
-
-                url = baseUrl + action_route + params;
+                
                 // make AJAX call
                 jQuery.ajax({
-                    type: "GET",
+                    type: "POST",
                     dataType: 'json',
+                    data : data,
                     beforeSend: function (x) {
-                        if (x && x.overrideMimeType) {
-                            x.overrideMimeType("application/j-son;charset=UTF-8");
-                        }
                         jQuery("body").css({
                             cursor: "wait"
                         });
                     },
-                    url: url,
+                    url: sandbox.getAjaxUrl() + "action_route=SaveLayer",
                     success: function (resp) {
-                        // Load the map layers again, since we want the newly created
-                        // group/base layer to show as a map layer, not as a layer class.
-                        if (!me.model || !me.model.getId) {
+                        jQuery("body").css("cursor", "");
+                        if (!me.model.getId()) {
+                            //trigger event to View.js so that it can act accordingly
                             accordion.trigger({
                                 type: "adminAction",
-                                command: 'addGroup'
+                                command: 'addLayer',
+                                layerData: resp
                             });
                         } else {
+                            //trigger event to View.js so that it can act accordingly
                             accordion.trigger({
                                 type: "adminAction",
-                                command: 'editGroup',
-                                id: me.model.getId()
+                                command: 'editLayer',
+                                layerData: resp
                             });
                         }
                     },
                     error: function (jqXHR, textStatus) {
-                        alert('Failed to save group');
+                        jQuery("body").css("cursor", "");
+                        alert('Failed to save grouplayer');
                     }
                 });
             },
 
-            removeGroup: function (e) {
+            removeLayerCollection: function (e) {
                 var me = this,
                     element = jQuery(e.currentTarget),
-                    editForm = element.parents('.admin-add-layer').attr('data-id'),
-                    accordion = element.parents('.accordion'),
-                    baseUrl = me.options.instance.getSandbox().getAjaxUrl(), // url for backend action_route
-                    action_route = "&action_route=DeleteOrganization",
-                    layerClassId = editForm.replace('base_', ''),
-                    params = "&layercl_id=" + layerClassId,
-                    url = baseUrl + action_route + params;
+//                    editForm = element.parents('.admin-add-layer').attr('data-id'),
+                    accordion = element.parents('.accordion');
+                var sandbox = me.options.instance.getSandbox();
                 // make AJAX call
                 jQuery.ajax({
                     type: "GET",
                     dataType: 'json',
-                    beforeSend: function (x) {
-                        if (x && x.overrideMimeType) {
-                            x.overrideMimeType("application/j-son;charset=UTF-8");
-                        }
+                    data : {
+                        layer_id : me.model.getId()
                     },
-                    url: url,
+                    url: sandbox.getAjaxUrl() + "action_route=DeleteLayer",
                     success: function (resp) {
                         accordion.trigger({
                             type: "adminAction",
-                            command: 'deleteGroup',
-                            id: me.model.getId()
+                            command: 'removeLayer',
+                            modelId: me.model.getId()
                         });
                     },
                     error: function (jqXHR, textStatus) {
@@ -649,21 +527,22 @@ define([
                     input = element.parents('.add-layer-wrapper').find('#add-layer-interface'),
                     wmsurlField = element.parents('.add-layer-wrapper').find('#add-layer-wms-url'),
                     baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
-                    route = "action_route=GetWSCapabilities",
-                    type = "&wmsurl=";
+                    wmsurl = input.val();
 
-                wmsurlField.html(input.val());
-                //add-layer-wms-button
+                wmsurlField.html(wmsurl);
 
                 jQuery.ajax({
-                    type: "GET",
+                    type: "POST",
+                    data : {
+                        wmsurl : wmsurl
+                    },
                     dataType: 'json',
                     beforeSend: function (x) {
                         if (x && x.overrideMimeType) {
                             x.overrideMimeType("application/j-son;charset=UTF-8");
                         }
                     },
-                    url: baseUrl + route + type + encodeURIComponent(input.val()),
+                    url: baseUrl + "action_route=GetWSCapabilities",
                     success: function (resp) {
                         me.addCapabilitySelect(resp, me, element);
                     },

@@ -5,7 +5,8 @@ Oskari.registerLocalization({
         "title": "admin: Map layers",
         "desc": "",
         "flyout": {
-            "title": "admin: Map layers"
+            "title": "admin: Map layers",
+            "fetchingLayers" : "Fetching layers."
         },
         "tile": {
             "title": "A: Map layers",
@@ -57,6 +58,11 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
+            "layertypes" : {
+                "wms": "WMS layer",
+                "wfs": "WFS layer",
+                "wmts": "WMTS layer"
+            },
             "selectLayer": "Select layer",
             "selectSubLayer": "Select sublayer",
 
@@ -77,11 +83,8 @@ Oskari.registerLocalization({
             "groupLayer": "Group layer",
             "interfaceVersion": "Interface version",
             "interfaceVersionDesc": "Interface version",
-            "wmslayer": "WMS layer",
             "wms1_1_1": "WMS 1.1.1",
             "wms1_3_0": "WMS 1.3.0",
-            "wfslayer": "WFS layer",
-            "wmtslayer": "WMTS layer",
             "getInfo": "Get info",
             "selectClass": "Select class",
             "selectClassDesc": "Select Inspire theme",
@@ -115,8 +118,8 @@ Oskari.registerLocalization({
             "addInspireThemesDesc": "Add classes (Inspire themes)",
             "opacity": "Opacity",
             "opacityDesc": "Layer opacity (0% will make the layer transparent)",
-            "style": "Style",
-            "styleDesc": "Style",
+            "style": "Default style",
+            "styleDesc": "Default style",
 
             "minScale": "Minimum scale",
             "minScaleDesc": "Layer's minimum scale",

@@ -99,8 +99,8 @@ function(name,viewClazz) {
     start : function() {
         var me = this;
         var conf = me.conf ;
-		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
-		var sandbox = Oskari.getSandbox(sandboxName);
+        var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+        var sandbox = Oskari.getSandbox(sandboxName);
 
         me.sandbox = sandbox;
         sandbox.register(this);
@@ -151,7 +151,7 @@ function(name,viewClazz) {
         }
 
         me.plugins['Oskari.userinterface.Flyout'] = 
-            Oskari.clazz.create('Oskari.integration.bundle.bb.Flyout', me, locFlyout, view);                       
+            Oskari.clazz.create('Oskari.integration.bundle.bb.Flyout', me, locFlyout, view);
 
         if(view.init != null) {
             this.view.init();

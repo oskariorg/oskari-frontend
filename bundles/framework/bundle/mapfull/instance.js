@@ -414,7 +414,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
          */
         toggleFullScreen: function () {
             jQuery('#' + this.contentMapDivId).toggleClass('oskari-map-window-fullscreen');
-            this.mapmodule.getMap().updateSize();
+            this.mapmodule.updateSize();
         }
     }, {
         /**

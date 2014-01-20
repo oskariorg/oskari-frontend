@@ -1,6 +1,6 @@
 /**
  * Class which creates the ui to define geometry visualizations for eg. my places.
- * By default it creates buttons for point, line and area selections, but this is configurable.
+ * By default it creates buttons for point/dot, line and area selections, but this is configurable.
  *
  * @class Oskari.userinterface.component.VisualizationForm
  */
@@ -24,9 +24,9 @@ Oskari.clazz.define('Oskari.userinterface.component.VisualizationForm',
 
         var defaultOptions = {
             // include all forms by default
-            forms: ['point', 'line', 'area'],
+            forms: ['dot', 'line', 'area'],
             formValues: {
-                point: {
+                dot: {
                     shape: 1,
                     color: "000000",
                     size: 3
@@ -53,7 +53,6 @@ Oskari.clazz.define('Oskari.userinterface.component.VisualizationForm',
             }
         };
         options = options || {};
-
         this._options = jQuery.extend({}, defaultOptions, options);
 
         this._formClazzes = this._createFormClazzes(this._options.forms, this._options.formValues);
@@ -84,7 +83,7 @@ Oskari.clazz.define('Oskari.userinterface.component.VisualizationForm',
                 if (formClazzes.hasOwnProperty(formName)) {
                     btnContainer = this.templateRenderButton.clone();
                     btnContainer.attr('title', this._loc.tooltips[formName]);
-                    btnContainer.addClass(this._iconClsPrefix + formName);
+                    btnContainer.addClass(this._iconClsPrefix + (formName === 'dot' ? 'point' : formName));
                     btnContainer.click(me._bindRenderButton(formClazzes[formName]));
                     form.append(btnContainer);
                 }
@@ -104,7 +103,6 @@ Oskari.clazz.define('Oskari.userinterface.component.VisualizationForm',
                 formClazzes = this._getFormClazz(),
                 fClazzName,
                 fClazz;
-
             for (fClazzName in formClazzes) {
                 if (formClazzes.hasOwnProperty(fClazzName)) {
                     fClazz = formClazzes[fClazzName];
@@ -206,11 +204,11 @@ Oskari.clazz.define('Oskari.userinterface.component.VisualizationForm',
         /**
          * Returns the form clazz for given parameter name
          * or an object of form clazzes given in the options
-         * (defaults to all, that is, 'point', 'line' and 'area')
+         * (defaults to all, that is, 'dot', 'line' and 'area')
          * or undefined if given a key which is not found.
          *
          * @method _getFormClazz
-         * @param  {String} formName 'point', 'line' or 'area'
+         * @param  {String} formName 'dot', 'line' or 'area'
          * @return {Oskari.clazz/Object[Oskari.clazz]/undefined}
          */
         _getFormClazz: function (formName) {
@@ -268,10 +266,10 @@ Oskari.clazz.define('Oskari.userinterface.component.VisualizationForm',
         /**
          * Creates a form clazz for a given form name and values.
          * Uses this clazz as the 'creator' and localization for
-         * key like 'pointform' which should be present in the loc object.
+         * key like 'dot' which should be present in the loc object.
          *
          * @method _createFormClazz
-         * @param  {String} formName 'point', 'line' or 'area'
+         * @param  {String} formName 'dot', 'line' or 'area'
          * @return {Oskari.clazz/undefined}
          */
         _createFormClazz: function (formName, formValues) {

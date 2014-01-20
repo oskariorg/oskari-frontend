@@ -162,10 +162,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             'StatsGrid.IndicatorsEvent': function (event) {
                 this._addIndicatorsToDataSourcesDialog(event.getIndicators());
             },
+
             'LayerToolsEditModeEvent' : function (event) {
-                this.isInLayerToolsEditMode = event.isInMode();
-                if (this.isInLayerToolsEditMode == false) {
+                // FIXME make sure event.isInMode() returns a boolean and remove !!
+                this.isInLayerToolsEditMode = !!event.isInMode();
+                if (!this.isInLayerToolsEditMode) {
                     this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
+                }
+            },
+
+            'MapSizeChangedEvent' : function (event) {
+                if (this.dataSourcesDialog) {
+                    var target = jQuery('div.logoplugin div.data-sources');
+                    if (target) {
+                        this.dataSourcesDialog.moveTo(target, 'top');
+                    }
                 }
             }
 

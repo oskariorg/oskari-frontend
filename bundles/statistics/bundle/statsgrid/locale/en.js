@@ -15,13 +15,21 @@ Oskari.registerLocalization({
             "title": "Indicators",
             "grid": {
                 "name": "Title",
-                "description": "Description"
+                "description": "Description",
+                "organization": "Data source",
+                "year": "Year",
+                "delete": " "
             },
+            "deleteTitle": "Deleting indicator",
+            "destroyIndicator": "Delete",
+            "cancelDelete": "Cancel",
+            "confirmDelete": "Are you sure you want to delete indicator ",
             "newIndicator": "New indicator",
             "error": {
                 "title": "Error",
                 "indicatorsError": "Error occurred whilst loading the indicators. Please try again later",
-                "indicatorError": "Error occurred whilst loading an indicator. Please try again later"
+                "indicatorError": "Error occurred whilst loading an indicator. Please try again later",
+                "indicatorDeleteError": "Error occurred whilst removing an indicator. Please try again later"
             }
         },
         "gender": "Gender",
@@ -33,7 +41,8 @@ Oskari.registerLocalization({
         "addColumn": "Get data",
         "removeColumn": "Remove",
         "indicators": "Indicators",
-        "cannotDisplayIndicator": "The indicator does not have values on the region category selected and it cannot be displayed in the grid.",
+        "cannotDisplayIndicator": "The indicator does not have values on the selected region category so it cannot be displayed in the grid.",
+        "availableRegions": " The following region categories have values on the indicator: ",
         "year": "Year",
         "buttons": {
             "ok": "OK",
@@ -128,6 +137,7 @@ Oskari.registerLocalization({
         "noRegionFound"         : "Region not found",
         "regionCategories"      : {
             "title"                 : "Region categories",
+            "KUNTA"                 : "Kunta",
             "ALUEHALLINTOVIRASTO"   : "Aluehallintovirasto",
             "MAAKUNTA"              : "Maakunta",
             "NUTS1"                 : "Manner-Suomi ja Ahvenanmaa",

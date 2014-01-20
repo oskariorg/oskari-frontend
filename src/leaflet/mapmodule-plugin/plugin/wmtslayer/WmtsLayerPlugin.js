@@ -30,6 +30,10 @@ function() {
      */
     _addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
 
+        if (!layer.isLayerOfType('WMTS')) {
+            return;
+        }
+
         var layers = [], layerIdPrefix = 'layer_';
         // insert layer or sublayers into array to handle them identically
         if ((layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap == true) && (layer.getSubLayers().length > 0)) {
@@ -77,7 +81,7 @@ function() {
                 "{TileCol}" : '{x}'
             };
 
-            var url = '' + wmtsLayerDef.resourceUrls.tile["image/png"];
+            var url = '' + wmtsLayerDef.resourceUrl.tile.template;
 
             for (var p in urlParts ) {
                 url = url.replace(p, urlParts[p]);

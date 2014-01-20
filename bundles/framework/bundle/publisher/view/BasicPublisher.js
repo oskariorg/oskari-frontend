@@ -578,6 +578,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 layoutContainer = me.templateLayout.clone();
                 input = layoutContainer.find("input");
                 input.val(me.toolLayouts[i]).change(changeListener);
+                // FIXME default to 0 index if activeToolLayout is not found
                 // First choice is active unless we have an active layout
                 if (me.activeToolLayout) {
                     if (me.toolLayouts[i] === me.activeToolLayout) {
@@ -1391,11 +1392,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 return;
             }
 
+
             var me = this,
                 styleConfig,
                 i,
                 tool,
                 tools = me.toolsPanel.getTools();
+
+            if (style.val === 'default') {
+                style.val = null;
+            }
 
             // Set the toolStyle to the config of each tool
             // and change the style immedately. 

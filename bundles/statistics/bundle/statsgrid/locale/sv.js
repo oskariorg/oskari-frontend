@@ -15,13 +15,21 @@ Oskari.registerLocalization({
             "title": "Indikatorer",
             "grid": {
                 "name": "Titeln",
-                "description": "Beskrivning"
+                "description": "Beskrivning",
+                "organization": "Upphov",
+                "year": "År",
+                "delete": " "
             },
+            "deleteTitle": "Indikaattorin poistaminen",
+            "destroyIndicator": "Radera",
+            "cancelDelete": "Avsluta",
+            "confirmDelete": "Haluatko varmasti poistaa indikaattorin ",
             "newIndicator": "Ny indikator",
             "error": {
                 "title": "Fel",
                 "indicatorsError": "Virhe indikaattorien latauksessa. Yritä myöhemmin uudelleen",
-                "indicatorError": "Virhe indikaattorin latauksessa. Yritä myöhemmin uudelleen"
+                "indicatorError": "Virhe indikaattorin latauksessa. Yritä myöhemmin uudelleen",
+                "indicatorDeleteError": "Virhe indikaattorin poistossa. Yritä myöhemmin uudelleen"
             }
         },
         "gender": "Kön",
@@ -33,7 +41,8 @@ Oskari.registerLocalization({
         "addColumn": "Hämta data",
         "removeColumn": "Radera",
         "indicators": "Indikator",
-        "cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voi näyttää taulukossa.",
+        "cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voida näyttää taulukossa.",
+        "availableRegions": " Arvot löytyvät seuraaville aluejaoille: ",
         "year": "År",
         "buttons": {
             "ok": "OK",
@@ -128,6 +137,7 @@ Oskari.registerLocalization({
         "noRegionFound"         : "Aluetta ei löytynyt",
         "regionCategories"      : {
             "title"                 : "Aluejaot",
+            "KUNTA"                 : "Kunta",
             "ALUEHALLINTOVIRASTO"   : "Aluehallintovirasto",
             "MAAKUNTA"              : "Maakunta",
             "NUTS1"                 : "Manner-Suomi ja Ahvenanmaa",

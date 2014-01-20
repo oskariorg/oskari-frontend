@@ -227,6 +227,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                     'lang': view.lang,
                     'isPublic': isPublic,
                     'show': this.loc.show,
+                    'html': this.loc.getHTML,
                     'edit': this.loc.edit,
                     'publish': isPublic ? this.loc.unpublish : this.loc.publish,
                     'delete': this.loc['delete']
@@ -247,7 +248,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             var me = this;
             var instance = this.instance;
             var sandbox = instance.getSandbox();
-            var visibleFields = ['name', 'domain', 'publish', 'show', 'edit', 'delete'];
+            var visibleFields = ['name', 'domain', 'publish', 'show', 'html', 'edit', 'delete'];
             var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
             grid.setDataModel(model);
             grid.setVisibleFields(visibleFields);
@@ -311,6 +312,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                     sandbox.request(me.instance.getName(), closeFlyoutRequest);
                 }
             };
+
+            //sending a request to publisher for editing view
+            var htmlRenderer = function (name, data) {
+                var link = me.templateLink.clone();
+                link.append(name);
+                link.bind('click', function () {
+                    var publishedMapUrl = sandbox.getLocalizedProperty(me.instance.conf.publishedMapUrl),
+                        url = 'http://'+ window.location.host + publishedMapUrl + data.id,
+                        view = me._getViewById(data.id),
+                        size = view ? view.state.mapfull.config.size : {height: 525, width: 700};
+                    me._showIframeCodePopup(url, size, view.name);
+                });
+                return link;
+            };
+            grid.setColumnValueRenderer('html', htmlRenderer);
+
 
             //sending a request to publisher for editing view
             var editRenderer = function (name, data) {
@@ -451,6 +468,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             }
 
             return handler.apply(this, [event]);
+
+        },
+        _showIframeCodePopup: function(url, size, name) {
+            var loc = this.loc,
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = dialog.createCloseButton(loc.button.ok),
+                url,
+                iframeCode,
+                textarea,
+                content;
+            okBtn.addClass('primary');
+
+            iframeCode = '<iframe src="' + url + '" width="' + size.width +
+                '" height="' + size.height + '"></iframe>';
+            textarea =
+                '<textarea rows="3" cols="80">' +
+                iframeCode +
+                '</textarea>';
+            content = loc.published.desc + '<br/>' + textarea;
+
+            dialog.makeModal();
+            dialog.stopKeydownPropagation();
+            dialog.show(name, content, [okBtn]);
 
         }
     });

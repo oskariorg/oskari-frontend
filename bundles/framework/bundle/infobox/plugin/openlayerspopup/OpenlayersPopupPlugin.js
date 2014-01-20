@@ -247,6 +247,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             if (font) {
                 this._changeFont(font);
             }
+
+            // Fix the HTML5 placeholder for < IE10
+            var inputs = jQuery('.contentWrapper input, .contentWrapper textarea');
+            if (typeof inputs.placeholder === 'function') {
+                inputs.placeholder();
+            }
         },
         setAdaptable: function (isAdaptable) {
             this.adaptable = isAdaptable;

@@ -107,6 +107,7 @@ Oskari.registerLocalization({
                     },
                     "toolStyles": {
                         "label": "Tool style",
+                        "default": "Default style",
                         "rounded-dark": "Rounded (dark)",
                         "rounded-light": "Rounded (light)",
                         "sharp-dark": "Polygon (dark)",

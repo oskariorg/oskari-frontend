@@ -5,7 +5,8 @@ Oskari.registerLocalization({
         "title": "Kartlager",
         "desc": "",
         "flyout": {
-            "title": "admin: Kartlager"
+            "title": "admin: Kartlager",
+            "fetchingLayers" : "Laddar lager."
         },
         "tile": {
             "title": "A: Kartlager",
@@ -57,6 +58,11 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
+            "layertypes" : {
+                "wms": "WMS Lager",
+                "wfs": "WFS Lager",
+                "wmts": "WMTS Lager"
+            },
             "selectLayer": "Välj nivå",
             "selectSubLayer": "Välj undernivå",
 
@@ -77,11 +83,11 @@ Oskari.registerLocalization({
             "groupLayer": "Gruppnivå",
             "interfaceVersion": "Gränss&shy;nittets version",
             "interfaceVersionDesc": "Gränss&shy;nittets version",
-            "wmslayer": "WMS Lager",
+//            "wmslayer": "WMS Lager",
             "wms1_1_1": "WMS 1.1.1",
             "wms1_3_0": "WMS 1.3.0",
-            "wfslayer": "WFS Lager",
-            "wmtslayer": "WMTS Lager",
+//            "wfslayer": "WFS Lager",
+//            "wmtslayer": "WMTS Lager",
             "getInfo": "Sök data",
             "selectClass": "Välj tema",
             "selectClassDesc": "Välj tema",
@@ -115,8 +121,8 @@ Oskari.registerLocalization({
             "addInspireThemesDesc": "Tillägg ämnen enligt InspireTheme",
             "opacity": "Opacitet",
             "opacityDesc": "Lagrets opacitet (0% gör lagret genomskinligt)",
-            "style": "Stil",
-            "styleDesc": "Stil",
+            "style": "Förvald utseende",
+            "styleDesc": "Förvald utseende",
 
             "minScale": "Minimi&shy;skala",
             "minScaleDesc": "Lagrets minimiskala (1:5669294)",

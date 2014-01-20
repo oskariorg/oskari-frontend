@@ -76,9 +76,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             me.template = jQuery(
                 '<div class="mapplugin search default-search-div" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin">' +
                     '<div class="search-textarea-and-button">' +
-
                     '<input placeholder="' + me.loc.placeholder + '" type="text" />' +
-
                     '<input type="button" value="' + me.loc.search + '" name="search" />' +
                     '</div>' +
                     '<div class="results">' +
@@ -548,6 +546,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             div = div || this.element;
 
             if (!style || !div) {
+                return;
+            }
+
+            if (style.val === null) {
+                this.conf.toolStyle = null;
+                div.remove();
+                this._createUI();
                 return;
             }
 

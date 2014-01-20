@@ -50,9 +50,9 @@ define([
 
 //            Dynamic values cannot be optimized, change to static for optimization by listing the array values.
 //            Log the modules and temporarily replace startupSequence with the console output or include all necessary modules in the build.
-            console.log('modules', modules);
+//            console.log('modules', modules);
 
-            require(modules, function() {
+            require(modules, function(item) {
                 var module = null,
                     instance = null,
                     identifier = null;
@@ -105,7 +105,7 @@ define([
         extend: function(props) {
             // Bundles are structured to modules, however the refactoring is done gradually.
             // TODO: Change Oskari.bundleCls to Oskari.moduleClass
-            var moduleClass = Oskari.bundleCls();
+            var moduleClass = Oskari.bundleCls(props.identifier);
 
             moduleClass.category(props);
             moduleClass.category({
@@ -145,19 +145,28 @@ define([
      *   var evt = evtCls.create({ 'prop': 'value' }); 
      *   Oskari.getSandbox().notifyAll(evt);  
      */ 
-    Oskari.Event = Oskari.cls('Oskari.event.Event',function(instanceProps) {
-        for (ip in instanceProps) {
-            if (instanceProps.hasOwnProperty(ip)) {
-                 this[ip] = instanceProps[ip];
-            }
-        }
-    },{
-         getName : function() {
+    var ExtendableEvent = 
+     Oskari.cls('Oskari.Event', function() {
+        console.log("CREATED EXTENDABLE EVENT as BASE for EVENTS");
+    }, {
+	extend : function(props) {
+	   return Oskari.cls(props.name ? 'Oskari.event._.'+props.name: undefined,function(instanceProps) {
+	        for (ip in instanceProps) {
+	       	    if (instanceProps.hasOwnProperty(ip)) {
+        		this[ip] = instanceProps[ip];
+	            }	
+        	}
+	      },{
+              getName : function() {
                 return this.name;
-         }
-    },{
-        protocol : ['Oskari.mapframework.event.Event']
+              }
+           },{
+             protocol : ['Oskari.mapframework.event.Event']
+           }).category(props);
+	}
     });
+
+    Oskari.Event = ExtendableEvent.create();
     
     /* Oskari.Request */
     /* example: 
@@ -166,19 +175,28 @@ define([
      *   Oskari.getSandbox().request("MainMapModule", req);
      *    
      */ 
-    Oskari.Request = Oskari.cls('Oskari.request.Request',function(instanceProps) {
-        for (ip in instanceProps) {
-            if (instanceProps.hasOwnProperty(ip)) {
+    var ExtendableRequest = 
+     Oskari.cls('Oskari.Request', function() {
+        console.log("CREATED EXTENDABLE REQUEST as BASE for REQUESTS");
+    }, {
+	extend : function(props) {
+          return Oskari.cls(props.name ? 'Oskari.request._.'+props.name: undefined,function(instanceProps) {
+            for (ip in instanceProps) {
+              if (instanceProps.hasOwnProperty(ip)) {
                  this[ip] = instanceProps[ip];
+              }
             }
-        }
-    },{
-         getName : function() {
+         },{
+           getName : function() {
                 return this.name;
-         }
-    },{
-        protocol : ['Oskari.mapframework.request.Request']
-    });
+           }
+         },{
+           protocol : ['Oskari.mapframework.request.Request']
+         }).category(props);
+       }
+     });
+
+    Oskari.Request = ExtendableRequest.create();
    
     /* Object Generic class */
     /* example:

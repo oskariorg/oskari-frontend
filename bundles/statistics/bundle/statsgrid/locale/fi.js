@@ -15,13 +15,21 @@ Oskari.registerLocalization({
 			"title": "Indikaattorit",
 			"grid": {
 				"name": "Otsikko",
-				"description": "Kuvaus"
+				"description": "Kuvaus",
+				"organization": "Tietolähde",
+				"year": "Vuosi",
+				"delete": " "
 			},
+			"deleteTitle": "Indikaattorin poistaminen",
+			"destroyIndicator": "Poista",
+			"cancelDelete": "Peruuta",
+			"confirmDelete": "Haluatko varmasti poistaa indikaattorin ",
 			"newIndicator": "Uusi indikaattori",
 			"error": {
 				"title": "Virhe",
 				"indicatorsError": "Virhe indikaattorien latauksessa. Yritä myöhemmin uudelleen",
-				"indicatorError": "Virhe indikaattorin latauksessa. Yritä myöhemmin uudelleen"
+				"indicatorError": "Virhe indikaattorin latauksessa. Yritä myöhemmin uudelleen",
+				"indicatorDeleteError": "Virhe indikaattorin poistossa. Yritä myöhemmin uudelleen"
 			}
 		},
 		"gender": "Sukupuoli",
@@ -33,7 +41,8 @@ Oskari.registerLocalization({
 		"addColumn": "Hae data",
 		"removeColumn": "Poista",
 		"indicators": "Indikaattorit",
-		"cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voi näyttää taulukossa.",
+		"cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voida näyttää taulukossa.",
+		"availableRegions": " Arvot löytyvät seuraaville aluejaoille: ",
 		"year": "Vuosi",
 		"buttons": {
 			"ok": "OK",

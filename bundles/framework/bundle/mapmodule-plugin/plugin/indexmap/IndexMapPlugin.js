@@ -185,10 +185,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             me.getMapModule().addMapControl('overviewMap', me._indexMap);
             var toggleButton = me.templates.toggle.clone();
             // add toggle functionality to button
-            toggleButton.click(function () {
-                if (!me.isInLayerToolsEditMode) {
-                    me.element.find('.olControlOverviewMapElement').toggle();
-                }
+            toggleButton.click(function (event) {
+                event.preventDefault();
+                var mappy = me.element.find('.olControlOverviewMapElement');
+                mappy.toggle();
             });
             // button has to be added separately so the element order is correct...
             me.element.append(toggleButton);
@@ -248,8 +248,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             },
             'LayerToolsEditModeEvent': function (event) {
                 if (this._sandbox) {
-                    this.isInLayerToolsEditMode = event.isInMode();
-                    if (this.isInLayerToolsEditMode == false) {
+                    // FIXME make sure event.isInMode() returns a boolean and remove !!
+                    this.isInLayerToolsEditMode = !!event.isInMode();
+                    if (!this.isInLayerToolsEditMode) {
                         this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
                     }
                 }

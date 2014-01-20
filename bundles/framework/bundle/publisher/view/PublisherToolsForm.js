@@ -304,7 +304,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
                 var alreadySelected = false;
                 for (i = 0; i < selectedLayers.length; i++) {
-                    if (selectedLayers[i].getId() == me.selectedDrawingLayer.layer.getId()) {
+                    if (selectedLayers[i].getId() === me.selectedDrawingLayer.layer.getId()) {
                         alreadySelected = true;
                     }
                 }
@@ -499,18 +499,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 var layerSelect = jQuery(me.templates.layerSelect).clone(),
                     layerSelectOption,
                     i;
+
                 for (i = 0; i < mylayers.length; i++) {
                     layerSelectOption = jQuery(me.templates.layerSelectOption).clone();
                     layerSelectOption.attr('value', mylayers[i].getId()).append(mylayers[i].getName());
                     // select correct layer
-                    if (me.selectedDrawingLayer.layer != null &&
+                    if (me.selectedDrawingLayer.layer !== null && me.selectedDrawingLayer.layer !== undefined &&
                             mylayers[i].getId() === me.selectedDrawingLayer.layer.getId()) {
                         layerSelectOption.prop('selected', true);
                     }
                     layerSelect.append(layerSelectOption);
                 }
                 // select default
-                if (me.selectedDrawingLayer.layer == null) {
+                if (me.selectedDrawingLayer.layer === null || me.selectedDrawingLayer.layer === undefined) {
                     me.selectedDrawingLayer.layer = mylayers[0];
                 }
                 layerSelect.change(function (e) {

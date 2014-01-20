@@ -2,7 +2,6 @@ th.asc {
   background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/asc_arrow.png');
   background-repeat: no-repeat;
   background-position: center center; }
-
 th.desc {
   background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png');
   background-repeat: no-repeat;
@@ -40,20 +39,20 @@ div.column-selector {
   padding: 0;
   border: 1px solid;
   z-index: 10001; }
-
-div.column-selector div.close-selector-button {
-  width: 16px;
-  height: 16px;
-  position: absolute;
-  top: 5px;
-  right: 5px; }
-
-div.column-selector ul.column-selector-list {
-  list-style-type: none;
-  padding-right: 30px; }
-
-div.column-selector label.column-label {
-  padding-left: 5px; }
+  div.column-selector div.close-selector-button {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 5px;
+    right: 5px; }
+    div.column-selector div.close-selector-button ul.column-selector-list {
+      list-style-type: none;
+      padding-right: 30px; }
+    div.column-selector div.close-selector-button label.column-label {
+      padding-left: 5px; }
 
 table.oskari-grid td {
-  padding: 5px; }
+  max-width: 110px;
+  overflow: hidden;
+  padding: 5px;
+  text-overflow: ellipsis; }

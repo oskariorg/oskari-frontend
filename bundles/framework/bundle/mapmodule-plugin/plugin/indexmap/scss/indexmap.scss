@@ -1,3 +1,5 @@
+$toggleSize: 46px;
+
 div.mapplugin.indexmap {
     .olControlOverviewMapElement {
         /* Hide by default, control's maximize: false doesn't seem to do anything */
@@ -8,10 +10,13 @@ div.mapplugin.indexmap {
         border-style: solid;
         border-top-width: 2px;
         padding: 5px;
+        margin-bottom: -$toggleSize;
     }
     .indexmapToggle {
-        width: 46px !important;
-        height: 46px !important;
+        width: $toggleSize !important;
+        height: $toggleSize !important;
+        position: relative;
+        float: left;
         cursor: default;
         background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap.png') 0px 0px !important;
 
@@ -19,6 +24,14 @@ div.mapplugin.indexmap {
             background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png') !important;
         }
 
+    }
+}
+
+.right {
+    div.mapplugin.indexmap {
+        .indexmapToggle {
+            float: right;
+        }
     }
 }
 
@@ -34,12 +47,10 @@ div.mapplugin.indexmap {
         
     }
 
-
-
     #OpenLayers_Control_minimizeDiv {
         position: absolute !important;
-        width: 46px !important;
-        height: 46px !important;
+        width: $toggleSize !important;
+        height: $toggleSize !important;
         right: 0px;
         bottom: 0px;
         cursor: default;
@@ -49,5 +60,5 @@ div.mapplugin.indexmap {
 }
 
 .olControlOverviewMapExtentRectangle  {
-    border:2px dashed #f47729 !important;
+    border: 2px dashed #f47729 !important;
 }

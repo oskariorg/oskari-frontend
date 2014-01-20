@@ -44,14 +44,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
         connect: function () {
             var url = this.url;
             this.protocols.categories = new OpenLayers.Protocol.WFS({
-                version: '1.1.0',
+                version: '1.0.0',
                 srsName: 'EPSG:3067',
                 featureType: 'categories',
                 featureNS: this.featureNS,
                 url: url
             });
             this.protocols.my_places = new OpenLayers.Protocol.WFS({
-                version: '1.1.0',
+                version: '1.0.0',
                 srsName: 'EPSG:3067',
                 geometryName: 'geometry',
                 featureType: 'my_places',
@@ -453,7 +453,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
         /**
          * @method commitPlaces
          *
-         * handles insert & update (NO delete here see next moethd)
+         * handles insert & update (NO delete here see next method)
          */
         commitMyPlaces: function (list, callback) {
             var p = this.protocols.my_places;

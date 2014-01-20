@@ -58,6 +58,7 @@ Oskari.registerLocalization({
       "publishedmaps": {
         "title": "Inbäddade",
         "show": "Visa på kartan",
+        "getHTML": "HTML-kod",
         "edit": "Redigera",
         "publish": "Avskilj karta",
         "unpublish": "Återta avskiljandet",
@@ -66,9 +67,13 @@ Oskari.registerLocalization({
           "name": "Namn",
           "domain": "Kartinställnigar",
           "publish": "Status",
-          "show": " ",
+          "show" : "Aktions",
+          "html" : " ",
           "edit": " ",
           "delete": " "
+        },
+        "published": {
+            "desc": "Inbädda kartan genom att tillägga HTML-koden nedan på din webbplats."
         },
         "popup": {
           "edit": "Byt namn på kartan",

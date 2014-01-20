@@ -77,6 +77,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @throws error if layer with the same id already exists
          */
         addLayer: function (layerModel, suppressEvent) {
+            // if parent id is present, forward to addSubLayer()
+            if(layerModel.getParentId() != -1) {
+                this.addSubLayer(layerModel.getParentId(), layerModel, suppressEvent);
+                return;
+            }
 
             // throws exception if the id is reserved to existing maplayer
             // we need to check again here
@@ -104,24 +109,20 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         addSubLayer: function (parentLayerId, layerModel, suppressEvent) {
             var parentLayer = this.findMapLayer(parentLayerId),
-                subLayers,
-                len,
-                i;
+                subLayers;
 
             if (parentLayer && (parentLayer.isBaseLayer() || parentLayer.isGroupLayer())) {
+
+                layerModel.setParentId(parentLayerId);
                 subLayers = parentLayer.getSubLayers();
-
-                for (i = 0, len = subLayers.length; i < len; ++i) {
-                    if (subLayers[i].getId() === layerModel.getId()) {
-                        return false;
-                    }
+                if(!parentLayer.addSubLayer(layerModel)) {
+                    // wasn't added - already added
+                    return;
                 }
-
-                subLayers.push(layerModel);
 
                 if (suppressEvent !== true) {
                     // notify components of added layer if not suppressed
-                    var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
+                    var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'update');
                     this._sandbox.notifyAll(evt);
                 }
             }
@@ -137,22 +138,46 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            true to not send event (should only be used on test cases to avoid unnecessary events)
          */
         removeLayer: function (layerId, suppressEvent) {
-            var layer = null,
-                i;
-            for (i = 0; i < this._loadedLayersList.length; i++) {
-                if ((this._loadedLayersList[i].getId() + '') === (layerId + '')) {
-                    layer = this._loadedLayersList[i];
-                    this._loadedLayersList.splice(i, 1);
+            var layer = this.findMapLayer(layerId),
+                parentLayer = null,
+                evt = null;
+            if(!layer) {
+                // not found in layers OR sublayers!
+                // TODO: should we notify somehow?
+                return;
+            }
+            // default to all layers
+            var layerList = this._loadedLayersList;
+            if(layer.getParentId() != -1) {
+                // referenced layer is a sublayer
+                var parentLayer = this.findMapLayer(layer.getParentId());
+                if(!parentLayer) {
+                    return;
+                }
+                // work on sublayers instead
+                layerList = parentLayer.getSubLayers();
+            }
+
+            for (var i = 0; i < layerList.length; i++) {
+                if ((layerList[i].getId() + '') === (layerId + '')) {
+                    layerList.splice(i, 1);
                     break;
                 }
             }
             if (layer && suppressEvent !== true) {
                 // notify components of layer removal
-                var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'remove');
+                if(parentLayer) {
+                    // notify a collection layer has been updated
+                    evt = this._sandbox.getEventBuilder('MapLayerEvent')(parentLayer.getId(), 'update');
+                }
+                else {
+                    // notify a layer has been removed
+                    evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'remove');
+                    // free up the layerId if actual removal
+                    this._reservedLayerIds[layerId] = false;
+                }
                 this._sandbox.notifyAll(evt);
             }
-            this._reservedLayerIds[layerId] = false;
-            // TODO: notify if layer not found?
         },
 
         /**
@@ -165,7 +190,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Boolean} suppressEvent (optional)
          *            true to not send event (should only be used on test cases to avoid unnecessary events)
          */
+        /*
         removeSubLayer: function (parentLayerId, layerId, suppressEvent) {
+            // this should be removed and only use removeLayer()!
+            alert('deprecated!');
             var parentLayer = this.findMapLayer(parentLayerId),
                 subLayers,
                 subLayer,
@@ -190,7 +218,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
             }
         },
-
+*/
         /**
          * @method updateLayer
          * Updates layer in internal layerlist and
@@ -203,93 +231,74 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         updateLayer: function (layerId, newLayerConf) {
             //console.log("MapLayerService: updateLayer");
-            var layer = this.findMapLayer(layerId),
-                i;
-            if (layer) {
-                //console.log("New layer config:");
-                //console.log(newLayerConf);
-
-                if (newLayerConf.dataUrl) {
-                    layer.setDataUrl(newLayerConf.dataUrl);
-                }
-
-                /*
-            if (newLayerConf.formats) {
-                //layer.set();
+            var layer = this.findMapLayer(layerId);
+            if (!layer) {
+                // couldn't find layer to update
+                // TODO: should we try to insert it or notify if layer not found?
+                return;
             }
-            */
 
-                /*
-            if (newLayerConf.isQueryable) {
-                // layer.set();
+            if (newLayerConf.dataUrl) {
+                layer.setDataUrl(newLayerConf.dataUrl);
             }
-            */
 
-                if (newLayerConf.legendImage) {
-                    layer.setLegendImage(newLayerConf.legendImage);
-                }
+            if (newLayerConf.legendImage) {
+                layer.setLegendImage(newLayerConf.legendImage);
+            }
 
-                if (newLayerConf.minScale) {
-                    layer.setMinScale(newLayerConf.minScale);
-                }
+            if (newLayerConf.minScale) {
+                layer.setMinScale(newLayerConf.minScale);
+            }
 
-                if (newLayerConf.maxScale) {
-                    layer.setMaxSclae(newLayerConf.maxScale);
-                }
+            if (newLayerConf.maxScale) {
+                layer.setMaxScale(newLayerConf.maxScale);
+            }
 
-                if (newLayerConf.name) {
-                    layer.setName(newLayerConf.name);
-                }
+            if (newLayerConf.name) {
+                layer.setName(newLayerConf.name);
+            }
 
-                /*
+            if (newLayerConf.subtitle) {
+                layer.setDescription(newLayerConf.subtitle);
+            }
+
             if (newLayerConf.orgName) {
-                // layer.set();
+                layer.setOrganizationName(newLayerConf.orgName);
             }
-            */
-                /*
+            if (newLayerConf.inspire) {
+                layer.setInspireName(newLayerConf.inspire);
+            }
+
+            // wms specific
+            // TODO: we need to figure this out some other way
+            // we could remove the old layer and create a new one in admin bundle
+            if (newLayerConf.version && layer.setVersion) {
+                layer.setVersion(newLayerConf.version);
+            }
+        
             if (newLayerConf.style) {
-                layer.setStyle(newLayerConf.style);
+                layer.selectStyle(newLayerConf.style);
             }
-            */
 
-                /*
-            if (newLayerConf.styles) {
-                // layer.set();
+            if (newLayerConf.wmsName) {
+                layer.setWmsName(newLayerConf.wmsName);
             }
-            */
 
-                if (newLayerConf.type) {
-                    layer.setType(newLayerConf.type);
-                }
-
-                /*
-            if (newLayerConf.updated) {
-                // layer.set();
+            if (newLayerConf.wmsUrl) {
+                layer.setWmsUrls(newLayerConf.wmsUrl.split(','));
             }
-            */
 
-                if (newLayerConf.wmsName) {
-                    layer.setWmsName(newLayerConf.wmsName);
-                }
-
-                if (newLayerConf.wmsUrl) {
-                    layer.setWmsUrls(newLayerConf.wmsUrl.split(','));
-                }
-
-                for (i in newLayerConf.admin) {
-                    if (newLayerConf.admin.hasOwnProperty(i)) {
-                        if (newLayerConf.admin[i]) {
-                            layer.admin[i] = newLayerConf.admin[i];
-                        }
+            for (var i in newLayerConf.admin) {
+                if (newLayerConf.admin.hasOwnProperty(i)) {
+                    if (newLayerConf.admin[i]) {
+                        layer.admin[i] = newLayerConf.admin[i];
                     }
                 }
-
-                //console.log(layer);
-                // notify components of layer update
-                var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
-                this._sandbox.notifyAll(evt);
             }
-            // TODO: notify if layer not found?
+
+            // notify components of layer update
+            var evt = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
+            this._sandbox.notifyAll(evt);
         },
         /**
          * @method makeLayerSticky
@@ -625,6 +634,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 for (i = 0; i < baseMapJson.subLayer.length; i++) {
                     // Notice that we are adding layers to baselayers sublayers array
                     subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
+                    subLayer.setParentId(baseMapJson.id);
 
                     //if (baseMapJson.subLayer[i].admin) {
                     subLayer.admin = baseMapJson.subLayer[i].admin || {};
@@ -689,8 +699,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return null;
             }
 
-            var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options),
-                perm;
+            var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options);
             if (!layer) {
                 throw "Unknown layer type '" + mapLayerJson.type + "'";
             }
@@ -757,7 +766,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             // permissions
             if (mapLayerJson.permissions) {
-                for (perm in mapLayerJson.permissions) {
+                for (var perm in mapLayerJson.permissions) {
                     if (mapLayerJson.permissions.hasOwnProperty(perm)) {
                         layer.addPermission(perm, mapLayerJson.permissions[perm]);
                     }
@@ -803,6 +812,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             // default to enabled, only check if it is disabled
             layer.setFeatureInfoEnabled(jsonLayer.gfi !== 'disabled');
+            layer.setVersion(jsonLayer.version);
             return this.populateStyles(layer, jsonLayer);
         },
         /**

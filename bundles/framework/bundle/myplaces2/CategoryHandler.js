@@ -309,7 +309,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.CategoryHandler",
                     cap: category.getLineCap(),
                     corner: category.getLineCorner(),
                     style: category.getLineStyle(),
-                    size: category.getLineWidth(),
+                    width: category.getLineWidth(),
                     color: category.getLineColor()
                 },
                 area: {
@@ -321,7 +321,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.CategoryHandler",
                     fillStyle: category.getAreaFillStyle()
                 }
             };
-
             form.setValues(values);
             var content = form.getForm();
             content.find('input[name=categoryname]').val(category.name);
