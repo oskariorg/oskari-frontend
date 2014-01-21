@@ -8,6 +8,10 @@
 
 myplaces2 bundle now requires wfs to be in use in both the backend and the frontend. `Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin` and `mapwfs2` bundle need to be present in application config's plugin array for mapfull and in import bundle section in mapfull's startup sequence, respectively. Please refer to documentation in [oskari-server](https://github.com/nls-oskari/oskari-server) repository for instructions in how to set up the transport backend service. Note that the transport uses websocket which might cause some issues in proxy environments.
 
+#### mapmyplaces
+
+mapmyplaces is a new bundle, which is used for showing myplaces feature data through wfs. mapmyplaces must be in mapfull startup sequence
+
 ### publishedstatehandler
 
 Added statehandler functions to published maps. It is also now possible to add map tools plugin in Publisher mode to new maps.
@@ -59,6 +63,8 @@ Configuration can now have additional link params f.ex. to add versioning for li
 	}
 }
 ```
+
+Add mapmyplaces
 
 ### Work in progress
 
