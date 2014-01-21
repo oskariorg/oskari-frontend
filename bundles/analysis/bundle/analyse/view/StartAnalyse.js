@@ -533,9 +533,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var formValues = me.visualizationForm.getValues();
             if (formValues) {
                 values.dot = {
-                    size: formValues.point.size,
-                    color: '#' + formValues.point.color,
-                    shape: formValues.point.shape
+                    size: formValues.dot.size,
+                    color: '#' + formValues.dot.color,
+                    shape: formValues.dot.shape
                 };
                 values.line = {
                     size: formValues.line.width,

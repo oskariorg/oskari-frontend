@@ -652,6 +652,10 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * @return {Oskari.mapframework.domain.Style} current style
          */
         getCurrentStyle: function () {
+            if(!this._currentStyle) {
+                // prevent "nullpointer" if selectstyle hasn't been called
+                this.selectStyle('');
+            }
             return this._currentStyle;
         },
         /**
