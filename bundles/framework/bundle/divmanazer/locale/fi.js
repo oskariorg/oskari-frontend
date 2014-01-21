@@ -4,11 +4,11 @@ Oskari.registerLocalization({
   "value": {
     "VisualizationForm": {
       "tooltips": {
-        "point": "Muokkaa pisteen esitystapaa",
+        "dot": "Muokkaa pisteen esitystapaa",
         "area": "Muokkaa alueen esitystapaa",
         "line": "Muokkaa viivan esitystapaa"
       },
-      "point": {
+      "dot": {
         "title": "Pistekohteen esitystapa",
         "tooltip": "",
         "symbol": {

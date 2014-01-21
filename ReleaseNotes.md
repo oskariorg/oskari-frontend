@@ -1,4 +1,75 @@
 # Release Notes
+
+## 1.17
+
+### **Breaking changes**
+
+#### myplaces2
+
+myplaces2 bundle now requires wfs to be in use in both the backend and the frontend. `Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin` and `mapwfs2` bundle need to be present in application config's plugin array for mapfull and in import bundle section in mapfull's startup sequence, respectively. Please refer to documentation in [oskari-server](https://github.com/nls-oskari/oskari-server) repository for instructions in how to set up the transport backend service. Note that the transport uses websocket which might cause some issues in proxy environments.
+
+#### mapmyplaces
+
+mapmyplaces is a new bundle, which is used for showing myplaces feature data through wfs. mapmyplaces must be in mapfull startup sequence
+
+### publishedstatehandler
+
+Added statehandler functions to published maps. It is also now possible to add map tools plugin in Publisher mode to new maps.
+
+### Statsgrid
+
+Added possibility to add indicator data through data import (localization is still work in progress)
+
+Adds a tab to personaldata from which users can access and delete their own saved indicators.
+
+The region category can now be changed from municipality to any other category SOTKAnet API has to offer.
+
+The column widths are now set automatically to take the space available when resizing the grid and when adding/removing indicators. Grid width is split equally to each column.
+
+### myplaces2
+
+Measurements of places (area or length depending on the type) are now shown in the myplaces tab and whilst drawing a new place or editing an old one.
+
+Dense point data is now aggregated into cluster visualizations.
+
+Multi-lines are not anymore incorrectly combined when editing them.
+
+### divmanazer/VisualizationForm
+
+Visualization previews are now compatible also with Internet Explorer 8.
+
+### Admin-layerrights
+
+Now provides tooltips for checkboxes (permission text) and layername (layertype/inspiretheme/organization)
+
+### Admin-layerselector
+
+Backend API changed and the bundle has been refactored to match the API and the code has been cleaned up on relevant parts.
+
+### Core/MapLayerService
+
+Layer update now copies all the information the user can change on editing a layer. Behavior change: MapLayerEvent with add/remove operation is no longer sent
+if a sublayer is removed/added, but instead it is sent with update operation. Removesublayer method was removed and removelayer handles sublayer removal as well. AddSubLayer method 
+is still available but addLayer will handle adding sublayers if the layer has parentId property.
+
+### mapfull
+
+Configuration can now have additional link params f.ex. to add versioning for links: 
+
+```javascript
+{
+	"link" : {
+		"ver" : "1.17"
+	}
+}
+```
+
+Add mapmyplaces
+
+### Work in progress
+
+We are preparing the next major release of Oskari. Oskari 2.0 will utilize RequireJS for resource loading instead of oskari-loader. Migration tools and documentation are developed and improved as the work progresses. These changes are unstable (i.e. they will change) and placed into the src-folder.
+
 ## 1.16
 
 ### **Breaking changes**

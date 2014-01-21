@@ -27,21 +27,24 @@ ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326".
 
 ```javascript
 {
-    "mapOptions" : {
-        "resolutions" : [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
-        "maxExtent" : {
-            "left" : -548576.0,
-            "bottom" : 6291456.0,
-            "right" : 1548576.0,
-            "top" :  8388608
-        },
-        "units" : "m",
-        "srsName" : "EPSG:3067"
-    },
-    "projectionDefs" : {
-        "EPSG:3067" : "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
-        "EPSG:4326" : "+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
-    },
+  "mapOptions" : {
+      "resolutions" : [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
+      "maxExtent" : {
+          "left" : -548576.0,
+          "bottom" : 6291456.0,
+          "right" : 1548576.0,
+          "top" :  8388608
+      },
+      "units" : "m",
+      "srsName" : "EPSG:3067"
+  },
+  "projectionDefs" : {
+      "EPSG:3067" : "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
+      "EPSG:4326" : "+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
+  },
+  "link" : {
+    "ver" : "1.17"
+  },
   "plugins":[
     {
       "id":"Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
@@ -76,6 +79,7 @@ ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326".
 * layers is an array of map layer JSON definitions that will be populated to Oskari.mapframework.service.MapLayerService. It can have 0 or more layer definitions but it SHOULD have at least the ones referenced in state.selectedLayers. Otherwise selectedLayers aren't going to be added to map on startup.
 * globalMapAjaxUrl is set to Oskari.mapframework.sandbox.Sandbox and can be asked everywhere with sandbox.getAjaxUrl()
 * mapOptions is passed to mapmodule-plugin constructor
+* link can be used to add link params f.ex. to add versioning for links
 * user is optional and should have information about the logged in user. It will be set to Oskari.mapframework.sandbox.Sandbox and can be asked everywhere with sandbox.getUser(). The format of the data should in a form accepted by Oskari.mapframework.domain.User constructor.
 * size is optional but if given will set the map elements size. If size isn't specified the map elements height will be set to window height and the bundle will listen to window resizing to adjust the map size.
 

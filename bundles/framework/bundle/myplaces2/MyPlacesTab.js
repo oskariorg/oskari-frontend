@@ -255,7 +255,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             panel.setTitle(category.getName());
 
             panel.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
-            var visibleFields = ['name', 'desc', 'createDate', 'updateDate', 'edit', 'delete'];
+            var visibleFields = ['name', 'desc', 'createDate', 'updateDate', 'measurement', 'edit', 'delete'];
             panel.grid.setVisibleFields(visibleFields);
             // set up the link from name field
             var nameRenderer = function (name, data) {
@@ -321,16 +321,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             for (i = 0; i < places.length; ++i) {
                 // check if this category
                 if (places[i].getCategoryID() === categoryId) {
+                    var drawMode = this._getDrawModeFromGeometry(places[i].geometry);
+                    var measurement = this.instance.formatMeasurementResult(places[i].geometry, drawMode);
                     gridModel.addData({
                         'id': places[i].getId(),
                         'name': places[i].getName(),
                         'desc': places[i].getDescription(),
+                        'attention_text': places[i].getAttention_text(),
                         'geometry': places[i].getGeometry(),
                         'categoryId': places[i].getCategoryID(),
                         'edit': this.loc.edit,
                         'delete': this.loc['delete'],
                         'createDate': this._formatDate(service, places[i].getCreateDate()),
-                        'updateDate': this._formatDate(service, places[i].getUpdateDate())
+                        'updateDate': this._formatDate(service, places[i].getUpdateDate()),
+                        'measurement': measurement
                     });
                 }
             }

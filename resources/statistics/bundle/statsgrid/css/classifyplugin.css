@@ -36,8 +36,11 @@
     color: white;
     background-color: black !important;
     padding: 4px; }
-  .manageClassificationPlugin div.classificationMethod {
-    margin: 4px; }
+  .manageClassificationPlugin div.classifications {
+    margin: 4px;
+    min-width: 168px; }
+    .manageClassificationPlugin div.classifications div.classificationOptions {
+      margin: 4px; }
   .manageClassificationPlugin div.content {
     color: black;
     background-color: white !important; }

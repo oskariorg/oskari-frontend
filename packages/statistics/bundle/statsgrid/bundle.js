@@ -17,10 +17,8 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 'statsgrid');
         },
         "update": function (manager, bundle, bi, info) {
-
         }
     }, {
-
         "protocol": ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
         "source": {
             "scripts": [{
@@ -38,6 +36,9 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/bundle/statsgrid/StatsToolbar.js"
+            }, {
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/statistics/bundle/statsgrid/AddOwnIndicatorForm.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/bundle/statsgrid/plugin/ManageClassificationPlugin.js"

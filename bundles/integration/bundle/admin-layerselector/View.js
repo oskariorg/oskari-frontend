@@ -162,58 +162,29 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
          */
         if (e.command === "removeLayer") {
             // remove layer from mapLayerService
-            if (e.baseLayerId) {
-                // If this is a sublayer, remove it from its parent's sublayer array
-                parentLayerId = 'base_' + e.baseLayerId;
-                mapLayerService.removeSubLayer(parentLayerId, e.modelId);
-            } else {
-                // otherwise just remove it from map layer service.
-                mapLayerService.removeLayer(e.modelId);
-            }
+            mapLayerService.removeLayer(e.modelId);
         } else if (e.command === "addLayer") {
             // add layer into mapLayerService
-            e.layerData.name = e.layerData.admin.name[Oskari.getDefaultLanguage()];
             var mapLayer = mapLayerService.createMapLayer(e.layerData);
-            mapLayer.admin = e.layerData.admin;
 
             if (e.baseLayerId) {
                 // If this is a sublayer, add it to its parent's sublayer array
-                parentLayerId = 'base_' + e.baseLayerId;
-                mapLayerService.addSubLayer(parentLayerId, mapLayer);
+                mapLayerService.addSubLayer(e.baseLayerId, mapLayer);
             } else {
                 // Otherwise just add it to the map layer service.
                 if (mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
                     mapLayerService.addLayer(mapLayer);
                 }
+                else {
+                    alert('Error!! Inserted a new layer but a layer with same id already existed!!');
+                    // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData); 
+                }
             }
         } else if (e.command === "editLayer") {
             // update layer info
-            //console.log("Editing layer");
-            //console.log(e.layerData.admin);
-            e.layerData.name = e.layerData.admin.name[Oskari.getDefaultLanguage()]; //TODO this should be in mapLayerService
             mapLayerService.updateLayer(e.layerData.id, e.layerData);
-        } else if (e.command === "addGroup") {
-            /*
-             ************************
-             * BASE OR GROUP LAYERS *
-             ************************
-             */
-            // load the map layers again
-
-            mapLayerService.loadAllLayersAjax();
-        } else if (e.command === "editGroup") {
-            // Remove the base/group layer from mapLayerService
-            // and load it again from backend, since we edited
-            // the layer class and the changes will not be
-            // reflected to the corresponding map layer directly.
-            mapLayerService.removeLayer(e.id, true);
-            mapLayerService.loadAllLayersAjax();
-        } else if (e.command === "deleteGroup") {
-            mapLayerService.removeLayer(e.id);
         }
     }
-
-
 }, {
     "extend": ["Oskari.integration.bundle.bb.View"]
 });

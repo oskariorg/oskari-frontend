@@ -26,6 +26,9 @@ Oskari.registerLocalization({
       "save": {
           "tooltip": "Tee piirros ja tulosta"
       },
+      "debug": {
+          "tooltip": "Pysäytä suoritus"
+      },
       "tooltip": "Hae ensin kiinteistöä"
     },
     "buttons": {
@@ -39,7 +42,7 @@ Oskari.registerLocalization({
           "title": "Määräalan tiedot",
           "tooltip": "Anna määräalan tiedot ja tulosta tai tallenna",
           "placename": {
-              "placeholder": "Määräalan tunnus"
+              "placeholder": "Tunnus"
           },
           "ptitle": {
               "placeholder": "Piirroksen otsikko"
@@ -57,11 +60,19 @@ Oskari.registerLocalization({
               "placeholder": "Kantatilan lähdeaineisto"
           },
           "reporter": {
-              "placeholder": "Määräalan laatija"
+              "placeholder": "Piirroksen laatija"
           },
           "area": {
-              "placeholder": "Pinta-ala (m-2)"
+              "placeholder": "Pinta-ala (m²)"
           }
+      },
+      "qualitycodes": {
+          "q0": "(Tuntematon)",
+          "q4": "Kuvamittaus",
+          "q14": "Digitointi",
+          "q20": "Maastomittaus",
+          "q30": "Kiinteistötoimitus",
+          "q50": "Kaavalaskenta"
       },
     "notification": {
       "placeLoading": {
@@ -78,7 +89,7 @@ Oskari.registerLocalization({
       },
       "error": {
         "title": "Virhe!",
-        "savePlace": "Kohteen tallentaminen ei onnistunut.",
+        "savePlace": "Tallennusvirhe - kohdetunnus on jo tod. käytössä",
         "loadPlace": "Kohteen lataaminen ei onnistunut"
       }
     },

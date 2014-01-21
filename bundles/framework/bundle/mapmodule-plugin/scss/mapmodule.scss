@@ -63,6 +63,7 @@ div.mapplugins {
         }
 
         &.right {
+            min-width: 100px;
             .mapplugin {
                 
                 &.layerselection {
@@ -79,6 +80,7 @@ div.mapplugins {
         }
 
         &.left {
+            min-width: 100px;
             .mapplugin {
                 
                 &.layerselection {
@@ -206,6 +208,10 @@ div.mapplugins {
                 display: table-cell;
                 vertical-align: middle;
             }
+        }
+
+        .mapplugin.indexmap .indexmapToggle {
+            float: right;
         }
 
     }

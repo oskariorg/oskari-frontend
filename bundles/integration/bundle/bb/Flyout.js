@@ -25,6 +25,7 @@ function(instance, locale, ui) {
     this.container = null;
     this.ui = ui;
     this.state = null;
+    this.hasUI = false;
 
 }, {
     getName : function() {
@@ -37,16 +38,15 @@ function(instance, locale, ui) {
         return this.container;
     },
     startPlugin : function() {
-
         var me = this;
         var locale = me.locale;
         var ui = me.ui;
         ui.setEl(me.container);
-        
-        ui.render();
+        me.container.append(this.locale.fetchingLayers);
     },
     stopPlugin : function() {
         this.container.empty();
+        this.hasUI = false;
     },
     getTitle : function() {
         return this.locale.title;
@@ -61,6 +61,12 @@ function(instance, locale, ui) {
         return this.state;
     },
 
+    lazyRender : function() {
+        if(!this.hasUI){
+            this.ui.render();
+            this.hasUI = true;
+        }
+    },
     render : function() {
         this.ui.render();
     }

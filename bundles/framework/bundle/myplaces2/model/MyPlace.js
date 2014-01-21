@@ -1,4 +1,3 @@
-
 Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.model.MyPlace', 
 
 /**
@@ -12,6 +11,7 @@ function() {
     this.categoryID = undefined;
     this.geometry = undefined;
     this.link = undefined;
+    this.attention_text = undefined;
     this.createDate = undefined;
     this.updateDate = undefined; 
 }, {
@@ -57,6 +57,20 @@ function() {
     getDescription : function() {
         return this.description;
     },
+        /**
+         * @method getAttention_text
+         * @return {String}
+         */
+        getAttention_text : function() {
+            return this.attention_text;
+        },
+        /**
+         * @method setAttention_text
+         * @param {String} value
+         */
+        setAttention_text : function(value) {
+            this.attention_text = value;
+        },
     /**
      * @method setLink 
      * @param {String} value

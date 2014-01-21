@@ -152,8 +152,8 @@ function() {
 			OpenLayers.ProxyHost = me.conf.proxyUrl;
 		}
         // Test
-        me.conf.wfstFeatureNS = 'http://www.oskari.org';
-        me.conf.wfstUrl =  '/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=PreParcel';
+        // me.conf.wfstFeatureNS = 'http://www.oskari.org';
+        // me.conf.wfstUrl =  '/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=PreParcel';
 
         if(me.conf && me.conf.stickyLayerIds) {
 			// Layer switch off disable
@@ -175,9 +175,16 @@ function() {
 		// handles selection events related to parcels
 		me.parcelSelectorHandler = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.ParcelSelectorHandler", me);
 		me.parcelSelectorHandler.start();
-		if (me.state && me.state.initRef) {
-			me.parcelSelectorHandler.loadParcel(me.state.initRef);
+        me.preparcelSelectorHandler = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.PreParcelSelectorHandler", me);
+        me.preparcelSelectorHandler.start();
+        // predefined parcel id
+		if (me.conf && me.conf.initRef) {
+			me.parcelSelectorHandler.loadParcel(me.conf.initRef);
 		}
+        // predefined part parcel (preparcel) plot id
+        else if (me.conf && me.conf.pid) {
+            me.preparcelSelectorHandler.loadPreParcel(me.conf.pid);
+        }
 	},
 	/**
 	 * @method stop

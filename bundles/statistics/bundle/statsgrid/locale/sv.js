@@ -15,9 +15,22 @@ Oskari.registerLocalization({
             "title": "Indikatorer",
             "grid": {
                 "name": "Titeln",
-                "description": "Beskrivning"
+                "description": "Beskrivning",
+                "organization": "Upphov",
+                "year": "År",
+                "delete": " "
             },
-            "newIndicator": "Ny indikator"
+            "deleteTitle": "Indikaattorin poistaminen",
+            "destroyIndicator": "Radera",
+            "cancelDelete": "Avsluta",
+            "confirmDelete": "Haluatko varmasti poistaa indikaattorin ",
+            "newIndicator": "Ny indikator",
+            "error": {
+                "title": "Fel",
+                "indicatorsError": "Virhe indikaattorien latauksessa. Yritä myöhemmin uudelleen",
+                "indicatorError": "Virhe indikaattorin latauksessa. Yritä myöhemmin uudelleen",
+                "indicatorDeleteError": "Virhe indikaattorin poistossa. Yritä myöhemmin uudelleen"
+            }
         },
         "gender": "Kön",
         "genders": {
@@ -28,7 +41,8 @@ Oskari.registerLocalization({
         "addColumn": "Hämta data",
         "removeColumn": "Radera",
         "indicators": "Indikator",
-        "cannotDisplayIndicator": "Indikaattorilla ei ole kuntapohjaisia arvoja, joten sitä ei voi näyttää taulukossa.",
+        "cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voida näyttää taulukossa.",
+        "availableRegions": " Arvot löytyvät seuraaville aluejaoille: ",
         "year": "År",
         "buttons": {
             "ok": "OK",
@@ -83,6 +97,7 @@ Oskari.registerLocalization({
 
         },
         "statistic": {
+            "title": "Tilastomuuttujat",
             "avg": "genomsnitt",
             "max": "Maximivärde",
             "mde": "Modus",
@@ -92,11 +107,12 @@ Oskari.registerLocalization({
             "sum": "Summa"
         },
         "values": "värden",
+        "included": "Värden",
         "municipality": "Kommuner",
         "selectRows": "Markera rader",
         "select4Municipalities": "Välj minst 4 kommuner",
         "showSelected": "Visa endast utvalda områden på nätet",
-        "not_included": "Inte inlcuded kommuner",
+        "not_included": "Inte inlcuded",
         "noMatch": "Inga matchade indikatorer",
         "selectIndicator": "Välja en indikator",
         "filterTitle"           : "Filtrera kolumndata",
@@ -120,12 +136,40 @@ Oskari.registerLocalization({
         "chosenRegionText"      : "Valitse alueita",
         "noRegionFound"         : "Aluetta ei löytynyt",
         "regionCategories"      : {
+            "title"                 : "Aluejaot",
+            "KUNTA"                 : "Kunta",
             "ALUEHALLINTOVIRASTO"   : "Aluehallintovirasto",
             "MAAKUNTA"              : "Maakunta",
             "NUTS1"                 : "Manner-Suomi ja Ahvenanmaa",
             "SAIRAANHOITOPIIRI"     : "Sairaanhoitopiiri",
             "SEUTUKUNTA"            : "Seutukunta",
             "SUURALUE"              : "Suuralue"
-        }
+        },
+        "addDataButton"             : "Add indicator",
+        "addDataTitle"              : "Add your own indicator",
+        "openImportDialogTip"       : "Import data from clipboard",
+        "openImportDataButton"      : "Import data",
+        "addDataMetaTitle"          : "Title",
+        "addDataMetaTitlePH"        : "Indicator's title",
+        "addDataMetaSources"        : "Source",
+        "addDataMetaSourcesPH"      : "Data source",
+        "addDataMetaDescription"    : "Description",
+        "addDataMetaDescriptionPH"  : "Description",
+        "addDataMetaReferenceLayer" : "Reference layer",
+        "addDataMetaYear"           : "Year",
+        "addDataMetaYearPH"         : "Year",
+        "addDataMetaPublicity"      : "Publishable",
+        "municipalityHeader"        : "Municipalities",
+        "municipalityPlaceHolder"   : "Give value",
+        "formCancel"                : "Cancel",
+        "formSubmit"                : "Submit",
+        "cancelButton"              : "Cancel",
+        "importDataButton"          : "Import",
+        "popupTitle"                : "Import data",
+        "importDataDescription"     : "You can bring region value duples by copying them to the textarea. <br>Place every municipality to their own row. You can separate the values with tabulator, colon or comma.<br>Example 1: Alajärvi, 1234<br>Example 2: 009    2100",
+        "failedSubmit"              : "Add indicator's metadata: ",
+        "connectionProblem"         : "We could not save the data due to connection problems",
+        "parsedDataInfo"            : "Imported regions count",
+        "parsedDataUnrecognized"    : "Unrecognized regions count"
     }
 });

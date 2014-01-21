@@ -66,10 +66,10 @@ function(instance) {
 		// sortable component
 		this.template = jQuery('<ul class="selectedLayersList sortable" ' + 'data-sortable=\'{' + 'itemCss: "li.layer.selected", ' + 'handleCss: "div.layer-title" ' + '}\'></ul>');
 
-		this.templateLayer = jQuery('<li class="layer selected">' + '<div class="layer-info">' + '<div class="layer-icon"></div>' + '<div class="layer-tool-remove"></div>' + '<div class="layer-title"><h4></h4></div>' + '</div>' + '<div class="stylesel">' + '<label for="style">' + loc['style'] + '</label>' + '<select name="style"></select></div>' + '<div class="layer-tools volatile">' + '</div>' + '</li>');
+		this.templateLayer = jQuery('<li class="layerselection2 layer selected">' + '<div class="layer-info">' + '<div class="layer-icon"></div>' + '<div class="layer-tool-remove"></div>' + '<div class="layer-title"><h4></h4></div>' + '</div>' + '<div class="stylesel">' + '<label for="style">' + loc['style'] + '</label>' + '<select name="style"></select></div>' + '<div class="layer-tools volatile">' + '</div>' + '</li>');
 
 		// footers are changed based on layer state
-		this.templateLayerFooterTools = jQuery('<div class="left-tools">' + '<div class="layer-visibility">' + '<a href="JavaScript:void(0);">' + loc['hide'] + '</a>' + '&nbsp;' + '<span class="temphidden" ' + 'style="display: none;">' + loc['hidden'] + '</span>' + '</div>' + '<div class="oskariui layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + '<div class="opacity-slider" style="display:inline-block">' + '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + '</div>' + '</div>' + '<div class="right-tools">' + '<div class="layer-rights"></div>' + '<div class="object-data"></div>' + '<div class="layer-description">' + '<div class="icon-info"></div>' + '</div></div>');
+		this.templateLayerFooterTools = jQuery('<div class="right-tools">' + '<div class="layer-rights"></div>' + '<div class="object-data"></div>' + '<div class="layer-description">' + '<div class="icon-info"></div>' + '</div></div>' + '<div class="left-tools">' + '<div class="layer-visibility">' + '<a href="JavaScript:void(0);">' + loc['hide'] + '</a>' + '&nbsp;' + '<span class="temphidden" ' + 'style="display: none;">' + loc['hidden'] + '</span>' + '</div>' + '<div class="oskariui layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + '<div class="opacity-slider" style="display:inline-block">' + '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + '</div>' + '</div>');
 
 		this.templateLayerFooterHidden = jQuery('<p class="layer-msg">' + '<a href="JavaScript:void(0);">' + loc['show'] + '</a> ' + loc['hidden'] + '</p>');
 
@@ -233,7 +233,7 @@ function(instance) {
 	 * @param {Number} newIndex index where the moved layer is now
 	 */
 	_layerOrderChanged : function(item) {
-		var allNodes = jQuery(this.container).find('.selectedLayersList li');
+		var allNodes = jQuery(this.container).find('.selectedLayersList li.layerselection2');
 		var movedId = item.attr('layer_id');
 		var newIndex = -1;
 
@@ -390,7 +390,7 @@ function(instance) {
 	handleLayerVisibilityChanged : function(layer, isInScale, isGeometryMatch) {
 		var me = this;
 		var sandbox = me.instance.getSandbox();
-		var lyrSel = 'li.layer.selected[layer_id=' + layer.getId() + ']';
+		var lyrSel = 'li.layerselection2.layer.selected[layer_id=' + layer.getId() + ']';
 
 		var layerDiv = jQuery(this.container).find(lyrSel);
 		var loc = this.instance.getLocalization('layer');
@@ -424,9 +424,21 @@ function(instance) {
 		var request = requestBuilder(layer.getId(), newOpacity);
 		sandbox.request(this.instance.getName(), request);
 
-		var lyrSel = 'li.layer.selected[layer_id=' + layer.getId() + ']';
-		var layerDiv = jQuery(this.container).find(lyrSel);
-		var opa = layerDiv.find('div.layer-opacity input.opacity');
+		this._changeOpacityInput(layer);
+	},
+	/**
+	 * Changes the opacity input field's value.
+	 *
+	 * @method _changeOpacityInput
+	 * @private
+	 * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object}
+	 * 	layer under the opacity change
+	 */
+	_changeOpacityInput: function(layer) {
+		var lyrSel = 'li.layerselection2.layer.selected[layer_id=' + layer.getId() + ']',
+			layerDiv = jQuery(this.container).find(lyrSel),
+			opa = layerDiv.find('div.layer-opacity input.opacity');
+
 		opa.attr('value', layer.getOpacity());
 	},
 	/**
@@ -440,10 +452,11 @@ function(instance) {
 	 * externally
 	 */
 	handleLayerOpacityChanged : function(layer) {
-
 		if (this._sliders[layer.getId()]) {
 			this._sliders[layer.getId()].slider('value', layer.getOpacity());
+			this._changeOpacityInput(layer);
 		}
+
 	},
 	/**
 	 * @method handleLayerStyleChanged
@@ -687,9 +700,9 @@ function(instance) {
 			// insert to top
 			if (layer.isBaseLayer() && keepLayersOrder != true) {
 				// find all baselayers == layers whose id starts with 'base_'
-				previousLayers = listContainer.find('li[layer_id^=base_]');
+				previousLayers = listContainer.find('li.layerselection2[layer_id^=base_]');
 			} else {
-				previousLayers = listContainer.find('.layer.selected');
+				previousLayers = listContainer.find('.layerselection2.layer.selected');
 			}
 
 			if (previousLayers.length > 0) {
@@ -708,7 +721,7 @@ function(instance) {
 		}
 		// remove layer
 		else {
-			var layerDiv = jQuery(this.container).find('li[layer_id=' + layer.getId() + ']');
+			var layerDiv = jQuery(this.container).find('li.layerselection2[layer_id=' + layer.getId() + ']');
 			if (layerDiv) {
 				this._sliders[layer.getId()] = null;
 				layerDiv.remove();
@@ -726,7 +739,7 @@ function(instance) {
 	 */
 	handleLayerModified : function(layer) {
 		var me = this;
-		var layerDiv = jQuery(this.container).find('li[layer_id=' + layer.getId() + ']');
+		var layerDiv = jQuery(this.container).find('li.layerselection2[layer_id=' + layer.getId() + ']');
 		jQuery(layerDiv).find('.layer-title h4').html(layer.getName());
 		this._updateStyles(layer, layerDiv);
 		var footer = layerDiv.find('div.layer-tools');
@@ -741,7 +754,7 @@ function(instance) {
 	 */
 	handleLayerSticky : function(layer) {
 		var me = this;
-		var layerDiv = jQuery(this.container).find('li[layer_id=' + layer.getId() + ']');
+		var layerDiv = jQuery(this.container).find('li.layerselection2[layer_id=' + layer.getId() + ']');
 		layerDiv.find('div.layer-tool-remove').removeClass('icon-close');
 
 	},

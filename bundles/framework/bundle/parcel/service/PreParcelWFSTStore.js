@@ -4,7 +4,7 @@
  * Transforms Ext Model & OpenLayers geometry to WFS Transactions
  *
  *
- * NEEDS: URL to WFS service UUID for storing to some speficic user
+ * NEEDS: URL to WFS service and KVP_UID for storing to some speficic kvp user
  *
  *
  * Sample Usage:
@@ -41,14 +41,14 @@ function(instance) {
     connect : function() {
         var url = this.url;
         this.protocols.preparcel = new OpenLayers.Protocol.WFS({
-            version : '1.1.0',
+            version : '1.0.0',
             srsName : 'EPSG:3067',
             featureType : 'preparcel',
             featureNS : this.featureNS,
             url : url
         });
         this.protocols.preparcel_data = new OpenLayers.Protocol.WFS({
-            version : '1.1.0',
+            version : '1.0.0',
             srsName : 'EPSG:3067',
             geometryName : 'geometry',
             featureType : 'preparcel_data',
@@ -62,27 +62,67 @@ function(instance) {
      *
      * loads preparcels from backend to given service filters by
      * initialised user uuid  ( kvp uuid)
+     *
+     * @param uid
+     * @param cb
      * TODO: add kvp_uid filter
      */
-    getPreParcels : function(cb) {
-        var uuid = this.uuid;
-        var uuidFilter = new OpenLayers.Filter.Comparison({
+    getPreParcels : function(uid, cb) {
+        var kvp_uid = (typeof uid !== "undefined") ? uid : this.uuid;
+        var kvp_uidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "uuid",
-            value : uuid
+            property : "kvp_uid",
+            value : kvp_uid
         });
         var p = this.protocols.preparcel;
 
         var me = this;
 
         p.read({
-            filter : uuidFilter,
+            filter : kvp_uidFilter,
             callback : function(response) {
                 me._handlePreParcelResponse(response, cb);
             }
         })
 
     },
+        /**
+         * @method getPreParcelById
+         *
+         * loads preparcel from backend to given service filters by
+         * initialised user uuid  ( kvp uuid) and preparcel ref
+         *
+         * @param uid
+         * @param ref  preparcel reference id
+         * @param cb
+         */
+        getPreParcelById : function(uid, ppref, cb) {
+            var kvp_uid = (typeof uid !== "undefined") ? uid : this.uuid;
+            var refFilter = new OpenLayers.Filter.Logical({
+                type: OpenLayers.Filter.Logical.AND,
+                filters: [
+                    new OpenLayers.Filter.Comparison({
+                        type : OpenLayers.Filter.Comparison.EQUAL_TO,
+                        property : "kvp_uid",
+                        value : kvp_uid
+                    }),
+                    new OpenLayers.Filter.Comparison({
+                        type : OpenLayers.Filter.Comparison.EQUAL_TO,
+                        property : "preparcel_id",
+                        value : ppref
+                    })]});
+            var p = this.protocols.preparcel;
+
+            var me = this;
+
+            p.read({
+                filter : refFilter,
+                callback : function(response) {
+                    me._handlePreParcelResponse(response, cb);
+                }
+            })
+
+        },
 
     /**
      * @method _handlePreParcelResponse
@@ -106,7 +146,6 @@ function(instance) {
         for (var n = 0; n < feats.length; n++) {
             var f = feats[n];
             var featAtts = f.attributes;
-
             var id = this._parseNumericId(f.fid);
 
             var preparcel = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.PreParcel');
@@ -116,7 +155,7 @@ function(instance) {
             preparcel.setPreparcel_id(featAtts['preparcel_id']);
             preparcel.setTitle(featAtts['title']);
             preparcel.setSubtitle(featAtts['subtitle']);
-            preparcel.setDescription(featAtts['description']);
+            preparcel.setDescription(featAtts['desc']);  // OL mixes description named attribute
             preparcel.setParent_property_id(featAtts['parent_property_id']);
             preparcel.setParent_property_quality(featAtts['parent_property_quality']);
             preparcel.setReporter(featAtts['reporter']);
@@ -148,6 +187,7 @@ function(instance) {
      */
     commitPreParcel: function (list, callback) {
         var uuid = this.uuid;
+        var kvp_uid = "12345"; //this.kvp_uid;
         var p = this.protocols.preparcel;
         var me = this;
 
@@ -158,11 +198,11 @@ function(instance) {
 
             var featAtts = {
                     'uuid': uuid,
-                    'kvp_uid':  preparcel.getKvp_uid(),
+                    'kvp_uid':  kvp_uid,
                     'preparcel_id': preparcel.getPreparcel_id(),
                     'title': preparcel.getTitle(),
                     'subtitle': preparcel.getSubtitle(),
-                    'description': preparcel.getDescription(),
+                    'desc': preparcel.getDescription(),
                     'parent_property_id': preparcel.getParent_property_id(),
                     'parent_property_quality': preparcel.getParent_property_quality(),
                     'reporter': preparcel.getReporter(),
@@ -299,16 +339,14 @@ function(instance) {
      * @method getPreParcelData
      *
      * loads preparcel geometries from backend to given service filters by
-     * initialised user uuid
+     * parcel_id (preparcel.id)
      *
      */
-    getPreParcelData : function(parcel_id, cb) {
-
-
+    getPreParcelData : function(preparcel_id, cb) {
         var parcelidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "parcel_id",
-            value : parcel_id
+            property : "preparcel_id",
+            value : preparcel_id
         });
 
         var p = this.protocols.preparcel_data;
@@ -352,7 +390,7 @@ function(instance) {
             ppdata.setCreated(featAtts['created']);
             ppdata.setGeometry(f.geometry);
             ppdata.setUpdated(featAtts['updated']);
-            ppdata.setUuid(uuid);
+            ppdata.setUuid(featAtts['uuid']);
 
             list.push(ppdata);
         }
@@ -380,7 +418,7 @@ function(instance) {
             var featAtts = {
                 'geom_type': m.getGeom_type(),
                 'preparcel_id' : m.getPreparcel_id(),
-                'uuid' : uuid
+                'uuid' : m.getUuid()
             };
 
             var feat = new OpenLayers.Feature.Vector(geom, featAtts);
@@ -393,7 +431,7 @@ function(instance) {
                 // toState handles some workflow stuff and doesn't work here
                 feat.state = OpenLayers.State.UPDATE;
             }
-            features.push(feat);
+           if(geom) features.push(feat);
         }
         var me = this;
         p.commit(features, {
@@ -478,6 +516,26 @@ function(instance) {
             }
         });
     },
+        /*
+         * @method deletePreParcel by preparcel.id
+         *
+         * delete preparcel_data of preparcel
+         */
+        deletePreParcelDataById : function(id,list, callback) {
+            var me = this;
+            var p = this.protocols.preparcel_data;
+            var deleFilter = new OpenLayers.Filter.Comparison({
+                type : OpenLayers.Filter.Comparison.EQUAL_TO,
+                property : "preparcel_id",
+                value : id
+            });
+
+            p.filterDelete(deleFilter, {
+                callback : function(response) {
+                    me._handleDeletePreParcelDataByIdResponse(response, list, callback);
+                }
+            });
+        },
 
     /**
      * @method handleDeletePreParcelDataResponse
@@ -497,12 +555,29 @@ function(instance) {
         }
 
     },
+        /**
+         * @method handleDeletePreParcelDataByIdResponse
+         *
+         * update state to local models
+         */
+        _handleDeletePreParcelDataByIdResponse : function(response, list, cb) {
 
-    /*
-     * @method disconnect
-     *
-     * 'disconnects' from store (does not but might)
-     */
+            /**
+             * Let's call service
+             */
+            if (response.statusText == "OK") {
+                cb(true, list);
+
+            } else {
+                cb(false, list);
+            }
+
+        },
+        /*
+         * @method disconnect
+         *
+         * 'disconnects' from store (does not but might)
+         */
     disconnect : function() {
 
     }

@@ -13,7 +13,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
      */
 
     function () {
-        "use strict";
         this.sandbox = null;
 
         /**
@@ -54,18 +53,18 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
     }, {
 
         getName: function () {
-            "use strict";
             return "userinterface.DivManazer";
         },
         init: function (sandbox) {
-            "use strict";
+
         },
         getExtensionByName: function (name) {
-            "use strict";
             return this.extensionsByName[name];
         },
+	    /**
+	     * @method getSandbox
+	     */
         getSandbox: function () {
-            "use strict";
             return this.sandbox;
         },
         /**
@@ -78,7 +77,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          *
          */
         "start": function () {
-            "use strict";
 
             /*
              * setup templates
@@ -146,7 +144,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          * implements bundle instance update method
          */
         "update": function () {
-            "use strict";
+
         },
         /**
          * @method stop
@@ -156,7 +154,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          * removes request handlers
          */
         "stop": function () {
-            "use strict";
             sandbox.removeRequestHandler('userinterface.UpdateExtensionRequest', this.requestHandlers.update);
             sandbox.removeRequestHandler('userinterface.RemoveExtensionRequest', this.requestHandlers.remove);
             sandbox.removeRequestHandler('userinterface.AddExtensionRequest', this.requestHandlers.add);
@@ -190,7 +187,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          * creates jQuery template to be cloned to any menubar Tiles
          */
         "compileTemplates": function () {
-            "use strict";
             /**
              * Templates
              */
@@ -200,6 +196,8 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
 
             flyout = jQuery(me.templates['Oskari.userinterface.Flyout']);
 
+		/*flyout.css('left', '-3195px');
+		 flyout.css('top', '-3100px');*/
             flyout.css('left', me.defaults.attach.left);
             flyout.css('top', me.defaults.attach.top);
 
@@ -214,7 +212,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          * AddExtensionRequest
          */
         "addExtension": function (extension) {
-            "use strict";
 
             var me = this,
                 plugins,
@@ -334,7 +331,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          * applies draggable handle to flyouts title bar
          */
         _applyDraggableToFlyout: function (flyout, extensionInfo, cls) {
-            "use strict";
             var me = this,
                 handle = flyout.children(cls).get()[0],
                 flyoutTarget = flyout.get()[0],
@@ -371,7 +367,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
                         /* Attempt to fix IE9 vs. draggable flyout width issues */
                         /* this did not work */
                         /* if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
-                        flyout.css('width',flyout.width()+"px"); 
+                        flyout.css('width',flyout.width()+"px");
                        }
                        */
 
@@ -407,7 +403,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          */
 
         createTile: function (extension, plugin, count, extensionInfo) {
-            "use strict";
             var me = this,
                 //container = jQuery('#menubar'),
                 tile = this.compiledTemplates['Oskari.userinterface.Tile'].clone(true, true),
@@ -418,7 +413,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
 
             tile.click(function () {
                 //plugin.setExtensionState();
-
                 me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
             });
 
@@ -434,7 +428,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          *
          */
         createFlyout: function (extension, plugin, count, extensionInfo) {
-            "use strict";
             var me = this,
                 flyout = this.compiledTemplates['Oskari.userinterface.Flyout'].clone(true, true),
                 flyouttools,
@@ -492,7 +485,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          *
          */
         createView: function (extension, plugin, count, extensionInfo) {
-            "use strict";
             var me = this,
                 view = me.compiledTemplates['Oskari.userinterface.View'].clone(true, true);
 
@@ -504,7 +496,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          */
 
         "removeExtension": function (extension) {
-            "use strict";
+
             /*
              * to-do:
              * - remove tile
@@ -568,7 +560,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          *
          */
         "updateExtension": function (extension, request) {
-            "use strict";
             var me = this,
                 extensions = me.extensions,
                 i,
@@ -696,6 +687,11 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
                 flyoutPlugin = flyoutInfo.plugin;
                 flyout = flyoutInfo.el;
 
+                //if flyout plugin has a lazyRender created, use it.
+                if(state === 'attach' && flyoutPlugin.lazyRender) {
+                    flyoutPlugin.lazyRender();
+                }
+
                 /**
                  * do the op for this extension
                  */
@@ -737,7 +733,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          * @method notifyExtensionViewStateChange
          */
         "notifyExtensionViewStateChange": function (extensionInfo) {
-            "use strict";
             var evt = extensionInfo.extensionUpdatedEvent;
             evt.setViewState(extensionInfo.state);
             evt.setViewInfo(extensionInfo.viewState);
@@ -902,7 +897,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          *
          */
         "applyTransition": function (obj, state, transitions) {
-            "use strict";
             var transition = transitions[state],
                 t;
             if (!transition) {
@@ -923,7 +917,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          *
          */
         "getFlyoutViewState": function (flyout, state) {
-            "use strict";
             var viewState = {
                 "left": flyout.css("left"),
                 "top": flyout.css("top"),
@@ -943,7 +936,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
         "flyoutOps": {
             /** @method detach */
             "detach": function (flyout, flyoutPlugin, extensionInfo, extensions) {
-                "use strict";
                 var me = this,
                     //toState,
                     viewState;
@@ -973,7 +965,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
             },
             /** @method attach */
             "attach": function (flyout, flyoutPlugin, extensionInfo, extensions) {
-                "use strict";
                 var me = this,
                     viewState;
 
@@ -994,7 +985,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
             },
             /** @method minimize */
             "minimize": function (flyout, flyoutPlugin, extensionInfo) {
-                "use strict";
                 var me = this,
                     viewState = me.getFlyoutViewState(flyout, "minimize");
 
@@ -1004,7 +994,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
             },
             /** @method restore */
             "restore": function (flyout, flyoutPlugin, extensionInfo) {
-                "use strict";
                 var me = this;
                 //    viewState;
                 me.applyTransition(flyout, "restore", me.flyoutTransitions);
@@ -1013,7 +1002,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
             },
             /** @method close */
             "close": function (flyout, flyoutPlugin, extensionInfo) {
-                "use strict";
                 var me = this;
 
                 extensionInfo.viewState = {
@@ -1033,11 +1021,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
         "viewOps": {
             /** @method detach */
             "view": function (flyout, flyoutPlugin, extensionInfo, extensions) {
-                "use strict";
             },
             /** @method close */
             "close": function (flyout, flyoutPlugin, extensionInfo) {
-                "use strict";
             }
 
         },
@@ -1050,7 +1036,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          * @param {Object} state bundle state as JSON
          */
         setState: function (state) {
-            "use strict";
             var me = this,
                 divmanazerState = state,
                 e,
@@ -1084,7 +1069,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          * @return {Object} bundle state as JSON
          */
         getState: function () {
-            "use strict";
             var me = this,
                 divmanazerState,
                 e,
@@ -1115,7 +1099,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          *
          */
         applyState: function () {
-            "use strict";
             var me = this;
             me.restoreExtensionViewStates();
         },
@@ -1124,7 +1107,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          * moves state to cache
          */
         refreshExtensionViewStates: function () {
-            "use strict";
             var me = this,
                 e,
                 extensionInfo,
@@ -1152,7 +1134,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          * @method restoreExtensionViewStates
          */
         restoreExtensionViewStates: function () {
-            "use strict";
             var me = this,
                 ops = me.flyoutOps,
                 extensions = me.extensions,
@@ -1210,7 +1191,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          * of the map window.
          */
         _toggleMapWindowFullScreen: function () {
-            "use strict";
             var me = this,
                 reqBuilder = me.sandbox.getRequestBuilder('MapFull.MapWindowFullScreenRequest');
 
@@ -1228,7 +1208,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          *
          */
         shuffleZIndices: function (toTop) {
-            "use strict";
             var me = this,
                 //extensions = me.extensions,
                 zarray = [],

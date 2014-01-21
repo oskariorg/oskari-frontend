@@ -4,11 +4,11 @@ Oskari.registerLocalization({
   "value": {
     "VisualizationForm": {
       "tooltips": {
-        "point": "Edit point style",
+        "dot": "Edit point style",
         "area": "Edit area style",
         "line": "Edit line style"
       },
-      "point": {
+      "dot": {
         "title": "Point feature portrayal",
         "tooltip": "",
         "symbol": {

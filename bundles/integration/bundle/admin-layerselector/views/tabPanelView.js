@@ -66,9 +66,6 @@ define([
                 this.layerGroupingModel = this.options.layerGroupingModel;
                 // If model triggers change event we need to re-render this view
                 this.layerGroupingModel.on("change:layerGroups", this.render, this);
-                // inspireClasses is needed when creating a new layer
-                this.inspireClasses = (this.options.inspire != null) ?
-                    this.options.inspire : this.layerGroupingModel;
 
                 this.addInspireButtonTemplate = _.template(AdminAddInspireButtonTemplate);
                 this.addInspireTemplate = _.template(AdminAddInspireTemplate);
@@ -107,6 +104,7 @@ define([
                             instance: this.options.instance
                         }));
                         var groupContainer = groupPanel.find('.content');
+                        // render layers
                         if (group.models != null) {
                             // Loop through layers in this group
                             for (var n = 0; n < group.models.length; ++n) {
@@ -115,9 +113,8 @@ define([
                                 // create a new layerView with layer model.
                                 var layerView = new LayerView({
                                     model: layer,
-                                    instance: this.options.instance,
-                                    classes: this.inspireClasses,
-                                    layerTabModel: this.layerGroupingModel
+                                    instance: this.options.instance
+                                    //,layerTabModel: this.layerGroupingModel
                                 });
 
                                 //odds and even rows
@@ -129,12 +126,11 @@ define([
                                 visibleLayerCount++;
                                 // Add layerView to group container
                                 groupContainer.append(layerView.$el);
-                                // TODO remove this line
-                                // FIXME why?
+                                // store reference to dom
                                 this.layerContainers[layer.getId()] = layerView;
                             }
                         }
-                        // At this point we want to add new grouping button only for organization
+                        // At this point we want to add new layer button only for organization
                         if (this.options.tabId == 'organization') {
                             groupContainer.append(this.addLayerBtnTemplate({
                                 instance: this.options.instance
@@ -145,42 +141,6 @@ define([
                             "lcId" : group.id
                         });
                         
-                        var j,
-                            lang,
-                            usedLanguages = {};
-                        group.locales = [];
-                        for (lang in group.names) {
-                            if (group.names.hasOwnProperty(lang)) {
-                                usedLanguages[lang] = true;
-                                group.locales.push({
-                                    "lang" : lang,
-                                    "name" : group.names[lang]
-                                });
-                            }
-                        }
-                        
-                        // Make sure all supported languages are present
-                        var supportedLanguages = Oskari.getSupportedLanguages();
-                        
-                        for (j = 0; j < supportedLanguages.length; j++) {
-                            if (!usedLanguages[supportedLanguages[j]]) {
-                                group.locales.push({
-                                    "lang" : supportedLanguages[j],
-                                    "name": ""
-                                });
-                            }
-                        }
-                        /* FIXME test sort, use it
-                        group.locales.sort(function (a, b) {
-                            if (a.lang < b.lang) {
-                                return -1;
-                            }
-                            if (a.lang > b.lang) {
-                                return 1;
-                            }
-                            return 0;
-                        });
-                        */
                         groupPanel.find('.accordion-header').append((this.options.tabId == 'inspire') ?
                             this.addInspireTemplate({
                                 data: group,
@@ -199,17 +159,8 @@ define([
                     this.$el.prepend(this.filterTemplate({
                         instance: this.options.instance
                     }));
-                    var newGroup = {
-                        "locales" : []
-                    };
-                    var supportedLanguages = Oskari.getSupportedLanguages();
-                    supportedLanguages.sort();
-                    for (var i = 0; i < supportedLanguages.length; i++) {
-                        newGroup.locales.push({
-                            "lang" : supportedLanguages[i],
-                            "name" : ""
-                        });
-                    }
+                    
+                    var newGroup = this.layerGroupingModel.getTemplateGroup();
 
                     if (this.options.tabId == 'inspire') {
                         this.$el.find('.oskarifield').append(
@@ -331,8 +282,7 @@ define([
                     // create layer settings view for adding or editing layer
                     var settings = new AdminLayerSettingsView({
                         model: null,
-                        instance: this.options.instance,
-                        classes: this.inspireClasses
+                        instance: this.options.instance
                     });
 
                     layer.append(settings.$el);
@@ -404,34 +354,26 @@ define([
                 var me = this,
                     element = jQuery(e.currentTarget),
                     addClass = element.parents('.admin-add-class');
-                // url for backend action_route
-                var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
-                    action_route = "&action_route=SaveOrganization",
-                    id = "&layerclass_id=",
-                    // id = "&layercl_id=", // this param is used in remove 
-                    lcId = element.parents('.accordion').attr('lcid'),
-                    parentId = "&parent_id=",
-                    names = '';
+
+                var data = {
+                    id : element.parents('.accordion').attr('lcid')
+                };
 
                 addClass.find('[id$=-name]').filter('[id^=add-class-]').each(function (index) {
                     lang = this.id.substring(10, this.id.indexOf("-name"));
-                    names += "&name_" + lang + "=" + this.value;
+                    //names += "&name_" + lang + "=" + this.value;
+                    data["name_" + lang] = this.value;
                 });
-                var url = baseUrl + action_route + id;
-                //add id of layer class
-                if (lcId != null) {
-                    url += lcId;
-                }
-                url += parentId + names;
-                // make AJAX call
-                me._save(e, url, function (response) {
-                    //console.log("Save...");
-                    // callback functionality
-                    me.layerGroupingModel.getClasses(me.options.instance.getSandbox().getAjaxUrl(), "&action_route=GetMapLayerClasses");
+
+                this.layerGroupingModel.save(data, function(err) {
+                    if(err) {
+                        // TODO: handle error
+                        alert("Error!! " + err);
+                        return;
+                    }
                     element.parents('.show-add-class').removeClass('show-add-class');
                     addClass.find('.admin-edit-org-btn').html(me.options.instance.getLocalization('edit'))
                 });
-
             },
             /**
              * Save class
@@ -443,38 +385,6 @@ define([
                 alert('Backend component is not ready yet.');
             },
             /**
-             * Save grouping. Do not use this method, but saveOrganization or saveClass
-             *
-             * @method _save
-             */
-            _save: function (e, url, successCallback) {
-                var me = this,
-                    element = jQuery(e.currentTarget),
-                    addClass = element.parents('.admin-add-class');
-
-                jQuery.ajax({
-                    type: "GET",
-                    dataType: 'json',
-                    beforeSend: function (x) {
-                        if (x && x.overrideMimeType) {
-                            x.overrideMimeType("application/j-son;charset=UTF-8");
-                        }
-                    },
-                    url: url,
-                    success: function (resp) {
-                        if (successCallback && resp === null) {
-                            successCallback(resp);
-                        }
-                    },
-                    error: function (jqXHR, textStatus) {
-                        if (jqXHR.status != 0) {
-                            alert(' false ');
-                        }
-                    }
-                });
-
-            },
-            /**
              * Remove organizations
              *
              * @method removeOrganization
@@ -482,21 +392,27 @@ define([
             removeOrganization: function (e) {
                 var me = this,
                     element = jQuery(e.currentTarget);
+                var groupId = element.attr('data-id');
+                var group = this.layerGroupingModel.getGroup(groupId);
+                var layers = group.getLayers();
 
-                var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
-                    action_route = "&action_route=DeleteOrganization",
-                    id = "&layercl_id=",
-                    parentId = "&parent_id=",
-                    idValue = element.attr('data-id'),
-                    parentIdValue = element.attr('data-parent-id');
 
-                idValue = (idValue != null) ? idValue : '';
-                parentIdValue = (parentIdValue != null) ? parentIdValue : '';
-                var url = baseUrl + action_route + id + idValue + parentId + parentIdValue;
-                // make AJAX call
-                me._remove(e, url, function (response) {
-                    me.layerGroupingModel.removeClass(idValue);
+                this.layerGroupingModel.remove(groupId, function(err) {
+                    if(err) {
+                        // TODO: handle error
+                        alert("Error!! " + err);
+                        return;
+                    }
                     element.parents('.accordion').remove();
+                    // remove layers that were under the organization since they are now gone from the DB
+                    _.each(layers, function(layer) {
+                        element.trigger({
+                            type: "adminAction",
+                            command: 'removeLayer',
+                            modelId: layer.getId(),
+                            baseLayerId: me.options.baseLayerId
+                        }); 
+                    });
                 });
             },
             /**
@@ -507,36 +423,6 @@ define([
             removeClass: function (e) {
                 //TODO
                 alert('Backend component is not ready yet.');
-            },
-            /**
-             * Remove grouping. Do not use this method, but removeOrganization or removeClass
-             *
-             * @method _remove
-             */
-            _remove: function (e, url, successCallback) {
-                var me = this,
-                    element = jQuery(e.currentTarget),
-                    addClass = element.parents('.admin-add-class');
-                jQuery.ajax({
-                    type: "GET",
-                    dataType: 'json',
-                    beforeSend: function (x) {
-                        if (x && x.overrideMimeType) {
-                            x.overrideMimeType("application/j-son;charset=UTF-8");
-                        }
-                    },
-                    url: url,
-                    success: function (resp) {
-                        if (successCallback && resp === null) {
-                            successCallback(resp);
-                        }
-                    },
-                    error: function (jqXHR, textStatus) {
-                        if (jqXHR.status != 0) {
-                            alert(' false ');
-                        }
-                    }
-                });
             },
 
             /**

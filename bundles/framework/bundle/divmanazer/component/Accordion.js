@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Accordion',
      */
 
     function () {
-        "use strict";
         this.template = jQuery('<div class="accordion"></div>');
         this.templateMsg = jQuery('<div class="accordionmsg"></div>');
         this.panels = [];
@@ -23,7 +22,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Accordion',
          * @param {Oskari.userinterface.component.AccordionPanel} panel
          */
         addPanel: function (panel) {
-            "use strict";
             // clear any message before adding panel
             this.removeMessage();
 
@@ -36,7 +34,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Accordion',
          * @param {Oskari.userinterface.component.AccordionPanel} pPanel
          */
         removePanel: function (pPanel) {
-            "use strict";
             var panel = null,
                 i;
             for (i = 0; i < this.panels.length; i += 1) {
@@ -54,19 +51,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Accordion',
             return false;
         },
         removeAllPanels: function () {
-            "use strict";
             this.ui.empty();
             this.panels = [];
         },
         removeMessage: function () {
-            "use strict";
             var msgContainer = this.ui.find("div.accordionmsg");
             if (msgContainer.length > 0) {
                 msgContainer.remove();
             }
         },
         showMessage: function (message) {
-            "use strict";
             this.removeMessage();
 
             var msgContainer = this.templateMsg.clone();
@@ -74,15 +68,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Accordion',
             this.ui.append(msgContainer);
         },
         showPanels: function () {
-            "use strict";
-            var i;
+            var i = 0;
             for (i = 0; i < this.panels.length; i += 1) {
                 this.panels[i].setVisible(true);
             }
         },
         hidePanels: function () {
-            "use strict";
-            var i;
+            var i = 0;
             for (i = 0; i < this.panels.length; i += 1) {
                 this.panels[i].setVisible(false);
             }
@@ -93,11 +85,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Accordion',
          * @param {jQuery} container reference to DOM element
          */
         insertTo: function (container) {
-            "use strict";
             container.append(this.ui);
         },
         getContainer: function () {
-            "use strict";
             return this.ui;
         }
     });

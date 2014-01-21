@@ -1,0 +1,154 @@
+.tools {
+  display: block;
+  z-index: 100000000 !important;
+  text-align: left; }
+  .tools .icon {
+    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/menu-rounded-dark.png');
+    display: inline-block;
+    height: 35px;
+    width: 35px;
+    vertical-align: bottom; }
+  .tools .publishedToolbarContainer {
+    height: auto;
+    background-color: transparent;
+    min-height: 60px;
+    z-index: 16000;
+    position: absolute;
+    top: 45px; }
+    .tools .publishedToolbarContainer .tools-top-arrow {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid #424343;
+      display: inline-block; }
+    .tools .publishedToolbarContainer .publishedToolbarContent {
+      background-color: #424343;
+      color: #FFFFFF;
+      border-radius: 6px;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      display: block;
+      width: 100%;
+      clear: both; }
+      .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0px 10px; }
+        .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow div.tool {
+          display: inline-block;
+          cursor: pointer; }
+        .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow div.tool.selected, .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow div.tool:hover:not(.disabled), .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow div.tool:active:not(.disabled) {
+          background-color: #212121; }
+      .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow:first-child {
+        border-top: none; }
+    .tools .publishedToolbarContainer .publishedToolbarContent.dark {
+      background-color: #424343;
+      border: none; }
+      .tools .publishedToolbarContainer .publishedToolbarContent.dark div.toolrow div.tool.selected, .tools .publishedToolbarContainer .publishedToolbarContent.dark div.toolrow div.tool:hover:not(.disabled), .tools .publishedToolbarContainer .publishedToolbarContent.dark div.toolrow div.tool:active:not(.disabled) {
+        background-color: #212121; }
+    .tools .publishedToolbarContainer .publishedToolbarContent.light {
+      background-color: #ffffff;
+      border: 1px solid #888; }
+      .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool.selected, .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool:hover:not(.disabled), .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool:active:not(.disabled) {
+        background-color: #eeeeee; }
+    .tools .publishedToolbarContainer .publishedToolbarPopupContent.dark .publishedToolPopupContent {
+      background-color: #424343;
+      color: #FFFFFF;
+      border: none; }
+    .tools .publishedToolbarContainer .publishedToolbarPopupContent.light .publishedToolPopupContent {
+      background-color: #FFFFFF;
+      color: #424343;
+      border: 1px solid #888; }
+    .tools .publishedToolbarContainer .publishedToolPopupContent {
+      background-color: #424343;
+      color: #FFFFFF;
+      border-radius: 6px;
+      padding: 0 10px 3px 10px;
+      display: block;
+      width: 220px;
+      clear: both; }
+      .tools .publishedToolbarContainer .publishedToolPopupContent .actions {
+        padding-top: 5px; }
+    .tools .publishedToolbarContainer .publishedToolPopupContent.measureline {
+      width: auto; }
+      .tools .publishedToolbarContainer .publishedToolPopupContent.measureline .content div {
+        text-align: center; }
+      .tools .publishedToolbarContainer .publishedToolPopupContent.measureline .actions input {
+        margin: 2px auto;
+        display: block; }
+    .tools .publishedToolbarContainer .publishedToolPopupContent.dark {
+      background-color: #424343;
+      border: none; }
+    .tools .publishedToolbarContainer .publishedToolPopupContent.light {
+      background-color: #ffffff;
+      border: 1px solid #888; }
+    .tools .publishedToolbarContainer .tool-group-title {
+      font-weight: bold; }
+
+.mapplugins.left .tools {
+  float: left; }
+  .mapplugins.left .tools .icon {
+    float: left; }
+  .mapplugins.left .tools .publishedToolbarContainer {
+    left: 10px; }
+    .mapplugins.left .tools .publishedToolbarContainer .tools-top-arrow {
+      float: left;
+      margin-left: 7.5px; }
+
+.mapplugins.right .tools {
+  float: right; }
+  .mapplugins.right .tools .icon {
+    float: right; }
+  .mapplugins.right .tools .publishedToolbarContainer {
+    right: 10px; }
+    .mapplugins.right .tools .publishedToolbarContainer .tools-top-arrow {
+      float: right;
+      margin-right: 7.5px; }
+
+.tool-history-back-dark {
+  width: 32px;
+  height: 32px;
+  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-history-back-dark.png') !important;
+  background-repeat: no-repeat !important; }
+
+.tool-history-back-light {
+  width: 32px;
+  height: 32px;
+  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-history-back-light.png') !important;
+  background-repeat: no-repeat !important; }
+
+.tool-history-forward-dark {
+  width: 32px;
+  height: 32px;
+  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-history-forward-dark.png') !important;
+  background-repeat: no-repeat !important; }
+
+.tool-history-forward-light {
+  width: 32px;
+  height: 32px;
+  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-history-forward-light.png') !important;
+  background-repeat: no-repeat !important; }
+
+.tool-measure-line-dark {
+  width: 32px;
+  height: 32px;
+  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-measure-line-dark.png') !important;
+  background-repeat: no-repeat !important; }
+
+.tool-measure-line-light {
+  width: 32px;
+  height: 32px;
+  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-measure-line-light.png') !important;
+  background-repeat: no-repeat !important; }
+
+.tool-measure-area-dark {
+  width: 32px;
+  height: 32px;
+  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-measure-area-dark.png') !important;
+  background-repeat: no-repeat !important; }
+
+.tool-measure-area-light {
+  width: 32px;
+  height: 32px;
+  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-measure-area-light.png') !important;
+  background-repeat: no-repeat !important; }

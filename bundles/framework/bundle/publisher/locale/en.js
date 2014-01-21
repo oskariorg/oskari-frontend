@@ -52,13 +52,17 @@ Oskari.registerLocalization({
                 "ControlsPlugin": "Panning on",
                 "SearchPlugin": "Address and place name search",
                 "GetInfoPlugin": "Query tool for place data",
-                "PublisherToolbarPlugin": "map tools"
+                "PublisherToolbarPlugin": "map tools",
+                "drawPoints" : "Allow points",
+                "drawLines" : "Allow lines",
+                "drawAreas" : "Allow areas",
+                "selectDrawLayer" : "Select draw layer"
             },
-            "toolbarToolNames": {  
-                "history_back" : "Move backward",
-                "history_forward" : "Move forward",
-                "measureline" : "Measure distance",
-                "measurearea" : "Measure area"
+            "toolbarToolNames": {
+                "history_back": "Move backward",
+                "history_forward": "Move forward",
+                "measureline": "Measure distance",
+                "measurearea": "Measure area"
             },
             "toollayout": {
                 "label": "Tool layout",
@@ -67,9 +71,10 @@ Oskari.registerLocalization({
                 "righthanded": "Righthanded"
             },
             "data": {
-                "label": "Statistics",
-                "tooltip": "Show the data related to map.",
-                "grid": "Show statistic grid"
+                "label":                "Statistics",
+                "tooltip":              "Show the data related to map.",
+                "grid":                 "Show statistic grid",
+                "allowClassification":  "Allow classification"
             },
             "layout": {
                 "label": "Layout",
@@ -99,6 +104,7 @@ Oskari.registerLocalization({
                     },
                     "toolStyles": {
                         "label": "Tool style",
+                        "default": "Default style",
                         "rounded-dark": "Rounded (dark)",
                         "rounded-light": "Rounded (light)",
                         "sharp-dark": "Polygon (dark)",
@@ -121,6 +127,9 @@ Oskari.registerLocalization({
                 "label": "Map layers",
                 "defaultLayer": "(Default layer)",
                 "useAsDefaultLayer": "Use as default layer"
+            },
+            "myplaces": {
+                "label": "My layers"
             },
             "sizes": {
                 "small": "Small",

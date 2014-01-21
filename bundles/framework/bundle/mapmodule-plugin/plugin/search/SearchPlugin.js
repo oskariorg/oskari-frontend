@@ -76,13 +76,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             me.template = jQuery(
                 '<div class="mapplugin search">' +
                     '<div class="search-textarea-and-button">' +
-                   
                     '<input placeholder="' + me.loc.placeholder + '" type="text" />' +
-            
-                   '<input type="button" value="' + me.loc.search + '" name="search" />' +
+                    '<input type="button" value="' + me.loc.search + '" name="search" />' +
                     '</div>' +
                     '<div class="results">' +
-                    '<div class="header">' + 
+                    '<div class="header">' +
                     '<div class="close icon-close" title="' + me.loc.close + '"></div>' +
                     '</div>' +
                     '<div class="content">&nbsp;</div>' +
@@ -277,7 +275,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             // to close button
             content.find('div.close').click(function (event) {
                 me._hideSearch();
-                 inputField.val('');
+                inputField.val('');
                 // TODO: this should also unbind the TR tag click listeners?
             });
             content.find('div.close-results').click(function (event) {
@@ -494,6 +492,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             div = div || this.element;
 
             if (!style || !div) {
+                return;
+            }
+
+            if (style.val === null) {
+                this.conf.toolStyle = null;
+                div.remove();
+                this._createUI();
                 return;
             }
 

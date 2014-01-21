@@ -187,6 +187,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
              */
             'AfterMapLayerAddEvent': function (event) {
                 this.addLayer(event.getMapLayer());
+                this._checkBaseLayers(event.getMapLayer());
             },
 
             /**
@@ -204,24 +205,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
              * Adds the layer to selection
              */
             'AfterMapMoveEvent': function (event) {
-                var i,
-                    layer;
-                // setup initial state here since we are using selected layers to create ui
-                // and plugin is started before any layers have been added
-                if (this.initialSetup) {
-                    this.initialSetup = false;
-
-                    // reacting to conf
-                    if (this.conf && this.conf.baseLayers) {
-                        for (i = 0; i < this.conf.baseLayers.length; i += 1) {
-                            layer = this._sandbox.findMapLayerFromSelectedMapLayers(this.conf.baseLayers[i]);
-                            this.addBaseLayer(layer);
-                        }
-                        if (this.conf.defaultBaseLayer) {
-                            this.selectBaseLayer(this.conf.defaultBaseLayer);
-                        }
-                    }
-                }
+                this._checkBaseLayers();
             }
         },
 
@@ -352,7 +336,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to move
          */
         addBaseLayer: function (layer) {
-            if (!layer || !layer.getId) {
+            if (!layer || !layer.getId || !this.element) {
                 return;
             }
             var div = this.layerRefs[layer.getId()];
@@ -546,7 +530,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var me = this,
                 containerClasses = 'top left',
                 position = 3;
-
             if (!me.element) {
                 me.element = me.templates.main.clone();
             }
@@ -597,7 +580,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         changeToolStyle: function (styleName, div) {
             div = div || this.element;
 
-            if (!div || !styleName) {
+            if (!div) {
+                return;
+            }
+
+            if (styleName === null) {
+                // reset plugin if active
+                if (this.element) {
+                    delete this.conf.toolStyle;
+                    this.stopPlugin();
+                    this.startPlugin();
+                }
                 return;
             }
 
@@ -611,9 +604,49 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/layers/images/',
                 bgImg = imgPath + 'map-layer-button-' + styleName + '.png';
 
-            div.addClass('published-styled-layerselector');
-            content.addClass('published-styled-layerselector-content');
-            header.addClass('published-styled-layerselector-header');
+            header.empty();
+            if (styleName !== null) {
+                div.addClass('published-styled-layerselector');
+                content.addClass('published-styled-layerselector-content');
+                content.addClass('layerselection-styled-content');
+                header.addClass('published-styled-layerselector-header');
+                // Set the styling to the content div based on the tool style.
+                this.getMapModule().changeCssClasses(
+                    'oskari-publisher-layers-' + styleName,
+                    /oskari-publisher-layers-/,
+                    [content]
+                );
+                // Set the styling of the header as well since the border rounding affects them
+                this.getMapModule().changeCssClasses(
+                    'oskari-publisher-layers-header-' + styleName,
+                    /oskari-publisher-layers-header-/,
+                    [contentHeader]
+                );
+                header.css({
+                    'background-image': 'url("' + bgImg + '")'
+                });
+            } else {
+                div.removeClass('published-styled-layerselector');
+                content.removeClass('published-styled-layerselector-content');
+                content.removeClass('layerselection-styled-content');
+                header.removeClass('published-styled-layerselector-header');
+                // Set the styling to the content div based on the tool style.
+                this.getMapModule().changeCssClasses(
+                    '',
+                    /oskari-publisher-layers-/,
+                    [content]
+                );
+                // Set the styling of the header as well since the border rounding affects them
+                this.getMapModule().changeCssClasses(
+                    '',
+                    /oskari-publisher-layers-header-/,
+                    [contentHeader]
+                );
+
+                header.css({
+                    'background-image': ''
+                });
+            }
 
             content.find('div.content-header').remove();
             content.find('div.styled-header-arrow').remove();
@@ -625,25 +658,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 self.closeSelection();
             });
 
-            content.addClass('layerselection-styled-content');
 
-            // Set the styling to the content div based on the tool style.
-            this.getMapModule().changeCssClasses(
-                'oskari-publisher-layers-' + styleName,
-                /oskari-publisher-layers-/,
-                [content]
-            );
-            // Set the styling of the header as well since the border rounding affects them
-            this.getMapModule().changeCssClasses(
-                'oskari-publisher-layers-header-' + styleName,
-                /oskari-publisher-layers-header-/,
-                [contentHeader]
-            );
-
-            header.empty();
-            header.css({
-                'background-image': 'url("' + bgImg + '")'
-            });
 
             // Pretty fugly, but needed here since we're modifying the DOM and
             // all the style changes disappear like Clint Eastwood rides into the sunset.
@@ -711,6 +726,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 testRegex = /oskari-publisher-font-/;
 
             this.getMapModule().changeCssClasses(classToAdd, testRegex, [div]);
+        },
+        _checkBaseLayers : function (layer) {
+            var i,
+                layer = layer;
+            // reacting to conf
+            if (this.conf && this.conf.baseLayers) {
+                // setup initial state here since we are using selected layers to create ui
+                // and plugin is started before any layers have been added
+                if (this.initialSetup && layer == null) {
+                    this.initialSetup = false;
+
+                    for (i = 0; i < this.conf.baseLayers.length; i += 1) {
+                        layer = this._sandbox.findMapLayerFromSelectedMapLayers(this.conf.baseLayers[i]);
+                        this.addBaseLayer(layer);
+                    }
+                    if (this.conf.defaultBaseLayer) {
+                        this.selectBaseLayer(this.conf.defaultBaseLayer);
+                    }
+                } else if (layer != null) {
+                    for (i = 0; i < this.conf.baseLayers.length; i++) {
+                        if (this.conf.baseLayers[i] == layer.getId()) {
+                            this.addBaseLayer(layer);
+                        }
+                    }
+                    if (this.conf.defaultBaseLayer == layer.getId()) {
+                        this.selectBaseLayer(this.conf.defaultBaseLayer);
+                    }
+                }
+            }
         }
     }, {
         /**

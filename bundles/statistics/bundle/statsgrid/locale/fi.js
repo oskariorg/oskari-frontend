@@ -15,9 +15,22 @@ Oskari.registerLocalization({
 			"title": "Indikaattorit",
 			"grid": {
 				"name": "Otsikko",
-				"description": "Kuvaus"
+				"description": "Kuvaus",
+				"organization": "Tietolähde",
+				"year": "Vuosi",
+				"delete": " "
 			},
-			"newIndicator": "Uusi indikaattori"
+			"deleteTitle": "Indikaattorin poistaminen",
+			"destroyIndicator": "Poista",
+			"cancelDelete": "Peruuta",
+			"confirmDelete": "Haluatko varmasti poistaa indikaattorin ",
+			"newIndicator": "Uusi indikaattori",
+			"error": {
+				"title": "Virhe",
+				"indicatorsError": "Virhe indikaattorien latauksessa. Yritä myöhemmin uudelleen",
+				"indicatorError": "Virhe indikaattorin latauksessa. Yritä myöhemmin uudelleen",
+				"indicatorDeleteError": "Virhe indikaattorin poistossa. Yritä myöhemmin uudelleen"
+			}
 		},
 		"gender": "Sukupuoli",
 		"genders": {
@@ -28,7 +41,8 @@ Oskari.registerLocalization({
 		"addColumn": "Hae data",
 		"removeColumn": "Poista",
 		"indicators": "Indikaattorit",
-		"cannotDisplayIndicator": "Indikaattorilla ei ole kuntapohjaisia arvoja, joten sitä ei voi näyttää taulukossa.",
+		"cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voida näyttää taulukossa.",
+		"availableRegions": " Arvot löytyvät seuraaville aluejaoille: ",
 		"year": "Vuosi",
 		"buttons": {
 			"ok": "OK",
@@ -82,6 +96,7 @@ Oskari.registerLocalization({
 
 		},
 		"statistic": {
+			"title": "Tilastomuuttujat",
 			"avg": "Keskiarvo",
 			"max": "Suurin arvo",
 			"mde": "Moodi",
@@ -91,6 +106,7 @@ Oskari.registerLocalization({
 			"sum": "Yhteensä"
 		},
 		"values": "arvoa",
+		"included": "Arvot",
 		"municipality": "Kunnat",
 		"not_included": "Poistettu laskuista",
 		"selectRows": "Valitse rivit",
@@ -119,12 +135,40 @@ Oskari.registerLocalization({
 		"chosenRegionText" 		: "Valitse alueita",
 		"noRegionFound"			: "Aluetta ei löytynyt",
 		"regionCategories"      : {
+			"title"					: "Aluejaot",
+			"KUNTA"					: "Kunta",
 		    "ALUEHALLINTOVIRASTO" 	: "Aluehallintovirasto",
 		    "MAAKUNTA" 				: "Maakunta",
 		    "NUTS1" 				: "Manner-Suomi ja Ahvenanmaa",
 		    "SAIRAANHOITOPIIRI" 	: "Sairaanhoitopiiri",
 		    "SEUTUKUNTA" 			: "Seutukunta",
 		    "SUURALUE" 				: "Suuralue"
-		}
+		},
+		"addDataButton" 			: "Lisää oma",
+		"addDataTitle" 				: "Lisää oma indikaattori",
+        "openImportDialogTip"		: "Tuo arvot leikepöydältä.",
+		"openImportDataButton" 		: "Tuo arvot",
+		"addDataMetaTitle" 			: "Otsikko",
+		"addDataMetaTitlePH" 		: "Indikaattorin otsikko",
+		"addDataMetaSources" 		: "Lähde",
+		"addDataMetaSourcesPH" 		: "Datan lähdeviittaus",
+		"addDataMetaDescription" 	: "Kuvaus",
+		"addDataMetaDescriptionPH" 	: "Kuvaus",
+		"addDataMetaReferenceLayer" : "Aineisto",
+		"addDataMetaYear" 			: "Vuosi",
+		"addDataMetaYearPH" 		: "Data on vuodelta",
+		"addDataMetaPublicity" 		: "Julkaistavissa",
+		"municipalityHeader" 		: "Kunnat",
+		"municipalityPlaceHolder"	: "Anna arvo",
+		"formCancel" 				: "Peruuta",
+		"formSubmit" 				: "Tallenna",
+		"cancelButton" 				: "Peruuta",
+		"importDataButton" 			: "Tallenna arvot",
+		"popupTitle" 				: "Tuo arvot",
+		"importDataDescription" 	: "Voit tuoda kunta - arvo -pareja kopioimalla ne tekstikenttään. <br>Jokainen kunta omalle rivilleen ja erottimeksi käy tabulaattori, kaksoispiste ja pilkku.<br>Esimerkki 1: Alajärvi, 1234<br>Esimerkki 2: 009	2100",
+        "failedSubmit"              : "Lisää indikaattorin metatiedot: ",
+        "connectionProblem"         : "Dataa ei voitu tallentaa yhteysongelman takia.",
+        "parsedDataInfo"            : "Tuotuja alueita oli yhteensä",
+        "parsedDataUnrecognized"    : "Tunnistamattomia alueita"
 	}
 });

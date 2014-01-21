@@ -389,13 +389,13 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
             // Let's show the user a dialog when the new analysislayer gets added to the map.
             if (event.getOperation() === 'add') {
                 var layer = this.mapLayerService.findMapLayer(layerId);
-                /* 
+
                 if (layer && layer.isLayerOfType('ANALYSIS')) {
                      this.showMessage(
-                    loc.success.layerAdded.title.replace(/\{layer\}/, layer.getName()),
-                    loc.success.layerAdded.message
+                    loc.success.layerAdded.title,
+                    loc.success.layerAdded.message.replace(/\{layer\}/, layer.getName())
                 );
-                }*/
+                }
             }
             // maplayers changed so update the tab content in personaldata
             this.personalDataTab.update();

@@ -52,13 +52,17 @@ Oskari.registerLocalization({
                 "ControlsPlugin": "Panorering på",
                 "SearchPlugin": "Adress- och ortnamnssökning",
                 "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet",
-                "PublisherToolbarPlugin": "Kartverktygen"
+                "PublisherToolbarPlugin": "Kartverktygen",
+                "drawPoints" : "Tillåter poäng",
+                "drawLines" : "Tillåter linjer",
+                "drawAreas" : "Tillåter områden",
+                "selectDrawLayer" : "Väljer ritning lager"
             },
-            "toolbarToolNames": {  
-                "history_back" : "Gå bakåt",
-                "history_forward" : "Gå framåt",
-                "measureline" : "Mäta avstånd",
-                "measurearea" : "Mäta område"
+            "toolbarToolNames": {
+                "history_back": "Gå bakåt",
+                "history_forward": "Gå framåt",
+                "measureline": "Mäta avstånd",
+                "measurearea": "Mäta område"
             },
             "toollayout": {
                 "label": "Verktyg applikation",
@@ -67,9 +71,10 @@ Oskari.registerLocalization({
                 "righthanded": "Högerhänt"
             },
             "data": {
-                "label": "Statistik",
-                "tooltip": "Show the data related to map.",
-                "grid": "Visa statistik bord"
+                "label":                "Statistik",
+                "tooltip":              "Show the data related to map.",
+                "grid":                 "Visa statistik bord",
+                "allowClassification":  "Möjliggöra klassificering"
             },
             "layout": {
                 "label": "Layout",
@@ -99,6 +104,7 @@ Oskari.registerLocalization({
                     },
                     "toolStyles": {
                         "label": "Verktygens stil",
+                        "default": "Förvald utseende",
                         "rounded-dark": "Avrundad (mörk)",
                         "rounded-light": "Avrundad (ljus)",
                         "sharp-dark": "Kantig (mörk)",
@@ -122,6 +128,9 @@ Oskari.registerLocalization({
                 "label": "Kartlager",
                 "defaultLayer": "(Förvald kartlager)",
                 "useAsDefaultLayer": "Använd som förvald kartlager"
+            },
+            "myplaces": {
+                "label": "Mina kartlager"
             },
             "sizes": {
                 "small": "Liten",

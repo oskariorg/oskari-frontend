@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
      */
 
     function () {
-        "use strict";
         this.container = undefined;
         this.opts = undefined;
     }, {
@@ -46,7 +45,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
          * @see  http://fgnass.github.com/spin.js/
          */
         insertTo: function (el, opts) {
-            "use strict";
             this.container = el;
             this.opts = opts || this.__opts;
         },
@@ -55,7 +53,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
          * starts spinner spin
          */
         start: function () {
-            "use strict";
             var el = this.container,
                 $el = $(el),
                 data = $el.data(),
@@ -77,7 +74,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
          * stops spinner spin
          */
         stop: function () {
-            "use strict";
             var el = this.container,
                 $el,
                 data;
@@ -92,7 +88,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
             }
         },
         _Spinner: (function (window, document) {
-            "use strict";
             //fgnass.github.com/spin.js#v1.2.8
 
             /**

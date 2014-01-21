@@ -50,8 +50,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 featureNS: this.featureNS,
                 url: url
             });
+            // myplaces uses version 1.0.0 since with 1.1.0 geoserver connects
+            // multilines to one continuous line on save
             this.protocols.my_places = new OpenLayers.Protocol.WFS({
-                version: '1.1.0',
+                version: '1.0.0',
                 srsName: 'EPSG:3067',
                 geometryName: 'geometry',
                 featureType: 'my_places',
@@ -399,6 +401,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 place.setId(id);
                 place.setName(featAtts.name);
                 place.setDescription(featAtts.place_desc);
+                place.setAttention_text(featAtts.attention_text);
                 place.setLink(featAtts.link);
                 place.setImageLink(featAtts.image_url);
                 place.setCategoryID(featAtts.category_id);
@@ -452,7 +455,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
         /**
          * @method commitPlaces
          *
-         * handles insert & update (NO delete here see next moethd)
+         * handles insert & update (NO delete here see next method)
          */
         commitMyPlaces: function (list, callback) {
             var p = this.protocols.my_places;
@@ -472,6 +475,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 featAtts = {
                     'name': m.getName(),
                     'place_desc': m.getDescription(),
+                    'attention_text': m.getAttention_text(),
                     'link': m.getLink(),
                     'image_url': m.getImageLink(),
                     'category_id': m.getCategoryID(),

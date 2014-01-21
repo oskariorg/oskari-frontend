@@ -58,6 +58,7 @@ Oskari.registerLocalization({
       "publishedmaps": {
         "title": "Embedded maps",
         "show" : "Show on the map",
+        "getHTML": "HTML code",
         "edit" : "Edit",
         "publish": "Publish map",
         "unpublish": "Unpublish map",
@@ -66,9 +67,13 @@ Oskari.registerLocalization({
           "name": "Name",
           "domain": "Map settings",
           "publish": "Status",
-          "show" : " ",
+          "show" : "Actions",
+          "html" : " ",
           "edit": " ",
           "delete": " "
+        },
+        "published": {
+            "desc": "Embed the map by adding the HTML code below to your website."
         },
         "popup": {
           "edit": "Change map name",

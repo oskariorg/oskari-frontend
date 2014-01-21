@@ -58,6 +58,20 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
          */
         getWmsName: function () {
             return this._wmsName;
+        },
+        /**
+         * @method setVersion
+         * @param {String} version 1.3.0 or 1.1.1.
+         */
+        setVersion: function (version) {
+            this._version = version;
+        },
+        /**
+         * @method getVersion
+         * @return {String} version 1.3.0 or 1.1.1.
+         */
+        getVersion: function () {
+            return this._version;
         }
     }, {
         "extend": ["Oskari.mapframework.domain.AbstractLayer"]

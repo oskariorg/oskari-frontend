@@ -199,7 +199,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
          * @param {Boolean} isBaseMap
          */
         _addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-
             if (!layer.isLayerOfType('WMS')) {
                 return;
             }
@@ -235,17 +234,17 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
 
                 // default params and options
                 var defaultParams = {
-                    layers: _layer.getWmsName(),
-                    transparent: true,
-                    id: _layer.getId(),
-                    styles: _layer.getCurrentStyle().getName(),
-                    format: "image/png"
-                },
+                        layers: _layer.getWmsName(),
+                        transparent: true,
+                        id: _layer.getId(),
+                        styles: _layer.getCurrentStyle().getName(),
+                        format: "image/png"
+                    },
                     defaultOptions = {
                         layerId: _layer.getWmsName(),
                         isBaseLayer: false,
                         displayInLayerSwitcher: false,
-                        visibility: true,
+                        visibility: _layer.isInScale(this.getMapModule().getMap().getScale()),
                         buffer: 0
                     },
                     layerParams = _layer.getParams(),

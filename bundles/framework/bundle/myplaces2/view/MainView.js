@@ -121,6 +121,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
              */
             'DrawPlugin.FinishedDrawingEvent': function (event) {
                 this._handleFinishedDrawingEvent(event);
+            },
+            'DrawPlugin.ActiveDrawingEvent': function(event) {
+                if (this.form) {
+                    this.form.setMeasurementResult(event.getDrawing(), event.getDrawMode());
+                }
             }
         },
         /**
@@ -158,10 +163,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                         link: place.getLink(),
                         imageLink: place.getImageLink(),
                         desc: place.getDescription(),
+                        attention_text: place.getAttention_text(),
                         category: place.getCategoryID()
                     }
                 };
                 this.form.setValues(param);
+            }
+
+            var drawing = this.drawPlugin.getDrawing();
+            if (drawing) {
+                if (drawing.CLASS_NAME === 'OpenLayers.Geometry.MultiLineString') {
+                    this.form.setMeasurementResult(drawing, 'line');
+                } else if (drawing.CLASS_NAME === 'OpenLayers.Geometry.MultiPolygon') {
+                    this.form.setMeasurementResult(drawing, 'area');
+                }
             }
 
             var content = [{
@@ -309,6 +324,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             place.setLink(values.link);
             place.setImageLink(values.imageLink);
             place.setDescription(values.desc);
+            place.setAttention_text(values.attention_text);
             place.setCategoryID(values.category);
             // fetch the latest geometry if edited after FinishedDrawingEvent
             place.setGeometry(this.drawPlugin.getDrawing());

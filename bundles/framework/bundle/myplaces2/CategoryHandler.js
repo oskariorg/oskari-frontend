@@ -234,9 +234,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.CategoryHandler",
             var catLoc = this.instance.getLocalization('category');
             var json = {
                 wmsName: 'oskari:my_places_categories',
-                type: "wmslayer",
-                isQueryable: true,
-                opacity: 90,
+                type: "myplaceslayer",
+                isQueryable:true,
+                opacity: 50,
                 metaType: this.instance.idPrefix,
                 orgName: catLoc.organization,
                 inspire: catLoc.inspire
@@ -309,7 +309,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.CategoryHandler",
                     cap: category.getLineCap(),
                     corner: category.getLineCorner(),
                     style: category.getLineStyle(),
-                    size: category.getLineWidth(),
+                    width: category.getLineWidth(),
                     color: category.getLineColor()
                 },
                 area: {
@@ -321,7 +321,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.CategoryHandler",
                     fillStyle: category.getAreaFillStyle()
                 }
             };
-
             form.setValues(values);
             var content = form.getForm();
             content.find('input[name=categoryname]').val(category.name);
@@ -443,6 +442,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.CategoryHandler",
                     error: loc.categoryNameIllegal
                 });
             }
+
             if (!this._validateNumber(values.dot.shape, 0, 6)) {
                 errors.push({
                     field: 'dotShape',

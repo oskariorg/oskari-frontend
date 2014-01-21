@@ -297,6 +297,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 layer;
             me._teardownState(mapmodule);
 
+            // map location needs to be set before layers are added
+            // otherwise f.ex. wfs layers break on add
+            if (state.east && ignoreLocation !== true) {
+                me.sandbox.getMap().moveTo(
+                    state.east,
+                    state.north,
+                    state.zoom
+                );
+            }
+
+            me.sandbox.syncMapState(true);
+
             // setting state
             if (state.selectedLayers) {
                 rbAdd = me.sandbox.getRequestBuilder('AddMapLayerRequest');
@@ -317,16 +329,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 }
             }
 
-
-            if (state.east && ignoreLocation !== true) {
-                me.sandbox.getMap().moveTo(
-                    state.east,
-                    state.north,
-                    state.zoom
-                );
-            }
-
-            me.sandbox.syncMapState(true);
         },
         /**
          * @method getState
@@ -388,7 +390,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 layer = null,
                 i = 0,
                 ilen = 0;
-
+            if(this.conf && this.conf.link) {
+                // add additional link params (version etc)
+                for(var key in this.conf.link) {
+                    link = key + '=' + this.conf.link[key] + '&' + link;
+                }
+            }
             for (i = 0, ilen = selectedLayers.length; i < ilen; i++) {
                 layer = selectedLayers[i];
                 if (!layer.hidden) {
@@ -412,7 +419,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
          */
         toggleFullScreen: function () {
             jQuery('#' + this.contentMapDivId).toggleClass('oskari-map-window-fullscreen');
-            this.mapmodule.getMap().updateSize();
+            this.mapmodule.updateSize();
         }
     }, {
         /**

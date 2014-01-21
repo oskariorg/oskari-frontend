@@ -125,7 +125,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             "src" : "../../../../bundles/framework/bundle/divmanazer/component/visualization-form/LineForm.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/component/visualization-form/PointForm.js"
+"src" : "../../../../bundles/framework/bundle/divmanazer/component/visualization-form/DotForm.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultTile.js"
@@ -141,18 +141,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultLayout.js"
-        },  {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedTile.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedFlyout.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedExtension.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedView.js"
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/divmanazer/css/divman.css"
@@ -194,7 +182,10 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             "src" : "../../../../resources/framework/bundle/divmanazer/css/popover.css"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../libraries/jquery/plugins/jquery.svg.package-1.4.5/jquery.svg.js"
+            "src" : "../../../../libraries/raphaeljs/raphael.min.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/jquery/plugins/jquery-placeholder/jquery.placeholder.js"
         }/*, {
          "type" : "text/javascript",
          "src" : "../../../../resources/framework/bundle/divmanazer/js/jquery.event.drag-1.5.min.js"

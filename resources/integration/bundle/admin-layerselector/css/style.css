@@ -43,9 +43,11 @@ div.admin-layerselector {
       float: none;
       width: 140px;
       height: 16px;
-      margin: 0; }
+      margin: 0;
+      margin-bottom: 4px; }
       div.admin-layerselector div.layer .add-layer-input.mid, div.admin-layerselector div.create-layer .add-layer-input.mid {
-        width: 217px; }
+        width: 217px;
+        float: left; }
       div.admin-layerselector div.layer .add-layer-input.long, div.admin-layerselector div.create-layer .add-layer-input.long {
         width: 297px; }
     div.admin-layerselector div.layer .layer-title, div.admin-layerselector div.create-layer .layer-title {
@@ -93,7 +95,8 @@ div.admin-layerselector {
       padding: 8px 10px 8px 10px;
       -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
       -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); }
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+      display: block; }
     div.admin-layerselector div.layer textarea.add-layer-input, div.admin-layerselector div.create-layer textarea.add-layer-input {
       padding: 10px;
       width: 157px;
@@ -167,7 +170,8 @@ div.admin-layerselector {
     padding: 10px 0px;
     height: auto;
     width: 100%;
-    overflow: hidden; }
+    overflow: hidden;
+    clear: right; }
   div.admin-layerselector .admin-add-class {
     padding: 0px 10px;
     overflow: hidden;
@@ -210,13 +214,15 @@ div.admin-layerselector {
     width: 100%; }
   div.admin-layerselector .input-controls {
     position: relative;
-    float: left;
+    /*float: left;*/
     margin-right: 5px; }
     div.admin-layerselector .input-controls input.add-class-input.mid {
       width: 297px; }
     div.admin-layerselector .input-controls .admin-add-class-cancel, div.admin-layerselector .input-controls .admin-add-layer-cancel {
       float: right;
       margin-right: 10px; }
+  div.admin-layerselector .adjacent .input-controls {
+    float: left; }
   div.admin-layerselector .icon-close {
     display: inline-block;
     opacity: 0;
@@ -226,6 +232,8 @@ div.admin-layerselector {
     right: 10px;
     margin-left: 0px;
     cursor: pointer; }
+    div.admin-layerselector .icon-close.mid {
+      right: 90px; }
   div.admin-layerselector .input-controls:hover .icon-close, div.admin-layerselector .layer:hover button.admin-arrange-layers {
     -webkit-transition-property: opacity;
     -webkit-transition-duration: 300ms;

@@ -29,7 +29,7 @@ function() {
     getWmsName : function() {
         return this._wmsName;
     },
-      /**
+    /**
      * @method setFilterPropertyName
      * @param {String} filterPropertyName is the key field name to map layer features 
      */
@@ -42,6 +42,33 @@ function() {
      */
     getFilterPropertyName : function() {
         return this._filterPropertyName;
+    },
+    /**
+     * Should have structure like this:
+     * {
+     *     categories: [
+     *         <SOTKAnet category>
+     *     ],
+     *     wmsNames: {
+     *         <SOTKAnet category>: <wmsname>
+     *     },
+     *     filterProperties: {
+     *         <SOTKAnet category>: <filter property>
+     *     }
+     * }
+     *
+     * @method setCategoryMappings
+     * @param {Object} mappings
+     */
+    setCategoryMappings : function(mappings) {
+        this._categoryMappings = mappings;
+    },
+    /**
+     * @method getCategoryMappings
+     * @return {Object} mappings for SOTKAnet categories
+     */
+    getCategoryMappings : function() {
+        return this._categoryMappings;
     }
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]

@@ -37,18 +37,22 @@ div.mapplugins {
           margin: 0 5px; }
           div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin.layerselection, div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin.search {
             float: right; }
-    div.mapplugins.top.right .mapplugin.layerselection {
-      margin-left: 0; }
-    div.mapplugins.top.right .mapplugin.layerselection, div.mapplugins.top.right .mapplugin.search {
-      display: block;
-      float: right;
-      margin: 0 5px; }
-    div.mapplugins.top.left .mapplugin.layerselection {
-      margin-right: 0; }
-    div.mapplugins.top.left .mapplugin.layerselection, div.mapplugins.top.left .mapplugin.search {
-      display: block;
-      float: left;
-      margin: 0 5px; }
+    div.mapplugins.top.right {
+      min-width: 100px; }
+      div.mapplugins.top.right .mapplugin.layerselection {
+        margin-left: 0; }
+      div.mapplugins.top.right .mapplugin.layerselection, div.mapplugins.top.right .mapplugin.search {
+        display: block;
+        float: right;
+        margin: 0 5px; }
+    div.mapplugins.top.left {
+      min-width: 100px; }
+      div.mapplugins.top.left .mapplugin.layerselection {
+        margin-right: 0; }
+      div.mapplugins.top.left .mapplugin.layerselection, div.mapplugins.top.left .mapplugin.search {
+        display: block;
+        float: left;
+        margin: 0 5px; }
   div.mapplugins.bottom {
     bottom: 0; }
     div.mapplugins.bottom .mappluginsContainer .mappluginsContent {
@@ -103,6 +107,8 @@ div.mapplugins {
       div.mapplugins.right.center .mappluginsContainer {
         display: table-cell;
         vertical-align: middle; }
+    div.mapplugins.right .mapplugin.indexmap .indexmapToggle {
+      float: right; }
 
 .oskari-publisher-font-arial {
   font-family: Arial, sans-serif !important; }

@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
      */
 
     function () {
-        "use strict";
         //this.template = jQuery('<div class="oskaributton"><input type="button"/></div>');
         this.template = jQuery('<input type="button"/>');
         this.title = null;
@@ -24,7 +23,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * @param {String} pTitle title for the button
          */
         setTitle: function (pTitle) {
-            "use strict";
             this.title = pTitle;
             if (this.ui) {
                 this.ui.attr('value', pTitle);
@@ -36,7 +34,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * @param {String} pClass class to be added
          */
         addClass: function (pClass) {
-            "use strict";
             this.ui.addClass(pClass);
         },
         /**
@@ -45,7 +42,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * @param {Boolean} blnEnabled true to enable, false to disable
          */
         setEnabled: function (blnEnabled) {
-            "use strict";
             if (blnEnabled === true) {
                 this.ui.removeAttr('disabled');
             } else {
@@ -58,7 +54,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * @return {String} title for the panel
          */
         getTitle: function () {
-            "use strict";
             return this.title;
         },
         /**
@@ -67,7 +62,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * @param {Function} pHandler click handler
          */
         setHandler: function (pHandler) {
-            "use strict";
             if (this.handler) {
                 this.ui.unbind('click', this.handler);
             }
@@ -79,7 +73,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * Destroys the button/removes it from document
          */
         destroy: function () {
-            "use strict";
             this.ui.remove();
         },
 
@@ -89,7 +82,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * @param {jQuery} container reference to DOM element
          */
         insertTo: function (container) {
-            "use strict";
             container.append(this.ui);
         },
         /**
@@ -98,7 +90,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * @return {jQuery} reference to DOM element
          */
         getButton: function () {
-            "use strict";
             return this.ui;
         }
     });
