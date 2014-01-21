@@ -625,11 +625,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
 
             // Layer doesn't have styles
             if (me.getStyles().length === 0) {
-                var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-                style.setName("");
-                style.setTitle("");
-                style.setLegend("");
-                this.addStyle(style);
+                this.addStyle(this._createEmptyStyle());
             }
             for (var i = 0; i < me.getStyles().length; i++) {
                 var style = me.getStyles()[i];
@@ -644,8 +640,28 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
 
             // didn't match anything select the first one
             if(!preventRecursion && !me._currentStyle) {
-                this.selectStyle(me.getStyles()[0].getName(), true);
+                if(styleName === '') {
+                    // FIXME: Fix layer styles array so it doesn't contain invalid styles so this isn't needed
+                    // tried to select empty style
+                    this._currentStyle = this._createEmptyStyle();
+                }
+                else {
+                    // tried to select non-existing style
+                    this.selectStyle(me.getStyles()[0].getName(), true);
+                }
             }
+        },
+        /**
+         * Creates an empty style
+         * @private 
+         * @return {Oskari.mapframework.domain.Style} empty style
+         */
+        _createEmptyStyle : function() {
+            var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
+            style.setName("");
+            style.setTitle("");
+            style.setLegend("");
+            return style;
         },
         /**
          * @method getCurrentStyle
