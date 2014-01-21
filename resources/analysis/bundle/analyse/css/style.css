@@ -10,7 +10,7 @@ div.notLoggedIn {
   position: absolute;
   height: 100%;
   top: 0;
-  left: 40px;
+  left: 0;
   z-index: 1500;
   width: 255px; }
 

@@ -625,11 +625,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
 
             // Layer doesn't have styles
             if (me.getStyles().length === 0) {
-                var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-                style.setName("");
-                style.setTitle("");
-                style.setLegend("");
-                this.addStyle(style);
+                this.addStyle(this._createEmptyStyle());
             }
             for (var i = 0; i < me.getStyles().length; i++) {
                 var style = me.getStyles()[i];
@@ -644,14 +640,38 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
 
             // didn't match anything select the first one
             if(!preventRecursion && !me._currentStyle) {
-                this.selectStyle(me.getStyles()[0].getName(), true);
+                if(styleName === '') {
+                    // FIXME: Fix layer styles array so it doesn't contain invalid styles so this isn't needed
+                    // tried to select empty style
+                    this._currentStyle = this._createEmptyStyle();
+                }
+                else {
+                    // tried to select non-existing style
+                    this.selectStyle(me.getStyles()[0].getName(), true);
+                }
             }
+        },
+        /**
+         * Creates an empty style
+         * @private 
+         * @return {Oskari.mapframework.domain.Style} empty style
+         */
+        _createEmptyStyle : function() {
+            var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
+            style.setName("");
+            style.setTitle("");
+            style.setLegend("");
+            return style;
         },
         /**
          * @method getCurrentStyle
          * @return {Oskari.mapframework.domain.Style} current style
          */
         getCurrentStyle: function () {
+            if(!this._currentStyle) {
+                // prevent "nullpointer" if selectstyle hasn't been called
+                this.selectStyle('');
+            }
             return this._currentStyle;
         },
         /**
@@ -805,22 +825,27 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
         /**
          * @method isInScale
          * @param {Number} scale scale to compare to
-         * @return {Boolean} true if given scale is between this layers min/max scales. Always return true for base-layers.
+         * @return {Boolean} true if given scale is between this layer's or its sublayers' min/max scales.
          */
         isInScale: function (scale) {
-            var _return = this.isBaseLayer();
-            if (!scale) {
-                var sandbox = Oskari.$().sandbox;
-                scale = sandbox.getMap().getScale();
-            }
+            var _inScale = false,
+                _subLayers = this.getSubLayers();
 
-            // Check layer scales only normal layers
-            if (!this.isBaseLayer()) {
-                if ((scale > this.getMaxScale() || !this.getMaxScale()) && (scale < this.getMinScale()) || !this.getMinScale()) {
-                    _return = true;
+            scale = scale || Oskari.getSandbox().getMap().getScale();
+
+            if (_subLayers && _subLayers.length) {
+                // Check if any of the sublayers is in scale
+                _inScale = _.any(_subLayers, function(subLayer) {
+                    return subLayer.isInScale(scale);
+                })
+            } else {
+                // Otherwise just check if the scale falls between min/max scales
+                if ((scale > this.getMaxScale() || !this.getMaxScale()) &&
+                    (scale < this.getMinScale()) || !this.getMinScale()) {
+                    _inScale = true;
                 }
             }
-            return _return;
+            return _inScale;
         },
         /**
          * @method getLayerType
