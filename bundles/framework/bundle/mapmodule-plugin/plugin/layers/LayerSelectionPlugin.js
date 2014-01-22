@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         init: function (sandbox) {
             var me = this;
-            me.templates.main = jQuery("<div class='mapplugin layerselection'>" +
+            me.templates.main = jQuery("<div class='mapplugin layerselection' data-clazz='Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin'>" +
                 '<div class="header"><div class="header-icon icon-arrow-white-right"></div></div>' +
                 '<div class="content"><div class="layers"></div><div class="baselayers"></div></div>' +
                 "</div>");
@@ -134,13 +134,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         stopPlugin: function (sandbox) {
             var me = this,
                 p;
+            var sb = sandbox || this._sandbox;
+
             for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p) && me._sandbox) {
-                    me._sandbox.unregisterFromEventByName(me, p);
+                if (me.eventHandlers.hasOwnProperty(p) && sb) {
+                    sb.unregisterFromEventByName(me, p);
                 }
             }
 
-            me._sandbox.unregister(me);
+            sb.unregister(me);
 
             // remove ui
             if (me.element) {
@@ -509,12 +511,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
+            if (!me.conf.location) {
+                me.conf.location = {};
+            }
+            me.conf.location.classes = location;
 
-            // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 3);
             }
         },
 

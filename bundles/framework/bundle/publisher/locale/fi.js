@@ -69,7 +69,10 @@ Oskari.registerLocalization({
                 "label": "Työkalujen asettelu",
                 "tooltip": "Valitse kartalla näytettävien työkalujen asettelu",
                 "lefthanded": "Vasenkätinen",
-                "righthanded": "Oikeakätinen"
+                "righthanded": "Oikeakätinen",
+                "userlayout" : "Siirrä itse",
+                "usereditmode": "Editointitila päälle",
+                "usereditmodeoff": "Poistu editointitilasta"
             },
             "data": {
                 "label":                "Tilastot",

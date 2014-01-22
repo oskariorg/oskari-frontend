@@ -12,6 +12,31 @@ div.mapplugins {
         margin: 0;
         padding: 0;
         .mappluginsContent {
+
+            &.ui-droppable {
+                background-color: rgba(255, 255, 255, 0.5);
+                border: 3px dashed #666666;
+                border-radius: 20px;
+                min-height: 70px;
+                min-width: 70px;
+                padding: 20px;
+
+                &.allowed {
+                    background-color: rgba(0, 255, 0, 0.3);
+
+                    &.ui-state-highlight {
+                        background-color: rgba(127, 255, 127, 0.5);
+                        border-color: #FFF;
+                    }
+
+                }
+
+                &.disallowed {
+                    background-color: rgba(255, 0, 0, 0.3);
+                }
+
+            }
+
             .mapplugin {
                 margin: 0 auto;
                 z-index: 15000;
@@ -120,7 +145,6 @@ div.mapplugins {
                     &.layerselection, &.search {
                         float: right;
                     }
-    
                 }
             }
         }
@@ -136,10 +160,6 @@ div.mapplugins {
                 &.logoplugin {
                     clear: both;
                     margin-right: $pluginMargin * -1;
-                }
-                
-                &.scalebar {
-                    
                 }
                 
                 &.indexmap, &.logoplugin, &.scalebar {
@@ -161,10 +181,6 @@ div.mapplugins {
                 &.logoplugin {
                     clear: both;
                     margin-left: $pluginMargin * -1;
-                }
-                
-                &.scalebar {
-                    
                 }
                 
                 &.indexmap, &.logoplugin, &.scalebar {
@@ -191,8 +207,7 @@ div.mapplugins {
                 display: table-cell;
                 vertical-align: middle;
             }
-        }
-        
+        }        
     }
 
     &.right {
@@ -213,9 +228,7 @@ div.mapplugins {
         .mapplugin.indexmap .indexmapToggle {
             float: right;
         }
-
     }
-
 }
 
 .oskari-publisher-font-arial {
