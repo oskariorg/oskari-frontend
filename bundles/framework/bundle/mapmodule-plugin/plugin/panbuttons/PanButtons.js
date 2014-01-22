@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             var me = this,
                 ppid = (new Date()).getTime().toString();
             // templates
-            this.templates.main = jQuery('<div class="mapplugin panbuttonDiv panbuttons">' +
+            this.templates.main = jQuery('<div class="mapplugin panbuttonDiv panbuttons" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.PanButtons">' +
                 '<div>' +
                 '  <img class="panbuttonDivImg" usemap="#panbuttons_' + ppid + '">' +
                 '    <map name="panbuttons_' + ppid + '">' +
@@ -136,6 +136,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 me.element.remove();
                 delete me.element;
             }
+for (p in me.eventHandlers) {
+    if (me.eventHandlers.hasOwnProperty(p)) {
+        me._sandbox.unregisterFromEventByName(me, p);
+    }
+}
             me._sandbox.unregister(this);
         },
 
@@ -150,12 +155,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
+            me.conf.location.classes = location;
 
             // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                //me.stopPlugin();
+                //me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 0);
             }
         },
         /**
@@ -204,6 +210,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panbuttonDivImg.removeClass("root");
             });
             center.bind('click', function (event) {
+if(!me.isInLayerToolsEditMode){
                 var rn = 'StateHandler.SetStateRequest',
                     mm = me.getMapModule(),
                     sb = mm.getSandbox(),
@@ -213,6 +220,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 } else {
                     sb.resetState();
                 }
+}
             });
 
             var left = pb.find('.panbuttons_left');
@@ -225,7 +233,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panbuttonDivImg.removeClass("left");
             });
             left.bind('click', function (event) {
-                me.getMapModule().panMapByPixels(-100, 0, true);
+if(!me.isInLayerToolsEditMode){
+               me.getMapModule().panMapByPixels(-100, 0, true);
+}
             });
 
             var right = pb.find('.panbuttons_right');
@@ -238,7 +248,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panbuttonDivImg.removeClass("right");
             });
             right.bind('click', function (event) {
+if(!me.isInLayerToolsEditMode){
                 me.getMapModule().panMapByPixels(100, 0, true);
+}
             });
 
             var top = pb.find('.panbuttons_up');
@@ -251,7 +263,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panbuttonDivImg.removeClass("up");
             });
             top.bind('click', function (event) {
+if(!me.isInLayerToolsEditMode){
                 me.getMapModule().panMapByPixels(0, -100, true);
+}
             });
 
             var bottom = pb.find('.panbuttons_down');
@@ -264,9 +278,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panbuttonDivImg.removeClass("down");
             });
             bottom.bind('click', function (event) {
+if(!me.isInLayerToolsEditMode){
                 me.getMapModule().panMapByPixels(0, 100, true);
+}
             });
             pb.mousedown(function (event) {
+if(!me.isInLayerToolsEditMode){
                 var radius = Math.round(0.5 * panbuttonDivImg[0].width),
                     pbOffset = panbuttonDivImg.offset(),
                     centerX = pbOffset.left + radius,
@@ -274,9 +291,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 if (Math.sqrt(Math.pow(centerX - event.pageX, 2) + Math.pow(centerY - event.pageY, 2)) < radius) {
                     event.stopPropagation();
                 }
+}
             });
+// in case we are already in edit mode when plugin is drawn
+this.isInLayerToolsEditMode = me.getMapModule().isInLayerToolsEditMode();
         },
 
+        /**
+         * @property {Object} eventHandlers
+         * @static
+         */
+        eventHandlers: {
+            'LayerToolsEditModeEvent' : function(event) {
+                this.isInLayerToolsEditMode = event.isInMode();
+                if(this.isInLayerToolsEditMode == false && this.element) {
+                    this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
+                }
+            }
+        },
         /**
          * @method onEvent
          * Event is handled forwarded to correct #eventHandlers if found or

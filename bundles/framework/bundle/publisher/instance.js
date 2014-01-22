@@ -231,7 +231,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
              * @method MapLayerVisibilityChangedEvent
              */
             'MapLayerVisibilityChangedEvent': function (event) {
-                if (this.publisher) {
+                if (this.publisher && this.publisher.maplayerPanel) {
                     this.publisher.maplayerPanel.handleLayerVisibilityChanged(event.getMapLayer(), event.isInScale(), event.isGeometryMatch());
                 }
             }
@@ -387,6 +387,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
 
                 Oskari.setLang(me.oskariLang);
                 if (me.publisher) {
+                    // make sure edit mode is disabled
+                    if (me.publisher.toolLayoutEditMode) {
+                        me.publisher._editToolLayoutOff();
+                    }
                     me.publisher.setEnabled(false);
                     me.publisher.destroy();
                 }

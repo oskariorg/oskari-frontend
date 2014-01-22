@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             me.loc = pluginLoc[me.__name];
 
             me.template = jQuery(
-                '<div class="mapplugin search">' +
+                '<div class="mapplugin search default-search-div" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin">' +
                     '<div class="search-textarea-and-button">' +
                     '<input placeholder="' + me.loc.placeholder + '" type="text" />' +
                     '<input type="button" value="' + me.loc.search + '" name="search" />' +
@@ -89,8 +89,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             );
 
             me.styledTemplate = jQuery(
-                '<div class="published-search-div">' +
-                    '<div class="search-area-div">' +
+                '<div class="mapplugin search published-search-div" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin">' +
+                    '<div class="search-area-div search-textarea-and-button">' +
                     '<div class="search-left"></div>' +
                     '<div class="search-middle">' +
                     '<input class="search-input" placeholder="' + me.loc.placeholder + '" type="text" />' +
@@ -150,7 +150,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             me._sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
+                    me._sandbox.registerForEventByName(me, p);
                 }
             }
             me._createUI();
@@ -197,7 +197,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * @property {Object} eventHandlers
          * @static
          */
-        eventHandlers: {},
+        eventHandlers: {
+            'LayerToolsEditModeEvent': function (event) {
+                this._setLayerToolsEditMode(event.isInMode());
+                // FIXME make sure isInLayerToolsEditMode and use !isInLayerToolsEditMode
+                if (!this.isInLayerToolsEditMode) {
+                    this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
+                }
+            }
+        },
+
+        _setLayerToolsEditMode: function (isInEditMode) {
+            this.isInLayerToolsEditMode = isInEditMode;
+            if (this.isInLayerToolsEditMode) {
+                this._inputField.prop("disabled", true);
+                this._searchButton.prop("disabled", true);
+
+                var overlay = jQuery('<div class="search-editmode-overlay">');
+                this.element.find('.search-textarea-and-button')
+                    .css({
+                        'position': 'relative'
+                    })
+                    .append(overlay);
+                overlay.mousedown(function (e) {
+                    e.preventDefault();
+                });
+
+            } else {
+                this._inputField.prop("disabled", false);
+                this._searchButton.prop("disabled", false);
+                this.element.find('.search-editmode-overlay').remove();
+            }
+        },
+
 
         /**
          * @method onEvent
@@ -220,12 +252,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
+            if (!me.conf.location) {
+                me.conf.location = {};
+            }
+            me.conf.location.classes = location;
 
-            // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 1);
             }
         },
         /**
@@ -236,51 +269,70 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          */
         _createUI: function () {
             var me = this,
-                sandbox = me._sandbox,
-                content,
-                containerClasses = 'top left',
-                position = 1;
+                content;
 
-            if (this.conf && this.conf.toolStyle) {
-                content = this.styledTemplate.clone();
-                this.changeToolStyle(this.conf.toolStyle, content);
+            if (me.conf && me.conf.toolStyle) {
+                content = me.styledTemplate.clone();
+                me.element = content;
+                me._inputField = content.find('input[type=text]');
+                me._searchButton = content.find('input[type=button]');
+                me.changeToolStyle(me.conf.toolStyle, content);
             } else {
-                content = this.template.clone();
+                content = me.template.clone();
+                me.element = content;
+                me._inputField = content.find('input[type=text]');
+                me._searchButton = content.find('input[type=button]');
             }
 
-            this.element = content;
-
             // bind events
-            var inputField = content.find('input[type=text]');
+            me._bindUIEvents();
+
+        },
+        _bindUIEvents: function () {
+            var me = this,
+                sandbox = me._sandbox,
+                content = this.element,
+                containerClasses = 'top left',
+                position = 1;
             // to text box
-            inputField.focus(function () {
+            me._inputField.focus(function () {
                 sandbox.request(me.getName(), sandbox.getRequestBuilder('DisableMapKeyboardMovementRequest')());
                 //me._checkForKeywordClear();
             });
-            inputField.blur(function () {
+            me._inputField.blur(function () {
                 sandbox.request(me.getName(), sandbox.getRequestBuilder('EnableMapKeyboardMovementRequest')());
                 //me._checkForKeywordInsert();
             });
 
-            inputField.keypress(function (event) {
-                me._checkForEnter(event);
+            me._inputField.keypress(function (event) {
+                if (!me.isInLayerToolsEditMode) {
+                    me._checkForEnter(event);
+                }
             });
             // to search button
-            content.find('input[type=button]').click(function (event) {
-                me._doSearch();
+            me._searchButton.click(function (event) {
+                if (!me.isInLayerToolsEditMode) {
+                    me._doSearch();
+                }
             });
             content.find('div.search-right').click(function (event) {
-                me._doSearch();
+                if (!me.isInLayerToolsEditMode) {
+                    me._doSearch();
+                }
             });
             // to close button
             content.find('div.close').click(function (event) {
-                me._hideSearch();
-                inputField.val('');
-                // TODO: this should also unbind the TR tag click listeners?
+                if (!me.isInLayerToolsEditMode) {
+                    me._hideSearch();
+                    me._inputField.val('');
+                    // TODO: this should also unbind the TR tag click listeners?
+                }
             });
             content.find('div.close-results').click(function (event) {
-                me._hideSearch();
-                inputField.val('');
+                if (!me.isInLayerToolsEditMode) {
+                    me._hideSearch();
+                    me._inputField.val('');
+                }
             });
             content.find('div.results').hide();
 
@@ -296,12 +348,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             }
             if (me.conf && me.conf.toolStyle) {
                 // Hide the results if esc was pressed or if the field is empty.
-                inputField.keyup(function (e) {
+                me._inputField.keyup(function (e) {
                     if (e.keyCode === 27 || (e.keyCode === 8 && !jQuery(this).val())) {
                         me._hideSearch();
                     }
                 });
             }
+            // in case we are already in edit mode when plugin is drawn
+            me._setLayerToolsEditMode(me.getMapModule().isInLayerToolsEditMode());
         },
         /**
          * @method _checkForEnter
@@ -503,13 +557,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             }
 
             // Remove the old unstyled search box and create a new one.
-            if (div.hasClass('mapplugin search')) {
-                div.remove();
-                this._createUI();
+            if (div.hasClass('default-search-div')) {
+                //div.remove();
+                //this._createUI();
+                // hand replace with styled version so we don't destroy this.element
+                div.removeClass('default-search-div').addClass('published-search-div');
+                div.empty();
+                this.styledTemplate.children().clone().appendTo(div);
+                this.changeToolStyle(this.conf.toolStyle, div);
+                this._bindUIEvents();
                 return;
             }
 
-            var resourcesPath = this.getMapModule().getImageUrl(),
+            var me = this,
+                resourcesPath = this.getMapModule().getImageUrl(),
                 imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/search/images/',
                 styleName = style.val,
                 bgLeft = imgPath + 'search-tool-' + styleName + '_01.png',
@@ -563,6 +624,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                     'color': ''
                 });
             }
+
+            me._setLayerToolsEditMode(me.getMapModule().isInLayerToolsEditMode());
+
         },
 
         /**

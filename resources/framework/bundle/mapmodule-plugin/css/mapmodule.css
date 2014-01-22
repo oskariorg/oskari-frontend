@@ -8,6 +8,20 @@ div.mapplugins {
   div.mapplugins .mappluginsContainer {
     margin: 0;
     padding: 0; }
+    div.mapplugins .mappluginsContainer .mappluginsContent.ui-droppable {
+      background-color: rgba(255, 255, 255, 0.5);
+      border: 3px dashed #666666;
+      border-radius: 20px;
+      min-height: 70px;
+      min-width: 70px;
+      padding: 20px; }
+      div.mapplugins .mappluginsContainer .mappluginsContent.ui-droppable.allowed {
+        background-color: rgba(0, 255, 0, 0.3); }
+        div.mapplugins .mappluginsContainer .mappluginsContent.ui-droppable.allowed.ui-state-highlight {
+          background-color: rgba(127, 255, 127, 0.5);
+          border-color: #FFF; }
+      div.mapplugins .mappluginsContainer .mappluginsContent.ui-droppable.disallowed {
+        background-color: rgba(255, 0, 0, 0.3); }
     div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin {
       margin: 0 auto;
       z-index: 15000;

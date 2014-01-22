@@ -68,7 +68,10 @@ Oskari.registerLocalization({
                 "label": "Verktyg applikation",
                 "tooltip": "Välj en applikation för de verktyg som visas på kartan",
                 "lefthanded": "Vänsterhänt",
-                "righthanded": "Högerhänt"
+                "righthanded": "Högerhänt",
+                "userlayout" : "Flytta verktyg",
+                "usereditmode": "Slå redigeringsläget på",
+                "usereditmodeoff": "Stäng redigeringsläget off"
             },
             "data": {
                 "label":                "Statistik",

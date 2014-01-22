@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
         me._indexMapUrl = '/framework/bundle/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
     }, {
         templates: {
-            main: jQuery('<div class="mapplugin indexmap"></div>'),
+            main: jQuery('<div class="mapplugin indexmap" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin"></div>'),
             toggle: jQuery('<div class="indexmapToggle"></div>')
         },
 
@@ -88,12 +88,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
+            if(!me.conf.location){
+                me.conf.location = {};
+            }
+            me.conf.location.classes = location;
 
-            // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 5);
             }
         },
         /**
@@ -142,6 +143,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             // initialize control, pass container
             me._indexMap = new OpenLayers.Control.OverviewMap(controlOptions);
 
+            // in case we are already in edit mode when plugin is drawn
+            this.isInLayerToolsEditMode = me.getMapModule().isInLayerToolsEditMode();
 
         },
         /**
@@ -241,6 +244,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             'AfterMapMoveEvent': function (event) {
                 if (this._indexMap) {
                     this._indexMap.update();
+                }
+            },
+            'LayerToolsEditModeEvent': function (event) {
+                if (this._sandbox) {
+                    // FIXME make sure event.isInMode() returns a boolean and remove !!
+                    this.isInLayerToolsEditMode = !!event.isInMode();
+                    if (!this.isInLayerToolsEditMode) {
+                        this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
+                    }
                 }
             }
         },

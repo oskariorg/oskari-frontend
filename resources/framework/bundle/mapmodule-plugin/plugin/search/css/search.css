@@ -228,3 +228,13 @@ div.published-search-div div.search-middle div.close-results {
   display: inline-block;
   float: right;
   cursor: pointer; }
+
+.search-textarea-and-button .search-editmode-overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0; }
+
+.mappluginsContent.ui-sortable div.mapplugin.search {
+  right: 0px; }

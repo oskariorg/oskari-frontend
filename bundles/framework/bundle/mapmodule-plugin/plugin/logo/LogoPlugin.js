@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
 
         templates: {
             main: jQuery(
-                "<div class='mapplugin logoplugin'>" +
+                "<div class='mapplugin logoplugin' data-clazz='Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin'>" +
                     "<div class='icon'></div>" +
                     "<div class='terms'><a href='JavaScript:void(0);'></a></div>" +
                     "<div class='data-sources'></div>" +
@@ -162,12 +162,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             'StatsGrid.IndicatorsEvent': function (event) {
                 this._addIndicatorsToDataSourcesDialog(event.getIndicators());
             },
+
+            'LayerToolsEditModeEvent' : function (event) {
+                // FIXME make sure event.isInMode() returns a boolean and remove !!
+                this.isInLayerToolsEditMode = !!event.isInMode();
+                if (!this.isInLayerToolsEditMode) {
+                    this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
+                }
+            },
+
             'MapSizeChangedEvent' : function (event) {
                 if (this.dataSourcesDialog) {
                     var target = jQuery('div.logoplugin div.data-sources');
-                    if (target) this.dataSourcesDialog.moveTo(target, 'top');
+                    if (target) {
+                        this.dataSourcesDialog.moveTo(target, 'top');
+                    }
                 }
             }
+
         },
 
         /** 
@@ -193,12 +205,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
+            if (!me.conf.location) {
+                me.conf.location = {};
+            }
+            me.conf.location.classes = location;
 
-            // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 1);
             }
         },
 
@@ -238,10 +251,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             link = me.element.find('div.icon');
             if (mapUrl) {
                 link.bind('click', function () {
-                    linkParams = sandbox.generateMapLinkParameters();
-                    mapUrl += linkParams;
-                    window.open(mapUrl, '_blank');
-                    return false;
+                    if (!me.isInLayerToolsEditMode) {
+                        linkParams = sandbox.generateMapLinkParameters();
+                        mapUrl += linkParams;
+                        window.open(mapUrl, '_blank');
+                        return false;
+                    }
                 });
             }
 
@@ -249,8 +264,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             if (termsUrl) {
                 link.append(myLoc.terms);
                 link.bind('click', function () {
-                    window.open(termsUrl, '_blank');
-                    return false;
+                    if (!me.isInLayerToolsEditMode) {
+                        window.open(termsUrl, '_blank');
+                        return false;
+                    }
                 });
             } else {
                 link.hide();
@@ -262,12 +279,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             } else {
                 dataSources.html(myLoc.dataSources);
                 dataSources.click(function (e) {
-                    if (me.dataSourcesDialog == null) {
+                    if (!me.isInLayerToolsEditMode) {
                         me._openDataSourcesDialog(e.target);
                         me._requestDataSources();
                     }
                 });
             }
+            // in case we are already in edit mode when plugin is drawn
+            this.isInLayerToolsEditMode = me.getMapModule().isInLayerToolsEditMode();
+
         },
 
         /**
