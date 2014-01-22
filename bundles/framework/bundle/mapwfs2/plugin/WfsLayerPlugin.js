@@ -106,6 +106,10 @@ function(config) {
             if(this.config.hostname == "localhost") {
                 this.config.hostname = location.hostname;
             }
+            if(!this.config.port) {
+                // convenience so the port isn't required
+                this.config.port = '';
+            }
             if(this.config.port.length > 0) {
                 this.config.port = ":" + this.config.port;
             }
