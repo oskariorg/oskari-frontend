@@ -311,7 +311,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 if (!alreadySelected) {
                     me._sandbox.postRequestByName('AddMapLayerRequest', [me.selectedDrawingLayer.layer.getId(), false, me.selectedDrawingLayer.layer.isBaseLayer()]);
                 }
-                selections.publishedMyPlaces = me.selectedDrawingLayer;
+                selections.publishedmyplaces2 = me.selectedDrawingLayer;
             }
 
             //sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), false, layer.isBaseLayer()]);
@@ -433,25 +433,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         }
                     }
 
-                    //FIXME when myplaces works on published maps
-                    //////////////////////////////////////////////////////////////////////////////
-                    /*
-                    // create option for adding drawing tools
-                    options = jQuery(me.templates.toolOptions).clone();
-                    tool.publisherPluginContainer.append(options);
+                    // FIXME when myplaces works on published maps
+                    if (false) {
+                        // create option for adding drawing tools
+                        options = jQuery(me.templates.toolOptions).clone();
+                        tool.publisherPluginContainer.append(options);
 
-                    var selectTool = jQuery(me.templates.toolOption).clone();
-                    selectTool.find('label')
-                        .attr('for', 'tool-opt-drawing').append(this.loc.toolbarToolNames['drawTools']);
-                    //toggle toolbar tool. i.e. send requests
-                    selectTool.find('input')
-                        .attr('id', 'tool-opt-drawing')
-                        .change(function(e) {
-                            me._toggleDrawTools(e, 'drawTools', 'myplaces', {})
-                        });
-                options.append(selectTool);
-*/
-                    ///////////////////////////////////////////////////////////////////////////////
+                        var selectTool = jQuery(me.templates.toolOption).clone();
+                        selectTool.find('label').attr('for', 'tool-opt-drawing').append(this.loc.toolbarToolNames.drawTools);
+                        //toggle toolbar tool. i.e. send requests
+                        selectTool.find('input')
+                            .attr('id', 'tool-opt-drawing')
+                            .change(function(e) {
+                                me._toggleDrawTools(e, 'drawTools', 'myplaces', {});
+                            });
+                        options.append(selectTool);
+                    }
 
                 }
 
