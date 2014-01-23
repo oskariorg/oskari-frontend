@@ -128,10 +128,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
          */
         registerVectorFormats: function () {
             this.registerVectorFormat("application/json", new OpenLayers.Format.GeoJSON({}));
-            this.registerVectorFormat("application/nlsfi-x-openlayers-feature", function () {
-                this.read = function (data) {
+            this.registerVectorFormat("application/nlsfi-x-openlayers-feature", {
+                read: function (data) {
                     return data;
-                };
+                }
             });
         },
         /***********************************************************
