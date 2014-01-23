@@ -135,9 +135,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
          * @static
          */
         eventHandlers: {
-            'AfterMapLayerAddEvent': function (event) {
-                this._afterMapLayerAddEvent(event);
-            },
             'AfterMapLayerRemoveEvent': function (event) {
                 this._afterMapLayerRemoveEvent(event);
             },
@@ -181,14 +178,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
             }
 
         },
-        /**
-         * Handle _afterMapLayerAddEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent}
-         *            event
-         */
-        _afterMapLayerAddEvent: function (event) {
-            this._addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
+        addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
+            this._addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         },
         /**
          * @method _addMapLayerToMap
@@ -201,17 +192,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
         _addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
             if (!layer.isLayerOfType('WMS')) {
                 return;
-            }
-
-            // remove marker layers
-            var markerLayer = this._map.getLayersByName("Markers"),
-                mlIdx;
-            if (markerLayer) {
-                for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                    if (markerLayer[mlIdx]) {
-                        this._map.removeLayer(markerLayer[mlIdx], false);
-                    }
-                }
             }
 
             var layers = [],
@@ -277,15 +257,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
                     this._map.setLayerIndex(openLayer, this._map.layers.length);
                 } else {
                     this._map.setLayerIndex(openLayer, 0);
-                }
-            }
-
-            // add marker layers
-            if (markerLayer) {
-                for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                    if (markerLayer[mlIdx]) {
-                        this._map.addLayer(markerLayer[mlIdx]);
-                    }
                 }
             }
         },

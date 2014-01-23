@@ -227,12 +227,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
             'WFSSetFilter': function (event) {
                 // tk this.wfsLayerPlugin.setFilterHandler(event);
             },
-
-
-            'AfterMapLayerAddEvent': function (event) {
-                this._afterMapLayerAddEvent(event);
-                //this.wfsLayerPlugin.mapLayerAddHandler(event);
-            },
             'AfterMapLayerRemoveEvent': function (event) {
                 this._afterMapLayerRemoveEvent(event);
                 // tk  this.wfsLayerPlugin.mapLayerRemoveHandler(event);
@@ -279,14 +273,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
             }
 
         },
-        /**
-         * Handle _afterMapLayerAddEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent}
-         *            event
-         */
-        _afterMapLayerAddEvent: function (event) {
-            this._addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
+        addMapLayerToMap: function(layer, keepLayerOnTop, isBaseMap) {
+            this._addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         },
         /**
          * @method _addMapLayerToMap
@@ -302,15 +290,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
             }
 
             var me = this;
-            var markerLayer = this._map.getLayersByName("Markers"),
-                mlIdx;
-            if (markerLayer) {
-                for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                    if (markerLayer[mlIdx]) {
-                        this._map.removeLayer(markerLayer[mlIdx], false);
-                    }
-                }
-            }
 
             var openLayerId = 'layer_' + layer.getId();
             var imgUrl = layer.getWpsUrl() + 'wpsLayerId=' + layer.getWpsLayerId();
@@ -341,13 +320,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
                 this._map.setLayerIndex(openLayer, this._map.layers.length);
             } else {
                 this._map.setLayerIndex(openLayer, 0);
-            }
-            if (markerLayer) {
-                for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                    if (markerLayer[mlIdx]) {
-                        this._map.addLayer(markerLayer[mlIdx]);
-                    }
-                }
             }
         },
 

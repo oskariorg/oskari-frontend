@@ -169,9 +169,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
          * @static
          */
         eventHandlers: {
-            'AfterMapLayerAddEvent': function (event) {
-                this._afterMapLayerAddEvent(event);
-            },
             'AfterMapLayerRemoveEvent': function (event) {
                 this._afterMapLayerRemoveEvent(event);
             },
@@ -252,14 +249,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             this._getFeatureControlHover.deactivate();
             this._getFeatureControlSelect.deactivate();
         },
-        /**
-         * Handle _afterMapLayerAddEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent}
-         *            event
-         */
-        _afterMapLayerAddEvent: function (event) {
-            this._addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
+        addMapLayerToMap: function(layer, keepLayerOnTop, isBaseMap) {
+            this._addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         },
         /**
          * @method _addMapLayerToMap
@@ -270,23 +261,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
          * @param {Boolean} isBaseMap
          */
         _addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            var me = this,
-                eventBuilder = me._sandbox.getEventBuilder('MapStats.FeatureHighlightedEvent'),
-                highlightEvent;
-
-            if (!layer.isLayerOfType(me._layerType)) {
+            if (!layer.isLayerOfType(this._layerType)) {
                 return;
             }
 
-            var markerLayer = me._map.getLayersByName("Markers"),
-                mlIdx;
-            if (markerLayer) {
-                for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                    if (markerLayer[mlIdx]) {
-                        me._map.removeLayer(markerLayer[mlIdx], false);
-                    }
-                }
-            }
+            var me = this,
+                eventBuilder = me._sandbox.getEventBuilder('MapStats.FeatureHighlightedEvent'),
+                highlightEvent;
 
             var layerScales = me.getMapModule().calculateLayerScales(layer.getMaxScale(), layer.getMinScale()),
                 openLayer = new OpenLayers.Layer.WMS('layer_' + layer.getId(), me.ajaxUrl + "&LAYERID=" + layer.getId(), {
@@ -489,13 +470,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 me._map.setLayerIndex(openLayer, me._map.layers.length);
             } else {
                 me._map.setLayerIndex(openLayer, 0);
-            }
-            if (markerLayer) {
-                for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                    if (markerLayer[mlIdx]) {
-                        me._map.addLayer(markerLayer[mlIdx]);
-                    }
-                }
             }
         },
 
