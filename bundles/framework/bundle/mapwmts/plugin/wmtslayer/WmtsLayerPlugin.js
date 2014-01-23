@@ -80,9 +80,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
      */
     stop: function (sandbox) {},
     eventHandlers: {
-        'AfterMapLayerAddEvent': function (event) {
-            this.afterMapLayerAddEvent(event);
-        },
         'AfterMapLayerRemoveEvent': function (event) {
             this.afterMapLayerRemoveEvent(event);
         },
@@ -101,7 +98,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
      *
      */
     preselectLayers: function (layers) {
-
         var sandbox = this._sandbox,
             i,
             layer,
@@ -117,18 +113,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         }
 
     },
-    /***********************************************************
-     * Handle AfterMapLaeyrAddEvent
-     *
-     * @param {Object}
-     *            event
-     */
-    afterMapLayerAddEvent: function (event) {
-        this.addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
-    },
 
     addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-
         if (!layer.isLayerOfType('WMTS')) {
             return;
         }

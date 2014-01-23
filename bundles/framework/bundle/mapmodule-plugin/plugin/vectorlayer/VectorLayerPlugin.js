@@ -83,9 +83,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorLayerPlugin', function(
 	},
 
 	eventHandlers : {
-		'AfterMapLayerAddEvent' : function(event) {
-			this.afterMapLayerAddEvent(event);
-		},
 		'AfterMapLayerRemoveEvent' : function(event) {
 			this.afterMapLayerRemoveEvent(event);
 		},
@@ -119,17 +116,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorLayerPlugin', function(
 		}
 	},
 
-	/***********************************************************
-	 * Handle AfterMapLaeyrAddEvent
-	 *
-	 * @param {Object}
-	 *            event
-	 */
-	afterMapLayerAddEvent : function(event) {
-		this.addMapLayerToMap(event.getMapLayer(),
-            event.getKeepLayersOrder(), event.isBasemap());
-	},
-
 	/**
 	 * adds vector format to props of known formats
 	 */
@@ -156,15 +142,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorLayerPlugin', function(
 	 * primitive for adding layer to this map
 	 */
 	addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
-
 		if (!layer.isLayerOfType('VECTOR'))
 			return;
-
-		var markerLayer = this._map.getLayersByName("Markers");
-		this._map.removeLayer(markerLayer[0], false);
-
-		//						var layerScales = this.getMapModule().calculateLayerScales(layer
-		//								.getMaxScale(), layer.getMinScale());
 
 		var styleMap = new OpenLayers.StyleMap();
 		var layerOpts = {
@@ -197,9 +176,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorLayerPlugin', function(
 		} else {
 			this._map.setLayerIndex(openLayer, 0);
 		}
-
-		this._map.addLayer(markerLayer[0]);
-
 	},
 	/***********************************************************
 	 * Handle AfterMapLayerRemoveEvent

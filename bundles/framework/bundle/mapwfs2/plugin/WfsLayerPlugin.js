@@ -436,7 +436,7 @@ function(config) {
                 styleName = "default";
             }
 
-            this.addMapLayerToMap(event.getMapLayer(), this.__typeNormal); // add WMS layer
+            this._addMapLayerToMap(event.getMapLayer(), this.__typeNormal); // add WMS layer
 
             // send together
             var self = this;
@@ -1069,12 +1069,14 @@ function(config) {
     },
 
     /**
-     * @method addMapLayerToMap
+     * @method _addMapLayerToMap
      *
      * @param {Object} layer
      * @param {String} layerType
      */
-    addMapLayerToMap : function(_layer, layerType) {
+    _addMapLayerToMap : function(_layer, layerType) {
+        if (!_layer.hasFeatureData()) return;
+
         var layerName = this.__layerPrefix + _layer.getId() + "_" + layerType;
         var layerScales = this.getMapModule().calculateLayerScales(_layer.getMaxScale(), _layer.getMinScale());
 

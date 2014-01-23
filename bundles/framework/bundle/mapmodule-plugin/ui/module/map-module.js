@@ -1122,21 +1122,35 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             layerMarkers.addMarker(marker);
         },
         /**
+         * Adds given marker layers to the map
+         *
+         * @method _addMarkers
+         * @private
+         * @param {OpenLayers.Layer} marker layers to add
+         */
+        _addMarkers: function (markerLayers) {
+            var me = this;
+
+            _.each(markerLayers, function(markerLayer) {
+                me._map.addLayer(markerLayer);
+            });
+        },
+        /**
+         * Removes any markers from the map
+         *
          * @method _removeMarkers
          * @private
-         * Removes any markers from the map
+         * @return {OpenLayers.Layer} marker layers
          */
         _removeMarkers: function () {
+            var me = this,
+                markerLayers = this._map.getLayersByName("Markers");
 
-            var markerLayer = this._map.getLayersByName("Markers"),
-                i;
-            if (markerLayer) {
-                for (i = 0; i < markerLayer.length; i++) {
-                    if (markerLayer[i]) {
-                        this._map.removeLayer(markerLayer[i], false);
-                    }
-                }
-            }
+            _.each(markerLayers, function(markerLayer) {
+                me._map.removeLayer(markerLayer, false);
+            });
+
+            return markerLayers;
         },
         /**
          * @method _hasMarkers
@@ -1161,6 +1175,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @static
          */
         eventHandlers: {
+            'AfterMapLayerAddEvent': function (event) {
+                this._afterMapLayerAddEvent(event);
+            },
             'SearchClearedEvent': function (event) {
                 this._removeMarkers();
             }
@@ -1179,6 +1196,30 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
 
             return handler.apply(this, [event]);
+        },
+        /**
+         * Adds the layer to the map through the correct plugin for the layer's type.
+         *
+         * @method _afterMapLayerAddEvent
+         * @param  {Object} layer Oskari layer of any type registered to the mapmodule plugin
+         * @param  {Boolean} keepLayersOrder
+         * @param  {Boolean} isBaseMap
+         * @return {undefined}
+         */
+        _afterMapLayerAddEvent: function(event) {
+            var layer = event.getMapLayer(),
+                keepLayersOrder = event.getKeepLayersOrder(),
+                isBaseMap = event.isBasemap()
+                markerLayers = this._removeMarkers(),
+                layerPlugins = this.getLayerPlugins();
+
+            _.each(layerPlugins, function(plugin) {
+                if (_.isFunction(plugin.addMapLayerToMap)) {
+                    plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
+                }
+            });
+
+            this._addMarkers(markerLayers);
         },
         /**
          * @method getOLMapLayers

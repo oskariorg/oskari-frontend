@@ -151,9 +151,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @static
          */
         eventHandlers: {
-            'AfterMapLayerAddEvent': function (event) {
-                this._afterMapLayerAddEvent(event);
-            },
             'AfterMapLayerRemoveEvent': function (event) {
                 this._afterMapLayerRemoveEvent(event);
             },
@@ -215,15 +212,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 }
             }
         },
-
-        /**
-         * Handle _afterMapLayerAddEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent}
-         *            event
-         */
-        _afterMapLayerAddEvent: function (event) {
-            this._addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
+        addMapLayerToMap: function(layer, keepLayerOnTop, isBaseMap) {
+            this._addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         },
         /**
          * @method _addMapLayerToMap
@@ -238,16 +228,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
             if (!layer.isLayerOfType(this._layerType)) {
                 return;
-            }
-
-            var markerLayer = this._map.getLayersByName("Markers"),
-                mlIdx;
-            if (markerLayer) {
-                for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                    if (markerLayer[mlIdx]) {
-                        this._map.removeLayer(markerLayer[mlIdx], false);
-                    }
-                }
             }
 
             var jsonp = new OpenLayers.Protocol.Script();
@@ -270,13 +250,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                     me._map.setLayerIndex(openLayer, me._map.layers.length);
                 } else {
                     me._map.setLayerIndex(openLayer, 0);
-                }
-                if (markerLayer) {
-                    for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                        if (markerLayer[mlIdx]) {
-                            me._map.addLayer(markerLayer[mlIdx]);
-                        }
-                    }
                 }
             });
 
