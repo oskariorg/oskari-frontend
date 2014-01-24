@@ -191,7 +191,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
                 if (layer.isLayerOfType(this._layerType)) {
                     sandbox.printDebug("preselecting " + layerId);
-                    this._addMapLayerToMap(layer, true, layer.isBaseLayer());
+                    this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
             }
 
@@ -213,17 +213,17 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             }
         },
         addMapLayerToMap: function(layer, keepLayerOnTop, isBaseMap) {
-            this._addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
+            this.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         },
         /**
-         * @method _addMapLayerToMap
-         * @private
          * Adds a single ArcGis layer to this map
+         *
+         * @method addMapLayerToMap
          * @param {Oskari.arcgis.domain.ArcGisLayer} layer
          * @param {Boolean} keepLayerOnTop
          * @param {Boolean} isBaseMap
          */
-        _addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
+        addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
             var me = this;
 
             if (!layer.isLayerOfType(this._layerType)) {

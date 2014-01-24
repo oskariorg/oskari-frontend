@@ -263,23 +263,22 @@ function(config) {
             }
 
             sandbox.printDebug("preselecting " + layerId);
-            this._addMapLayerToMap(layer, true, layer.isBaseLayer());
+            this.addMapLayerToMap(layer, true, layer.isBaseLayer());
         }
 
     },
     addMapLayerToMap: function(layer, keepLayerOnTop, isBaseMap) {
-        this._addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
+        this.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
     },
     /**
      * Adds a single MyPlaces layer to this map
      * 
-     * @method _addMapLayerToMap
-     * @private
+     * @method addMapLayerToMap
      * @param {Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer} layer
      * @param {Boolean} keepLayerOnTop
      * @param {Boolean} isBaseMap
      */
-    _addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
+    addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
         if(!layer.isLayerOfType(this._layerType)) {
             return;
         }

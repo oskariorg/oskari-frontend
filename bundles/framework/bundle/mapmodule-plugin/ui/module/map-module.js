@@ -1122,20 +1122,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             layerMarkers.addMarker(marker);
         },
         /**
-         * Adds given marker layers to the map
-         *
-         * @method _addMarkers
-         * @private
-         * @param {OpenLayers.Layer} marker layers to add
-         */
-        _addMarkers: function (markerLayers) {
-            var me = this;
-
-            _.each(markerLayers, function(markerLayer) {
-                me._map.addLayer(markerLayer);
-            });
-        },
-        /**
          * Removes any markers from the map
          *
          * @method _removeMarkers
@@ -1207,11 +1193,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {undefined}
          */
         _afterMapLayerAddEvent: function(event) {
-            var layer = event.getMapLayer(),
+            var map = this.getMap(),
+                layer = event.getMapLayer(),
                 keepLayersOrder = event.getKeepLayersOrder(),
-                isBaseMap = event.isBasemap()
-                markerLayers = this._removeMarkers(),
-                layerPlugins = this.getLayerPlugins();
+                isBaseMap = event.isBasemap(),
+                layerPlugins = this.getLayerPlugins(),
+                markerLayers = map.getLayersByName("Markers");
 
             _.each(layerPlugins, function(plugin) {
                 if (_.isFunction(plugin.addMapLayerToMap)) {
@@ -1219,7 +1206,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
             });
 
-            this._addMarkers(markerLayers);
+            // Make sure the marker layers are always on top
+            _.each(markerLayers, function(markerLayer) {
+                map.raiseLayer(markerLayer, map.layers.length);
+            });
         },
         /**
          * @method getOLMapLayers
