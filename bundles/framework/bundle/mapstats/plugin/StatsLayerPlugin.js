@@ -224,7 +224,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
 
                 if (layer.isLayerOfType(this._layerType)) {
                     sandbox.printDebug("preselecting " + layerId);
-                    this._addMapLayerToMap(layer, true, layer.isBaseLayer());
+                    this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
             }
 
@@ -250,17 +250,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             this._getFeatureControlSelect.deactivate();
         },
         addMapLayerToMap: function(layer, keepLayerOnTop, isBaseMap) {
-            this._addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
+            this.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         },
         /**
-         * @method _addMapLayerToMap
-         * @private
          * Adds a single WMS layer to this map
+         *
+         * @method addMapLayerToMap
          * @param {Oskari.mapframework.domain.WmsLayer} layer
          * @param {Boolean} keepLayerOnTop
          * @param {Boolean} isBaseMap
          */
-        _addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
+        addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
             if (!layer.isLayerOfType(this._layerType)) {
                 return;
             }
