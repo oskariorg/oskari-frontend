@@ -73,9 +73,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
          */
         stop: function (sandbox) {},
         eventHandlers: {
-            'AfterMapLayerAddEvent': function (event) {
-                this.afterMapLayerAddEvent(event);
-            },
             'AfterMapLayerRemoveEvent': function (event) {
                 this.afterMapLayerRemoveEvent(event);
             },
@@ -134,15 +131,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
                 }
             });
         },
-        /***********************************************************
-         * Handle AfterMapLaeyrAddEvent
-         *
-         * @param {Object}
-         *            event
-         */
-        afterMapLayerAddEvent: function (event) {
-            this.addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
-        },
         afterMapLayerRemoveEvent: function (event) {
             var layer = event.getMapLayer();
 
@@ -173,7 +161,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
          * primitive for adding layer to this map
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-
             var ownedLayer = this.getMapLayer();
 
             if (!layer.isLayerOfType('VECTOR')) {
@@ -183,12 +170,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
             if (layer.getId() + '' !== ownedLayer.getId() + '') {
                 return;
             }
-
-            var markerLayer = this._map.getLayersByName("Markers");
-            this._map.removeLayer(markerLayer[0], false);
-
-            //                      var layerScales = this.getMapModule().calculateLayerScales(layer
-            //                              .getMaxScale(), layer.getMinScale());
 
             var styleMap = new OpenLayers.StyleMap();
             var layerOpts = {
@@ -228,10 +209,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
             } else {
                 this._map.setLayerIndex(openLayer, 0);
             }
-
-            this._map.addLayer(markerLayer[0]);
-
-
         },
         removeMapLayerFromMap: function (layer) {
 
@@ -280,10 +257,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
             var mimeType = event.getMimeType();
             var features = event.getFeatures();
 
-
-
             var op = event.getOp();
-
 
             var format = this._supportedFormats[mimeType];
 
