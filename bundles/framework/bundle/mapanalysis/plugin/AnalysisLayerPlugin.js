@@ -273,9 +273,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
             }
 
         },
-        addMapLayerToMap: function(layer, keepLayerOnTop, isBaseMap) {
-            this.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
-        },
         /**
          * Adds a single Analysis layer to this map
          *
