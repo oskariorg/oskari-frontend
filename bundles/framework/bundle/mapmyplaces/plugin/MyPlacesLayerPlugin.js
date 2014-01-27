@@ -267,9 +267,6 @@ function(config) {
         }
 
     },
-    addMapLayerToMap: function(layer, keepLayerOnTop, isBaseMap) {
-        this.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
-    },
     /**
      * Adds a single MyPlaces layer to this map
      * 
@@ -631,7 +628,6 @@ function(config) {
                         }
                         featureFilter = featureFilter+")";
                     */
-
                         if (featureFilter !== null) {
                             var openLayer = this.layer.map.getLayersByName('layer_' + layer.getId())[0];
                             openLayer.mergeNewParams({'myFeatureNames': featureFilter});

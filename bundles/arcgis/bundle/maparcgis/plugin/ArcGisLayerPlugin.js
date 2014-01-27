@@ -212,9 +212,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 }
             }
         },
-        addMapLayerToMap: function(layer, keepLayerOnTop, isBaseMap) {
-            this.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
-        },
         /**
          * Adds a single ArcGis layer to this map
          *
