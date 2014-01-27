@@ -228,9 +228,6 @@ function(config) {
      * @static
      */
     eventHandlers : {
-        'AfterMapLayerAddEvent' : function(event) {
-            this._afterMapLayerAddEvent(event);
-        },
         'AfterMapLayerRemoveEvent' : function(event) {
             this._afterMapLayerRemoveEvent(event);
         },
@@ -266,43 +263,24 @@ function(config) {
             }
 
             sandbox.printDebug("preselecting " + layerId);
-            this._addMapLayerToMap(layer, true, layer.isBaseLayer());
+            this.addMapLayerToMap(layer, true, layer.isBaseLayer());
         }
 
     },
     /**
-     * @method _afterMapLayerAddEvent
-     * @private 
-     * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent}
-     *            event
-     */
-    _afterMapLayerAddEvent : function(event) {
-        this._addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
-    },
-    /**
      * Adds a single MyPlaces layer to this map
      * 
-     * @method _addMapLayerToMap
-     * @private
+     * @method addMapLayerToMap
      * @param {Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer} layer
      * @param {Boolean} keepLayerOnTop
      * @param {Boolean} isBaseMap
      */
-    _addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
-
+    addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
         if(!layer.isLayerOfType(this._layerType)) {
             return;
         }
 
         var me = this;
-        var markerLayer = this._map.getLayersByName("Markers");
-        if (markerLayer) {
-            for (var mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                if (markerLayer[mlIdx]) {
-                    this._map.removeLayer(markerLayer[mlIdx], false);
-                }
-            }
-        }
 
         var openLayerId = 'layer_' + layer.getId();
         var imgUrl = layer.getWmsUrl();
@@ -650,7 +628,6 @@ function(config) {
                         }
                         featureFilter = featureFilter+")";
                     */
-
                         if (featureFilter !== null) {
                             var openLayer = this.layer.map.getLayersByName('layer_' + layer.getId())[0];
                             openLayer.mergeNewParams({'myFeatureNames': featureFilter});
@@ -777,14 +754,6 @@ function(config) {
             this._map.setLayerIndex(clusterLayer, this._map.layers.length);
         } else {
             this._map.setLayerIndex(openLayer, 0);
-        }
-
-        if (markerLayer) {
-            for (var mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                if (markerLayer[mlIdx]) {
-                    this._map.addLayer(markerLayer[mlIdx]);
-                }
-            }
         }
 
         if (myPlacesService) {

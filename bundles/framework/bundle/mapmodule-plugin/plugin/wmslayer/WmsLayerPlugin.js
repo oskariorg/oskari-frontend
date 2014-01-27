@@ -135,9 +135,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
          * @static
          */
         eventHandlers: {
-            'AfterMapLayerAddEvent': function (event) {
-                this._afterMapLayerAddEvent(event);
-            },
             'AfterMapLayerRemoveEvent': function (event) {
                 this._afterMapLayerRemoveEvent(event);
             },
@@ -176,42 +173,22 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
 
                 if (layer.isLayerOfType('WMS')) {
                     sandbox.printDebug("preselecting " + layerId);
-                    this._addMapLayerToMap(layer, true, layer.isBaseLayer());
+                    this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
             }
 
         },
         /**
-         * Handle _afterMapLayerAddEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent}
-         *            event
-         */
-        _afterMapLayerAddEvent: function (event) {
-            this._addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
-        },
-        /**
-         * @method _addMapLayerToMap
-         * @private
          * Adds a single WMS layer to this map
+         *
+         * @method addMapLayerToMap
          * @param {Oskari.mapframework.domain.WmsLayer} layer
          * @param {Boolean} keepLayerOnTop
          * @param {Boolean} isBaseMap
          */
-        _addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
+        addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
             if (!layer.isLayerOfType('WMS')) {
                 return;
-            }
-
-            // remove marker layers
-            var markerLayer = this._map.getLayersByName("Markers"),
-                mlIdx;
-            if (markerLayer) {
-                for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                    if (markerLayer[mlIdx]) {
-                        this._map.removeLayer(markerLayer[mlIdx], false);
-                    }
-                }
             }
 
             var layers = [],
@@ -277,15 +254,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
                     this._map.setLayerIndex(openLayer, this._map.layers.length);
                 } else {
                     this._map.setLayerIndex(openLayer, 0);
-                }
-            }
-
-            // add marker layers
-            if (markerLayer) {
-                for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                    if (markerLayer[mlIdx]) {
-                        this._map.addLayer(markerLayer[mlIdx]);
-                    }
                 }
             }
         },

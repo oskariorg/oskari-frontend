@@ -227,12 +227,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
             'WFSSetFilter': function (event) {
                 // tk this.wfsLayerPlugin.setFilterHandler(event);
             },
-
-
-            'AfterMapLayerAddEvent': function (event) {
-                this._afterMapLayerAddEvent(event);
-                //this.wfsLayerPlugin.mapLayerAddHandler(event);
-            },
             'AfterMapLayerRemoveEvent': function (event) {
                 this._afterMapLayerRemoveEvent(event);
                 // tk  this.wfsLayerPlugin.mapLayerRemoveHandler(event);
@@ -275,42 +269,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
                 }
 
                 sandbox.printDebug("preselecting " + layerId);
-                this._addMapLayerToMap(layer, true, layer.isBaseLayer());
+                this.addMapLayerToMap(layer, true, layer.isBaseLayer());
             }
 
         },
         /**
-         * Handle _afterMapLayerAddEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent}
-         *            event
-         */
-        _afterMapLayerAddEvent: function (event) {
-            this._addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
-        },
-        /**
-         * @method _addMapLayerToMap
-         * @private
          * Adds a single Analysis layer to this map
+         *
+         * @method addMapLayerToMap
          * @param {Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer} layer
          * @param {Boolean} keepLayerOnTop
          * @param {Boolean} isBaseMap
          */
-        _addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
+        addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
             if (!layer.isLayerOfType(this._layerType)) {
                 return;
             }
 
             var me = this;
-            var markerLayer = this._map.getLayersByName("Markers"),
-                mlIdx;
-            if (markerLayer) {
-                for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                    if (markerLayer[mlIdx]) {
-                        this._map.removeLayer(markerLayer[mlIdx], false);
-                    }
-                }
-            }
 
             var openLayerId = 'layer_' + layer.getId();
             var imgUrl = layer.getWpsUrl() + 'wpsLayerId=' + layer.getWpsLayerId();
@@ -341,13 +317,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
                 this._map.setLayerIndex(openLayer, this._map.layers.length);
             } else {
                 this._map.setLayerIndex(openLayer, 0);
-            }
-            if (markerLayer) {
-                for (mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
-                    if (markerLayer[mlIdx]) {
-                        this._map.addLayer(markerLayer[mlIdx]);
-                    }
-                }
             }
         },
 
