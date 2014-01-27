@@ -37,6 +37,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         /** @static @property __name plugin name */
         __name: 'LogoPlugin',
 
+        getClazz: function () {
+            return "Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin";
+        },
+
         /**
          * @method getName
          * @return {String} plugin name

@@ -113,7 +113,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          */
         enablePlugin: function (blnEnabled) {
             if (blnEnabled) {
-                this.plugin.setLocation(this.plugin.conf.location.classes);
+                this.plugin.setLocation(this._publisher._getPreferredPluginLocation(this.plugin, this.plugin.conf.location.classes));
+                //this.plugin.setLocation(this.plugin.conf.location.classes);
                 this.plugin.startPlugin(this.instance.sandbox);
                 if (this._publisher.toolLayoutEditMode && this.plugin.element) {
                     this._publisher._makeDraggable(this.plugin.element);

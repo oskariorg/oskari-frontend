@@ -32,6 +32,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          */
         __name: 'Portti2Zoombar',
 
+        getClazz: function () {
+            return "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar";
+        },
+
         /**
          * @method getName
          * @return {String} the name for the component
@@ -267,18 +271,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             'LayerToolsEditModeEvent': function (event) {
                 if (this._sandbox) {
                     this._setLayerToolsEditMode(event.isInMode());
-                    if (this.isInLayerToolsEditMode == false) {
-                        this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
-                    }
                 }
             }
         },
 
         _setLayerToolsEditMode: function (isInEditMode) {
             this.isInLayerToolsEditMode = isInEditMode;
-            if (this._slider != null && this.isInLayerToolsEditMode) {
+            if (this._slider && this.isInLayerToolsEditMode) {
                 this._slider.slider("option", "disabled", true);
-            } else if (this._slider != null) {
+            } else if (this._slider) {
                 this._slider.slider("option", "disabled", false);
             }
         },

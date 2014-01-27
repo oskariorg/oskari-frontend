@@ -21,10 +21,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me.element = undefined;
         me.conf = config;
         me.initialSetup = true;
+        me.isInLayerToolsEditMode = false;
         me.templates = {};
     }, {
         /** @static @property __name module name */
         __name: 'LayerSelectionPlugin',
+
+        getClazz: function () {
+            return "Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin";
+        },
 
         /**
          * @method getName
@@ -208,6 +213,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
              */
             'AfterMapMoveEvent': function (event) {
                 this._checkBaseLayers();
+            },
+            'LayerToolsEditModeEvent': function (event) {
+                this._setLayerToolsEditMode(event.isInMode());
+            }
+        },
+
+        _setLayerToolsEditMode: function (isInEditMode) {
+            if (this.isInLayerToolsEditMode === isInEditMode) {
+                // we don't want to bind click twice...
+                return;
+            }
+            var header = this.element.find("div.header");
+            this.isInLayerToolsEditMode = isInEditMode;
+            if (isInEditMode) {
+                this.closeSelection();
+                header.unbind("click");
+            } else {
+                this._bindHeader(header);
             }
         },
 
@@ -521,6 +544,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             }
         },
 
+        _bindHeader: function (header) {
+            var me = this;
+            header.bind('click', function () {
+                var content = me.element.find('div.content');
+                if (content.is(':hidden')) {
+                    me.openSelection();
+                } else {
+                    me.closeSelection();
+                }
+            });
+        },
+
         /**
          * @method  _createUI
          * Creates the whole ui from scratch and writes the plugin in to the UI.
@@ -541,14 +576,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 header = me.element.find('div.header');
             header.append(myLoc.title);
 
-            header.bind('click', function () {
-                var content = me.element.find('div.content');
-                if (content.is(':hidden')) {
-                    me.openSelection();
-                } else {
-                    me.closeSelection();
-                }
-            });
+            me._bindHeader(header);
+            
             me.closeSelection();
 
             me.setupLayers();
@@ -731,13 +760,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             this.getMapModule().changeCssClasses(classToAdd, testRegex, [div]);
         },
         _checkBaseLayers : function (layer) {
-            var i,
-                layer = layer;
+            var i;
             // reacting to conf
             if (this.conf && this.conf.baseLayers) {
                 // setup initial state here since we are using selected layers to create ui
                 // and plugin is started before any layers have been added
-                if (this.initialSetup && layer == null) {
+                if (this.initialSetup && (layer === null || layer === undefined)){
                     this.initialSetup = false;
 
                     for (i = 0; i < this.conf.baseLayers.length; i += 1) {
@@ -747,7 +775,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     if (this.conf.defaultBaseLayer) {
                         this.selectBaseLayer(this.conf.defaultBaseLayer);
                     }
-                } else if (layer != null) {
+                } else if (layer !== null && layer !== undefined) {
                     for (i = 0; i < this.conf.baseLayers.length; i++) {
                         if (this.conf.baseLayers[i] == layer.getId()) {
                             this.addBaseLayer(layer);

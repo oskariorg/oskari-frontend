@@ -27,6 +27,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
          */
         __name: 'PanButtons',
 
+        getClazz: function () {
+            return "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons";
+        },
+
         /**
          * @method getName
          * @return {String} the name for the component
@@ -131,16 +135,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          */
         stopPlugin: function (sandbox) {
-            var me = this;
+            var me = this,
+                p;
             if (me.element) {
                 me.element.remove();
                 delete me.element;
             }
-for (p in me.eventHandlers) {
-    if (me.eventHandlers.hasOwnProperty(p)) {
-        me._sandbox.unregisterFromEventByName(me, p);
-    }
-}
+            for (p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me._sandbox.unregisterFromEventByName(me, p);
+                }
+            }
             me._sandbox.unregister(this);
         },
 
@@ -210,17 +215,17 @@ for (p in me.eventHandlers) {
                 panbuttonDivImg.removeClass("root");
             });
             center.bind('click', function (event) {
-if(!me.isInLayerToolsEditMode){
-                var rn = 'StateHandler.SetStateRequest',
-                    mm = me.getMapModule(),
-                    sb = mm.getSandbox(),
-                    rb = sb.getRequestBuilder(rn);
-                if (rb) {
-                    sb.request(me, rb());
-                } else {
-                    sb.resetState();
+                if (!me.isInLayerToolsEditMode) {
+                    var rn = 'StateHandler.SetStateRequest',
+                        mm = me.getMapModule(),
+                        sb = mm.getSandbox(),
+                        rb = sb.getRequestBuilder(rn);
+                    if (rb) {
+                        sb.request(me, rb());
+                    } else {
+                        sb.resetState();
+                    }
                 }
-}
             });
 
             var left = pb.find('.panbuttons_left');
@@ -233,9 +238,9 @@ if(!me.isInLayerToolsEditMode){
                 panbuttonDivImg.removeClass("left");
             });
             left.bind('click', function (event) {
-if(!me.isInLayerToolsEditMode){
-               me.getMapModule().panMapByPixels(-100, 0, true);
-}
+                if (!me.isInLayerToolsEditMode) {
+                    me.getMapModule().panMapByPixels(-100, 0, true);
+                }
             });
 
             var right = pb.find('.panbuttons_right');
@@ -248,9 +253,9 @@ if(!me.isInLayerToolsEditMode){
                 panbuttonDivImg.removeClass("right");
             });
             right.bind('click', function (event) {
-if(!me.isInLayerToolsEditMode){
-                me.getMapModule().panMapByPixels(100, 0, true);
-}
+                if (!me.isInLayerToolsEditMode) {
+                    me.getMapModule().panMapByPixels(100, 0, true);
+                }
             });
 
             var top = pb.find('.panbuttons_up');
@@ -263,9 +268,9 @@ if(!me.isInLayerToolsEditMode){
                 panbuttonDivImg.removeClass("up");
             });
             top.bind('click', function (event) {
-if(!me.isInLayerToolsEditMode){
-                me.getMapModule().panMapByPixels(0, -100, true);
-}
+                if (!me.isInLayerToolsEditMode) {
+                    me.getMapModule().panMapByPixels(0, -100, true);
+                }
             });
 
             var bottom = pb.find('.panbuttons_down');
@@ -278,23 +283,23 @@ if(!me.isInLayerToolsEditMode){
                 panbuttonDivImg.removeClass("down");
             });
             bottom.bind('click', function (event) {
-if(!me.isInLayerToolsEditMode){
-                me.getMapModule().panMapByPixels(0, 100, true);
-}
+                if (!me.isInLayerToolsEditMode) {
+                    me.getMapModule().panMapByPixels(0, 100, true);
+                }
             });
             pb.mousedown(function (event) {
-if(!me.isInLayerToolsEditMode){
-                var radius = Math.round(0.5 * panbuttonDivImg[0].width),
-                    pbOffset = panbuttonDivImg.offset(),
-                    centerX = pbOffset.left + radius,
-                    centerY = pbOffset.top + radius;
-                if (Math.sqrt(Math.pow(centerX - event.pageX, 2) + Math.pow(centerY - event.pageY, 2)) < radius) {
-                    event.stopPropagation();
+                if (!me.isInLayerToolsEditMode) {
+                    var radius = Math.round(0.5 * panbuttonDivImg[0].width),
+                        pbOffset = panbuttonDivImg.offset(),
+                        centerX = pbOffset.left + radius,
+                        centerY = pbOffset.top + radius;
+                    if (Math.sqrt(Math.pow(centerX - event.pageX, 2) + Math.pow(centerY - event.pageY, 2)) < radius) {
+                        event.stopPropagation();
+                    }
                 }
-}
             });
-// in case we are already in edit mode when plugin is drawn
-this.isInLayerToolsEditMode = me.getMapModule().isInLayerToolsEditMode();
+            // in case we are already in edit mode when plugin is drawn
+            this.isInLayerToolsEditMode = me.getMapModule().isInLayerToolsEditMode();
         },
 
         /**
@@ -302,11 +307,8 @@ this.isInLayerToolsEditMode = me.getMapModule().isInLayerToolsEditMode();
          * @static
          */
         eventHandlers: {
-            'LayerToolsEditModeEvent' : function(event) {
+            'LayerToolsEditModeEvent': function (event) {
                 this.isInLayerToolsEditMode = event.isInMode();
-                if(this.isInLayerToolsEditMode == false && this.element) {
-                    this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
-                }
             }
         },
         /**

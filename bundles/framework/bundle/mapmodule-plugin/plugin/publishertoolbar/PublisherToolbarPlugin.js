@@ -22,6 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         me.toolbarContent = 'publishedToolbarContent';
         me.toolbarPopupContent = 'publishedToolbarPopupContent';
         me.toolbarContainer = 'publishedToolbarContainer'; // Note! this needs to match styles and templates
+        me.isInLayerToolsEditMode = false;
 
     }, {
         // templates for tools-mapplugin
@@ -47,6 +48,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          */
         getName: function () {
             return this.pluginName;
+        },
+        getClazz: function () {
+            return "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin";
         },
         /**
          * @method getMapModule
@@ -260,7 +264,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          * @property {Object} eventHandlers
          * @static
          */
-        eventHandlers: {},
+        eventHandlers: {
+            'LayerToolsEditModeEvent': function (event) {
+                this._setLayerToolsEditMode(event.isInMode());
+            }
+        },
+
+        _setLayerToolsEditMode: function (isInEditMode) {
+            if (this.isInLayerToolsEditMode === isInEditMode) {
+                // we don't want to bind click twice...
+                return;
+            }
+            this.isInLayerToolsEditMode = isInEditMode;
+            if (isInEditMode) {
+                // close toolbar
+                this.element.find('.' + this.toolbarContainer).hide();
+                // disable icon
+                this.element.find("div.icon").unbind("click");
+            } else {
+                // enable icon
+                this._bindIcon();
+            }
+        },
 
         /**
          * @method onEvent
@@ -322,15 +347,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             toolscontainer = me.element.find('.' + me.toolbarContainer);
             toolscontainer.hide();
 
-            var icon = me.element.find('div.icon');
-            icon.on('click', function () {
-                toolscontainer.toggle();
-            });
+            me._bindIcon();
+            
 
             if (me.conf && me.conf.font) {
                 me.changeFont(me.conf.font, content);
             }
 
+        },
+
+        _bindIcon: function () {
+            var me = this,
+                icon = me.element.find("div.icon"),
+                toolscontainer = me.element.find('.' + me.toolbarContainer);
+            icon.bind('click', function () {
+                toolscontainer.toggle();
+            });
         },
 
         insertToMap: function () {
