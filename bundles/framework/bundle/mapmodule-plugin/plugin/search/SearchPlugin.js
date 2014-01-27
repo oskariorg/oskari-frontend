@@ -26,6 +26,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         /** @static @property __name plugin name */
         __name: 'SearchPlugin',
 
+        getClazz: function () {
+            return "Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin";
+        },
+
         /**
          * @method getName
          * @return {String} plugin name
@@ -200,14 +204,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         eventHandlers: {
             'LayerToolsEditModeEvent': function (event) {
                 this._setLayerToolsEditMode(event.isInMode());
-                // FIXME make sure isInLayerToolsEditMode and use !isInLayerToolsEditMode
-                if (!this.isInLayerToolsEditMode) {
-                    this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
-                }
             }
         },
 
         _setLayerToolsEditMode: function (isInEditMode) {
+            if (this.isInLayerToolsEditMode === isInEditMode) {
+                return;
+            }
             this.isInLayerToolsEditMode = isInEditMode;
             if (this.isInLayerToolsEditMode) {
                 this._inputField.prop("disabled", true);

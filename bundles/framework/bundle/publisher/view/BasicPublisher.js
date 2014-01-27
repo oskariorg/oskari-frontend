@@ -623,11 +623,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 snap: true,
                 start: function (event, ui) {
                     // drag start, see which droppables are valid
-                    me._showDroppable(ui.helper.attr('data-clazz'));
+                    me._showDroppable(ui.helper.attr('data-clazz'), ui.helper.parents(".mapplugins"));
                 },
                 stop: me._hideDroppable,
                 revert: "invalid"
             });
+        },
+
+        _togglePluginUIControls: function (enable) {
+            var i,
+                tool,
+                tools;
+
+            for (i = 0; i < this.tools.length; i++) {
+                tool = tools[i];
+                if (tool.plugin && tool.plugin.toggleUIControls) {
+                    tool.plugin.toggleUIControls(enable);
+                }
+            }
         },
 
         _editToolLayoutOn: function () {
@@ -641,7 +654,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 droppables = jQuery('.mappluginsContent').droppable({
                     // TODO see if this can be done in hover? Would it even be wanted behaviour?
                     drop: function (event, ui) {
-                        var plugin = me._getPluginByClazz(ui.draggable.attr("data-clazz"));
+                        var pluginClazz = ui.draggable.attr("data-clazz"),
+                            plugin = me._getPluginByClazz(pluginClazz),
+                            source = ui.draggable.parents(".mapplugins"),
+                            target = jQuery(this);
+                        me._moveSiblings(pluginClazz, source, target) ;
                         if (plugin && plugin.setLocation) {
                             plugin.setLocation(jQuery(this).parents('.mapplugins').attr('data-location'));
                             // Reset draggable's inline css... couldn't find a cleaner way to do this.
@@ -676,23 +693,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
             jQuery('.mapplugin').removeClass('toollayoutedit');
 
-            jQuery('.mapplugin.ui-draggable').draggable("destroy");
+            var draggables = jQuery('.mapplugin.ui-draggable');
+            draggables.css("position", "");
+            draggables.draggable("destroy");
             jQuery('.mappluginsContent.ui-droppable').droppable("destroy");
 
-            var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(false),
-                plugin,
-                i;
+            var event = sandbox.getEventBuilder('LayerToolsEditModeEvent')(false);
             sandbox.notifyAll(event);
 
             // Set logoplugin and layerselection as well
             // FIXME get this from logoPlugin's config, no need to traverse the DOM
             if (me.logoPlugin) {
                 me.logoPluginClasses.classes = me.logoPlugin.element.parents('.mapplugins').attr('data-location');
+                me.logoPlugin.element.css("position", "");
                 //me.logoPlugin.setLocation(me.logoPluginClasses.classes);
             }
             if (me.maplayerPanel.plugin && me.maplayerPanel.plugin.element) {
                 me.layerSelectionClasses.classes = me.maplayerPanel.plugin.element.parents('.mapplugins').attr('data-location');
                 //me.maplayerPanel.plugin.setLocation(me.layerSelectionClasses.classes);
+                me.maplayerPanel.plugin.element.css("position", "");
             }
 
             // set map controls back to original settings after editing tool layout
@@ -960,26 +979,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             selections.layout = me.activeToolLayout;
             me.toolsPanel.addValues(selections);
 
-
-            /* toolsPanel.addValues does this already...
-            for (i = 0; i < me.tools.length; i += 1) {
-                if (me.tools[i].selected) {
-                    tmpTool = {
-                        id: me.tools[i].id
-                    };
-                    if (me.tools[i].config) {
-                        tmpTool.config = jQuery.extend(true, {}, me.tools[i].config);
-                        // Remove unneeded stuff from conf
-                        for (j = 0; j < me.toolLayouts.length; j += 1) {
-                            tmpTool.config[me.toolLayouts[j]] = null;
-                            delete tmpTool.config[me.toolLayouts[j]];
-                        }
-                    }
-                    selections.plugins.push(tmpTool);
-                }
-            }*/
-
-
             if (size === 'custom') {
                 var width = container.find('div.customsize input[name=width]').val(),
                     height = container.find('div.customsize input[name=height]').val();
@@ -1067,12 +1066,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 sandbox = me.instance.getSandbox(),
                 url = sandbox.getAjaxUrl();
             // Total width for map and grid. Used to calculate the iframe size.
-            var totalWidth = (me.isDataVisible ? (selections.size.width + me._calculateGridWidth()) : selections.size.width);
-            var errorHandler = function () {
-                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                    okBtn = dialog.createCloseButton(me.loc.buttons.ok);
-                dialog.show(me.loc.error.title, me.loc.error.saveFailed, [okBtn]);
-            };
+            var totalWidth = (me.isDataVisible ? (selections.size.width + me._calculateGridWidth()) : selections.size.width),
+                errorHandler = function () {
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                        okBtn = dialog.createCloseButton(me.loc.buttons.ok);
+                    dialog.show(me.loc.error.title, me.loc.error.saveFailed, [okBtn]);
+                };
             /*
             if (!window.confirm("Publish map?")) {
                 console.log(selections);
@@ -1373,7 +1372,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     // sotka indicators
                     (!indicator.ownIndicator) ||
                     // own indicators
-                    (indicator.ownIndicator && indicator['public'])
+                    (indicator.ownIndicator && indicator.public)
                 );
             });
             return statsGridState;
@@ -1534,6 +1533,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         _getGetInfoPlugin: function () {
             return this.toolsPanel.getToolById('Oskari.mapframework.mapmodule.GetInfoPlugin');
         },
+        /**
+         * @method _getPreferredPluginLocation
+         */
+        _getPreferredPluginLocation: function (plugin, defaultLocation) {
+            var me = this,
+                location = defaultLocation,
+                dropzoneSelector = "div.mapplugins." + location.split(" ").join(".");
+            if (location === null || this._siblingsAllowed(plugin.getClazz(), null, jQuery(dropzoneSelector)) === 0) {
+                // try to find a container that's allowed
+                var allowedLocations = me.toolDropRules[plugin.getClazz()].allowedLocations;
+                // TODO once grouped siblings is implemented:
+                // if plugin has groupedSiblings, return a container with an allowedSibling if available
+                // we invert the order because bottom containers are before the top ones in the DOM
+                jQuery(jQuery("div.mapplugins").get().reverse()).each(function () {
+                    var target = jQuery(this),
+                        allowedLocation = me._locationAllowed(allowedLocations, target);
+                    if (allowedLocation) {
+                        if (me._siblingsAllowed(plugin.getClazz(), null, target) === 2) {
+                            location = allowedLocation;
+                            return false;
+                        }
+                    }
+                });
+            }
+            return location;
+        },
+        /**
+         * @method _getInitialPluginLocation
+         */
         _getInitialPluginLocation: function (data, pluginName) {
             var plugins = this.data.state.mapfull.config.plugins,
                 plugin,
@@ -1606,29 +1634,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         },
         /**
          * vmethod _getPluginByClazz Returns plugin object of given plugin class
-         * @param  {String} clazz            Plugin class
+         * @param  {String} pluginClazz      Plugin class
          * @return {Object}                  Plugin object of given plugin class, null if not found
          */
-        _getPluginByClazz: function (clazz) {
+        _getPluginByClazz: function (pluginClazz) {
             var me = this,
-                i,
-                tools = me.toolsPanel.getTools(),
+                tool,
                 plugin = null;
-            plugin = me.toolsPanel.getToolById(clazz);
-            if (plugin &&  plugin.plugin) {
-                plugin = plugin.plugin;
+            tool = me.toolsPanel.getToolById(pluginClazz);
+            if (tool &&  tool.plugin) {
+                plugin = tool.plugin;
             } else {
-                plugin = null;
-            }
-            /*for (i = 0; i < tools.length; i++) {
-                if (tools[i].id === clazz) {
-                    plugin = tools[i].plugin;
-                }
-            }*/
-            if (plugin === null) {
-                if (clazz === "Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin") {
+                if (pluginClazz === "Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin") {
                     plugin = me.logoPlugin;
-                } else if (clazz === "Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin") {
+                } else if (pluginClazz === "Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin") {
                     plugin = me.maplayerPanel.plugin;
                 }
             }
@@ -1653,18 +1672,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         },
 
         /**
-         * @method _getDraggedPlugins Returns all plugins that should be included in the drag
-         * @param  {String} plugin    Plugin class
-         * @return {Array}            Array of plugin classes
+         * @method _getDraggedPlugins   Returns all plugins that should be included in the drag, including original dragged plugin
+         * @param  {String} pluginClazz Plugin class
+         * @return {Array}              Array of plugin classes
          */
-        _getDraggedPlugins: function (plugin) {
-            var ret;
-            if (this.toolDropRules[plugin].groupedSiblings) {
-                ret = this._getActivePlugins(this.toolDropRules[plugin].allowedSiblings);
-                ret.push(plugin);
-            } else {
-                ret = [plugin];
+        _getDraggedPlugins: function (pluginClazz) {
+            var ret = [];
+            if (this.toolDropRules[pluginClazz].groupedSiblings) {
+                ret = this._getActivePlugins(this.toolDropRules[pluginClazz].allowedSiblings);
+                
             }
+            ret.push(pluginClazz);
             return ret;
         },
 
@@ -1690,7 +1708,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          * @method _locationAllowed           Is the dropzone in the plugin's allowed locations
          * @param  {Array}   allowedLocations Array of allowed locations for the plugin
          * @param  {Object}  dropzone         jQuery object of the dropzone
-         * @return {Boolean}                  True if dropzone is allowed for plugin
+         * @return {String}                   Allowed location string if allowed, null if not.
          */
         _locationAllowed: function (allowedLocations, dropzone) {
             var isAllowedLocation,
@@ -1701,60 +1719,95 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             for (i = 0; i < allowedLocations.length; i++) {
                 isAllowedLocation = dropzone.is("." + allowedLocations[i].split(' ').join("."));
                 if (isAllowedLocation) {
-                    break;
+                    return allowedLocations[i];
                 }
             }
-            return isAllowedLocation;
+            return null;
         },
 
+
         /**
-         * Checks if plugins in dropzone are allowed siblings for given plugin
-         * @param  {String} plugin   Plugin clazz
-         * @param  {Object} dropzone jQuery object for dropzone
-         * @return {Boolean}         True if dropzone's plugins are allowed siblings fo given plugin 
-         */
-        _siblingsAllowed: function (plugin, dropzone) {
-            var siblings = this._getDropzonePlugins(dropzone),
+         * @method _moveSiblings        Moves unallowed siblings to source so plugin can be moved to target
+         * @param  {String} pluginClazz Plugin clazz
+         * @param  {Object} source      jQuery object for source dropzone (optional)
+         * @param  {Object} target      jQuery object for target dropzone
+         **/
+        _moveSiblings: function (pluginClazz, source, target) {
+            var me = this,
+                siblings = this._getDropzonePlugins(target),
                 i;
             for (i = 0; i < siblings.length; i++) {
-                if (jQuery.inArray(siblings[i], this.toolDropRules[plugin].allowedSiblings) < 0 && plugin !== siblings[i]) {
-                    return false;
+                if (jQuery.inArray(siblings[i], me.toolDropRules[pluginClazz].allowedSiblings) < 0) {
+                    // Unallowed sibling, move to source
+                    me._getPluginByClazz(siblings[i]).setLocation(source.attr("data-location"));
                 }
             }
-            return true;
         },
 
         /**
-         * @method _showDroppable  Shows dropzones where the given plugin can be dropped in green
-         * @param  {String} plugin Plugin class
+         * @method _siblingsAllowed         Checks if plugins in dropzone are allowed siblings for given plugin
+         * @param  {String} pluginClazz     Plugin clazz
+         * @param  {Object} source          jQuery object for source dropzone (optional)
+         * @param  {Object} target          jQuery object for target dropzone
+         * @param  {String} excludedSibling Plugin clazz for plugin that should be ignored in sibling check (optional)
+         * @return {Number}                 0 = no, 1 = siblings can be moved out of the way, 2 = yes
          */
-        _showDroppable: function (plugin) {
+        _siblingsAllowed: function (pluginClazz, source, target, excludedSibling) {
+            var me = this,
+                siblings = this._getDropzonePlugins(target),
+                i,
+                ret = 2;
+            for (i = 0; i < siblings.length; i++) {
+                if (!excludedSibling || siblings[i] !== excludedSibling) {
+                    // sibling is not ignored, see if it's an allowed sibling
+                    if (jQuery.inArray(siblings[i], me.toolDropRules[pluginClazz].allowedSiblings) < 0 && pluginClazz !== siblings[i]) {
+                        // not an allowed sibling, see if we can move it out of the way (don't pass a source, it'd cause an infinite loop)
+                        // only accept 2/yes as a result, moving source plugins out of the way would get too weird
+                        if ( source && me._locationAllowed(this.toolDropRules[siblings[i]].allowedLocations, source) && me._siblingsAllowed(siblings[i], null, source, pluginClazz) == 2) {
+                            // sibling can be moved to source
+                            ret = 1;
+                        } else {
+                            // sibling can't be moved to source
+                            ret = 0;
+                            break;
+                        }
+                    }
+                }
+            }
+            return ret;
+        },
+
+        /**
+         * @method _showDroppable       Shows dropzones where the given plugin can be dropped in green
+         * @param  {String} pluginClazz Plugin class
+         * @param  {Object} source      jQuery object for source dropzone
+         */
+        _showDroppable: function (pluginClazz, source) {
             var me = this,
                 allowedLocation,
-                dropzone,
+                target,
                 i;
-            if (!plugin) {
+            if (!pluginClazz) {
                 return;
             }
             jQuery('div.mapplugins').each(function () {
-                dropzone = jQuery(this);
-                var al = me.toolDropRules[plugin].allowedLocations;
-                allowedLocation = me._locationAllowed(al, dropzone);
+                target = jQuery(this);
+                allowedLocation = me._locationAllowed(me.toolDropRules[pluginClazz].allowedLocations, target);
                 if (allowedLocation) {
-                    allowedLocation = me._siblingsAllowed(plugin, dropzone);
+                    allowedLocation = me._siblingsAllowed(pluginClazz, source, target);
 
-                    // TODO use classes instead of inline css
+                    // show allowed-if-we-move-some-siblings-out-of-the-way as allowed for now
                     if (allowedLocation) {
                         // paint it green, plugin can be dropped here
-                        dropzone.find(".mappluginsContent").addClass("allowed").droppable("enable");
+                        target.find(".mappluginsContent").addClass("allowed").droppable("enable");
                     } else {
                         // paint it red, plugins already in the dropzone aren't allowed siblings for this plugin
                         // we could also try to move them somewhere?
-                        dropzone.find(".mappluginsContent").addClass("disallowed").droppable("disable");
+                        target.find(".mappluginsContent").addClass("disallowed").droppable("disable");
                     }
                 } else {
                     // paint it red, this isn't an allowed dropzone for the plugin
-                    dropzone.find(".mappluginsContent").addClass("disallowed").droppable("disable");
+                    target.find(".mappluginsContent").addClass("disallowed").droppable("disable");
                 }
             });
         },

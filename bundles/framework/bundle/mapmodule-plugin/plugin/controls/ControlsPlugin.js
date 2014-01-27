@@ -47,10 +47,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
         /**
          * @method hasUI
          * @return {Boolean} true
-         * This plugin has an UI so always returns true
+         * This plugin doesn't have a UI so always returns false
          */
         hasUI: function () {
-            return true;
+            return false;
         },
         /**
          * @method getMapModule

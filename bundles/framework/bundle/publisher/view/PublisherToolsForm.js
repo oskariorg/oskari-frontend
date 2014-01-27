@@ -339,6 +339,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
         activatePreviewPlugin: function (tool, enabled) {
             var me = this,
                 sandbox = me._sandbox;
+
             if (!tool.plugin && enabled) {
                 var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
                 tool.plugin = Oskari.clazz.create(tool.id, tool.config);
@@ -347,6 +348,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             if (!tool.plugin) {
                 // plugin not created -> nothing to do
                 return;
+            }
+            if (tool.config && tool.config.location) {
+                tool.plugin.setLocation(this._publisher._getPreferredPluginLocation(tool.plugin, tool.config.location.classes));
             }
 
             var _toggleToolOption = function (toolName, groupName, toolOption) {
