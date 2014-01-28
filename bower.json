@@ -1,0 +1,30 @@
+{
+  "name": "Oskari",
+  "version": "1.17.0",
+  "homepage": "www.oskari.org",
+  "authors": [
+    "Mikael Blomberg <mikael.blomberg@nls.fi>",
+    "Tapio Keisteri <tapio.keisteri@nls.fi>",
+    "Janne Korhonen <janne.korhonen@nls.fi>",
+    "Sami Mäkinen <sami.makinen@nls.fi>",
+    "Timo Mikkolainen <timo.mikkolainen@nls.fi>",
+    "Aku Peltonen <aku.peltonen@nls.fi>",
+    "Matti Pulakka <matti.pulakka@nls.fi>",
+    "Esko Vääräsmäki <esko.vaarasmaki@nls.fi>"
+  ],
+  "description": "Open-Source Map Framework",
+  "keywords": [
+    "Oskari",
+    "Map",
+    "OpenLayers"
+  ],
+  "license": "MIT,EUPL",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -777,6 +777,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.addLayerUrl(mapLayerJson.url);
             }
 
+            layer.setLegendImage(mapLayerJson.legendImage);
+            
             if (mapLayerJson.localization) {
                 // overrides name/desc/inspire/organization if defined!!
                 layer.setLocalization(mapLayerJson.localization);
@@ -813,6 +815,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // default to enabled, only check if it is disabled
             layer.setFeatureInfoEnabled(jsonLayer.gfi !== 'disabled');
             layer.setVersion(jsonLayer.version);
+
+            if (jsonLayer.formats && jsonLayer.formats.value) {
+                layer.setQueryFormat(jsonLayer.formats.value);
+            }
+
             return this.populateStyles(layer, jsonLayer);
         },
         /**
@@ -835,6 +842,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 styleJson,
                 blnMultipleStyles,
                 style;
+
 
             if (jsonLayer.styles) {
                 // has styles
@@ -863,26 +871,17 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // set the default style
                 layer.selectStyle(jsonLayer.style);
             }
-
-            // Create empty style that works as default if none available
-            if (layer.getStyles().length == 0) {
-                if(defaultStyle) {
-                    layer.addStyle(defaultStyle);
-                    layer.selectStyle(defaultStyle.getName());
-                } else {
-                    style = styleBuilder();
-                    style.setName("");
-                    style.setTitle("");
-                    style.setLegend("");
-                    layer.addStyle(style);
-                    layer.selectStyle("");
-                }
-            }
-
-            layer.setLegendImage(jsonLayer.legendImage);
-
-            if (jsonLayer.formats && jsonLayer.formats.value) {
-                layer.setQueryFormat(jsonLayer.formats.value);
+            
+            if(defaultStyle) {
+                layer.addStyle(defaultStyle);
+                layer.selectStyle(defaultStyle.getName());
+            } else {
+                style = styleBuilder();
+                style.setName("");
+                style.setTitle("");
+                style.setLegend("");
+                layer.addStyle(style);
+                layer.selectStyle("");
             }
 
             return layer;

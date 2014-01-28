@@ -19,6 +19,7 @@ Oskari.registerLocalization({
             "privateTooltip": "Taso on yksityinen. Muuta taso julkiseksi klikkaamalla.",
             "publicTooltip": "Taso on julkinen. Muuta taso yksityiseksi klikkaamalla."
         },
+        "addCategory": "Lisää taso",
         "editCategory": "Muokkaa tasoa",
         "deleteCategory": "Poista taso",
         "edit": "Muokkaa",
@@ -45,6 +46,22 @@ Oskari.registerLocalization({
         }
     },
     "tools": {
+      "measureline": {
+        "title": "Etäisyyden mittaus",
+        "tooltip": "Mittaa etäisyys",
+        "add": "",
+        "next": "",
+        "edit": "Muokkaa viivaa raahaamalla viivan taitepisteitä.",
+        "noResult": "0 m"
+      },
+      "measurearea": {
+        "title": "Mittaa pinta-ala",
+        "tooltip": "Pinta-alan mittaus",
+        "add": "",
+        "next": "",
+        "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
+        "noResult": "0 m²"
+      },
       "point": {
         "title": "Pisteen lisäys",
         "tooltip": "Lisää piste",
@@ -72,11 +89,13 @@ Oskari.registerLocalization({
         "noResult": "0 m²"
       }
     },
-     "buttons": {
+    "buttons": {
       "ok": "OK",
       "cancel": "Peruuta",
+      "close": "Lopeta",
       "finish": "Tallenna piirto",
       "save": "Tallenna",
+      "saveAsMyPlace": "Tallenna omaksi paikaksi",
       "movePlaces": "Siirrä kohteet ja poista",
       "deleteCategory": "Poista",
       "deleteCategoryAndPlaces": "Poista kohteineen",

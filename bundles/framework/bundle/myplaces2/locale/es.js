@@ -19,6 +19,7 @@ Oskari.registerLocalization({
             "privateTooltip": "La capa es privada. Pulse en la capa para publicarla.",
             "publicTooltip": "La capa es pública. Pulse en la capa para despublicarla."
         },
+        "addCategory": "Añadir capa",
         "editCategory": "Editar capa",
         "deleteCategory": "Borrar capa",
         "edit": "Editar",
@@ -44,6 +45,22 @@ Oskari.registerLocalization({
         }
       },
     "tools": {
+      "measureline": {
+        "title": "NOT TRANSLATED",
+        "tooltip": "NOT TRANSLATED",
+        "add": "",
+        "next": "",
+        "edit": "NOT TRANSLATED",
+        "noResult": "0 m"
+      },
+      "measurearea": {
+        "title": "NOT TRANSLATED",
+        "tooltip": "NOT TRANSLATED",
+        "add": "",
+        "next": "",
+        "edit": "NOT TRANSLATED",
+        "noResult": "0 m²"
+      },
       "point": {
         "tooltip": "Añadir punto",
         "new": "Añadir punto mediante un click en el mapa.",
@@ -69,8 +86,10 @@ Oskari.registerLocalization({
     "buttons": {
       "ok": "Hecho",
       "cancel": "Cancelar",
+      "close": "NOT TRANSLATED",
       "finish": "Fin de edición",
       "save": "Guardar",
+      "saveAsMyPlace": "NOT TRANSLATED",
       "movePlaces": "Mover sitios y borrar",
       "deleteCategory": "Borrar",
       "deleteCategoryAndPlaces": "Borrar categorías y sitios",

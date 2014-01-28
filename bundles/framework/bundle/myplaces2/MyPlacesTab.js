@@ -39,13 +39,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             return this.tabsContainer.ui;
         },
         initContainer: function () {
-            this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', this.loc.nocategories);
+            var me = this;
+            me.addAddLayerButton();
+            me.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', me.loc.nocategories, me.addLayerButton);
         },
+
+        addAddLayerButton: function () {
+            var me = this;
+            me.addLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            // TODO I18N
+            me.addLayerButton.setTitle(me.loc.addCategory);
+            me.addLayerButton.setHandler(function () {
+                me.instance.openAddLayerDialog('div.personaldata ul li select', 'right');
+            });
+            return me.addLayerButton;
+        },
+
         addTabContent: function (container) {
             var me = this;
-            this.initTabContent();
-            this.tabsContainer.ui.addClass('peikko');
-            container.append(this.tabsContainer.ui);
+            me.initTabContent();
+            me.tabsContainer.ui.addClass('peikko');
+            container.append(me.tabsContainer.ui);
         },
         /**
          * @property {Object} eventHandlers
@@ -57,10 +71,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
              * Updates the category tabs and grids inside them with current data
              */
             'MyPlaces.MyPlacesChangedEvent': function (event) {
-                var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
-                var categories = service.getAllCategories();
-                var places = service.getAllMyPlaces();
-                var me = this;
+                var me = this,
+                    service = me.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService'),
+                    categories = service.getAllCategories(),
+                    places = service.getAllMyPlaces();
                 /*
             var publishLinkClosure = function(id, isPublic) {
                 return function() {

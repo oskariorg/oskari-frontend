@@ -65,14 +65,14 @@ function() {
      */
     showMessage : function(title, message) {
         var loc = this.getLocalization();
-    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	okBtn.setTitle(loc.buttons.ok);
-    	okBtn.addClass('primary');
-    	okBtn.setHandler(function() {
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(loc.buttons.ok);
+        okBtn.addClass('primary');
+        okBtn.setHandler(function() {
             dialog.close(true);
-    	});
-    	dialog.show(title, message, [okBtn]);
+        });
+        dialog.show(title, message, [okBtn]);
     },
     /**
      * @method forceDisable
@@ -150,8 +150,8 @@ function() {
         // Should this not come as a param?
         var me = this;
         var conf = me.conf ;
-		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
-		var sandbox = Oskari.getSandbox(sandboxName);
+        var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+        var sandbox = Oskari.getSandbox(sandboxName);
         this.sandbox = sandbox;
 
         this.featureNS = conf ? conf.featureNS : null;
@@ -194,23 +194,25 @@ function() {
         this.view.start();
         
         this.editRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler', sandbox, me);
+        this.openAddLayerDialogHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDialogHandler', sandbox, me);
         sandbox.addRequestHandler('MyPlaces.EditPlaceRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.EditCategoryRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.DeleteCategoryRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.PublishCategoryRequest', this.editRequestHandler);
+        sandbox.addRequestHandler('MyPlaces.OpenAddLayerDialogRequest', this.openAddLayerDialogHandler);
        
         var tabLocalization = this.getLocalization('tab');
 
-        tab = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.MyPlacesTab', this, tabLocalization);
+        this.tab = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.MyPlacesTab', this, tabLocalization);
   
-        tab.initContainer();
+        this.tab.initContainer();
          // binds tab to events
-        if (tab.bindEvents) {
-            tab.bindEvents();
+        if (this.tab.bindEvents) {
+            this.tab.bindEvents();
         }
 
-        var title =  tab.getTitle();
-        var content = tab.getContent();
+        var title =  this.tab.getTitle();
+        var content = this.tab.getContent();
    
         var first = true;
         var reqName = 'PersonalData.AddTabRequest';
@@ -223,11 +225,52 @@ function() {
      * @method stop
      * implements BundleInstance protocol stop method - does nothing atm
      */
-    stop : function() {
+    stop : function () {
         this.sandbox = null;
     },
 
-    _getCategoryDefaults : function() {
+    openAddLayerDialog: function (originator, side) {
+            // create popup
+            // TODO popup doesn't block bg?
+            var me = this,
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.CategoryForm', me),
+                categoryHandler = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.CategoryHandler", me),
+                btnLoc = me.getLocalization('buttons'),
+                buttons = [],
+                saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                cancelBtn = dialog.createCloseButton(btnLoc.cancel);
+
+            saveBtn.setTitle(btnLoc.save);
+            saveBtn.addClass('primary');
+            saveBtn.setHandler(function () {
+                var values = categoryForm.getValues(),
+                    errors = categoryHandler.validateCategoryFormValues(values);
+                if (errors.length !== 0) {
+                    categoryHandler.showValidationErrorMessage(errors);
+                    return;
+                }
+                var category = categoryHandler.getCategoryFromFormValues(values);
+                categoryHandler.saveCategory(category);
+
+                dialog.close();
+                me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+            });
+            buttons.push(cancelBtn);
+            buttons.push(saveBtn);
+            
+            // TODO add buttons
+            dialog.show(me.getLocalization('tab').addCategory, categoryForm.getForm(), buttons);
+            // Move dialog next to layer select
+            if (originator) {
+                dialog.moveTo(originator, side);
+            }
+            // Disable rest of UI
+            dialog.makeModal();
+            categoryForm.start();
+    },
+
+    _getCategoryDefaults : function () {
         var defaults = {
             name: this.getLocalization('category').defaultName,
             point: {

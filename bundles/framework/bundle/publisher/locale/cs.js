@@ -61,7 +61,7 @@ Oskari.registerLocalization({
                 "tooltip": "Choose a layout for the tools shown on the map",
                 "lefthanded": "Lefthanded",
                 "righthanded": "Righthanded",
-                "userlayout": "Move tools",
+                "userlayout": "Custom layout",
                 "usereditmode": "Switch edit mode on",
                 "usereditmodeoff": "Switch edit mode off"
             },
@@ -71,6 +71,7 @@ Oskari.registerLocalization({
                 "grid": "Show statistic grid"
             },
             "layers": {
+                "add": "NOT TRANSLATED",
                 "label": "Mapové vrstvy",
                 "defaultLayer": "(Defaultní vrstva)",
                 "useAsDefaultLayer": "Použij jako defalutní vrstvu"
