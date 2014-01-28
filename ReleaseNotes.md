@@ -10,13 +10,13 @@ Removed handling of `AfterMapLayerAddEvent` from the layer plugins for it is the
 
 WfsLayerPlugin now assumes config values hostname and port based on document.location if not configured and contextPath also defaults to '/transport' if not configured.
 
-### core/map layer service
+### core/map layer service/AbstractLayer
 
 Maplayer JSON parsing changed a bit:
 
 * Legendimage is now parsed for all layer types
 
-* Styles populator now add a default style before parsing the styles array
+* AbstractLayer.addStyle() now checks that a style with the same name isn't added yet.
 
 * Formats parsing has been moved out from styles parsing and in to wmslayer specific parsing as they are not related operations
 
