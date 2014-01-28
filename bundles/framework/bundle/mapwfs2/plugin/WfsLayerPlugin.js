@@ -160,7 +160,6 @@ function(config) {
      */
     startPlugin : function(sandbox) {
         this._map = this.getMapModule().getMap();
-
         this.createTilesGrid();
         sandbox.register(this);
         for (p in this.eventHandlers) {
@@ -532,9 +531,10 @@ function(config) {
         if(this.getSandbox().getMap().isMoving()) {
             return;
         }
-
         var lonlat = event.getLonLat();
         var keepPrevious = this.getSandbox().isCtrlKeyDown();
+        this._mapClickData.comet = false;
+        this._mapClickData.ajax = false;
         this.getIO().setMapClick(lonlat.lon, lonlat.lat, keepPrevious);
     },
 
@@ -542,10 +542,9 @@ function(config) {
      * @method getInfoResultHandler
      */
     getInfoResultHandler : function(event) {
-
         this._mapClickData.ajax = true;
         this._mapClickData.data = event.getData();
-        if(!this.isWFSOpen() || this._mapClickData.comet) {
+        if(!this.isWFSOpen() || this._mapClickData.comet || this._mapClickData.wfs) {
             this.showInfoBox();
         }
     },
