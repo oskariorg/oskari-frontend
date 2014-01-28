@@ -128,14 +128,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
 
                     // for logged-in-user: add line & area buttons
                     if (sandbox.getUser().isLoggedIn()) {
+                        var loc = me.instance.getLocalization();
                         if(tool === 'line') {
                             measureTool = jQuery.extend(true, {}, this.buttons[tool]);
                             measureTool.iconCls = 'tool-measure-line';
+                            measureTool.tooltip = loc.tools.measureline.tooltip;
                             sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
                         }
                         if(tool === 'area') {
                             measureTool = jQuery.extend(true, {}, this.buttons[tool]);
                             measureTool.iconCls = 'tool-measure-area';
+                            measureTool.tooltip = loc.tools.measurearea.tooltip;
                             sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
                         }
                     }
@@ -192,11 +195,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
          * implements Module protocol update method
          */
         _showDrawHelper: function (drawMode) {
-            var me = this;
+            var me = this,
+                locTool = this.instance.getLocalization('tools')[drawMode];
             // show help popup with cancel and finished buttons
-            var locTool = this.instance.getLocalization('tools')[drawMode];
+            // for logged-in-user: add line & area buttons
+            if (me.instance.sandbox.getUser().isLoggedIn()) {
+                if(drawMode === 'line') {
+                    locTool = this.instance.getLocalization('tools').measureline;
+                } else if(drawMode === 'area') {
+                    locTool = this.instance.getLocalization('tools').measurearea;
+                }
+            }
+            
             var locBtns = this.instance.getLocalization('buttons');
-            var title = locTool['title'];
+            var title = locTool.title;
             var message = locTool.add;
 
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -220,6 +232,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                 me.sendStopDrawRequest();
             });
             buttons.push(finishBtn);
+
+            // for logged-in-user: add line & area buttons
+            if (me.instance.sandbox.getUser().isLoggedIn()) {
+                if(drawMode === 'line' || drawMode === 'area') {
+                    cancelBtn.setTitle(locBtns.close);
+                    finishBtn.setTitle(locBtns.saveAsMyPlace);
+                }
+            }
+
 
             var content = this.templateHelper.clone();
             content.find('div.infoText').html(message);
@@ -330,10 +351,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
              * @param {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.AddedFeatureEvent} event
              */
             'DrawPlugin.AddedFeatureEvent': function (event) {
-                if (event.getDrawingMode() !== undefined) {
-                    if (event.getDrawingMode() !== null) {
+                var drawingMode = event.getDrawingMode();
+                if (drawingMode !== undefined) {
+                    if (drawingMode !== null) {
+                        if (this.instance.sandbox.getUser().isLoggedIn()) {
+                            if(drawingMode === 'line') {
+                                drawingMode = "measureline";
+                            } else if(drawingMode === 'area') {
+                                drawingMode = "measurearea";
+                            }
+                        }
                         var loc = this.instance.getLocalization('tools');
-                        var areaDialogContent = loc[event.getDrawingMode()].next;
+                        var areaDialogContent = loc[drawingMode].next;
                         var content = this.dialog.getJqueryContent();
                         if (content.find('div.infoText') !== areaDialogContent) {
                             content.find('div.infoText').html(areaDialogContent);

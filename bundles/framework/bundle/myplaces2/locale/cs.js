@@ -45,6 +45,22 @@ Oskari.registerLocalization({
         }
       },
     "tools": {
+      "measureline": {
+        "title": "NOT TRANSLATED",
+        "tooltip": "NOT TRANSLATED",
+        "add": "",
+        "next": "",
+        "edit": "NOT TRANSLATED",
+        "noResult": "0 m"
+      },
+      "measurearea": {
+        "title": "NOT TRANSLATED",
+        "tooltip": "NOT TRANSLATED",
+        "add": "",
+        "next": "",
+        "edit": "NOT TRANSLATED",
+        "noResult": "0 m²"
+      },
       "point": {
         "tooltip": "Přidat bod",
         "new": "Přidat bod kliknutím v mapě",
@@ -70,8 +86,10 @@ Oskari.registerLocalization({
     "buttons": {
       "ok": "OK",
       "cancel": "Storno",
+      "close": "NOT TRANSLATED",
       "finish": "Ukončit kreslení",
       "save": "Uložit",
+      "saveAsMyPlace": "NOT TRANSLATED",
       "movePlaces": "Posunot místa a smazat",
       "deleteCategory": "Smazat",
       "deleteCategoryAndPlaces": "Smazat kategorii a místa",
