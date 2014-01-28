@@ -507,7 +507,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     tool.publisherPluginContainer.append(options);
 
                     // FIXME when myplaces works on published maps
-                    if (true) {
+                    if (false) {
                         // create option for adding drawing tools
                         options = jQuery(me.templates.toolOptions).clone();
                         tool.publisherPluginContainer.append(options);
