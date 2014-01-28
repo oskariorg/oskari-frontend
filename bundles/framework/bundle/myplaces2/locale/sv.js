@@ -19,6 +19,7 @@ Oskari.registerLocalization({
             "privateTooltip": "Kartlagret är privat. Klicka på lagret för att offentliggöra det.",
             "publicTooltip": "Kartlagret är offentliggöra. Klicka på lagret för att privat det."
         },
+        "addCategory": "Tillägg kartlager",
         "editCategory": "Editera kartlager",
         "deleteCategory": "Ta bort kartlager",
         "edit": "Editera",

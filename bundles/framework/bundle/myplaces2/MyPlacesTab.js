@@ -39,13 +39,60 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             return this.tabsContainer.ui;
         },
         initContainer: function () {
-            this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', this.loc.nocategories);
+            var me = this;
+            me.addAddLayerButton();
+            me.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', me.loc.nocategories, me.addLayerButton);
         },
+        addAddLayerButton: function () {
+            var me = this;
+            me.addLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            // TODO I18N
+            me.addLayerButton.setTitle(me.loc.addCategory);
+            me.addLayerButton.setHandler(function () {
+                // create popup
+                // TODO popup doesn't block bg?
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.CategoryForm', me.instance),
+                    categoryHandler = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.CategoryHandler", me.instance),
+                    btnLoc = me.instance.getLocalization('buttons'),
+                    buttons = [],
+                    saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                    cancelBtn = dialog.createCloseButton(btnLoc.cancel);
+
+                saveBtn.setTitle(btnLoc.save);
+                saveBtn.addClass('primary');
+                saveBtn.setHandler(function () {
+                    var values = categoryForm.getValues(),
+                        errors = categoryHandler.validateCategoryFormValues(values);
+                    if (errors.length !== 0) {
+                        categoryHandler.showValidationErrorMessage(errors);
+                        return;
+                    }
+                    var category = categoryHandler.getCategoryFromFormValues(values);
+                    categoryHandler.saveCategory(category);
+
+                    dialog.close();
+                    me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+                });
+                buttons.push(cancelBtn);
+                buttons.push(saveBtn);
+                
+                // TODO add buttons
+                dialog.show(me.loc.addCategory, categoryForm.getForm(), buttons);
+                // Move dialog next to layer select
+                dialog.moveTo('div.personaldata ul li select', 'right');
+                // Disable rest of UI
+                dialog.makeModal();
+                categoryForm.start();
+            });
+            return me.addLayerButton;
+        },
+
         addTabContent: function (container) {
             var me = this;
-            this.initTabContent();
-            this.tabsContainer.ui.addClass('peikko');
-            container.append(this.tabsContainer.ui);
+            me.initTabContent();
+            me.tabsContainer.ui.addClass('peikko');
+            container.append(me.tabsContainer.ui);
         },
         /**
          * @property {Object} eventHandlers
@@ -57,10 +104,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
              * Updates the category tabs and grids inside them with current data
              */
             'MyPlaces.MyPlacesChangedEvent': function (event) {
-                var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
-                var categories = service.getAllCategories();
-                var places = service.getAllMyPlaces();
-                var me = this;
+                var me = this,
+                    service = me.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService'),
+                    categories = service.getAllCategories(),
+                    places = service.getAllMyPlaces();
                 /*
             var publishLinkClosure = function(id, isPublic) {
                 return function() {
