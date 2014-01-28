@@ -19,6 +19,7 @@ Oskari.registerLocalization({
             "privateTooltip": "La capa es privada. Pulse en la capa para publicarla.",
             "publicTooltip": "La capa es pública. Pulse en la capa para despublicarla."
         },
+        "addCategory": "Añadir capa",
         "editCategory": "Editar capa",
         "deleteCategory": "Borrar capa",
         "edit": "Editar",

@@ -19,6 +19,7 @@ Oskari.registerLocalization({
             "privateTooltip": "The map layer is private. Click the map layer to make it public.",
             "publicTooltip": "The map layer is public. Click the map layer to make it private."
         },
+        "addCategory": "Add map layer",
         "editCategory": "Edit map layer",
         "deleteCategory": "Delete map layer",
         "edit": "Edit",

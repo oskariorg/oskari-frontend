@@ -12,8 +12,9 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
      * @param {String} pEmptyMsg message that will be displayed if there is no tabs added
      */
 
-    function (pEmptyMsg) {
+    function (pEmptyMsg, button) {
 
+        this.button = button;
         this.panels = [];
         this.tabChangeListeners = [];
         if (pEmptyMsg) {
@@ -39,7 +40,10 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
             var me = this;
             if (this.panels.length === 0) {
                 var content = this.templateTabs.clone();
-                this.ui.html(content);
+                me.ui.html(content);
+                if (me.button && me.button.insertTo) {
+                    me.button.insertTo(me.ui.find("li"));
+                }
             }
             var headerContainer = this.ui.find('ul li select'),
                 header = this.templateTabOption.clone();

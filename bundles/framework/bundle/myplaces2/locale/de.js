@@ -19,6 +19,7 @@ Oskari.registerLocalization({
             "privateTooltip": "Die Kartenebene ist nicht öffentlich.| Klicken Sie auf die Kartenebene, um sie öffentlich zu machen.",
             "publicTooltip": "Die Kartenebene ist öffentlich| Klicken Sie auf die Kartenebene, um sie nicht öffentlich zu machen."
         },
+        "addCategory": "Kartenebene hinzufügen",
         "editCategory": "Kartenebene bearbeiten",
         "deleteCategory": "Kartenebene löschen",
         "edit": "Bearbeiten",

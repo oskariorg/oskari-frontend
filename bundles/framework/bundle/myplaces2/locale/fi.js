@@ -19,6 +19,7 @@ Oskari.registerLocalization({
             "privateTooltip": "Taso on yksityinen. Muuta taso julkiseksi klikkaamalla.",
             "publicTooltip": "Taso on julkinen. Muuta taso yksityiseksi klikkaamalla."
         },
+        "addCategory": "Lisää taso",
         "editCategory": "Muokkaa tasoa",
         "deleteCategory": "Poista taso",
         "edit": "Muokkaa",

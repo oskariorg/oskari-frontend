@@ -19,6 +19,7 @@ Oskari.registerLocalization({
             "privateTooltip": "Mapa je soukromá| Klikněte na mapovou vrstvu pro její veřejné zpřístupnění.",
             "publicTooltip": "Mapa je veřejná| Klikněte na mapovou vrstvu pro její změnu na soukromou."
         },
+        "addCategory": "Přidat mapovou vrstvu",
         "editCategory": "Upravit mapovou vrstvu",
         "deleteCategory": "Smazat mapovou vrstvu",
         "edit": "Upravit",
