@@ -89,7 +89,7 @@ Oskari.registerLocalization({
         "noResult": "0 m²"
       }
     },
-     "buttons": {
+    "buttons": {
       "ok": "OK",
       "cancel": "Peruuta",
       "close": "Lopeta",
