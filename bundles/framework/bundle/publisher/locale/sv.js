@@ -53,16 +53,16 @@ Oskari.registerLocalization({
                 "SearchPlugin": "Adress- och ortnamnssökning",
                 "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet",
                 "PublisherToolbarPlugin": "Kartverktygen",
-                "drawPoints" : "Tillåter poäng",
-                "drawLines" : "Tillåter linjer",
-                "drawAreas" : "Tillåter områden",
                 "selectDrawLayer" : "Väljer ritning lager"
             },
             "toolbarToolNames": {
                 "history_back": "Gå bakåt",
                 "history_forward": "Gå framåt",
                 "measureline": "Mäta avstånd",
-                "measurearea": "Mäta område"
+                "measurearea": "Mäta område",
+                "point" : "Tillåter punkter",
+                "line" : "Tillåter linjer",
+                "area" : "Tillåter områden",
             },
             "toollayout": {
                 "label": "Verktyg applikation",

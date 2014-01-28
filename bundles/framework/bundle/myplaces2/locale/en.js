@@ -46,6 +46,22 @@ Oskari.registerLocalization({
         }
     },
     "tools": {
+      "measureline": {
+        "title": "Distance measurement",
+        "tooltip": "Measure distance",
+        "add": "",
+        "next": "",
+        "edit": "Edit the line by clicking and dragging its break points.",
+        "noResult": "0 m"
+      },
+      "measurearea": {
+        "title": "Area measurement",
+        "tooltip": "Measure area",
+        "add": "",
+        "next": "",
+        "edit": "Edit the shape of the area by clicking and dragging the break points on its edge line.",
+        "noResult": "0 m²"
+      },
       "point": {
         "title": "Adding point",
         "tooltip": "Add point",
@@ -76,8 +92,10 @@ Oskari.registerLocalization({
     "buttons": {
       "ok": "OK",
       "cancel": "Cancel",
+      "close": "Cancel",
       "finish": "Save drawing",
       "save": "Save",
+      "saveAsMyPlace": "Save as my place",
       "movePlaces": "Move places and delete",
       "deleteCategory": "Delete",
       "deleteCategoryAndPlaces": "Delete category and places",

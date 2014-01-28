@@ -46,6 +46,22 @@ Oskari.registerLocalization({
         }
     },
     "tools": {
+      "measureline": {
+        "title": "Etäisyyden mittaus",
+        "tooltip": "Mittaa etäisyys",
+        "add": "",
+        "next": "",
+        "edit": "Muokkaa viivaa raahaamalla viivan taitepisteitä.",
+        "noResult": "0 m"
+      },
+      "measurearea": {
+        "title": "Mittaa pinta-ala",
+        "tooltip": "Pinta-alan mittaus",
+        "add": "",
+        "next": "",
+        "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
+        "noResult": "0 m²"
+      },
       "point": {
         "title": "Pisteen lisäys",
         "tooltip": "Lisää piste",
@@ -76,8 +92,10 @@ Oskari.registerLocalization({
      "buttons": {
       "ok": "OK",
       "cancel": "Peruuta",
+      "close": "Lopeta",
       "finish": "Tallenna piirto",
       "save": "Tallenna",
+      "saveAsMyPlace": "Tallenna omaksi paikaksi",
       "movePlaces": "Siirrä kohteet ja poista",
       "deleteCategory": "Poista",
       "deleteCategoryAndPlaces": "Poista kohteineen",

@@ -53,16 +53,16 @@ Oskari.registerLocalization({
                 "SearchPlugin": "Address and place name search",
                 "GetInfoPlugin": "Query tool for place data",
                 "PublisherToolbarPlugin": "map tools",
-                "drawPoints" : "Allow points",
-                "drawLines" : "Allow lines",
-                "drawAreas" : "Allow areas",
                 "selectDrawLayer" : "Select draw layer"
             },
             "toolbarToolNames": {
                 "history_back": "Move backward",
                 "history_forward": "Move forward",
                 "measureline": "Measure distance",
-                "measurearea": "Measure area"
+                "measurearea": "Measure area",
+                "point" : "Allow points",
+                "line" : "Allow lines",
+                "area" : "Allow areas",
             },
             "toollayout": {
                 "label": "Tool layout",

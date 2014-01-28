@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
      *       map of enabled plugins, pass a null or undefined to use defaults
      */
 
-    function (publisher, enabledPlugins) {
+    function(publisher, enabledPlugins) {
         this.loc = publisher.loc;
         this._publisher = publisher;
         this._sandbox = null;
@@ -133,9 +133,65 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 tool;
             for (i = 0; i < this.tools.length; i++) {
                 tool = this.tools[i];
-                tool.selected = !!enabledPlugins[tool.id];
+                tool.selected = !! enabledPlugins[tool.id];
             }
         }
+
+        this.buttonGroups = [{
+            'name': 'history',
+            'buttons': {
+                'history_back': {
+                    iconCls: 'tool-history-back-dark',
+                    prepend: true,
+                    disabled: true,
+                    callback: function() {}
+                },
+                'history_forward': {
+                    iconCls: 'tool-history-forward-dark',
+                    disabled: true,
+                    callback: function() {}
+                }
+            }
+        }, {
+            'name': 'basictools',
+            'buttons': {
+                'measureline': {
+                    iconCls: 'tool-measure-line-dark',
+                    disabled: true,
+                    sticky: true,
+                    callback: function() {}
+                },
+                'measurearea': {
+                    iconCls: 'tool-measure-area-dark',
+                    disabled: true,
+                    sticky: true,
+                    callback: function() {}
+                }
+            }
+        }, {
+            'name': 'myplaces',
+            'buttons': {
+                'point': {
+                    iconCls: 'myplaces-draw-point',
+                    disabled: true,
+                    sticky: true,
+                    callback: function() {}
+                },
+                'line': {
+                    iconCls: 'myplaces-draw-line',
+                    disabled: true,
+                    sticky: true,
+                    callback: function() {}
+                },
+                'area': {
+                    iconCls: 'myplaces-draw-area',
+                    disabled: true,
+                    sticky: true,
+                    callback: function() {}
+                }
+
+            }
+        }];
 
         this.templates = {
             'help': '<div class="help icon-info"></div>',
@@ -156,7 +212,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
          * @method init
          * @param {Object} pData initial data
          */
-        init: function (pData) {
+        init: function(pData) {
             var me = this,
                 sandbox = me._publisher.instance.getSandbox(),
                 mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
@@ -165,7 +221,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             me.myplaces = myplaces;
             me._sandbox = sandbox;
         },
-        getTools: function () {
+        getTools: function() {
             return this.tools;
         },
         /**
@@ -174,7 +230,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
          * @method getPanel
          * @return {Oskari.userinterface.component.AccordionPanel}
          */
-        getPanel: function (data) {
+        getPanel: function(data) {
 
 
             var me = this,
@@ -192,8 +248,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             contentPanel.append(tooltipCont);
 
             // content
-            var closureMagic = function (tool) {
-                return function () {
+            var closureMagic = function(tool) {
+                return function() {
                     var checkbox = jQuery(this),
                         isChecked = checkbox.is(':checked');
                     tool.selected = isChecked;
@@ -231,7 +287,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             return panel;
         },
 
-        getToolById: function (id) {
+        getToolById: function(id) {
             var idx = this._toolIndices[id],
                 ret = null;
             if (idx !== null && idx !== undefined) {
@@ -245,7 +301,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
          * @param selections object in which additions are made
          * @return {Object}
          */
-        addValues: function (selections) {
+        addValues: function(selections) {
             var me = this,
                 toolbarConfig = me.toolbarConfig,
                 selectedLayers = me._sandbox.findAllSelectedMapLayers(),
@@ -298,9 +354,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 }
             }
 
-            if (me.selectedDrawingLayer.point === true ||
-                    me.selectedDrawingLayer.line === true ||
-                    me.selectedDrawingLayer.area === true) {
+            if (me.toolbarConfig.myplaces.point === true ||
+                me.toolbarConfig.myplaces.line === true ||
+                me.toolbarConfig.myplaces.area === true) {
 
                 var alreadySelected = false;
                 for (i = 0; i < selectedLayers.length; i++) {
@@ -325,7 +381,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
          * @method validate
          * @return {Object[]}
          */
-        validate: function () {
+        validate: function() {
             var errors = [];
             return errors;
         },
@@ -336,7 +392,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
          * @param {Object} tool tool definition as in #tools property
          * @param {Boolean} enabled, true to enable plugin, false to disable
          */
-        activatePreviewPlugin: function (tool, enabled) {
+        activatePreviewPlugin: function(tool, enabled) {
             var me = this,
                 sandbox = me._sandbox;
 
@@ -353,8 +409,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 tool.plugin.setLocation(this._publisher._getPreferredPluginLocation(tool.plugin, tool.config.location.classes));
             }
 
-            var _toggleToolOption = function (toolName, groupName, toolOption) {
-                return function () {
+            var _toggleToolOption = function(toolName, groupName, toolOption) {
+                return function() {
                     var checkbox = jQuery(this),
                         isChecked = checkbox.is(':checked'),
                         reqBuilder;
@@ -378,8 +434,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 };
             };
 
-            var toolOptions,
+            var options,
                 i,
+                groupName,
                 buttonGroup,
                 toolName,
                 toolButton,
@@ -403,39 +460,50 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
                     tool.plugin.setToolbarContainer();
                     me.toolbarConfig.classes = tool.plugin.getToolConfs();
-                }
+                    var _addToolGroup = function(groupName, options, toolOption, toggleToolHandler) {
+                        var i,
+                            ilen,
+                            buttonGroup,
+                            toolName,
+                            toolButton,
+                            reqBuilder;
 
-                toolOptions = tool.plugin.getToolOptions ? tool.plugin.getToolOptions() : null;
-
-                //atm. this is using toolsplugin's button structure
-                var options;
-                if (toolOptions) {
-
-                    options = jQuery(me.templates.toolOptions).clone();
-                    tool.publisherPluginContainer.append(options);
-                    //loop through button groups and buttons
-                    for (i in toolOptions) {
-                        if (toolOptions.hasOwnProperty(i)) {
-                            buttonGroup = toolOptions[i];
-                            for (toolName in buttonGroup.buttons) {
-                                if (buttonGroup.buttons.hasOwnProperty(toolName)) {
-                                    toolButton = buttonGroup.buttons[toolName];
-                                    // create checkbox
-                                    toolButton.selectTool = jQuery(me.templates.toolOption).clone();
-                                    toolButton.selectTool.find('label')
-                                        .attr('for', 'tool-opt-' + toolName).append(this.loc.toolbarToolNames[toolName]);
-                                    if (toolButton.selected) {
-                                        toolButton.selectTool.find('input').attr('checked', 'checked');
-                                    }
-                                    //toggle toolbar tool. i.e. send requests
-                                    toolButton.selectTool.find('input')
-                                        .attr('id', 'tool-opt-' + toolName)
-                                        .change(_toggleToolOption(toolName, buttonGroup.name, toolButton));
-                                    options.append(toolButton.selectTool);
-                                }
+                        // retrieve myplaces button configs
+                        for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
+                            if (groupName === me.buttonGroups[i].name) {
+                                buttonGroup = me.buttonGroups[i];
+                                break;
                             }
                         }
+
+                        for (toolName in buttonGroup.buttons) {
+                            if (buttonGroup.buttons.hasOwnProperty(toolName)) {
+                                toolButton = buttonGroup.buttons[toolName];
+                                toolButton.toolbarid = toolOption.toolbarId;
+
+                                // create checkbox
+                                toolButton.selectTool = jQuery(me.templates.toolOption).clone();
+                                toolButton.selectTool.find('label')
+                                    .attr('for', 'tool-opt-' + toolName).append(me.loc.toolbarToolNames[toolName]);
+                                if (toolButton.selected) {
+                                    toolButton.selectTool.find('input').attr('checked', 'checked');
+                                }
+                                //toggle toolbar tool. i.e. send requests
+                                toolButton.selectTool.find('input')
+                                    .attr('id', 'tool-opt-' + toolName)
+                                    .change(_toggleToolOption(toolName, buttonGroup.name, toolButton));
+                                options.append(toolButton.selectTool);
+                            }
+                        }
+
+                        return options;
                     }
+
+                    // append after all buttons have been added
+                    options = jQuery(me.templates.toolOptions).clone();
+                    options = _addToolGroup('history', options, me.toolbarConfig, _toggleToolOption);
+                    options = _addToolGroup('basictools', options, me.toolbarConfig, _toggleToolOption);
+                    tool.publisherPluginContainer.append(options);
 
                     // FIXME when myplaces works on published maps
                     if (false) {
@@ -449,13 +517,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         selectTool.find('input')
                             .attr('id', 'tool-opt-drawing')
                             .change(function(e) {
-                                me._toggleDrawTools(e, 'drawTools', 'myplaces', {});
+                                me._toggleDrawTools(e, 'drawTools', 'myplaces', me.toolbarConfig, _toggleToolOption);
                             });
                         options.append(selectTool);
                     }
-
                 }
-
             } else {
                 // toolbar (bundle) needs to be notified
                 if (tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
@@ -491,8 +557,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 }
             }
         },
-        _toggleDrawTools: function (event, toolName, groupName, toolOption) {
+        _toggleDrawTools: function(event, toolName, groupName, toolOption, toggleToolHandler) {
             var me = this,
+                button, buttonGroup, i, ilen, options,
                 checkbox = jQuery(event.target),
                 isChecked = checkbox.is(':checked'),
                 mylayers = me.myplaces;
@@ -506,7 +573,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     layerSelectOption.attr('value', mylayers[i].getId()).append(mylayers[i].getName());
                     // select correct layer
                     if (me.selectedDrawingLayer.layer !== null && me.selectedDrawingLayer.layer !== undefined &&
-                            mylayers[i].getId() === me.selectedDrawingLayer.layer.getId()) {
+                        mylayers[i].getId() === me.selectedDrawingLayer.layer.getId()) {
                         layerSelectOption.prop('selected', true);
                     }
                     layerSelect.append(layerSelectOption);
@@ -515,7 +582,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 if (me.selectedDrawingLayer.layer === null || me.selectedDrawingLayer.layer === undefined) {
                     me.selectedDrawingLayer.layer = mylayers[0];
                 }
-                layerSelect.change(function (e) {
+                layerSelect.change(function(e) {
                     var target = jQuery(e.target),
                         value = target.val(),
                         i;
@@ -527,50 +594,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 });
 
                 var optionSettings = jQuery(me.templates.toolOptionSettings).clone(),
-                    optionSetting = jQuery(me.templates.toolOptionSetting).clone(),
-                    osPoint = jQuery(me.templates.toolOptionSetting).clone(),
-                    osLine = jQuery(me.templates.toolOptionSetting).clone(),
-                    osArea = jQuery(me.templates.toolOptionSetting).clone(),
-                    osPointInput = jQuery(me.templates.toolOptionSettingInput).clone(),
-                    osLineInput = jQuery(me.templates.toolOptionSettingInput).clone(),
-                    osAreaInput = jQuery(me.templates.toolOptionSettingInput).clone();
+                    optionSetting = jQuery(me.templates.toolOptionSetting).clone();
 
                 //add select for drawlayer
                 optionSetting.append('<span>' + me.loc.tools.selectDrawLayer + '</span><br/>');
                 optionSetting.append(layerSelect);
+                optionSettings.append(optionSetting);
+
+                // retrieve myplaces button configs
+                for (i = 0, ilen = this.buttonGroups.length; i < ilen; i++) {
+                    if (groupName === this.buttonGroups[i].name) {
+                        buttonGroup = this.buttonGroups[i];
+                        break;
+                    }
+                }
+
+                // build DOM based on button configs
+                for (toolName in buttonGroup.buttons) {
+                    if (buttonGroup.buttons.hasOwnProperty(toolName)) {
+                        toolButton = buttonGroup.buttons[toolName];
+                        toolButton.toolbarid = toolOption.toolbarId;
+
+                        // create checkbox
+                        toolButton.toolOption = jQuery(me.templates.toolOptionSetting).clone();
+                        toolButton.toolOption.append(jQuery(me.templates.toolOptionSettingInput).clone());
+                        toolButton.toolOption.find('label')
+                            .attr('for', 'option-' + toolName).append(this.loc.toolbarToolNames[toolName]);
+
+                        //toggle toolbar tool. i.e. send requests
+                        toolButton.toolOption.find('input')
+                            .attr('id', 'option-' + toolName)
+                            .change(toggleToolHandler(toolName, buttonGroup.name, toolButton));
+                        optionSettings.append(toolButton.toolOption);
+                    }
+                }
                 //add different settings
                 checkbox.parent()
-                    .append(optionSettings
-                        .append(optionSetting)
-                        .append(osPoint.append(osPointInput))
-                        .append(osLine.append(osLineInput))
-                        .append(osArea.append(osAreaInput))
-                        );
-
-                osPoint.find('label').attr('for', 'option-point').append(me.loc.tools.drawPoints);
-                osPoint.find('input')
-                    .attr('id', 'option-point')
-                    .change(function (e) {
-                        var cbPoint = jQuery(e.target);
-                        me.selectedDrawingLayer.point = cbPoint.is(':checked');
-                    });
-
-                osLine.find('label').attr('for', 'option-line').append(me.loc.tools.drawLines);
-                osLine.find('input')
-                    .attr('id', 'option-line')
-                    .change(function (e) {
-                        var cbLine = jQuery(e.target);
-                        me.selectedDrawingLayer.line = cbLine.is(':checked');
-                    });
-
-                osArea.find('label').attr('for', 'option-area').append(me.loc.tools.drawAreas);
-                osArea.find('input')
-                    .attr('id', 'option-area')
-                    .change(function (e) {
-                        var cbArea = jQuery(e.target);
-                        me.selectedDrawingLayer.area = cbArea.is(':checked');
-                    });
-
+                    .append(optionSettings);
             } else {
                 checkbox.parent().find('.tool-option-settings').remove();
             }
