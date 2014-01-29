@@ -843,17 +843,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 blnMultipleStyles,
                 style;
 
-            if(defaultStyle) {
-                layer.addStyle(defaultStyle);
-                layer.selectStyle(defaultStyle.getName());
-            } else {
-                style = styleBuilder();
-                style.setName("");
-                style.setTitle("");
-                style.setLegend("");
-                layer.addStyle(style);
-                layer.selectStyle("");
-            }
 
             if (jsonLayer.styles) {
                 // has styles
@@ -881,6 +870,18 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
                 // set the default style
                 layer.selectStyle(jsonLayer.style);
+            }
+            
+            if(defaultStyle) {
+                layer.addStyle(defaultStyle);
+                layer.selectStyle(defaultStyle.getName());
+            } else {
+                style = styleBuilder();
+                style.setName("");
+                style.setTitle("");
+                style.setLegend("");
+                layer.addStyle(style);
+                layer.selectStyle("");
             }
 
             return layer;

@@ -127,6 +127,7 @@ Oskari.registerLocalization({
                 }
             },
             "layers": {
+                "add": "Add layer",
                 "label": "Map layers",
                 "defaultLayer": "(Default layer)",
                 "useAsDefaultLayer": "Use as default layer"

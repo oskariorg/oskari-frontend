@@ -71,6 +71,7 @@ Oskari.registerLocalization({
                 "grid": "Show statistic grid"
             },
             "layers": {
+                "add": "NOT TRANSLATED",
                 "label": "Kartenebenen",
                 "defaultLayer": "(Standardebene)",
                 "useAsDefaultLayer": "Als Standardebene verwenden"

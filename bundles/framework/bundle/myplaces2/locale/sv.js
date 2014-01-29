@@ -46,6 +46,22 @@ Oskari.registerLocalization({
         }
       },
     "tools": {
+      "measureline": {
+        "title": "Mät avstånd",
+        "tooltip": "Mät avstånd",
+        "add": "",
+        "next": "",
+        "edit": "Editera linjen genom att klicka och dra brytningspunkterna.",
+        "noResult": "0 m"
+      },
+      "measurearea": {
+        "title": "Mät areal",
+        "tooltip": "Mät areal",
+        "add": "",
+        "next": "",
+        "edit": "Editera områdets form genom att klicka och dra brytningspunkterna på omkretslinjen.",
+        "noResult": "0 m²"
+      },
       "point": {
         "title": "Tillägg punkt",
         "tooltip": "Tillägg punkt",
@@ -76,8 +92,10 @@ Oskari.registerLocalization({
     "buttons": {
       "ok": "OK",
       "cancel": "Tillbaka",
+      "close": "Avbryt",
       "finish": "Lagra rita",
       "save": "Lagra",
+      "saveAsMyPlace": "Lagra",
       "movePlaces": "Flytta objekt och ta bort",
       "deleteCategory": "Ta bort",
       "deleteCategoryAndPlaces": "Ta bort kategori inklusive objekt",

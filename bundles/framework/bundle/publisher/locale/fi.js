@@ -128,6 +128,7 @@ Oskari.registerLocalization({
                 }
             },
             "layers": {
+                "add": "Lisää taso",
                 "label": "Karttatasot",
                 "defaultLayer": "(Oletusvalinta)",
                 "useAsDefaultLayer": "Käytä oletuksena"

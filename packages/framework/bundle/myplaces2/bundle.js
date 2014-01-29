@@ -86,7 +86,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/myplaces2/request/EditRequestHandler.js"
-		},
+		}, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/myplaces2/request/OpenAddLayerDialogRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/myplaces2/request/OpenAddLayerDialogHandler.js"
+        },
 		/* service */
 		{
 			"type" : "text/javascript",
