@@ -308,25 +308,37 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             sandbox.addRequestHandler('ClearHistoryRequest', this.requestHandlers.clearHistoryHandler);
 
             this._createMap();
-            // changed to resolutions based map zoom levels
-            // -> calculate scales array for backward compatibility
-            var i,
-                calculatedScale;
-            for (i = 0; i < this._options.resolutions.length; ++i) {
-
-                calculatedScale = OpenLayers.Util.getScaleFromResolution(this._options.resolutions[i], this._map.units);
-                // rounding off the resolution to scale calculation
-                calculatedScale = calculatedScale * 100000000;
-                calculatedScale = Math.round(calculatedScale);
-                calculatedScale = calculatedScale / 100000000;
-                this._mapScales.push(calculatedScale);
-            }
+            var scales = this._calculateScalesFromResolutions(this._options.resolutions, this._map.units);
+            this._mapScales = scales;
+            
             this._createBaseLayer();
 
             this.addMapControl('navigationHistoryTool', this._navigationHistoryTool);
             this.getMapControl('navigationHistoryTool').activate();
             this._addMapControlPluginContainers();
             return this._map;
+        },
+        /**
+         * Changed to resolutions based map zoom levels, but we need to 
+         * calculate scales array for backward compatibility
+         * 
+         * @param  {Number[]} resolutions configured resolutions array
+         * @param  {String} units         OpenLayers unit (m/degree etc)
+         * @return {Number[]}             calculated matching scales array
+         * @private
+         */
+        _calculateScalesFromResolutions : function(resolutions, units) {
+            var scales = [];
+            for (var i = 0; i < resolutions.length; ++i) {
+
+                var calculatedScale = OpenLayers.Util.getScaleFromResolution(resolutions[i], units);
+                // rounding off the resolution to scale calculation
+                calculatedScale = calculatedScale * 100000000;
+                calculatedScale = Math.round(calculatedScale);
+                calculatedScale = calculatedScale / 100000000;
+                scales.push(calculatedScale);
+            }
+            return scales;
         },
 
         /**
