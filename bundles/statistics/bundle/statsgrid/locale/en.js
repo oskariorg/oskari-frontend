@@ -110,7 +110,7 @@ Oskari.registerLocalization({
         "included": "Values",
         "municipality": "Municipalities",
         "selectRows": "Select rows",
-        "select4Municipalities": "Select 4 municipalities",
+        "select4Municipalities": "Select at least two areas",
         "showSelected": "Show only selected areas on the grid",
         "not_included": "Not included",
         "noMatch": "No results matched",
