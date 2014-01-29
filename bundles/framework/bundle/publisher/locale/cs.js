@@ -71,6 +71,7 @@ Oskari.registerLocalization({
                 "grid": "Show statistic grid"
             },
             "layers": {
+                "add": "NOT TRANSLATED",
                 "label": "Mapové vrstvy",
                 "defaultLayer": "(Defaultní vrstva)",
                 "useAsDefaultLayer": "Použij jako defalutní vrstvu"

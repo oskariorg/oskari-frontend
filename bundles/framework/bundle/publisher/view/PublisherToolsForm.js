@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
      */
 
     function(publisher, enabledPlugins) {
+        this.instance = publisher.instance;
         this.loc = publisher.loc;
         this._publisher = publisher;
         this._sandbox = null;
@@ -497,7 +498,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         }
 
                         return options;
-                    }
+                    };
 
                     // append after all buttons have been added
                     options = jQuery(me.templates.toolOptions).clone();
@@ -566,7 +567,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             if (isChecked) {
                 var layerSelect = jQuery(me.templates.layerSelect).clone(),
                     layerSelectOption,
-                    i;
+                    addLayerButton;
 
                 for (i = 0; i < mylayers.length; i++) {
                     layerSelectOption = jQuery(me.templates.layerSelectOption).clone();
@@ -596,9 +597,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 var optionSettings = jQuery(me.templates.toolOptionSettings).clone(),
                     optionSetting = jQuery(me.templates.toolOptionSetting).clone();
 
+                addLayerButton = me._getAddLayerButton();
+
                 //add select for drawlayer
                 optionSetting.append('<span>' + me.loc.tools.selectDrawLayer + '</span><br/>');
                 optionSetting.append(layerSelect);
+                addLayerButton.insertTo(optionSetting);
                 optionSettings.append(optionSetting);
 
                 // retrieve myplaces button configs
@@ -629,10 +633,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     }
                 }
                 //add different settings
-                checkbox.parent()
+                checkbox.parent().parent()
                     .append(optionSettings);
             } else {
-                checkbox.parent().find('.tool-option-settings').remove();
+                checkbox.parent().parent().find('.tool-option-settings').remove();
             }
+        },
+
+        _getAddLayerButton: function () {
+            var me = this,
+                addLayerButton;
+
+            addLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            // TODO I18N
+            addLayerButton.setTitle(this.loc.layers.add);
+            addLayerButton.setHandler(function () {
+                // send OpenAddLayerDialogEvent
+                console.log("Send OpenAddLayerDialogEvent");
+                var request = me._sandbox.getRequestBuilder('MyPlaces.OpenAddLayerDialogRequest')('.publisher-select-layer', 'right');
+                me._sandbox.request(me.instance, request);
+            });
+            return addLayerButton;
         }
     });

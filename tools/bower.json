@@ -1,0 +1,24 @@
+{
+  "name": "tools",
+  "private": true,
+  "dependencies": {
+    "jquery": "1.10.2",
+    "openlayers": "2.13.1",
+    "chosen": "~1.0.0",
+    "jquery-migrate": "1.2.1",
+    "jquery-ui": "1.9.1",
+    "slickgrid": "~2.1.0",
+    "requirejs": "~2.1.10",
+    "jsts": "~0.13.3",
+    "leaflet": "~0.7.2",
+    "lodash": "~2.4.1",
+    "proj4": "~2.1.0",
+    "q": "~1.0.0",
+    "raphael": "~2.1.2",
+    "ol3": "https://github.com/openlayers/ol3.git#~3.0.0-beta.1",
+    "clipper": "https://github.com/Delapouite/JsClipper.git",
+    "geostats": "https://github.com/simogeo/geostats.git",
+    "jscolor": "http://jscolor.com/release/jscolor-1.4.2.zip"
+  },
+  "devDependencies": {}
+}

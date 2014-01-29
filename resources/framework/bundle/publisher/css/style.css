@@ -88,6 +88,10 @@ div.basic_publisher div.tool label, div.basic_publisher div.data label {
 div.basic_publisher div.tool input, div.basic_publisher div.data input {
   margin-right: 10px; }
 
+div.basic_publisher div.tool input[type="button"], div.basic_publisher div.data input[type="button"] {
+  margin-top: 5px;
+  margin-bottom: 5px; }
+
 /* Buttons */
 div.basic_publisher div.buttons, div.publisher div.startview div.buttons {
   text-align: center;
