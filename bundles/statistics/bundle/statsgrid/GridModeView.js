@@ -11,7 +11,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
      */
 
     function () {}, {
-
+        /**
+         * @method getName
+         * @return {String} implementation name
+         */
+        getName: function () {
+            return 'Oskari.statistics.bundle.statsgrid.GridModeView';
+        },
         /**
          * @method startPlugin
          * called by host to start view operations
@@ -125,9 +131,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 elCenter = this.getCenterColumn(),
                 elLeft = this.getLeftColumn();
 
+            // FIXME we should figure out a better way to toggle modes & map plugins
+
+
             if (isShown) {
                 /** ENTER The Mode */
 
+                // FIXME move center location and zoom level to config
                 /** Center Finland and set zoom to min **/
                 var newCenter = new OpenLayers.LonLat(520000, 7250000);
                 mapModule.centerMap(newCenter, 0);

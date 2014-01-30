@@ -59,9 +59,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.Flyout',
          * @method stopPlugin
          * Interface method implementation, does nothing atm
          */
-        stopPlugin: function () {
-
-        },
+        stopPlugin: function () {},
         /**
          * @method getTitle
          * @return {String} localized text for the title of the flyout

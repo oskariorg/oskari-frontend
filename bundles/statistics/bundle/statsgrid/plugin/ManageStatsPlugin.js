@@ -342,6 +342,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 categories = me._acceptedRegionCategories;
             this.regionCategories = _.foldl(regionData, function (result, region) {
                 if (_.contains(categories, region.category)) {
+                    // FIXME this is ugly
                     result[region.category] || (result[region.category] = []);
 
                     result[region.category].push({
@@ -584,7 +585,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             me.grid = grid;
             me.dataView = dataView;
 
-            me.autosizeColumns();
+            // AH-885, we want the municipality column to fill 50% or so of the available space if it's the only column.
+            //me.autosizeColumns();
+            columns = grid.getColumns();
+            columns[1].width = 318;
             me.setGridHeight();
 
             //window resize!
@@ -849,10 +853,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var selectors = container.find('.selectors-container'),
                 parameters = selectors.find('.parameters-cont'),
                 regions = metadata.classifications,
-                regions = regions && regions.region,
-                regions = regions && regions.title,
-                regions = regions && regions[Oskari.getLang()],
                 warnTxt = this._locale.cannotDisplayIndicator;
+            regions = regions && regions.region;
+            regions = regions && regions.title;
+            regions = regions && regions[Oskari.getLang()];
+                
 
             if (regions) {
                 warnTxt += (this._locale.availableRegions + regions);
@@ -1258,10 +1263,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             // replace the columns with the columns without the column that was found
             if (found) {
+                if (allOtherColumns.length === 2) {
+                    // Only checkbox and municipality columns left, resize municipality column to ~50%
+                    allOtherColumns[1].width = 318;
+                }
                 this.grid.setColumns(allOtherColumns);
                 this.grid.render();
                 this.dataView.refresh();
-                this.autosizeColumns();
+                if (allOtherColumns.length !== 2) {
+                    this.autosizeColumns();
+                }
             }
 
             // remove indicator also from to the state!
@@ -1447,7 +1458,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     // url
                     me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
                     // success callback
-
+                    // FIXME create function outside loop
                     function (data) {
                         //keep track of returned ajax calls
                         fetchedIndicators++;
@@ -1473,7 +1484,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         }
                     },
                     // error callback
-
+                    // FIXME create function outside loop
                     function (jqXHR, textStatus) {
                         me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.indicatorDataXHRError);
                         //keep track of returned ajax calls
@@ -1507,7 +1518,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     // url
                     me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
                     // success callback
-
+                    // FIXME create function outside loop
                     function (data) {
                         fetchedIndicators++;
                         if (data) {
@@ -1545,7 +1556,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         }
                     },
                     // error callback
-
+                    // FIXME create function outside loop
                     function (jqXHR, textStatus) {
                         me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.indicatorDataXHRError);
                         fetchedIndicators++;

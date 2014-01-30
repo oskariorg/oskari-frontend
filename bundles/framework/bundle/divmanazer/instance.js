@@ -293,7 +293,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
                 el = view;
                 viewPlugin.setEl(el.get());
                 viewPlugin.startPlugin();
-
             }
 
 

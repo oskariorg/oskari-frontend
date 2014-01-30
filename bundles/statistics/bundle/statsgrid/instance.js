@@ -219,7 +219,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 container = view.getEl();
             var layer = this.sandbox.findMapLayerFromAllAvailable(state.layerId);
 
-            this.state = jQuery.extend({}, {
+            me.state = jQuery.extend({}, {
                 indicators: [],
                 layerId: null
             }, state);
@@ -241,14 +241,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                     timeout = (isLayerAdded ? 0 : 50);
                 // if not, request to add it to the map
                 if (!isLayerAdded) {
-                    var reqBuilder = this.sandbox.getRequestBuilder('AddMapLayerRequest');
+                    var reqBuilder = me.sandbox.getRequestBuilder('AddMapLayerRequest');
                     if (reqBuilder) {
-                        this.sandbox.request(this, reqBuilder(layer.getId()));
+                        me.sandbox.request(this, reqBuilder(layer.getId()));
                     }
                 }
                 // wait until the layer gets added and go to the stats mode.
                 window.setTimeout(function() {
-                    view.prepareMode(true, layer);
+                    var evt = me.sandbox.getEventBuilder('userinterface.ExtensionUpdatedEvent')(me, 'attach');
+                    me.sandbox.notifyAll(evt, true);
+                    //view.prepareMode(true, layer);
                 }, timeout);
             } else {
                 // Otherwise just load the indicators in the state.

@@ -235,7 +235,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 }
 
                 var isOpen = event.getViewState() !== "close";
-
                 me.displayContent(isOpen);
 
             },
@@ -317,7 +316,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
 
             sandbox.removeRequestHandler('printout.PrintMapRequest', this.printoutHandler);
             this.printoutHandler = null;
-
+            console.log("Stoppetystop");
             var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
 
@@ -403,11 +402,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                     break;
                 }
             }
-            if (blnEnabled == true) {
+            if (blnEnabled) {
 
                 //me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
-                request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
-                me.sandbox.request(me.getName(), request);
+                jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', 'none');
+
 
                 // proceed with printout view
                 if (!this.printout) {
@@ -423,6 +422,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 this.printout.refresh(true);
             } else {
                 if (this.printout) {
+                    jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', '');
+                    request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
+                    me.sandbox.request(me.getName(), request);
                     this.printout.setEnabled(false);
                     this.printout.hide();
                     // clean legend

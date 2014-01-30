@@ -131,10 +131,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 me = this;
             me._sandbox = sandbox || me.getMapModule().getSandbox();
             me._map = me.getMapModule().getMap();
-            sandbox.register(me);
+            me._sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
+                    me._sandbox.registerForEventByName(me, p);
                 }
             }
             me._createUI();
@@ -234,7 +234,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             'MapLayerEvent': function (event) {
                 // TODO add check for event.getMapLayer().getId() here?
                 this._createLayerSelectionElements();
-            }
+            },
+            /**
+             * @method userinterface.ExtensionUpdatedEvent
+             */
+            'userinterface.ExtensionUpdatedEvent': function (event) {
+                if (jQuery.inArray(event.getExtension().getName(), ['Analyse', 'Publisher', 'StatsGrid', 'Printout']) > -1) {
+                    var me = this,
+                        isShown = event.getViewState() !== "close";
+                    if (isShown) {
+                        // Mode opened, hide plugin
+                        if (!me.hiddenByMode) {
+                            me.hiddenByMode = true;
+                            me.element.hide();
+                        }
+                    } else if (me.hiddenByMode) {
+                        me.hiddenByMode = null;
+                        delete me.hiddenByMode;
+                        me.element.show();
+                    }
+                }
+            },
         },
 
         /**

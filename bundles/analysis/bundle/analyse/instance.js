@@ -310,12 +310,15 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
             var me = this,
                 map = jQuery('#contentMap'),
                 tools = jQuery('#maptools');
-            // FIXME make sure blnEnabled is a boolean and use if (blnEnabled) {...
-            if (blnEnabled == true) {
 
+            if (blnEnabled) {
+
+                // Hide flyout, it's not needed...
+                jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().hide();
+                /* Why would we close analyse here?
                 // me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
                 var request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
-                me.sandbox.request(me.getName(), request);
+                me.sandbox.request(me.getName(), request);*/
 
                 // proceed with analyse view
                 if (!this.analyse) {
@@ -334,9 +337,11 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
 
             } else {
                 if (this.analyse) {
+                    // Reset tile state
+                    var request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
+                    me.sandbox.request(me.getName(), request);
                     this.analyse.setEnabled(false);
                     this.analyse.hide();
-
                 }
             }
         },

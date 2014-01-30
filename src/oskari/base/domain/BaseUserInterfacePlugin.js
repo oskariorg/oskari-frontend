@@ -1,7 +1,10 @@
 /**
  * @class Oskari.mapframework.ui.module.common.mapmodule.BaseUserInterfacePlugin
  *
- * Interface/protocol definition for map plugins
+ * Interface definition for map plugins that have a UI.
+ * TODO:
+ *     - split into base and ui versions, ui version extending the base version
+ *     - add hide when in mode (boolean that's checked in an eventhandler, we'll have to add some sort of a merge for the handlers...)
  */
 Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.BaseUserInterfacePlugin',
     /**
@@ -14,14 +17,24 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.BaseUserInte
     function () {
         throw "Oskari.mapframework.ui.module.common.mapmodule.UserInterfacePlugin should not be instantiated";
     }, {
-
-        _isEnabled: false,
+        _clazz: null,
+        _config: null,
+        _element: null,
+        _enabled: true,
+        _eventHandlers: [],
+        _index: null,
+        _map: null,
+        _mapModule: null,
+        _pluginName: null,
+        _sandbox: null,
+        _visible: true,
 
         /**
          * @method getName
          * @return {String} module name
          */
         getName: function () {
+            // Throw a fit if name is not set, it'd probably break things.
             if (this._pluginName === null || this._pluginName === undefined) {
                 throw "No name provided!";
             }
@@ -33,6 +46,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.BaseUserInte
          * @return {Oskari.mapframework.ui.module.common.MapModule}
          */
         getMapModule: function () {
+            // Throw a fit if mapmodule is not set, it'd probably break things.
+            if (this._mapModule === null || this._mapModule === undefined) {
+                throw "No mapmodule provided!";
+            }
             return this._mapModule;
         },
         /**
@@ -73,7 +90,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.BaseUserInte
          * @return {String} Plugin class
          */
         getClazz: function () {
-            // TODO is this already available somewhere?
+            // Throw a fit if clazz is not set, it'd probably break things.
             if (this._clazz === null || this._clazz === undefined) {
                 throw "No clazz provided for " + this.getName() + "!";
             }
@@ -82,7 +99,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.BaseUserInte
 
         /**
          * @method getElement
-         * @return {jQuery} Plugin jQuery element
+         * @return {jQuery} Plugin jQuery element or null/undefined if no element has been set
          */
         getElement: function () {
             // element should be created in startPlugin and only destroyed in stopPlugin
@@ -184,12 +201,15 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.BaseUserInte
 
             me._sandbox = sandbox || me.getMapModule().getSandbox();
             me._sandbox.register(me);
-            for (eventHandler in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(eventHandler)) {
+            for (eventHandler in me._eventHandlers) {
+                if (me._eventHandlers.hasOwnProperty(eventHandler)) {
                     me._sandbox.registerForEventByName(me, eventHandler);
                 }
             }
             me._create();
+            // There's a possibility these were set before the plugin was started.
+            me.setEnabled(me._enabled);
+            me.setVisible(me._visible);
             element = me.getElement();
             if (element) {
                 element.attr("data-clazz", me.getClazz());
@@ -201,8 +221,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.BaseUserInte
             var me = this,
                 eventHandler;
 
-            for (eventHandler in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(eventHandler)) {
+            for (eventHandler in me._eventHandlers) {
+                if (me._eventHandlers.hasOwnProperty(eventHandler)) {
                     me._sandbox.unregisterFromEventByName(me, eventHandler);
                 }
             }
@@ -212,7 +232,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.BaseUserInte
             me._destroy();
             if (me._element) {
                 me._element.remove();
-                delete me._element;
+                me._element = null;
             }
         },
         /**
@@ -249,32 +269,50 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.BaseUserInte
          * @param {Boolean} enable Whether the controls should be enabled or disabled.
          */
         _toggleUIControls: function (enable) {
-            // implement if needed
+            // implement if needed... don't trust this._enabled, set the state even if enable === this._enabled
         },
 
         /**
-         * @method toggleUIControls Enable/Disable plugin controls.
+         * @method setEnabled      Enable/Disable plugin controls.
          * @param {Boolean} enable Whether the controls should be enabled or disabled.
          */
-        toggleUIControls: function (enabled) {
-            if (this._isEnabled === enabled) {
-                this._isEnabled = enabled;
-                // toggle controls
-                this._toggleControls(enabled);
-            }
+        setEnabled: function (enabled) {
+            // toggle controls
+            this._toggleUIControls(enabled);
+            this._enabled = enabled;
         },
 
         /**
-         * @method isEnabled Are the plugin's controls enabled
-         * @return {Boolean} True if plugin's tools are enabled
+         * @method getEnabled Are the plugin's controls enabled
+         * @return {Boolean}  True if plugin's tools are enabled
          */
-        isEnabled: function () {
-            return this._isEnabled;
+        getEnabled: function () {
+            return this._enabled;
+        },
+
+        /**
+         * @method setVisible       Set the plugin UI's visibility
+         * @param {Boolean} visible Whether the UI should be visible or hidden
+         */
+        setVisible: function (visible) {
+            // toggle element
+            if (this._element) {
+                this._element.toggle(visible);
+            }
+            this._visible = visible;
+        },
+
+        /**
+         * @method getVisible Is the plugin's UI visible
+         * @return {Boolean}  True if plugin is visible
+         */
+        getVisible: function () {
+            return this._visible;
         },
 
         /**
          * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * @param {Oskari.mapframework.event.Event} event an Oskari event object
          * Event is handled forwarded to correct #eventHandlers if found or discarded
          * if not.
          */
