@@ -26,8 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
         this.selectedDrawingLayer = {
             'layer': null
         };
-        this.toolbarConfig = {};
-
+        this.toolbarConfig = {'myplaces': {'point': false, 'line': false, 'area': false}};
 
         /**
          * @property tools
