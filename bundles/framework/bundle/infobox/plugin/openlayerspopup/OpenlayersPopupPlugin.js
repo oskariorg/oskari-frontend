@@ -234,7 +234,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
             openlayersMap.addPopup(popup);
             if (this.adaptable) {
-                jQuery(this._adaptPopupSize($));
+                jQuery(this._adaptPopupSize(id));
             }
             this._panMapToShowPopup(lonlat);
 
@@ -258,10 +258,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             this.adaptable = isAdaptable;
         },
 
-        _adaptPopupSize: function ($) {
-
-            var viewport = $('.olMapViewport');
-            var popup = $('.olPopup');
+        _adaptPopupSize: function (olPopupId) {
+            var viewport = jQuery(this.getMapModule().getMapViewPortDiv());
+            var popup = jQuery('#' + olPopupId);
             //popup needs to move 10 pixels to the right so that header arrow can be moved out of container(left).
             var left = parseFloat(popup.css('left')) + 10;
 
