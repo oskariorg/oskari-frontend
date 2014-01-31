@@ -54,7 +54,7 @@ define([
                 // if we get baseLayerId -> this is a sublayer
                 if(this.options.baseLayerId && this.options.model) {
                     // wrap existing sublayers with model
-                    this.model = new layerModel(this.options.model)
+                    this.model = new layerModel(this.options.model);
                 }
                 else {
                     this.model = this.options.model;
@@ -317,7 +317,9 @@ define([
 
                 // base and group are always of type wmslayer
                 data.layerType = 'wmslayer';
-                data.layer_id = me.model.getId();
+                if (me.model.getId() !== null && me.model.getId() !== undefined) {
+                    data.layer_id = me.model.getId();
+                }
 
                 form.find('[id$=-name]').filter('[id^=add-layer-]').each(function (index) {
                     var lang = this.id.substring(10, this.id.indexOf("-name"));
@@ -431,12 +433,15 @@ define([
                 */
                 var sandbox = me.options.instance.getSandbox();
                 var data = {
-                    layer_id : me.model.getId(),
                     groupId : accordion.attr('lcid'),
                     layerType : 'collection',
                     isBase : me.model.isBaseLayer(),
                     inspireTheme : groupElement.find('#add-layer-inspire-theme').val()
                 };
+
+                if (me.model.getId() !== null && me.model.getId() !== undefined) {
+                    data.layer_id = me.model.getId();
+                }
 
                 groupElement.find('[id$=-name]').filter('[id^=add-group-]').each(function (index) {
                     var lang = this.id.substring(10, this.id.indexOf("-name"));
@@ -445,7 +450,7 @@ define([
 
                 // permissions
                 if(!me.model.getId()) {
-                    var checkedPermissions = []
+                    var checkedPermissions = [];
                     groupElement.find(".layer-view-role").filter(":checked").each(function (index) {
                         checkedPermissions.push(jQuery(this).data("role-id"));
                     });
