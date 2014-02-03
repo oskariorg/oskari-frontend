@@ -180,10 +180,10 @@ define([
                 }
             },
             _createNewModel : function(type) {
-                var sandbox = this.instance.sandbox;
-                var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                var layer = null;
-                if(type == 'base' || type == 'groupMap' ) {
+                var sandbox = this.instance.sandbox,
+                    mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+                    layer = null;
+                if(type === 'base' || type === 'groupMap' ) {
                     layer = mapLayerService.createMapLayer({ 'type' : type });
                 }
                 else {
@@ -194,10 +194,9 @@ define([
             },
 
             createGroupForm: function (groupTitle, e) {
-
                 var me = this;
                 if (!me.model) {
-                    if(groupTitle == 'baseName') {
+                    if(groupTitle === 'baseName') {
                         me.model = this._createNewModel('base');
                     }
                     else {
@@ -371,7 +370,7 @@ define([
                     success: function (resp) {
                         // response should be a complete JSON for the new layer
                         if(!resp) {
-                            alert("Saving layer didn't work");
+                            alert(me.instance.getLocalization('admin').update_or_insert_failed);
                         }
                         else if(resp.error) {
                             alert(me.instance.getLocalization('admin')[resp.error] || resp.error);
@@ -411,7 +410,33 @@ define([
                     error: function (jqXHR, textStatus) {
                         console.log(jqXHR, textStatus);
                         if (jqXHR.status !== 0) {
-                            alert("Saving layer didn't work");
+                            var loc = me.instance.getLocalization('admin'),
+                                err = loc.update_or_insert_failed;
+                            if (jqXHR.responseText) {
+                                var jsonResponse = jQuery.parseJSON(jqXHR.responseText);
+                                if (jsonResponse && jsonResponse.error) {
+                                    err = jsonResponse.error;
+                                    // see if we recognize the error
+                                    var errVar = null;
+                                    if (err.indexOf('mandatory_field_missing:') === 0) {
+                                        errVar = err.substring('mandatory_field_missing:'.length);
+                                        err = 'mandatory_field_missing';
+                                    } else if (err.indexOf('invalid_field_value:') === 0) {
+                                        errVar = err.substring('invalid_field_value:'.length);
+                                        err = 'invalid_field_value';
+                                    } else if (err.indexOf('operation_not_permitted_for_layer_id:') === 0) {
+                                        errVar = err.substring('operation_not_permitted_for_layer_id:'.length);
+                                        err = 'operation_not_permitted_for_layer_id';
+                                    } else if (err.indexOf('no_layer_with_id') === 0) {
+                                        errVar = err.substring('no_layer_with_id:'.length);
+                                        err = 'no_layer_with_id';
+                                    }
+
+                                    err = loc[err] || err;
+                                    err += errVar === null || errVar === undefined ? '' : loc[errVar];
+                                }
+                            }
+                            alert(err);
                         }
                     }
                 });
