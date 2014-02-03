@@ -29,7 +29,8 @@ Users can select styling for the published map in 'Layout' panel. The colour sch
 
 ## Bundle configuration
 
-Some configuration is needed for URLs:
+The loginUrl, and registerUrl are needed for localized login screen. The publishedMapUrl is used to ensure the links are correct in the published map info screen.
+The drawRoleIds is optional and when defined, the users with the roleIds listed are able to publish maps with draw tools.
 
 ```javascript
 "conf": {
@@ -48,7 +49,8 @@ Some configuration is needed for URLs:
     "fi": "www.paikkatietoikkuna.fi/published/fi/",
     "sv": "www.paikkatietoikkuna.fi/published/sv/"
   },
-  "urlPrefix": "www.paikkatietoikkuna.fi"
+  "urlPrefix": "www.paikkatietoikkuna.fi",
+  "drawRoleIds": [1,2,3]
 }
 ```
 

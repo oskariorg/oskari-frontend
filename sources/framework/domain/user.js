@@ -112,5 +112,31 @@ Oskari.clazz.define('Oskari.mapframework.domain.User',
          */
         getRoles: function () {
             return this._roles;
+        },
+
+        /**
+         * @method hasRole
+         * Returns true if user has a role, which id is provided.
+         *
+         * @param {Number} ids
+         * @return {Boolean}
+         */
+        hasRole: function (ids) {
+            var i, j, role, id,
+                roles = this.getRoles(),
+                ilen = roles.length.
+                jlen = ids.length;
+
+            for (i = 0; i < ilen; i++) {
+                role = roles[i];
+                for (j = 0; j < jlen; j++) {
+                    id = ids[j];
+                    if (id === role.id) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     });

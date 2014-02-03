@@ -37,7 +37,7 @@ define([
 	"bundles/framework/bundle/divmanazer/extension/DefaultLayout",
 	"bundles/framework/bundle/divmanazer/component/visualization-form/AreaForm",
 	"bundles/framework/bundle/divmanazer/component/visualization-form/LineForm",
-	"bundles/framework/bundle/divmanazer/component/visualization-form/PointForm",
+	"bundles/framework/bundle/divmanazer/component/visualization-form/DotForm",
 	"src/framework/divmanazer/extension/EnhancedTile",
 	"src/framework/divmanazer/extension/EnhancedFlyout",
 	"src/framework/divmanazer/extension/EnhancedView",

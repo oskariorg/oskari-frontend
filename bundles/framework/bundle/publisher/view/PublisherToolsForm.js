@@ -505,8 +505,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     options = _addToolGroup('basictools', options, me.toolbarConfig, _toggleToolOption);
                     tool.publisherPluginContainer.append(options);
 
-                    // FIXME when myplaces works on published maps
-                    if (false) {
+                    // show for admin users
+                    if (me._sandbox.getUser().hasRole(me.instance.conf.adminId)) {
                         // create option for adding drawing tools
                         options = jQuery(me.templates.toolOptions).clone();
                         tool.publisherPluginContainer.append(options);
