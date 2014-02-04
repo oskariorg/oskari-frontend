@@ -528,7 +528,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             } else {
                 // toolbar (bundle) needs to be notified
                 if (tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
-                    me.toolbarConfig = {};
+                    me.toolbarConfig = null;
                 }
                 if (tool._isPluginStarted) {
                     //remove buttons

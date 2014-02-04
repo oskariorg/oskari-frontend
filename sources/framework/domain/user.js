@@ -123,24 +123,20 @@ Oskari.clazz.define('Oskari.mapframework.domain.User',
          * @return {Boolean} true if any id match roles that user has
          */
         hasRole: function (ids) {
-            if(!ids) {
-                return false;
-            }
-            var i, j, role, id,
-                roles = this.getRoles(),
-                ilen = roles.length,
-                jlen = ids.length;
-
-            for (i = 0; i < ilen; i++) {
-                role = roles[i];
-                for (j = 0; j < jlen; j++) {
-                    id = ids[j];
-                    if (id === role.id) {
-                        return true;
+            if (ids && ids.length) {
+                var i, ilen, j, jlen, role, roles = this.getRoles();
+                ilen = ids.length;
+                jlen = roles.length;
+                for (i = 0; i < ilen; i++) {
+                    id = ids[i];
+                    for (j = 0; j < jlen; j++) {
+                        role = roles[j];
+                        if (id === role.id) {
+                            return true;
+                        }
                     }
                 }
             }
-
             return false;
         }
     });
