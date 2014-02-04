@@ -105,7 +105,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             this.gridPlugin = gridPlugin;
 
             // Register classification plugin for map.
-            var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', { 'state' : me.getState()}, locale);
+            var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', {
+                'state': me.getState()
+            }, locale);
             mapModule.registerPlugin(classifyPlugin);
             mapModule.startPlugin(classifyPlugin);
             this.classifyPlugin = classifyPlugin;
@@ -160,6 +162,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 }
             }
         },
+        isLayerVisible: function () {
+            var ret,
+                layer = this.sandbox.findMapLayerFromSelectedMapLayers(this.conf.defaultLayerId);
+            ret = layer !== null && layer !== undefined;
+            return ret;
+        },
         _isLayerPresent: function () {
             var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
             if (this.conf && this.conf.defaultLayerId) {
@@ -179,14 +187,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @method getUserIndicatorsService
          * @return {Oskari.statistics.bundle.statsgrid.UserIndicatorsService}
          */
-        getUserIndicatorsService: function() {
+        getUserIndicatorsService: function () {
             return this.userIndicatorsService;
         },
         /**
          * @method addUserIndicator
          * @param {Object} indicator
          */
-        addUserIndicator: function(indicator) {
+        addUserIndicator: function (indicator) {
             var view = this.getView(),
                 state = this.getState();
 
@@ -237,7 +245,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             // Load the mode and show content if not loaded already.
             if (!view.isVisible) {
                 // Check if the layer is added
-                var isLayerAdded = !!this.sandbox.findMapLayerFromSelectedMapLayers(layer.getId()),
+                var isLayerAdded = !! this.sandbox.findMapLayerFromSelectedMapLayers(layer.getId()),
                     timeout = (isLayerAdded ? 0 : 50);
                 // if not, request to add it to the map
                 if (!isLayerAdded) {
@@ -247,7 +255,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                     }
                 }
                 // wait until the layer gets added and go to the stats mode.
-                window.setTimeout(function() {
+                window.setTimeout(function () {
                     var evt = me.sandbox.getEventBuilder('userinterface.ExtensionUpdatedEvent')(me, 'attach');
                     me.sandbox.notifyAll(evt, true);
                     //view.prepareMode(true, layer);
@@ -391,7 +399,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 },
                 retainEvent,
                 eventBuilder;
-            data[layer.getId()]=[];
+            data[layer.getId()] = [];
             data[layer.getId()].push(tile);
 
             // If the event is already defined, just update the data.
