@@ -20,6 +20,12 @@ Maplayer JSON parsing changed a bit:
 
 * Formats parsing has been moved out from styles parsing and in to wmslayer specific parsing as they are not related operations
 
+### statistics/statsgrid
+
+The region category can now be changed whilst creating a new indicator.
+
+A warning sign is displayed in an indicator's header if its data cannot be displayed in the selected region category.
+
 ## 1.17.2.
 
 ### infobox
