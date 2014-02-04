@@ -506,7 +506,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     tool.publisherPluginContainer.append(options);
 
                     // show for admin users
-                    if (me._sandbox.getUser().hasRole(me.instance.conf.adminId)) {
+                    if (me._sandbox.getUser().hasRole(me.instance.conf.drawRoleIds)) {
                         // create option for adding drawing tools
                         options = jQuery(me.templates.toolOptions).clone();
                         tool.publisherPluginContainer.append(options);
