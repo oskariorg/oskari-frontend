@@ -48,7 +48,14 @@ function(instance, localization) {
      * @property {Object} eventHandlers
      * @static
      */
-    eventHandlers : {},
+    eventHandlers : {
+        'StatsGrid.UserIndicatorEvent': function(event) {
+            var type = event.getType(),
+                indicator = event.getIndicator();
+
+            if (type === 'create') this._addIndicatorToGrid(indicator);
+        }
+    },
     /**
      * Binds event handlers, sets the container and
      * fetches the user created indicators.
@@ -61,8 +68,6 @@ function(instance, localization) {
 
         this.bindEvents();
         this.container = this.template.clone();
-        // Bind the "Add new indicator" button to show the form
-        //this._bindAddNewIndicator(this.container);
         // Retrieve the indicators from the service
         var service = this.instance.getUserIndicatorsService();
         service.getUserIndicators(function(indicators) {
@@ -140,18 +145,28 @@ function(instance, localization) {
         gridModel.setIdField('id');
 
         _.each(indicators, function(indicator) {
-            gridModel.addData({
-                'id': indicator.id,
-                'name': me._retrieveValue(indicator.title),
-                'description': me._retrieveValue(indicator.description),
-                'organization': me._retrieveValue(indicator.organization),
-                'year': (indicator.year || '')
-            });
+            me._addIndicatorData.call(me, gridModel, indicator);
         });
 
         this.grid = this._createUserIndicatorsGrid(gridModel);
         this.grid.renderTo(this.container.find('div.indicatorsGrid'));
         this._requestToAddTab();
+    },
+    /**
+     * Adds given indicator to the grid model.
+     *
+     * @method _addIndicatorData
+     * @param {Object} gridModel
+     * @param {Object} indicator
+     */
+    _addIndicatorData: function(gridModel, indicator) {
+        gridModel.addData({
+            'id': indicator.id,
+            'name': this._retrieveValue(indicator.title),
+            'description': this._retrieveValue(indicator.description),
+            'organization': this._retrieveValue(indicator.organization),
+            'year': (indicator.year || '')
+        });
     },
     /**
      * Tries to retrieve value from given object.
@@ -268,9 +283,22 @@ function(instance, localization) {
             }
         }
 
-        if (index) {
+        if (index !== null) {
             gridData.splice(index, 1);
         }
+        this.grid.renderTo(this.container.find('div.indicatorsGrid'));
+    },
+    /**
+     * Adds given indicator to the grid.
+     *
+     * @method _addIndicatorToGrid
+     * @param {Object} indicator
+     */
+    _addIndicatorToGrid: function(indicator) {
+        var gridModel = this.grid.getDataModel();
+
+        this._addIndicatorData(gridModel, indicator);
+
         this.grid.renderTo(this.container.find('div.indicatorsGrid'));
     },
     /**
@@ -286,16 +314,6 @@ function(instance, localization) {
         button.click(function() {
             me._showAddIndicatorForm();
         });
-    },
-    /**
-     * Shows the form where users can create new indicators.
-     *
-     * @method _showAddIndicatorForm
-     * @return {undefined}
-     */
-    _showAddIndicatorForm: function() {
-        // TODO: create a form to create a new indicator and display it to the user.
-        alert('Not implemented yet');
     },
 
     /**
