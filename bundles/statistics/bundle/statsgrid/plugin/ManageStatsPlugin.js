@@ -1206,8 +1206,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 }
             }
 
+            // Display a warning if cannot be displayed in the selected region category
             if (column.header && column.header.buttons) {
                 me._addHeaderWarning(hasNoData, column.header.buttons);
+                me.grid.setColumns(columns);
             }
 
             // create all the aggregators we need
@@ -1234,7 +1236,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             me.dataView.refresh();
             me.grid.invalidateAllRows();
             me.grid.render();
-            me.grid.setColumns(columns);
 
             if (!silent) {
                 // Show classification
@@ -1244,26 +1245,32 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             me.updateDemographicsButtons(indicatorId, gender, year);
             me.grid.setSortColumn(me._state.currentColumn, true);
         },
+        /**
+         * Displays a warning in the header if the indicator data
+         * cannot be displayed in the selected region category.
+         *
+         * @method _addHeaderWarning
+         * @param {Boolean} noData
+         * @param {Array[Object]} buttons
+         */
         _addHeaderWarning: function(noData, buttons) {
             var addedAlready = _.any(buttons, function(item) {
                 return item.id === 'no-data-warning';
             });
 
-            if (noData) {
-                if (!addedAlready) {
-                    buttons.push({
-                        id: 'no-data-warning',
-                        cssClass: 'statsgrid-no-indicator-data backendstatus-maintenance-pending',
-                        tooltip: this._locale.noIndicatorData
-                    });
-                }
-            } else {
-                if (addedAlready) {
-                    for (var i = 0, bLen = buttons.length; i < bLen; ++i) {
-                        if (buttons[i].id === 'no-data-warning') {
-                            buttons.splice(i, 1);
-                            break;
-                        }
+            if (noData && !addedAlready) {
+                // If no data for current category and not yet displayed
+                buttons.push({
+                    id: 'no-data-warning',
+                    cssClass: 'statsgrid-no-indicator-data backendstatus-maintenance-pending',
+                    tooltip: this._locale.noIndicatorData
+                });
+            } else if (addedAlready) {
+                // Remove if warning is there
+                for (var i = 0, bLen = buttons.length; i < bLen; ++i) {
+                    if (buttons[i].id === 'no-data-warning') {
+                        buttons.splice(i, 1);
+                        break;
                     }
                 }
             }
