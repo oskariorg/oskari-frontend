@@ -222,6 +222,16 @@ div.filter-region-select {
   width: 16px !important;
   height: 16px !important;
 }
+.statsgrid-no-indicator-data {
+  position: absolute;
+  top: inherit;
+  right: 30px;
+  width: 20px !important;
+  height: 20px !important;
+}
+.statsgrid-hide-header {
+  visibility: hidden;
+}
 
 .statsgrid .form-cont {
   height: 100%;

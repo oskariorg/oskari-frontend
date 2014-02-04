@@ -7,10 +7,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
  * @param {Object} localization
  * @param {Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance} instance
  */
-function(sandbox, localization, municipalityData, layerWMSName, layerId, regionCategory) {
+function(sandbox, localization, regionCategories, layerWMSName, layerId, regionCategory) {
     this.sandbox = sandbox;
     this.localization = localization;
-    this.municipalities = municipalityData;
+    this.regions = regionCategories;
     this.layerWMSName = layerWMSName;
     this.layerId = layerId;
     this.regionCategory = regionCategory;
@@ -21,7 +21,7 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
         'formHead' : '<div class="form-head"><h2></h2></div>',
         'formShowImport' : '<div class="form-show-import"><button class="import-button"></button></div>',
         'formImport' : '<div class="form-import"><textarea class="import-textarea"></textarea><button class="start-import"></button></div>',
-        'formMeta' : '<div class="form-meta"><div class="title"><label></label><input type="text" required></div><div class="sources"><label></label><input type="text" required></div><div class="description"><label></label><input type="text" required></div><div class="year"><label></label><input type="text" required></div><div class="reference-layer"><label></label><span></span></div><div class="publicity"><label></label><input type="checkbox"></div></div>',
+        'formMeta' : '<div class="form-meta"><div class="title"><label></label><input type="text" required></div><div class="sources"><label></label><input type="text" required></div><div class="description"><label></label><input type="text" required></div><div class="year"><label></label><input type="text" required></div><div class="reference-layer"><label></label><select></select></div><div class="publicity"><label></label><input type="checkbox"></div></div>',
         'formMunicipalities': '<div class="municipalities"></div>',
         'formMunicipalityHeader': '<div class="municipality-header"><label></label><hr></div>',
         'formMunicipalityRow': '<div class="municipality-row"><label></label><input type="text"></div>',
@@ -35,6 +35,7 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
 	 */
 	createUI : function(container, callback) {
         var me = this;
+        var layer = me.sandbox.findMapLayerFromAllAvailable(me.layerId);
         var formCont = jQuery(me.template.formCont).clone(),
             formHead = jQuery(me.template.formHead).clone(),
             formShowImport = jQuery(me.template.formShowImport).clone(),
@@ -66,7 +67,25 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
             });
 
         formMeta.find('.reference-layer').find('label').append(this.localization.addDataMetaReferenceLayer);
-        formMeta.find('.reference-layer').find('span').append(me.layerWMSName);
+        //formMeta.find('.reference-layer').find('span').append(me.layerWMSName);
+        var regionCategorySelect = formMeta.find('.reference-layer').find('select');
+        var regionCategories = layer.getCategoryMappings().categories;
+
+        _.each(regionCategories, function(region) {
+            var regionOption = jQuery('<option></option>');
+            regionOption.
+                val(region).
+                html(me.localization.regionCategories[region]);
+
+            if (me.regionCategory === region) regionOption.attr('selected', 'selected');
+
+            regionCategorySelect.append(regionOption);
+        });
+        regionCategorySelect.change(function(e) {
+            me.regionCategory = e.target.value;
+            me._createRegionInputs(formCont, me.regions[e.target.value]);
+        });
+
         formMeta.find('.publicity').find('label').append(this.localization.addDataMetaPublicity);
 
         formHead.find('h2').append(me.localization.addDataTitle);
@@ -111,8 +130,6 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
 
         });
 
-        formMunicipalityHeader.find('label').append(me.localization.regionCategories[me.regionCategory]);
-
         // add cancel data submit
         var cancel = formSubmit.find('.cancel-form-button');
         cancel.append(me.localization.formCancel);
@@ -134,32 +151,44 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
             .append(formMunicipalities)
             .append(formSubmit);
 
-        // add municipalities
-        for (var i = 0; i < me.municipalities.length; i++) {
-            var municipality = me.municipalities[i];
-            var formMunicipalityRow = jQuery(me.template.formMunicipalityRow).clone();
-            var m = municipality.municipality.toLowerCase();
-            if (me.regionCategory.toLowerCase() === me.municipalityCategory) {
-                m = m.split(' ')[0];
-            }
-            formMunicipalityRow
-                .attr('data-name', m)
-                .attr('data-code', municipality.code)
-                .attr('data-id', municipality.id)                
-                .find('label')
-                .attr('for', 'municipality_'+ m)
-                .append(municipality.municipality + " (" + municipality.code + ")");
-            formMunicipalityRow
-                .find('input')
-                .attr('id', 'municipality_'+ m)
-                .attr('placeholder', me.localization.municipalityPlaceHolder);
-
-            formMunicipalities.append(formMunicipalityRow);
-        };
+        me._createRegionInputs(formCont, me.regions[me.regionCategory]);
 
         container.append(formCont);
 
 	},
+    _createRegionInputs: function(container, regions) {
+        var me = this,
+            header = container.find('div.municipality-header label'),
+            form = container.find('div.municipalities'),
+            row, name;
+
+        header.html(me.localization.regionCategories[me.regionCategory]);
+        form.empty();
+
+        _.each(regions, function(region) {
+            row = jQuery(me.template.formMunicipalityRow).clone();
+            name = region.municipality.toLowerCase();
+
+            if (me.regionCategory.toLowerCase() === me.municipalityCategory) {
+                name = name.split(' ')[0];
+            }
+
+            row
+                .attr('data-name', name)
+                .attr('data-code', region.code)
+                .attr('data-id', region.id)                
+                .find('label')
+                .attr('for', 'municipality_'+ name)
+                .append(region.municipality + " (" + region.code + ")");
+
+            row
+                .find('input')
+                .attr('id', 'municipality_'+ name)
+                .attr('placeholder', me.localization.municipalityPlaceHolder);
+
+            form.append(row);
+        });
+    },
     /**
      * @method _handleCancel
      * @private 
@@ -331,6 +360,7 @@ function(sandbox, localization, municipalityData, layerWMSName, layerId, regionC
         json.published = me.container.find('.form-meta .publicity').find('input').prop('checked');
 
         json.category = me.regionCategory;
+        //json.category = me.container.find('.form-meta .reference-layer select').val();
 
         json.data = [];
 

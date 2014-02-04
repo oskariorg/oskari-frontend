@@ -105,6 +105,7 @@ Oskari.registerLocalization({
 			"std": "Keskihajonta",
 			"sum": "Yhteensä"
 		},
+		"noIndicatorData": "Indikaattoria ei voi tarkastella tässä aluejaossa",
 		"values": "arvoa",
 		"included": "Arvot",
 		"municipality": "Kunnat",
@@ -154,7 +155,7 @@ Oskari.registerLocalization({
 		"addDataMetaSourcesPH" 		: "Datan lähdeviittaus",
 		"addDataMetaDescription" 	: "Kuvaus",
 		"addDataMetaDescriptionPH" 	: "Kuvaus",
-		"addDataMetaReferenceLayer" : "Aineisto",
+		"addDataMetaReferenceLayer" : "Aluejako",
 		"addDataMetaYear" 			: "Vuosi",
 		"addDataMetaYearPH" 		: "Data on vuodelta",
 		"addDataMetaPublicity" 		: "Julkaistavissa",

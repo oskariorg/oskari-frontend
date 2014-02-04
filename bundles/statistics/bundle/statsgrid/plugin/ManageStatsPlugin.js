@@ -740,9 +740,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             button.find('input').val(me._locale.addDataButton);
             paramCont.append(button);
             button.find('input').click(function (e) {
-                var items = me.dataView ? me.dataView.getItems() : null,
-                    form = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
-                    me._sandbox, me._locale, items, me._layer.getWmsName(), me._layer.getId(), me._selectedRegionCategory);
+                var form = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
+                    me._sandbox, me._locale, me.regionCategories, me._layer.getWmsName(), me._layer.getId(), me._selectedRegionCategory);
                 container.find('.selectors-container').hide();
                 container.find('#municipalGrid').hide();
                 form.createUI(container, function (data) {
@@ -777,6 +776,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 'public': data.published,
                 ownIndicator: true
             });
+
+            if (me._selectedRegionCategory !== data.category) {
+                me.changeGridRegion(data.category);
+            }
 
             // Show the data in the grid.
             me.addIndicatorDataToGrid(container, data.indicatorId, 'total', data.year, data.data, indicator);
@@ -1166,6 +1169,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
         _updateIndicatorDataToGrid: function (columnId, data, columns) {
             var me = this,
+                hasNoData = true,
+                column = me._getColumnById(columnId),
                 i,
                 silent,
                 indicatorId,
@@ -1188,6 +1193,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     // find region
                     var item = me.dataView.getItemById(regionId);
                     if (item) {
+                        hasNoData = false;
                         // update row
                         numValue = Number(value);
                         if (isNaN(numValue)) {
@@ -1198,6 +1204,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         me.dataView.updateItem(item.id, item);
                     }
                 }
+            }
+
+            // Display a warning if cannot be displayed in the selected region category
+            if (column.header && column.header.buttons) {
+                me._addHeaderWarning(hasNoData, column.header.buttons);
+                me.grid.setColumns(columns);
             }
 
             // create all the aggregators we need
@@ -1232,6 +1244,36 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             me.updateDemographicsButtons(indicatorId, gender, year);
             me.grid.setSortColumn(me._state.currentColumn, true);
+        },
+        /**
+         * Displays a warning in the header if the indicator data
+         * cannot be displayed in the selected region category.
+         *
+         * @method _addHeaderWarning
+         * @param {Boolean} noData
+         * @param {Array[Object]} buttons
+         */
+        _addHeaderWarning: function(noData, buttons) {
+            var addedAlready = _.any(buttons, function(item) {
+                return item.id === 'no-data-warning';
+            });
+
+            if (noData && !addedAlready) {
+                // If no data for current category and not yet displayed
+                buttons.push({
+                    id: 'no-data-warning',
+                    cssClass: 'statsgrid-no-indicator-data backendstatus-maintenance-pending',
+                    tooltip: this._locale.noIndicatorData
+                });
+            } else if (addedAlready) {
+                // Remove if warning is there
+                for (var i = 0, bLen = buttons.length; i < bLen; ++i) {
+                    if (buttons[i].id === 'no-data-warning') {
+                        buttons.splice(i, 1);
+                        break;
+                    }
+                }
+            }
         },
 
         /**
@@ -1929,8 +1971,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 dataView = this.dataView,
                 grid = this.grid,
                 regions = _.clone(this.regionCategories[category], true),
-                currColumn,
-                categoryMappings;
+                currColumn;
 
             _.each(regions, function (item) {
                 item.sel = 'checked';
