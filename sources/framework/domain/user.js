@@ -22,13 +22,14 @@ Oskari.clazz.define('Oskari.mapframework.domain.User',
     function (userData) {
 
         this._loggedIn = false;
+        this._roles = [];
         if (userData) {
             this._firstName = userData.firstName;
             this._lastName = userData.lastName;
             this._nickName = userData.nickName;
             this._loginName = userData.loginName;
             this._uuid = userData.userUUID;
-            this._roles = userData.roles;
+            this._roles = userData.roles || [];
             if (userData.userUUID) {
                 this._loggedIn = true;
             }
@@ -115,16 +116,19 @@ Oskari.clazz.define('Oskari.mapframework.domain.User',
         },
 
         /**
+         * Returns true if user has any role matching any id provided as param
          * @method hasRole
-         * Returns true if user has a role, which id is provided.
-         *
-         * @param {Number} ids
-         * @return {Boolean}
+         * 
+         * @param {Number[]} list of ids
+         * @return {Boolean} true if any id match roles that user has
          */
         hasRole: function (ids) {
+            if(!ids) {
+                return false;
+            }
             var i, j, role, id,
                 roles = this.getRoles(),
-                ilen = roles.length.
+                ilen = roles.length,
                 jlen = ids.length;
 
             for (i = 0; i < ilen; i++) {
