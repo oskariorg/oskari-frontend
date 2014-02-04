@@ -130,7 +130,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                     if (sandbox.getUser().isLoggedIn()) {
                         var loc = me.instance.getLocalization();
                         if (tool === 'line') {
-                            console.log("LINE");
                             measureTool = jQuery.extend(true, {}, this.buttons[tool]);
                             measureTool.callback = function () {
                                 me.startNewDrawing({
@@ -142,7 +141,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                             sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
                         }
                         if (tool === 'area') {
-                            console.log("AREA");
                             measureTool = jQuery.extend(true, {}, this.buttons[tool]);
                             measureTool.callback = function () {
                                 me.startNewDrawing({
@@ -204,7 +202,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
 
             if (!config.geometry) {
                 // show only when drawing new place
-                console.log(config);
                 this._showDrawHelper(config.drawMode);
 
             }
@@ -214,7 +211,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
          * implements Module protocol update method
          */
         _showDrawHelper: function (drawMode) {
-            console.log("_showDrawHelper ", drawMode);
             var me = this,
                 locTool = this.instance.getLocalization('tools')[drawMode];
 
