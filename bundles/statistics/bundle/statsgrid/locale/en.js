@@ -106,6 +106,7 @@ Oskari.registerLocalization({
             "std": "Standard deviation",
             "sum": "Sum"
         },
+        "noIndicatorData": "Can not display indicator with selected region category",
         "values": "values",
         "included": "Values",
         "municipality": "Municipalities",
