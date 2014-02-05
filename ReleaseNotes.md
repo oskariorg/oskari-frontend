@@ -20,6 +20,8 @@ Maplayer JSON parsing changed a bit:
 
 * Formats parsing has been moved out from styles parsing and in to wmslayer specific parsing as they are not related operations
 
+* Default style for layers now has a label. The localization file used is linked by mapfull with the key 'Generic'. Default styles are also now shown as an option if there is another style option available in the layers data.
+
 ### statistics/statsgrid
 
 The region category can now be changed whilst creating a new indicator.

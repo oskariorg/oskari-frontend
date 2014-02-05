@@ -284,11 +284,9 @@ function(instance) {
                 opt;
             sel.empty();
             for (i = 0; i < styles.length; i++) {
-                if (styles[i].getName()) {
-                    opt = jQuery('<option value="' + styles[i].getName() + '">' + styles[i].getTitle() + '</option>');
-                    sel.append(opt);
-                    hasOpts = true;
-                }
+                opt = jQuery('<option value="' + styles[i].getName() + '">' + styles[i].getTitle() + '</option>');
+                sel.append(opt);
+                hasOpts = true;
             }
             if(!sel.hasClass("binded")) {
                 sel.change(function(e) {

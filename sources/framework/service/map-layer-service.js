@@ -47,6 +47,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         this.modelBuilderMapping = {
 
         };
+        // get generic localization (linked by mapfull)
+        this._localization = Oskari.getLocalization('Generic');
 
     }, {
         /** @static @property __qname fully qualified name for service */
@@ -820,7 +822,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setQueryFormat(jsonLayer.formats.value);
             }
 
-            return this.populateStyles(layer, jsonLayer);
+            var locDefaultStyle = this._localization['default-style'];
+            var defaultStyle = Oskari.clazz.create('Oskari.mapframework.domain.Style');
+            defaultStyle.setName("");
+            defaultStyle.setTitle(locDefaultStyle);
+            defaultStyle.setLegend("");
+            return this.populateStyles(layer, jsonLayer, defaultStyle);
         },
         /**
          * @method populateStyles

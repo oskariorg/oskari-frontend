@@ -78,7 +78,19 @@ function() {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/mapfull/css/style.css"
         }],
-        "resources" : []
+        "locales": [{
+            "lang": "fi",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/mapfull/locale/fi.js"
+        }, {
+            "lang": "sv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/mapfull/locale/sv.js"
+        }, {
+            "lang": "en",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/mapfull/locale/en.js"
+        }]
     },
     "bundle" : {
         "manifest" : {
