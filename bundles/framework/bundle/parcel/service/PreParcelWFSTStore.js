@@ -26,7 +26,7 @@ function(instance) {
     this.featureNS = (conf ? conf.wfstFeatureNS : null) || 'http://www.oskari.org';
     var user = instance.getSandbox().getUser();
     //TODO: use KVP uuidia
-    this.uuid = user.getUuid();
+    this.uuid = "todo12345"; //user.getUuid();
 
     this.protocols = {};
     this.url = conf.wfstUrl;
@@ -250,10 +250,13 @@ function(instance) {
                 state = feature.state;
                 if (state) {
                     if (state == OpenLayers.State.INSERT) {
+
                         feature.fid = insertIds[i];
-                        feature.attributes.id = feature.fid;
-                        var id = this._parseNumericId(feature.fid);
-                        list[i].setId(id);
+                        if (typeof feature.fid !== "undefined") {
+                            feature.attributes.id = feature.fid;
+                            var id = this._parseNumericId(feature.fid);
+                            list[i].setId(id);
+                        }
                     }
                     feature.state = null;
                 }
