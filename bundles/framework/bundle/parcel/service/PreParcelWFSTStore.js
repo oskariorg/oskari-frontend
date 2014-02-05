@@ -26,7 +26,7 @@ function(instance) {
     this.featureNS = (conf ? conf.wfstFeatureNS : null) || 'http://www.oskari.org';
     var user = instance.getSandbox().getUser();
     //TODO: use KVP uuidia
-    this.uuid = "todo12345"; //user.getUuid();
+    this.uuid = user.getUuid();
 
     this.protocols = {};
     this.url = conf.wfstUrl;
