@@ -111,7 +111,7 @@ Oskari.registerLocalization({
         "included": "Värden",
         "municipality": "Kommuner",
         "selectRows": "Markera rader",
-        "select4Municipalities": "Välj minst twå områden",
+        "select4Municipalities": "Välj minst två områden",
         "showSelected": "Visa endast utvalda områden på nätet",
         "not_included": "Inte inlcuded",
         "noMatch": "Inga matchade indikatorer",
