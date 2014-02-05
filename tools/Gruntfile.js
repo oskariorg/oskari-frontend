@@ -308,7 +308,7 @@ module.exports = function (grunt) {
             }
         },
         requirejs: {
-          oskari: {
+          'oskari': {
             options: {
                 baseUrl : "../",
                 paths: {
@@ -317,7 +317,7 @@ module.exports = function (grunt) {
                 optimizeAllPluginResources: true,
                 findNestedDependencies: true,
                 preserveLicenseComments: true,
-                name: "bundles/oskari/oskari",
+                name: "src/oskari/oskari",
                 version: "2.0.0",
                 out: "../libraries/oskari/oskari-<%= requirejs.oskari.options.version %>.min.js"
             }
@@ -327,7 +327,7 @@ module.exports = function (grunt) {
                 baseUrl : "../",
                 paths: {
                     jquery: "empty:",
-                    oskari: "bundles/oskari/oskari",
+                    oskari: "src/oskari/oskari",
                     css: "libraries/requirejs/lib/css",
                     json: "libraries/requirejs/lib/json",
                     domReady: "libraries/requirejs/lib/domReady",
@@ -338,7 +338,7 @@ module.exports = function (grunt) {
                 findNestedDependencies: true,
                 preserveLicenseComments: true,
                 version: "1.13",
-                name: "bundles/oskari/oskari-with-loader",
+                name: "src/oskari/oskari-with-loader",
                 out: "../libraries/oskari/oskari-<%= requirejs['oskari-with-loader'].options.version %>.min.js"
             }
           },

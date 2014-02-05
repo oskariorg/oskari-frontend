@@ -27,7 +27,7 @@ div.mapplugin.backgroundLayerSelectionPlugin {
       height: 28px;
       line-height: 28px;
       font-size: 14px;
-      width: 110px;
+      width: 120px;
       padding: 0 10px;
       background-color: #3c3c3c;
       color: white;
@@ -50,7 +50,7 @@ div.mapplugin.backgroundLayerSelectionPlugin {
       div.mapplugin.backgroundLayerSelectionPlugin div.content ul li {
         display: inline-block;
         cursor: pointer;
-        width: 110px;
+        width: 120px;
         background-color: #3c3c3c;
         color: white;
         margin: 0 1px 0 0;
@@ -89,7 +89,7 @@ div.mapplugin.backgroundLayerSelectionPlugin {
         margin-top: 7px; }
     div.mapplugin.backgroundLayerSelectionPlugin div.content.dropdown ul {
       display: none;
-      width: 128px;
+      width: 138px;
       margin: 0 auto;
       height: auto;
       border: 1px solid #3c3c3c;

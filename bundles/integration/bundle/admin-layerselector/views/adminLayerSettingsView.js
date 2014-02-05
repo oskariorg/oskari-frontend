@@ -54,7 +54,7 @@ define([
                 // if we get baseLayerId -> this is a sublayer
                 if(this.options.baseLayerId && this.options.model) {
                     // wrap existing sublayers with model
-                    this.model = new layerModel(this.options.model)
+                    this.model = new layerModel(this.options.model);
                 }
                 else {
                     this.model = this.options.model;
@@ -180,10 +180,10 @@ define([
                 }
             },
             _createNewModel : function(type) {
-                var sandbox = this.instance.sandbox;
-                var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                var layer = null;
-                if(type == 'base' || type == 'groupMap' ) {
+                var sandbox = this.instance.sandbox,
+                    mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+                    layer = null;
+                if(type === 'base' || type === 'groupMap' ) {
                     layer = mapLayerService.createMapLayer({ 'type' : type });
                 }
                 else {
@@ -194,10 +194,9 @@ define([
             },
 
             createGroupForm: function (groupTitle, e) {
-
                 var me = this;
                 if (!me.model) {
-                    if(groupTitle == 'baseName') {
+                    if(groupTitle === 'baseName') {
                         me.model = this._createNewModel('base');
                     }
                     else {
@@ -317,7 +316,9 @@ define([
 
                 // base and group are always of type wmslayer
                 data.layerType = 'wmslayer';
-                data.layer_id = me.model.getId();
+                if (me.model.getId() !== null && me.model.getId() !== undefined) {
+                    data.layer_id = me.model.getId();
+                }
 
                 form.find('[id$=-name]').filter('[id^=add-layer-]').each(function (index) {
                     var lang = this.id.substring(10, this.id.indexOf("-name"));
@@ -369,7 +370,7 @@ define([
                     success: function (resp) {
                         // response should be a complete JSON for the new layer
                         if(!resp) {
-                            alert("Saving layer didn't work");
+                            alert(me.instance.getLocalization('admin').update_or_insert_failed);
                         }
                         else if(resp.error) {
                             alert(me.instance.getLocalization('admin')[resp.error] || resp.error);
@@ -409,7 +410,33 @@ define([
                     error: function (jqXHR, textStatus) {
                         console.log(jqXHR, textStatus);
                         if (jqXHR.status !== 0) {
-                            alert("Saving layer didn't work");
+                            var loc = me.instance.getLocalization('admin'),
+                                err = loc.update_or_insert_failed;
+                            if (jqXHR.responseText) {
+                                var jsonResponse = jQuery.parseJSON(jqXHR.responseText);
+                                if (jsonResponse && jsonResponse.error) {
+                                    err = jsonResponse.error;
+                                    // see if we recognize the error
+                                    var errVar = null;
+                                    if (err.indexOf('mandatory_field_missing:') === 0) {
+                                        errVar = err.substring('mandatory_field_missing:'.length);
+                                        err = 'mandatory_field_missing';
+                                    } else if (err.indexOf('invalid_field_value:') === 0) {
+                                        errVar = err.substring('invalid_field_value:'.length);
+                                        err = 'invalid_field_value';
+                                    } else if (err.indexOf('operation_not_permitted_for_layer_id:') === 0) {
+                                        errVar = err.substring('operation_not_permitted_for_layer_id:'.length);
+                                        err = 'operation_not_permitted_for_layer_id';
+                                    } else if (err.indexOf('no_layer_with_id') === 0) {
+                                        errVar = err.substring('no_layer_with_id:'.length);
+                                        err = 'no_layer_with_id';
+                                    }
+
+                                    err = loc[err] || err;
+                                    err += errVar === null || errVar === undefined ? '' : loc[errVar];
+                                }
+                            }
+                            alert(err);
                         }
                     }
                 });
@@ -431,12 +458,15 @@ define([
                 */
                 var sandbox = me.options.instance.getSandbox();
                 var data = {
-                    layer_id : me.model.getId(),
                     groupId : accordion.attr('lcid'),
                     layerType : 'collection',
                     isBase : me.model.isBaseLayer(),
                     inspireTheme : groupElement.find('#add-layer-inspire-theme').val()
                 };
+
+                if (me.model.getId() !== null && me.model.getId() !== undefined) {
+                    data.layer_id = me.model.getId();
+                }
 
                 groupElement.find('[id$=-name]').filter('[id^=add-group-]').each(function (index) {
                     var lang = this.id.substring(10, this.id.indexOf("-name"));
@@ -445,7 +475,7 @@ define([
 
                 // permissions
                 if(!me.model.getId()) {
-                    var checkedPermissions = []
+                    var checkedPermissions = [];
                     groupElement.find(".layer-view-role").filter(":checked").each(function (index) {
                         checkedPermissions.push(jQuery(this).data("role-id"));
                     });

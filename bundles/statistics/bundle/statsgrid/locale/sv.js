@@ -106,6 +106,7 @@ Oskari.registerLocalization({
             "std": "Standardavvikelse",
             "sum": "Summa"
         },
+        "noIndicatorData": "Indikaattoria ei voi tarkastella tässä aluejaossa",
         "values": "värden",
         "included": "Värden",
         "municipality": "Kommuner",

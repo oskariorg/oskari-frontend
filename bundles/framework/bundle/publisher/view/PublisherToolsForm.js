@@ -26,7 +26,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
         this.selectedDrawingLayer = {
             'layer': null
         };
-        this.toolbarConfig = {'myplaces': {'point': false, 'line': false, 'area': false}};
 
         /**
          * @property tools
@@ -330,6 +329,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 if (hasActiveTools) {
                     selections.toolbar = toolbarConfig;
                 }
+
+                if (toolbarConfig.myplaces.point === true ||
+                    toolbarConfig.myplaces.line === true ||
+                    toolbarConfig.myplaces.area === true) {
+
+                    var alreadySelected = false;
+                    for (i = 0; i < selectedLayers.length; i++) {
+                        if (selectedLayers[i].getId() === me.selectedDrawingLayer.layer.getId()) {
+                            alreadySelected = true;
+                        }
+                    }
+                    if (!alreadySelected) {
+                        me._sandbox.postRequestByName('AddMapLayerRequest', [me.selectedDrawingLayer.layer.getId(), false, me.selectedDrawingLayer.layer.isBaseLayer()]);
+                    }
+                    selections.publishedmyplaces2 = me.selectedDrawingLayer;
+                }
             }
 
             for (i = 0; i < me.tools.length; i += 1) {
@@ -353,23 +368,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     selections.plugins.push(tmpTool);
                 }
             }
-
-            if (me.toolbarConfig.myplaces.point === true ||
-                me.toolbarConfig.myplaces.line === true ||
-                me.toolbarConfig.myplaces.area === true) {
-
-                var alreadySelected = false;
-                for (i = 0; i < selectedLayers.length; i++) {
-                    if (selectedLayers[i].getId() === me.selectedDrawingLayer.layer.getId()) {
-                        alreadySelected = true;
-                    }
-                }
-                if (!alreadySelected) {
-                    me._sandbox.postRequestByName('AddMapLayerRequest', [me.selectedDrawingLayer.layer.getId(), false, me.selectedDrawingLayer.layer.isBaseLayer()]);
-                }
-                selections.publishedmyplaces2 = me.selectedDrawingLayer;
-            }
-
             //sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), false, layer.isBaseLayer()]);
             return selections;
         },
@@ -455,7 +453,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         'toolbarId': 'PublisherToolbar',
                         'defaultToolbarContainer': '.publishedToolbarContent',
                         'hasContentContainer': true,
-                        'classes': {}
+                        'classes': {},
+                        'myplaces' : {
+                            'point': false, 
+                            'line': false, 
+                            'area': false
+                        }
                     };
 
                     tool.plugin.setToolbarContainer();
@@ -505,8 +508,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     options = _addToolGroup('basictools', options, me.toolbarConfig, _toggleToolOption);
                     tool.publisherPluginContainer.append(options);
 
-                    // FIXME when myplaces works on published maps
-                    if (false) {
+                    // show for admin users
+                    if (me._sandbox.getUser().hasRole(me.instance.conf.drawRoleIds)) {
                         // create option for adding drawing tools
                         options = jQuery(me.templates.toolOptions).clone();
                         tool.publisherPluginContainer.append(options);
@@ -525,7 +528,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             } else {
                 // toolbar (bundle) needs to be notified
                 if (tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
-                    me.toolbarConfig = {};
+                    me.toolbarConfig = null;
                 }
                 if (tool._isPluginStarted) {
                     //remove buttons
@@ -648,7 +651,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             addLayerButton.setTitle(this.loc.layers.add);
             addLayerButton.setHandler(function () {
                 // send OpenAddLayerDialogEvent
-                console.log("Send OpenAddLayerDialogEvent");
                 var request = me._sandbox.getRequestBuilder('MyPlaces.OpenAddLayerDialogRequest')('.publisher-select-layer', 'right');
                 me._sandbox.request(me.instance, request);
             });

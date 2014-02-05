@@ -98,6 +98,7 @@ Oskari.registerLocalization({
             "addSubLayer": "Tillägg en undernivå",
 
             "wmsInterfaceAddress": "WMS-gränssnittets address",
+            "wmsUrl": "WMS-gränssnittets address",
             "wmsInterfaceAddressDesc": "WMS-gränssnittets URL-address separerat med komma",
             "wmsServiceMetaId": "WMS metadata tagg",
             "wmsServiceMetaIdDesc": "WMS-tjänstens metadata filtagg",
@@ -166,7 +167,11 @@ Oskari.registerLocalization({
             "interfaceAddress": "Gränssnitten address",
             "interfaceAddressDesc": "WMS address för lager definitionen",
             "viewingRightsRoles": "Kollar rättigheter roller",
-            "metadataReadFailure": "Fetching layer metadata failed."
+            "metadataReadFailure": "Fetching layer metadata failed.",
+            "mandatory_field_missing": "Nödvändig uppgift: ",
+            "invalid_field_value": "Ogiltigt värde: ",
+            "operation_not_permitted_for_layer_id": "Åtgärden är inte tillåten för kartlager ",
+            "no_layer_with_id": "Ingen kartlagret hittades med id "
         },
         "cancel": "Tillbaka",
         "add": "Tillägg",

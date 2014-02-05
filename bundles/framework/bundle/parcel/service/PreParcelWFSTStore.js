@@ -250,10 +250,13 @@ function(instance) {
                 state = feature.state;
                 if (state) {
                     if (state == OpenLayers.State.INSERT) {
+
                         feature.fid = insertIds[i];
-                        feature.attributes.id = feature.fid;
-                        var id = this._parseNumericId(feature.fid);
-                        list[i].setId(id);
+                        if (typeof feature.fid !== "undefined") {
+                            feature.attributes.id = feature.fid;
+                            var id = this._parseNumericId(feature.fid);
+                            list[i].setId(id);
+                        }
                     }
                     feature.state = null;
                 }

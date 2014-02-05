@@ -20,6 +20,24 @@ Maplayer JSON parsing changed a bit:
 
 * Formats parsing has been moved out from styles parsing and in to wmslayer specific parsing as they are not related operations
 
+### statistics/statsgrid
+
+The region category can now be changed whilst creating a new indicator.
+
+A warning sign is displayed in an indicator's header if its data cannot be displayed in the selected region category.
+
+## 1.17.2.
+
+### infobox
+
+Adaptable size handling improved. Selectors used to detect map size and get reference to the popup in question should now be safe even if there are multiple maps/popups on page.
+
+## 1.17.1
+
+### mapmodule/layerplugins
+
+Improved marker handling, mapmodule now moves markerlayer on top when a new layer is added.
+
 ## 1.17
 
 ### **Breaking changes**

@@ -352,12 +352,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
 
                 map.addClass('mapPublishMode');
                 me.sandbox.mapMode = 'mapPublishMode';
-                // close all flyouts - TODO: how about popups/gfi?
-
-                //postRequestByName brakes mode change functionality! me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
-                request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
-                me.sandbox.request(me.getName(), request);
-
+                // close/hide flyout - TODO: how about other flyouts, popups/gfi?
+                jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', 'none');
 
                 // proceed with publisher view
                 me.publisher = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
@@ -387,6 +383,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
 
                 Oskari.setLang(me.oskariLang);
                 if (me.publisher) {
+                    jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', '');
                     // make sure edit mode is disabled
                     if (me.publisher.toolLayoutEditMode) {
                         me.publisher._editToolLayoutOff();
@@ -400,6 +397,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     delete me.sandbox._mapMode;
                 }
                 me._addLayers();
+                //postRequestByName brakes mode change functionality! me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
+                request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
+                me.sandbox.request(me.getName(), request);
             }
             // publishing mode should be sent to mapfull to disable resizing
             requestBuilder = me.sandbox.getRequestBuilder('MapFull.MapResizeEnabledRequest');

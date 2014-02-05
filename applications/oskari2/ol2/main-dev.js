@@ -53,6 +53,7 @@ require(["mainConfig"], function() {
             Oskari.setLang(language);
             var appConfig = appSetup.configuration;
             Oskari.setConfiguration(appConfig);
+            console.log(appConfig);
 
             /* loading main map and divmanazer */
             require(["mapfull",
