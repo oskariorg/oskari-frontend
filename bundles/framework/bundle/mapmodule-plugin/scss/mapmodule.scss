@@ -79,6 +79,10 @@ div.mapplugins {
                     vertical-align: top;
                     margin: 0 $pluginMargin / 2;
 
+                    &.search {
+                        text-align: center;
+                    }
+
                     &.layerselection, &.search {
                         float: right;
                     }
@@ -93,6 +97,10 @@ div.mapplugins {
                 
                 &.layerselection {
                     margin-left: 0;
+                }
+
+                &.search {
+                    text-align: right;
                 }
     
                 &.layerselection, &.search {
@@ -110,6 +118,10 @@ div.mapplugins {
                 
                 &.layerselection {
                     margin-right: 0;
+                }
+
+                &.search {
+                    text-align: left;
                 }
     
                 &.layerselection, &.search {

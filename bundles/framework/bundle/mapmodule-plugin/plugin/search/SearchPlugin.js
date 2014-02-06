@@ -171,6 +171,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             var me = this,
                 p;
             me.element.remove();
+            me.element = null;
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     me._sandbox.unregisterFromEventByName(me, p);
@@ -308,7 +309,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             });
 
             me._inputField.keypress(function (event) {
+                console.log("Key pressed");
                 if (!me.isInLayerToolsEditMode) {
+                    console.log("Checking for enter");
                     me._checkForEnter(event);
                 }
             });
@@ -546,34 +549,51 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * @param {jQuery} div
          */
         changeToolStyle: function (style, div) {
-            div = div || this.element;
+            var me = this,
+                removedClass,
+                addedClass,
+                template;
+            div = div || me.element;
 
             if (!style || !div) {
                 return;
             }
 
+            // Set the correct template for the style... ugly.
+            // FIXME use the same HTML for both of these so we don't have to muck about with the DOM
             if (style.val === null) {
-                this.conf.toolStyle = null;
-                div.remove();
-                this._createUI();
+                me.conf.toolStyle = null;
+                div.removeClass('published-search-div').addClass('default-search-div');
+                div.empty();
+                me.template.children().clone().appendTo(div);
+                me._inputField = div.find('input[type=text]');
+                me._searchButton = div.find('input[type=button]');
+                me._bindUIEvents();
+                // Force edit mode so the tool controls are disabled
+                if (me.isInLayerToolsEditMode) {
+                    me.isInLayerToolsEditMode = false;
+                    me._setLayerToolsEditMode(true);
+                }
                 return;
             }
 
             // Remove the old unstyled search box and create a new one.
             if (div.hasClass('default-search-div')) {
-                //div.remove();
-                //this._createUI();
                 // hand replace with styled version so we don't destroy this.element
                 div.removeClass('default-search-div').addClass('published-search-div');
                 div.empty();
-                this.styledTemplate.children().clone().appendTo(div);
-                this.changeToolStyle(this.conf.toolStyle, div);
-                this._bindUIEvents();
-                return;
+                me.styledTemplate.children().clone().appendTo(div);
+                me._inputField = div.find('input[type=text]');
+                me._searchButton = div.find('input[type=button]');
+                me._bindUIEvents();
+                // Force edit mode so the tool controls are disabled
+                if (me.isInLayerToolsEditMode) {
+                    me.isInLayerToolsEditMode = false;
+                    me._setLayerToolsEditMode(true);
+                }
             }
 
-            var me = this,
-                resourcesPath = this.getMapModule().getImageUrl(),
+            var resourcesPath = this.getMapModule().getImageUrl(),
                 imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/search/images/',
                 styleName = style.val,
                 bgLeft = imgPath + 'search-tool-' + styleName + '_01.png',

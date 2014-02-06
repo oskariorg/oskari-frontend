@@ -49,12 +49,16 @@ div.mapplugins {
           display: inline-block;
           vertical-align: top;
           margin: 0 5px; }
+          div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin.search {
+            text-align: center; }
           div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin.layerselection, div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin.search {
             float: right; }
     div.mapplugins.top.right {
       min-width: 100px; }
       div.mapplugins.top.right .mapplugin.layerselection {
         margin-left: 0; }
+      div.mapplugins.top.right .mapplugin.search {
+        text-align: right; }
       div.mapplugins.top.right .mapplugin.layerselection, div.mapplugins.top.right .mapplugin.search {
         display: block;
         float: right;
@@ -63,6 +67,8 @@ div.mapplugins {
       min-width: 100px; }
       div.mapplugins.top.left .mapplugin.layerselection {
         margin-right: 0; }
+      div.mapplugins.top.left .mapplugin.search {
+        text-align: left; }
       div.mapplugins.top.left .mapplugin.layerselection, div.mapplugins.top.left .mapplugin.search {
         display: block;
         float: left;
