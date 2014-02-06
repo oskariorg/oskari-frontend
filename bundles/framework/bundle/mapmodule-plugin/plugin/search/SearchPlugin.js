@@ -167,6 +167,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             var me = this,
                 p;
             me.element.remove();
+            me.element = null;
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     me._sandbox.unregisterFromEventByName(me, p);
@@ -241,46 +242,68 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 containerClasses = 'top left',
                 position = 1;
 
-            if (this.conf && this.conf.toolStyle) {
-                content = this.styledTemplate.clone();
-                this.changeToolStyle(this.conf.toolStyle, content);
+            if (me.conf && me.conf.toolStyle) {
+                content = me.styledTemplate.clone();
+                me.element = content;
+                me._inputField = content.find('input[type=text]');
+                me._searchButton = content.find('input[type=button]');
+                me.changeToolStyle(me.conf.toolStyle, content);
             } else {
-                content = this.template.clone();
+                content = me.template.clone();
+                me.element = content;
+                me._inputField = content.find('input[type=text]');
+                me._searchButton = content.find('input[type=button]');
             }
 
-            this.element = content;
+            me._bindUIEvents();
+        },
 
-            // bind events
-            var inputField = content.find('input[type=text]');
+        _bindUIEvents: function() {
+
+            var me = this,
+                sandbox = me._sandbox,
+                content = this.element,
+                containerClasses = 'top left',
+                position = 1;
             // to text box
-            inputField.focus(function () {
+            me._inputField.focus(function () {
                 sandbox.request(me.getName(), sandbox.getRequestBuilder('DisableMapKeyboardMovementRequest')());
                 //me._checkForKeywordClear();
             });
-            inputField.blur(function () {
+            me._inputField.blur(function () {
                 sandbox.request(me.getName(), sandbox.getRequestBuilder('EnableMapKeyboardMovementRequest')());
                 //me._checkForKeywordInsert();
             });
 
-            inputField.keypress(function (event) {
-                me._checkForEnter(event);
+            me._inputField.keypress(function (event) {
+                if (!me.isInLayerToolsEditMode) {
+                    me._checkForEnter(event);
+                }
             });
             // to search button
-            content.find('input[type=button]').click(function (event) {
-                me._doSearch();
+            me._searchButton.click(function (event) {
+                if (!me.isInLayerToolsEditMode) {
+                    me._doSearch();
+                }
             });
             content.find('div.search-right').click(function (event) {
-                me._doSearch();
+                if (!me.isInLayerToolsEditMode) {
+                    me._doSearch();
+                }
             });
             // to close button
             content.find('div.close').click(function (event) {
-                me._hideSearch();
-                inputField.val('');
-                // TODO: this should also unbind the TR tag click listeners?
+                if (!me.isInLayerToolsEditMode) {
+                    me._hideSearch();
+                    me._inputField.val('');
+                    // TODO: this should also unbind the TR tag click listeners?
+                }
             });
             content.find('div.close-results').click(function (event) {
-                me._hideSearch();
-                inputField.val('');
+                if (!me.isInLayerToolsEditMode) {
+                    me._hideSearch();
+                    me._inputField.val('');
+                }
             });
             content.find('div.results').hide();
 
@@ -296,7 +319,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             }
             if (me.conf && me.conf.toolStyle) {
                 // Hide the results if esc was pressed or if the field is empty.
-                inputField.keyup(function (e) {
+                me._inputField.keyup(function (e) {
                     if (e.keyCode === 27 || (e.keyCode === 8 && !jQuery(this).val())) {
                         me._hideSearch();
                     }
@@ -489,6 +512,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * @param {jQuery} div
          */
         changeToolStyle: function (style, div) {
+            var me = this;
+
             div = div || this.element;
 
             if (!style || !div) {
@@ -496,17 +521,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             }
 
             if (style.val === null) {
-                this.conf.toolStyle = null;
-                div.remove();
-                this._createUI();
+                me.conf.toolStyle = null;
+                div.removeClass('published-search-div').addClass('mapplugin search');
+                div.empty();
+                me.template.children().clone().appendTo(div);
+                me._inputField = div.find('input[type=text]');
+                me._searchButton = div.find('input[type=button]');
+                me._bindUIEvents();
+                if (me.isInLayerToolsEditMode) {
+                    me.isInLayerToolsEditMode = false;
+                    me._setLayerToolsEditMode(true);
+                }
                 return;
             }
 
             // Remove the old unstyled search box and create a new one.
             if (div.hasClass('mapplugin search')) {
-                div.remove();
-                this._createUI();
-                return;
+                // hand replace with styled version so we don't destroy this.element
+                div.removeClass('mapplugin search').addClass('published-search-div');
+                div.empty();
+                me.styledTemplate.children().clone().appendTo(div);
+
+                me._inputField = div.find('input[type=text]');
+                me._searchButton = div.find('input[type=button]');
+                me._bindUIEvents();
+                // Force edit mode so the tool controls are disabled
+                if (me.isInLayerToolsEditMode) {
+                    me.isInLayerToolsEditMode = false;
+                    me._setLayerToolsEditMode(true);
+                }
             }
 
             var resourcesPath = this.getMapModule().getImageUrl(),

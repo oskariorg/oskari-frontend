@@ -149,7 +149,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         setMapControlPlugin: function (element, containerClasses, position) {
             // Get the container
-            var containerSelector = '.mapplugins.' + containerClasses.split(' ').join('.') + ' .mappluginsContainer .mappluginsContent',
+            var containerSelector = '.mapplugins.' + (containerClasses + " ").split(' ').join('.') + ' .mappluginsContainer .mappluginsContent',
                 container = jQuery(containerSelector),
                 pos = position + '',
                 inverted = /^(?=.*\bbottom\b)((?=.*\bleft\b)|(?=.*\bright\b)).+/.test(containerClasses), // bottom corner container?
@@ -166,13 +166,15 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
             // Add slot to element
             element.attr('data-position', position);
+            // Detach element
+            element.detach();
             // Get container's children, iterate through them
             if (position !== null && position !== undefined) {
                 container.find('.mapplugin').each(function () {
                     curr = $(this);
                     // if plugin's slot isn't bigger (or smaller for bottom corners) than ours, store it to precedingPlugin
                     if ((!inverted && curr.attr('data-position') <= pos) ||
-                        (inverted && curr.attr('data-position') > pos)) {
+                            (inverted && curr.attr('data-position') > pos)) {
                         precedingPlugin = curr;
                     }
                 });
