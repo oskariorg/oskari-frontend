@@ -56,6 +56,12 @@ function(config) {
         "getinfo_result_header" : '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
         "getinfo_result_header_title" : '<div class="getinforesult_header_title"></div>',
         "wrapper" : '<div></div>',
+        "myPlacesWrapper": '<div class="myplaces_place">' +
+            '<h3 class="myplaces_header"></h3>' +
+            '<p class="myplaces_desc"></p>' +
+            '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' +
+            '<a class="myplaces_link"></a>' +
+        '</div>',
         "getinfo_result_table" : '<table class="getinforesult_table"></table>',
         "link_outside" : '<a target="_blank"></a>',
         "tableRow" : '<tr></tr>',
@@ -684,20 +690,24 @@ function(config) {
             var fragmentTitle = fragment.layerName;
             var fragmentMarkup = fragment.markup;
 
-            var contentWrapper = this.template.wrapper.clone();
-
-            var headerWrapper = this.template.getinfo_result_header.clone();
-            var titleWrapper = this.template.getinfo_result_header_title.clone();
-
-            titleWrapper.append(fragmentTitle);
-            headerWrapper.append(titleWrapper);
-            contentWrapper.append(headerWrapper);
-
-
-            if (fragmentMarkup) {
-                contentWrapper.append(fragmentMarkup);
+            if (fragment.isMyPlace) {
+                if (fragmentMarkup) wrapper.append(fragmentMarkup);
             }
-            wrapper.append(contentWrapper);
+            else {
+                var contentWrapper = this.template.wrapper.clone();
+                var headerWrapper = this.template.getinfo_result_header.clone();
+                var titleWrapper = this.template.getinfo_result_header_title.clone();
+
+                titleWrapper.append(fragmentTitle);
+                headerWrapper.append(titleWrapper);
+                contentWrapper.append(headerWrapper);
+
+                if (fragmentMarkup) {
+                    contentWrapper.append(fragmentMarkup);
+                }
+                wrapper.append(contentWrapper);
+            }
+            delete fragment.isMyPlace;
         }
         content.html = wrapper;
 
@@ -723,6 +733,7 @@ function(config) {
     formatWFSFeaturesForInfoBox  : function(wfsLayers) {
         var result = [];
         var type = "wfslayer";
+        var isMyPlace;
 
         var layerId;
         var layer;
@@ -739,6 +750,7 @@ function(config) {
             if(layer == null) {
                 continue;
             }
+            isMyPlace = layer.isLayerOfType('myplaces');
             layerName = layer ? layer.getName() : "";
 
             var features = [];
@@ -746,12 +758,14 @@ function(config) {
             var values;
             var fields = layer.getFields().slice(0);
 
-            // replace fields with locales
-            var locales = layer.getLocales();
-            if(locales != null) {
-                for(var l = 0; l < fields.length; l++) {
-                    if(locales.length >= 1) {
-                        fields[l] = locales[l];
+            if (!isMyPlace) {
+                // replace fields with locales
+                var locales = layer.getLocales();
+                if(locales != null) {
+                    for(var l = 0; l < fields.length; l++) {
+                        if(locales.length >= 1) {
+                            fields[l] = locales[l];
+                        }
                     }
                 }
             }
@@ -788,18 +802,60 @@ function(config) {
             }
 
             for(var k = 0; k < features.length; k++) {
-                markup = this._json2html(features[k]);
+                if (isMyPlace) {
+                    markup = this._formatMyPlacesGfi(features[k]);
+                } else {
+                    markup = this._json2html(features[k]);
+                }
 
                 result.push({
                     markup : markup,
                     layerId : layerId,
                     layerName : layerName,
-                    type : type
+                    type : type,
+                    isMyPlace: isMyPlace
                 });
             }
         }
 
         return result;
+    },
+
+    /**
+     * Formats the html to show for my places layers' gfi dialog.
+     *
+     * @method _formatMyPlacesGfi
+     * @param {Object} place response data to format
+     * @return {jQuery} formatted html
+     */
+    _formatMyPlacesGfi: function (place) {
+        var me = this,
+            content = me.template.myPlacesWrapper.clone(),
+            img = content.find('a.myplaces_imglink'),
+            link = content.find('a.myplaces_link');
+
+        content.find('h3.myplaces_header').html(place.name);
+        content.find('p.myplaces_desc').html(place.place_desc);
+
+        if (place.image_url) {
+            img.attr({
+                'href': place.image_url
+            }).find('img.myplaces_img').attr({
+                'src': place.image_url
+            });
+        } else {
+            img.remove();
+        }
+        
+        if (place.link) {
+            link.attr({
+                'href': place.link
+            }).html(place.link);
+        } else {
+            link.remove();
+        }
+
+        return content;
     },
 
     /**
@@ -826,7 +882,7 @@ function(config) {
                 continue;
             }
             var vType = (typeof value).toLowerCase();
-            var vPres = ""
+            var valpres = ""
             switch (vType) {
                 case "string":
                     if (value.indexOf("http://") == 0) {
