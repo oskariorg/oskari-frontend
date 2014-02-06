@@ -107,13 +107,22 @@ function(config) {
         var sandbox = Oskari.getSandbox(sandboxName);
         this._sandbox = sandbox;
 
-        // service init
+         // service init
         if(this.config) {
-            if(this.config.hostname == "localhost") {
+            if(!this.config.hostname || this.config.hostname == "localhost") {
+                // convenience so the host isn't required
                 this.config.hostname = location.hostname;
+            }
+            if(!this.config.port) {
+                // convenience so the port isn't required
+                this.config.port = '' + location.port;
             }
             if(this.config.port.length > 0) {
                 this.config.port = ":" + this.config.port;
+            }
+            if(!this.config.contextPath) {
+                // convenience so the contextPath isn't required
+                this.config.contextPath = '/transport';
             }
         }
         this._connection = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.service.Connection", this.config, this);
