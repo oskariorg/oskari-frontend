@@ -13,8 +13,11 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
 
     function (params, options) {
         var me = this;
-        /* Internal id for this map layer */
-        me._id = null;
+        /* Internal id for this map layer.
+        Id needs to be undefined instead of null
+        otherwise jquery will send it as "null" string.
+         */
+        me._id = undefined;
 
         /* Name of this layer */
         me._name = null;
