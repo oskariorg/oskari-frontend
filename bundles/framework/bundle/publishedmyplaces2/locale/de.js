@@ -19,6 +19,7 @@ Oskari.registerLocalization({
             "privateTooltip": "Die Kartenebene ist nicht öffentlich.| Klicken Sie auf die Kartenebene, um sie öffentlich zu machen.",
             "publicTooltip": "Die Kartenebene ist öffentlich| Klicken Sie auf die Kartenebene, um sie nicht öffentlich zu machen."
         },
+        "addCategory": "Kartenebene hinzufügen",
         "editCategory": "Kartenebene bearbeiten",
         "deleteCategory": "Kartenebene löschen",
         "edit": "Bearbeiten",
@@ -44,6 +45,22 @@ Oskari.registerLocalization({
         }
     },
     "tools": {
+      "measureline": {
+        "title": "NOT TRANSLATED",
+        "tooltip": "NOT TRANSLATED",
+        "add": "",
+        "next": "",
+        "edit": "NOT TRANSLATED",
+        "noResult": "0 m"
+      },
+      "measurearea": {
+        "title": "NOT TRANSLATED",
+        "tooltip": "NOT TRANSLATED",
+        "add": "",
+        "next": "",
+        "edit": "NOT TRANSLATED",
+        "noResult": "0 m²"
+      },
       "point": {
         "tooltip": "Punkt hinzufügen",
         "new": "Punkt durch Klicken auf die Karte hinzufügen.",
@@ -69,8 +86,10 @@ Oskari.registerLocalization({
     "buttons": {
       "ok": "OK",
       "cancel": "Abbrechen",
+      "close": "NOT TRANSLATED",
       "finish": "Zeichnen beenden",
       "save": "Speichern",
+      "saveAsMyPlace": "NOT TRANSLATED",
       "movePlaces": "Orte verschieben und löschen",
       "deleteCategory": "Löschen",
       "deleteCategoryAndPlaces": "Kategorien und Orte löschen",

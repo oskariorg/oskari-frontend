@@ -127,7 +127,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 this.__elements.main.remove();
                 delete this.__elements.main;
             }
-
             sandbox.unregister(this);
         },
 
@@ -183,22 +182,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          * Updates the plugins interface (hides if no WFS layer selected)
          */
         update: function () {
-            var sandbox = this.mapModule.getSandbox(),
-                layers = sandbox.findAllSelectedMapLayers(),
-                layerCount = 0,
-                i;
-            // count amount of wfs layers == number of tabs
-            for (i = 0; i < layers.length; i++) {
-                var layer = layers[i];
-                if (layer.hasFeatureData()) {
-                    layerCount++;
+            // the mapModule is only defined when started, update can also be called after it has been started once and stopped
+            // therefore we need to check if we have a reference to a map module as the reference is available when started
+            if (this.mapModule) {
+                var sandbox = this.mapModule.getSandbox(),
+                    layers = sandbox.findAllSelectedMapLayers(),
+                    layerCount = 0,
+                    i;
+                // count amount of wfs layers == number of tabs
+                for (i = 0; i < layers.length; i++) {
+                    var layer = layers[i];
+                    if (layer.hasFeatureData()) {
+                        layerCount++;
+                    }
                 }
-            }
-            var me = this;
-            if (layerCount > 0) {
-                me.__elements.main.show();
-            } else {
-                me.__elements.main.hide();
+                var me = this;
+                if (layerCount > 0) {
+                    me.__elements.main.show();
+                } else {
+                    me.__elements.main.hide();
+                }
             }
         },
 
