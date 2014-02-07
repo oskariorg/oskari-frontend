@@ -28,6 +28,20 @@ The region category can now be changed whilst creating a new indicator.
 
 A warning sign is displayed in an indicator's header if its data cannot be displayed in the selected region category.
 
+## 1.17.3
+
+### Publisher bundle
+
+Editing a published map no longer leaves searchplugin on map after exiting publish-mode.
+
+### admin-layerselector bundle
+
+Layer id is now correctly left blank for new layers instead of sending "null" string.
+
+### mapwfs2/WFSLayerPlugin
+
+Now formats myplaces data the same way as GetInfoPlugin.
+
 ## 1.17.2.
 
 ### infobox
