@@ -309,9 +309,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             });
 
             me._inputField.keypress(function (event) {
-                console.log("Key pressed");
                 if (!me.isInLayerToolsEditMode) {
-                    console.log("Checking for enter");
                     me._checkForEnter(event);
                 }
             });
