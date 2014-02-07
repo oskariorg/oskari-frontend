@@ -165,8 +165,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                     (OpenLayers.Renderer.VML.LABEL_SHIFT[align.substr(0, 1)]);
                 var yshift = textbox.clientHeight *
                     (OpenLayers.Renderer.VML.LABEL_SHIFT[align.substr(1, 1)]);
-                label.style.left = parseInt(label.style.left) - xshift - 1 + "px";
-                label.style.top = parseInt(label.style.top) + yshift + "px";
+                label.style.left = parseInt(label.style.left, 10) - xshift - 1 + "px";
+                label.style.top = parseInt(label.style.top, 10) + yshift + "px";
 
             };
         },

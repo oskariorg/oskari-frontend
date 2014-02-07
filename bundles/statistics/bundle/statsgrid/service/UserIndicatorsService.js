@@ -88,7 +88,7 @@ function(instance) {
                 if (typeof successCb === 'function') successCb(response);
             },
             error : function(jqXHR, textStatus) {
-                if (typeof errorCb === 'function' && jqXHR.status != 0) errorCb(jqXHR, textStatus);
+                if (typeof errorCb === 'function' && jqXHR.status !== 0) errorCb(jqXHR, textStatus);
             }
         };
 

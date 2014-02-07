@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var layerList = this._loadedLayersList;
             if(layer.getParentId() != -1) {
                 // referenced layer is a sublayer
-                var parentLayer = this.findMapLayer(layer.getParentId());
+                parentLayer = this.findMapLayer(layer.getParentId());
                 if(!parentLayer) {
                     return;
                 }

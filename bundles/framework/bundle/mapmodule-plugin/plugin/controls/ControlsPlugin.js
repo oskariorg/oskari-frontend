@@ -96,8 +96,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
          *          reference to application sandbox
          */
         init: function (sandbox) {
-            var me = this;
-            var mapMovementHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMovementControlsRequestHandler', me.getMapModule());
+            var me = this,
+                mapMovementHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMovementControlsRequestHandler', me.getMapModule());
             this.requestHandlers = {
                 'ToolSelectionRequest': Oskari.clazz.create('Oskari.mapframework.mapmodule.ToolSelectionHandler', sandbox, me),
                 'EnableMapKeyboardMovementRequest': mapMovementHandler,
@@ -222,8 +222,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
                 this.getMapModule().addMapControl('zoomBoxTool', this._zoomBoxTool);
                 this._zoomBoxTool.deactivate();
             }
-            this.getMapModule().addMapControl('keyboardControls', this._keyboardControls);
-            this.getMapModule().getMapControl('keyboardControls').activate();
+            if (this.conf.keyboardControls !== false) {
+                this.getMapModule().addMapControl('keyboardControls', this._keyboardControls);
+                this.getMapModule().getMapControl('keyboardControls').activate();
+            }
 
             if (this.conf.measureControls !== false) {
                 this.getMapModule().addMapControl('measureControls_line', this._measureControls.line);
@@ -245,9 +247,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
                 this._zoomBoxTool.deactivate();
                 this.getMapModule().removeMapControl('zoomBoxTool', this._zoomBoxTool);
             }
-
-            this._keyboardControls.deactivate();
-            this.getMapModule().removeMapControl('keyboardControls', this._keyboardControls);
+            if (this.conf.keyboardControls !== false) {
+                this._keyboardControls.deactivate();
+                this.getMapModule().removeMapControl('keyboardControls', this._keyboardControls);
+            }
 
             if (this.conf.measureControls !== false) {
                 this._measureControls.line.deactivate();
@@ -267,8 +270,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
          * @private
          */
         _createMapControls: function () {
-            var me = this;
-            var sandbox = me._sandbox;
+            var me = this,
+                sandbox = me._sandbox;
             // check if already created
             if (this._zoomBoxTool) {
                 return;
@@ -323,12 +326,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
             }
 
             function measurementsHandler(event, finished) {
-                var sandbox = me._sandbox;
-                var geometry = event.geometry;
-                var units = event.units;
-                var order = event.order;
-                var measure = event.measure;
-                var out = null;
+                var sandbox = me._sandbox,
+                    geometry = event.geometry,
+                    units = event.units,
+                    order = event.order,
+                    measure = event.measure,
+                    out = null;
                 if (order === 1) {
                     out = measure.toFixed(3) + " " + units;
                 } else if (order === 2) {
@@ -336,8 +339,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
                 }
                 /*sandbox.printDebug(out + " " + ( finished ? "FINISHED" : "CONTINUES"));*/
 
-                var geomAsText = null;
-                var geomMimeType = null;
+                var geomAsText = null,
+                    geomMimeType = null;
                 if (finished) {
                     if (OpenLayers.Format.GeoJSON) {
                         var format = new (OpenLayers.Format.GeoJSON)();
@@ -352,6 +355,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
             for (key in this._measureControls) {
                 if (this._measureControls.hasOwnProperty(key)) {
                     control = this._measureControls[key];
+                    // FIXME create functions outside loop
                     control.events.on({
                         'measure': function (event) {
                             measurementsHandler(event, true);

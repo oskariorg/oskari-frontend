@@ -201,7 +201,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * (e.g. MapLayerService)
          */
         getParentId: function () {
-            if(!this._baseLayerId) {
+            if (!this._baseLayerId) {
                 return -1;
             }
             return this._baseLayerId;
@@ -484,7 +484,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          *          0-100 in percents
          */
         getOpacity: function () {
-            if(this._opacity === null || this._opacity === undefined) {
+            if (this._opacity === null || this._opacity === undefined) {
                 return 100;
             }
             return this._opacity;
@@ -604,19 +604,19 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * adds style to layer
          */
         addStyle: function (style) {
-            if(!style || !style.getName || typeof style.getName !== 'function') {
+            if (!style || !style.getName || typeof style.getName !== 'function') {
                 // invalid style
                 return;
             }
             var foundExisting = false;
-            for(var i = 0; i < this.getStyles().length; ++i) {
+            for (var i = 0; i < this.getStyles().length; ++i) {
                 var curStyle = this.getStyles()[i];
-                if(curStyle.getName() == style.getName()) {
+                if (curStyle.getName() == style.getName()) {
                     foundExisting = true;
                     break;
                 }
             }
-            if(!foundExisting) {
+            if (!foundExisting) {
                 // only add if one with same name isn't added yet
                 this.getStyles().push(style);
             }
@@ -627,7 +627,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * Gets layer styles
          */
         getStyles: function () {
-            if(!this._styles) {
+            if (!this._styles) {
                 this._styles = [];
             }
             return this._styles;
@@ -653,17 +653,17 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
             }
 
             // didn't match anything select the first one
-            if(!me._currentStyle) {
+            if (!me._currentStyle) {
                 // Style not found, use an empty one!
                 this._currentStyle = this._createEmptyStyle();
             }
         },
         /**
          * Creates an empty style
-         * @private 
+         * @private
          * @return {Oskari.mapframework.domain.Style} empty style
          */
-        _createEmptyStyle : function() {
+        _createEmptyStyle: function () {
             var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
             style.setName("");
             style.setTitle("");
@@ -675,7 +675,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          * @return {Oskari.mapframework.domain.Style} current style
          */
         getCurrentStyle: function () {
-            if(!this._currentStyle) {
+            if (!this._currentStyle) {
                 // prevent "nullpointer" if selectstyle hasn't been called
                 this.selectStyle('');
             }
@@ -842,9 +842,9 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
 
             if (_subLayers && _subLayers.length) {
                 // Check if any of the sublayers is in scale
-                _inScale = _.any(_subLayers, function(subLayer) {
+                _inScale = _.any(_subLayers, function (subLayer) {
                     return subLayer.isInScale(scale);
-                })
+                });
             } else {
                 // Otherwise just check if the scale falls between min/max scales
                 if ((scale > this.getMaxScale() || !this.getMaxScale()) &&

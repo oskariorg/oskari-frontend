@@ -97,13 +97,6 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	pinchZoomOptions : null,
 
 	/**
-	 * APIProperty: documentDrag
-	 * {Boolean} Allow panning of the map by dragging outside map viewport.
-	 *     Default is false.
-	 */
-	documentDrag : false,
-
-	/**
 	 * Property: zoomBox
 	 * {<OpenLayers.Control.ZoomBox>}
 	 */
@@ -180,7 +173,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	setup : function(mapmodule) {
 		this.mapmodule = mapmodule;
 		this.sandbox = this.mapmodule.getSandbox();
-		this._hoverEventBuilder = this.sandbox.getEventBuilder("MouseHoverEvent")
+		this._hoverEventBuilder = this.sandbox.getEventBuilder("MouseHoverEvent");
 		this._hoverEvent = this._hoverEventBuilder();
 		this._mapClickedBuilder = this.sandbox.getEventBuilder('MapClickedEvent');
 
@@ -330,11 +323,10 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 					this.applyTransform("");
 					var zoom = this.map.getZoomForResolution(this.map.getResolution() / last.scale, true);
 					if(zoom !== this.map.getZoom() || !this.currentCenter.equals(this.pinchOrigin)) {
-						var resolution = this.map.getResolutionForZoom(zoom);
-
-						var location = this.map.getLonLatFromPixel(this.pinchOrigin);
-						var zoomPixel = this.currentCenter;
-						var size = this.map.getSize();
+						var resolution = this.map.getResolutionForZoom(zoom),
+							location = this.map.getLonLatFromPixel(this.pinchOrigin),
+							zoomPixel = this.currentCenter,
+							size = this.map.getSize();
 
 						location.lon += resolution * ((size.w / 2) - zoomPixel.x);
 						location.lat -= resolution * ((size.h / 2) - zoomPixel.y);
@@ -385,20 +377,20 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	 * evt - {Event}
 	 */
 	defaultDblClick : function(evt) {
-		var deltaZ = 1;
-		var currentZoom = this.map.getZoom();
-		var newZoom = this.map.getZoom() + Math.round(deltaZ);
+		var deltaZ = 1,
+			currentZoom = this.map.getZoom(),
+			newZoom = this.map.getZoom() + Math.round(deltaZ);
 		newZoom = Math.max(newZoom, 0);
 		newZoom = Math.min(newZoom, this.map.getNumZoomLevels());
 		if(newZoom === currentZoom) {
 			return;
 		}
-		var size = this.map.getSize();
-		var deltaX = size.w / 2 - evt.xy.x;
-		var deltaY = evt.xy.y - size.h / 2;
-		var newRes = this.map.baseLayer.getResolutionForZoom(newZoom);
-		var zoomPoint = this.map.getLonLatFromPixel(evt.xy);
-		var newCenter = null;
+		var size = this.map.getSize(),
+			deltaX = size.w / 2 - evt.xy.x,
+			deltaY = evt.xy.y - size.h / 2,
+			newRes = this.map.baseLayer.getResolutionForZoom(newZoom),
+			zoomPoint = this.map.getLonLatFromPixel(evt.xy),
+			newCenter = null;
 		
 		if( this.useCenterMapInDblClickZoom ) {
 			newCenter = this.map.getCenter();
@@ -430,19 +422,19 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	 * deltaZ - {Integer}
 	 */
 	wheelChange : function(evt, deltaZ) {
-		var currentZoom = this.map.getZoom();
-		var newZoom = this.map.getZoom() + Math.round(deltaZ);
+		var currentZoom = this.map.getZoom(),
+			newZoom = this.map.getZoom() + Math.round(deltaZ);
 		newZoom = Math.max(newZoom, 0);
 		newZoom = Math.min(newZoom, this.map.getNumZoomLevels());
 		if(newZoom === currentZoom) {
 			return;
 		}
-		var size = this.map.getSize();
-		var deltaX = size.w / 2 - evt.xy.x;
-		var deltaY = evt.xy.y - size.h / 2;
-		var newRes = this.map.baseLayer.getResolutionForZoom(newZoom);
-		var zoomPoint = this.map.getLonLatFromPixel(evt.xy);
-		var newCenter = null;
+		var size = this.map.getSize(),
+			deltaX = size.w / 2 - evt.xy.x,
+			deltaY = evt.xy.y - size.h / 2,
+			newRes = this.map.baseLayer.getResolutionForZoom(newZoom),
+			zoomPoint = this.map.getLonLatFromPixel(evt.xy),
+			newCenter = null;
 		
 		if( this.useCenterMapInWheelZoom ) {
 			newCenter = this.map.getCenter();
@@ -537,10 +529,10 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 				res = this.kinetic.end(xy);
 			}
 			/*this.map.pan(
-			 this.handlers.drag.x - xy.x,
-			 this.handlers.drag.y - xy.y,
-			 {dragging: !!res, animate: false}
-			 );*/
+             this.handlers.drag.x - xy.x,
+             this.handlers.drag.y - xy.y,
+             {dragging: !!res, animate: false}
+             );*/
 			this.mapmodule.panMapByPixels(this.handlers.drag.x - xy.x, this.handlers.drag.y - xy.y, true, false, false);
 			if(res) {
 				var self = this;
@@ -560,7 +552,6 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 		/* may be this should dispatch to mapmodule */
 		var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
 		this._hoverEvent.set(lonlat.lon, lonlat.lat, false, evt.pageX, evt.pageY);
-
 		this.sandbox.notifyAll(this._hoverEvent, true);
 	},
 	defaultHoverPause : function(evt) {
@@ -569,18 +560,14 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 		}
 		/* may be this should dispatch to mapmodule */
 		var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
-
-		var hoverEvent = this._hoverEventBuilder();
-		hoverEvent.set(lonlat.lon, lonlat.lat, false, evt.pageX, evt.pageY,true);
-
-		this.sandbox.notifyAll(hoverEvent);
+		this._hoverEvent.set(lonlat.lon, lonlat.lat, true, evt.pageX, evt.pageY);
+		this.sandbox.notifyAll(this._hoverEvent);
 	},
 	sendMapClickEvent : function(evt) {
 		/* may be this should dispatch to mapmodule */
-		var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
-
-		var evt = this._mapClickedBuilder(lonlat, evt.xy.x, evt.xy.y);
-		this.sandbox.notifyAll(evt);
+		var lonlat = this.map.getLonLatFromViewPortPx(evt.xy),
+			event = this._mapClickedBuilder(lonlat, evt.xy.x, evt.xy.y);
+		this.sandbox.notifyAll(event);
 	},
 	sendMapSetCenter : function(newCenter, newZoom) {
 		/* this implicitly calls mapmodule.notifyMoveEnd() which sends AfterMapMoveEvent */

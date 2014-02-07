@@ -10,21 +10,26 @@
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.domain.QueuedTile",
 
-/**
- * @method create called automatically on construction
- * @static
- * @param options
- */
-function(options) {
-    for(p in options )
-    this[p] = options[p];
-}, {
     /**
-     * @method getBounds
-     * TODO: check
-     * @return bounds
+     * @method create called automatically on construction
+     * @static
+     * @param options
      */
-    getBounds : function() {
-        return this.bounds;
-    }
-});
+
+    function (options) {
+        var p;
+        for (p in options) {
+            if (options.hasOwnProperty(p)) {
+                this[p] = options[p];
+            }
+        }
+    }, {
+        /**
+         * @method getBounds
+         * TODO: check
+         * @return bounds
+         */
+        getBounds: function () {
+            return this.bounds;
+        }
+    });

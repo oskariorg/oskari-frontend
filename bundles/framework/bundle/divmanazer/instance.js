@@ -61,9 +61,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
         getExtensionByName: function (name) {
             return this.extensionsByName[name];
         },
-	    /**
-	     * @method getSandbox
-	     */
+        /**
+         * @method getSandbox
+         */
         getSandbox: function () {
             return this.sandbox;
         },
@@ -196,8 +196,8 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
 
             flyout = jQuery(me.templates['Oskari.userinterface.Flyout']);
 
-		/*flyout.css('left', '-3195px');
-		 flyout.css('top', '-3100px');*/
+            /*flyout.css('left', '-3195px');
+         flyout.css('top', '-3100px');*/
             flyout.css('left', me.defaults.attach.left);
             flyout.css('top', me.defaults.attach.top);
 
@@ -687,7 +687,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
                 flyout = flyoutInfo.el;
 
                 //if flyout plugin has a lazyRender created, use it.
-                if(state === 'attach' && flyoutPlugin.lazyRender) {
+                if (state === 'attach' && flyoutPlugin.lazyRender) {
                     flyoutPlugin.lazyRender();
                 }
 
@@ -1019,11 +1019,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          */
         "viewOps": {
             /** @method detach */
-            "view": function (flyout, flyoutPlugin, extensionInfo, extensions) {
-            },
+            "view": function (flyout, flyoutPlugin, extensionInfo, extensions) {},
             /** @method close */
-            "close": function (flyout, flyoutPlugin, extensionInfo) {
-            }
+            "close": function (flyout, flyoutPlugin, extensionInfo) {}
 
         },
 

@@ -59,7 +59,6 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MouseHoverEvent',
          *            lat latitude on mouse location
          */
         set: function (lon, lat, isPaused, pageX, pageY) {
-
             this._lon = lon;
             this._lat = lat;
             this._paused = isPaused;

@@ -16,15 +16,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.request.ShowFeature
          * @method handleRequest
          * Shows WFS feature data with requested properties
          * @param {Oskari.mapframework.core.Core} core
-         * 		reference to the application core (reference sandbox core.getSandbox())
+         *      reference to the application core (reference sandbox core.getSandbox())
          * @param {Oskari.mapframework.bundle.featuredata2.request.ShowFeatureDataRequest} request
-         * 		request to handle
+         *      request to handle
          */
         handleRequest : function(core, request) {
-            var id = request.getId();
-            var flyout = this.featureData.plugins["Oskari.userinterface.Flyout"];
-            var panels = flyout.tabsContainer.panels;
-            for (var i=0; i<panels.length; i++) {
+            var id = request.getId(),
+                flyout = this.featureData.plugins["Oskari.userinterface.Flyout"],
+                panels = flyout.tabsContainer.panels,
+                i;
+            for (i=0; i<panels.length; i++) {
                 if (panels[i].layer.getId() === id) {
                     flyout.tabsContainer.select(panels[i]);
                     break;
