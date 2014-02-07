@@ -335,7 +335,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                 // check if this category
                 if (places[i].getCategoryID() === categoryId) {
                     var drawMode = this._getDrawModeFromGeometry(places[i].geometry),
-                        measurement = this.instance.formatMeasurementResult(places[i].geometry, drawMode);
+                        measurement = this.instance.getDrawPlugin().getMapModule().formatMeasurementResult(places[i].geometry, drawMode);
                     gridModel.addData({
                         'id': places[i].getId(),
                         'name': places[i].getName(),

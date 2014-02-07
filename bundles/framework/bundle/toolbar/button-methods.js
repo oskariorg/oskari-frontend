@@ -21,7 +21,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         var me = this,
             toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
             group = null,
-            prefixedGroup = (pConfig ? pConfig.toolbarid ? pConfig.toolbarid : 'default' : 'default') + '-' + pGroup;
+            prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup;
         if (!me.buttons[prefixedGroup]) {
             // create group if not existing
             me.buttons[prefixedGroup] = {};
@@ -174,6 +174,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      *            pId identifier for a button (optional)
      * @param {String}
      *            pGroup identifier for group of buttons
+     * @param {String}
+     *            pToolbarId identifier for toolbar container
      *
      * Removes a button from the toolbar all whole group of buttons if pId is not defined.
      * Triggered usually by sending Oskari.mapframework.bundle.toolbar.request.RemoveToolButtonRequest.
@@ -182,12 +184,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         if (!pGroup) {
             return;
         }
-        var prefixedGroup = pGroup;
-        if (pToolbarId) {
-            prefixedGroup = pToolbarId + '-' + prefixedGroup;
-        } else {
-            prefixedGroup = 'default-' + prefixedGroup;
-        }
+        var prefixedGroup = (pToolbarId || 'default') + '-' + pGroup;
         if (this.buttons[prefixedGroup]) {
             var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]),
                 group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
@@ -226,23 +223,26 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      *            pGroup identifier for group of buttons
      * @param {Boolean}
      *            pState  true if enabled, false to disable
+     * @param {String}
+     *            pToolbarId identifier for toolbar container
      *
      * Enables/disables a button from the toolbar all whole group of buttons if pId is not defined.
      * Triggered usually by sending Oskari.mapframework.bundle.toolbar.request.ToolButtonStateRequest.
      */
-    changeToolButtonState: function (pId, pGroup, pState) {
+    changeToolButtonState: function (pId, pGroup, pState, pToolbarId) {
         if (!pGroup) {
             return;
         }
-        if (this.buttons[pGroup]) {
-            var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]),
-                group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']'),
+        var prefixedGroup = (pToolbarId || 'default') + '-' + pGroup;
+        if (this.buttons[prefixedGroup]) {
+            var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]),
+                group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']'),
                 button,
                 buttonContainers,
                 b;
             if (pId) {
                 button = group.find('div.tool[tool=' + pId + ']');
-                this.buttons[pGroup][pId].enabled = pState;
+                this.buttons[prefixedGroup][pId].enabled = pState;
                 if (pState) {
                     button.removeClass('disabled');
                 } else {
@@ -255,9 +255,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 } else {
                     buttonContainers.addClass('disabled');
                 }
-                for (b in this.buttons[pGroup]) {
-                    if (this.buttons[pGroup].hasOwnProperty(b)) {
-                        this.buttons[pGroup][b].enabled = pState;
+                for (b in this.buttons[prefixedGroup]) {
+                    if (this.buttons[prefixedGroup].hasOwnProperty(b)) {
+                        this.buttons[prefixedGroup][b].enabled = pState;
                     }
                 }
             }

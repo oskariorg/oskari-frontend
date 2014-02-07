@@ -381,7 +381,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             'DrawPlugin.ActiveDrawingEvent': function (event) {
                 var geom = event.getDrawing(),
                     mode = event.getDrawMode(),
-                    resultText = this.instance.formatMeasurementResult(geom, mode);
+                    resultText = this.instance.getDrawPlugin().getMapModule().formatMeasurementResult(geom, mode);
 
                 if (this.dialog) {
                     var content = this.dialog.getJqueryContent();
