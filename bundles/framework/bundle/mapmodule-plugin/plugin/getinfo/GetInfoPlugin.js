@@ -276,10 +276,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
 
                 // skips wfs from the ajax call
                 if (!me._isIgnoredLayerType(layer) &&
-                        layer.getQueryable &&
-                        layer.getQueryable() &&
-                        layer.isInScale(mapScale) &&
-                        layer.isVisible()) {
+                    layer.getQueryable &&
+                    layer.getQueryable() &&
+                    layer.isInScale(mapScale) &&
+                    layer.isVisible()) {
 
                     if (!layerIds) {
                         layerIds = "";
