@@ -34,6 +34,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         // indicators meta for data sources
         this.indicatorsMeta = {};
         this.selectedMunicipalities = {};
+        // Array of open popups so we can easily get rid of them when the UI is hidden.
+        // stored as [{'name': 'somePopup', 'popup': popupObject, 'content', contentElement}]
+        this.popups = [];
         //    this.conf = config || {};
         var defaults = {
             "statistics": [{
@@ -1816,9 +1819,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             }
 
             // new header menu plugin
-            var headerMenuPlugin = new Slick.Plugins.HeaderMenu2({});
+            me.headerMenuPlugin = new Slick.Plugins.HeaderMenu2({});
             // lets create a menu when user clicks the button.
-            headerMenuPlugin.onBeforeMenuShow.subscribe(function (e, args) {
+            me.headerMenuPlugin.onBeforeMenuShow.subscribe(function (e, args) {
                 var menu = args.menu,
                     i,
                     input;
@@ -1907,7 +1910,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             });
             // when command is given shos statistical variable as a new "row" in subheader
-            headerMenuPlugin.onCommand.subscribe(function (e, args) {
+            me.headerMenuPlugin.onCommand.subscribe(function (e, args) {
                 var i;
                 if (args.command === 'selectRows') {
                     var columns = args.grid.getColumns(),
@@ -1955,7 +1958,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     me.dataView.refresh();
                 }
             });
-            grid.registerPlugin(headerMenuPlugin);
+            grid.registerPlugin(me.headerMenuPlugin);
         },
 
         /**
@@ -2096,9 +2099,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(me._locale.buttons.cancel);
             cancelBtn.setHandler(function () {
-                popup.off();
                 headerMenuPlugin.hide();
-                dialog.close(true);
+                me._destroyPopup('filterPopup');
             });
 
             // filter
@@ -2119,10 +2121,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 }
 
                 me.filterColumn(column, select.val(), inputArray);
-
-                popup.off();
                 headerMenuPlugin.hide();
-                dialog.close(true);
+                me._destroyPopup('filterPopup');
             });
 
             // show the dialog
@@ -2131,7 +2131,25 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             popup.on('keydown', function (e) {
                 e.stopPropagation();
             });
+            me.popups.push({
+                name: 'filterPopup',
+                popup: dialog,
+                content: popup
+            });
+        },
 
+        _destroyPopup: function (name) {
+            var i,
+                popup;
+            for (i = 0; i < this.popups.length; i++) {
+                popup = this.popups[i];
+                if (popup.name === name) {
+                    popup.content.off();
+                    popup.popup.close(true);
+                    this.popups.pop(i);
+                    break;
+                }
+            }
         },
 
         /**
@@ -2161,9 +2179,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             cancelBtn.setTitle(cancelLoc);
             cancelBtn.setHandler(function () {
-                content.off();
                 headerMenuPlugin.hide();
-                dialog.close(true);
+                me._destroyPopup('filterByRegionPopup');
             });
 
             filterBtn.setTitle(filterLoc);
@@ -2171,10 +2188,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             filterBtn.setHandler(function (e) {
                 regionIds = content.find('div.filter-region-select select').val();
                 me.filterColumnByRegion(column, regionIds);
-
-                content.off();
                 headerMenuPlugin.hide();
-                dialog.close(true);
+                me._destroyPopup('filterByRegionPopup');
             });
 
             // Description text
@@ -2208,6 +2223,25 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             });
 
             dialog.show(dialogTitle, content, [cancelBtn, filterBtn]);
+            me.popups.push({
+                name: 'filterByRegionPopup',
+                popup: dialog,
+                content: content
+            });
+        },
+
+        destroyPopups: function () {
+            // destroy header popups
+            this.headerMenuPlugin.hide();
+            // destroy filter popups created by _createFilterByRegionPopup and _createFilterPopup
+            var i,
+                popup;
+            for (i = 0; i < this.popups.length; i++) {
+                popup = this.popups[i];
+                popup.content.off();
+                popup.popup.close(true);
+            }
+            this.popups = [];
         },
 
         /**

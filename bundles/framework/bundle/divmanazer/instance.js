@@ -405,15 +405,24 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
             var me = this,
                 //container = jQuery('#menubar'),
                 tile = this.compiledTemplates['Oskari.userinterface.Tile'].clone(true, true),
-                title = tile.children('.oskari-tile-title');
+                title = tile.children('.oskari-tile-title'),
+                tileClick = function () {
+                    //plugin.setExtensionState();
+                    tile.off('click');
+                    me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
+                    window.setTimeout(
+                        function () {
+                            tile.click(tileClick);
+                        },
+                        500
+                    );
+                };
             //status;
             title.append(plugin.getTitle());
             //status = tile.children('.oskari-tile-status');
 
-            tile.click(function () {
-                //plugin.setExtensionState();
-                me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
-            });
+
+            tile.click(tileClick);
 
             plugin.setEl(tile.get());
 

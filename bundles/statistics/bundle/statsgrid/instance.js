@@ -245,7 +245,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             // Load the mode and show content if not loaded already.
             if (!view.isVisible) {
                 // Check if the layer is added
-                var isLayerAdded = !! this.sandbox.findMapLayerFromSelectedMapLayers(layer.getId()),
+                var isLayerAdded = !!this.sandbox.findMapLayerFromSelectedMapLayers(layer.getId()),
                     timeout = (isLayerAdded ? 0 : 50);
                 // if not, request to add it to the map
                 if (!isLayerAdded) {
