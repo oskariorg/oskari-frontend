@@ -19,6 +19,7 @@ Oskari.registerLocalization({
       },
       "button": {
         "cancel": "Cancel",
+        "empty": "Remove selections",
         "show": "View places",
         "close": "Close",
         "edit" : "Edit"

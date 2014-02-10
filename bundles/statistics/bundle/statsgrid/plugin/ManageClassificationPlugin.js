@@ -366,6 +366,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 check = false,
                 limits = [],
                 isNonNumeric = false,
+                valid = true,
                 method,
                 i,
                 k,
@@ -434,6 +435,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 limits = gstats.getJenks(classes);
             } else if (method === '2') {
                 limits = gstats.getQuantile(classes);
+                // Check for errors
+                for (i=0; i<limits.length; i++) {
+                    if (typeof limits[i] === "undefined") {
+                        valid = false;
+                        break;
+                    }
+                }
             } else if (method === '3') {
                 limits = gstats.getEqInterval(classes);
             } else if (method === '4') {
@@ -442,6 +450,18 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                     return;
                 }
                 classes = limits.length - 1;
+            }
+
+            // Preliminary error handling
+            if (!valid) {
+                classify = me.element.find('.classifications');
+                classify.find('.block').remove();
+                block = jQuery(me.templates.block);
+                block.append("");
+                classify.append(block);
+                // Show legend in content
+                this.element.find('div.content').show();
+                return;
             }
 
             if (!isNonNumeric) {
@@ -1401,7 +1421,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                     if (state.methodId == 4 && state.manualBreaksInput) {
                         var manualInput = me.element.find('.manualBreaks').find('input[name=breaksInput]');
                         manualInput.val(state.manualBreaksInput);
-                        me.element.find('.classCount').hide();
+                        me.element.find('.countSlider').hide();
                         me.element.find('.manualBreaks').show();
                     }
                 }
