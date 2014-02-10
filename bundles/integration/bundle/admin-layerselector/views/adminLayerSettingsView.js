@@ -348,7 +348,8 @@ define([
                 data.gfiType = form.find('#add-layer-responsetype').val();
 
                 if (!data.gfiType) {
-                    data.gfiType = '';
+                    // if there isn't a selection, don't send anything so backend will keep the existing value
+                    delete data.gfiType;
                 }
 
                 data.viewPermissions = '';

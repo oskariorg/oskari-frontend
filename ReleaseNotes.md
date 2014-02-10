@@ -38,6 +38,8 @@ Editing a published map no longer leaves searchplugin on map after exiting publi
 
 Layer id is now correctly left blank for new layers instead of sending "null" string.
 
+GFI type parameter is not sent if there is no selection (on update for example). The backend will keep the existing value if it doesn't receive a new one.
+
 ### mapwfs2/WFSLayerPlugin
 
 Now formats myplaces data the same way as GetInfoPlugin.

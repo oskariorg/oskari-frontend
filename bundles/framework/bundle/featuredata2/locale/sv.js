@@ -19,6 +19,7 @@ Oskari.registerLocalization({
             },
             "button": {
                 "cancel": "Avbryt",
+                "empty": "",
                 "show": "Visa",
                 "close": "Stäng",
                 "edit": "Redigera"

@@ -129,11 +129,33 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             instructions.append(this.localization.instructions);
             content.append(instructions);
 
-            var cancelBtn = dialog.createCloseButton(this.localization.button.cancel);
+            var controlButtons = [];
+            var emptyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            emptyBtn.setTitle(this.localization.button.empty);
+            emptyBtn.setHandler(function () {
+                // Remove selections
+                var sandbox = me.instance.getSandbox();
+                var layers = sandbox.findAllSelectedMapLayers();
+                for (var i = 0; i < layers.length; ++i) {
+                    if (layers[i].hasFeatureData()) {
+                        var eBuilder = sandbox.getEventBuilder('WFSFeaturesSelectedEvent'),
+                        event = eBuilder([], layers[i], false);
+                        sandbox.notifyAll(event);
+                    }
+                }
+                this.blur();
+            });
+            controlButtons.push(emptyBtn);
+            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            cancelBtn.setTitle(this.localization.button.cancel);
+            cancelBtn.setHandler(function () {
+                dialog.close(true);
+            });
             cancelBtn.addClass('primary');
+            controlButtons.push(cancelBtn);
 
             dialog.addClass('tools_selection');
-            dialog.show(popupLoc, content, [cancelBtn]);
+            dialog.show(popupLoc, content, controlButtons);
             dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
         },
 
