@@ -340,9 +340,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
 
             var geom = layer.getGeometry();
 
-            if ((geom === null) || (typeof geom === "undefined")) {
+            if ((geom === null) || (typeof geom === "undefined") ) {
                 return;
             }
+            if (geom.length === 0) {
+                return;
+            }
+
             var olPolygon = geom[0];
             var bounds = olPolygon.getBounds();
             var centroid = olPolygon.getCentroid();
