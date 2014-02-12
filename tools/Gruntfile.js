@@ -121,6 +121,47 @@ module.exports = function (grunt) {
                 src: ['../{bundles,packages}/**/*.js']
             }
         },
+        compress: {
+            zip: {
+                options: {
+                    archive: "../oskari.<%= versionNum %>.zip",
+                    mode: 'zip',
+                    pretty: true
+                },
+                files: [
+                    // Copy all files under the application template folder
+                    {
+                        cwd: './oskari_application_template/',
+                        src: '**',
+                        dest: '/',
+                        expand: true
+                    },
+                    // Copy all minified oskari files
+                    {
+                        cwd: '../dist/',
+                        src: 'oskari*',
+                        dest: '/min/',
+                        expand: true
+                    },
+                    {
+                        src: '../bundles/bundle.js',
+                        dest: '/',
+                    },
+                    {
+                        src: '../packages/openlayers/startup.js',
+                        dest: '/',
+                    }
+                ]
+            },
+            tgz: {
+                options: {
+                    archive: "../oskari.<%= versionNum %>.tgz",
+                    mode: 'tgz',
+                    pretty: true
+                },
+                files: '<%= compress.zip.files %>'
+            }
+        },
         modulizeAll: {
           'admin-layerrights': '../packages/framework/bundle/admin-layerrights',
           'backendstatus': '../packages/framework/bundle/backendstatus',
@@ -375,6 +416,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-compress');
 
     // Default task(s).
     grunt.registerTask('default', ['karma:dev', 'compileAppSetupToStartupSequence', 'compileDev', 'karma:dev:run', 'watch']);
@@ -458,6 +500,7 @@ module.exports = function (grunt) {
         }
         // set version in config for grunt templating
         grunt.config.set("version", version + "/");
+        grunt.config.set("versionNum", version);
 
         // set multi task configs for compile and validate
         configs = configs.split(',');
@@ -540,6 +583,7 @@ module.exports = function (grunt) {
         grunt.task.run('sprite');
         grunt.task.run('oskaridoc');
         grunt.task.run('mddocs');
+        grunt.task.run('compress');
     });
 
     grunt.registerTask('packageopenlayer', 'Package openlayers according to packages', function (packages) {

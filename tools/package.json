@@ -52,7 +52,8 @@
     "karma-mocha": "0.1.0",
     "karma-expect": "1.0.0",
     "karma-ie-launcher": "0.1.1",
-    "karma-junit-reporter": "0.1.0"
+    "karma-junit-reporter": "0.1.0",
+    "grunt-contrib-compress": "~0.6.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
