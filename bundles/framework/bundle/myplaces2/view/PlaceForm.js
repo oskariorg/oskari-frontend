@@ -58,13 +58,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
          * @return {jQuery} jquery reference for the form
          */
         getForm: function (categories) {
-            var ui = this.template.clone();
-            var loc = this.instance.getLocalization('placeform');
+            var ui = this.template.clone(),
+                loc = this.instance.getLocalization('placeform');
             // TODO: if a place is given for editing -> populate fields here
             // populate category options
             if (categories) {
-                var selection = ui.find('select[name=category]');
-                var option,
+                var selection = ui.find('select[name=category]'),
+                    option,
                     i,
                     cat;
                 //option.append(loc.category['new']);
@@ -97,9 +97,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                 ui.find('input[name=placeAttention]').attr('value', this.initialValues.place.attention_text);
                 ui.find('input[name=placelink]').attr('value', this.initialValues.place.link);
                 ui.find('input[name=imagelink]').attr('value', this.initialValues.place.imageLink);
+                this._updateImageUrl(this.initialValues.place.imageLink, ui);
             }
 
-            var measurementDiv = ui.find('div.measurementResult')
+            var measurementDiv = ui.find('div.measurementResult');
             if (this.measurementResult) {
                 measurementDiv.html(this.measurementResult);
             } else {
@@ -121,10 +122,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
 
             if (onScreenForm.length > 0) {
                 // found form on screen
-                var placeName = onScreenForm.find('input[name=placename]').val();
-                var placeDesc = onScreenForm.find('textarea[name=placedesc]').val();
-                var placeAttention = onScreenForm.find('input[name=placeAttention]').val();
-                var placeLink = onScreenForm.find('input[name=placelink]').val();
+                var placeName = onScreenForm.find('input[name=placename]').val(),
+                    placeDesc = onScreenForm.find('textarea[name=placedesc]').val(),
+                    placeAttention = onScreenForm.find('input[name=placeAttention]').val(),
+                    placeLink = onScreenForm.find('input[name=placelink]').val();
                 if (placeLink) {
                     if (placeLink.indexOf('://') === -1 || placeLink.indexOf('://') > 6) {
                         placeLink = 'http://' + placeLink;
@@ -132,8 +133,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                     placeLink = placeLink.replace("<", '');
                     placeLink = placeLink.replace(">", '');
                 }
-                var imageLink = onScreenForm.find('input[name=imagelink]').val();
-                var categorySelection = onScreenForm.find('select[name=category]').val();
+                var imageLink = onScreenForm.find('input[name=imagelink]').val(),
+                    categorySelection = onScreenForm.find('select[name=category]').val();
                 values.place = {
                     name: placeName,
                     desc: placeDesc,
@@ -170,19 +171,21 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                 onScreenForm.find('input[name=placelink]').val(data.place.link);
                 onScreenForm.find('input[name=imagelink]').val(data.place.imageLink);
                 onScreenForm.find('select[name=category]').val(data.place.category);
+                this._updateImageUrl(data.place.imageLink, onScreenForm);
+
             }
 
             this.initialValues = data;
         },
-        setMeasurementResult: function(geometry, drawMode) {
+        setMeasurementResult: function (geometry, drawMode) {
             var loc = this.instance.getLocalization('placeform'),
-                measurementWithUnit = this.instance.formatMeasurementResult(geometry, drawMode);
+                measurementWithUnit = this.instance.getDrawPlugin().getMapModule().formatMeasurementResult(geometry, drawMode);
 
             this.measurementResult = loc.measurement[drawMode] + measurementWithUnit;
 
             this._getOnScreenForm().
-                find('div.measurementResult').
-                html(this.measurementResult);
+            find('div.measurementResult').
+            html(this.measurementResult);
         },
         /**
          * @method _bindCategoryChange
@@ -193,8 +196,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
          * @param {String} newCategoryId category id for the new category option == when we need to react
          */
         _bindCategoryChange: function () {
-            var me = this;
-            var onScreenForm = this._getOnScreenForm();
+            var me = this,
+                onScreenForm = this._getOnScreenForm();
             onScreenForm.find('select[name=category]').live('change', function () {
                 // remove category form is initialized
                 if (me.categoryForm) {
@@ -212,15 +215,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
          * @private
          */
         _bindImageUrlChange: function () {
-            var me = this;
-            var onScreenForm = me._getOnScreenForm();
-            onScreenForm.find('input[name=imagelink]').live('change', function () {
-                var form = me._getOnScreenForm();
-                var src = jQuery(this).val();
-                form.find('div.imagePreview').find('img').attr('src', src);
-                form.find('a.myplaces_imglink').attr({
-                    'href': src
-                });
+            var me = this,
+                onScreenForm = me._getOnScreenForm();
+            onScreenForm.find('input[name=imagelink]').live('change keyup', function () {
+                me._updateImageUrl(jQuery(this).val(), me._getOnScreenForm());
+            });
+        },
+
+        _updateImageUrl: function (src, form) {
+            var img = form.find('div.imagePreview').find('img');
+            img.attr('src', src);
+            form.find('a.myplaces_imglink').attr({
+                'href': src
             });
         },
 
@@ -231,11 +237,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
          * @private
          */
         _bindCreateNewLayer: function () {
-            var me = this;
-            var onScreenForm = me._getOnScreenForm();
-            onScreenForm.find('a.newLayerLink').live('click', function (event) {
+            var me = this,
+                onScreenForm = me._getOnScreenForm();
+            onScreenForm.find('a.newLayerLink').live('click', function (evt) {
                 var form = me._getOnScreenForm();
-                event.preventDefault();
+                evt.preventDefault();
                 me.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.CategoryForm', me.instance);
                 form.find('div#newLayerForm').html(me.categoryForm.getForm());
                 //add listeners etc.

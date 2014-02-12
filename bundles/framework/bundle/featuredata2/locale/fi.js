@@ -19,6 +19,7 @@ Oskari.registerLocalization({
       },
       "button": {
         "cancel": "Peruuta",
+        "empty": "Poista valinnat",
         "show": "Näytä kohteet",
         "close": "Sulje",
         "edit" : "Muokkaa"

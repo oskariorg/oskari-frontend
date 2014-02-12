@@ -103,7 +103,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
                 olPoint;
             for (count = 0; count < points.length; ++count) {
                 point = points[count];
-                olPoint = new OpenLayers.Geometry.Point(point.lat, point.lon);
+                olPoint = new OpenLayers.Geometry.Point(point.lon, point.lat);
                 olPoints.addPoint(olPoint);
             }
             var bounds = olPoints.getBounds();

@@ -352,7 +352,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
                 values[2] = jQuery('input.custom-color.custom-blue-value').val();
                 // From integer to hex values
                 for (i = 0; i < 3; i++) {
-                    intValue = parseInt(values[i]);
+                    intValue = parseInt(values[i], 10);
                     if ((intValue < 0) || (intValue > 255)) {
                         return;
                     }

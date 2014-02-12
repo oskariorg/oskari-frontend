@@ -208,11 +208,10 @@ div.filter-region-select ul {
   top: inherit;
   right: 30px;
   width: 20px !important;
-  height: 20px !important;
-}
+  height: 20px !important; }
+
 .statsgrid-hide-header {
-  visibility: hidden;
-}
+  visibility: hidden; }
 
 .statsgrid .form-cont {
   height: 100%;

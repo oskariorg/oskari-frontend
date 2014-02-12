@@ -19,6 +19,7 @@ Oskari.registerLocalization({
             "privateTooltip": "Taso on yksityinen. Muuta taso julkiseksi klikkaamalla.",
             "publicTooltip": "Taso on julkinen. Muuta taso yksityiseksi klikkaamalla."
         },
+        "addCategory": "Lisää taso",
         "editCategory": "Muokkaa tasoa",
         "deleteCategory": "Poista taso",
         "edit": "Muokkaa",
@@ -28,6 +29,7 @@ Oskari.registerLocalization({
           "desc": "Kuvaus",
           "createDate": "Luotu",
           "updateDate": "Päivitetty",
+          "measurement": "Pituus/pinta-ala",
           "edit": " ",
           "delete": " "
         },
@@ -44,7 +46,24 @@ Oskari.registerLocalization({
         }
     },
     "tools": {
+      "measureline": {
+        "title": "Etäisyyden mittaus",
+        "tooltip": "Mittaa etäisyys",
+        "add": "",
+        "next": "",
+        "edit": "Muokkaa viivaa raahaamalla viivan taitepisteitä.",
+        "noResult": "0 m"
+      },
+      "measurearea": {
+        "title": "Mittaa pinta-ala",
+        "tooltip": "Pinta-alan mittaus",
+        "add": "",
+        "next": "",
+        "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
+        "noResult": "0 m²"
+      },
       "point": {
+        "title": "Pisteen lisäys",
         "tooltip": "Lisää piste",
         "add": "Lisää piste klikkaamalla karttaa.",
         "next": "Voit tallentaa tai piirtää pisteitä samaan kohteeseen.",
@@ -52,25 +71,31 @@ Oskari.registerLocalization({
         "save": "Tallenna sijainti"
       },
       "line": {
+        "title": "Viivan lisäys",
         "tooltip": "Lisää viiva",
         "add": "Lisää viivan taitepiste klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'.",
         "next": "Voit tallentaa tai piirtää lisää viivoja samaan kohteeseen.",
         "edit": "Muokkaa viivaa raahaamalla viivan taitepisteitä.",
-        "save": "Tallenna muoto"
+        "save": "Tallenna muoto",
+        "noResult": "0 m"
       },
       "area": {
+        "title": "Alueen lisäys",
         "tooltip": "Lisää alue",
         "add": "Lisää alueen taitepisteet klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'. Voit piirtää alueeseen reiän pitämällä pohjassa Alt-näppäintä.",
         "next": "Voit tallentaa tai piirtää lisää alueita samaan kohteeseen.",
         "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
-        "save": "Tallenna muoto"
+        "save": "Tallenna muoto",
+        "noResult": "0 m²"
       }
     },
-     "buttons": {
+    "buttons": {
       "ok": "OK",
       "cancel": "Peruuta",
-      "finish": "Lopeta piirto",
+      "close": "Lopeta",
+      "finish": "Tallenna piirto",
       "save": "Tallenna",
+      "saveAsMyPlace": "Tallenna omaksi paikaksi",
       "movePlaces": "Siirrä kohteet ja poista",
       "deleteCategory": "Poista",
       "deleteCategoryAndPlaces": "Poista kohteineen",
@@ -88,6 +113,13 @@ Oskari.registerLocalization({
       },
       "placedesc": {
         "placeholder": "Kuvaile kohdetta"
+      },
+      "placeAttention": {
+        "placeholder": "Huomioteksti"
+      },
+      "measurement": {
+        "line": "Viivan pituus: ",
+        "area": "Alueen pinta-ala: "
       },
       "category": {
         "label": "Karttataso",

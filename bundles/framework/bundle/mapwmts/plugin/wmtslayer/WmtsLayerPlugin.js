@@ -139,7 +139,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
 
 
         var wmtsUrl = //layer.getWmtsUrls()[0]; 
-            layerDef.resourceUrl ? (layerDef.resourceUrl.tile ? layerDef.resourceUrl.tile.template : undefined) : undefined;
+        layerDef.resourceUrl ? (layerDef.resourceUrl.tile ? layerDef.resourceUrl.tile.template : undefined) : undefined;
 
         if (!wmtsUrl) {
             wmtsUrl = layer.getWmtsUrls()[0][0].url;
@@ -173,13 +173,12 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             matrixSet: matrixSet.identifier,
             format: imageFormat,
             style: layer.getCurrentStyle().getName(),
-            visibility: true,
             transparent: true,
             matrixIds: matrixIds,
             isBaseLayer: layer.isBaseLayer(),
             buffer: 0,
             serverResolutions: serverResolutions,
-            visibility : layer.isInScale(sandbox.getMap().getScale()),
+            visibility: layer.isInScale(sandbox.getMap().getScale()),
             layerDef: layerDef
         };
 

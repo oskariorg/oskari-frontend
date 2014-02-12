@@ -19,6 +19,7 @@ Oskari.registerLocalization({
             "privateTooltip": "Kartlagret är privat. Klicka på lagret för att offentliggöra det.",
             "publicTooltip": "Kartlagret är offentliggöra. Klicka på lagret för att privat det."
         },
+        "addCategory": "Tillägg kartlager",
         "editCategory": "Editera kartlager",
         "deleteCategory": "Ta bort kartlager",
         "edit": "Editera",
@@ -28,6 +29,7 @@ Oskari.registerLocalization({
           "desc": "Beskrivning",
           "createDate": "Skapad",
           "updateDate": "Uppdaterad",
+          "measurement": "Längd/area",
           "edit": " ",
           "delete": " "
         },
@@ -44,7 +46,24 @@ Oskari.registerLocalization({
         }
       },
     "tools": {
+      "measureline": {
+        "title": "Mät avstånd",
+        "tooltip": "Mät avstånd",
+        "add": "",
+        "next": "",
+        "edit": "Editera linjen genom att klicka och dra brytningspunkterna.",
+        "noResult": "0 m"
+      },
+      "measurearea": {
+        "title": "Mät areal",
+        "tooltip": "Mät areal",
+        "add": "",
+        "next": "",
+        "edit": "Editera områdets form genom att klicka och dra brytningspunkterna på omkretslinjen.",
+        "noResult": "0 m²"
+      },
       "point": {
+        "title": "Tillägg punkt",
         "tooltip": "Tillägg punkt",
         "add": "Tillägg punkt genom att klicka på kartan.",
         "next": "Du kan lagra eller tillägga fler punkter till samma området.",
@@ -52,25 +71,31 @@ Oskari.registerLocalization({
         "save": "Lagra läge"
       },
       "line": {
+        "title": "Tillägg linje",
         "tooltip": "Tillägg linje",
         "add": "Tillägg en brytningspunkt på linjen genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'.",
         "next": "Du kan lagra eller tillägga fler linjer till samma området.",
         "edit": "Editera linjen genom att klicka och dra brytningspunkterna.",
-        "save": "Lagra form"
+        "save": "Lagra form",
+        "noResult": "0 m"
       },
       "area": {
+        "title": "Tillägg område",
         "tooltip": "Tillägg område",
         "add": "Tillägg områdets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'. Håll ned Alt-tangenten för att skapa hål i polygonerna.",
         "next": "Du kan lagra eller tillägga fler polygoner till samma området.",
         "edit": "Editera områdets form genom att klicka och dra brytningspunkterna på omkretslinjen.",
-        "save": "Lagra form"
+        "save": "Lagra form",
+        "noResult": "0 m²"
       }
     },
     "buttons": {
       "ok": "OK",
       "cancel": "Tillbaka",
-      "finish": "Sluta rita",
+      "close": "Avbryt",
+      "finish": "Lagra rita",
       "save": "Lagra",
+      "saveAsMyPlace": "Lagra",
       "movePlaces": "Flytta objekt och ta bort",
       "deleteCategory": "Ta bort",
       "deleteCategoryAndPlaces": "Ta bort kategori inklusive objekt",
@@ -88,6 +113,13 @@ Oskari.registerLocalization({
       },
       "placedesc": {
         "placeholder": "Beskriv objektet"
+      },
+      "placeAttention": {
+            "placeholder": "Obs tekst"
+      },
+      "measurement": {
+        "line": "Linjelängd: ",
+        "area": "Area: "
       },
       "category": {
         "label": "Kartlager",

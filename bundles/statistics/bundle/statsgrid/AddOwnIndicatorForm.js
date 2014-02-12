@@ -27,16 +27,16 @@ function(sandbox, localization, regionCategories, layerWMSName, layerId, regionC
         'formMunicipalityRow': '<div class="municipality-row"><label></label><input type="text"></div>',
         'formSubmit':'<div class="form-submit"><button class="submit-form-button" title=""></button><button class="cancel-form-button"></button></div>',
         'importDataPopup' : '<div class="import-data-popup"><p class="import-data-desc"></p><div class="import-container"><textarea class="import-data-textarea"></textarea></div></div>'
-    }
+    };
 }, {
 	/**
 	 * @method _createUI
 	 * Create UI for the form
 	 */
 	createUI : function(container, callback) {
-        var me = this;
-        var layer = me.sandbox.findMapLayerFromAllAvailable(me.layerId);
-        var formCont = jQuery(me.template.formCont).clone(),
+        var me = this,
+            layer = me.sandbox.findMapLayerFromAllAvailable(me.layerId),
+            formCont = jQuery(me.template.formCont).clone(),
             formHead = jQuery(me.template.formHead).clone(),
             formShowImport = jQuery(me.template.formShowImport).clone(),
             formMeta = jQuery(me.template.formMeta).clone(),
@@ -135,13 +135,13 @@ function(sandbox, localization, regionCategories, layerWMSName, layerId, regionC
         cancel.append(me.localization.formCancel);
         cancel.click(function(e) {
             me._handleCancel(e, me);
-        })
+        });
         // add data submit
         var submit = formSubmit.find('.submit-form-button');
         submit.append(me.localization.formSubmit);
         submit.click(function(e) {
             me._handleSubmit(e, me, callback);
-        })
+        });
 
         formCont
             .append(formHead)
@@ -208,13 +208,13 @@ function(sandbox, localization, regionCategories, layerWMSName, layerId, regionC
         var service = this.sandbox.getService('Oskari.statistics.bundle.statsgrid.UserIndicatorsService'),
             indicatorData = me._gatherData();
 
-        if(indicatorData != null && service != null) {
+        if(indicatorData !== null && indicatorData !== undefined && service !== null && service !== undefined) {
             if(this.sandbox && this.sandbox.getUser().isLoggedIn()) {
                 service.saveUserIndicator(indicatorData, function(indicator) {
                     me.container.find('.form-cont').remove();
                     me.container.find('.selectors-container').show();
                     me.container.find('#municipalGrid').show();
-                    if(indicator.id != null) {
+                    if(indicator.id !== null && indicator.id !== undefined) {
                         indicatorData.indicatorId = 'user_'+indicator.id;
                         callback(indicatorData);
                     }
@@ -238,11 +238,9 @@ function(sandbox, localization, regionCategories, layerWMSName, layerId, regionC
      * Parse data from dialog (it is pasted from clipboard)
      */
     _parseData: function(e, me, dialog) {
-        var inputArray = [];
-        var divmanazerpopup = jQuery(e.target)
-            .parents('.divmanazerpopup');
-
-        var data = divmanazerpopup.find('textarea').val();
+        var inputArray = [],
+            divmanazerpopup = jQuery(e.target).parents('.divmanazerpopup'),
+            data = divmanazerpopup.find('textarea').val();
         //update form regions / municipalities
         var updateValue = function(name, value) {
             var row;
@@ -250,16 +248,20 @@ function(sandbox, localization, regionCategories, layerWMSName, layerId, regionC
             if (/^\d+$/.test(name)) {
                 // add prefix zeros to the code if needed (in case of municipality)
                 if (me.regionCategory.toLowerCase() === me.municipalityCategory) {
-                    if (name.length === 1) name = '00' + name;
-                    if (name.length === 2) name = '0' + name;
+                    if (name.length === 1) {
+                        name = '00' + name;
+                    }
+                    if (name.length === 2) {
+                        name = '0' + name;
+                    }
                 }
-                var row = me.container.find('.municipality-row[data-code=' + name + ']');
+                row = me.container.find('.municipality-row[data-code=' + name + ']');
             } else {
                 // Only use the first part of the name in case of a municipality
                 if (me.regionCategory.toLowerCase() === me.municipalityCategory) {
                     name = name.split(' ')[0];
                 }
-                var row = me.container.find('.municipality-row[data-name=' + name.toLowerCase() + ']');
+                row = me.container.find('.municipality-row[data-name=' + name.toLowerCase() + ']');
             }
 
             if (row && row.length) {
@@ -269,10 +271,10 @@ function(sandbox, localization, regionCategories, layerWMSName, layerId, regionC
             }
 
             return false;
-        }
-        var lines = data.match(/[^\r\n]+/g);
-        var updated = 0;
-        var unrecognized = [];
+        };
+        var lines = data.match(/[^\r\n]+/g),
+            updated = 0;
+            unrecognized = [];
         //loop through all the lines and parse municipalities (name or code)
         _.each(lines, function(line) {
             var area,
@@ -310,33 +312,33 @@ function(sandbox, localization, regionCategories, layerWMSName, layerId, regionC
      * Parse data from dialog (it is pasted from clipboard)
      */
     _gatherData : function() {
-        var me = this;
-        var json = {};
-        var emptyFields = [];
+        var me = this,
+            json = {},
+            emptyFields = [];
 
         // IE8 fix
-        if(typeof String.prototype.trim !== 'function') {
+        if (typeof String.prototype.trim !== 'function') {
             String.prototype.trim = function() {
                 return this.replace(/^\s+|\s+$/g, ''); 
-            }
+            };
         }
         // Get indicator title or push it to the unrecognized areas array
         var title = me.container.find('.form-meta .title').find('input').val();
-        if(title == null || title.trim() == "") {
+        if(title === null || title === undefined || title.trim() === "") {
             emptyFields.push(me.container.find('.form-meta .title').find('label').text());
         }
         // TODO: real localized title
         json.title = JSON.stringify({'fi': title});
 
         var source = me.container.find('.form-meta .sources').find('input').val();
-        if(source == null || source.trim() == "") {
+        if(source === null || source === undefined || source.trim() === "") {
             emptyFields.push(me.container.find('.form-meta .sources').find('label').text());
         }
         // TODO: real localized source
         json.source = JSON.stringify({'fi': source});
 
         var description = me.container.find('.form-meta .description').find('input').val();
-        if(description == null || description.trim() == "") {
+        if(description === null || description === undefined || description.trim() === "") {
             emptyFields.push(me.container.find('.form-meta .description').find('label').text());
         }
         // TODO: real localized description
@@ -345,8 +347,8 @@ function(sandbox, localization, regionCategories, layerWMSName, layerId, regionC
         var year = me.container.find('.form-meta .year').find('input').val();
         var text = /^[0-9]+$/;
         var currentYear = new Date().getFullYear();
-        if(year == null || year.trim() == "" || 
-            ((year != "") && (!text.test(year))) || 
+        if(year === null || year === undefined || year.trim() === "" || 
+            ((year !== "") && (!text.test(year))) || 
             year.length != 4 || 
             year < 1900 || 
             year > currentYear) {
@@ -378,18 +380,19 @@ function(sandbox, localization, regionCategories, layerWMSName, layerId, regionC
             return null;
         } else {
             // loop through all the regions and gather data 
-            var municipalityRows = me.container.find('.municipality-row');
-            for (var i = 0; i < municipalityRows.length; i++) {
-                var row = jQuery(municipalityRows[i]);
-                var input = row.find('input');
-                var value = input.val();
-                if(value != null && value.trim() != "") {
+            var municipalityRows = me.container.find('.municipality-row'),
+                i;
+            for (i = 0; i < municipalityRows.length; i++) {
+                var row = jQuery(municipalityRows[i]),
+                    input = row.find('input'),
+                    value = input.val();
+                if(value !== null && value !== undefined && value.trim() !== "") {
                     json.data.push({
                         'region': row.attr('data-id'),
                         'primary value' : value
                     });
                 }
-            };
+            }
             json.data = JSON.stringify(json.data);
             return json;
         }
@@ -402,10 +405,10 @@ function(sandbox, localization, regionCategories, layerWMSName, layerId, regionC
     validateYear: function(year,e) {
         var text = /^[0-9]+$/;
         if(e.type=="blur" || 
-            year.length == 4 && e.keyCode != 8 && e.keyCode != 46 && e.keyCode != 37 && e.keyCode!= 39) {
-            if (year != 0) {
+            year.length === 4 && e.keyCode !== 8 && e.keyCode !== 46 && e.keyCode !== 37 && e.keyCode !== 39) {
+            if (year !== 0 && year !== '0') {
                 var current = jQuery(e.target);
-                if ((year != "") && (!text.test(year))) {
+                if ((year !== "") && (!text.test(year))) {
                     //alert("Please Enter Numeric Values Only");
                     current.css({'color': '#ff0000'});
                     return false;

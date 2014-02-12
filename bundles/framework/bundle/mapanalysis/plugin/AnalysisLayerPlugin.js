@@ -318,9 +318,97 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
             } else {
                 this._map.setLayerIndex(openLayer, 0);
             }
+
+            this.handleBounds(layer);
         },
 
         /**
+         * @method handleBounds
+         * @private
+         *
+         * Make use of the layer bounding box information to set appropriate map view
+         *
+         * @param
+         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
+         *            layer layer for which to handle bounds
+         *
+         */
+        handleBounds: function (layer) {
+            var sandbox = this._sandbox;
+
+            this._parseGeometryForLayer(layer);
+
+            var geom = layer.getGeometry();
+
+            if ((geom === null) || (typeof geom === "undefined") ) {
+                return;
+            }
+            if (geom.length === 0) {
+                return;
+            }
+
+            var olPolygon = geom[0];
+            var bounds = olPolygon.getBounds();
+            var centroid = olPolygon.getCentroid();
+            var epsilon = 1.0;
+
+            var rb = sandbox.getRequestBuilder('MapMoveRequest'),
+                req;
+            if (rb) {
+                if (olPolygon.getArea() < epsilon) {
+                    // zoom to level 9 if a single point
+                    req = rb(centroid.x, centroid.y, 9);
+                    sandbox.request(this, req);
+                } else {
+                    req = rb(centroid.x, centroid.y, bounds);
+                    sandbox.request(this, req);
+                }
+            }
+        },
+
+        /**
+         * @method _parseGeometryForLayer
+         * @private
+         *
+         * If layer.getGeometry() is empty, tries to parse layer.getGeometryWKT()
+         * and set parsed geometry to the layer
+         *
+         * @param
+         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
+         *            layer layer for which to parse geometry
+         *
+         */
+        _parseGeometryForLayer: function (layer) {
+            // parse geometry if available
+            if (layer.getGeometry && layer.getGeometry().length === 0) {
+                var layerWKTGeom = layer.getGeometryWKT();
+                if (!layerWKTGeom) {
+                    // no wkt, dont parse
+                    return;
+                }
+                // http://dev.openlayers.org/docs/files/OpenLayers/Format/WKT-js.html
+                // parse to OpenLayers.Geometry.Geometry[] array ->
+                // layer.setGeometry();
+                var wkt = new OpenLayers.Format.WKT();
+
+                var features = wkt.read(layerWKTGeom);
+                if (features) {
+                    if (features.constructor != Array) {
+                        features = [features];
+                    }
+                    var geometries = [],
+                        i;
+                    for (i = 0; i < features.length; ++i) {
+                        geometries.push(features[i].geometry);
+                    }
+                    layer.setGeometry(geometries);
+                } else {
+                    // 'Bad WKT';
+                }
+            }
+        },
+
+      /**
          * @method _afterMapLayerRemoveEvent
          * Handle AfterMapLayerRemoveEvent
          * @private

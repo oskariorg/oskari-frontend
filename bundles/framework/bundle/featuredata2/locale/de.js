@@ -19,6 +19,7 @@ Oskari.registerLocalization({
       },
       "button": {
         "cancel": "Abbrechen",
+        "empty": "",
         "show": "Orte anzeigen",
         "close": "Schließen",
         "edit" : "Bearbeiten"

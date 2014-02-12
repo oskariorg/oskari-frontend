@@ -238,32 +238,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
          * @param {Object} pData initial data (optional)
          */
         init: function (pData) {
-            var self = this,
+            var me = this,
                 iData = pData || {},
                 f,
                 field,
                 template;
 
             // Set the initial values
-            this.values = {
+            me.values = {
                 colourScheme: iData.colourScheme,
                 font: iData.font,
                 toolStyle: iData.toolStyle
             };
 
             // "Precompile" the templates
-            for (f in this.fields) {
-                if (this.fields.hasOwnProperty(f)) {
-                    field = this.fields[f];
-                    template = field.getContent.apply(self, arguments);
+            for (f in me.fields) {
+                if (me.fields.hasOwnProperty(f)) {
+                    field = me.fields[f];
+                    template = field.getContent.apply(me, arguments);
                     field.content = template;
                 }
             }
 
             if (pData !== null && pData !== undefined) {
-                this._sendFontChangedEvent(this.values.font);
-                this._sendColourSchemeChangedEvent(this.values.colourScheme);
-                this._sendToolStyleChangedEvent(this._getItemByCode(this.values.toolStyle, this.initialValues.toolStyles));
+                me._prepopulateCustomColours(pData.colourScheme);
+                me._sendFontChangedEvent(me.values.font);
+                me._sendColourSchemeChangedEvent(me.values.colourScheme);
+                me._sendToolStyleChangedEvent(me._getItemByCode(me.values.toolStyle, me.initialValues.toolStyles));
             }
         },
 
@@ -507,6 +508,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
                 // Create the inputs for custom colour
                 if ('custom' === colours[i].val) {
                     customColourButton = jQuery('<button>' + this.loc.layout.fields.colours.buttonLabel + '</button>');
+                    // FIXME don't create functions inside a loop
                     customColourButton.click(function () {
                         colourInput.find('input[type=radio]').attr('checked', 'checked');
                         self._createCustomColoursPopup();
@@ -631,6 +633,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
             iconClsInputs.find('input[value=' + customColours.iconCls + ']').attr('checked', 'checked');
         },
 
+        _prepopulateCustomColours: function (colourScheme) {
+            var me = this,
+                ccv = {},
+                customColours = me._getItemByCode('custom', this.initialValues.colours);
+            if (colourScheme) {
+                ccv.bg = me._getColourFromRgbString(colourScheme.bgColour);
+                ccv.title = me._getColourFromRgbString(colourScheme.titleColour);
+                ccv.header = me._getColourFromRgbString(colourScheme.headerColour);
+                ccv.iconCls = colourScheme.iconCls;
+                me.customColourValues = ccv;
+                // Set the values to initial values
+                customColours.bgColour = this._getCssRgb(ccv.bg);
+                customColours.titleColour = this._getCssRgb(ccv.title);
+                customColours.headerColour = this._getCssRgb(ccv.header);
+                customColours.iconCls = ccv.iconCls;
+                // Change the colours of the preview popup
+                me._changeGfiColours(customColours);
+                // Send an event notifying the changed colours
+                me._sendColourSchemeChangedEvent(customColours);
+            }
+        },
+
         /**
          * Collects the custom colours values from the content div.
          *
@@ -686,7 +710,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
          *
          * @method _getColourFromRgbDiv
          * @param {jQuery} rgbDiv
-         * @return {String} returns an rgb colour object
+         * @return {Object} returns an rgb colour object
          *          {
          *              red: <0-255>,
          *              green: <0-255>,
@@ -722,6 +746,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
         },
 
         /**
+         * Returns an rgb colour object parsed from the string.
+         *
+         * @method _getColourFromRgbDiv
+         * @param {String} rgbString
+         * @return {Object} returns an rgb colour object
+         *          {
+         *              red: <0-255>,
+         *              green: <0-255>,
+         *              blue: <0-255>
+         *          }
+         */
+        _getColourFromRgbString: function (rgbString) {
+            var start = rgbString.indexOf("("),
+                end = rgbString.indexOf(")"),
+                ret = null,
+                rgb;
+            if (start > -1 && end > -1 && end > start) {
+                rgb = rgbString.substring(start + 1, end).split(/\s*,\s*/);
+                if (rgb.length === 3) {
+                    ret = {
+                        "red": rgb[0],
+                        "green": rgb[1],
+                        "blue": rgb[2]
+                    };
+                }
+            }
+            return ret;
+        },
+
+        /**
          * Creates the sample gfi where the user can see the effects of the chosen colour scheme.
          *
          * @method _createGfiPreview
@@ -734,6 +788,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
                 featureDesc = this.loc.layout.popup.gfiDialog.featureDesc,
                 linkUrl = this._publisher.urlBase + Oskari.getLang();
             // Templates
+            // FIXME get GFI template from GFI plugin
             var dialogContent = jQuery('<div></div>'),
                 header = jQuery('<div class="popupTitle"></div>'),
                 headerWrapper = jQuery('<div class="popupHeader"></div>'),
@@ -846,11 +901,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
          */
         _sendEvent: function (eventName, eventData) {
             var eventBuilder = this._sandbox.getEventBuilder(eventName),
-                event;
+                evt;
 
             if (eventBuilder) {
-                event = eventBuilder(eventData);
-                this._sandbox.notifyAll(event);
+                evt = eventBuilder(eventData);
+                this._sandbox.notifyAll(evt);
             }
         },
 

@@ -178,7 +178,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
 
             } else {
                 /** EXIT The Mode */
-
+                this.instance.gridPlugin.destroyPopups(); // This is ugly, whose responsibility should this be?
                 jQuery('#contentMap').removeClass('statsgrid-contentMap');
                 jQuery('.oskariui-mode-content').removeClass('statsgrid-mode');
 

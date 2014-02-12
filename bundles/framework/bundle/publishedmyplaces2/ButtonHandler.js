@@ -88,7 +88,7 @@ function(instance) {
 
         // remove configured buttons and set tooltips
         for(var tool in this.buttons) {
-            if (this.conf.buttons && this.conf.buttons[tool] === false) {
+            if (this.conf.myplaces && this.conf.myplaces[tool] === false) {
                 delete this.buttons[tool];
             } else {
                 this.buttons[tool].tooltip = loc[tool]['tooltip'] + guestPostfix;
@@ -127,7 +127,7 @@ function(instance) {
     disableButtons : function() {
         var sandbox = this.instance.sandbox;
         var stateReqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
-        sandbox.request(this, stateReqBuilder({}, this.buttonGroup, false));
+        sandbox.request(this, stateReqBuilder(undefined, this.buttonGroup, false));
     },  
     /**
      * @method startNewDrawing
@@ -164,30 +164,30 @@ function(instance) {
      * implements Module protocol update method
      */
     _showDrawHelper : function(drawMode) {
-    	var me = this;
+        var me = this;
+
         // show help popup with cancel and finished buttons
-        var locTool = this.instance.getLocalization('tools')[drawMode];
-        var locBtns = this.instance.getLocalization('buttons');
-    	var title = this.instance.getLocalization('title');
-    	var content = locTool["add"],
-            toolContainerRequest;
-    	
-        var buttons = [];
-    	var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	cancelBtn.setTitle(locBtns["cancel"]);
-    	cancelBtn.setHandler(function() {
+        var locTool = this.instance.getLocalization('tools')[drawMode],
+            locBtns = this.instance.getLocalization('buttons'),
+            title = locTool.title,
+            content = locTool.add,
+            toolContainerRequest,
+            buttons = [],
+            cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        cancelBtn.setTitle(locBtns.cancel);
+        cancelBtn.setHandler(function () {
             // ask toolbar to select default tool
             var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
             me.instance.sandbox.request(me, toolbarRequest);
             me.sendStopDrawRequest(true);
-    	});
+        });
         buttons.push(cancelBtn);
-        
+
         var finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
-        finishBtn.setTitle(locBtns["finish"]);
+        finishBtn.setTitle(locBtns.finish);
         finishBtn.addClass('primary');
-        finishBtn.setHandler(function() {
+        finishBtn.setHandler(function () {
             me.sendStopDrawRequest();
         });
         buttons.push(finishBtn);
@@ -298,7 +298,7 @@ function(instance) {
          */
         'DrawPlugin.AddedFeatureEvent' : function(event) {
             var me = this;
-            if (typeof  event.getDrawingMode() !== "undefined") {
+            if (typeof event.getDrawingMode() !== "undefined") {
                 if (event.getDrawingMode() !== null) {
                     var loc = this.instance.getLocalization('tools');
                     var areaDialogContent = loc[event.getDrawingMode()]['next'];
