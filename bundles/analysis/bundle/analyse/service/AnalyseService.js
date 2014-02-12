@@ -139,8 +139,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
                     } else {
                         mapLayerService = this.instance.mapLayerService;
                         mapLayer = mapLayerService.createMapLayer(analyseJson);
-                        mapLayer.setWpsUrl(analyseJson.wpsUrl);
-                        mapLayer.setWpsName(analyseJson.wpsName);
                         // Add the layer to the map layer service
                         mapLayerService.addLayer(mapLayer, true);
 
