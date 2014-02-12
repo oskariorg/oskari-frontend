@@ -77,13 +77,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 'state': me.getState(),
                 //'csvDownload' : true,
                 "statistics": [{
-                    "id": "avg",
+                    "id": "min",
                     "visible": true
                 }, {
                     "id": "max",
                     "visible": true
                 }, {
-                    "id": "min",
+                    "id": "avg",
                     "visible": true
                 }, {
                     "id": "mde",

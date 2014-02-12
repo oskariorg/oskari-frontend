@@ -436,7 +436,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             } else if (method === '2') {
                 limits = gstats.getQuantile(classes);
                 // Check for errors
-                for (i=0; i<limits.length; i++) {
+                for (i = 0; i < limits.length; i++) {
                     if (typeof limits[i] === "undefined") {
                         valid = false;
                         break;
@@ -1067,6 +1067,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         _createColorDialog: function () {
             //Main dialog
             var me = this;
+            if (me.dialog) {
+                me.dialog.close();
+            }
             me.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
             me.content = me.templateContent.clone();
@@ -1075,9 +1078,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
             var colorset_sotka = jQuery('<div class="colorset_sotka"><br>' + this._locale.colorset.setselection + '<br><select id="colo_set"></select><br></div>');
             me.content.append(colorset_sotka);
-            var sel = colorset_sotka.find('select');
-
-            var opt = jQuery('<option value="' + "seq" + '">' + this._locale.colorset.sequential + '</option>');
+            var sel = colorset_sotka.find('select'),
+                opt = jQuery('<option value="' + "seq" + '">' + this._locale.colorset.sequential + '</option>');
             sel.append(opt);
             opt = jQuery('<option value="' + "qual" + '">' + this._locale.colorset.qualitative + '</option>');
             sel.append(opt);
@@ -1113,11 +1115,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
          * @private
          */
         _createColorTable: function () {
-            var me = this;
-            var table = jQuery('<table class="colo_table1"></table>');
-            var rows = 5;
-            var curcolset = null;
-            var colorindex = 3;
+            var me = this,
+                table = jQuery('<table class="colo_table1"></table>'),
+                rows = 5,
+                curcolset = null,
+                colorindex = 3;
             // Use 4th color value set in the grid
             if (me.currentColorSet === 'div') {
                 rows = this.colorsets_div.length;
@@ -1139,7 +1141,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 colorArr,
                 tableCellTemplate,
                 j,
-                tableCell;
+                tableCell,
+                rowClick = function (event) {
+                    var colorIndex = jQuery(this).attr('data-colorIdx');
+                    me._selectedColors(colorIndex);
+                },
+                rowMouseOut = function (event) {
+                    jQuery(this).removeClass("hover");
+
+                },
+                rowMouseOver = function (event) {
+                    if (!jQuery(this).hasClass("selected")) {
+                        jQuery(this).addClass("hover");
+                    }
+                };
 
             for (i = 0; i < rows; i++) {
                 row = jQuery('<td></td>');
@@ -1154,24 +1169,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                     row.append(tableCell);
 
                 }
-                // FIXME move functions outside loop
+
                 // Mouse events
-                row.mouseover(function (event) {
-                    if (!jQuery(this).hasClass("selected")) {
-                        jQuery(this).addClass("hover");
-                    }
-
-                });
-                row.mouseout(function (event) {
-                    jQuery(this).removeClass("hover");
-
-                });
+                row.mouseover(rowMouseOver);
+                row.mouseout(rowMouseOut);
 
                 // For selected colors
-                row.click(function (event) {
-                    var colorIndex = jQuery(this).attr('data-colorIdx');
-                    me._selectedColors(colorIndex);
-                });
+                row.click(rowClick);
 
                 // Zoom color table section in Hover
                 // me._hoverZoomColorTable(row);

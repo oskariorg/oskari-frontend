@@ -40,13 +40,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         //    this.conf = config || {};
         var defaults = {
             "statistics": [{
-                "id": "avg",
+                "id": "min",
                 "visible": true
             }, {
                 "id": "max",
                 "visible": true
             }, {
-                "id": "min",
+                "id": "avg",
                 "visible": true
             }, {
                 "id": "mde",
@@ -602,6 +602,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     me.setGridHeight();
                 }, 100);
             });
+            // Hackhack, initialoly sort by municipality column (slickgrid doesn't have an easy way to do this...)
+            jQuery('.slick-header-columns').children().eq(1).trigger('click');
         },
 
         /**
@@ -1202,7 +1204,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         if (isNaN(numValue)) {
                             item[columnId] = value;
                         } else {
-                            item[columnId] = numValue;
+                            // show two decimals even if the number doesn't have the required accuracy...
+                            item[columnId] = numValue && numValue.toFixed ? numValue.toFixed(2) : numValue;
                         }
                         me.dataView.updateItem(item.id, item);
                     }
@@ -1774,7 +1777,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         totalsItem = jQuery(this.templates.statsgridTotalsVar);
                         var val = value[columnId][type];
                         if (!isNaN(val) && !this._isInt(val)) {
-                            val = val.toFixed(2);
+                            val = val && val.toFixed ? val.toFixed(2) : val;
                         }
                         if (_.isNaN(val)) {
                             val = '-';
@@ -1784,6 +1787,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
                     } else if (columnId === 'municipality') {
                         totalsItem = jQuery(this.templates.statsgridTotalsVar);
+                        totalsItem.attr('title', this._locale.statistic.tooltip[type]);
                         totalsItem.addClass('statsgrid-totals-label').text(this._locale.statistic[type]);
                         break;
                     }
@@ -2045,6 +2049,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         _createFilterPopup: function (column, headerMenuPlugin) {
             var me = this,
                 popup = jQuery(me.templates.filterPopup);
+            // destroy possible open instance
+            me._destroyPopup('filterPopup');
             popup.find('.filter-desc').text(me._locale.indicatorFilterDesc);
 
             //labels for condition
@@ -2138,17 +2144,24 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             });
         },
 
-        _destroyPopup: function (name) {
-            var i,
-                popup;
+        _getPopupIndex: function(name) {
+            var ret = null;
             for (i = 0; i < this.popups.length; i++) {
-                popup = this.popups[i];
-                if (popup.name === name) {
-                    popup.content.off();
-                    popup.popup.close(true);
-                    this.popups.pop(i);
+                if (this.popups[i].name === name) {
+                    ret = i;
                     break;
                 }
+            }
+            return ret;
+        },
+
+        _destroyPopup: function (name) {
+            var i = this._getPopupIndex(name);
+                popup = i === null ? null : this.popups[i];
+            if (popup) {
+                popup.content.off();
+                popup.popup.close(true);
+                this.popups.splice(i, 1);
             }
         },
 
@@ -2176,6 +2189,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 key,
                 regionCatOption,
                 regionCatLoc;
+
+            // destroy possible open instance
+            me._destroyPopup('filterByRegionPopup');
 
             cancelBtn.setTitle(cancelLoc);
             cancelBtn.setHandler(function () {
