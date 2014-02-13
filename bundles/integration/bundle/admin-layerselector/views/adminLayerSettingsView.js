@@ -252,6 +252,12 @@ define([
                     element = jQuery(e.currentTarget),
                     addLayerDiv = element.parents('.admin-add-layer');
 
+                var confirmMsg = me.instance.getLocalization('admin').confirmDeleteLayer;
+                if(!confirm(confirmMsg)) {
+                    // existing layer/cancel!!
+                    return;
+                }
+
                 var sandbox = me.options.instance.getSandbox();
                 jQuery.ajax({
                     type: "GET",
@@ -340,7 +346,8 @@ define([
                 data.wmsUrl = form.find('#add-layer-wms-url').val();
                 if(data.wmsUrl != me.model.getWmsUrls().join() ||
                    data.wmsName != me.model.getWmsName()) {
-                    if(me.model.getId() && !confirm('Oikeudet hajoaa, oletko varma?')) {
+                    var confirmMsg = me.instance.getLocalization('admin').confirmResourceKeyChange;
+                    if(me.model.getId() && !confirm(confirmMsg)) {
                         // existing layer/cancel!!
                         return;
                     }

@@ -58,6 +58,9 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
+            "confirmResourceKeyChange" : "TRANSLATION MISSING",
+            "confirmDeleteLayerGroup" : "TRANSLATION MISSING",
+            "confirmDeleteLayer" : "TRANSLATION MISSING",
             "layertypes" : {
                 "wms": "WMS Lager",
                 "wfs": "WFS Lager",

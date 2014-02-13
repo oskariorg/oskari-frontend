@@ -64,6 +64,7 @@ define([
              */
             initialize: function () {
                 this.layerGroupingModel = this.options.layerGroupingModel;
+                this.instance = this.options.instance;
                 // If model triggers change event we need to re-render this view
                 // listenTo will remove dead listeners, use it instead of on()
                 this.listenTo(this.layerGroupingModel, 'change:layerGroups', this.render);
@@ -396,10 +397,16 @@ define([
             removeOrganization: function (e) {
                 var me = this,
                     element = jQuery(e.currentTarget);
+
+                var confirmMsg = me.instance.getLocalization('admin').confirmDeleteLayerGroup;
+                if(!confirm(confirmMsg)) {
+                    // existing layer/cancel!!
+                    return;
+                }
+
                 var groupId = element.attr('data-id');
                 var group = this.layerGroupingModel.getGroup(groupId);
                 var layers = group.getLayers();
-
                 this.layerGroupingModel.remove(groupId, function(err) {
                     if(err) {
                         // TODO: handle error

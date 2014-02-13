@@ -300,15 +300,6 @@
                 });
             },
 
-            confirmDelete : function(callback) {
-                if(confirm('Are you sure?')) {
-                    callback();
-                }
-                else {
-                    // canceled
-                }
-            },
-
             /**
              * Ajax call to remove a group to backend.
              *
@@ -324,26 +315,24 @@
                     return;
                 }
 
-                this.confirmDelete(function() {
-                    jQuery.ajax({
-                        type: "POST",
-                        dataType: 'json',
-                        data : {
-                            id : id
-                        },
-                        url: me.baseURL + me.actions.remove + "&iefix=" + (new Date()).getTime(),
-                        success: function (pResp) {
-                            me._removeClass(id);
-                            if(callback) {
-                                callback();
-                            }
-                        },
-                        error: function (jqXHR, textStatus) {
-                            if(callback /* && jqXHR.status !== 0 */) {
-                                callback("Error while removing group " + textStatus);
-                            }
+                jQuery.ajax({
+                    type: "POST",
+                    dataType: 'json',
+                    data : {
+                        id : id
+                    },
+                    url: me.baseURL + me.actions.remove + "&iefix=" + (new Date()).getTime(),
+                    success: function (pResp) {
+                        me._removeClass(id);
+                        if(callback) {
+                            callback();
                         }
-                    });
+                    },
+                    error: function (jqXHR, textStatus) {
+                        if(callback /* && jqXHR.status !== 0 */) {
+                            callback("Error while removing group " + textStatus);
+                        }
+                    }
                 });
             },
             /**
@@ -377,7 +366,7 @@
                             modelId: layer.getId()
                         }); 
                     });
-                    if(layer.length == 0) {
+                    if(layers.length == 0) {
                         // trigger change event so that DOM will be re-rendered
                         // if there was no layers
                         this.trigger('change:layerGroups');
