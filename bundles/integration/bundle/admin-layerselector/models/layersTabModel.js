@@ -300,6 +300,15 @@
                 });
             },
 
+            confirmDelete : function(callback) {
+                if(confirm('Are you sure?')) {
+                    callback();
+                }
+                else {
+                    // canceled
+                }
+            },
+
             /**
              * Ajax call to remove a group to backend.
              *
@@ -307,31 +316,33 @@
              * @param {Number} id for the group to remove
              */
             remove: function (id, callback) {
+                var me = this;
                 if(!id) {
                     if(callback) {
                         callback('Id missing');
                     }
                     return;
                 }
-                var me = this;
-                jQuery.ajax({
-                    type: "POST",
-                    dataType: 'json',
-                    data : {
-                        id : id
-                    },
-                    url: me.baseURL + me.actions.remove + "&iefix=" + (new Date()).getTime(),
-                    success: function (pResp) {
-                        me._removeClass(id);
-                        if(callback) {
-                            callback();
+                this.confirmDelete(function() {
+                    jQuery.ajax({
+                        type: "POST",
+                        dataType: 'json',
+                        data : {
+                            id : id
+                        },
+                        url: me.baseURL + me.actions.remove + "&iefix=" + (new Date()).getTime(),
+                        success: function (pResp) {
+                            me._removeClass(id);
+                            if(callback) {
+                                callback();
+                            }
+                        },
+                        error: function (jqXHR, textStatus) {
+                            if(callback /* && jqXHR.status !== 0 */) {
+                                callback("Error while removing group " + textStatus);
+                            }
                         }
-                    },
-                    error: function (jqXHR, textStatus) {
-                        if(callback /* && jqXHR.status !== 0 */) {
-                            callback("Error while removing group " + textStatus);
-                        }
-                    }
+                    });
                 });
             },
             /**
@@ -367,14 +378,21 @@
              */
             addLayer : function(layermodel) {
                 var modelGroupId = layermodel.getGroupId(this.type);
+                var me = this;
                 _.each(this.layerGroups, function(group){
                     var tmp = group.get(layermodel);
                     if(modelGroupId === group.id) {
                         group.add(layermodel, {merge: true});
+                        if(!tmp) {
+                            // new layer - trigger change
+                            me.trigger('change:layerGroups');
+                        }
                     }
-                    else if(tmp != null) {
-                        // group changed - should we force render?
+                    else if(tmp) {
+                        // layer removed from group/group changed
                         group.remove(tmp);
+                        // trigger change
+                        me.trigger('change:layerGroups');
                     }
                 });
             },

@@ -65,7 +65,10 @@ define([
             initialize: function () {
                 this.layerGroupingModel = this.options.layerGroupingModel;
                 // If model triggers change event we need to re-render this view
-                this.layerGroupingModel.on("change", this.render, this);
+                // listenTo will remove dead listeners, use it instead of on()
+                //this.listenTo(this.layerGroupingModel, 'add', this.render);
+                this.listenTo(this.layerGroupingModel, 'change:layerGroups', this.render);
+                //this.listenTo(this.layerGroupingModel, 'remove', this.render);
 
                 this.addInspireButtonTemplate = _.template(AdminAddInspireButtonTemplate);
                 this.addInspireTemplate = _.template(AdminAddInspireTemplate);
