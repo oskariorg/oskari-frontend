@@ -66,9 +66,11 @@ define([
                 this.layerGroupingModel = this.options.layerGroupingModel;
                 // If model triggers change event we need to re-render this view
                 // listenTo will remove dead listeners, use it instead of on()
-                //this.listenTo(this.layerGroupingModel, 'add', this.render);
                 this.listenTo(this.layerGroupingModel, 'change:layerGroups', this.render);
-                //this.listenTo(this.layerGroupingModel, 'remove', this.render);
+                this.listenTo(this.layerGroupingModel, 'adminAction', function(e) {
+                    // route adminAction from model to an ui element that View.js listens
+                    this.$el.trigger(e);
+                });
 
                 this.addInspireButtonTemplate = _.template(AdminAddInspireButtonTemplate);
                 this.addInspireTemplate = _.template(AdminAddInspireTemplate);
@@ -364,7 +366,6 @@ define([
 
                 addClass.find('[id$=-name]').filter('[id^=add-class-]').each(function (index) {
                     lang = this.id.substring(10, this.id.indexOf("-name"));
-                    //names += "&name_" + lang + "=" + this.value;
                     data["name_" + lang] = this.value;
                 });
 
@@ -399,23 +400,12 @@ define([
                 var group = this.layerGroupingModel.getGroup(groupId);
                 var layers = group.getLayers();
 
-
                 this.layerGroupingModel.remove(groupId, function(err) {
                     if(err) {
                         // TODO: handle error
                         alert("Error!! " + err);
                         return;
                     }
-                    element.parents('.accordion').remove();
-                    // remove layers that were under the organization since they are now gone from the DB
-                    _.each(layers, function(layer) {
-                        element.trigger({
-                            type: "adminAction",
-                            command: 'removeLayer',
-                            modelId: layer.getId(),
-                            baseLayerId: me.options.baseLayerId
-                        }); 
-                    });
                 });
             },
             /**

@@ -340,8 +340,8 @@ define([
                 data.wmsUrl = form.find('#add-layer-wms-url').val();
                 if(data.wmsUrl != me.model.getWmsUrls().join() ||
                    data.wmsName != me.model.getWmsName()) {
-                    if(!confirm('Oikeudet hajoaa, oletko varma?')) {
-                        // cancel!!
+                    if(me.model.getId() && !confirm('Oikeudet hajoaa, oletko varma?')) {
+                        // existing layer/cancel!!
                         return;
                     }
                 }

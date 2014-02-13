@@ -77,9 +77,10 @@ define([
                     }));
             },
             removeLayer : function(layerId) {
+                // removing layer from the main collection
+                // layer groups monitor the main collection and update 
+                // their state based on changes to the main collection
                 this.instance.models.layers.removeLayer(layerId);
-                //this.instance.models.organization.removeLayer(layerId);
-                //this.instance.models.inspire.removeLayer(layerId);
             },
             addToCollection: function (layerList) {
                 var models = this.instance.models.layers;

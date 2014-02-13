@@ -323,6 +323,7 @@
                     }
                     return;
                 }
+
                 this.confirmDelete(function() {
                     jQuery.ajax({
                         type: "POST",
@@ -354,14 +355,34 @@
              */
             _removeClass: function (id) {
                 var groups = this.layerGroups;
+                var foundIndex = -1;
                 for (var i = groups.length - 1; i >= 0; i -= 1) {
                     /// === wont match it correctly for some reason, maybe string from DOM attribute <> integer
                     if (groups[i].id == id) {
-                        groups.splice(i, 1);
-                        return;
+                        foundIndex = i;
+                        //groups.splice(foundIndex, 1);
+                        break;
                     }
                 }
-
+                if(foundIndex !== -1) {
+                    var me = this;
+                    var group = groups.splice(foundIndex, 1)[0];
+                    // remove layers so they are removed from the other tab as well
+                    var layers = group.getLayers();
+                    _.each(layers, function(layer){
+                        // this will trigger removal of layer which updates both tabs
+                        me.trigger('adminAction', {
+                            type: "adminAction",
+                            command: 'removeLayer',
+                            modelId: layer.getId()
+                        }); 
+                    });
+                    if(layer.length == 0) {
+                        // trigger change event so that DOM will be re-rendered
+                        // if there was no layers
+                        this.trigger('change:layerGroups');
+                    }
+                }
             },
             /**
              * Removes layer from all layer groups found on this tab
@@ -371,6 +392,8 @@
                 _.each(this.layerGroups, function(group){
                     group.remove(layermodel);
                 });
+                // trigger change event so that DOM will be re-rendered
+                this.trigger('change:layerGroups');
             },
             /**
              * Removes layer from all layer groups found on this tab
