@@ -38,6 +38,7 @@ define([
                 me.classNames = me.options.classes;
                 me.template = _.template(ViewTemplate);
                 me.subLayerTemplate = _.template(SubLayerTemplate);
+                this.model.on('change', this.render, this);
                 me.render();
             },
 

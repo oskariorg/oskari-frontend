@@ -16,6 +16,18 @@
                 this.layerGroups = this.attributes.grouping || [];
                 this.layers = this.attributes.layers || [];
                 this.filter = '';
+
+                var me = this;
+                // bind this view to the add and remove events of the collection!
+                this.layers.on('change', function(model){
+                    me.addLayer(model);
+                });
+                this.layers.on('add', function(model){
+                    me.addLayer(model);
+                });
+                this.layers.on('remove', function(model){
+                    me.removeLayer(model);
+                });
             },
 
 
@@ -283,7 +295,7 @@
                     }
                     var groupAttr = layer[groupingMethod]();
                     if(group.name === groupAttr) {
-                        group.addLayer(layer);
+                        group.add(layer);
                     }
                 });
             },
@@ -340,6 +352,33 @@
                 }
 
             },
+            /**
+             * Removes layer from all layer groups found on this tab
+             * @param  {LayerModel} layermodel backbone layer model
+             */
+            removeLayer : function(layermodel) {
+                _.each(this.layerGroups, function(group){
+                    group.remove(layermodel);
+                });
+            },
+            /**
+             * Removes layer from all layer groups found on this tab
+             * @param  {LayerModel} layermodel backbone layer model
+             */
+            addLayer : function(layermodel) {
+                var modelGroupId = layermodel.getGroupId(this.type);
+                _.each(this.layerGroups, function(group){
+                    var tmp = group.get(layermodel);
+                    if(modelGroupId === group.id) {
+                        group.add(layermodel, {merge: true});
+                    }
+                    else if(tmp != null) {
+                        // group changed - should we force render?
+                        group.remove(tmp);
+                    }
+                });
+            },
+            
 
             getGroup: function (groupId) {
                 var groups = this.layerGroups;

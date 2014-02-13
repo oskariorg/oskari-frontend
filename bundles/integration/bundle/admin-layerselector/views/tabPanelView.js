@@ -65,7 +65,7 @@ define([
             initialize: function () {
                 this.layerGroupingModel = this.options.layerGroupingModel;
                 // If model triggers change event we need to re-render this view
-                this.layerGroupingModel.on("change:layerGroups", this.render, this);
+                this.layerGroupingModel.on("change", this.render, this);
 
                 this.addInspireButtonTemplate = _.template(AdminAddInspireButtonTemplate);
                 this.addInspireTemplate = _.template(AdminAddInspireTemplate);

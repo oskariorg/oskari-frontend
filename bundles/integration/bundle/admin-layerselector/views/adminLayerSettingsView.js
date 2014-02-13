@@ -68,6 +68,7 @@ define([
                 _.bindAll(this);
 
                 this._rolesUpdateHandler();
+                this.model.on('change', this.render, this);
 
                 this.render();
             },

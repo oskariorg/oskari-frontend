@@ -18,6 +18,8 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
         /* Array of wms urls for this layer */
         this._wmsUrls = [];
 
+        this._availableQueryFormats = [];
+
         /* Layer Type */
         this._layerType = "WMS";
     }, {
@@ -27,7 +29,18 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
          * Apppends the url to layer array of wms image urls
          */
         addWmsUrl: function (wmsUrl) {
-            this._wmsUrls.push(wmsUrl);
+            var foundExisting = false;
+            for (var i = 0; i < this.getWmsUrls().length; ++i) {
+                var url = this.getWmsUrls()[i];
+                if (url == wmsUrl) {
+                    foundExisting = true;
+                    break;
+                }
+            }
+            if (!foundExisting) {
+                // only add if isn't added yet
+                this._wmsUrls.push(wmsUrl);
+            }
         },
         /**
          * @method getWmsUrls
@@ -72,6 +85,23 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
          */
         getVersion: function () {
             return this._version;
+        },
+        /**
+         * Possible options for #setQueryFormat()
+         * @method setAvailableQueryFormats
+         * @param {String[]} options for GFI output
+         */
+        setAvailableQueryFormats: function (options) {
+            
+            this._availableQueryFormats = options || [];
+        },
+        /**
+         * Possible options for #setQueryFormat()
+         * @method getAvailableQueryFormats
+         * @return {String[]} options for GFI output
+         */
+        getAvailableQueryFormats: function () {
+            return this._availableQueryFormats || [];
         }
     }, {
         "extend": ["Oskari.mapframework.domain.AbstractLayer"]

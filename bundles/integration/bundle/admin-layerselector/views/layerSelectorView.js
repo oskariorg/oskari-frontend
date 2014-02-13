@@ -76,14 +76,23 @@ define([
                         tabId: tabType
                     }));
             },
-
+            removeLayer : function(layerId) {
+                this.instance.models.layers.removeLayer(layerId);
+                //this.instance.models.organization.removeLayer(layerId);
+                //this.instance.models.inspire.removeLayer(layerId);
+            },
+            addToCollection: function (layerList) {
+                var models = this.instance.models.layers;
+                // merge updates existing
+                models.add(layerList, {merge: true});
+            },
             /**
              * Adds layer models and uses those to create layersTabModels
              *
              * @method addToCollection
              * @param {Array} models which are created from layers.
              */
-            addToCollection: function (models) {
+            createUI: function (models) {
                 var collection = new LayerCollection(models);
                 // clear everything
                 this.el.html(this.appTemplate);

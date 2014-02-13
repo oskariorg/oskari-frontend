@@ -7,6 +7,12 @@
                 // exted given object (layer) with this one
                 jQuery.extend(this, model);
                 this.supportedLanguages = Oskari.getSupportedLanguages();
+                // setup backbone id so collections work
+                this.id = model.getId();
+
+                this.on('all', function() {
+                    console.log(arguments);
+                })
             },
 
             /**
@@ -19,6 +25,14 @@
             	}
             	return null;
         	},
+            /**
+             * Returns organization or inspire id based on type
+             * @param  {String} type ['organization' | 'inspire']
+             * @return {Number} group id
+             */
+            getGroupId : function(type) {
+                return this.admin[type + 'Id'];
+            },
             /**
              * Returns language codes for defined names
              * @return {String[]} language codes
