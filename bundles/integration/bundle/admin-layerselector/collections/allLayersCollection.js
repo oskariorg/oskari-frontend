@@ -78,14 +78,11 @@
                  * @method removeLayer
                  */
                 removeLayer: function (id) {
-                    for (var i = this.models.length - 1; i >= 0; i--) {
-                        if (this.models[i].id === id) {
-                            this.models[i].splice(index, 1);
-                            break;
-                        }
-                    };
+                    var model = this.get(id);
+                    if(model) {
+                        this.remove(model);
+                    }
                 }
-
 
             });
 

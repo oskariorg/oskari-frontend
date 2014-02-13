@@ -16,6 +16,18 @@
                 this.layerGroups = this.attributes.grouping || [];
                 this.layers = this.attributes.layers || [];
                 this.filter = '';
+
+                var me = this;
+                // bind this view to the add and remove events of the collection!
+                this.layers.on('change', function(model){
+                    me.addLayer(model);
+                });
+                this.layers.on('add', function(model){
+                    me.addLayer(model);
+                });
+                this.layers.on('remove', function(model){
+                    me.removeLayer(model);
+                });
             },
 
 
@@ -283,9 +295,18 @@
                     }
                     var groupAttr = layer[groupingMethod]();
                     if(group.name === groupAttr) {
-                        group.addLayer(layer);
+                        group.add(layer);
                     }
                 });
+            },
+
+            confirmDelete : function(callback) {
+                if(confirm('Are you sure?')) {
+                    callback();
+                }
+                else {
+                    // canceled
+                }
             },
 
             /**
@@ -295,31 +316,34 @@
              * @param {Number} id for the group to remove
              */
             remove: function (id, callback) {
+                var me = this;
                 if(!id) {
                     if(callback) {
                         callback('Id missing');
                     }
                     return;
                 }
-                var me = this;
-                jQuery.ajax({
-                    type: "POST",
-                    dataType: 'json',
-                    data : {
-                        id : id
-                    },
-                    url: me.baseURL + me.actions.remove + "&iefix=" + (new Date()).getTime(),
-                    success: function (pResp) {
-                        me._removeClass(id);
-                        if(callback) {
-                            callback();
+
+                this.confirmDelete(function() {
+                    jQuery.ajax({
+                        type: "POST",
+                        dataType: 'json',
+                        data : {
+                            id : id
+                        },
+                        url: me.baseURL + me.actions.remove + "&iefix=" + (new Date()).getTime(),
+                        success: function (pResp) {
+                            me._removeClass(id);
+                            if(callback) {
+                                callback();
+                            }
+                        },
+                        error: function (jqXHR, textStatus) {
+                            if(callback /* && jqXHR.status !== 0 */) {
+                                callback("Error while removing group " + textStatus);
+                            }
                         }
-                    },
-                    error: function (jqXHR, textStatus) {
-                        if(callback /* && jqXHR.status !== 0 */) {
-                            callback("Error while removing group " + textStatus);
-                        }
-                    }
+                    });
                 });
             },
             /**
@@ -331,15 +355,71 @@
              */
             _removeClass: function (id) {
                 var groups = this.layerGroups;
+                var foundIndex = -1;
                 for (var i = groups.length - 1; i >= 0; i -= 1) {
                     /// === wont match it correctly for some reason, maybe string from DOM attribute <> integer
                     if (groups[i].id == id) {
-                        groups.splice(i, 1);
-                        return;
+                        foundIndex = i;
+                        //groups.splice(foundIndex, 1);
+                        break;
                     }
                 }
-
+                if(foundIndex !== -1) {
+                    var me = this;
+                    var group = groups.splice(foundIndex, 1)[0];
+                    // remove layers so they are removed from the other tab as well
+                    var layers = group.getLayers();
+                    _.each(layers, function(layer){
+                        // this will trigger removal of layer which updates both tabs
+                        me.trigger('adminAction', {
+                            type: "adminAction",
+                            command: 'removeLayer',
+                            modelId: layer.getId()
+                        }); 
+                    });
+                    if(layer.length == 0) {
+                        // trigger change event so that DOM will be re-rendered
+                        // if there was no layers
+                        this.trigger('change:layerGroups');
+                    }
+                }
             },
+            /**
+             * Removes layer from all layer groups found on this tab
+             * @param  {LayerModel} layermodel backbone layer model
+             */
+            removeLayer : function(layermodel) {
+                _.each(this.layerGroups, function(group){
+                    group.remove(layermodel);
+                });
+                // trigger change event so that DOM will be re-rendered
+                this.trigger('change:layerGroups');
+            },
+            /**
+             * Removes layer from all layer groups found on this tab
+             * @param  {LayerModel} layermodel backbone layer model
+             */
+            addLayer : function(layermodel) {
+                var modelGroupId = layermodel.getGroupId(this.type);
+                var me = this;
+                _.each(this.layerGroups, function(group){
+                    var tmp = group.get(layermodel);
+                    if(modelGroupId === group.id) {
+                        group.add(layermodel, {merge: true});
+                        if(!tmp) {
+                            // new layer - trigger change
+                            me.trigger('change:layerGroups');
+                        }
+                    }
+                    else if(tmp) {
+                        // layer removed from group/group changed
+                        group.remove(tmp);
+                        // trigger change
+                        me.trigger('change:layerGroups');
+                    }
+                });
+            },
+            
 
             getGroup: function (groupId) {
                 var groups = this.layerGroups;

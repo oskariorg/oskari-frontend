@@ -68,6 +68,11 @@ define([
                 _.bindAll(this);
 
                 this._rolesUpdateHandler();
+                if(this.model) {
+                    // listenTo will remove dead listeners, use it instead of on()
+                    this.listenTo(this.model, 'change', this.render);
+                    //this.model.on('change', this.render, this);
+                }
 
                 this.render();
             },
@@ -333,6 +338,13 @@ define([
                 data.type = form.find('#add-layer-type').val() || 'wmslayer';
                 data.wmsName = form.find('#add-layer-wms-id').val();
                 data.wmsUrl = form.find('#add-layer-wms-url').val();
+                if(data.wmsUrl != me.model.getWmsUrls().join() ||
+                   data.wmsName != me.model.getWmsName()) {
+                    if(me.model.getId() && !confirm('Oikeudet hajoaa, oletko varma?')) {
+                        // existing layer/cancel!!
+                        return;
+                    }
+                }
 
                 data.opacity = form.find('#opacity-slider').val();
 
@@ -434,7 +446,14 @@ define([
                                     }
 
                                     err = loc[err] || err;
-                                    err += errVar === null || errVar === undefined ? '' : loc[errVar];
+                                    if(errVar) {
+                                        if(loc[errVar]) {
+                                            err += loc[errVar];
+                                        }
+                                        else {
+                                            err += errVar;
+                                        }
+                                    }
                                 }
                             }
                             alert(err);

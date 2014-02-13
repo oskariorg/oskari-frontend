@@ -32,21 +32,49 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
 
         },
         'MapLayerEvent': function (event) {
-            // trigger after interval since events are being spammed by backendstatus
-            // this way browser doesn't crash
-            var interval = 500,
-                me = this;
-            if (me._previousLayerUpdateTimer) {
-                clearTimeout(me._previousLayerUpdateTimer);
-                me._previousLayerUpdateTimer = null;
+            if(event.getOperation() === 'update' || 
+                event.getOperation() === 'add') {
+                // schedule to be updated
+                this._scheduleUpdateForLayer(event.getLayerId())
+                // trigger after interval since events are being spammed by backendstatus
+                // this way browser doesn't crash
+                var interval = 500,
+                    me = this;
+                if (me._previousLayerUpdateTimer) {
+                    clearTimeout(me._previousLayerUpdateTimer);
+                    me._previousLayerUpdateTimer = null;
+                }
+                me._previousLayerUpdateTimer = setTimeout(function () {
+                    me._layerUpdateHandler();
+                }, interval);
             }
-            me._previousLayerUpdateTimer = setTimeout(function () {
-                me._layerUpdateHandler();
-            }, interval);
+            else if(event.getOperation() === 'remove') {
+                this.view.removeLayer(event.getLayerId());
+            }
 
             jQuery("body").css({
                 cursor: "auto"
             });
+        }
+    },
+    _scheduleUpdateForLayer : function(layerId) {
+        if(!this._scheduledLayers) {
+            this._scheduledLayers = [];
+        }
+        var sandbox = this.getSandbox(),
+            mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+
+        // TODO: maybe check layer type and not update if myplaces etc?
+        if(layerId) {
+            // single layer
+            var layer = mapLayerService.findMapLayer(layerId);
+            if (layer) {
+                // layer found -> schedule for update
+                this._scheduledLayers.push(layer);
+            }
+        }
+        else {
+            this._scheduledLayers = mapLayerService.getAllLayers();
         }
     },
     /**
@@ -62,21 +90,19 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         // (updates everything instead of layer.name)
         var sandbox = this.getSandbox(),
             // populate layer list
-            mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
-            layers = mapLayerService.getAllLayers();
+            mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
         if (this.view !== null && this.view !== undefined) {
-            this.view.addToCollection(layers);
-        } else {
-            this.layers = layers;
+            if(!this._scheduledLayers || this._scheduledLayers.length > 30) {
+                // if more than 30 layers require update -> make full re-render
+                this.view.createUI(mapLayerService.getAllLayers());
+            }
+            else {
+                this.view.addToCollection(this._scheduledLayers);
+            }
+           // clear schedule layer updates
+           this._scheduledLayers = [];
         }
-        /* TODO use this to _update_ the updated layer?
-        // TODO: handle based on operation
-        if(event.getOperation() === 'update') {
-        }
-        else if(event.getOperation() === 'add') {
-        }
-        */
     },
 
     /**
@@ -138,6 +164,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             });
             // If call for layers is ready before backbone is created,
             // we'll instantiate our view with that data 
+            me._scheduleUpdateForLayer();
             me._layerUpdateHandler();
         });
     },
