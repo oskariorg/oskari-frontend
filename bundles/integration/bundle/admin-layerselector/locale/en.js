@@ -58,6 +58,7 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
+            "capabilitiesLabel" : "WMSCapabilities",
             "confirmResourceKeyChange" : "By changing the values of wmsname and url the layer permissions will reset. Continue?",
             "confirmDeleteLayerGroup" : "Delete layer group. Continue?",
             "confirmDeleteLayer" : "Delete layer. Continue?",

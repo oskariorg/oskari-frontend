@@ -36,8 +36,8 @@
         </div>
         <div class="add-layer-input-area">
             <select id="add-layer-interface-version">
-                <option value="<%= instance.getLocalization('admin').wms1_1_1 %>" <% if(model.getVersion() == '1.1.1' ) { %>selected<% } %> ><%= instance.getLocalization('admin').wms1_1_1 %></option>
-                <option value="<%= instance.getLocalization('admin').wms1_3_0 %>" <% if(model.getVersion() == '1.3.0' ) { %>selected<% } %> ><%= instance.getLocalization('admin').wms1_3_0 %></option>
+                <option value="1.1.1" <% if(model.getVersion() == '1.1.1' ) { %>selected<% } %> ><%= instance.getLocalization('admin').wms1_1_1 %></option>
+                <option value="1.3.0" <% if(model.getVersion() == '1.3.0' ) { %>selected<% } %> ><%= instance.getLocalization('admin').wms1_3_0 %></option>
             </select>
         </div>
     </div>
@@ -50,6 +50,22 @@
             <textarea rows="3" cols="40" id="add-layer-wms-url" class="add-layer-input long" required><% if(model.getWmsUrls) { %><%= model.getWmsUrls().join() %><% } %></textarea>
         </div>
     </div>
+
+    <% if(capabilities) { %>
+    <div class="add-layer-record capabilities">
+        <div class="add-layer-label-area">
+            <label class="add-layer-label"><%= instance.getLocalization('admin').capabilitiesLabel %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <%= capabilitiesTemplate({
+                    capabilities: capabilities, 
+                    capabilitiesTemplate: capabilitiesTemplate, 
+                    isSub : false }) %>
+            </div>
+        </div>
+    </div>
+    <% } %>
 
     <% 
         // Names are not necessary for sublayers, BUT we need to show something as the name for admins (!isSubLayer &&)

@@ -83,7 +83,9 @@ define([
                 this.instance.models.layers.removeLayer(layerId);
             },
             addToCollection: function (layerList) {
+                // FIXME: we might have a timing issue here
                 var models = this.instance.models.layers;
+
                 // merge updates existing
                 models.add(layerList, {merge: true});
             },
@@ -95,6 +97,9 @@ define([
              */
             createUI: function (models) {
                 var collection = new LayerCollection(models);
+                this.instance.models = {
+                    "layers" : collection
+                };
                 // clear everything
                 this.el.html(this.appTemplate);
 
@@ -131,11 +136,8 @@ define([
                 // FIXME: not really comfortable with this but need 
                 // the references on layer forms and instance is available
                 // maybe create a service to store these?
-                this.instance.models = {
-                    "inspire" : this.inspireTabModel,
-                    "organization" : this.organizationTabModel,
-                    "layers" : collection
-                };
+                this.instance.models.inspire = this.inspireTabModel;
+                this.instance.models.organization = this.organizationTabModel;
 
                 // activate organization tab
                 jQuery('.admin-layerselectorapp .tabsHeader').find('.organization').parent().addClass('active');

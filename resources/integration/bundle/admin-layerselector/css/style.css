@@ -1,10 +1,18 @@
-/*  */
-body {
-  position: relative; }
 
 /* layer group container */
 div.admin-layerselector {
   /* layer container */ }
+
+ div.admin-layerselector .capabilities ul {
+    margin: 5px 20px;
+}
+
+ div.admin-layerselector .capabilities li.closed {
+    color: blue;
+}
+ div.admin-layerselector .capabilities li.closed ul {
+    display : none;
+}
   div.admin-layerselector div.layerGroup {
     background-color: #f3f3f3;
     border: 1pt solid #c0d0d0;

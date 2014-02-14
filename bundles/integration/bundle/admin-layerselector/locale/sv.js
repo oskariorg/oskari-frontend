@@ -58,6 +58,7 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
+            "capabilitiesLabel" : "WMSCapabilities",
             "confirmResourceKeyChange" : "TRANSLATION MISSING",
             "confirmDeleteLayerGroup" : "TRANSLATION MISSING",
             "confirmDeleteLayer" : "TRANSLATION MISSING",

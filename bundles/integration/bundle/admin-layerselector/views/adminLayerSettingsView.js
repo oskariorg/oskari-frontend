@@ -3,6 +3,7 @@ define([
     'text!_bundle/templates/adminLayerSettingsTemplate.html',
     'text!_bundle/templates/adminGroupSettingsTemplate.html',
     'text!_bundle/templates/group/subLayerTemplate.html',
+    'text!_bundle/templates/capabilitiesTemplate.html',
     '_bundle/collections/userRoleCollection',
     '_bundle/models/layerModel'
 ],
@@ -11,6 +12,7 @@ define([
         LayerSettingsTemplate,
         GroupSettingsTemplate,
         SubLayerTemplate,
+        CapabilitiesTemplate,
         userRoleCollection,
         layerModel
     ) {
@@ -39,7 +41,8 @@ define([
                 "change #add-layer-type": "createLayerSelect",
                 "click .admin-add-group-ok": "saveCollectionLayer",
                 "click .admin-add-group-cancel": "hideLayerSettings",
-                "click .admin-remove-group": "removeLayerCollection"
+                "click .admin-remove-group": "removeLayerCollection",
+                "click .add-layer-record.capabilities li" :"handleCapabilitiesSelection"
             },
 
             /**
@@ -65,6 +68,7 @@ define([
                 this.layerTemplate = _.template(LayerSettingsTemplate);
                 this.groupTemplate = _.template(GroupSettingsTemplate);
                 this.subLayerTemplate = _.template(SubLayerTemplate);
+                this.capabilitiesTemplate = _.template(CapabilitiesTemplate);
                 _.bindAll(this);
 
                 this._rolesUpdateHandler();
@@ -102,6 +106,7 @@ define([
                     } else if (me.model.isGroupLayer()) {
                         me.createGroupForm('groupName');
                     } else if(me.model.isLayerOfType('WMS')) {
+                        me.$el.empty();
                         me.createLayerForm();
                     }
                 } else {
@@ -154,6 +159,7 @@ define([
                     styles = [];
                 if (!me.model) {
                     me.model = this._createNewModel('wmslayer');
+                    this.listenTo(this.model, 'change', this.render);
                 }
 
                 // This propably isn't the best way to get reference to inspire themes
@@ -163,6 +169,10 @@ define([
                     instance: me.options.instance,
                     inspireThemes: inspireGroups,
                     isSubLayer: me.options.baseLayerId,
+                    // capabilities template related
+                    capabilities : me.model.get('capabilities'),
+                    capabilitiesTemplate : me.capabilitiesTemplate,
+                    // ^ /capabilities related
                     roles: me.roles
                 }));
                 // if settings are hidden, we need to populate template and
@@ -572,7 +582,6 @@ define([
                     }
                 });
             },
-
             /**
              * Fetch capabilities. AJAX call to get capabilities for given capability url
              *
@@ -581,17 +590,21 @@ define([
             fetchCapabilities: function (e) {
                 var me = this,
                     element = jQuery(e.currentTarget),
-                    input = element.parents('.add-layer-wrapper').find('#add-layer-interface'),
-                    wmsurlField = element.parents('.add-layer-wrapper').find('#add-layer-wms-url'),
-                    baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
-                    wmsurl = input.val();
+                    form = element.parents('.add-layer-wrapper'),
+                    baseUrl = me.options.instance.getSandbox().getAjaxUrl();
 
-                wmsurlField.html(wmsurl);
+                var serviceURL = form.find('#add-layer-interface').val();
+//                var wmsVersion = form.find('#add-layer-interface-version').val();
+
+                me.model.set({
+//                    "_version" : wmsVersion,
+                    "_wmsUrls" : [serviceURL]
+                }, {silent: true});
 
                 jQuery.ajax({
                     type: "POST",
                     data : {
-                        wmsurl : wmsurl
+                        wmsurl : serviceURL
                     },
                     dataType: 'json',
                     beforeSend: function (x) {
@@ -601,7 +614,7 @@ define([
                     },
                     url: baseUrl + "action_route=GetWSCapabilities",
                     success: function (resp) {
-                        me.addCapabilitySelect(resp, me, element);
+                        me.model.setCapabilitiesResponse(resp);
                     },
                     error: function (jqXHR, textStatus) {
                         if (jqXHR.status !== 0) {
@@ -609,218 +622,19 @@ define([
                         }
                     }
                 });
-
-
             },
-            /**
-             * Add capabilities as a drop down list if AJAX call returned any
-             *
-             * @method addCapabilitySelect
-             */
-            addCapabilitySelect: function (capability, me, element) {
-                var select = '<select id="admin-select-capability">',
-                    layers,
-                    topLayer,
-                    i;
-                me.capabilities = this.getValue(capability);
-                // if returned data does not contain capability section
-                // there is nothing to be added
-                if (!me.capabilities || !me.capabilities.Capability) {
-                    return;
-                }
-
-                // This might be more elegant as its own template
-
-                select += '<option value="" selected="selected">' + this.options.instance.getLocalization('admin').selectLayer + '</option>';
-                topLayer = this.getValue(this.capabilities, 'Capability').Layer;
-                if (topLayer.Title) {
-                    select += '<option value="' + "-1" + '">' + topLayer.Title + '</option>';
-                }
-                layers = topLayer.Layer;
-                for (i = layers.length - 1; i >= 0; i -= 1) {
-                    select += '<option value="' + i + '">' + layers[i].Title + '</option>';
-                }
-                select += '</select>';
-
-                // if there was a drop down list already, remove it and add a new one
-                element.parent().find('#admin-select-capability').remove();
-                element.parent().append(select);
-                element.parent().find('#admin-select-capability').on('change', me.readCapabilities);
-
-            },
-            /**
-             * Read capabilities. When user has selected a capability from drop down list
-             * we need to read the values to the fields
-             *
-             * @method readCapabilities
-             */
-            readCapabilities: function (e) {
+            handleCapabilitiesSelection : function(e) {
                 var me = this,
-                    current = jQuery(e.currentTarget),
-                    selected = current.val(),
-                    capability,
-                    selectedLayer,
-                    subLayerSelect,
-                    subLayers,
-                    i,
-                    value;
-                // If no value (eg. the placeholder option was selected) remove the
-                // sublayer select and return.
-                if (!selected) {
-                    jQuery('#admin-select-sublayer').remove();
-                    return;
+                    current = jQuery(e.currentTarget);
+                // stop propagation so handler on outer tags won't be triggered as well
+                e.stopPropagation();
+                var wmsName = current.attr('data-wmsname');
+                if(wmsName) {
+                    me.model.setupCapabilities(wmsName);
                 }
-                capability = me.getValue(me.capabilities, 'Capability');
-                if (selected > -1) {
-                    selectedLayer = capability.Layer.Layer[selected];
-                } else {
-                    selectedLayer = capability.Layer;
-                }
-
-                jQuery('#admin-select-sublayer').remove();
-                if (selectedLayer.Layer) {
-                    // If the selected layer has sub-layers create a dropdown to show them.
-
-                    // This might be more elegant as its own template
-                    subLayerSelect = '<select id="admin-select-sublayer">';
-                    subLayerSelect += '<option value="" selected="selected">' + me.options.instance.getLocalization('admin').selectSubLayer + '</option>';
-                    subLayers = selectedLayer.Layer;
-                    for (i = subLayers.length - 1; i >= 0; i -= 1) {
-                        subLayerSelect += '<option value="' + i + '">' + subLayers[i].Title + '</option>';
-                    }
-                    subLayerSelect += '</select>';
-                    jQuery(subLayerSelect).insertAfter('#admin-select-capability');
-                    jQuery('#admin-select-sublayer').on('change', function () {
-                        value = jQuery(this).val();
-                        if (value) {
-                            me.updateLayerValues(subLayers[value], capability, current.parents('.add-layer-wrapper'));
-                        }
-                    });
-                }
-
-                // update values for the parent layer.
-                me.updateLayerValues(selectedLayer, capability, current.parents('.add-layer-wrapper'));
-            },
-
-            /**
-             * Updates the values of the create layer form
-             *
-             * @method updateLayerValues
-             * @param {Object} selectedLayer
-             * @param {Object} capability
-             * @param {Object} container
-             */
-            updateLayerValues: function (selectedLayer, capability, container) {
-                // Clear out the old values
-                //var layerInterface = container.find('#add-layer-interface').val(),
-                    // keep wms url from reseting... hacky whacky
-                var wmsurlField = container.find('#add-layer-wms-url'),
-                    wmsurl = wmsurlField.text(),
-                    defaultLanguage = Oskari.getDefaultLanguage(),
-                    wmsname = selectedLayer.Name,
-                    styles = selectedLayer.Style,
-                    minScale = selectedLayer.MaxScaleDenominator,
-                    maxScale = selectedLayer.MinScaleDenominator,
-                    srsName = selectedLayer.CRS,
-                    legendURL,
-                    styleSelect,
-                    //s = [],
-                    i,
-                    gfiType,
-                    gfiTypeSelect,
-                    wmsMetadataId,
-                    uuid,
-                    idx,
-                    opacityInput = container.find(".opacity-slider.opacity"),
-                    opacity = opacityInput.val();
-
-                this.clearAllFields();
-                container.find(".opacity-slider.opacity").val(opacity);
-                container.find('.layout-slider').slider('value', opacity);
-
-                wmsurlField.text(wmsurl);
-                //title
-                jQuery('#add-layer-' + defaultLanguage + '-name').val(selectedLayer.Title);
-
-                // wmsname
-                jQuery('#add-layer-wms-id').val(wmsname);
-
-                if (styles) {
-
-                    //LegendURL
-                    if (styles.LegendURL) {
-                        legendURL = styles.LegendURL.OnlineResource['xlink:href'];
-                        jQuery('#add-layer-legendImage').val(legendURL);
-                    }
-
-                    //Styles
-                    styleSelect = jQuery('#add-layer-style');
-                    if (Object.prototype.toString.call(styles) === '[object Array]') {
-                        for (i = 0; i < styles.length; i += 1) {
-                            styleSelect.append('<option>' + styles[i].Title + '</option>');
-                        }
-                    } else {
-                        styleSelect.append('<option>' + styles.Title + '</option>');
-                    }
-                }
-
-                // Scale denominators
-                if (maxScale && minScale) {
-                    jQuery('#add-layer-minscale').val(minScale);
-                    jQuery('#add-layer-maxscale').val(maxScale);
-                }
-
-                // SRS name
-                if (srsName) {
-                    jQuery('#add-layer-srsname').val(srsName);
-                }
-
-                if (capability.Request.GetFeatureInfo) {
-                    gfiType = capability.Request.GetFeatureInfo.Format;
-                    gfiTypeSelect = jQuery('#add-layer-responsetype');
-                    gfiTypeSelect.append('<option value="" selected="selected"></option>');
-                    for (i = 0; i < gfiType.length; i += 1) {
-                        gfiTypeSelect.append('<option>' + gfiType[i] + '</option>');
-                    }
-                }
-
-                // WMS Metadata Id
-                if (capability['inspire_vs:ExtendedCapabilities'] &&
-                        capability['inspire_vs:ExtendedCapabilities']['inspire_common:MetadataUrl'] &&
-                        capability['inspire_vs:ExtendedCapabilities']['inspire_common:MetadataUrl']['inspire_common:URL'].indexOf) {
-                    wmsMetadataId = capability['inspire_vs:ExtendedCapabilities']['inspire_common:MetadataUrl']['inspire_common:URL'];
-                    wmsMetadataId = wmsMetadataId.substring(wmsMetadataId.indexOf('id=') + 3);
-                    if (wmsMetadataId.indexOf('&') >= 0) {
-                        wmsMetadataId = wmsMetadataId.substring(0, wmsMetadataId.indexOf('&'));
-                    }
-                    jQuery('#add-layer-metadataid').val(wmsMetadataId.trim());
-                }
-
-                // WMS url - copied from url the user inserted
-                /*
-            var getMapRequest = capability.Request.GetMap;
-            if (getMapRequest) {
-                var wmsUrl = getMapRequest.DCPType.HTTP.Get.OnlineResource['xlink:href'];
-                if(wmsUrl != null && wmsUrl !== "") {
-                    jQuery('#add-layer-wms-url').val(wmsUrl);
-                } else {
-                    jQuery('#add-layer-wms-url').val(layerInterface);
-                }
-                container.find('#add-layer-interface').val(layerInterface)
-            }
-            */
-                //metadata id == uuid
-                //"http://www.paikkatietohakemisto.fi/geonetwork/srv/en/main.home?uuid=a22ec97f-d418-4957-9b9d-e8b4d2ec3eac"
-                uuid = this.capabilities.Service.OnlineResource['xlink:href'];
-                if (uuid) {
-                    idx = uuid.indexOf('uuid=');
-                    if (idx >= 0) {
-                        uuid = uuid.substring(idx + 5);
-                        if (uuid.indexOf('&') >= 0) {
-                            uuid = uuid.substring(0, uuid.indexOf('&'));
-                        }
-                        jQuery('#add-layer-datauuid').val(uuid);
-                    }
+                else {
+                    current.children('ul').toggle();
+                    current.toggleClass('closed');
                 }
             },
 
@@ -852,25 +666,6 @@ define([
                 if (input.length === 1) {
                     input.val('');
                 }
-            },
-
-            /**
-             * Clears all the fields of the create layer form.
-             *
-             * @method clearAllFields
-             */
-            clearAllFields: function () {
-                var form = jQuery('.create-layer');
-                // Clear all the inputs and textareas.
-                form.find('input').val('');
-                form.find('textarea').text('');
-                // Empty the GFI response type select
-                jQuery('#add-layer-responsetype').empty();
-                // Empty the layer style select
-                jQuery('#add-layer-style').empty();
-                // opacity has to be set to 100
-                this.$el.find(".admin-add-layer .opacity-slider.opacity").val(100);
-                this.$el.find('.layout-slider').slider('value', 100);
             },
 
             /**

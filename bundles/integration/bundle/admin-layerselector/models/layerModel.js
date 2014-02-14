@@ -43,6 +43,61 @@ if (!Function.prototype.bind) {
                 // setup backbone id so collections work
                 this.id = model.getId();
             },
+            /**
+             * Sets the internal state for full capabilities response. 
+             * Call setupCapabilities with selected wmslayer to pick one layer def from the whole response after calling this.
+             * @param  {Object} capabilities response from server
+             */
+            setCapabilitiesResponse : function(resp) {
+              this.set({
+                  "_version" : resp.version,
+                  "capabilities" : resp
+              });
+            },
+            /**
+             * Internal method to set attributes based on given capabilities node.
+             * @private
+             * @param  {Object} capabilitiesNode
+             */
+            _setupFromCapabilitiesValues : function(capabilitiesNode) {
+                console.log("Found:", capabilitiesNode);
+
+            },
+            /**
+             * Recursive function to search capabilities by wmsName.
+             * Recursion uses the second parameter internally, but it's optional.
+             * If not set, it will be fetched from models attributes.
+             * @param  {String} wmsName      name to search for
+             * @param  {Object} capabilities (optional capabilities object)
+             * @return {Boolean}             true if name was found
+             */
+            setupCapabilities : function(wmsName, capabilities) {
+              if(!wmsName) {
+                return;
+              }
+              var me = this;
+              if(!capabilities) {
+                capabilities = this.get('capabilities');
+              }
+              if(capabilities.wmsName == wmsName) {
+                me._setupFromCapabilitiesValues(capabilities);
+                return true;
+              }
+              var found = false;
+              _.each(capabilities.groups, function(group) {
+                if(!found) {
+                  found = me.setupCapabilities(wmsName, group);
+                }
+              });
+              if(!found) {
+                _.each(capabilities.layers, function(layer) {
+                  if(!found) {
+                    found = me.setupCapabilities(wmsName, layer);
+                  }
+                });
+              }
+              return found;
+            },
 
             /**
              * Returns XSLT if defined or null if not
