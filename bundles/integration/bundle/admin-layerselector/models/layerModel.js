@@ -63,6 +63,7 @@ if (!Function.prototype.bind) {
             getGroupId : function(type) {
                 var adminBlock = this.get('admin');
                 if(adminBlock) {
+                    // inspireId or organizationId
                     return adminBlock[type + 'Id'];
                 }
                 return null;
