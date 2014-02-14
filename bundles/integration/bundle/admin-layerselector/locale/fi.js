@@ -58,7 +58,7 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
-            "confirmResourceKeyChange" : "Muuttamalla wmsname ja url arvoja tason oikeudet muuttuvat. Haluatko jatkaa?",
+            "confirmResourceKeyChange" : "Olet muuttanut wmsname- tai url-kentän arvoja. Tietoturvasyistä karttatason käyttöoikeudet poistetaan ja ne täytyy asettaa uudelleen. Haluatko jatkaa?",
             "confirmDeleteLayerGroup" : "Tasoryhmän poisto. Haluatko jatkaa?",
             "confirmDeleteLayer" : "Tason poisto. Haluatko jatkaa?",
             "layertypes" : {
