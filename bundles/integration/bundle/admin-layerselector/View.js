@@ -59,7 +59,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         }
         me._previousLayerUpdateTimer = setTimeout(function () {
             if(!me._layerUpdateHandler()) {
-                // try again if not successful
+                // try again if not successful - accessed too quickly etc
                 me._triggerLayerUpdateCountdown();
             }
         }, interval);
