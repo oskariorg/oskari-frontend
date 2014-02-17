@@ -251,6 +251,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         if (me.toolbarConfig[groupName]) {
                             delete me.toolbarConfig[groupName][toolName];
                         }
+                        me.toolbarConfig[groupName][toolName] = false;
                     }
                 };
             };
