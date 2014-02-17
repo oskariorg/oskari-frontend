@@ -165,6 +165,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             },
             'AfterRearrangeSelectedMapLayerEvent': function (event) {
                 this.plugins['Oskari.userinterface.Flyout'].refresh();
+            },
+            /**
+             * @method MapLayerEvent
+             * @param {Oskari.mapframework.event.common.MapLayerEvent} event
+             */
+            'MapLayerEvent': function (event) {
+                if (event.getOperation() === 'update') {
+                    this.plugins['Oskari.userinterface.Flyout'].refresh();
+                }
             }
         },
 
