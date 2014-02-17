@@ -328,12 +328,7 @@ define([
                 }
 
                 // add layer type and version
-                wmsVersion = (wmsVersion !== "") ? wmsVersion : form.find('#add-layer-interface-version > option').first().val();
-
-                if (wmsVersion.indexOf('WMS') >= 0) {
-                    var parts = wmsVersion.split(' ');
-                    data.version = parts[1];
-                }
+                data.version = (wmsVersion !== "") ? wmsVersion : form.find('#add-layer-interface-version > option').first().val();
 
                 // base and group are always of type wmslayer
                 data.layerType = 'wmslayer';
@@ -438,7 +433,6 @@ define([
                         }
                     },
                     error: function (jqXHR, textStatus) {
-                        console.log(jqXHR, textStatus);
                         if (jqXHR.status !== 0) {
                             var loc = me.instance.getLocalization('admin'),
                                 err = loc.update_or_insert_failed;
