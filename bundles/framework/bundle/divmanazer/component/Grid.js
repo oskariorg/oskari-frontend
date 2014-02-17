@@ -152,6 +152,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @return (jQuery) reference to rendered content
          */
         _createAdditionalDataField: function (data) {
+            if (!data || jQuery.isEmptyObject(data)) {
+                return false;
+            }
             var me = this,
                 content = this._renderAdditionalData(data),
                 link;
