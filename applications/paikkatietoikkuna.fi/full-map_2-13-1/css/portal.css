@@ -860,7 +860,6 @@ select {
   display: block; }
 
 .portlet-dropzone.empty {
-  height: 20px;
   overflow: hidden; }
 
 .lfr-has-sidebar #main-content {
@@ -869,9 +868,6 @@ select {
 /*drop-zones*/
 .portlet {
   margin: 0 0 15px; }
-
-.portlet-borderless-container {
-  margin-bottom: 20px; }
 
 /*map view*/
 .sidebar-toggle {

@@ -306,6 +306,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                                         .attr('id', 'tool-opt-' + toolName)
                                         .change(_toggleToolOption(toolName, buttonGroup.name, toolButton));
                                     options.append(toolButton.selectTool);
+                                    if (me._publisher.data.state.toolbar && me._publisher.data.state.toolbar.config) {
+                                        var tbConf = me._publisher.data.state.toolbar.config;
+                                        if (tbConf[buttonGroup.name] && tbConf[buttonGroup.name][toolName]) {
+                                            var toolElement = toolButton.selectTool.find('input');
+                                            toolElement
+                                                .trigger('click')
+                                                .trigger('change');
+                                            toolElement = null; // ensure we release the dom element
+                                        }
+                                    }
                                 }
                             }
                         }
