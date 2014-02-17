@@ -138,7 +138,7 @@ module.exports = function (grunt) {
                     },
                     // Copy all minified oskari files
                     {
-                        cwd: '../dist/',
+                        cwd: '../dist/<%= versionNum %>/<%= compress.options.fullMap %>',
                         src: 'oskari*',
                         dest: '/min/',
                         expand: true
@@ -574,6 +574,8 @@ module.exports = function (grunt) {
                 "dest": dest
             });
             grunt.config.set("sprite." + appName + ".options", options);
+
+            if (appName === 'full-map') grunt.config.set('compress.options.fullMap', appName);
         }
 
         grunt.task.run('validate');
@@ -583,7 +585,7 @@ module.exports = function (grunt) {
         grunt.task.run('sprite');
         grunt.task.run('oskaridoc');
         grunt.task.run('mddocs');
-        grunt.task.run('compress');
+        if (grunt.config.get('compress.options.fullMap')) grunt.task.run('compress');
     });
 
     grunt.registerTask('packageopenlayer', 'Package openlayers according to packages', function (packages) {
