@@ -633,8 +633,8 @@ define([
                     me.model.setupCapabilities(wmsName);
                 }
                 else {
-                    current.children('ul').toggle();
-                    current.toggleClass('closed');
+                    //current.children('ul').toggle();
+                    current.children('ul').toggleClass('closed');
                 }
             },
 

@@ -41,16 +41,7 @@
             </select>
         </div>
     </div>
-
-    <div class="add-layer-record">
-        <div class="add-layer-label-area">
-            <label for="add-layer-wms-url" class="add-layer-label" title="<%= instance.getLocalization('admin').wmsInterfaceAddressDesc %>"><%= instance.getLocalization('admin').wmsInterfaceAddress %></label>
-        </div>
-        <div class="add-layer-input-area">
-            <textarea rows="3" cols="40" id="add-layer-wms-url" class="add-layer-input long" required><% if(model.getWmsUrls) { %><%= model.getWmsUrls().join() %><% } %></textarea>
-        </div>
-    </div>
-
+    
     <% if(capabilities) { %>
     <div class="add-layer-record capabilities">
         <div class="add-layer-label-area">
@@ -66,6 +57,16 @@
         </div>
     </div>
     <% } %>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-wms-url" class="add-layer-label" title="<%= instance.getLocalization('admin').wmsInterfaceAddressDesc %>"><%= instance.getLocalization('admin').wmsInterfaceAddress %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <textarea rows="3" cols="40" id="add-layer-wms-url" class="add-layer-input long" required><% if(model.getWmsUrls) { %><%= model.getWmsUrls().join() %><% } %></textarea>
+        </div>
+    </div>
+
 
     <% 
         // Names are not necessary for sublayers, BUT we need to show something as the name for admins (!isSubLayer &&)

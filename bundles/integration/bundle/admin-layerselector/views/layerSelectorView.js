@@ -83,11 +83,13 @@ define([
                 this.instance.models.layers.removeLayer(layerId);
             },
             addToCollection: function (layerList) {
-                // FIXME: we might have a timing issue here
+                if(!this.instance.models || this.instance.models.layers) {
+                    return false;
+                }
                 var models = this.instance.models.layers;
-
                 // merge updates existing
                 models.add(layerList, {merge: true});
+                return true;
             },
             /**
              * Adds layer models and uses those to create layersTabModels
@@ -149,6 +151,7 @@ define([
                 //console.log("Getting inspire themes and map layer classes");
                 this.inspireTabModel.getClasses('getInspireName');
                 this.organizationTabModel.getClasses('getOrganizationName');
+                return true;
             },
 
             /**

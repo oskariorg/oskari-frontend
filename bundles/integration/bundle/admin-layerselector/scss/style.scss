@@ -24,17 +24,39 @@ div.admin-layerselector {
 
     }
 
-    .capabilities ul {
-        margin: 5px 20px;
+    /* For long lists, make capabilities list scrollable */
+    .add-layer-record.capabilities {
+      max-height: 250px;
+      overflow: auto;
     }
 
-    .capabilities li.closed {
-        color: blue;
-        display : none;
+    .capabilities {
+        ul {
+            margin: 0px 20px 5px 20px;
+            /* reset for parent level style */
+            font-weight: normal;
+        }
+
+        li ul {
+            /* sublist */
+            margin: 5px;
+        }
+
+        /* link-like hover */
+        li.capabilitieslayer:hover {
+            text-decoration: underline;
+        }
+
+        /* emphasize group nodes */
+        li.groupTitle {
+            font-weight: bold;
+
+            ul.closed {
+                display : none;
+            }
+        }
     }
-    .capabilities li.closed ul {
-        display : none;
-    }
+
 
     .oskariTabs {
         min-width: 480px;

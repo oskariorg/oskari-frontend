@@ -49,10 +49,27 @@ if (!Function.prototype.bind) {
              * @param  {Object} capabilities response from server
              */
             setCapabilitiesResponse : function(resp) {
-              this.set({
-                  "_version" : resp.version,
-                  "capabilities" : resp
-              });
+                this._sortCapabilities(resp);
+                this.set({
+                    "_version" : resp.version,
+                    "capabilities" : resp
+                });
+            },
+            _sortCapabilities : function(capabilities) {
+                var me = this;
+                var sortFunction = me._getPropertyComparatorFor('title');
+                capabilities.layers.sort(sortFunction);
+                capabilities.groups.sort(sortFunction);
+                _.each(capabilities.groups, function(group) {
+                    me._sortCapabilities(group);
+                });
+            },
+            _getPropertyComparatorFor : function(property) {
+                return function(a, b) {
+                    if(a[property] > b[property]) return 1;
+                    else if (a[property] < b[property]) return -1;
+                    return 0;
+                }
             },
             /**
              * Internal method to set attributes based on given capabilities node.
@@ -60,8 +77,11 @@ if (!Function.prototype.bind) {
              * @param  {Object} capabilitiesNode
              */
             _setupFromCapabilitiesValues : function(capabilitiesNode) {
-                console.log("Found:", capabilitiesNode);
-
+                var sb = Oskari.getSandbox();
+                sb.printDebug("Found:", capabilitiesNode);
+                var mapLayerService = sb.getService('Oskari.mapframework.service.MapLayerService');
+                var mapLayer = mapLayerService.createMapLayer(capabilitiesNode);
+                this.set(mapLayer);
             },
             /**
              * Recursive function to search capabilities by wmsName.
@@ -84,20 +104,24 @@ if (!Function.prototype.bind) {
                 return true;
               }
               var found = false;
+
+              // check layers directly under this 
+              _.each(capabilities.layers, function(layer) {
+                if(!found) {
+                    found = me.setupCapabilities(wmsName, layer);
+                }
+              });
+              // if not found, check any groups under this 
+              if(!found) {
               _.each(capabilities.groups, function(group) {
                 if(!found) {
                   found = me.setupCapabilities(wmsName, group);
                 }
               });
-              if(!found) {
-                _.each(capabilities.layers, function(layer) {
-                  if(!found) {
-                    found = me.setupCapabilities(wmsName, layer);
-                  }
-                });
               }
               return found;
             },
+
 
             /**
              * Returns XSLT if defined or null if not
@@ -105,11 +129,11 @@ if (!Function.prototype.bind) {
              */
             getGfiXslt : function() {
                 var adminBlock = this.get('admin');
-            	if(adminBlock) {
-            		return adminBlock.xslt;
-            	}
-            	return null;
-        	},
+                if(adminBlock) {
+                    return adminBlock.xslt;
+                }
+                return null;
+            },
             /**
              * Returns organization or inspire id based on type
              * @param  {String} type ['organization' | 'inspire']
@@ -128,17 +152,17 @@ if (!Function.prototype.bind) {
              * @return {String[]} language codes
              */
             getNameLanguages : function() {
-            	// TODO: maybe cache result?
-            	return this._getLanguages(this.get('_name'));
-        	},
+                // TODO: maybe cache result?
+                return this._getLanguages(this.get('_name'));
+            },
             /**
              * Returns language codes for defined names
              * @return {String[]} language codes
              */
             getDescLanguages : function() {
-            	// TODO: maybe cache result?
-            	return this._getLanguages(this.get('_description'));
-        	},
+                // TODO: maybe cache result?
+                return this._getLanguages(this.get('_description'));
+            },
             /**
              * Returns defined language codes or default language if not set
              * @method  _getLanguages
@@ -146,23 +170,23 @@ if (!Function.prototype.bind) {
              * @return {String[]} [description]
              * @private
              */
-        	_getLanguages : function(attr) {
-            	var langList = [];
-            	// add languages from possible object value
-            	if (attr && typeof attr === 'object') {
-            		for(var key in attr) {
-    					langList.push(key);
-            		}
-            	}
+            _getLanguages : function(attr) {
+                var langList = [];
+                // add languages from possible object value
+                if (attr && typeof attr === 'object') {
+                    for(var key in attr) {
+                        langList.push(key);
+                    }
+                }
 
-            	// add any missing languages
-            	_.each(this.supportedLanguages, function(lang) {
-            		if(jQuery.inArray(lang, langList) == -1) {
-            			langList.push(lang);
-            		}
-            	});
-            	/*
-            	// TODO: do we need to sort by language?
+                // add any missing languages
+                _.each(this.supportedLanguages, function(lang) {
+                    if(jQuery.inArray(lang, langList) == -1) {
+                        langList.push(lang);
+                    }
+                });
+                /*
+                // TODO: do we need to sort by language?
                 langList.sort(function (a, b) {
                     if (a < b) {
                         return -1;
@@ -172,8 +196,8 @@ if (!Function.prototype.bind) {
                     }
                     return 0;
                 });*/
-        		return langList;
-        	}
+                return langList;
+            }
         });
     });
 }).call(this);
