@@ -36,17 +36,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                 event.getOperation() === 'add') {
                 // schedule to be updated
                 this._scheduleUpdateForLayer(event.getLayerId())
-                // trigger after interval since events are being spammed by backendstatus
-                // this way browser doesn't crash
-                var interval = 500,
-                    me = this;
-                if (me._previousLayerUpdateTimer) {
-                    clearTimeout(me._previousLayerUpdateTimer);
-                    me._previousLayerUpdateTimer = null;
-                }
-                me._previousLayerUpdateTimer = setTimeout(function () {
-                    me._layerUpdateHandler();
-                }, interval);
+                this._triggerLayerUpdateCountdown();
             }
             else if(event.getOperation() === 'remove') {
                 this.view.removeLayer(event.getLayerId());
@@ -56,6 +46,23 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                 cursor: "auto"
             });
         }
+    },
+    _triggerLayerUpdateCountdown : function() {
+        // trigger after interval since events are being spammed by backendstatus
+        // this way browser doesn't crash
+        var interval = 500,
+            me = this;
+
+        if (me._previousLayerUpdateTimer) {
+            clearTimeout(me._previousLayerUpdateTimer);
+            me._previousLayerUpdateTimer = null;
+        }
+        me._previousLayerUpdateTimer = setTimeout(function () {
+            if(!me._layerUpdateHandler()) {
+                // try again if not successful - accessed too quickly etc
+                me._triggerLayerUpdateCountdown();
+            }
+        }, interval);
     },
     _scheduleUpdateForLayer : function(layerId) {
         if(!this._scheduledLayers) {
@@ -91,18 +98,21 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         var sandbox = this.getSandbox(),
             // populate layer list
             mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-
+        var success = false;
         if (this.view !== null && this.view !== undefined) {
             if(!this._scheduledLayers || this._scheduledLayers.length > 30) {
                 // if more than 30 layers require update -> make full re-render
-                this.view.createUI(mapLayerService.getAllLayers());
+                success = this.view.createUI(mapLayerService.getAllLayers());
             }
             else {
-                this.view.addToCollection(this._scheduledLayers);
+                success = this.view.addToCollection(this._scheduledLayers);
             }
-           // clear schedule layer updates
-           this._scheduledLayers = [];
+            if(success) {
+               // clear schedule layer updates
+               this._scheduledLayers = [];
+            }
         }
+        return success;
     },
 
     /**

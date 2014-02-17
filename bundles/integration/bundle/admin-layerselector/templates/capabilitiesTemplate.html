@@ -1,10 +1,10 @@
-<ul>
+<ul <% if(isSub) { %>class="closed"<% } %>>
     <% _.each(capabilities.groups, function(cap) { %>
-        <li class="<% if(isSub) { %>closed<% } %>"><%= cap.title %>
+        <li class="groupTitle"><%= cap.title %>
         	<%= capabilitiesTemplate({capabilities: cap, capabilitiesTemplate: capabilitiesTemplate, isSub : true}) %>
         </li>
     <% }); %>
     <% _.each(capabilities.layers, function(layer) { %>
-        <li data-wmsname="<%= layer.wmsName %>"><%= layer.title %></li>
+        <li class="capabilitieslayer" data-wmsname="<%= layer.wmsName %>"><%= layer.title %></li>
     <% }); %>
 </ul>

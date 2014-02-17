@@ -4,15 +4,33 @@ div.admin-layerselector {
   /* layer container */ }
 
  div.admin-layerselector .capabilities ul {
-    margin: 5px 20px;
+    margin: 0px 20px 5px 20px;
 }
 
- div.admin-layerselector .capabilities li.closed {
-    color: blue;
+ div.admin-layerselector .capabilities li ul {
+  /* sublist */
+    margin: 5px;
 }
- div.admin-layerselector .capabilities li.closed ul {
+
+div.admin-layerselector .add-layer-record.capabilities {
+  max-height: 250px;
+  overflow: auto;
+}
+
+ div.admin-layerselector .capabilities ul {
+  /* reset for parent level style */
+    font-weight: normal;
+}
+ div.admin-layerselector .capabilities li.capabilitieslayer:hover {
+    text-decoration: underline;
+}
+ div.admin-layerselector .capabilities li.groupTitle {
+    font-weight: bold;
+}
+ div.admin-layerselector .capabilities li.groupTitle ul.closed {
     display : none;
 }
+
   div.admin-layerselector div.layerGroup {
     background-color: #f3f3f3;
     border: 1pt solid #c0d0d0;
