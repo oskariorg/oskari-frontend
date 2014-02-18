@@ -1,65 +1,79 @@
-/* "tab" content */
-div.oskariTabs div.tabsContent {
-    border-left: 1px solid #999999;
-    border-right: 1px solid #999999;
-    border-top: 0px solid #999999;
-    border-bottom: 1px solid #999999;
-    color: #000000;
-    height: 90%;
-
-    div.tab-content {
-        padding : 10px;
-        overflow : auto;
-    }
-    
-    ul {
+div.oskariTabs {
+    /* tab headers */
+     div.tabsHeader {
+       background: url('/Oskari/resources/framework/bundle/divmanazer/images/tab_bg.png') repeat-x scroll center bottom; /* #FFFFFF*/
+        clear: left;
         float: left;
-        list-style: none outside none;
-        margin: 0;
+        font : 12pt Arial,sans-serif;
+        font-weight: bold;
+        overflow: hidden;
         padding: 0;
-        text-align: center;
+        width: 100%;
 
-        li {
-            display: block;
+        ul {
             float: left;
             list-style: none outside none;
-            margin: 10px 0 0;
+            margin: 0;
             padding: 0;
-            right: 50%;
+            text-align: center;
 
-            &.active a {
-                border-left: 1px solid #999999;
-                border-right: 1px solid #999999;
-                border-top: 1px solid #999999;
-                border-bottom: 0px solid #999999;
-                color: #000000;
-            }
-
-            &.fill a {
-               width: 100%;
-            }
-
-            a {
-                background: none repeat scroll 0 0 #FFFFFF;
-                border-bottom: 1px solid #999999;
-                color: #3333FF;
+            li {
                 display: block;
                 float: left;
-                padding: 10px 20px;
-                position: relative;
-                text-decoration: none;
-            }
+                list-style: none outside none;
+                margin: 10px 0 0;
+                padding: 0;
+                right: 50%;
 
-            input[type="button"] {
-                font-size: 0.75em;
-            }
+                &.active a {
+                    border-left: 1px solid #999999;
+                    border-right: 1px solid #999999;
+                    border-top: 1px solid #999999;
+                    border-bottom: 0px solid #999999;
+                    color: #000000;
+                }
 
-            select {
-                margin-right: 10px;
+                &.fill a {
+                   width: 100%;
+                }
+
+                a {
+                    background: none repeat scroll 0 0 #FFFFFF;
+                    border-bottom: 1px solid #999999;
+                    color: #3333FF;
+                    display: block;
+                    float: left;
+                    padding: 10px 20px;
+                    position: relative;
+                    text-decoration: none;
+                }
+
+                input[type="button"] {
+                    font-size: 0.75em;
+                }
+
+                select {
+                    margin-right: 10px;
+                }
+
             }
 
         }
 
+    }
+
+    /* "tab" content */
+    div.tabsContent {
+        border-left: 1px solid #999999;
+        border-right: 1px solid #999999;
+        border-top: 0px solid #999999;
+        border-bottom: 1px solid #999999;
+        color: #000000;
+        height: 90%;
+    }
+    div.tab-content {
+        padding : 10px;
+        overflow: auto;
     }
 
 }
