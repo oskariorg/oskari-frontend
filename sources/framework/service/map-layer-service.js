@@ -148,6 +148,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // TODO: should we notify somehow?
                 return;
             }
+            // remove the layer from core.
+            this._sandbox.removeMapLayer(layerId);
             // default to all layers
             var layerList = this._loadedLayersList;
             if(layer.getParentId() != -1) {

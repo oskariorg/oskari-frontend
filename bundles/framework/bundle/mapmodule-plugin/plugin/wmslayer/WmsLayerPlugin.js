@@ -135,6 +135,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
          * @static
          */
         eventHandlers: {
+            'MapLayerEvent': function(event) {
+                var op = event.getOperation(),
+                    layer = this._sandbox.findMapLayerFromSelectedMapLayers(event.getLayerId());
+
+                if (op === 'update' && layer && layer.isLayerOfType('WMS'))
+                    this._updateLayer(layer);
+            },
             'AfterMapLayerRemoveEvent': function (event) {
                 this._afterMapLayerRemoveEvent(event);
             },
@@ -388,6 +395,51 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
                         });
                     }
                 }
+            }
+        },
+        /**
+         * Updates the OpenLayers and redraws them if scales have changed.
+         *
+         * @method _updateLayer
+         * @param  {Oskari.mapframework.domain.WmsLayer} layer
+         * @return {undefined}
+         */
+        _updateLayer: function(layer) {
+            var oLayers = this.getOLMapLayers(layer),
+                subs = layer.getSubLayers(),
+                layerList = subs.length ? subs : [layer],
+                llen = layerList.length,
+                scale = this.getMapModule().getMap().getScale(),
+                i, newRes, isInScale;
+
+            for (i = 0; i < llen; ++i) {
+                newRes = this._calculateResolutions(layerList[i]);
+                isInScale = layerList[i].isInScale(scale);
+                if (newRes && isInScale) {
+                    oLayers[i].addOptions({
+                        resolutions: newRes
+                    });
+                    oLayers[i].setVisibility(isInScale);
+                    oLayers[i].redraw(true);
+                }
+            }
+        },
+        /**
+         * Calculates the resolutions based on layer scales.
+         *
+         * @method _calculateResolutions
+         * @param  {Oskari.mapframework.domain.WmsLayer} layer
+         * @return {Array[Number]}
+         */
+        _calculateResolutions: function(layer) {
+            var minScale = layer.getMinScale(),
+                maxScale = layer.getMaxScale();
+
+            if (minScale || maxScale) {
+                // use resolutions instead of scales to minimize chance of transformation errors
+                return this
+                    .getMapModule()
+                    .calculateLayerResolutions(maxScale, minScale);
             }
         }
     }, {

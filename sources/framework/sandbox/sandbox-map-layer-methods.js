@@ -90,5 +90,23 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-layer-methods'
      */
     allowMultipleHighlightLayers: function (allow) {
         this._core.allowMultipleHighlightLayers(allow);
+    },
+
+    /**
+     * Calls the core to remove the map layer.
+     *
+     * @method removeMapLayer
+     * @param  {String/Number} layerId
+     * @return {undefined}
+     */
+    removeMapLayer: function(layerId) {
+        // We need a fake request since
+        // the '_handleRemoveMapLayerRequest'
+        // expects one.
+        this._core._handleRemoveMapLayerRequest({
+            getMapLayerId: function() {
+                return layerId;
+            }
+        });
     }
 });
