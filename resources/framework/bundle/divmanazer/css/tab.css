@@ -8,7 +8,8 @@ div.oskariTabs div.tabsContent {
   height: 90%; }
 
 div.oskariTabs div.tab-content {
-  padding: 10px; }
+  padding: 10px;
+  overflow : auto;}
 
 /* tab headers */
 div.oskariTabs div.tabsHeader {
