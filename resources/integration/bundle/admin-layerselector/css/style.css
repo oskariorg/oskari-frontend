@@ -12,7 +12,7 @@ div.admin-layerselector {
     margin: 5px;
 }
 
-div.admin-layerselector .add-layer-record.capabilities {
+div.admin-layerselector .add-layer-record.capabilities .add-layer-input-area {
   max-height: 250px;
   overflow: auto;
 }

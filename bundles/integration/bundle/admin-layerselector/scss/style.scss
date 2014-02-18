@@ -25,7 +25,7 @@ div.admin-layerselector {
     }
 
     /* For long lists, make capabilities list scrollable */
-    .add-layer-record.capabilities {
+    .add-layer-record.capabilities .add-layer-input-area {
       max-height: 250px;
       overflow: auto;
     }
