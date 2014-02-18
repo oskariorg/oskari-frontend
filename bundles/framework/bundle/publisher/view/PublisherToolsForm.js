@@ -431,6 +431,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         if (me[configName][groupName]) {
                             me[configName][groupName][toolName] = false;
                         }
+                        me.toolbarConfig[groupName][toolName] = false;
                     }
                 };
             };
