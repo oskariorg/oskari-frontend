@@ -53,7 +53,6 @@ if (!Function.prototype.bind) {
                 this._sortCapabilities(resp);
               }
                 this.set({
-                    "_version" : resp.version,
                     "capabilities" : resp
                 });
             },
