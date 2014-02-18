@@ -83,7 +83,7 @@ define([
                 this.instance.models.layers.removeLayer(layerId);
             },
             addToCollection: function (layerList) {
-                if(!this.instance.models || this.instance.models.layers) {
+                if(!this.instance.models || !this.instance.models.layers) {
                     return false;
                 }
                 var models = this.instance.models.layers;

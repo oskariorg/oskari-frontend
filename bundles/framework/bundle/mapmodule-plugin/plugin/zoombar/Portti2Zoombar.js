@@ -78,11 +78,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         init: function () {
             var me = this;
             // templates
-            this.templates.main = jQuery('<div class="oskariui mapplugin pzbDiv zoombar" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar">' +
-                '<div class="pzbDiv-plus"  title="Katu"></div>' +
+            this.templates.main = jQuery('<div class="oskariui mapplugin pzbDiv zoombar">' +
+                '<div class="pzbDiv-plus"></div>' +
                 '<input type=\'hidden\' />' +
                 '<div class="slider"></div>' +
-                '<div class="pzbDiv-minus"  title="Koko Maa"></div>' +
+                '<div class="pzbDiv-minus"></div>' +
                 '</div>');
         },
         /**
