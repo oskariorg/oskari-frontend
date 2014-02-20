@@ -105,8 +105,14 @@ if (!Function.prototype.bind) {
               if(!capabilities) {
                 capabilities = this.get('capabilities');
               }
+              // layer node
               if(capabilities.wmsName == wmsName) {
                 me._setupFromCapabilitiesValues(capabilities);
+                return true;
+              }
+              // group node
+              if(capabilities.self && capabilities.self.wmsName == wmsName) {
+                me._setupFromCapabilitiesValues(capabilities.self);
                 return true;
               }
               var found = false;

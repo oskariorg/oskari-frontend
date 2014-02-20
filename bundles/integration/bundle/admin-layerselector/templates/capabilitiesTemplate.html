@@ -1,6 +1,9 @@
-<ul <% if(isSub) { %>class="closed"<% } %>>
+<ul>
+    <% if(capabilities.self) { %>
+    	<li class="capabilitieslayer groupLevelLayer" data-wmsname="<%= capabilities.self.wmsName %>"><%= capabilities.self.title %></li>
+	<% } %>
     <% _.each(capabilities.groups, function(cap) { %>
-        <li class="groupTitle"><%= cap.title %>
+        <li class="groupTitle closed"><div class="icon-arrow-right inline-icon"></div> <%= cap.title %>
         	<%= capabilitiesTemplate({capabilities: cap, capabilitiesTemplate: capabilitiesTemplate, isSub : true}) %>
         </li>
     <% }); %>
