@@ -622,14 +622,14 @@ define([
                 e.stopPropagation();
                 var wmsName = current.attr('data-wmsname');
                 if(wmsName) {
+                    // actual layer node -> populate model
                     me.model.setupCapabilities(wmsName);
                 }
                 else {
-                    
+                    // toggle class to hide submenu
                     current.toggleClass('closed');
+                    // toggle open/closed icon
                     current.children('div.inline-icon').toggleClass('icon-arrow-right icon-arrow-down');
-                    //current.children('div.inline-icon').toggleClass('icon-arrow-down');
-                    
                 }
             },
 
