@@ -48,10 +48,11 @@ if (!Function.prototype.bind) {
              * Call setupCapabilities with selected wmslayer to pick one layer def from the whole response after calling this.
              * @param  {Object} capabilities response from server
              */
-            setCapabilitiesResponse : function(resp) {
+            setCapabilitiesResponse : function(resp, skipSort) {
+              if(!skipSort) {
                 this._sortCapabilities(resp);
+              }
                 this.set({
-                    "_version" : resp.version,
                     "capabilities" : resp
                 });
             },
@@ -81,7 +82,12 @@ if (!Function.prototype.bind) {
                 sb.printDebug("Found:", capabilitiesNode);
                 var mapLayerService = sb.getService('Oskari.mapframework.service.MapLayerService');
                 var mapLayer = mapLayerService.createMapLayer(capabilitiesNode);
-                this.set(mapLayer);
+                // clear existing values
+                var capabilities = this.get("capabilities");
+                this.clear({silent : true});
+                this.set(mapLayer, {silent : true});
+                // this will trigger change so the previous can be done silently
+                this.setCapabilitiesResponse(capabilities);
             },
             /**
              * Recursive function to search capabilities by wmsName.

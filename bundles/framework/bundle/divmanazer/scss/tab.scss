@@ -1,16 +1,14 @@
-/* "tab" content */
-div.oskariTabs div.tabsContent {
-    border-left: 1px solid #999999;
-    border-right: 1px solid #999999;
-    border-top: 0px solid #999999;
-    border-bottom: 1px solid #999999;
-    color: #000000;
-    height: 90%;
-}
-div.oskariTabs div.tab-content {
-    padding : 10px;
-    overflow : auto;
-}
+div.oskariTabs {
+    /* tab headers */
+     div.tabsHeader {
+       background: url('/Oskari/resources/framework/bundle/divmanazer/images/tab_bg.png') repeat-x scroll center bottom; /* #FFFFFF*/
+        clear: left;
+        float: left;
+        font : 12pt Arial,sans-serif;
+        font-weight: bold;
+        overflow: hidden;
+        padding: 0;
+        width: 100%;
 
         ul {
             float: left;
@@ -75,6 +73,7 @@ div.oskariTabs div.tab-content {
     }
     div.tab-content {
         padding : 10px;
+        overflow: auto;
     }
 
 }

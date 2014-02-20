@@ -741,11 +741,19 @@ function(instance) {
      */
     handleLayerModified : function(layer) {
         var me = this,
-            layerDiv = jQuery(me.container).find('li.layerselection2[layer_id=' + layer.getId() + ']');
+            layerDiv = jQuery(me.container).find('li.layerselection2[layer_id=' + layer.getId() + ']'),
+            scale = this.instance.getSandbox().getMap().getScale();
+
+        newDiv = this._createLayerContainer(layer);
+        layerDiv.replaceWith(newDiv);
+
+        this._appendLayerFooter(newDiv, layer, layer.isInScale(scale), true);
+        /*
         jQuery(layerDiv).find('.layer-title h4').html(layer.getName());
         me._updateStyles(layer, layerDiv);
         var footer = layerDiv.find('div.layer-tools');
         me._updatePublishPermissionText(layer, footer);
+        */
     },
     /**
      * @method handleLayerSticky

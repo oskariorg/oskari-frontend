@@ -588,10 +588,8 @@ define([
                     baseUrl = me.options.instance.getSandbox().getAjaxUrl();
 
                 var serviceURL = form.find('#add-layer-interface').val();
-//                var wmsVersion = form.find('#add-layer-interface-version').val();
 
                 me.model.set({
-//                    "_version" : wmsVersion,
                     "_wmsUrls" : [serviceURL]
                 }, {silent: true});
 

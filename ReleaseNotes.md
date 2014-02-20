@@ -2,6 +2,10 @@
 
 ## 1.18
 
+### sandbox
+
+Added `removeMapLayer` method which does the same thing as sending a `RemoveMapLayerRequest` but without the need for a request.
+
 ### mapmodule-plugin and all the layer plugins
 
 Removed handling of `AfterMapLayerAddEvent` from the layer plugins for it is the mapmodule who handles it now. It calls `addMapLayerToMap` function for each of its registered layer plugins and assures the marker layer always appear on top of the map.
