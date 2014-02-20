@@ -28,6 +28,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         this.statsService = null;
         // indicators (meta data)
         this.indicators = [];
+        this.stateIndicatorsLoaded = false;
         // object to hold the data for each indicators.
         // Used in case the user changes the region category.
         this.indicatorsData = {};
@@ -1424,6 +1425,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 // Not a valid current column nor a data value column
                 return;
             }
+            if (!this.stateIndicatorsLoaded) {
+                // No use to be here without indicators
+                return;
+            }
 
             //Classify data
             var me = this,
@@ -1697,6 +1702,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             // current column is needed for rendering map
                             // sendstats
                             var column = me._getColumnById(state.currentColumn);
+                            // Filter
+                            if ((state.filterMethod !== null) && (typeof state.filterMethod !== "undefined") &&
+                               (state.filterInput !== null) && (typeof state.filterInput !== "undefined") && (state.filterInput.length > 0)) {
+                                me.filterColumn(column, state.filterMethod, state.filterInput);
+                                state.filterInput = [];
+                            }
+
+                            // Area filter
+                            if ((state.filterRegion !== null) && (typeof state.filterRegion !== "undefined") && (state.filterRegion.length > 0)) {
+                                me.filterColumnByRegion(column, state.filterRegion);
+                                state.filterRegion = [];
+                            }
+
+                            me.stateIndicatorsLoaded = true;
                             me.sendStatsData(column);
                             me.grid.setSortColumn(state.currentColumn, true);
                         }
@@ -2126,6 +2145,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     inputArray.push(input2.val());
                 }
 
+                // me._state.filterMethod = select.val();
+                // me._state.filterInput = inputArray;
+
                 me.filterColumn(column, select.val(), inputArray);
                 headerMenuPlugin.hide();
                 me._destroyPopup('filterPopup');
@@ -2203,6 +2225,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             filterBtn.addClass('primary');
             filterBtn.setHandler(function (e) {
                 regionIds = content.find('div.filter-region-select select').val();
+                // me._state.filterRegion = regionIds;
                 me.filterColumnByRegion(column, regionIds);
                 headerMenuPlugin.hide();
                 me._destroyPopup('filterByRegionPopup');
