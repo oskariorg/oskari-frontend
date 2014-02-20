@@ -1721,6 +1721,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         }
                     });
                 });
+            } else {
+                me.stateIndicatorsLoaded = true;
             }
         },
         /**
