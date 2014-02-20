@@ -32,14 +32,18 @@ div.admin-layerselector {
 
     .capabilities {
         ul {
-            margin: 0px 20px 5px 20px;
             /* reset for parent level style */
             font-weight: normal;
+            margin: 0px 20px 5px 20px;
+        }
+
+        .inline-icon {
+            display: inline-block;
         }
 
         li ul {
             /* sublist */
-            margin: 5px;
+            margin: 5px 20px;
         }
 
         /* link-like hover */
@@ -47,11 +51,20 @@ div.admin-layerselector {
             text-decoration: underline;
         }
 
+        li.capabilitieslayer.groupLevelLayer {
+            font-style: italic;
+            list-style: none;
+            margin-left: -15px;
+        }
+
         /* emphasize group nodes */
         li.groupTitle {
             font-weight: bold;
-
-            ul.closed {
+            list-style: none;
+            margin: 5px -10px;
+        }
+        li.groupTitle.closed {
+            ul {
                 display : none;
             }
         }

@@ -625,8 +625,11 @@ define([
                     me.model.setupCapabilities(wmsName);
                 }
                 else {
-                    //current.children('ul').toggle();
-                    current.children('ul').toggleClass('closed');
+                    
+                    current.toggleClass('closed');
+                    current.children('div.inline-icon').toggleClass('icon-arrow-right icon-arrow-down');
+                    //current.children('div.inline-icon').toggleClass('icon-arrow-down');
+                    
                 }
             },
 
