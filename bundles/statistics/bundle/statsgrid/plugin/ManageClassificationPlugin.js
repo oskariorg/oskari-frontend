@@ -164,6 +164,18 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             if (this._state.numberOfClasses < 3) {
                 this._state.numberOfClasses = 2;
             }
+            if ((this._state.filterMethod === null) || (typeof this._state.filterMethod === "undefined") ) {
+                this._state.filterMethod = "";
+            }
+            if ((this._state.filterInput === null) || (typeof this._state.filterInput === "undefined") ) {
+                this._state.filterInput = [];
+            }
+            if ((this._state.filterRegion === null) || (typeof this._state.filterRegion === "undefined") ) {
+                this._state.filterRegion = [];
+            }
+            if ((this._state.municipalities === null) || (typeof this._state.municipalities === "undefined") ) {
+                this._state.municipalities = [];
+            }
         },
         /**
          * @method stopPlugin
