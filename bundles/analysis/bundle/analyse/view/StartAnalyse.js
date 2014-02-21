@@ -1410,6 +1410,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // Publisher permissions
             var pubPerm = layer.getPermission('publish');
+console.log("b");
 console.log(pubPerm);
             if (typeof pubPerm !== "undefined") {
 console.log("...")
@@ -1576,6 +1577,7 @@ console.log("...")
                 mapLayer.setWpsName(analyseJson.wpsName);
 
                 var pubPerm = me.getPermissions();
+console.log("a");
 console.log(pubPerm);
                 if (typeof pubPerm !== "undefined") {
 console.log(",,,");
