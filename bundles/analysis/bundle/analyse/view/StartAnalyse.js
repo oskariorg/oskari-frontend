@@ -1409,7 +1409,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             selections.bbox = this.instance.getSandbox().getMap().getBbox();
 
             // Publisher permissions
-debugger;
+console.log(layer.getPermission('publish'));
             this.setPermissions(layer.getPermission('publish'));
 
             return selections;
@@ -1570,7 +1570,7 @@ debugger;
                 mapLayer = mapLayerService.createMapLayer(analyseJson);
                 mapLayer.setWpsUrl(analyseJson.wpsUrl);
                 mapLayer.setWpsName(analyseJson.wpsName);
-debugger;
+console.log(me.getPermissions());
                 mapLayer.addPermission("publish", me.getPermissions());
                 //mapLayer.setWpsUrl('/karttatiili/wpshandler?');
                 //mapLayer.setWpsName('ana:analysis_data');
