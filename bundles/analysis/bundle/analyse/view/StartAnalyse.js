@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      *      localization data in JSON format
      */
 
-    function (instance, localization) {
+        function (instance, localization) {
         var me = this,
             p,
             f,
@@ -25,6 +25,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         me.loc = localization;
         me.id_prefix = 'oskari_analyse_';
         me.layer_prefix = 'analysis_';
+        me.max_analyse_layer_fields = 10;
 
         /* templates */
         me.template = {};
@@ -181,6 +182,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             /* progress */
             me.progressSpinner.insertTo(container);
+
+            // Infos
+            me._showInfos();
 
         },
         /**
@@ -620,7 +624,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 icons;
             // request updates for map tiles
             for (i = 0; i < layers.length; i++) {
-              if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS') || layers[i].isLayerOfType('MYPLACES')) {
+                if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS') || layers[i].isLayerOfType('MYPLACES')) {
                     option = {
                         id: me.id_prefix + 'layer_' + layers[i].getId(),
                         label: layers[i].getName()
@@ -653,8 +657,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'id': dat.id,
                     'checked': dat.checked
                 }).change(function (e) {
-                    me._refreshFields();
-                });
+                        me._refreshFields();
+                    });
                 opt.find('label').html(dat.label).attr({
                     'for': dat.id,
                     'class': 'params_checklabel'
@@ -676,6 +680,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var clickMagic = function () {
                 return function () {
                     me._modifyAnalyseName();
+                    me._showInfos();
                 };
             };
 
@@ -1332,6 +1337,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             contentPanel.find('.analyse_option_cont').remove();
             me._addAnalyseData(contentPanel);
 
+            // Infos
+            me._showInfos();
+
         },
         /**
          * @method refreshExtraParameters
@@ -1506,7 +1514,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     function (response) {
                         me.progressSpinner.stop();
                         if (response) {
-                            me._handleAnalyseMapResponse(response);
+                            if(response.error)
+                            {
+                                me.instance.showMessage(me.loc.error.title, me.loc.error[response.error] || response.error);
+                            }
+                            else
+                                me._handleAnalyseMapResponse(response);
                         }
                     },
                     // Error callback
@@ -1724,7 +1737,21 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 'placeholder': me.loc.analyse_name.tooltip
             });
         },
+        /**
+         * Inform user, if more than 10 fields in analyse input layer
+         * @private
+         */
+        _showInfos: function () {
+            var me = this;
+            var selectedLayer = me._getSelectedMapLayer();
+            if (!selectedLayer) {
+                return;
+            }
 
+            if (selectedLayer.getFields && selectedLayer.getFields().length > me.max_analyse_layer_fields) {
+                me.instance.showMessage( me.loc.infos.title, me.loc.infos.layer+" "+selectedLayer.getName()+" "+me.loc.infos.over10);
+            }
+        },
         /**
          * Change default colors for analyse in random range order
          * @method randomColors
@@ -1741,12 +1768,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
 
             var line_point_border_colors = [
-                'e31a1c', '2171b5', '238b45', '88419d',
-                '2b8cbe', '238b45', 'd94801', 'd7301f',
-                '0570b0', '02818a', 'ce1256', '6a51a3',
-                'ae017e', 'cb181d', '238443', '225ea8',
-                'cc4c02'
-            ],
+                    'e31a1c', '2171b5', '238b45', '88419d',
+                    '2b8cbe', '238b45', 'd94801', 'd7301f',
+                    '0570b0', '02818a', 'ce1256', '6a51a3',
+                    'ae017e', 'cb181d', '238443', '225ea8',
+                    'cc4c02'
+                ],
                 fill_colors = [
                     'fd8d3c', '6baed6', '66c2a4', '8c96c6',
                     '7bccc4', '74c476', 'fd8d3c', 'fc8d59',
