@@ -459,9 +459,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
         hasPublishRight: function (layer) {
             // permission might be "no_publication_permission"
             // or nothing at all
-console.log("c");
-console.log(layer);
-console.log(layer.getPermission('publish'));
             return (layer.getPermission('publish') === 'publication_permission_ok');
         },
         /**

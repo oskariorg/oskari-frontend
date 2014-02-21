@@ -1410,10 +1410,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // Publisher permissions
             var pubPerm = layer.getPermission('publish');
-console.log("b");
-console.log(pubPerm);
             if (typeof pubPerm !== "undefined") {
-console.log("...")
                 this.setPermissions(pubPerm);
             }
 
@@ -1575,12 +1572,8 @@ console.log("...")
                 mapLayer = mapLayerService.createMapLayer(analyseJson);
                 mapLayer.setWpsUrl(analyseJson.wpsUrl);
                 mapLayer.setWpsName(analyseJson.wpsName);
-
                 var pubPerm = me.getPermissions();
-console.log("a");
-console.log(pubPerm);
                 if (typeof pubPerm !== "undefined") {
-console.log(",,,");
                     mapLayer.addPermission("publish", pubPerm);
                 }
                 //mapLayer.setWpsUrl('/karttatiili/wpshandler?');
