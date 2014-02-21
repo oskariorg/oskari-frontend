@@ -184,7 +184,21 @@ Oskari.registerLocalization({
                 "noParameters": "Ei parametrejä",
                 "noLayer": "Ei valittua tasoa",
                 "noAnalyseUnionLayer": "Valitse ainakin toinen analyysitaso",
-                "invalidMethod": "Tuntematon menetelmä: "
+                "invalidMethod": "Tuntematon menetelmä: ",
+                "Analyse_parameter_missing": "Analys parameter fel",
+                "Unable_to_parse_analysis": "Analys parameter fel",
+                "Unable_to_get_WPS_features": "Unable to get WPS features",
+                "WPS_execute_returns_Exception": "WPS execute returns Exception",
+                "WPS_execute_returns_no_features": "WPS execute returns no features",
+                "Unable_to_process_aggregate_union": "Unable to process aggregate union",
+                "Unable_to_get_features_for_union": "Unable to get features for union",
+                "Unable_to_store_analysis_data": "Unable to store analysis data",
+                "Unable_to_get_analysisLayer_data": "Unable to get analysisLayer data"
+            },
+            "infos": {
+                "title": "Info",
+                "layer": "Lagring -",
+                "over10": "- över 10 attribut - Väljä max 10 från list för analys"
             }
 
         },
