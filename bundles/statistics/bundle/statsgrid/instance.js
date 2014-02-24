@@ -222,48 +222,17 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @param {Boolean} ignoreLocation true to NOT set map location based on state
          */
         setState: function (state, ignoreLocation) {
-            var me = this,
-                view = this.getView(),
-                container = view.getEl();
-            var layer = this.sandbox.findMapLayerFromAllAvailable(state.layerId);
-
-            me.state = jQuery.extend({}, {
+            this.state = jQuery.extend({}, {
                 indicators: [],
                 layerId: null
             }, state);
 
-            // We need to notify the grid of the current state so it can load the right indicators.
-            me.gridPlugin.setState(this.state);
-            me.classifyPlugin.setState(this.state);
+            // We need to notify the grid of the current state
+            // so it can load the right indicators.
+            this.gridPlugin.setState(this.state);
+            this.classifyPlugin.setState(this.state);
             // Reset the classify plugin
-            me.classifyPlugin.resetUI(this.state);
-
-            if (!layer) {
-                return;
-            }
-
-            // Load the mode and show content if not loaded already.
-            if (!view.isVisible) {
-                // Check if the layer is added
-                var isLayerAdded = !!this.sandbox.findMapLayerFromSelectedMapLayers(layer.getId()),
-                    timeout = (isLayerAdded ? 0 : 50);
-                // if not, request to add it to the map
-                if (!isLayerAdded) {
-                    var reqBuilder = me.sandbox.getRequestBuilder('AddMapLayerRequest');
-                    if (reqBuilder) {
-                        me.sandbox.request(this, reqBuilder(layer.getId()));
-                    }
-                }
-                // wait until the layer gets added and go to the stats mode.
-                window.setTimeout(function () {
-                    var evt = me.sandbox.getEventBuilder('userinterface.ExtensionUpdatedEvent')(me, 'attach');
-                    me.sandbox.notifyAll(evt, true);
-                    //view.prepareMode(true, layer);
-                }, timeout);
-            } else {
-                // Otherwise just load the indicators in the state.
-                me.gridPlugin.loadStateIndicators(this.state, container);
-            }
+            this.classifyPlugin.resetUI(this.state);
         },
         getState: function () {
             return this.state;
