@@ -32,6 +32,8 @@ The region category can now be changed whilst creating a new indicator.
 
 A warning sign is displayed in an indicator's header if its data cannot be displayed in the selected region category.
 
+The mode doesn't get started automatically anymore.
+
 ## 1.17.3
 
 ### Publisher bundle
