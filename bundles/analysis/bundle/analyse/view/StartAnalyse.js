@@ -89,6 +89,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
         me._filterJsons = {};
         me._filterPopups = {};
+
+        // Publisher permissions
+        me._permissions = '';
+
     }, {
         __templates: {
             "content": '<div class="layer_data"></div>',
@@ -1404,6 +1408,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Bbox
             selections.bbox = this.instance.getSandbox().getMap().getBbox();
 
+            // Publisher permissions
+            var pubPerm = layer.getPermission('publish');
+            if (typeof pubPerm !== "undefined") {
+                this.setPermissions(pubPerm);
+            }
+
             return selections;
         },
 
@@ -1562,6 +1572,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 mapLayer = mapLayerService.createMapLayer(analyseJson);
                 mapLayer.setWpsUrl(analyseJson.wpsUrl);
                 mapLayer.setWpsName(analyseJson.wpsName);
+                var pubPerm = me.getPermissions();
+                if (typeof pubPerm !== "undefined") {
+                    mapLayer.addPermission("publish", pubPerm);
+                }
                 //mapLayer.setWpsUrl('/karttatiili/wpshandler?');
                 //mapLayer.setWpsName('ana:analysis_data');
                 // Add the layer to the map layer service
@@ -1818,11 +1832,16 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         getEnabled: function () {
             return this.isEnabled;
         },
-
         getState: function () {
             return {}; // TODO: later this._gatherSelections();
         },
         setState: function (formState) {
 
+        },
+        getPermissions: function () {
+            return this._permissions;
+        },
+        setPermissions: function (permissions) {
+            this._permissions = permissions;
         }
     });
