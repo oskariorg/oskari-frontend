@@ -3,17 +3,17 @@
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.FeatureDataBundle", function() {
+Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.FeatureDataBundle", function () {
 
 }, {
-    "create": function() {
+    "create": function () {
         var me = this;
         var inst = Oskari.clazz.create("Oskari.mapframework.bundle.featuredata.FeatureDataBundleInstance");
 
         return inst;
 
     },
-    "update": function(manager, bundle, bi, info) {
+    "update": function (manager, bundle, bi, info) {
 
     }
 }, {
@@ -64,29 +64,77 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.FeatureDataBundle", 
         }],
 
         "locales": [{
-            "lang": "fi",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/featuredata/locale/fi.js"
-        }, {
-            "lang": "sv",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/featuredata/locale/sv.js"
-        }, {
-            "lang": "en",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/featuredata/locale/en.js"
-        },{
             "lang": "cs",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/featuredata/locale/cs.js"
+        }, {
+            "lang": "da",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/da.js"
         }, {
             "lang": "de",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/featuredata/locale/de.js"
         }, {
+            "lang": "en",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/en.js"
+        }, {
             "lang": "es",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/featuredata/locale/es.js"
+        }, {
+            "lang": "et",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/et.js"
+        }, {
+            "lang": "fi",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/fi.js"
+        }, {
+            "lang": "gr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/gr.js"
+        }, {
+            "lang": "hr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/hr.js"
+        }, {
+            "lang": "lv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/lv.js"
+        }, {
+            "lang": "nl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/nl.js"
+        }, {
+            "lang": "pl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/pl.js"
+        }, {
+            "lang": "pt",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/pt.js"
+        }, {
+            "lang": "si",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/si.js"
+        }, {
+            "lang": "sk",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/sk.js"
+        }, {
+            "lang": "sq",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/sq.js"
+        }, {
+            "lang": "sv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/sv.js"
+        }, {
+            "lang": "uk",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/uk.js"
         }]
     },
     "bundle": {

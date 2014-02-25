@@ -121,6 +121,16 @@ module.exports = function (grunt) {
                 src: ['../{bundles,packages}/**/*.js']
             }
         },
+        impL10nExcels: {
+            target: {
+            }
+        },
+        genL10nExcels: {
+            target: {
+                expand: true,
+                src: ['../bundles/**/bundle/*/']
+            }
+        },
         modulizeAll: {
           'admin-layerrights': '../packages/framework/bundle/admin-layerrights',
           'backendstatus': '../packages/framework/bundle/backendstatus',

@@ -53,31 +53,31 @@ Oskari.registerLocalization({
                 "SearchPlugin": "Address and place name search",
                 "GetInfoPlugin": "Query tool for place data",
                 "PublisherToolbarPlugin": "map tools",
-                "selectDrawLayer" : "Select draw layer"
+                "selectDrawLayer": "Select draw layer"
             },
             "toolbarToolNames": {
                 "history_back": "Move backward",
                 "history_forward": "Move forward",
                 "measureline": "Measure distance",
                 "measurearea": "Measure area",
-                "point" : "Allow points",
-                "line" : "Allow lines",
-                "area" : "Allow areas",
+                "point": "Allow points",
+                "line": "Allow lines",
+                "area": "Allow areas",
             },
             "toollayout": {
                 "label": "Tool layout",
                 "tooltip": "Choose a layout for the tools shown on the map",
                 "lefthanded": "Lefthanded",
                 "righthanded": "Righthanded",
-                "userlayout" : "Custom layout",
+                "userlayout": "Custom layout",
                 "usereditmode": "Switch edit mode on",
                 "usereditmodeoff": "Switch edit mode off"
             },
             "data": {
-                "label":                "Statistics",
-                "tooltip":              "Show the data related to map.",
-                "grid":                 "Show statistic grid",
-                "allowClassification":  "Allow classification"
+                "label": "Statistics",
+                "tooltip": "Show the data related to map.",
+                "grid": "Show statistic grid",
+                "allowClassification": "Allow classification"
             },
             "layout": {
                 "label": "Layout",

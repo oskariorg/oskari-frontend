@@ -5,13 +5,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
         /*
          * implementation for protocol 'Oskari.bundle.Bundle'
          */
-    "create": function () {
-        return this;
+        "create": function () {
+            return this;
+        },
+        "update": function (manager, bundle, bi, info) {
+            manager.alert("RECEIVED update notification " + info);
+        }
     },
-    "update": function (manager, bundle, bi, info) {
-        manager.alert("RECEIVED update notification " + info);
-    }
-},
 
     /**
      * metadata
@@ -346,29 +346,77 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             ],
             "locales": [{
                 // when lang is undefined, loader loads each language file, publisher needs localization for each
-                //"lang" : "fi",
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/fi.js"
-            }, {
-                //"lang" : "sv",
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/sv.js"
-            }, {
-                //"lang" : "en",
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/en.js"
-            }, {
                 //"lang" : "cs",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/cs.js"
+            }, {
+                //"lang" : "da",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/da.js"
             }, {
                 //"lang" : "de",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/de.js"
             }, {
+                //"lang" : "en",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/en.js"
+            }, {
                 //"lang" : "es",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/es.js"
+            }, {
+                //"lang" : "et",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/et.js"
+            }, {
+                //"lang" : "fi",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/fi.js"
+            }, {
+                //"lang" : "gr",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/gr.js"
+            }, {
+                //"lang" : "hr",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/hr.js"
+            }, {
+                //"lang" : "lv",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/lv.js"
+            }, {
+                //"lang" : "nl",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/nl.js"
+            }, {
+                //"lang" : "pl",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/pl.js"
+            }, {
+                //"lang" : "pt",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/pt.js"
+            }, {
+                //"lang" : "si",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/si.js"
+            }, {
+                //"lang" : "sk",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/sk.js"
+            }, {
+                //"lang" : "sq",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/sq.js"
+            }, {
+                //"lang" : "sv",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/sv.js"
+            }, {
+                //"lang" : "uk",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/uk.js"
             }]
         },
         "bundle": {

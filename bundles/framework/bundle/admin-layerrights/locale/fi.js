@@ -3,13 +3,12 @@ Oskari.registerLocalization({
     "key" : "admin-layerrights",
     "value" : {
         "title" : "Tasojen Oikeudet",
-        "desc" : "desc",
+        "desc" : "NOT TRANSLATED",
         "tile" : {
             "title" : "Tasojen Oikeudet"
         },
         "flyout" : {
-            "title" : "Tasojen Oikeuksien Hallinta",
-            "message" : "Tasojen Oikeuksien Hallinta"
+            "title" : "Tasojen Oikeuksien Hallinta"
         },
         "rights" : {
             "name"              : "Nimi",

@@ -31,29 +31,69 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
             "src": "../../../../resources/framework/bundle/coordinatedisplay/css/coordinatedisplay.css"
         }],
         "locales": [{
-            "lang": "fi",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/fi.js"
-        }, {
-            "lang": "sv",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/sv.js"
-        }, {
-            "lang": "en",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/en.js"
-        }, {
             "lang": "cs",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/cs.js"
+        }, {
+            "lang": "da",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/da.js"
         }, {
             "lang": "de",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/de.js"
         }, {
+            "lang": "en",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/en.js"
+        }, {
             "lang": "es",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/es.js"
+        }, {
+            "lang": "et",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/et.js"
+        }, {
+            "lang": "fi",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/fi.js"
+        }, {
+            "lang": "gr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/gr.js"
+        }, {
+            "lang": "hr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/hr.js"
+        }, {
+            "lang": "lv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/lv.js"
+        }, {
+            "lang": "nl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/nl.js"
+        }, {
+            "lang": "pl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/pl.js"
+        }, {
+            "lang": "pt",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/pt.js"
+        }, {
+            "lang": "si",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/si.js"
+        }, {
+            "lang": "sv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/sv.js"
+        }, {
+            "lang": "uk",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/uk.js"
         }]
     },
     "bundle": {

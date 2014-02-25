@@ -41,7 +41,7 @@ Oskari.registerLocalization({
                     "tooltip": "Lägg cirkel"
                 },
                 "select": {
-                  "tooltip": "Markera objekt"
+                    "tooltip": "Markera objekt"
                 }
             }
         }

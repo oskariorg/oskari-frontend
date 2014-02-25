@@ -48,7 +48,7 @@ Oskari.registerLocalization({
       },
       "GetInfoPlugin": {
         "title": "Kartenebenen",
-        "layer": "Layer",
+        "layer": "NOT TRANSLATED",
         "places": "Orte",
         "description": "Beschreibung",
         "link": "URL-addresse",
