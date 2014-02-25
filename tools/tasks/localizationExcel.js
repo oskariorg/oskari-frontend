@@ -129,6 +129,7 @@ module.exports = function (grunt) {
                 notes,
                 worksheet,
                 localizationDir = '..\\dist\\L10N\\' + locale,
+                notesFile = '../docs/L10N/' + bundleDir.substring(3) + 'notes.js',
                 worksheetFile = localizationDir + '\\' + bundleName + '_' + locale + '\\xl\\worksheets\\sheet1.xml',
                 output,
                 asyncCounter = 4; // decremented on async done
@@ -141,7 +142,7 @@ module.exports = function (grunt) {
                 grunt.log.error('No template locale defined.');
                 done(false);
             }
-
+            console.log(notesFile);
             var cleanup = function (finish, ret) {
                 // delete copied template...
                 var templateDir = localizationDir + '\\' + bundleName + '_' + locale;
@@ -336,8 +337,7 @@ module.exports = function (grunt) {
             });
 
             // Read translation notes
-            // TODO magic up a valid path for this
-            fs.readFile(bundleDir + '\\docs\\I10N\\' + bundleDir, {
+            fs.readFile(notesFile, {
                 encoding: 'utf8'
             }, function (err, data) {
                 if (err) {
