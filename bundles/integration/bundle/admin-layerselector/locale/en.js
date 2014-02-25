@@ -141,6 +141,8 @@ Oskari.registerLocalization({
             "gfiResponseTypeDesc": "Response type for Get Feature Info (GFI)",
             "gfiStyle": "GFI style",
             "gfiStyleDesc": "GFI style (XSLT)",
+            "realtime": "Real time layer",
+            "refreshRate": "Refresh rate (in seconds)",
 
             "generic": {
                 "placeholder": "Name in {0}",

@@ -144,6 +144,8 @@ Oskari.registerLocalization({
             "gfiResponseTypeDesc": "Svarets typ dvs Get Feature Info (GFI)",
             "gfiStyle": "GFI stil",
             "gfiStyleDesc": "GFI stil (XSLT)",
+            "realtime": "Reaaliaikataso",
+            "refreshRate": "Virkistystaajuus (sekunneissa)",
 
             "generic": {
                 "placeholder": "Name in {0}",
