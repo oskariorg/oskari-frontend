@@ -4,7 +4,7 @@ div.oskariTabs {
        background: url('/Oskari/resources/framework/bundle/divmanazer/images/tab_bg.png') repeat-x scroll center bottom; /* #FFFFFF*/
         clear: left;
         float: left;
-        font : 12pt  Arial,sans-serif;
+        font : 12pt Arial,sans-serif;
         font-weight: bold;
         overflow: hidden;
         padding: 0;
@@ -73,6 +73,7 @@ div.oskariTabs {
     }
     div.tab-content {
         padding : 10px;
+        overflow: auto;
     }
 
 }

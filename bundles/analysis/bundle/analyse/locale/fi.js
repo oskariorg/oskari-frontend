@@ -184,8 +184,22 @@ Oskari.registerLocalization({
                 "nohelp": "Ohjetta ei löytynyt",
                 "saveFailed": "Analyysin tallennus epäonnistui. Yritä myöhemmin uudelleen.",
                 "loadLayersFailed": "Analyysitasojen lataus epäonnistui. Yritä myöhemmin uudelleen.",
-                "loadLayerTypesFailed": "Analyysi- tai WFS-tason tietotyyppien haku epäonnistui "
+                "loadLayerTypesFailed": "Analyysi- tai WFS-tason tietotyyppien haku epäonnistui ",
+                "Analyse_parameter_missing": "Analyysin parametrit puuttuvat",
+                "Unable_to_parse_analysis": "Analyysin parametrit väärin",
+                "Unable_to_get_WPS_features": "Analyysin WPS input kohteiden haku epäonnistui",
+                "WPS_execute_returns_Exception": "Analyysin prosessointi epäonnistui",
+                "WPS_execute_returns_no_features": "Analyysi ei palauta yhtään kohdetta",
+                "Unable_to_process_aggregate_union": "Yhdisteen koosteen prosessointi epäonnistui",
+                "Unable_to_get_features_for_union": "Koosteen input kohteiden haku epäonnistui",
+                "Unable_to_store_analysis_data": "Analyysin tallennus epäonnistui",
+                "Unable_to_get_analysisLayer_data": "Analyysitason tietojen parsinta epäonnistui"
 
+            },
+            "infos": {
+                "title": "Tiedoksi",
+                "layer": "Tasolla -",
+                "over10": "- yli kymmenen ominaisuutta - Valitse listalta korkeintaan 10"
             }
         },
         "StartView": {

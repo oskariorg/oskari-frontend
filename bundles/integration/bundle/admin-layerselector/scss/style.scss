@@ -1,8 +1,3 @@
-/*  */
-body {
-    position: relative;
-}
-
 /* layer group container */
 div.admin-layerselector {
     div.layerGroup {
@@ -28,6 +23,53 @@ div.admin-layerselector {
         }
 
     }
+
+    /* For long lists, make capabilities list scrollable */
+    .add-layer-record.capabilities .add-layer-input-area {
+      max-height: 250px;
+      overflow: auto;
+    }
+
+    .capabilities {
+        ul {
+            /* reset for parent level style */
+            font-weight: normal;
+            margin: 0px 20px 5px 20px;
+        }
+
+        .inline-icon {
+            display: inline-block;
+        }
+
+        li ul {
+            /* sublist */
+            margin: 5px 20px;
+        }
+
+        /* link-like hover */
+        li.capabilitieslayer:hover {
+            text-decoration: underline;
+        }
+
+        li.capabilitieslayer.groupLevelLayer {
+            font-style: italic;
+            list-style: none;
+            margin-left: -15px;
+        }
+
+        /* emphasize group nodes */
+        li.groupTitle {
+            font-weight: bold;
+            list-style: none;
+            margin: 5px -10px;
+        }
+        li.groupTitle.closed {
+            ul {
+                display : none;
+            }
+        }
+    }
+
 
     .oskariTabs {
         min-width: 480px;

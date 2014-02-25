@@ -105,12 +105,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
             map.render(me.mapDivId);
             // startup plugins
             if (me.conf.plugins) {
-                var plugins = this.conf.plugins,
-                    i;
-                for (i = 0; i < plugins.length; i++) {
-                    plugins[i].instance = Oskari.clazz.create(plugins[i].id, plugins[i].config);
-                    module.registerPlugin(plugins[i].instance);
-                    module.startPlugin(plugins[i].instance);
+                var plugins = this.conf.plugins;
+                for (var i = 0; i < plugins.length; i++) {
+                    try {
+                        plugins[i].instance = Oskari.clazz.create(plugins[i].id, plugins[i].config);
+                        module.registerPlugin(plugins[i].instance);
+                        module.startPlugin(plugins[i].instance);
+                    }
+                    catch(e) {
+                        // something wrong with plugin (e.g. implementation not imported) -> log a warning
+                        me.sandbox.printWarn('Unable to start plugin: ' + plugins[i].id);
+                    }
                 }
             }
 

@@ -148,6 +148,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // TODO: should we notify somehow?
                 return;
             }
+            // remove the layer from core.
+            this._sandbox.removeMapLayer(layerId);
             // default to all layers
             var layerList = this._loadedLayersList;
             if(layer.getParentId() != -1) {
@@ -274,21 +276,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // wms specific
             // TODO: we need to figure this out some other way
             // we could remove the old layer and create a new one in admin bundle
-            if (newLayerConf.version && layer.setVersion) {
-                layer.setVersion(newLayerConf.version);
-            }
-        
-            if (newLayerConf.style) {
-                layer.selectStyle(newLayerConf.style);
+            
+            if (newLayerConf.type === 'wmslayer') {
+                // TODO: remove styles and wmsurls??
+                this._populateWmsMapLayerAdditionalData(layer, newLayerConf);
             }
 
-            if (newLayerConf.wmsName) {
-                layer.setWmsName(newLayerConf.wmsName);
-            }
-
-            if (newLayerConf.wmsUrl) {
-                layer.setWmsUrls(newLayerConf.wmsUrl.split(','));
-            }
 
             for (var i in newLayerConf.admin) {
                 if (newLayerConf.admin.hasOwnProperty(i)) {
@@ -794,6 +787,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             return layer;
         },
+
         /**
          * @method _populateWmsMapLayerAdditionalData
          *
@@ -818,8 +812,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             layer.setFeatureInfoEnabled(jsonLayer.gfi !== 'disabled');
             layer.setVersion(jsonLayer.version);
 
-            if (jsonLayer.formats && jsonLayer.formats.value) {
+            if (jsonLayer.formats) {
                 layer.setQueryFormat(jsonLayer.formats.value);
+                layer.setAvailableQueryFormats(jsonLayer.formats.available);
             }
 
             var locDefaultStyle = this._localization['default-style'];

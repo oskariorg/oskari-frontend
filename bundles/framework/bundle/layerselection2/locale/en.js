@@ -12,7 +12,7 @@ Oskari.registerLocalization({
             "out-of-scale": "Data in this map layer cannot be shown at the selected scale level.",
             "move-to-scale": "Go to a suitable scale level.",
             "out-of-content-area": "The map layer contains no data at this location.",
-            "move-to-content-area": "Move to the centre of the content area.",
+            "move-to-content-area": "Locate",
             "description": "Description",
             "object-data": "Object data",
             "rights": {

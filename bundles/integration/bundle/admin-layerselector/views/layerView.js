@@ -38,6 +38,11 @@ define([
                 me.classNames = me.options.classes;
                 me.template = _.template(ViewTemplate);
                 me.subLayerTemplate = _.template(SubLayerTemplate);
+                // listenTo will remove dead listeners, use it instead of on()
+                this.listenTo(this.model, 'add', this.render);
+                this.listenTo(this.model, 'change', this.render);
+                this.listenTo(this.model, 'remove', this.render);
+                //this.model.on('change', this.render, this);
                 me.render();
             },
 

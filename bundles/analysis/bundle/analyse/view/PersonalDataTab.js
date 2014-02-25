@@ -193,6 +193,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
             // show msg to user about successful removal
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             dialog.show(this.loc.notification.deletedTitle, this.loc.notification.deletedMsg);
+            dialog.fadeout(3000);
         },
         /**
          * Failure callback for backend operation.

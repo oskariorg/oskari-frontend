@@ -13,6 +13,18 @@
             initialize: function(models,title) {
                 this.name = title; 
                 this.searchIndex = {};
+                if(!models || models.length === 0) {
+                    // setup empty collection
+                    this.resetLayers();
+                }
+                var me = this;
+
+                this.on('add', function(layerModel) {
+                    me.searchIndex[layerModel.getId()] = me._getSearchIndex(layerModel);
+                });
+                this.on('change', function(layerModel) {
+                    me.searchIndex[layerModel.getId()] = me._getSearchIndex(layerModel);
+                });
             },
 
             /**
@@ -63,36 +75,6 @@
                 return this.name;
             },
             /**
-             * Adds a new layer to the layer group
-             * @method addLayer 
-             * @param {LayerModel} layer
-             */
-            addLayer : function(layerModel) {
-                var tmpModel = this.get(layerModel);
-                if(!tmpModel)  {
-                    this.add(layerModel, {silent: true});
-                    this.searchIndex[layerModel.getId()] = this._getSearchIndex(layerModel);
-                }
-
-            },
-            /**
-             * removes a layer with given id
-             * @method addLayer 
-             * @param {LayerModel} layer
-             * @return {Object} removed layer
-             */
-            removeLayer: function(id) {
-                var removed = false;
-                for (var i = this.models.length - 1; i >= 0; i--) {
-                    if(this.models[i].id === id ) {
-                        this.models[i].splice(index, 1);
-                        removed = true;
-                        break;
-                    }
-                };
-                return removed;
-            },
-            /**
              * Get all layer 
              * 
              * @method getLayers 
@@ -107,8 +89,9 @@
              * @method addLayer 
              * @param {LayerModel} layer
              */
-            removeLayers : function() {
-                this.models = [];
+            resetLayers : function() {
+                //this.models = [];
+                this.reset();
             },
             /**
              * Returns search index. i.e. full name of a layer as a string 
