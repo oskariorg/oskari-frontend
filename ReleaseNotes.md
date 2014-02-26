@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.19
+
+### mapmodule-plugin/realtimePlugin
+
+Added a new plugin for managing layers which have been cofigured as real time layers. The plugin refreshes the layers periodically, with a refresh rate specified for each layer separately. See the docs for more info.
+
 ## 1.18
 
 ### sandbox
