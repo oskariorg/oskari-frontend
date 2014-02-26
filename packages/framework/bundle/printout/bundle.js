@@ -115,9 +115,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundle", functi
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/printout/locale/pt.js"
         }, {
-            "lang": "si",
+            "lang": "sl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/printout/locale/si.js"
+            "src": "../../../../bundles/framework/bundle/printout/locale/sl.js"
         }, {
             "lang": "sk",
             "type": "text/javascript",

@@ -89,9 +89,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundle", func
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/maplegend/locale/pt.js"
         }, {
-            "lang": "si",
+            "lang": "sl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/maplegend/locale/si.js"
+            "src": "../../../../bundles/framework/bundle/maplegend/locale/sl.js"
         }, {
             "lang": "sk",
             "type": "text/javascript",

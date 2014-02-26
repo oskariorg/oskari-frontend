@@ -83,9 +83,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/pt.js"
         }, {
-            "lang": "si",
+            "lang": "sl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/si.js"
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/sl.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",

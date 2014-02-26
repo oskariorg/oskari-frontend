@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "si",
+    "lang": "sl",
     "key": "MyPlaces2",
     "value": {
         "title": "Kraji",

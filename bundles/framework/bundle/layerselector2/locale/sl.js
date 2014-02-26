@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "si",
+    "lang": "sl",
     "key": "LayerSelector",
     "value": {
         "title": "Sloji karte",

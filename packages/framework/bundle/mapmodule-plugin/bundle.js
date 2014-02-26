@@ -398,9 +398,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/pt.js"
             }, {
-                //"lang" : "si",
+                //"lang" : "sl",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/si.js"
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/sl.js"
             }, {
                 //"lang" : "sk",
                 "type": "text/javascript",

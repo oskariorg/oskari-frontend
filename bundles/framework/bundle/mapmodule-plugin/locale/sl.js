@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "si",
+    "lang": "sl",
     "key": "MapModule",
     "value": {
         "status_update_map": "Posodabljanje karte",

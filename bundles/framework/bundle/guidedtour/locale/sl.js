@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "si",
+    "lang": "sl",
     "key": "GuidedTour",
     "value": {
         "button": {

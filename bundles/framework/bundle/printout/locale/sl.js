@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "si",
+    "lang": "sl",
     "key": "Printout",
     "value": {
         "title": "Natisni kartni pogled",

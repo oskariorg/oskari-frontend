@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "si",
+    "lang": "sl",
     "key": "Publisher",
     "value": {
         "title": "Izdelaj karto",

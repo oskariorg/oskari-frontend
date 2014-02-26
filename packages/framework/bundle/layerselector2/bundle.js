@@ -100,9 +100,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/layerselector2/locale/pt.js"
         }, {
-            "lang": "si",
+            "lang": "sl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/layerselector2/locale/si.js"
+            "src": "../../../../bundles/framework/bundle/layerselector2/locale/sl.js"
         }, {
             "lang": "sk",
             "type": "text/javascript",

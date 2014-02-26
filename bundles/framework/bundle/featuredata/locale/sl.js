@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "si",
+    "lang": "sl",
     "key": "FeatureData",
     "value": {
         "title": "Objektni podatek",

@@ -183,9 +183,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/myplaces2/locale/pt.js"
         }, {
-            "lang": "si",
+            "lang": "sl",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/myplaces2/locale/si.js"
+            "src": "../../../../bundles/framework/bundle/myplaces2/locale/sl.js"
         }, {
             "lang": "sk",
             "type": "text/javascript",

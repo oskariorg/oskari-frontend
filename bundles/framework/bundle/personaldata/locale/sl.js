@@ -1,6 +1,6 @@
 Oskari.registerLocalization(
 {
-    "lang": "si",
+    "lang": "sl",
     "key": "PersonalData",
     "value": {
         "title": "Moji podatki",
