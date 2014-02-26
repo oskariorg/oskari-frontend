@@ -108,6 +108,10 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
 
         me._baseLayerId = -1;
 
+        // Realtime
+        me._realtime = false;
+        me._refreshRate = null;
+
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -920,5 +924,34 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         getLayerUrls: function () {
             return this._layerUrls;
+        },
+        /**
+         * @method setRealtime
+         * @param {Boolean} realtime
+         */
+        setRealtime: function(realtime) {
+            this._realtime = (realtime === true);
+        },
+        /**
+         * @method isRealtime
+         * @return {Boolean}
+         */
+        isRealtime: function() {
+            return this._realtime;
+        },
+        /**
+         * @method setRefreshRate
+         * @param {Number} refreshRate
+         */
+        setRefreshRate: function(refreshRate) {
+            if (refreshRate < 0) this._refreshRate = 0;
+            else this._refreshRate = refreshRate;
+        },
+        /**
+         * @method getRefreshRate
+         * @return {Number}
+         */
+        getRefreshRate: function() {
+            return this._refreshRate;
         }
     });
