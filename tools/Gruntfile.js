@@ -121,6 +121,16 @@ module.exports = function (grunt) {
                 src: ['../{bundles,packages}/**/*.js']
             }
         },
+        impL10nExcels: {
+            target: {
+            }
+        },
+        genL10nExcels: {
+            target: {
+                expand: true,
+                src: ['../bundles/**/bundle/*/']
+            }
+        },
         compress: {
             zip: {
                 options: {

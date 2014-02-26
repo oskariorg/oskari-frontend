@@ -546,14 +546,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
                 closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 title = this.loc.layout.fields.colours.custom,
                 content = this._createCustomColoursInputs(),
-                isChecked = jQuery('div#publisher-colour-inputs input#custom').attr('checked'),
                 customColours;
 
             closeButton.setTitle(this.loc.layout.popup.close);
             closeButton.setHandler(function () {
                 self._collectCustomColourValues(content);
                 // Change the preview gfi and send event only if currently checked
-                if (isChecked) {
+                if (jQuery('div#publisher-colour-inputs input#custom').attr('checked')) {
                     customColours = self._getItemByCode('custom', self.initialValues.colours);
                     // Change the colours of the preview popup
                     self._changeGfiColours(customColours);
@@ -630,7 +629,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
             this._prepopulateRgbDiv(titleInputs, customColours.title);
             this._prepopulateRgbDiv(headerInputs, customColours.header);
             iconClsInputs.find('input[type=radio]').removeAttr('checked');
-            iconClsInputs.find('input[value=' + customColours.iconCls + ']').attr('checked', 'checked');
+            var iconCls = customColours.iconCls || 'icon-close-white';
+            iconClsInputs.find('input[value=' + iconCls + ']').attr('checked', 'checked');
         },
 
         _prepopulateCustomColours: function (colourScheme) {
@@ -679,7 +679,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
             customColours.bgColour = this._getCssRgb(bgColours);
             customColours.titleColour = this._getCssRgb(titleColours);
             customColours.headerColour = this._getCssRgb(headerColours);
-            customColours.iconCls = iconCls;
+            customColours.iconCls = iconCls || 'icon-close-white';
         },
 
         /**
@@ -722,6 +722,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
                 green = rgbDiv.find('input[name=green]').val(),
                 blue = rgbDiv.find('input[name=blue]').val();
 
+            red = red.length ? parseInt(red, 10) : 0;
+            green = green.length ? parseInt(green, 10) : 0;
+            blue = blue.length ? parseInt(blue, 10) : 0;        
+
             return {
                 red: red,
                 green: green,
@@ -748,7 +752,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
         /**
          * Returns an rgb colour object parsed from the string.
          *
-         * @method _getColourFromRgbDiv
+         * @method _getColourFromRgbString
          * @param {String} rgbString
          * @return {Object} returns an rgb colour object
          *          {
