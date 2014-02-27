@@ -116,7 +116,7 @@ Oskari.registerLocalization({
         "changeInfo": "Ändern Sie Ihre Konto-Informationen",
         "changePassword": "Ändern Sie Ihr Passwort",
         "removeAccount": "Löschen Sie Ihr Konto",
-        "changeInfoUrl": "/web/en/profile"
+        "changeInfoUrl": "/web/de/profile"
       }
     },
     "button": {

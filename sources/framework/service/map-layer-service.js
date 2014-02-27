@@ -272,6 +272,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (newLayerConf.inspire) {
                 layer.setInspireName(newLayerConf.inspire);
             }
+            if (newLayerConf.realtime) {
+                layer.setRealtime(newLayerConf.realtime);
+            }
+            if (newLayerConf.refreshRate) {
+                layer.setRefreshRate(newLayerConf.refreshRate);
+            }
 
             // wms specific
             // TODO: we need to figure this out some other way
@@ -592,6 +598,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             baseLayer.setMaxScale(baseMapJson.maxScale);
             baseLayer.setMinScale(baseMapJson.minScale);
 
+            baseLayer.setRealtime(baseMapJson.realtime);
+            baseLayer.setRefreshRate(baseMapJson.refreshRate);
+
             baseLayer.setDataUrl(baseMapJson.dataUrl);
             baseLayer.setMetadataIdentifier(baseMapJson.dataUrl_uuid);
             if (!baseLayer.getMetadataIdentifier() && baseLayer.getDataUrl()) {
@@ -724,6 +733,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             layer.setDescription(mapLayerJson.subtitle);
             layer.setQueryable(mapLayerJson.isQueryable === "true" ||
                 mapLayerJson.isQueryable === true);
+
+            layer.setRealtime(mapLayerJson.realtime);
+            layer.setRefreshRate(mapLayerJson.refreshRate);
 
             // metadata 
             layer.setDataUrl(mapLayerJson.dataUrl);

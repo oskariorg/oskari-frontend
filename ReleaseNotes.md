@@ -1,6 +1,18 @@
 # Release Notes
 
+## 1.19
+
+### mapmodule-plugin/realtimePlugin
+
+Added a new plugin for managing layers which have been cofigured as real time layers. The plugin refreshes the layers periodically, with a refresh rate specified for each layer separately. See the docs for more info.
+
 ## 1.18
+
+## Known issues
+
+* mapmyplaces - doesn't update attention text for features on update/remove
+
+* statisticsgrid - sorting indicator values doesn't work correctly, seems to be comparing values as strings instead of numbers
 
 ### sandbox
 
@@ -31,6 +43,8 @@ Maplayer JSON parsing changed a bit:
 The region category can now be changed whilst creating a new indicator.
 
 A warning sign is displayed in an indicator's header if its data cannot be displayed in the selected region category.
+
+The mode doesn't get started automatically anymore.
 
 ## 1.17.3
 

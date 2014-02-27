@@ -124,9 +124,9 @@ Oskari.registerLocalization({
         "NotLoggedView": {
             "text": "Sie müssen sich anmelden, bevor Sie etwas einbinden können.",
             "signup": "Anmelden",
-            "signupUrl": "/web/en/login",
+            "signupUrl": "/web/de/login",
             "register": "Registrieren",
-            "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "registerUrl": "/web/de/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
         },
         "StartView": {
             "text": "Sie können die gerade von Ihnen erzeugte Kartenansicht auf einer Webseite einbinden.",

@@ -53,6 +53,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
     function () {
         this.mapModule = null;
         this.pluginName = null;
+        this._popupId = null;
         this._sandbox = null;
         this._map = null;
         this._popups = {};
@@ -137,12 +138,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          */
         popup: function (id, title, contentData, lonlat, colourScheme, font) {
             var me = this;
-
             var arrow = this._arrow.clone();
             var header = this._header.clone();
             var headerWrapper = this._headerWrapper.clone();
             var contentDiv = this._contentDiv.clone();
             var closeButton = this._headerCloseButton.clone();
+            me._popupId = id;
 
             header.append(title);
             headerWrapper.append(header);
@@ -356,7 +357,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          * @param {jQuery} div
          */
         _changeColourScheme: function (colourScheme, div) {
-            div = div || jQuery('div#getinforesult');
+            div = div || jQuery('div#' + this._popupId);
 
             if (!colourScheme || !div) return;
 
@@ -392,9 +393,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 'color': colourScheme.headerColour
             });
 
-            closeButton.removeClass('icon-close-white');
-            closeButton.removeClass('icon-close');
-            closeButton.addClass(colourScheme.iconCls);
+            // AH-1075 colourScheme.iconCls might not be set, so check first.
+            if (colourScheme.iconCls) {
+                closeButton.removeClass('icon-close-white');
+                closeButton.removeClass('icon-close');
+                closeButton.addClass(colourScheme.iconCls);
+            }
         },
         /**
          * Changes the font used by plugin by adding a CSS class to its DOM elements.

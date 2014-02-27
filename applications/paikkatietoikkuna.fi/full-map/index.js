@@ -75,31 +75,6 @@ jQuery(document).ready(function () {
     function start(appSetup, appConfig, cb) {
         var app = Oskari.app;
 
-/*
-// modify plugin config that was received from GetAppSetup:
-
-        var plugins = appConfig.mapfull.conf.plugins,
-            wfs;
-        for (var i = 0, pLen = plugins.length; i < pLen; ++i) {
-            if (plugins[i].id === 'Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin') {
-                wfs = plugins[i];
-                break;
-            }
-        }
-
-        if (wfs) {
-            wfs.config = {
-                backoffIncrement: 1000,
-                contextPath: "/transport-0.0.1",
-                disconnectTime: 30000,
-                hostname: "localhost",
-                lazy: true,
-                maxBackoff: 60000,
-                maxNetworkDelay: 10000,
-                port: "8888"
-            };
-        }
-*/
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
         app.startApplication(function (startupInfos) {
@@ -107,25 +82,6 @@ jQuery(document).ready(function () {
             if (cb) {
                 cb(instance);
             }
-
-/*
-// add a bundle to the setup after bundles gotten from GetAppSetup have been started:
-
-             var ugStartup = {
-                bundlename : 'analyse',
-                bundleinstancename : 'analyse',
-                metadata : {
-                    "Import-Bundle" : {
-                        "analyse" : {
-                            bundlePath : '/Oskari/packages/analysis/bundle/'
-                        }
-                    }
-                }
-            };
-
-            Oskari.bundle_facade.playBundle(ugStartup, function() {
-            });
-*/
         });
 
     }
