@@ -2337,44 +2337,52 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         filterColumn: function (column, method, inputArray) {
             var data = this.grid.getData(),
                 items = data.getItems(),
-                item,
+                item, itemVal,
                 i;
+
+            inputArray = _.map(inputArray, function(val) {
+                var numVal = Number((val || 'NaN').replace(',', '.'));
+                if (_.isNaN(numVal)) return val;
+                return numVal;
+            });
+
             for (i = 0; i < items.length; i++) {
                 item = items[i];
 
                 if (item.sel === 'checked') {
-                    if (item[column.id] === null || item[column.id] === undefined) {
+                    itemVal = item[column.id];
+                    if (itemVal === null || itemVal === undefined) {
                         item.sel = 'empty';
                     } else {
 
                         switch (method) {
                         case '>':
-                            if (!(item[column.id] > inputArray[0])) {
+                            if (!(itemVal > inputArray[0])) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '>=':
-                            if (!(item[column.id] >= inputArray[0])) {
+                            if (!(itemVal >= inputArray[0])) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '=':
-                            if (!(item[column.id] === inputArray[0])) {
+                            if (!(itemVal === inputArray[0])) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '<=':
-                            if (!(item[column.id] <= inputArray[0])) {
+                            if (!(itemVal <= inputArray[0])) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '<':
-                            if (!(item[column.id] < inputArray[0])) {
+                            if (!(itemVal < inputArray[0])) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '...':
-                            if (!(inputArray[0] < item[column.id] && item[column.id] < inputArray[1])) {
+                            if (!(inputArray[0] < itemVal && itemVal < inputArray[1])) {
                                 item.sel = 'empty';
                             }
                             break;
