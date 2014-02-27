@@ -8,6 +8,20 @@ div.mapplugins {
   div.mapplugins .mappluginsContainer {
     margin: 0;
     padding: 0; }
+    div.mapplugins .mappluginsContainer .mappluginsContent.ui-droppable {
+      background-color: rgba(255, 255, 255, 0.5);
+      border: 3px dashed #666666;
+      border-radius: 20px;
+      min-height: 70px;
+      min-width: 70px;
+      padding: 20px; }
+      div.mapplugins .mappluginsContainer .mappluginsContent.ui-droppable.allowed {
+        background-color: rgba(0, 255, 0, 0.3); }
+        div.mapplugins .mappluginsContainer .mappluginsContent.ui-droppable.allowed.ui-state-highlight {
+          background-color: rgba(127, 255, 127, 0.5);
+          border-color: #FFF; }
+      div.mapplugins .mappluginsContainer .mappluginsContent.ui-droppable.disallowed {
+        background-color: rgba(255, 0, 0, 0.3); }
     div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin {
       margin: 0 auto;
       z-index: 15000;
@@ -35,12 +49,16 @@ div.mapplugins {
           display: inline-block;
           vertical-align: top;
           margin: 0 5px; }
+          div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin.search {
+            text-align: center; }
           div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin.layerselection, div.mapplugins.top.center .mappluginsContainer .mappluginsContent .mapplugin.search {
             float: right; }
     div.mapplugins.top.right {
       min-width: 100px; }
       div.mapplugins.top.right .mapplugin.layerselection {
         margin-left: 0; }
+      div.mapplugins.top.right .mapplugin.search {
+        text-align: right; }
       div.mapplugins.top.right .mapplugin.layerselection, div.mapplugins.top.right .mapplugin.search {
         display: block;
         float: right;
@@ -49,6 +67,8 @@ div.mapplugins {
       min-width: 100px; }
       div.mapplugins.top.left .mapplugin.layerselection {
         margin-right: 0; }
+      div.mapplugins.top.left .mapplugin.search {
+        text-align: left; }
       div.mapplugins.top.left .mapplugin.layerselection, div.mapplugins.top.left .mapplugin.search {
         display: block;
         float: left;

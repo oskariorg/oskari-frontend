@@ -16244,6 +16244,660 @@ OpenLayers.Layer.WMTS = OpenLayers.Class(OpenLayers.Layer.Grid, {
  * See license.txt in the OpenLayers distribution or repository for the
  * full text of the license. */
 
+/**
+ * @requires OpenLayers/Layer/Grid.js
+ */
+
+/** 
+ * Class: OpenLayers.Layer.XYZ
+ * The XYZ class is designed to make it easier for people who have tiles
+ * arranged by a standard XYZ grid. 
+ * 
+ * Inherits from:
+ *  - <OpenLayers.Layer.Grid>
+ */
+OpenLayers.Layer.XYZ = OpenLayers.Class(OpenLayers.Layer.Grid, {
+    
+    /**
+     * APIProperty: isBaseLayer
+     * Default is true, as this is designed to be a base tile source. 
+     */
+    isBaseLayer: true,
+    
+    /**
+     * APIProperty: sphericalMercator
+     * Whether the tile extents should be set to the defaults for 
+     *    spherical mercator. Useful for things like OpenStreetMap.
+     *    Default is false, except for the OSM subclass.
+     */
+    sphericalMercator: false,
+
+    /**
+     * APIProperty: zoomOffset
+     * {Number} If your cache has more zoom levels than you want to provide
+     *     access to with this layer, supply a zoomOffset.  This zoom offset
+     *     is added to the current map zoom level to determine the level
+     *     for a requested tile.  For example, if you supply a zoomOffset
+     *     of 3, when the map is at the zoom 0, tiles will be requested from
+     *     level 3 of your cache.  Default is 0 (assumes cache level and map
+     *     zoom are equivalent).  Using <zoomOffset> is an alternative to
+     *     setting <serverResolutions> if you only want to expose a subset
+     *     of the server resolutions.
+     */
+    zoomOffset: 0,
+    
+    /**
+     * APIProperty: serverResolutions
+     * {Array} A list of all resolutions available on the server.  Only set this
+     *     property if the map resolutions differ from the server. This
+     *     property serves two purposes. (a) <serverResolutions> can include
+     *     resolutions that the server supports and that you don't want to
+     *     provide with this layer; you can also look at <zoomOffset>, which is
+     *     an alternative to <serverResolutions> for that specific purpose.
+     *     (b) The map can work with resolutions that aren't supported by
+     *     the server, i.e. that aren't in <serverResolutions>. When the
+     *     map is displayed in such a resolution data for the closest
+     *     server-supported resolution is loaded and the layer div is
+     *     stretched as necessary.
+     */
+    serverResolutions: null,
+
+    /**
+     * Constructor: OpenLayers.Layer.XYZ
+     *
+     * Parameters:
+     * name - {String}
+     * url - {String}
+     * options - {Object} Hashtable of extra options to tag onto the layer
+     */
+    initialize: function(name, url, options) {
+        if (options && options.sphericalMercator || this.sphericalMercator) {
+            options = OpenLayers.Util.extend({
+                projection: "EPSG:900913",
+                numZoomLevels: 19
+            }, options);
+        }
+        OpenLayers.Layer.Grid.prototype.initialize.apply(this, [
+            name || this.name, url || this.url, {}, options
+        ]);
+    },
+    
+    /**
+     * APIMethod: clone
+     * Create a clone of this layer
+     *
+     * Parameters:
+     * obj - {Object} Is this ever used?
+     * 
+     * Returns:
+     * {<OpenLayers.Layer.XYZ>} An exact clone of this OpenLayers.Layer.XYZ
+     */
+    clone: function (obj) {
+        
+        if (obj == null) {
+            obj = new OpenLayers.Layer.XYZ(this.name,
+                                            this.url,
+                                            this.getOptions());
+        }
+
+        //get all additions from superclasses
+        obj = OpenLayers.Layer.Grid.prototype.clone.apply(this, [obj]);
+
+        return obj;
+    },    
+
+    /**
+     * Method: getURL
+     *
+     * Parameters:
+     * bounds - {<OpenLayers.Bounds>}
+     *
+     * Returns:
+     * {String} A string with the layer's url and parameters and also the
+     *          passed-in bounds and appropriate tile size specified as
+     *          parameters
+     */
+    getURL: function (bounds) {
+        var xyz = this.getXYZ(bounds);
+        var url = this.url;
+        if (OpenLayers.Util.isArray(url)) {
+            var s = '' + xyz.x + xyz.y + xyz.z;
+            url = this.selectUrl(s, url);
+        }
+        
+        return OpenLayers.String.format(url, xyz);
+    },
+    
+    /**
+     * Method: getXYZ
+     * Calculates x, y and z for the given bounds.
+     *
+     * Parameters:
+     * bounds - {<OpenLayers.Bounds>}
+     *
+     * Returns:
+     * {Object} - an object with x, y and z properties.
+     */
+    getXYZ: function(bounds) {
+        var res = this.getServerResolution();
+        var x = Math.round((bounds.left - this.maxExtent.left) /
+            (res * this.tileSize.w));
+        var y = Math.round((this.maxExtent.top - bounds.top) /
+            (res * this.tileSize.h));
+        var z = this.getServerZoom();
+
+        if (this.wrapDateLine) {
+            var limit = Math.pow(2, z);
+            x = ((x % limit) + limit) % limit;
+        }
+
+        return {'x': x, 'y': y, 'z': z};
+    },
+    
+    /* APIMethod: setMap
+     * When the layer is added to a map, then we can fetch our origin 
+     *    (if we don't have one.) 
+     * 
+     * Parameters:
+     * map - {<OpenLayers.Map>}
+     */
+    setMap: function(map) {
+        OpenLayers.Layer.Grid.prototype.setMap.apply(this, arguments);
+        if (!this.tileOrigin) { 
+            this.tileOrigin = new OpenLayers.LonLat(this.maxExtent.left,
+                                                this.maxExtent.bottom);
+        }                                       
+    },
+
+    CLASS_NAME: "OpenLayers.Layer.XYZ"
+});
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/** 
+ * @requires OpenLayers/Layer/XYZ.js
+ */ 
+
+/** 
+ * Class: OpenLayers.Layer.ArcGISCache   
+ * Layer for accessing cached map tiles from an ArcGIS Server style mapcache. 
+ * Tile must already be cached for this layer to access it. This does not require 
+ * ArcGIS Server itself.
+ * 
+ * A few attempts have been made at this kind of layer before. See 
+ * http://trac.osgeo.org/openlayers/ticket/1967 
+ * and 
+ * http://trac.osgeo.org/openlayers/browser/sandbox/tschaub/arcgiscache/lib/OpenLayers/Layer/ArcGISCache.js
+ *
+ * Typically the problem encountered is that the tiles seem to "jump around".
+ * This is due to the fact that the actual max extent for the tiles on AGS layers
+ * changes at each zoom level due to the way these caches are constructed.
+ * We have attempted to use the resolutions, tile size, and tile origin
+ * from the cache meta data to make the appropriate changes to the max extent
+ * of the tile to compensate for this behavior.  This must be done as zoom levels change
+ * and before tiles are requested, which is why methods from base classes are overridden.
+ *
+ * For reference, you can access mapcache meta data in two ways. For accessing a 
+ * mapcache through ArcGIS Server, you can simply go to the landing page for the
+ * layer. (ie. http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer)
+ * For accessing it directly through HTTP, there should always be a conf.xml file
+ * in the root directory. 
+ * (ie. http://serverx.esri.com/arcgiscache/DG_County_roads_yesA_backgroundDark/Layers/conf.xml)
+ *  
+ *Inherits from: 
+ *  - <OpenLayers.Layer.XYZ>             
+ */    
+OpenLayers.Layer.ArcGISCache = OpenLayers.Class(OpenLayers.Layer.XYZ, {  
+
+    /**
+     * APIProperty: url
+     * {String | Array} The base URL for the layer cache.  You can also
+     *     provide a list of URL strings for the layer if your cache is
+     *     available from multiple origins.  This must be set before the layer
+     *     is drawn.
+     */
+    url: null,
+    
+   /**
+    * APIProperty: tileOrigin
+    * {<OpenLayers.LonLat>} The location of the tile origin for the cache.
+    *     An ArcGIS cache has it's origin at the upper-left (lowest x value
+    *     and highest y value of the coordinate system).  The units for the
+    *     tile origin should be the same as the units for the cached data.
+    */
+    tileOrigin: null, 
+   
+   /**
+    * APIProperty: tileSize
+    * {<OpenLayers.Size>} This size of each tile. Defaults to 256 by 256 pixels.
+    */
+    tileSize: new OpenLayers.Size(256, 256),
+    
+   /**
+    * APIProperty: useAGS
+    * {Boolean} Indicates if we are going to be accessing the ArcGIS Server (AGS)
+    *     cache via an AGS MapServer or directly through HTTP. When accessing via
+    *     AGS the path structure uses a standard z/y/x structure. But AGS actually
+    *     stores the tile images on disk using a hex based folder structure that looks
+    *     like "http://example.com/mylayer/L00/R00000000/C00000000.png".  Learn more
+    *     about this here:
+    *     http://blogs.esri.com/Support/blogs/mappingcenter/archive/2010/08/20/Checking-Your-Local-Cache-Folders.aspx
+    *     Defaults to true;
+    */    
+    useArcGISServer: true,
+
+   /**
+    * APIProperty: type
+    * {String} Image type for the layer.  This becomes the filename extension
+    *     in tile requests.  Default is "png" (generating a url like
+    *     "http://example.com/mylayer/L00/R00000000/C00000000.png").
+    */
+    type: 'png',
+    
+    /**
+    * APIProperty: useScales
+    * {Boolean} Optional override to indicate that the layer should use 'scale' information
+    *     returned from the server capabilities object instead of 'resolution' information.
+    *     This can be important if your tile server uses an unusual DPI for the tiles.
+    */
+    useScales: false,
+    
+   /**
+    * APIProperty: overrideDPI
+    * {Boolean} Optional override to change the OpenLayers.DOTS_PER_INCH setting based 
+    *     on the tile information in the server capabilities object.  This can be useful 
+    *     if your server has a non-standard DPI setting on its tiles, and you're only using 
+    *     tiles with that DPI.  This value is used while OpenLayers is calculating resolution
+    *     using scales, and is not necessary if you have resolution information. (This is
+    *     typically the case)  Regardless, this setting can be useful, but is dangerous
+    *     because it will impact other layers while calculating resolution.  Only use this
+    *     if you know what you are doing.  (See OpenLayers.Util.getResolutionFromScale)
+    */
+    overrideDPI: false,
+    
+   /**
+    * Constructor: OpenLayers.Layer.ArcGISCache 
+    * Creates a new instance of this class 
+    * 
+    * Parameters: 
+    * name - {String} 
+    * url - {String} 
+    * options - {Object} extra layer options
+    */ 
+    initialize: function(name, url, options) { 
+        OpenLayers.Layer.XYZ.prototype.initialize.apply(this, arguments);
+
+        if (this.resolutions) {        
+            this.serverResolutions = this.resolutions;
+            this.maxExtent = this.getMaxExtentForResolution(this.resolutions[0]);
+        }
+
+        // this block steps through translating the values from the server layer JSON 
+        // capabilities object into values that we can use.  This is also a helpful
+        // reference when configuring this layer directly.
+        if (this.layerInfo) {
+            // alias the object
+            var info = this.layerInfo;
+            
+            // build our extents
+            var startingTileExtent = new OpenLayers.Bounds(
+                info.fullExtent.xmin, 
+                info.fullExtent.ymin, 
+                info.fullExtent.xmax, 
+                info.fullExtent.ymax  
+            );
+
+            // set our projection based on the given spatial reference.
+            // esri uses slightly different IDs, so this may not be comprehensive
+            this.projection = 'EPSG:' + info.spatialReference.wkid;
+            this.sphericalMercator = (info.spatialReference.wkid == 102100);
+            
+            // convert esri units into openlayers units (basic feet or meters only)
+            this.units = (info.units == "esriFeet") ? 'ft' : 'm';
+
+            // optional extended section based on whether or not the server returned
+            // specific tile information
+            if (!!info.tileInfo) {            
+                // either set the tiles based on rows/columns, or specific width/height
+                this.tileSize = new OpenLayers.Size(
+                    info.tileInfo.width || info.tileInfo.cols, 
+                    info.tileInfo.height || info.tileInfo.rows
+                );
+                
+                // this must be set when manually configuring this layer
+                this.tileOrigin = new OpenLayers.LonLat(
+                    info.tileInfo.origin.x, 
+                    info.tileInfo.origin.y
+                );
+
+                var upperLeft = new OpenLayers.Geometry.Point(
+                    startingTileExtent.left, 
+                    startingTileExtent.top
+                );
+                
+                var bottomRight = new OpenLayers.Geometry.Point(
+                    startingTileExtent.right, 
+                    startingTileExtent.bottom
+                );            
+                
+                if (this.useScales) {
+                    this.scales = [];
+                } else {
+                    this.resolutions = [];
+                }
+                
+                this.lods = [];
+                for(var key in info.tileInfo.lods) {
+                    if (info.tileInfo.lods.hasOwnProperty(key)) {
+                        var lod = info.tileInfo.lods[key];
+                        if (this.useScales) {
+                            this.scales.push(lod.scale);
+                        } else {
+                            this.resolutions.push(lod.resolution);
+                        }
+                    
+                        var start = this.getContainingTileCoords(upperLeft, lod.resolution);
+                        lod.startTileCol = start.x;
+                        lod.startTileRow = start.y;
+                    
+                        var end = this.getContainingTileCoords(bottomRight, lod.resolution);
+                        lod.endTileCol = end.x;
+                        lod.endTileRow = end.y;    
+                        this.lods.push(lod);
+                    }
+                }
+
+                this.maxExtent = this.calculateMaxExtentWithLOD(this.lods[0]);
+                this.serverResolutions = this.resolutions;
+                if (this.overrideDPI && info.tileInfo.dpi) {
+                    // see comment above for 'overrideDPI'
+                    OpenLayers.DOTS_PER_INCH = info.tileInfo.dpi;
+                }
+            } 
+       }
+    }, 
+
+   /** 
+    * Method: getContainingTileCoords
+    * Calculates the x/y pixel corresponding to the position of the tile
+    *     that contains the given point and for the for the given resolution.
+    * 
+    * Parameters:
+    * point - {<OpenLayers.Geometry.Point>} 
+    * res - {Float} The resolution for which to compute the extent.
+    * 
+    * Returns: 
+    * {<OpenLayers.Pixel>} The x/y pixel corresponding to the position 
+    * of the upper left tile for the given resolution.
+    */
+    getContainingTileCoords: function(point, res) {
+        return new OpenLayers.Pixel(
+           Math.max(Math.floor((point.x - this.tileOrigin.lon) / (this.tileSize.w * res)),0),
+           Math.max(Math.floor((this.tileOrigin.lat - point.y) / (this.tileSize.h * res)),0)
+        );
+    },
+    
+   /** 
+    * Method: calculateMaxExtentWithLOD
+    * Given a Level of Detail object from the server, this function
+    *     calculates the actual max extent
+    * 
+    * Parameters: 
+    * lod - {Object} a Level of Detail Object from the server capabilities object 
+            representing a particular zoom level
+    * 
+    * Returns: 
+    * {<OpenLayers.Bounds>} The actual extent of the tiles for the given zoom level
+    */
+   calculateMaxExtentWithLOD: function(lod) {
+        // the max extent we're provided with just overlaps some tiles
+        // our real extent is the bounds of all the tiles we touch
+
+        var numTileCols = (lod.endTileCol - lod.startTileCol) + 1;
+        var numTileRows = (lod.endTileRow - lod.startTileRow) + 1;        
+
+        var minX = this.tileOrigin.lon + (lod.startTileCol * this.tileSize.w * lod.resolution);
+        var maxX = minX + (numTileCols * this.tileSize.w * lod.resolution);
+
+        var maxY = this.tileOrigin.lat - (lod.startTileRow * this.tileSize.h * lod.resolution);
+        var minY = maxY - (numTileRows * this.tileSize.h * lod.resolution);
+        return new OpenLayers.Bounds(minX, minY, maxX, maxY);
+   },
+    
+   /** 
+    * Method: calculateMaxExtentWithExtent
+    * Given a 'suggested' max extent from the server, this function uses
+    *     information about the actual tile sizes to determine the actual
+    *     extent of the layer.
+    * 
+    * Parameters: 
+    * extent - {<OpenLayers.Bounds>} The 'suggested' extent for the layer
+    * res - {Float} The resolution for which to compute the extent.
+    * 
+    * Returns: 
+    * {<OpenLayers.Bounds>} The actual extent of the tiles for the given zoom level
+    */
+   calculateMaxExtentWithExtent: function(extent, res) {
+        var upperLeft = new OpenLayers.Geometry.Point(extent.left, extent.top);
+        var bottomRight = new OpenLayers.Geometry.Point(extent.right, extent.bottom);
+        var start = this.getContainingTileCoords(upperLeft, res);
+        var end = this.getContainingTileCoords(bottomRight, res);
+        var lod = {
+            resolution: res,
+            startTileCol: start.x,
+            startTileRow: start.y,
+            endTileCol: end.x,
+            endTileRow: end.y
+        };
+        return this.calculateMaxExtentWithLOD(lod);
+   },
+    
+    /** 
+    * Method: getUpperLeftTileCoord
+    * Calculates the x/y pixel corresponding to the position 
+    *     of the upper left tile for the given resolution.
+    * 
+    * Parameters: 
+    * res - {Float} The resolution for which to compute the extent.
+    * 
+    * Returns: 
+    * {<OpenLayers.Pixel>} The x/y pixel corresponding to the position 
+    * of the upper left tile for the given resolution.
+    */
+    getUpperLeftTileCoord: function(res) {
+        var upperLeft = new OpenLayers.Geometry.Point(
+            this.maxExtent.left,
+            this.maxExtent.top);
+        return this.getContainingTileCoords(upperLeft, res);
+    },
+
+    /** 
+    * Method: getLowerRightTileCoord
+    * Calculates the x/y pixel corresponding to the position 
+    *     of the lower right tile for the given resolution.
+    *  
+    * Parameters: 
+    * res - {Float} The resolution for which to compute the extent.
+    * 
+    * Returns: 
+    * {<OpenLayers.Pixel>} The x/y pixel corresponding to the position
+    * of the lower right tile for the given resolution.
+    */
+    getLowerRightTileCoord: function(res) {
+        var bottomRight = new OpenLayers.Geometry.Point(
+            this.maxExtent.right,
+            this.maxExtent.bottom);
+        return this.getContainingTileCoords(bottomRight, res);
+    },
+    
+   /** 
+    * Method: getMaxExtentForResolution
+    * Since the max extent of a set of tiles can change from zoom level
+    *     to zoom level, we need to be able to calculate that max extent 
+    *     for a given resolution.
+    *
+    * Parameters: 
+    * res - {Float} The resolution for which to compute the extent.
+    * 
+    * Returns: 
+    * {<OpenLayers.Bounds>} The extent for this resolution
+    */ 
+    getMaxExtentForResolution: function(res) {
+        var start = this.getUpperLeftTileCoord(res);
+        var end = this.getLowerRightTileCoord(res);
+
+        var numTileCols = (end.x - start.x) + 1;
+        var numTileRows = (end.y - start.y) + 1;
+
+        var minX = this.tileOrigin.lon + (start.x * this.tileSize.w * res);
+        var maxX = minX + (numTileCols * this.tileSize.w * res);
+        
+        var maxY = this.tileOrigin.lat - (start.y * this.tileSize.h * res);
+        var minY = maxY - (numTileRows * this.tileSize.h * res);
+        return new OpenLayers.Bounds(minX, minY, maxX, maxY);
+    },
+    
+   /** 
+    * APIMethod: clone 
+    * Returns an exact clone of this OpenLayers.Layer.ArcGISCache
+    * 
+    * Parameters: 
+    * [obj] - {Object} optional object to assign the cloned instance to.
+    *  
+    * Returns: 
+    * {<OpenLayers.Layer.ArcGISCache>} clone of this instance 
+    */ 
+    clone: function (obj) { 
+        if (obj == null) { 
+            obj = new OpenLayers.Layer.ArcGISCache(this.name, this.url, this.options);
+        }
+        return OpenLayers.Layer.XYZ.prototype.clone.apply(this, [obj]);
+    },
+
+    /**
+     * Method: initGriddedTiles
+     * 
+     * Parameters:
+     * bounds - {<OpenLayers.Bounds>}
+     */
+    initGriddedTiles: function(bounds) {
+        delete this._tileOrigin;
+        OpenLayers.Layer.XYZ.prototype.initGriddedTiles.apply(this, arguments);
+    },
+    
+    /**
+     * Method: getMaxExtent
+     * Get this layer's maximum extent.
+     *
+     * Returns:
+     * {<OpenLayers.Bounds>}
+     */
+    getMaxExtent: function() {
+        var resolution = this.map.getResolution();
+        return this.maxExtent = this.getMaxExtentForResolution(resolution);
+    },
+
+    /**
+     * Method: getTileOrigin
+     * Determine the origin for aligning the grid of tiles.  
+     *     The origin will be derived from the layer's <maxExtent> property. 
+     *
+     * Returns:
+     * {<OpenLayers.LonLat>} The tile origin.
+     */
+    getTileOrigin: function() {
+        if (!this._tileOrigin) {
+            var extent = this.getMaxExtent();
+            this._tileOrigin = new OpenLayers.LonLat(extent.left, extent.bottom);
+        }
+        return this._tileOrigin;
+    },
+
+   /**
+    * Method: getURL
+    * Determine the URL for a tile given the tile bounds.  This is should support
+    *     urls that access tiles through an ArcGIS Server MapServer or directly through
+    *     the hex folder structure using HTTP.  Just be sure to set the useArcGISServer
+    *     property appropriately!  This is basically the same as 
+    *     'OpenLayers.Layer.TMS.getURL',  but with the addition of hex addressing,
+    *     and tile rounding.
+    *
+    * Parameters:
+    * bounds - {<OpenLayers.Bounds>}
+    *
+    * Returns:
+    * {String} The URL for a tile based on given bounds.
+    */
+    getURL: function (bounds) {
+        var res = this.getResolution(); 
+
+        // tile center
+        var originTileX = (this.tileOrigin.lon + (res * this.tileSize.w/2)); 
+        var originTileY = (this.tileOrigin.lat - (res * this.tileSize.h/2));
+
+        var center = bounds.getCenterLonLat();
+        var point = { x: center.lon, y: center.lat };
+        var x = (Math.round(Math.abs((center.lon - originTileX) / (res * this.tileSize.w)))); 
+        var y = (Math.round(Math.abs((originTileY - center.lat) / (res * this.tileSize.h)))); 
+        var z = this.map.getZoom();
+
+        // this prevents us from getting pink tiles (non-existant tiles)
+        if (this.lods) {        
+            var lod = this.lods[this.map.getZoom()];
+            if ((x < lod.startTileCol || x > lod.endTileCol) 
+                || (y < lod.startTileRow || y > lod.endTileRow)) {
+                    return null;
+            }
+        }
+        else {
+            var start = this.getUpperLeftTileCoord(res);
+            var end = this.getLowerRightTileCoord(res);
+            if ((x < start.x || x >= end.x)
+                || (y < start.y || y >= end.y)) {
+                    return null;
+            }        
+        }
+
+        // Construct the url string
+        var url = this.url;
+        var s = '' + x + y + z;
+
+        if (OpenLayers.Util.isArray(url)) {
+            url = this.selectUrl(s, url);
+        }
+
+        // Accessing tiles through ArcGIS Server uses a different path
+        // structure than direct access via the folder structure.
+        if (this.useArcGISServer) {
+            // AGS MapServers have pretty url access to tiles
+            url = url + '/tile/${z}/${y}/${x}';
+        } else {
+            // The tile images are stored using hex values on disk.
+            x = 'C' + OpenLayers.Number.zeroPad(x, 8, 16);
+            y = 'R' + OpenLayers.Number.zeroPad(y, 8, 16);
+            z = 'L' + OpenLayers.Number.zeroPad(z, 2, 10);
+            url = url + '/${z}/${y}/${x}.' + this.type;
+        }
+
+        // Write the values into our formatted url
+        url = OpenLayers.String.format(url, {'x': x, 'y': y, 'z': z});
+
+        return OpenLayers.Util.urlAppend(
+            url, OpenLayers.Util.getParameterString(this.params)
+        );
+    },
+
+    CLASS_NAME: 'OpenLayers.Layer.ArcGISCache' 
+}); 
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
 
 /**
  * @requires OpenLayers/BaseTypes/Class.js
@@ -42256,3 +42910,381 @@ OpenLayers.Lang = {
  * {String} A internationalized string.
  */
 OpenLayers.i18n = OpenLayers.Lang.translate;
+
+/* Copyright (c) 2006-2013 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Protocol.js
+ * @requires OpenLayers/Feature/Vector.js
+ * @requires OpenLayers/Format/GeoJSON.js
+ */
+
+/**
+ * if application uses the query string, for example, for BBOX parameters,
+ * OpenLayers/Format/QueryStringFilter.js should be included in the build config file
+ */
+
+/**
+ * Class: OpenLayers.Protocol.Script
+ * A basic Script protocol for vector layers.  Create a new instance with the
+ *     <OpenLayers.Protocol.Script> constructor.  A script protocol is used to
+ *     get around the same origin policy.  It works with services that return
+ *     JSONP - that is, JSON wrapped in a client-specified callback.  The
+ *     protocol handles fetching and parsing of feature data and sends parsed
+ *     features to the <callback> configured with the protocol.  The protocol
+ *     expects features serialized as GeoJSON by default, but can be configured
+ *     to work with other formats by setting the <format> property.
+ *
+ * Inherits from:
+ *  - <OpenLayers.Protocol>
+ */
+OpenLayers.Protocol.Script = OpenLayers.Class(OpenLayers.Protocol, {
+
+    /**
+     * APIProperty: url
+     * {String} Service URL.  The service is expected to return serialized 
+     *     features wrapped in a named callback (where the callback name is
+     *     generated by this protocol).
+     *     Read-only, set through the options passed to the constructor.
+     */
+    url: null,
+
+    /**
+     * APIProperty: params
+     * {Object} Query string parameters to be appended to the URL.
+     *     Read-only, set through the options passed to the constructor.
+     *     Example: {maxFeatures: 50}
+     */
+    params: null,
+    
+    /**
+     * APIProperty: callback
+     * {Object} Function to be called when the <read> operation completes.
+     */
+    callback: null,
+
+    /**
+     * APIProperty: callbackTemplate
+     * {String} Template for creating a unique callback function name
+     * for the registry. Should include ${id}.  The ${id} variable will be
+     * replaced with a string identifier prefixed with a "c" (e.g. c1, c2).
+     * Default is "OpenLayers.Protocol.Script.registry.${id}".
+     */
+    callbackTemplate: "OpenLayers.Protocol.Script.registry.${id}",
+
+    /**
+     * APIProperty: callbackKey
+     * {String} The name of the query string parameter that the service 
+     *     recognizes as the callback identifier.  Default is "callback".
+     *     This key is used to generate the URL for the script.  For example
+     *     setting <callbackKey> to "myCallback" would result in a URL like 
+     *     http://example.com/?myCallback=...
+     */
+    callbackKey: "callback",
+
+    /**
+     * APIProperty: callbackPrefix
+     * {String} Where a service requires that the callback query string 
+     *     parameter value is prefixed by some string, this value may be set.
+     *     For example, setting <callbackPrefix> to "foo:" would result in a
+     *     URL like http://example.com/?callback=foo:...  Default is "".
+     */
+    callbackPrefix: "",
+
+    /**
+     * APIProperty: scope
+     * {Object} Optional ``this`` object for the callback. Read-only, set 
+     *     through the options passed to the constructor.
+     */
+    scope: null,
+
+    /**
+     * APIProperty: format
+     * {<OpenLayers.Format>} Format for parsing features.  Default is an 
+     *     <OpenLayers.Format.GeoJSON> format.  If an alternative is provided,
+     *     the format's read method must take an object and return an array
+     *     of features.
+     */
+    format: null,
+
+    /**
+     * Property: pendingRequests
+     * {Object} References all pending requests.  Property names are script 
+     *     identifiers and property values are script elements.
+     */
+    pendingRequests: null,
+
+    /**
+     * APIProperty: srsInBBOX
+     * {Boolean} Include the SRS identifier in BBOX query string parameter.
+     *     Setting this property has no effect if a custom filterToParams method
+     *     is provided.   Default is false.  If true and the layer has a 
+     *     projection object set, any BBOX filter will be serialized with a 
+     *     fifth item identifying the projection.  
+     *     E.g. bbox=-1000,-1000,1000,1000,EPSG:900913
+     */
+    srsInBBOX: false,
+
+    /**
+     * Constructor: OpenLayers.Protocol.Script
+     * A class for giving layers generic Script protocol.
+     *
+     * Parameters:
+     * options - {Object} Optional object whose properties will be set on the
+     *     instance.
+     *
+     * Valid options include:
+     * url - {String}
+     * params - {Object}
+     * callback - {Function}
+     * scope - {Object}
+     */
+    initialize: function(options) {
+        options = options || {};
+        this.params = {};
+        this.pendingRequests = {};
+        OpenLayers.Protocol.prototype.initialize.apply(this, arguments);
+        if (!this.format) {
+            this.format = new OpenLayers.Format.GeoJSON();
+        }
+
+        if (!this.filterToParams && OpenLayers.Format.QueryStringFilter) {
+            var format = new OpenLayers.Format.QueryStringFilter({
+                srsInBBOX: this.srsInBBOX
+            });
+            this.filterToParams = function(filter, params) {
+                return format.write(filter, params);
+            };
+        }
+    },
+    
+    /**
+     * APIMethod: read
+     * Construct a request for reading new features.
+     *
+     * Parameters:
+     * options - {Object} Optional object for configuring the request.
+     *     This object is modified and should not be reused.
+     *
+     * Valid options:
+     * url - {String} Url for the request.
+     * params - {Object} Parameters to get serialized as a query string.
+     * filter - {<OpenLayers.Filter>} Filter to get serialized as a
+     *     query string.
+     *
+     * Returns:
+     * {<OpenLayers.Protocol.Response>} A response object, whose "priv" property
+     *     references the injected script.  This object is also passed to the
+     *     callback function when the request completes, its "features" property
+     *     is then populated with the features received from the server.
+     */
+    read: function(options) {
+        OpenLayers.Protocol.prototype.read.apply(this, arguments);
+        options = OpenLayers.Util.applyDefaults(options, this.options);
+        options.params = OpenLayers.Util.applyDefaults(
+            options.params, this.options.params
+        );
+        if (options.filter && this.filterToParams) {
+            options.params = this.filterToParams(
+                options.filter, options.params
+            );
+        }
+        var response = new OpenLayers.Protocol.Response({requestType: "read"});
+        var request = this.createRequest(
+            options.url, 
+            options.params, 
+            OpenLayers.Function.bind(function(data) {
+                response.data = data;
+                this.handleRead(response, options);
+            }, this)
+        );
+        response.priv = request;
+        return response;
+    },
+
+    /** 
+     * APIMethod: filterToParams 
+     * Optional method to translate an <OpenLayers.Filter> object into an object 
+     *     that can be serialized as request query string provided.  If a custom 
+     *     method is not provided, any filter will not be serialized. 
+     * 
+     * Parameters: 
+     * filter - {<OpenLayers.Filter>} filter to convert. 
+     * params - {Object} The parameters object. 
+     * 
+     * Returns: 
+     * {Object} The resulting parameters object. 
+     */
+
+    /** 
+     * Method: createRequest
+     * Issues a request for features by creating injecting a script in the 
+     *     document head.
+     *
+     * Parameters:
+     * url - {String} Service URL.
+     * params - {Object} Query string parameters.
+     * callback - {Function} Callback to be called with resulting data.
+     *
+     * Returns:
+     * {HTMLScriptElement} The script pending execution.
+     */
+    createRequest: function(url, params, callback) {
+        var id = OpenLayers.Protocol.Script.register(callback);
+        var name = OpenLayers.String.format(this.callbackTemplate, {id: id});
+        params = OpenLayers.Util.extend({}, params);
+        params[this.callbackKey] = this.callbackPrefix + name;
+        url = OpenLayers.Util.urlAppend(
+            url, OpenLayers.Util.getParameterString(params)
+        );
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = url;
+        script.id = "OpenLayers_Protocol_Script_" + id;
+        this.pendingRequests[script.id] = script;
+        var head = document.getElementsByTagName("head")[0];
+        head.appendChild(script);
+        return script;
+    },
+    
+    /** 
+     * Method: destroyRequest
+     * Remove a script node associated with a response from the document.  Also
+     *     unregisters the callback and removes the script from the 
+     *     <pendingRequests> object.
+     *
+     * Parameters:
+     * script - {HTMLScriptElement}
+     */
+    destroyRequest: function(script) {
+        OpenLayers.Protocol.Script.unregister(script.id.split("_").pop());
+        delete this.pendingRequests[script.id];
+        if (script.parentNode) {
+            script.parentNode.removeChild(script);
+        }
+    },
+
+    /**
+     * Method: handleRead
+     * Individual callbacks are created for read, create and update, should
+     *     a subclass need to override each one separately.
+     *
+     * Parameters:
+     * response - {<OpenLayers.Protocol.Response>} The response object to pass to
+     *     the user callback.
+     * options - {Object} The user options passed to the read call.
+     */
+    handleRead: function(response, options) {
+        this.handleResponse(response, options);
+    },
+
+    /**
+     * Method: handleResponse
+     * Called by CRUD specific handlers.
+     *
+     * Parameters:
+     * response - {<OpenLayers.Protocol.Response>} The response object to pass to
+     *     any user callback.
+     * options - {Object} The user options passed to the create, read, update,
+     *     or delete call.
+     */
+    handleResponse: function(response, options) {
+        if (options.callback) {
+            if (response.data) {
+                response.features = this.parseFeatures(response.data);
+                response.code = OpenLayers.Protocol.Response.SUCCESS;
+            } else {
+                response.code = OpenLayers.Protocol.Response.FAILURE;
+            }
+            this.destroyRequest(response.priv);
+            options.callback.call(options.scope, response);
+        }
+    },
+
+    /**
+     * Method: parseFeatures
+     * Read Script response body and return features.
+     *
+     * Parameters:
+     * data - {Object} The data sent to the callback function by the server.
+     *
+     * Returns:
+     * {Array({<OpenLayers.Feature.Vector>})} or
+     *     {<OpenLayers.Feature.Vector>} Array of features or a single feature.
+     */
+    parseFeatures: function(data) {
+        return this.format.read(data);
+    },
+
+    /**
+     * APIMethod: abort
+     * Abort an ongoing request.  If no response is provided, all pending 
+     *     requests will be aborted.
+     *
+     * Parameters:
+     * response - {<OpenLayers.Protocol.Response>} The response object returned
+     *     from a <read> request.
+     */
+    abort: function(response) {
+        if (response) {
+            this.destroyRequest(response.priv);
+        } else {
+            for (var key in this.pendingRequests) {
+                this.destroyRequest(this.pendingRequests[key]);
+            }
+        }
+    },
+    
+    /**
+     * APIMethod: destroy
+     * Clean up the protocol.
+     */
+    destroy: function() {
+        this.abort();
+        delete this.params;
+        delete this.format;
+        OpenLayers.Protocol.prototype.destroy.apply(this);
+    },
+
+    CLASS_NAME: "OpenLayers.Protocol.Script" 
+});
+
+(function() {
+    var o = OpenLayers.Protocol.Script;
+    var counter = 0;
+    o.registry = {};
+    
+    /**
+     * Function: OpenLayers.Protocol.Script.register
+     * Register a callback for a newly created script.
+     *
+     * Parameters:
+     * callback - {Function} The callback to be executed when the newly added
+     *     script loads.  This callback will be called with a single argument
+     *     that is the JSON returned by the service.
+     *
+     * Returns:
+     * {Number} An identifier for retrieving the registered callback.
+     */
+    o.register = function(callback) {
+        var id = "c"+(++counter);
+        o.registry[id] = function() {
+            callback.apply(this, arguments);
+        };
+        return id;
+    };
+    
+    /**
+     * Function: OpenLayers.Protocol.Script.unregister
+     * Unregister a callback previously registered with the register function.
+     *
+     * Parameters:
+     * id - {Number} The identifer returned by the register function.
+     */
+    o.unregister = function(id) {
+        delete o.registry[id];
+    };
+})();

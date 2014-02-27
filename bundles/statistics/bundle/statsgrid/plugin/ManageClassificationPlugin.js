@@ -150,16 +150,31 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
          * initializes state params since it might be possible
          * that there is not all the data included
          */
-        _initState : function() {
-            if(this._state.methodId == null || this._state.methodId < 1) {
+        _initState: function () {
+            if (this._state.methodId === null || this._state.methodId === undefined || this._state.methodId < 1) {
                 this._state.methodId = '1';
             }
             var cmode = this._state.classificationMode;
-            if(cmode == null) {
+            if (cmode === null || cmode === undefined) {
                 cmode = '';
             }
-            if(this._state.numberOfClasses == null || this._state.numberOfClasses < 3) {
+            if (this._state.numberOfClasses === null || this._state.numberOfClasses === undefined) {
+                this._state.numberOfClasses = 5;
+            }
+            if (this._state.numberOfClasses < 3) {
                 this._state.numberOfClasses = 2;
+            }
+            if ((this._state.filterMethod === null) || (typeof this._state.filterMethod === "undefined") ) {
+                this._state.filterMethod = "";
+            }
+            if ((this._state.filterInput === null) || (typeof this._state.filterInput === "undefined") ) {
+                this._state.filterInput = [];
+            }
+            if ((this._state.filterRegion === null) || (typeof this._state.filterRegion === "undefined") ) {
+                this._state.filterRegion = [];
+            }
+            if ((this._state.municipalities === null) || (typeof this._state.municipalities === "undefined") ) {
+                this._state.municipalities = [];
             }
         },
         /**
@@ -363,6 +378,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 check = false,
                 limits = [],
                 isNonNumeric = false,
+                valid = true,
                 method,
                 i,
                 k,
@@ -374,20 +390,18 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 return;
             }
 
-            var classificationCount = me._checkClassCount(params.COL_VALUES.length);
-
+            // var classificationCount = me._checkClassCount(params.COL_VALUES.length);
             // if slider is disabled don't show classification but help / guide
             // that you should select more municipalities
-            if (classificationCount.max <= classificationCount.min) {
+            if (params.COL_VALUES.length < 2) {
+                // if (classificationCount.max <= classificationCount.min) {
                 classify = me.element.find('.classifications');
                 classify.find('.block').remove();
                 block = jQuery(me.templates.block);
                 block.append(jQuery(me.templates.classificationGuide).text(this._locale.select4Municipalities));
                 classify.append(block);
-
                 // Show legend in content
                 this.element.find('div.content').show();
-                return;
             }
 
             // Get classification method
@@ -402,7 +416,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             }
 
             // Get class count
-            var classes = me._state.numberOfClasses;
+            if (me._state.numberOfClasses > params.COL_VALUES.length - 1) {
+                var newValue = Math.max(2, params.COL_VALUES.length - 1);
+                this.rangeSlider.slider('option', 'value', newValue);
+                jQuery('input#amount_class').val(newValue);
+                me._state.numberOfClasses = newValue;
+            }
+            var classes = me._state.numberOfClasses,
                 gcol_data = params.COL_VALUES;
             gcol_data = gcol_data.slice(0);
             var codes = params.VIS_CODES;
@@ -413,30 +433,47 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             if (isNonNumeric) {
                 limits = gstats.getUniqueValues();
                 classes = limits.length;
-                _.times(classes, function() { strings.push([]); });
-                for (var k = 0, dataLen = col_data.length; k < dataLen; k++) {
+                _.times(classes, function () {
+                    strings.push([]);
+                });
+                for (k = 0, dataLen = col_data.length; k < dataLen; k++) {
                     for (i = 0; i < classes; i++) {
                         if (limits[i] === col_data[k]) {
                             strings[i].push(codes[k]);
                         }
                     }
                 }
-            }
-            else if (method === '1') {
+            } else if (method === '1') {
                 limits = gstats.getJenks(classes);
-            }
-            else if (method === '2') {
+            } else if (method === '2') {
                 limits = gstats.getQuantile(classes);
-            }
-            else if (method === '3') {
+                // Check for errors
+                for (i = 0; i < limits.length; i++) {
+                    if (typeof limits[i] === "undefined") {
+                        valid = false;
+                        break;
+                    }
+                }
+            } else if (method === '3') {
                 limits = gstats.getEqInterval(classes);
-            }
-            else if (method === '4') {
+            } else if (method === '4') {
                 limits = this.setManualBreaks(gstats);
                 if (!limits) {
                     return;
                 }
                 classes = limits.length - 1;
+            }
+
+            // Preliminary error handling
+            if (!valid) {
+                classify = me.element.find('.classifications');
+                classify.find('.block').remove();
+                block = jQuery(me.templates.block);
+                block.append("");
+                classify.append(block);
+                // Show legend in content
+                this.element.find('div.content').show();
+                return;
             }
 
             if (!isNonNumeric) {
@@ -469,9 +506,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 }
             }
 
-            var classString = _.map(strings, function(stringArr) {
-                    return stringArr.join(',');
-                }).join('|'),
+            var classString = _.map(strings, function (stringArr) {
+                return stringArr.join(',');
+            }).join('|'),
                 colors = me._getColors(this.currentColorSet, me.colorsetIndex, classes - 2);
             // If true, reverses the color "array"
             if (me.colorsFlipped) {
@@ -484,7 +521,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             }
             gstats.setColors(colorArr);
 
-            me._state.manualBreaksInput = me._state.manualBreaksInput != null ? me._state.manualBreaksInput.toString() : "";
+            me._state.manualBreaksInput = (me._state.manualBreaksInput !== null && me._state.manualBreaksInput !== undefined) ? me._state.manualBreaksInput.toString() : "";
             colors = colors.replace(/,/g, '|');
             var classificationMode = me._state.classificationMode;
 
@@ -511,27 +548,28 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             // Send the data out for visualization.
             this.statsService.sendVisualizationData(layer, returnObject);
 
-            var legendRounder = function (i) {
-                var ret;
-                if (isNaN(i) || (i % 1 === 0)) {
-                    ret = i;
-                } else {
-                    ret = (Math.round(i * 10) / 10);
-                }
-                return ret;
-            };
+            if (params.COL_VALUES.length >= 2) {
+                var legendRounder = function (i) {
+                    var ret;
+                    if (isNaN(i) || (i % 1 === 0)) {
+                        ret = i;
+                    } else {
+                        ret = (Math.round(i * 10) / 10);
+                    }
+                    return ret;
+                };
 
-            var colortab = gstats.getHtmlLegend(null, sortcol.name, true, legendRounder, classificationMode);
-            classify = me.element.find('.classifications');
-            classify.find('.block').remove();
-            block = jQuery(me.templates.block).clone();
+                var colortab = gstats.getHtmlLegend(null, sortcol.name, true, legendRounder, classificationMode);
+                classify = me.element.find('.classifications');
+                classify.find('.block').remove();
+                block = jQuery(me.templates.block).clone();
 
-            block.append(colortab);
-            classify.append(block);
+                block.append(colortab);
+                classify.append(block);
 
-            // Show legend in content
-            this.element.find('div.content').show();
-
+                // Show legend in content
+                this.element.find('div.content').show();
+            }
         },
 
         /**
@@ -554,21 +592,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 VIS_COLORS: "choro:"
             });
         },
-        _hasNonNumericValues: function(values) {
+        _hasNonNumericValues: function (values) {
             for (var i = 0, valLen = values.length; i < valLen; ++i) {
                 var val = values[i];
-                if (val != undefined) {
+                if (val !== undefined) {
                     if (isNaN(val)) return true;
                 }
             }
             return false;
         },
-        _hideClassificationOptions: function(element) {
+        _hideClassificationOptions: function (element) {
             element.find('div.classificationMethod').hide();
             element.find('div.classCount').hide();
             element.find('div.classificationMode').hide();
         },
-        _showClassificationOptions: function(element) {
+        _showClassificationOptions: function (element) {
             element.find('div.classificationMethod').show();
             element.find('div.classCount').show();
             element.find('div.classificationMode').show();
@@ -602,16 +640,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             // Content HTML / Method select HTML
             var content = me.element.find('div.content'),
                 classify = jQuery(
-                    '<div class="classifications">'+
-                        '<div class="classificationOptions">'+
-                            '<div class="classificationMethod"></div>'+
-                            '<div class="classCount">'+
-                                '<div class="countSlider"></div>'+
-                                '<div class="manualBreaks"></div>'+
-                            '</div>'+
-                            '<div class="classificationMode"></div>'+
-                            '<div class="classificationColors"></div>'+
-                        '</div>'+
+                    '<div class="classifications">' +
+                    '<div class="classificationOptions">' +
+                    '<div class="classificationMethod"></div>' +
+                    '<div class="classCount">' +
+                    '<div class="countSlider"></div>' +
+                    '<div class="manualBreaks"></div>' +
+                    '</div>' +
+                    '<div class="classificationMode"></div>' +
+                    '<div class="classificationColors"></div>' +
+                    '</div>' +
                     '</div>'
                 ),
                 classifyOptions = classify.find('.classificationOptions'),
@@ -620,7 +658,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 opt;
 
             // do not show classification option if it is not allowed - published map
-            if(me._state.allowClassification !== false) {
+            if (me._state.allowClassification !== false) {
                 classifyOptions
                     .find('div.classificationMethod')
                     .append(this._locale.classify.classifymethod + '<br><select class="method"></select><br>');
@@ -645,7 +683,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 // Content HTML / class count input HTML
                 var classcnt = classifyOptions.find('div.classCount div.countSlider');
                 classcnt
-                    .append(this._locale.classify['classes'])
+                    .append(this._locale.classify.classes)
                     .append('<input type="text" id="amount_class" readonly="readonly" value="5" /><div id="slider-range-max"></div>');
                 //var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="amount_class" readonly="readonly" value="5" /><div id="slider-range-max"></div>');
 
@@ -655,11 +693,17 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                     max: me.maxClassNum,
                     value: me._state.numberOfClasses,
                     slide: function (event, ui) {
-                        me._state.numberOfClasses = ui.value;
-                        jQuery('input#amount_class').val(ui.value);
-                        jQuery(this).slider('option', 'value', ui.value);
+                        var newValue = ui.value;
+                        if (newValue > me._params.COL_VALUES.length - 1) {
+                            newValue = Math.max(2, me._params.COL_VALUES.length - 1);
+                        }
+                        me._state.numberOfClasses = newValue;
+                        jQuery('input#amount_class').val(newValue);
                         // Classify again
                         me.classifyData(event);
+                    },
+                    stop: function (event, ui) {
+                        jQuery(this).slider('option', 'value', me._state.numberOfClasses);
                     }
                 });
                 this.rangeSlider = slider;
@@ -799,7 +843,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         setManualBreaks: function (gstats) {
             var me = this,
                 limits = [],
-                manBreaks = this._state.manualBreaksInput.split(','),//element.find('.classificationMethod').find('.manualBreaks').find('input[name=breaksInput]').val().split(','),
+                manBreaks = this._state.manualBreaksInput.split(','), //element.find('.classificationMethod').find('.manualBreaks').find('input[name=breaksInput]').val().split(','),
                 dialog,
                 msg;
 
@@ -1035,6 +1079,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         _createColorDialog: function () {
             //Main dialog
             var me = this;
+            if (me.dialog) {
+                me.dialog.close();
+            }
             me.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
             me.content = me.templateContent.clone();
@@ -1043,9 +1090,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
             var colorset_sotka = jQuery('<div class="colorset_sotka"><br>' + this._locale.colorset.setselection + '<br><select id="colo_set"></select><br></div>');
             me.content.append(colorset_sotka);
-            var sel = colorset_sotka.find('select');
-
-            var opt = jQuery('<option value="' + "seq" + '">' + this._locale.colorset.sequential + '</option>');
+            var sel = colorset_sotka.find('select'),
+                opt = jQuery('<option value="' + "seq" + '">' + this._locale.colorset.sequential + '</option>');
             sel.append(opt);
             opt = jQuery('<option value="' + "qual" + '">' + this._locale.colorset.qualitative + '</option>');
             sel.append(opt);
@@ -1081,11 +1127,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
          * @private
          */
         _createColorTable: function () {
-            var me = this;
-            var table = jQuery('<table class="colo_table1"></table>');
-            var rows = 5;
-            var curcolset = null;
-            var colorindex = 3;
+            var me = this,
+                table = jQuery('<table class="colo_table1"></table>'),
+                rows = 5,
+                curcolset = null,
+                colorindex = 3;
             // Use 4th color value set in the grid
             if (me.currentColorSet === 'div') {
                 rows = this.colorsets_div.length;
@@ -1107,7 +1153,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 colorArr,
                 tableCellTemplate,
                 j,
-                tableCell;
+                tableCell,
+                rowClick = function (event) {
+                    var colorIndex = jQuery(this).attr('data-colorIdx');
+                    me._selectedColors(colorIndex);
+                },
+                rowMouseOut = function (event) {
+                    jQuery(this).removeClass("hover");
+
+                },
+                rowMouseOver = function (event) {
+                    if (!jQuery(this).hasClass("selected")) {
+                        jQuery(this).addClass("hover");
+                    }
+                };
 
             for (i = 0; i < rows; i++) {
                 row = jQuery('<td></td>');
@@ -1122,24 +1181,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                     row.append(tableCell);
 
                 }
-                // FIXME move functions outside loop
+
                 // Mouse events
-                row.mouseover(function (event) {
-                    if (!jQuery(this).hasClass("selected")) {
-                        jQuery(this).addClass("hover");
-                    }
-
-                });
-                row.mouseout(function (event) {
-                    jQuery(this).removeClass("hover");
-
-                });
+                row.mouseover(rowMouseOver);
+                row.mouseout(rowMouseOut);
 
                 // For selected colors
-                row.click(function (event) {
-                    var colorIndex = jQuery(this).attr('data-colorIdx');
-                    me._selectedColors(colorIndex);
-                });
+                row.click(rowClick);
 
                 // Zoom color table section in Hover
                 // me._hoverZoomColorTable(row);
@@ -1322,12 +1370,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         _adjustClassificationSlider: function (checkedItemsCount) {
 
             // classifyPlugin can't slide more than there are municipalities
-            var slider = jQuery('#slider-range-max');
-            var selectedVal = slider.slider('option', 'value');
-
-            var sliderSettings = this._checkClassCount(checkedItemsCount);
-            var max = sliderSettings.max;
-            var selectedVal = sliderSettings.val;
+            var slider = jQuery('#slider-range-max'),
+                selectedVal = slider.slider('option', 'value'),
+                sliderSettings = this._checkClassCount(checkedItemsCount),
+                max = sliderSettings.max;
+            selectedVal = sliderSettings.val;
 
             slider.slider('option', 'min', 2);
             slider.slider('option', 'max', max);
@@ -1346,56 +1393,60 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         /**
          * @method _checkClassCount
          * @private
-         * 
-         * Check class count and limints.
+         *
+         * Check class count and limits.
          */
-         _checkClassCount: function(checkedItemsCount) {
+        _checkClassCount: function (checkedItemsCount) {
             var max = checkedItemsCount < this.maxClassNum ? checkedItemsCount > 2 ? checkedItemsCount : 3 : this.maxClassNum;
             max--;
             var selectedVal = max > selectedVal ? selectedVal > 2 ? selectedVal : 2 : max;
-            return {'min' : 2, 'max': max, 'value' : selectedVal}
+            return {
+                'min': 2,
+                'max': max,
+                'value': selectedVal
+            };
         },
 
         /**
          * @method _loadStateVariables
          * @private
-         * 
+         *
          * Set state of classification options to correct one.
          */
-        _loadStateVariables: function() {
+        _loadStateVariables: function () {
             var me = this,
                 state = this._state;
             if (state.colors) {
-                me.currentColorSet  = state.colors.set;
-                me.colorsetIndex    = state.colors.index;
-                me.colorsFlipped    = state.colors.flipped;
+                me.currentColorSet = state.colors.set;
+                me.colorsetIndex = state.colors.index;
+                me.colorsFlipped = state.colors.flipped;
             }
             // if user is not able to set different classification options
             // there is no need to set them to state
-            if(me._state.allowClassification !== false){
+            if (me._state.allowClassification !== false) {
                 // distinct, discontinuous etc.
                 if (state.classificationMode) {
                     var modeSelect = me.element.find('.classification-mode');
                     modeSelect.val(state.classificationMode);
                 }
                 // jenks, quantiles, eq interval, manual breaks
-                if(state.methodId != null && state.methodId > 0) {
+                if (state.methodId !== null && state.methodId !== undefined && state.methodId > 0) {
                     var select = me.element.find('.classificationMethod').find('.method');
                     select.val(state.methodId);
                     // The manual breaks method:
-                    if(state.methodId == 4 && state.manualBreaksInput) {
+                    if (state.methodId == 4 && state.manualBreaksInput) {
                         var manualInput = me.element.find('.manualBreaks').find('input[name=breaksInput]');
                         manualInput.val(state.manualBreaksInput);
-                        me.element.find('.classCount').hide();
+                        me.element.find('.countSlider').hide();
                         me.element.find('.manualBreaks').show();
                     }
                 }
                 // how many different groups there will be
-                if (state.numberOfClasses != null && 
+                if (state.numberOfClasses !== null && state.numberOfClasses !== undefined &&
                     state.numberOfClasses > 0) {
 
                     var slider = me.rangeSlider;
-                    if (slider != null) {
+                    if (slider !== null && slider !== undefined) {
                         slider.slider("value", state.numberOfClasses);
                         slider.parent().find('input#amount_class').val(state.numberOfClasses);
                     }
@@ -1405,11 +1456,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
         /**
          * @method showClassificationOptions
-         * 
-         * Show classification options if allowed. 
+         *
+         * Show classification options if allowed.
          * i.e. draw UI and send request to geostat
          */
-        showClassificationOptions: function(isAllowed) {
+        showClassificationOptions: function (isAllowed) {
             this._state.allowClassification = isAllowed;
             this.resetUI();
             this.classifyData();

@@ -58,6 +58,10 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
+            "capabilitiesLabel" : "WMSCapabilities",
+            "confirmResourceKeyChange" : "Olet muuttanut wmsname- tai url-kentän arvoja. Tietoturvasyistä karttatason käyttöoikeudet poistetaan ja ne täytyy asettaa uudelleen. Haluatko jatkaa?",
+            "confirmDeleteLayerGroup" : "Tasoryhmän poisto. Haluatko jatkaa?",
+            "confirmDeleteLayer" : "Tason poisto. Haluatko jatkaa?",
             "layertypes" : {
                 "wms": "WMS Taso",
                 "wfs": "WFS Taso",
@@ -98,6 +102,7 @@ Oskari.registerLocalization({
             "addSubLayer": "Lisää alataso",
 
             "wmsInterfaceAddress": "WMS-rajapinnan osoitteet",
+            "wmsUrl": "WMS-rajapinnan osoitteet",
             "wmsInterfaceAddressDesc": "WMS-rajapinnan URL-osoitteet pilkulla eroteltuna",
             "wmsServiceMetaId": "WMS metatiedon tunniste",
             "wmsServiceMetaIdDesc": "WMS-palvelun metatiedon tiedostotunniste",
@@ -166,7 +171,11 @@ Oskari.registerLocalization({
             "interfaceAddress": "Rajapinnan osoite",
             "interfaceAddressDesc": "WMS&shy;-tasomäärittelyjen osoite",
             "viewingRightsRoles": "Katseluoikeudet rooleille",
-            "metadataReadFailure": "Tason metatiedon haku epäonnistui."
+            "metadataReadFailure": "Tason metatiedon haku epäonnistui.",
+            "mandatory_field_missing": "Pakollinen tieto: ",
+            "invalid_field_value": "Viallinen arvo: ",
+            "operation_not_permitted_for_layer_id": "Operaatio ei ole sallittu tasolle ",
+            "no_layer_with_id": "Tasoa ei löytynyt ID:llä "
         },
         "cancel": "Peruuta",
         "add": "Tallenna",

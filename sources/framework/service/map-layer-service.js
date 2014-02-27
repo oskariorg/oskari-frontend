@@ -47,6 +47,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         this.modelBuilderMapping = {
 
         };
+        // get generic localization (linked by mapfull)
+        this._localization = Oskari.getLocalization('Generic');
 
     }, {
         /** @static @property __qname fully qualified name for service */
@@ -146,11 +148,13 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // TODO: should we notify somehow?
                 return;
             }
+            // remove the layer from core.
+            this._sandbox.removeMapLayer(layerId);
             // default to all layers
             var layerList = this._loadedLayersList;
             if(layer.getParentId() != -1) {
                 // referenced layer is a sublayer
-                var parentLayer = this.findMapLayer(layer.getParentId());
+                parentLayer = this.findMapLayer(layer.getParentId());
                 if(!parentLayer) {
                     return;
                 }
@@ -272,21 +276,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // wms specific
             // TODO: we need to figure this out some other way
             // we could remove the old layer and create a new one in admin bundle
-            if (newLayerConf.version && layer.setVersion) {
-                layer.setVersion(newLayerConf.version);
-            }
-        
-            if (newLayerConf.style) {
-                layer.selectStyle(newLayerConf.style);
+            
+            if (newLayerConf.type === 'wmslayer') {
+                // TODO: remove styles and wmsurls??
+                this._populateWmsMapLayerAdditionalData(layer, newLayerConf);
             }
 
-            if (newLayerConf.wmsName) {
-                layer.setWmsName(newLayerConf.wmsName);
-            }
-
-            if (newLayerConf.wmsUrl) {
-                layer.setWmsUrls(newLayerConf.wmsUrl.split(','));
-            }
 
             for (var i in newLayerConf.admin) {
                 if (newLayerConf.admin.hasOwnProperty(i)) {
@@ -777,6 +772,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.addLayerUrl(mapLayerJson.url);
             }
 
+            layer.setLegendImage(mapLayerJson.legendImage);
+            
             if (mapLayerJson.localization) {
                 // overrides name/desc/inspire/organization if defined!!
                 layer.setLocalization(mapLayerJson.localization);
@@ -790,6 +787,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             return layer;
         },
+
         /**
          * @method _populateWmsMapLayerAdditionalData
          *
@@ -813,7 +811,18 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // default to enabled, only check if it is disabled
             layer.setFeatureInfoEnabled(jsonLayer.gfi !== 'disabled');
             layer.setVersion(jsonLayer.version);
-            return this.populateStyles(layer, jsonLayer);
+
+            if (jsonLayer.formats) {
+                layer.setQueryFormat(jsonLayer.formats.value);
+                layer.setAvailableQueryFormats(jsonLayer.formats.available);
+            }
+
+            var locDefaultStyle = this._localization['default-style'];
+            var defaultStyle = Oskari.clazz.create('Oskari.mapframework.domain.Style');
+            defaultStyle.setName("");
+            defaultStyle.setTitle(locDefaultStyle);
+            defaultStyle.setLegend("");
+            return this.populateStyles(layer, jsonLayer, defaultStyle);
         },
         /**
          * @method populateStyles
@@ -835,6 +844,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 styleJson,
                 blnMultipleStyles,
                 style;
+
 
             if (jsonLayer.styles) {
                 // has styles
@@ -863,26 +873,17 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // set the default style
                 layer.selectStyle(jsonLayer.style);
             }
-
-            // Create empty style that works as default if none available
-            if (layer.getStyles().length == 0) {
-                if(defaultStyle) {
-                    layer.addStyle(defaultStyle);
-                    layer.selectStyle(defaultStyle.getName());
-                } else {
-                    style = styleBuilder();
-                    style.setName("");
-                    style.setTitle("");
-                    style.setLegend("");
-                    layer.addStyle(style);
-                    layer.selectStyle("");
-                }
-            }
-
-            layer.setLegendImage(jsonLayer.legendImage);
-
-            if (jsonLayer.formats && jsonLayer.formats.value) {
-                layer.setQueryFormat(jsonLayer.formats.value);
+            
+            if(defaultStyle) {
+                layer.addStyle(defaultStyle);
+                layer.selectStyle(defaultStyle.getName());
+            } else {
+                style = styleBuilder();
+                style.setName("");
+                style.setTitle("");
+                style.setLegend("");
+                layer.addStyle(style);
+                layer.selectStyle("");
             }
 
             return layer;

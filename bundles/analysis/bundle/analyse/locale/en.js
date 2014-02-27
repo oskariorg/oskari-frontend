@@ -185,7 +185,21 @@ Oskari.registerLocalization({
                 "nohelp": "No guide found",
                 "saveFailed": "Storing analysis failed. Try again a little later.",
                 "loadLayersFailed": "Analysis layer load failed",
-                "loadLayerTypesFailed": "Analysis or WFS layer field types request failed"
+                "loadLayerTypesFailed": "Analysis or WFS layer field types request failed",
+                "Analyse_parameter_missing": "Analyse parameter missing",
+                "Unable_to_parse_analysis": "Unable to parse analysis",
+                "Unable_to_get_WPS_features": "Unable to get WPS features",
+                "WPS_execute_returns_Exception": "WPS execute returns Exception",
+                "WPS_execute_returns_no_features": "WPS execute returns no features",
+                "Unable_to_process_aggregate_union": "Unable to process aggregate union",
+                "Unable_to_get_features_for_union": "Unable to get features for union",
+                "Unable_to_store_analysis_data": "Unable to store analysis data",
+                "Unable_to_get_analysisLayer_data": "Unable to get analysisLayer data"
+            },
+            "infos": {
+                "title": "Info",
+                "layer": "Layer -",
+                "over10": "- over 10 fields - Select max 10 from a list for analyse"
             }
         },
         "StartView": {

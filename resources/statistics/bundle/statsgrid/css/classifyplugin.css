@@ -105,15 +105,16 @@
 
 /* TODO should these be under .manageClassificationPlugin? */
 .geostats-legend div {
-  margin-bottom: 5px; }
+  margin-bottom: 3px; }
 
 .geostats-legend-block {
   border: 1px solid #555;
   display: inline-table;
   float: none;
   height: 12px;
-  margin: 0 5px 0 0;
-  width: 20px; }
+  margin: 2px 5px 0 0;
+  width: 20px;
+  vertical-align: middle; }
 
 .geostats-legend-counter {
   color: #666;

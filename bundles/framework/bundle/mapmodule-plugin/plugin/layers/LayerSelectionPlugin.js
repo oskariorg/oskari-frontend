@@ -21,10 +21,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me.element = undefined;
         me.conf = config;
         me.initialSetup = true;
+        me.isInLayerToolsEditMode = false;
         me.templates = {};
     }, {
         /** @static @property __name module name */
         __name: 'LayerSelectionPlugin',
+
+        getClazz: function () {
+            return "Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin";
+        },
 
         /**
          * @method getName
@@ -87,7 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         init: function (sandbox) {
             var me = this;
-            me.templates.main = jQuery("<div class='mapplugin layerselection'>" +
+            me.templates.main = jQuery("<div class='mapplugin layerselection' data-clazz='Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin'>" +
                 '<div class="header"><div class="header-icon icon-arrow-white-right"></div></div>' +
                 '<div class="content"><div class="layers"></div><div class="baselayers"></div></div>' +
                 "</div>");
@@ -134,13 +139,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         stopPlugin: function (sandbox) {
             var me = this,
                 p;
+            var sb = sandbox || this._sandbox;
+
             for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p) && me._sandbox) {
-                    me._sandbox.unregisterFromEventByName(me, p);
+                if (me.eventHandlers.hasOwnProperty(p) && sb) {
+                    sb.unregisterFromEventByName(me, p);
                 }
             }
 
-            me._sandbox.unregister(me);
+            sb.unregister(me);
 
             // remove ui
             if (me.element) {
@@ -206,6 +213,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
              */
             'AfterMapMoveEvent': function (event) {
                 this._checkBaseLayers();
+            },
+            'LayerToolsEditModeEvent': function (event) {
+                this._setLayerToolsEditMode(event.isInMode());
+            }
+        },
+
+        _setLayerToolsEditMode: function (isInEditMode) {
+            if (this.isInLayerToolsEditMode === isInEditMode) {
+                // we don't want to bind click twice...
+                return;
+            }
+            var header = this.element.find("div.header");
+            this.isInLayerToolsEditMode = isInEditMode;
+            if (isInEditMode) {
+                this.closeSelection();
+                header.unbind("click");
+            } else {
+                this._bindHeader(header);
             }
         },
 
@@ -509,13 +534,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
-
-            // reset plugin if active
-            if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+            if (!me.conf.location) {
+                me.conf.location = {};
             }
+            me.conf.location.classes = location;
+
+            if (me.element) {
+                me.getMapModule().setMapControlPlugin(me.element, location, 3);
+            }
+        },
+
+        _bindHeader: function (header) {
+            var me = this;
+            header.bind('click', function () {
+                var content = me.element.find('div.content');
+                if (content.is(':hidden')) {
+                    me.openSelection();
+                } else {
+                    me.closeSelection();
+                }
+            });
         },
 
         /**
@@ -538,14 +576,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 header = me.element.find('div.header');
             header.append(myLoc.title);
 
-            header.bind('click', function () {
-                var content = me.element.find('div.content');
-                if (content.is(':hidden')) {
-                    me.openSelection();
-                } else {
-                    me.closeSelection();
-                }
-            });
+            me._bindHeader(header);
+            
             me.closeSelection();
 
             me.setupLayers();
@@ -728,13 +760,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             this.getMapModule().changeCssClasses(classToAdd, testRegex, [div]);
         },
         _checkBaseLayers : function (layer) {
-            var i,
-                layer = layer;
+            var i;
             // reacting to conf
             if (this.conf && this.conf.baseLayers) {
                 // setup initial state here since we are using selected layers to create ui
                 // and plugin is started before any layers have been added
-                if (this.initialSetup && layer == null) {
+                if (this.initialSetup && (layer === null || layer === undefined)){
                     this.initialSetup = false;
 
                     for (i = 0; i < this.conf.baseLayers.length; i += 1) {
@@ -744,7 +775,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     if (this.conf.defaultBaseLayer) {
                         this.selectBaseLayer(this.conf.defaultBaseLayer);
                     }
-                } else if (layer != null) {
+                } else if (layer !== null && layer !== undefined) {
                     for (i = 0; i < this.conf.baseLayers.length; i++) {
                         if (this.conf.baseLayers[i] == layer.getId()) {
                             this.addBaseLayer(layer);

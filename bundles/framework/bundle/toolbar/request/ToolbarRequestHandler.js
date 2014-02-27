@@ -25,16 +25,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolbarRequestHa
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var sandbox = core.getSandbox();
-            if (request.getOp() === 'add') {
+            var sandbox = core.getSandbox(),
+                requestOperation = request.getOp();
+
+            if (requestOperation === 'add') {
                 this._toolbar._addToolbar(request.getId(), request.getData());
-            } else if (request.getOp() === 'show') {
+            } else if (requestOperation === 'show') {
                 this._toolbar._showToolbar(request.getId());
-            } else if (request.getOp() === 'hide') {
+            } else if (requestOperation === 'hide') {
                 this._toolbar._hideToolbar(request.getId());
-            } else if (request.getOp() === 'remove') {
+            } else if (requestOperation === 'remove') {
                 this._toolbar._removeToolbar(request.getId());
-            } else if (request.getOp() === 'changeName') {
+            } else if (requestOperation === 'changeName') {
                 this._toolbar.changeMenuToolbarTitle(request.getData());
             }
 

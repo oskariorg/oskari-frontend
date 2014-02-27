@@ -1,0 +1,116 @@
+{ 
+  "startupSequence" : [ 
+      {
+            "instanceProps": {},
+            "title": "OpenLayers",
+            "bundleinstancename": "openlayers-default-theme",
+            "fi": "OpenLayers",
+            "sv": "?",
+            "en": "OpenLayers",
+            "bundlename": "openlayers-default-theme",
+            "metadata": {
+                "Import-Bundle": {
+                    "openlayers-default-theme": {
+                        "bundlePath": "../../../packages/openlayers/bundle/"
+                    },
+                    "openlayers-2_13_1-full-map": {
+                        "bundlePath": "../../../packages/openlayers/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+      { 
+        "title" : "Map",
+        "en" : "Map",
+        "fi" : "Map",
+        "sv" : "Map",
+        "bundleinstancename" : "mapfull",
+        "bundlename" : "mapfull",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+            	"oskariui" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "core-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "core-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "domain" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "event-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "event-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "event-map-layer" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "mapfull" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "mapmodule-plugin" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "mapwmts" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "maparcgis" : { "bundlePath" : "../../../packages/arcgis/bundle/" },
+                "request-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "request-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "request-map-layer" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "sandbox-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "sandbox-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "service-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "service-map" : { "bundlePath" : "../../../packages/framework/bundle/" }
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },
+      { 
+        "title" : "Oskari DIV Manazer",
+        "en" : "Oskari DIV Manazer",
+        "fi" : "Oskari DIV Manazer",
+        "sv" : "Oskari DIV Manazer",
+        "bundleinstancename" : "divmanazer",
+        "bundlename" : "divmanazer",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "divmanazer" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },
+      { 
+        "title" : "Oskari coordinatedisplay",
+        "en" : "Oskari coordinatedisplay",
+        "fi" : "Oskari coordinatedisplay",
+        "sv" : "Oskari coordinatedisplay",
+        "bundleinstancename" : "coordinatedisplay",
+        "bundlename" : "coordinatedisplay",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "coordinatedisplay" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },
+      { 
+        "title" : "LayerSelector",
+        "en" : "LayerSelector",
+        "fi" : "LayerSelector",
+        "sv" : "LayerSelector",
+        "bundleinstancename" : "layerselector2",
+        "bundlename" : "layerselector2",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "layerselector2" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },
+      { 
+        "title" : "LayerSelection",
+        "en" : "LayerSelection",
+        "fi" : "LayerSelection",
+        "sv" : "LayerSelection",
+        "bundleinstancename" : "layerselection2",
+        "bundlename" : "layerselection2",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "layerselection2" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      }
+  ]
+}

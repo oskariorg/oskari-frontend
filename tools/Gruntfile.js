@@ -121,6 +121,47 @@ module.exports = function (grunt) {
                 src: ['../{bundles,packages}/**/*.js']
             }
         },
+        compress: {
+            zip: {
+                options: {
+                    archive: "../oskari.<%= versionNum %>.zip",
+                    mode: 'zip',
+                    pretty: true
+                },
+                files: [
+                    // Copy all files under the application template folder
+                    {
+                        cwd: './oskari_application_template/',
+                        src: '**',
+                        dest: '/',
+                        expand: true
+                    },
+                    // Copy all minified oskari files
+                    {
+                        cwd: '../dist/<%= versionNum %>/<%= compress.options.fullMap %>',
+                        src: 'oskari*',
+                        dest: '/min/',
+                        expand: true
+                    },
+                    {
+                        src: '../bundles/bundle.js',
+                        dest: '/',
+                    },
+                    {
+                        src: '../packages/openlayers/startup.js',
+                        dest: '/',
+                    }
+                ]
+            },
+            tgz: {
+                options: {
+                    archive: "../oskari.<%= versionNum %>.tgz",
+                    mode: 'tgz',
+                    pretty: true
+                },
+                files: '<%= compress.zip.files %>'
+            }
+        },
         modulizeAll: {
           'admin-layerrights': '../packages/framework/bundle/admin-layerrights',
           'backendstatus': '../packages/framework/bundle/backendstatus',
@@ -308,7 +349,7 @@ module.exports = function (grunt) {
             }
         },
         requirejs: {
-          oskari: {
+          'oskari': {
             options: {
                 baseUrl : "../",
                 paths: {
@@ -317,7 +358,7 @@ module.exports = function (grunt) {
                 optimizeAllPluginResources: true,
                 findNestedDependencies: true,
                 preserveLicenseComments: true,
-                name: "bundles/oskari/oskari",
+                name: "src/oskari/oskari",
                 version: "2.0.0",
                 out: "../libraries/oskari/oskari-<%= requirejs.oskari.options.version %>.min.js"
             }
@@ -327,7 +368,7 @@ module.exports = function (grunt) {
                 baseUrl : "../",
                 paths: {
                     jquery: "empty:",
-                    oskari: "bundles/oskari/oskari",
+                    oskari: "src/oskari/oskari",
                     css: "libraries/requirejs/lib/css",
                     json: "libraries/requirejs/lib/json",
                     domReady: "libraries/requirejs/lib/domReady",
@@ -338,7 +379,7 @@ module.exports = function (grunt) {
                 findNestedDependencies: true,
                 preserveLicenseComments: true,
                 version: "1.13",
-                name: "bundles/oskari/oskari-with-loader",
+                name: "src/oskari/oskari-with-loader",
                 out: "../libraries/oskari/oskari-<%= requirejs['oskari-with-loader'].options.version %>.min.js"
             }
           },
@@ -375,6 +416,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-compress');
 
     // Default task(s).
     grunt.registerTask('default', ['karma:dev', 'compileAppSetupToStartupSequence', 'compileDev', 'karma:dev:run', 'watch']);
@@ -458,6 +500,7 @@ module.exports = function (grunt) {
         }
         // set version in config for grunt templating
         grunt.config.set("version", version + "/");
+        grunt.config.set("versionNum", version);
 
         // set multi task configs for compile and validate
         configs = configs.split(',');
@@ -531,6 +574,8 @@ module.exports = function (grunt) {
                 "dest": dest
             });
             grunt.config.set("sprite." + appName + ".options", options);
+
+            if (appName === 'full-map') grunt.config.set('compress.options.fullMap', appName);
         }
 
         grunt.task.run('validate');
@@ -540,6 +585,7 @@ module.exports = function (grunt) {
         grunt.task.run('sprite');
         grunt.task.run('oskaridoc');
         grunt.task.run('mddocs');
+        if (grunt.config.get('compress.options.fullMap')) grunt.task.run('compress');
     });
 
     grunt.registerTask('packageopenlayer', 'Package openlayers according to packages', function (packages) {
@@ -579,7 +625,7 @@ module.exports = function (grunt) {
             for (i in files) {
                 if (files.hasOwnProperty(i)) {
                     file = files[i];
-                    if (file.indexOf('.cfg') !== -1) {
+                    if (file.indexOf('.cfg') !== -1 && file.indexOf('2_13_1') !== -1) {
                         packages.push(file);
                     }
                 }

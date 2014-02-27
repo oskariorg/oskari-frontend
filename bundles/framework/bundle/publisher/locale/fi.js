@@ -53,9 +53,6 @@ Oskari.registerLocalization({
                 "SearchPlugin": "Osoite- ja paikannimihaku",
                 "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
                 "PublisherToolbarPlugin": "Karttatyökalut",
-                "drawPoints" : "Salli pisteet",
-                "drawLines" : "Salli viivat",
-                "drawAreas" : "Salli alueet",
                 "selectDrawLayer" : "Valitse piirtotaso"
             },
             "toolbarToolNames": {
@@ -63,13 +60,19 @@ Oskari.registerLocalization({
                 "history_forward": "Siirry eteenpäin",
                 "measureline": "Mittaa etäisyyttä",
                 "measurearea": "Mittaa aluetta",
-                "drawTools" : "Piirtotyökalut"
+                "drawTools" : "Piirtotyökalut",
+                "point" : "Salli pisteet",
+                "line" : "Salli viivat",
+                "area" : "Salli alueet",
             },
             "toollayout": {
                 "label": "Työkalujen asettelu",
                 "tooltip": "Valitse kartalla näytettävien työkalujen asettelu",
                 "lefthanded": "Vasenkätinen",
-                "righthanded": "Oikeakätinen"
+                "righthanded": "Oikeakätinen",
+                "userlayout" : "Oma asettelu",
+                "usereditmode": "Muokkaustila päälle",
+                "usereditmodeoff": "Poistu muokkaustilasta"
             },
             "data": {
                 "label":                "Tilastot",
@@ -125,6 +128,7 @@ Oskari.registerLocalization({
                 }
             },
             "layers": {
+                "add": "Lisää taso",
                 "label": "Karttatasot",
                 "defaultLayer": "(Oletusvalinta)",
                 "useAsDefaultLayer": "Käytä oletuksena"

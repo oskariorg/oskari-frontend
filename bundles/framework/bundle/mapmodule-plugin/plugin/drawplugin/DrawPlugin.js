@@ -192,7 +192,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
                     // send an event that the drawing has been completed
                     me.finishedDrawing();
                 },
-                'vertexmodified': function(event) {
+                'vertexmodified': function (event) {
                     me._sendActiveGeometry(me.getDrawing());
                 }
             }
@@ -204,7 +204,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
             line: new OpenLayers.Control.DrawFeature(me.drawLayer,
                 OpenLayers.Handler.Path, {
                     callbacks: {
-                        modify: function(geom, feature) {
+                        modify: function (geom, feature) {
                             me._sendActiveGeometry(me.getActiveDrawing(feature.geometry), 'line');
                         }
                     }
@@ -215,7 +215,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
                         holeModifier: "altKey"
                     },
                     callbacks: {
-                        modify: function(geom, feature) {
+                        modify: function (geom, feature) {
                             me._sendActiveGeometry(me.getActiveDrawing(feature.geometry), 'area');
                         }
                     }
@@ -286,8 +286,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
         }
         var featClass = this.drawLayer.features[0].geometry.CLASS_NAME;
         if ((featClass === "OpenLayers.Geometry.MultiPoint") ||
-                (featClass === "OpenLayers.Geometry.MultiLineString") ||
-                (featClass === "OpenLayers.Geometry.MultiPolygon")) {
+            (featClass === "OpenLayers.Geometry.MultiLineString") ||
+            (featClass === "OpenLayers.Geometry.MultiPolygon")) {
             return this.drawLayer.features[0].geometry;
         }
 
@@ -319,11 +319,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
      * @param  {OpenLayers.Geometry} geometry
      * @return {OpenLayers.Geometry}
      */
-    getActiveDrawing: function(geometry) {
+    getActiveDrawing: function (geometry) {
         var prevGeom = this.getDrawing(),
             composedGeom;
 
-        if (prevGeom != null) {
+        if (prevGeom !== null && prevGeom !== undefined) {
             composedGeom = prevGeom.clone();
             composedGeom.addComponent(geometry);
             return composedGeom;
@@ -348,11 +348,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
         return activeDrawControls;
     },
 
-    _sendActiveGeometry: function(geometry, drawMode) {
+    _sendActiveGeometry: function (geometry, drawMode) {
         var eventBuilder = this._sandbox.getEventBuilder('DrawPlugin.ActiveDrawingEvent'),
             event, featClass;
 
-        if (drawMode == null) {
+        if (drawMode === null || drawMode === undefined) {
             featClass = geometry.CLASS_NAME;
             switch (featClass) {
             case "OpenLayers.Geometry.LineString":

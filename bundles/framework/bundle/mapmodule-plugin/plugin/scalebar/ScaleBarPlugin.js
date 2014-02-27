@@ -21,11 +21,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
     }, {
 
         templates: {
-            main: jQuery('<div class="mapplugin scalebar"></div>')
+            main: jQuery('<div class="mapplugin scalebar" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"></div>')
         },
 
         /** @static @property __name plugin name */
         __name: 'ScaleBarPlugin',
+
+        getClazz: function () {
+            return "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin";
+        },
 
         /**
          * @method getName
@@ -92,12 +96,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
+            me.conf.location.classes = location;
 
             // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                //me.stopPlugin();
+                //me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 3);
             }
         },
 
@@ -190,6 +195,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
                 if (this._scalebar) {
                     this._scalebar.update();
                 }
+            },
+            'LayerToolsEditModeEvent' : function(event) {
+                this.isInLayerToolsEditMode = event.isInMode();
             }
         },
 

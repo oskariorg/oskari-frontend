@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsService',
 function(instance) {
     this.instance = instance;
     this.sandbox = instance.sandbox;
+    this.eventName = 'StatsGrid.UserIndicatorEvent';
 }, {
     __name: "StatsGrid.UserIndicatorsService",
     __qname : "Oskari.statistics.bundle.statsgrid.UserIndicatorsService",
@@ -44,8 +45,20 @@ function(instance) {
     },
 
     saveUserIndicator: function(indicator, successCb, errorCb) {
-        var url = this.sandbox.getAjaxUrl() + 'action_route=SaveUserIndicator';
-        this._post(url, indicator, successCb, errorCb);
+        var me = this,
+            url = this.sandbox.getAjaxUrl() + 'action_route=SaveUserIndicator',
+            sandbox = this.sandbox,
+            eventName = this.eventName,
+            cbWrapper = function(response) {
+                var eventBuilder = sandbox.getEventBuilder(eventName);
+                if (eventBuilder) {
+                    var event = eventBuilder('create', me._objectifyIndicator(indicator, response));
+                    sandbox.notifyAll(event);
+                }
+                successCb(response);
+            };
+
+        this._post(url, indicator, cbWrapper, errorCb);
     },
 
     deleteUserIndicator: function(indicatorId, successCb, errorCb) {
@@ -75,13 +88,25 @@ function(instance) {
                 if (typeof successCb === 'function') successCb(response);
             },
             error : function(jqXHR, textStatus) {
-                if (typeof errorCb === 'function' && jqXHR.status != 0) errorCb(jqXHR, textStatus);
+                if (typeof errorCb === 'function' && jqXHR.status !== 0) errorCb(jqXHR, textStatus);
             }
         };
 
         if (data) params.data = data;
 
         jQuery.ajax(params);
+    },
+
+    _objectifyIndicator: function(indicator, response) {
+        var retIndicator = {
+            id: response.id,
+            title: JSON.parse(indicator.title),
+            description: JSON.parse(indicator.description),
+            organization: JSON.parse(indicator.source),
+            year: indicator.year
+        };
+
+        return retIndicator;
     }
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']

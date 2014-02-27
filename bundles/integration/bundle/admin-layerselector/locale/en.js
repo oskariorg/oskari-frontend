@@ -58,6 +58,10 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
+            "capabilitiesLabel" : "WMSCapabilities",
+            "confirmResourceKeyChange" : "By changing the values of wmsname and url the layer permissions will reset. Continue?",
+            "confirmDeleteLayerGroup" : "Delete layer group. Continue?",
+            "confirmDeleteLayer" : "Delete layer. Continue?",
             "layertypes" : {
                 "wms": "WMS layer",
                 "wfs": "WFS layer",
@@ -95,6 +99,7 @@ Oskari.registerLocalization({
             "addSubLayer": "Add sublayer",
 
             "wmsInterfaceAddress": "WMS interface URL",
+            "wmsUrl": "WMS interface URL",
             "wmsInterfaceAddressDesc": "WMS interface URL-addresses separated with commas",
             "wmsServiceMetaId": "WMS metadata id",
             "wmsServiceMetaIdDesc": "Metadata id of WMS service",
@@ -163,7 +168,11 @@ Oskari.registerLocalization({
             "interfaceAddress": "interface URL",
             "interfaceAddressDesc": "URL for WMS layer definitions",
             "viewingRightsRoles": "Viewing Rights roles",
-            "metadataReadFailure": "Fetching layer metadata failed."
+            "metadataReadFailure": "Fetching layer metadata failed.",
+            "mandatory_field_missing": "Field is required: ",
+            "invalid_field_value": "Invalid value: ",
+            "operation_not_permitted_for_layer_id": "Operation not permitted for layer ",
+            "no_layer_with_id": "Layer not found with id "
         },
         "cancel": "Cancel",
         "add": "Add",

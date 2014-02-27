@@ -60,7 +60,10 @@ Oskari.registerLocalization({
                 "label": "Tool layout",
                 "tooltip": "Choose a layout for the tools shown on the map",
                 "lefthanded": "Lefthanded",
-                "righthanded": "Righthanded"
+                "righthanded": "Righthanded",
+                "userlayout" : "Custom layout",
+                "usereditmode": "Switch edit mode on",
+                "usereditmodeoff": "Switch edit mode off"
             },
             "data": {
                 "label": "Statistics",
@@ -68,6 +71,7 @@ Oskari.registerLocalization({
                 "grid": "Show statistic grid"
             },
             "layers": {
+                "add": "NOT TRANSLATED",
                 "label": "Capas",
                 "defaultLayer": "(Capa por defecto)",
                 "useAsDefaultLayer": "Usar como capa por defecto"

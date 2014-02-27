@@ -11,7 +11,7 @@
 
 ## Description
 
-Bundle fetches data from the SotkaNET statistics and indicator bank (www.sotkanet.fi) and displays the data in a grid and visualizes it on the map. Users can select different indicators from a menu and classify the data in multiple ways, including specifying class breaks by hand (manual breaks).
+Bundle fetches data from the SOTKAnet statistics and indicator bank (www.sotkanet.fi) and displays the data in a grid and visualizes it on the map. Users can select different indicators from a menu and classify the data in multiple ways, including specifying class breaks by hand (manual breaks).
 
 The grid and the classifier are initialized as plugins so they can be used individually as well. They both use the StatisticsService to send events and make the actual AJAX calls to fetch the data.
 
@@ -19,7 +19,7 @@ Grid section: selected regions will be visualized on the map.
 Map section: selected regions are hilighted in the grid.
 Select hilighted mode: selected regions (map) are also selected in the grid.
 
-Each data column has a menu from where the user can filter the values in the grid and on the map. Filtering is possible based on values (equals, greater than etc.) or regions (at the moment regions from the SOTKANet service are supported. Refer to the REST API documentation [here](http://uusi.sotkanet.fi/portal/pls/portal/!PORTAL.wwpob_page.show?_docname=26001.HTML) (only in Finnish)).
+Each data column has a menu from where the user can filter the values in the grid and on the map. Filtering is possible based on values (equals, greater than etc.) or regions (at the moment regions from the SOTKAnet service are supported. Refer to the REST API documentation [here](http://uusi.sotkanet.fi/portal/pls/portal/!PORTAL.wwpob_page.show?_docname=26001.HTML) (only in Finnish)).
 
 ## TODO
 
@@ -186,7 +186,7 @@ state : {
   </tr>
   <tr>
     <td>MapStats.StatsVisualizationChangeEvent</td>
-    <td>After new data has been fetched from the sotkanet service so it can be classified</td>
+    <td>After new data has been fetched from the SOTKAnet service so it can be classified</td>
   </tr>
   <tr>
     <td>MapStats.StatsVisualizationChangeEvent</td>

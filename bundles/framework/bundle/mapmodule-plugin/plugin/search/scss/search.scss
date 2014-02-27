@@ -6,7 +6,7 @@ div.search div.close {
   float: right; }
 
 div.search input[type=text] {
-  width: 124px !important; }
+  width: 140px !important; }
 
 div.search input[type=button] {
   width: 35px;
@@ -97,7 +97,7 @@ div.published-search-div div.search-area-div input.search-input {
   background-image: none;
   width: 145px;
   float: left;
-  padding: 8px 0px 8px 0px;
+  padding: 10px 5px 10px 5px;
   outline: none; }
 
 div.published-search-div div.published-search-results {
@@ -241,3 +241,12 @@ div.published-search-div div.search-middle div.close-results {
   float: right;
   cursor: pointer;
 }
+.search-textarea-and-button .search-editmode-overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  }
+.mappluginsContent.ui-sortable div.mapplugin.search {
+  right: 0px; }

@@ -236,7 +236,7 @@ function() {
          * Disable grid updates on close, otherwise enable updates
          */
         'userinterface.ExtensionUpdatedEvent': function(event) {
-            var plugin = this.plugins['Oskari.userinterface.Flyout']
+            var plugin = this.plugins['Oskari.userinterface.Flyout'];
 
             // ExtensionUpdateEvents are fired a lot, only let featuredata2 extension event to be handled when enabled
             if (event.getExtension().getName() !== this.getName()) {
@@ -262,8 +262,8 @@ function() {
 
             this.popupHandler.showSelectionTools(true);
 
-            var event = this.sandbox.getEventBuilder("WFSSetFilter")(features);
-            this.sandbox.notifyAll(event);
+            var evt = this.sandbox.getEventBuilder("WFSSetFilter")(features);
+            this.sandbox.notifyAll(evt);
 
             this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'detach']);
         }
@@ -274,9 +274,12 @@ function() {
      * implements BundleInstance protocol stop method
      */
     "stop": function() {
-        var sandbox = this.sandbox();
+        var sandbox = this.sandbox(),
+            p;
         for (p in this.eventHandlers) {
-            sandbox.unregisterFromEventByName(this, p);
+            if (this.eventHandlers.hasOwnProperty(p)) {
+                sandbox.unregisterFromEventByName(this, p);
+            }
         }
 
         var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);

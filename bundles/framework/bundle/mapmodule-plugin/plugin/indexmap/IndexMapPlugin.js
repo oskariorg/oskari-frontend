@@ -23,14 +23,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
         me.element = null;
         me._indexMap = null;
         me._indexMapUrl = '/framework/bundle/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
+        me.isInLayerToolsEditMode = false;
     }, {
         templates: {
-            main: jQuery('<div class="mapplugin indexmap"></div>'),
+            main: jQuery('<div class="mapplugin indexmap" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin"></div>'),
             toggle: jQuery('<div class="indexmapToggle"></div>')
         },
 
         /** @static @property __name plugin name */
         __name: 'IndexMapPlugin',
+
+        getClazz: function () {
+            return "Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin";
+        },
 
         /**
          * @method getName
@@ -88,12 +93,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
+            if(!me.conf.location){
+                me.conf.location = {};
+            }
+            me.conf.location.classes = location;
 
-            // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 5);
             }
         },
         /**
@@ -142,6 +148,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             // initialize control, pass container
             me._indexMap = new OpenLayers.Control.OverviewMap(controlOptions);
 
+            // in case we are already in edit mode when plugin is drawn
+            this.isInLayerToolsEditMode = me.getMapModule().isInLayerToolsEditMode();
 
         },
         /**
@@ -182,14 +190,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
             me.getMapModule().addMapControl('overviewMap', me._indexMap);
             var toggleButton = me.templates.toggle.clone();
             // add toggle functionality to button
-            toggleButton.click(function (event) {
-                event.preventDefault();
-                var mappy = me.element.find('.olControlOverviewMapElement');
-                mappy.toggle();
-            });
+            me._bindIcon(toggleButton);
+
             // button has to be added separately so the element order is correct...
             me.element.append(toggleButton);
         },
+
+        _bindIcon: function (icon) {
+            var me = this;
+            icon.bind("click", function (event) {
+                event.preventDefault();
+                var miniMap = me.element.find('.olControlOverviewMapElement');
+                miniMap.toggle();
+            });
+        },
+
         /**
          * @method stopPlugin
          * Interface method for the plugin protocol.
@@ -242,6 +257,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
                 if (this._indexMap) {
                     this._indexMap.update();
                 }
+            },
+            'LayerToolsEditModeEvent': function (event) {
+                this._setLayerToolsEditMode(event.isInMode());
+            }
+        },
+
+        _setLayerToolsEditMode: function (isInEditMode) {
+            if (this.isInLayerToolsEditMode === isInEditMode) {
+                // we don't want to bind click twice...
+                return;
+            }
+            this.isInLayerToolsEditMode = isInEditMode;
+            var icon = this.element.find(".indexmapToggle");
+
+            if (isInEditMode) {
+                // close map
+                var miniMap = this.element.find('.olControlOverviewMapElement');
+                miniMap.hide();
+                // disable icon
+                icon.unbind("click");
+            } else {
+                // enable icon
+                this._bindIcon(icon);
             }
         },
 

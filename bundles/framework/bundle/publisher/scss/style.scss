@@ -30,11 +30,11 @@ div.publisher div.startview div.tou {
 div.publisher div.startview div.layerlist {
   border : 1px solid;
   padding : 10px;
-}
-div.publisher div.startview div.layerlist h4 {
-  font-size : 14px;
-  line-height: 15px;
+  h4 {
+    font-size : 14px;
+    line-height: 15px;
     padding-bottom: 5px;
+  }
 }
 div.publisher div.startview ul {
     list-style: disc inside none;
@@ -95,9 +95,20 @@ div.basic_publisher div.tool-options {
   }
 }
 
+div.basic_publisher div.tool label,
+div.basic_publisher div.data label {
+  margin-right: 10px;
+}
+
 div.basic_publisher div.tool input,
 div.basic_publisher div.data input {
     margin-right: 10px;
+}
+
+div.basic_publisher div.tool input[type="button"],
+div.basic_publisher div.data input[type="button"] {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 /* Buttons */
@@ -152,6 +163,9 @@ div#publisher-custom-colours div.rgbInput input[type="text"] {
 }
 
 div.basic_publisher { 
+  .disabled-button {
+    opacity: 0.8;
+  }
   .layer.selected {
     border: 1pt solid #c0d0e0;
     margin: 0 5px 5px 0;

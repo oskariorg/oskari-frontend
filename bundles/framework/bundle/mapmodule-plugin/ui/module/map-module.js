@@ -135,6 +135,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             for (i = 0; i < containerClasses.length; i++) {
                 containerDiv = jQuery('<div class="mapplugins"><div class="mappluginsContainer"><div class="mappluginsContent"></div></div></div>');
                 containerDiv.addClass(containerClasses[i]);
+                containerDiv.attr('data-location', containerClasses[i]);
                 mapDiv.append(containerDiv);
             }
 
@@ -307,25 +308,37 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             sandbox.addRequestHandler('ClearHistoryRequest', this.requestHandlers.clearHistoryHandler);
 
             this._createMap();
-            // changed to resolutions based map zoom levels
-            // -> calculate scales array for backward compatibility
-            var i,
-                calculatedScale;
-            for (i = 0; i < this._options.resolutions.length; ++i) {
-
-                calculatedScale = OpenLayers.Util.getScaleFromResolution(this._options.resolutions[i], this._map.units);
-                // rounding off the resolution to scale calculation
-                calculatedScale = calculatedScale * 100000000;
-                calculatedScale = Math.round(calculatedScale);
-                calculatedScale = calculatedScale / 100000000;
-                this._mapScales.push(calculatedScale);
-            }
+            var scales = this._calculateScalesFromResolutions(this._options.resolutions, this._map.units);
+            this._mapScales = scales;
+            
             this._createBaseLayer();
 
             this.addMapControl('navigationHistoryTool', this._navigationHistoryTool);
             this.getMapControl('navigationHistoryTool').activate();
             this._addMapControlPluginContainers();
             return this._map;
+        },
+        /**
+         * Changed to resolutions based map zoom levels, but we need to 
+         * calculate scales array for backward compatibility
+         * 
+         * @param  {Number[]} resolutions configured resolutions array
+         * @param  {String} units         OpenLayers unit (m/degree etc)
+         * @return {Number[]}             calculated matching scales array
+         * @private
+         */
+        _calculateScalesFromResolutions : function(resolutions, units) {
+            var scales = [];
+            for (var i = 0; i < resolutions.length; ++i) {
+
+                var calculatedScale = OpenLayers.Util.getScaleFromResolution(resolutions[i], units);
+                // rounding off the resolution to scale calculation
+                calculatedScale = calculatedScale * 100000000;
+                calculatedScale = Math.round(calculatedScale);
+                calculatedScale = calculatedScale / 100000000;
+                scales.push(calculatedScale);
+            }
+            return scales;
         },
 
         /**
@@ -1006,7 +1019,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 i;
             for (i = 0; i < this._mapScales.length; i++) {
                 if ((!minScale || minScale >= this._mapScales[i]) &&
-                    (!maxScale || maxScale <= this._mapScales[i])) {
+                        (!maxScale || maxScale <= this._mapScales[i])) {
                     layerScales.push(this._mapScales[i]);
                 }
             }
@@ -1025,7 +1038,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 i;
             for (i = 0; i < this._mapScales.length; i++) {
                 if ((!minScale || minScale >= this._mapScales[i]) &&
-                    (!maxScale || maxScale <= this._mapScales[i])) {
+                        (!maxScale || maxScale <= this._mapScales[i])) {
                     // resolutions are in the same order as scales so just use them
                     layerResolutions.push(this._options.resolutions[i]);
                 }
@@ -1069,6 +1082,41 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 }
             }
             return zoomLevel;
+        },
+        /**
+         * Formats the measurement of the geometry.
+         * Returns a string with the measurement and
+         * an appropriate unit (m/km or m²/km²)
+         * or an empty string for point.
+         *
+         * @method formatMeasurementResult
+         * @param  {OpenLayers.Geometry} geometry
+         * @param  {String} drawMode
+         * @return {String}
+         */
+        formatMeasurementResult: function(geometry, drawMode) {
+            var measurement, unit;
+
+            if (drawMode === 'area') {
+                measurement = (Math.round(100 * geometry.getArea())/100);
+                unit = ' m²';
+                // 1 000 000 m² === 1 km²
+                if (measurement >= 1000000) {
+                    measurement = (Math.round(measurement)/1000000);
+                    unit = ' km²';
+                }
+            } else if (drawMode === 'line') {
+                measurement = (Math.round(100 * geometry.getLength())/100);
+                unit = ' m';
+                // 1 000 m === 1 km
+                if (measurement >= 1000) {
+                    measurement = (Math.round(measurement)/1000);
+                    unit = ' km';
+                }
+            } else {
+                return '';
+            }
+            return (measurement + unit).replace('.', ',');
         },
         /**
          * @method start
@@ -1168,6 +1216,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             },
             'SearchClearedEvent': function (event) {
                 this._removeMarkers();
+            },
+            'LayerToolsEditModeEvent' : function (event) {
+                this._isInLayerToolsEditMode = event.isInMode();
             }
         },
 
@@ -1313,6 +1364,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 // Add the new font as a CSS class.
                 el.addClass(classToAdd);
             }
+        },
+        isInLayerToolsEditMode : function () {
+            return this._isInLayerToolsEditMode;
         }
     }, {
         /**

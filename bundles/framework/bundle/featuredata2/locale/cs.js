@@ -19,6 +19,7 @@ Oskari.registerLocalization({
       },
       "button": {
         "cancel": "Storno",
+        "empty": "",
         "show": "Zobrazit místa",
         "close": "Zavřít",
         "edit" : "Upravit"

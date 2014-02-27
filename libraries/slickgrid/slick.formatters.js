@@ -18,7 +18,7 @@
   });
 
   function PercentCompleteFormatter(row, cell, value, columnDef, dataContext) {
-    if (value == null || value === "") {
+    if (value === null || value === undefined || value === "") {
       return "-";
     } else if (value < 50) {
       return "<span style='color:red;font-weight:bold;'>" + value + "%</span>";
@@ -28,7 +28,7 @@
   }
 
   function PercentCompleteBarFormatter(row, cell, value, columnDef, dataContext) {
-    if (value == null || value === "") {
+    if (value === null || value === undefined  || value === "") {
       return "";
     }
 

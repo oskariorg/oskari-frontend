@@ -69,8 +69,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
 
         this.templateHelper = jQuery(
             '<div class="drawHelper">' +
-                '<div class="infoText"></div>' +
-                '<div class="measurementResult"></div>' +
+            '<div class="infoText"></div>' +
+            '<div class="measurementResult"></div>' +
             '</div>'
         );
     }, {
@@ -87,8 +87,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
          * implements Module protocol init method
          */
         init: function () {
-            var loc = this.instance.getLocalization('tools');
-            var user = this.instance.sandbox.getUser();
+            var loc = this.instance.getLocalization('tools'),
+                user = this.instance.sandbox.getUser();
             // different tooltip for guests - "Please log in to use"
             var guestPostfix = ' - ' + this.instance.getLocalization('guest').loginShort,
                 tool,
@@ -108,8 +108,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
          * implements Module protocol start methdod
          */
         start: function () {
-            var me = this;
-            var sandbox = me.instance.sandbox,
+            var me = this,
+                sandbox = me.instance.sandbox,
                 p,
                 tool,
                 measureTool;
@@ -128,14 +128,27 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
 
                     // for logged-in-user: add line & area buttons
                     if (sandbox.getUser().isLoggedIn()) {
-                        if(tool === 'line') {
+                        var loc = me.instance.getLocalization();
+                        if (tool === 'line') {
                             measureTool = jQuery.extend(true, {}, this.buttons[tool]);
+                            measureTool.callback = function () {
+                                me.startNewDrawing({
+                                    drawMode: 'measureline'
+                                });
+                            };
                             measureTool.iconCls = 'tool-measure-line';
+                            measureTool.tooltip = loc.tools.measureline.tooltip;
                             sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
                         }
-                        if(tool === 'area') {
+                        if (tool === 'area') {
                             measureTool = jQuery.extend(true, {}, this.buttons[tool]);
+                            measureTool.callback = function () {
+                                me.startNewDrawing({
+                                    drawMode: 'measurearea'
+                                });
+                            };
                             measureTool.iconCls = 'tool-measure-area';
+                            measureTool.tooltip = loc.tools.measurearea.tooltip;
                             sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
                         }
                     }
@@ -153,8 +166,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
          * Disables draw buttons
          */
         disableButtons: function () {
-            var sandbox = this.instance.sandbox;
-            var stateReqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
+            var sandbox = this.instance.sandbox,
+                stateReqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
             sandbox.request(this, stateReqBuilder(undefined, this.buttonGroup, false));
         },
         /**
@@ -177,8 +190,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
          * @param config params for StartDrawRequest
          */
         sendDrawRequest: function (config) {
-            var me = this;
-            var startRequest = this.instance.sandbox.getRequestBuilder('DrawPlugin.StartDrawingRequest')(config);
+            var me = this,
+                conf = jQuery.extend(true, {}, config);
+            if (conf.drawMode === 'measureline') {
+                conf.drawMode = 'line';
+            } else if (conf.drawMode === 'measurearea') {
+                conf.drawMode = 'area';
+            }
+            var startRequest = this.instance.sandbox.getRequestBuilder('DrawPlugin.StartDrawingRequest')(conf);
             this.instance.sandbox.request(this, startRequest);
 
             if (!config.geometry) {
@@ -192,17 +211,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
          * implements Module protocol update method
          */
         _showDrawHelper: function (drawMode) {
-            var me = this;
-            // show help popup with cancel and finished buttons
-            var locTool = this.instance.getLocalization('tools')[drawMode];
-            var locBtns = this.instance.getLocalization('buttons');
-            var title = locTool['title'];
-            var message = locTool.add;
+            var me = this,
+                locTool = this.instance.getLocalization('tools')[drawMode];
 
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var locBtns = this.instance.getLocalization('buttons'),
+                title = locTool.title,
+                message = locTool.add,
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             this.dialog = dialog;
-            var buttons = [];
-            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var buttons = [],
+                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(locBtns.cancel);
             cancelBtn.setHandler(function () {
                 // ask toolbar to select default tool
@@ -220,6 +238,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                 me.sendStopDrawRequest();
             });
             buttons.push(finishBtn);
+
+            // for logged-in-user: add line & area buttons
+            if (me.instance.sandbox.getUser().isLoggedIn()) {
+                if (drawMode === 'line' || drawMode === 'area') {
+                    cancelBtn.setTitle(locBtns.close);
+                    finishBtn.setTitle(locBtns.saveAsMyPlace);
+                }
+            }
+
 
             var content = this.templateHelper.clone();
             content.find('div.infoText').html(message);
@@ -243,8 +270,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
          * @param {Boolean} isCancel boolean param for StopDrawingRequest, true == canceled, false = finish drawing (dblclick)
          */
         sendStopDrawRequest: function (isCancel) {
-            var me = this;
-            var request = this.instance.sandbox.getRequestBuilder('DrawPlugin.StopDrawingRequest')(isCancel);
+            var me = this,
+                request = this.instance.sandbox.getRequestBuilder('DrawPlugin.StopDrawingRequest')(isCancel);
             this.instance.sandbox.request(this, request);
             if (this.dialog) {
                 this.dialog.close();
@@ -330,11 +357,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
              * @param {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.AddedFeatureEvent} event
              */
             'DrawPlugin.AddedFeatureEvent': function (event) {
-                if (event.getDrawingMode() !== undefined) {
-                    if (event.getDrawingMode() !== null) {
-                        var loc = this.instance.getLocalization('tools');
-                        var areaDialogContent = loc[event.getDrawingMode()].next;
-                        var content = this.dialog.getJqueryContent();
+                var drawingMode = event.getDrawingMode();
+                if (drawingMode !== undefined) {
+                    if (drawingMode !== null) {/*
+                        if (this.instance.sandbox.getUser().isLoggedIn()) {
+                            if (drawingMode === 'line') {
+                                drawingMode = "measureline";
+                            } else if (drawingMode === 'area') {
+                                drawingMode = "measurearea";
+                            }
+                        }*/
+                        var loc = this.instance.getLocalization('tools'),
+                            areaDialogContent = loc[drawingMode].next,
+                            content = this.dialog.getJqueryContent();
                         if (content.find('div.infoText') !== areaDialogContent) {
                             content.find('div.infoText').html(areaDialogContent);
                             this.dialog.moveTo('#toolbar div.toolrow[tbgroup=default-myplaces]', 'top');
@@ -343,10 +378,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                 }
             },
 
-            'DrawPlugin.ActiveDrawingEvent': function(event) {
+            'DrawPlugin.ActiveDrawingEvent': function (event) {
                 var geom = event.getDrawing(),
                     mode = event.getDrawMode(),
-                    resultText = this.instance.formatMeasurementResult(geom, mode);
+                    resultText = this.instance.getDrawPlugin().getMapModule().formatMeasurementResult(geom, mode);
 
                 if (this.dialog) {
                     var content = this.dialog.getJqueryContent();

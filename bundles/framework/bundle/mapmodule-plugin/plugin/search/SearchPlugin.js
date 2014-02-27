@@ -26,6 +26,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         /** @static @property __name plugin name */
         __name: 'SearchPlugin',
 
+        getClazz: function () {
+            return "Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin";
+        },
+
         /**
          * @method getName
          * @return {String} plugin name
@@ -74,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             me.loc = pluginLoc[me.__name];
 
             me.template = jQuery(
-                '<div class="mapplugin search">' +
+                '<div class="mapplugin search default-search-div" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin">' +
                     '<div class="search-textarea-and-button">' +
                     '<input placeholder="' + me.loc.placeholder + '" type="text" />' +
                     '<input type="button" value="' + me.loc.search + '" name="search" />' +
@@ -89,8 +93,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             );
 
             me.styledTemplate = jQuery(
-                '<div class="published-search-div">' +
-                    '<div class="search-area-div">' +
+                '<div class="mapplugin search published-search-div" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin">' +
+                    '<div class="search-area-div search-textarea-and-button">' +
                     '<div class="search-left"></div>' +
                     '<div class="search-middle">' +
                     '<input class="search-input" placeholder="' + me.loc.placeholder + '" type="text" />' +
@@ -150,7 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             me._sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
+                    me._sandbox.registerForEventByName(me, p);
                 }
             }
             me._createUI();
@@ -198,7 +202,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * @property {Object} eventHandlers
          * @static
          */
-        eventHandlers: {},
+        eventHandlers: {
+            'LayerToolsEditModeEvent': function (event) {
+                this._setLayerToolsEditMode(event.isInMode());
+            }
+        },
+
+        _setLayerToolsEditMode: function (isInEditMode) {
+            if (this.isInLayerToolsEditMode === isInEditMode) {
+                return;
+            }
+            this.isInLayerToolsEditMode = isInEditMode;
+            if (this.isInLayerToolsEditMode) {
+                this._inputField.prop("disabled", true);
+                this._searchButton.prop("disabled", true);
+
+                var overlay = jQuery('<div class="search-editmode-overlay">');
+                this.element.find('.search-textarea-and-button')
+                    .css({
+                        'position': 'relative'
+                    })
+                    .append(overlay);
+                overlay.mousedown(function (e) {
+                    e.preventDefault();
+                });
+
+            } else {
+                this._inputField.prop("disabled", false);
+                this._searchButton.prop("disabled", false);
+                this.element.find('.search-editmode-overlay').remove();
+            }
+        },
+
 
         /**
          * @method onEvent
@@ -221,12 +256,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             if (!me.conf) {
                 me.conf = {};
             }
-            me.conf.location = location;
+            if (!me.conf.location) {
+                me.conf.location = {};
+            }
+            me.conf.location.classes = location;
 
-            // reset plugin if active
             if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
+                me.getMapModule().setMapControlPlugin(me.element, location, 1);
             }
         },
         /**
@@ -237,10 +273,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          */
         _createUI: function () {
             var me = this,
-                sandbox = me._sandbox,
-                content,
-                containerClasses = 'top left',
-                position = 1;
+                content;
 
             if (me.conf && me.conf.toolStyle) {
                 content = me.styledTemplate.clone();
@@ -255,11 +288,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 me._searchButton = content.find('input[type=button]');
             }
 
+            // bind events
             me._bindUIEvents();
+
         },
-
-        _bindUIEvents: function() {
-
+        _bindUIEvents: function () {
             var me = this,
                 sandbox = me._sandbox,
                 content = this.element,
@@ -325,6 +358,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                     }
                 });
             }
+            // in case we are already in edit mode when plugin is drawn
+            me._setLayerToolsEditMode(me.getMapModule().isInLayerToolsEditMode());
         },
         /**
          * @method _checkForEnter
@@ -512,22 +547,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * @param {jQuery} div
          */
         changeToolStyle: function (style, div) {
-            var me = this;
-
-            div = div || this.element;
+            var me = this,
+                removedClass,
+                addedClass,
+                template;
+            div = div || me.element;
 
             if (!style || !div) {
                 return;
             }
 
+            // Set the correct template for the style... ugly.
+            // FIXME use the same HTML for both of these so we don't have to muck about with the DOM
             if (style.val === null) {
                 me.conf.toolStyle = null;
-                div.removeClass('published-search-div').addClass('mapplugin search');
+                div.removeClass('published-search-div').addClass('default-search-div');
                 div.empty();
                 me.template.children().clone().appendTo(div);
                 me._inputField = div.find('input[type=text]');
                 me._searchButton = div.find('input[type=button]');
                 me._bindUIEvents();
+                // Force edit mode so the tool controls are disabled
                 if (me.isInLayerToolsEditMode) {
                     me.isInLayerToolsEditMode = false;
                     me._setLayerToolsEditMode(true);
@@ -536,12 +576,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             }
 
             // Remove the old unstyled search box and create a new one.
-            if (div.hasClass('mapplugin search')) {
+            if (div.hasClass('default-search-div')) {
                 // hand replace with styled version so we don't destroy this.element
-                div.removeClass('mapplugin search').addClass('published-search-div');
+                div.removeClass('default-search-div').addClass('published-search-div');
                 div.empty();
                 me.styledTemplate.children().clone().appendTo(div);
-
                 me._inputField = div.find('input[type=text]');
                 me._searchButton = div.find('input[type=button]');
                 me._bindUIEvents();
@@ -606,6 +645,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                     'color': ''
                 });
             }
+
+            me._setLayerToolsEditMode(me.getMapModule().isInLayerToolsEditMode());
+
         },
 
         /**

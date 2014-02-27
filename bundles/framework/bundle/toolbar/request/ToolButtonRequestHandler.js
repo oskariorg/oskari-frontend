@@ -25,17 +25,19 @@ function(toolbar) {
      *      request to handle
      */
     handleRequest : function(core, request) {
-        var sandbox = core.getSandbox();
-        if(request.getName() == 'Toolbar.AddToolButtonRequest') {
+        var sandbox = core.getSandbox(),
+            requestName = request.getName();
+
+        if(requestName == 'Toolbar.AddToolButtonRequest') {
             this._handleAdd(sandbox, request);
         }
-        else if(request.getName() == 'Toolbar.RemoveToolButtonRequest') {
+        else if(requestName == 'Toolbar.RemoveToolButtonRequest') {
             this._handleRemove(sandbox, request);
         }
-        else if(request.getName() == 'Toolbar.ToolButtonStateRequest') {
+        else if(requestName == 'Toolbar.ToolButtonStateRequest') {
             this._handleState(sandbox, request);
         }
-        else if(request.getName() == 'Toolbar.SelectToolButtonRequest') {
+        else if(requestName == 'Toolbar.SelectToolButtonRequest') {
             this._handleClick(sandbox, request);
         }
     },

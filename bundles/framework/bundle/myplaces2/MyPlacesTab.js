@@ -39,13 +39,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             return this.tabsContainer.ui;
         },
         initContainer: function () {
-            this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', this.loc.nocategories);
+            var me = this;
+            me.addAddLayerButton();
+            me.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', me.loc.nocategories, me.addLayerButton);
         },
+
+        addAddLayerButton: function () {
+            var me = this;
+            me.addLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            // TODO I18N
+            me.addLayerButton.setTitle(me.loc.addCategory);
+            me.addLayerButton.setHandler(function () {
+                me.instance.openAddLayerDialog('div.personaldata ul li select', 'right');
+            });
+            return me.addLayerButton;
+        },
+
         addTabContent: function (container) {
             var me = this;
-            this.initTabContent();
-            this.tabsContainer.ui.addClass('peikko');
-            container.append(this.tabsContainer.ui);
+            me.initTabContent();
+            me.tabsContainer.ui.addClass('peikko');
+            container.append(me.tabsContainer.ui);
         },
         /**
          * @property {Object} eventHandlers
@@ -57,10 +71,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
              * Updates the category tabs and grids inside them with current data
              */
             'MyPlaces.MyPlacesChangedEvent': function (event) {
-                var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
-                var categories = service.getAllCategories();
-                var places = service.getAllMyPlaces();
-                var me = this;
+                var me = this,
+                    service = me.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService'),
+                    categories = service.getAllCategories(),
+                    places = service.getAllMyPlaces();
                 /*
             var publishLinkClosure = function(id, isPublic) {
                 return function() {
@@ -149,12 +163,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
          */
         _showPlace: function (geometry, categoryId) {
             // center map on selected place
-            var center = geometry.getCentroid();
-            var mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, geometry.getBounds(), false);
+            var center = geometry.getCentroid(),
+                mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, geometry.getBounds(), false);
             this.instance.sandbox.request(this.instance, mapmoveRequest);
             // add the myplaces layer to map
-            var layerId = 'myplaces_' + categoryId;
-            var layer = this.instance.sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            var layerId = 'myplaces_' + categoryId,
+                layer = this.instance.sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
                 var request = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
                 this.instance.sandbox.request(this.instance, request);
@@ -181,11 +195,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
          * @private
          */
         _deletePlace: function (data) {
-            var me = this;
-            var sandbox = this.instance.sandbox;
-            var loc = this.loc.notification['delete'];
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var me = this,
+                sandbox = this.instance.sandbox,
+                loc = this.loc.notification['delete'],
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             okBtn.setTitle(loc.btnDelete);
             okBtn.addClass('primary');
 
@@ -195,12 +209,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                 var callback = function (isSuccess) {
 
                     /* let's refresh map also if there */
-                    var categoryId = data.categoryId;
-                    var layerId = 'myplaces_' + categoryId;
-                    var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+                    var categoryId = data.categoryId,
+                        layerId = 'myplaces_' + categoryId,
+                        layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
                     if (layer) {
-                        var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest');
-                        var updateRequest = updateRequestBuilder(layerId, true);
+                        var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
+                            updateRequest = updateRequestBuilder(layerId, true);
                         sandbox.request(me.instance, updateRequest);
                     }
 
@@ -213,8 +227,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                 };
                 service.deleteMyPlace(data.id, callback);
             });
-            var cancelBtn = dialog.createCloseButton(loc.btnCancel);
-            var confirmMsg = loc.confirm + '"' + data.name + '"' + '?';
+            var cancelBtn = dialog.createCloseButton(loc.btnCancel),
+                confirmMsg = loc.confirm + '"' + data.name + '"' + '?';
             dialog.show(loc.title, confirmMsg, [cancelBtn, okBtn]);
             dialog.makeModal();
         },
@@ -247,10 +261,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
          * @private
          */
         _createCategoryTab: function (category) {
-            var me = this;
-            var id = category.getId();
-
-            var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+            var me = this,
+                id = category.getId(),
+                panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
             panel.setId(id);
             panel.setTitle(category.getName());
 
@@ -310,9 +323,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
          * @param {Number} categoryId id for category to populate
          */
         _populatePlaces: function (categoryId) {
-            var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
-            var places = service.getAllMyPlaces();
-            var panel = this.tabPanels[categoryId];
+            var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService'),
+                places = service.getAllMyPlaces(),
+                panel = this.tabPanels[categoryId];
             // update places
             var gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
             gridModel.setIdField('id');
@@ -321,8 +334,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             for (i = 0; i < places.length; ++i) {
                 // check if this category
                 if (places[i].getCategoryID() === categoryId) {
-                    var drawMode = this._getDrawModeFromGeometry(places[i].geometry);
-                    var measurement = this.instance.formatMeasurementResult(places[i].geometry, drawMode);
+                    var drawMode = this._getDrawModeFromGeometry(places[i].geometry),
+                        measurement = this.instance.getDrawPlugin().getMapModule().formatMeasurementResult(places[i].geometry, drawMode);
                     gridModel.addData({
                         'id': places[i].getId(),
                         'name': places[i].getName(),
@@ -345,8 +358,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
          * @return {String}
          */
         _formatDate: function (service, date) {
-            var time = service.parseDate(date);
-            var value = '';
+            var time = service.parseDate(date),
+                value = '';
             if (time.length > 0) {
                 value = time[0];
             }
@@ -400,8 +413,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
          * Register tab as eventlistener
          */
         bindEvents: function () {
-            var instance = this.instance;
-            var sandbox = instance.getSandbox(),
+            var instance = this.instance,
+                sandbox = instance.getSandbox(),
                 p;
             // faking to be module with getName/onEvent methods
             for (p in this.eventHandlers) {
@@ -416,8 +429,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
          * Unregister tab as eventlistener
          */
         unbindEvents: function () {
-            var instance = this.instance;
-            var sandbox = instance.getSandbox(),
+            var instance = this.instance,
+                sandbox = instance.getSandbox(),
                 p;
             // faking to be module with getName/onEvent methods
             for (p in this.eventHandlers) {

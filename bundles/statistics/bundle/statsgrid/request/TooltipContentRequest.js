@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.request.TooltipContentRe
      */
 
     function (feature) {
-        this._feature = feature
+        this._feature = feature;
     }, {
         /** @static @property __name request name */
         __name: "StatsGrid.TooltipContentRequest",

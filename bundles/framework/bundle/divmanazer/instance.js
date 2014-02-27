@@ -61,9 +61,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
         getExtensionByName: function (name) {
             return this.extensionsByName[name];
         },
-	    /**
-	     * @method getSandbox
-	     */
+        /**
+         * @method getSandbox
+         */
         getSandbox: function () {
             return this.sandbox;
         },
@@ -196,8 +196,8 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
 
             flyout = jQuery(me.templates['Oskari.userinterface.Flyout']);
 
-		/*flyout.css('left', '-3195px');
-		 flyout.css('top', '-3100px');*/
+            /*flyout.css('left', '-3195px');
+         flyout.css('top', '-3100px');*/
             flyout.css('left', me.defaults.attach.left);
             flyout.css('top', me.defaults.attach.top);
 
@@ -293,7 +293,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
                 el = view;
                 viewPlugin.setEl(el.get());
                 viewPlugin.startPlugin();
-
             }
 
 
@@ -406,15 +405,24 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
             var me = this,
                 //container = jQuery('#menubar'),
                 tile = this.compiledTemplates['Oskari.userinterface.Tile'].clone(true, true),
-                title = tile.children('.oskari-tile-title');
+                title = tile.children('.oskari-tile-title'),
+                tileClick = function () {
+                    //plugin.setExtensionState();
+                    tile.off('click');
+                    me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
+                    window.setTimeout(
+                        function () {
+                            tile.click(tileClick);
+                        },
+                        500
+                    );
+                };
             //status;
             title.append(plugin.getTitle());
             //status = tile.children('.oskari-tile-status');
 
-            tile.click(function () {
-                //plugin.setExtensionState();
-                me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
-            });
+
+            tile.click(tileClick);
 
             plugin.setEl(tile.get());
 
@@ -688,7 +696,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
                 flyout = flyoutInfo.el;
 
                 //if flyout plugin has a lazyRender created, use it.
-                if(state === 'attach' && flyoutPlugin.lazyRender) {
+                if (state === 'attach' && flyoutPlugin.lazyRender) {
                     flyoutPlugin.lazyRender();
                 }
 
@@ -1020,11 +1028,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
          */
         "viewOps": {
             /** @method detach */
-            "view": function (flyout, flyoutPlugin, extensionInfo, extensions) {
-            },
+            "view": function (flyout, flyoutPlugin, extensionInfo, extensions) {},
             /** @method close */
-            "close": function (flyout, flyoutPlugin, extensionInfo) {
-            }
+            "close": function (flyout, flyoutPlugin, extensionInfo) {}
 
         },
 

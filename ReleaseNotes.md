@@ -1,5 +1,45 @@
 # Release Notes
 
+## 1.18
+
+## Known issues
+
+* mapmyplaces - doesn't update attention text for features on update/remove
+
+* statisticsgrid - sorting indicator values doesn't work correctly, seems to be comparing values as strings instead of numbers
+
+### sandbox
+
+Added `removeMapLayer` method which does the same thing as sending a `RemoveMapLayerRequest` but without the need for a request.
+
+### mapmodule-plugin and all the layer plugins
+
+Removed handling of `AfterMapLayerAddEvent` from the layer plugins for it is the mapmodule who handles it now. It calls `addMapLayerToMap` function for each of its registered layer plugins and assures the marker layer always appear on top of the map.
+
+### mapwfs2
+
+WfsLayerPlugin now assumes config values hostname and port based on document.location if not configured and contextPath also defaults to '/transport' if not configured.
+
+### core/map layer service/AbstractLayer
+
+Maplayer JSON parsing changed a bit:
+
+* Legendimage is now parsed for all layer types
+
+* AbstractLayer.addStyle() now checks that a style with the same name isn't added yet.
+
+* Formats parsing has been moved out from styles parsing and in to wmslayer specific parsing as they are not related operations
+
+* Default style for layers now has a label. The localization file used is linked by mapfull with the key 'Generic'. Default styles are also now shown as an option if there is another style option available in the layers data.
+
+### statistics/statsgrid
+
+The region category can now be changed whilst creating a new indicator.
+
+A warning sign is displayed in an indicator's header if its data cannot be displayed in the selected region category.
+
+The mode doesn't get started automatically anymore.
+
 ## 1.17.3
 
 ### Publisher bundle
@@ -9,6 +49,8 @@ Editing a published map no longer leaves searchplugin on map after exiting publi
 ### admin-layerselector bundle
 
 Layer id is now correctly left blank for new layers instead of sending "null" string.
+
+GFI type parameter is not sent if there is no selection (on update for example). The backend will keep the existing value if it doesn't receive a new one.
 
 ### mapwfs2/WFSLayerPlugin
 

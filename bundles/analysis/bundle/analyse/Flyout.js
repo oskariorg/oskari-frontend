@@ -59,9 +59,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.Flyout',
          * @method stopPlugin
          * Interface method implementation, does nothing atm
          */
-        stopPlugin: function () {
-
-        },
+        stopPlugin: function () {},
         /**
          * @method getTitle
          * @return {String} localized text for the title of the flyout
@@ -119,6 +117,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.Flyout',
             // Show info or not
             if (jQuery.cookie('analyse_info_seen') !== '1') {
                 this.view.render(flyout);
+                flyout.parent().parent().css('display', '');
             } else {
                 this.instance.setAnalyseMode(true);
             }

@@ -19,6 +19,7 @@ Oskari.registerLocalization({
             "privateTooltip": "Mapa je soukromá| Klikněte na mapovou vrstvu pro její veřejné zpřístupnění.",
             "publicTooltip": "Mapa je veřejná| Klikněte na mapovou vrstvu pro její změnu na soukromou."
         },
+        "addCategory": "Přidat mapovou vrstvu",
         "editCategory": "Upravit mapovou vrstvu",
         "deleteCategory": "Smazat mapovou vrstvu",
         "edit": "Upravit",
@@ -44,6 +45,22 @@ Oskari.registerLocalization({
         }
       },
     "tools": {
+      "measureline": {
+        "title": "NOT TRANSLATED",
+        "tooltip": "NOT TRANSLATED",
+        "add": "",
+        "next": "",
+        "edit": "NOT TRANSLATED",
+        "noResult": "0 m"
+      },
+      "measurearea": {
+        "title": "NOT TRANSLATED",
+        "tooltip": "NOT TRANSLATED",
+        "add": "",
+        "next": "",
+        "edit": "NOT TRANSLATED",
+        "noResult": "0 m²"
+      },
       "point": {
         "tooltip": "Přidat bod",
         "new": "Přidat bod kliknutím v mapě",
@@ -69,8 +86,10 @@ Oskari.registerLocalization({
     "buttons": {
       "ok": "OK",
       "cancel": "Storno",
+      "close": "NOT TRANSLATED",
       "finish": "Ukončit kreslení",
       "save": "Uložit",
+      "saveAsMyPlace": "NOT TRANSLATED",
       "movePlaces": "Posunot místa a smazat",
       "deleteCategory": "Smazat",
       "deleteCategoryAndPlaces": "Smazat kategorii a místa",
