@@ -392,6 +392,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             featureHeader.css({
                 'color': colourScheme.headerColour
             });
+
             // AH-1075 colourScheme.iconCls might not be set, so check first.
             if (colourScheme.iconCls) {
                 closeButton.removeClass('icon-close-white');
