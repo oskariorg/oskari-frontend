@@ -54,6 +54,7 @@ Oskari.registerLocalization({
                 "Portti2Zoombar": "Maßstabs-Scrollbalken",
                 "ControlsPlugin": "Verschieben nach",
                 "SearchPlugin": "Suche nach Adresse und Ortsname",
+                "FeaturedataPlugin": "",
                 "GetInfoPlugin": "Ortsdaten-Abfrage"
             },
             "toollayout": {

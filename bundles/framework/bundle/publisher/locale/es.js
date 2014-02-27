@@ -54,6 +54,7 @@ Oskari.registerLocalization({
                 "Portti2Zoombar": "Barra de escala",
                 "ControlsPlugin": "Desplazamiento",
                 "SearchPlugin": "Búsqueda de sitios y direcciones",
+                "FeaturedataPlugin": "",
                 "GetInfoPlugin": "Herramienta de consulta para los datos de sitios"
             },
             "toollayout": {

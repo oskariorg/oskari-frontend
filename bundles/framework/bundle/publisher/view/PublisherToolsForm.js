@@ -288,6 +288,50 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 toolContainer.find('input').attr('id', 'tool-' + pluginKey).change(closureMagic(tool));
             }
 
+            // Feature data
+            var mapLayerService = this._sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            var test = mapLayerService.getLayersOfType('WFS');
+
+            // Check if selected layers include wfs layers
+            var wfs = false;
+            var layers = this._sandbox.findAllSelectedMapLayers();
+            for (var i = 0; i < layers.length; ++i) {
+                if (layers[i].hasFeatureData()) {
+                    wfs = true;
+                    break;
+                }
+            }
+            if (wfs) {
+                var featureData = this._sandbox.findRegisteredModuleInstance("FeatureData2");
+                if (typeof featureData !== "undefined") {
+                    featuredataBundle =  {
+                        "id": "Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin",
+                        "selected": false,
+                        "config": {
+                            "instance": featureData
+                        }
+                    };
+                    toolContainer = jQuery(this.templates.tool).clone();
+                    pluginKey = featuredataBundle.id;
+                    me._toolIndices[pluginKey] = i;
+                    pluginKey = pluginKey.substring(pluginKey.lastIndexOf('.') + 1);
+                    toolname = this.loc.tools[pluginKey];
+                    toolContainer.find('label').attr('for', 'tool-' + pluginKey).append(toolname);
+                    if (featuredataBundle.selected) {
+                        toolContainer.find('input').attr('checked', 'checked');
+                    }
+                    featuredataBundle.publisherPluginContainer = toolContainer;
+                    contentPanel.append(toolContainer);
+
+                    if (data) {
+                        var classes = this._publisher._getInitialPluginLocation(data, featuredataBundle.id);
+                        if (classes) {
+                            featuredataBundle.config.location.classes = classes;
+                        }
+                    }
+                    toolContainer.find('input').attr('id', 'tool-' + pluginKey).change(closureMagic(featuredataBundle));
+                }
+            }
             return panel;
         },
 

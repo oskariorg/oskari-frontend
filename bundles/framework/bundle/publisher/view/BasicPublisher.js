@@ -964,7 +964,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     domain: values.domain,
                     name: values.name,
                     language: values.language,
-                    plugins: []
+                    plugins: [],
+                    bundles: []
                 },
                 i,
                 j,
@@ -1044,6 +1045,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             // saves possible open gfi popups
             if (sandbox.getStatefulComponents().infobox) {
                 selections.infobox = sandbox.getStatefulComponents().infobox.getState();
+            }
+
+            // adds possible feature data bundle
+            var featureData = sandbox.findRegisteredModuleInstance("FeatureData2");
+            if (typeof featureData !== "undefined") {
+                selections.featuredata2 = {
+                    selectionTools: false
+                }
             }
 
             if (errors.length > 0) {

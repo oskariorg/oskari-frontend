@@ -54,6 +54,7 @@ Oskari.registerLocalization({
                 "Portti2Zoombar": "Posuvné měřítko",
                 "ControlsPlugin": "Panorámování",
                 "SearchPlugin": "Vyhledávání adresy a zeměpisného jména",
+                "FeaturedataPlugin": "",
                 "GetInfoPlugin": "Dotazovací nástroj pro zeměpisná jména"
             },
             "toollayout": {
