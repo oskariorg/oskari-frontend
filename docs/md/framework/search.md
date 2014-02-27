@@ -12,6 +12,7 @@
 ## Description
 
 Provides (address etc) search functionality with a flyout UI.
+Search channels configuration is defined *-ext.properties  (backend)
 
 ## Screenshot
 
@@ -20,6 +21,7 @@ Provides (address etc) search functionality with a flyout UI.
 ## Bundle configuration
 
 No configuration is required, but it can be used to set ajax URL. If not set, sandbox.getAjaxUrl() with action_route#GetSearchResult is used instead.
+http://...&action_route=GetSearchResult&searchKey=helsinki&epsg=EPSG:3067
 
 ```javascript
 {
