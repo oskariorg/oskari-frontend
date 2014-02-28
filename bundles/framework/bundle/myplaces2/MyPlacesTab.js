@@ -216,6 +216,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                         var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
                             updateRequest = updateRequestBuilder(layerId, true);
                         sandbox.request(me.instance, updateRequest);
+                        // Update myplaces extra layers
+                        var eventBuilder = sandbox.getEventBuilder('MapMyPlaces.MyPlacesVisualizationChangeEvent');
+                        if (eventBuilder) {
+                            var event = eventBuilder(layerId, true);
+                            sandbox.notifyAll(event);
+                        }
                     }
 
                     if (isSuccess) {

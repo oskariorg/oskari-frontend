@@ -29,6 +29,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapmyplaces.MapMyPlacesBundle", 
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/mapmyplaces/domain/MyPlacesLayer.js"
             }, {
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/framework/bundle/mapmyplaces/event/MyPlacesVisualizationChangeEvent.js"
+            }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/mapmyplaces/domain/MyPlacesLayerModelBuilder.js"
             }],
