@@ -284,6 +284,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
          * @param {Boolean} keepLayerOnTop
          * @param {Boolean} isBaseMap
          */
+        //TODO: split this function
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
             if (!layer.isLayerOfType(this._layerType)) {
                 return;
@@ -298,8 +299,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
 
             // use layer, if layer already exists on map
             var isNew=false;
-            var openLayer = null;
-            if(layer.map) openLayer = layer.map.getLayersByName('layer_' + layer.getId())[0];
+            var openLayer = this._getOLWmsLayer(layer)
             if(!openLayer)
             {
                 isNew=true;
@@ -988,9 +988,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                 {
                     mapLayer.destroy();
                 }
+                else  mapLayer.redraw(true);
             });
 
             this.addMapLayerToMap(layer, true, layer.isBaseLayer());
+        },
+        /**
+         *Return OL Wms layer, if it is not removed
+         *
+         * @method  _getOLWmsLayer, if on a OL map
+         * @private
+         * @param {Object} Oskari layer
+         *            event
+         */
+        _getOLWmsLayer: function (layer) {
+
+            if (!layer) return null;
+            if (!layer.isLayerOfType(this._layerType)) {
+                return null;
+            }
+            var olWmsLayer = null;
+
+
+                var mapLayers = this.getOLMapLayers(layer);
+
+                _.forEach(mapLayers, function (mapLayer) {
+                    if (mapLayer.CLASS_NAME === "OpenLayers.Layer.WMS" && mapLayer.name !== null) {
+                        olWmsLayer = mapLayer;
+                    }
+
+                });
+
+            return olWmsLayer;
         }
     }, {
         /**
