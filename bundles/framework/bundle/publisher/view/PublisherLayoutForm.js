@@ -762,21 +762,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
          *          }
          */
         _getColourFromRgbString: function (rgbString) {
-            var start = rgbString.indexOf("("),
-                end = rgbString.indexOf(")"),
-                ret = null,
-                rgb;
-            if (start > -1 && end > -1 && end > start) {
-                rgb = rgbString.substring(start + 1, end).split(/\s*,\s*/);
-                if (rgb.length === 3) {
-                    ret = {
-                        "red": rgb[0],
-                        "green": rgb[1],
-                        "blue": rgb[2]
-                    };
+            var rgb = [0,0,0];
+            if(rgbString && rgbString.length > 1) {
+                if(rgbString.charAt(0) === '#' && rgbString.length === 7) {
+                    // assume hexcolor as in premade schemes
+                    var red = rgbString.substring(1,3);
+                    var green = rgbString.substring(3,5);
+                    var blue = rgbString.substring(5,7);
+                    rgb[0] = parseInt(red, 16);
+                    rgb[1] = parseInt(green, 16);
+                    rgb[2] = parseInt(blue, 16);
+                }
+                else {
+                    // assume rgb(x,y,z) as in custom schemes
+                    var start = rgbString.indexOf("("),
+                        end = rgbString.indexOf(")")
+                    if (start > -1 && end > -1 && end > start) {
+                        var parsed = rgbString.substring(start + 1, end).split(/\s*,\s*/);
+                        if (rgb.length === 3) {
+                            rgb = parsed;
+                        }
+                    }   
                 }
             }
-            return ret;
+            return {
+                "red" : rgb[0],
+                "green" : rgb[1],
+                "blue" : rgb[2]
+            };
         },
 
         /**
