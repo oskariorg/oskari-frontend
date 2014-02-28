@@ -984,7 +984,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
             var mapLayers = this.getOLMapLayers(layer);
 
             _.forEach(mapLayers, function (mapLayer) {
-                if(maplayer.CLASS_NAME !== "OpenLayers.Layer.WMS")
+                if(mapLayer.CLASS_NAME !== "OpenLayers.Layer.WMS")
                 {
                     mapLayer.destroy();
                 }
