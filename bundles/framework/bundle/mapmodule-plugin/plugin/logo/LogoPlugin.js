@@ -246,9 +246,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 me.element = me.templates.main.clone();
             }
 
-            if (me.conf && me.conf.location) {
-                containerClasses = me.conf.location.classes || containerClasses;
-                position = me.conf.location.position || position;
+            if (me.conf) {
+                if(me.conf.location) {
+                    containerClasses = me.conf.location.classes || containerClasses;
+                    position = me.conf.location.position || position;
+                }
+                if(me.conf.font) {
+                    this.changeFont(me.conf.font);
+                }
             }
             //parentContainer.append(me.element);
             me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);

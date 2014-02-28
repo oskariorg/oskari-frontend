@@ -1019,14 +1019,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 selections.baseLayers = layerValues.baseLayers;
             }
             // add logoplugin
-            selections.plugins.push({
+            var logoPlugin = {
                 "id": "Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin",
                 "config": {
                     "location": {
                         "classes": me.logoPluginClasses.classes
                     }
                 }
-            });
+            };
+            // setup logoplugin font
+            var layoutOptions = me.layoutPanel.getValues();
+            logoPlugin.config.font = layoutOptions.font;
+            selections.plugins.push(logoPlugin);
+
             // if data grid is enabled
             if (me.showStats) {
                 // get state of statsgrid
