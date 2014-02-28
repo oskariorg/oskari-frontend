@@ -469,7 +469,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
                 colourInput,
                 colourName,
                 i,
-                prevColour,
+                prevColour = self.values.colourScheme,
                 selectedColour,
                 customColourButton;
 
@@ -497,7 +497,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
                 });
 
                 // Set the selected colour or default to 'dark_grey' if non-existant.
-                prevColour = self.values.colourScheme;
                 if (prevColour && prevColour.val === colours[i].val || (!prevColour && colours[i].val === 'dark_grey')) {
                     colourInput.find('input[type=radio]').attr('checked', 'checked');
                     self._changeGfiColours(colours[i], content);
@@ -525,6 +524,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
                 // * change the value of the colour scheme input in the layout panel
                 colourName = self.loc.layout.fields.colours[selectedColour.val];
                 jQuery('div.basic_publisher').find('input[name=publisher-colour]').val(colourName).attr('data-colour-code', selectedColour.val);
+                self.values.colourScheme = selectedColour;
                 // * notify others of the changed colour scheme
                 self._sendColourSchemeChangedEvent(selectedColour);
             });
@@ -753,8 +753,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
          * Returns an rgb colour object parsed from the string.
          *
          * @method _getColourFromRgbString
-         * @param {String} rgbString
-         * @return {Object} returns an rgb colour object
+         * @param {String} rgbString hex from premade scheme or css style rgb(r,g,b) as in custom scheme
+         * @return {Object} returns an rgb colour object - defaults to 0,0,0 if parse fails
          *          {
          *              red: <0-255>,
          *              green: <0-255>,
