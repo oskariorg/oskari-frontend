@@ -335,6 +335,9 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                 this.analyse.show();
                 this.analyse.setEnabled(true);
 
+                // Show info
+                this.analyse.showInfos();
+
             } else {
                 if (this.analyse) {
                     // Reset tile state

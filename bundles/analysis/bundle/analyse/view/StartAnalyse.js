@@ -187,8 +187,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             /* progress */
             me.progressSpinner.insertTo(container);
 
-            // Infos
-            me._showInfos();
 
         },
         /**
@@ -684,7 +682,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var clickMagic = function () {
                 return function () {
                     me._modifyAnalyseName();
-                    me._showInfos();
+                    me.showInfos();
                 };
             };
 
@@ -1341,9 +1339,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             contentPanel.find('.analyse_option_cont').remove();
             me._addAnalyseData(contentPanel);
 
-            // Infos
-            me._showInfos();
-
         },
         /**
          * @method refreshExtraParameters
@@ -1373,6 +1368,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var methodName = selectedMethod && selectedMethod.replace(this.id_prefix, '');
 
             var layer = this._getSelectedMapLayer();
+
+            // No layers
+            if(!layer) return;
 
             // Get the feature fields
             var selectedColumnmode = container.find('input[name=params]:checked').val();
@@ -1500,22 +1498,25 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var sandbox = this.instance.getSandbox();
             var url = sandbox.getAjaxUrl();
             var selections = me._gatherSelections();
-            var data = {};
-            data.analyse = JSON.stringify(selections);
 
-            var layerId = selections.layerId;
-            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-            if (this.getFilterJson(layerId)) {
-                var filterJson = this.getFilterJson(layerId);
-                // If the user wanted to include only selected/clicked
-                // features, get them now from the layer.
-                if (filterJson.featureIds) {
-                    this._getSelectedFeatureIds(layer, filterJson);
-                }
-                data.filter = JSON.stringify(filterJson);
-            }
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
+
+                var data = {};
+                data.analyse = JSON.stringify(selections);
+
+                var layerId = selections.layerId;
+                var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+                if (this.getFilterJson(layerId)) {
+                    var filterJson = this.getFilterJson(layerId);
+                    // If the user wanted to include only selected/clicked
+                    // features, get them now from the layer.
+                    if (filterJson.featureIds) {
+                        this._getSelectedFeatureIds(layer, filterJson);
+                    }
+                    data.filter = JSON.stringify(filterJson);
+                }
+
                 // Send the data for analysis to the backend
                 me.progressSpinner.start();
                 me.instance.analyseService.sendAnalyseData(data,
@@ -1524,8 +1525,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     function (response) {
                         me.progressSpinner.stop();
                         if (response) {
-                            if(response.error)
-                            {
+                            if (response.error) {
                                 me.instance.showMessage(me.loc.error.title, me.loc.error[response.error] || response.error);
                             }
                             else
@@ -1753,14 +1753,16 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
         /**
          * Inform user, if more than 10 fields in analyse input layer
-         * @private
+         *
          */
-        _showInfos: function () {
+        showInfos: function () {
             var me = this;
             var selectedLayer = me._getSelectedMapLayer();
             if (!selectedLayer) {
                 return;
             }
+            // Not analysis layers
+            if (selectedLayer.getId().toString().indexOf(me.layer_prefix) > -1) return;
 
             if (selectedLayer.getFields && selectedLayer.getFields().length > me.max_analyse_layer_fields) {
                 me.instance.showMessage( me.loc.infos.title, me.loc.infos.layer+" "+selectedLayer.getName()+" "+me.loc.infos.over10);
