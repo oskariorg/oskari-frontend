@@ -284,7 +284,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
          * @param {Boolean} keepLayerOnTop
          * @param {Boolean} isBaseMap
          */
-        //TODO: split this function
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
             if (!layer.isLayerOfType(this._layerType)) {
                 return;
@@ -297,12 +296,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
             var layerScales = this.getMapModule()
                 .calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
 
-            // use layer, if layer already exists on map
-            var isNew=false;
-            var openLayer = this._getOLWmsLayer(layer)
-            if(!openLayer)
-            {
-                isNew=true;
                 openLayer = new OpenLayers.Layer.WMS(openLayerId, imgUrl, {
                     layers: layer.getWmsName(),
                     transparent: true,
@@ -316,8 +309,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                     singleTile: true,
                     transitionEffect: null
                 });
-            }
 
+            this._addMapLayersToMap(layer, openLayer, keepLayerOnTop, true);
+        },
+        /**
+         * Adds  map layers (Wms layer / label text layer / group layer) to this map
+         *
+         * @method _addMapLayersToMap
+         * @param {Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer} layer
+         * @param {OpenLayers.Layer.WMS} layer
+         * @param {Boolean} keepLayerOnTop
+         * @param {Boolean} isNew  is WMS openLayer already on Map
+         */
+        _addMapLayersToMap : function (layer, openLayer, keepLayerOnTop, isNew)
+        {
+            var me = this;
+
+            var openLayerId = 'layer_' + layer.getId();
 
             var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
             renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
@@ -643,16 +651,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                             }
 
                             /*
-                    if (clusteredFeatures > 0) {
-                        var featureFilter = "+AND+NOT+IN(";
-                        for (var i=0; i<clusteredFeatures.length; i++) {
-                            featureFilter = featureFilter+"'"+clusteredFeatures[i]+"'";
-                            if (i < clusteredFeatures.length-1) {
-                                featureFilter = featureFilter+",";
-                            }
-                        }
-                        featureFilter = featureFilter+")";
-                    */
+                             if (clusteredFeatures > 0) {
+                             var featureFilter = "+AND+NOT+IN(";
+                             for (var i=0; i<clusteredFeatures.length; i++) {
+                             featureFilter = featureFilter+"'"+clusteredFeatures[i]+"'";
+                             if (i < clusteredFeatures.length-1) {
+                             featureFilter = featureFilter+",";
+                             }
+                             }
+                             featureFilter = featureFilter+")";
+                             */
                             if (featureFilter !== null) {
                                 var openLayer = this.layer.map.getLayersByName('layer_' + layer.getId())[0];
                                 openLayer.mergeNewParams({
@@ -705,7 +713,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                         Math.sqrt(
                             Math.pow((cc.lon - fc.lon), 2) + Math.pow((cc.lat - fc.lat), 2)
                         ) / this.resolution
-                    );
+                        );
                     return (distance <= this.distance);
                 },
 
@@ -964,7 +972,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
             //openLayer[0].setOpacity(opacity);
         },
         /**
-         * Handle MyPlaces Visualization Changed for extra layers
+         * Handle MyPlaces Visualization Changed (attribute modifications, deletions, insertions) for extra layers
          *
          * @method _MyPlacesVisualizationChangeEvent
          * @private
@@ -982,44 +990,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
             }
 
             var mapLayers = this.getOLMapLayers(layer);
+            var olWmsLayer = null;
 
             _.forEach(mapLayers, function (mapLayer) {
                 if(mapLayer.CLASS_NAME !== "OpenLayers.Layer.WMS")
                 {
                     mapLayer.destroy();
                 }
-                else  mapLayer.redraw(true);
+                else
+                {
+                    mapLayer.redraw(true);
+                    olWmsLayer = mapLayer;
+                }
             });
-
-            this.addMapLayerToMap(layer, true, layer.isBaseLayer());
-        },
-        /**
-         *Return OL Wms layer, if it is not removed
-         *
-         * @method  _getOLWmsLayer, if on a OL map
-         * @private
-         * @param {Object} Oskari layer
-         *            event
-         */
-        _getOLWmsLayer: function (layer) {
-
-            if (!layer) return null;
-            if (!layer.isLayerOfType(this._layerType)) {
-                return null;
-            }
-            var olWmsLayer = null;
-
-
-                var mapLayers = this.getOLMapLayers(layer);
-
-                _.forEach(mapLayers, function (mapLayer) {
-                    if (mapLayer.CLASS_NAME === "OpenLayers.Layer.WMS" && mapLayer.name !== null) {
-                        olWmsLayer = mapLayer;
-                    }
-
-                });
-
-            return olWmsLayer;
+            // Add my places extra layers to Map, not wms layer
+            if(olWmsLayer) this._addMapLayersToMap(layer, olWmsLayer, true, false);
         }
     }, {
         /**
