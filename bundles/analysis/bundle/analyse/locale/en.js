@@ -176,7 +176,7 @@ Oskari.registerLocalization({
             "error": {
                 "title": "Error",
                 "invalidSetup": "Invalid parameters",
-                "noParameters": "No parameters set",
+                "noParameters": "No input data, no parameters set",
                 "noLayer": "No layer / features selected",
                 "noAnalyseUnionLayer": "Choose at least another analyse layer",
                 "invalidMethod": "Unknown method: ",
