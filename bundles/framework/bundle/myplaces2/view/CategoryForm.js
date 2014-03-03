@@ -66,12 +66,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.CategoryForm",
             '<label>' + loc.drawing.label + '</label><br clear="all" />' +
             '<div class="rendering"></div>' +
             '</div>' +
-            '<div class="field visibleFields">' +
+// Currently visible fields are not saved or used in any way so commenting out the UI for now
+/*            '<div class="field visibleFields">' +
             '<label>' + loc.visibleFields.label + '</label><br clear="all" />' +
             '<input type="checkbox" name="placename" checked="checked" />' + loc.visibleFields.placename + '<br/>' +
             '<input type="checkbox" name="placedesc" checked="checked" />' + loc.visibleFields.placedesc + '<br/>' +
             '<input type="checkbox" name="image" checked="checked" />' + loc.visibleFields.image + '<br/>' +
-            '</div>' +
+            '</div>' + */
             '</div>');
         this.templateTableRow = jQuery('<tr></tr>');
         this.templateTableCell = jQuery('<td></td>');

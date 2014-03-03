@@ -246,9 +246,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 me.element = me.templates.main.clone();
             }
 
-            if (me.conf && me.conf.location) {
-                containerClasses = me.conf.location.classes || containerClasses;
-                position = me.conf.location.position || position;
+            if (me.conf) {
+                if(me.conf.location) {
+                    containerClasses = me.conf.location.classes || containerClasses;
+                    position = me.conf.location.position || position;
+                }
+                if(me.conf.font) {
+                    this.changeFont(me.conf.font);
+                }
             }
             //parentContainer.append(me.element);
             me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
@@ -283,9 +288,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             } else {
                 dataSources.html(myLoc.dataSources);
                 dataSources.click(function (e) {
-                    if (!me.isInLayerToolsEditMode) {
+                    if (!me.isInLayerToolsEditMode && me.dataSourcesDialog == null) {
                         me._openDataSourcesDialog(e.target);
                         me._requestDataSources();
+                    } else if (me.dataSourcesDialog != null) {
+                        me.dataSourcesDialog.close(true);
+                        me.dataSourcesDialog = null;
                     }
                 });
             }

@@ -480,8 +480,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     for (i = 0, l = cols.length; i < l; i++) {
                         field = cols[i].sortCol.field;
                         sign = cols[i].sortAsc ? 1 : -1;
-                        value1 = dataRow1[field];
-                        value2 = dataRow2[field];
+                        value1 = me._numerizeValue(dataRow1[field]);
+                        value2 = me._numerizeValue(dataRow2[field]);
                         if (value1 === null || value1 === undefined) {
                             return 1;
                         }
@@ -2273,7 +2273,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
         destroyPopups: function () {
             // destroy header popups
-            this.headerMenuPlugin.hide();
+            if (this.headerMenuPlugin) this.headerMenuPlugin.hide();
             // destroy filter popups created by _createFilterByRegionPopup and _createFilterPopup
             var i,
                 popup;
@@ -2340,11 +2340,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 item, itemVal,
                 i;
 
-            inputArray = _.map(inputArray, function(val) {
-                var numVal = Number((val || 'NaN').replace(',', '.'));
-                if (_.isNaN(numVal)) return val;
-                return numVal;
-            });
+            inputArray = _.map(inputArray, this._numerizeValue);
 
             for (i = 0; i < items.length; i++) {
                 item = items[i];
@@ -2756,6 +2752,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     delete this.indicatorsMeta[indicatorId];
                 }
             }
+        },
+
+        /**
+         * Returns the provided value as a number if it can be
+         * casted to such. Otherwise just returns the given string.
+         *
+         * @method _numerizeValue
+         * @private
+         * @param  {String} val
+         * @return {Number/String}
+         */
+        _numerizeValue: function(val) {
+            var numVal = Number((val || 'NaN').replace(',', '.'));
+            if (_.isNaN(numVal)) return val;
+            return numVal;
         }
 
     }, {

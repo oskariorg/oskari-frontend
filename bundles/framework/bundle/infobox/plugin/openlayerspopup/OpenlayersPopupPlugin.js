@@ -53,7 +53,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
     function () {
         this.mapModule = null;
         this.pluginName = null;
-        this._popupId = null;
         this._sandbox = null;
         this._map = null;
         this._popups = {};
@@ -143,7 +142,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             var headerWrapper = this._headerWrapper.clone();
             var contentDiv = this._contentDiv.clone();
             var closeButton = this._headerCloseButton.clone();
-            me._popupId = id;
 
             header.append(title);
             headerWrapper.append(header);
@@ -239,18 +237,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             }
             this._panMapToShowPopup(lonlat);
 
+            var popupDOM = jQuery('#' + id);
             // Set the colour scheme if one provided
             if (colourScheme) {
-                this._changeColourScheme(colourScheme);
+                this._changeColourScheme(colourScheme, popupDOM, id);
             }
 
             // Set the font if one provided
             if (font) {
-                this._changeFont(font);
+                this._changeFont(font, popupDOM, id);
             }
 
             // Fix the HTML5 placeholder for < IE10
-            var inputs = jQuery('.contentWrapper input, .contentWrapper textarea');
+            var inputs = popupDOM.find('.contentWrapper input, .contentWrapper textarea');
             if (typeof inputs.placeholder === 'function') {
                 inputs.placeholder();
             }
@@ -354,10 +353,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          *          headerColour: <the colour of the feature name>,
          *          iconCls: <the icon class of the gfi close icon>
          *      }
-         * @param {jQuery} div
+         * @param {jQuery} div DOMElement
+         * @param {String} id popup id
          */
-        _changeColourScheme: function (colourScheme, div) {
-            div = div || jQuery('div#' + this._popupId);
+        _changeColourScheme: function (colourScheme, div, id) {
+            div = div || jQuery('div#' + id);
 
             if (!colourScheme || !div) return;
 
@@ -405,10 +405,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          *
          * @method _changeFont
          * @param {String} fontId
-         * @param {jQuery} div
+         * @param {jQuery} div DOMElement
+         * @param {String} id popup id
          */
-        _changeFont: function (fontId, div) {
-            div = div || jQuery('div#getinforesult');
+        _changeFont: function (fontId, div, id) {
+            div = div || jQuery('div#' + id);
 
             if (!div || !fontId) return;
 

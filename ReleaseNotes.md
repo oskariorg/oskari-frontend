@@ -6,6 +6,44 @@
 
 Added a new plugin for managing layers which have been cofigured as real time layers. The plugin refreshes the layers periodically, with a refresh rate specified for each layer separately. See the docs for more info.
 
+## 1.18.1
+
+### mapmyplaces bundle
+
+Now updates attention text on feature update
+
+### publisher bundle
+
+Now sends selected font as part of Logoplugin config to backend. 
+
+Now accepts premade color schemes for opeining an existing view for editing (triggered a js error in 1.18).
+
+Toolbar placement fixed on non-default style to be inline with other plugins.
+
+### myplaces2 bundle
+
+Removed options for selecting which properties should be shown for features (name, description etc) on myplaces layer add/edit form since selections were not used.
+
+### LogoPlugin
+
+Clicking datasource link repeatedly now toggles the popup instead of opening another one on top of the previous.
+
+### statisticsgrid bundle
+
+Sorting now handles values as numbers instead of strings.
+
+Fixed a compatibility issue resulting in js error when going from statictics mode to publisher mode in a specific way.
+
+### infobox plugin
+
+Now uses actual popup id as identifier when setting colorscheme/font instead of hardcoded id.
+
+### analyse bundle
+
+Analyse mode is now behaving more appropriately when source layer has more properties than can be saved in analysis.
+
+Now displayes a proper notification if source layer is unavailable when saving analysis.
+
 ## 1.18
 
 ## Known issues

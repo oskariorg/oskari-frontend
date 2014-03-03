@@ -65,8 +65,7 @@ table.search-results th {
 }
 */
 div.published-search-div {
-  float: left;
-  position: relative; }
+  float: left; }
 
 .right div.published-search-div {
   float: right; }

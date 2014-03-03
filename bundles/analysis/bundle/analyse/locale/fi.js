@@ -175,7 +175,7 @@ Oskari.registerLocalization({
             "error": {
                 "title": "Virhe",
                 "invalidSetup": "Virheellisiä parametrejä",
-                "noParameters": "Ei parametrejä",
+                "noParameters": "Ei tietoaineistoa, ei parametrejä",
                 "noLayer": "Ei valittua tasoa",
                 "noAnalyseUnionLayer": "Valitse ainakin toinen analyysitaso",
                 "invalidMethod": "Tuntematon menetelmä: ",

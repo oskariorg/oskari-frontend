@@ -181,7 +181,7 @@ Oskari.registerLocalization({
                 "loadLayersFailed": "Fel i analys ladda ner",
                 "loadLayerTypesFailed": "Analys eller WFS data typ request fel",
                 "invalidSetup": "Virheellisiä parametrejä",
-                "noParameters": "Ei parametrejä",
+                "noParameters": "Ingen data för analys",
                 "noLayer": "Ei valittua tasoa",
                 "noAnalyseUnionLayer": "Valitse ainakin toinen analyysitaso",
                 "invalidMethod": "Tuntematon menetelmä: ",
