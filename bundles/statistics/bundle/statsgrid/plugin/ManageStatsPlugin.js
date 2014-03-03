@@ -2273,7 +2273,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
         destroyPopups: function () {
             // destroy header popups
-            this.headerMenuPlugin.hide();
+            if (this.headerMenuPlugin) this.headerMenuPlugin.hide();
             // destroy filter popups created by _createFilterByRegionPopup and _createFilterPopup
             var i,
                 popup;

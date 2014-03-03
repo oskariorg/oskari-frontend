@@ -288,9 +288,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             } else {
                 dataSources.html(myLoc.dataSources);
                 dataSources.click(function (e) {
-                    if (!me.isInLayerToolsEditMode) {
+                    if (!me.isInLayerToolsEditMode && me.dataSourcesDialog == null) {
                         me._openDataSourcesDialog(e.target);
                         me._requestDataSources();
+                    } else if (me.dataSourcesDialog != null) {
+                        me.dataSourcesDialog.close(true);
+                        me.dataSourcesDialog = null;
                     }
                 });
             }
