@@ -1651,7 +1651,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         showMessage: function (title, message, buttons) {
             // Oskari components aren't available in a published map.
             if (!this._published) {
-                var loc = this._locale,
+                if (this.dialog) {
+                    this.dialog.close(true);
+                    this.dialog = null;
+                    return;
+                }
+
+                var me = this,
+                    loc = this._locale,
                     dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 if (buttons) {
                     dialog.show(title, message, buttons);
@@ -1661,8 +1668,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     okBtn.addClass('primary');
                     okBtn.setHandler(function () {
                         dialog.close(true);
+                        me.dialog = null;
                     });
                     dialog.show(title, message, [okBtn]);
+                    me.dialog = dialog;
                 }
             }
         },
