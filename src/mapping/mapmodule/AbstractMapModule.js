@@ -124,6 +124,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @param {String} id control id/name
          */
         removeMapControl: function (id) {
+            var ctl = this._controls[id];
             this._removeMapControlImpl(ctl);
             delete this._controls[id];
         },
