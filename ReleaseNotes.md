@@ -6,6 +6,11 @@
 
 Added a new plugin for managing layers which have been cofigured as real time layers. The plugin refreshes the layers periodically, with a refresh rate specified for each layer separately. See the docs for more info.
 
+### mapmodule-plugin/map-module.js
+
+Extends src/mapping/mapmodule/AbstractMapModule.js to allow a smoother transition to Oskari 2.0 and helps keeping the codebases up to date.
+Note! Alternative build systems need to include the AbstractMapModule.js file.
+
 ## 1.18.1
 
 ### mapmyplaces bundle

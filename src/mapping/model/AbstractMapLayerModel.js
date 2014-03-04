@@ -4,7 +4,7 @@
  * Superclass for layer objects copy pasted from wmslayer. Need to check
  * if something should be moved back to wmslayer. Nothing else currently uses this.
  */
-Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
+Oskari.clazz.define('Oskari.mapframework.domain.AbstractMapLayerModel',
 
 /**
  * @method create called automatically on construction

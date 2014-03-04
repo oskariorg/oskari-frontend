@@ -13,7 +13,6 @@ Oskari.AbstractFunc = function () {
         throw "AbstractFuncCalled: " + name;
     };
 };
-Oskari.NoOpFunc = function () {};
 
 Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
     /**
@@ -54,7 +53,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
 
         this._map = null;
 
-        // _mapScales are calculated based on resolutions on init
+        // _mapScales are calculated in _calculateScalesImpl based on resolutions in options
         this._mapScales = [];
         this._mapResolutions = options.resolutions;
         // arr
@@ -162,14 +161,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
         getLayerPlugins: function () {
             return this._layerPlugins;
         },
-        /**
-         * @method clearNavigationHistory
-         * Clears the internal OpenLayers.Control.NavigationHistory
-         * history.
-         */
-        clearNavigationHistory: function () {
-
-        },
 
         /**
          * @method getName
@@ -210,9 +201,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
 
         /**
          * @method init
-         * Implements Module protocol init method. Creates the OpenLayers Map.
+         * Implements Module protocol init method. Creates the Map.
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         * @return {OpenLayers.Map}
+         * @return {Map}
          */
         init: function (sandbox) {
 
@@ -220,7 +211,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
 
             this._sandbox = sandbox;
 
-            // setting options
             if (this._options) {
                 if (this._options.resolutions) {
                     this._mapResolutions = this._options.resolutions;
@@ -234,32 +224,24 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
                 }
             }
 
-            // register events & requesthandlers
-            // TODO: should these be in start-method?
-            for (p in this.eventHandlers) {
-                sandbox.registerForEventByName(this, p);
-            }
+            this._map = this._createMapImpl();
 
-            this.requestHandlers = {
-                mapLayerUpdateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
-                mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapping.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this)
-            };
-            sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
-            sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
-            sandbox.addRequestHandler('ClearHistoryRequest', this.requestHandlers.clearHistoryHandler);
-
-            this._createMap();
             // changed to resolutions based map zoom levels
             // -> calculate scales array for backward compatibility
-            for (var i = 0; i < this._mapResolutions.length; ++i) {
-                var calculatedScale = OpenLayers.Util.getScaleFromResolution(this._mapResolutions[i], 'm');
-                calculatedScale = calculatedScale * 10000;
-                calculatedScale = Math.round(calculatedScale);
-                calculatedScale = calculatedScale / 10000;
-                this._mapScales.push(calculatedScale);
-            }
+            this._calculateScalesImpl(this._mapResolutions);
 
-            return this._map;
+            return this._initImpl(this._sandbox, this._options, this._map);
+        },
+
+        /**
+         * @method _initImpl
+         * Init for implementation specific functionality.
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Map} map
+         * @return {Map}
+         */
+        _initImpl: function (sandbox, options, map) {
+            return map;
         },
 
         /**
@@ -300,7 +282,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @param {Oskari.mapframework.ui.module.common.mapmodule.Plugin} plugin
          */
         registerPlugin: function (plugin) {
-            var sandbox = this._sandbox;
+            var sandbox = this.getSandbox();
             plugin.setMapModule(this);
             var pluginName = plugin.getName();
             sandbox.printDebug('[' + this.getName() + ']' + ' Registering ' + pluginName);
@@ -315,8 +297,8 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @param {Oskari.mapframework.ui.module.common.mapmodule.Plugin} plugin
          */
         unregisterPlugin: function (plugin) {
-            var sandbox = this._sandbox;
-            var pluginName = plugin.getName();
+            var sandbox = this.getSandbox(),
+                pluginName = plugin.getName();
             sandbox.printDebug('[' + this.getName() + ']' + ' Unregistering ' + pluginName);
             plugin.unregister();
             this._pluginInstances[pluginName] = undefined;
@@ -329,8 +311,8 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @param {Oskari.mapframework.ui.module.common.mapmodule.Plugin} plugin
          */
         startPlugin: function (plugin) {
-            var sandbox = this._sandbox;
-            var pluginName = plugin.getName();
+            var sandbox = this.getSandbox(),
+                pluginName = plugin.getName();
 
             sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
             plugin.startPlugin(sandbox);
@@ -341,8 +323,8 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @param {Oskari.mapframework.ui.module.common.mapmodule.Plugin} plugin
          */
         stopPlugin: function (plugin) {
-            var sandbox = this._sandbox;
-            var pluginName = plugin.getName();
+            var sandbox = this.getSandbox(),
+                pluginName = plugin.getName();
 
             sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
             plugin.stopPlugin(sandbox);
@@ -354,9 +336,12 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          */
         startPlugins: function (sandbox) {
-            for (var pluginName in this._pluginInstances) {
-                sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
-                this._pluginInstances[pluginName].startPlugin(sandbox);
+            var pluginName;
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName)) {
+                    sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
+                    this._pluginInstances[pluginName].startPlugin(sandbox);
+                }
             }
         },
         /**
@@ -366,9 +351,12 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          */
         stopPlugins: function (sandbox) {
-            for (var pluginName in this._pluginInstances) {
-                sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
-                this._pluginInstances[pluginName].stopPlugin(sandbox);
+            var pluginName;
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName)) {
+                    sandbox.printDebug('[' + this.getName() + ']' + ' Starting ' + pluginName);
+                    this._pluginInstances[pluginName].stopPlugin(sandbox);
+                }
             }
         },
         /**
@@ -387,7 +375,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @param {Boolean} bln true to enable stealth mode
          */
         setStealth: function (bln) {
-            this._stealth = (bln == true);
+            this._stealth = !!bln;
         },
         /**
          * @method notifyAll
@@ -397,11 +385,11 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          */
         notifyAll: function (event, retainEvent) {
             // propably not called anymore?
-            if (this._stealth) {
+            if (this.getStealth()) {
                 return;
             }
 
-            this._sandbox.notifyAll(event, retainEvent);
+            this.getSandbox().notifyAll(event, retainEvent);
         },
         /**
          * @method getMap
@@ -410,16 +398,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          */
         getMap: function () {
             return this._map;
-        },
-        /**
-         * @method transformCoordinates
-         * Transforms coordinates from given projection to the maps projectino.
-         * @param {OpenLayers.LonLat} pLonlat
-         * @param {String} srs projection for given lonlat params like "EPSG:4326"
-         * @return {OpenLayers.LonLat} transformed coordinates
-         */
-        transformCoordinates: function (pLonlat, srs) {
-            return pLonlat.transform(new OpenLayers.Projection(srs), this.getMap().getProjectionObject());
         },
 
         /**
@@ -570,6 +548,41 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
             return zoomLevel;
         },
         /**
+         * Formats the measurement of the geometry.
+         * Returns a string with the measurement and
+         * an appropriate unit (m/km or m²/km²)
+         * or an empty string for point.
+         *
+         * @method formatMeasurementResult
+         * @param  {OpenLayers.Geometry} geometry
+         * @param  {String} drawMode
+         * @return {String}
+         */
+        formatMeasurementResult: function(geometry, drawMode) {
+            var measurement, unit;
+
+            if (drawMode === 'area') {
+                measurement = (Math.round(100 * geometry.getArea())/100);
+                unit = ' m²';
+                // 1 000 000 m² === 1 km²
+                if (measurement >= 1000000) {
+                    measurement = (Math.round(measurement)/1000000);
+                    unit = ' km²';
+                }
+            } else if (drawMode === 'line') {
+                measurement = (Math.round(100 * geometry.getLength())/100);
+                unit = ' m';
+                // 1 000 m === 1 km
+                if (measurement >= 1000) {
+                    measurement = (Math.round(measurement)/1000);
+                    unit = ' km';
+                }
+            } else {
+                return '';
+            }
+            return (measurement + unit).replace('.', ',');
+        },
+        /**
          * @method start
          * implements BundleInstance protocol start method
          * Starts the plugins registered on the map and adds
@@ -585,10 +598,22 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
 
             sandbox.printDebug("Starting " + this.getName());
 
+            // register events handlers
+            var p;
+            for (p in this.eventHandlers) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(this, p);
+                }
+            }
+
             this.startPlugins(sandbox);
             this.updateCurrentState();
-            this.started = true;
+            this.started = this._startImpl();;
         },
+        _startImpl: function () {
+            return true;
+        },
+
         /**
          * @method stop
          * implements BundleInstance protocol stop method
@@ -602,18 +627,17 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
             }
 
             this.stopPlugins(sandbox);
-            this.started = false;
+            this.started = this._stopImpl();
+        },
+        _stopImpl: function () {
+            return true;
         },
 
         /**
          * @property eventHandlers
          * @static
          */
-        eventHandlers: {
-            'SearchClearedEvent': function (event) {
-
-            }
-        },
+        eventHandlers: {},
 
         /**
          * @method onEvent
@@ -630,42 +654,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
             return handler.apply(this, [event]);
         },
         /**
-         * @method getOLMapLayers
-         * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
-         * Internally calls getOLMapLayers() on all registered layersplugins.
-         * @param {String} layerId
-         * @return {OpenLayers.Layer[]}
-         */
-        getOLMapLayers: function (layerId) {
-            var me = this;
-            var sandbox = me._sandbox;
-
-            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-            if (!layer) {
-                // not found
-                return null;
-            }
-            var lps = this.getLayerPlugins();
-            // let the actual layerplugins find the layer since the name depends on
-            // type
-
-            var results = [];
-
-            for (var p in lps) {
-                var layersPlugin = lps[p];
-                // find the actual openlayers layers (can be many)
-                var layerList = layersPlugin.getOLMapLayers(layer);
-                if (layerList) {
-                    // if found -> return list
-                    // otherwise continue looping
-                    for (var l = 0; l < layerList.length; l++) {
-                        results.push(layerList[l]);
-                    }
-                }
-            }
-            return results.length > 0 ? results : null;
-        },
-        /**
          * @method updateCurrentState
          * Setup layers from selected layers
          * This is needed if map layers are added before mapmodule/plugins are started.
@@ -677,17 +665,20 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          */
         updateCurrentState: function () {
 
-            var me = this;
-            var sandbox = me._sandbox;
-
-            var layers = sandbox.findAllSelectedMapLayers();
-            var lps = this.getLayerPlugins();
+            var me = this,
+                sandbox = me._sandbox,
+                layers = sandbox.findAllSelectedMapLayers(),
+                lps = this.getLayerPlugins(),
+                layersPlugin,
+                p;
 
             for (p in lps) {
-                var layersPlugin = lps[p];
+                if (lps.hasOwnProperty(p)) {
+                    layersPlugin = lps[p];
 
-                sandbox.printDebug('preselecting ' + p);
-                layersPlugin.preselectLayers(layers);
+                    sandbox.printDebug('preselecting ' + p);
+                    layersPlugin.preselectLayers(layers);
+                }
             }
         },
 
@@ -803,9 +794,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
         getMapExtent: function () {
             var bounds = this._map.getBounds();
             var bsw = bounds.getSouthWest();
-            var sw = this._map2Crs(bsw.lng, bsw.lat);
+            var sw = this._map2CrsImpl(bsw.lng, bsw.lat);
             var bne = bounds.getNorthEast();
-            var ne = this._map2Crs(bne.lng, bsw.lat);
+            var ne = this._map2CrsImpl(bne.lng, bsw.lat);
             return [sw.x, sw.y, ne.x, ne.y];
         },
 
@@ -832,6 +823,13 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
                 min: minScaleZoom,
                 max: maxScaleZoom
             };
+        },
+        /**
+         * @method getMapScales
+         * @return {Number[]} calculated mapscales
+         */
+        getMapScales: function () {
+            return this._mapScales;
         },
         /**
          * @method calculateLayerScales
@@ -871,27 +869,22 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
 
         /* IMPL specific */
 
-        _crs2Map: Oskari.AbstractFunc("_crs2Map"),
-        _map2Crs: Oskari.AbstractFunc("_map2Crs"),
+        _crs2MapImpl: Oskari.AbstractFunc("_crs2MapImpl"),
+        _map2CrsImpl: Oskari.AbstractFunc("_map2CrsImpl"),
 
         updateSize: Oskari.AbstractFunc("updateSize"),
 
         /**
-         * @method createMap
+         * @method _createMapImpl
          * @private
-         * Creates the OpenLayers.Map object
-         * @return {OpenLayers.Map}
+         * Creates the Implementation specific Map object
+         * @return {Map}
          */
-        _createMap: Oskari.AbstractFunc("_createMap"),
+        _createMapImpl: Oskari.AbstractFunc("_createMapImpl"),
 
         /**
          * @method moveMapToLanLot
-         * Moves the map to the given position.
-         * NOTE! Doesn't send an event if zoom level is not changed.
-         * Call notifyMoveEnd() afterwards to notify other components about changed state.
-         * @param {OpenLayers.LonLat} lonlat coordinates to move the map to
-         * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
-         * @param {Boolean} pIsDragging true if the user is dragging the map to a new location currently (optional)
+         * Moves the map to the given position. Alias for panMapToLonLat.
          */
         moveMapToLanLot: function () {
             return this.panMapToLonLat.apply(this, arguments);
@@ -983,24 +976,23 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * gets the maps zoom level to given absolute number
          * @return {Number} newZoomLevel absolute zoom level (0-12)
          */
-        getZoomLevel: Oskari.AbstractFunc("getZoomLevel"),
+        getZoomLevel: function () {
+            return this.getMap().getZoom();
+        },
 
         /**
-         * @method _updateDomain
+         * @method _updateDomainImpl
          * @private
          * Updates the sandbox map domain object with the current map properties.
          * Ignores the call if map is in stealth mode.
          */
-        _updateDomain: Oskari.AbstractFunc("_updateDomain"),
+        _updateDomainImpl: Oskari.AbstractFunc("_updateDomainImpl"),
 
         _addLayerImpl: Oskari.AbstractFunc("_addLayerImpl(layerImpl)"),
 
         _setLayerImplIndex: Oskari.AbstractFunc("_setLayerImplIndex(layerImpl,n)"),
 
         _removeLayerImpl: Oskari.AbstractFunc("_removeLayerImpl(layerImpl)"),
-
-        getMapSize: Oskari.AbstractFunc("getMapSize"),
-        getMapExtent: Oskari.AbstractFunc("getMapExtent"),
 
         _setLayerImplVisible: Oskari.AbstractFunc("_setLayerImplVisible"),
 
@@ -1010,9 +1002,11 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
 
         notifyMoveEnd: function () {},
 
+        _calculateScalesImpl: Oskari.AbstractFunc("_calculateScalesImpl(resolutions)"),
+
         _addMapControlImpl: Oskari.AbstractFunc("_addMapControlImpl(ctl)"),
 
-        _removeMapControlImpl: Oskari.AbstractFunc("_removeMapControlImpl(ctl)")
+        _removeMapControlImpl: Oskari.AbstractFunc("_removeMapControlImpl(ctl)"),
 
     }, {
         /**
