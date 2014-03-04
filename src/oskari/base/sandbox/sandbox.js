@@ -259,14 +259,14 @@ function(core) {
         var oldListeners = this._listeners[eventName],
             deleteIndex = -1,
             d;
-        if (oldListeners == null) {
+        if (oldListeners === null || oldListeners === undefined) {
             // no listeners
             this._core.printDebug("Module does not listen to that event, skipping.");
             return;
         }
 
         for (d = 0; d < oldListeners.length; d++) {
-            if (oldListeners[d] == module) {
+            if (oldListeners[d] === module) {
                 deleteIndex = d;
                 break;
             }

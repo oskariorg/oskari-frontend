@@ -23,6 +23,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 
             "scripts": [
                 /*
+                 * Abstract base
+                 */
+
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../src/mapping/mapmodule/AbstractMapModule.js"
+                },
+                /*
                  * map-module
                  */
                 {

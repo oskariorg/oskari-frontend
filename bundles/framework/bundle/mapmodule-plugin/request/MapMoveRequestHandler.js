@@ -55,7 +55,7 @@ function(sandbox, mapModule) {
                 this.mapModule._map.zoomTo(zoom);
             }
         }
-        this.mapModule._updateDomain();
+        this.mapModule._updateDomainImpl();
         if (marker) {
             this.mapModule._drawMarker();
         }
