@@ -336,6 +336,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     toolContainer
                         .find('input').attr('id', 'tool-' + pluginKey)
                         .change(closureMagic(featuredataBundle));
+
+                    this.activatePreviewPlugin(featuredataBundle, featureDataSelected);
                 }
             }
             return panel;
