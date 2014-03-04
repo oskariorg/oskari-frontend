@@ -17,7 +17,6 @@ function(config) {
     this._enabled = true;
     this._index = null;
     this._visible = true;
-    this._startPluginHook.unshift('_startPluginBasicImpl');
 }, {
     /**
      * @method startPlugin
@@ -26,7 +25,6 @@ function(config) {
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      */
     _startPluginBasicImpl : function (sandbox) {
-        /*
         this._element = this._createControlElement();
         this._ctl = this.createControlAdapter(this._element);
         this.getMapModule().addMapControl(this._pluginName,this._ctl);
@@ -38,8 +36,7 @@ function(config) {
         var element = me.getElement();
         if (element) {
             element.attr("data-clazz", me.getClazz());
-        }*/
-        console.log('it works!');
+        }
     },
 
     /**
