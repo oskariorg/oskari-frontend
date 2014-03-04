@@ -303,9 +303,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             if (wfs) {
                 var featureData = this._sandbox.findRegisteredModuleInstance("FeatureData2");
                 if (typeof featureData !== "undefined") {
+                    var featureDataSelected = false;
+                    if (data && data.state && data.state.featuredata2) {
+                        featureDataSelected = true;
+                    }
                     var featuredataBundle =  {
                         "id": "Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin",
-                        "selected": false,
+                        "selected": featureDataSelected,
                         "config": {
                             "instance": featureData
                         }
