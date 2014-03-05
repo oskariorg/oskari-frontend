@@ -441,38 +441,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
         zoomTo: function (zoomLevel) {
             this.setZoomLevel(zoomLevel, false);
         },
-        /**
-         * @method panMapEast
-         * Pans the map toward east by 3/4 of the map width
-         */
-        panMapEast: function () {
-            var size = this.getMapSize();
-            this.panMapByPixels(0.75 * size.w, 0);
-        },
-        /**
-         * @method panMapWest
-         * Pans the map toward west by 3/4 of the map width
-         */
-        panMapWest: function () {
-            var size = this.getMapSize();
-            this.panMapByPixels(-0.75 * size.w, 0);
-        },
-        /**
-         * @method panMapNorth
-         * Pans the map toward north by 3/4 of the map height
-         */
-        panMapNorth: function () {
-            var size = this.getMapSize();
-            this.panMapByPixels(0, -0.75 * size.h);
-        },
-        /**
-         * @method panMapSouth
-         * Pans the map toward south by 3/4 of the map height
-         */
-        panMapSouth: function () {
-            var size = this.getMapSize();
-            this.panMapByPixels(0, 0.75 * size.h);
-        },
 
         /**
          * @method moveMapByPixels
@@ -527,7 +495,8 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
                 return zoomLevel;
             }
 
-            var scale = this.getMapScale();
+            // FIXME: relies on OL2 implementation, refactor to use Impl
+            var scale = this.getMap().getScale();
 
             if (scale < minScale) {
                 // zoom out
@@ -785,19 +754,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
             var res = (extent[2] - extent[0]) / size[0];
             return OpenLayers.Util.getScaleFromResolution(res, 'm');
 
-        },
-
-        getMapSize: function () {
-            var mapContainer = jQuery(this._map.getContainer());
-            return [mapContainer.width(), mapContainer.height()];
-        },
-        getMapExtent: function () {
-            var bounds = this._map.getBounds();
-            var bsw = bounds.getSouthWest();
-            var sw = this._map2CrsImpl(bsw.lng, bsw.lat);
-            var bne = bounds.getNorthEast();
-            var ne = this._map2CrsImpl(bne.lng, bsw.lat);
-            return [sw.x, sw.y, ne.x, ne.y];
         },
 
         /**
