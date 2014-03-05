@@ -166,6 +166,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
         _promptForView: function (successCallback, viewName, viewDescription) {
             var me = this;
 
+            if (me.dialog) return;
+
             var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
             var nameInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'name');
             nameInput.setPlaceholder(this.loc.popup.name_placeholder);
@@ -196,11 +198,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 if (errors.length === 0) {
                     successCallback(nameInput.getValue(), template.find("textarea").val());
                     dialog.close();
+                    me.dialog = null;
                 } else {
                     form.showErrors();
                 }
             });
             var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
+            cancelBtn.setHandler(function() {
+                dialog.close(true);
+                me.dialog = null;
+            })
             dialog.show(title, template, [cancelBtn, okBtn]);
             // we dont want key events to bubble up...
             dialog.dialog.on("keyup", function (e) {
@@ -209,6 +216,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             dialog.dialog.on("keydown", function (e) {
                 e.stopPropagation();
             });
+
+            me.dialog = dialog;
         },
 
         /**

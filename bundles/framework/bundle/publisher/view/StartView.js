@@ -194,6 +194,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
          */
         _showTermsOfUse: function () {
             var me = this;
+
+            if (me.dialog) {
+                me.dialog.close(true);
+                me.dialog = null;
+                return;
+            }
+
             if (!me.termsOfUse) {
                 // load the article first
                 var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', me.instance.sandbox);
@@ -209,7 +216,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
 
             var dlg = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 closeBtn = dlg.createCloseButton(me.loc.buttons.close);
+
+            closeBtn.setHandler(function() {
+                dlg.close(true);
+                me.dialog = null;
+            })
             dlg.show(me.termsOfUse.title, me.termsOfUse.body, [closeBtn]);
+            me.dialog = dlg;
         },
         /**
          * Checks if the user has accepted terms of use and sets hasAcceptedTou property

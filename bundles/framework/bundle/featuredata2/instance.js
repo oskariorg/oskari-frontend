@@ -94,8 +94,11 @@ function() {
         }
 
         //Let's extend UI
-        var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
-        sandbox.request(this, request);
+        var requestBuilder = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')
+        if (requestBuilder) {
+            var request = requestBuilder(this);
+            sandbox.request(this, request);
+        }
 
         // draw ui
         me.createUi();

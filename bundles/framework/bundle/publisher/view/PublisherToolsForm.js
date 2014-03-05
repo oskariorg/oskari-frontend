@@ -290,13 +290,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
             // Feature data
             var mapLayerService = this._sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            var test = mapLayerService.getLayersOfType('WFS');
 
             // Check if selected layers include wfs layers
             var wfs = false;
             var layers = this._sandbox.findAllSelectedMapLayers();
-            for (var i = 0; i < layers.length; ++i) {
-                if (layers[i].hasFeatureData()) {
+            for (var j = 0; j < layers.length; ++j) {
+                if (layers[j].hasFeatureData()) {
                     wfs = true;
                     break;
                 }
@@ -304,13 +303,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             if (wfs) {
                 var featureData = this._sandbox.findRegisteredModuleInstance("FeatureData2");
                 if (typeof featureData !== "undefined") {
-                    featuredataBundle =  {
+                    var featureDataSelected = false;
+                    if (data && data.state && data.state.featuredata2) {
+                        featureDataSelected = true;
+                    }
+                    var featuredataBundle =  {
                         "id": "Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin",
-                        "selected": false,
+                        "selected": featureDataSelected,
                         "config": {
                             "instance": featureData
                         }
                     };
+                    this.featuredataBundle = featuredataBundle;
                     toolContainer = jQuery(this.templates.tool).clone();
                     pluginKey = featuredataBundle.id;
                     me._toolIndices[pluginKey] = i;
@@ -329,7 +333,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                             featuredataBundle.config.location.classes = classes;
                         }
                     }
-                    toolContainer.find('input').attr('id', 'tool-' + pluginKey).change(closureMagic(featuredataBundle));
+                    toolContainer
+                        .find('input').attr('id', 'tool-' + pluginKey)
+                        .change(closureMagic(featuredataBundle));
+
+                    this.activatePreviewPlugin(featuredataBundle, featureDataSelected);
                 }
             }
             return panel;
@@ -775,6 +783,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 if (buttons[tool] === true) {
                     return true;
                 }
+            }
+            return false;
+        },
+
+        hasFeatureDataBundle: function() {
+            if (this.featuredataBundle) {
+                return this.featuredataBundle.selected;
             }
             return false;
         }

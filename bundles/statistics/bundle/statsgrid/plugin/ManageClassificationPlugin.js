@@ -735,8 +735,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 });
                 manualcls.find('.icon-info').click(function (event) {
                     // open helpityhelp...
-                    var desc =
-                        '<p>' + me._locale.classify.info + '</p>';
+                    var desc = '<p>' + me._locale.classify.info + '</p>';
                     me.showMessage(me._locale.classify.infoTitle, desc);
                 });
                 manualcls.hide();
@@ -819,17 +818,25 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
          * @param {String} message popup message
          */
         showMessage: function (title, message) {
+            var me = this;
             // Oskari components aren't available in a published map.
             if (!this._published) {
-                var loc = this._locale,
-                    dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                    okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                okBtn.setTitle(loc.buttons.ok);
-                okBtn.addClass('primary');
-                okBtn.setHandler(function () {
-                    dialog.close(true);
-                });
-                dialog.show(title, message, [okBtn]);
+                if (me.messageDialog) {
+                    me.messageDialog.close(true);
+                    me.messageDialog = null;
+                } else {
+                    var loc = this._locale,
+                        dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                        okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                    okBtn.setTitle(loc.buttons.ok);
+                    okBtn.addClass('primary');
+                    okBtn.setHandler(function () {
+                        dialog.close(true);
+                        me.messageDialog = null;
+                    });
+                    dialog.show(title, message, [okBtn]);
+                    me.messageDialog = dialog;
+                }
             }
         },
 
@@ -1080,7 +1087,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             //Main dialog
             var me = this;
             if (me.dialog) {
-                me.dialog.close();
+                me.dialog.close(true);
+                me.dialog = null;
+                return;
             }
             me.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
@@ -1114,8 +1123,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             // Set background color for current selected colors
             me._hiliSelectedColors();
 
-            var cancelBtn = me.dialog.createCloseButton(this._locale.colorset.cancel);
+            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            cancelBtn.setTitle(this._locale.colorset.cancel);
             cancelBtn.addClass('primary');
+            cancelBtn.setHandler(function () {
+                me.dialog.close(true);
+                me.dialog = null;
+            });
 
             me.dialog.addClass('tools_selection');
             me.dialog.show(this._locale.colorset.themeselection, me.content, [cancelBtn]);
