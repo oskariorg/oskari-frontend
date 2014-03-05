@@ -1067,6 +1067,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          * @param {Object} selections map data as returned by _gatherSelections()
          */
         _publishMap: function (selections) {
+            console.log(selections);
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 url = sandbox.getAjaxUrl();
@@ -1189,13 +1190,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             me._setSelectedSize();
 
-            tools.push(me.toolsPanel.getFeatureDataPlugin());
-
             for (i = 0; i < tools.length; i += 1) {
                 if (tools[i].selected) {
                     me.toolsPanel.activatePreviewPlugin(tools[i], true);
                 }
             }
+            me.toolsPanel.activatePreviewPlugin(me.toolsPanel.getFeatureDataPlugin());
+            
             mapModule.registerPlugin(me.logoPlugin);
             this.logoPlugin.startPlugin(me.instance.sandbox);
         },
