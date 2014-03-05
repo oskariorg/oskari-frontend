@@ -475,14 +475,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                         me.data.hasLayerSelectionPlugin = plugins[i].config;
                     }
                 }
-                //me.data.hasLayerSelectionPlugin = false; (commented out for a reason)
-                // FIXME shouldn't this be in publishertoolform? we don't have the tools here.
-                // yeerp... feck
-                /*
-                for (i = 0; i < me.tools.length; i += 1) {
-                    option = me.tools[i];
-                    option.selected = !!selectedPluginIDs[option.id];
-                }*/
             }
             // Add the layout panel to the accordion.
             me.toolsPanel = Oskari.clazz.create(
@@ -1196,6 +1188,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
 
             me._setSelectedSize();
+
+            tools.push(me.toolsPanel.getFeatureDataPlugin());
 
             for (i = 0; i < tools.length; i += 1) {
                 if (tools[i].selected) {
