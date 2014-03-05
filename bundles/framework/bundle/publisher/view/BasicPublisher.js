@@ -1067,7 +1067,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          * @param {Object} selections map data as returned by _gatherSelections()
          */
         _publishMap: function (selections) {
-            console.log(selections);
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 url = sandbox.getAjaxUrl();
@@ -1196,8 +1195,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 }
             }
             me.toolsPanel.activatePreviewPlugin(me.toolsPanel.getFeatureDataPlugin());
-            
-            mapModule.registerPlugin(me.logoPlugin);
+
+             mapModule.registerPlugin(me.logoPlugin);
             this.logoPlugin.startPlugin(me.instance.sandbox);
         },
         /**
