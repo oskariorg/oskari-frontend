@@ -791,6 +791,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             return false;
         },
 
+        activateFeatureDataPlugin: function(activate) {
+            if (this.hasFeatureDataBundle()) {
+                var featureData = this.getFeatureDataPlugin();
+
+                this.activatePreviewPlugin(featureData, activate);
+
+                if (!activate && featureData.plugin) {
+                    featureData.plugin = undefined;
+                    delete featureData.plugin;
+                }
+            }
+        },
+
         hasFeatureDataBundle: function() {
             if (this.featuredataBundle) {
                 return this.featuredataBundle.selected;

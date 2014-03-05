@@ -1194,7 +1194,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     me.toolsPanel.activatePreviewPlugin(tools[i], true);
                 }
             }
-            me.toolsPanel.activatePreviewPlugin(me.toolsPanel.getFeatureDataPlugin());
+            me.toolsPanel.activateFeatureDataPlugin(true);
 
              mapModule.registerPlugin(me.logoPlugin);
             this.logoPlugin.startPlugin(me.instance.sandbox);
@@ -1220,6 +1220,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     delete tools[i].plugin;
                 }
             }
+            me.toolsPanel.activateFeatureDataPlugin(false);
+
             me.maplayerPanel.stop();
 
             me.layoutPanel.stop();
