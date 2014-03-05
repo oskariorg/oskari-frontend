@@ -451,6 +451,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             var me = this,
                 sandbox = me._sandbox;
 
+            if (!tool) return;
+
             if (!tool.plugin && enabled) {
                 var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
                 tool.plugin = Oskari.clazz.create(tool.id, tool.config);
