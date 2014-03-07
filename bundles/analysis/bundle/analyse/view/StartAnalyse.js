@@ -1549,47 +1549,34 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 requestBuilder,
                 request;
 
-            // TODO: Handle WPS results when no FeatureCollection eg. aggregate
-            if (analyseJson.wpsLayerId + '' === "-1") {
-                this.instance.showMessage("Tulokset", analyseJson.result);
-            } else {
 
-                mapLayerService = this.instance.mapLayerService;
-                // Prefix the id to avoid collisions
-                // FIXME: temporary, server should respond with an actual
-                // id so that further analysis with this layer is possible.
-                analyseJson.id = this.layer_prefix + analyseJson.id + '_' + analyseJson.wpsLayerId;
-                // Create the layer model
-                mapLayer = mapLayerService.createMapLayer(analyseJson);
-                mapLayer.setWpsUrl(analyseJson.wpsUrl);
-                mapLayer.setWpsName(analyseJson.wpsName);
-                //mapLayer.setWpsUrl('/karttatiili/wpshandler?');
-                //mapLayer.setWpsName('ana:analysis_data');
-                // Add the layer to the map layer service
-                mapLayerService.addLayer(mapLayer);
+            mapLayerService = this.instance.mapLayerService;
+            // Create the layer model
+            mapLayer = mapLayerService.createMapLayer(analyseJson);
+            // Add the layer to the map layer service
+            mapLayerService.addLayer(mapLayer);
 
-                // Request the layer to be added to the map.
-                // instance.js handles things from here on.
-                requestBuilder = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest');
-                if (requestBuilder) {
-                    request = requestBuilder(mapLayer.getId());
-                    this.instance.sandbox.request(this.instance, request);
-                }
-                // Remove old layers if any
-                if (analyseJson.mergeLayers) {
-                    var mlays = analyseJson.mergeLayers;
-                    if (mlays.length > 0) {
-                        // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
-                        // also we need to do it before service.remove() to avoid problems on other components
-                        var removeMLrequestBuilder = this.instance.sandbox.getRequestBuilder('RemoveMapLayerRequest'),
-                            i;
+            // Request the layer to be added to the map.
+            // instance.js handles things from here on.
+            requestBuilder = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest');
+            if (requestBuilder) {
+                request = requestBuilder(mapLayer.getId());
+                this.instance.sandbox.request(this.instance, request);
+            }
+            // Remove old layers if any
+            if (analyseJson.mergeLayers) {
+                var mlays = analyseJson.mergeLayers;
+                if (mlays.length > 0) {
+                    // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
+                    // also we need to do it before service.remove() to avoid problems on other components
+                    var removeMLrequestBuilder = this.instance.sandbox.getRequestBuilder('RemoveMapLayerRequest'),
+                        i;
 
-                        for (i in mlays) {
-                            if (mlays.hasOwnProperty(i)) {
-                                request = removeMLrequestBuilder(mlays[i]);
-                                this.instance.sandbox.request(this.instance, request);
-                                mapLayerService.removeLayer(mlays[i]);
-                            }
+                    for (i in mlays) {
+                        if (mlays.hasOwnProperty(i)) {
+                            request = removeMLrequestBuilder(mlays[i]);
+                            this.instance.sandbox.request(this.instance, request);
+                            mapLayerService.removeLayer(mlays[i]);
                         }
                     }
                 }
