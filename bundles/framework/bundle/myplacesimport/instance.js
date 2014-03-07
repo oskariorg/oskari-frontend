@@ -11,10 +11,6 @@ function () {
         "sandbox": "sandbox",
         "flyoutClazz": "Oskari.mapframework.bundle.myplacesimport.Flyout"
     };
-    this.state = {
-        indicators: [],
-        layerId: null
-    };
     this.buttonGroup = 'myplaces';
     this.toolName = 'import';
     this.tool = {
@@ -38,13 +34,13 @@ function () {
             sandbox.registerAsStateful(this.mediator.bundleId, this);
         }
 
-        request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
-        sandbox.request(this, request);
-
         importService = Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService', this);
         sandbox.registerService(importService);
         importService.init();
         this.importService = importService;
+
+        request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+        sandbox.request(this, request);
 
         this.registerTool();
     },

@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.analysis.bundle.analyse.AnalyseBundleInstance} instance
+     * @param {Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBundleInstance} instance
      *      reference to component that created the flyout
      */
 
@@ -18,11 +18,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
     }, {
         __name: 'Oskari.mapframework.bundle.myplacesimport.Flyout',
         __templates: {
-            iframe: '<iframe id="myplacesimport-target" name="myplacesimport-target" height="0" width="0" frameborder="0" scrolling="no"></iframe>',
+            iframe: '<iframe src="JavaScript:\"\"" id="myplacesimport-target" name="myplacesimport-target" height="0" width="0" frameborder="0" scrolling="no"></iframe>',
             base: '<div class="content">' +
                     '<div class="info"></div>' +
                     '<div class="state"></div>' +
-                    '<div class="actions"></div>' +
                 '</div>',
             actions: '<div class="import-actions">' +
                     '<input type="button" class="cancel" value="Cancel" />' +
@@ -31,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             file: '<div class="file-import">' +
                     '<form id="myplacesimport-form" method="post" enctype="multipart/form-data" target="myplacesimport-target">' +
                         '<input type="file" name="file-import" multiple></input>' +
-                        '<input type="submit" value="Submit" />' +
+                        '<input type="submit" value="Submit" class="primary" />' +
                     '</form>' +
                 '</div>',
             layer: '<div class="layer-info">' +
@@ -47,17 +46,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         getName: function () {
             return this.__name;
         },
+        /**
+         * @method setTemplate
+         * @param {jQuery} template
+         */
         setTemplate: function(template) {
+            if (this.template && template) {
+                this.template.replaceWith(template);
+            }
             this.template = template;
         },
+        /**
+         * @method getTemplate
+         * @return {jQuery}
+         */
         getTemplate: function() {
             return this.template;
         },
         /**
-         * @method startPlugin
-         *
          * Interface method implementation, assigns the HTML templates
          * that will be used to create the UI
+         *
+         * @method startPlugin
          */
         startPlugin: function () {
             var container = this.getEl(),
@@ -70,8 +80,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             container.append(this.getTemplate());
         },
         /**
-         * @method stopPlugin
          * Interface method implementation
+         *
+         * @method stopPlugin
          */
         stopPlugin: function () {
             if (this.template) this.template.empty();
@@ -79,19 +90,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             if (this.container) this.container.empty();
             this.container = undefined;
         },
+        /**
+         * Creates a new UI from scratch
+         *
+         * @method refresh
+         */
         refresh: function() {
             this.container
                 .find('iframe')
                 .replaceWith(jQuery(this.__templates.iframe).clone());
 
-            var template = this.createUi();
-            this.getTemplate().replaceWith(template);
-            this.setTemplate(template);
+            this.setTemplate(this.createUi());
         },
         /**
-         * @method createUi
          * Creates the UI for a fresh start.
-         * Selects the view to show based on user (guest/loggedin)
+         *
+         * @method createUi
+         * @return {jQuery} returns the template to place on the DOM
          */
         createUi: function () {
             var locale = this.getLocalization(),
@@ -104,6 +119,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
 
             return template;
         },
+        /**
+         * Creates the template for file upload form
+         *
+         * @method __createFileImportTemplate
+         * @private
+         * @param  {Object} locale
+         * @return {jQuery}
+         */
         __createFileImportTemplate: function(locale) {
             var me = this,
                 file = jQuery(this.__templates.file).clone(),
@@ -112,19 +135,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             // TODO: set the file upload action route here:
             file.find('form').attr('action', action);
             file.find('form input[type=submit]').val(locale.file.submit);
-            // Get to the next step when the action has finished loading.
             this.container.find('iframe').on('load', function() {
-                console.log('ifrme loaded');
+                // Get to the next step when the action has finished loading.
                 me.__layerInfoStep(locale);
             });
 
             return file;
         },
+        /**
+         * Replaces the previous file form with the layer info form
+         * 
+         * @method __layerInfoStep
+         * @private
+         * @param  {Object} locale
+         */
         __layerInfoStep: function(locale) {
             var template = this.getTemplate();
             template.find('div.info').html(locale.layer.title);
             template.find('div.state').html(this.__createLayerTemplate(locale));
         },
+        /**
+         * Creates the template for layer info form
+         * 
+         * @method __createLayerTemplate
+         * @private
+         * @param  {Object} locale
+         * @return {jQuery}
+         */
         __createLayerTemplate: function(locale) {
             var layer = jQuery(this.__templates.layer).clone();
 
@@ -136,6 +173,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
 
             return layer;
         },
+        /**
+         * Creates the template for 'next' and 'previous' actions
+         * 
+         * @method __createActionsTemplate
+         * @private
+         * @param  {Object} locale
+         * @return {jQuery}
+         */
         __createActionsTemplate: function(locale) {
             var me = this,
                 actions = jQuery(this.__templates.actions).clone();
@@ -154,10 +199,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
 
             return actions;
         },
+        /**
+         * Sends a request to clean up the temp files in the backend
+         * and refreshes the UI
+         * 
+         * @method __cancel
+         * @private
+         */
         __cancel: function() {
             this.instance.getService().sendImportCleanUp();
             this.refresh();
         },
+        /**
+         * Sends the layer data to the backend and shows a message.
+         * Also refreshes the UI
+         * 
+         * @method __finish
+         * @private
+         * @param  {Object} locale
+         */
         __finish: function(locale) {
             var me = this,
                 service = this.instance.getService(),
@@ -174,6 +234,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 // failure
             });
         },
+        /**
+         * Returns the data from the layer form
+         * 
+         * @method __getLayerData
+         * @private
+         * @return {Object}
+         */
         __getLayerData: function() {
             var layerTemplate = this.getTemplate().find('div.layer-info'),
                 data = {layer: {}};
@@ -184,6 +251,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
 
             return data;
         },
+        /**
+         * Displays a message on the screen
+         * 
+         * @method __showMessage
+         * @private
+         * @param  {String} title
+         * @param  {String} message
+         */
         __showMessage: function (title, message) {
             var me = this,
                 loc = this._locale,
