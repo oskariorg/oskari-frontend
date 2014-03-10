@@ -78,6 +78,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundle", func
         }],
 
         "locales": [{
+            "lang": "am",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/publisher/locale/am.js"
+        }, {
+            "lang": "bg",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/publisher/locale/bg.js"
+        }, {
             "lang": "cs",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/publisher/locale/cs.js"
@@ -114,6 +122,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundle", func
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/publisher/locale/hr.js"
         }, {
+            "lang": "hu",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/publisher/locale/hu.js"
+        }, {
             "lang": "lv",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/publisher/locale/lv.js"
@@ -129,6 +141,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundle", func
             "lang": "pt",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/publisher/locale/pt.js"
+        }, {
+            "lang": "ro",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/publisher/locale/ro.js"
+        }, {
+            "lang": "rs",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/publisher/locale/rs.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",

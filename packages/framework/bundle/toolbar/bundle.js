@@ -59,6 +59,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundle", function
                 "src": "../../../../resources/framework/bundle/toolbar/css/toolbar.css"
             }],
             "locales": [{
+                "lang": "am",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/toolbar/locale/am.js"
+            }, {
                 "lang": "cs",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/toolbar/locale/cs.js"
@@ -91,6 +95,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundle", function
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/toolbar/locale/hr.js"
             }, {
+                "lang": "hu",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/toolbar/locale/hu.js"
+            }, {
                 "lang": "lv",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/toolbar/locale/lv.js"
@@ -106,6 +114,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundle", function
                 "lang": "pt",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/toolbar/locale/pt.js"
+            }, {
+                "lang": "ro",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/toolbar/locale/ro.js"
+            }, {
+                "lang": "rs",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/toolbar/locale/rs.js"
             }, {
                 "lang": "sl",
                 "type": "text/javascript",

@@ -64,6 +64,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.FeatureDataBundle", 
         }],
 
         "locales": [{
+            "lang": "bg",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/bg.js"
+        }, {
             "lang": "cs",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/featuredata/locale/cs.js"
@@ -92,6 +96,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.FeatureDataBundle", 
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/featuredata/locale/fi.js"
         }, {
+            "lang": "ge",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/ge.js"
+        }, {
             "lang": "gr",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/featuredata/locale/gr.js"
@@ -99,6 +107,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.FeatureDataBundle", 
             "lang": "hr",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/featuredata/locale/hr.js"
+        }, {
+            "lang": "hu",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/hu.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",
@@ -115,6 +127,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.FeatureDataBundle", 
             "lang": "pt",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/featuredata/locale/pt.js"
+        }, {
+            "lang": "ro",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/ro.js"
+        }, {
+            "lang": "rs",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/locale/rs.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",
