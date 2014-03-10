@@ -40,7 +40,7 @@ Oskari.registerLocalization({
         },
         "addColumn": "Get data",
         "removeColumn": "Remove",
-        "indicators": "Indicators",
+        "indicators": "Indicator",
         "cannotDisplayIndicator": "The indicator does not have values on the selected region category so it cannot be displayed in the grid.",
         "availableRegions": " The following region categories have values on the indicator: ",
         "year": "Year",
@@ -156,7 +156,7 @@ Oskari.registerLocalization({
             "SUURALUE": "Suuralue"
         },
         "addDataButton": "Add indicator",
-        "addDataTitle": "Add your own indicator",
+        "addDataTitle": "Add a new indicator",
         "openImportDialogTip": "Import data from clipboard",
         "openImportDataButton": "Import data",
         "addDataMetaTitle": "Title",
