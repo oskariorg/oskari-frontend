@@ -31,6 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
         this.lastSort = null;
 
         this._searchContainer = null;
+        this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
     }, {
         /**
          * @method getName
@@ -443,6 +444,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 value = value * -1;
             }
             return value;
+        },
+
+        /**
+         *
+         *
+         */
+        addTab: function (item) {
+            var me = this;
+            var flyout = jQuery(this.container);
+            // Change into tab mode if not already
+            if (me.tabsContainer.panels.length === 0) {
+                me.tabsContainer.insertTo(flyout);
+                var defaultPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+                var searchContainer = jQuery("div.searchContainer");
+                defaultPanel.setTitle(me.getTitle());
+                defaultPanel.setContent(searchContainer);
+                defaultPanel.setPriority(me.instance.tabPriority);
+                me.tabsContainer.addPanel(defaultPanel);
+            }
+
+            var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+            panel.setTitle(item.title);
+            panel.setContent(item.content);
+            panel.setPriority(item.priority);
+            me.tabsContainer.addPanel(panel);
         }
     }, {
         /**

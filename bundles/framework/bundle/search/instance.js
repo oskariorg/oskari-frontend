@@ -21,6 +21,7 @@ Oskari.clazz
             this.plugins = {};
             this.localization = null;
             this.service = null;
+            this.tabPriority = 1;
         }, {
             /**
              * @static
@@ -102,6 +103,11 @@ Oskari.clazz
                     ajaxUrl = sandbox.getAjaxUrl() + 'action_route=GetSearchResult';
                 }
 
+                // Default tab priority
+                if (this.conf && typeof this.conf.priority === 'number') {
+                    this.tabPriority = this.conf.priority;
+                }
+
                 var servName =
                     'Oskari.mapframework.bundle.search.service.SearchService';
                 this.service = Oskari.clazz.create(servName, ajaxUrl);
@@ -124,6 +130,12 @@ Oskari.clazz
 
                 // draw ui
                 me.createUi();
+
+                // UI exists and we can hook up the request handler
+                this.requestHandlers = {
+                    addTabRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.search.request.AddTabRequestHandler', sandbox, this.plugins['Oskari.userinterface.Flyout'])
+                };
+                sandbox.addRequestHandler('Search.AddTabRequest', this.requestHandlers.addTabRequestHandler);
             },
             /**
              * @method init
