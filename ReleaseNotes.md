@@ -11,6 +11,22 @@ Added a new plugin for managing layers which have been cofigured as real time la
 Extends src/mapping/mapmodule/AbstractMapModule.js to allow a smoother transition to Oskari 2.0 and helps keeping the codebases up to date.
 Note! Alternative build systems need to include the AbstractMapModule.js file.
 
+Default resolutions for mapmodule has been changed:
+
+* from [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25] 
+
+* to [2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5]
+
+If you have used the defaults and want to keep them add mapOptions to your mapfull config:
+
+```javascript
+{
+	"mapOptions": {
+		"resolutions": [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25]
+	}
+}
+```
+
 ## 1.18.1
 
 ### mapmyplaces bundle
