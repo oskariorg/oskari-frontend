@@ -25,8 +25,10 @@ Oskari.registerLocalization({
     "metadataCatalogueResultDescriptionOrdering": "Voit järjestää tuloksia alla olevassa taulukossa klikkaamalla sarakeotsikkoa.",
     "metadataCatalogueResults": "Tulokset: ",
     "metadataCatalogueResultsDescription": " hakutulosta haulla ",
-    "metadatacatalogueservice_alert_title": "Virhe: ",
-    "metadatacatalogueservice_not_found_anything_text": "Haulla ei löytynyt yhtään tulosta.",
+    "metadataoptionservice_alert_title": "Virhe: ",
+    "metadataoptionservice_not_found_anything_text": "Laajennettu haku ei ole käytettävissä.",
+    "metadatasearchservice_alert_title": "Virhe: ",
+    "metadatasearchservice_not_found_anything_text": "Haulla ei löytynyt yhtään tulosta.",
     "too_short": "Hakusana on liian lyhyt.",
     "cannot_be_empty": "Hakusana ei voi olla tyhjä.",
     "too_many_stars": "Liian monta *-merkkiä."

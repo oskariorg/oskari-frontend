@@ -20,7 +20,8 @@ Oskari.clazz
             this.started = false;
             this.plugins = {};
             this.localization = null;
-            this.service = null;
+            this.optionService = null;
+            this.searchService = null;
             this.tabPriority = 5.0;
         }, {
             /**
@@ -115,11 +116,18 @@ Oskari.clazz
 
                 this.localization = Oskari.getLocalization(this.getName());
 
-                var ajaxUrl = null;
+                var optionAjaxUrl = null;
                 if (this.conf && this.conf.url) {
-                    ajaxUrl = this.conf.url;
+                    optionAjaxUrl = this.conf.optionUrl;
                 } else {
-                    ajaxUrl = sandbox.getAjaxUrl() + 'action_route=GetMetadataSearchOptions';
+                    optionAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetMetadataSearchOptions';
+                }
+
+                var searchAjaxUrl = null;
+                if (this.conf && this.conf.url) {
+                    searchAjaxUrl = this.conf.searchUrl;
+                } else {
+                    searchAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetMetadataSearch';
                 }
 
                 // Default tab priority
@@ -127,9 +135,13 @@ Oskari.clazz
                     this.tabPriority = this.conf.priority;
                 }
 
-                var servName =
-                    'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataCatalogueService';
-                this.service = Oskari.clazz.create(servName, ajaxUrl);
+                var optionServName =
+                    'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataOptionService';
+                this.optionService = Oskari.clazz.create(optionServName, optionAjaxUrl);
+
+                var searchServName =
+                    'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataSearchService';
+                this.searchService = Oskari.clazz.create(searchServName, searchAjaxUrl);
 
                 sandbox.register(me);
                 var p;
@@ -262,7 +274,42 @@ Oskari.clazz
                 button.setTitle(me.getLocalization('metadataCatalogueButton'));
 
                 var doMetadataCatalogue = function () {
-                    alert("Searching Metadata");
+                    var search = {keyword: field.getValue(), options: []};
+                    // Collect the advanced search options
+                    if (moreLessLink.html() === me.getLocalization('showLess')) {
+                        // Checkboxes
+                        var checkboxRows = metadataCatalogueContainer.find(".checkboxRow");
+                        for (var i=0; i<checkboxRows.length; i++) {
+                            var checkboxDefs = jQuery(checkboxRows[i]).find(".metadataMultiDef");
+                            if (checkboxDefs.length == 0) {
+                                continue;
+                            }
+                            var values = [];
+                            for (var j=0; j<checkboxDefs.length; j++) {
+                                var checkboxDef = jQuery(checkboxDefs[j]);
+                                if (checkboxDef.is(":checked")) {
+                                    values.push(checkboxDef.val());
+                                }
+                            }
+                            search.options.push({"field": jQuery(checkboxDefs[0]).attr("name"), "values": values});
+                        }
+                        // Dropdown lists
+                        var dropdownRows = metadataCatalogueContainer.find(".dropdownRow");
+                        for (var i=0; i<dropdownRows.length; i++) {
+                            var dropdownDef = jQuery(dropdownRows[i]).find(".metadataDef");
+                            search.options.push({"field": dropdownDef.attr("name"), "values": [dropdownDef.find(":selected").val()]});
+                        }
+                    }
+                    me.searchService.doSearch(JSON.stringify(search),function(data) {
+                            me.showResults(data);
+                        }, function(data) {
+                            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                            var okBtn = dialog.createCloseButton('OK');
+                            var title = me.getLocalization('metadatasearchservice_alert_title');
+                            var msg = me.getLocalization('metadatasearchservice_not_found_anything_text');
+                            dialog.show(title, msg, [okBtn]);
+                        }
+                    );
                 };
 
                 button.setHandler(doMetadataCatalogue);
@@ -285,7 +332,7 @@ Oskari.clazz
                 var moreLessLink = this.templates.moreLessLink.clone();
                 moreLessLink.html(me.getLocalization('showMore'));
                 moreLessLink.click(function() {
-                    me.service.doSearch(null, function (data) {
+                    me.optionService.getOptions(function (data) {
                         var advancedContainer = metadataCatalogueContainer.find('div.advanced');
                         if (moreLessLink.html() === me.getLocalization('showMore')) {
                             moreLessLink.html(me.getLocalization('showLess'));
@@ -302,15 +349,16 @@ Oskari.clazz
                                         for (var j=0; j < dataField.values.length; j++) {
                                             var value = dataField.values[j];
                                             var text = "";
+                                            var newCheckbox = me.templates.metadataCheckbox.clone();
+                                            var newCheckboxDef = newCheckbox.find(":checkbox");
+                                            newCheckboxDef.attr("name",dataField.field);
+                                            newCheckboxDef.attr("value",value.val);
                                             // Localization available?
                                             if (typeof value.locale !== "undefined") {
                                                 text = value.locale;
                                             } else {
                                                 text = value.val;
                                             }
-                                            var newCheckbox = me.templates.metadataCheckbox.clone();
-                                            newCheckbox.find(":checkbox").attr("name",text);
-                                            newCheckbox.find(":checkbox").attr("value",text);
                                             newCheckbox.find("label.metadataTypeText").append(text);
                                             newRow.find(".checkboxes").append(newCheckbox);
                                         }
@@ -319,19 +367,21 @@ Oskari.clazz
                                         newRow = me.templates.dropdownRow.clone();
                                         newRow.find("div.rowLabel").append(newLabel);
                                         var newDropdown = me.templates.metadataDropdown.clone();
+                                        var dropdownDef = newDropdown.find(".metadataDef");
+                                        dropdownDef.attr("name",dataField.field);
                                         for (var j=0; j < dataField.values.length; j++) {
                                             var value = dataField.values[j];
                                             var text = "";
+                                            var newOption = me.templates.dropdownOption.clone();
+                                            newOption.attr("value",value.val);
                                             // Localization available?
                                             if (typeof value.locale !== "undefined") {
                                                 text = value.locale;
                                             } else {
                                                 text = value.val;
                                             }
-                                            var newOption = me.templates.dropdownOption.clone();
-                                            newOption.attr("value",text);
                                             newOption.text(text);
-                                            newDropdown.find(".metadataDef").append(newOption);
+                                            dropdownDef.append(newOption);
                                         }
                                         newRow.append(newDropdown);
                                     }
@@ -347,15 +397,21 @@ Oskari.clazz
                     }, function (data) {
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                         var okBtn = dialog.createCloseButton('OK');
-                        var title = me.getLocalization('metadatacatalogueservice_alert_title');
-                        var msg = me.getLocalization('metadatacatalogueservice_not_found_anything_text');
+                        var title = me.getLocalization('metadataoptionservice_alert_title');
+                        var msg = me.getLocalization('metadataoptionservice_not_found_anything_text');
                         dialog.show(title, msg, [okBtn]);
                     });
                 });
                 metadataCatalogueContainer.find('div.moreLess').append(moreLessLink);
-
+            },
+            /**
+             * @method showResults
+             * displays metadata search results
+             */
+            showResults: function (results) {
 
             },
+
             /**
              * @method setState
              * @param {Object} state bundle state as JSON

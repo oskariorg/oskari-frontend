@@ -4,7 +4,7 @@
  * Requests for a metadata catalogue search to be made with the given query and provides
  * callbacks
  */
-Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.service.MetadataCatalogueService',
+Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.service.MetadataSearchService',
 
 /**
  * @method create called automatically on construction
@@ -19,7 +19,7 @@ function(searchUrl) {
     this._searchUrl = searchUrl;
 }, {
     /** @static @property __qname fully qualified name for service */
-    __qname : "Oskari.catalogue.bundle.metadatacatalogue.service.MetadataCatalogueService",
+    __qname : "Oskari.catalogue.bundle.metadatacatalogue.service.MetadataSearchService",
     /**
      * @method getQName
      * @return {String} fully qualified name for service
@@ -59,8 +59,7 @@ function(searchUrl) {
               }
              },
             url : this._searchUrl,
-            data : "",
-//            data : "searchKey=" + searchString + "&Language=" + lang + "&epsg="+epsg,
+            data : "search=" + searchString,
             error : onError,
             success : onSuccess
         });
