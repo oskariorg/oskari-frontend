@@ -63,6 +63,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundle", functi
         }],
 
         "locales": [{
+            "lang": "am",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/printout/locale/am.js"
+        }, {
+            "lang": "bg",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/printout/locale/bg.js"
+        }, {
             "lang": "cs",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/printout/locale/cs.js"
@@ -99,6 +107,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundle", functi
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/printout/locale/hr.js"
         }, {
+            "lang": "hu",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/printout/locale/hu.js"
+        }, {
             "lang": "lv",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/printout/locale/lv.js"
@@ -114,6 +126,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundle", functi
             "lang": "pt",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/printout/locale/pt.js"
+        }, {
+            "lang": "ro",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/printout/locale/ro.js"
+        }, {
+            "lang": "rs",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/printout/locale/rs.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",

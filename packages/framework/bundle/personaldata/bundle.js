@@ -56,6 +56,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundle"
         }],
 
         "locales": [{
+            "lang": "am",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/am.js"
+        }, {
+            "lang": "bg",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/bg.js"
+        }, {
             "lang": "cs",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/personaldata/locale/cs.js"
@@ -84,6 +92,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundle"
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/personaldata/locale/fi.js"
         }, {
+            "lang": "ge",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/ge.js"
+        }, {
             "lang": "gr",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/personaldata/locale/gr.js"
@@ -91,6 +103,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundle"
             "lang": "hr",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/personaldata/locale/hr.js"
+        }, {
+            "lang": "hu",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/hu.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",
@@ -107,6 +123,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundle"
             "lang": "pt",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/personaldata/locale/pt.js"
+        }, {
+            "lang": "ro",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/ro.js"
+        }, {
+            "lang": "rs",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/rs.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",

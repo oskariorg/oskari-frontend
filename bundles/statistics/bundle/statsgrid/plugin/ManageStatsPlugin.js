@@ -665,6 +665,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     if (indicatorsdata) {
                         //if fetch returned something we create drop down selector
                         me.createIndicatorsSelect(container, indicatorsdata);
+                        me.createDemographicsSelects(container, null);
                     } else {
                         me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.indicatorsDataError);
                     }
@@ -913,33 +914,48 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          */
         createDemographicsSelects: function (container, indicator) {
             var me = this;
-            this.indicators.push(indicator);
 
             var selectors = container.find('.selectors-container');
             // year & gender are in a different container than indicator select
             var parameters = selectors.find('.parameters-cont'),
                 newIndicator = parameters.find('.new-indicator-cont'),
                 year = null,
-                gender = null;
+                gender = null,
+                columnId,
+                includedInGrid;
 
-            // if there is a range we can create year select
-            if (indicator.range !== null && indicator.range !== undefined) {
-                newIndicator.before(this.getYearSelectorHTML(indicator.range.start, indicator.range.end));
-                // by default the last value is selected in getYearSelectorHTML
-                year = indicator.range.end;
-            }
-            // if there is a classification.sex we can create gender select
-            if (indicator.classifications && indicator.classifications.sex) {
-                newIndicator.before(this.getGenderSelectorHTML(indicator.classifications.sex.values));
-                // by default the last value is selected in getGenderSelectorHTML
-                gender = indicator.classifications.sex.values[indicator.classifications.sex.values.length - 1];
-            }
-            gender = gender !== null && gender !== undefined ? gender : 'total';
+            if (indicator) {
+                // We have an indicator, create the selects with its data
+                me.indicators.push(indicator);
+                // if there is a range we can create year select
+                if (indicator.range !== null && indicator.range !== undefined) {
+                    newIndicator.before(this.getYearSelectorHTML(indicator.range.start, indicator.range.end));
+                    // by default the last value is selected in getYearSelectorHTML
+                    year = indicator.range.end;
+                }
 
-            // by default the last year and gender is selected
-            var columnId = me._getIndicatorColumnId(indicator.id, gender, year),
-                includedInGrid = this.isIndicatorInGrid(columnId),
-                fetchButton = jQuery('<button class="fetch-data' + (includedInGrid ? ' hidden' : '') + ' selector-button">' + this._locale.addColumn + '</button>'),
+                // if there is a classification.sex we can create gender select
+                if (indicator.classifications && indicator.classifications.sex) {
+                    newIndicator.before(me.getGenderSelectorHTML(indicator.classifications.sex.values));
+                    // by default the last value is selected in getGenderSelectorHTML
+                    gender = indicator.classifications.sex.values[indicator.classifications.sex.values.length - 1];
+                }
+
+                gender = gender !== null && gender !== undefined ? gender : 'total';
+
+                // by default the last year and gender is selected
+                columnId = me._getIndicatorColumnId(indicator.id, gender, year);
+                includedInGrid = this.isIndicatorInGrid(columnId);
+            } else {
+                // No indicator, create disabled mock selects
+                newIndicator.before(me.getYearSelectorHTML(0, -1));
+                newIndicator.before(me.getGenderSelectorHTML([]));
+                parameters.find('select.year').prop('disabled', 'disabled');
+                parameters.find('select.gender').prop('disabled', 'disabled');
+                includedInGrid = false;
+            }
+
+            var fetchButton = jQuery('<button class="fetch-data' + (includedInGrid ? ' hidden' : '') + ' selector-button">' + this._locale.addColumn + '</button>'),
                 removeButton = jQuery('<button class="remove-data' + (includedInGrid ? '' : ' hidden') + ' selector-button">' + this._locale.removeColumn + '</button>');
 
             newIndicator.before(fetchButton);
@@ -947,18 +963,22 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             selectors.find('.indicator-cont').after(parameters);
 
-            // click listener
-            fetchButton.click(function (e) {
-                var element = jQuery(e.currentTarget),
-                    year = jQuery('.statsgrid').find('.yearsel').find('.year').val(),
-                    gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
-                gender = gender !== null && gender !== undefined ? gender : 'total';
-                // me.getSotkaIndicatorData(container,indicator, gender, year);
-                var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
-                me.getSotkaIndicatorData(container, indicator.id, gender, year, function () {
-                    me.addIndicatorMeta(indicator);
+            if (indicator) {
+                // click listener
+                fetchButton.click(function (e) {
+                    var element = jQuery(e.currentTarget),
+                        year = jQuery('.statsgrid').find('.yearsel').find('.year').val(),
+                        gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
+                    gender = gender !== null && gender !== undefined ? gender : 'total';
+                    // me.getSotkaIndicatorData(container,indicator, gender, year);
+                    var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
+                    me.getSotkaIndicatorData(container, indicator.id, gender, year, function () {
+                        me.addIndicatorMeta(indicator);
+                    });
                 });
-            });
+            } else {
+                parameters.find('button.fetch-data').prop('disabled', 'disabled');
+            }
 
             // click listener
             removeButton.click(function (e) {

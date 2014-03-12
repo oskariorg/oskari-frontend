@@ -35,7 +35,7 @@ function(id, imageUrl, options) {
     this._imageUrl = imageUrl;
 
     this._options = {
-        resolutions : [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
+        resolutions : [2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5],
         srsName : 'EPSG:3067',
         units : 'm'
     };
