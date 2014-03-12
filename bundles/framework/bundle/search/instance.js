@@ -21,7 +21,7 @@ Oskari.clazz
             this.plugins = {};
             this.localization = null;
             this.service = null;
-            this.tabPriority = 1;
+            this.tabPriority = 1.0;
         }, {
             /**
              * @static

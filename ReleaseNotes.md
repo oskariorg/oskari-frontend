@@ -11,6 +11,14 @@ Added a new plugin for managing layers which have been cofigured as real time la
 Extends src/mapping/mapmodule/AbstractMapModule.js to allow a smoother transition to Oskari 2.0 and helps keeping the codebases up to date.
 Note! Alternative build systems need to include the AbstractMapModule.js file.
 
+### search bundle
+
+Search flyout is now capable to include multiple tabs.
+
+### metadatacatalogue bundle
+
+Added a new plugin for metadata catalogue searches.
+
 ## 1.18.1
 
 ### mapmyplaces bundle

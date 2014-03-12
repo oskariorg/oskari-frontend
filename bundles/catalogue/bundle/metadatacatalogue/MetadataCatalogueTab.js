@@ -1,13 +1,13 @@
 /**
  * @class Oskari.mapframework.bundle.personaldata.AccountTab
- * Renders the "Search" tab.
+ * Renders the "MetadataCatalogue" tab.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.search.SearchTab',
+Oskari.clazz.define('Oskari.mapframework.bundle.metadatacatalogue.MetadataCatalogueTab',
 
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.mapframework.bundle.search.PersonalDataBundleInstance} instance
+     * @param {Oskari.mapframework.bundle.metadatacatalogue.MetadataCatalogueBundleInstance} instance
      *     reference to component that created the tab
      */
 
@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.SearchTab',
         this.conf = instance.conf;
         this.instance = instance;
         this.tabsContainer = undefined;
-        this.template = jQuery('<div class="search"></div>');
+        this.template = jQuery('<div class="metadatacatalogue"></div>');
         this.loc = localization;
     }, {
         getTitle: function () {
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.SearchTab',
             container.append(me.tabsContainer.ui);
         },
 
-        _createSearchTab: function (container) {
+        _createMetadataCatalogueTab: function (container) {
 
         }
     });
