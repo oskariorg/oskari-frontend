@@ -215,8 +215,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
 
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     var okBtn = dialog.createCloseButton('OK');
-                    var msg = me.instance.getLocalization('searchservice_search_alert_title');
-                    dialog.show(msg, msg, [okBtn]);
+                    var title = me.instance.getLocalization('searchservice_search_alert_title');
+                    var msg = me.instance.getLocalization('searchservice_search_not_found_anything_text');
+                    dialog.show(title, msg, [okBtn]);
                 });
             };
 

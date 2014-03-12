@@ -27,6 +27,14 @@ If you have used the defaults and want to keep them add mapOptions to your mapfu
 }
 ```
 
+### search bundle
+
+Search flyout is now capable to include multiple tabs.
+
+### metadatacatalogue bundle
+
+Added a new plugin for metadata catalogue searches.
+
 ## 1.18.1
 
 ### mapmyplaces bundle

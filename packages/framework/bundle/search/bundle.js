@@ -32,9 +32,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.search.SearchBundle", function (
             "src": "../../../../bundles/framework/bundle/search/Flyout.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/search/SearchTab.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/search/Tile.js"
         }, {
             "type": "text/javascript",
