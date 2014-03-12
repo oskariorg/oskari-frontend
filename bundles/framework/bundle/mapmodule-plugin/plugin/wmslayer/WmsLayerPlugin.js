@@ -437,9 +437,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
 
             if (minScale || maxScale) {
                 // use resolutions instead of scales to minimize chance of transformation errors
-                return this
-                    .getMapModule()
-                    .calculateLayerResolutions(maxScale, minScale);
+                return this.getMapModule().calculateLayerResolutions(maxScale, minScale);
             }
         }
     }, {

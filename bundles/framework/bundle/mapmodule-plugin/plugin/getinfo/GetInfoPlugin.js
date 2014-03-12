@@ -33,6 +33,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
             jqhr: null,
             timestamp: null
         };
+        me.clickLocation = null;
 
         /* templates */
         me.template = {};
@@ -43,19 +44,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
             }
         }
     }, {
-
-        __templates: {
-            "wrapper": '<div></div>',
-            "getinfo_result_table": '<table class="getinforesult_table"></table>',
-            "link_outside": '<a target="_blank"></a>',
-            "tableRow": '<tr></tr>',
-            "tableCell": '<td></td>',
-            "span": '<span></span>',
-            "header": '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
-            "headerTitle": '<div class="getinforesult_header_title"></div>',
-            "myPlacesWrapper": '<div class="myplaces_place">' + '<h3 class="myplaces_header"></h3>' + '<p class="myplaces_desc"></p>' + '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' + '<a class="myplaces_link"></a>' + '</div>'
-        },
-
         /** @static @property __name plugin name */
         __name: 'GetInfoPlugin',
 
@@ -218,10 +206,44 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                 var lonlat = evt.getLonLat(),
                     x = evt.getMouseX(),
                     y = evt.getMouseY();
+
+                this.clickLocation = {
+                    lonlat: lonlat,
+                    x: x,
+                    y: y
+                };
                 this.handleGetInfo(lonlat, x, y);
             },
             'AfterMapMoveEvent': function (evt) {
                 this._cancelAjaxRequest();
+            },
+            'AfterMapLayerAddEvent': function(evt) {
+                if (this.clickLocation) {
+                    var reqB = this._sandbox.getRequestBuilder('InfoBox.RefreshInfoBoxRequest'),
+                        req;
+
+                    if (reqB) {
+                        req = reqB(this.infoboxId);
+                        this._sandbox.request(this, req);
+                    }
+                }
+            },
+            'InfoBox.InfoBoxEvent': function(evt) {
+                if (evt.getId() === this.infoboxId && evt.isOpen() && _.isObject(this.clickLocation)) {
+                    var me = this,
+                        lonlat = this.clickLocation.lonlat,
+                        x = this.clickLocation.x,
+                        y = this.clickLocation.y,
+                        evtB = this._sandbox.getEventBuilder('MapClickedEvent'),
+                        evt = evtB(lonlat, x, y);
+
+                    setTimeout(function() {
+                        me._sandbox.notifyAll(evt);
+                    }, 0);
+                }
+            },
+            'GetInfoResultEvent': function(evt) {
+                this._handleInfoResult(evt.getData());
             }
         },
         /**
@@ -257,62 +279,49 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
         },
 
         /**
+         * Constructs a layer list for valid layers for info queries
+         * 
          * @method _buildLayerIdList
          * @private
-         * Constructs a layer list for valid layers for info queries
          * @return
          * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
          */
         _buildLayerIdList: function () {
             var me = this,
                 selected = me._sandbox.findAllSelectedMapLayers(),
-                layerIds = null,
-                mapScale = me._sandbox.getMap().getScale(),
-                i,
-                layer;
+                layerIds;
 
-            for (i = 0; i < selected.length; i++) {
-                layer = selected[i];
+            layerIds = _.chain(selected)
+                .filter(function(layer) {
+                    return me._isQualified(layer);
+                })
+                .map(function(layer) {
+                    return layer.getId();
+                })
+                .value()
+                .join(',');
 
-                // skips wfs from the ajax call
-                if (!me._isIgnoredLayerType(layer) &&
+            return layerIds || null;
+        },
+        _isQualified: function(layer) {
+            return (!this._isIgnoredLayerType(layer) &&
                     layer.getQueryable &&
                     layer.getQueryable() &&
-                    layer.isInScale(mapScale) &&
-                    layer.isVisible()) {
-
-                    if (!layerIds) {
-                        layerIds = "";
-                    }
-
-                    if (layerIds !== "") {
-                        layerIds += ",";
-                    }
-
-                    layerIds += layer.getId();
-                }
-            }
-
-            return layerIds;
+                    layer.isInScale(this._sandbox.getMap().getScale()) &&
+                    layer.isVisible());
         },
-
         /**
+         * Checks if layer's type is ignored
+         * 
          * @method _isIgnoredLayerType
          * @private
-         * Checks if layer's type is ignored
          * @param {Oskari.mapframework.domain.AbstractLayer} layer
          * @return {Boolean} true if layer's type is ignored
          */
         _isIgnoredLayerType: function (layer) {
-            if (this.config !== null && this.config !== undefined && this.config.ignoredLayerTypes) {
-                var i;
-                for (i = 0; i < this.config.ignoredLayerTypes.length; i++) {
-                    if (layer.isLayerOfType(this.config.ignoredLayerTypes[i])) {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            return _.any((this.config || {}).ignoredLayerTypes, function(type) {
+                return layer.isLayerOfType(type);
+            });
         },
         /**
          * @method _startAjaxRequest
@@ -371,42 +380,20 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
          */
         handleGetInfo: function (lonlat, x, y) {
             var me = this,
-                dte = new Date(),
-                dteMs = dte.getTime();
+                dteMs = (new Date()).getTime(),
+                layerIds = me._buildLayerIdList(),
+                ajaxUrl = this._sandbox.getAjaxUrl(),
+                mapVO = me._sandbox.getMap();
 
-            if (me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp && dteMs - me._pendingAjaxQuery.timestamp < 500) {
+            if (me._pendingAjaxQuery.busy &&
+                me._pendingAjaxQuery.timestamp &&
+                dteMs - me._pendingAjaxQuery.timestamp < 500) {
                 me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo NOT SENT (time difference < 500ms)");
                 return;
             }
 
             me._cancelAjaxRequest();
-
-            var layerIds = me._buildLayerIdList();
-
-            // let's not start anything we cant' resolve
-            if (!layerIds) {
-                var data = {
-                    fragments: [],
-                    lonlat: lonlat,
-                    popupid: this.infoboxId,
-                    title: ""
-                };
-                var pluginLoc = this.getMapModule().getLocalization('plugin', true),
-                    myLoc = pluginLoc[this.__name];
-                data.title = myLoc.title;
-                var evt = me._sandbox.getEventBuilder("GetInfoResultEvent")(data);
-                me._sandbox.notifyAll(evt);
-
-                me._sandbox.printDebug("[GetInfoPlugin] NO layers with featureInfoEnabled, in scale and visible");
-                return;
-            }
-
             me._startAjaxRequest(dteMs);
-
-            var ajaxUrl = this._sandbox.getAjaxUrl(),
-                lon = lonlat.lon,
-                lat = lonlat.lat,
-                mapVO = me._sandbox.getMap();
 
             jQuery.ajax({
                 beforeSend: function (x) {
@@ -416,21 +403,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                     }
                 },
                 success: function (resp) {
-                    if (resp.data && resp.data instanceof Array) {
-                        resp.lonlat = lonlat;
-                        var parsed = me._parseGfiResponse(resp);
-                        if (!parsed) {
-                            return;
-                        }
-                        parsed.popupid = me.infoboxId;
-                        parsed.lonlat = lonlat;
-
-                        if (!me._isAjaxRequestBusy()) {
-                            return;
-                        }
-
-                        me._showFeatures(parsed);
-
+                    if (me._isAjaxRequestBusy()) {
+                        me._handleInfoResult({
+                            features: resp.data,
+                            lonlat: lonlat,
+                            via: 'ajax'
+                        });
                     }
 
                     me._finishAjaxRequest();
@@ -450,8 +428,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                     projection: me.mapModule.getProjection(),
                     x: x,
                     y: y,
-                    lon: lon,
-                    lat: lat,
+                    lon: lonlat.lon,
+                    lat: lonlat.lat,
                     width: mapVO.getWidth(),
                     height: mapVO.getHeight(),
                     bbox: mapVO.getBbox().toBBOX(),
@@ -463,497 +441,74 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                 url: ajaxUrl + 'action_route=GetFeatureInfoWMS'
             });
         },
-        /**
-         * @method _closeGfiInfo
-         * @private
-         * Closes the infobox with GFI data
-         */
-        _closeGfiInfo: function () {
-            var request = this._sandbox.getRequestBuilder("InfoBox.HideInfoBoxRequest")(this.infoboxId);
-            this._sandbox.request(this, request);
+        _handleInfoResult: function(data) {
+            var content = {},
+                fragments = [],
+                colourScheme,
+                font;
+
+            if (data.via === 'ajax') {
+                fragments = this._parseGfiResponse(data);
+            } else {
+                fragments = this._formatWFSFeaturesForInfoBox(data);
+            }
+
+            if (fragments.length === 0) {
+                this._closeGfiInfo();
+                return;
+            }
+            
+            content.actions = {};
+            content.html = this._renderFragments(fragments);
+
+            if (_.isObject(this.config)) {
+                colourScheme = this.config.colourScheme;
+                font = this.config.font;
+            }
+
+            this._showGfiInfo([content], data.lonlat, colourScheme, font);
         },
         /**
+         * Closes the infobox with GFI data
+         * 
+         * @method _closeGfiInfo
+         * @private
+         */
+        _closeGfiInfo: function () {
+            var reqBuilder = this._sandbox.getRequestBuilder("InfoBox.HideInfoBoxRequest"),
+                request;
+
+            if (reqBuilder) {
+                request = reqBuilder(this.infoboxId);
+                this._sandbox.request(this, request);
+            }
+        },
+        /**
+         * Shows given content in given location using infobox bundle
+         * 
          * @method _showGfiInfo
          * @private
-         * Shows given content in given location using infobox bundle
          * @param {Object[]} content infobox content array
          * @param {OpenLayers.LonLat} lonlat location for the GFI data
          */
-        _showGfiInfo: function (content, lonlat) {
-            var request = this._sandbox.getRequestBuilder("InfoBox.ShowInfoBoxRequest")("getinforesult", "GetInfo Result", content, lonlat, true);
-            this._sandbox.request(this, request);
-        },
-        /**
-         * @method _formatResponseForInfobox
-         * @private
-         * Parses the GFI JSON response to a content array that can be
-         * shown with infobox bundle
-         * @param {Object} response response from json query
-         * @return {Object[]}
-         */
-        _formatResponseForInfobox: function (response) {
-            var content = [];
-            if (!response || !response.data) {
-                return content;
+        _showGfiInfo: function (content, lonlat, colourScheme, font) {
+            var pluginLoc = this.getMapModule().getLocalization('plugin', true),
+                infoboxLoc = pluginLoc[this.__name],
+                reqBuilder = this._sandbox.getRequestBuilder("InfoBox.ShowInfoBoxRequest"),
+                request;
+
+            if (reqBuilder) {
+                request = reqBuilder(
+                    this.infoboxId,
+                    infoboxLoc.title,
+                    content,
+                    lonlat,
+                    true,
+                    colourScheme,
+                    font
+                );
+                this._sandbox.request(this, request);
             }
-            var me = this,
-                dataList = [];
-            // TODO: fix in serverside!
-            if (!response.data.length) {
-                // not an array
-                dataList.push(response.data);
-            } else {
-                dataList = response.data;
-            }
-            var ii,
-                data,
-                html;
-            for (ii = 0; ii < dataList.length; ii++) {
-                data = dataList[ii];
-                html = me._formatGfiDatum(data);
-                if (html !== null && html !== undefined) {
-                    content.push({
-                        html: html
-                    });
-                }
-            }
-            return content;
-        },
-
-        /**
-         * @method _parseGfiResponse
-         * @private
-         * Parses and formats a GFI response
-         * @param {Object} resp response data to format
-         * @return {Object} object { fragments: coll, title: title } where
-         *  fragments is an array of JSON { markup: '<html-markup>', layerName:
-         * 'nameforlayer', layerId: idforlayer }
-         */
-        _parseGfiResponse: function (resp) {
-            var sandbox = this._sandbox,
-                data = resp.data,
-                coll = [],
-                lonlat = resp.lonlat,
-                title = lonlat.lon + ", " + lonlat.lat,
-                layerCount = resp.layerCount;
-            if (layerCount === 0 || data.length === 0 || !(data instanceof Array)) {
-                return;
-            }
-            var di,
-                datum,
-                layerId,
-                layer,
-                layerName,
-                type,
-                features,
-                fi,
-                fea,
-                children,
-                ci,
-                child,
-                pnimi,
-                pretty,
-                isMyPlace,
-                fragmentData;
-
-            for (di = 0; di < data.length; di++) {
-                datum = data[di];
-                layerId = datum.layerId;
-                layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-                layerName = layer ? layer.getName() : '';
-                type = datum.type;
-
-                if (type === "wfslayer") {
-                    features = datum.features;
-                    if (features && features.length) {
-                        for (fi = 0; fi < features.length; fi++) {
-                            fea = features[fi];
-                            children = fea.children;
-                            if (children && children.length) {
-                                for (ci = 0; ci < children.length; ci++) {
-                                    child = children[ci];
-                                    pnimi = child.pnr_PaikanNimi;
-                                    if (pnimi && pnimi['pnr:kirjoitusasu']) {
-                                        title = pnimi['pnr:kirjoitusasu'];
-                                    }
-                                    pretty = this._json2html(child);
-                                    coll.push({
-                                        markup: pretty,
-                                        layerId: layerId,
-                                        layerName: layerName,
-                                        type: type
-                                    });
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    pretty = this._formatGfiDatum(datum);
-                    if (pretty !== null && pretty !== undefined) {
-                        if (datum.layerId && typeof datum.layerId === 'string' && datum.layerId.match('myplaces_')) {
-                            isMyPlace = true;
-                        } else {
-                            isMyPlace = false;
-                        }
-                        fragmentData = {
-                            markup: pretty,
-                            layerId: layerId,
-                            layerName: layerName,
-                            type: type,
-                            isMyPlace: isMyPlace
-                        };
-                        coll.push(fragmentData);
-                    }
-                }
-            }
-
-            return {
-                fragments: coll,
-                title: title
-            };
-        },
-
-        /**
-         * @method _formatJSONValue
-         * @private
-         * Formats a GFI response value to a jQuery object
-         * @param {pValue} datum response data to format
-         * @return {jQuery} formatted HMTL
-         */
-        _formatJSONValue: function (pValue) {
-            if (!pValue) {
-                return;
-            }
-            var value = this.template.span.clone();
-            // if value is an array -> format it first
-            // TODO: maybe some nicer formatting?
-            if (Object.prototype.toString.call(pValue) === '[object Array]') {
-                var placeHolder = '',
-                    i,
-                    obj,
-                    objAttr,
-                    innerValue,
-                    pluginLoc,
-                    myLoc,
-                    localizedAttr;
-                for (i = 0; i < pValue.length; ++i) {
-                    obj = pValue[i];
-                    for (objAttr in obj) {
-                        if (obj.hasOwnProperty(objAttr)) {
-                            innerValue = this._formatJSONValue(obj[objAttr]);
-                            if (innerValue) {
-                                // Get localized attribute name
-                                // TODO this should only apply to omat tasot?
-                                pluginLoc = this.getMapModule().getLocalization('plugin', true);
-                                myLoc = pluginLoc[this.__name];
-                                localizedAttr = myLoc[objAttr];
-                                value.append(localizedAttr || objAttr);
-                                value.append(": ");
-                                value.append(innerValue);
-                                value.append('<br/>');
-                            }
-                        }
-                    }
-                }
-            } else if (pValue.indexOf && pValue.indexOf('://') > 0 && pValue.indexOf('://') < 7) {
-                var label = value,
-                    link = this.template.link_outside.clone();
-                link.attr('href', pValue);
-                link.append(pValue);
-                value.append(link);
-            } else {
-                value.append(pValue);
-            }
-            return value;
-        },
-        /**
-         * @method _formatGfiDatum
-         * @private
-         * Formats a GFI HTML or JSON object to result HTML
-         * @param {Object} datum response data to format
-         * @return {jQuery} formatted HMTL
-         */
-        _formatGfiDatum: function (datum) {
-            if (!datum.presentationType) {
-                return null;
-            }
-
-            var me = this,
-                response = me.template.wrapper.clone(),
-                html = '',
-                contentType = (typeof datum.content),
-                hasHtml = false;
-            if (contentType === 'string') {
-                hasHtml = (datum.content.indexOf('<html') >= 0);
-                hasHtml = hasHtml || (datum.content.indexOf('<HTML') >= 0);
-            }
-            if (datum.presentationType === 'JSON' || (datum.content && datum.content.parsed)) {
-                // This is for my places info popup
-                if (datum.layerId && typeof datum.layerId === 'string' && datum.layerId.match('myplaces_')) {
-                    return me._formatMyPlacesGfi(datum);
-                }
-
-                var even = false,
-                    rawJsonData = datum.content.parsed,
-                    dataArray = [];
-                if (Object.prototype.toString.call(rawJsonData) === '[object Array]') {
-                    dataArray = rawJsonData;
-                } else {
-                    dataArray.push(rawJsonData);
-                }
-                var i,
-                    attr,
-                    jsonData,
-                    table,
-                    value,
-                    row,
-                    labelCell,
-                    pluginLoc,
-                    myLoc,
-                    localizedAttr,
-                    valueCell;
-                for (i = 0; i < dataArray.length; ++i) {
-                    jsonData = dataArray[i];
-                    table = me.template.getinfo_result_table.clone();
-                    for (attr in jsonData) {
-                        if (jsonData.hasOwnProperty(attr)) {
-                            value = me._formatJSONValue(jsonData[attr]);
-                            if (value) {
-                                row = me.template.tableRow.clone();
-                                table.append(row);
-                                if (!even) {
-                                    row.addClass("odd");
-                                }
-                                even = !even;
-
-                                labelCell = me.template.tableCell.clone();
-                                // Get localized name for attribute
-                                // TODO this should only apply to omat tasot?
-                                pluginLoc = this.getMapModule().getLocalization('plugin', true);
-                                myLoc = pluginLoc[this.__name];
-                                localizedAttr = myLoc[attr];
-                                labelCell.append(localizedAttr || attr);
-                                row.append(labelCell);
-                                valueCell = me.template.tableCell.clone();
-                                valueCell.append(value);
-                                row.append(valueCell);
-                            }
-
-                        }
-                    }
-                    response.append(table);
-                }
-                return response;
-            }
-            if (hasHtml) {
-                // html has to be put inside a container so jquery behaves
-                var parsedHTML = jQuery("<div></div>").append(datum.content);
-                // Remove stuff from head etc. that we don't need/want
-                parsedHTML.find("link, meta, script, style, title").remove();
-                // Add getinforesult class etc. so the table is styled properly
-                parsedHTML.find("table").addClass('getinforesult_table');
-                parsedHTML.find("tr:even").addClass("odd");
-                response.append(parsedHTML.html());
-            } else {
-                response.append(datum.content);
-            }
-            return response;
-        },
-
-        /**
-         * Formats the html to show for my places layers' gfi dialog.
-         *
-         * @method _formatMyPlacesGfi
-         * @param {Object} datum response data to format
-         * @return {jQuery} formatted html
-         */
-        _formatMyPlacesGfi: function (datum) {
-            var me = this,
-                wrapper = me.template.wrapper.clone(),
-                places = datum.content.parsed.places,
-                pLen = places.length,
-                place,
-                content,
-                i;
-
-            wrapper.addClass('myplaces_wrapper');
-
-            for (i = 0; i < pLen; ++i) {
-                place = places[i];
-
-                content = me.template.myPlacesWrapper.clone();
-                content.find('h3.myplaces_header').html(place.name);
-                content.find('p.myplaces_desc').html(place.description);
-                if (place.imageUrl) {
-                    content.find('img.myplaces_img').attr({
-                        'src': place.imageUrl
-                    });
-                    content.find('a.myplaces_imglink').attr({
-                        'href': place.imageUrl
-                    });
-                } else {
-                    content.find('img.myplaces_img').remove();
-                }
-                content.find('a.myplaces_link').attr({
-                    'href': place.link
-                }).html(place.link);
-                wrapper.append(content);
-            }
-
-            return wrapper;
-        },
-
-        /**
-         * @method _json2html
-         * @private
-         * Parses and formats a WFS layers JSON GFI response
-         * @param {Object} node response data to format
-         * @param {String} layerName name of the layer for this data
-         * @return {String} formatted HMTL
-         */
-        _json2html: function (node) {
-            if (node === null || node === undefined) {
-                return '';
-            }
-            var even = true,
-                html = this.template.getinfo_result_table.clone(),
-                row = null,
-                keyColumn = null,
-                valColumn = null,
-                key;
-            for (key in node) {
-                if (node.hasOwnProperty(key)) {
-                    var value = node[key],
-                        vType = (typeof value).toLowerCase(),
-                        vPres = '',
-                        valpres;
-                    switch (vType) {
-                    case 'string':
-                        if (value.indexOf('http://') === 0) {
-                            valpres = this.template.link_outside.clone();
-                            valpres.attr('href', value);
-                            valpres.append(value);
-                        } else {
-                            valpres = value;
-                        }
-                        break;
-                    case 'undefined':
-                        valpres = 'n/a';
-                        break;
-                    case 'boolean':
-                        valpres = (value ? 'true' : 'false');
-                        break;
-                    case 'number':
-                        valpres = value.toString();
-                        break;
-                    case 'function':
-                        valpres = '?';
-                        break;
-                    case 'object':
-                        valpres = this._json2html(value);
-                        break;
-                    default:
-                        valpres = '';
-                    }
-                    even = !even;
-
-                    row = this.template.tableRow.clone();
-                    if (!even) {
-                        row.addClass("odd");
-                    }
-
-                    keyColumn = this.template.tableCell.clone();
-                    keyColumn.append(key);
-                    row.append(keyColumn);
-
-                    valColumn = this.template.tableCell.clone();
-                    valColumn.append(valpres);
-                    row.append(valColumn);
-
-                    html.append(row);
-                }
-            }
-            return html;
-        },
-
-        /**
-         * @method _showFeatures
-         * Shows multiple features in an infobox.
-         * Parameter data is in format:
-         *
-         *  { fragments: coll, title: title }
-         * fragments is an array of JSON { markup: '<html-markup>', layerName:
-         * 'nameforlayer', layerId: idforlayer }
-         *
-         * @param {Array} data
-         */
-        _showFeatures: function (data) {
-            var me = this,
-                content = {},
-                wrapper = me.template.wrapper.clone(),
-                colourScheme = null,
-                font = null,
-                di,
-                fragment,
-                fragmentTitle,
-                fragmentMarkup,
-                contentWrapper,
-                headerWrapper,
-                titleWrapper,
-                pluginLoc,
-                myLoc,
-                reqBuilder,
-                request,
-                evt;
-
-            content.html = '';
-            content.actions = {};
-            for (di = 0; di < data.fragments.length; di++) {
-                fragment = data.fragments[di];
-                fragmentTitle = fragment.layerName;
-                fragmentMarkup = fragment.markup;
-                contentWrapper = me.template.wrapper.clone();
-
-                // Do not show the layer name if this is a my_places layer.
-                if (!fragment.isMyPlace) {
-                    headerWrapper = me.template.header.clone();
-                    titleWrapper = me.template.headerTitle.clone();
-                    titleWrapper.append(fragmentTitle);
-                    titleWrapper.attr('title', fragmentTitle);
-                    headerWrapper.append(titleWrapper);
-                    contentWrapper.append(headerWrapper);
-                }
-
-                if (fragmentMarkup) {
-                    contentWrapper.append(fragmentMarkup);
-                }
-                wrapper.append(contentWrapper);
-            }
-
-            if (this.config && this.config.colourScheme) {
-                data.colourScheme = this.config.colourScheme;
-            }
-
-            if (this.config && this.config.font) {
-                data.font = this.config.font;
-            }
-
-            content.html = wrapper;
-
-            pluginLoc = this.getMapModule().getLocalization('plugin', true);
-            myLoc = pluginLoc[this.__name];
-            data.title = myLoc.title;
-
-            if (!this.config || this.config.infoBox) {
-                reqBuilder = me._sandbox.getRequestBuilder("InfoBox.ShowInfoBoxRequest");
-                if (reqBuilder) {
-                    request = reqBuilder(data.popupid, data.title, [content], data.lonlat, true, data.colourScheme, data.font);
-                    me._sandbox.request(me, request);
-                }
-            }
-
-            evt = me._sandbox.getEventBuilder("GetInfoResultEvent")(data);
-            me._sandbox.notifyAll(evt);
         }
     }, {
         /**
