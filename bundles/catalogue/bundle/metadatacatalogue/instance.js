@@ -301,28 +301,7 @@ Oskari.clazz
                         }
                     }
                     me.searchService.doSearch(search,function(data) {
-results = {
-	"results" : [
-	{
-		"name" : "jotain1",
-		"organization" : "asdg1",
-		"metadataid" : "fdsa"
-	},
-	{
-		"name" : "jotain2",
-		"organization" : "asdg2",
-		"metadataid" : "fdsa"
-	},
-	{
-		"name" : "jotain3",
-		"organization" : "asdg3",
-		"metadataid" : "fdsa"
-	}
-	]
-}
-
-
-                            me.showResults(results);
+                            me.showResults(data);
                         }, function(data) {
                             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                             var okBtn = dialog.createCloseButton('OK');
