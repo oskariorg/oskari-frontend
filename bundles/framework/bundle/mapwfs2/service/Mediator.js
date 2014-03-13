@@ -212,7 +212,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * Creates WFSFeaturesSelectedEvent
      */
     getWFSMapClick: function (data) {
-        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
+        var sandbox = this.plugin.getSandbox();
+        var layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId);
         var keepPrevious = data.data.keepPrevious;
         var featureIds = [];
 
@@ -230,17 +231,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             layer.setClickedFeatureIds(featureIds);
         }
 
+        var event = sandbox.getEventBuilder("WFSFeaturesSelectedEvent")(featureIds, layer, keepPrevious);
+        sandbox.notifyAll(event);
 
-        this.plugin.getmapClickData().wfs.push(data.data);
-        if (this.plugin.getLayerCount() == this.plugin.getmapClickData().wfs.length) {
-            this.plugin.getmapClickData().comet = true;
-            if (this.plugin.getmapClickData().ajax) {
-                this.plugin.showInfoBox();
-            }
-        }
-
-        var event = this.plugin.getSandbox().getEventBuilder("WFSFeaturesSelectedEvent")(featureIds, layer, keepPrevious);
-        this.plugin.getSandbox().notifyAll(event);
+        data.data.lonlat = this.lonlat;
+        var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(data.data);
+        sandbox.notifyAll(infoEvent);
     },
 
     /**
@@ -468,11 +464,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
      *
      * sends message to /service/wfs/setMapClick
      */
-    setMapClick: function (longitude, latitude, keepPrevious) {
+    setMapClick: function (lonlat, keepPrevious) {
         if (this.connection.isConnected()) {
+            this.lonlat = lonlat;
             this.cometd.publish('/service/wfs/setMapClick', {
-                "longitude": longitude,
-                "latitude": latitude,
+                "longitude": lonlat.lon,
+                "latitude": lonlat.lat,
                 "keepPrevious": keepPrevious
             });
         }

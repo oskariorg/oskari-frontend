@@ -91,6 +91,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
                     "type": "text/javascript",
                     "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetInfoPlugin.js"
                 }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetFeatureInfoFormatter.js"
+                }, {
                     "type": "text/css",
                     "src": "../../../../resources/framework/bundle/mapmodule-plugin/plugin/getinfo/css/getinfo.css"
                 },

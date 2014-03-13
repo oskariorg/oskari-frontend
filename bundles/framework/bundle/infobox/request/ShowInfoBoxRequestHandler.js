@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.ShowInfoBoxReque
         handleRequest: function (core, request) {
 
             if (request.getHidePrevious()) {
-                this.popupPlugin.close();
+                this.popupPlugin.close(undefined, request.getPosition());
             }
             this.popupPlugin.popup(
                 request.getId(),
