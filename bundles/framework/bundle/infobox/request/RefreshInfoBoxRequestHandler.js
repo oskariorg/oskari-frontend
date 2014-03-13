@@ -24,13 +24,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.RefreshInfoBoxRe
         handleRequest: function (core, request) {
             var sandbox = this.popupPlugin._sandbox,
                 popupId = request.getId(),
+                operation = request.getOperation(),
+                contentId = request.getContentId(),
                 popup = this.popupPlugin.getPopups(popupId),
                 evtB, evt;
 
             if (popup) {
-                evtB = sandbox.getEventBuilder('InfoBox.InfoBoxEvent');
-                evt = evtB(popupId, true);
-                sandbox.notifyAll(evt);
+                if (operation === 'remove') {
+                    this.popupPlugin.removeContentData(popupId, contentId);
+                } else {
+                    evtB = sandbox.getEventBuilder('InfoBox.InfoBoxEvent');
+                    evt = evtB(popupId, true);
+                    sandbox.notifyAll(evt);
+                }
             }
         }
     }, {

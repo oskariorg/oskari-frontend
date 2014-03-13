@@ -9,15 +9,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.RefreshInfoBoxRe
     /**
      * @method create called automatically on construction
      * @static
-     * @param {String} id for popup/infobox (optional)
-     * @param {jQuery} content new content for popup
-     * @param {Boolean} replace true to replace old content, false to append to it
+     * @param {String} id for popup/infobox
+     * @param {String} operation to perform (optional)
+     *                 if not provided, sends an event to notify if the popup is open
+     * @param {String/Number} contentId the id for the content we want to do thing to
      */
-    function (id, content, replace) {
+    function (id, operation, contentId) {
         this._creator = null;
         this._id = id;
-        this._content = content;
-        this._replace = replace;
+        this._operation = operation;
+        this._contentId = contentId;
     }, {
         /** @static @property __name request name */
         __name: "InfoBox.RefreshInfoBoxRequest",
@@ -36,18 +37,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.RefreshInfoBoxRe
             return this._id;
         },
         /**
-         * @method getContent
-         * @return {jQuery}
+         * @method getOperation
+         * @return {String}
          */
-        getContent: function() {
-            return this._content;
+        getOperation: function() {
+            return this._operation;
         },
         /**
-         * @method getReplace
-         * @return {Boolean}
+         * @method getContentId
+         * @return {String/Number}
          */
-        getReplace: function() {
-            return this._replace;
+        getContentId: function() {
+            return this._contentId;
         }
     }, {
         /**

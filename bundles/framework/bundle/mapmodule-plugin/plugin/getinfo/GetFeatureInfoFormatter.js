@@ -57,20 +57,25 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             sandbox = this._sandbox,
             coll;
 
-        coll = _.map(data.features, function(datum) {
-            var layer = sandbox.findMapLayerFromSelectedMapLayers(datum.layerId),
-                layerName = layer ? layer.getName() : '',
-                pretty = me._formatGfiDatum(datum);
+        coll = _.chain(data.features)
+            .map(function(datum) {
+                var layer = sandbox.findMapLayerFromSelectedMapLayers(datum.layerId),
+                    layerName = layer ? layer.getName() : '',
+                    pretty = me._formatGfiDatum(datum);
 
-            if (pretty !== null && pretty !== undefined) {
-                return {
-                    markup: pretty,
-                    layerId: datum.layerId,
-                    layerName: layerName,
-                    type: datum.type
-                };
-            }
-        });
+                if (pretty !== null && pretty !== undefined) {
+                    return {
+                        markup: pretty,
+                        layerId: datum.layerId,
+                        layerName: layerName,
+                        type: datum.type
+                    };
+                }
+            })
+            .reject(function(feature) {
+                return feature === undefined;
+            })
+            .value();
 
         return coll || [];
     },
@@ -159,6 +164,8 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             var parsedHTML = jQuery("<div></div>").append(datum.content);
             // Remove stuff from head etc. that we don't need/want
             parsedHTML.find("link, meta, script, style, title").remove();
+            // let's not return a bunch of empty html
+            if (jQuery.trim(parsedHTML.html()) === "") return null;
             // Add getinforesult class etc. so the table is styled properly
             parsedHTML.find("table").addClass('getinforesult_table');
             parsedHTML.find("tr:even").addClass("odd");

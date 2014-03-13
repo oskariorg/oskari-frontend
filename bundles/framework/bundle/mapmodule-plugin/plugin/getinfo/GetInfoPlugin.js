@@ -160,6 +160,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
             me._sandbox.unregister(me);
             me._map = null;
             me._sandbox = null;
+            me.clickLocation = null;
         },
         /**
          * @method start
@@ -203,44 +204,22 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                     // disabled, do nothing
                     return;
                 }
-                var lonlat = evt.getLonLat(),
-                    x = evt.getMouseX(),
-                    y = evt.getMouseY();
-
                 this.clickLocation = {
-                    lonlat: lonlat,
-                    x: x,
-                    y: y
+                    lonlat: evt.getLonLat()
                 };
-                this.handleGetInfo(lonlat, x, y);
+                this.handleGetInfo(this.clickLocation.lonlat);
             },
             'AfterMapMoveEvent': function (evt) {
                 this._cancelAjaxRequest();
             },
+            'AfterMapLayerRemoveEvent': function(evt) {
+                this._refreshGfiInfo('remove', evt.getMapLayer().getId());
+            },
             'AfterMapLayerAddEvent': function(evt) {
-                if (this.clickLocation) {
-                    var reqB = this._sandbox.getRequestBuilder('InfoBox.RefreshInfoBoxRequest'),
-                        req;
-
-                    if (reqB) {
-                        req = reqB(this.infoboxId);
-                        this._sandbox.request(this, req);
-                    }
-                }
+                this._refreshGfiInfo();
             },
             'InfoBox.InfoBoxEvent': function(evt) {
-                if (evt.getId() === this.infoboxId && evt.isOpen() && _.isObject(this.clickLocation)) {
-                    var me = this,
-                        lonlat = this.clickLocation.lonlat,
-                        x = this.clickLocation.x,
-                        y = this.clickLocation.y,
-                        evtB = this._sandbox.getEventBuilder('MapClickedEvent'),
-                        evt = evtB(lonlat, x, y);
-
-                    setTimeout(function() {
-                        me._sandbox.notifyAll(evt);
-                    }, 0);
-                }
+                this._handleInfoBoxEvent(evt);
             },
             'GetInfoResultEvent': function(evt) {
                 this._handleInfoResult(evt.getData());
@@ -378,12 +357,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
          * @param {Number}
          *            y mouseclick on map y coordinate (in pixels)
          */
-        handleGetInfo: function (lonlat, x, y) {
+        handleGetInfo: function (lonlat) {
             var me = this,
                 dteMs = (new Date()).getTime(),
                 layerIds = me._buildLayerIdList(),
                 ajaxUrl = this._sandbox.getAjaxUrl(),
-                mapVO = me._sandbox.getMap();
+                mapVO = me._sandbox.getMap(),
+                olMap = me.mapModule.getMap(),
+                px = olMap.getViewPortPxFromLonLat(lonlat);
 
             if (me._pendingAjaxQuery.busy &&
                 me._pendingAjaxQuery.timestamp &&
@@ -404,10 +385,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                 },
                 success: function (resp) {
                     if (me._isAjaxRequestBusy()) {
-                        me._handleInfoResult({
-                            features: resp.data,
-                            lonlat: lonlat,
-                            via: 'ajax'
+                        _.each(resp.data, function(datum) {                            
+                            me._handleInfoResult({
+                                features: [datum],
+                                lonlat: lonlat,
+                                via: 'ajax'
+                            });
                         });
                     }
 
@@ -426,8 +409,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                 data: {
                     layerIds: layerIds,
                     projection: me.mapModule.getProjection(),
-                    x: x,
-                    y: y,
+                    x: px.x,
+                    y: px.y,
                     lon: lonlat.lon,
                     lat: lonlat.lat,
                     width: mapVO.getWidth(),
@@ -442,7 +425,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
             });
         },
         _handleInfoResult: function(data) {
-            var content = {},
+            var content = [],
+                contentData = {},
                 fragments = [],
                 colourScheme,
                 font;
@@ -453,20 +437,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                 fragments = this._formatWFSFeaturesForInfoBox(data);
             }
 
-            if (fragments.length === 0) {
-                this._closeGfiInfo();
-                return;
-            }
-            
-            content.actions = {};
-            content.html = this._renderFragments(fragments);
-
-            if (_.isObject(this.config)) {
-                colourScheme = this.config.colourScheme;
-                font = this.config.font;
+            if (fragments.length) {
+                contentData.actions = {};
+                contentData.html = this._renderFragments(fragments);
+                contentData.layerId = fragments[0].layerId;
+                content.push(contentData);
             }
 
-            this._showGfiInfo([content], data.lonlat, colourScheme, font);
+            this._showGfiInfo(content, data.lonlat);
         },
         /**
          * Closes the infobox with GFI data
@@ -491,11 +469,16 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
          * @param {Object[]} content infobox content array
          * @param {OpenLayers.LonLat} lonlat location for the GFI data
          */
-        _showGfiInfo: function (content, lonlat, colourScheme, font) {
+        _showGfiInfo: function (content, lonlat) {
             var pluginLoc = this.getMapModule().getLocalization('plugin', true),
                 infoboxLoc = pluginLoc[this.__name],
                 reqBuilder = this._sandbox.getRequestBuilder("InfoBox.ShowInfoBoxRequest"),
-                request;
+                request, colourScheme, font;
+
+            if (_.isObject(this.config)) {
+                colourScheme = this.config.colourScheme;
+                font = this.config.font;
+            }
 
             if (reqBuilder) {
                 request = reqBuilder(
@@ -508,6 +491,34 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                     font
                 );
                 this._sandbox.request(this, request);
+            }
+        },
+        _refreshGfiInfo: function(operation, contentId) {
+            if (this.clickLocation) {
+                var reqB = this._sandbox.getRequestBuilder('InfoBox.RefreshInfoBoxRequest'),
+                    req;
+
+                if (reqB) {
+                    req = reqB(this.infoboxId, operation, contentId);
+                    this._sandbox.request(this, req);
+                }
+            }
+        },
+        _handleInfoBoxEvent: function(evt) {
+            var me = this,
+                clickLoc = this.clickLocation,
+                clickEventB, clickEvent;
+
+            if (evt.getId() === this.infoboxId &&
+                evt.isOpen() &&
+                _.isObject(clickLoc)) {
+                clickEventB = this._sandbox.getEventBuilder('MapClickedEvent');
+                clickEvent = clickEventB(clickLoc.lonlat);
+                // Timeout needed since the layer plugins haven't
+                // necessarily done their job of adding the layer yet.
+                setTimeout(function() {
+                    me._sandbox.notifyAll(clickEvent);
+                }, 0);
             }
         }
     }, {

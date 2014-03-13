@@ -136,22 +136,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          * }]
          */
         popup: function (id, title, contentData, lonlat, colourScheme, font) {
+            if (_.isEmpty(contentData)) return;
+
             var me = this,
                 currPopup = this._popups[id],
                 refresh = (currPopup &&
                     currPopup.lonlat.lon === lonlat.lon &&
-                    currPopup.lonlat.lat === lonlat.lat),
-                contentDiv, popupContent, popup;
+                    currPopup.lonlat.lat === lonlat.lat);
 
             if (refresh) {
-                contentData = (currPopup.contentData || []).concat(contentData);
+                contentData = this._getChangedContentData(
+                    currPopup.contentData.slice(), contentData.slice());
                 currPopup.contentData = contentData;
             }
-            contentDiv = this._renderContentData(contentData);
-            popupContent = this._renderPopupContent(title, contentDiv);
+
+            this._renderPopup(id, contentData, title, refresh, lonlat, colourScheme, font);
+        },
+        _renderPopup: function(id, contentData, title, refresh, lonlat, colourScheme, font) {
+            var contentDiv = this._renderContentData(contentData),
+                popupContent = this._renderPopupContent(title, contentDiv),
+                popup;
 
             if (refresh) {
-                popup = currPopup.popup;
+                popup = this._popups[id].popup;
                 popup.setContentHTML(popupContent);
             } else {
                 popup = new OpenLayers.Popup(
@@ -177,6 +184,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 };
 
                 this.getMapModule().getMap().addPopup(popup);
+                this._panMapToShowPopup(lonlat);
+
+                var popupDOM = jQuery('#' + id);
+                // Set the colour scheme if one provided
+                if (colourScheme) {
+                    this._changeColourScheme(colourScheme, popupDOM, id);
+                }
+                // Set the font if one provided
+                if (font) {
+                    this._changeFont(font, popupDOM, id);
+                }
+            }
+
+            if (this.adaptable) {
+                this._adaptPopupSize(id, refresh);
             }
 
             this._setClickEvent(id, popup, contentData);
@@ -184,23 +206,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             popup.setBackgroundColor('transparent');
             jQuery(popup.div).css('overflow', 'visible');
             jQuery(popup.groupDiv).css('overflow', 'visible');
-
-            if (this.adaptable) {
-                this._adaptPopupSize(id, refresh);
-            }
-            this._panMapToShowPopup(lonlat);
-
-            var popupDOM = jQuery('#' + id);
-            // Set the colour scheme if one provided
-            if (colourScheme) {
-                this._changeColourScheme(colourScheme, popupDOM, id);
-            }
-            // Set the font if one provided
-            if (font) {
-                this._changeFont(font, popupDOM, id);
-            }
             // Fix the HTML5 placeholder for < IE10
-            var inputs = popupDOM.find('.contentWrapper input, .contentWrapper textarea');
+            var inputs = jQuery('#' + id).find('.contentWrapper input, .contentWrapper textarea');
             if (typeof inputs.placeholder === 'function') {
                 inputs.placeholder();
             }
@@ -282,6 +289,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 },
                 scope: popup
             });
+        },
+        _getChangedContentData: function(oldData, newData) {
+            var retData;
+
+            for (var i = 0, oLen = oldData.length; i < oLen; ++i) {
+                for (var j = 0, nLen = newData.length; j < nLen; ++j) {
+                    if (newData[j].layerId &&
+                        newData[j].layerId === oldData[i].layerId) {
+                        oldData[i] = newData[j];
+                        newData.splice(j, 1);
+                        break;
+                    }
+                }
+            }
+
+            retData = oldData.concat(newData);
+
+            return retData;
+        },
+        removeContentData: function(popupId, contentId) {
+            var popup = this.getPopups(popupId),
+                removed = false,
+                contentData, datum, i;
+
+            if (!popup) return;
+
+            contentData = popup.contentData;
+
+            for (i = 0, cLen = contentData.length; i < cLen; ++i) {
+                datum = contentData[i];
+                if (datum.layerId && (''+datum.layerId === ''+contentId)) {
+                    contentData.splice(i, 1);
+                    removed = true;
+                    break;
+                }
+            }
+
+            if (removed) {
+                this._renderPopup(popupId, contentData, popup.title, true);
+            }
         },
         setAdaptable: function (isAdaptable) {
             this.adaptable = isAdaptable;
@@ -483,7 +530,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             if (!id) {
                 for (var pid in this._popups) {
                     var popup = this._popups[pid];
-                    if (position.lon !== popup.lonlat.lon ||
+                    if (!position ||
+                        position.lon !== popup.lonlat.lon ||
                         position.lat !== popup.lonlat.lat) {
                         popup.popup.destroy();
                         delete this._popups[pid];
