@@ -117,14 +117,14 @@ Oskari.clazz
                 this.localization = Oskari.getLocalization(this.getName());
 
                 var optionAjaxUrl = null;
-                if (this.conf && this.conf.url) {
+                if (this.conf && this.conf.optionUrl) {
                     optionAjaxUrl = this.conf.optionUrl;
                 } else {
                     optionAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetMetadataSearchOptions';
                 }
 
                 var searchAjaxUrl = null;
-                if (this.conf && this.conf.url) {
+                if (this.conf && this.conf.searchUrl) {
                     searchAjaxUrl = this.conf.searchUrl;
                 } else {
                     searchAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetMetadataSearch';
@@ -301,7 +301,28 @@ Oskari.clazz
                         }
                     }
                     me.searchService.doSearch(search,function(data) {
-                            me.showResults(data);
+results = {
+	"results" : [
+	{
+		"name" : "jotain1",
+		"organization" : "asdg1",
+		"metadataid" : "fdsa"
+	},
+	{
+		"name" : "jotain2",
+		"organization" : "asdg2",
+		"metadataid" : "fdsa"
+	},
+	{
+		"name" : "jotain3",
+		"organization" : "asdg3",
+		"metadataid" : "fdsa"
+	}
+	]
+}
+
+
+                            me.showResults(results);
                         }, function(data) {
                             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                             var okBtn = dialog.createCloseButton('OK');
