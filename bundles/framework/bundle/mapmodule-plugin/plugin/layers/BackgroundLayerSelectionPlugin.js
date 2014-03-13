@@ -189,10 +189,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
          */
         eventHandlers: {
             /**
-             * [description]
+             * @method AfterRearrangeSelectedMapLayerEvent
              * @param {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent} event
              *
-             * Rearanges layers
+             * Rearranges layers
              */
             'AfterRearrangeSelectedMapLayerEvent': function (event) {
                 // Update selection, bottom baselayer might've changed
