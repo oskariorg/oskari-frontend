@@ -352,10 +352,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
          *
          * @param {OpenLayers.LonLat}
          *            lonlat coordinates
-         * @param {Number}
-         *            x mouseclick on map x coordinate (in pixels)
-         * @param {Number}
-         *            y mouseclick on map y coordinate (in pixels)
          */
         handleGetInfo: function (lonlat) {
             var me = this,
@@ -424,6 +420,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                 url: ajaxUrl + 'action_route=GetFeatureInfoWMS'
             });
         },
+        /**
+         * Formats the given data and sends a request to show infobox.
+         * 
+         * @method _handleInfoResult
+         * @private
+         * @param  {Object} data
+         */
         _handleInfoResult: function(data) {
             var content = [],
                 contentData = {},
@@ -493,6 +496,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                 this._sandbox.request(this, request);
             }
         },
+        /**
+         * Sends a request to refresh infobox content.
+         * 
+         * @method _refreshGfiInfo
+         * @private
+         * @param  {String} operation currently only 'remove' supported (optional)
+         * @param  {String} contentId (optional)
+         */
         _refreshGfiInfo: function(operation, contentId) {
             if (this.clickLocation) {
                 var reqB = this._sandbox.getRequestBuilder('InfoBox.RefreshInfoBoxRequest'),
@@ -504,6 +515,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                 }
             }
         },
+        /**
+         * Sends a 'MapClickEvent' if there's an infobox opened by this plugin.
+         * Effectively refreshes all the content of the infobox with added layers.
+         * 
+         * @method _handleInfoBoxEvent
+         * @private
+         * @param  {Object} evt
+         */
         _handleInfoBoxEvent: function(evt) {
             var me = this,
                 clickLoc = this.clickLocation,

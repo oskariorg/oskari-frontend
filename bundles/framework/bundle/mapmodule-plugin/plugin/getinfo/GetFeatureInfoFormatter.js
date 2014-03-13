@@ -10,6 +10,14 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         "myPlacesWrapper": '<div class="myplaces_place">' + '<h3 class="myplaces_header"></h3>' + '<p class="myplaces_desc"></p>' + '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' + '<a class="myplaces_link"></a>' + '</div>',
         "linkOutside": '<a target="_blank"></a>',
     },
+    /**
+     * Wraps the html feature fragments into a container.
+     * 
+     * @method _renderFragments
+     * @private
+     * @param  {Object[]} fragments
+     * @return {jQuery}
+     */
     _renderFragments: function(fragments) {
         var me = this;
 

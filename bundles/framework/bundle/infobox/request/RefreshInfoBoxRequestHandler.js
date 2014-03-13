@@ -14,6 +14,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.RefreshInfoBoxRe
     }, {
         /**
          * Refreshes the requested infobox/popup if present
+         * If operation is 'remove', removes the requested content from the popup.
+         * If no operation is given, just sends a status report of the requested popup.
          * 
          * @method handleRequest
          * @param {Oskari.mapframework.core.Core} core
@@ -31,8 +33,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.RefreshInfoBoxRe
 
             if (popup) {
                 if (operation === 'remove') {
+                    // Remove the content data with the provided content id
                     this.popupPlugin.removeContentData(popupId, contentId);
                 } else {
+                    // Send a status report of the popup (is it open)
                     evtB = sandbox.getEventBuilder('InfoBox.InfoBoxEvent');
                     evt = evtB(popupId, true);
                     sandbox.notifyAll(evt);

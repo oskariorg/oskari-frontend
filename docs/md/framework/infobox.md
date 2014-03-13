@@ -54,6 +54,10 @@ state : {
   <tr>
     <td> InfoBox.HideInfoBoxRequest </td><td> Infobox is removed - single box if id is given or all if not specified</td>
   </tr>
+  <tr>
+    <td> InfoBox.RefreshInfoBoxRequest </td>
+    <td> Currently supports one operation - `remove` which removes content from the infobox by the given content id. If no operation is given, sends an event to inform interested parties whether there's an infobox open with the given popup id.</td>
+  </tr>
 </table>
 
 ## Requests the bundle sends out

@@ -150,9 +150,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 currPopup.contentData = contentData;
             }
 
-            this._renderPopup(id, contentData, title, refresh, lonlat, colourScheme, font);
+            this._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh);
         },
-        _renderPopup: function(id, contentData, title, refresh, lonlat, colourScheme, font) {
+        _renderPopup: function(id, contentData, title, lonlat, colourScheme, font, refresh) {
             var contentDiv = this._renderContentData(contentData),
                 popupContent = this._renderPopupContent(title, contentDiv),
                 popup;
@@ -172,7 +172,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                     title: title,
                     contentData: contentData,
                     lonlat: lonlat,
-                    popup: popup
+                    popup: popup,
+                    colourScheme: colourScheme,
+                    font: font
                 };
 
                 popup.moveTo = function (px) {
@@ -184,34 +186,44 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 };
 
                 this.getMapModule().getMap().addPopup(popup);
-                this._panMapToShowPopup(lonlat);
 
-                var popupDOM = jQuery('#' + id);
-                // Set the colour scheme if one provided
-                if (colourScheme) {
-                    this._changeColourScheme(colourScheme, popupDOM, id);
-                }
-                // Set the font if one provided
-                if (font) {
-                    this._changeFont(font, popupDOM, id);
-                }
             }
-
+            
             if (this.adaptable) {
                 this._adaptPopupSize(id, refresh);
             }
 
+            this._panMapToShowPopup(lonlat);
             this._setClickEvent(id, popup, contentData);
 
             popup.setBackgroundColor('transparent');
             jQuery(popup.div).css('overflow', 'visible');
             jQuery(popup.groupDiv).css('overflow', 'visible');
+
+            var popupDOM = jQuery('#' + id);
+            // Set the colour scheme if one provided
+            if (colourScheme) {
+                this._changeColourScheme(colourScheme, popupDOM, id);
+            }
+            // Set the font if one provided
+            if (font) {
+                this._changeFont(font, popupDOM, id);
+            }
             // Fix the HTML5 placeholder for < IE10
-            var inputs = jQuery('#' + id).find('.contentWrapper input, .contentWrapper textarea');
+            var inputs = popupDOM.find('.contentWrapper input, .contentWrapper textarea');
             if (typeof inputs.placeholder === 'function') {
                 inputs.placeholder();
             }
         },
+        /**
+         * Wraps the content into popup and returns the html string.
+         * 
+         * @method _renderPopupContent
+         * @private
+         * @param  {String} title
+         * @param  {jQuery} contentDiv
+         * @return {String}
+         */
         _renderPopupContent: function(title, contentDiv) {
             var arrow = this._arrow.clone(),
                 header = this._header.clone(),
@@ -228,6 +240,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
             return resultHtml;
         },
+        /**
+         * Renders the content data into html presentation.
+         * Also creates links/buttons for the actions.
+         * 
+         * @method _renderContentData
+         * @private
+         * @param  {Object[]} contentData
+         * @return {jQuery}
+         */
         _renderContentData: function(contentData) {
             var me = this;
 
@@ -290,6 +311,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 scope: popup
             });
         },
+        /**
+         * Merges the given new data to the old data.
+         * If there's a fragment with the same layerId in both,
+         * the new one replaces it.
+         * 
+         * @method _getChangedContentData
+         * @private
+         * @param  {Object[]} oldData
+         * @param  {Object[]} newData
+         * @return {Object[]}
+         */
         _getChangedContentData: function(oldData, newData) {
             var retData;
 
@@ -308,6 +340,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
             return retData;
         },
+        /**
+         * Removes the data of given id from the popup and
+         * renders it again to reflect the change.
+         * 
+         * @method removeContentData
+         * @private
+         * @param  {String} popupId
+         * @param  {String} contentId
+         */
         removeContentData: function(popupId, contentId) {
             var popup = this.getPopups(popupId),
                 removed = false,
@@ -327,7 +368,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             }
 
             if (removed) {
-                this._renderPopup(popupId, contentData, popup.title, true);
+                this._renderPopup(
+                    popupId,
+                    contentData,
+                    popup.title,
+                    popup.lonlat,
+                    popup.colourScheme,
+                    popup.font,
+                    true
+                );
             }
         },
         setAdaptable: function (isAdaptable) {

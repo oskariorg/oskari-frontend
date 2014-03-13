@@ -53,6 +53,22 @@ This plugin doesn't sends out any requests
   <tr>
     <td> AfterMapMoveEvent </td><td> Cancel ajax request.</td>
   </tr>
+  <tr>
+    <td> AfterMapLayerRemoveEvent </td>
+    <td> Requests the layer's block to be removed from the GFI popup.</td>
+  </tr>
+  <tr>
+    <td> AfterMapLayerAddEvent </td>
+    <td> Sends a request to inquire if there's a GFI popup opened by this plugin.</td>
+  </tr>
+  <tr>
+    <td> InfoBox.InfoBoxEvent </td>
+    <td> Sends a `MapClickedEvent` to the last clicked position if there's a GFI popup opened by this plugin.</td>
+  </tr>
+  <tr>
+    <td> GetInfoResultEvent </td>
+    <td> Adds info results to the GFI popup, if it's open. This is the way other bundles who want to send information to the GFI popup should communicate with this plugin</td>
+  </tr>
 </table>
 
 ## Events the plugin sends out
@@ -62,7 +78,8 @@ This plugin doesn't sends out any requests
     <th>Event</th><th>Why/when</th>
   </tr>
   <tr>
-    <td>GetInfoResultEvent</td><td> Result of ajax request formatted send as an event so that infobox handling can be done elsewhere </td>
+    <td>MapClickedEvent</td>
+    <td> Sent after a map layer has been added to the map on the condition there's a popup opened by this plugin. Sent with the same lon/lat as the last actual map click. </td>
   </tr>
 </table>
 
