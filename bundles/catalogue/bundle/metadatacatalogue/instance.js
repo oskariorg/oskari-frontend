@@ -291,7 +291,7 @@ Oskari.clazz
                                     values.push(checkboxDef.val());
                                 }
                             }
-                            search[jQuery(checkboxDefs[0]).attr("name")] = "["+values.join()+"]";
+                            search[jQuery(checkboxDefs[0]).attr("name")] = values.join();
                         }
                         // Dropdown lists
                         var dropdownRows = metadataCatalogueContainer.find(".dropdownRow");
