@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 '</div>',
             file: '<div class="file-import">' +
                     '<form id="myplacesimport-form" method="post" enctype="multipart/form-data" target="myplacesimport-target">' +
-                        '<input type="file" name="file-import" multiple></input>' +
+                        '<input type="file" name="file-import"></input>' +
                         '<div class="name"><label>Name</label><input type="text" name="layer-name" /></div>' +
                         '<div class="desc"><label>Description</label><input type="text" name="layer-desc" /></div>' +
                         '<div class="source"><label>Data source</label><input type="text" name="layer-source" /></div>' +

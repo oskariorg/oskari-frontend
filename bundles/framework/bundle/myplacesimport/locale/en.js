@@ -6,7 +6,7 @@ Oskari.registerLocalization({
         "desc": "",
         "flyout": {
             "title": "Omien aineistojen tuonti",
-            "description": "Voit tuoda omia aineistoja shape-formaatissa.",
+            "description": "Voit tuoda omia aineistoja shape-formaatissa zip-muodossa.",
             "actions": {
                 "cancel": "Peruuta",
                 "next": "Seuraava"
