@@ -274,30 +274,36 @@ Oskari.clazz
                 button.setTitle(me.getLocalization('metadataCatalogueButton'));
 
                 var doMetadataCatalogue = function () {
-                    var search = {keyword: field.getValue(), options: []};
+                    var search = "search="+field.getValue();
                     // Collect the advanced search options
                     if (moreLessLink.html() === me.getLocalization('showLess')) {
                         // Checkboxes
                         var checkboxRows = metadataCatalogueContainer.find(".checkboxRow");
                         for (var i=0; i<checkboxRows.length; i++) {
                             var checkboxDefs = jQuery(checkboxRows[i]).find(".metadataMultiDef");
-                            if (checkboxDefs.length == 0) {
+                            if (checkboxDefs.length > 0) {
+                                search = search+"&"+jQuery(checkboxDefs[0]).attr("name")+"=";
+                            } else {
                                 continue;
                             }
-                            var values = [];
+                            var firstItem = true;
                             for (var j=0; j<checkboxDefs.length; j++) {
                                 var checkboxDef = jQuery(checkboxDefs[j]);
                                 if (checkboxDef.is(":checked")) {
-                                    values.push(checkboxDef.val());
+                                    if (!firstItem) {
+                                        search = search+",";
+                                    } else {
+                                        firstItem = false;
+                                    }
+                                    search = search+checkboxDef.val();
                                 }
                             }
-                            search.options.push({"field": jQuery(checkboxDefs[0]).attr("name"), "values": values});
                         }
                         // Dropdown lists
                         var dropdownRows = metadataCatalogueContainer.find(".dropdownRow");
                         for (var i=0; i<dropdownRows.length; i++) {
                             var dropdownDef = jQuery(dropdownRows[i]).find(".metadataDef");
-                            search.options.push({"field": dropdownDef.attr("name"), "values": [dropdownDef.find(":selected").val()]});
+                            search = search+"&"+dropdownDef.attr("name")+"="+dropdownDef.find(":selected").val();
                         }
                     }
                     me.searchService.doSearch(JSON.stringify(search),function(data) {

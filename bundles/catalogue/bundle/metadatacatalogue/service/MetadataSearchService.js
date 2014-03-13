@@ -59,7 +59,7 @@ function(searchUrl) {
               }
              },
             url : this._searchUrl,
-            data : "search=" + searchString,
+            data : searchString,
             error : onError,
             success : onSuccess
         });
