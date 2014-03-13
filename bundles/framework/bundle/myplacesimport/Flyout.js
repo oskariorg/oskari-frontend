@@ -23,20 +23,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                     '<div class="info"></div>' +
                     '<div class="state"></div>' +
                 '</div>',
-            actions: '<div class="import-actions">' +
-                    '<input type="button" class="cancel" value="Cancel" />' +
-                    '<input type="button" class="next primary" value="Next" />' +
-                '</div>',
             file: '<div class="file-import">' +
                     '<form id="myplacesimport-form" method="post" enctype="multipart/form-data" target="myplacesimport-target">' +
                         '<input type="file" name="file-import" multiple></input>' +
+                        '<div class="name"><label>Name</label><input type="text" name="layer-name" /></div>' +
+                        '<div class="desc"><label>Description</label><input type="text" name="layer-desc" /></div>' +
+                        '<div class="source"><label>Data source</label><input type="text" name="layer-source" /></div>' +
                         '<input type="submit" value="Submit" class="primary" />' +
                     '</form>' +
-                '</div>',
-            layer: '<div class="layer-info">' +
-                    '<div class="name"><label>Name</label><input type="text" name="layer-name" /></div>' +
-                    '<div class="desc"><label>Description</label><input type="text" name="layer-desc" /></div>' +
-                    '<div class="source"><label>Data source</label><input type="text" name="layer-source" /></div>' +
                 '</div>'
         },
         /**
@@ -132,83 +126,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 file = jQuery(this.__templates.file).clone(),
                 action = this.instance.getService().getFileImportUrl();
 
-            // TODO: set the file upload action route here:
-            file.find('form').attr('action', action);
-            file.find('form input[type=submit]').val(locale.file.submit);
+            file.find('form')
+                .attr('action', action);
+            file.find('form input[type=submit]')
+                .val(locale.file.submit);
+            file.find('div.name label')
+                .html(locale.layer.name);
+            file.find('div.desc label')
+                .html(locale.layer.desc);
+            file.find('div.source label')
+                .html(locale.layer.source);
             this.container.find('iframe').on('load', function() {
-                // Get to the next step when the action has finished loading.
-                me.__layerInfoStep(locale);
+                me.__finish(locale);
             });
 
             return file;
-        },
-        /**
-         * Replaces the previous file form with the layer info form
-         * 
-         * @method __layerInfoStep
-         * @private
-         * @param  {Object} locale
-         */
-        __layerInfoStep: function(locale) {
-            var template = this.getTemplate();
-            template.find('div.info').html(locale.layer.title);
-            template.find('div.state').html(this.__createLayerTemplate(locale));
-        },
-        /**
-         * Creates the template for layer info form
-         * 
-         * @method __createLayerTemplate
-         * @private
-         * @param  {Object} locale
-         * @return {jQuery}
-         */
-        __createLayerTemplate: function(locale) {
-            var layer = jQuery(this.__templates.layer).clone();
-
-            layer.find('div.name label').html(locale.layer.name);
-            layer.find('div.desc label').html(locale.layer.desc);
-            layer.find('div.source label').html(locale.layer.source);
-
-            layer.append(this.__createActionsTemplate(locale));
-
-            return layer;
-        },
-        /**
-         * Creates the template for 'next' and 'previous' actions
-         * 
-         * @method __createActionsTemplate
-         * @private
-         * @param  {Object} locale
-         * @return {jQuery}
-         */
-        __createActionsTemplate: function(locale) {
-            var me = this,
-                actions = jQuery(this.__templates.actions).clone();
-
-            actions.find('input.cancel')
-                .val(locale.actions.cancel)
-                .click(function(e) {
-                    me.__cancel();
-                });
-
-            actions.find('input.next')
-                .val(locale.actions.next)
-                .click(function(e) {
-                    me.__finish(locale);
-                });
-
-            return actions;
-        },
-        /**
-         * Sends a request to clean up the temp files in the backend
-         * and refreshes the UI
-         * 
-         * @method __cancel
-         * @private
-         */
-        __cancel: function() {
-            this.instance.getService().sendImportCleanUp();
-            this.refresh();
         },
         /**
          * Sends the layer data to the backend and shows a message.
@@ -219,37 +151,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param  {Object} locale
          */
         __finish: function(locale) {
-            var me = this,
-                service = this.instance.getService(),
-                data = this.__getLayerData();
+            // TODO: somehow get the layer json from the iframe
+            // and display the layer on the map and in the my data menu
+            var title = locale.finish.success.title,
+                msg = locale.finish.success.message;
 
-            service.sendLayerData(data, function(response) {
-                // success
-                var title = locale.finish.success.title,
-                    msg = JSON.stringify(data);
-
-                me.__showMessage(title, msg);
-                me.refresh();
-            }, function(failure) {
-                // failure
-            });
-        },
-        /**
-         * Returns the data from the layer form
-         * 
-         * @method __getLayerData
-         * @private
-         * @return {Object}
-         */
-        __getLayerData: function() {
-            var layerTemplate = this.getTemplate().find('div.layer-info'),
-                data = {layer: {}};
-
-            data.layer.name = layerTemplate.find('div.name input').val();
-            data.layer.description = layerTemplate.find('div.desc input').val();
-            data.layer.source = layerTemplate.find('div.source input').val();
-
-            return data;
+            this.__showMessage(title, msg);
+            this.refresh();
         },
         /**
          * Displays a message on the screen
