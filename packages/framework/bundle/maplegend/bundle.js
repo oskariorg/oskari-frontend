@@ -37,6 +37,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundle", func
         }],
 
         "locales": [{
+            "lang": "am",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/maplegend/locale/am.js"
+        }, {
+            "lang": "bg",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/maplegend/locale/bg.js"
+        }, {
             "lang": "cs",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/maplegend/locale/cs.js"
@@ -65,6 +73,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundle", func
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/maplegend/locale/fi.js"
         }, {
+            "lang": "ge",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/maplegend/locale/ge.js"
+        }, {
             "lang": "gr",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/maplegend/locale/gr.js"
@@ -72,6 +84,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundle", func
             "lang": "hr",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/maplegend/locale/hr.js"
+        }, {
+            "lang": "hu",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/maplegend/locale/hu.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",
@@ -88,6 +104,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundle", func
             "lang": "pt",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/maplegend/locale/pt.js"
+        }, {
+            "lang": "ro",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/maplegend/locale/ro.js"
+        }, {
+            "lang": "rs",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/maplegend/locale/rs.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",

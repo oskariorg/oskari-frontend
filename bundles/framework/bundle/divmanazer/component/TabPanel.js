@@ -18,6 +18,7 @@ function() {
     this.content = null;
     this.header = null;
     this.selectionHandler = null;
+    this.priority = 1.0;
     this.html=this.template.clone();
     this.html.hide();
 }, {
@@ -37,6 +38,23 @@ function() {
      */
     getId : function() {
         return this.id;
+    },
+
+    /**
+     * @method setPriority
+     * Sets the panel priority
+     * @param {Number} priority priority for the panel
+     */
+    setPriority : function(priority) {
+        this.priority = priority;
+    },
+    /**
+     * @method getPriority
+     * Returns the panel priority
+     * @return {Number} priority for the panel
+     */
+    getPriority : function() {
+        return this.priority;
     },
 
     /**
@@ -131,5 +149,20 @@ function() {
      */
     insertTo: function (container) {
         container.append(this.html);
+    },
+
+    /**
+     * @method insertTo
+     * Adds this panel to given container at given location.
+     * Usually used by Oskari.userinterface.component.TabContainer internally.
+     * @param {jQuery} container reference to DOM element
+     * @param {Integer} index array location
+     */
+    insertAt: function (container, index) {
+        if (index === 0) {
+            container.prepend(this.html[0]);
+        } else {
+            container.children().eq(index-1).after(this.html[0])
+        }
     }
 });

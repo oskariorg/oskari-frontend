@@ -31,6 +31,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
             "src": "../../../../resources/framework/bundle/coordinatedisplay/css/coordinatedisplay.css"
         }],
         "locales": [{
+            "lang": "bg",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/bg.js"
+        }, {
             "lang": "cs",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/cs.js"
@@ -82,6 +86,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
             "lang": "pt",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/pt.js"
+        }, {
+            "lang": "ro",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/coordinatedisplay/locale/ro.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",

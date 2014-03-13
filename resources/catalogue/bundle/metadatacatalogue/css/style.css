@@ -1,0 +1,41 @@
+div.metadataCatalogueDescription {
+    margin: 0;
+    margin-bottom: 8px; }
+
+div.metadataCatalogueContainer {
+    height: 90%; }
+
+div.moreLess {
+    padding: 10px 0
+}
+
+div.metadataCatalogueContainer div.rowLabel {
+    display: table-cell;
+    vertical-align: middle;
+    margin-left: 0;
+    min-width: 130px;
+    width: 130px;
+}
+
+div.metadataCatalogueContainer div.checkboxes {
+    display: table-cell;
+    vertical-align: middle;
+    margin-left: 130px;
+    width: auto;
+}
+
+div.metadataCatalogueContainer div.metadataType {
+    display: table-cell;
+    vertical-align: middle;
+    padding-right: 10px;
+    width: auto;
+    white-space: nowrap;
+}
+
+div.metadataCatalogueContainer div.metadataRow {
+    margin-bottom: 10px;
+}
+
+div.metadataCatalogueContainer div.rowLabel {
+    white-space: nowrap;
+}

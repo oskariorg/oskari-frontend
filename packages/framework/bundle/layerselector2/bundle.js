@@ -48,6 +48,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
         }],
 
         "locales": [{
+            "lang": "am",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/layerselector2/locale/am.js"
+        }, {
+            "lang": "bg",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/layerselector2/locale/bg.js"
+        }, {
             "lang": "cs",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/layerselector2/locale/cs.js"
@@ -76,6 +84,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/layerselector2/locale/fi.js"
         }, {
+            "lang": "ge",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/layerselector2/locale/ge.js"
+        }, {
             "lang": "gr",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/layerselector2/locale/gr.js"
@@ -83,6 +95,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
             "lang": "hr",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/layerselector2/locale/hr.js"
+        }, {
+            "lang": "hu",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/layerselector2/locale/hu.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",
@@ -99,6 +115,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
             "lang": "pt",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/layerselector2/locale/pt.js"
+        }, {
+            "lang": "rs",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/layerselector2/locale/rs.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",

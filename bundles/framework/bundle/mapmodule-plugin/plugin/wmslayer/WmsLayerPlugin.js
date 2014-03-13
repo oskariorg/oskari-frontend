@@ -415,7 +415,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
             for (i = 0; i < llen; ++i) {
                 newRes = this._calculateResolutions(layerList[i]);
                 isInScale = layerList[i].isInScale(scale);
-                if (newRes && isInScale) {
+                // Make sure the sub exists before mucking about with it
+                if (newRes && isInScale && oLayers[i]) {
                     oLayers[i].addOptions({
                         resolutions: newRes
                     });

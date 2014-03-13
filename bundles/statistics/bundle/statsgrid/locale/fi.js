@@ -38,9 +38,9 @@ Oskari.registerLocalization({
             "female": "naiset",
             "total": "yhteensä"
         },
-        "addColumn": "Hae data",
+        "addColumn": "Hae aineisto",
         "removeColumn": "Poista",
-        "indicators": "Indikaattorit",
+        "indicators": "Indikaattori",
         "cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voida näyttää taulukossa.",
         "availableRegions": " Arvot löytyvät seuraaville aluejaoille: ",
         "year": "Vuosi",
@@ -154,8 +154,8 @@ Oskari.registerLocalization({
             "SEUTUKUNTA": "Seutukunta",
             "SUURALUE": "Suuralue"
         },
-        "addDataButton": "Lisää oma",
-        "addDataTitle": "Lisää oma indikaattori",
+        "addDataButton": "Lisää uusi",
+        "addDataTitle": "Lisää uusi indikaattori",
         "openImportDialogTip": "Tuo arvot leikepöydältä.",
         "openImportDataButton": "Tuo arvot",
         "addDataMetaTitle": "Otsikko",

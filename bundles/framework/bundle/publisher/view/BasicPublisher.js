@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             '<input class="allow-classification" type="checkbox"/>' +
             '<label class="allow-classification-label"></label>' +
             '</div>');
-        me.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
+        me.templateSizeOptionTool = jQuery('<div class="tool ">' + '<label><input type="radio" name="size" />' + '<span></span></label></div>');
         me.templateCustomSize = jQuery('<div class="customsize">' + '<input type="text" name="width" ' +
             'placeholder="' + localization.sizes.width + '"/> x ' +
             '<input type="text" name="height" placeholder="' + localization.sizes.height + '"/></div>');

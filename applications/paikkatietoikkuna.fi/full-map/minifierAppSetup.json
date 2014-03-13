@@ -180,6 +180,22 @@
 			}
 		}, {
 			"instanceProps": {},
+			"title": "metadatacatalogue",
+			"bundleinstancename": "metadatacatalogue",
+			"fi": "metadatacatalogue",
+			"sv": "metadatacatalogue",
+			"en": "metadatacatalogue",
+			"bundlename": "metadatacatalogue",
+			"metadata": {
+				"Import-Bundle": {
+					"metadatacatalogue": {
+						"bundlePath": "../../../packages/catalogue/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"instanceProps": {},
 			"title": "Karttatasot",
 			"bundleinstancename": "layerselector2",
 			"fi": "layerselector",

@@ -131,6 +131,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
         ],
 
         "locales": [{
+            "lang": "am",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/myplaces2/locale/am.js"
+        }, {
+            "lang": "bg",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/myplaces2/locale/bg.js"
+        }, {
             "lang": "cs",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/myplaces2/locale/cs.js"
@@ -159,6 +167,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/myplaces2/locale/fi.js"
         }, {
+            "lang": "ge",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/myplaces2/locale/ge.js"
+        },{
             "lang": "gr",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/myplaces2/locale/gr.js"
@@ -166,6 +178,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
             "lang": "hr",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/myplaces2/locale/hr.js"
+        }, {
+            "lang": "hu",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/myplaces2/locale/hu.js"
         }, {
             "lang": "lv",
             "type": "text/javascript",
@@ -182,6 +198,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
             "lang": "pt",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/myplaces2/locale/pt.js"
+        }, {
+            "lang": "ro",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/myplaces2/locale/ro.js"
+        }, {
+            "lang": "rs",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/myplaces2/locale/rs.js"
         }, {
             "lang": "sl",
             "type": "text/javascript",

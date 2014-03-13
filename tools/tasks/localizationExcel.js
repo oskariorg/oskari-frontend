@@ -15,20 +15,20 @@ module.exports = function (grunt) {
             this.files.forEach(function (file) {
                 file.src.map(function (filepath) {
                     //if (filepath.indexOf('n-layerri') > -1) {
-                        var pathTokens = filepath.trim().split('/'),
-                            bundleName = pathTokens[pathTokens.length - 2];
+                    var pathTokens = filepath.trim().split('/'),
+                        bundleName = pathTokens[pathTokens.length - 2];
 
-                        for (i = 0; i < locales.length; i++) {
-                            grunt.config.set(
-                                'generate-l10n-excel.' + bundleName + '_' + locales[i], [{
-                                    bundleName: bundleName,
-                                    bundleDir: filepath,
-                                    locale: locales[i],
-                                    templateLocale: templateLocale
-                                }]
+                    for (i = 0; i < locales.length; i++) {
+                        grunt.config.set(
+                            'generate-l10n-excel.' + bundleName + '_' + locales[i], [{
+                                bundleName: bundleName,
+                                bundleDir: filepath,
+                                locale: locales[i],
+                                templateLocale: templateLocale
+                            }]
 
-                            );
-                        }
+                        );
+                    }
                     //}
                 });
             });
@@ -366,207 +366,203 @@ module.exports = function (grunt) {
      * oskari-import-l10n-excel
      */
 
-    module.exports = function (grunt) {
-        grunt.registerMultiTask(
-            'import-l10n-excel',
-            'Import localization excel files',
-            function () {
-                var fs = require('fs'),
-                    file = this.data[0].file;
-                if (!file) {
-                    grunt.fail.fatal('No file defined.');
-                }
-                if (!fs.existsSync(file)) {
-                    grunt.fail.fatal('File ' + file + ' doesn\'t exist.');
-                }
-                grunt.log.writeln('Importing', file);
-                var AdmZip = require('adm-zip'),
-                    parseString = require('xml2js').parseString,
-                    sst = [],
-                    i,
-                    j,
-                    row,
-                    cell,
-                    localeDir,
-                    localeFile = null,
-                    targetFile,
-                    key,
-                    original,
-                    localized,
-                    translation,
-                    sourceLocale,
-                    me = this,
-                    delimiter = this.data[0].delimiter,
-                    locale = this.data[0].locale,
-                    templateLocale = this.data[0].templateLocale,
-                    textNode;
+    grunt.registerMultiTask(
+        'import-l10n-excel',
+        'Import localization excel files',
+        function () {
+            var fs = require('fs'),
+                file = this.data[0].file;
+            if (!file) {
+                grunt.fail.fatal('No file defined.');
+            }
+            if (!fs.existsSync(file)) {
+                grunt.fail.fatal('File ' + file + ' doesn\'t exist.');
+            }
+            grunt.log.writeln('Importing', file);
+            var AdmZip = require('adm-zip'),
+                parseString = require('xml2js').parseString,
+                sst = [],
+                i,
+                j,
+                row,
+                cell,
+                localeDir,
+                localeFile = null,
+                targetFile,
+                key,
+                original,
+                localized,
+                translation,
+                sourceLocale,
+                me = this,
+                delimiter = this.data[0].delimiter,
+                locale = this.data[0].locale,
+                templateLocale = this.data[0].templateLocale,
+                textNode;
 
-                // xl/sharedStrings.xml, Shared strings <si><t>val, 0-based index
-                parseString(new AdmZip(file).readAsText('xl/sharedStrings.xml'), function (err, result) {
-                    if (result && result.sst && result.sst.si) {
-                        for (i = 0; i < result.sst.si.length; i++) {
-                            textNode = result.sst.si[i].t[0];
-                            if (typeof textNode == 'string' || textNode instanceof String) {
-                                sst.push(textNode.trim());
-                            } else if (textNode.hasOwnProperty('_')) {
-                                sst.push(textNode._.trim());
-                            } else {
-                                sst.push('');
-                            }
+            // xl/sharedStrings.xml, Shared strings <si><t>val, 0-based index
+            parseString(new AdmZip(file).readAsText('xl/sharedStrings.xml'), function (err, result) {
+                if (result && result.sst && result.sst.si) {
+                    for (i = 0; i < result.sst.si.length; i++) {
+                        textNode = result.sst.si[i].t[0];
+                        if (typeof textNode == 'string' || textNode instanceof String) {
+                            sst.push(textNode.trim());
+                        } else if (textNode.hasOwnProperty('_')) {
+                            sst.push(textNode._.trim());
+                        } else {
+                            sst.push('');
                         }
                     }
-                });
-                // Hackhack, easy way to read/load the localization files
-                var Oskari = {
-                    registerLocalization: function (localization) {
-                        return localization;
-                    }
-                };
-                // Get the original translation. Returns 'NOT TRANSLATED' if translation is not available.
-                var getTranslation = function (pathStack) {
-                    if (!translation) {
+                }
+            });
+            // Hackhack, easy way to read/load the localization files
+            var Oskari = {
+                registerLocalization: function (localization) {
+                    return localization;
+                }
+            };
+            // Get the original translation. Returns 'NOT TRANSLATED' if translation is not available.
+            var getTranslation = function (pathStack) {
+                if (!translation) {
+                    return '';
+                }
+                var currNode = translation,
+                    i;
+                for (i = 0; i < pathStack.length; i++) {
+                    currNode = currNode[pathStack[i]];
+                    if (!currNode) {
                         return '';
                     }
-                    var currNode = translation,
-                        i;
-                    for (i = 0; i < pathStack.length; i++) {
-                        currNode = currNode[pathStack[i]];
-                        if (!currNode) {
-                            return '';
-                        }
-                    }
-                    return currNode || '';
-                };
-                // Sets a new translation value
-                var setNewValue = function (pathStack, val) {
-                    var currNode = sourceLocale,
-                        i,
-                        newValue = val && val.length ? val : 'NOT TRANSLATED';
-                    for (i = 0; i < pathStack.length; i++) {
-                        if (i + 1 === pathStack.length) {
-                            if (pathStack.join('.') !== 'key') {
-                                if (currNode.hasOwnProperty(pathStack[i])) {
-                                    if (currNode[pathStack[i]]) {
-                                        // We have an old value, replace it with something (why would anyone translate an empty string?)
-                                        currNode[pathStack[i]] = newValue;
-                                    }
-                                } else {
-                                    grunt.log.warn('Unknown localization key: ', pathStack.join('.'));
-                                    break;
+                }
+                return currNode || '';
+            };
+            // Sets a new translation value
+            var setNewValue = function (pathStack, val) {
+                var currNode = sourceLocale,
+                    i,
+                    newValue = val && val.length ? val : 'NOT TRANSLATED';
+                for (i = 0; i < pathStack.length; i++) {
+                    if (i + 1 === pathStack.length) {
+                        if (pathStack.join('.') !== 'key') {
+                            if (currNode.hasOwnProperty(pathStack[i])) {
+                                if (currNode[pathStack[i]]) {
+                                    // We have an old value, replace it with something (why would anyone translate an empty string?)
+                                    currNode[pathStack[i]] = newValue;
                                 }
-                            }
-                        } else {
-                            currNode = currNode[pathStack[i]];
-                            if (!currNode) {
+                            } else {
                                 grunt.log.warn('Unknown localization key: ', pathStack.join('.'));
                                 break;
                             }
                         }
-                    }
-                };
-                var initLocalization = function (node, stack) {
-                    var pathStack = stack || [],
-                        p;
-
-                    if (typeof node == 'string' || node instanceof String) {
-                        setNewValue(pathStack, getTranslation(pathStack));
-                    } else if (node.constructor === Object) {
-                        // Node value is an object, recurse
-                        for (p in node) {
-                            if (node.hasOwnProperty(p)) {
-                                pathStack.push(p);
-                                initLocalization(node[p], pathStack);
-                                pathStack.pop();
-                            }
+                    } else {
+                        currNode = currNode[pathStack[i]];
+                        if (!currNode) {
+                            grunt.log.warn('Unknown localization key: ', pathStack.join('.'));
+                            break;
                         }
-                    } else if (node instanceof Array) {
-                        for (p = 0; p < node.length; p++) {
+                    }
+                }
+            };
+            var initLocalization = function (node, stack) {
+                var pathStack = stack || [],
+                    p;
+
+                if (typeof node == 'string' || node instanceof String) {
+                    setNewValue(pathStack, getTranslation(pathStack));
+                } else if (node.constructor === Object) {
+                    // Node value is an object, recurse
+                    for (p in node) {
+                        if (node.hasOwnProperty(p)) {
                             pathStack.push(p);
                             initLocalization(node[p], pathStack);
                             pathStack.pop();
                         }
-                    } else {
-                        // booleans, numbers... stuff that isn't translated
                     }
-                };
-                var getLocalization = function (path, fileName) {
-                    var data = null;
-                    // read template
-                    if (fs.existsSync(path + '\\en.js')) {
-                        data = fs.readFileSync(path + '\\' + templateLocale + '.js', {
-                            encoding: 'utf8'
-                        });
-                        sourceLocale = eval(data);
-                    } else {
-                        grunt.fail.fatal('Couldn\'t read template localization:', path + '\\' + templateLocale + '.js');
+                } else if (node instanceof Array) {
+                    for (p = 0; p < node.length; p++) {
+                        pathStack.push(p);
+                        initLocalization(node[p], pathStack);
+                        pathStack.pop();
                     }
-
-                    // Read old locale
-                    targetFile = path + '/' + fileName;
-                    if (fs.existsSync(targetFile)) {
-                        data = fs.readFileSync(targetFile, {
-                            encoding: 'utf8'
-                        });
-                        translation = eval(data);
-                    } else {
-                        grunt.log.warn('Couldn\'t find old translation at ' + path + '\\' + fileName);
-                    }
-                    initLocalization(sourceLocale);
-                };
-                var getCellValue = function (cell) {
-                    if (cell === null || cell === undefined) {
-                        return '';
-                    }
-                    if (cell.v) {
-                        return sst[parseInt(cell.v)];
-                    } else if (cell.is) {
-                        return cell.is[0].t[0].trim();
-                    } else {
-                        return '';
-                    }
-                };
-                // xl/worksheets/sheet1.xml Table <sheetData><row><c>[<v>sharedstringid|<is><t>val]
-                var sheet = new AdmZip(file).readAsText('xl/worksheets/sheet1.xml');
-                parseString(sheet, function (err, result) {
-                    if (result && result.worksheet && result.worksheet.sheetData && result.worksheet.sheetData[0].row) {
-                        // skip header row
-                        for (i = 1; i < result.worksheet.sheetData[0].row.length; i++) {
-                            cells = result.worksheet.sheetData[0].row[i].c;
-                            if (localeFile === null) {
-                                localeDir = '..\\' + getCellValue(cells[0]).substring(8);
-                                localeFile = getCellValue(cells[1]);
-                                getLocalization(localeDir, locale ? locale + '.js' : localeFile);
-                            }
-
-                            key = getCellValue(cells[2]);
-                            if (key && key !== 'key') {
-
-                                original = getCellValue(cells[3]);
-                                localized = getCellValue(cells[4]);
-
-                                var pathStack = key.split(delimiter);
-                                setNewValue(pathStack, localized);
-                            }
-                        }
-                    } else {
-                        grunt.fail.fatal('No parse result');
-                    }
-                });
-
-                // Set user defined locale if available
-                if (locale) {
-                    setNewValue(['lang'], locale);
+                } else {
+                    // booleans, numbers... stuff that isn't translated
                 }
-                // Write file to targetFile
-                fs.writeFileSync(
-                    targetFile,
-                    'Oskari.registerLocalization(\n' +
-                    JSON.stringify(sourceLocale, null, 4) +
-                    '\n);'
-                );
+            };
+            var getLocalization = function (path, fileName) {
+                var data = null;
+                // read template
+                if (fs.existsSync(path + '\\en.js')) {
+                    data = fs.readFileSync(path + '\\' + templateLocale + '.js', {
+                        encoding: 'utf8'
+                    });
+                    sourceLocale = eval(data);
+                } else {
+                    grunt.fail.fatal('Couldn\'t read template localization:', path + '\\' + templateLocale + '.js');
+                }
+
+                // Read old locale
+                targetFile = path + '/' + fileName;
+                if (fs.existsSync(targetFile)) {
+                    data = fs.readFileSync(targetFile, {
+                        encoding: 'utf8'
+                    });
+                    translation = eval(data);
+                } else {
+                    grunt.log.warn('Couldn\'t find old translation at ' + path + '\\' + fileName);
+                }
+                initLocalization(sourceLocale);
+            };
+            var getCellValue = function (cell) {
+                if (cell === null || cell === undefined) {
+                    return '';
+                }
+                if (cell.v) {
+                    return sst[parseInt(cell.v)];
+                } else if (cell.is) {
+                    return cell.is[0].t[0].trim();
+                } else {
+                    return '';
+                }
+            };
+            // xl/worksheets/sheet1.xml Table <sheetData><row><c>[<v>sharedstringid|<is><t>val]
+            var sheet = new AdmZip(file).readAsText('xl/worksheets/sheet1.xml');
+            parseString(sheet, function (err, result) {
+                if (result && result.worksheet && result.worksheet.sheetData && result.worksheet.sheetData[0].row) {
+                    // skip header row
+                    for (i = 1; i < result.worksheet.sheetData[0].row.length; i++) {
+                        cells = result.worksheet.sheetData[0].row[i].c;
+                        if (localeFile === null) {
+                            localeDir = '..\\' + getCellValue(cells[0]).substring(8);
+                            localeFile = getCellValue(cells[1]);
+                            getLocalization(localeDir, locale ? locale + '.js' : localeFile);
+                        }
+
+                        key = getCellValue(cells[2]);
+                        if (key && key !== 'key') {
+
+                            original = getCellValue(cells[3]);
+                            localized = getCellValue(cells[4]);
+
+                            var pathStack = key.split(delimiter);
+                            setNewValue(pathStack, localized);
+                        }
+                    }
+                } else {
+                    grunt.fail.fatal('No parse result');
+                }
+            });
+
+            // Set user defined locale if available
+            if (locale) {
+                setNewValue(['lang'], locale);
             }
-        );
-    };
-
-
+            // Write file to targetFile
+            fs.writeFileSync(
+                targetFile,
+                'Oskari.registerLocalization(\n' +
+                JSON.stringify(sourceLocale, null, 4) +
+                '\n);'
+            );
+        }
+    );
 };

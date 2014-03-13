@@ -39,7 +39,10 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                 this._triggerLayerUpdateCountdown();
             }
             else if(event.getOperation() === 'remove') {
-                this.view.removeLayer(event.getLayerId());
+                if(this.view) {
+                    // check that view has been initialized before calling remove
+                    this.view.removeLayer(event.getLayerId());
+                }
             }
 
             jQuery("body").css({

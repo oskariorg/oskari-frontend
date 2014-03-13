@@ -162,6 +162,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 }
             },
             /**
+             * @method AfterRearrangeSelectedMapLayerEvent
+             * @param {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent} event
+             *
+             * Rearranges layers
+             */
+            'AfterRearrangeSelectedMapLayerEvent': function (event) {
+                if (event._creator !== this.getName() && event._fromPosition !== event._toPosition) {
+                    // Layer order has been changed by someone else, resort layers
+                    this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+                    this.publisher.maplayerPanel.handleLayerOrderChanged(event._movedMapLayer, event._fromPosition, event._toPosition);
+                    if (this.publisher && event._creator !== this.publisher.maplayerPanel.plugin.getName()) {
+                        this.publisher.maplayerPanel.handleLayerSelectionChanged();
+                    }
+                }
+            },
+            /**
              * @method MapLayerEvent
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              */

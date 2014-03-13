@@ -38,6 +38,10 @@ Oskari.clazz.define(
                 "src": "../../../../resources/framework/bundle/guidedtour/css/style.css"
             }],
             "locales": [{
+                "lang": "bg",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/guidedtour/locale/bg.js"
+            }, {
                 "lang": "cs",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/guidedtour/locale/cs.js"
@@ -66,6 +70,10 @@ Oskari.clazz.define(
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/guidedtour/locale/fi.js"
             }, {
+                "lang": "ge",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/guidedtour/locale/ge.js"
+            }, {
                 "lang": "gr",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/guidedtour/locale/gr.js"
@@ -73,6 +81,10 @@ Oskari.clazz.define(
                 "lang": "hr",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/guidedtour/locale/hr.js"
+            }, {
+                "lang": "hu",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/guidedtour/locale/hu.js"
             }, {
                 "lang": "lv",
                 "type": "text/javascript",
@@ -89,6 +101,14 @@ Oskari.clazz.define(
                 "lang": "pt",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/guidedtour/locale/pt.js"
+            }, {
+                "lang": "ro",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/guidedtour/locale/ro.js"
+            }, {
+                "lang": "rs",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/guidedtour/locale/rs.js"
             }, {
                 "lang": "sl",
                 "type": "text/javascript",
