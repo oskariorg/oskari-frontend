@@ -47,7 +47,7 @@ function(searchUrl) {
 	 * @param {Function}
 	 *            onComplete callback method for search completion
      */
-    doSearch : function(searchString, onSuccess, onError) {
+    doSearch : function(search, onSuccess, onError) {
         var lang = Oskari.getLang();
         var epsg = Oskari.getSandbox().getMap().getSrsName();
         jQuery.ajax({
@@ -59,7 +59,7 @@ function(searchUrl) {
               }
              },
             url : this._searchUrl,
-            data : searchString,
+            data : search,
             error : onError,
             success : onSuccess
         });

@@ -59,7 +59,11 @@ function(searchUrl) {
               }
              },
             url : this._searchUrl,
-            data : "searchKey=" + searchString + "&Language=" + lang + "&epsg="+epsg,
+            data : {
+                "searchKey" : searchString,
+                "Language" : lang,
+                "epsg" : epsg
+            },
             error : onError,
             success : onSuccess
         });

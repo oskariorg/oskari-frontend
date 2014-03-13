@@ -274,39 +274,33 @@ Oskari.clazz
                 button.setTitle(me.getLocalization('metadataCatalogueButton'));
 
                 var doMetadataCatalogue = function () {
-                    var search = "search="+field.getValue();
+                    var search = {search: field.getValue()};
                     // Collect the advanced search options
                     if (moreLessLink.html() === me.getLocalization('showLess')) {
                         // Checkboxes
                         var checkboxRows = metadataCatalogueContainer.find(".checkboxRow");
                         for (var i=0; i<checkboxRows.length; i++) {
                             var checkboxDefs = jQuery(checkboxRows[i]).find(".metadataMultiDef");
-                            if (checkboxDefs.length > 0) {
-                                search = search+"&"+jQuery(checkboxDefs[0]).attr("name")+"=";
-                            } else {
+                            if (checkboxDefs.length == 0) {
                                 continue;
                             }
-                            var firstItem = true;
+                            var values = [];
                             for (var j=0; j<checkboxDefs.length; j++) {
                                 var checkboxDef = jQuery(checkboxDefs[j]);
                                 if (checkboxDef.is(":checked")) {
-                                    if (!firstItem) {
-                                        search = search+",";
-                                    } else {
-                                        firstItem = false;
-                                    }
-                                    search = search+checkboxDef.val();
+                                    values.push(checkboxDef.val());
                                 }
                             }
+                            search[jQuery(checkboxDefs[0]).attr("name")] = "["+values.join()+"]";
                         }
                         // Dropdown lists
                         var dropdownRows = metadataCatalogueContainer.find(".dropdownRow");
                         for (var i=0; i<dropdownRows.length; i++) {
                             var dropdownDef = jQuery(dropdownRows[i]).find(".metadataDef");
-                            search = search+"&"+dropdownDef.attr("name")+"="+dropdownDef.find(":selected").val();
+                            search[dropdownDef.attr("name")] = dropdownDef.find(":selected").val();
                         }
                     }
-                    me.searchService.doSearch(JSON.stringify(search),function(data) {
+                    me.searchService.doSearch(search,function(data) {
                             me.showResults(data);
                         }, function(data) {
                             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
