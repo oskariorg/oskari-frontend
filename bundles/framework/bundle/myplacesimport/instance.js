@@ -25,9 +25,7 @@ function () {
         var conf = this.conf,
             sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
             sandbox = Oskari.getSandbox(sandboxName),
-            loc = this.getLocalization(),
-            request, importService, userLayersTab,
-            addTabReqBuilder, addTabReq;
+            request;
 
         this.sandbox = sandbox;
         sandbox.register(this);
@@ -37,31 +35,15 @@ function () {
             sandbox.registerAsStateful(this.mediator.bundleId, this);
         }
 
-        importService = Oskari.clazz.create(
-            'Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService',
-            this
-        );
-        sandbox.registerService(importService);
-        importService.init();
-        this.importService = importService;
-
-        userLayersTab = Oskari.clazz.create(
-            'Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
-            this, loc.tab
-        );
-        addTabReqBuilder = sandbox.getRequestBuilder('PersonalData.AddTabRequest');
-        if (addTabReqBuilder) {
-            addTabReq = addTabReqBuilder(loc.tab.title, userLayersTab.getContent());
-            sandbox.request(this, addTabReq);
-        }
-        this.tab = userLayersTab;
+        this.importService = this.createService(sandbox);
+        this.importService.init();
+        this.tab = this.addTab(sandbox);
 
         request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
         sandbox.request(this, request);
 
         this.registerTool();
     },
-
     registerTool: function() {
         var me = this,
             sandbox = this.getSandbox(),
@@ -77,7 +59,6 @@ function () {
             sandbox.request(this, request);
         }
     },
-
     startTool: function() {
         var sandbox = this.getSandbox(),
             reqBuilder = sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest'),
@@ -96,11 +77,36 @@ function () {
             sandbox.request(this, toolbarRequest);
         }
     },
-
+    addUserLayer: function(layerJson) {
+        // TODO: send json to maplayerservice
+        console.log(layerJson);
+    },
+    createService: function(sandbox) {
+        var importService = Oskari.clazz.create(
+            'Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService',
+            this
+        );
+        sandbox.registerService(importService);
+        return importService;
+    },
     getService: function() {
         return this.importService;
     },
+    addTab: function(sandbox) {
+        var loc = this.getLocalization(),
+            userLayersTab = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
+                this, loc.tab
+            ),
+            addTabReqBuilder = sandbox.getRequestBuilder('PersonalData.AddTabRequest'),
+            addTabReq;
 
+        if (addTabReqBuilder) {
+            addTabReq = addTabReqBuilder(loc.tab.title, userLayersTab.getContent());
+            sandbox.request(this, addTabReq);
+        }
+        return userLayersTab;
+    },
     getTab: function() {
         return this.tab;
     }

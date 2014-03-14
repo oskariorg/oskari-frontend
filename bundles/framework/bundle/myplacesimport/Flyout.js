@@ -127,17 +127,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 action = this.instance.getService().getFileImportUrl();
 
             file.find('form')
-                .attr('action', action);
-            file.find('form input[type=submit]')
-                .val(locale.file.submit);
-            file.find('div.name label')
-                .html(locale.layer.name);
-            file.find('div.desc label')
-                .html(locale.layer.desc);
-            file.find('div.source label')
-                .html(locale.layer.source);
+                    .attr('action', action)
+                .find('input[type=submit]')
+                    .val(locale.file.submit)
+                .end()
+                .find('div.name label')
+                    .html(locale.layer.name)
+                .end()
+                .find('div.desc label')
+                    .html(locale.layer.desc)
+                .end()
+                .find('div.source label')
+                    .html(locale.layer.source);
+
             this.container.find('iframe').on('load', function() {
-                me.__finish(locale);
+                me.__finish(jQuery(this), locale);
             });
 
             return file;
@@ -150,12 +154,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @private
          * @param  {Object} locale
          */
-        __finish: function(locale) {
-            // TODO: somehow get the layer json from the iframe
-            // and display the layer on the map and in the my data menu
+        __finish: function(iframe, locale) {
             var title = locale.finish.success.title,
-                msg = locale.finish.success.message;
+                msg = locale.finish.success.message,
+                json = undefined;
 
+            try {
+                json = JSON.parse(iframe.contents().find('pre').html());
+            } catch(error) {
+                this.instance
+                    .getSandbox()
+                    .printWarn('Error whilst parsing user layer json', error);
+                title = null, msg = locale.finish.failure.message;
+            }
+
+            this.instance.addUserLayer(json);
             this.__showMessage(title, msg);
             this.refresh();
         },
