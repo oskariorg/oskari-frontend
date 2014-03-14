@@ -9,6 +9,7 @@ Oskari.registerLocalization({
     "metadataCatalogueButton": "Hae",
     "showMore" : "Lisää hakuehtoja",
     "showLess" : "Piilota laajennettu haku",
+    "emptyOption" : "* Ei rajausta * ",
     "type" : "Tyyppi",
     "serviceType" : "Palvelun tyyppi",
     "serviceName" : "Palvelun nimi",
