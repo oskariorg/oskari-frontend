@@ -387,7 +387,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
          * @param {Function} cb
          */
         _modifyOL: function(layer, cb) {
-            var oLayer = this._getOLMapLayers(layer);
+            var oLayer = this.getOLMapLayers(layer);
             if (oLayer && oLayer.length && oLayer[0] !== null && oLayer[0] !== undefined) {
                 cb(oLayer);
             }
@@ -396,12 +396,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
          * Returns references to OpenLayers layer objects for requested layer
          * or null if layer is not added to map.
          * 
-         * @method _getOLMapLayers
-         * @private
+         * @method getOLMapLayers
          * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer
          * @return {OpenLayers.Layer[]}
          */
-        _getOLMapLayers: function (layer) {
+        getOLMapLayers: function (layer) {
             return this._map.getLayersByName('layer_' + layer.getId());
         }
     }, {
