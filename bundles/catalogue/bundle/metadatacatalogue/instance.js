@@ -330,79 +330,95 @@ Oskari.clazz
 
                 // Link to advanced search
                 var moreLessLink = this.templates.moreLessLink.clone();
-                moreLessLink.html(me.getLocalization('showMore'));
+                moreLessLink.html(me.getLocalization('showMore')); 
+                // TODO: don't make query when closing and perhaps do it only once and keep in memory?
                 moreLessLink.click(function() {
-                    me.optionService.getOptions(function (data) {
-                        var advancedContainer = metadataCatalogueContainer.find('div.advanced');
-                        if (moreLessLink.html() === me.getLocalization('showMore')) {
-                            moreLessLink.html(me.getLocalization('showLess'));
-                            if (advancedContainer.is(':empty')) {
-                                var dataFields = data.fields;
-                                for (var i=0; i < dataFields.length; i++) {
-                                    var dataField = dataFields[i];
-                                    var newRow = null;
-                                    var newLabel = me.getLocalization(dataField.field);
-                                    // Checkbox
-                                    if (dataField.multi) {
-                                        newRow = me.templates.checkboxRow.clone();
-                                        newRow.find('div.rowLabel').text(newLabel);
-                                        for (var j=0; j < dataField.values.length; j++) {
-                                            var value = dataField.values[j];
-                                            var text = "";
-                                            var newCheckbox = me.templates.metadataCheckbox.clone();
-                                            var newCheckboxDef = newCheckbox.find(":checkbox");
-                                            newCheckboxDef.attr("name",dataField.field);
-                                            newCheckboxDef.attr("value",value.val);
-                                            // Localization available?
-                                            if (typeof value.locale !== "undefined") {
-                                                text = value.locale;
-                                            } else {
-                                                text = value.val;
-                                            }
-                                            newCheckbox.find("label.metadataTypeText").append(text);
-                                            newRow.find(".checkboxes").append(newCheckbox);
-                                        }
-                                    // Dropdown list
-                                    } else {
-                                        newRow = me.templates.dropdownRow.clone();
-                                        newRow.find("div.rowLabel").append(newLabel);
-                                        var newDropdown = me.templates.metadataDropdown.clone();
-                                        var dropdownDef = newDropdown.find(".metadataDef");
-                                        dropdownDef.attr("name",dataField.field);
-                                        for (var j=0; j < dataField.values.length; j++) {
-                                            var value = dataField.values[j];
-                                            var text = "";
-                                            var newOption = me.templates.dropdownOption.clone();
-                                            newOption.attr("value",value.val);
-                                            // Localization available?
-                                            if (typeof value.locale !== "undefined") {
-                                                text = value.locale;
-                                            } else {
-                                                text = value.val;
-                                            }
-                                            newOption.text(text);
-                                            dropdownDef.append(newOption);
-                                        }
-                                        newRow.append(newDropdown);
-                                    }
-                                    advancedContainer.append(newRow);
-                                }
-                            } else {
-                                advancedContainer.show();
-                            }
+                    var advancedContainer = metadataCatalogueContainer.find('div.advanced');
+                    if (moreLessLink.html() === me.getLocalization('showMore')) {
+                        // open advanced/toggle link text
+                        moreLessLink.html(me.getLocalization('showLess'));
+                        if (advancedContainer.is(':empty')) {
+                            me.optionService.getOptions(function (data) {
+                                me._createAdvancedPanel(data, advancedContainer, moreLessLink);
+                            }, function (data) {
+                                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                                var okBtn = dialog.createCloseButton('OK');
+                                var title = me.getLocalization('metadataoptionservice_alert_title');
+                                var msg = me.getLocalization('metadataoptionservice_not_found_anything_text');
+                                dialog.show(title, msg, [okBtn]);
+                            });
                         } else {
-                            moreLessLink.html(me.getLocalization('showMore'));
-                            advancedContainer.hide();
+                            advancedContainer.show();
                         }
-                    }, function (data) {
-                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        var okBtn = dialog.createCloseButton('OK');
-                        var title = me.getLocalization('metadataoptionservice_alert_title');
-                        var msg = me.getLocalization('metadataoptionservice_not_found_anything_text');
-                        dialog.show(title, msg, [okBtn]);
-                    });
+                    } else {
+                        // close advanced/toggle link text
+                        moreLessLink.html(me.getLocalization('showMore'));
+                        advancedContainer.hide();
+                    }
                 });
                 metadataCatalogueContainer.find('div.moreLess').append(moreLessLink);
+            },
+            _createAdvancedPanel : function(data, advancedContainer, moreLessLink) {
+                var me = this;
+                var dataFields = data.fields;
+                for (var i=0; i < dataFields.length; i++) {
+                    var dataField = dataFields[i];
+                    var newRow = null;
+                    var newLabel = me.getLocalization(dataField.field);
+                    if(dataField.values.length === 0) {
+                        // no options to show -> skip
+                        continue;
+                    }
+
+                    // Checkbox
+                    if (dataField.multi) {
+                        newRow = me.templates.checkboxRow.clone();
+                        newRow.find('div.rowLabel').text(newLabel);
+                        for (var j=0; j < dataField.values.length; j++) {
+                            var value = dataField.values[j];
+                            var text = "";
+                            var newCheckbox = me.templates.metadataCheckbox.clone();
+                            var newCheckboxDef = newCheckbox.find(":checkbox");
+                            newCheckboxDef.attr("name",dataField.field);
+                            newCheckboxDef.attr("value",value.val);
+                            // Localization available?
+                            if (typeof value.locale !== "undefined") {
+                                text = value.locale;
+                            } else {
+                                text = value.val;
+                            }
+                            newCheckbox.find("label.metadataTypeText").append(text);
+                            newRow.find(".checkboxes").append(newCheckbox);
+                        }
+                    // Dropdown list
+                    } else {
+                        newRow = me.templates.dropdownRow.clone();
+                        newRow.find("div.rowLabel").append(newLabel);
+                        var newDropdown = me.templates.metadataDropdown.clone();
+                        var dropdownDef = newDropdown.find(".metadataDef");
+                        dropdownDef.attr("name",dataField.field);
+                        var emptyOption = me.templates.dropdownOption.clone();
+                        emptyOption.attr("value", '');
+                        emptyOption.text(me.getLocalization('emptyOption'));
+                        dropdownDef.append(emptyOption);
+                        for (var j=0; j < dataField.values.length; j++) {
+                            var value = dataField.values[j];
+                            var text = "";
+                            var newOption = me.templates.dropdownOption.clone();
+                            newOption.attr("value",value.val);
+                            // Localization available?
+                            if (typeof value.locale !== "undefined") {
+                                text = value.locale;
+                            } else {
+                                text = value.val;
+                            }
+                            newOption.text(text);
+                            dropdownDef.append(newOption);
+                        }
+                        newRow.append(newDropdown);
+                    }
+                    advancedContainer.append(newRow);
+                }
             },
             /**
              * @method showResults
