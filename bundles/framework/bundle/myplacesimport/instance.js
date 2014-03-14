@@ -17,27 +17,44 @@ function () {
         iconCls: 'myplaces-draw-point',
         tooltip: '',
         sticky: true
-    }
+    };
+    this.importService = undefined;
+    this.tab = undefined;
 }, {
     start: function () {
-        var me = this,
-            conf = this.conf,
+        var conf = this.conf,
             sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
             sandbox = Oskari.getSandbox(sandboxName),
-            request, importService;
+            loc = this.getLocalization(),
+            request, importService, userLayersTab,
+            addTabReqBuilder, addTabReq;
 
-        me.sandbox = sandbox;
+        this.sandbox = sandbox;
         sandbox.register(this);
 
-        /* stateful */
+        // stateful
         if (conf && conf.stateful === true) {
             sandbox.registerAsStateful(this.mediator.bundleId, this);
         }
 
-        importService = Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService', this);
+        importService = Oskari.clazz.create(
+            'Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService',
+            this
+        );
         sandbox.registerService(importService);
         importService.init();
         this.importService = importService;
+
+        userLayersTab = Oskari.clazz.create(
+            'Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
+            this, loc.tab
+        );
+        addTabReqBuilder = sandbox.getRequestBuilder('PersonalData.AddTabRequest');
+        if (addTabReqBuilder) {
+            addTabReq = addTabReqBuilder(loc.tab.title, userLayersTab.getContent());
+            sandbox.request(this, addTabReq);
+        }
+        this.tab = userLayersTab;
 
         request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
         sandbox.request(this, request);
@@ -82,6 +99,10 @@ function () {
 
     getService: function() {
         return this.importService;
+    },
+
+    getTab: function() {
+        return this.tab;
     }
 }, {
     "extend": ["Oskari.userinterface.extension.DefaultExtension"]

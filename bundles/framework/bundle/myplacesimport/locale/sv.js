@@ -29,6 +29,18 @@ Oskari.registerLocalization({
                     "title": "Tason tuonti epäonnistui. Yritä myöhemmin uudelleen."
                 }
             }
-        }        
+        },
+        "tab": {
+            "title": "Omat aineistot",
+            "grid": {
+                "name": "Nimi",
+                "description": "Kuvaus",
+                "source": "Tietolähde"
+            }
+        },
+        "layer": {
+            "organization": "Omat aineistot",
+            "inspire": "Omat aineistot"
+        }
     }
 });
