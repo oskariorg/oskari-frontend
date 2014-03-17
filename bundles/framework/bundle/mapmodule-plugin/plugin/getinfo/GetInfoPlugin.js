@@ -362,6 +362,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                 olMap = me.mapModule.getMap(),
                 px = olMap.getViewPortPxFromLonLat(lonlat);
 
+            if (!layerIds) return;
             if (me._pendingAjaxQuery.busy &&
                 me._pendingAjaxQuery.timestamp &&
                 dteMs - me._pendingAjaxQuery.timestamp < 500) {
