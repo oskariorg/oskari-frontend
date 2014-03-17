@@ -39,6 +39,10 @@ If you have used the defaults and want to keep them add mapOptions to your mapfu
 }
 ```
 
+### Sandbox/map layer service
+
+Added new method to find all layers corresponding to given metadata id.
+
 ### search bundle
 
 Search flyout is now capable to include multiple tabs.

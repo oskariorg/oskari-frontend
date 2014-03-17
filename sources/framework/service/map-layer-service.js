@@ -474,6 +474,26 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             return list;
         },
         /**
+         * @method getLayerByMetadataId
+         * Returns an array of layers added to the service corresponding to given metadata identifier
+         *
+         * @param {String} metadataIdentifier
+         *            metadata identifier to filter the layers with
+         * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
+         */
+        getLayersByMetadataId: function(metadataIdentifier) {
+            var list = [],
+                i,
+                layer;
+            for (i = 0; i < this._loadedLayersList.length; ++i) {
+                layer = this._loadedLayersList[i];
+                if (layer.getMetadataIdentifier() ===  metadataIdentifier) {
+                    list.push(layer);
+                }
+            }
+            return list;
+        },
+        /**
          * @method registerLayerModel
          *      Register an external layer model type (to be used by extension bundles).
          * Adds a new type to #typeMapping
