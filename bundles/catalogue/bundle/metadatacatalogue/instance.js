@@ -558,9 +558,8 @@ Oskari.clazz
                         mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
                         layers = mapLayerService.getLayersByMetadataId(row.id);
                         for (j = 0; j < layers.length; ++j) {
-                            titleText = titleText+"<br>"+me.getLocalization("mapLayer")+" "+layers[j].getName();
-                            // Todo: following line is only for temporary demonstration purposes of future development:
-                            titleText = titleText+'&nbsp;&nbsp;&nbsp;&nbsp;<a href="JavaScript:void(0);">'+me.getLocalization("show")+"</a>";
+                            // Todo: following line is for demonstration purposes of future development:
+                            titleText = titleText+"<br>&nbsp;&nbsp;&nbsp;&nbsp;* "+layers[j].getName();
                         }
                     }
                     jQuery(cells[0]).append(titleText);

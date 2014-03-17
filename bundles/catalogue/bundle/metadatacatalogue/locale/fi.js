@@ -39,7 +39,7 @@ Oskari.registerLocalization({
             "name": "Nimi",
             "rating": "Arviointi"
         },
-        "mapLayer": "Karttataso",
+        // "mapLayer": "Karttataso",
         "show": "Näytä",
         "hide": "Piilota"
     }
