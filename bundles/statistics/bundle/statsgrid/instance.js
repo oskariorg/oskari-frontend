@@ -195,22 +195,33 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @param {Object} indicator
          */
         addUserIndicator: function (indicator) {
-            var view = this.getView(),
-                state = this.getState();
+            var me = this,
+                view = me.getView(),
+                state = me.getState();
 
             state.indicators = state.indicators || [];
             state.indicators.push(indicator);
+            if (!view.isVisible) {
+                view.prepareMode(true, null, true);
+            }
 
             if (view.isVisible) {
-                this.gridPlugin.changeGridRegion(indicator.category);
-                this.gridPlugin.addIndicatorDataToGrid(
-                    null, indicator.id, indicator.gender, indicator.year, indicator.data, indicator.meta
+                // AH-1110 ugly hack, we have to wait until ManageStatsPlugin has initialized
+                // If we set the state as below and then prepareMode(true), slickgrid breaks with no visible error
+                window.setTimeout(
+                    function () {
+                        me.gridPlugin.changeGridRegion(indicator.category);
+                        me.gridPlugin.addIndicatorDataToGrid(
+                            null, indicator.id, indicator.gender, indicator.year, indicator.data, indicator.meta
+                        );
+                        me.gridPlugin.addIndicatorMeta(indicator);
+                    }, 1000
                 );
-                this.gridPlugin.addIndicatorMeta(indicator);
             } else {
+                // show the view.
                 state.layerId = indicator.layerId || state.layerId;
                 state.regionCategory = indicator.category;
-                this.setState(state);
+                me.setState(state);
             }
         },
         /**

@@ -26,12 +26,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
             var me = this,
                 sandbox = me.instance.getSandbox();
 
-            this.toolbar = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatsToolbar', {
+            me.toolbar = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatsToolbar', {
                 title: me.getTitle()
-            }, this.instance);
+            }, me.instance);
 
-            this.requestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.StatsGridRequestHandler', me);
-            sandbox.addRequestHandler('StatsGrid.StatsGridRequest', this.requestHandler);
+            me.requestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.StatsGridRequestHandler', me);
+            sandbox.addRequestHandler('StatsGrid.StatsGridRequest', me.requestHandler);
 
             var el = me.getEl();
             el.addClass("statsgrid");
@@ -50,20 +50,25 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
             var me = this;
             // Do not enter the mode if it's already on.
             if (!me.isVisible || !isShown) {
-                me.isVisible = (isShown == true);
+                me.isVisible = !!isShown;
 
                 // Update the layer if current layer is null or if the layer has changed.
-                if ((layer && (me._layer === null || me._layer === undefined)) ||
-                    (layer && me._layer.getId() + '' !== layer.getId() + '')) {
+                if (
+                    layer &&
+                    (!me._layer ||
+                        (layer.getId() + '') !== (me._layer.getId() + '')
+                    )
+                ) {
                     me._layer = layer;
                     // Notify the grid plugin of the changed layer.
-                    me.instance.gridPlugin.setLayer(layer);
+                    me.instance.gridPlugin.setLayer(me._layer);
                     // Save the changed layer to the state.
                     me.instance.state.layerId = me._layer.getId();
                     me.toolbar.changeName(me.instance.getLocalization('tile').title + ' - ' + me._layer.getName());
+                    me._layer.setOpacity(100);
                 }
                 // use default layer if we're showing the UI and don't have a layer
-                var layerAdded = me.isVisible && me._layer === null || me._layer === undefined;
+                var layerAdded = me.isVisible && !me._layer;
                 if (layerAdded) {
                     me._layer = me.instance.sandbox.findMapLayerFromSelectedMapLayers(me.instance.conf.defaultLayerId);
                     if (!me._layer) {
@@ -79,6 +84,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                         // Save the changed layer to the state.
                         me.instance.state.layerId = me._layer.getId();
                         me.toolbar.changeName(me.instance.getLocalization('tile').title + ' - ' + me._layer.getName());
+                        me._layer.setOpacity(100);
                     }
                 } else if (!me.isVisible && me._layer) {
                     me._layer = null;
@@ -123,20 +129,34 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
          */
         showMode: function (isShown, blnFromExtensionEvent) {
             var me = this,
-                sandbox = this.instance.getSandbox();
-            this.toolbar.show(isShown);
+                sandbox = me.instance.getSandbox();
+            me.toolbar.show(isShown);
 
-            var mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule'),
+            var mapModule = me.instance.getSandbox().findRegisteredModuleInstance('MainMapModule'),
                 map = mapModule.getMap(),
-                elCenter = this.getCenterColumn(),
-                elLeft = this.getLeftColumn();
+                elCenter = me.getCenterColumn(),
+                elLeft = me.getLeftColumn(),
+                layers,
+                layer,
+                i,
+                visReqName = 'MapModulePlugin.MapLayerVisibilityRequest',
+                visibilityRequestBuilder = sandbox.getRequestBuilder(visReqName),
+                request;
 
             // FIXME we should figure out a better way to toggle modes & map plugins
-
-
             if (isShown) {
                 /** ENTER The Mode */
-
+                // Hide base layers, store hidden layers to state so we can show them on exit
+                layers = me.instance.sandbox.findAllSelectedMapLayers();
+                me.instance.state.hiddenLayers = [];
+                for (i = 0; i < layers.length; i++) {
+                    layer = layers[i];
+                    if (layer && me._layer && layer.getId() !== me._layer.getId() && layer.isVisible()) {
+                        me.instance.state.hiddenLayers.push(layer);
+                        request = visibilityRequestBuilder(layer.getId(), false);
+                        sandbox.request(me.instance.getName(), request);
+                    }
+                }
                 // FIXME move center location and zoom level to config
                 /** Center Finland and set zoom to min **/
                 var newCenter = new OpenLayers.LonLat(520000, 7250000);
@@ -164,8 +184,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                         me.instance.gridPlugin.grid.resizeCanvas();
                     },
                     stop: function (event, ui) {
-                        var difference = ui.size.width - ui.originalSize.width;
-                        var slickHeader = jQuery('div.slick-header-columns');
+                        var difference = ui.size.width - ui.originalSize.width,
+                            slickHeader = jQuery('div.slick-header-columns');
                         slickHeader.width(slickHeader.width() + difference);
 
                         map.updateSize();
@@ -178,7 +198,23 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
 
             } else {
                 /** EXIT The Mode */
-                this.instance.gridPlugin.destroyPopups(); // This is ugly, whose responsibility should this be?
+                // Make hidden layers visible
+                layers = me.instance.state.hiddenLayers;
+                if (layers) {
+                    for (i = 0; i < layers.length; i++) {
+                        layer = layers[i];
+                        if (layer) {
+                            request = visibilityRequestBuilder(layer.getId(), true);
+                            sandbox.request(me.instance.getName(), request);
+                        }
+                    }
+                }
+                // remove stats layer if we added it and there's no active indicators
+                // this breaks published stats...
+                //me.instance.gridPlugin.resetLayer();
+
+                me.instance.state.hiddenLayers = [];
+                me.instance.gridPlugin.destroyPopups(); // This is ugly, whose responsibility should this be?
                 jQuery('#contentMap').removeClass('statsgrid-contentMap');
                 jQuery('.oskariui-mode-content').removeClass('statsgrid-mode');
 
@@ -195,8 +231,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 if (!blnFromExtensionEvent) {
                     // reset tile state if not triggered by tile click
                     // postRequestbyName is banned! sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'close']);
-                    var request = sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(this.instance, 'close', this.instance.getName());
-                    sandbox.request(this.instance.getName(), request);
+                    request = sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me.instance, 'close', me.instance.getName());
+                    sandbox.request(me.instance.getName(), request);
                 }
 
                 /** a hack to notify openlayers of map size change */
