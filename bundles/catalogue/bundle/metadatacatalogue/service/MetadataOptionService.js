@@ -59,7 +59,6 @@ function(searchUrl) {
               }
              },
             url : this._searchUrl,
-            data : "",
             error : onError,
             success : onSuccess
         });
@@ -71,5 +70,3 @@ function(searchUrl) {
      */
     'protocol' : ['Oskari.mapframework.service.Service']
 });
-
-/* Inheritance */

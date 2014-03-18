@@ -2,6 +2,18 @@
 
 ## 1.19
 
+### mapwfs2
+
+No longer waits for an WMSGetFeatureInfo request to complete when sending map click features. Instead immediately sends a `GetInfoResultEvent` with the received data.
+
+### infobox
+
+Made adaptable to add more content to an open popup. Basically if it receives a request to show a popup with the same id and location as an open one, just adds/modifies the content of said popup.
+
+### mapmodule-plugin/getinfo
+
+Is the single point of contact with the infobox now. Handles adding/removing map layers and modifies the infobox popup accordingly. Bundles who want feature info shown on a info popup should send a `GetInfoResultEvent` with the data they want to show.
+
 ### mapmodule-plugin/realtimePlugin
 
 Added a new plugin for managing layers which have been cofigured as real time layers. The plugin refreshes the layers periodically, with a refresh rate specified for each layer separately. See the docs for more info.
@@ -26,6 +38,10 @@ If you have used the defaults and want to keep them add mapOptions to your mapfu
 	}
 }
 ```
+
+### Sandbox/map layer service
+
+Added new method to find all layers corresponding to given metadata id.
 
 ### search bundle
 

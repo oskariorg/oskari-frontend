@@ -136,75 +136,155 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          * }]
          */
         popup: function (id, title, contentData, lonlat, colourScheme, font) {
-            var me = this;
-            var arrow = this._arrow.clone();
-            var header = this._header.clone();
-            var headerWrapper = this._headerWrapper.clone();
-            var contentDiv = this._contentDiv.clone();
-            var closeButton = this._headerCloseButton.clone();
+            if (_.isEmpty(contentData)) return;
+
+            var me = this,
+                currPopup = this._popups[id],
+                refresh = (currPopup &&
+                    currPopup.lonlat.lon === lonlat.lon &&
+                    currPopup.lonlat.lat === lonlat.lat);
+
+            if (refresh) {
+                contentData = this._getChangedContentData(
+                    currPopup.contentData.slice(), contentData.slice());
+                currPopup.contentData = contentData;
+            }
+
+            this._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh);
+        },
+        _renderPopup: function(id, contentData, title, lonlat, colourScheme, font, refresh) {
+            var contentDiv = this._renderContentData(contentData),
+                popupContent = this._renderPopupContent(title, contentDiv),
+                popup;
+
+            if (refresh) {
+                popup = this._popups[id].popup;
+                popup.setContentHTML(popupContent);
+            } else {
+                popup = new OpenLayers.Popup(
+                    id,
+                    lonlat,
+                    new OpenLayers.Size(400, 300),
+                    popupContent,
+                    false
+                );
+                this._popups[id] = {
+                    title: title,
+                    contentData: contentData,
+                    lonlat: lonlat,
+                    popup: popup,
+                    colourScheme: colourScheme,
+                    font: font
+                };
+
+                popup.moveTo = function (px) {
+                    if ((px !== null && px !== undefined) && (this.div !== null && this.div !== undefined)) {
+                        this.div.style.left = px.x + "px";
+                        var topy = px.y - 20;
+                        this.div.style.top = topy + "px";
+                    }
+                };
+
+                this.getMapModule().getMap().addPopup(popup);
+
+            }
+            
+            if (this.adaptable) {
+                this._adaptPopupSize(id, refresh);
+            }
+
+            this._panMapToShowPopup(lonlat);
+            this._setClickEvent(id, popup, contentData);
+
+            popup.setBackgroundColor('transparent');
+            jQuery(popup.div).css('overflow', 'visible');
+            jQuery(popup.groupDiv).css('overflow', 'visible');
+
+            var popupDOM = jQuery('#' + id);
+            // Set the colour scheme if one provided
+            if (colourScheme) {
+                this._changeColourScheme(colourScheme, popupDOM, id);
+            }
+            // Set the font if one provided
+            if (font) {
+                this._changeFont(font, popupDOM, id);
+            }
+            // Fix the HTML5 placeholder for < IE10
+            var inputs = popupDOM.find('.contentWrapper input, .contentWrapper textarea');
+            if (typeof inputs.placeholder === 'function') {
+                inputs.placeholder();
+            }
+        },
+        /**
+         * Wraps the content into popup and returns the html string.
+         * 
+         * @method _renderPopupContent
+         * @private
+         * @param  {String} title
+         * @param  {jQuery} contentDiv
+         * @return {String}
+         */
+        _renderPopupContent: function(title, contentDiv) {
+            var arrow = this._arrow.clone(),
+                header = this._header.clone(),
+                headerWrapper = this._headerWrapper.clone(),
+                closeButton = this._headerCloseButton.clone(),
+                resultHtml;
 
             header.append(title);
             headerWrapper.append(header);
             headerWrapper.append(closeButton);
+            resultHtml = arrow.outerHTML() +
+                headerWrapper.outerHTML() +
+                contentDiv.outerHTML();
 
-            for (var i = 0; i < contentData.length; i++) {
-                if (i !== 0) {
-                    contentDiv.append(this._contentSeparator.clone());
-                }
-                var html = contentData[i].html;
-                var contentWrapper = this._contentWrapper.clone();
-                contentWrapper.append(html);
-                var action = contentData[i].actions;
-                var useButtons = (contentData[i].useButtons == true);
-                var primaryButton = contentData[i].primaryButton;
-                for (var key in action) {
-                    var attrName = key;
-                    var attrValue = action[key];
-                    var actionLink = null;
+            return resultHtml;
+        },
+        /**
+         * Renders the content data into html presentation.
+         * Also creates links/buttons for the actions.
+         * 
+         * @method _renderContentData
+         * @private
+         * @param  {Object[]} contentData
+         * @return {jQuery}
+         */
+        _renderContentData: function(contentData) {
+            var me = this;
+
+            return _.foldl(contentData, function(contentDiv, datum, index) {
+                var useButtons = (datum.useButtons === true),
+                    primaryButton = datum.primaryButton,
+                    contentWrapper = me._contentWrapper.clone();
+
+                contentWrapper.append(datum.html);
+
+                for (var key in datum.actions) {
+                    var actionLink, btn, link;
+
                     if (useButtons) {
-                        actionLink = this._actionButton.clone();
-                        var btn = actionLink.find('input');
-                        btn.attr('contentdata', i);
-                        btn.attr('value', attrName);
-                        if (attrName == primaryButton) {
-                            btn.addClass('primary');
-                        }
+                        actionLink = me._actionButton.clone();
+                        btn = actionLink.find('input');
+                        btn.attr({
+                            "contentdata": index,
+                            "value": key
+                        });
+                        if (key == primaryButton) btn.addClass('primary');
                     } else {
-                        actionLink = this._actionLink.clone();
-                        var link = actionLink.find('a');
-                        link.attr('contentdata', i);
-                        link.append(attrName);
+                        actionLink = me._actionLink.clone();
+                        link = actionLink.find('a');
+                        link.attr('contentdata', index);
+                        link.append(key);
                     }
                     contentWrapper.append(actionLink);
                 }
+
                 contentDiv.append(contentWrapper);
-            }
-
-            var openlayersMap = this.getMapModule().getMap();
-            var popup = new OpenLayers.Popup(id,
-                new OpenLayers.LonLat(lonlat.lon, lonlat.lat),
-                new OpenLayers.Size(400, 300),
-                arrow.outerHTML() +
-                headerWrapper.outerHTML() +
-                contentDiv.outerHTML(),
-                false);
-            popup.moveTo = function (px) {
-                if ((px !== null && px !== undefined) && (this.div !== null && this.div !== undefined)) {
-                    this.div.style.left = px.x + "px";
-                    var topy = px.y - 20;
-                    this.div.style.top = topy + "px";
-                }
-            };
-
-            popup.setBackgroundColor('transparent');
-            this._popups[id] = {
-                title: title,
-                contentData: contentData,
-                lonlat: lonlat,
-                popup: popup
-            }
-            jQuery(popup.div).css('overflow', 'visible');
-            jQuery(popup.groupDiv).css('overflow', 'visible');
+                return contentDiv;
+            }, me._contentDiv.clone());
+        },
+        _setClickEvent: function(id, popup, contentData) {
+            var me = this;
             // override
             popup.events.un({
                 "click": popup.onclick,
@@ -214,11 +294,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             popup.events.on({
                 "click": function (evt) {
                     var link = jQuery(evt.target || evt.srcElement);
+
                     if (link.hasClass('olPopupCloseBox')) { // Close button
                         me.close(id);
                     } else { // Action links
                         var i = link.attr('contentdata');
-                        //var text = link.html();
                         var text = link.attr('value');
                         if (!text) {
                             text = link.html();
@@ -230,41 +310,88 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 },
                 scope: popup
             });
+        },
+        /**
+         * Merges the given new data to the old data.
+         * If there's a fragment with the same layerId in both,
+         * the new one replaces it.
+         * 
+         * @method _getChangedContentData
+         * @private
+         * @param  {Object[]} oldData
+         * @param  {Object[]} newData
+         * @return {Object[]}
+         */
+        _getChangedContentData: function(oldData, newData) {
+            var retData;
 
-            openlayersMap.addPopup(popup);
-            if (this.adaptable) {
-                jQuery(this._adaptPopupSize(id));
+            for (var i = 0, oLen = oldData.length; i < oLen; ++i) {
+                for (var j = 0, nLen = newData.length; j < nLen; ++j) {
+                    if (newData[j].layerId &&
+                        newData[j].layerId === oldData[i].layerId) {
+                        oldData[i] = newData[j];
+                        newData.splice(j, 1);
+                        break;
+                    }
+                }
             }
-            this._panMapToShowPopup(lonlat);
 
-            var popupDOM = jQuery('#' + id);
-            // Set the colour scheme if one provided
-            if (colourScheme) {
-                this._changeColourScheme(colourScheme, popupDOM, id);
+            retData = oldData.concat(newData);
+
+            return retData;
+        },
+        /**
+         * Removes the data of given id from the popup and
+         * renders it again to reflect the change.
+         * 
+         * @method removeContentData
+         * @private
+         * @param  {String} popupId
+         * @param  {String} contentId
+         */
+        removeContentData: function(popupId, contentId) {
+            var popup = this.getPopups(popupId),
+                removed = false,
+                contentData, datum, i;
+
+            if (!popup) return;
+
+            contentData = popup.contentData;
+
+            for (i = 0, cLen = contentData.length; i < cLen; ++i) {
+                datum = contentData[i];
+                if (datum.layerId && (''+datum.layerId === ''+contentId)) {
+                    contentData.splice(i, 1);
+                    removed = true;
+                    break;
+                }
             }
 
-            // Set the font if one provided
-            if (font) {
-                this._changeFont(font, popupDOM, id);
-            }
-
-            // Fix the HTML5 placeholder for < IE10
-            var inputs = popupDOM.find('.contentWrapper input, .contentWrapper textarea');
-            if (typeof inputs.placeholder === 'function') {
-                inputs.placeholder();
+            if (removed) {
+                this._renderPopup(
+                    popupId,
+                    contentData,
+                    popup.title,
+                    popup.lonlat,
+                    popup.colourScheme,
+                    popup.font,
+                    true
+                );
             }
         },
         setAdaptable: function (isAdaptable) {
             this.adaptable = isAdaptable;
         },
 
-        _adaptPopupSize: function (olPopupId) {
+        _adaptPopupSize: function (olPopupId, isOld) {
             var viewport = jQuery(this.getMapModule().getMapViewPortDiv());
             var popup = jQuery('#' + olPopupId);
-            //popup needs to move 10 pixels to the right so that header arrow can be moved out of container(left).
-            var left = parseFloat(popup.css('left')) + 10;
+            var left = parseFloat(popup.css('left'));
+            // popup needs to move 10 pixels to the right
+            // so that header arrow can be moved out of container(left).
+            // Only move it if creating a new popup
+            if (!isOld) left = left + 10;
 
-            //
             popup.find('.popupHeaderArrow').css({
                 'margin-left': '-10px'
             });
@@ -395,9 +522,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
             // AH-1075 colourScheme.iconCls might not be set, so check first.
             if (colourScheme.iconCls) {
-                closeButton.removeClass('icon-close-white');
-                closeButton.removeClass('icon-close');
-                closeButton.addClass(colourScheme.iconCls);
+                closeButton
+                    .removeClass('icon-close-white icon-close')
+                    .addClass(colourScheme.iconCls);
             }
         },
         /**
@@ -446,13 +573,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          * @param {String} id
          *      id for popup that we want to close (optional - if not given, closes all popups)
          */
-        close: function (id) {
+        close: function (id, position) {
             // destroys all if id not given
             // deletes reference to the same id will work next time also
             if (!id) {
                 for (var pid in this._popups) {
-                    this._popups[pid].popup.destroy();
-                    delete this._popups[pid];
+                    var popup = this._popups[pid];
+                    if (!position ||
+                        position.lon !== popup.lonlat.lon ||
+                        position.lat !== popup.lonlat.lat) {
+                        popup.popup.destroy();
+                        delete this._popups[pid];
+                    }
                 }
                 return;
             }
@@ -470,7 +602,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          * Returns references to popups that are currently open
          * @return {Object}
          */
-        getPopups: function () {
+        getPopups: function (id) {
+            if (id) {
+                return this._popups[id];
+            }
             return this._popups;
         },
 
