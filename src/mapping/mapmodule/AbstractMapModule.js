@@ -40,7 +40,16 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
 
         this._id = id;
         this._imageUrl = imageUrl;
-        this._options = options;
+        this._options = {
+            resolutions : [2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5],
+            srsName : 'EPSG:3067',
+            units : 'm'
+        };
+        if(options) {
+            for(var key in options) {
+                this._options[key] = options[key];
+            }
+        }
 
         this._controls = {};
         this._layerPlugins = {};
@@ -48,18 +57,23 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
         /** @static @property {String} _projectionCode SRS projection code, defaults
          * to 'EPSG:3067' */
         this._projection = null;
-        this._projectionCode = options.srsName;
+        this._projectionCode = this._options.srsName;
         this._supportedFormats = {};
 
         this._map = null;
 
         // _mapScales are calculated in _calculateScalesImpl based on resolutions in options
         this._mapScales = [];
-        this._mapResolutions = options.resolutions;
+        this._mapResolutions = this._options.resolutions;
         // arr
-        this._maxExtent = options.maxExtent;
+        this._maxExtent = this._options.maxExtent || {};
         // props: left,bottom,right, top
-        this._extent = [this._maxExtent.left, this._maxExtent.bottom, this._maxExtent.right, this._maxExtent.top];
+        if(this._maxExtent.left) {
+            this._extent = [this._maxExtent.left, this._maxExtent.bottom, this._maxExtent.right, this._maxExtent.top];
+        }
+        else {
+            this._extent = [];   
+        }
         // arr
 
         this._sandbox = null;

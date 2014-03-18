@@ -23,6 +23,22 @@ Oskari.clazz
             this.optionService = null;
             this.searchService = null;
             this.tabPriority = 5.0;
+            this.resultHeaders = [{
+                title: this.getLocalization('grid').name,
+                prop: 'name'
+            }, {
+                title: this.getLocalization('grid').rating,
+                prop: 'rating'
+            }, {
+                title: '',
+                prop: 'info'
+            }];
+            this.lastSearch = "";
+            // last search result is saved so we can sort it in client
+            this.lastResult = null;
+            // last sort parameters are saved so we can change sort direction
+            // if the same column is sorted again
+            this.lastSort = null;
         }, {
             /**
              * @static
@@ -34,7 +50,8 @@ Oskari.clazz
              * @property templates
              */
             templates: {
-                metadataTab: jQuery('<div class="metadataCatalogueContainer">' +
+                metadataTab: jQuery('<div class="metadataCatalogueContainer"></div>'),
+                optionPanel: jQuery('<div class="main metadataOptions">' +
                     '<div class="metadataCatalogueDescription"></div>' +
                     '<div class="controls"></div>'+
                     '<div class="moreLess"></div>'+
@@ -46,8 +63,12 @@ Oskari.clazz
                 metadataDropdown: jQuery('<div class="metadataType"><select class="metadataDef"></select></div>'),
                 dropdownOption: jQuery('<option></option>'),
                 checkboxRow: jQuery('<div class="metadataRow checkboxRow"><div class="rowLabel"></div class=""><div class="checkboxes"></div></div></div>'),
-                dropdownRow: jQuery('<div class="metadataRow dropdownRow"><div class="rowLabel"></div></div>')
-            },
+                dropdownRow: jQuery('<div class="metadataRow dropdownRow"><div class="rowLabel"></div></div>'),
+                resultPanel: jQuery('<div class="main metadataResults"></div>'),
+                resultHeader: jQuery('<div class="resultHeader"><div class="panelHeader resultTitle"></div><div class="panelHeader modify"><a href="JavaScript:void(0);" class="modifyLink"></a></div></div>'),
+                resultTable: jQuery('<div class="resultTable"><table class="metadataSearchResult">' + '<thead><tr></tr></thead>' + '<tbody></tbody>' + '</table></div>'),
+                resultTableHeader: jQuery('<th><a href="JavaScript:void(0);"></a></th>'),
+                resultTableRow: jQuery('<tr>' + '<td></td>' + '<td></td>' + '<td><div class="layer-info icon-info"></div></td>' + '</tr>')            },
             /**
              * @method getName
              * @return {String} the name for the component
@@ -239,6 +260,11 @@ Oskari.clazz
                 var me = this;
 
                 var metadataCatalogueContainer = this.templates.metadataTab.clone();
+                var optionPanel = this.templates.optionPanel.clone();
+                var resultPanel = this.templates.resultPanel.clone();
+                metadataCatalogueContainer.append(optionPanel);
+                metadataCatalogueContainer.append(resultPanel);
+                resultPanel.hide();
 
                 var metadataCatalogueDescription = metadataCatalogueContainer.find('div.metadataCatalogueDescription');
                 metadataCatalogueDescription.html(me.getLocalization('metadataCatalogueDescription'));
@@ -256,11 +282,8 @@ Oskari.clazz
                     me.state.metadatacataloguetext = value;
                     if (!value) {
                         // remove results when field is emptied
-                        var info = metadataCatalogueContainer.find('div.info');
-                        info.empty();
                         var resultList = metadataCatalogueContainer.find('div.resultList');
                         resultList.empty();
-
                         // try to remove markers if request is available when field is emptied
                         var reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkerRequest');
                         if (reqBuilder) {
@@ -300,16 +323,16 @@ Oskari.clazz
                             search[dropdownDef.attr("name")] = dropdownDef.find(":selected").val();
                         }
                     }
+                    me.lastSearch = field.getValue();
                     me.searchService.doSearch(search,function(data) {
-                            me.showResults(data);
-                        }, function(data) {
-                            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            var okBtn = dialog.createCloseButton('OK');
-                            var title = me.getLocalization('metadatasearchservice_alert_title');
-                            var msg = me.getLocalization('metadatasearchservice_not_found_anything_text');
-                            dialog.show(title, msg, [okBtn]);
-                        }
-                    );
+                        me._showResults(metadataCatalogueContainer,data);
+                    }, function(data) {
+                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        var okBtn = dialog.createCloseButton('OK');
+                        var title = me.getLocalization('metadatasearchservice_alert_title');
+                        var msg = me.getLocalization('metadatasearchservice_not_found_anything_text');
+                        dialog.show(title, msg, [okBtn]);
+                    });
                 };
 
                 button.setHandler(doMetadataCatalogue);
@@ -331,7 +354,6 @@ Oskari.clazz
                 // Link to advanced search
                 var moreLessLink = this.templates.moreLessLink.clone();
                 moreLessLink.html(me.getLocalization('showMore')); 
-                // TODO: don't make query when closing and perhaps do it only once and keep in memory?
                 moreLessLink.click(function() {
                     var advancedContainer = metadataCatalogueContainer.find('div.advanced');
                     if (moreLessLink.html() === me.getLocalization('showMore')) {
@@ -424,10 +446,190 @@ Oskari.clazz
              * @method showResults
              * displays metadata search results
              */
-            showResults: function (results) {
+            _showResults: function (metadataCatalogueContainer,data) {
+                var me = this;
+                me.lastResult = data.results;
+                var resultPanel = metadataCatalogueContainer.find(".metadataResults");
+                var optionPanel = metadataCatalogueContainer.find(".metadataOptions");
+                var resultHeader = me.templates.resultHeader.clone();
+                resultHeader.find(".resultTitle").text(me.getLocalization('metadataCatalogueResults') +
+                    me.lastResult.length + me.getLocalization('metadataCatalogueResultsDescription') + me.lastSearch);
+                var modifyLink = resultHeader.find(".modifyLink");
+                modifyLink.html(me.getLocalization('modifySearch'));
+                modifyLink.click(function() {
+                    resultPanel.empty();
+                    optionPanel.show();
+                });
 
+                // render results
+                var table = me.templates.resultTable.clone();
+                var tableHeaderRow = table.find('thead tr');
+                var tableBody = table.find('tbody');
+                tableBody.empty();
+                // header reference needs some closure magic to work here
+                var headerClosureMagic = function (scopedValue) {
+                    return function () {
+                        // clear table for sorted results
+                        tableBody.empty();
+                        // default to descending sort
+                        var descending = false;
+                        // if last sort was made on the same column ->
+                        // change direction
+                        if (me.lastSort && me.lastSort.attr === scopedValue.prop) {
+                            descending = !me.lastSort.descending;
+                        }
+                        // sort the results
+                        me._sortResults(scopedValue.prop, descending);
+                        // populate table content
+                        me._populateResultTable(tableBody);
+                        // apply visual changes
+                        var headerContainer = tableHeaderRow.find('a:contains(' + scopedValue.title + ')');
+                        tableHeaderRow.find('th').removeClass('asc');
+                        tableHeaderRow.find('th').removeClass('desc');
+                        if (descending) {
+                            headerContainer.parent().addClass('desc');
+                        } else {
+                            headerContainer.parent().addClass('asc');
+                        }
+                        return false;
+                    };
+                };
+                var i,
+                    header,
+                    link;
+                for (i = 0; i < me.resultHeaders.length; ++i) {
+                    header = me.templates.resultTableHeader.clone();
+                    header.addClass(me.resultHeaders[i].prop);
+                    link = header.find('a');
+                    link.append(me.resultHeaders[i].title);
+                    // Todo: Temporarily only first column is sortable
+                    if (i===0)  {
+                        link.bind('click', headerClosureMagic(me.resultHeaders[i]));
+                    }
+                    tableHeaderRow.append(header);
+                }
+
+                me._populateResultTable(tableBody);
+                resultPanel.append(resultHeader);
+                resultPanel.append(table);
+                optionPanel.hide();
+                resultPanel.show();
             },
 
+            _populateResultTable: function (resultsTableBody) {
+                var me = this;
+                var results = me.lastResult;
+                // row reference needs some closure magic to work here
+                var closureMagic = function (scopedValue) {
+                    return function () {
+                        me._resultClicked(scopedValue);
+                        return false;
+                    };
+                };
+                var i,
+                    j,
+                    row,
+                    resultContainer,
+                    cells,
+                    titleCell,
+                    titleText,
+                    mapLayerService,
+                    layers,
+                    rn,
+                    additionalUuids,
+                    additionalUuidsCheck,
+                    subLayers,
+                    s,
+                    subUuid;
+
+                for (i = 0; i < results.length; ++i) {
+                    row = results[i];
+                    if ((!row.name)||(row.name.length === 0)) {
+                        continue;
+                    }
+                    resultContainer = me.templates.resultTableRow.clone();
+                    cells = resultContainer.find('td');
+                    titleCell = jQuery(cells[0]);
+                    titleText = row.name;
+                    if ((row.organization)&&(row.organization.length > 0)) {
+                        titleText = titleText+", "+row.organization;
+                    }
+                    if ((row.id)&&(row.id.length > 0)) {
+                        mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                        layers = mapLayerService.getLayersByMetadataId(row.id);
+                        for (j = 0; j < layers.length; ++j) {
+                            // Todo: following line is for demonstration purposes of future development:
+                            titleText = titleText+"<br>&nbsp;&nbsp;&nbsp;&nbsp;* "+layers[j].getName();
+                        }
+                    }
+                    jQuery(cells[0]).append(titleText);
+                    jQuery(cells[0]).addClass(me.resultHeaders[0].prop);
+                    // Todo: real rating
+                    jQuery(cells[1]).append("*****");
+                    jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
+                    jQuery(cells[2]).addClass(me.resultHeaders[2].prop);
+                    jQuery(cells[2]).find('div.layer-info').click(function () {
+                        var rn = 'catalogue.ShowMetadataRequest';
+                        me.sandbox.postRequestByName(rn, [{
+                            uuid: row.id
+                        }]);
+                    });
+                    resultsTableBody.append(resultContainer);
+                }
+            },
+            /**
+             * @method _sortResults
+             * Sorts the last search result by comparing given attribute on
+             * the search objects
+             * @private
+             * @param {String} pAttribute attributename to sort by (e.g.
+             * result[pAttribute])
+             * @param {Boolean} pDescending true if sort direction is descending
+             */
+            _sortResults: function (pAttribute, pDescending) {
+                var me = this;
+                if (!this.lastResult) {
+                    return;
+                }
+                me.lastSort = {
+                    attr: pAttribute,
+                    descending: pDescending
+                };
+                this.lastResult.sort(function (a, b) {
+                    return me._searchResultComparator(a, b, pAttribute, pDescending);
+                });
+
+            },
+            /**
+             * @method _searchResultComparator
+             * Compares the given attribute on given objects for sorting
+             * search result objects.
+             * @private
+             * @param {Object} a search result 1
+             * @param {Object} b search result 2
+             * @param {String} pAttribute attributename to sort by (e.g.
+             * a[pAttribute])
+             * @param {Boolean} pDescending true if sort direction is descending
+             */
+            _searchResultComparator: function (a, b, pAttribute, pDescending) {
+                var nameA = a[pAttribute].toLowerCase();
+                var nameB = b[pAttribute].toLowerCase();
+
+                var value = 0;
+                if (nameA === nameB) {
+                    nameA = a.id;
+                    nameB = b.id;
+                }
+                if (nameA < nameB) {
+                    value = -1;
+                } else if (nameA > nameB) {
+                    value = 1;
+                }
+                if (pDescending) {
+                    value = value * -1;
+                }
+                return value;
+            },
             /**
              * @method setState
              * @param {Object} state bundle state as JSON
