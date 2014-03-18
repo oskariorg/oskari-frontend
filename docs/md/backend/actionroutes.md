@@ -29,6 +29,7 @@ GetThematicMap
 - [GetWSFDescribeFeature](<%= docsurl %>backend/actionroutes/GetWSFDescribeFeature.html)
 - [GetMapLayerClasses](<%= docsurl %>backend/actionroutes/getMapLayerClasses.html)
 - [GetAnalysisLayers](<%= docsurl %>backend/actionroutes/getAnalysisLayers.html)
+- [GetUserLayers](<%= docsurl %>backend/actionroutes/getUserLayers.html)
 
 GetWmsServices
 - [SaveLayer](<%= docsurl %>backend/actionroutes/saveLayer.html)
@@ -72,6 +73,9 @@ GetPublishedMyPlaceLayers
 
 ## ANALYSIS
 - [CreateAnalysisLayer](<%= docsurl %>backend/actionroutes/createanalysislayer.html)
+
+## User layer
+- [CreateUserLayer](<%= docsurl %>backend/actionroutes/createuserlayer.html)
 
 * added by MapFull as this is liferay specific
     - GetArticlesByTag
