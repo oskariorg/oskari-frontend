@@ -4,110 +4,116 @@
  *
  * @class Oskari.statistics.bundle.statsgrid.UserIndicatorsService
  */
-Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsService', 
-
-/**
- * @method create called automatically on construction
- * @static
- * 
- */
-function(instance) {
-    this.instance = instance;
-    this.sandbox = instance.sandbox;
-    this.eventName = 'StatsGrid.UserIndicatorEvent';
-}, {
-    __name: "StatsGrid.UserIndicatorsService",
-    __qname : "Oskari.statistics.bundle.statsgrid.UserIndicatorsService",
-
-    getQName : function() {
-        return this.__qname;
-    },
-
-    getName: function() {
-        return this.__name;
-    },
+Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsService',
 
     /**
-     * @method init
-     * Initializes the service
+     * @method create called automatically on construction
+     * @static
+     *
      */
-    init: function() {
-    },
 
-    getUserIndicators: function(successCb, errorCb) {
-        var url = this.sandbox.getAjaxUrl() + 'action_route=GetUserIndicators';
-        this._get(url, successCb, errorCb);
-    },
+    function (instance) {
+        this.instance = instance;
+        this.sandbox = instance.sandbox;
+        this.eventName = 'StatsGrid.UserIndicatorEvent';
+    }, {
+        __name: "StatsGrid.UserIndicatorsService",
+        __qname: "Oskari.statistics.bundle.statsgrid.UserIndicatorsService",
 
-    getUserIndicator: function(indicatorId, successCb, errorCb) {
-        var url = this.sandbox.getAjaxUrl() + 'action_route=GetUserIndicators&id=' + indicatorId;
-        this._get(url, successCb, errorCb);
-    },
+        getQName: function () {
+            return this.__qname;
+        },
 
-    saveUserIndicator: function(indicator, successCb, errorCb) {
-        var me = this,
-            url = this.sandbox.getAjaxUrl() + 'action_route=SaveUserIndicator',
-            sandbox = this.sandbox,
-            eventName = this.eventName,
-            cbWrapper = function(response) {
-                var eventBuilder = sandbox.getEventBuilder(eventName);
-                if (eventBuilder) {
-                    var event = eventBuilder('create', me._objectifyIndicator(indicator, response));
-                    sandbox.notifyAll(event);
+        getName: function () {
+            return this.__name;
+        },
+
+        /**
+         * @method init
+         * Initializes the service
+         */
+        init: function () {},
+
+        getUserIndicators: function (successCb, errorCb) {
+            var url = this.sandbox.getAjaxUrl() + 'action_route=GetUserIndicators';
+            this._get(url, successCb, errorCb);
+        },
+
+        getUserIndicator: function (indicatorId, successCb, errorCb) {
+            var url = this.sandbox.getAjaxUrl() + 'action_route=GetUserIndicators&id=' + indicatorId;
+            this._get(url, successCb, errorCb);
+        },
+
+        saveUserIndicator: function (indicator, successCb, errorCb) {
+            var me = this,
+                url = this.sandbox.getAjaxUrl() + 'action_route=SaveUserIndicator',
+                sandbox = this.sandbox,
+                eventName = this.eventName,
+                cbWrapper = function (response) {
+                    var eventBuilder = sandbox.getEventBuilder(eventName);
+                    if (eventBuilder) {
+                        var event = eventBuilder('create', me._objectifyIndicator(indicator, response));
+                        sandbox.notifyAll(event);
+                    }
+                    successCb(response);
+                };
+
+            this._post(url, indicator, cbWrapper, errorCb);
+        },
+
+        deleteUserIndicator: function (indicatorId, successCb, errorCb) {
+            var url = this.sandbox.getAjaxUrl() + 'action_route=DeleteUserIndicator&id=' + indicatorId;
+            this._get(url, successCb, errorCb);
+        },
+
+        _get: function (url, successCb, errorCb) {
+            this._ajax("GET", url, successCb, errorCb);
+        },
+
+        _post: function (url, data, successCb, errorCb) {
+            this._ajax("POST", url, successCb, errorCb, data);
+        },
+
+        _ajax: function (method, url, successCb, errorCb, data) {
+            var params = {
+                url: url,
+                type: method,
+                dataType: 'json',
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                success: function (response) {
+                    if (typeof successCb === 'function') {
+                        successCb(response);
+                    }
+                },
+                error: function (jqXHR, textStatus) {
+                    if (typeof errorCb === 'function' && jqXHR.status !== 0) {
+                        errorCb(jqXHR, textStatus);
+                    }
                 }
-                successCb(response);
             };
 
-        this._post(url, indicator, cbWrapper, errorCb);
-    },
-
-    deleteUserIndicator: function(indicatorId, successCb, errorCb) {
-        var url = this.sandbox.getAjaxUrl() + 'action_route=DeleteUserIndicator&id=' + indicatorId;
-        this._get(url, successCb, errorCb);
-    },
-
-    _get: function(url, successCb, errorCb) {
-        this._ajax("GET", url, successCb, errorCb);
-    },
-
-    _post: function(url, data, successCb, errorCb) {
-        this._ajax("POST", url, successCb, errorCb, data);
-    },
-
-    _ajax: function(method, url, successCb, errorCb, data) {
-        var params = {
-            url : url,
-            type : method,
-            dataType : 'json',
-            beforeSend : function(x) {
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
-                }
-            },
-            success : function(response) {
-                if (typeof successCb === 'function') successCb(response);
-            },
-            error : function(jqXHR, textStatus) {
-                if (typeof errorCb === 'function' && jqXHR.status !== 0) errorCb(jqXHR, textStatus);
+            if (data) {
+                params.data = data;
             }
-        };
 
-        if (data) params.data = data;
+            jQuery.ajax(params);
+        },
 
-        jQuery.ajax(params);
-    },
+        _objectifyIndicator: function (indicator, response) {
+            var retIndicator = {
+                id: response.id,
+                title: JSON.parse(indicator.title),
+                description: JSON.parse(indicator.description),
+                organization: JSON.parse(indicator.source),
+                year: indicator.year
+            };
 
-    _objectifyIndicator: function(indicator, response) {
-        var retIndicator = {
-            id: response.id,
-            title: JSON.parse(indicator.title),
-            description: JSON.parse(indicator.description),
-            organization: JSON.parse(indicator.source),
-            year: indicator.year
-        };
-
-        return retIndicator;
-    }
-}, {
-    'protocol' : ['Oskari.mapframework.service.Service']
-});
+            return retIndicator;
+        }
+    }, {
+        'protocol': ['Oskari.mapframework.service.Service']
+    });

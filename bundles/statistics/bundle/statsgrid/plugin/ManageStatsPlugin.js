@@ -89,7 +89,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         this._selectedRegionCategory = undefined;
         this._defaultRegionCategory = 'KUNTA';
     }, {
-        /** 
+        /**
          * @property __name module name
          * @static
          */
@@ -742,8 +742,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          */
         _addOwnIndicatorButton: function (paramCont, container) {
             var me = this,
-                button = jQuery(me.templates.addOwnIndicator),
-                ctnr = paramCont.parents('div.statsgrid');
+                button = jQuery(me.templates.addOwnIndicator);
             button.find('input').val(me._locale.addDataButton);
             paramCont.append(button);
             button.find('input').click(function (e) {
@@ -1571,8 +1570,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             me.addIndicatorMeta(data);
                             var j;
                             for (j = 0; j < indicators.length; j++) {
-                                // FIXME use ===
-                                if (indicators[j].id == data.id) {
+                                if (indicators[j].id === data.id) {
                                     me.indicators[j] = data;
                                 }
                             }
