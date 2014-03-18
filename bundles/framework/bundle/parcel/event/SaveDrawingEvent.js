@@ -27,7 +27,7 @@ function(feature) {
      */
     getDrawing : function() {
         return this._drawing;
-    },
+    }
 }, {
     'protocol' : ['Oskari.mapframework.event.Event']
 });

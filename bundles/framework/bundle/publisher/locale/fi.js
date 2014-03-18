@@ -64,7 +64,7 @@ Oskari.registerLocalization({
                 "drawTools" : "Piirtotyökalut",
                 "point" : "Salli pisteet",
                 "line" : "Salli viivat",
-                "area" : "Salli alueet",
+                "area" : "Salli alueet"
             },
             "toollayout": {
                 "label": "Työkalujen asettelu",
