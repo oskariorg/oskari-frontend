@@ -2,6 +2,10 @@
 
 ## 1.19
 
+### *new bundle* myplacesimport
+
+Adds functionality to import users' own data zipped in (currently only) ESRI shape file format. Also added is a complementary bundle `mapuserlayers` which is responsible for showing the user layers on the map.
+
 ### mapwfs2
 
 No longer waits for an WMSGetFeatureInfo request to complete when sending map click features. Instead immediately sends a `GetInfoResultEvent` with the received data.
