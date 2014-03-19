@@ -44,6 +44,9 @@
 	                "mapanalysis": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
+	                "mapuserlayers": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
 	                "service-base": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
@@ -479,6 +482,22 @@
         			}
         		}
         	}
-        }
+        }, {
+		    "title" : "myplacesimport",
+		    "fi" : "myplacesimport",
+		    "sv" : "myplacesimport",
+		    "en" : "myplacesimport",
+		    "bundlename" : "myplacesimport",
+		    "bundleinstancename" : "myplacesimport",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "myplacesimport" : {
+		                "bundlePath" : "../../../packages/framework/bundle/"
+		            }
+		        },
+		        "Require-Bundle-Instance" : []
+		    },
+		    "instanceProps" : {}
+		}
 	]
 }
