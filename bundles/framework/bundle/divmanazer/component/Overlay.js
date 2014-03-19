@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
 
     function () {
         this.template = jQuery('<div class="oskarioverlay transparent"></div>');
-        this._overlay = null;
+        this._overlays = null;
         this._targetSelector = null;
         this._resizingWorkaround = null;
     }, {
@@ -22,33 +22,45 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
          */
         overlay: function (elementSelector) {
             var me = this,
-                target;
-            me._overlay = this.template.clone();
+                targets;
             me._targetSelector = elementSelector;
             if (!this._targetSelector) {
                 this._targetSelector = 'body';
             }
-            target = jQuery(this._targetSelector);
-            target.append(this._overlay);
+            targets = jQuery(this._targetSelector);
+            me._overlays = _.map(targets, function (target) {
+                return {
+                  overlay: me.template.clone(),
+                  target: jQuery(target)
+                };
+            });
+            _.forEach(me._overlays, function (overlay) {
+                overlay.target.append(overlay.overlay);
+            });
             me._setupSizeAndLocation();
-            me._overlay.bind('click', function (event) {
-                event.preventDefault();
+            _.forEach(me._overlays, function (overlay) {
+                overlay.overlay.bind('click', function (event) {
+                    event.preventDefault();
+                })
             });
         },
         _setupSizeAndLocation: function () {
-            var me = this,
-                target = jQuery(this._targetSelector);
-            me._overlay.css({
-                'left': "0px",
-                'top': "0px",
-                'width': target.width() + 'px',
-                'height': target.height() + 'px'
+            var me = this;
+            _.forEach(me._overlays, function (overlay) {
+                overlay.overlay.css({
+                    'left': "0px",
+                    'top': "0px",
+                    'width': overlay.target.width() + 'px',
+                    'height': overlay.target.height() + 'px'
+                });
             });
         },
         resize: function () {
-            var tmp = jQuery(this._targetSelector);
-            this._overlay.height(tmp.height());
-            this._overlay.width(tmp.width());
+            var me = this;
+            _.forEach(me._overlays, function (overlay) {
+                overlay.overlay.height(overlay.target.height());
+                overlay.overlay.width(overlay.target.width());
+            });
         },
         followResizing: function (useWindow) {
             var me = this;
@@ -64,15 +76,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             }
         },
         close: function () {
-            this._overlay.remove();
+            var me = this;
+            _.forEach(me._overlays, function (overlay) {
+               overlay.overlay.remove();
+            });
             if (this._resizingWorkaround) {
                 clearTimeout(this._resizingWorkaround);
             }
         },
         bindClickToClose: function () {
             var me = this;
-            me._overlay.bind('click', function () {
-                me.close();
+            _.forEach(me._overlays, function (overlay) {
+                overlay.overlay.bind('click', function() {
+                    me.close();
+                });
             });
         }
     });
