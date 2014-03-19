@@ -20,9 +20,11 @@ function () {
     };
     this.importService = undefined;
     this.tab = undefined;
+    this.layerType = 'userlayer';
 }, {
     start: function () {
-        var conf = this.conf,
+        var me = this,
+            conf = this.conf,
             sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
             sandbox = Oskari.getSandbox(sandboxName),
             request;
@@ -35,9 +37,12 @@ function () {
             sandbox.registerAsStateful(this.mediator.bundleId, this);
         }
 
+        this.tab = this.addTab(sandbox);
         this.importService = this.createService(sandbox);
         this.importService.init();
-        this.tab = this.addTab(sandbox);
+        this.importService.getUserLayers(function() {
+            me.getTab().refresh();
+        });
 
         request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
         sandbox.request(this, request);
@@ -78,8 +83,22 @@ function () {
         }
     },
     addUserLayer: function(layerJson) {
-        // TODO: send json to maplayerservice
-        console.log(layerJson);
+        if (!layerJson) return;
+
+        var me = this,
+            sandbox = this.getSandbox(),
+            reqBuilder, request;
+
+        this.getService().addLayerToService(layerJson, function(mapLayer) {
+            // refresh the tab
+            me.getTab().refresh();
+            // Request the layer to be added to the map.
+            requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
+            if (requestBuilder) {
+                request = requestBuilder(mapLayer.getId());
+                sandbox.request(me, request);
+            }
+        });
     },
     createService: function(sandbox) {
         var importService = Oskari.clazz.create(

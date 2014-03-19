@@ -84,7 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
             var sandboxName = (this.config ? this.config.sandbox : null) || 'sandbox';
             var sandbox = Oskari.getSandbox(sandboxName);
             var layerModelBuilder = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.myplacesimport.domain.UserLayersLayerModelBuilder',
+                'Oskari.mapframework.bundle.myplacesimport.domain.UserLayerModelBuilder',
                 sandbox);
             var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
@@ -181,9 +181,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
         },
 
         /**
-         * @method onEvent
          * Event is handled forwarded to correct #eventHandlers if found or discarded
          * if not.
+         *
+         * @method onEvent
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
          */
         onEvent: function (event) {
@@ -191,30 +192,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
             if (handler) return handler.apply(this, [event]);
         },
         /**
+         * Adds given user layers to map if of type 'userlayer'
+         * 
          * @method preselectLayers
-         * Adds given analysis layers to map if of type WFS
          * @param {Oskari.mapframework.domain.WfsLayer[]} layers
          */
         preselectLayers: function (layers) {
-            var sandbox = this._sandbox,
-                i,
-                layer,
-                layerId;
-            for (i = 0; i < layers.length; i++) {
-                layer = layers[i];
-                layerId = layer.getId();
+            var me = this,
+                sandbox = this._sandbox;
 
-                if (!layer.isLayerOfType(this._layerType)) {
-                    continue;
-                }
-
-                sandbox.printDebug("preselecting " + layerId);
-                this.addMapLayerToMap(layer, true, layer.isBaseLayer());
-            }
-
+            _.chain(layers)
+                .filter(function(layer) {
+                    return layer.isLayerOfType(me._layerType);
+                })
+                .each(function(layer) {
+                    sandbox.printDebug("preselecting " + layer.getId());
+                    me.addMapLayerToMap(layer, true, layer.isBaseLayer());
+                });
         },
         /**
-         * Adds a single Analysis layer to this map
+         * Adds a single user layer to the map
          *
          * @method addMapLayerToMap
          * @param {Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer} layer
@@ -226,11 +223,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
                 return;
             }
             var openLayerId = 'layer_' + layer.getId(),
-                imgUrl = layer.getWpsUrl() + 'wpsLayerId=' + layer.getWpsLayerId(),
+                layerId = _.last(layer.getId().split('_')),
+                imgUrl = layer.getLayerUrls()[0] + 'id=' + layerId,
                 layerScales = this.getMapModule()
-                    .calculateLayerScales(layer.getMaxScale(), layer.getMinScale()),
+                    .calculateLayerScales(
+                        layer.getMaxScale(),
+                        layer.getMinScale()
+                    ),
                 openLayer = new OpenLayers.Layer.WMS(openLayerId, imgUrl, {
-                    layers: layer.getWpsName(),
+                    layers: layer.getRenderingElement(),
                     transparent: true,
                     format: "image/png"
                 }, {
@@ -299,7 +300,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
                 }
             }
         },
-
         /**
          * @method _parseGeometryForLayer
          * @private
@@ -361,7 +361,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
          * @private
          * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer
          */
-        _changeMapLayerOpacity: function (event) {
+        _changeMapLayerOpacity: function (layer) {
             this._modifyOL(layer, function(oLayer) {
                 oLayer.setOpacity(layer.getOpacity() / 100);
             });
@@ -389,7 +389,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
         _modifyOL: function(layer, cb) {
             var oLayer = this.getOLMapLayers(layer);
             if (oLayer && oLayer.length && oLayer[0] !== null && oLayer[0] !== undefined) {
-                cb(oLayer);
+                cb(oLayer[0]);
             }
         },
         /**

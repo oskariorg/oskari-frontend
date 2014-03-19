@@ -28,6 +28,8 @@ Oskari.clazz.define(
             layer.setSource(mapLayerJson.source);
             layer.setOrganizationName(loclayer.organization);
             layer.setInspireName(loclayer.inspire);
+            layer.setRenderingElement(mapLayerJson.renderingElement);
+            layer.addLayerUrl(mapLayerJson.renderingUrl);
         }
     }
 );
