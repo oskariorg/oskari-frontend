@@ -14,8 +14,7 @@ function () {
     this.buttonGroup = 'myplaces';
     this.toolName = 'import';
     this.tool = {
-        iconCls: 'myplaces-draw-point',
-        tooltip: '',
+        iconCls: 'upload-material',
         sticky: true
     };
     this.importService = undefined;
@@ -51,6 +50,7 @@ function () {
     },
     registerTool: function() {
         var me = this,
+            loc = this.getLocalization(),
             sandbox = this.getSandbox(),
             reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest'),
             request;
@@ -58,6 +58,7 @@ function () {
         this.tool.callback = function() {
             me.startTool();
         }
+        this.tool.tooltip = loc.tool.tooltip;
 
         if (reqBuilder) {
             request = reqBuilder(this.toolName, this.buttonGroup, this.tool);

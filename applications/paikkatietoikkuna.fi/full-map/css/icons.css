@@ -798,3 +798,11 @@
     background-position: -2036px 0px !important;
 }
 
+.upload-material {
+    width: 28px;
+    height: 28px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2068px 0px !important;
+}
+

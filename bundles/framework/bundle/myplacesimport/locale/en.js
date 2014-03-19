@@ -4,6 +4,9 @@ Oskari.registerLocalization({
     "value": {
         "title": "Omien aineistojen tuonti",
         "desc": "",
+        "tool": {
+            "tooltip": "Tuo oma aineisto"
+        },
         "flyout": {
             "title": "Omien aineistojen tuonti",
             "description": "Voit tuoda omia aineistoja shape-formaatissa zip-muodossa.",
