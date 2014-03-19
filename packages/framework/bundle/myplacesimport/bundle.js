@@ -3,9 +3,8 @@
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBundle", function () {
-
-}, {
+Oskari.clazz.define("Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBundle",
+    function () {}, {
     "create": function () {
         return Oskari.clazz.create("Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBundleInstance");
     },
@@ -13,7 +12,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
 }, {
     "protocol": ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source": {
-
         "scripts": [{
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/myplacesimport/instance.js"
@@ -23,8 +21,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/myplacesimport/service/MyPlacesImportService.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/myplacesimport/UserLayersTab.js"
+        }, {
+            "type": "text/css",
+            "src": "../../../../resources/framework/bundle/myplacesimport/css/style.css"
         }],
-
         "locales": [{
             "lang": "fi",
             "type": "text/javascript",
@@ -37,9 +40,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             "lang": "en",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/myplacesimport/locale/en.js"
-        }, {
-            "type": "text/css",
-            "src": "../../../../resources/framework/bundle/myplacesimport/css/style.css"
         }]
     },
     "bundle": {
