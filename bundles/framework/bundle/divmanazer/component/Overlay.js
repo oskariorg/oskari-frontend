@@ -12,7 +12,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
     function () {
         this.template = jQuery('<div class="oskarioverlay transparent"></div>');
         this._overlays = null;
-        this._targetSelector = null;
         this._resizingWorkaround = null;
     }, {
         /**
@@ -22,12 +21,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
          */
         overlay: function (elementSelector) {
             var me = this,
+                targetSelector = elementSelector,
                 targets;
-            me._targetSelector = elementSelector;
-            if (!this._targetSelector) {
-                this._targetSelector = 'body';
+            if (!targetSelector) {
+                targetSelector = 'body';
             }
-            targets = jQuery(this._targetSelector);
+            targets = jQuery(targetSelector);
             me._overlays = _.map(targets, function (target) {
                 return {
                   overlay: me.template.clone(),
