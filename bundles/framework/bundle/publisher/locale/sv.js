@@ -63,7 +63,7 @@ Oskari.registerLocalization({
                 "measurearea": "Mäta område",
                 "point" : "Tillåter punkter",
                 "line" : "Tillåter linjer",
-                "area" : "Tillåter områden",
+                "area" : "Tillåter områden"
             },
             "toollayout": {
                 "label": "Verktyg applikation",

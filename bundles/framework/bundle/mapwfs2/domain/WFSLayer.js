@@ -5,214 +5,215 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
 
-/**
- * @method create called automatically on construction
- * @static
- */
-function() {
-    /* Layer Type */
-    this._layerType = "WFS";
-    this._featureData = true;
-    this._fields = []; // property names
-    this._locales = []; // property name locales
-    this._activeFeatures = []; // features on screen
-    this._selectedFeatures = []; // filtered features
-    this._clickedFeatureIds = []; // clicked feature ids (map)
-    this._clickedFeatureListIds = []; // clicked feature ids (list)
-    this._propertyTypes = {}; // name and describeFeatureType type (hashmap, json)
-    this._styles = []; /* Array of styles that this layer supports */
-    this._customStyle = null;
-
-    this.localization = Oskari.getLocalization('MapWfs2');
-}, {
-   /* Layer type specific functions */
-
     /**
-     * @method getFields
-     * @return {String[]} fields
+     * @method create called automatically on construction
+     * @static
      */
-    getFields : function() {
-        return this._fields;
-    },
 
-    /**
-     * @method setFields
-     * @param {String[]} fields
-     */
-    setFields : function(fields) {
-        this._fields = fields;
-    },
+    function () {
+        /* Layer Type */
+        this._layerType = "WFS";
+        this._featureData = true;
+        this._fields = []; // property names
+        this._locales = []; // property name locales
+        this._activeFeatures = []; // features on screen
+        this._selectedFeatures = []; // filtered features
+        this._clickedFeatureIds = []; // clicked feature ids (map)
+        this._clickedFeatureListIds = []; // clicked feature ids (list)
+        this._propertyTypes = {}; // name and describeFeatureType type (hashmap, json)
+        this._styles = []; /* Array of styles that this layer supports */
+        this._customStyle = null;
 
-    /**
-     * @method getLocales
-     * @return {String[]} locales
-     */
-    getLocales : function() {
-        return this._locales;
-    },
+        this.localization = Oskari.getLocalization('MapWfs2');
+    }, {
+        /* Layer type specific functions */
 
-    /**
-     * @method setLocales
-     * @param {String[]} locales
-     */
-    setLocales : function(locales) {
-        this._locales = locales;
-    },
+        /**
+         * @method getFields
+         * @return {String[]} fields
+         */
+        getFields: function () {
+            return this._fields;
+        },
 
-    /**
-     * @method getActiveFeatures
-     * @return {Object[]} features
-     */
-    getActiveFeatures : function() {
-        return this._activeFeatures;
-    },
+        /**
+         * @method setFields
+         * @param {String[]} fields
+         */
+        setFields: function (fields) {
+            this._fields = fields;
+        },
 
-    /**
-     * @method setActiveFeature
-     * @param {Object} feature
-     */
-    setActiveFeature : function(feature) {
-        this._activeFeatures.push(feature);
-    },
+        /**
+         * @method getLocales
+         * @return {String[]} locales
+         */
+        getLocales: function () {
+            return this._locales;
+        },
 
-    /**
-     * @method setActiveFeatures
-     * @param {Object[]} features
-     */
-    setActiveFeatures : function(features) {
-        this._activeFeatures = features;
-    },
+        /**
+         * @method setLocales
+         * @param {String[]} locales
+         */
+        setLocales: function (locales) {
+            this._locales = locales;
+        },
 
-    /**
-     * @method getSelectedFeatures
-     * @return {Object[]} features
-     */
-    getSelectedFeatures : function() {
-        return this._selectedFeatures;
-    },
+        /**
+         * @method getActiveFeatures
+         * @return {Object[]} features
+         */
+        getActiveFeatures: function () {
+            return this._activeFeatures;
+        },
 
-    /**
-     * @method setSelectedFeature
-     * @param {Object} feature
-     */
-    setSelectedFeature : function(feature) {
-        this._selectedFeatures.push(feature);
-    },
+        /**
+         * @method setActiveFeature
+         * @param {Object} feature
+         */
+        setActiveFeature: function (feature) {
+            this._activeFeatures.push(feature);
+        },
 
-    /**
-     * @method setSelectedFeatures
-     * @param {Object[]} features
-     */
-    setSelectedFeatures : function(features) {
-        this._selectedFeatures = features;
-    },
+        /**
+         * @method setActiveFeatures
+         * @param {Object[]} features
+         */
+        setActiveFeatures: function (features) {
+            this._activeFeatures = features;
+        },
 
-    /**
-     * @method getClickedFeatureIds
-     * @return {String[]} featureIds
-     */
-    getClickedFeatureIds : function() {
-        return this._clickedFeatureIds;
-    },
+        /**
+         * @method getSelectedFeatures
+         * @return {Object[]} features
+         */
+        getSelectedFeatures: function () {
+            return this._selectedFeatures;
+        },
 
-    /**
-     * @method setClickedFeatureId
-     * @param {String} id
-     */
-    setClickedFeatureId : function(id) {
-        this._clickedFeatureIds.push(id);
-    },
+        /**
+         * @method setSelectedFeature
+         * @param {Object} feature
+         */
+        setSelectedFeature: function (feature) {
+            this._selectedFeatures.push(feature);
+        },
 
-    /**
-     * @method setClickedFeatureIds
-     * @param {String[]} features
-     */
-    setClickedFeatureIds : function(ids) {
-        this._clickedFeatureIds = ids;
-    },
+        /**
+         * @method setSelectedFeatures
+         * @param {Object[]} features
+         */
+        setSelectedFeatures: function (features) {
+            this._selectedFeatures = features;
+        },
 
-    /**
-     * @method getClickedFeatureListIds
-     * @return {String[]} featureIds
-     */
-    getClickedFeatureListIds : function() {
-        return this._clickedFeatureListIds;
-    },
+        /**
+         * @method getClickedFeatureIds
+         * @return {String[]} featureIds
+         */
+        getClickedFeatureIds: function () {
+            return this._clickedFeatureIds;
+        },
 
-    /**
-     * @method setClickedFeatureListId
-     * @param {String} id
-     */
-    setClickedFeatureListId : function(id) {
-        this._clickedFeatureListIds.push(id);
-    },
+        /**
+         * @method setClickedFeatureId
+         * @param {String} id
+         */
+        setClickedFeatureId: function (id) {
+            this._clickedFeatureIds.push(id);
+        },
 
-    /**
-     * @method setClickedFeatureListIds
-     * @param {String} id
-     */
-    setClickedFeatureListIds : function(ids) {
-        this._clickedFeatureListIds = ids;
-    },
+        /**
+         * @method setClickedFeatureIds
+         * @param {String[]} features
+         */
+        setClickedFeatureIds: function (ids) {
+            this._clickedFeatureIds = ids;
+        },
 
-    /**
-     * @method setPropertyTypes
-     * @param {json} propertyTypes
-     */
-    setPropertyTypes : function(propertyTypes) {
-        this._propertyTypes = propertyTypes;
-    },
+        /**
+         * @method getClickedFeatureListIds
+         * @return {String[]} featureIds
+         */
+        getClickedFeatureListIds: function () {
+            return this._clickedFeatureListIds;
+        },
 
-    /**
-     * @method getPropertyTypes
-     * @return {json} propertyTypes
-     */
-    getPropertyTypes : function() {
-        return this._propertyTypes;
-    },
+        /**
+         * @method setClickedFeatureListId
+         * @param {String} id
+         */
+        setClickedFeatureListId: function (id) {
+            this._clickedFeatureListIds.push(id);
+        },
 
-    /**
-     * Overriding getLegendImage for WFS
-     *
-     * @method getLegendImage
-     * @return {String} URL to a legend image
-     */
-    getLegendImage : function() {
-        return null;
-    },
+        /**
+         * @method setClickedFeatureListIds
+         * @param {String} id
+         */
+        setClickedFeatureListIds: function (ids) {
+            this._clickedFeatureListIds = ids;
+        },
 
-    /**
-     * @method setCustomStyle
-     * @param {json} customStyle
-     */
-    setCustomStyle : function(customStyle) {
-        this._customStyle = customStyle;
-    },
+        /**
+         * @method setPropertyTypes
+         * @param {json} propertyTypes
+         */
+        setPropertyTypes: function (propertyTypes) {
+            this._propertyTypes = propertyTypes;
+        },
 
-    /**
-     * @method getCustomStyle
-     * @return {json} customStyle
-     */
-    getCustomStyle : function() {
-        return this._customStyle;
-    },
+        /**
+         * @method getPropertyTypes
+         * @return {json} propertyTypes
+         */
+        getPropertyTypes: function () {
+            return this._propertyTypes;
+        },
 
-    /**
-     * @method getStyles
-     * @return {Oskari.mapframework.domain.Style[]}
-     * Gets layer styles
-     */
-    getStyles : function() {
-        if(this.getCustomStyle()) {
-            var locOwnStyle = this.localization['own-style'];
-            var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-            style.setName("oskari_custom");
-            style.setTitle(locOwnStyle);
-            style.setLegend("");
-            return this._styles.concat([style]);
+        /**
+         * Overriding getLegendImage for WFS
+         *
+         * @method getLegendImage
+         * @return {String} URL to a legend image
+         */
+        getLegendImage: function () {
+            return null;
+        },
+
+        /**
+         * @method setCustomStyle
+         * @param {json} customStyle
+         */
+        setCustomStyle: function (customStyle) {
+            this._customStyle = customStyle;
+        },
+
+        /**
+         * @method getCustomStyle
+         * @return {json} customStyle
+         */
+        getCustomStyle: function () {
+            return this._customStyle;
+        },
+
+        /**
+         * @method getStyles
+         * @return {Oskari.mapframework.domain.Style[]}
+         * Gets layer styles
+         */
+        getStyles: function () {
+            if (this.getCustomStyle()) {
+                var locOwnStyle = this.localization['own-style'];
+                var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
+                style.setName("oskari_custom");
+                style.setTitle(locOwnStyle);
+                style.setLegend("");
+                return this._styles.concat([style]);
+            }
+            return this._styles;
         }
-        return this._styles;
-    },
-}, {
-    "extend": ["Oskari.mapframework.domain.AbstractLayer"]
-});
+    }, {
+        "extend": ["Oskari.mapframework.domain.AbstractLayer"]
+    });

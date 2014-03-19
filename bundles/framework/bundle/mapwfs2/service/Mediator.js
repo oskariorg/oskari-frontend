@@ -387,7 +387,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
                 "bbox": bbox,
                 "zoom": zoom,
                 "grid": grid,
-                "tiles": tiles,
+                "tiles": tiles
             });
         }
     },
@@ -451,7 +451,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
 
                 "dot_color": style.dot.color, // check somewhere that first char is # - _prefixColorForServer @ MyPlacesWFSTStore.js
                 "dot_shape": style.dot.shape,
-                "dot_size": style.dot.size,
+                "dot_size": style.dot.size
             });
         }
     },

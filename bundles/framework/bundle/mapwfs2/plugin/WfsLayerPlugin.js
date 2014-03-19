@@ -44,7 +44,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
             "connection_broken": {
                 limit: 1,
                 count: 0
-            },
+            }
         };
 
         this.activeHighlightLayers = [];
@@ -632,7 +632,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
          * @method preselectLayers
          */
         preselectLayers: function (layers) {
-            _.each(layers, function(layer) {
+            _.each(layers, function (layer) {
                 if (layer.hasFeatureData()) {
                     this.getSandbox().printDebug("[WfsLayerPlugin] preselecting " + layer.getId());
                 }
@@ -1250,7 +1250,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
             // send as an event forward to WFSPlugin (draws)
             var event = this.getSandbox().getEventBuilder("WFSImageEvent")(layer, imageUrl, bbox, imageSize, "highlight", false, false);
             this.getSandbox().notifyAll(event);
-        },
+        }
 
     }, {
         "protocol": ["Oskari.mapframework.module.Module",
