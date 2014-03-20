@@ -859,9 +859,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          * @return {undefined}
          */
         _warnOfInvalidIndicator: function (container, metadata) {
-            var selectors = container.find('.selectors-container'),
-                parameters = selectors.find('.parameters-cont'),
-                regions = metadata.classifications,
+            var regions = metadata.classifications,
                 warnTxt = this._locale.cannotDisplayIndicator;
             regions = regions && regions.region;
             regions = regions && regions.title;
@@ -871,10 +869,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             if (regions) {
                 warnTxt += (this._locale.availableRegions + regions);
             }
-
-            this.deleteDemographicsSelect(container);
-            parameters.
-            prepend(jQuery(this.templates.cannotDisplayIndicator).append(warnTxt));
+            this.disableDemographicsSelect(container);
+            this.showMessage(this._locale.indicators, warnTxt, null);
         },
         /**
          * Create indicator meta info button
@@ -920,21 +916,23 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 year = null,
                 gender = null,
                 columnId,
-                includedInGrid;
+                includedInGrid,
+                fetchButton,
+                removeButton;
 
             if (indicator) {
                 // We have an indicator, create the selects with its data
                 me.indicators.push(indicator);
                 // if there is a range we can create year select
                 if (indicator.range !== null && indicator.range !== undefined) {
-                    newIndicator.before(this.getYearSelectorHTML(indicator.range.start, indicator.range.end));
+                    me.updateYearSelectorValues(parameters.find('select.year'), indicator.range.start, indicator.range.end);
                     // by default the last value is selected in getYearSelectorHTML
                     year = indicator.range.end;
                 }
 
                 // if there is a classification.sex we can create gender select
                 if (indicator.classifications && indicator.classifications.sex) {
-                    newIndicator.before(me.getGenderSelectorHTML(indicator.classifications.sex.values));
+                    me.updateGenderSelectorValues(parameters.find('select.gender'), indicator.classifications.sex.values);
                     // by default the last value is selected in getGenderSelectorHTML
                     gender = indicator.classifications.sex.values[indicator.classifications.sex.values.length - 1];
                 }
@@ -944,6 +942,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 // by default the last year and gender is selected
                 columnId = me._getIndicatorColumnId(indicator.id, gender, year);
                 includedInGrid = this.isIndicatorInGrid(columnId);
+                fetchButton = parameters.find('button.fetch-data');
+                fetchButton.prop('disabled', '');
+                removeButton = parameters.find('button.remove-data');
+                if (includedInGrid) {
+                    fetchButton.addClass('hidden');
+                    removeButton.removeClass('hidden');
+                } else {
+                    removeButton.addClass('hidden');
+                    fetchButton.removeClass('hidden');
+                }
             } else {
                 // No indicator, create disabled mock selects
                 newIndicator.before(me.getYearSelectorHTML(0, -1));
@@ -951,15 +959,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 parameters.find('select.year').prop('disabled', 'disabled');
                 parameters.find('select.gender').prop('disabled', 'disabled');
                 includedInGrid = false;
-            }
-
-            var fetchButton = jQuery('<button class="fetch-data' + (includedInGrid ? ' hidden' : '') + ' selector-button">' + this._locale.addColumn + '</button>'),
+                fetchButton = jQuery('<button class="fetch-data' + (includedInGrid ? ' hidden' : '') + ' selector-button">' + this._locale.addColumn + '</button>');
                 removeButton = jQuery('<button class="remove-data' + (includedInGrid ? '' : ' hidden') + ' selector-button">' + this._locale.removeColumn + '</button>');
-
-            newIndicator.before(fetchButton);
-            newIndicator.before(removeButton);
-
-            selectors.find('.indicator-cont').after(parameters);
+                newIndicator.before(fetchButton);
+                newIndicator.before(removeButton);
+                selectors.find('.indicator-cont').after(parameters);
+            }
+            
 
             if (indicator) {
                 // click listener
@@ -974,24 +980,30 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         me.addIndicatorMeta(indicator);
                     });
                 });
+                // click listener
+                removeButton.click(function (e) {
+                    var year = jQuery('.statsgrid').find('.yearsel').find('.year').val(),
+                        gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
+                    gender = gender !== null && gender !== undefined ? gender : 'total';
+                    var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
+                    me.removeIndicatorDataFromGrid(indicator.id, gender, year);
+                });
             } else {
                 parameters.find('button.fetch-data').prop('disabled', 'disabled');
             }
+        },
 
-            // click listener
-            removeButton.click(function (e) {
-                var year = jQuery('.statsgrid').find('.yearsel').find('.year').val(),
-                    gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
-                gender = gender !== null && gender !== undefined ? gender : 'total';
-                var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
-                me.removeIndicatorDataFromGrid(indicator.id, gender, year);
-            });
+        disableDemographicsSelect: function (container) {
+            var parameters = container.find('.parameters-cont');
+            parameters.find('button.fetch-data').prop('disabled', 'disabled');
+            parameters.find('select.year').prop('disabled', 'disabled');
+            parameters.find('select.gender').prop('disabled', 'disabled');
         },
 
         deleteDemographicsSelect: function (container) {
-            container.find('.parameters-cont').find('.selector-cont').remove();
-            container.find('.parameters-cont').find('.selector-button').remove();
-            container.find('.parameters-cont').find('.cannot-display-indicator').remove();
+            container.find('.parameters-cont').find('select.year').empty();
+            container.find('.parameters-cont').find('.select.gender').empty();
+            //container.find('.parameters-cont').find('.cannot-display-indicator').remove(); //?
         },
 
         /**
@@ -1428,16 +1440,30 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 i,
                 opt;
 
-            for (i = startYear; i <= endYear; i++) {
-                opt = jQuery('<option value="' + i + '">' + i + '</option>');
-                sel.append(opt);
-            }
-
-            sel.val(endYear);
+            me.updateYearSelectorValues(sel, startYear, endYear);
             sel.change(function (e) {
                 me.updateDemographicsButtons(null, null, e.target.value);
             });
             return year;
+        },
+        /**
+         * Update values for year selector
+         *
+         * @method updateYearSelectorValues
+         * @param sel
+         * @param startYear
+         * @param endYear
+         */
+        updateYearSelectorValues: function (sel, startYear, endYear) {
+            var i,
+                opt;
+            sel.empty();
+            for (i = startYear; i <= endYear; i++) {
+                opt = jQuery('<option value="' + i + '">' + i + '</option>');
+                sel.append(opt);
+            }
+            sel.val(endYear);
+            sel.prop('disabled', '');
         },
         /**
          * Create HTML for gender selector
@@ -1449,18 +1475,33 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var me = this;
             //Gender
             var gender = jQuery('<div class="gendersel selector-cont"><label for="gender">' + this._locale.gender + '</label><select name="gender" class="gender"></select></div>'),
-                sel = gender.find('select'),
-                i,
+                sel = gender.find('select');
+
+            if (values && values.length) {
+                me.updateGenderSelectorValues(sel, values);
+            }
+            sel.change(function (e) {
+                me.updateDemographicsButtons(null, e.target.value, null);
+            });
+            return gender;
+        },
+        /**
+         * Update values for gender selector
+         *
+         * @method updateGenderSelectorValues
+         * @param sel Select element
+         * @param values Values for select element
+         */
+        updateGenderSelectorValues: function (sel, values) {
+            var i,
                 opt;
+            sel.empty();
             for (i = 0; i < values.length; i++) {
                 opt = jQuery('<option value="' + values[i] + '">' + this._locale.genders[values[i]] + '</option>');
                 sel.append(opt);
             }
             sel.val(values[values.length - 1]);
-            sel.change(function (e) {
-                me.updateDemographicsButtons(null, e.target.value, null);
-            });
-            return gender;
+            sel.prop('disabled', '');
         },
         /**
          * Sends the selected column's data from the grid
