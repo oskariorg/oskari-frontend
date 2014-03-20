@@ -12,7 +12,7 @@ Oskari.registerLocalization({
         "emptyOption" : "* Ei rajausta * ",
         "type" : "Tyyppi",
         "serviceType" : "Palvelun tyyppi",
-        "serviceName" : "Palvelun nimi",
+        "serviceName" : "Resurssin nimi",
         "organization" : "Vastaava organisaatio",
         "coverage" : "Kattavuusalue",
         "inspireTheme" : "Inspire-teema",

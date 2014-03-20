@@ -1,0 +1,51 @@
+<sld:StyledLayerDescriptor xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
+    <sld:NamedLayer>
+        <sld:Name>WaterBodies</sld:Name>
+        <sld:UserStyle>
+            <sld:Name>Default Styler</sld:Name>
+            <sld:Title>Default Styler (zoom in to see more objects)</sld:Title>
+            <sld:Abstract/>
+            <sld:IsDefault>1</sld:IsDefault>
+            <sld:FeatureTypeStyle>
+                <sld:Name>testStyleName</sld:Name>
+                <sld:Title>title</sld:Title>
+                <sld:Abstract>abstract</sld:Abstract>
+                <sld:FeatureTypeName>Feature</sld:FeatureTypeName>
+                <sld:SemanticTypeIdentifier>generic:geometry</sld:SemanticTypeIdentifier>
+                <sld:Rule>
+                    <sld:Name>testRuleName</sld:Name>
+                    <sld:Title>title</sld:Title>
+                    <sld:Abstract>Abstract</sld:Abstract>
+                    <sld:PolygonSymbolizer>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">blue</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">
+                                <ogc:Literal>1.0</ogc:Literal>
+                            </sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">
+                                <ogc:Literal>#C0C0C0</ogc:Literal>
+                            </sld:CssParameter>
+                            <sld:CssParameter name="stroke-linecap">
+                                <ogc:Literal>butt</ogc:Literal>
+                            </sld:CssParameter>
+                            <sld:CssParameter name="stroke-linejoin">
+                                <ogc:Literal>miter</ogc:Literal>
+                            </sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">
+                                <ogc:Literal>1</ogc:Literal>
+                            </sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">
+                                <ogc:Literal>1</ogc:Literal>
+                            </sld:CssParameter>
+                            <sld:CssParameter name="stroke-dashoffset">
+                                <ogc:Literal>0</ogc:Literal>
+                            </sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:PolygonSymbolizer>
+                </sld:Rule>
+            </sld:FeatureTypeStyle>
+        </sld:UserStyle>
+    </sld:NamedLayer>
+</sld:StyledLayerDescriptor>
