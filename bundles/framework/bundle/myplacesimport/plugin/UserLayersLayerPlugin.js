@@ -14,10 +14,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
         this._map = null;
         this._supportedFormats = {};
         this.config = config;
-        this.ajaxUrl = null;
-        if (config && config.ajaxUrl) {
-            this.ajaxUrl = config.ajaxUrl;
-        }
     }, {
         /** @static @property __name plugin name */
         __name: 'UserLayersLayerPlugin',
@@ -58,25 +54,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
             return false;
         },
         /**
-         * @method register
          * Interface method for the plugin protocol.
          * Registers self as a layerPlugin to mapmodule with mapmodule.setLayerPlugin()
+         * 
+         * @method register
          */
         register: function () {
             this.getMapModule().setLayerPlugin('userlayer', this);
         },
         /**
-         * @method unregister
          * Interface method for the plugin protocol
          * Unregisters self from mapmodules layerPlugins
+         * 
+         * @method unregister
          */
         unregister: function () {
             this.getMapModule().setLayerPlugin('userlayer', null);
         },
         /**
-         * @method init
          * Interface method for the module protocol.
          *
+         * @method init
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          *          reference to application sandbox
          */
@@ -114,10 +112,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
                     sandbox.registerForEventByName(this, p);
                 }
             }
-            if (!this.ajaxUrl) {
-                this.ajaxUrl = sandbox.getAjaxUrl() + 'action_route=GetAnalysis?';
-            }
-
         },
         /**
          * @method stopPlugin
@@ -258,15 +252,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
         },
 
         /**
+         * Make use of the layer bounding box information to set appropriate map view
+         * 
          * @method handleBounds
          * @private
-         *
-         * Make use of the layer bounding box information to set appropriate map view
-         *
-         * @param
-         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
-         *            layer layer for which to handle bounds
-         *
+         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer}
+         * layer for which to handle bounds
          */
         handleBounds: function (layer) {
             var sandbox = this._sandbox;
@@ -275,10 +266,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
 
             var geom = layer.getGeometry();
 
-            if ((geom === null) || (typeof geom === "undefined") ) {
-                return;
-            }
-            if (geom.length === 0) {
+            if ((geom === null) || (typeof geom === "undefined") || geom.length === 0) {
                 return;
             }
 
@@ -301,16 +289,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
             }
         },
         /**
-         * @method _parseGeometryForLayer
-         * @private
-         *
          * If layer.getGeometry() is empty, tries to parse layer.getGeometryWKT()
          * and set parsed geometry to the layer
          *
-         * @param
-         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
-         *            layer layer for which to parse geometry
-         *
+         * @method _parseGeometryForLayer
+         * @private
+         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer}
+         * layer for which to parse geometry
          */
         _parseGeometryForLayer: function (layer) {
             // parse geometry if available

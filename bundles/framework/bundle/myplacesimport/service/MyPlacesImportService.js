@@ -1,47 +1,58 @@
 /**
  * @class Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService', 
-
+Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService',
 /**
  * @method create called automatically on construction
  * @static
- * 
  */
 function(instance) {
     this.instance = instance;
     this.sandbox = instance.sandbox;
-    this.ajaxUrl = this.sandbox.getAjaxUrl() + '&action_route=';
-    this.createUrl = 'CreateUserLayer';
-    this.getUrl = 'GetUserLayers';
+    this.urls = {};
+
+    var ajaxUrl = this.sandbox.getAjaxUrl() + '&action_route=';
+    this.urls.create = (ajaxUrl + 'CreateUserLayer');
+    this.urls.get = (ajaxUrl + 'GetUserLayers');
 }, {
     __name: "MyPlacesImport.MyPlacesImportService",
     __qname : "Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService",
-
     getQName : function() {
         return this.__qname;
     },
-
     getName: function() {
         return this.__name;
     },
-
     /**
+     * Initializes the service (does nothing atm).
+     * 
      * @method init
-     * Initializes the service
      */
     init: function() {
     },
-
+    /**
+     * Returns the url used to send the file data to.
+     * 
+     * @method getFileImportUrl
+     * @return {String}
+     */
     getFileImportUrl: function() {
-        return this.ajaxUrl + this.createUrl;
+        return this.urls.create;
     },
-
+    /**
+     * Retrieves the user layers (with the id param only the specified layer)
+     * from the backend and adds them to the map layer service.
+     * 
+     * @method getUserLayers
+     * @param  {Function} successCb (optional)
+     * @param  {Function} errorCb (optional)
+     * @param  {String} id (optional)
+     */
     getUserLayers: function(successCb, errorCb, id) {
         var me = this,
-            url = this.ajaxUrl + this.getUrl;
+            url = this.urls.get;
 
-        if (id) url = (url + '&id=' + id);
+        if (id) url += ('&id=' + id);
 
         jQuery.ajax({
             url : url,
@@ -58,13 +69,20 @@ function(instance) {
                 }
             },
             error: function(jqXHR, textStatus) {
-                if (typeof errorCb === 'function' && jqXHR.status !== 0) {
+                if (_.isFunction(errorCb) && jqXHR.status !== 0) {
                     errorCb(jqXHR, textStatus);
                 }
             }
         });
-        // TODO: get the user's layers and act accordingly
     },
+    /**
+     * Adds the layers to the map layer service.
+     * 
+     * @method _addLayersToService
+     * @private
+     * @param {JSON[]} layers
+     * @param {Function} cb
+     */
     _addLayersToService: function(layers, cb) {
         var me = this;
         _.each(layers, function(layerJson) {
@@ -72,6 +90,14 @@ function(instance) {
         });
         if (_.isFunction(cb)) cb();
     },
+    /**
+     * Adds one layer to the map layer service
+     * and calls the cb with the added layer model if provided.
+     * 
+     * @method addLayerToService
+     * @param {JSON} layerJson
+     * @param {Function} cb (optional)
+     */
     addLayerToService: function(layerJson, cb) {
         var mapLayerService = this.sandbox
                 .getService('Oskari.mapframework.service.MapLayerService'),

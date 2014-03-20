@@ -13,21 +13,21 @@ Oskari.clazz.define(
         );
     }, {
         /**
-         * parses any additional fields to model
-         * @param {Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer} layer partially populated layer
+         * Parses any additional fields to model
+         * 
+         * @param {Oskari.mapframework.bundle.myplacesimport.domain.UserLayer} layer partially populated layer
          * @param {Object} mapLayerJson JSON presentation of the layer
          * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
          */
         parseLayerData : function(layer, mapLayerJson, maplayerService) {
             var loclayer = this.localization.layer;
-
             // call parent parseLayerData
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
             // set layer specific data
-            layer.setDescription(mapLayerJson.description);
-            layer.setSource(mapLayerJson.source);
             layer.setOrganizationName(loclayer.organization);
             layer.setInspireName(loclayer.inspire);
+            layer.setDescription(mapLayerJson.description);
+            layer.setSource(mapLayerJson.source);
             layer.setRenderingElement(mapLayerJson.renderingElement);
             layer.addLayerUrl(mapLayerJson.renderingUrl);
         }

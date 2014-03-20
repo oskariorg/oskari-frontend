@@ -21,6 +21,12 @@ function () {
     this.tab = undefined;
     this.layerType = 'userlayer';
 }, {
+    /**
+     * Registers itself to the sandbox, creates the tab and the service
+     * and adds the flyout.
+     *
+     * @method start
+     */
     start: function () {
         var me = this,
             conf = this.conf,
@@ -48,6 +54,11 @@ function () {
 
         this.registerTool();
     },
+    /**
+     * Requests the tool to be added to the toolbar.
+     * 
+     * @method registerTool
+     */
     registerTool: function() {
         var me = this,
             loc = this.getLocalization(),
@@ -57,7 +68,7 @@ function () {
 
         this.tool.callback = function() {
             me.startTool();
-        }
+        };
         this.tool.tooltip = loc.tool.tooltip;
 
         if (reqBuilder) {
@@ -65,6 +76,11 @@ function () {
             sandbox.request(this, request);
         }
     },
+    /**
+     * Opens the flyout when the tool gets clicked.
+     * 
+     * @method startTool
+     */
     startTool: function() {
         var sandbox = this.getSandbox(),
             reqBuilder = sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest'),
@@ -83,6 +99,12 @@ function () {
             sandbox.request(this, toolbarRequest);
         }
     },
+    /**
+     * Adds the user layer to the map layer service and to the map.
+     * 
+     * @method addUserLayer
+     * @param {JSON} layerJson
+     */
     addUserLayer: function(layerJson) {
         if (!layerJson) return;
 
@@ -101,6 +123,13 @@ function () {
             }
         });
     },
+    /**
+     * Creates the import service and registers it to the sandbox.
+     * 
+     * @method createService
+     * @param  {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @return {Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService}
+     */
     createService: function(sandbox) {
         var importService = Oskari.clazz.create(
             'Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService',
@@ -109,9 +138,22 @@ function () {
         sandbox.registerService(importService);
         return importService;
     },
+    /**
+     * Returns the import service.
+     * 
+     * @method getService
+     * @return {Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService}
+     */
     getService: function() {
         return this.importService;
     },
+    /**
+     * Creates the user layers tab and adds it to the personaldata bundle.
+     * 
+     * @method addTab
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     * @return {Oskari.mapframework.bundle.myplacesimport.UserLayersTab}
+     */
     addTab: function(sandbox) {
         var loc = this.getLocalization(),
             userLayersTab = Oskari.clazz.create(
@@ -127,6 +169,10 @@ function () {
         }
         return userLayersTab;
     },
+    /**
+     * @method getTab
+     * @return {Oskari.mapframework.bundle.myplacesimport.UserLayersTab}
+     */
     getTab: function() {
         return this.tab;
     }
