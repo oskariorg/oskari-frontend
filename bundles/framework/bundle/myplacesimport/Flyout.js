@@ -234,18 +234,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         __finish: function(iframe, locale) {
             var title = locale.finish.success.title,
                 msg = locale.finish.success.message,
-                json = undefined;
+                json = undefined, success = true;
 
             try {
                 json = JSON.parse(iframe.contents().find('pre').html());
+                if (json === null || json === undefined) success = false;
             } catch(error) {
                 this.instance
                     .getSandbox()
                     .printWarn('Error whilst parsing user layer json', error);
+                success = false;
+            }
+
+            if (success === true) {
+                this.instance.addUserLayer(json);
+            } else {
                 title = null, msg = locale.finish.failure.message;
             }
 
-            this.instance.addUserLayer(json);
             this.__showMessage(title, msg);
             this.refresh();
         },
