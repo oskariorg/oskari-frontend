@@ -27,7 +27,7 @@ Oskari.clazz
                 title: this.getLocalization('grid').name,
                 prop: 'name'
             }, {
-                title: this.getLocalization('grid').rating,
+                title: '', // this.getLocalization('grid').rating,
                 prop: 'rating'
             }, {
                 title: '',
@@ -527,54 +527,59 @@ Oskari.clazz
                     };
                 };
                 var i,
-                    j,
-                    row,
                     resultContainer,
                     cells,
                     titleCell,
                     titleText,
                     mapLayerService,
-                    layers,
-                    rn,
-                    additionalUuids,
-                    additionalUuidsCheck,
-                    subLayers,
-                    s,
-                    subUuid;
+                    layers;
 
                 for (i = 0; i < results.length; ++i) {
-                    row = results[i];
-                    if ((!row.name)||(row.name.length === 0)) {
+                    if ((!results[i].name) || (results[i].name.length === 0)) {
                         continue;
                     }
-                    resultContainer = me.templates.resultTableRow.clone();
-                    cells = resultContainer.find('td');
-                    titleCell = jQuery(cells[0]);
-                    titleText = row.name;
-                    if ((row.organization)&&(row.organization.length > 0)) {
-                        titleText = titleText+", "+row.organization;
-                    }
-                    if ((row.id)&&(row.id.length > 0)) {
-                        mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                        layers = mapLayerService.getLayersByMetadataId(row.id);
-                        for (j = 0; j < layers.length; ++j) {
-                            // Todo: following line is for demonstration purposes of future development:
-                            titleText = titleText+"<br>&nbsp;&nbsp;&nbsp;&nbsp;* "+layers[j].getName();
+                    (function (i) {
+                        var j,
+                            row,
+                            rn,
+                            additionalUuids,
+                            additionalUuidsCheck,
+                            subLayers,
+                            s,
+                            subUuid;
+
+                        row = results[i];
+                        resultContainer = me.templates.resultTableRow.clone();
+                        cells = resultContainer.find('td');
+                        titleCell = jQuery(cells[0]);
+                        titleText = row.name;
+                        if ((row.organization) && (row.organization.length > 0)) {
+                            titleText = titleText + ", " + row.organization;
                         }
-                    }
-                    jQuery(cells[0]).append(titleText);
-                    jQuery(cells[0]).addClass(me.resultHeaders[0].prop);
-                    // Todo: real rating
-                    jQuery(cells[1]).append("*****");
-                    jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
-                    jQuery(cells[2]).addClass(me.resultHeaders[2].prop);
-                    jQuery(cells[2]).find('div.layer-info').click(function () {
-                        var rn = 'catalogue.ShowMetadataRequest';
-                        me.sandbox.postRequestByName(rn, [{
-                            uuid: row.id
-                        }]);
-                    });
-                    resultsTableBody.append(resultContainer);
+                        if ((row.id) && (row.id.length > 0)) {
+                            mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                            layers = mapLayerService.getLayersByMetadataId(row.id);
+                            for (var j = 0; j < layers.length; ++j) {
+                                // Todo: following line is for demonstration purposes of future development:
+                                titleText = titleText + "<br>&nbsp;&nbsp;&nbsp;&nbsp;* " + layers[j].getName();
+                            }
+                        }
+                        jQuery(cells[0]).append(titleText);
+                        jQuery(cells[0]).addClass(me.resultHeaders[0].prop);
+                        // Todo: real rating
+                        //jQuery(cells[1]).append("*****");
+                        jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
+                        jQuery(cells[2]).addClass(me.resultHeaders[2].prop);
+                        jQuery(cells[2]).find('div.layer-info').click(function () {
+                            var rn = 'catalogue.ShowMetadataRequest';
+                            me.sandbox.postRequestByName(rn, [
+                                {
+                                    uuid: row.id
+                                }
+                            ]);
+                        });
+                        resultsTableBody.append(resultContainer);
+                    })(i);
                 }
             },
             /**
