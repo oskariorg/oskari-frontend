@@ -556,6 +556,11 @@ Oskari.clazz
                         if ((row.organization) && (row.organization.length > 0)) {
                             titleText = titleText + ", " + row.organization;
                         }
+                        jQuery(cells[0]).append(titleText);
+                        jQuery(cells[0]).addClass(me.resultHeaders[0].prop);
+                        // Todo: real rating
+                        //jQuery(cells[1]).append("*****");
+                        jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
                         if ((row.id) && (row.id.length > 0)) {
                             mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
                             layers = mapLayerService.getLayersByMetadataId(row.id);
@@ -563,21 +568,16 @@ Oskari.clazz
                                 // Todo: following line is for demonstration purposes of future development:
                                 titleText = titleText + "<br>&nbsp;&nbsp;&nbsp;&nbsp;* " + layers[j].getName();
                             }
+                            jQuery(cells[2]).addClass(me.resultHeaders[2].prop);
+                            jQuery(cells[2]).find('div.layer-info').click(function () {
+                                var rn = 'catalogue.ShowMetadataRequest';
+                                me.sandbox.postRequestByName(rn, [
+                                    {
+                                        uuid: row.id
+                                    }
+                                ]);
+                            });
                         }
-                        jQuery(cells[0]).append(titleText);
-                        jQuery(cells[0]).addClass(me.resultHeaders[0].prop);
-                        // Todo: real rating
-                        //jQuery(cells[1]).append("*****");
-                        jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
-                        jQuery(cells[2]).addClass(me.resultHeaders[2].prop);
-                        jQuery(cells[2]).find('div.layer-info').click(function () {
-                            var rn = 'catalogue.ShowMetadataRequest';
-                            me.sandbox.postRequestByName(rn, [
-                                {
-                                    uuid: row.id
-                                }
-                            ]);
-                        });
                         resultsTableBody.append(resultContainer);
                     })(i);
                 }
