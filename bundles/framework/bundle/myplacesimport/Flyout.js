@@ -29,6 +29,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                         '<div class="name"><label>Name</label><input type="text" name="layer-name" /></div>' +
                         '<div class="desc"><label>Description</label><input type="text" name="layer-desc" /></div>' +
                         '<div class="source"><label>Data source</label><input type="text" name="layer-source" /></div>' +
+                        '<div class="style">' +
+                            '<label>Layer style</label>' +
+                            '<div class="style-form"></div>' +
+                            '<input type="hidden" name="layer-style" />' +
+                        '</div>' +
                         '<input type="submit" value="Submit" class="primary" />' +
                     '</form>' +
                 '</div>'
@@ -124,21 +129,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         __createFileImportTemplate: function(locale) {
             var me = this,
                 file = jQuery(this.__templates.file).clone(),
-                action = this.instance.getService().getFileImportUrl();
+                action = this.instance.getService().getFileImportUrl(),
+                styleForm = Oskari.clazz.create(
+                    'Oskari.userinterface.component.VisualizationForm'
+                );
 
+            file.find('div.name label').html(locale.layer.name);
+            file.find('div.desc label').html(locale.layer.desc);
+            file.find('div.source label').html(locale.layer.source);
+            file.find('div.style label').html(locale.layer.style);
+            file.find('div.style-form').html(styleForm.getForm());
             file.find('form')
-                    .attr('action', action)
+                .attr('action', action)
                 .find('input[type=submit]')
                     .val(locale.file.submit)
-                .end()
-                .find('div.name label')
-                    .html(locale.layer.name)
-                .end()
-                .find('div.desc label')
-                    .html(locale.layer.desc)
-                .end()
-                .find('div.source label')
-                    .html(locale.layer.source);
+                    .on('click', function(e) {
+                        var form = jQuery(this).parent();
+                        // Set the value of the hidden style field
+                        form.find('input[name=layer-style]')
+                            .val(JSON.stringify(styleForm.getValues()));
+                        // Prevent from sending if there were missing fields
+                        if (me.__validateForm(form, locale)) {
+                            e.preventDefault();
+                        }
+                    });
 
             this.container.find('iframe').on('load', function() {
                 me.__finish(jQuery(this), locale);
@@ -147,12 +161,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             return file;
         },
         /**
+         * Validates the form inputs (currently that the name and file are present).
+         * Returns true if there were any errors (missing values).
+         * 
+         * @method __validateForm
+         * @private
+         * @param  {jQuery} form
+         * @param  {Object} locale
+         * @return {Boolean}
+         */
+        __validateForm: function(form, locale) {
+            var fileInput = form.find('input[type=file]'),
+                nameInput = form.find('input[name=layer-name]'),
+                errors = false,
+                errorTitle, errorMsg;
+
+            if (!fileInput.val() || !nameInput.val()) {
+                errors = true;
+                errorTitle = locale.validations.error.title;
+                errorMsg = locale.validations.error.message;
+                this.__showMessage(errorTitle, errorMsg);
+            }
+
+            return errors;
+        },
+        /**
          * Sends the layer data to the backend and shows a message.
          * Also refreshes the UI
          * 
          * @method __finish
          * @private
-         * @param  {Object} locale
+         * @param {jQuery} iframe
+         * @param {Object} locale
          */
         __finish: function(iframe, locale) {
             var title = locale.finish.success.title,

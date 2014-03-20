@@ -21,7 +21,14 @@ Oskari.registerLocalization({
                 "title": "Tallenna tason tiedot:",
                 "name": "Nimi",
                 "desc": "Kuvaus",
-                "source": "Tietolähde"
+                "source": "Tietolähde",
+                "style": "Tason tyyli"
+            },
+            "validations": {
+                "error": {
+                    "title": "Virhe",
+                    "message": "Tiedosto ja tason nimi puuttuvat."
+                }
             },
             "finish": {
                 "success": {
@@ -34,7 +41,7 @@ Oskari.registerLocalization({
             }
         },
         "tab": {
-            "title": "Omat aineistot",
+            "title": "Aineistot",
             "grid": {
                 "name": "Nimi",
                 "description": "Kuvaus",
