@@ -144,10 +144,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 .find('input[type=submit]')
                     .val(locale.file.submit)
                     .on('click', function(e) {
-                        var form = jQuery(this).parent();
+                        var form = jQuery(this).parent(),
+                            styleJson = JSON.stringify(me.__getStyleValues(styleForm));
                         // Set the value of the hidden style field
-                        form.find('input[name=layer-style]')
-                            .val(JSON.stringify(styleForm.getValues()));
+                        form.find('input[name=layer-style]').val(styleJson);
                         // Prevent from sending if there were missing fields
                         if (me.__validateForm(form, locale)) {
                             e.preventDefault();
@@ -159,6 +159,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             });
 
             return file;
+        },
+        /**
+         * Returns the visualization form's values.
+         * 
+         * @method __getStyleValues
+         * @private
+         * @param  {Oskari.userinterface.component.VisualizationForm} styleForm
+         * @return {Object}
+         */
+        __getStyleValues: function(styleForm) {
+            var formValues = styleForm.getValues(),
+                values = {};
+
+            if (formValues) {
+                values.dot = {
+                    size: formValues.dot.size,
+                    color: '#' + formValues.dot.color,
+                    shape: formValues.dot.shape
+                };
+                values.line = {
+                    size: formValues.line.width,
+                    color: '#' + formValues.line.color,
+                    cap: formValues.line.cap,
+                    corner: formValues.line.corner,
+                    style: formValues.line.style
+                };
+                values.area = {
+                    size: formValues.area.lineWidth,
+                    lineColor: '#' + formValues.area.lineColor,
+                    fillColor: '#' + formValues.area.fillColor,
+                    lineStyle: formValues.area.lineStyle,
+                    fillStyle: formValues.area.fillStyle,
+                    lineCorner: formValues.area.lineCorner
+                };
+            }
+
+            return values;
         },
         /**
          * Validates the form inputs (currently that the name and file are present).
