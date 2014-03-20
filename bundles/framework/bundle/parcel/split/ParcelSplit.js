@@ -92,8 +92,10 @@ function(drawPlugin) {
      * {Oskari.mapframework.bundle.parcel.DrawingToolInstance} instance provides the features that are used for the splitting.
      */
     split : function(trivial) {
-    	var me = this;
-        if (this.drawPlugin.splitSelection) return;
+        var me = this;
+        if (this.drawPlugin.splitSelection) {
+            return;
+        }
 
         var parcelLayer = this.drawPlugin.drawLayer;
         var editLayer = this.drawPlugin.editLayer;
@@ -185,7 +187,9 @@ function(drawPlugin) {
                 pq.y = p0.y;
             }
             // Denominator zero:
-            if ((isNaN(pq.x))||(isNaN(pq.y))) return p0;
+            if ((isNaN(pq.x))||(isNaN(pq.y))) {
+                return p0;
+            }
             return pq;
        };
 
@@ -280,7 +284,9 @@ function(drawPlugin) {
 
         this.drawPlugin.splitSelection = true;
         var baseMultiPolygon = parcelLayer.features[0];
-        if (baseMultiPolygon.geometry.CLASS_NAME !== "OpenLayers.Geometry.MultiPolygon") return;
+        if (baseMultiPolygon.geometry.CLASS_NAME !== "OpenLayers.Geometry.MultiPolygon") {
+            return;
+        }
         this.drawPlugin.backupFeatures = [baseMultiPolygon.clone()];
         attributes = parcelLayer.features[0].attributes;
 
@@ -301,7 +307,9 @@ function(drawPlugin) {
         }
 
         var featureInd = parcelLayer.features.length-1;
-        if (featureInd < 1) return;
+        if (featureInd < 1) {
+            return;
+        }
         this.drawPlugin.operatingFeature = parcelLayer.features[featureInd];
 
         switch (this.drawPlugin.operatingFeature.geometry.CLASS_NAME) {
@@ -391,7 +399,9 @@ function(drawPlugin) {
          */
         scaleup : function(poly, scale) {
             var i, j;
-            if (!scale) scale = 1;
+            if (!scale) {
+                scale = 1;
+            }
             for(i = 0; i < poly.length; i++) {
                 for(j = 0; j < poly[i].length; j++) {
                   poly[i][j].X = Math.floor(poly[i][j].X*scale);
@@ -438,7 +448,6 @@ function(drawPlugin) {
             var olLinearRings;
             var olLineStringPoints = [];
             var olPolygon;
-            var olComponents = [];
 
             // JSTS variables
             var jstsParser = new jsts.io.OpenLayersParser();
@@ -811,9 +820,13 @@ function(drawPlugin) {
                                 break;
                             }
                         }
-                        if (!found) break;
+                        if (!found) {
+                            break;
+                        }
                     }
-                    if (found) continue lineStringLoop;
+                    if (found) {
+                        continue lineStringLoop;
+                    }
                 }
                 nextIndex = olEndPoints.length;
                 lastIndex = olNewLineStrings[k].components.length-1;
@@ -869,7 +882,9 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
                     if (olEndPoints[k][l].references.length !== 2) continue;
                     // Check for duplicates
                     for (m = 0; m < this.drawPlugin.markerLayer.markers.length; m++) {
-                        if (this.drawPlugin.markerLayer.markers[m].reference.point.id === olEndPoints[k][l].id) continue intersections;
+                        if (this.drawPlugin.markerLayer.markers[m].reference.point.id === olEndPoints[k][l].id) {
+                            continue intersections;
+                        }
                     }
 
                     marker = new OpenLayers.Marker(new OpenLayers.LonLat(olEndPoints[k][l].x,olEndPoints[k][l].y),this.markerIcon.clone());
@@ -1084,9 +1099,15 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
      * @param {}
      */
     startOrStopEquals: function(segment1,segment2){
-        if (segment1.components[0].equals(segment2.components[0])) return true;
-        if (segment1.components[0].equals(segment2.components[1])) return true;
-        if (segment1.components[1].equals(segment2.components[0])) return true;
+        if (segment1.components[0].equals(segment2.components[0])) {
+            return true;
+        }
+        if (segment1.components[0].equals(segment2.components[1])) {
+            return true;
+        }
+        if (segment1.components[1].equals(segment2.components[0])) {
+            return true;
+        }
         return (segment1.components[1].equals(segment2.components[1]));
     },
 
@@ -1108,12 +1129,20 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
        }
        for (i=0; i<array1.length; i++) {
           key = (typeof array1[i]) + "~" + array1[i];
-          if (temp[key]) { temp[key]++; } else { temp[key] = 1; }
+          if (temp[key]) {
+              temp[key]++;
+          } else {
+              temp[key] = 1;
+          }
        }
        for (i=0; i<array2.length; i++) {
           key = (typeof array2[i]) + "~" + array2[i];
           if (temp[key]) {
-             if (temp[key] == 0) { return false; } else { temp[key]--; }
+             if (temp[key] == 0) {
+                 return false;
+             } else {
+                 temp[key]--;
+             }
           } else {
              return false;
           }
@@ -1146,7 +1175,9 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
                 }
             }
         }
-        if (pInd < 0) return; // This should not happen
+        if (pInd < 0) { // This should not happen
+            return;
+        }
         var remPolygon = null;
 
         // Remove the point from old polygon
@@ -1262,11 +1293,9 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
                     }
                 }
 
-
                 if (markerInd === -1) {
                     continue;
                 }
-
 
                 marker.reference.segments.p[k][0][0] = refPoints[markerInd];
                 if ((refPoints[markerInd+1].boundaryPoint)&&(refPoints[markerInd+1].short !== marker.reference.line)) {
