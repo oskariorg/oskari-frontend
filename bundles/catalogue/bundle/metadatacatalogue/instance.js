@@ -526,28 +526,19 @@ Oskari.clazz
                         return false;
                     };
                 };
-                var i,
-                    resultContainer,
-                    cells,
-                    titleCell,
-                    titleText,
-                    mapLayerService,
-                    layers;
-
-                for (i = 0; i < results.length; ++i) {
+                for (var i = 0; i < results.length; ++i) {
                     if ((!results[i].name) || (results[i].name.length === 0)) {
                         continue;
                     }
                     (function (i) {
                         var j,
+                            resultContainer,
+                            cells,
+                            titleCell,
+                            titleText,
+                            layers,
                             row,
-                            rn,
-                            additionalUuids,
-                            additionalUuidsCheck,
-                            subLayers,
-                            s,
-                            subUuid;
-
+                            mapLayerService;
                         row = results[i];
                         resultContainer = me.templates.resultTableRow.clone();
                         cells = resultContainer.find('td');
@@ -556,11 +547,6 @@ Oskari.clazz
                         if ((row.organization) && (row.organization.length > 0)) {
                             titleText = titleText + ", " + row.organization;
                         }
-                        jQuery(cells[0]).append(titleText);
-                        jQuery(cells[0]).addClass(me.resultHeaders[0].prop);
-                        // Todo: real rating
-                        //jQuery(cells[1]).append("*****");
-                        jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
                         if ((row.id) && (row.id.length > 0)) {
                             mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
                             layers = mapLayerService.getLayersByMetadataId(row.id);
@@ -578,6 +564,11 @@ Oskari.clazz
                                 ]);
                             });
                         }
+                        jQuery(cells[0]).append(titleText);
+                        jQuery(cells[0]).addClass(me.resultHeaders[0].prop);
+                        // Todo: real rating
+                        //jQuery(cells[1]).append("*****");
+                        jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
                         resultsTableBody.append(resultContainer);
                     })(i);
                 }
