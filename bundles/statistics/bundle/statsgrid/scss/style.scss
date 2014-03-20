@@ -78,6 +78,7 @@
 
 .statsgrid .selectors-container .new-indicator-cont {
   float: left;
+  margin-top: 8px;
   padding-left: 10px;
 
   input {
@@ -89,6 +90,10 @@
 .statsgrid .parameters-cont {
   min-height: 115px;
   float: left;
+
+  button:disabled, input:disabled, select:disabled {
+    opacity: 0.25;
+  }
 
   .cannot-display-indicator {
     margin-left: 10px;
