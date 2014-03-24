@@ -13,7 +13,7 @@ Oskari.registerLocalization({
         "type" : "Tyyppi",
         "serviceType" : "Palvelun tyyppi",
         "Title" : "Resurssin nimi",
-        "OrganizationName" : "Vastaava organisaatio",
+        "OrganisationName" : "Vastaava organisaatio",
         "coverage" : "Kattavuusalue",
         "inspireTheme" : "Inspire-teema",
         "Subject" : "Avainsana",

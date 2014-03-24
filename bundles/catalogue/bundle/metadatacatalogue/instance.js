@@ -23,6 +23,7 @@ Oskari.clazz
             this.optionService = null;
             this.searchService = null;
             this.tabPriority = 5.0;
+            this.conditions = [];
             this.resultHeaders = [{
                 title: this.getLocalization('grid').name,
                 prop: 'name'
@@ -293,11 +294,6 @@ Oskari.clazz
                         // remove results when field is emptied
                         var resultList = metadataCatalogueContainer.find('div.resultList');
                         resultList.empty();
-                        // try to remove markers if request is available when field is emptied
-                        var reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkerRequest');
-                        if (reqBuilder) {
-                            sandbox.request(me.getName(), reqBuilder());
-                        }
                     }
                 });
                 field.addClearButton();
@@ -422,6 +418,9 @@ Oskari.clazz
                                 text = value.val;
                             }
                             newCheckbox.find("label.metadataTypeText").append(text);
+                            newCheckbox.change(function(){
+                                me._updateOptions(advancedContainer);
+                            });
                             newRow.find(".checkboxes").append(newCheckbox);
                         }
                     // Dropdown list
@@ -449,16 +448,61 @@ Oskari.clazz
                             newOption.text(text);
                             dropdownDef.append(newOption);
                         }
+                        newDropdown.find(".metadataDef").change(function(){
+                            me._updateOptions(advancedContainer);
+                        });
                         newRow.append(newDropdown);
                     }
+                    // Conditional visibility
+
+                    if ((typeof dataField.shownIf !== "undefined")&&(dataField.shownIf.length > 0)) {
+                        me.conditions.push({field: dataField.field, shownIf: dataField.shownIf});
+                        newRow.hide();
+                    }
+                    newRow.addClass(dataField.field);
                     advancedContainer.append(newRow);
                 }
+                me._updateOptions(advancedContainer);
             },
+
             /**
              * @method showResults
-             * displays metadata search results
+             * Updates availability of the options
              */
-            _showResults: function (metadataCatalogueContainer,data) {
+            _updateOptions: function(container) {
+                var me = this;
+                for (var i = 0; i < me.conditions.length; i++) {
+                    var condition = me.conditions[i];
+                    var row = container.find("."+condition.field);
+                    for (var j = 0; j < condition.shownIf.length; j++) {
+                        var ref = condition.shownIf[j];
+                        for (var refItem in ref) {
+                            var value = condition.shownIf[j][refItem];
+                            var refRow = container.find(".metadataRow."+refItem);
+                            if (refRow.hasClass("checkboxRow")) {
+                                // Check box
+                                if (!refRow.find("input:checkbox[value="+value+"]").is(':checked')) {
+                                    row.hide();
+                                    return;
+                                }
+                            } else if (refRow.hasClass("dropdownRow")) {
+                                var selectedOption = refRow.find(".metadataDef option:selected").val();
+                                if (value !== selectedOption) {
+                                    row.hide();
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+                row.show();
+            },
+
+            /**
+             * @method showResults
+             * Displays metadata search results
+             */
+            _showResults: function(metadataCatalogueContainer,data) {
                 var me = this;
                 me.lastResult = data.results;
                 var resultPanel = metadataCatalogueContainer.find(".metadataResults");
