@@ -32,6 +32,9 @@ Oskari.clazz
             }, {
                 title: '',
                 prop: 'info'
+            }, {
+                title: '',
+                prop: 'remove'
             }];
             this.lastSearch = "";
             // last search result is saved so we can sort it in client
@@ -65,10 +68,16 @@ Oskari.clazz
                 checkboxRow: jQuery('<div class="metadataRow checkboxRow"><div class="rowLabel"></div class=""><div class="checkboxes"></div></div></div>'),
                 dropdownRow: jQuery('<div class="metadataRow dropdownRow"><div class="rowLabel"></div></div>'),
                 resultPanel: jQuery('<div class="main metadataResults"></div>'),
-                resultHeader: jQuery('<div class="resultHeader"><div class="panelHeader resultTitle"></div><div class="panelHeader modify"><a href="JavaScript:void(0);" class="modifyLink"></a></div></div>'),
+                resultHeader: jQuery('<div class="metadataResultHeader"><div class="panelHeader resultTitle"></div><div class="panelHeader modify"><a href="JavaScript:void(0);" class="modifyLink"></a></div></div>'),
                 resultTable: jQuery('<div class="resultTable"><table class="metadataSearchResult">' + '<thead><tr></tr></thead>' + '<tbody></tbody>' + '</table></div>'),
                 resultTableHeader: jQuery('<th><a href="JavaScript:void(0);"></a></th>'),
-                resultTableRow: jQuery('<tr>' + '<td></td>' + '<td></td>' + '<td><div class="layer-info icon-info"></div></td>' + '</tr>')            },
+                resultTableRow: jQuery('<tr class="spacerRow"><td class="spacer"></td></tr><tr class="resultRow">'
+                    + '<td></td>' + '<td></td>' + '<td><div class="layerInfo icon-info"></div></td>'
+                    + '<td><div class="resultRemove icon-close"></div></td>' + '</tr>'),
+                layerList: jQuery('<ul class="layerList"></ul>'),
+                layerListItem: jQuery('<li></li>'),
+                layerLink: jQuery('<a href="JavaScript:void(0);" class="layerLink"></a>')
+            },
             /**
              * @method getName
              * @return {String} the name for the component
@@ -287,7 +296,7 @@ Oskari.clazz
                         // try to remove markers if request is available when field is emptied
                         var reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkerRequest');
                         if (reqBuilder) {
-                            sandbox.request(me.instance.getName(), reqBuilder());
+                            sandbox.request(me.getName(), reqBuilder());
                         }
                     }
                 });
@@ -385,13 +394,16 @@ Oskari.clazz
                 var dataFields = data.fields;
                 for (var i=0; i < dataFields.length; i++) {
                     var dataField = dataFields[i];
-                    var newRow = null;
-                    var newLabel = me.getLocalization(dataField.field);
-                    if(dataField.values.length === 0) {
+                    if (dataField.values.length === 0) {
                         // no options to show -> skip
                         continue;
                     }
-
+                    var newRow = null;
+                    var newLabel = me.getLocalization(dataField.field);
+                    // Continue gracefully also without localization
+                    if (typeof newLabel !== "string") {
+                        newLabel = dataField.field;
+                    }
                     // Checkbox
                     if (dataField.multi) {
                         newRow = me.templates.checkboxRow.clone();
@@ -452,8 +464,7 @@ Oskari.clazz
                 var resultPanel = metadataCatalogueContainer.find(".metadataResults");
                 var optionPanel = metadataCatalogueContainer.find(".metadataOptions");
                 var resultHeader = me.templates.resultHeader.clone();
-                resultHeader.find(".resultTitle").text(me.getLocalization('metadataCatalogueResults') +
-                    me.lastResult.length + me.getLocalization('metadataCatalogueResultsDescription') + me.lastSearch);
+                resultHeader.find(".resultTitle").text(me.getLocalization('metadataCatalogueResults')+me.lastSearch+":");
                 var modifyLink = resultHeader.find(".modifyLink");
                 modifyLink.html(me.getLocalization('modifySearch'));
                 modifyLink.click(function() {
@@ -502,7 +513,7 @@ Oskari.clazz
                     header.addClass(me.resultHeaders[i].prop);
                     link = header.find('a');
                     link.append(me.resultHeaders[i].title);
-                    // Todo: Temporarily only first column is sortable
+                    // Todo: Temporarily only the first column is sortable
                     if (i===0)  {
                         link.bind('click', headerClosureMagic(me.resultHeaders[i]));
                     }
@@ -526,36 +537,49 @@ Oskari.clazz
                         return false;
                     };
                 };
+                var selectedLayers = me.sandbox.findAllSelectedMapLayers();
                 for (var i = 0; i < results.length; ++i) {
                     if ((!results[i].name) || (results[i].name.length === 0)) {
                         continue;
                     }
                     (function (i) {
                         var j,
+                            k,
                             resultContainer,
                             cells,
                             titleCell,
                             titleText,
                             layers,
                             row,
-                            mapLayerService;
+                            mapLayerService,
+                            layerList;
                         row = results[i];
                         resultContainer = me.templates.resultTableRow.clone();
-                        cells = resultContainer.find('td');
+                        resultContainer.addClass("res"+ i);
+                        cells = resultContainer.find('td').not('.spacer');
                         titleCell = jQuery(cells[0]);
                         titleText = row.name;
+                        // Include organization information if available
                         if ((row.organization) && (row.organization.length > 0)) {
                             titleText = titleText + ", " + row.organization;
                         }
+                        // Add title
+                        jQuery(cells[0]).append(titleText);
+                        jQuery(cells[0]).addClass(me.resultHeaders[0].prop);
                         if ((row.id) && (row.id.length > 0)) {
                             mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
                             layers = mapLayerService.getLayersByMetadataId(row.id);
+                            layerList = me.templates.layerList.clone();
+                            // Add layer links
                             for (var j = 0; j < layers.length; ++j) {
-                                // Todo: following line is for demonstration purposes of future development:
-                                titleText = titleText + "<br>&nbsp;&nbsp;&nbsp;&nbsp;* " + layers[j].getName();
+                                me._addLayerLinks(layers[j], layerList);
                             }
+                            jQuery(cells[0]).append(layerList);
+                            // Todo: real rating
+                            //jQuery(cells[1]).append("*****");
+                            jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
                             jQuery(cells[2]).addClass(me.resultHeaders[2].prop);
-                            jQuery(cells[2]).find('div.layer-info').click(function () {
+                            jQuery(cells[2]).find('div.layerInfo').click(function () {
                                 var rn = 'catalogue.ShowMetadataRequest';
                                 me.sandbox.postRequestByName(rn, [
                                     {
@@ -563,16 +587,86 @@ Oskari.clazz
                                     }
                                 ]);
                             });
+                            jQuery(cells[3]).addClass(me.resultHeaders[3].prop);
+                            jQuery(cells[3]).find('div.resultRemove').click(function () {
+                                jQuery("table.metadataSearchResult tr.res"+i).remove();
+                            });
                         }
-                        jQuery(cells[0]).append(titleText);
-                        jQuery(cells[0]).addClass(me.resultHeaders[0].prop);
-                        // Todo: real rating
-                        //jQuery(cells[1]).append("*****");
-                        jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
                         resultsTableBody.append(resultContainer);
                     })(i);
                 }
             },
+
+            _addLayerLinks : function(layer,layerList) {
+                var me = this;
+                var selectedLayers,
+                    selectedLayer,
+                    layerSelected,
+                    showText,
+                    hideText,
+                    visibilityRequestBuilder,
+                    builder,
+                    request,
+                    layerListItem,
+                    layerLink;
+                layerSelected = false;
+                selectedLayers = me.sandbox.findAllSelectedMapLayers();
+                for (var k = 0; k < selectedLayers.length; ++k) {
+                    selectedLayer = selectedLayers[k];
+                    if (layer.getId() === selectedLayer.getId()) {
+                        layerSelected = true;
+                        break;
+                    }
+                }
+                layerLink = me.templates.layerLink.clone();
+                showText = me.getLocalization("show"),
+                    hideText = me.getLocalization("hide");
+
+                // Check if layer is already selected and visible
+                if ((layerSelected)&&(layer.isVisible())) {
+                    layerLink.html(hideText);
+                } else {
+                    layerLink.html(showText);
+                }
+
+                // Click binding
+                layerLink.click(function() {
+                    visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+                    // Hide layer
+                    if (jQuery(this).html() === hideText) {
+                        // Set previously selected layer only invisible
+                        /* if (layerSelected) {
+                            request = visibilityRequestBuilder(layer.getId(), false);
+                            // Unselect previously unselected layer
+                        } else {
+                            builder = me.sandbox.getRequestBuilder('RemoveMapLayerRequest');
+                            request = builder(layer.getId());
+                        }*/
+
+                        builder = me.sandbox.getRequestBuilder('RemoveMapLayerRequest');
+                        layerSelected = false;
+
+                        request = builder(layer.getId());
+                        me.sandbox.request(me.getName(), request);
+                        jQuery(this).html(showText);
+                    } else {
+                        // Select previously unselected layer
+                        if (!layerSelected) {
+                            me.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), false, layer.isBaseLayer()]);
+                        }
+                        // Set layer visible
+                        request = visibilityRequestBuilder(layer.getId(), true);
+                        me.sandbox.request(me.getName(), request);
+                        jQuery(this).html(hideText);
+                    }
+                });
+                layerListItem = me.templates.layerListItem.clone();
+                layerListItem.text(layer.getName());
+                layerListItem.append("&nbsp;&nbsp;");
+                layerListItem.append(layerLink);
+                layerList.append(layerListItem);
+            },
+
             /**
              * @method _sortResults
              * Sorts the last search result by comparing given attribute on
