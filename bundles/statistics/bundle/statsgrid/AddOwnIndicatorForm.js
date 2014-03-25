@@ -260,7 +260,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                 if (row && row.length) {
                     row.find('input').val(value);
                     // Why would we want to move the row?
-                    //row.appendTo(row.parent());
+                    row.appendTo(row.parent());
                     return true;
                 }
 
