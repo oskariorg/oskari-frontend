@@ -118,6 +118,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             });
 
             this.editLayer.updateLine = function() {
+                if (this.features.length === 0) {
+                    return;
+                }
                 var editFeature = this.features[0];
                 var endPoints = [];
                 if (editFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiLineString") {

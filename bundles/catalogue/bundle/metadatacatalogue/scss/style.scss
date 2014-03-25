@@ -3,86 +3,107 @@ div.metadataCatalogueDescription {
   margin-bottom: 8px; }
 
 div.metadataCatalogueContainer {
-  height: 90%;
-}
+  height: 90%; }
 
-div.main {
+div.metadataCatalogueContainer div.main {
   width: 100%;
-  height: 100%;
-}
+  height: 100%; }
 
-div.moreLess {
-  padding: 10px 0
-}
+div.metadataCatalogueContainer div.moreLess {
+  padding: 10px 0; }
 
 div.metadataOptions div.rowLabel {
   display: table-cell;
   vertical-align: middle;
   margin-left: 0;
   min-width: 130px;
-  width: 130px;
-}
+  width: 130px; }
 
 div.metadataOptions div.checkboxes {
   display: table-cell;
   vertical-align: middle;
   margin-left: 130px;
-  width: auto;
-}
+  width: auto; }
 
 div.metadataOptions div.metadataType {
   display: table-cell;
   vertical-align: middle;
   padding-right: 10px;
   width: auto;
-  white-space: nowrap;
-}
+  white-space: nowrap; }
 
 div.metadataOptions div.metadataRow {
-  margin-bottom: 10px;
-}
+  margin-bottom: 10px; }
 
 div.metadataOptions div.rowLabel {
-  white-space: nowrap;
-}
+  white-space: nowrap; }
 
-div.resultHeader {
+div.metadataResultHeader {
   width: 100%;
-  height: 35px;
-}
+  height: 35px; }
 
-div.resultHeader div.resultTitle {
-  float: left;
-}
+div.metadataResultHeader div.resultTitle {
+  float: left; }
 
-div.resultHeader div.modify {
-  float: right;
-}
+div.metadataResultHeader div.modify {
+  float: right; }
 
-div.resultHeader div.panelHeader {
+div.metadataResultHeader div.panelHeader {
   margin-top: 10px;
-  margin-bottom: 20px;
-}
+  margin-bottom: 20px; }
 
-th.name, td.name {
+div.metadataCatalogueContainer th.name, td.name {
   text-align: left;
 }
 
-th.rating, td.rating {
-  text-align: right;
+div.metadataCatalogueContainer td.name {
+  padding-left: 8px;
 }
 
-th.info, td.info {
+div.metadataCatalogueContainer th.rating, td.rating {
+  text-align: right; }
+
+div.metadataCatalogueContainer th.info, td.info {
   text-align: right;
+  width: 16px;
 }
 
-td.info div.layer-info {
+div.metadataCatalogueContainer th.remove, td.remove {
+  text-align: right;
+  width: 16px;
+}
+
+div.metadataCatalogueContainer td.info div.layerInfo {
   width: 16px;
   height: 16px;
-  margin-left : 5px;
-  float : right;
+  margin-left: 5px;
+  float: right; }
+
+div.metadataCatalogueContainer td.remove div.resultRemove {
+  width: 16px;
+  height: 16px;
+  margin-left: 5px;
+  margin-right: 5px;
+  float: right; }
+
+div.metadataCatalogueContainer tr.resultRow {
+  padding-left: 10px;
+  outline: 1pt solid #c0d0e0;
 }
 
-table.metadataSearchResult {
-  float:left;
+div.metadataCatalogueContainer tr.spacerRow {
+  height: 7px;
 }
+
+div.metadataCatalogueContainer td.spacer {
+  padding: 0;
+}
+
+div.metadataCatalogueContainer table.metadataSearchResult {
+  float: left;
+}
+
+div.metadataCatalogueContainer ul.layerList {
+  padding-left: 35px;
+}
+
