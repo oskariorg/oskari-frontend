@@ -183,6 +183,7 @@ Oskari.registerLocalization({
         "failedSubmit": "NOT TRANSLATED",
         "connectionProblem": "NOT TRANSLATED",
         "parsedDataInfo": "NOT TRANSLATED",
-        "parsedDataUnrecognized": "NOT TRANSLATED"
+        "parsedDataUnrecognized": "NOT TRANSLATED",
+        "loginToSaveIndicator": "NOT TRANSLATED"
     }
 });

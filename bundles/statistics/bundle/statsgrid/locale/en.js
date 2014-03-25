@@ -183,6 +183,7 @@ Oskari.registerLocalization({
         "failedSubmit": "Add indicator's metadata: ",
         "connectionProblem": "We could not save the data due to connection problems",
         "parsedDataInfo": "Imported regions count",
-        "parsedDataUnrecognized": "Unrecognized regions count"
+        "parsedDataUnrecognized": "Unrecognized regions count",
+        "loginToSaveIndicator": "NOT TRANSLATED"
     }
 });
