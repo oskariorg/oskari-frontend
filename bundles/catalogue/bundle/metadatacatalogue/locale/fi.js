@@ -7,6 +7,7 @@ Oskari.registerLocalization({
         "contentErrorMsg": "Hakusanassa on kiellettyjä merkkejä.",
         "metadataCatalogueDescription": "Hae paikkatietoaineistoja tai palveluita.",
         "metadataCatalogueButton": "Hae",
+        "assistance": "Hae aineistoja",
         "showMore" : "Lisää hakuehtoja",
         "showLess" : "Piilota laajennettu haku",
         "emptyOption" : "* Ei rajausta * ",
