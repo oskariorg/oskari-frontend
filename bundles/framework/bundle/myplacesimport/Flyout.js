@@ -151,12 +151,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                         // Prevent from sending if there were missing fields
                         if (me.__validateForm(form, locale)) {
                             e.preventDefault();
+                        } else {
+                            me.container.find('iframe').on('load', function() {
+                                me.__finish(jQuery(this), locale);
+                            });
                         }
                     });
-
-            this.container.find('iframe').on('load', function() {
-                me.__finish(jQuery(this), locale);
-            });
 
             return file;
         },
@@ -238,7 +238,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
 
             try {
                 json = JSON.parse(iframe.contents().find('pre').html());
-                if (json === null || json === undefined) success = false;
+
+                if (this.__jsonError(json)) {
+                    success = false;   
+                }
             } catch(error) {
                 this.instance
                     .getSandbox()
@@ -271,6 +274,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             dialog.show(title, message);
             dialog.fadeout(5000);
         },
+        /**
+         * Checks if json is null or undefined or if it has a key `error`.
+         * 
+         * @method __jsonError
+         * @private
+         * @param  {JSON} json
+         * @return {Boolean}
+         */
+        __jsonError: function(json) {
+            var error = false;
+
+            if (json === null || json === undefined) error = true;
+            else if (json.error) error = true;
+
+            return error;
+        }
     }, {
         "extend": ["Oskari.userinterface.extension.DefaultFlyout"]
     });
