@@ -156,7 +156,7 @@ Oskari.registerLocalization({
             "SUURALUE": "Suuralue"
         },
         "addDataButton": "Add indicator",
-        "addDataTitle": "Add a new indicator",
+        "addDataTitle": "NOT TRANSLATED",
         "openImportDialogTip": "Import data from clipboard",
         "openImportDataButton": "Import data",
         "addDataMetaTitle": "Title",
@@ -170,16 +170,20 @@ Oskari.registerLocalization({
         "addDataMetaYearPH": "Year",
         "addDataMetaPublicity": "Publishable",
         "municipalityHeader": "Municipalities",
+        "dataRows": "NOT TRANSLATED",
         "municipalityPlaceHolder": "Give value",
+        "formEmpty": "NOT TRANSLATED",
         "formCancel": "Cancel",
         "formSubmit": "Submit",
         "cancelButton": "Cancel",
-        "importDataButton": "Import",
+        "clearImportDataButton": "NOT TRANSLATED",
+        "importDataButton": "Add",
         "popupTitle": "Import data",
-        "importDataDescription": "You can bring region value duples by copying them to the textarea. <br>Place every municipality to their own row. You can separate the values with tabulator, colon or comma.<br>Example 1: Alajärvi, 1234<br>Example 2: 009    2100",
+        "importDataDescription": "You can bring region value duples by copying them to the textarea. \nPlace every municipality to their own row. You can separate the values with tabulator, colon or comma. \nExample 1: Alajärvi, 1234 \nExample 2: 009    2100",
         "failedSubmit": "Add indicator's metadata: ",
         "connectionProblem": "We could not save the data due to connection problems",
         "parsedDataInfo": "Imported regions count",
-        "parsedDataUnrecognized": "Unrecognized regions count"
+        "parsedDataUnrecognized": "Unrecognized regions count",
+        "loginToSaveIndicator": "NOT TRANSLATED"
     }
 });

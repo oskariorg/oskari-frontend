@@ -238,56 +238,69 @@ div.filter-region-select {
   visibility: hidden;
 }
 
-.statsgrid .form-cont {
-  height: 100%;
-  position: relative;
+form.add-indicator {
 
-  .form-head {
-    padding: 5px 10px;
+  h2 {
+    margin-left: 10px;
   }
-  .form-show-import {
-    float: right;
-    margin-top: 15px;
-    .import-buton {
-      margin-right: 0px;
+
+  fieldset {
+    border: 0;
+    margin: 0;
+    padding: 10px;
+
+    legend {
+        font-size: 16px;
+        font-weight: bold;
     }
-  }
-  .form-meta {
-    label {
-      display: inline-block;
-      padding-left: 10px;
-      width: 150px;
-      font-size: 14px;
-    }
-    span {
-      display: inline-block;
-      line-height: 25px;
-      font-size: 14px;
-      font-weight: bold;
-    }
-  }
-  .municipality-header {
-    margin-top: 30px;
-    padding-left: 10px;
 
     label {
-      font-size: 16px;
-      font-weight: bold;
+        clear: left;
+        float: left;
+        display: block;
+        font-size: 14px;
+        line-height: 16px;
+        width: 150px;
     }
-    hr {
-      border: solid 1px black;
-      margin: 10px 0;
+
+    input, select {
+        clear: right;
+        display: block;
+        float: left;
+        margin-left: 0;
     }
+
+    button {
+        float: right;
+        margin-left: 15px;
+    }
+
+    textarea {
+      display: block;
+      height: 100px;
+      width: 100%;
+      margin-bottom: 5px;
+      clear: both;
+    }
+
   }
+
+  hr {
+    border: solid 1px black;
+    margin: 0 0 10px;
+  }
+
   .municipalities {
     position: absolute;
     bottom: 40px;
-    top: 325px;
-    left: 0px;
+    top: 500px;
+    left: -10px;
     width: 100%;
     overflow: auto;
+    margin: 0;
 
     .municipality-row {
+
       label {
         display: inline-block;
         padding-left: 10px;
@@ -295,41 +308,27 @@ div.filter-region-select {
         font-weight: bold;
         font-size: 14px;
       }
+
     }
+
   }
+
   .form-submit {
     height: 40px;
     position: absolute;
     bottom: 0px;
-    right: 15px;
-    .submit-form-button {
-      float:right;
-      margin: 5px;
+    left: 0;
+    right: 0;
+    padding: 0;
+
+    button {
+        float: right;
+        margin: 5px;
+
+        &.cancel-form-button {
+            float: left;
+        }
 
     }
-    .cancel-form-button {
-      float: right;
-      margin: 5px;
-    }
   }
-}
-.import-data-textarea {
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: 10px;
-}
-.import-indicator-bold {
-  font-size: 1.2em;
-  font-weight: bold;
-}
-.header-menu-subheading {
-  font-weight: bold;
-  padding: 5px 0;
-}
-.subheading-middle {
-  border-top: 1px solid black;
-}
-.indicator-name-link {
-  cursor: pointer;
-  color: #0085d1;
 }

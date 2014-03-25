@@ -70,7 +70,7 @@
     background-position: -142px -16px !important;
 }
 
-.icon-funnel {
+.icon-drag {
     width: 16px;
     height: 16px;
     background-image: url('../icons/icons.png') !important;
@@ -78,7 +78,15 @@
     background-position: -158px 0px !important;
 }
 
-.icon-info {
+.icon-drag:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -158px -16px !important;
+}
+
+.icon-funnel {
     width: 16px;
     height: 16px;
     background-image: url('../icons/icons.png') !important;
@@ -86,15 +94,7 @@
     background-position: -174px 0px !important;
 }
 
-.icon-info:hover {
-    width: 16px;
-    height: 16px;
-    background-image: url('../icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -174px -16px !important;
-}
-
-.icon-maximize {
+.icon-info {
     width: 16px;
     height: 16px;
     background-image: url('../icons/icons.png') !important;
@@ -102,7 +102,7 @@
     background-position: -190px 0px !important;
 }
 
-.icon-maximize:hover {
+.icon-info:hover {
     width: 16px;
     height: 16px;
     background-image: url('../icons/icons.png') !important;
@@ -110,7 +110,7 @@
     background-position: -190px -16px !important;
 }
 
-.icon-minimize {
+.icon-maximize {
     width: 16px;
     height: 16px;
     background-image: url('../icons/icons.png') !important;
@@ -118,7 +118,7 @@
     background-position: -206px 0px !important;
 }
 
-.icon-minimize:hover {
+.icon-maximize:hover {
     width: 16px;
     height: 16px;
     background-image: url('../icons/icons.png') !important;
@@ -126,12 +126,36 @@
     background-position: -206px -16px !important;
 }
 
+.icon-menu {
+    width: 25px;
+    height: 7px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -222px 0px !important;
+}
+
+.icon-minimize {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -247px 0px !important;
+}
+
+.icon-minimize:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -247px -16px !important;
+}
+
 .icon-restore {
     width: 16px;
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -222px 0px !important;
+    background-position: -263px 0px !important;
 }
 
 .icon-restore:hover {
@@ -139,7 +163,15 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -222px -16px !important;
+    background-position: -263px -16px !important;
+}
+
+.layer-analysis {
+    width: 16px;
+    height: 16px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -279px 0px !important;
 }
 
 .layer-base {
@@ -147,7 +179,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -238px 0px !important;
+    background-position: -295px 0px !important;
 }
 
 .layer-gfi-1 {
@@ -155,7 +187,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -254px 0px !important;
+    background-position: -311px 0px !important;
 }
 
 .layer-gfi-2 {
@@ -163,7 +195,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -270px 0px !important;
+    background-position: -327px 0px !important;
 }
 
 .layer-group {
@@ -171,7 +203,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -286px 0px !important;
+    background-position: -343px 0px !important;
 }
 
 .layer-vector {
@@ -179,7 +211,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -302px 0px !important;
+    background-position: -359px 0px !important;
 }
 
 .layer-wfs {
@@ -187,7 +219,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -318px 0px !important;
+    background-position: -375px 0px !important;
 }
 
 .layer-wms {
@@ -195,7 +227,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -334px 0px !important;
+    background-position: -391px 0px !important;
 }
 
 .layer-wmts {
@@ -203,7 +235,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -350px 0px !important;
+    background-position: -407px 0px !important;
 }
 
 .marker {
@@ -211,7 +243,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -366px 0px !important;
+    background-position: -423px 0px !important;
 }
 
 .myplaces-draw-area {
@@ -219,7 +251,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -398px 0px !important;
+    background-position: -455px 0px !important;
 }
 
 .myplaces-draw-line {
@@ -227,7 +259,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -430px 0px !important;
+    background-position: -487px 0px !important;
 }
 
 .myplaces-draw-point {
@@ -235,7 +267,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -462px 0px !important;
+    background-position: -519px 0px !important;
 }
 
 .tool-history-back {
@@ -243,7 +275,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -494px 0px !important;
+    background-position: -551px 0px !important;
 }
 
 .tool-history-forward {
@@ -251,7 +283,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -526px 0px !important;
+    background-position: -583px 0px !important;
 }
 
 .tool-measure-area {
@@ -259,7 +291,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -558px 0px !important;
+    background-position: -615px 0px !important;
 }
 
 .tool-measure-line {
@@ -267,6 +299,5 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -590px 0px !important;
+    background-position: -647px 0px !important;
 }
-

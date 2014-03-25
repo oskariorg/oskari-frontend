@@ -216,76 +216,62 @@ div.filter-region-select ul {
 .statsgrid-hide-header {
   visibility: hidden; }
 
-.statsgrid .form-cont {
-  height: 100%;
-  position: relative; }
-  .statsgrid .form-cont .form-head {
-    padding: 5px 10px; }
-  .statsgrid .form-cont .form-show-import {
+form.add-indicator h2 {
+  margin-left: 10px; }
+form.add-indicator fieldset {
+  border: 0;
+  margin: 0;
+  padding: 10px; }
+  form.add-indicator fieldset legend {
+    font-size: 16px;
+    font-weight: bold; }
+  form.add-indicator fieldset label {
+    clear: left;
+    float: left;
+    display: block;
+    font-size: 14px;
+    line-height: 16px;
+    width: 150px; }
+  form.add-indicator fieldset input, form.add-indicator fieldset select {
+    clear: right;
+    display: block;
+    float: left;
+    margin-left: 0; }
+  form.add-indicator fieldset button {
     float: right;
-    margin-top: 15px; }
-    .statsgrid .form-cont .form-show-import .import-buton {
-      margin-right: 0px; }
-  .statsgrid .form-cont .form-meta label {
+    margin-left: 15px; }
+  form.add-indicator fieldset textarea {
+    display: block;
+    height: 100px;
+    width: 100%;
+    margin-bottom: 5px;
+    clear: both; }
+form.add-indicator hr {
+  border: solid 1px black;
+  margin: 0 0 10px; }
+form.add-indicator .municipalities {
+  position: absolute;
+  bottom: 40px;
+  top: 500px;
+  left: -10px;
+  width: 100%;
+  overflow: auto;
+  margin: 0; }
+  form.add-indicator .municipalities .municipality-row label {
     display: inline-block;
     padding-left: 10px;
     width: 150px;
+    font-weight: bold;
     font-size: 14px; }
-  .statsgrid .form-cont .form-meta span {
-    display: inline-block;
-    line-height: 25px;
-    font-size: 14px;
-    font-weight: bold; }
-  .statsgrid .form-cont .municipality-header {
-    margin-top: 30px;
-    padding-left: 10px; }
-    .statsgrid .form-cont .municipality-header label {
-      font-size: 16px;
-      font-weight: bold; }
-    .statsgrid .form-cont .municipality-header hr {
-      border: solid 1px black;
-      margin: 10px 0; }
-  .statsgrid .form-cont .municipalities {
-    position: absolute;
-    bottom: 40px;
-    top: 325px;
-    left: 0px;
-    width: 100%;
-    overflow: auto; }
-    .statsgrid .form-cont .municipalities .municipality-row label {
-      display: inline-block;
-      padding-left: 10px;
-      width: 150px;
-      font-weight: bold;
-      font-size: 14px; }
-  .statsgrid .form-cont .form-submit {
-    height: 40px;
-    position: absolute;
-    bottom: 0px;
-    right: 15px; }
-    .statsgrid .form-cont .form-submit .submit-form-button {
-      float: right;
-      margin: 5px; }
-    .statsgrid .form-cont .form-submit .cancel-form-button {
-      float: right;
-      margin: 5px; }
-
-.import-data-textarea {
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: 10px; }
-
-.import-indicator-bold {
-  font-size: 1.2em;
-  font-weight: bold; }
-
-.header-menu-subheading {
-  font-weight: bold;
-  padding: 5px 0; }
-
-.subheading-middle {
-  border-top: 1px solid black; }
-
-.indicator-name-link {
-  cursor: pointer;
-  color: #0085d1; }
+form.add-indicator .form-submit {
+  height: 40px;
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  padding: 0; }
+  form.add-indicator .form-submit button {
+    float: right;
+    margin: 5px; }
+    form.add-indicator .form-submit button.cancel-form-button {
+      float: left; }
