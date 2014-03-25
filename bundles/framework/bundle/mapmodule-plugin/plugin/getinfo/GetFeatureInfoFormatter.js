@@ -8,7 +8,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         "header": '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
         "headerTitle": '<div class="getinforesult_header_title"></div>',
         "myPlacesWrapper": '<div class="myplaces_place">' + '<h3 class="myplaces_header"></h3>' + '<p class="myplaces_desc"></p>' + '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' + '<a class="myplaces_link"></a>' + '</div>',
-        "linkOutside": '<a target="_blank"></a>',
+        "linkOutside": '<a target="_blank"></a>'
     },
     /**
      * Wraps the html feature fragments into a container.
@@ -22,15 +22,15 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         var me = this;
 
         return _.foldl(fragments, function(wrapper, fragment) {
-            var fragmentTitle = fragment.layerName;
-            var fragmentMarkup = fragment.markup;
+            var fragmentTitle = fragment.layerName,
+                fragmentMarkup = fragment.markup;
 
             if (fragment.isMyPlace) {
                 if (fragmentMarkup) wrapper.append(fragmentMarkup);
             } else {
-                var contentWrapper = me.template.wrapper.clone();
-                var headerWrapper = me.template.header.clone();
-                var titleWrapper = me.template.headerTitle.clone();
+                var contentWrapper = me.template.wrapper.clone(),
+                    headerWrapper = me.template.header.clone(),
+                    titleWrapper = me.template.headerTitle.clone();
 
                 titleWrapper.append(fragmentTitle);
                 headerWrapper.append(titleWrapper);
@@ -240,14 +240,14 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
      * @method _formatWFSFeaturesForInfoBox
      */
     _formatWFSFeaturesForInfoBox: function (data) {
-        var me = this;
-        var layer = this._sandbox.findMapLayerFromSelectedMapLayers(data.layerId);
-        var isMyPlace = layer.isLayerOfType('myplaces');
-        var fields = layer.getFields().slice();
-        var hiddenFields = ['__fid', '__centerX', '__centerY'];
-        var type = "wfslayer";
-        var result;
-        var markup;
+        var me = this,
+            layer = this._sandbox.findMapLayerFromSelectedMapLayers(data.layerId),
+            isMyPlace = layer.isLayerOfType('myplaces'),
+            fields = layer.getFields().slice(),
+            hiddenFields = ['__fid', '__centerX', '__centerY'],
+            type = "wfslayer",
+            result,
+            markup;
 
         if (data.features == "empty" || layer === null || layer === undefined) {
             return;
@@ -359,8 +359,8 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             if (!value || !key) {
                 continue;
             }
-            var vType = (typeof value).toLowerCase();
-            var valpres = "";
+            var vType = (typeof value).toLowerCase(),
+                valpres = "";
             switch (vType) {
             case "string":
                 if (value.indexOf("http://") === 0) {

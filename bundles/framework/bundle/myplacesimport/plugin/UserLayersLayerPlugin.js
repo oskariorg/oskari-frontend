@@ -79,12 +79,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
          *          reference to application sandbox
          */
         init: function (sandbox) {
-            var sandboxName = (this.config ? this.config.sandbox : null) || 'sandbox';
-            var sandbox = Oskari.getSandbox(sandboxName);
-            var layerModelBuilder = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.myplacesimport.domain.UserLayerModelBuilder',
-                sandbox);
-            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            var sandboxName = (this.config ? this.config.sandbox : null) || 'sandbox',
+                sandbox = Oskari.getSandbox(sandboxName),
+                layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.domain.UserLayerModelBuilder', sandbox),
+                mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
             // register domain builder
             if (mapLayerService) {
@@ -171,7 +169,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
                 if (layer.isLayerOfType(this._layerType)) {
                     this._changeMapLayerOpacity(layer);
                 }
-            },
+            }
         },
 
         /**
@@ -270,12 +268,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
                 return;
             }
 
-            var olPolygon = geom[0];
-            var bounds = olPolygon.getBounds();
-            var centroid = olPolygon.getCentroid();
-            var epsilon = 1.0;
-
-            var rb = sandbox.getRequestBuilder('MapMoveRequest'),
+            var olPolygon = geom[0],
+                bounds = olPolygon.getBounds(),
+                centroid = olPolygon.getCentroid(),
+                epsilon = 1.0,
+                rb = sandbox.getRequestBuilder('MapMoveRequest'),
                 req;
             if (rb) {
                 if (olPolygon.getArea() < epsilon) {
@@ -308,9 +305,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
                 // http://dev.openlayers.org/docs/files/OpenLayers/Format/WKT-js.html
                 // parse to OpenLayers.Geometry.Geometry[] array ->
                 // layer.setGeometry();
-                var wkt = new OpenLayers.Format.WKT();
-
-                var features = wkt.read(layerWKTGeom);
+                var wkt = new OpenLayers.Format.WKT(),
+                    features = wkt.read(layerWKTGeom);
                 if (features) {
                     if (features.constructor != Array) {
                         features = [features];
