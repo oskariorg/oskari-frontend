@@ -163,6 +163,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             searchDescription.html(this.instance.getLocalization('searchDescription'));
 
             var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
+            field.setPlaceholder(me.instance.getLocalization("searchAssistance"));
 
             var regex = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*\*?$/;
             field.setContentCheck(true, this.instance.getLocalization('contentErrorMsg'), regex);

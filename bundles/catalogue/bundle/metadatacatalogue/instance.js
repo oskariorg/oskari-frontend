@@ -280,6 +280,7 @@ Oskari.clazz
                 metadataCatalogueDescription.html(me.getLocalization('metadataCatalogueDescription'));
 
                 var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
+                field.setPlaceholder(me.getLocalization('assistance'));
 
                 var regex = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*\*?$/;
                 field.setContentCheck(true, me.getLocalization('contentErrorMsg'), regex);

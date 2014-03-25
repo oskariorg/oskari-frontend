@@ -51,11 +51,14 @@ function(instance) {
     startPlugin : function() {
         var loc = this.instance.getLocalization('filter');
         this.template = jQuery('<div class="parcelSearchContainer">' +
-        		'<div class="parcelSearchType">'+
+                '<div class="parcelSearchType">'+
+                    // Currently only one search type
+                    /*
                     '<input type="radio" name="parcelSearchType" class="parcelSearchType" id="ParcelSelectedEvent" checked="checked"/>'+
                     '<label for "rbtnParcel" class="parcelSearchType">'+loc.parcel+'</label>'+
                     '<input type="radio" name="parcelSearchType" class="parcelSearchType" id="RegisterUnitSelectedEvent"/>'+
                     '<label for "rbtnParcel" class="parcelSearchType">'+loc.registerUnit+'</label>'+
+                    */
                 '</div>'+
                 '<div class="parcelSearchControls">'+
                     '<div class="parcelSearchField">'+
@@ -108,13 +111,15 @@ function(instance) {
         cel.empty();
 
         var parcelContainer = this.template.clone();
+        var description = this.instance.getLocalization("description");
+        parcelContainer.find(".parcelSearchType").text(description);
         var searchField = parcelContainer.find(".parcelSearchField");
         searchField.append(this._getFilterField().getField());
         var searchButton = parcelContainer.find(".parcelSearchButton");
         this._getActionButton().insertTo(searchButton);
 
         cel.append(parcelContainer);
-        cel.parents("div.oskari-flyout").addClass("parcelselectorBase");;
+        cel.parents("div.oskari-flyout").addClass("parcelselectorBase");
 
     },
 
@@ -185,12 +190,16 @@ function(instance) {
      * @return {String} Selected search type.
      */
     _getSearchType : function() {
+        // Currently only one search type
+        return "ParcelSelector.ParcelSelectedEvent";
+        /*
         var selectedVal = "";
         var selected = jQuery("input[type='radio'][name='parcelSearchType']:checked");
         if (selected.length > 0) {
             return "ParcelSelector."+selected.attr("id");
         }
         return "";
+        */
     }
 },
     {
