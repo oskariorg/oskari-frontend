@@ -62,7 +62,7 @@ Oskari.registerLocalization({
                 "measurearea": "NOT TRANSLATED",
                 "point": "NOT TRANSLATED",
                 "line": "NOT TRANSLATED",
-                "area": "NOT TRANSLATED",
+                "area": "NOT TRANSLATED"
             },
             "toollayout": {
                 "label": "NOT TRANSLATED",

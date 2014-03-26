@@ -746,13 +746,24 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             button.find('input').val(me._locale.addDataButton);
             paramCont.append(button);
             button.find('input').click(function (e) {
-                var form = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
-                    me._sandbox, me._locale, me.regionCategories, me._layer.getWmsName(), me._layer.getId(), me._selectedRegionCategory);
-                container.find('.selectors-container').hide();
-                container.find('#municipalGrid').hide();
-                form.createUI(container, function (data) {
-                    me._addUserIndicatorToGrid(data, container, me);
-                });
+                // Warn the user if they're not logged in
+                if (!me._sandbox || !me._sandbox.getUser().isLoggedIn()) {
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                        okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                    okBtn.setTitle(me._locale.buttons.ok);
+                    okBtn.addClass('primary');
+                    okBtn.setHandler(function () {
+                        dialog.close(true);
+                        var form = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
+                            me._sandbox, me._locale, me.regionCategories, me._layer.getWmsName(), me._layer.getId(), me._selectedRegionCategory);
+                        container.find('.selectors-container').hide();
+                        container.find('#municipalGrid').hide();
+                        form.createUI(container, function (data) {
+                            me._addUserIndicatorToGrid(data, container, me);
+                        });
+                    });
+                    dialog.show(me._locale.addDataTitle, me._locale.loginToSaveIndicator, [okBtn]);
+                }
             });
         },
         _addUserIndicatorToGrid: function (data, container, me) {
@@ -965,7 +976,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 newIndicator.before(removeButton);
                 selectors.find('.indicator-cont').after(parameters);
             }
-            
+
 
             if (indicator) {
                 // click listener

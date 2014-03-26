@@ -184,6 +184,7 @@ Oskari.registerLocalization({
         "failedSubmit": "Lisää indikaattorin metatiedot: ",
         "connectionProblem": "Dataa ei voitu tallentaa yhteysongelman takia.",
         "parsedDataInfo": "Tuotuja alueita oli yhteensä",
-        "parsedDataUnrecognized": "Tunnistamattomia alueita"
+        "parsedDataUnrecognized": "Tunnistamattomia alueita",
+        "loginToSaveIndicator": "Kirjaudu ensin sisään jos haluat tallentaa aineiston."
     }
 });
