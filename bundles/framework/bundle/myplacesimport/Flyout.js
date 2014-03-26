@@ -234,7 +234,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         __finish: function(iframe, locale) {
             var title = locale.finish.success.title,
                 msg = locale.finish.success.message,
-                json = undefined, success = true;
+                json,
+                success = true;
 
             try {
                 json = JSON.parse(iframe.contents().find('pre').html());
@@ -252,7 +253,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             if (success === true) {
                 this.instance.addUserLayer(json);
             } else {
-                title = null, msg = locale.finish.failure.message;
+                title = null;
+                msg = locale.finish.failure.message;
             }
 
             this.__showMessage(title, msg);
