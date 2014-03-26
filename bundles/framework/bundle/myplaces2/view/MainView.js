@@ -113,7 +113,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
              */
             'Toolbar.ToolSelectedEvent': function (event) {
                 // changed tool
-                this._cleanupPopup();
+                this.cleanupPopup();
             },
             /**
              * @method DrawPlugin.FinishedDrawingEvent
@@ -187,7 +187,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             }];
             // cancel button
             content[0].actions[loc.buttons.cancel] = function () {
-                me._cleanupPopup();
+                me.cleanupPopup();
                 // ask toolbar to select default tool
                 var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
                 me.instance.sandbox.request(me, toolbarRequest);
@@ -199,6 +199,21 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
 
             var request = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, loc.placeform.title, content, location, true);
             sandbox.request(me.getName(), request);
+        },
+        /**
+         * Destroys the opened form popup(s) from the screen.
+         * 
+         * @method deletePlaceForm
+         */
+        deletePlaceForm: function() {
+            var sandbox = this.instance.sandbox,
+                requestB = sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest'),
+                request;
+
+            if (requestB) {
+                request = requestB(this.popupId);
+                sandbox.request(this.getName(), request);
+            }
         },
         /**
          * @method _validateForm
@@ -362,7 +377,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                         sandbox.notifyAll(event);
                     }
 
-                    me._cleanupPopup();
+                    me.cleanupPopup();
 
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     loc = me.instance.getLocalization('notification').placeAdded;
@@ -378,13 +393,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             this.instance.getService().saveMyPlace(place, serviceCallback);
         },
         /**
-         * @method _cleanupPopup
+         * @method cleanupPopup
          * Cancels operations:
          * - close popup
          * - destroy form
          * @private
          */
-        _cleanupPopup: function () {
+        cleanupPopup: function () {
             // form not open, nothing to do
             if (!this.form) {
                 return;
