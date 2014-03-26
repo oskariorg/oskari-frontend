@@ -7,7 +7,7 @@ Oskari.registerLocalization({
     "contentErrorMsg": "Hakusanassa on kiellettyjä merkkejä.",
     "searchDescription": "Hae paikannimeä, osoitetta tai kiinteistötunnusta.",
     "searchButton": "Hae",
-    "searchAssistance": "Hae kohteita",
+    "searchAssistance": "Kirjoita hakusana",
     "searchResultCount": "Hakusi palautti ",
     "searchResultCount2": " tulosta",
     "searchResultDescriptionMoreResults": "Tarkentamalla hakua voit tiivistää tulosten joukkoa.",

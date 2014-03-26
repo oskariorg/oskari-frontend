@@ -407,17 +407,11 @@ Oskari.clazz
                         newRow.find('div.rowLabel').text(newLabel);
                         for (var j=0; j < dataField.values.length; j++) {
                             var value = dataField.values[j];
-                            var text = "";
+                            var text = me._getOptionLocalization(value);
                             var newCheckbox = me.templates.metadataCheckbox.clone();
                             var newCheckboxDef = newCheckbox.find(":checkbox");
                             newCheckboxDef.attr("name",dataField.field);
                             newCheckboxDef.attr("value",value.val);
-                            // Localization available?
-                            if (typeof value.locale !== "undefined") {
-                                text = value.locale;
-                            } else {
-                                text = value.val;
-                            }
                             newCheckbox.find("label.metadataTypeText").append(text);
                             newCheckbox.change(function(){
                                 me._updateOptions(advancedContainer);
@@ -437,15 +431,9 @@ Oskari.clazz
                         dropdownDef.append(emptyOption);
                         for (var j=0; j < dataField.values.length; j++) {
                             var value = dataField.values[j];
-                            var text = "";
+                            var text = me._getOptionLocalization(value);
                             var newOption = me.templates.dropdownOption.clone();
                             newOption.attr("value",value.val);
-                            // Localization available?
-                            if (typeof value.locale !== "undefined") {
-                                text = value.locale;
-                            } else {
-                                text = value.val;
-                            }
                             newOption.text(text);
                             dropdownDef.append(newOption);
                         }
@@ -464,6 +452,24 @@ Oskari.clazz
                     advancedContainer.append(newRow);
                 }
                 me._updateOptions(advancedContainer);
+            },
+
+            /**
+             * @method _getOptionLocalization
+             * Generates localization for option values
+             */
+            _getOptionLocalization: function(value) {
+                var me = this;
+                // Localization available?
+                if (typeof value.locale !== "undefined") {
+                    text = value.locale;
+                } else {
+                    text = me.getLocalization(value.val);
+                    if (typeof text !== "string") {
+                        text = value.val;
+                    }
+                }
+                return text;
             },
 
             /**
