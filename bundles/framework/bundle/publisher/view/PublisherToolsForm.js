@@ -393,12 +393,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
                     var alreadySelected = false;
                     for (i = 0; i < selectedLayers.length; i++) {
-                        if (selectedLayers[i].getId() === me.selectedDrawingLayer.layer.getId()) {
+                        if (selectedLayers[i].getId() === me.selectedDrawingLayer.layer) {
                             alreadySelected = true;
                         }
                     }
                     if (!alreadySelected) {
-                        me._sandbox.postRequestByName('AddMapLayerRequest', [me.selectedDrawingLayer.layer.getId(), false, me.selectedDrawingLayer.layer.isBaseLayer()]);
+                        me._sandbox.postRequestByName('AddMapLayerRequest', [me.selectedDrawingLayer.layer, false]);
                     }
                     selections.publishedmyplaces2 = me.selectedDrawingLayer;
                 }
@@ -683,24 +683,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     layerSelectOption.attr('value', mylayers[i].getId()).append(mylayers[i].getName());
                     // select correct layer
                     if (me.selectedDrawingLayer.layer !== null && me.selectedDrawingLayer.layer !== undefined &&
-                        mylayers[i].getId() === me.selectedDrawingLayer.layer.getId()) {
+                        mylayers[i].getId() === me.selectedDrawingLayer.layer) {
                         layerSelectOption.prop('selected', true);
                     }
                     layerSelect.append(layerSelectOption);
                 }
                 // select default
                 if (me.selectedDrawingLayer.layer === null || me.selectedDrawingLayer.layer === undefined) {
-                    me.selectedDrawingLayer.layer = mylayers[0];
+                    me.selectedDrawingLayer.layer = mylayers[0].getId();
                 }
                 layerSelect.change(function(e) {
                     var target = jQuery(e.target),
                         value = target.val(),
                         i;
-                    for (i = 0; i < mylayers.length; i++) {
-                        if (mylayers[i].getId() === value) {
-                            me.selectedDrawingLayer.layer = mylayers[i];
-                        }
-                    }
+                    me.selectedDrawingLayer.layer = value;
                 });
 
                 var optionSettings = jQuery(me.templates.toolOptionSettings).clone(),

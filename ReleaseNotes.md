@@ -2,6 +2,10 @@
 
 ## 1.19
 
+### localization
+
+Added italian translations for analyse and metadataflyout bundles (thanks rockini)
+
 ### divmanazer/ui-components
 
 Overlay now supports element selector that spans over multiple DOM elements (thanks uhef)
