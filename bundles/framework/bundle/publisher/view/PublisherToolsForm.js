@@ -541,6 +541,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                                                 me[configName][buttonGroup.name] = {};
                                             }
                                             me[configName][buttonGroup.name][toolName] = true;
+                                            // AH-1241 tool selections were lost when a published map was edited
+                                            buttonGroup.buttons[toolName].selected = true;
                                         }
                                     }
                                 }
