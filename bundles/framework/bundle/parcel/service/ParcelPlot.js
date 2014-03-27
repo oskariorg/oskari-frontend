@@ -420,11 +420,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
         _getPrintParams: function (values) {
 
             var sandbox = this.instance.getSandbox();
-
             var maplinkArgs = sandbox.generateMapLinkParameters();
+            var loc = this.instance.getLocalization('page');
 
             var selections = {
-                pageTitle: "Määräalakartta / Emäkiinteistö: "+ values.parent_property_id,
+                pageTitle: loc.title+" "+ values.parent_property_id,
                 pageSize: values.size,
                 maplinkArgs: maplinkArgs,
                 format: "application/pdf",
