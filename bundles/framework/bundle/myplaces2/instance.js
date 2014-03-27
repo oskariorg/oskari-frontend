@@ -179,8 +179,6 @@ function() {
         var defaults = this._getCategoryDefaults();
         var actionUrl = this.conf.queryUrl;
         // Set max features to configured.
-        conf = conf || {};
-        conf.maxFeatures = 2;
         var maxFeatures = (conf ? conf.maxFeatures : undefined);
         //'/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&myplaces=WFS';
         // this.conf.queryUrl; 
