@@ -259,8 +259,12 @@ function(drawPlugin) {
             for (var i = 0; i < segments.polygons.length; i++) {
                 for (var j = 0; j < segments.p[i].length; j++) {
                     var sp = [segments.p[i][j][0],segments.p[i][j][1]];
-                    if (!((sp[0].boundaryPoint)&&(sp[1].boundaryPoint))) continue;
-                    if ((sp[0].short >= 0)&&(sp[0].short === sp[1].short)) continue;
+                    if (!((sp[0].boundaryPoint)&&(sp[1].boundaryPoint))) {
+                        continue;
+                    }
+                    if ((sp[0].short >= 0)&&(sp[0].short === sp[1].short)) {
+                        continue;
+                    }
                     var p1 = {x: sp[0].x, y: sp[0].y};
                     var p2 = {x: sp[1].x, y: sp[1].y};
                     projPoints.push(this.pointProjection(point,p1,p2));
@@ -361,7 +365,9 @@ function(drawPlugin) {
                     break;
                 }
             }
-            if (!inside) continue;
+            if (!inside) {
+                continue;
+            }
 
             // Validity check
             if ((outPolygon.components[0].intersects(inPolygon.geometry.components[0]))
@@ -501,9 +507,9 @@ function(drawPlugin) {
                     from = (from < 0)
                         ? Math.ceil(from)
                         : Math.floor(from);
-                    if (from < 0)
+                    if (from < 0) {
                         from += len;
-
+                    }
                     for (; from < len; from++) {
                         if (from in this &&
                             this[from] === elt)
@@ -521,7 +527,7 @@ function(drawPlugin) {
                     'use strict';
                     var T, k;
 
-                    if (this == null) {
+                    if (this === null) {
                         throw new TypeError("this is null or not defined");
                     }
 
@@ -646,8 +652,9 @@ function(drawPlugin) {
                     } else {
                         union = jstsOldPolygons[i].getExteriorRing().union(union);
                     }
-                    if (i<jstsOldPolygons.length-1) continue;
-
+                    if (i<jstsOldPolygons.length-1) {
+                        continue;
+                    }
                 }
                 polygonizer = new jsts.operation.polygonize.Polygonizer();
                 polygonizer.add(union);
@@ -677,9 +684,13 @@ function(drawPlugin) {
                     clipType = ClipperLib.ClipType.ctIntersection;
                     // Cut intersections
                     success = cpr.Execute(clipType, clipSolutionPolygons);
-                    if (!success) return -2;
+                    if (!success) {
+                        return -2;
+                    }
 
-                    if (clipSolutionPolygons.length === 0) continue;
+                    if (clipSolutionPolygons.length === 0) {
+                        continue;
+                    }
 
                     // Polygons to OpenLayers format
                     polygonIndexes = [];
@@ -740,7 +751,9 @@ function(drawPlugin) {
                                 clipSolutionHoles = new ClipperLib.Polygons();
                                 clipType = ClipperLib.ClipType.ctIntersection;
                                 success = cpr.Execute(clipType, clipSolutionHoles);
-                                if (!success) return -3;
+                                if (!success) {
+                                    return -3;
+                                }
 
                                 if (clipSolutionHoles.length > 0) {
                                     clipHole = clipSolutionPolygons[k];
@@ -780,7 +793,9 @@ function(drawPlugin) {
                 crossRing = sharedEdge;
                 olLineStringPoints = [];
                 olNewLineStringsTmp = [];
-                if (sharedEdge) olLineStringPoints.push(olPoints[0]);
+                if (sharedEdge) {
+                    olLineStringPoints.push(olPoints[0]);
+                }
                 for (j = 1; j < olPoints.length-1; j++) {
                     if (!this.equalArrays(olPoints[j].references, olPoints[j-1].references)) {
                         if (sharedEdge) {
@@ -790,7 +805,9 @@ function(drawPlugin) {
                         }
                     }
                     sharedEdge = (olPoints[j].references.length > 1);
-                    if (sharedEdge) olLineStringPoints.push(olPoints[j]);
+                    if (sharedEdge) {
+                        olLineStringPoints.push(olPoints[j]);
+                    }
                 }
                 if (sharedEdge) {
                     if ((crossRing)&&(olNewLineStringsTmp.length>0)&&(this.equalArrays(olPoints[olPoints.length-2].references, olPoints[0].references))) {
@@ -922,8 +939,12 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
                                                 for (i = 0; i < olEndPoints.length; i++) {
                                                     for (j = 0; j < 2; j++) {
                                                         if (olEndPoints[i][j].id === olPoint.id) {
-                                                            if (olEndPoints[i][j].references.length !== 2) continue;
-                                                            if ((olSolutionLineStrings[k].components.length === 2)&&(this.equalArrays(olPoints[o].references,olPoint.references))) continue;
+                                                            if (olEndPoints[i][j].references.length !== 2) {
+                                                                continue;
+                                                            }
+                                                            if ((olSolutionLineStrings[k].components.length === 2)&&(this.equalArrays(olPoints[o].references,olPoint.references))) {
+                                                                continue;
+                                                            }
                                                             found = true;
                                                             break endPoints;
                                                         }
@@ -949,8 +970,12 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
                                                     for (i = 0; i < olEndPoints.length; i++) {
                                                         for (j = 0; j < 2; j++) {
                                                             if (olEndPoints[i][j].id === olPoint.id) {
-                                                                if (olEndPoints[i][j].references.length !== 2) continue;
-                                                                if ((olSolutionLineStrings[k].components.length === 2)&&(this.equalArrays(olPoints[o].references,olPoint.references))) continue;
+                                                                if (olEndPoints[i][j].references.length !== 2) {
+                                                                    continue;
+                                                                }
+                                                                if ((olSolutionLineStrings[k].components.length === 2)&&(this.equalArrays(olPoints[o].references,olPoint.references))) {
+                                                                    continue;
+                                                                }
                                                                 found = true;
                                                                 break endPoints;
                                                             }
@@ -1124,7 +1149,7 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
        if ( (!array1[0]) || (!array2[0]) ) {
           return false;
        }
-       if (array1.length != array2.length) {
+       if (array1.length !== array2.length) {
           return false;
        }
        for (i=0; i<array1.length; i++) {
@@ -1138,7 +1163,7 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
        for (i=0; i<array2.length; i++) {
           key = (typeof array2[i]) + "~" + array2[i];
           if (temp[key]) {
-             if (temp[key] == 0) {
+             if (temp[key] === 0) {
                  return false;
              } else {
                  temp[key]--;
@@ -1162,7 +1187,6 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
         var i, j, k, l, m, n;
         var marker = this.map.activeMarker;
         var markers = this.drawPlugin.markerLayer.markers;
-        var markerIndexes = [[],[]];
 
         // Search the correct point
         pLoop:
@@ -1217,7 +1241,9 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
                         markerIndexes[0].push([features[fInd].geometry.components[0].components[i].markerPoint,i]);
                     }
                 }*/
-                if (removed) break;
+                if (removed) {
+                    break;
+                }
             }
             i = i+1;
         }

@@ -894,7 +894,7 @@
     background-position: -2526px 0px !important;
 }
 
-.tool-link {
+.tool-language {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -902,7 +902,7 @@
     background-position: -2558px 0px !important;
 }
 
-.tool-measure-area {
+.tool-link {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -910,7 +910,7 @@
     background-position: -2590px 0px !important;
 }
 
-.tool-measure-line {
+.tool-measure-area {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -918,7 +918,7 @@
     background-position: -2622px 0px !important;
 }
 
-.tool-pan {
+.tool-measure-line {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -926,7 +926,7 @@
     background-position: -2654px 0px !important;
 }
 
-.tool-print {
+.tool-pan {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -934,7 +934,7 @@
     background-position: -2686px 0px !important;
 }
 
-.tool-reset {
+.tool-print {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -942,7 +942,7 @@
     background-position: -2718px 0px !important;
 }
 
-.tool-save-view {
+.tool-reset {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -950,10 +950,19 @@
     background-position: -2750px 0px !important;
 }
 
-.tool-zoombox {
+.tool-save-view {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
     background-position: -2782px 0px !important;
 }
+
+.tool-zoombox {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2814px 0px !important;
+}
+
