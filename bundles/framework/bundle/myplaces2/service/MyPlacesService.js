@@ -37,13 +37,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
             return this.__name;
         },
         /**
-         * @method init
          * Initializes the service and loads places/categories
+         * @method init
+         * @param {Boolean} blnSkipLoad true to skip loading existing categories (f.ex. in published map)
          */
-        init: function () {
+        init: function (blnSkipLoad) {
             // preload stuff
             var me = this;
             this.wfstStore.connect();
+            if(blnSkipLoad === true) {
+                return;
+            }
             var loadedCategories = false;
             var loadedPlaces = false;
 

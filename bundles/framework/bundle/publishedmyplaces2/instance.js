@@ -147,7 +147,7 @@ function() {
      */
     start : function() {
         var me = this;
-        var conf = me.conf ;
+        var conf = me.conf || {};
 		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
 		var sandbox = Oskari.getSandbox(sandboxName);
         this.sandbox = sandbox;
@@ -166,8 +166,9 @@ function() {
 
         var user = sandbox.getUser();
         
-        if(!user.isLoggedIn()) {
+        if(!user.isLoggedIn() && conf.allowGuest !== true) {
             // guest users don't need anything else
+            // overrideable via conf.allowGuest
             return;
         }
 
@@ -184,12 +185,17 @@ function() {
             actionUrl, user.getUuid(), sandbox, defaults, this);
         // register service so personal data can access it
         this.sandbox.registerService(this.myPlacesService);
-        // init loads the places/categories
-        this.myPlacesService.init();
 
+        // init WITHOUT loading places/categories
+        this.myPlacesService.init(true);
 
         // handles my places insert form etc
-        this.view = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.view.MainView", this);
+        var categoryId = (conf ? (conf.layer ? conf.layer.split('myplaces_')[1] : null) : null);
+        this.view = Oskari.clazz.create(
+            "Oskari.mapframework.bundle.myplaces2.view.MainView", this, {
+                category: categoryId,
+                published: true
+            });
         this.view.start();
     },
     /**

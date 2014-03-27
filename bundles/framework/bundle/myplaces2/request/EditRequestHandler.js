@@ -29,6 +29,9 @@ function(sandbox, instance) {
         if(request.getName() == 'MyPlaces.EditPlaceRequest') {
             this._handleEditPlace(sandbox, request);
         }
+        else if (request.getName() == 'MyPlaces.DeletePlaceRequest') {
+            this._handleDeletePlace(sandbox, request);
+        }
         else if(request.getName() == 'MyPlaces.EditCategoryRequest') {
             this._handleEditCategory(sandbox, request);
         }
@@ -62,6 +65,28 @@ function(sandbox, instance) {
             dialog.fadeout();
             */
         }
+    },
+    _handleDeletePlace: function(sandbox, request) {
+        this.sandbox.printDebug("[Oskari.mapframework.bundle.myplaces2.request.DeleteRequestHandler] delete requested for place " + request.getId());
+        /* let's refresh map also if there */
+        var categoryId = request.getId(),
+            layerId = 'myplaces_' + categoryId,
+            layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+
+        if (layer) {
+            var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
+                updateRequest = updateRequestBuilder(layerId, true);
+            sandbox.request(this.instance, updateRequest);
+            // Update myplaces extra layers
+            var eventBuilder = sandbox.getEventBuilder('MapMyPlaces.MyPlacesVisualizationChangeEvent');
+            if (eventBuilder) {
+                var event = eventBuilder(layerId, true);
+                sandbox.notifyAll(event);
+            }
+        }
+
+        this.instance.getDrawPlugin().stopDrawing();
+        this.instance.getMainView().cleanupPopup();
     },
     _handleEditCategory : function(sandbox, request) {
         this.sandbox.printDebug("[Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler] edit requested for category " + request.getId());
