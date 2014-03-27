@@ -23,6 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
         //user's own layers (not id's)
         this.myplaces = [];
+        // Why do we have a separate state object for the drawing tools...
         this.selectedDrawingLayer = {
             'layer': null,
             'myplaces' : {
@@ -628,6 +629,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
                         // trigger click & change to send events
                         if (me._hasSelectedDrawTool()) {
+                            // This is just plain ugly...
+                            toolElement.attr('checked', 'checked');
                             toolElement
                                 .trigger('click')
                                 .trigger('change');
@@ -663,7 +666,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         //remove dom elements
                         toolOptionCheckboxes.remove();
                         optionContainer.remove();
-                    }
+                    };
                     _removeOptions('.tool-options', me._toggleToolOption);
                     _removeOptions('.tool-option-setting', me._toggleToolOption);
 
@@ -678,6 +681,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 checkbox = jQuery(event.target),
                 isChecked = checkbox.is(':checked'),
                 mylayers = me.myplaces;
+
             if (isChecked) {
                 var layerSelect = jQuery(me.templates.layerSelect).clone(),
                     layerSelectOption,
@@ -743,7 +747,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
                         // trigger click & change to send events
                         if (me.selectedDrawingLayer[buttonGroup.name] && me.selectedDrawingLayer[buttonGroup.name][toolName]) {
-                            toolElement
+                            toolElement.attr('checked', 'checked')
                                 .trigger('click')
                                 .trigger('change');
                             toolElement = null; // ensure we release the dom element
