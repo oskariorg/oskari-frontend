@@ -15,6 +15,7 @@ Oskari.registerLocalization({
     "tab": {
         "title": "Kohteet",
         "nocategories": "Et ole vielä tallentanut kohteita.",
+        "maxFeaturesExceeded": "Kohteiden määrä ylittää sallitun rajan. Kaikkia kohteita ei ladattu.",
         "publishCategory": {
             "privateTooltip": "Taso on yksityinen. Muuta taso julkiseksi klikkaamalla.",
             "publicTooltip": "Taso on julkinen. Muuta taso yksityiseksi klikkaamalla."

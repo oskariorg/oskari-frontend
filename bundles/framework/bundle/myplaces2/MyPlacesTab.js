@@ -75,15 +75,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                     service = me.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService'),
                     categories = service.getAllCategories(),
                     places = service.getAllMyPlaces();
-                /*
-            var publishLinkClosure = function(id, isPublic) {
-                return function() {
-                    var request = me.instance.sandbox.getRequestBuilder('MyPlaces.PublishCategoryRequest')(id, isPublic);
-                    me.instance.sandbox.request(me.instance, request);
-                    return false;
-                };
-            }
-*/
+
                 var editLinkClosure = function (id) {
                     return function () {
                         var request = me.instance.sandbox.getRequestBuilder('MyPlaces.EditCategoryRequest')(id);
@@ -131,26 +123,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                     deleteLink.bind('click', deletelinkClosure(id));
                     panel.getContainer().append(deleteLink);
 
-                    /*
-                var publishLink = this.linkTemplate.clone();
-                publishLink.addClass('categoryOp');
-                var isPublic = categories[i].isPublic();
-                var publishIcon = this.iconTemplate.clone();
-                
-                if(isPublic) {
-                    publishIcon.addClass('icon-public');
-                    publishLink.attr('title', this.loc.publishCategory.publicTooltip);
-                }
-                else {
-                    publishIcon.addClass('icon-private');
-                    publishLink.attr('title', this.loc.publishCategory.privateTooltip);
-                }
-                publishLink.append(publishIcon);
-                publishLink.bind('click', publishLinkClosure(id, !isPublic));
-                panel.getContainer().append(publishLink);
-*/
                 }
                 this._removeObsoleteCategories();
+
+                // Inform user of some features not being loaded due to
+                // the max features restriction
+                if (this.instance.conf &&
+                    this.instance.conf.maxFeatures &&
+                    this.instance.conf.maxFeatures === places.length) {
+                    this._informOfMaxFeatures(this.getContent());
+                }
             }
         },
         /**
@@ -433,5 +415,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                     sandbox.unregisterFromEventByName(this, p);
                 }
             }
+        },
+
+        _informOfMaxFeatures: function(container) {
+            var alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
+            alert.insertTo(container);
+            alert.setContent(this.loc.maxFeaturesExceeded);
         }
     });
