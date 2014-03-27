@@ -487,6 +487,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         if (me[configName][groupName]) {
                             me[configName][groupName][toolName] = false;
                         }
+                        if (me.toolbarConfig[groupName] === null || me.toolbarConfig[groupName] === undefined) {
+                            me.toolbarConfig[groupName] = {};
+                        }
                         me.toolbarConfig[groupName][toolName] = false;
                     }
                 };
@@ -541,6 +544,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                                                 me[configName][buttonGroup.name] = {};
                                             }
                                             me[configName][buttonGroup.name][toolName] = true;
+                                            // AH-1241 tool selections were lost when a published map was edited
+                                            buttonGroup.buttons[toolName].selected = true;
                                         }
                                     }
                                 }
