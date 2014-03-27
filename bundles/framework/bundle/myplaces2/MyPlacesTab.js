@@ -207,25 +207,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                 dialog.close();
                 var service = sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
                 var callback = function (isSuccess) {
-
-                    /* let's refresh map also if there */
-                    var categoryId = data.categoryId,
-                        layerId = 'myplaces_' + categoryId,
-                        layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-                    if (layer) {
-                        var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
-                            updateRequest = updateRequestBuilder(layerId, true);
-                        sandbox.request(me.instance, updateRequest);
-                        // Update myplaces extra layers
-                        var eventBuilder = sandbox.getEventBuilder('MapMyPlaces.MyPlacesVisualizationChangeEvent');
-                        if (eventBuilder) {
-                            var event = eventBuilder(layerId, true);
-                            sandbox.notifyAll(event);
-                        }
-                    }
+                    var request;
 
                     if (isSuccess) {
                         dialog.show(loc.title, loc.success);
+                        request = me.instance.sandbox
+                            .getRequestBuilder('MyPlaces.DeletePlaceRequest')(data.categoryId);
+
+                        me.instance.sandbox.request(me.instance, request);
                     } else {
                         dialog.show(loc.title, loc.error);
                     }
