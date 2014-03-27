@@ -29,11 +29,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
      * @param {String} featureNS
      */
 
-    function (url, uuid, featureNS) {
+    function (url, uuid, featureNS, options) {
         this.uuid = uuid;
         this.protocols = {};
         this.url = url;
         this.featureNS = featureNS;
+        this.options = options || {};
     }, {
 
         /**
@@ -52,14 +53,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
             });
             // myplaces uses version 1.0.0 since with 1.1.0 geoserver connects
             // multilines to one continuous line on save
-            this.protocols.my_places = new OpenLayers.Protocol.WFS({
+            var myPlacesProps = {
                 version: '1.0.0',
                 srsName: 'EPSG:3067',
                 geometryName: 'geometry',
                 featureType: 'my_places',
                 featureNS: this.featureNS,
                 url: url
-            });
+            };
+            if (this.options.maxFeatures) {
+                myPlacesProps.maxFeatures = this.options.maxFeatures;
+            }
+            this.protocols.my_places = new OpenLayers.Protocol.WFS(myPlacesProps);
         },
 
         /**

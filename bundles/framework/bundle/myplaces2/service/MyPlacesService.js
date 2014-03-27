@@ -16,12 +16,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
      *
      */
 
-    function (url, uuid, sandbox, defaults, pInstance) {
+    function (url, uuid, sandbox, defaults, pInstance, options) {
 
         // list of loaded categories & myplaces
         this._categoryList = [];
         this._placesList = [];
-        this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore', url, uuid, pInstance.featureNS);
+        this.wfstStore = Oskari.clazz.create(
+            'Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore',
+            url, uuid, pInstance.featureNS, options);
         this._sandbox = sandbox;
         this.defaultCategory = null;
         this.defaults = defaults;

@@ -15,6 +15,7 @@ Oskari.registerLocalization({
     "tab": {
         "title": "Objekt",
         "nocategories": "Du har ännu inte lagrat objekten.",
+        "maxFeaturesExceeded": "Kohteiden määrä ylittää rajoituksen. Kaikkia kohteita ei ladattu.",
         "publishCategory": {
             "privateTooltip": "Kartlagret är privat. Klicka på lagret för att offentliggöra det.",
             "publicTooltip": "Kartlagret är offentliggöra. Klicka på lagret för att privat det."
