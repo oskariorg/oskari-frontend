@@ -487,6 +487,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         if (me[configName][groupName]) {
                             me[configName][groupName][toolName] = false;
                         }
+                        if (me.toolbarConfig[groupName] === null || me.toolbarConfig[groupName] === undefined) {
+                            me.toolbarConfig[groupName] = {};
+                        }
                         me.toolbarConfig[groupName][toolName] = false;
                     }
                 };
