@@ -11,8 +11,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
      * @static
      */
 
-    function (instance) {
+    function (instance, options) {
         this.instance = instance;
+        this.options = options;
         this.popupId = 'myplacesForm';
         this.form = undefined;
     }, {
@@ -153,7 +154,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             var sandbox = this.instance.sandbox;
             sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             var loc = this.instance.getLocalization();
-            this.form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.PlaceForm', this.instance);
+            this.form = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.myplaces2.view.PlaceForm', this.instance, this.options);
             var categories = this.instance.getService().getAllCategories();
             if (place) {
                 var param = {
