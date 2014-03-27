@@ -400,17 +400,28 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
          * @private
          */
         cleanupPopup: function () {
-            // form not open, nothing to do
-            if (!this.form) {
-                return;
-            }
-            var sandbox = this.instance.sandbox;
-            var request = sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest')(this.popupId);
-            sandbox.request(this, request);
-            this.form.destroy();
-            this.form = undefined;
-            sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+            var sandbox = this.instance.sandbox,
+                hideRequestB = sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest'),
+                keyBoardRB = sandbox.getRequestBuilder('EnableMapKeyboardMovementRequest'),
+                hideRequest,
+                keyBoardRequest;
+
             this.instance.enableGfi(true);
+
+            if (hideRequestB) {
+                hideRequest = hideRequestB(this.popupId);
+                sandbox.request(this, hideRequest);
+            }
+
+            if (keyBoardRB) {
+                keyBoardRequest = keyBoardRB();
+                sandbox.request(this, keyBoardRequest);
+            }
+
+            if (this.form) {
+                this.form.destroy();
+                this.form = undefined;
+            }
         }
     }, {
         /**

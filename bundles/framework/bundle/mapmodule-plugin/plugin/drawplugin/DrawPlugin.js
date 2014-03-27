@@ -75,7 +75,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
         // disable all draw controls
         this.toggleControl();
         // clear drawing
-        this.drawLayer.destroyFeatures();
+        if (this.drawLayer) this.drawLayer.destroyFeatures();
     },
 
     forceFinishDraw: function () {
