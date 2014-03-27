@@ -189,7 +189,12 @@ function() {
 
 
         // handles my places insert form etc
-        this.view = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.view.MainView", this);
+        var categoryId = (conf ? (conf.layer ? conf.layer.split('myplaces_')[1] : null) : null);
+        this.view = Oskari.clazz.create(
+            "Oskari.mapframework.bundle.myplaces2.view.MainView", this, {
+                category: categoryId,
+                published: true
+            });
         this.view.start();
     },
     /**
