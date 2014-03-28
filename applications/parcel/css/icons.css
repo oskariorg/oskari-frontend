@@ -207,27 +207,27 @@
 }
 
 .icon-close {
-    width: 32px;
-    height: 32px;
+    width: 16px;
+    height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
     background-position: -604px 0px !important;
 }
 
 .icon-close {
-    width: 32px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -636px 0px !important;
+    background-position: -620px 0px !important;
 }
 
 .icon-close:hover {
-    width: 32px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -636px -24px !important;
+    background-position: -620px -16px !important;
 }
 
 .icon-cut-disabled {
@@ -235,7 +235,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -668px 0px !important;
+    background-position: -636px 0px !important;
 }
 
 .icon-cut-normal {
@@ -243,7 +243,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -700px 0px !important;
+    background-position: -668px 0px !important;
 }
 
 .icon-default-active {
@@ -251,7 +251,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -732px 0px !important;
+    background-position: -700px 0px !important;
 }
 
 .icon-default-disabled {
@@ -259,7 +259,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -764px 0px !important;
+    background-position: -732px 0px !important;
 }
 
 .icon-default-normal {
@@ -267,7 +267,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -796px 0px !important;
+    background-position: -764px 0px !important;
 }
 
 .icon-distance-active {
@@ -275,7 +275,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -828px 0px !important;
+    background-position: -796px 0px !important;
 }
 
 .icon-distance-disabled {
@@ -283,7 +283,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -860px 0px !important;
+    background-position: -828px 0px !important;
 }
 
 .icon-distance-normal {
@@ -291,7 +291,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -892px 0px !important;
+    background-position: -860px 0px !important;
 }
 
 .icon-drag-corner {
@@ -299,7 +299,7 @@
     height: 23px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -924px 0px !important;
+    background-position: -892px 0px !important;
 }
 
 .icon-drag-corner:hover {
@@ -307,7 +307,7 @@
     height: 23px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -924px -23px !important;
+    background-position: -892px -23px !important;
 }
 
 .icon-drag {
@@ -315,7 +315,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -947px 0px !important;
+    background-position: -915px 0px !important;
 }
 
 .icon-drag:hover {
@@ -323,7 +323,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -947px -16px !important;
+    background-position: -915px -16px !important;
 }
 
 .icon-fwd-active {
@@ -331,7 +331,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -963px 0px !important;
+    background-position: -931px 0px !important;
 }
 
 .icon-fwd-disabled {
@@ -339,7 +339,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -995px 0px !important;
+    background-position: -963px 0px !important;
 }
 
 .icon-fwd-normal {
@@ -347,7 +347,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1027px 0px !important;
+    background-position: -995px 0px !important;
 }
 
 .icon-hand-active {
@@ -355,7 +355,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1059px 0px !important;
+    background-position: -1027px 0px !important;
 }
 
 .icon-hand-disabled {
@@ -363,7 +363,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1091px 0px !important;
+    background-position: -1059px 0px !important;
 }
 
 .icon-hand-normal {
@@ -371,7 +371,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1123px 0px !important;
+    background-position: -1091px 0px !important;
 }
 
 .icon-info {
@@ -379,7 +379,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1155px 0px !important;
+    background-position: -1123px 0px !important;
 }
 
 .icon-info:hover {
@@ -387,7 +387,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1155px -16px !important;
+    background-position: -1123px -16px !important;
 }
 
 .icon-maximize {
@@ -395,7 +395,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1171px 0px !important;
+    background-position: -1139px 0px !important;
 }
 
 .icon-maximize:hover {
@@ -403,7 +403,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1171px -16px !important;
+    background-position: -1139px -16px !important;
 }
 
 .icon-menu {
@@ -411,7 +411,7 @@
     height: 7px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1187px 0px !important;
+    background-position: -1155px 0px !important;
 }
 
 .icon-minimize {
@@ -419,7 +419,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1212px 0px !important;
+    background-position: -1180px 0px !important;
 }
 
 .icon-minimize:hover {
@@ -427,7 +427,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1212px -16px !important;
+    background-position: -1180px -16px !important;
 }
 
 .icon-palsta-disabled {
@@ -435,7 +435,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1228px 0px !important;
+    background-position: -1196px 0px !important;
 }
 
 .icon-palsta-normal {
@@ -443,7 +443,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1260px 0px !important;
+    background-position: -1228px 0px !important;
 }
 
 .icon-print-active {
@@ -451,7 +451,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1292px 0px !important;
+    background-position: -1260px 0px !important;
 }
 
 .icon-print-disabled {
@@ -459,7 +459,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1324px 0px !important;
+    background-position: -1292px 0px !important;
 }
 
 .icon-print-normal {
@@ -467,7 +467,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1356px 0px !important;
+    background-position: -1324px 0px !important;
 }
 
 .icon-private {
@@ -475,7 +475,7 @@
     height: 18px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1388px 0px !important;
+    background-position: -1356px 0px !important;
 }
 
 .icon-public {
@@ -483,7 +483,7 @@
     height: 18px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1406px 0px !important;
+    background-position: -1374px 0px !important;
 }
 
 .icon-restore {
@@ -491,7 +491,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1424px 0px !important;
+    background-position: -1392px 0px !important;
 }
 
 .icon-restore:hover {
@@ -499,7 +499,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1424px -16px !important;
+    background-position: -1392px -16px !important;
 }
 
 .icon-select-geometry {
@@ -507,7 +507,7 @@
     height: 23px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1440px 0px !important;
+    background-position: -1408px 0px !important;
 }
 
 .icon-snapshot-active {
@@ -515,7 +515,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1463px 0px !important;
+    background-position: -1431px 0px !important;
 }
 
 .icon-snapshot-disabled {
@@ -523,7 +523,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1495px 0px !important;
+    background-position: -1463px 0px !important;
 }
 
 .icon-snapshot-normal {
@@ -531,7 +531,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1527px 0px !important;
+    background-position: -1495px 0px !important;
 }
 
 .icon-split-active {
@@ -539,7 +539,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1559px 0px !important;
+    background-position: -1527px 0px !important;
 }
 
 .icon-split-disabled {
@@ -547,7 +547,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1591px 0px !important;
+    background-position: -1559px 0px !important;
 }
 
 .icon-split-normal {
@@ -555,7 +555,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1623px 0px !important;
+    background-position: -1591px 0px !important;
 }
 
 .icon-table {
@@ -563,7 +563,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1655px 0px !important;
+    background-position: -1623px 0px !important;
 }
 
 .icon-zoom-active {
@@ -571,7 +571,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1671px 0px !important;
+    background-position: -1639px 0px !important;
 }
 
 .icon-zoom-disabled {
@@ -579,7 +579,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1703px 0px !important;
+    background-position: -1671px 0px !important;
 }
 
 .icon-zoom-normal {
@@ -587,7 +587,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1735px 0px !important;
+    background-position: -1703px 0px !important;
 }
 
 .layer-base {
@@ -595,7 +595,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1767px 0px !important;
+    background-position: -1735px 0px !important;
 }
 
 .layer-gfi-1 {
@@ -603,7 +603,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1783px 0px !important;
+    background-position: -1751px 0px !important;
 }
 
 .layer-gfi-2 {
@@ -611,7 +611,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1799px 0px !important;
+    background-position: -1767px 0px !important;
 }
 
 .layer-group {
@@ -619,7 +619,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1815px 0px !important;
+    background-position: -1783px 0px !important;
 }
 
 .layer-stats {
@@ -627,7 +627,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1831px 0px !important;
+    background-position: -1799px 0px !important;
 }
 
 .layer-vector {
@@ -635,7 +635,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1847px 0px !important;
+    background-position: -1815px 0px !important;
 }
 
 .layer-wfs {
@@ -643,7 +643,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1863px 0px !important;
+    background-position: -1831px 0px !important;
 }
 
 .layer-wms {
@@ -651,7 +651,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1879px 0px !important;
+    background-position: -1847px 0px !important;
 }
 
 .layer-wmts {
@@ -659,7 +659,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1895px 0px !important;
+    background-position: -1863px 0px !important;
 }
 
 .marker {
@@ -667,7 +667,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1911px 0px !important;
+    background-position: -1879px 0px !important;
 }
 
 .myplaces-area {
@@ -675,7 +675,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1943px 0px !important;
+    background-position: -1911px 0px !important;
 }
 
 .myplaces-draw-area {
@@ -683,7 +683,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1971px 0px !important;
+    background-position: -1939px 0px !important;
 }
 
 .myplaces-draw-line {
@@ -691,7 +691,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2003px 0px !important;
+    background-position: -1971px 0px !important;
 }
 
 .myplaces-draw-point {
@@ -699,7 +699,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2035px 0px !important;
+    background-position: -2003px 0px !important;
 }
 
 .myplaces-line {
@@ -707,7 +707,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2067px 0px !important;
+    background-position: -2035px 0px !important;
 }
 
 .myplaces-point {
@@ -715,7 +715,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2095px 0px !important;
+    background-position: -2063px 0px !important;
 }
 
 .parcel-clear {
@@ -723,7 +723,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2123px 0px !important;
+    background-position: -2091px 0px !important;
 }
 
 .parcel-draw-area {
@@ -731,7 +731,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2155px 0px !important;
+    background-position: -2123px 0px !important;
 }
 
 .parcel-draw-line {
@@ -739,7 +739,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2187px 0px !important;
+    background-position: -2155px 0px !important;
 }
 
 .parcel-selector {
@@ -747,7 +747,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2219px 0px !important;
+    background-position: -2187px 0px !important;
 }
 
 .selection-area {
@@ -755,7 +755,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2251px 0px !important;
+    background-position: -2219px 0px !important;
 }
 
 .selection-area:hover {
@@ -763,7 +763,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2251px -32px !important;
+    background-position: -2219px -32px !important;
 }
 
 .selection-circle {
@@ -771,7 +771,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2283px 0px !important;
+    background-position: -2251px 0px !important;
 }
 
 .selection-circle:hover {
@@ -779,7 +779,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2283px -32px !important;
+    background-position: -2251px -32px !important;
 }
 
 .selection-line {
@@ -787,7 +787,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2315px 0px !important;
+    background-position: -2283px 0px !important;
 }
 
 .selection-line:hover {
@@ -795,7 +795,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2315px -32px !important;
+    background-position: -2283px -32px !important;
 }
 
 .selection-point {
@@ -803,7 +803,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2347px 0px !important;
+    background-position: -2315px 0px !important;
 }
 
 .selection-point:hover {
@@ -811,7 +811,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2347px -32px !important;
+    background-position: -2315px -32px !important;
 }
 
 .selection-remove {
@@ -819,7 +819,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2379px 0px !important;
+    background-position: -2347px 0px !important;
 }
 
 .selection-remove:hover {
@@ -827,7 +827,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2379px -32px !important;
+    background-position: -2347px -32px !important;
 }
 
 .selection-square {
@@ -835,7 +835,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2411px 0px !important;
+    background-position: -2379px 0px !important;
 }
 
 .selection-square:hover {
@@ -843,7 +843,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2411px -32px !important;
+    background-position: -2379px -32px !important;
 }
 
 .selection_edit {
@@ -851,7 +851,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2443px 0px !important;
+    background-position: -2411px 0px !important;
 }
 
 .selection_edit:hover {
@@ -859,7 +859,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2443px -32px !important;
+    background-position: -2411px -32px !important;
 }
 
 .tool-draw-cut {
@@ -867,7 +867,7 @@
     height: 36px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2475px 0px !important;
+    background-position: -2443px 0px !important;
 }
 
 .tool-feature-selection {
@@ -875,7 +875,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2510px 0px !important;
+    background-position: -2478px 0px !important;
 }
 
 .tool-feature-selection:hover {
@@ -883,7 +883,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2510px -32px !important;
+    background-position: -2478px -32px !important;
 }
 
 .tool-history-back {
@@ -891,7 +891,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2542px 0px !important;
+    background-position: -2510px 0px !important;
 }
 
 .tool-history-forward {
@@ -899,7 +899,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2574px 0px !important;
+    background-position: -2542px 0px !important;
 }
 
 .tool-link {
@@ -907,7 +907,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2606px 0px !important;
+    background-position: -2574px 0px !important;
 }
 
 .tool-measure-area {
@@ -915,7 +915,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2638px 0px !important;
+    background-position: -2606px 0px !important;
 }
 
 .tool-measure-line {
@@ -923,7 +923,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2670px 0px !important;
+    background-position: -2638px 0px !important;
 }
 
 .tool-pan {
@@ -931,7 +931,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2702px 0px !important;
+    background-position: -2670px 0px !important;
 }
 
 .tool-print {
@@ -939,7 +939,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2734px 0px !important;
+    background-position: -2702px 0px !important;
 }
 
 .tool-reset {
@@ -947,7 +947,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2766px 0px !important;
+    background-position: -2734px 0px !important;
 }
 
 .tool-save-view {
@@ -955,7 +955,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2798px 0px !important;
+    background-position: -2766px 0px !important;
 }
 
 .tool-zoombox {
@@ -963,6 +963,6 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2830px 0px !important;
+    background-position: -2798px 0px !important;
 }
 
