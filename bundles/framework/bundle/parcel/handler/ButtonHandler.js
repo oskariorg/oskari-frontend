@@ -87,14 +87,6 @@ function(instance) {
             callback : function() {
                 me._saveDrawing();
             }
-        },
-        'language' : {
-            iconCls : 'tool-language',
-            tooltip : '',
-            sticky : true,
-            callback : function() {
-                me._changeLanguage();
-            }
         }/*,
         'debug' : {
             iconCls : 'icon-arrow-right',
@@ -295,18 +287,6 @@ function(instance) {
         if (this.dialog) {
             this.dialog.close();
         }
-    },
-    /**
-     * @method _changeLanguage
-     * @private
-     * Changes the application language between Finnish and Swedish.
-     */
-    _changeLanguage : function() {
-        var me = this;
-        var loc = me.instance.getLocalization('notification').language;
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        dialog.show(loc.changed, "");
-        dialog.fadeout(2000);
     },
     /**
      * @method stop

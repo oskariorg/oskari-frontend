@@ -26,9 +26,6 @@ Oskari.registerLocalization({
             "save": {
                 "tooltip": "Tee piirros ja tulosta"
             },
-            "language": {
-                "tooltip": "Vaihda kieli ruotsiksi"
-            },
             "debug": {
                 "tooltip": "Pysäytä suoritus"
             },
@@ -100,7 +97,7 @@ Oskari.registerLocalization({
                 "savePlace": "Tallennus onnistui"
             },
             "language": {
-                "changed": "Suomi valittu kieleksi."
+                "changed": "Ruotsi valittu kieleksi."
             }
 
         },
@@ -110,6 +107,9 @@ Oskari.registerLocalization({
         },
         "page": {
             "title": "Määräalakartta / Emäkiinteistö"
+        },
+        "language": {
+            "change": "Ruotsiksi"
         }
     }
 });

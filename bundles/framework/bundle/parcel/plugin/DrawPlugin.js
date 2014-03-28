@@ -36,6 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
         this.operatingFeature = null;
         this.hotspot = null;
         this.sld = null;
+        this.templateLanguageLink = null;
     }, {
         /**
          * @method getName
