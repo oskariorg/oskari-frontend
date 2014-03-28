@@ -15,6 +15,7 @@ Oskari.registerLocalization({
         "tab": {
             "title": "Places",
             "nocategories": "You have not yet saved the places.",
+            "maxFeaturesExceeded": "Maximum amount of places exceeded. All places have not been loaded.",
             "publishCategory": {
                 "privateTooltip": "The map layer is private. Click the map layer to make it public.",
                 "publicTooltip": "The map layer is public. Click the map layer to make it private."
