@@ -1410,11 +1410,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             this.updateDemographicsButtons(indicatorId, gender, year);
 
+
+            this.sendStatsData(undefined);
+/*
             if (columnId === this._state.currentColumn) {
                 // hide the layer, as we just removed the "selected"
                 this._setLayerVisibility(false);
                 this._state.currentColumn = null;
             }
+*/
         },
 
         resetLayer: function () {
@@ -1522,7 +1526,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          * @param curCol  Selected indicator data column
          */
         sendStatsData: function (curCol) {
-            if (curCol === null || curCol === undefined || curCol.field.indexOf('indicator') < 0) {
+            if (curCol && curCol.field.indexOf('indicator') < 0) {
                 // Not a valid current column nor a data value column
                 return;
             }
@@ -1540,19 +1544,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 k,
                 municipalities = me._state.municipalities = [];
             // Set current column to be stated
-            me._state.currentColumn = curCol.id;
+            me._state.currentColumn = curCol ? curCol.id : undefined;
 
             // Get values of selected column
             var data = this.dataView.getItems();
-            for (i = 0; i < data.length; i++) {
-                var row = data[i];
-                // Exclude null values
-                if (row.sel === "checked") {
-                    municipalities.push(row.id);
-                    if (row[curCol.field] !== null && row[curCol.field] !== undefined) {
-                        statArray.push(row[curCol.field]);
-                        // Municipality codes (kuntakoodit)
-                        munArray.push(row.code);
+            if (curCol) {
+                for (i = 0; i < data.length; i++) {
+                    var row = data[i];
+                    // Exclude null values
+                    if (row.sel === "checked") {
+                        municipalities.push(row.id);
+                        if (row[curCol.field] !== null && row[curCol.field] !== undefined) {
+                            statArray.push(row[curCol.field]);
+                            // Municipality codes (kuntakoodit)
+                            munArray.push(row.code);
+                        }
                     }
                 }
             }
@@ -2113,7 +2119,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 dataView = this.dataView,
                 grid = this.grid,
                 regions = _.clone(this.regionCategories[category], true),
-                currColumn;
+                currColumn = undefined;
 
             _.each(regions, function (item) {
                 item.sel = 'checked';
@@ -2147,8 +2153,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // send the stats parameters for the visualization
             if (me._state.currentColumn) {
                 currColumn = me._getColumnById(me._state.currentColumn);
-                me.sendStatsData(currColumn);
             }
+            
+            me.sendStatsData(currColumn);
         },
 
         _setLayerToCategory: function (category) {

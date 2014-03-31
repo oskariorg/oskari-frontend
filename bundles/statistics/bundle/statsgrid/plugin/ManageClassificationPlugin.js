@@ -386,7 +386,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 classify;
 
             //Check selected column - only data columns are handled
-            if (sortcol.field.indexOf('indicator') < 0) {
+            if (!sortcol || (sortcol && sortcol.field.indexOf('indicator') < 0)) {
                 return;
             }
 
@@ -570,6 +570,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 // Show legend in content
                 this.element.find('div.content').show();
             }
+
+            this._visibilityOn();
         },
 
         /**
@@ -591,6 +593,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 VIS_CLASSES: "",
                 VIS_COLORS: "choro:"
             });
+            this.resetUI();
         },
         _hasNonNumericValues: function (values) {
             for (var i = 0, valLen = values.length; i < valLen; ++i) {
