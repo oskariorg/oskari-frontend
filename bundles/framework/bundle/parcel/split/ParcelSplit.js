@@ -121,6 +121,8 @@ function(drawPlugin) {
                     if (lines[i].components.length === 2) {
                         lines[i].components[0].short = i;
                         lines[i].components[1].short = i;
+                        lines[i].components[0].shortLink = lines[i].components[1];
+                        lines[i].components[1].shortLink = lines[i].components[0];
                     }
                 }
                 me.updatePolygons(projection.p,projection.p0);
@@ -180,9 +182,15 @@ function(drawPlugin) {
             var dp = dotProduct(p0p1,pqp1);
             var l =  dotProduct(p0p1,p0p1);
             if (dp < 0) {
+                if (!p1.closed) {
+                    return null;
+                }
                 pq.x = p1.x;
                 pq.y = p1.y;
             } else if (dp > l) {
+                if (!p0.closed) {
+                    return null;
+                }
                 pq.x = p0.x;
                 pq.y = p0.y;
             }
@@ -246,6 +254,7 @@ function(drawPlugin) {
 
 
         this.map.activeMarkerProjection  = function(refLonlat) {
+            var me = this;
             var projection = {
                 lonlat : null,
                 p : [],
@@ -259,15 +268,43 @@ function(drawPlugin) {
             for (var i = 0; i < segments.polygons.length; i++) {
                 for (var j = 0; j < segments.p[i].length; j++) {
                     var sp = [segments.p[i][j][0],segments.p[i][j][1]];
+                    // Eliminate trivial cases
                     if (!((sp[0].boundaryPoint)&&(sp[1].boundaryPoint))) {
                         continue;
                     }
-                    if ((sp[0].short >= 0)&&(sp[0].short === sp[1].short)) {
+                    if ((typeof sp[0].shortLink !== "undefined")&&(sp[0].shortLink.id === sp[1].id)) {
                         continue;
                     }
-                    var p1 = {x: sp[0].x, y: sp[0].y};
-                    var p2 = {x: sp[1].x, y: sp[1].y};
-                    projPoints.push(this.pointProjection(point,p1,p2));
+                    if ((typeof sp[1].shortLink !== "undefined")&&(sp[1].shortLink.id === sp[0].id)) {
+                        continue;
+                    }
+
+                    var p1 = {x: sp[0].x, y: sp[0].y, closed: true};
+                    var p2 = {x: sp[1].x, y: sp[1].y, closed: true};
+                    var activeMarkerPoint = me.activeMarker.reference.point.markerPoint;
+
+                    // Handle meeting pointers
+                    if ((sp[1].markerPoint !== activeMarkerPoint)) {
+                        if ((sp[0].markerPoint >= 0) && (sp[0].markerPoint !== activeMarkerPoint)) {
+                            p1.closed = false;
+                        }
+                    }
+
+                    if ((sp[0].markerPoint !== activeMarkerPoint)) {
+                       if ((sp[1].markerPoint >= 0) && (sp[1].markerPoint !== activeMarkerPoint)) {
+                            p2.closed = false;
+                        }
+                    }
+                    if ((!p1.closed)&&(!p2.closed)) {
+                        continue;
+                    }
+
+                    // Actual projection
+                    var projPoint = this.pointProjection(point,p1,p2);
+                    if (projPoint === null) {
+                        continue;
+                    }
+                    projPoints.push(projPoint);
                     var lastIndex = projPoints.length-1;
                     distances.push(this.distance(point,projPoints[lastIndex]));
                     if ((distances[lastIndex] < distances[minDistInd])||(projection.lonlat === null)) {
@@ -903,11 +940,12 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
                             continue intersections;
                         }
                     }
-
+                    olEndPoints[k][l].lineId = olSolutionLineStrings[k].id;
                     marker = new OpenLayers.Marker(new OpenLayers.LonLat(olEndPoints[k][l].x,olEndPoints[k][l].y),this.markerIcon.clone());
                     marker.reference = {
                         point : olEndPoints[k][l],
                         line : k,
+                        lineId: olSolutionLineStrings[k].id,
                         segments : {
                             polygons : [],
                             p: []
@@ -1072,6 +1110,8 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
                 if (lines[i].components.length === 2) {
                     lines[i].components[0].short = i;
                     lines[i].components[1].short = i;
+                    lines[i].components[0].shortLink = lines[i].components[1];
+                    lines[i].components[1].shortLink = lines[i].components[0];
                 } else {
                     lines[i].components[0].short = -1;
                     lines[i].components[lines[i].components.length-1].short = -1;
@@ -1278,7 +1318,10 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
                             } */
                         }
                     }
-                    if ((features[j].geometry.components[0].components[prevInd].boundaryPoint)&&(features[j].geometry.components[0].components[prevInd].short < 0)) {
+                    // Check if point is on the boundary and handle cases which include two point split lines
+                    if ((features[j].geometry.components[0].components[prevInd].boundaryPoint)
+                    &&((features[j].geometry.components[0].components[prevInd].short < 0)
+                    ||(features[j].geometry.components[0].components[prevInd].lineId !== marker.reference.lineId))) {
                         features[j].geometry.components[0].components.splice(prevInd+1,0,point);
                         if (cornerInd !== 0) {
                             cornerInd = cornerInd+1;

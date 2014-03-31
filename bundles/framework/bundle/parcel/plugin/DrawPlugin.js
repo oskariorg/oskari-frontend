@@ -199,6 +199,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                         if (lineString.components.length === 2) {
                             lineString.components[0].short = i;
                             lineString.components[1].short = i;
+                            lineString.components[0].shortLink = lineString.components[1];
+                            lineString.components[1].shortLink = lineString.components[0];
                         } else {
                             lineString.components[0].short = -1;
                             lineString.components[lastIndex].short = -1;
