@@ -594,7 +594,6 @@ module.exports = function (grunt) {
         grunt.task.run('compileAppCSS');
         grunt.task.run('sprite');
         grunt.task.run('oskaridoc');
-        grunt.task.run('mddocs');
         if (grunt.config.get('compress.options.fullMap')) grunt.task.run('compress');
     });
 
