@@ -252,3 +252,8 @@ form.add-indicator .form-submit {
     margin: 5px; }
     form.add-indicator .form-submit button.cancel-form-button {
       float: left; }
+
+.indicator-name-link {
+  color: #0085d1;
+  cursor: pointer;
+}
