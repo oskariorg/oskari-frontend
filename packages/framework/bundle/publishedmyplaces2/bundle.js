@@ -99,15 +99,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
 		}, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/myplaces2/view/PlaceForm.js"
-        // }, {
-        //     "type" : "text/javascript",
-        //     "src" : "../../../../bundles/framework/bundle/myplaces2/view/PointForm.js"
-        // }, {
-        //     "type" : "text/javascript",
-        //     "src" : "../../../../bundles/framework/bundle/myplaces2/view/LineForm.js"
-        // }, {
-        //     "type" : "text/javascript",
-        //     "src" : "../../../../bundles/framework/bundle/myplaces2/view/AreaForm.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/myplaces2/view/CategoryForm.js"
@@ -120,13 +111,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
         }, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/publishedmyplaces2/instance.js"
-        }, {
-           // NOTE! EXTERNAL LIBRARY!
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/jscolor/jscolor.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/raphaeljs/raphael.min.js"
 		},
 		// css
 		{
