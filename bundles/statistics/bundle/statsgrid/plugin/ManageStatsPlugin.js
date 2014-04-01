@@ -743,6 +743,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         _addOwnIndicatorButton: function (paramCont, container) {
             var me = this,
                 button = jQuery(me.templates.addOwnIndicator);
+
             button.find('input').val(me._locale.addDataButton);
             paramCont.append(button);
             button.find('input').click(function (e) {
@@ -754,16 +755,26 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     okBtn.addClass('primary');
                     okBtn.setHandler(function () {
                         dialog.close(true);
-                        var form = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
-                            me._sandbox, me._locale, me.regionCategories, me._layer.getWmsName(), me._layer.getId(), me._selectedRegionCategory);
-                        container.find('.selectors-container').hide();
-                        container.find('#municipalGrid').hide();
-                        form.createUI(container, function (data) {
-                            me._addUserIndicatorToGrid(data, container, me);
-                        });
+                        me.createIndicatorForm(container);
                     });
                     dialog.show(me._locale.addDataTitle, me._locale.loginToSaveIndicator, [okBtn]);
+                } else {
+                    me.createIndicatorForm(container);
                 }
+            });
+        },
+        createIndicatorForm: function(container) {
+            var me = this,
+                form = Oskari.clazz.create(
+                    'Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
+                    me._sandbox, me._locale, me.regionCategories,
+                    me._layer.getWmsName(), me._layer.getId(),
+                    me._selectedRegionCategory);
+
+            container.find('.selectors-container').hide();
+            container.find('#municipalGrid').hide();
+            form.createUI(container, function (data) {
+                me._addUserIndicatorToGrid(data, container, me);
             });
         },
         _addUserIndicatorToGrid: function (data, container, me) {
