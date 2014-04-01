@@ -1263,23 +1263,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          */
         setPluginLanguage: function (lang) {
             Oskari.setLang(lang);
-            var i,
-                tool;
-            for (i = 0; i < this.tools.length; i += 1) {
-                tool = this.tools[i];
+            var me = this,
+                i,
+                tool,
+                tools = me.toolsPanel.getTools();
+            for (i = 0; i < tools.length; i += 1) {
+                tool = tools[i];
                 if (tool._isPluginStarted) {
                     // FIXME no restarts, it breaks stuff... add a changeLanguage function or smthn...
                     // stop and start if enabled to change language
-                    this.toolsPanel.activatePreviewPlugin(tool, false);
-                    this.toolsPanel.activatePreviewPlugin(tool, true);
+                    me.toolsPanel.activatePreviewPlugin(tool, false);
+                    me.toolsPanel.activatePreviewPlugin(tool, true);
                 }
             }
             // stop and start if enabled to change language
-            this._resetLayerSelectionPlugin();
+            me._resetLayerSelectionPlugin();
 
             // stop and start if enabled to change language
-            this.logoPlugin.stopPlugin(this.instance.sandbox);
-            this.logoPlugin.startPlugin(this.instance.sandbox);
+            me.logoPlugin.stopPlugin(this.instance.sandbox);
+            me.logoPlugin.startPlugin(this.instance.sandbox);
         },
         /**
          * @method _resetLayerSelectionPlugin
