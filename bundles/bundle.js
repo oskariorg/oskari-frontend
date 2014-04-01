@@ -35,9 +35,9 @@ Oskari = (function () {
             window.console.debug(msg);
 
         },
-    /**
-     * @class Oskari.bundle_locale
-     */
+        /**
+         * @class Oskari.bundle_locale
+         */
         bundle_locale = function () {
             this.lang = null;
             this.localizations = {};
@@ -3021,7 +3021,7 @@ Oskari = (function () {
         setPreloaded: function (usep) {
             _preloaded = usep;
         },
-        setInstTs: function(x) {
+        setInstTs: function (x) {
             instTs = x;
         },
         /**

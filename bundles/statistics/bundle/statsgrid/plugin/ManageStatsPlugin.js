@@ -346,8 +346,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 categories = me._acceptedRegionCategories;
             this.regionCategories = _.foldl(regionData, function (result, region) {
                 if (_.contains(categories, region.category)) {
-                    // FIXME this is ugly
-                    result[region.category] || (result[region.category] = []);
+                    if (!result[region.category]) {
+                        result[region.category] = [];
+                    }
 
                     result[region.category].push({
                         id: region.id,
@@ -1412,7 +1413,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
 
             this.sendStatsData(undefined);
-/*
+            /*
             if (columnId === this._state.currentColumn) {
                 // hide the layer, as we just removed the "selected"
                 this._setLayerVisibility(false);
@@ -2119,7 +2120,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 dataView = this.dataView,
                 grid = this.grid,
                 regions = _.clone(this.regionCategories[category], true),
-                currColumn = undefined;
+                currColumn;
 
             _.each(regions, function (item) {
                 item.sel = 'checked';
@@ -2154,7 +2155,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             if (me._state.currentColumn) {
                 currColumn = me._getColumnById(me._state.currentColumn);
             }
-            
+
             me.sendStatsData(currColumn);
         },
 
@@ -2474,32 +2475,32 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
                         switch (method) {
                         case '>':
-                            if (!(itemVal > inputArray[0])) {
+                            if (itemVal <= inputArray[0]) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '>=':
-                            if (!(itemVal >= inputArray[0])) {
+                            if (itemVal < inputArray[0]) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '=':
-                            if (!(itemVal === inputArray[0])) {
+                            if (itemVal !== inputArray[0]) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '<=':
-                            if (!(itemVal <= inputArray[0])) {
+                            if (itemVal > inputArray[0]) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '<':
-                            if (!(itemVal < inputArray[0])) {
+                            if (itemVal >= inputArray[0]) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '...':
-                            if (!(inputArray[0] < itemVal && itemVal < inputArray[1])) {
+                            if (inputArray[0] >= itemVal || itemVal >= inputArray[1]) {
                                 item.sel = 'empty';
                             }
                             break;
