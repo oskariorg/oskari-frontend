@@ -28,6 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
         this.defaultCategory = null;
         this.defaults = defaults;
         this._instance = pInstance;
+        this.skipLoading = false;
     }, {
         __qname: "Oskari.mapframework.bundle.myplaces2.service.MyPlacesService",
         getQName: function () {
@@ -48,6 +49,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
             var me = this;
             this.wfstStore.connect();
             if(blnSkipLoad === true) {
+                this.skipLoading = blnSkipLoad;
                 return;
             }
             var loadedCategories = false;
@@ -598,8 +600,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                 me._notifyDataChanged();
                 callback(success, list[0], isNew);
             };
-
-            this.wfstStore.commitMyPlaces([myplaceModel], callBackWrapper);
+            // skipLoading is used for published maps (value by init-method param)
+            // it means we shouldn't load any features on start and also when saving
+            this.wfstStore.commitMyPlaces([myplaceModel], callBackWrapper, this.skipLoading);
         },
 
         /**

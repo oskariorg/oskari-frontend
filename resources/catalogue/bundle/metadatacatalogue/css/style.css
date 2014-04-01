@@ -53,25 +53,21 @@ div.metadataResultHeader div.panelHeader {
   margin-bottom: 20px; }
 
 div.metadataCatalogueContainer th.name, td.name {
-  text-align: left;
-}
+  text-align: left; }
 
 div.metadataCatalogueContainer td.name {
-  padding-left: 8px;
-}
+  padding-left: 8px; }
 
 div.metadataCatalogueContainer th.rating, td.rating {
   text-align: right; }
 
 div.metadataCatalogueContainer th.info, td.info {
   text-align: right;
-  width: 16px;
-}
+  width: 16px; }
 
 div.metadataCatalogueContainer th.remove, td.remove {
   text-align: right;
-  width: 16px;
-}
+  width: 16px; }
 
 div.metadataCatalogueContainer td.info div.layerInfo {
   width: 16px;
@@ -88,22 +84,16 @@ div.metadataCatalogueContainer td.remove div.resultRemove {
 
 div.metadataCatalogueContainer tr.resultRow {
   padding-left: 10px;
-  outline: 1pt solid #c0d0e0;
-}
+  outline: 1pt solid #c0d0e0; }
 
 div.metadataCatalogueContainer tr.spacerRow {
-  height: 7px;
-}
+  height: 7px; }
 
 div.metadataCatalogueContainer td.spacer {
-  padding: 0;
-}
+  padding: 0; }
 
 div.metadataCatalogueContainer table.metadataSearchResult {
-  float: left;
-}
+  float: left; }
 
 div.metadataCatalogueContainer ul.layerList {
-  padding-left: 35px;
-}
-
+  padding-left: 35px; }

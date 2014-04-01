@@ -1,56 +1,143 @@
 #contentMap.statsgrid-contentMap {
-  position: relative; }
+  position: relative;
+}
 
 .oskariui-mode-content {
   height: 100%;
-  background-color: white; }
+  background-color: white;
 
-.oskariui-mode-content.statsgrid-mode {
-  overflow: hidden;
-  height: auto;
-  width: 100%;
-  position: absolute;
-  top: 40px;
-  bottom: 0; }
+  &.statsgrid-mode {
+    overflow: hidden;
+    height: auto;
+    width: 100%;
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+  }
+
+}
 
 .oskariui-left {
-  float: left; }
+  float: left;
+}
 
 .oskariui-center {
-  float: left; }
+  float: left;
+}
+
+.statsgrid_100 {
+  height: 100%;
+}
 
 .statsgrid {
   min-width: 100%;
   min-height: 100%;
-  height: 100%; }
+  height: 100%;
 
-.statsgrid_100 {
-  height: 100%; }
+  .statsgrid-table {
+    min-height: 80%;
+    height: 80%;
+    font: 12px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+  }
 
-.statsgrid .statsgrid-table {
-  min-height: 80%;
-  height: 80%;
-  font: 12px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif; }
+  .idContainer {
+    margin: 4px;
+    border: 1pt solid #40B0C0;
+    border-radius: 5px;
+    padding: 4px;
+    background-color: #80F0A0;
+    cursor: pointer;
+  }
 
-.statsgrid .idContainer {
-  margin: 4px;
-  border: 1pt solid #40B0C0;
-  border-radius: 5px;
-  padding: 4px;
-  background-color: #80F0A0;
-  cursor: pointer; }
+  .indicator-cont {
+    float: left;
+    position: relative;
+    padding-right: 30px;
 
-.statsgrid .selectors-container {
-  position: relative;
-  height: 20%;
-  min-height: 157px;
-  padding-top: 10px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ie-box-sizing: border-box;
-  -o-box-sizing: border-box;
-  box-sizing: border-box; 
-  min-width: 470px;
+    .icon-info {
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      margin: 7px;
+    }
+
+  }
+
+  .municipal-grid {
+    width: 100%;
+    height: 80%;
+  }
+
+  .parameters-cont {
+    min-height: 115px;
+    float: left;
+
+    button {
+      float: right;
+      clear: both;
+      margin: 8px 0 10px 0;
+    }
+
+    button:disabled, input:disabled, select:disabled {
+      opacity: 0.25;
+    }
+
+    .cannot-display-indicator {
+      margin-left: 10px;
+    }
+  }
+
+  .selector-cont {
+    clear: both;
+
+    label {
+      float: left;
+      width: 80px;
+      padding: 10px;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    select {
+      float: right;
+
+      &.indi {
+        width: 200px;
+      }
+
+      &.parameter {
+        width: 100px;
+      }
+
+    }
+
+  }
+
+  .selectors-container {
+    position: relative;
+    height: 20%;
+    min-height: 157px;
+    padding-top: 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ie-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box; 
+    min-width: 470px;
+
+    .new-indicator-cont {
+      float: left;
+      margin-top: 8px;
+      padding-left: 10px;
+
+      input {
+        float: right;
+        margin: 0px;
+      }
+    }
+
+  }
+
 }
 
 .statsgrid-csv-button {
@@ -58,80 +145,21 @@
   left: 10px;
   bottom: 10px;
 }
+
 .statsgrid-variable {
   float: left;
   clear: both;
 }
-.statsgrid .indicator-cont {
-  float: left;
-  position: relative;
-  padding-right: 30px; }
 
-.statsgrid .indicator-cont .icon-info {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  margin: 7px; }
-
-.statsgrid .selector-cont select.indi {
-  width: 200px; }
-
-.statsgrid .selectors-container .new-indicator-cont {
-  float: left;
-  margin-top: 8px;
-  padding-left: 10px;
-
-  input {
-    float: right;
-    margin: 0px;
-  }
-}
-
-.statsgrid .parameters-cont {
-  min-height: 115px;
-  float: left;
-
-  button:disabled, input:disabled, select:disabled {
-    opacity: 0.25;
-  }
-
-  .cannot-display-indicator {
-    margin-left: 10px;
-  }
-}
-
-.statsgrid .selector-cont {
-  clear: both; }
-
-.statsgrid .selector-cont label {
-  float: left;
-  width: 80px;
-  padding: 10px;
-  font-weight: bold;
-  font-size: 1.2em; }
-
-.statsgrid .selector-cont select {
-  float: right; }
-
-.statsgrid .selector-cont select.parameter {
-  width: 100px; }
-
-.statsgrid .parameters-cont button {
-  float: right;
-  clear: both;
-  margin: 8px 0 10px 0; }
-
-.statsgrid .municipal-grid {
-  width: 100%;
-  height: 80%; }
-  
 .statsgrid-totals-label {
   font-weight: bold;
 }
+
 .statsgrid-show-total-selects label,
 .statsgrid-show-row-selects label {
   margin-left: 5px;
 }
+
 .statsgrid-show-row-selects {
   border-top: solid 1px black;
   padding-top: 5px;
@@ -151,17 +179,19 @@
   box-shadow: 2px 2px 2px silver;
   min-width: 100px;
   z-index: 20;
-}
 
-.slick-header-menu .slick-header-menuitem {
-  padding: 2px 4px;
-  border: 1px solid transparent;
-  border-radius: 3px;
-}
+  .slick-header-menuitem {
+    padding: 2px 4px;
+    border: 1px solid transparent;
+    border-radius: 3px;
 
-.slick-header-menuitem:hover {
-  border-color: silver;
-  background: white;
+    &:hover {
+      border-color: silver;
+      background: white;
+    }
+
+  }
+
 }
 
 .slick-header-menuitem-disabled {
@@ -178,48 +208,62 @@
 }
 
 /* Filter popup */
-.divmanazerpopup .filter-row {
-  clear: both;
-  padding-top: 10px;
-}
-.divmanazerpopup .filter-label {
-  float: left;
-  width: 100px;
-  font-weight: bold;
-}
-.divmanazerpopup .filter-value {
-  float: left;
-  margin-left: 10px;
-}
-.divmanazerpopup .filter-container:after {
-    content:"";
-    display:table;
-    clear:both;
-}
-.divmanazerpopup .filter-select {
-  width: 195px;
-}
-.divmanazerpopup .filter-input {
-  width: 70px;
-  float: left;
-  margin-top: 10px;
-}
-.divmanazerpopup .filter-between {
-  display: none;
-  float: left;
-  margin: 20px 10px;
-  width: 10px;
-  text-align: center;
+.divmanazerpopup {
+
+  .filter-row {
+    clear: both;
+    padding-top: 10px;
+  }
+
+  .filter-label {
+    float: left;
+    width: 100px;
+    font-weight: bold;
+  }
+
+  .filter-value {
+    float: left;
+    margin-left: 10px;
+  }
+
+  .filter-container:after {
+      content:"";
+      display:table;
+      clear:both;
+  }
+
+  .filter-select {
+    width: 195px;
+  }
+
+  .filter-input {
+    width: 70px;
+    float: left;
+    margin-top: 10px;
+  }
+
+  .filter-between {
+    display: none;
+    float: left;
+    margin: 20px 10px;
+    width: 10px;
+    text-align: center;
+  }
+ 
 }
 
 div.filter-region-select {
+
   select {
     width: 350px;
   }
+
   ul {
     margin: 0 !important;
   }
+
 }
+
 .statsgrid-remove-indicator {
   position: absolute;
   top: 5px;
@@ -293,7 +337,7 @@ form.add-indicator {
   .municipalities {
     position: absolute;
     bottom: 40px;
-    top: 500px;
+    top: 510px;
     left: -10px;
     width: 100%;
     overflow: auto;
