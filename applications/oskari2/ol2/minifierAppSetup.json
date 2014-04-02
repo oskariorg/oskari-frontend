@@ -1,24 +1,5 @@
 {
     "startupSequence": [{
-        "title": "OpenLayers",
-        "en": "OpenLayers",
-        "fi": "OpenLayers",
-        "sv": "OpenLayers",
-        "bundleinstancename": "openlayers-default-theme",
-        "bundlename": "openlayers-default-theme",
-        "instanceProps": {},
-        "metadata": {
-            "Import-Bundle": {
-                "openlayers-default-theme": {
-                    "bundlePath": "../../../packages/openlayers/bundle/"
-                },
-                "openlayers-single-full": {
-                    "bundlePath": "../../../packages/openlayers/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        }
-    }, {
         "instanceProps": {},
         "title": "Map",
         "bundleinstancename": "mapfull",
@@ -287,23 +268,6 @@
             "Require-Bundle-Instance": []
         },
         "instanceProps": {}
-    }, {
-        "title": "statsgrid",
-        "fi": "statsgrid",
-        "sv": "statsgrid",
-        "en": "statsgrid",
-        "bundleinstancename": "statsgrid",
-        "bundlename": "statsgrid",
-        "metadata": {
-            "Import-Bundle": {
-                "statsgrid": {
-                    "bundlePath": "../../../packages/statistics/bundle/"
-                },
-                "geostats": {
-                    "bundlePath": "../../../packages/libraries/bundle/"
-                }
-            }
-        }
     }],
     "configuration": {
         "backendstatus": {
@@ -346,19 +310,6 @@
             "state": {},
             "conf": {}
         },
-        "statsgrid": {
-            "state": {
-                "indicators": [],
-                "layerId": null
-            },
-            "conf": {
-                "stateful": true,
-                "viewClazz": "Oskari.statistics.bundle.statsgrid.StatsView",
-                "sandbox": "sandbox",
-                "name": "StatsGrid",
-                "tileClazz": "Oskari.statistics.bundle.statsgrid.Tile"
-            }
-        },
         "mapfull": {
             "state": {
                 "selectedLayers": [{
@@ -386,7 +337,7 @@
                 }, {
                     "id": "Oskari.ol2.mapmodule.WmsLayerPlugin"
                 }, {
-                    "id": "Oskari.ol2.mapmodule.WmtsLayerPlugin"
+                    "id": "Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin"
                 }],
                 "layers": [{
                     "wmsName": "taustakartta",

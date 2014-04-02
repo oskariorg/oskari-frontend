@@ -1,15 +1,14 @@
 define([
 	"oskari",
 	"jquery",
-	"src/framework/oskariui/module",
-	"./instance",
+	"oskariui",
+	"../mapmodule-plugin/module",
+	"bundles/framework/bundle/mapfull/instance",
 	"bundles/framework/bundle/mapfull/enhancement/start-map-with-link-enhancement",
 	"bundles/framework/bundle/mapfull/request/MapResizeEnabledRequest",
 	"bundles/framework/bundle/mapfull/request/MapResizeEnabledRequestHandler",
 	"bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequest",
 	"bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequestHandler",
-	"mapstats",
-	"mapwfs",
 	"css!resources/framework/bundle/mapfull/css/style.css"
 ], function(Oskari, jQuery) {
 	Oskari.bundleCls('oskariui');

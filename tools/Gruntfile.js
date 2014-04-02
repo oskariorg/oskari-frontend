@@ -64,6 +64,11 @@ module.exports = function (grunt) {
                 concat: true
             }
         },
+        release: {
+            options: {
+                configs: "../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/full-map_guest/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map/minifierAppSetup.json,../applications/parcel/minifierAppSetup.json"
+            }
+        },
         karma: {
             options: {
                 configFile: 'karma.conf.js'
@@ -500,11 +505,14 @@ module.exports = function (grunt) {
             cwd,
             appName,
             dest,
-            options,
+            options = this.options(),
             files,
             copyFiles,
             appNameSeparatorIndex,
             parentAppName;
+        if (options.configs && !configs) {
+            configs = options.configs;
+        }
         if (!version || !configs) {
             grunt.fail.fatal('Missing parameter\nUsage: grunt release:1.7:"../path/to/minifierAppSetup.json"', 1);
         }

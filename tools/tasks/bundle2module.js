@@ -8,6 +8,8 @@ module.exports = function(grunt) {
         var done = this.async();
         var starttime = (new Date()).getTime();
 
+        grunt.log.writeln('WARNING! Use with caution!');
+        grunt.log.writeln('bundle2module overwrites existing files without notification or confirmations.');
         grunt.log.writeln('Converting ' + origin + " to module.js ");
 
         var fs = require("fs"),
@@ -45,11 +47,12 @@ module.exports = function(grunt) {
             if (relativePath.indexOf('.') !== 0) {
                 relativePath = './' + relativePath;
             } else {
-                // detect relative files regarding resources, bundles and libraries
+                // detect relative files regarding resources, bundles, libraries, and sources
                 // change path and mark with _ to ensure file extensions are removed so that Require is able to find the file
                 relativePath = relativePath.replace(/[\.\/]*resources/, 'resources');
                 relativePath = relativePath.replace(/[\.\/]*bundles/, 'bundles');
                 relativePath = relativePath.replace(/[\.\/]*libraries/, 'libraries');
+                relativePath = relativePath.replace(/[\.\/]*sources/, 'sources');
             }
 
             // dots mess around with RequireJS file extension detection.

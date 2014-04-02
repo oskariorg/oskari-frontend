@@ -69,9 +69,6 @@ No statehandling has been implemented.
   <tr>
     <td> MapMoveRequest </td><td> Moving map position</td>
   </tr>
-  <tr>
-    <td> ClearHistoryRequest </td><td> Clearing Openlayers history(not used yet, the history handling are yet in statehandler)</td>
-  </tr>
 </table>
 
 * Plugins might handle additional requests

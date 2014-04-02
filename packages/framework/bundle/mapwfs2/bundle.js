@@ -76,6 +76,18 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapwfs2/domain/WfsLayerModelBuilder.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/component/VisualizationForm.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/component/visualization-form/DotForm.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/component/visualization-form/LineForm.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/component/visualization-form/AreaForm.js"
         }],
 
         "locales" : [{

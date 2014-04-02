@@ -123,9 +123,6 @@ Currently default buttons send out requests but these should be defined in bundl
   <tr>
     <td> StateHandler.SetStateRequest </td><td> tbd</td>
   </tr>
-  <tr>
-    <td> ClearHistoryRequest </td><td> tbd</td>
-  </tr>
 </table>
 
 ## Events the bundle listens to

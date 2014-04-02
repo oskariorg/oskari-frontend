@@ -41,30 +41,55 @@
     var bundle_locale = function() {
         this.lang = null;
         this.localizations = {};
-
+        this.supportedLocales = null;
     };
 
     bundle_locale.prototype = {
-        setLocalization : function(lang, key, value) {
-            if (!this.localizations[lang])
+        setLocalization: function (lang, key, value) {
+            if (!this.localizations[lang]) {
                 this.localizations[lang] = {};
+            }
             this.localizations[lang][key] = value;
         },
-        setLang : function(lang) {
+        setLang: function (lang) {
             this.lang = lang;
         },
-        getLang : function() {
+        setSupportedLocales: function (locales) {
+            this.supportedLocales = locales;
+        },
+        getLang: function () {
             return this.lang;
         },
-        getLocalization : function(key) {
+        getLocalization: function (key) {
             return this.localizations[this.lang][key];
+        },
+        getSupportedLocales: function () {
+            if (this.supportedLocales) {
+                return this.supportedLocales;
+            }
+            return [];
+        },
+        getDefaultLanguage: function () {
+            var locale = this.supportedLocales[0];
+            return locale.substring(0, locale.indexOf("_"));
+        },
+        getSupportedLanguages: function () {
+            var langs = [],
+                locale,
+                i;
+            for (i = 0; i < this.supportedLocales.length; i += 1) {
+                locale = this.supportedLocales[i];
+                langs.push(locale.substring(0, locale.indexOf("_")));
+            }
+            return langs;
         }
     };
 
     /**
      * singleton localisation registry instance
      */
-    var blocale = new bundle_locale();
+    var blocale = new bundle_locale(),
+        localesURL = null;
 
     /*
      * 'dev' adds ?ts=<instTs> parameter to js loads 'default' does not add
@@ -509,12 +534,19 @@
             if (args.length == 0)
                 throw "missing arguments";
             var instargs = this.slicer.apply(arguments, [1]), cdef = args[0], pdefsp = this.pdefsp(cdef);
-            if (!pdefsp)
+            if (!pdefsp) {
+                // If this error is thrown,
+                // the class definition is missing.
+                // Ensure the file has been loaded before use
                 throw "clazz " + cdef + " does not exist";
+            }
 
             var inst = new pdefsp._class(), ctors = pdefsp._constructors;
             if (ctors) {
                 for (var c = 0; c < ctors.length; c++) {
+                    // If an error occurs below,
+                    // the constructor is missing.
+                    // Ensure the file has been loaded before use
                     ctors[c].apply(inst, instargs);
                 }
             } else {
@@ -1408,6 +1440,34 @@
         },
         /**
          * @static
+         * @method Oskari.setSupportedLocales
+         */
+        setSupportedLocales: function (locales) {
+            return blocale.setSupportedLocales(locales);
+        },
+        /**
+         * @static
+         * @method Oskari.getSupportedLocales
+         */
+        getSupportedLocales: function () {
+            return blocale.getSupportedLocales();
+        },
+        /**
+         * @static
+         * @method Oskari.getDefaultLanguage
+         */
+        getDefaultLanguage: function () {
+            return blocale.getDefaultLanguage();
+        },
+        /**
+         * @static
+         * @method Oskari.getSupportedLanguages
+         */
+        getSupportedLanguages: function () {
+            return blocale.getSupportedLanguages();
+        },
+        /**
+         * @static
          * @method Oskari.purge
          */
         purge : function() {
@@ -1616,7 +1676,7 @@
             var bi = bm.createInstance(bundleid);
             fcd.bundleInstances[bundleid] = bi;
 
-            var configProps = fcd.getBundleInstanceConfigurationByName(bundleid);
+            var configProps = fcd.getBundleInstanceConfigurationByName(instanceid || bundleid);
             if (configProps) {
                 for (ip in configProps) {
                     bi[ip] = configProps[ip];

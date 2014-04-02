@@ -376,6 +376,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             for (i = 0; i < allLayers.length; i++) {
 
                 mapLayer = this.createMapLayer(allLayers[i]);
+                if (!mapLayer) {
+                    // unsupported map type, skip
+                    // continue with next layer
+                    continue;
+                }
 
                 if (this._reservedLayerIds[mapLayer.getId()] !== true) {
                     this.addLayer(mapLayer, true);
@@ -576,7 +581,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 mapLayer.names = mapLayerJson.names;
             }
 
-            if (this._stickyLayerIds[mapLayer.getId()]) {
+            if (mapLayer && this._stickyLayerIds[mapLayer.getId()]) {
                 mapLayer.setSticky(true);
             }
 
@@ -725,6 +730,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options);
             if (!layer) {
+                console.log('disabled map layer error throwing. Unknown layer type', mapLayerJson.type);
+                return null;
                 throw "Unknown layer type '" + mapLayerJson.type + "'";
             }
             //these may be implemented as jsonHandler
