@@ -5,11 +5,11 @@ Oskari.registerLocalization({
         "title" : "",
         "desc" : "",
         "display" : {
-            "header" : "Valitun paikan tiedot",
+            "header" : "...",
             "info" : {
-                "name" : "Nimi: ",
-                "area" : "Pinta-ala: ",
-                "length" : "Piiri: "
+                "name" : "...",
+                "area" : "...",
+                "length" : "..."
             }
         }
     }
