@@ -164,16 +164,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             if (this._state.numberOfClasses < 3) {
                 this._state.numberOfClasses = 2;
             }
-            if ((this._state.filterMethod === null) || (typeof this._state.filterMethod === "undefined") ) {
+            if ((this._state.filterMethod === null) || (typeof this._state.filterMethod === "undefined")) {
                 this._state.filterMethod = "";
             }
-            if ((this._state.filterInput === null) || (typeof this._state.filterInput === "undefined") ) {
+            if ((this._state.filterInput === null) || (typeof this._state.filterInput === "undefined")) {
                 this._state.filterInput = [];
             }
-            if ((this._state.filterRegion === null) || (typeof this._state.filterRegion === "undefined") ) {
+            if ((this._state.filterRegion === null) || (typeof this._state.filterRegion === "undefined")) {
                 this._state.filterRegion = [];
             }
-            if ((this._state.municipalities === null) || (typeof this._state.municipalities === "undefined") ) {
+            if ((this._state.municipalities === null) || (typeof this._state.municipalities === "undefined")) {
                 this._state.municipalities = [];
             }
         },
@@ -386,7 +386,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 classify;
 
             //Check selected column - only data columns are handled
-            if (sortcol.field.indexOf('indicator') < 0) {
+            if (!sortcol || (sortcol && sortcol.field.indexOf('indicator') < 0)) {
                 return;
             }
 
@@ -570,6 +570,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 // Show legend in content
                 this.element.find('div.content').show();
             }
+
+            this._visibilityOn();
         },
 
         /**
@@ -591,6 +593,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 VIS_CLASSES: "",
                 VIS_COLORS: "choro:"
             });
+            this.resetUI();
         },
         _hasNonNumericValues: function (values) {
             for (var i = 0, valLen = values.length; i < valLen; ++i) {

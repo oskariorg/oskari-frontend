@@ -2,6 +2,14 @@
 
 ## 1.19
 
+### Documentation
+
+Docs has been removed from oskari-repository and they are now available in http://www.oskari.org/documentation and https://github.com/nls-oskari/oskari.org/tree/master/md/documentation along with backend documentation
+
+### localization
+
+Added italian translations for analyse and metadataflyout bundles (thanks rockini)
+
 ### divmanazer/ui-components
 
 Overlay now supports element selector that spans over multiple DOM elements (thanks uhef)

@@ -608,6 +608,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 visReqName = 'MapModulePlugin.MapLayerVisibilityRequest',
                 visibilityRequestBuilder = sandbox.getRequestBuilder(visReqName);
 
+            // Sticky layers can't be hidden
+            if (layer.isSticky()) {
+                tools.find('div.layer-visibility').hide();
+            }
+
             tools.find('div.layer-visibility a').bind('click', function () {
                 // send request to hide map layer
                 var request = visibilityRequestBuilder(layer.getId(), false);

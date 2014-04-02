@@ -29,11 +29,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
      * @param {String} featureNS
      */
 
-    function (url, uuid, featureNS) {
+    function (url, uuid, featureNS, options) {
         this.uuid = uuid;
         this.protocols = {};
         this.url = url;
         this.featureNS = featureNS;
+        this.options = options || {};
     }, {
 
         /**
@@ -52,14 +53,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
             });
             // myplaces uses version 1.0.0 since with 1.1.0 geoserver connects
             // multilines to one continuous line on save
-            this.protocols.my_places = new OpenLayers.Protocol.WFS({
+            var myPlacesProps = {
                 version: '1.0.0',
                 srsName: 'EPSG:3067',
                 geometryName: 'geometry',
                 featureType: 'my_places',
                 featureNS: this.featureNS,
                 url: url
-            });
+            };
+            if (this.options.maxFeatures) {
+                myPlacesProps.maxFeatures = this.options.maxFeatures;
+            }
+            this.protocols.my_places = new OpenLayers.Protocol.WFS(myPlacesProps);
         },
 
         /**
@@ -457,7 +462,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
          *
          * handles insert & update (NO delete here see next method)
          */
-        commitMyPlaces: function (list, callback) {
+        commitMyPlaces: function (list, callback, skipFeatureLoading) {
             var p = this.protocols.my_places;
             var uuid = this.uuid;
             var features = [],
@@ -497,7 +502,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
             var me = this;
             p.commit(features, {
                 callback: function (response) {
-                    me._handleCommitMyPlacesResponse(response, list, callback);
+                    me._handleCommitMyPlacesResponse(response, list, callback, skipFeatureLoading);
                 }
             });
         },
@@ -507,7 +512,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
          *
          * fix ids to model in this response handler
          */
-        _handleCommitMyPlacesResponse: function (response, list, cb) {
+        _handleCommitMyPlacesResponse: function (response, list, cb, skipFeatureLoading) {
             if (response.success()) {
 
                 var features = response.reqFeatures;
@@ -536,16 +541,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                         feature.state = null;
                     }
                 }
-                // make another roundtrip to get the updated models from server
-                // to get the create/update date
-                var modelUpdateCb = function (pList) {
-                    if (pList.length < 1) {
-                        cb(false, pList);
-                    } else {
-                        cb(true, pList);
-                    }
-                };
-                this.getMyPlacesByIdList(formattedIdList, modelUpdateCb);
+                if(skipFeatureLoading === true) {
+                    cb(true, list);
+                } else {
+                    // make another roundtrip to get the updated models from server
+                    // to get the create/update date
+                    var modelUpdateCb = function (pList) {
+                        if (pList.length < 1) {
+                            cb(false, pList);
+                        } else {
+                            cb(true, pList);
+                        }
+                    };
+                    this.getMyPlacesByIdList(formattedIdList, modelUpdateCb);
+                }
 
             } else {
 

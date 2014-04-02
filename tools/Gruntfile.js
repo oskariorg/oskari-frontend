@@ -102,7 +102,7 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     paths: ['../sources/framework', '../bundles/framework', '../bundles/sample', '../bundles/catalogue'],
-                    outdir: '../dist/<%= version %>api/',
+                    outdir: '../oskari.org/api/<%= version %>',
                     themedir: '../docs/yui/theme'
                 }
             }
@@ -139,7 +139,7 @@ module.exports = function (grunt) {
         compress: {
             zip: {
                 options: {
-                    archive: "../oskari.<%= versionNum %>.zip",
+                    archive: "../oskari.org/archives/oskari.<%= versionNum %>.zip",
                     mode: 'zip',
                     pretty: true
                 },
@@ -170,7 +170,7 @@ module.exports = function (grunt) {
             },
             tgz: {
                 options: {
-                    archive: "../oskari.<%= versionNum %>.tgz",
+                    archive: "../oskari.org/archives/oskari.<%= versionNum %>.tgz",
                     mode: 'tgz',
                     pretty: true
                 },
@@ -602,7 +602,6 @@ module.exports = function (grunt) {
         grunt.task.run('compileAppCSS');
         grunt.task.run('sprite');
         grunt.task.run('oskaridoc');
-        grunt.task.run('mddocs');
         if (grunt.config.get('compress.options.fullMap')) grunt.task.run('compress');
     });
 

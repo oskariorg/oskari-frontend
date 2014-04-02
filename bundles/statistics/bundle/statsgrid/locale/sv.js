@@ -170,16 +170,20 @@ Oskari.registerLocalization({
         "addDataMetaYearPH": "NOT TRANSLATED",
         "addDataMetaPublicity": "NOT TRANSLATED",
         "municipalityHeader": "NOT TRANSLATED",
+        "dataRows": "NOT TRANSLATED",
         "municipalityPlaceHolder": "NOT TRANSLATED",
+        "formEmpty": "NOT TRANSLATED",
         "formCancel": "NOT TRANSLATED",
         "formSubmit": "NOT TRANSLATED",
         "cancelButton": "NOT TRANSLATED",
+        "clearImportDataButton": "NOT TRANSLATED",
         "importDataButton": "NOT TRANSLATED",
         "popupTitle": "NOT TRANSLATED",
         "importDataDescription": "NOT TRANSLATED",
         "failedSubmit": "NOT TRANSLATED",
         "connectionProblem": "NOT TRANSLATED",
         "parsedDataInfo": "NOT TRANSLATED",
-        "parsedDataUnrecognized": "NOT TRANSLATED"
+        "parsedDataUnrecognized": "NOT TRANSLATED",
+        "loginToSaveIndicator": "NOT TRANSLATED"
     }
 });
