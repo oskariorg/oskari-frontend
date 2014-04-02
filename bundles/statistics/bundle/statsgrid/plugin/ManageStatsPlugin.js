@@ -764,7 +764,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 }
             });
         },
-        createIndicatorForm: function(container) {
+        createIndicatorForm: function (container) {
             var me = this,
                 form = Oskari.clazz.create(
                     'Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
