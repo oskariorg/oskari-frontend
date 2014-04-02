@@ -60,9 +60,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                                     if (rb) {
                                         me.getSandbox().request(me, rb());
                                     }
-                                    // clear history
-                                    req = me.getSandbox().getRequestBuilder('ClearHistoryRequest')();
-                                    me.getSandbox().request(me, req);
                                 }
                             },
                             'history_back' : {

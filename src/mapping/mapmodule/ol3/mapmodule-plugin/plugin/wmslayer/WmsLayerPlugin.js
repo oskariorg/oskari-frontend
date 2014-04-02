@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.mapmodule.WmsLayerPlugin
  * Provides functionality to draw WMS layers on the map
  */
-Oskari.clazz.define('Oskari.ol3.mapmodule.plugin.WmsLayerPlugin',
+Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
 
 /**
  * @method create called automatically on construction
@@ -164,5 +164,5 @@ function() {
      * @static
      */
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"],
-    "extend" : ["Oskari.mapping.mapmodule.plugin.MapLayerPlugin"]
+    "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"]
 });

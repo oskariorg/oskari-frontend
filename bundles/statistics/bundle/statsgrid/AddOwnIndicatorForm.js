@@ -131,17 +131,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
             field = form.find('.cancel-form-button');
             field.append(me.localization.formCancel);
             field.click(function (e) {
+                e.preventDefault();
                 me._handleCancel(e, me);
             });
             field = form.find('.clear-form-button');
             field.append(me.localization.formEmpty);
             field.click(function (e) {
+                e.preventDefault();
                 me._clearValues();
             });
             // add data submit
             field = form.find('.submit-form-button');
             field.append(me.localization.formSubmit);
             field.click(function (e) {
+                e.preventDefault();
                 me._handleSubmit(e, me, callback);
             });
 

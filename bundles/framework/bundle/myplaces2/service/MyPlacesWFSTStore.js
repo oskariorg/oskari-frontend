@@ -462,7 +462,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
          *
          * handles insert & update (NO delete here see next method)
          */
-        commitMyPlaces: function (list, callback) {
+        commitMyPlaces: function (list, callback, skipFeatureLoading) {
             var p = this.protocols.my_places;
             var uuid = this.uuid;
             var features = [],
@@ -502,7 +502,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
             var me = this;
             p.commit(features, {
                 callback: function (response) {
-                    me._handleCommitMyPlacesResponse(response, list, callback);
+                    me._handleCommitMyPlacesResponse(response, list, callback, skipFeatureLoading);
                 }
             });
         },
@@ -512,7 +512,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
          *
          * fix ids to model in this response handler
          */
-        _handleCommitMyPlacesResponse: function (response, list, cb) {
+        _handleCommitMyPlacesResponse: function (response, list, cb, skipFeatureLoading) {
             if (response.success()) {
 
                 var features = response.reqFeatures;
@@ -541,16 +541,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                         feature.state = null;
                     }
                 }
-                // make another roundtrip to get the updated models from server
-                // to get the create/update date
-                var modelUpdateCb = function (pList) {
-                    if (pList.length < 1) {
-                        cb(false, pList);
-                    } else {
-                        cb(true, pList);
-                    }
-                };
-                this.getMyPlacesByIdList(formattedIdList, modelUpdateCb);
+                if(skipFeatureLoading === true) {
+                    cb(true, list);
+                } else {
+                    // make another roundtrip to get the updated models from server
+                    // to get the create/update date
+                    var modelUpdateCb = function (pList) {
+                        if (pList.length < 1) {
+                            cb(false, pList);
+                        } else {
+                            cb(true, pList);
+                        }
+                    };
+                    this.getMyPlacesByIdList(formattedIdList, modelUpdateCb);
+                }
 
             } else {
 

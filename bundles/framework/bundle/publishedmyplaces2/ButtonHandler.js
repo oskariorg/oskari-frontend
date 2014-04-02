@@ -84,7 +84,7 @@ function(instance) {
         var user = this.instance.sandbox.getUser();
 
         // different tooltip for guests - "Please log in to use"
-        var guestPostfix = user.isLoggedIn() ? '' : ' - ' + this.instance.getLocalization('guest').loginShort;
+        var guestPostfix = user.isLoggedIn() || this.conf.allowGuest === true ? '' : ' - ' + this.instance.getLocalization('guest').loginShort;
 
         // remove configured buttons and set tooltips
         for(var tool in this.buttons) {
@@ -115,8 +115,10 @@ function(instance) {
         }
         
         var user = me.instance.sandbox.getUser();
-        if(!user.isLoggedIn()) {
+
+        if(!user.isLoggedIn() && me.conf.allowGuest !== true) {
             // disable toolbar buttons for guests
+            // overrideable via conf.allowGuest
             me.disableButtons();
         }
     },

@@ -2,7 +2,7 @@ module.exports = function (grunt) {
     /* Generates localization excel files */
     grunt.registerMultiTask(
         "genL10nExcels",
-        "Test how this data src thingie works...",
+        "Generate localization excel files",
         function () {
             var locale = grunt.option('locale'),
                 locales,
@@ -39,7 +39,7 @@ module.exports = function (grunt) {
     /* Imports lozalization excels */
     grunt.registerMultiTask(
         "impL10nExcels",
-        "Test excel import",
+        "Import localization excel file translations back to localization json.",
         function () {
             var pattern = grunt.option('pattern'),
                 delimiter = grunt.option('delimiter') || '.',
@@ -354,7 +354,10 @@ module.exports = function (grunt) {
                 fs.mkdirsSync(localizationDir + '\\' + bundleName + '_' + locale);
             }
             // Extract excel template to dist/L10n/bundleName_??
-            var zip = new AdmZip('..\\docs\\l10n\\template.xlsx');
+            if (!fs.existsSync('..\\tools\\template.xlsx')) {
+                grunt.log.error('Template excel file doesn\'t exist.');
+            }
+            var zip = new AdmZip('..\\tools\\template.xlsx');
             zip.extractAllTo(localizationDir + '\\' + bundleName + '_' + locale, true);
             readTemplate(worksheetFile);
         }

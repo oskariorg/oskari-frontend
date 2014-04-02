@@ -185,5 +185,5 @@ Oskari.clazz.define('Oskari.ol2.mapmodule.WmtsLayerPlugin', function(config) {
      * @static
      */
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"],
-    "extend" : ["Oskari.mapping.mapmodule.plugin.MapLayerPlugin"]
+    "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"]
 });

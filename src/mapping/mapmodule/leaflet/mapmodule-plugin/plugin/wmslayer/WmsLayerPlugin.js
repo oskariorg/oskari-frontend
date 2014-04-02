@@ -167,6 +167,6 @@ function() {
      * @static
      */
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"],
-    "extend" : ["Oskari.mapping.mapmodule.plugin.MapLayerPlugin"]
+    "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"]
 });
 

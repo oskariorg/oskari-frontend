@@ -346,8 +346,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 categories = me._acceptedRegionCategories;
             this.regionCategories = _.foldl(regionData, function (result, region) {
                 if (_.contains(categories, region.category)) {
-                    // FIXME this is ugly
-                    result[region.category] || (result[region.category] = []);
+                    if (!result[region.category]) {
+                        result[region.category] = [];
+                    }
 
                     result[region.category].push({
                         id: region.id,
@@ -743,6 +744,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         _addOwnIndicatorButton: function (paramCont, container) {
             var me = this,
                 button = jQuery(me.templates.addOwnIndicator);
+
             button.find('input').val(me._locale.addDataButton);
             paramCont.append(button);
             button.find('input').click(function (e) {
@@ -754,16 +756,26 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     okBtn.addClass('primary');
                     okBtn.setHandler(function () {
                         dialog.close(true);
-                        var form = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
-                            me._sandbox, me._locale, me.regionCategories, me._layer.getWmsName(), me._layer.getId(), me._selectedRegionCategory);
-                        container.find('.selectors-container').hide();
-                        container.find('#municipalGrid').hide();
-                        form.createUI(container, function (data) {
-                            me._addUserIndicatorToGrid(data, container, me);
-                        });
+                        me.createIndicatorForm(container);
                     });
                     dialog.show(me._locale.addDataTitle, me._locale.loginToSaveIndicator, [okBtn]);
+                } else {
+                    me.createIndicatorForm(container);
                 }
+            });
+        },
+        createIndicatorForm: function (container) {
+            var me = this,
+                form = Oskari.clazz.create(
+                    'Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
+                    me._sandbox, me._locale, me.regionCategories,
+                    me._layer.getWmsName(), me._layer.getId(),
+                    me._selectedRegionCategory);
+
+            container.find('.selectors-container').hide();
+            container.find('#municipalGrid').hide();
+            form.createUI(container, function (data) {
+                me._addUserIndicatorToGrid(data, container, me);
             });
         },
         _addUserIndicatorToGrid: function (data, container, me) {
@@ -1412,7 +1424,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
 
             this.sendStatsData(undefined);
-/*
+            /*
             if (columnId === this._state.currentColumn) {
                 // hide the layer, as we just removed the "selected"
                 this._setLayerVisibility(false);
@@ -2119,7 +2131,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 dataView = this.dataView,
                 grid = this.grid,
                 regions = _.clone(this.regionCategories[category], true),
-                currColumn = undefined;
+                currColumn;
 
             _.each(regions, function (item) {
                 item.sel = 'checked';
@@ -2154,7 +2166,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             if (me._state.currentColumn) {
                 currColumn = me._getColumnById(me._state.currentColumn);
             }
-            
+
             me.sendStatsData(currColumn);
         },
 
@@ -2474,32 +2486,32 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
                         switch (method) {
                         case '>':
-                            if (!(itemVal > inputArray[0])) {
+                            if (itemVal <= inputArray[0]) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '>=':
-                            if (!(itemVal >= inputArray[0])) {
+                            if (itemVal < inputArray[0]) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '=':
-                            if (!(itemVal === inputArray[0])) {
+                            if (itemVal !== inputArray[0]) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '<=':
-                            if (!(itemVal <= inputArray[0])) {
+                            if (itemVal > inputArray[0]) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '<':
-                            if (!(itemVal < inputArray[0])) {
+                            if (itemVal >= inputArray[0]) {
                                 item.sel = 'empty';
                             }
                             break;
                         case '...':
-                            if (!(inputArray[0] < itemVal && itemVal < inputArray[1])) {
+                            if (inputArray[0] >= itemVal || itemVal >= inputArray[1]) {
                                 item.sel = 'empty';
                             }
                             break;

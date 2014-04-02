@@ -342,12 +342,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
                     "src": "../../../../bundles/framework/bundle/mapmodule-plugin/event/MapSizeChangedEvent.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/request/ClearHistoryRequest.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/controls/ClearHistoryHandler.js"
-                }, {
-                    "type": "text/javascript",
                     "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/zoombar/Portti2Zoombar.js"
                 }, {
                     "type": "text/css",
