@@ -200,7 +200,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     textarea,
                     content;
                 okBtn.addClass('primary');
-
                 url = this.sandbox.getLocalizedProperty(this.conf.publishedMapUrl) + event.getId();
                 iframeCode = '<iframe src="' + url + '" width="' + event.getWidth() +
                     '" height="' + event.getHeight() + '"></iframe>';
@@ -494,7 +493,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
             for (i = 0; i < selectedLayers.length; i += 1) {
                 layer = selectedLayers[i];
                 if (!this.hasPublishRight(layer) &&
-                        layer.getId().toString().indexOf('myplaces_') < 0) {
+                    layer.getId().toString().indexOf('myplaces_') < 0) {
                     deniedLayers.push(layer);
                 }
             }

@@ -550,10 +550,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 var column = me._getColumnById(me._state.currentColumn);
                 me.sendStatsData(column);
                 /* 
-            //TODO find a way to tell openlayers that some area should be hilighted without clicking them
+                //TODO find a way to tell openlayers that some area should be hilighted without clicking them
                 me.selectedMunicipalities[column.code] = (item.sel == "checked");
-            */
-
+                */
 
                 // resize grid (content/rows does not show extra rows otherwise. i.e. group headers & footers)
                 args.grid.setColumns(args.grid.getColumns());

@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
             this._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh);
         },
-        _renderPopup: function(id, contentData, title, lonlat, colourScheme, font, refresh) {
+        _renderPopup: function (id, contentData, title, lonlat, colourScheme, font, refresh) {
             var contentDiv = this._renderContentData(contentData),
                 popupContent = this._renderPopupContent(title, contentDiv),
                 popup;
@@ -188,7 +188,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 this.getMapModule().getMap().addPopup(popup);
 
             }
-            
+
             if (this.adaptable) {
                 this._adaptPopupSize(id, refresh);
             }
@@ -217,14 +217,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         },
         /**
          * Wraps the content into popup and returns the html string.
-         * 
+         *
          * @method _renderPopupContent
          * @private
          * @param  {String} title
          * @param  {jQuery} contentDiv
          * @return {String}
          */
-        _renderPopupContent: function(title, contentDiv) {
+        _renderPopupContent: function (title, contentDiv) {
             var arrow = this._arrow.clone(),
                 header = this._header.clone(),
                 headerWrapper = this._headerWrapper.clone(),
@@ -243,16 +243,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         /**
          * Renders the content data into html presentation.
          * Also creates links/buttons for the actions.
-         * 
+         *
          * @method _renderContentData
          * @private
          * @param  {Object[]} contentData
          * @return {jQuery}
          */
-        _renderContentData: function(contentData) {
+        _renderContentData: function (contentData) {
             var me = this;
 
-            return _.foldl(contentData, function(contentDiv, datum, index) {
+            return _.foldl(contentData, function (contentDiv, datum, index) {
                 var useButtons = (datum.useButtons === true),
                     primaryButton = datum.primaryButton,
                     contentWrapper = me._contentWrapper.clone();
@@ -283,7 +283,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 return contentDiv;
             }, me._contentDiv.clone());
         },
-        _setClickEvent: function(id, popup, contentData) {
+        _setClickEvent: function (id, popup, contentData) {
             var me = this;
             // override
             popup.events.un({
@@ -315,14 +315,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          * Merges the given new data to the old data.
          * If there's a fragment with the same layerId in both,
          * the new one replaces it.
-         * 
+         *
          * @method _getChangedContentData
          * @private
          * @param  {Object[]} oldData
          * @param  {Object[]} newData
          * @return {Object[]}
          */
-        _getChangedContentData: function(oldData, newData) {
+        _getChangedContentData: function (oldData, newData) {
             var retData;
 
             for (var i = 0, oLen = oldData.length; i < oLen; ++i) {
@@ -343,13 +343,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         /**
          * Removes the data of given id from the popup and
          * renders it again to reflect the change.
-         * 
+         *
          * @method removeContentData
          * @private
          * @param  {String} popupId
          * @param  {String} contentId
          */
-        removeContentData: function(popupId, contentId) {
+        removeContentData: function (popupId, contentId) {
             var popup = this.getPopups(popupId),
                 removed = false,
                 contentData, datum, i;
@@ -360,7 +360,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
             for (i = 0, cLen = contentData.length; i < cLen; ++i) {
                 datum = contentData[i];
-                if (datum.layerId && (''+datum.layerId === ''+contentId)) {
+                if (datum.layerId && ('' + datum.layerId === '' + contentId)) {
                     contentData.splice(i, 1);
                     removed = true;
                     break;
