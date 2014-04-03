@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      *      localization data in JSON format
      */
 
-        function (instance, localization) {
+    function (instance, localization) {
         var me = this,
             p,
             f,
@@ -656,8 +656,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'id': dat.id,
                     'checked': dat.checked
                 }).change(function (e) {
-                        me._refreshFields();
-                    });
+                    me._refreshFields();
+                });
                 opt.find('label').html(dat.label).attr({
                     'for': dat.id,
                     'class': 'params_checklabel'
@@ -1367,7 +1367,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var layer = this._getSelectedMapLayer();
 
             // No layers
-            if(!layer) return;
+            if (!layer) return;
 
             // Get the feature fields
             var selectedColumnmode = container.find('input[name=params]:checked').val();
@@ -1518,8 +1518,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         if (response) {
                             if (response.error) {
                                 me.instance.showMessage(me.loc.error.title, me.loc.error[response.error] || response.error);
-                            }
-                            else
+                            } else
                                 me._handleAnalyseMapResponse(response);
                         }
                     },
@@ -1631,9 +1630,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 me.instance.getSandbox().postRequestByName(
-                    rn,
-                    [
-                        {
+                    rn, [{
                             uuid: uuid
                         },
                         additionalUuids
@@ -1739,7 +1736,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (selectedLayer.getId().toString().indexOf(me.layer_prefix) > -1) return;
 
             if (selectedLayer.getFields && selectedLayer.getFields().length > me.max_analyse_layer_fields) {
-                me.instance.showMessage( me.loc.infos.title, me.loc.infos.layer+" "+selectedLayer.getName()+" "+me.loc.infos.over10);
+                me.instance.showMessage(me.loc.infos.title, me.loc.infos.layer + " " + selectedLayer.getName() + " " + me.loc.infos.over10);
             }
         },
         /**
@@ -1758,12 +1755,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
 
             var line_point_border_colors = [
-                    'e31a1c', '2171b5', '238b45', '88419d',
-                    '2b8cbe', '238b45', 'd94801', 'd7301f',
-                    '0570b0', '02818a', 'ce1256', '6a51a3',
-                    'ae017e', 'cb181d', '238443', '225ea8',
-                    'cc4c02'
-                ],
+                'e31a1c', '2171b5', '238b45', '88419d',
+                '2b8cbe', '238b45', 'd94801', 'd7301f',
+                '0570b0', '02818a', 'ce1256', '6a51a3',
+                'ae017e', 'cb181d', '238443', '225ea8',
+                'cc4c02'
+            ],
                 fill_colors = [
                     'fd8d3c', '6baed6', '66c2a4', '8c96c6',
                     '7bccc4', '74c476', 'fd8d3c', 'fc8d59',

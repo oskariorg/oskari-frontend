@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.request.IndicatorsReques
          *      request to handle
          */
         handleRequest: function (core, request) {
-            if (request.getName() == 'StatsGrid.IndicatorsRequest') {
+            if (request.getName() === 'StatsGrid.IndicatorsRequest') {
                 var sandbox = this.instance.getSandbox(),
                     eventBuilder = sandbox.getEventBuilder('StatsGrid.IndicatorsEvent'),
                     evt,
