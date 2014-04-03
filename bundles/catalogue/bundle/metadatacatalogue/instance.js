@@ -69,7 +69,13 @@ Oskari.clazz
                 checkboxRow: jQuery('<div class="metadataRow checkboxRow"><div class="rowLabel"></div class=""><div class="checkboxes"></div></div></div>'),
                 dropdownRow: jQuery('<div class="metadataRow dropdownRow"><div class="rowLabel"></div></div>'),
                 resultPanel: jQuery('<div class="main metadataResults"></div>'),
-                resultHeader: jQuery('<div class="metadataResultHeader"><div class="panelHeader resultTitle"></div><div class="panelHeader modify"><a href="JavaScript:void(0);" class="modifyLink"></a></div></div>'),
+                resultHeader: jQuery('<div class="metadataResultHeader">'
+                        + '<div class="panelHeader resultTitle"></div>'
+                        + '<div class="panelHeader resultLinks">'
+                            + '<a href="JavaScript:void(0);" class="showLink"></a>'
+                            + '<a href="JavaScript:void(0);" class="modifyLink"></a>'
+                        + '</div>'
+                    + '</div>'),
                 resultTable: jQuery('<div class="resultTable"><table class="metadataSearchResult">' + '<thead><tr></tr></thead>' + '<tbody></tbody>' + '</table></div>'),
                 resultTableHeader: jQuery('<th><a href="JavaScript:void(0);"></a></th>'),
                 resultTableRow: jQuery('<tr class="spacerRow"><td class="spacer"></td></tr><tr class="resultRow">'
@@ -443,7 +449,6 @@ Oskari.clazz
                         newRow.append(newDropdown);
                     }
                     // Conditional visibility
-
                     if ((typeof dataField.shownIf !== "undefined")&&(dataField.shownIf.length > 0)) {
                         me.conditions.push({field: dataField.field, shownIf: dataField.shownIf});
                         newRow.hide();
@@ -514,8 +519,17 @@ Oskari.clazz
                 me.lastResult = data.results;
                 var resultPanel = metadataCatalogueContainer.find(".metadataResults");
                 var optionPanel = metadataCatalogueContainer.find(".metadataOptions");
+
+                // Create header
                 var resultHeader = me.templates.resultHeader.clone();
                 resultHeader.find(".resultTitle").text(me.getLocalization('metadataCatalogueResults')+me.lastSearch+":");
+                var showLink = resultHeader.find(".showLink");
+                showLink.hide();
+                showLink.html(me.getLocalization('showSearch'));
+                showLink.click(function() {
+                    jQuery("table.metadataSearchResult tr").show();
+                    showLink.hide();
+                });
                 var modifyLink = resultHeader.find(".modifyLink");
                 modifyLink.html(me.getLocalization('modifySearch'));
                 modifyLink.click(function() {
@@ -531,6 +545,13 @@ Oskari.clazz
                 // header reference needs some closure magic to work here
                 var headerClosureMagic = function (scopedValue) {
                     return function () {
+                        // save hidden results
+                        var hiddenRows = tableBody.find('tr.resultRow:hidden');
+                        var hiddenResults = [];
+                        for (var i=0; i<hiddenRows.length; i++) {
+                            hiddenResults.push(jQuery(hiddenRows[i]).data("resultId"));
+                        }
+
                         // clear table for sorted results
                         tableBody.empty();
                         // default to descending sort
@@ -544,6 +565,18 @@ Oskari.clazz
                         me._sortResults(scopedValue.prop, descending);
                         // populate table content
                         me._populateResultTable(tableBody);
+
+                        // hide hidden results
+                        var newRows = tableBody.find('tr');
+                        for (var i=0; i<newRows.length; i++) {
+                            var resultId = jQuery(newRows[i]).data("resultId");
+                            for (var j = 0; j < hiddenResults.length; j++) {
+                                if (resultId === hiddenResults[j]) {
+                                    jQuery(newRows[i]).hide();
+                                }
+                            }
+                        }
+
                         // apply visual changes
                         var headerContainer = tableHeaderRow.find('a:contains(' + scopedValue.title + ')');
                         tableHeaderRow.find('th').removeClass('asc');
@@ -598,7 +631,6 @@ Oskari.clazz
                             k,
                             resultContainer,
                             cells,
-                            titleCell,
                             titleText,
                             layers,
                             row,
@@ -607,8 +639,8 @@ Oskari.clazz
                         row = results[i];
                         resultContainer = me.templates.resultTableRow.clone();
                         resultContainer.addClass("res"+ i);
+                        resultContainer.data("resultId",row.id);
                         cells = resultContainer.find('td').not('.spacer');
-                        titleCell = jQuery(cells[0]);
                         titleText = row.name;
                         // Include organization information if available
                         if ((row.organization) && (row.organization.length > 0)) {
@@ -640,7 +672,8 @@ Oskari.clazz
                             });
                             jQuery(cells[3]).addClass(me.resultHeaders[3].prop);
                             jQuery(cells[3]).find('div.resultRemove').click(function () {
-                                jQuery("table.metadataSearchResult tr.res"+i).remove();
+                                jQuery("table.metadataSearchResult tr.res"+i).hide();
+                                jQuery("div.metadataResultHeader a.showLink").show();
                             });
                         }
                         resultsTableBody.append(resultContainer);
