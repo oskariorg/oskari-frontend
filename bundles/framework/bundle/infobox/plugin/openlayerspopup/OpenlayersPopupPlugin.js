@@ -352,9 +352,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         removeContentData: function (popupId, contentId) {
             var popup = this.getPopups(popupId),
                 removed = false,
-                contentData, datum, i;
+                contentData,
+                datum,
+                i;
 
-            if (!popup) return;
+            if (!popup) {
+                return;
+            }
 
             contentData = popup.contentData;
 
@@ -368,15 +372,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             }
 
             if (removed) {
-                this._renderPopup(
-                    popupId,
-                    contentData,
-                    popup.title,
-                    popup.lonlat,
-                    popup.colourScheme,
-                    popup.font,
-                    true
-                );
+                if (contentData.length === 0) {
+                    // No content left, close popup
+                    this.close(popupId);
+                } else {
+                    this._renderPopup(
+                        popupId,
+                        contentData,
+                        popup.title,
+                        popup.lonlat,
+                        popup.colourScheme,
+                        popup.font,
+                        true
+                    );
+                }
             }
         },
         setAdaptable: function (isAdaptable) {
