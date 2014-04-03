@@ -204,10 +204,24 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
          */
         _changeLanguage : function() {
             var me = this;
-            var loc = me.getLocalization('notification').language;
+            var loc = me.getLocalization();
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.show(loc.changed, "");
-            dialog.fadeout(2000);
+            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            okBtn.setTitle(loc.buttons.ok);
+            okBtn.setHandler(function() {
+                dialog.close();
+                var language = Oskari.getLang();
+                if (language === 'fi') {
+                    window.open("?lang=sv","_self");
+                } else {
+                    window.open("?lang=fi","_self");
+                }
+            });
+            var cancelBtn = dialog.createCloseButton(loc.buttons.cancel);
+            cancelBtn.addClass('primary');
+            var dialogText = loc.notification.language;
+            dialog.show(dialogText.title, dialogText.confirm, [okBtn, cancelBtn]);
+            dialog.makeModal();
         },
         /**
          * @method stop
