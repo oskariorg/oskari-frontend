@@ -98,6 +98,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                 this._bindCreateNewLayer();
             }
 
+            // Hide the image preview at first
+            this._updateImageUrl('', ui);
             this._bindImageUrlChange();
 
             if (this.initialValues) {
@@ -235,11 +237,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
         },
 
         _updateImageUrl: function (src, form) {
-            var img = form.find('div.imagePreview').find('img');
-            img.attr('src', src);
-            form.find('a.myplaces_imglink').attr({
-                'href': src
-            });
+            var preview = form.find('div.imagePreview');
+
+            preview
+                .find('a.myplaces_imglink').attr('href', src)
+                .find('img').attr('src', src);
+
+            if (src) {
+                preview.show()
+            } else {
+                preview.hide();
+            }
         },
 
         /**
