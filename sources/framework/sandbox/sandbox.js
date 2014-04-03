@@ -716,17 +716,19 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
         /**
          * @method getLocalizedProperty
          * @param property Property
+         * @param lang Optional language
          */
-        getLocalizedProperty: function (property) {
+        getLocalizedProperty: function (property, lang) {
             var ret,
                 supportedLocales,
-                i;
+                i,
+                language = lang || Oskari.getLang();
             if (property === null || property === undefined) {
                 return null;
             }
             if (typeof property === 'object') {
                 // property value is an object, so it's prolly localized
-                ret = property[Oskari.getLang()];
+                ret = property[language];
                 if (ret === null) {
                     supportedLocales = Oskari.getSupportedLocales();
                     for (i = 0; i < supportedLocales.length; i += 1) {
