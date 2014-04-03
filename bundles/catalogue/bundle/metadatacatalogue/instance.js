@@ -309,6 +309,7 @@ Oskari.clazz
                 button.setTitle(me.getLocalization('metadataCatalogueButton'));
 
                 var doMetadataCatalogue = function () {
+                    metadataCatalogueContainer.find(".metadataOptions").hide();
                     var search = {search: field.getValue()};
                     // Collect the advanced search options
                     if (moreLessLink.html() === me.getLocalization('showLess')) {
