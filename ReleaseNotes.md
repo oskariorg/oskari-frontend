@@ -2,6 +2,10 @@
 
 ## 1.19
 
+### mapwmts
+
+Fixed support for WMTS layers without resource URLs.
+
 ### Documentation
 
 Docs has been removed from oskari-repository and they are now available in http://www.oskari.org/documentation and https://github.com/nls-oskari/oskari.org/tree/master/md/documentation along with backend documentation
