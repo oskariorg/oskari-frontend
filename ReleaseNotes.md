@@ -20,7 +20,7 @@ Overlay now supports element selector that spans over multiple DOM elements (tha
 
 ### *new bundle* myplacesimport
 
-Adds functionality to import users' own data zipped in (currently only) ESRI shape file format. Also added is a complementary bundle `mapuserlayers` which is responsible for showing the user layers on the map.
+Adds functionality to import users' own data zipped in ESRI shape file set or Google kml(kmz) file. Also added is a complementary bundle `mapuserlayers` which is responsible for showing the user layers on the map.
 
 ### mapwfs2
 

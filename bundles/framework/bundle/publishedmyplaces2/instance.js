@@ -16,7 +16,7 @@ function() {
     this.categoryHandler = undefined;
     this.myPlacesService = undefined;
     this.featureNS = undefined;
-    this.idPrefix = 'publishedmyplaces';
+    this.idPrefix = 'myplaces';
 }, {
     __name : 'PublishedMyPlaces',
     /**

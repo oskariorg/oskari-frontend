@@ -12,36 +12,56 @@ div.notLoggedIn {
   top: 0;
   left: 0;
   z-index: 1500;
-  width: 255px; }
+  width: 384px; }
 
 #contentMap div.basic_publisher div.content {
   padding: 10px; }
 
-div.analyse div.startview div.icon-info, div.basic_analyse div.icon-info {
-  float: right; }
-
 div.analyse div.startview div.error ul li {
   color: red; }
+div.analyse div.startview div.icon-info {
+  float: right; }
 
+div.basic_analyse > div.content {
+  overflow: auto;
+  height: 89%; }
 div.basic_analyse > div.header {
   background-color: #FDF8D9;
   padding: 5px 10px; }
-
-div.basic_analyse > div.header div.icon-close {
+  div.basic_analyse > div.header div.icon-close {
+    float: right; }
+div.basic_analyse div.analyse-select-featurelist {
+  display: inline;
+  margin-left: 6px; }
+  div.basic_analyse div.analyse-select-featurelist a {
+    font-size: 150%;
+    color: #37B7FF;
+    text-decoration: none; }
+  div.basic_analyse div.analyse-select-featurelist ul {
+    font-size: 100%;
+    line-height: 100%;
+    padding: 0;
+    padding-top: 10px; }
+    div.basic_analyse div.analyse-select-featurelist ul li {
+      list-style-type: none; }
+div.basic_analyse div.icon-info {
   float: right; }
+div.basic_analyse div.icon-menu {
+  margin: -5px 100px; }
+div.basic_analyse div.location {
+  height: 30px; }
+div.basic_analyse div.previewNotes {
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-bottom: 2px; }
+div.basic_analyse div.tool {
+  margin: 5px; }
 
 div.basic_analyse div.form div.field input, div.field select {
   width: 80%;
   background-color: white;
   filter: Alpha(opacity=100) !important;
   /* unquote for libsass bug */ }
-
-div.basic_analyse > div.content {
-  overflow: auto;
-  height: 89%; }
-
-div.basic_analyse div.tool {
-  margin: 5px; }
 
 div.basic_analyse div.tool input, div.basic_analyse div.analyse_settings_cont input {
   margin-right: 10px; }
@@ -53,9 +73,8 @@ div.basic_analyse div.tool input, div.basic_analyse div.analyse_settings_cont in
   -o-border-radius: 2px;
   -ms-border-radius: 2px;
   border-radius: 2px; }
-
-.analyse_radiolabel:hover, .analyse_checklabel:hover {
-  background-color: #eee; }
+  .analyse_radiolabel:hover, .analyse_checklabel:hover {
+    background-color: #eee; }
 
 .analyse_params_label, .analyse_title_label, .output_color_label, .columns_title_label, .settings_buffer_label, .extra_title_label, .settings_name_label {
   font-weight: bold;
@@ -67,48 +86,18 @@ div.basic_analyse div.tool input, div.basic_analyse div.analyse_settings_cont in
 .analyse_title_colcont {
   margin: 10px 5px; }
 
-div.basic_analyse div.icon-menu {
-  margin: -5px 100px; }
-
 /* Buttons */
 div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
   margin: 5px; }
-
-div.basic_analyse div.buttons input, div.analyse div.startview div.buttons input {
-  margin-right: 1px; }
-
-div.basic_analyse div.analyse-select-featurelist {
-  display: inline;
-  margin-left: 6px; }
-
-div.basic_analyse div.analyse-select-featurelist a {
-  font-size: 150%;
-  color: #37B7FF;
-  text-decoration: none; }
-
-div.basic_analyse div.analyse-select-featurelist ul {
-  font-size: 100%;
-  line-height: 100%;
-  padding: 0;
-  padding-top: 10px; }
-
-div.basic_analyse div.analyse-select-featurelist ul li {
-  list-style-type: none; }
+  div.basic_analyse div.buttons input, div.analyse div.startview div.buttons input {
+    margin-right: 1px; }
 
 label.params_checklabel {
   text-overflow: ellipsis;
   display: inline-block;
-  width: 117px;
+  width: 200px;
   white-space: nowrap;
   overflow: hidden; }
-
-div.basic_analyse div.location {
-  height: 30px; }
-
-div.basic_analyse div.previewNotes {
-  margin-left: 8px;
-  margin-right: 8px;
-  margin-bottom: 2px; }
 
 table.layer-icons {
   font-family: Arial, sans-serif;
@@ -117,66 +106,53 @@ table.layer-icons {
   margin: 0 0 2px;
   width: 30%;
   display: inline-table; }
+  table.layer-icons div.icon-info {
+    float: none; }
 
 /* Analyse filter CSS */
 div.analyse-filter-popup-content {
   padding: 8px; }
-
-div.analyse-filter-popup-content div.analyse-filter {
-  padding: 12px 8px;
-  border-bottom: 1px solid #888;
-  border-top: 1px solid #E8E8E8; }
-
-div.analyse-filter-popup-content div.analyse-filter:first-child {
-  border-top: none;
-  padding-top: 0; }
-
-div.analyse-filter-popup-content div.analyse-filter:last-child {
-  border-bottom: none;
-  padding-bottom: 0; }
-
-div.analyse-filter-popup-content div.bbox-title, div.analyse-filter-popup-content div.bbox-radio {
-  display: inline-block; }
-
-div.analyse-filter-popup-content div.bbox-title {
-  float: left; }
-
-div.analyse-filter-popup-content div.bbox-radio {
-  margin-left: 25px; }
-
-div.analyse-filter-popup-content div.bbox-radio div.bbox-on, div.analyse-filter-popup-content div.bbox-radio div.bbox-off {
-  margin-top: 5px; }
-
-div.analyse-filter-popup-content div.analyse-filter-clicked-features div.clicked-features-title {
-  display: inline-block;
-  margin-right: 25px; }
-
-div.analyse-filter-popup-content div.analyse-filter-clicked-features label {
-  margin-left: 8px; }
+  div.analyse-filter-popup-content div.analyse-filter {
+    padding: 12px 8px;
+    border-bottom: 1px solid #888;
+    border-top: 1px solid #E8E8E8; }
+    div.analyse-filter-popup-content div.analyse-filter:first-child {
+      border-top: none;
+      padding-top: 0; }
+    div.analyse-filter-popup-content div.analyse-filter:last-child {
+      border-bottom: none;
+      padding-bottom: 0; }
+  div.analyse-filter-popup-content div.analyse-filter-clicked-features div.clicked-features-title {
+    display: inline-block;
+    margin-right: 25px; }
+  div.analyse-filter-popup-content div.analyse-filter-clicked-features label {
+    margin-left: 8px; }
+  div.analyse-filter-popup-content div.bbox-title, div.analyse-filter-popup-content div.bbox-radio {
+    display: inline-block; }
+  div.analyse-filter-popup-content div.bbox-title {
+    float: left; }
+  div.analyse-filter-popup-content div.bbox-radio {
+    margin-left: 25px; }
+    div.analyse-filter-popup-content div.bbox-radio div.bbox-on, div.analyse-filter-popup-content div.bbox-radio div.bbox-off {
+      margin-top: 5px; }
 
 div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px; }
-
-div.analyse-filter-popup-content div.filter-option select.operator, div.analyse-filter-popup-content div.filter-option select.boolean {
-  width: 60px; }
-
 div.analyse-filter-popup-content div.filter-option div.manage-filter-option {
   display: inline-block; }
-
-div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.add-filter-option, div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.remove-filter-option {
-  display: inline-block;
-  font-size: 200%;
-  font-weight: bold;
-  cursor: pointer; }
-
+  div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.add-filter-option, div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.remove-filter-option {
+    display: inline-block;
+    font-size: 200%;
+    font-weight: bold;
+    cursor: pointer; }
 div.analyse-filter-popup-content div.filter-option input[name="attribute-value"] {
   width: 120px; }
-
-div.analyse-filter-popup-content div.filter-option select.attribute {
-  width: 150px; }
-
 div.analyse-filter-popup-content div.filter-option input[name="case-sensitive"] {
   margin-right: 5px; }
+div.analyse-filter-popup-content div.filter-option select.attribute {
+  width: 150px; }
+div.analyse-filter-popup-content div.filter-option select.operator, div.analyse-filter-popup-content div.filter-option select.boolean {
+  width: 60px; }
 
 div.basic_analyse div.toolContainer div.tool {
   display: inline-block;
