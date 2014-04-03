@@ -7,6 +7,7 @@ Oskari.registerLocalization({
         "contentErrorMsg": "Search term contains illegal characters.",
         "searchDescription": "Search by place name, address or real estate unit identifier.",
         "searchButton": "Search",
+        "searchAssistance": " ",
         "searchResultCount": "The search returned ",
         "searchResultCount2": " results.",
         "searchResultDescriptionMoreResults": "Define the search to decrease the number of results.",
