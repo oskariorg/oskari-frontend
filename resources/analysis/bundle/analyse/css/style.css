@@ -177,3 +177,8 @@ div.analyse-filter-popup-content div.filter-option select.attribute {
 
 div.analyse-filter-popup-content div.filter-option input[name="case-sensitive"] {
   margin-right: 5px; }
+
+div.basic_analyse div.toolContainer div.tool {
+  display: inline-block;
+  cursor: pointer;
+}
