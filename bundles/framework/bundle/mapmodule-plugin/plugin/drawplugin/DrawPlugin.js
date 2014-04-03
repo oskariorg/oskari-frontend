@@ -11,10 +11,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
     this.editMode = false;
     this.currentDrawMode = null;
     this.prefix = "DrawPlugin.";
+    this.creatorId = undefined;
 
     if (config && config.id) {
-        // Note that the events and requests need to match the configured prefix based on the id!
+        // Note that the events and requests need to match the configured
+        // prefix based on the id!
         this.prefix = config.id + ".";
+        this.creatorId = config.id;
     }
     // graphicFill, instance
     if (config && config.graphicFill) {
@@ -86,7 +89,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
         } catch (error) {
             // happens when the sketch isn't even started -> reset state
             this.stopDrawing();
-            var event = this._sandbox.getEventBuilder('DrawPlugin.SelectedDrawingEvent')();
+            var evtBuilder = this._sandbox.getEventBuilder('DrawPlugin.SelectedDrawingEvent');
+            var event = evtBuilder(null, null, this.creatorId);
             this._sandbox.notifyAll(event);
         }
     },
@@ -133,12 +137,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
             this.modifyControls.select.select(this.drawLayer.features[lastIndex]);
         }
 
-        var event;
+        var evtBuilder, event;
         if (!this.multipart || isForced) {
-            event = this._sandbox.getEventBuilder('DrawPlugin.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
+            evtBuilder = this._sandbox.getEventBuilder('DrawPlugin.FinishedDrawingEvent');
+            event = evtBuilder(this.getDrawing(), this.editMode, this.creatorId);
             this._sandbox.notifyAll(event);
         } else {
-            event = this._sandbox.getEventBuilder('DrawPlugin.AddedFeatureEvent')(this.getDrawing(), this.currentDrawMode);
+            evtBuilder = this._sandbox.getEventBuilder('DrawPlugin.AddedFeatureEvent');
+            event = evtBuilder(this.getDrawing(), this.currentDrawMode, this.creatorId);
             this._sandbox.notifyAll(event);
         }
     },
@@ -369,7 +375,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
         }
 
         if (eventBuilder) {
-            event = eventBuilder(geometry, drawMode);
+            event = eventBuilder(geometry, drawMode, this.creatorId);
             this._sandbox.notifyAll(event);
         }
     },

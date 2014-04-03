@@ -142,25 +142,25 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
             this.accordion = accordion;
 
-            var contentPanel = this._createContentPanel();
-            contentPanel.open();
-
-            accordion.addPanel(contentPanel);
+            var contentPanel = Oskari.clazz.create(
+                'Oskari.analysis.bundle.analyse.view.ContentPanel', this);
+            this.contentPanel = contentPanel.getPanelContainer();
+            this._addAnalyseData(this.contentPanel);
 
             var methodPanel = this._createMethodPanel();
-            methodPanel.open();
-            accordion.addPanel(methodPanel);
 
             var settingsPanel = this._createSettingsPanel();
-            settingsPanel.open();
-
-            accordion.addPanel(settingsPanel);
 
             var outputPanel = this._createOutputPanel();
             //outputPanel.open();
 
+            contentPanel.getPanel().open();
+            methodPanel.open();
+            settingsPanel.open();
+            accordion.addPanel(contentPanel.getPanel());
+            accordion.addPanel(methodPanel);
+            accordion.addPanel(settingsPanel);
             accordion.addPanel(outputPanel);
-
             accordion.insertTo(contentDiv);
 
             // buttons
@@ -185,35 +185,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me.progressSpinner.insertTo(container);
 
 
-        },
-        /**
-         * @method _createContentPanel
-         * @private
-         * Creates the content layer selection panel for analyse
-         * @return {jQuery} Returns the created panel
-         */
-        _createContentPanel: function () {
-            var me = this;
-            var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-            panel.setTitle(this.loc.content.label);
-            me.contentPanel = panel.getContainer();
-
-            var tooltipCont = this.template.help.clone();
-            tooltipCont.attr('title', this.loc.content.tooltip);
-            me.contentPanel.append(tooltipCont);
-            me._addAnalyseData(me.contentPanel);
-
-            var dataBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            dataBtn.setTitle(this.loc.buttons.data);
-            dataBtn.addClass('primary');
-            dataBtn.setHandler(function () {
-
-                me._modifyAnalyseData(me.contentPanel);
-
-            });
-            dataBtn.insertTo(me.contentPanel);
-
-            return panel;
         },
         /**
          * @method _createMethodPanel
@@ -1298,30 +1269,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             dropdown.change(aggreMagic());
             columnsContainer.append(dropdown);
 
-        },
-
-        /**
-         * @method _modifyAnalyseData
-         * @private
-         * modify analyse data layers in selection box
-         * @param {jQuery} contentPanel  content panel for data layer selections
-         */
-        _modifyAnalyseData: function (contentPanel) {
-            var me = this;
-            // Open layerselector
-            //me.instance.setAnalyseMode(false);
-            var name = 'LayerSelector';
-            var extension = me._getFakeExtension(name);
-            var rn = 'userinterface.UpdateExtensionRequest';
-            me.instance.getSandbox().postRequestByName(rn, [extension, 'attach']);
-
-        },
-        _getFakeExtension: function (name) {
-            return {
-                getName: function () {
-                    return name;
-                }
-            };
         },
         /**
          * @method refreshAnalyseData
