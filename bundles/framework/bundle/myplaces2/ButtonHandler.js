@@ -362,7 +362,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             'DrawPlugin.AddedFeatureEvent': function (event) {
                 var drawingMode = event.getDrawingMode();
                 if (drawingMode !== undefined) {
-                    if (drawingMode !== null) {/*
+                    if (drawingMode !== null) {
+                        /*
                         if (this.instance.sandbox.getUser().isLoggedIn()) {
                             if (drawingMode === 'line') {
                                 drawingMode = "measureline";

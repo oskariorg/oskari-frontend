@@ -2,20 +2,20 @@ Oskari.registerLocalization({
     "lang" : "fi",
     "key" : "ParcelSelector",
     "value" : {
-        "title" : "Kiinteistöhaku",
-        "button" : "Hae",
+        "title" : "...",
+        "button" : "...",
         "errors" : {
-            "title": "Virhe!",
-            "illegalInput" : "Tunniste on väärän muotoinen."
+            "title": "...",
+            "illegalInput" : "..."
         },
-        "description" : "Hae kiinteistötunnuksella.",
+        "description" : "...",
         "filter" : {
-            "text" : "Hae kiinteistöjä",
-            "parcel" : "Palsta",
-            "registerUnit" : "Rekisteriyksikkö"
+            "text" : "...",
+            "parcel" : "...",
+            "registerUnit" : "..."
         },
         "buttons": {
-            "ok": "OK"
+            "ok": "..."
         }
     }
 });

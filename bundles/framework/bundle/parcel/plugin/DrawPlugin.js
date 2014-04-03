@@ -10,7 +10,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
      * @static
      * @param {Oskari.mapframework.bundle.parcel.DrawingToolInstance} instance
      */
-    function(instance) {
+
+    function (instance) {
         this.instance = instance;
         this.mapModule = null;
         this.pluginName = null;
@@ -23,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
         this.markerLayer = null;
         this.currentDrawMode = null;
         this.currentFeatureType = null;
-        this._oldPreParcel = null;   // old preparcel attributes
+        this._oldPreParcel = null; // old preparcel attributes
         // Created in init
         this.splitter = null;
         this.backupFeatures = [];
@@ -43,15 +44,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * Returns plugin name.
          * @return {String} The plugin name.
          */
-        getName : function() {
+        getName: function () {
             return this.pluginName;
         },
-        getMap : function() {
+        getMap: function () {
             return this._map;
         },
 
-        processFeatures : function() {
-            if (!((this.drawLayer.features.length > 1)&&(this.operatingFeature === null))) return; // Nothing to process
+        processFeatures: function () {
+            if (!((this.drawLayer.features.length > 1) && (this.operatingFeature === null))) return; // Nothing to process
             var me = this;
             // Make sure that all the component states are in sync, such as dialogs.
             var event = me._sandbox.getEventBuilder('Parcel.FinishedDrawingEvent')();
@@ -70,13 +71,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @param sandbox reference to Oskari sandbox
          * @method init
          */
-        init : function(sandbox) {
+        init: function (sandbox) {
             var me = this;
             // This layer will first contain the downloaded feature. After the split is done, that feature
             // removed from the layer
             this.drawLayer = new OpenLayers.Layer.Vector("Parcel Draw Layer", {
-                eventListeners : {
-                    "featuresadded" : function(layer) {
+                eventListeners: {
+                    "featuresadded": function (layer) {
                         if (layer.features[0].length === 0) {
                             return;
                         }
@@ -85,10 +86,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                             dialog.show(loc.title, "");
                             // The popup dialog doesn't work without short delay
-                            setTimeout(function(){
+                            setTimeout(function () {
                                 me.processFeatures();
                                 dialog.close();
-                            },200);
+                            }, 200);
                         } else {
                             me.processFeatures();
                         }
@@ -99,11 +100,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
 
             // This layer will contain the geometry that will split the original feature.
             this.editLayer = new OpenLayers.Layer.Vector("Parcel Edit Layer", {
-                eventListeners : {
-                    "featuremodified" : function(event) {
+                eventListeners: {
+                    "featuremodified": function (event) {
                         var line = event.feature.geometry.components[0];
                         // Line or hole?
-                        if (line.components[0].id !== line.components[line.components.length-1].id) {
+                        if (line.components[0].id !== line.components[line.components.length - 1].id) {
                             this.updateLine();
                         } else {
                             this.updateHole(event.feature);
@@ -118,20 +119,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                 }
             });
 
-            this.editLayer.updateLine = function() {
+            this.editLayer.updateLine = function () {
                 if (this.features.length === 0) {
                     return;
                 }
                 var editFeature = this.features[0];
-                var endPoints = [];
+                var endPoints = [],
+                    i;
                 if (editFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiLineString") {
                     // Handles the point added into the line
-                    for (var i = 0; i < editFeature.geometry.components.length; i++) {
+                    for (i = 0; i < editFeature.geometry.components.length; i++) {
                         var lineString = editFeature.geometry.components[i];
                         for (var k = 0; k < lineString.components.length; k++) {
                             var point = lineString.components[k];
                             var newReferences = [];
-                            if ( typeof point.references === "undefined") {
+                            if (typeof point.references === "undefined") {
                                 var prevPoint = lineString.components[k - 1];
                                 var nextPoint = lineString.components[k + 1];
                                 for (var l = 0; l < prevPoint.references.length; l++) {
@@ -146,7 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                                     if (!found)
                                         continue;
                                     var polygon = null;
-                                    for ( m = 0; m < me.drawLayer.features.length; m++) {
+                                    for (m = 0; m < me.drawLayer.features.length; m++) {
                                         var feature = me.drawLayer.features[m];
                                         if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.Polygon") {
                                             if (feature.geometry.id === refPoly) {
@@ -157,7 +159,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                                     }
                                     var points = polygon.components[0].components;
                                     var polyLength = points.length - 1;
-                                    for ( m = 0; m < polyLength; m++) {
+                                    for (m = 0; m < polyLength; m++) {
                                         var n = m + 1;
                                         if ((points[m] === prevPoint) && (points[n] === nextPoint)) {
                                             points.splice(n, 0, point);
@@ -215,16 +217,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
 
                 }
                 // Hidden start and end points of the line
-                for (i=0; i<endPoints.length; i++) {
-                    jQuery("#"+endPoints[i]).css("display","none");
+                for (i = 0; i < endPoints.length; i++) {
+                    jQuery("#" + endPoints[i]).css("display", "none");
                 }
 
             };
 
-            this.editLayer.updateHole = function(lineFeature) {
+            this.editLayer.updateHole = function (lineFeature) {
                 var points = lineFeature.geometry.components[0].components;
                 if (points.length != lineFeature.numPoints) {
-                    var polygonFeature = me.drawLayer.features[me.drawLayer.features.length-1];
+                    var polygonFeature = me.drawLayer.features[me.drawLayer.features.length - 1];
                     polygonFeature.geometry.components[0].components = points;
                     lineFeature.numPoints = points.length;
                 }
@@ -256,17 +258,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             this.selectInfoControl = new OpenLayers.Control.SelectFeature(me.drawLayer);
             this._map.addControl(this.selectInfoControl);
 
-            var modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer, {clickout:false, toggle:false});
+            var modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer, {
+                clickout: false,
+                toggle: false
+            });
             this._map.addControl(modifyEditControl);
 
             this.controls = {
-                select : selectEditControl,
-                modify : modifyEditControl
+                select: selectEditControl,
+                modify: modifyEditControl
             };
 
             this.drawControls = {
-                line : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Path),
-                area : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Polygon)
+                line: new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Path),
+                area: new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Polygon)
             };
             this._map.addLayers([me.drawLayer]);
             for (var key in this.drawControls) {
@@ -280,23 +285,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             this._map.setLayerIndex(me.markerLayer, 1000);
 
             OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
-                defaultHandlerOptions : {
-                    'single' : true,
-                    'double' : true,
-                    'pixelTolerance' : 10,
-                    'stopSingle' : true,
-                    'stopDouble' : true
+                defaultHandlerOptions: {
+                    'single': true,
+                    'double': true,
+                    'pixelTolerance': 10,
+                    'stopSingle': true,
+                    'stopDouble': true
                 },
 
-                initialize : function(options) {
+                initialize: function (options) {
                     this.handlerOptions = OpenLayers.Util.extend({}, this.defaultHandlerOptions);
                     OpenLayers.Control.prototype.initialize.apply(this, arguments);
                     this.handler = new OpenLayers.Handler.Click(this, {
-                        'click' : this.trigger
+                        'click': this.trigger
                     }, this.handlerOptions);
                 },
 
-                trigger : function(e) {
+                trigger: function (e) {
                     // Trigger disabled if popup visible
                     if (jQuery("div#parcelForm").length > 0) return;
                     var lonlat = me._map.getLonLatFromPixel(e.xy);
@@ -304,7 +309,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                     var i;
                     var oldSelectedFeature = me.selectedFeature;
                     var features = me.drawLayer.features;
-                    for ( i = 0; i < features.length; i++) {
+                    for (i = 0; i < features.length; i++) {
                         var geometry = features[i].geometry;
                         if (geometry.CLASS_NAME == "OpenLayers.Geometry.Polygon") {
                             if (geometry.containsPoint(point)) {
@@ -318,7 +323,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                             me.selectedFeature = oldSelectedFeature;
                     }
                     if (oldSelectedFeature != me.selectedFeature) {
-                        for ( i = 0; i < features.length; i++) {
+                        for (i = 0; i < features.length; i++) {
                             me.drawLayer.features[i].style = (i === me.selectedFeature) ? me.selectStyle : me.basicStyle;
                         }
                         me.editLayer.redraw();
@@ -332,10 +337,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             click.activate();
 
             this.requestHandlers = {
-                startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', me),
-                stopDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StopDrawingRequestHandler', me),
-                cancelDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.CancelDrawingRequestHandler', me),
-                saveDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.SaveDrawingRequestHandler', me)
+                startDrawingHandler: Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', me),
+                stopDrawingHandler: Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StopDrawingRequestHandler', me),
+                cancelDrawingHandler: Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.CancelDrawingRequestHandler', me),
+                saveDrawingHandler: Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.SaveDrawingRequestHandler', me)
             };
 
             // Todo: styles from file
@@ -359,7 +364,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          *          reference to application sandbox
          */
-        startPlugin : function(sandbox) {
+        startPlugin: function (sandbox) {
             this._sandbox = sandbox;
             sandbox.register(this);
             sandbox.addRequestHandler('Parcel.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
@@ -375,7 +380,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          *          reference to application sandbox
          */
-        stopPlugin : function(sandbox) {
+        stopPlugin: function (sandbox) {
             // Let possible info box know that this layer should not be followed.
             var event = sandbox.getEventBuilder('ParcelInfo.ParcelLayerUnregisterEvent')([this.getDrawingLayer(), this.getEditLayer()]);
             sandbox.notifyAll(event);
@@ -393,14 +398,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @method getMapModule
          * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map module
          */
-        getMapModule : function() {
+        getMapModule: function () {
             return this.mapModule;
         },
         /**
          * @method setMapModule
          * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map module
          */
-        setMapModule : function(mapModule) {
+        setMapModule: function (mapModule) {
             this.mapModule = mapModule;
             this._map = mapModule.getMap();
             this.pluginName = mapModule.getName() + 'Parcel.DrawPlugin';
@@ -419,7 +424,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @param {String} featureType The feature type of the feature. This is required when feature is committed to the server.
          * @method drawFeature
          */
-        drawFeature : function(features, featureType) {
+        drawFeature: function (features, featureType) {
             this.clear();
 
             this.currentFeatureType = null;
@@ -470,7 +475,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @param {Object} params includes isModify, drawMode, geometry.
          * @method
          */
-        startDrawing : function(params) {
+        startDrawing: function (params) {
             // activate requested draw control for new geometry
             this.toggleControl(params.drawMode);
         },
@@ -485,14 +490,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          *
          * @method finishSketchDraw
          */
-        finishSketchDraw : function() {
+        finishSketchDraw: function () {
             try {
                 this.drawControls[this.currentDrawMode].finishSketch();
                 // Because flow has been quite by specific button.
                 // Remove control. Then, user needs to choose the correct tool again.
                 this.toggleControl();
 
-            } catch(error) {
+            } catch (error) {
                 // happens when the sketch isn't even started -> reset state
                 var event = this._sandbox.getEventBuilder('Parcel.ParcelSelectedEvent')();
                 this._sandbox.notifyAll(event);
@@ -506,7 +511,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          *
          * @method cancelDrawing
          */
-        cancelDrawing : function() {
+        cancelDrawing: function () {
             // disable all draw controls
             this.toggleControl();
         },
@@ -522,7 +527,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          *
          * @method saveDrawing
          */
-        saveDrawing : function() {
+        saveDrawing: function () {
             if (this.selectedFeature > -2) {
                 // Select the feature that is going to be saved.
                 // Then, it is shown for the user if user has unselected it before pressing save button.
@@ -541,7 +546,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * controls)
          * @method toggleControl
          */
-        toggleControl : function(drawMode) {
+        toggleControl: function (drawMode) {
             this.currentDrawMode = drawMode;
 
             for (var key in this.drawControls) {
@@ -557,21 +562,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @return {OpenLayers.Layer.Vector} Returns the drawn vector layer.
          * @method getDrawingLayer
          */
-        getDrawingLayer : function() {
+        getDrawingLayer: function () {
             return this.drawLayer;
         },
         /**
          * @return {OpenLayers.Layer.Vector} Returns the edit vector layer.
          * @method getEditLayer
          */
-        getEditLayer : function() {
+        getEditLayer: function () {
             return this.editLayer;
         },
         /**
          * @return {OpenLayers.Layer.Vector} Returns the marker layer.
          * @method getMarkerLayer
          */
-        getMarkerLayer : function() {
+        getMarkerLayer: function () {
             return this.markerLayer;
         },
         /**
@@ -580,7 +585,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @return {OpenLayers.Feature.Vector} Returns the drawn vector feature from the draw layer. May be undefined if no feature.
          * @method getDrawing
          */
-        getDrawing : function() {
+        getDrawing: function () {
             if (this.selectedFeature > -1) {
 
                 return this.drawLayer.features[this.selectedFeature];
@@ -596,7 +601,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @return index of selected feature
          * @method getIndexOfSelectedFeature
          */
-        getIndexOfSelectedFeature : function() {
+        getIndexOfSelectedFeature: function () {
             if (this.selectedFeature > -1) {
 
                 return this.selectedFeature;
@@ -607,7 +612,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * Returns the parcel geometry from the draw layer
          * @method
          */
-        getParcelGeometry : function() {
+        getParcelGeometry: function () {
             if (this.drawLayer.features.length === 0) return null;
             var cur = 0;
             if (this.selectedFeature > -1) cur = this.selectedFeature;
@@ -617,7 +622,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * Returns the boundary geometry from the edit layer
          * @method
          */
-        getBoundaryGeometry : function() {
+        getBoundaryGeometry: function () {
             if (this.editLayer.features.length === 0) return null;
             return this.editLayer.features[0].geometry;
         },
@@ -625,21 +630,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * Returns the operating geometry
          * @method
          */
-        getOperatingGeometry : function() {
+        getOperatingGeometry: function () {
             return this.operatingFeature.geometry;
         },
         /**
          * @param {String} featureType The feature type of the parcel feature. This is used when feature is commited to the server.
          * @method setFeatureType
          */
-        setFeatureType : function(featureType) {
+        setFeatureType: function (featureType) {
             this.currentFeatureType = featureType;
         },
         /**
          * @param {String} The feature type of the parcel feature. This is used when feature is commited to the server.
          * @method getFeatureType
          */
-        getFeatureType : function() {
+        getFeatureType: function () {
             return this.currentFeatureType;
         },
         /**
@@ -653,20 +658,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @method getSandbox
          * @return {Oskari.mapframework.sandbox.Sandbox}
          */
-        getSandbox : function() {
+        getSandbox: function () {
             return this._sandbox;
         },
         /**
          * @method start
          * called from sandbox
          */
-        start : function(sandbox) {
-        },
+        start: function (sandbox) {},
         /**
          * @method stop
          * called from sandbox
          */
-        stop : function(sandbox) {
+        stop: function (sandbox) {
             // Let possible info box know that this layer should not be followed.
             var event = sandbox.getEventBuilder('ParcelInfo.ParcelLayerUnregisterEvent')([this.getDrawingLayer(), this.getEditLayer()]);
             sandbox.notifyAll(event);
@@ -675,20 +679,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @method register
          * Does nothing atm.
          */
-        register : function() {
-        },
+        register: function () {},
         /**
          * @method unregister
          * Does nothing atm.
          */
-        unregister : function() {
-        },
+        unregister: function () {},
 
         /**
          * @method clear
          * Clears all layers.
          */
-        clear : function() {
+        clear: function () {
             // remove possible old drawing
             this.controls.modify.deactivate();
             this.drawLayer.removeAllFeatures();
@@ -709,8 +711,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * and replaces the feature hold by this instance.
          * @method splitFeature
          */
-        splitFeature : function(trivial) {
-            var trivialSplit = ( typeof trivial === "undefined" ? false : trivial);
+        splitFeature: function (trivial) {
+            var trivialSplit = (typeof trivial === "undefined" ? false : trivial);
             var editFeature = this.splitter.split(trivialSplit);
             if (editFeature !== undefined) {
                 this.initControls(editFeature);
@@ -720,10 +722,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             if (this.hotspot !== null) {
                 var minDist = Number.POSITIVE_INFINITY;
                 var selectedInd = 0;
-                for (i=0; i<this.drawLayer.features.length; i++) {
+                for (i = 0; i < this.drawLayer.features.length; i++) {
                     var centroid = this.drawLayer.features[i].geometry.getCentroid();
                     var dist = this.hotspot.point.distanceTo(centroid);
-                    if ((dist < minDist)||((dist === minDist)&&(this.hotspot.inside === this.drawLayer.features[i].geometry.containsPoint(centroid)))) {
+                    if ((dist < minDist) || ((dist === minDist) && (this.hotspot.inside === this.drawLayer.features[i].geometry.containsPoint(centroid)))) {
                         minDist = dist;
                         selectedInd = i;
                     }
@@ -741,13 +743,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             this.editLayer.updateLine();
         },
 
-        initControls : function(editingFeature) {
+        initControls: function (editingFeature) {
             this.buttons.setEnabled(true);
-            this.buttons.setButtonEnabled("line",false);
-            this.buttons.setButtonEnabled("area",false);
-            this.buttons.setButtonEnabled("selector",false);
-            this.buttons.setButtonEnabled("clear",true);
-            this.buttons.setButtonEnabled("save",true);
+            this.buttons.setButtonEnabled("line", false);
+            this.buttons.setButtonEnabled("area", false);
+            this.buttons.setButtonEnabled("selector", false);
+            this.buttons.setButtonEnabled("clear", true);
+            this.buttons.setButtonEnabled("save", true);
 
             if (editingFeature !== null) {
                 this.controls.select.select(editingFeature);
@@ -759,7 +761,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             //this.drawLayer.features[0].style = this.selectStyle;
             //this.selectedFeature = 0;
             // Make sure the marker layer is topmost (previous activations push the vector layer too high)
-            var index = Math.max(this._map.Z_INDEX_BASE['Feature'], this.markerLayer.getZIndex()) + 1;
+            var index = Math.max(this._map.Z_INDEX_BASE.Feature, this.markerLayer.getZIndex()) + 1;
             this.markerLayer.setZIndex(index);
             this.updateInfobox();
             // Reproduce the original OL 2.12 behaviour
@@ -767,7 +769,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); // IE8
         },
 
-        createEditor : function(features, data, preparcel) {
+        createEditor: function (features, data, preparcel) {
             var newPolygons = [];
             var referencePolygons = [];
             var originalPolygons = [];
@@ -775,20 +777,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             var originalPoints = [];
             var partInd = 0;
             var selectedFeature = 0;
-            var i, j,k;
+            var i, j, k;
             this.clear();
             this.currentFeatureType = this.instance.conf.registerUnitFeatureType;
             this._oldPreParcel = preparcel;
 
             // Original geometry reference
-            for (i=0; i<features.length; i++) {
+            for (i = 0; i < features.length; i++) {
                 referencePolygons.push(features[i].geometry);
                 originalPolygons.push(features[i].geometry);
                 originalLinearRings = [];
-                for (j=0; j<features[i].geometry.components.length; j++) {
+                for (j = 0; j < features[i].geometry.components.length; j++) {
                     originalPoints = [];
-                    for (k=0; k<features[i].geometry.components[j].components.length; k++) {
-                        originalPoints.push(new OpenLayers.Geometry.Point(features[i].geometry.components[j].components[k].x,features[i].geometry.components[j].components[k].y));
+                    for (k = 0; k < features[i].geometry.components[j].components.length; k++) {
+                        originalPoints.push(new OpenLayers.Geometry.Point(features[i].geometry.components[j].components[k].x, features[i].geometry.components[j].components[k].y));
                     }
                     originalLinearRings.push(new OpenLayers.Geometry.LinearRing(originalPoints));
                 }
@@ -798,14 +800,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')([this.getDrawingLayer(), this.getEditLayer()]);
             this._sandbox.notifyAll(event);
 
-            for (i=0; i<data.length; i++) {
+            for (i = 0; i < data.length; i++) {
                 switch (data[i].geom_type) {
-                    case "selectedpartparcel":
-                        selectedFeature = partInd;
-                    case "partparcel":
-                        newPolygons.push(data[i].geometry);
-                        partInd = partInd+1;
-                        break;
+                case "selectedpartparcel":
+                    selectedFeature = partInd;
+                case "partparcel":
+                    newPolygons.push(data[i].geometry);
+                    partInd = partInd + 1;
+                    break;
                 }
             }
             var centroid = newPolygons[selectedFeature].getCentroid();
@@ -818,19 +820,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             this.drawLayer.addFeatures(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(referencePolygons)));
 
             // Update the name field
-            for (i=0; i<this.drawLayer.features.length; i++) {
+            for (i = 0; i < this.drawLayer.features.length; i++) {
                 this.drawLayer.features[i].attributes.name = features[0].attributes.tekstiKartalla;
             }
             this.updateInfobox();
             // Zoom to the loaded feature.
-            this._map.zoomToExtent(this.drawLayer.getDataExtent());    },
+            this._map.zoomToExtent(this.drawLayer.getDataExtent());
+        },
 
         /**
          * Updates feature info in info box.
          * If there is not a feature in selected state, then 1st feature in drawLayer is selected and updated
          * @method updateInfobox
          */
-        updateInfobox : function() {
+        updateInfobox: function () {
             if (this.selectedFeature > -1) {
                 // Set selected
                 this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
@@ -848,6 +851,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             }
         }
     }, {
-        'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
     }
 );

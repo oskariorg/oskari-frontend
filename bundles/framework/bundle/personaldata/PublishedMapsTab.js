@@ -318,10 +318,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 var link = me.templateLink.clone();
                 link.append(name);
                 link.bind('click', function () {
-                    var publishedMapUrl = sandbox.getLocalizedProperty(me.instance.conf.publishedMapUrl),
-                        url = 'http://'+ window.location.host + publishedMapUrl + data.id,
+                    var publishedMapUrl = sandbox.getLocalizedProperty(me.instance.conf.publishedMapUrl, data.lang),
+                        url = 'http://' + window.location.host + publishedMapUrl + data.id,
                         view = me._getViewById(data.id),
-                        size = view ? view.state.mapfull.config.size : {height: 525, width: 700};
+                        size = view ? view.state.mapfull.config.size : {
+                            height: 525,
+                            width: 700
+                        };
                     me._showIframeCodePopup(url, size, view.name);
                 });
                 return link;
@@ -335,9 +338,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 link.append(name);
                 link.bind('click', function () {
                     if (setMapState(data, false, function () {
-                            setMapState(data, true);
-                            editRequestSender(data);
-                        })) {
+                        setMapState(data, true);
+                        editRequestSender(data);
+                    })) {
                         editRequestSender(data);
                     }
                     return false;
@@ -400,8 +403,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 key = visibleFields[i];
                 coluiname = 'grid.' + key;
                 if (this.loc &&
-                        this.loc.grid &&
-                        this.loc.grid[key]) {
+                    this.loc.grid &&
+                    this.loc.grid[key]) {
                     coluiname = this.loc.grid[key];
                 }
                 grid.setColumnUIName(key, coluiname);
@@ -470,11 +473,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             return handler.apply(this, [event]);
 
         },
-        _showIframeCodePopup: function(url, size, name) {
+        _showIframeCodePopup: function (url, size, name) {
             var loc = this.loc,
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = dialog.createCloseButton(loc.button.ok),
-                url,
                 iframeCode,
                 textarea,
                 content;

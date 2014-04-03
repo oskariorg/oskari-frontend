@@ -2,114 +2,114 @@ Oskari.registerLocalization({
     "lang": "fi",
     "key": "Parcel",
     "value": {
-        "title": "Kohteet",
+        "title": "...",
         "desc": "",
         "tools": {
             "line": {
-                "tooltip": "Jaa kohde viivalla",
-                "new": "Halkaise kohde viivalla. Lisää viivan taitepiste klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella.",
-                "edit": "Muokkaa viivaa raahaamalla viivan taitepisteitä.",
-                "save": "Tallenna muoto"
+                "tooltip": "...",
+                "new": "...",
+                "edit": "...",
+                "save": "..."
             },
             "area": {
-                "tooltip": "Jaa kohde alueella",
-                "new": "Piirrä reikä kohteeseen. Lisää alueen taitepisteet klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella.",
-                "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
-                "save": "Tallenna muoto"
+                "tooltip": "...",
+                "new": "...",
+                "edit": "...",
+                "save": "..."
             },
             "selector": {
-                "tooltip": "Jaa kohde valitsemalla kokonainen palsta"
+                "tooltip": "..."
             },
             "clear": {
-                "tooltip": "Tyhjennä"
+                "tooltip": "..."
             },
             "save": {
-                "tooltip": "Tee piirros ja tulosta"
+                "tooltip": "..."
             },
             "language": {
-                "tooltip": "Vaihda kieli ruotsiksi"
+                "tooltip": "..."
             },
             "debug": {
-                "tooltip": "Pysäytä suoritus"
+                "tooltip": "..."
             },
-            "tooltip": "Hae ensin kiinteistöä"
+            "tooltip": "..."
         },
         "buttons": {
-            "ok": "OK",
-            "cancel": "Peruuta",
-            "print": "Tulosta",
-            "save": "Tallenna",
-            "movePlaces": "Siirrä kohteet ja poista"
+            "ok": "...",
+            "cancel": "...",
+            "print": "...",
+            "save": "...",
+            "movePlaces": "..."
         },
         "placeform": {
-            "title": "Määräalan tiedot",
-            "tooltip": "Anna määräalan tiedot ja tulosta tai tallenna",
+            "title": "...",
+            "tooltip": "...",
             "placename": {
-                "placeholder": "Tunnus"
+                "placeholder": "..."
             },
             "ptitle": {
-                "placeholder": "Piirroksen otsikko"
+                "placeholder": "..."
             },
             "subtitle": {
-                "placeholder": "Piirroksen alaotsikko"
+                "placeholder": "..."
             },
             "description": {
-                "placeholder": "Yleiskuvaus"
+                "placeholder": "..."
             },
             "parent_property_id": {
-                "placeholder": "Kantatilan tunnus"
+                "placeholder": "..."
             },
             "parent_property_quality": {
-                "placeholder": "Kantatilan lähdeaineisto"
+                "placeholder": "..."
             },
             "reporter": {
-                "placeholder": "Piirroksen laatija"
+                "placeholder": "..."
             },
             "area": {
-                "placeholder": "Pinta-ala (m²)"
+                "placeholder": "..."
             }
         },
         "qualitycodes": {
-            "q0": "(Tuntematon)",
-            "q4": "Kuvamittaus",
-            "q14": "Digitointi",
-            "q20": "Maastomittaus",
-            "q30": "Kiinteistötoimitus",
-            "q50": "Kaavalaskenta"
+            "q0": "...",
+            "q4": "...",
+            "q14": "...",
+            "q20": "...",
+            "q30": "...",
+            "q50": "..."
         },
         "notification": {
             "placeLoading": {
-                "title": "Kohdetta ladataan",
+                "title": "...",
                 "message": ""
             },
             "calculating": {
-                "title": "Lasketaan jakoa",
+                "title": "...",
                 "message": ""
             },
             "placeAdding": {
-                "title": "Kohdetta tallennetaan",
+                "title": "...",
                 "message": ""
             },
             "error": {
-                "title": "Virhe!",
-                "savePlace": "Tallennusvirhe - kohdetunnus on jo käytössä",
-                "loadPlace": "Kohteen lataaminen ei onnistunut",
-                "modifyPlace": "Muokkausvirhe"
+                "title": "...",
+                "savePlace": "...",
+                "loadPlace": "...",
+                "modifyPlace": "..."
             },
             "success": {
-                "savePlace": "Tallennus onnistui"
+                "savePlace": "..."
             },
             "language": {
-                "changed": "Suomi valittu kieleksi."
+                "changed": "..."
             }
 
         },
         "validation": {
-            "title": "Tiedoissa puutteita:",
-            "placeName": "Kohteen nimi puuttuu."
+            "title": "...",
+            "placeName": "..."
         },
         "page": {
-            "title": "Määräalakartta / Emäkiinteistö"
+            "title": "..."
         }
     }
 });

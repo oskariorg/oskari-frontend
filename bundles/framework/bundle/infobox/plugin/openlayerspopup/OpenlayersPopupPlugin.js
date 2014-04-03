@@ -96,15 +96,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             var me = this;
 
             // templates
-            this._arrow = jQuery('<div class="popupHeaderArrow"></div>');
-            this._header = jQuery('<div></div>');
-            this._headerWrapper = jQuery('<div class="popupHeader"></div>');
-            this._headerCloseButton = jQuery('<div class="olPopupCloseBox icon-close-white" style="position: absolute; top: 12px;"></div>');
-            this._contentDiv = jQuery('<div class="popupContent"></div>');
-            this._contentWrapper = jQuery('<div class="contentWrapper"></div>');
-            this._actionLink = jQuery('<span class="infoboxActionLinks"><a href="#"></a></span>');
-            this._actionButton = jQuery('<span class="infoboxActionLinks"><input type="button" /></span>');
-            this._contentSeparator = jQuery('<div class="infoboxLine">separator</div>');
+            me._arrow = jQuery('<div class="popupHeaderArrow"></div>');
+            me._header = jQuery('<div></div>');
+            me._headerWrapper = jQuery('<div class="popupHeader"></div>');
+            me._headerCloseButton = jQuery('<div class="olPopupCloseBox icon-close-white" style="position: absolute; top: 12px;"></div>');
+            me._contentDiv = jQuery('<div class="popupContent"></div>');
+            me._contentWrapper = jQuery('<div class="contentWrapper"></div>');
+            me._actionLink = jQuery('<span class="infoboxActionLinks"><a href="#"></a></span>');
+            me._actionButton = jQuery('<span class="infoboxActionLinks"><input type="button" /></span>');
+            me._contentSeparator = jQuery('<div class="infoboxLine">separator</div>');
         },
 
         /**
@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
             this._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh);
         },
-        _renderPopup: function(id, contentData, title, lonlat, colourScheme, font, refresh) {
+        _renderPopup: function (id, contentData, title, lonlat, colourScheme, font, refresh) {
             var contentDiv = this._renderContentData(contentData),
                 popupContent = this._renderPopupContent(title, contentDiv),
                 popup;
@@ -188,7 +188,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 this.getMapModule().getMap().addPopup(popup);
 
             }
-            
+
             if (this.adaptable) {
                 this._adaptPopupSize(id, refresh);
             }
@@ -217,14 +217,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         },
         /**
          * Wraps the content into popup and returns the html string.
-         * 
+         *
          * @method _renderPopupContent
          * @private
          * @param  {String} title
          * @param  {jQuery} contentDiv
          * @return {String}
          */
-        _renderPopupContent: function(title, contentDiv) {
+        _renderPopupContent: function (title, contentDiv) {
             var arrow = this._arrow.clone(),
                 header = this._header.clone(),
                 headerWrapper = this._headerWrapper.clone(),
@@ -243,16 +243,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         /**
          * Renders the content data into html presentation.
          * Also creates links/buttons for the actions.
-         * 
+         *
          * @method _renderContentData
          * @private
          * @param  {Object[]} contentData
          * @return {jQuery}
          */
-        _renderContentData: function(contentData) {
+        _renderContentData: function (contentData) {
             var me = this;
 
-            return _.foldl(contentData, function(contentDiv, datum, index) {
+            return _.foldl(contentData, function (contentDiv, datum, index) {
                 var useButtons = (datum.useButtons === true),
                     primaryButton = datum.primaryButton,
                     contentWrapper = me._contentWrapper.clone();
@@ -283,7 +283,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 return contentDiv;
             }, me._contentDiv.clone());
         },
-        _setClickEvent: function(id, popup, contentData) {
+        _setClickEvent: function (id, popup, contentData) {
             var me = this;
             // override
             popup.events.un({
@@ -315,14 +315,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          * Merges the given new data to the old data.
          * If there's a fragment with the same layerId in both,
          * the new one replaces it.
-         * 
+         *
          * @method _getChangedContentData
          * @private
          * @param  {Object[]} oldData
          * @param  {Object[]} newData
          * @return {Object[]}
          */
-        _getChangedContentData: function(oldData, newData) {
+        _getChangedContentData: function (oldData, newData) {
             var retData;
 
             for (var i = 0, oLen = oldData.length; i < oLen; ++i) {
@@ -343,24 +343,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         /**
          * Removes the data of given id from the popup and
          * renders it again to reflect the change.
-         * 
+         *
          * @method removeContentData
          * @private
          * @param  {String} popupId
          * @param  {String} contentId
          */
-        removeContentData: function(popupId, contentId) {
+        removeContentData: function (popupId, contentId) {
             var popup = this.getPopups(popupId),
                 removed = false,
-                contentData, datum, i;
+                contentData,
+                datum,
+                i;
 
-            if (!popup) return;
+            if (!popup) {
+                return;
+            }
 
             contentData = popup.contentData;
 
             for (i = 0, cLen = contentData.length; i < cLen; ++i) {
                 datum = contentData[i];
-                if (datum.layerId && (''+datum.layerId === ''+contentId)) {
+                if (datum.layerId && ('' + datum.layerId === '' + contentId)) {
                     contentData.splice(i, 1);
                     removed = true;
                     break;
@@ -368,15 +372,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             }
 
             if (removed) {
-                this._renderPopup(
-                    popupId,
-                    contentData,
-                    popup.title,
-                    popup.lonlat,
-                    popup.colourScheme,
-                    popup.font,
-                    true
-                );
+                if (contentData.length === 0) {
+                    // No content left, close popup
+                    this.close(popupId);
+                } else {
+                    this._renderPopup(
+                        popupId,
+                        contentData,
+                        popup.title,
+                        popup.lonlat,
+                        popup.colourScheme,
+                        popup.font,
+                        true
+                    );
+                }
             }
         },
         setAdaptable: function (isAdaptable) {
@@ -384,41 +393,44 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         },
 
         _adaptPopupSize: function (olPopupId, isOld) {
-            var viewport = jQuery(this.getMapModule().getMapViewPortDiv());
-            var popup = jQuery('#' + olPopupId);
-            var left = parseFloat(popup.css('left'));
+            var viewport = jQuery(this.getMapModule().getMapViewPortDiv()),
+                popup = jQuery('#' + olPopupId),
+                left = parseFloat(popup.css('left'));
             // popup needs to move 10 pixels to the right
             // so that header arrow can be moved out of container(left).
             // Only move it if creating a new popup
-            if (!isOld) left = left + 10;
+            if (!isOld) {
+                left = left + 10;
+            }
 
             popup.find('.popupHeaderArrow').css({
                 'margin-left': '-10px'
             });
-            var header = popup.find('.popupHeader').css('width', '100%');
-            var content = popup.find('.popupContent').css({
-                'margin-left': '0',
-                'padding': '5px 20px 5px 20px'
-            });
+            var header = popup.find('.popupHeader').css('width', '100%'),
+                maxWidth = viewport.width() * 0.7,
+                maxHeight = viewport.height() * 0.7,
+                content = popup.find('.popupContent').css({
+                    'margin-left': '0',
+                    'padding': '5px 20px 5px 20px',
+                    'max-height': maxHeight - 40 + 'px'
+                });
 
             popup.find('.olPopupContent').css({
                 'width': '100%',
                 'height': '100%'
             });
 
-            var maxWidth = viewport.width() * 0.7;
-            var maxHeight = viewport.height() * 0.7;
             var wrapper = content.find('.contentWrapper');
             popup.css({
                 'height': 'auto',
                 'width': 'auto',
-                'min-width': '256px',
+                'min-width': '300px',
                 'max-width': maxWidth + 'px',
                 'min-height': '200px',
-                'max-height': maxHeight + 'px',
                 'left': left + 'px',
                 'z-index': '16000'
             });
+
             if (jQuery.browser.msie) {
                 // allow scrolls to appear in IE, but not in any other browser
                 // instead add some padding to the wrapper to make it look better
@@ -444,17 +456,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          * @param {OpenLayers.LonLat} lonlat where to show the popup
          */
         _panMapToShowPopup: function (lonlat) {
-            var pixels = this._map.getViewPortPxFromLonLat(lonlat);
-            var size = this._map.getCurrentSize();
-            var width = size.w;
-            var height = size.h;
+            var pixels = this._map.getViewPortPxFromLonLat(lonlat),
+                size = this._map.getCurrentSize(),
+                width = size.w,
+                height = size.h;
             // if infobox would be out of screen 
             // -> move map to make infobox visible on screen
-            var panx = 0;
-            var pany = 0;
-            var popup = jQuery('.olPopup');
-            var infoboxWidth = popup.width() + 50; //450;
-            var infoboxHeight = popup.height() + 90; //300; 
+            var panx = 0,
+                pany = 0,
+                popup = jQuery('.olPopup'),
+                infoboxWidth = popup.width() + 128, // add some safety margin here so the popup close button won't got under the zoombar...
+                infoboxHeight = popup.height() + 128; //300; 
             if (pixels.x + infoboxWidth > width) {
                 panx = width - (pixels.x + infoboxWidth);
             }
@@ -548,7 +560,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             // Remove possible old font classes.
             for (var j = 0; j < elements.length; j++) {
                 var el = elements[j];
-
+                // FIXME create function outside the loop
                 el.removeClass(function () {
                     var removeThese = '',
                         classNames = this.className.split(' ');

@@ -97,9 +97,9 @@ Oskari.registerLocalization({
                 "savePlace": "Tallennus onnistui"
             },
             "language": {
-                "changed": "Ruotsi valittu kieleksi."
+                "title": "Kielen vaihtaminen ruotsiksi",
+                "confirm": "Kielen vaihtuessa menetät keskeneräisen työsi."
             }
-
         },
         "validation": {
             "title": "Tiedoissa puutteita:",
