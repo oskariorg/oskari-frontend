@@ -314,6 +314,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 currentSelection = me.element.find('div.currentSelection'),
                 newSelection = me._sandbox.findMapLayerFromSelectedMapLayers(newSelectionId),
                 isBaseLayer = true;
+
+            if(newSelectionId === currentSelection.attr("data-layerId")) {
+                // user clicked already selected option, do nothing
+                return;
+            }
             // switch bg layer (no need to call update on ui, we should catch the event)
             // - check if current bottom layer exists & is in our list (if so, remove)
             if (currentBottom) {
