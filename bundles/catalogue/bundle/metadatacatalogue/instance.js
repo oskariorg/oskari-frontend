@@ -68,6 +68,7 @@ Oskari.clazz
                 dropdownOption: jQuery('<option></option>'),
                 checkboxRow: jQuery('<div class="metadataRow checkboxRow"><div class="rowLabel"></div class=""><div class="checkboxes"></div></div></div>'),
                 dropdownRow: jQuery('<div class="metadataRow dropdownRow"><div class="rowLabel"></div></div>'),
+                searchPanel: jQuery('<div class="main metadataSearching"></div>'),
                 resultPanel: jQuery('<div class="main metadataResults"></div>'),
                 resultHeader: jQuery('<div class="metadataResultHeader">'
                         + '<div class="panelHeader resultTitle"></div>'
@@ -277,9 +278,13 @@ Oskari.clazz
 
                 var metadataCatalogueContainer = this.templates.metadataTab.clone();
                 var optionPanel = this.templates.optionPanel.clone();
+                var searchPanel = this.templates.searchPanel.clone();
                 var resultPanel = this.templates.resultPanel.clone();
                 metadataCatalogueContainer.append(optionPanel);
+                metadataCatalogueContainer.append(searchPanel);
                 metadataCatalogueContainer.append(resultPanel);
+                searchPanel.hide();
+                searchPanel.append(me.getLocalization('searching'));
                 resultPanel.hide();
 
                 var metadataCatalogueDescription = metadataCatalogueContainer.find('div.metadataCatalogueDescription');
@@ -310,6 +315,7 @@ Oskari.clazz
 
                 var doMetadataCatalogue = function () {
                     metadataCatalogueContainer.find(".metadataOptions").hide();
+                    metadataCatalogueContainer.find(".metadataSearching").show();
                     var search = {search: field.getValue()};
                     // Collect the advanced search options
                     if (moreLessLink.html() === me.getLocalization('showLess')) {
@@ -519,8 +525,12 @@ Oskari.clazz
                 var me = this;
                 me.lastResult = data.results;
                 var resultPanel = metadataCatalogueContainer.find(".metadataResults");
+                var searchPanel = metadataCatalogueContainer.find(".metadataSearching");
                 var optionPanel = metadataCatalogueContainer.find(".metadataOptions");
 
+                // Hide other panels, if visible
+                searchPanel.hide();
+                optionPanel.hide();
                 // Create header
                 var resultHeader = me.templates.resultHeader.clone();
                 resultHeader.find(".resultTitle").text(me.getLocalization('metadataCatalogueResults')+me.lastSearch+":");
