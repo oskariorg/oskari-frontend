@@ -2,8 +2,9 @@ Oskari.registerLocalization({
     "lang": "en",
     "key": "Search",
     "value": {
-        "title": "Location Search",
+        "title": "Search",
         "desc": "",
+        "tabTitle": "Location Search",
         "contentErrorMsg": "Search term contains illegal characters.",
         "searchDescription": "Search by place name, address or real estate unit identifier.",
         "searchButton": "Search",

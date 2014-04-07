@@ -110,6 +110,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
         },
 
         /**
+         * @method getTabTitle
+         * @return {String} localized text for the tab title
+         */
+        getTabTitle: function () {
+            return this.instance.getLocalization('tabTitle');
+        },
+
+        /**
          * @method getDescription
          * @return {String} localized text for the description of the
          * flyout
@@ -460,7 +468,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 me.tabsContainer.insertTo(flyout);
                 var defaultPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
                 var searchContainer = jQuery("div.searchContainer");
-                defaultPanel.setTitle(me.getTitle());
+                defaultPanel.setTitle(me.getTabTitle());
                 defaultPanel.setContent(searchContainer);
                 defaultPanel.setPriority(me.instance.tabPriority);
                 me.tabsContainer.addPanel(defaultPanel);
