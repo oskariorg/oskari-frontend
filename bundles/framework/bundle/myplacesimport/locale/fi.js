@@ -45,7 +45,22 @@ Oskari.registerLocalization({
             "grid": {
                 "name": "Nimi",
                 "description": "Kuvaus",
-                "source": "Tietolähde"
+                "source": "Tietolähde",
+                "remove": " "
+            },
+            "confirmDeleteMsg": "Haluatko poistaa tason:",
+            "buttons": {
+                "ok": "OK",
+                "cancel": "Peruuta",
+                "delete": "Poista"
+            },
+            "notification": {
+                "deletedTitle": "Karttatason poisto",
+                "deletedMsg": "Karttataso poistettu."
+            },
+            "error": {
+                "title": "Virhe!",
+                "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin."
             }
         },
         "layer": {
