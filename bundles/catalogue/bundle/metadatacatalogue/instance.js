@@ -346,6 +346,8 @@ Oskari.clazz
                     me.searchService.doSearch(search,function(data) {
                         me._showResults(metadataCatalogueContainer,data);
                     }, function(data) {
+                        searchPanel.hide();
+                        optionPanel.show();
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                         var okBtn = dialog.createCloseButton('OK');
                         var title = me.getLocalization('metadatasearchservice_alert_title');
