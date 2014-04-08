@@ -90,10 +90,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
 
             // remove configured buttons and set tooltips
             for (var tool in this.buttons) {
-                if (this.conf.myplaces && this.conf.myplaces[tool] === false) {
-                    delete this.buttons[tool];
-                } else {
+                if (this.conf.myplaces && this.conf.myplaces[tool]) {
                     this.buttons[tool].tooltip = loc[tool].tooltip + guestPostfix;
+                } else {
+                    delete this.buttons[tool];
                 }
             }
         },
