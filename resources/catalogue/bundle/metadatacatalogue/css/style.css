@@ -39,14 +39,23 @@ div.metadataOptions div.rowLabel {
   white-space: nowrap; }
 
 div.metadataResultHeader {
+  display: table;
   width: 100%;
   height: 35px; }
 
-div.metadataResultHeader div.resultTitle {
-  float: left; }
+div.metadataResultHeader div.resultHeaderContainer {
+    display: table-row;
+}
 
-div.metadataResultHeader div.modify {
-  float: right; }
+div.metadataResultHeader div.resultTitle {
+    float: left;
+    text-align: left;
+}
+
+div.metadataResultHeader div.resultLinks {
+    float: right;
+    text-align: right;
+}
 
 div.metadataResultHeader div.panelHeader {
   margin-top: 10px;
@@ -89,11 +98,26 @@ div.metadataCatalogueContainer tr.resultRow {
 div.metadataCatalogueContainer tr.spacerRow {
   height: 7px; }
 
+div.metadataCatalogueContainer td {
+    border: none;
+}
+
 div.metadataCatalogueContainer td.spacer {
   padding: 0; }
 
 div.metadataCatalogueContainer table.metadataSearchResult {
-  float: left; }
+  float: left;
+}
 
 div.metadataCatalogueContainer ul.layerList {
   padding-left: 35px; }
+
+div.metadataCatalogueContainer a.showLink {
+    display: inline-block;
+    margin-left: 15px;
+}
+
+div.metadataCatalogueContainer a.modifyLink {
+    display: inline-block;
+    margin-left: 15px;
+}

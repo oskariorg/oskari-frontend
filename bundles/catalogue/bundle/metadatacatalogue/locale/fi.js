@@ -33,6 +33,7 @@ Oskari.registerLocalization({
         "ResourceLanguage": "Resurssin kieli",
         //"searchResults" : "Hakutulokset",
         "modifySearch" : "Muokkaa hakua",
+        "showSearch" : "Näytä kaikki hakutulokset",
         "metadataCatalogueResultCount": "Hakusi palautti ",
         "metadataCatalogueResultCount2": " tulosta",
         "metadataCatalogueResultDescriptionMoreResults": "Tarkentamalla hakua voit tiivistää tulosten joukkoa.",
@@ -52,7 +53,7 @@ Oskari.registerLocalization({
         },
         // "mapLayer": "Karttataso",
         "show": "Näytä",
-        "hide": "Piilota"
-
+        "hide": "Piilota",
+        "searching": "Haku käynnissä."
     }
 });

@@ -228,7 +228,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
         _validateForm: function (values) {
             var errors = [];
             var categoryHandler = this.instance.getCategoryHandler();
-            errors = categoryHandler.validateCategoryFormValues(values.category);
+            if(categoryHandler && categoryHandler.validateCategoryFormValues) {
+                errors = categoryHandler.validateCategoryFormValues(values.category);
+            }
 
             var loc = this.instance.getLocalization('validation');
             if (!values.place.name) {
