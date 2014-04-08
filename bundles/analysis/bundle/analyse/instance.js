@@ -312,7 +312,6 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                 tools = jQuery('#maptools');
 
             if (blnEnabled) {
-
                 // Hide flyout, it's not needed...
                 jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().hide();
                 /* Why would we close analyse here?

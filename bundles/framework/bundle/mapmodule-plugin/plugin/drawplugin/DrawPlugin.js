@@ -35,8 +35,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
     },
     setMapModule: function (mapModule) {
         this.mapModule = mapModule;
-        this._map = mapModule.getMap();
-        this.pluginName = mapModule.getName() + this.__name;
+
+        if (mapModule) {
+            this._map = mapModule.getMap();
+            this.pluginName = mapModule.getName() + this.__name;
+        } else {
+            this._map = null;
+            this.pluginName = null;
+        }
     },
     /**
      * Enables the draw control for given params.drawMode.
@@ -394,13 +400,20 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
 
     },
     stopPlugin: function (sandbox) {
+        this.toggleControl();
+
+        if (this.drawLayer) {
+            //this._map.removeLayer(this.drawLayer);
+            //this.drawLayer.destroyFeatures();
+            this.drawLayer.destroy();
+            this.drawLayer = undefined;
+        }
 
         sandbox.removeRequestHandler('DrawPlugin.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
         sandbox.removeRequestHandler('DrawPlugin.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
         sandbox.removeRequestHandler('DrawPlugin.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
         sandbox.unregister(this);
 
-        this._map = null;
         this._sandbox = null;
     },
     /* @method start

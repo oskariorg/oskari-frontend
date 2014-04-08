@@ -8,16 +8,19 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             line: [],
             area: []
         };
-        this.featureLayer = this._createFeatureLayer();;
         this.panel        = this._createPanel();
         this.drawPluginId = this.instance.getName();
         this.drawPlugin   = this._createDrawPlugin();
+        this.featureLayer = undefined;
+        this.isStarted    = false;
 
         this.start();
     }, {
         _templates: {
             'layersContainer': '<div class="layers"></div>',
-            'toolContainer': '<div class="toolContainer"></div>',
+            'toolContainer': '<div class="toolContainer">' +
+                    '<h4 class="title"></h4>' +
+                '</div>',
             'tool': '<div class="tool"></div>',
             'buttons': '<div class="buttons"></div>'
         },
@@ -51,6 +54,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             }
         },
         start: function() {
+            // Already started so nothing to do here
+            if (this.isStarted) return;
+
             var sandbox = this.instance.getSandbox(),
                 mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
                 p;
@@ -61,10 +67,18 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 }
             }
 
+            this._toggleDrawPlugins(false);
+            this.featureLayer = this._createFeatureLayer();
+
             mapModule.registerPlugin(this.drawPlugin);
             mapModule.startPlugin(this.drawPlugin);
+
+            this.isStarted = true;
         },
         stop: function() {
+            // Already stopped so nothing to do here
+            if (!this.isStarted) return;
+
             var sandbox = this.instance.getSandbox(),
                 mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
                 p;
@@ -75,17 +89,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 }
             }
 
-            mapModule.unregisterPlugin(this.drawPlugin);
             mapModule.stopPlugin(this.drawPlugin);
+            mapModule.unregisterPlugin(this.drawPlugin);
 
             this._destroyFeatureLayer();
-            this.drawPluginId = undefined;
-            this.drawPlugin = undefined;
-            this.panel = undefined;
-            this.features = undefined;
-            this.loc = undefined;
-            this.instance = undefined;
-            this.view = undefined;
+            this._toggleDrawPlugins(true);
+
+            this.isStarted = false;
         },
         /**
          * Creates the content layer selection panel for analyse
@@ -141,6 +151,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 toolContainer = jQuery(this._templates.toolContainer).clone(),
                 toolTemplate = jQuery(this._templates.tool),
                 tools = ['point', 'line', 'area'];
+
+            toolContainer.find('h4.title').html('Lisää kohde');
 
             return _.foldl(tools, function(container, tool) {
                 var toolDiv = toolTemplate.clone();
@@ -288,7 +300,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             }
         },
         removeGeometry: function(id, mode) {
-            var arr = this.features[mode],
+            var arr = this.features[mode] || [],
                 i,
                 arrLen,
                 feature;
@@ -342,5 +354,19 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 this.featureLayer.destroy();
                 this.featureLayer = undefined;
             }
+        },
+        _toggleDrawPlugins: function(enabled) {
+            var me = this,
+                sandbox = this.instance.getSandbox(),
+                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
+                drawPlugins = _.filter(mapModule.getPluginInstances(), function(plugin) {
+                    return (plugin.getName().match(/DrawPlugin$/) &&
+                            plugin.getName() !== me.drawPlugin.getName());
+                });
+
+            _.each(drawPlugins, function(plugin) {
+                if (enabled) mapModule.startPlugin(plugin);
+                else mapModule.stopPlugin(plugin);
+            });
         }
 });

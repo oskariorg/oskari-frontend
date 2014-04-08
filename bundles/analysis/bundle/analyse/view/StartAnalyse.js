@@ -1785,8 +1785,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         show: function () {
             this.mainPanel.show();
         },
-        setEnabled: function (e) {
-            this.isEnabled = e;
+        setEnabled: function (enabled) {
+            this.isEnabled = enabled;
+
+            if (enabled) {
+                this.contentPanel.start();
+            } else {
+                this.contentPanel.stop();
+            }
         },
         getEnabled: function () {
             return this.isEnabled;
