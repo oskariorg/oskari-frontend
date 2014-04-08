@@ -158,3 +158,15 @@ div.basic_analyse div.toolContainer div.tool {
   display: inline-block;
   cursor: pointer;
 }
+div.basic_analyse div.toolContainer div.tool.active {
+  background-color: #aaa;
+}
+
+div.basic_analyse div.icon-close.analyse-temp-feature {
+  display: inline-block;
+}
+
+div.basic_analyse div.toolContainer div.buttons {
+  display: inline-block;
+  float: right;
+}

@@ -94,6 +94,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         __templates: {
             "content": '<div class="layer_data"></div>',
             "icons_layer": '<table class=layer-icons> <tr> <td><div class="layer-icon layer-wfs" title="Tietotuote"></div></td><td><div class="layer-info icon-info"></div></td><td><div class="filter icon-funnel"></div></td></tr></table>',
+            "icons_temp_layer": '<div class="icon-close"></div>',
             "tool": '<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>',
             "buttons": '<div class="buttons"></div>',
             "help": '<div class="help icon-info"></div>',
@@ -144,8 +145,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             var contentPanel = Oskari.clazz.create(
                 'Oskari.analysis.bundle.analyse.view.ContentPanel', this);
-            this.contentPanel = contentPanel.getPanelContainer();
-            this._addAnalyseData(this.contentPanel);
+            this.contentPanel = contentPanel;
+            this._addAnalyseData(contentPanel);
 
             var methodPanel = this._createMethodPanel();
 
@@ -577,10 +578,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * Add analyse data layer to selection box
          * @param {jQuery} contentPanel  content panel for data layer selections
          */
-        _addAnalyseData: function (contentPanel_in) {
+        _addAnalyseData: function (contentPanel) {
             var me = this,
-                contentPanel = contentPanel_in.find('.help:first'),
-                layers = this.instance.getSandbox().findAllSelectedMapLayers();
+                layersContainer = contentPanel.getLayersContainer(),
+                layers = this.instance.getSandbox().findAllSelectedMapLayers(),
+                features = contentPanel.getFeatures();
             // Add property types for WFS layer, if not there
             this._addPropertyTypes(layers);
             var options = [],
@@ -591,7 +593,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 f,
                 dat,
                 opt,
-                icons;
+                icons,
+                type,
+                fLen,
+                removeTemp;
             // request updates for map tiles
             for (i = 0; i < layers.length; i++) {
                 if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS') || layers[i].isLayerOfType('MYPLACES')) {
@@ -642,9 +647,43 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 me._filterRequest(icons, dat.id);
 
                 opt.append(icons);
-                contentPanel.after(opt);
-
+                layersContainer.append(opt);
             }
+
+            // Drawn temp features
+            for (type in features) {
+                if (features.hasOwnProperty(type)) {
+                    for (i = 0, fLen = features[type].length; i < fLen; ++i) {
+                        dat = features[type][i];
+                        opt = me.template.option.clone();
+
+                        opt.find('input').attr({
+                            'id': dat.id,
+                            'checked': dat.checked
+                        }).change(function (e) {
+                            me._refreshFields();
+                        });
+                        opt.find('label').html(type + ' ' + (i+1)).attr({
+                            'for': dat.id,
+                            'class': 'params_checklabel'
+                        });
+
+                        removeTemp = function(id, type) {
+                            return function() {
+                                contentPanel.removeGeometry(id, type);
+                            };
+                        };
+
+                        icons = me.template.icons_temp_layer.clone();
+                        icons.addClass('analyse-temp-feature');
+                        icons.click(removeTemp(dat.id, type));
+                        opt.append(icons);
+
+                        layersContainer.append(opt);
+                    }
+                }
+            }
+
             // Analyse name
             me._modifyAnalyseName();
             var clickMagic = function () {
@@ -655,7 +694,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             };
 
             // layer changed cb
-            me.contentPanel.find('input').click(clickMagic());
+            layersContainer
+                .find('input[name="selectedlayer"]')
+                .click(clickMagic());
 
             me._refreshFields();
         },
@@ -1277,11 +1318,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          *
          */
         refreshAnalyseData: function () {
-            var me = this;
-            var contentPanel = me.mainPanel;
             // Remove old
-            contentPanel.find('.analyse_option_cont').remove();
-            me._addAnalyseData(contentPanel);
+            this.contentPanel.emptyLayers();
+            this._addAnalyseData(this.contentPanel);
 
         },
         /**

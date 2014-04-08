@@ -100,6 +100,23 @@ div.basic_analyse {
         margin: 5px;
     }
 
+    div.icon-close.analyse-temp-feature {
+        display: inline-block;
+    }
+
+    div.toolContainer {
+        div.tool {
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        div.buttons {
+            display: inline-block;
+            float: right;
+        }
+    }
+
+
 }
 
 div.basic_analyse div.form div.field input, div.field select {
@@ -259,9 +276,4 @@ div.analyse-filter-popup-content div.filter-option {
         width: 60px;
     }
 
-}
-
-div.basic_analyse div.toolContainer div.tool {
-  display: inline-block;
-  cursor: pointer;
 }
