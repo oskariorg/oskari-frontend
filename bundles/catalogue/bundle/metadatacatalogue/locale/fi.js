@@ -53,7 +53,7 @@ Oskari.registerLocalization({
         },
         // "mapLayer": "Karttataso",
         "show": "Näytä",
-        "hide": "Piilota"
-
+        "hide": "Piilota",
+        "searching": "Haku käynnissä."
     }
 });
