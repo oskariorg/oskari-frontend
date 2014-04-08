@@ -233,9 +233,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
         };
 
         if (this.graphicFill !== null && this.graphicFill !== undefined) {
-            var str = this.graphicFill;
-            var format = new OpenLayers.Format.SLD();
-            var obj = format.read(str),
+            var str = this.graphicFill,
+                format = new OpenLayers.Format.SLD(),
+                obj = format.read(str),
                 p;
             if (obj && obj.namedLayers) {
                 for (p in obj.namedLayers) {
@@ -290,12 +290,18 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
             (featClass === "OpenLayers.Geometry.MultiPolygon")) {
             return this.drawLayer.features[0].geometry;
         }
-
-        var drawing = null;
-        var components = [],
-            i;
+        var drawing = null,
+            components = [],
+            i,
+            geom;
         for (i = 0; i < this.drawLayer.features.length; i++) {
-            components.push(this.drawLayer.features[i].geometry);
+            geom = this.drawLayer.features[i].geometry;
+            // Remove unfinished polygons
+            if (geom.CLASS_NAME === 'OpenLayers.Geometry.Polygon' && geom.components.length && geom.components[0].CLASS_NAME === 'OpenLayers.Geometry.LinearRing' && geom.components[0].components.length < 4) {
+                // Unfinished poly, ignore.
+            } else {
+                components.push(geom);
+            }
         }
         switch (featClass) {
         case "OpenLayers.Geometry.Point":
@@ -350,7 +356,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
 
     _sendActiveGeometry: function (geometry, drawMode) {
         var eventBuilder = this._sandbox.getEventBuilder('DrawPlugin.ActiveDrawingEvent'),
-            event, featClass;
+            event,
+            featClass;
 
         if (drawMode === null || drawMode === undefined) {
             featClass = geometry.CLASS_NAME;
