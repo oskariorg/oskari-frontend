@@ -195,7 +195,7 @@ module.exports = function (grunt) {
           'mapstats': '../packages/framework/bundle/mapstats',
           'mapwfs': '../packages/framework/bundle/mapwfs',
           'mapwfs2': '../packages/framework/bundle/mapwfs2',
-          'mapwmts': '../packages/framework/bundle/mapwmts',
+// Manual replaced by src/framework/mapwmts          'mapwmts': '../packages/framework/bundle/mapwmts',
           'metadata': '../packages/framework/bundle/metadata',
           'myplaces2': '../packages/framework/bundle/myplaces2',
 // Manual modification          'oskariui': '../packages/framework/bundle/oskariui',
