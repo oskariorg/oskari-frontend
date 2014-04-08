@@ -2,11 +2,13 @@ Oskari.registerLocalization({
   "lang": "sv",
   "key": "Search",
   "value": {
-    "title": "Ortnamnssökning",
+    "title": "Sökning",
     "desc": "",
+    "tabTitle": "Ortnamnssökning",
     "contentErrorMsg": "Sökterm innehåller otillåtna tecken.",
     "searchDescription": "Sök ortnamn, adress eller fastighetsbeteckning.",
     "searchButton": "Sök",
+    "searchAssistance": " ",
     "searchResultCount": "Sökningen gav ",
     "searchResultCount2": " resultat.",
     "searchResultDescriptionMoreResults": "Precisera sökningen för mera kompakta resultat.",
@@ -24,8 +26,8 @@ Oskari.registerLocalization({
       "type": "Typ"
     },
     "resultBox" : {
-    	"close" : "Stäng",
-    	"title" : "Sökresultat"
+      "close" : "Stäng",
+      "title" : "Sökresultat"
     }
   }
 });

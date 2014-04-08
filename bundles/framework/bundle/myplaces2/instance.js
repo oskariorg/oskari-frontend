@@ -177,13 +177,16 @@ function() {
         this.categoryHandler.start();        
 
         var defaults = this._getCategoryDefaults();
-        
-        var actionUrl = this.conf.queryUrl; 
+        var actionUrl = this.conf.queryUrl;
+        // Set max features to configured.
+        var maxFeatures = (conf ? conf.maxFeatures : undefined);
         //'/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&myplaces=WFS';
         // this.conf.queryUrl; 
         // back end communication
         this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService', 
-            actionUrl, user.getUuid(), sandbox, defaults, this);
+            actionUrl, user.getUuid(), sandbox, defaults, this, {
+                maxFeatures: maxFeatures
+            });
         // register service so personal data can access it
         this.sandbox.registerService(this.myPlacesService);
         // init loads the places/categories
@@ -196,6 +199,7 @@ function() {
         this.editRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler', sandbox, me);
         this.openAddLayerDialogHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDialogHandler', sandbox, me);
         sandbox.addRequestHandler('MyPlaces.EditPlaceRequest', this.editRequestHandler);
+        sandbox.addRequestHandler('MyPlaces.DeletePlaceRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.EditCategoryRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.DeleteCategoryRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.PublishCategoryRequest', this.editRequestHandler);
@@ -343,7 +347,6 @@ function() {
         }
         return parts.join('');
     }
-
 }, {
     /**
      * @property {String[]} protocol

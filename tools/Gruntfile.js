@@ -64,6 +64,11 @@ module.exports = function (grunt) {
                 concat: true
             }
         },
+        release: {
+            options: {
+                configs: "../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/full-map_guest/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map/minifierAppSetup.json,../applications/parcel/minifierAppSetup.json"
+            }
+        },
         karma: {
             options: {
                 configFile: 'karma.conf.js'
@@ -97,7 +102,7 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     paths: ['../sources/framework', '../bundles/framework', '../bundles/sample', '../bundles/catalogue'],
-                    outdir: '../dist/<%= version %>api/',
+                    outdir: '../oskari.org/api/<%= version %>',
                     themedir: '../docs/yui/theme'
                 }
             }
@@ -121,10 +126,20 @@ module.exports = function (grunt) {
                 src: ['../{bundles,packages}/**/*.js']
             }
         },
+        impL10nExcels: {
+            target: {
+            }
+        },
+        genL10nExcels: {
+            target: {
+                expand: true,
+                src: ['../bundles/**/bundle/*/']
+            }
+        },
         compress: {
             zip: {
                 options: {
-                    archive: "../oskari.<%= versionNum %>.zip",
+                    archive: "../oskari.org/archives/oskari.<%= versionNum %>.zip",
                     mode: 'zip',
                     pretty: true
                 },
@@ -155,7 +170,7 @@ module.exports = function (grunt) {
             },
             tgz: {
                 options: {
-                    archive: "../oskari.<%= versionNum %>.tgz",
+                    archive: "../oskari.org/archives/oskari.<%= versionNum %>.tgz",
                     mode: 'tgz',
                     pretty: true
                 },
@@ -490,11 +505,14 @@ module.exports = function (grunt) {
             cwd,
             appName,
             dest,
-            options,
+            options = this.options(),
             files,
             copyFiles,
             appNameSeparatorIndex,
             parentAppName;
+        if (options.configs && !configs) {
+            configs = options.configs;
+        }
         if (!version || !configs) {
             grunt.fail.fatal('Missing parameter\nUsage: grunt release:1.7:"../path/to/minifierAppSetup.json"', 1);
         }
@@ -584,7 +602,6 @@ module.exports = function (grunt) {
         grunt.task.run('compileAppCSS');
         grunt.task.run('sprite');
         grunt.task.run('oskaridoc');
-        grunt.task.run('mddocs');
         if (grunt.config.get('compress.options.fullMap')) grunt.task.run('compress');
     });
 

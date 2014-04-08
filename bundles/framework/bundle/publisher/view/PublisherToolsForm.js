@@ -23,6 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
         //user's own layers (not id's)
         this.myplaces = [];
+        // Why do we have a separate state object for the drawing tools...
         this.selectedDrawingLayer = {
             'layer': null,
             'myplaces' : {
@@ -288,7 +289,61 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 toolContainer.find('input').attr('id', 'tool-' + pluginKey).change(closureMagic(tool));
             }
 
+            // Feature data
+            var mapLayerService = this._sandbox.getService('Oskari.mapframework.service.MapLayerService');
+
+            // Check if selected layers include wfs layers
+            var wfs = false;
+            var layers = this._sandbox.findAllSelectedMapLayers();
+            for (var j = 0; j < layers.length; ++j) {
+                if (layers[j].hasFeatureData()) {
+                    wfs = true;
+                    break;
+                }
+            }
+            if (wfs) {
+                var featureData = this._sandbox.findRegisteredModuleInstance("FeatureData2");
+                if (typeof featureData !== "undefined") {
+                    var featureDataSelected = false;
+                    if (data && data.state && data.state.featuredata2) {
+                        featureDataSelected = true;
+                    }
+                    var featuredataBundle =  {
+                        "id": "Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin",
+                        "selected": featureDataSelected,
+                        "config": {
+                            "instance": featureData
+                        }
+                    };
+                    this.featuredataBundle = featuredataBundle;
+                    toolContainer = jQuery(this.templates.tool).clone();
+                    pluginKey = featuredataBundle.id;
+                    me._toolIndices[pluginKey] = i;
+                    pluginKey = pluginKey.substring(pluginKey.lastIndexOf('.') + 1);
+                    toolname = this.loc.tools[pluginKey];
+                    toolContainer.find('label').attr('for', 'tool-' + pluginKey).append(toolname);
+                    if (featuredataBundle.selected) {
+                        toolContainer.find('input').attr('checked', 'checked');
+                    }
+                    featuredataBundle.publisherPluginContainer = toolContainer;
+                    contentPanel.append(toolContainer);
+
+                    if (data) {
+                        var classes = this._publisher._getInitialPluginLocation(data, featuredataBundle.id);
+                        if (classes) {
+                            featuredataBundle.config.location.classes = classes;
+                        }
+                    }
+                    toolContainer
+                        .find('input').attr('id', 'tool-' + pluginKey)
+                        .change(closureMagic(featuredataBundle));
+                }
+            }
             return panel;
+        },
+
+        getFeatureDataPlugin: function() {
+            return this.featuredataBundle;
         },
 
         getToolById: function(id) {
@@ -339,12 +394,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
                     var alreadySelected = false;
                     for (i = 0; i < selectedLayers.length; i++) {
-                        if (selectedLayers[i].getId() === me.selectedDrawingLayer.layer.getId()) {
+                        if (selectedLayers[i].getId() === me.selectedDrawingLayer.layer) {
                             alreadySelected = true;
                         }
                     }
                     if (!alreadySelected) {
-                        me._sandbox.postRequestByName('AddMapLayerRequest', [me.selectedDrawingLayer.layer.getId(), false, me.selectedDrawingLayer.layer.isBaseLayer()]);
+                        me._sandbox.postRequestByName('AddMapLayerRequest', [me.selectedDrawingLayer.layer, false]);
                     }
                     selections.publishedmyplaces2 = me.selectedDrawingLayer;
                 }
@@ -397,6 +452,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             var me = this,
                 sandbox = me._sandbox;
 
+            if (!tool) return;
+
             if (!tool.plugin && enabled) {
                 var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
                 tool.plugin = Oskari.clazz.create(tool.id, tool.config);
@@ -430,6 +487,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         sandbox.request(requester, reqBuilder(toolName, groupName, toolOption.toolbarid));
                         if (me[configName][groupName]) {
                             me[configName][groupName][toolName] = false;
+                        }
+                        if (me.toolbarConfig[groupName] === null || me.toolbarConfig[groupName] === undefined) {
+                            me.toolbarConfig[groupName] = {};
                         }
                         me.toolbarConfig[groupName][toolName] = false;
                     }
@@ -485,6 +545,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                                                 me[configName][buttonGroup.name] = {};
                                             }
                                             me[configName][buttonGroup.name][toolName] = true;
+                                            // AH-1241 tool selections were lost when a published map was edited
+                                            buttonGroup.buttons[toolName].selected = true;
                                         }
                                     }
                                 }
@@ -567,6 +629,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
                         // trigger click & change to send events
                         if (me._hasSelectedDrawTool()) {
+                            // This is just plain ugly...
+                            toolElement.attr('checked', 'checked');
                             toolElement
                                 .trigger('click')
                                 .trigger('change');
@@ -602,7 +666,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         //remove dom elements
                         toolOptionCheckboxes.remove();
                         optionContainer.remove();
-                    }
+                    };
                     _removeOptions('.tool-options', me._toggleToolOption);
                     _removeOptions('.tool-option-setting', me._toggleToolOption);
 
@@ -617,6 +681,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 checkbox = jQuery(event.target),
                 isChecked = checkbox.is(':checked'),
                 mylayers = me.myplaces;
+
             if (isChecked) {
                 var layerSelect = jQuery(me.templates.layerSelect).clone(),
                     layerSelectOption,
@@ -627,24 +692,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     layerSelectOption.attr('value', mylayers[i].getId()).append(mylayers[i].getName());
                     // select correct layer
                     if (me.selectedDrawingLayer.layer !== null && me.selectedDrawingLayer.layer !== undefined &&
-                        mylayers[i].getId() === me.selectedDrawingLayer.layer.getId()) {
+                        mylayers[i].getId() === me.selectedDrawingLayer.layer) {
                         layerSelectOption.prop('selected', true);
                     }
                     layerSelect.append(layerSelectOption);
                 }
                 // select default
                 if (me.selectedDrawingLayer.layer === null || me.selectedDrawingLayer.layer === undefined) {
-                    me.selectedDrawingLayer.layer = mylayers[0];
+                    me.selectedDrawingLayer.layer = mylayers[0].getId();
                 }
                 layerSelect.change(function(e) {
                     var target = jQuery(e.target),
                         value = target.val(),
                         i;
-                    for (i = 0; i < mylayers.length; i++) {
-                        if (mylayers[i].getId() === value) {
-                            me.selectedDrawingLayer.layer = mylayers[i];
-                        }
-                    }
+                    me.selectedDrawingLayer.layer = value;
                 });
 
                 var optionSettings = jQuery(me.templates.toolOptionSettings).clone(),
@@ -686,7 +747,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
                         // trigger click & change to send events
                         if (me.selectedDrawingLayer[buttonGroup.name] && me.selectedDrawingLayer[buttonGroup.name][toolName]) {
-                            toolElement
+                            toolElement.attr('checked', 'checked')
                                 .trigger('click')
                                 .trigger('change');
                             toolElement = null; // ensure we release the dom element
@@ -731,6 +792,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 if (buttons[tool] === true) {
                     return true;
                 }
+            }
+            return false;
+        },
+
+        activateFeatureDataPlugin: function(activate) {
+            if (this.hasFeatureDataBundle()) {
+                var featureData = this.getFeatureDataPlugin();
+
+                this.activatePreviewPlugin(featureData, activate);
+
+                if (!activate && featureData.plugin) {
+                    featureData.plugin = undefined;
+                    delete featureData.plugin;
+                }
+            }
+        },
+
+        hasFeatureDataBundle: function() {
+            if (this.featuredataBundle) {
+                return this.featuredataBundle.selected;
             }
             return false;
         }

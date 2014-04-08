@@ -178,7 +178,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
                 el = me._elements.display = me.__templates.latlondiv.clone();
             }
 
-            var crs = me._map.getProjection(),
+            var crs = me.getMapModule().getProjection(),
                 crsText = me._locale.crs[crs];
 
             el.find('.cbCrsLabel').html(crsText);

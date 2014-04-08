@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
         me.isDataVisible = false;
 
         me.templateHelp = jQuery('<div class="help icon-info"></div>');
-        me.templateTool = jQuery('<div class="tool"><input type="checkbox"/><label></label></div>');
+        me.templateTool = jQuery('<div class="tool"><label><input type="checkbox"/></label></div>');
         me.templateList = jQuery('<ul class="selectedLayersList sortable" ' + 'data-sortable=\'{' + 'itemCss: "li.layer.selected", ' + 'handleCss: "div.layer-title" ' + '}\'></ul>');
         //me.templateLayer    = jQuery('<li class="tool"><input type="checkbox"/><label></label></li>');
         me.templateLayer = jQuery('<li class="layer selected">' + '<div class="layer-info">' + '<div class="layer-tool-remove icon-close"></div>' + '<div class="layer-title"><h4></h4></div>' + '</div>' + '<div class="layer-tools volatile">' + '</div>' + '</li>');
@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 '<div class="layout-slider" id="layout-slider">' + '</div> ' +
                 '<div class="opacity-slider" style="display:inline-block">' +
                 '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' +
-                '</div> <br/><input class="baselayer" type="checkbox"/><label>' + layerLoc.selectAsBaselayer + '</label>' + '</div>' +
+                '</div> <br/><label><input class="baselayer" type="checkbox"/>' + layerLoc.selectAsBaselayer + '</label>' + '</div>' +
                 '<div class="right-tools">' + '<div class="layer-rights"></div>' +
                 '<div class="object-data"></div>' + '<div class="layer-description">' + '</div></div>');
         me.templateLayerFooterHidden = jQuery('<p class="layer-msg">' + '<a href="JavaScript:void(0);">' + layerLoc.show + '</a> ' + layerLoc.hidden + '</p>');
@@ -301,6 +301,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 if (shouldPreselectLayer(layer.getId())) {
                     input.attr('checked', 'checked');
                     layer.selected = true;
+                    // Make sure the layer is added before making it a base layer
+                    this.plugin.addLayer(layer);
                     this.plugin.addBaseLayer(layer);
                 }
 
@@ -468,6 +470,55 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 layerDiv = jQuery(this.container).find(lyrSel),
                 opa = layerDiv.find('div.layer-opacity input.opacity');
             opa.attr('value', layer.getOpacity());
+        },
+        handleLayerOrderChanged: function (layer, fromPosition, toPosition) {
+            if (!layer) {
+                return;
+            }
+            if (isNaN(fromPosition)) {
+                return;
+            }
+            if (isNaN(toPosition)) {
+                return;
+            }
+
+            if (fromPosition === toPosition) {
+                // Layer wasn't actually moved, ignore
+                return;
+            }
+
+            // Layer order is inverted in the DOM.
+            // Also note that from- and toPosition are 0-based, where nth-child
+            // based, so we just subtract position from layer count
+            var me = this,
+                layerContainer = jQuery(me.container).find('> ul'),
+                layerCount = layerContainer.find('> li').length,
+                fromIndex = layerCount - fromPosition, // Order is inverted
+                toIndex = layerCount - toPosition,
+                el = layerContainer.find('> li:nth-child(' + fromIndex + ')' ).detach();
+
+            if (layerCount === 0) {
+                // No layers to move, ignore
+                return;
+            }
+
+            if (toIndex > layerCount) {
+                // invalid toIndex, ignore
+                return;
+            }
+
+            if (toIndex === 1) {
+                // First element, just add to the beginning
+                layerContainer.prepend(el);
+            } else if (toIndex === layerCount) {
+                // Last element, just add to the end
+                layerContainer.append(el);
+            } else {
+                // Somewhere in the middle, add before index
+                // This would fail on toIndex === layerCount as we've removed one element,
+                // but that case is handled above
+                layerContainer.find('> li:nth-child(' + toIndex + ')' ).before(el);
+            }
         },
         /**
          * @method handleLayerVisibilityChanged

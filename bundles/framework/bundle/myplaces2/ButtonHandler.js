@@ -211,6 +211,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
          * implements Module protocol update method
          */
         _showDrawHelper: function (drawMode) {
+            if (this.dialog) {
+                this.dialog.close(true);
+                this.dialog = null;
+            }
             var me = this,
                 locTool = this.instance.getLocalization('tools')[drawMode];
 
@@ -227,6 +231,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                 var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
                 me.instance.sandbox.request(me, toolbarRequest);
                 me.sendStopDrawRequest(true);
+                dialog.close(true);
+                me.dialog = null;
             });
             buttons.push(cancelBtn);
 
@@ -273,9 +279,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             var me = this,
                 request = this.instance.sandbox.getRequestBuilder('DrawPlugin.StopDrawingRequest')(isCancel);
             this.instance.sandbox.request(this, request);
-            if (this.dialog) {
-                this.dialog.close();
-            }
         },
         /**
          * @method update
@@ -359,7 +362,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             'DrawPlugin.AddedFeatureEvent': function (event) {
                 var drawingMode = event.getDrawingMode();
                 if (drawingMode !== undefined) {
-                    if (drawingMode !== null) {/*
+                    if (drawingMode !== null) {
+                        /*
                         if (this.instance.sandbox.getUser().isLoggedIn()) {
                             if (drawingMode === 'line') {
                                 drawingMode = "measureline";

@@ -51,6 +51,7 @@ Oskari.registerLocalization({
                 "Portti2Zoombar": "Mittakaavasäädin",
                 "ControlsPlugin": "Kartan liikuttaminen",
                 "SearchPlugin": "Osoite- ja paikannimihaku",
+                "FeaturedataPlugin": "Kohdetiedot",
                 "GetInfoPlugin": "Kohdetietojen kyselytyökalu",
                 "PublisherToolbarPlugin": "Karttatyökalut",
                 "selectDrawLayer" : "Valitse piirtotaso"
@@ -63,7 +64,7 @@ Oskari.registerLocalization({
                 "drawTools" : "Piirtotyökalut",
                 "point" : "Salli pisteet",
                 "line" : "Salli viivat",
-                "area" : "Salli alueet",
+                "area" : "Salli alueet"
             },
             "toollayout": {
                 "label": "Työkalujen asettelu",

@@ -47,8 +47,8 @@ Oskari.registerLocalization({
         "column_type": "Typ"
       },
       "GetInfoPlugin": {
-        "title": "Map layers",
-        "layer": "Layer",
+        "title": "NOT TRANSLATED",
+        "layer": "NOT TRANSLATED",
         "places": "Místa",
         "description": "Popis",
         "link": "URL-adresa",

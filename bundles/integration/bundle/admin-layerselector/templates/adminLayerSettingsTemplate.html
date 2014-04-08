@@ -248,6 +248,35 @@
         </div>
     </div>
 
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label class="add-class-label" title="<%= instance.getLocalization('admin').realtime %>" ><%= instance.getLocalization('admin').realtime %>
+            </label>
+        </div>
+        <div class="add-class-input-area">
+            <div class="input-controls">
+                <label for="add-layer-realtime"><%= instance.getLocalization('admin').realtime %></label>
+                <input
+                    type="checkbox"
+                    id="add-layer-realtime"
+                    class="add-class-input"
+                    placeholder="placeholder"
+                    <% if (model.isRealtime()) { %>checked<% } %>
+                />
+            </div>
+            <div class="input-controls">
+                <label for="add-layer-refreshrate"></label>
+                <input
+                    type="text"
+                    id="add-layer-refreshrate"
+                    class="add-layer-input long"
+                    placeholder="<%= instance.getLocalization('admin').refreshRate %>"
+                    <% if (model.getRefreshRate()) { %>value="<%= model.getRefreshRate() %>"<% } %>
+                />
+            </div>
+        </div>
+    </div>
+
     <% if(!model.getId() && !isSubLayer) { %>
     <!-- roles - only for new layers (not sublayers) -->
     <div class="add-class-record">

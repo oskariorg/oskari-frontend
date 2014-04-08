@@ -272,6 +272,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (newLayerConf.inspire) {
                 layer.setInspireName(newLayerConf.inspire);
             }
+            if (newLayerConf.realtime) {
+                layer.setRealtime(newLayerConf.realtime);
+            }
+            if (newLayerConf.refreshRate) {
+                layer.setRefreshRate(newLayerConf.refreshRate);
+            }
 
             // wms specific
             // TODO: we need to figure this out some other way
@@ -370,6 +376,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             for (i = 0; i < allLayers.length; i++) {
 
                 mapLayer = this.createMapLayer(allLayers[i]);
+                if (!mapLayer) {
+                    // unsupported map type, skip
+                    // continue with next layer
+                    continue;
+                }
 
                 if (this._reservedLayerIds[mapLayer.getId()] !== true) {
                     this.addLayer(mapLayer, true);
@@ -468,6 +479,26 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             return list;
         },
         /**
+         * @method getLayerByMetadataId
+         * Returns an array of layers added to the service corresponding to given metadata identifier
+         *
+         * @param {String} metadataIdentifier
+         *            metadata identifier to filter the layers with
+         * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
+         */
+        getLayersByMetadataId: function(metadataIdentifier) {
+            var list = [],
+                i,
+                layer;
+            for (i = 0; i < this._loadedLayersList.length; ++i) {
+                layer = this._loadedLayersList[i];
+                if (layer.getMetadataIdentifier() ===  metadataIdentifier) {
+                    list.push(layer);
+                }
+            }
+            return list;
+        },
+        /**
          * @method registerLayerModel
          *      Register an external layer model type (to be used by extension bundles).
          * Adds a new type to #typeMapping
@@ -550,7 +581,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 mapLayer.names = mapLayerJson.names;
             }
 
-            if (this._stickyLayerIds[mapLayer.getId()]) {
+            if (mapLayer && this._stickyLayerIds[mapLayer.getId()]) {
                 mapLayer.setSticky(true);
             }
 
@@ -591,6 +622,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             baseLayer.setMaxScale(baseMapJson.maxScale);
             baseLayer.setMinScale(baseMapJson.minScale);
+
+            baseLayer.setRealtime(baseMapJson.realtime);
+            baseLayer.setRefreshRate(baseMapJson.refreshRate);
 
             baseLayer.setDataUrl(baseMapJson.dataUrl);
             baseLayer.setMetadataIdentifier(baseMapJson.dataUrl_uuid);
@@ -696,6 +730,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options);
             if (!layer) {
+                console.log('disabled map layer error throwing. Unknown layer type', mapLayerJson.type);
+                return null;
                 throw "Unknown layer type '" + mapLayerJson.type + "'";
             }
             //these may be implemented as jsonHandler
@@ -724,6 +760,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             layer.setDescription(mapLayerJson.subtitle);
             layer.setQueryable(mapLayerJson.isQueryable === "true" ||
                 mapLayerJson.isQueryable === true);
+
+            layer.setRealtime(mapLayerJson.realtime);
+            layer.setRefreshRate(mapLayerJson.refreshRate);
 
             // metadata 
             layer.setDataUrl(mapLayerJson.dataUrl);

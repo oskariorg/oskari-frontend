@@ -1,48 +1,7 @@
-
 /* layer group container */
 div.admin-layerselector {
+  /* For long lists, make capabilities list scrollable */
   /* layer container */ }
-
- div.admin-layerselector .capabilities li ul {
-  /* sublist */
-    margin: 5px 20px;
-}
-
-div.admin-layerselector .add-layer-record.capabilities .add-layer-input-area {
-  max-height: 250px;
-  overflow: auto;
-}
-
- div.admin-layerselector .capabilities ul {
-    margin: 0px 20px 5px 20px;
-  /* reset for parent level style */
-    font-weight: normal;
-}
- div.admin-layerselector .capabilities .inline-icon {
-    display: inline-block;
-}
- div.admin-layerselector .capabilities li.capabilitieslayer:hover {
-    text-decoration: underline;
-}
-div.admin-layerselector .capabilities li.capabilitieslayer.groupLevelLayer {
-    font-style: italic;
-    list-style: none;
-    margin-left: -15px;
-}
- div.admin-layerselector .capabilities li.groupTitle {
-    font-weight: bold;
-    list-style: none;
-    margin: 5px -10px;
-}
-/*
-div.admin-layerselector .capabilities li.groupTitle:before {
-    content: "[+]";
-    margin-right: 4px;
-}*/
-div.admin-layerselector .capabilities li.groupTitle.closed ul {
-    display : none;
-}
-
   div.admin-layerselector div.layerGroup {
     background-color: #f3f3f3;
     border: 1pt solid #c0d0d0;
@@ -59,6 +18,33 @@ div.admin-layerselector .capabilities li.groupTitle.closed ul {
       font-weight: bold;
       padding: 8px 10px 8px 12px;
       font: 14pt Arial, sans-serif; }
+  div.admin-layerselector .add-layer-record.capabilities .add-layer-input-area {
+    max-height: 250px;
+    overflow: auto; }
+  div.admin-layerselector .capabilities {
+    /* link-like hover */
+    /* emphasize group nodes */ }
+    div.admin-layerselector .capabilities ul {
+      /* reset for parent level style */
+      font-weight: normal;
+      margin: 0px 20px 5px 20px; }
+    div.admin-layerselector .capabilities .inline-icon {
+      display: inline-block; }
+    div.admin-layerselector .capabilities li ul {
+      /* sublist */
+      margin: 5px 20px; }
+    div.admin-layerselector .capabilities li.capabilitieslayer:hover {
+      text-decoration: underline; }
+    div.admin-layerselector .capabilities li.capabilitieslayer.groupLevelLayer {
+      font-style: italic;
+      list-style: none;
+      margin-left: -15px; }
+    div.admin-layerselector .capabilities li.groupTitle {
+      font-weight: bold;
+      list-style: none;
+      margin: 5px -10px; }
+    div.admin-layerselector .capabilities li.groupTitle.closed ul {
+      display: none; }
   div.admin-layerselector .oskariTabs {
     min-width: 480px; }
     div.admin-layerselector .oskariTabs div.tabsHeader ul li.admin-modify-wms {

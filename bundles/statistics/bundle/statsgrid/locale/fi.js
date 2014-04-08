@@ -38,9 +38,9 @@ Oskari.registerLocalization({
             "female": "naiset",
             "total": "yhteensä"
         },
-        "addColumn": "Hae data",
+        "addColumn": "Hae aineisto",
         "removeColumn": "Poista",
-        "indicators": "Indikaattorit",
+        "indicators": "Indikaattori",
         "cannotDisplayIndicator": "Indikaattorilla ei ole arvoja valitsemallasi aluejaolla, joten sitä ei voida näyttää taulukossa.",
         "availableRegions": " Arvot löytyvät seuraaville aluejaoille: ",
         "year": "Vuosi",
@@ -154,8 +154,10 @@ Oskari.registerLocalization({
             "SEUTUKUNTA": "Seutukunta",
             "SUURALUE": "Suuralue"
         },
-        "addDataButton": "Lisää oma",
-        "addDataTitle": "Lisää oma indikaattori",
+        "baseInfoTitle": "Tunnistetiedot",
+        "dataTitle": "Aineisto",
+        "addDataButton": "Lisää uusi",
+        "addDataTitle": "Lisää uusi aineisto",
         "openImportDialogTip": "Tuo arvot leikepöydältä.",
         "openImportDataButton": "Tuo arvot",
         "addDataMetaTitle": "Otsikko",
@@ -169,16 +171,20 @@ Oskari.registerLocalization({
         "addDataMetaYearPH": "Data on vuodelta",
         "addDataMetaPublicity": "Julkaistavissa",
         "municipalityHeader": "Kunnat",
+        "dataRows": "Aineistorivit",
         "municipalityPlaceHolder": "Anna arvo",
+        "formEmpty": "Tyhjennä",
         "formCancel": "Peruuta",
         "formSubmit": "Tallenna",
         "cancelButton": "Peruuta",
-        "importDataButton": "Tallenna arvot",
+        "clearImportDataButton": "Tyhjennä aineistorivit",
+        "importDataButton": "Lisää",
         "popupTitle": "Tuo arvot",
-        "importDataDescription": "Voit tuoda kunta - arvo -pareja kopioimalla ne tekstikenttään. <br>Jokainen kunta omalle rivilleen ja erottimeksi käy tabulaattori, kaksoispiste ja pilkku.<br>Esimerkki 1: Alajärvi, 1234<br>Esimerkki 2: 009   2100",
+        "importDataDescription": "Voit tuoda kunta - arvo -pareja kopioimalla ne tekstikenttään. \nJokainen kunta omalle rivilleen ja erottimeksi käy tabulaattori, kaksoispiste ja pilkku. \nEsimerkki 1: Alajärvi, 1234 \nEsimerkki 2: 009   2100",
         "failedSubmit": "Lisää indikaattorin metatiedot: ",
         "connectionProblem": "Dataa ei voitu tallentaa yhteysongelman takia.",
         "parsedDataInfo": "Tuotuja alueita oli yhteensä",
-        "parsedDataUnrecognized": "Tunnistamattomia alueita"
+        "parsedDataUnrecognized": "Tunnistamattomia alueita",
+        "loginToSaveIndicator": "Kirjaudu ensin sisään jos haluat tallentaa aineiston."
     }
 });

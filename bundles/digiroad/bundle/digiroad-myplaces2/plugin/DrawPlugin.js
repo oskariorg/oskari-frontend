@@ -1,7 +1,7 @@
 /**
  * @class Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin
  */
-Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', function(url, snappingLayerConf) {
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', function (url, snappingLayerConf) {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
@@ -15,35 +15,37 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
     this.queryUrl = url;
     this.snappingLayerConf = snappingLayerConf;
 }, {
-    __name : 'DigiroadMyPlaces.DrawPlugin',
+    __name: 'DigiroadMyPlaces.DrawPlugin',
 
-    getName : function() {
+    getName: function () {
         return this.pluginName;
     },
-    getMapModule : function() {
+    getMapModule: function () {
         return this.mapModule;
     },
-    setMapModule : function(mapModule) {
+    setMapModule: function (mapModule) {
         this.mapModule = mapModule;
         this._map = mapModule.getMap();
         this.pluginName = mapModule.getName() + this.__name;
     },
-    
+
     /**
      * @method createSnappingGridLayer
      * Creates the layer which is used as a 'grid' to the user drawing a geometry.
      */
-    createSnappingGridLayer: function(protocolUrl, conf) {
+    createSnappingGridLayer: function (protocolUrl, conf) {
         var layer, protocol, styleMap;
 
         this.snappingLayerStrategy = new OpenLayers.Strategy.BBOX({
-        	ratio: 1,
-        	autoActivate: false
+            ratio: 1,
+            autoActivate: false
         });
 
         protocol = new OpenLayers.Protocol[conf.protocol](conf.opts);
 
-        styleMap = new OpenLayers.StyleMap({'strokeOpacity': 0.0});
+        styleMap = new OpenLayers.StyleMap({
+            'strokeOpacity': 0.0
+        });
 
         layer = new OpenLayers.Layer.Vector("snappingGridLayer", {
             protocol: protocol,
@@ -60,20 +62,22 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
      * Activates the BBOX strategy used to fetch data to the snapping 'grid'.
      * This gets activated when user clicks a drawing tool.
      */
-    activateSnapping: function() {
+    activateSnapping: function () {
         this.snappingLayerStrategy.activate();
-        if(this.snappingGridLayer) {
-        	this.snappingGridLayer.refresh({force: true})
+        if (this.snappingGridLayer) {
+            this.snappingGridLayer.refresh({
+                force: true
+            });
         }
     },
-    
+
     /**
      * Deactivates the snapping layer BBOX strategy and destroys all the features
      * on the layer.
      */
-    deactivateSnapping: function() {
+    deactivateSnapping: function () {
         this.snappingLayerStrategy.deactivate();
-        if(this.snappingGridLayer) {
+        if (this.snappingGridLayer) {
             this.snappingGridLayer.destroyFeatures();
         }
     },
@@ -84,31 +88,30 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
      * @param params includes drawMode, geometry and style
      * @method
      */
-    startDrawing : function(params) {
-    	this.activateSnapping();
-        if(params.isModify) {
+    startDrawing: function (params) {
+        this.activateSnapping();
+        if (params.isModify) {
             // preselect it for modification
             this.modifyControls.select.select(this.drawLayer.features[0]);
+        } else {
+            // remove possible old drawing
+            this.drawLayer.destroyFeatures();
+
+            if (params.geometry) {
+                // sent existing geometry == edit mode
+                this.editMode = true;
+                // add feature to draw layer
+                var features = [new OpenLayers.Feature.Vector(params.geometry)];
+                this.drawLayer.addFeatures(features);
+                // preselect it for modification
+                this.modifyControls.select.select(this.drawLayer.features[0]);
+            } else {
+                // otherwise activate requested draw control for new geometry
+                this.editMode = false;
+                this.toggleControl(params.drawMode);
+            }
         }
-        else {
-	        // remove possible old drawing
-	        this.drawLayer.destroyFeatures();
-        	
-	        if(params.geometry) {
-	            // sent existing geometry == edit mode
-	            this.editMode = true;
-	            // add feature to draw layer
-	            var features = [new OpenLayers.Feature.Vector(params.geometry)];
-	            this.drawLayer.addFeatures(features);
-	            // preselect it for modification
-	            this.modifyControls.select.select(this.drawLayer.features[0]);
-	        } else {
-	            // otherwise activate requested draw control for new geometry
-	            this.editMode = false;
-	            this.toggleControl(params.drawMode);
-	        }
-        }
-    
+
 
     },
     /**
@@ -116,39 +119,38 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
      * clears the layer of any drawn features
      * @method
      */
-    stopDrawing : function() {
+    stopDrawing: function () {
         // disable all draw controls
         this.toggleControl();
         // clear drawing
         this.drawLayer.destroyFeatures();
         this.deactivateSnapping();
     },
-    
-    forceFinishDraw : function() {
-    	try {
-    		this.drawControls[this.currentDrawMode].finishSketch();
-    	}
-    	catch(error) {
-    		// happens when the sketch isn't even started -> reset state
-        	this.stopDrawing();
-	        var event = this._sandbox.getEventBuilder('DigiroadMyPlaces.MyPlaceSelectedEvent')();
-	        this._sandbox.notifyAll(event);
-    	}
+
+    forceFinishDraw: function () {
+        try {
+            this.drawControls[this.currentDrawMode].finishSketch();
+        } catch (error) {
+            // happens when the sketch isn't even started -> reset state
+            this.stopDrawing();
+            var event = this._sandbox.getEventBuilder('DigiroadMyPlaces.MyPlaceSelectedEvent')();
+            this._sandbox.notifyAll(event);
+        }
     },
-    
+
     /**
      * Called when drawing is finished.
      * Disables all draw controls and
      * sends a MyPlaces.FinishedDrawingEvent with the drawn the geometry.
      * @method
      */
-    finishedDrawing : function() {
-    	this.deactivateSnapping();
+    finishedDrawing: function () {
+        this.deactivateSnapping();
         this.toggleControl();
-        if(!this.editMode) {
-	        // programmatically select the drawn feature ("not really supported by openlayers")
-	        // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
-        	this.modifyControls.select.select(this.drawLayer.features[0]);
+        if (!this.editMode) {
+            // programmatically select the drawn feature ("not really supported by openlayers")
+            // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
+            this.modifyControls.select.select(this.drawLayer.features[0]);
         }
         var event = this._sandbox.getEventBuilder('DigiroadMyPlaces.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
         this._sandbox.notifyAll(event);
@@ -160,12 +162,12 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
      * controls)
      * @method
      */
-    toggleControl : function(drawMode) {
-    	this.currentDrawMode = drawMode;
-    	
-        for(var key in this.drawControls) {
+    toggleControl: function (drawMode) {
+        this.currentDrawMode = drawMode;
+
+        for (var key in this.drawControls) {
             var control = this.drawControls[key];
-            if(drawMode == key) {
+            if (drawMode == key) {
                 control.activate();
             } else {
                 control.deactivate();
@@ -180,16 +182,16 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
      * @param sandbox reference to Oskari sandbox
      * @method
      */
-    init : function(sandbox) {
+    init: function (sandbox) {
         var me = this;
         this.requestHandlers = {
-            startDrawingHandler : Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.StartDrawingRequestPluginHandler', sandbox, me),
-            stopDrawingHandler : Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.StopDrawingRequestPluginHandler', sandbox, me),
-            getGeometryHandler : Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.GetGeometryRequestPluginHandler', sandbox, me)
+            startDrawingHandler: Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.StartDrawingRequestPluginHandler', sandbox, me),
+            stopDrawingHandler: Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.StopDrawingRequestPluginHandler', sandbox, me),
+            getGeometryHandler: Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.GetGeometryRequestPluginHandler', sandbox, me)
         };
 
         this.snappingGridLayer = this.createSnappingGridLayer(this.queryUrl, this.snappingLayerConf);
-        
+
         this.drawLayer = new OpenLayers.Layer.Vector("MyPlaces Draw Layer", {
             /*style: {
              strokeColor: "#ff00ff",
@@ -197,14 +199,14 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
              fillOpacity: 0,
              cursor: "pointer"
              },*/
-            eventListeners : {
-                "featuresadded" : function(layer) {
-                	// send an event that the drawing has been completed
+            eventListeners: {
+                "featuresadded": function (layer) {
+                    // send an event that the drawing has been completed
                     me.finishedDrawing();
                 }
             }
         });
-        
+
         var snapControl = new OpenLayers.Control.Snapping({
             layer: this.drawLayer,
             targets: [this.snappingGridLayer],
@@ -212,26 +214,26 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
         });
         this._map.addControl(snapControl);
         snapControl.activate();
-        
+
         this.drawControls = {
-            point : new OpenLayers.Control.DrawFeature(me.drawLayer, 
-                                                       OpenLayers.Handler.Point),
-            line : new OpenLayers.Control.DrawFeature(me.drawLayer, 
-                                                      OpenLayers.Handler.Path),
-            area : new OpenLayers.Control.DrawFeature(me.drawLayer, 
-                                                      OpenLayers.Handler.Polygon),
-            box : new OpenLayers.Control.DrawFeature(me.drawLayer, 
-                        OpenLayers.Handler.RegularPolygon, {
-                            handlerOptions: {
-                                sides: 4,
-                                irregular: true
-                            }
-                        })
+            point: new OpenLayers.Control.DrawFeature(me.drawLayer,
+                OpenLayers.Handler.Point),
+            line: new OpenLayers.Control.DrawFeature(me.drawLayer,
+                OpenLayers.Handler.Path),
+            area: new OpenLayers.Control.DrawFeature(me.drawLayer,
+                OpenLayers.Handler.Polygon),
+            box: new OpenLayers.Control.DrawFeature(me.drawLayer,
+                OpenLayers.Handler.RegularPolygon, {
+                    handlerOptions: {
+                        sides: 4,
+                        irregular: true
+                    }
+                })
         };
-        
+
         // doesn't really need to be in array, but lets keep it for future development
         this.modifyControls = {
-            modify : new OpenLayers.Control.ModifyFeature(me.drawLayer, {
+            modify: new OpenLayers.Control.ModifyFeature(me.drawLayer, {
                 standalone: true
             })
         };
@@ -246,10 +248,11 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
         });
 
         this._map.addLayers([me.drawLayer, this.snappingGridLayer]);
-        for(var key in this.drawControls) {
+        var key;
+        for (key in this.drawControls) {
             this._map.addControl(this.drawControls[key]);
         }
-        for(var key in this.modifyControls) {
+        for (key in this.modifyControls) {
             this._map.addControl(this.modifyControls[key]);
         }
         // no harm in activating straight away
@@ -259,15 +262,14 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
      * Returns the drawn geometry from the draw layer
      * @method
      */
-    getDrawing : function() {
+    getDrawing: function () {
         return this.drawLayer.features[0].geometry;
     },
-    register : function() {
+    register: function () {
 
     },
-    unregister : function() {
-    },
-    startPlugin : function(sandbox) {
+    unregister: function () {},
+    startPlugin: function (sandbox) {
         this._sandbox = sandbox;
 
         sandbox.register(this);
@@ -276,7 +278,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
         sandbox.addRequestHandler('DigiroadMyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
 
     },
-    stopPlugin : function(sandbox) {
+    stopPlugin: function (sandbox) {
 
         sandbox.removeRequestHandler('DigiroadMyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
         sandbox.removeRequestHandler('DigiroadMyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
@@ -289,15 +291,13 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
     /* @method start
      * called from sandbox
      */
-    start : function(sandbox) {
-    },
+    start: function (sandbox) {},
     /**
      * @method stop
      * called from sandbox
      *
      */
-    stop : function(sandbox) {
-    }
+    stop: function (sandbox) {}
 }, {
-    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });

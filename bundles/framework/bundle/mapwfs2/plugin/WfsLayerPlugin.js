@@ -36,12 +36,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
         this._tileData = null;
         this._tileDataTemp = null;
 
-        this._mapClickData = {
-            comet: false,
-            ajax: false,
-            wfs: []
-        };
-
         this.errorTriggers = {
             "connection_not_available": {
                 limit: 1,
@@ -50,33 +44,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
             "connection_broken": {
                 limit: 1,
                 count: 0
-            },
+            }
         };
 
         this.activeHighlightLayers = [];
-
-        /* templates */
-        this.template = {};
-        var p;
-        for (p in this.__templates) {
-            if (this.__templates.hasOwnProperty(p)) {
-                this.template[p] = jQuery(this.__templates[p]);
-            }
-        }
     }, {
         __name: "WfsLayerPlugin",
-
-        __templates: {
-            "getinfo_result_header": '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
-            "getinfo_result_header_title": '<div class="getinforesult_header_title"></div>',
-            "wrapper": '<div></div>',
-            "myPlacesWrapper": '<div class="myplaces_place">' + '<h3 class="myplaces_header"></h3>' + '<p class="myplaces_desc"></p>' + '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' + '<a class="myplaces_link"></a>' + '</div>',
-            "getinfo_result_table": '<table class="getinforesult_table"></table>',
-            "link_outside": '<a target="_blank"></a>',
-            "tableRow": '<tr></tr>',
-            "tableCell": '<td></td>'
-        },
-
         __layerPrefix: "wfs_layer_",
         __typeHighlight: "highlight",
         __typeNormal: "normal",
@@ -258,14 +231,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
         },
 
         /**
-         * @method getmapClickData
-         * @return {Object} map click data
-         */
-        getmapClickData: function () {
-            return this._mapClickData;
-        },
-
-        /**
          * @static
          * @property eventHandlers
          */
@@ -308,14 +273,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
              */
             "MapClickedEvent": function (event) {
                 this.mapClickedHandler(event);
-            },
-
-            /**
-             * @method GetInfoResultEvent
-             * @param {Object} event
-             */
-            "GetInfoResultEvent": function (event) {
-                this.getInfoResultHandler(event);
             },
 
             /**
@@ -556,20 +513,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
             }
             var lonlat = event.getLonLat();
             var keepPrevious = this.getSandbox().isCtrlKeyDown();
-            this._mapClickData.comet = false;
-            this._mapClickData.ajax = false;
-            this.getIO().setMapClick(lonlat.lon, lonlat.lat, keepPrevious);
-        },
-
-        /**
-         * @method getInfoResultHandler
-         */
-        getInfoResultHandler: function (event) {
-            this._mapClickData.ajax = true;
-            this._mapClickData.data = event.getData();
-            if (!this.isWFSOpen() || this._mapClickData.comet || this._mapClickData.wfs) {
-                this.showInfoBox();
-            }
+            this.getIO().setMapClick(lonlat, keepPrevious);
         },
 
         /**
@@ -685,308 +629,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
         },
 
         /**
-         * @method showInfoBox
-         *
-         * Wraps data to html and makes ShowInfoBoxRequest
-         */
-        showInfoBox: function () {
-            if (this._mapClickData.data === undefined || this._mapClickData.data === null) { // error
-                return;
-            }
-
-            var data = this._mapClickData.data;
-            var wfs = this._mapClickData.wfs;
-            var wfsFeatures = this.formatWFSFeaturesForInfoBox(wfs);
-
-            data.fragments = data.fragments.concat(wfsFeatures);
-
-            // empty result
-            if (data.fragments.length === 0) {
-                this._mapClickData = {
-                    comet: false,
-                    ajax: false,
-                    wfs: []
-                };
-                return;
-            }
-
-            var content = {};
-            var wrapper = this.template.wrapper.clone();
-
-            content.html = "";
-            content.actions = {};
-            for (var di = 0; di < data.fragments.length; di++) {
-                var fragment = data.fragments[di];
-                var fragmentTitle = fragment.layerName;
-                var fragmentMarkup = fragment.markup;
-
-                if (fragment.isMyPlace) {
-                    if (fragmentMarkup) wrapper.append(fragmentMarkup);
-                } else {
-                    var contentWrapper = this.template.wrapper.clone();
-                    var headerWrapper = this.template.getinfo_result_header.clone();
-                    var titleWrapper = this.template.getinfo_result_header_title.clone();
-
-                    titleWrapper.append(fragmentTitle);
-                    headerWrapper.append(titleWrapper);
-                    contentWrapper.append(headerWrapper);
-
-                    if (fragmentMarkup) {
-                        contentWrapper.append(fragmentMarkup);
-                    }
-                    wrapper.append(contentWrapper);
-                }
-                delete fragment.isMyPlace;
-            }
-            content.html = wrapper;
-
-            // show info box
-            var request = this.getSandbox().getRequestBuilder("InfoBox.ShowInfoBoxRequest")(
-                data.popupid,
-                data.title, [content],
-                data.lonlat,
-                true,
-                data.colourScheme,
-                data.font
-            );
-            this.getSandbox().request(this, request);
-
-            // clear the data
-            this._mapClickData = {
-                comet: false,
-                ajax: false,
-                wfs: []
-            };
-        },
-
-        /**
-         * @method formatWFSFeaturesForInfoBox
-         */
-        formatWFSFeaturesForInfoBox: function (wfsLayers) {
-            var result = [];
-            var type = "wfslayer";
-            var isMyPlace;
-
-            var layerId;
-            var layer;
-            var layerName;
-            var markup;
-
-            for (var x = 0; x < wfsLayers.length; x++) {
-                if (wfsLayers[x].features == "empty") {
-                    continue;
-                }
-                // define layer specific information
-                layerId = wfsLayers[x].layerId;
-                layer = this.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-                if (layer === null || layer === undefined) {
-                    continue;
-                }
-                isMyPlace = layer.isLayerOfType('myplaces');
-                layerName = layer ? layer.getName() : "";
-
-                var features = [];
-                var feature;
-                var values;
-                var fields = layer.getFields().slice(0);
-
-                if (!isMyPlace) {
-                    // replace fields with locales
-                    var locales = layer.getLocales();
-                    if (locales !== null && locales !== undefined) {
-                        for (var l = 0; l < fields.length; l++) {
-                            if (locales.length >= 1) {
-                                fields[l] = locales[l];
-                            }
-                        }
-                    }
-                }
-
-                // helper function for visibleFields
-                var contains = function (a, obj) {
-                    for (var i = 0; i < a.length; i++) {
-                        if (a[i] == obj)
-                            return true;
-                    }
-                    return false;
-                };
-
-                var hiddenFields = [];
-                hiddenFields.push("__fid");
-                hiddenFields.push("__centerX");
-                hiddenFields.push("__centerY");
-
-                // key:value
-                for (var i = 0; i < wfsLayers[x].features.length; i++) {
-                    feature = {};
-                    values = wfsLayers[x].features[i];
-                    for (var j = 0; j < fields.length; j++) {
-                        if (contains(hiddenFields, fields[j])) { // skip hidden
-                            continue;
-                        }
-                        if (values[j] === null || values[j] === undefined || values[j] === "") {
-                            feature[fields[j]] = "";
-                        } else {
-                            feature[fields[j]] = values[j];
-                        }
-                    }
-                    features.push(feature);
-                }
-
-                for (var k = 0; k < features.length; k++) {
-                    if (isMyPlace) {
-                        markup = this._formatMyPlacesGfi(features[k]);
-                    } else {
-                        markup = this._json2html(features[k]);
-                    }
-
-                    result.push({
-                        markup: markup,
-                        layerId: layerId,
-                        layerName: layerName,
-                        type: type,
-                        isMyPlace: isMyPlace
-                    });
-                }
-            }
-
-            return result;
-        },
-
-        /**
-         * Formats the html to show for my places layers' gfi dialog.
-         *
-         * @method _formatMyPlacesGfi
-         * @param {Object} place response data to format
-         * @return {jQuery} formatted html
-         */
-        _formatMyPlacesGfi: function (place) {
-            var me = this,
-                content = me.template.myPlacesWrapper.clone(),
-                img = content.find('a.myplaces_imglink'),
-                link = content.find('a.myplaces_link');
-
-            content.find('h3.myplaces_header').html(place.name);
-            content.find('p.myplaces_desc').html(place.place_desc);
-
-            if (place.image_url) {
-                img.attr({
-                    'href': place.image_url
-                }).find('img.myplaces_img').attr({
-                    'src': place.image_url
-                });
-            } else {
-                img.remove();
-            }
-
-            if (place.link) {
-                link.attr({
-                    'href': place.link
-                }).html(place.link);
-            } else {
-                link.remove();
-            }
-
-            return content;
-        },
-
-        /**
-         * @method _json2html
-         * @private
-         * Parses and formats a WFS layers JSON GFI response
-         * @param {Object} node response data to format
-         * @return {String} formatted HMTL
-         */
-        _json2html: function (node) {
-            if (node === null || node === undefined) {
-                return "";
-            }
-            var even = true,
-                html = this.template.getinfo_result_table.clone(),
-                row = null,
-                keyColumn = null,
-                valColumn = null,
-                key;
-
-            for (key in node) {
-                var value = node[key];
-                if (!value || !key) {
-                    continue;
-                }
-                var vType = (typeof value).toLowerCase();
-                var valpres = "";
-                switch (vType) {
-                case "string":
-                    if (value.indexOf("http://") === 0) {
-                        valpres = this.template.link_outside.clone();
-                        valpres.attr("href", value);
-                        valpres.append(value);
-                    } else {
-                        valpres = value;
-                    }
-                    break;
-                case "undefined":
-                    valpres = "n/a";
-                    break;
-                case "boolean":
-                    valpres = (value ? "true" : "false");
-                    break;
-                case "number":
-                    valpres = "" + value;
-                    break;
-                case "function":
-                    valpres = "?";
-                    break;
-                case "object":
-                    // format array
-                    if (jQuery.isArray(value)) {
-                        var valueDiv = this.template.wrapper.clone();
-                        for (var i = 0; i < value.length; ++i) {
-                            var innerTable = this._json2html(value[i]);
-                            valueDiv.append(innerTable);
-                        }
-                        valpres = valueDiv;
-                    } else {
-                        valpres = this._json2html(value);
-                    }
-                    break;
-                default:
-                    valpres = "";
-                }
-                even = !even;
-
-                row = this.template.tableRow.clone();
-                if (!even) {
-                    row.addClass("odd");
-                }
-
-                keyColumn = this.template.tableCell.clone();
-                keyColumn.append(key);
-                row.append(keyColumn);
-
-                valColumn = this.template.tableCell.clone();
-                valColumn.append(valpres);
-                row.append(valColumn);
-
-                html.append(row);
-            }
-            return html;
-        },
-
-        /**
          * @method preselectLayers
          */
         preselectLayers: function (layers) {
-            for (var i = 0; i < layers.length; i++) {
-                var layer = layers[i];
-                var layerId = layer.getId();
-
-                if (!layer.hasFeatureData()) {
-                    continue;
+            _.each(layers, function (layer) {
+                if (layer.hasFeatureData()) {
+                    this.getSandbox().printDebug("[WfsLayerPlugin] preselecting " + layer.getId());
                 }
-
-                this.getSandbox().printDebug("[WfsLayerPlugin] preselecting " + layerId);
-            }
+            });
         },
 
         /**
@@ -1600,7 +1250,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
             // send as an event forward to WFSPlugin (draws)
             var event = this.getSandbox().getEventBuilder("WFSImageEvent")(layer, imageUrl, bbox, imageSize, "highlight", false, false);
             this.getSandbox().notifyAll(event);
-        },
+        }
 
     }, {
         "protocol": ["Oskari.mapframework.module.Module",

@@ -79,6 +79,7 @@ function() {
 		mapModule.startPlugin(this.popupPlugin);
 		sandbox.addRequestHandler('InfoBox.ShowInfoBoxRequest', this.requestHandlers.showInfoHandler);
 		sandbox.addRequestHandler('InfoBox.HideInfoBoxRequest', this.requestHandlers.hideInfoHandler);
+        sandbox.addRequestHandler('InfoBox.RefreshInfoBoxRequest', this.requestHandlers.refreshInfoHandler);
 
         //sandbox.registerAsStateful(this.mediator.bundleId, this);
 	},
@@ -96,7 +97,8 @@ function() {
 
 		this.requestHandlers = {
 			showInfoHandler : Oskari.clazz.create('Oskari.mapframework.bundle.infobox.request.ShowInfoBoxRequestHandler', this.popupPlugin),
-			hideInfoHandler : Oskari.clazz.create('Oskari.mapframework.bundle.infobox.request.HideInfoBoxRequestHandler', this.popupPlugin)
+			hideInfoHandler : Oskari.clazz.create('Oskari.mapframework.bundle.infobox.request.HideInfoBoxRequestHandler', this.popupPlugin),
+            refreshInfoHandler : Oskari.clazz.create('Oskari.mapframework.bundle.infobox.request.RefreshInfoBoxRequestHandler', this.popupPlugin)
 
 		};
 		return null;
@@ -122,42 +124,9 @@ function() {
 	eventHandlers : {
 		/**
 		 * @method MapClickedEvent
-		 * FIXME: just for testing - dummy data for demo purposes
 		 */
-/*		MapClickedEvent : function(e) {
-			var me = this;
-
-			var popupId = "" + e.getLonLat().lon + "_" + e.getLonLat().lat;
-
-			var exampleContent = [{
-				html : "<h3>Kumpumoreeni</h3>" + "<p>Suomen maanperä 1:10000000 (WFS)</p>",
-				actions : {
-					"Tallenna" : function() {
-						alert('tallennettu');
-					},
-					"Sulje" : function() {
-                        var request = me.sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest')(popupId);
-                        me.sandbox.request(me.getName(), request);
-					}
-				}
-			}, {
-				html : "<h3>Struven ketju/Mustaviiri</h3>" + "<p>Maailmanperintökohteet (N:6682245 E:478060)</p>" + "<p>Struven ketju on kolmioketju, joka kulkee lähelllä itäistä 26 pituuspiiriä Hammerfestistä, Pohjoisen jäämeren rannalta, Mustallemerelle Ukrainan Izmailmaan</p>",
-				actions : {
-					"Tallenna" : function() {
-						alert('tallennettu2');
-					},
-					"Sulje" : function() {
-						var request = me.sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest')(popupId);
-						me.sandbox.request(me.getName(), request);
-					}
-				}
-			}];
-
-			var request = this.sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')(popupId, "Title", exampleContent, e.getLonLat(), true);
-			this.sandbox.request(me.getName(), request);
-
+		MapClickedEvent : function(e) {
 		}
-		*/
 	},
 
 	/**

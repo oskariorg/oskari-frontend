@@ -116,7 +116,7 @@ Oskari.registerLocalization({
         "changeInfo": "Změnit informace o vašem účtu",
         "changePassword": "Změnit vaše heslo",
         "removeAccount": "Zrušit váš účet",
-        "changeInfoUrl": "/web/en/profile"
+        "changeInfoUrl": "/web/cs/profile"
       }
     },
     "button": {

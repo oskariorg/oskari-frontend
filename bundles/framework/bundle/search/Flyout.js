@@ -31,6 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
         this.lastSort = null;
 
         this._searchContainer = null;
+        this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
     }, {
         /**
          * @method getName
@@ -109,6 +110,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
         },
 
         /**
+         * @method getTabTitle
+         * @return {String} localized text for the tab title
+         */
+        getTabTitle: function () {
+            return this.instance.getLocalization('tabTitle');
+        },
+
+        /**
          * @method getDescription
          * @return {String} localized text for the description of the
          * flyout
@@ -162,6 +171,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             searchDescription.html(this.instance.getLocalization('searchDescription'));
 
             var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
+            field.setPlaceholder(me.instance.getLocalization("searchAssistance"));
 
             var regex = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*\*?$/;
             field.setContentCheck(true, this.instance.getLocalization('contentErrorMsg'), regex);
@@ -214,8 +224,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
 
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     var okBtn = dialog.createCloseButton('OK');
-                    var msg = me.instance.getLocalization('searchservice_search_alert_title');
-                    dialog.show(msg, msg, [okBtn]);
+                    var title = me.instance.getLocalization('searchservice_search_alert_title');
+                    var msg = me.instance.getLocalization('searchservice_search_not_found_anything_text');
+                    dialog.show(title, msg, [okBtn]);
                 });
             };
 
@@ -443,6 +454,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 value = value * -1;
             }
             return value;
+        },
+
+        /**
+         *
+         *
+         */
+        addTab: function (item) {
+            var me = this;
+            var flyout = jQuery(this.container);
+            // Change into tab mode if not already
+            if (me.tabsContainer.panels.length === 0) {
+                me.tabsContainer.insertTo(flyout);
+                var defaultPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+                var searchContainer = jQuery("div.searchContainer");
+                defaultPanel.setTitle(me.getTabTitle());
+                defaultPanel.setContent(searchContainer);
+                defaultPanel.setPriority(me.instance.tabPriority);
+                me.tabsContainer.addPanel(defaultPanel);
+            }
+
+            var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+            panel.setTitle(item.title);
+            panel.setContent(item.content);
+            panel.setPriority(item.priority);
+            me.tabsContainer.addPanel(panel);
         }
     }, {
         /**

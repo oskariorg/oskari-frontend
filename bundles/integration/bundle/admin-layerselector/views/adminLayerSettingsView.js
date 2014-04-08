@@ -371,6 +371,9 @@ define([
                 data.xslt = form.find('#add-layer-xslt').val();
                 data.gfiType = form.find('#add-layer-responsetype').val();
 
+                data.realtime = form.find('#add-layer-realtime').is(':checked');
+                data.refreshRate = form.find('#add-layer-refreshrate').val();
+
                 if (!data.gfiType) {
                     // if there isn't a selection, don't send anything so backend will keep the existing value
                     delete data.gfiType;

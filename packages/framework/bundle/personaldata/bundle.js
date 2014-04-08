@@ -56,29 +56,101 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundle"
         }],
 
         "locales": [{
-            "lang": "fi",
+            "lang": "am",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/personaldata/locale/fi.js"
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/am.js"
         }, {
-            "lang": "sv",
+            "lang": "bg",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/personaldata/locale/sv.js"
-        }, {
-            "lang": "en",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/personaldata/locale/en.js"
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/bg.js"
         }, {
             "lang": "cs",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/personaldata/locale/cs.js"
         }, {
+            "lang": "da",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/da.js"
+        }, {
             "lang": "de",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/personaldata/locale/de.js"
         }, {
+            "lang": "en",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/en.js"
+        }, {
             "lang": "es",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/personaldata/locale/es.js"
+        }, {
+            "lang": "et",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/et.js"
+        }, {
+            "lang": "fi",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/fi.js"
+        }, {
+            "lang": "ge",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/ge.js"
+        }, {
+            "lang": "gr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/gr.js"
+        }, {
+            "lang": "hr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/hr.js"
+        }, {
+            "lang": "hu",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/hu.js"
+        }, {
+            "lang": "lv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/lv.js"
+        }, {
+            "lang": "nl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/nl.js"
+        }, {
+            "lang": "pl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/pl.js"
+        }, {
+            "lang": "pt",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/pt.js"
+        }, {
+            "lang": "ro",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/ro.js"
+        }, {
+            "lang": "rs",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/rs.js"
+        }, {
+            "lang": "sl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/sl.js"
+        }, {
+            "lang": "sk",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/sk.js"
+        }, {
+            "lang": "sq",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/sq.js"
+        }, {
+            "lang": "sv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/sv.js"
+        }, {
+            "lang": "uk",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/locale/uk.js"
         }]
     },
     "bundle": {

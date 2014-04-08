@@ -1,5 +1,76 @@
 # Release Notes
 
+## 1.19
+
+### mapwmts
+
+Fixed support for WMTS layers without resource URLs.
+
+### Documentation
+
+Docs has been removed from oskari-repository and they are now available in http://www.oskari.org/documentation and https://github.com/nls-oskari/oskari.org/tree/master/md/documentation along with backend documentation
+
+### localization
+
+Added italian translations for analyse and metadataflyout bundles (thanks rockini)
+
+### divmanazer/ui-components
+
+Overlay now supports element selector that spans over multiple DOM elements (thanks uhef)
+
+### *new bundle* myplacesimport
+
+Adds functionality to import users' own data zipped in ESRI shape file set or Google kml(kmz) file. Also added is a complementary bundle `mapuserlayers` which is responsible for showing the user layers on the map.
+
+### mapwfs2
+
+No longer waits for an WMSGetFeatureInfo request to complete when sending map click features. Instead immediately sends a `GetInfoResultEvent` with the received data.
+
+### infobox
+
+Made adaptable to add more content to an open popup. Basically if it receives a request to show a popup with the same id and location as an open one, just adds/modifies the content of said popup.
+
+### mapmodule-plugin/getinfo
+
+Is the single point of contact with the infobox now. Handles adding/removing map layers and modifies the infobox popup accordingly. Bundles who want feature info shown on a info popup should send a `GetInfoResultEvent` with the data they want to show.
+
+### mapmodule-plugin/realtimePlugin
+
+Added a new plugin for managing layers which have been cofigured as real time layers. The plugin refreshes the layers periodically, with a refresh rate specified for each layer separately. See the docs for more info.
+
+### mapmodule-plugin/map-module.js
+
+Extends src/mapping/mapmodule/AbstractMapModule.js to allow a smoother transition to Oskari 2.0 and helps keeping the codebases up to date.
+Note! Alternative build systems need to include the AbstractMapModule.js file.
+
+Default resolutions for mapmodule has been changed:
+
+* from [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25] 
+
+* to [2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5]
+
+If you have used the defaults and want to keep them add mapOptions to your mapfull config:
+
+```javascript
+{
+	"mapOptions": {
+		"resolutions": [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25]
+	}
+}
+```
+
+### Sandbox/map layer service
+
+Added new method to find all layers corresponding to given metadata id.
+
+### search bundle
+
+Search flyout is now capable to include multiple tabs.
+
+### metadatacatalogue bundle
+
+Added a new plugin for metadata catalogue searches.
+
 ## 1.18.1
 
 ### mapmyplaces bundle

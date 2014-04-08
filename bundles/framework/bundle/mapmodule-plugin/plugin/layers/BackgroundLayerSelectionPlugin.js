@@ -99,11 +99,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             // currentSelection stores the current selection so we don't have to reorder the list elements
             this.template = jQuery(
                 '<div class="backgroundLayerSelectionPlugin oskariui mapplugin">' +
-                    '<div class="bg"></div>' +
-                    '<div class="content">' +
-                    '    <ul></ul>' +
-                    '    <div class="currentSelection"></div>' +
-                    '</div></div>'
+                '<div class="bg"></div>' +
+                '<div class="content">' +
+                '    <ul></ul>' +
+                '    <div class="currentSelection"></div>' +
+                '</div></div>'
             );
             // header-icon is used to show the open/close arrow
             this.dropdownArrowTemplate = jQuery('<div class="header-icon icon-arrow-white-right"></div>');
@@ -112,9 +112,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             // used in case the module config is faulty
             this.errorTemplate = jQuery(
                 '<div class="backgroundLayerSelectionPlugin oskariui mapplugin">' +
-                    '<div class="bg"></div>' +
-                    '<div class="error">No baseLayers defined in configuration</div>' +
-                    '</div>'
+                '<div class="bg"></div>' +
+                '<div class="error">No baseLayers defined in configuration</div>' +
+                '</div>'
             );
         },
         /**
@@ -189,10 +189,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
          */
         eventHandlers: {
             /**
-             * [description]
+             * @method AfterRearrangeSelectedMapLayerEvent
              * @param {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent} event
              *
-             * Rearanges layers
+             * Rearranges layers
              */
             'AfterRearrangeSelectedMapLayerEvent': function (event) {
                 // Update selection, bottom baselayer might've changed
@@ -254,7 +254,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                         me.element.show();
                     }
                 }
-            },
+            }
         },
 
         /**
@@ -314,6 +314,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 currentSelection = me.element.find('div.currentSelection'),
                 newSelection = me._sandbox.findMapLayerFromSelectedMapLayers(newSelectionId),
                 isBaseLayer = true;
+
+            if(newSelectionId === currentSelection.attr("data-layerId")) {
+                // user clicked already selected option, do nothing
+                return;
+            }
             // switch bg layer (no need to call update on ui, we should catch the event)
             // - check if current bottom layer exists & is in our list (if so, remove)
             if (currentBottom) {
@@ -327,7 +332,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 me._sandbox.postRequestByName('RemoveMapLayerRequest', [newSelectionId]);
             } else {
                 newSelection = me._sandbox.findMapLayerFromAllAvailable(newSelectionId);
-                isBaseLayer = ( newSelection ? newSelection.isBaseLayer() : true );
+                isBaseLayer = (newSelection ? newSelection.isBaseLayer() : true);
             }
 
             me._sandbox.postRequestByName('AddMapLayerRequest', [newSelectionId, false, isBaseLayer]);
@@ -372,7 +377,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 listElement.toggleClass('selected', listElement.attr("data-layerId") === newSelectionId);
             });
             // - update currentSelection with the new selection's information if it's in baseLayers
+            // clean up current selection
             currentSelection.empty();
+            currentSelection.attr("data-layerId", '');
+            currentSelection.attr("title", '');
             if (jQuery.inArray(newSelectionId, me.conf.baseLayers) > -1) {
                 currentSelection.attr("data-layerId", newSelectionId);
                 currentSelection.attr("title", newSelectionName);
@@ -512,21 +520,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
 
             // Change the color of the list items
             div.find('li').css({
-                'background-color' : colorScheme.buttonBackgroundColor,
+                'background-color': colorScheme.buttonBackgroundColor,
                 'color': colorScheme.buttonColor
             }).filter('.selected').css({
-                'background-color' : colorScheme.buttonSelectedBackgroundColor,
+                'background-color': colorScheme.buttonSelectedBackgroundColor,
                 'color': colorScheme.buttonSelectedColor
             });
             div.find('.dropdown li').css({
-                'background-color' : colorScheme.buttonSelectedBackgroundColor,
+                'background-color': colorScheme.buttonSelectedBackgroundColor,
                 'color': colorScheme.buttonSelectedColor,
                 'border-color': colorScheme.buttonBorderColor
             });
 
             // Change the color of the current selection
             div.find('div.currentSelection').css({
-                'background-color' : colorScheme.buttonBackgroundColor,
+                'background-color': colorScheme.buttonBackgroundColor,
                 'color': colorScheme.buttonColor
             });
         },

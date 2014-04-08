@@ -44,6 +44,9 @@
 	                "mapanalysis": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
+	                "mapuserlayers": {
+	                    "bundlePath": "../../../packages/framework/bundle/"
+	                },
 	                "service-base": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
@@ -174,6 +177,22 @@
 				"Import-Bundle": {
 					"search": {
 						"bundlePath": "../../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"instanceProps": {},
+			"title": "metadatacatalogue",
+			"bundleinstancename": "metadatacatalogue",
+			"fi": "metadatacatalogue",
+			"sv": "metadatacatalogue",
+			"en": "metadatacatalogue",
+			"bundlename": "metadatacatalogue",
+			"metadata": {
+				"Import-Bundle": {
+					"metadatacatalogue": {
+						"bundlePath": "../../../packages/catalogue/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -463,6 +482,22 @@
         			}
         		}
         	}
-        }
+        }, {
+		    "title" : "myplacesimport",
+		    "fi" : "myplacesimport",
+		    "sv" : "myplacesimport",
+		    "en" : "myplacesimport",
+		    "bundlename" : "myplacesimport",
+		    "bundleinstancename" : "myplacesimport",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "myplacesimport" : {
+		                "bundlePath" : "../../../packages/framework/bundle/"
+		            }
+		        },
+		        "Require-Bundle-Instance" : []
+		    },
+		    "instanceProps" : {}
+		}
 	]
 }

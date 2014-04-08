@@ -138,11 +138,11 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         var reqEnc = "KVP";
 
 
-        var wmtsUrl = //layer.getWmtsUrls()[0]; 
+        var wmtsUrl = 
         layerDef.resourceUrl ? (layerDef.resourceUrl.tile ? layerDef.resourceUrl.tile.template : undefined) : undefined;
 
         if (!wmtsUrl) {
-            wmtsUrl = layer.getWmtsUrls()[0][0].url;
+            wmtsUrl = layer.getWmtsUrls()[0];
         } else {
             reqEnc = "REST";
         }

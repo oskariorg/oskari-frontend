@@ -36,6 +36,9 @@
                 "mapstats": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
+                "mapanalysis": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
                 "service-base": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
@@ -85,6 +88,22 @@
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
                 "ui-components": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title": "Oskari DIV Manazer",
+        "fi": "Oskari DIV Manazer",
+        "sv": "Oskari DIV Manazer",
+        "en": "Oskari DIV Manazer",
+        "bundlename": "divmanazer",
+        "bundleinstancename": "divmanazer",
+        "metadata": {
+            "Import-Bundle": {
+                "divmanazer": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 }
             },
@@ -191,5 +210,21 @@
             "Require-Bundle-Instance" : []
         },
         "instanceProps" : {}
+    }, {
+        "title": "Featuredata",
+        "fi": "Kohdetiedot",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "featuredata2",
+        "bundleinstancename": "featuredata2",
+        "metadata": {
+            "Import-Bundle": {
+                "featuredata2": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
     }]
 }

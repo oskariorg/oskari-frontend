@@ -32,7 +32,7 @@
     "grunt-cli": "0.1.9",
     "grunt-contrib-watch": "0.4.4",
     "yuidocjs": "0.3.45",
-    "grunt-karma": "0.6.2",
+    "grunt-karma": "0.8.2",
     "grunt-lib-contrib": "0.6.1",
     "grunt-contrib-clean": "0.4.1",
     "grunt-contrib-copy": "0.4.1",

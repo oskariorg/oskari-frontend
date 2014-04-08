@@ -42,20 +42,40 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
             if (this.panels.length === 0) {
                 content = this.templateTabs.clone();
                 this.ui.html(content);
+                if (typeof panel.getPriority() !== 'number') {
+                    panel.setPriority(1.0);
+                }
+            } else {
+                if (first) {
+                    // Set as first item
+                    panel.setPriority(this.panels[0].getPriority()-1.0);
+                } else if (typeof panel.getPriority() !== 'number') {
+                    // Set as last item
+                    panel.setPriority(this.panels[this.panels.lenght-1].getPriority()+1.0);
+                }
+            }
+
+            // check the correct panel index corresponding to the priority value
+            var index = 0;
+            while (index < this.panels.length) {
+                if (panel.getPriority() < this.panels[index].getPriority()) {
+                    break;
+                }
+                index = index+1;
             }
 
             // ensure order is correct
             headerContainer = this.ui.find('ul.tabsItem');
             header = panel.getHeader();
-            if (first) {
+            if (index === 0) {
                 headerContainer.prepend(header);
                 this.select(panel);
             } else {
-                headerContainer.append(header);
+                headerContainer.children().eq(index-1).after(header)
             }
 
-            panel.insertTo(this.ui.find('div.tabsContentItem'));
-            this.panels.push(panel);
+            panel.insertAt(this.ui.find('div.tabsContentItem'),index);
+            this.panels.splice(index,0,panel);
             if (this.panels.length === 1) {
                 // select first by default
                 this.select(panel);

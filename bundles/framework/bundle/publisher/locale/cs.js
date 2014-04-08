@@ -54,21 +54,22 @@ Oskari.registerLocalization({
                 "Portti2Zoombar": "Posuvné měřítko",
                 "ControlsPlugin": "Panorámování",
                 "SearchPlugin": "Vyhledávání adresy a zeměpisného jména",
+                "FeaturedataPlugin": "",
                 "GetInfoPlugin": "Dotazovací nástroj pro zeměpisná jména"
             },
             "toollayout": {
-                "label": "Tool layout",
-                "tooltip": "Choose a layout for the tools shown on the map",
-                "lefthanded": "Lefthanded",
-                "righthanded": "Righthanded",
-                "userlayout": "Custom layout",
-                "usereditmode": "Switch edit mode on",
-                "usereditmodeoff": "Switch edit mode off"
+                "label": "NOT TRANSLATED",
+                "tooltip": "NOT TRANSLATED",
+                "lefthanded": "NOT TRANSLATED",
+                "righthanded": "NOT TRANSLATED",
+                "userlayout": "NOT TRANSLATED",
+                "usereditmode": "NOT TRANSLATED",
+                "usereditmodeoff": "NOT TRANSLATED"
             },
             "data": {
-                "label": "Statistics",
-                "tooltip": "Show the data related to map.",
-                "grid": "Show statistic grid"
+                "label": "NOT TRANSLATED",
+                "tooltip": "NOT TRANSLATED",
+                "grid": "NOT TRANSLATED"
             },
             "layers": {
                 "add": "NOT TRANSLATED",
@@ -123,9 +124,9 @@ Oskari.registerLocalization({
         "NotLoggedView": {
             "text": "Před použitím funkce pro vkládání je třeba se přihlásit.",
             "signup": "Přihlášení",
-            "signupUrl": "/web/en/login",
+            "signupUrl": "/web/cs/login",
             "register": "Registrace",
-            "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "registerUrl": "/web/cs/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
         },
         "StartView": {
             "text": "Zobrazení mapy, které jste právě vytvořili na svém webu nebo webu vašeho zaměstnavatele, můžete vložit.",

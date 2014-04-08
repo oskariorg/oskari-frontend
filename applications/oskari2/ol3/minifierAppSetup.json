@@ -361,11 +361,11 @@
                 "plugins": [{
                     "id": "Oskari.ol3.mapmodule.plugin.ControlsPlugin"
                 }, {
-                    "id": "Oskari.mapping.mapmodule.plugin.LayersPlugin"
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
                 }, {
                     "id": "Oskari.ol3.mapmodule.plugin.WmsLayerPlugin"
                 }, {
-                    "id": "Oskari.ol3.mapmodule.plugin.WmtsLayerPlugin"
+                    "id": "Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin"
                 }, {
                     "id": "Oskari.ol3.mapmodule.plugin.PanButtons"
                 }],

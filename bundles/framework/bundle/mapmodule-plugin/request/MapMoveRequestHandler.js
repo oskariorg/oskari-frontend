@@ -50,17 +50,14 @@ function(sandbox, mapModule) {
         // if zoom=0 -> if(zoom) is determined as false...
         if (zoom || zoom === 0) {
             if (zoom.CLASS_NAME === 'OpenLayers.Bounds') {
-                this.mapModule._map.zoomToExtent(zoom);
+                this.mapModule.zoomToExtent(zoom);
             } else {
-                this.mapModule._map.zoomTo(zoom);
+                this.mapModule.zoomTo(zoom);
             }
         }
-        this.mapModule._updateDomain();
         if (marker) {
             this.mapModule._drawMarker();
         }
-
-        this.mapModule.notifyMoveEnd();
 
         this.sandbox.printDebug("[MapMoveRequestHandler] map moved");
     }

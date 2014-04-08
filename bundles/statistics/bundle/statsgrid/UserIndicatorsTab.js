@@ -401,5 +401,5 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
                 dialog.close(true);
             });
             dialog.show(title, message, [okBtn]);
-        },
+        }
     });

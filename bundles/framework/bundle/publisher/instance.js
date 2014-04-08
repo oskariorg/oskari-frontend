@@ -162,6 +162,24 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 }
             },
             /**
+             * @method AfterRearrangeSelectedMapLayerEvent
+             * @param {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent} event
+             *
+             * Rearranges layers
+             */
+            'AfterRearrangeSelectedMapLayerEvent': function (event) {
+                if (event._creator !== this.getName() && event._fromPosition !== event._toPosition) {
+                    // Layer order has been changed by someone else, resort layers
+                    this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
+                    if (this.publisher) {
+                        this.publisher.maplayerPanel.handleLayerOrderChanged(event._movedMapLayer, event._fromPosition, event._toPosition);
+                        if(event._creator !== this.publisher.maplayerPanel.plugin.getName()) {
+                            this.publisher.maplayerPanel.handleLayerSelectionChanged();
+                        }
+                    }
+                }
+            },
+            /**
              * @method MapLayerEvent
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              */
@@ -184,7 +202,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     textarea,
                     content;
                 okBtn.addClass('primary');
-
                 url = this.sandbox.getLocalizedProperty(this.conf.publishedMapUrl) + event.getId();
                 iframeCode = '<iframe src="' + url + '" width="' + event.getWidth() +
                     '" height="' + event.getHeight() + '"></iframe>';
@@ -478,7 +495,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
             for (i = 0; i < selectedLayers.length; i += 1) {
                 layer = selectedLayers[i];
                 if (!this.hasPublishRight(layer) &&
-                        layer.getId().toString().indexOf('myplaces_') < 0) {
+                    layer.getId().toString().indexOf('myplaces_') < 0) {
                     deniedLayers.push(layer);
                 }
             }

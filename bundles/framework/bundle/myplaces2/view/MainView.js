@@ -11,8 +11,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
      * @static
      */
 
-    function (instance) {
+    function (instance, options) {
         this.instance = instance;
+        this.options = options;
         this.popupId = 'myplacesForm';
         this.form = undefined;
     }, {
@@ -113,7 +114,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
              */
             'Toolbar.ToolSelectedEvent': function (event) {
                 // changed tool
-                this._cleanupPopup();
+                this.cleanupPopup();
             },
             /**
              * @method DrawPlugin.FinishedDrawingEvent
@@ -153,7 +154,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             var sandbox = this.instance.sandbox;
             sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             var loc = this.instance.getLocalization();
-            this.form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.PlaceForm', this.instance);
+            this.form = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.myplaces2.view.PlaceForm', this.instance, this.options);
             var categories = this.instance.getService().getAllCategories();
             if (place) {
                 var param = {
@@ -187,7 +189,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             }];
             // cancel button
             content[0].actions[loc.buttons.cancel] = function () {
-                me._cleanupPopup();
+                me.cleanupPopup();
                 // ask toolbar to select default tool
                 var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
                 me.instance.sandbox.request(me, toolbarRequest);
@@ -201,6 +203,21 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             sandbox.request(me.getName(), request);
         },
         /**
+         * Destroys the opened form popup(s) from the screen.
+         * 
+         * @method deletePlaceForm
+         */
+        deletePlaceForm: function() {
+            var sandbox = this.instance.sandbox,
+                requestB = sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest'),
+                request;
+
+            if (requestB) {
+                request = requestB(this.popupId);
+                sandbox.request(this.getName(), request);
+            }
+        },
+        /**
          * @method _validateForm
          * Validates form data, returns an object array if any errors.
          * Error objects have field and error properties ({field : 'name', error: 'Name missing'}).
@@ -211,7 +228,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
         _validateForm: function (values) {
             var errors = [];
             var categoryHandler = this.instance.getCategoryHandler();
-            errors = categoryHandler.validateCategoryFormValues(values.category);
+            if(categoryHandler && categoryHandler.validateCategoryFormValues) {
+                errors = categoryHandler.validateCategoryFormValues(values.category);
+            }
 
             var loc = this.instance.getLocalization('validation');
             if (!values.place.name) {
@@ -362,7 +381,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                         sandbox.notifyAll(event);
                     }
 
-                    me._cleanupPopup();
+                    me.cleanupPopup();
 
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     loc = me.instance.getLocalization('notification').placeAdded;
@@ -378,24 +397,35 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             this.instance.getService().saveMyPlace(place, serviceCallback);
         },
         /**
-         * @method _cleanupPopup
+         * @method cleanupPopup
          * Cancels operations:
          * - close popup
          * - destroy form
          * @private
          */
-        _cleanupPopup: function () {
-            // form not open, nothing to do
-            if (!this.form) {
-                return;
-            }
-            var sandbox = this.instance.sandbox;
-            var request = sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest')(this.popupId);
-            sandbox.request(this, request);
-            this.form.destroy();
-            this.form = undefined;
-            sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+        cleanupPopup: function () {
+            var sandbox = this.instance.sandbox,
+                hideRequestB = sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest'),
+                keyBoardRB = sandbox.getRequestBuilder('EnableMapKeyboardMovementRequest'),
+                hideRequest,
+                keyBoardRequest;
+
             this.instance.enableGfi(true);
+
+            if (hideRequestB) {
+                hideRequest = hideRequestB(this.popupId);
+                sandbox.request(this, hideRequest);
+            }
+
+            if (keyBoardRB) {
+                keyBoardRequest = keyBoardRB();
+                sandbox.request(this, keyBoardRequest);
+            }
+
+            if (this.form) {
+                this.form.destroy();
+                this.form = undefined;
+            }
         }
     }, {
         /**

@@ -12,7 +12,7 @@ Oskari.registerLocalization({
       "out-of-scale": "Tämän karttatason aineistoa ei voida näyttää valitulla mittakaavatasolla.",
       "move-to-scale": "Siirry sopivalle mittakaavatasolle",
       "out-of-content-area": "Tällä karttatasolla ei ole aineistoa tässä sijainnissa",
-      "move-to-content-area": "Siirry kattavuusalueen keskipisteeseen",
+      "move-to-content-area": "Paikanna",
       "description": "Kuvaus",
       "object-data": "Kohdetiedot",
       "rights": {

@@ -317,16 +317,19 @@ function(instance) {
         }
         // Callback handles the end of the asynchronous operation.
         var serviceCallback = function(blnSuccess, model, blnNew) {
+            var loc;
             if (blnSuccess) {
+                loc = me.instance.getLocalization('notification')['success'];
                 me._success2Url(values);
-                me.instance.showMessage('Tallennus onnistui');
+                me.instance.showMessage(loc.savePlace);
                 me._cleanupPopup();
             } else {
+                loc = me.instance.getLocalization('notification')['error'];
                 // blnNew should always be true since we are adding a preparcel
                 if (blnNew) {
-                    me.instance.showMessage('Tallennusvirhe - kohdetunnus tod. on jo käytössä');
+                    me.instance.showMessage(loc.savePlace);
                 } else {
-                    me.instance.showMessage('Muokkausvirhe');
+                    me.instance.showMessage(loc.modifyPlace);
                 }
             }
         }
@@ -342,10 +345,11 @@ function(instance) {
         var me = this;
         // Callback handles the end of the asynchronous operation.
         var serviceCallback = function(blnSuccess, model) {
+            var loc = me.instance.getLocalization('notification')['error'];
             if (blnSuccess) {
                 me._cleanupPopup();
             } else {
-                me.instance.showMessage('Error in loading preparcel');
+                me.instance.showMessage(loc.loadPlace);
             }
         };
         this.instance.getService().loadPreParcel(me.drawPlugin, serviceCallback);
@@ -361,10 +365,11 @@ function(instance) {
         var me = this;
         // Callback handles the end of the asynchronous operation.
         var serviceCallback = function(blnSuccess, model) {
+            var loc = me.instance.getLocalization('notification')['error'];
             if (blnSuccess) {
                 me._cleanupPopup();
             } else {
-                me.instance.showMessage('Error in loading preparcel');
+                me.instance.showMessage(loc.loadPlace);
             }
         };
         this.instance.getService().loadPreParcelData(parcel_id, me.drawPlugin, serviceCallback);

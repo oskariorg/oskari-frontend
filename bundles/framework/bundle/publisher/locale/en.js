@@ -51,8 +51,9 @@ Oskari.registerLocalization({
                 "Portti2Zoombar": "Scale scrollbar",
                 "ControlsPlugin": "Panning on",
                 "SearchPlugin": "Address and place name search",
+                "FeaturedataPlugin": "Feature data",
                 "GetInfoPlugin": "Query tool for place data",
-                "PublisherToolbarPlugin": "map tools",
+                "PublisherToolbarPlugin": "Map tools",
                 "selectDrawLayer" : "Select draw layer"
             },
             "toolbarToolNames": {
@@ -62,22 +63,22 @@ Oskari.registerLocalization({
                 "measurearea": "Measure area",
                 "point" : "Allow points",
                 "line" : "Allow lines",
-                "area" : "Allow areas",
+                "area" : "Allow areas"
             },
             "toollayout": {
                 "label": "Tool layout",
                 "tooltip": "Choose a layout for the tools shown on the map",
                 "lefthanded": "Lefthanded",
                 "righthanded": "Righthanded",
-                "userlayout" : "Custom layout",
+                "userlayout": "Custom layout",
                 "usereditmode": "Switch edit mode on",
                 "usereditmodeoff": "Switch edit mode off"
             },
             "data": {
-                "label":                "Statistics",
-                "tooltip":              "Show the data related to map.",
-                "grid":                 "Show statistic grid",
-                "allowClassification":  "Allow classification"
+                "label": "Statistics",
+                "tooltip": "Show the data related to map.",
+                "grid": "Show statistic grid",
+                "allowClassification": "Allow classification"
             },
             "layout": {
                 "label": "Layout",

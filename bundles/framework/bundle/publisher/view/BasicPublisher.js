@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             '<input class="allow-classification" type="checkbox"/>' +
             '<label class="allow-classification-label"></label>' +
             '</div>');
-        me.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
+        me.templateSizeOptionTool = jQuery('<div class="tool ">' + '<label><input type="radio" name="size" />' + '<span></span></label></div>');
         me.templateCustomSize = jQuery('<div class="customsize">' + '<input type="text" name="width" ' +
             'placeholder="' + localization.sizes.width + '"/> x ' +
             '<input type="text" name="height" placeholder="' + localization.sizes.height + '"/></div>');
@@ -475,14 +475,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                         me.data.hasLayerSelectionPlugin = plugins[i].config;
                     }
                 }
-                //me.data.hasLayerSelectionPlugin = false; (commented out for a reason)
-                // FIXME shouldn't this be in publishertoolform? we don't have the tools here.
-                // yeerp... feck
-                /*
-                for (i = 0; i < me.tools.length; i += 1) {
-                    option = me.tools[i];
-                    option.selected = !!selectedPluginIDs[option.id];
-                }*/
             }
             // Add the layout panel to the accordion.
             me.toolsPanel = Oskari.clazz.create(
@@ -964,7 +956,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     domain: values.domain,
                     name: values.name,
                     language: values.language,
-                    plugins: []
+                    plugins: [],
+                    bundles: []
                 },
                 i,
                 j,
@@ -1051,6 +1044,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 selections.infobox = sandbox.getStatefulComponents().infobox.getState();
             }
 
+            // adds possible feature data bundle
+            if (this.toolsPanel.hasFeatureDataBundle()) {
+                selections.featuredata2 = {
+                    selectionTools: false
+                }
+            }
+
             if (errors.length > 0) {
                 // TODO: messages
                 me._showValidationErrorMessage(errors);
@@ -1077,12 +1077,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                         okBtn = dialog.createCloseButton(me.loc.buttons.ok);
                     dialog.show(me.loc.error.title, me.loc.error.saveFailed, [okBtn]);
                 };
-            /*
-            if (!window.confirm("Publish map?")) {
-                console.log(selections);
-                return;
-            }
-            */
 
             // make the ajax call
             jQuery.ajax({
@@ -1200,7 +1194,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     me.toolsPanel.activatePreviewPlugin(tools[i], true);
                 }
             }
-            mapModule.registerPlugin(me.logoPlugin);
+            me.toolsPanel.activateFeatureDataPlugin(true);
+
+             mapModule.registerPlugin(me.logoPlugin);
             this.logoPlugin.startPlugin(me.instance.sandbox);
         },
         /**
@@ -1224,6 +1220,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     delete tools[i].plugin;
                 }
             }
+            me.toolsPanel.activateFeatureDataPlugin(false);
+
             me.maplayerPanel.stop();
 
             me.layoutPanel.stop();
@@ -1265,23 +1263,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          */
         setPluginLanguage: function (lang) {
             Oskari.setLang(lang);
-            var i,
-                tool;
-            for (i = 0; i < this.tools.length; i += 1) {
-                tool = this.tools[i];
+            var me = this,
+                i,
+                tool,
+                tools = me.toolsPanel.getTools();
+            for (i = 0; i < tools.length; i += 1) {
+                tool = tools[i];
                 if (tool._isPluginStarted) {
                     // FIXME no restarts, it breaks stuff... add a changeLanguage function or smthn...
                     // stop and start if enabled to change language
-                    this.toolsPanel.activatePreviewPlugin(tool, false);
-                    this.toolsPanel.activatePreviewPlugin(tool, true);
+                    me.toolsPanel.activatePreviewPlugin(tool, false);
+                    me.toolsPanel.activatePreviewPlugin(tool, true);
                 }
             }
             // stop and start if enabled to change language
-            this._resetLayerSelectionPlugin();
+            me._resetLayerSelectionPlugin();
 
             // stop and start if enabled to change language
-            this.logoPlugin.stopPlugin(this.instance.sandbox);
-            this.logoPlugin.startPlugin(this.instance.sandbox);
+            me.logoPlugin.stopPlugin(this.instance.sandbox);
+            me.logoPlugin.startPlugin(this.instance.sandbox);
         },
         /**
          * @method _resetLayerSelectionPlugin

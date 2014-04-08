@@ -35,6 +35,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             "main": '<div class="mapplugin featuredataplugin"><a href="javascript:void(0);"></a></div>'
         },
 
+        getClazz: function () {
+            return "Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin";
+        },
         /**
          * @method getName
          * @return {String} plugin name

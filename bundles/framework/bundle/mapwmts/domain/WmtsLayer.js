@@ -11,8 +11,9 @@ Oskari.clazz.define('Oskari.mapframework.wmts.domain.WmtsLayer',
 function() {
 
     //Internal id for this map layer
-    this._WmtsLayerName = null;
+    this._WmtsName = null;
     this._WmtsMatrixSet = null;
+    this._WmtsLayerDef = null;
 
     // Description for layer
     this._WmtsUrls = [];

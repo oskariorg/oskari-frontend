@@ -44,6 +44,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.infobox.InfoBoxBundle",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/infobox/request/HideInfoBoxRequestHandler.js"
             }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/infobox/request/RefreshInfoBoxRequest.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/infobox/request/RefreshInfoBoxRequestHandler.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/infobox/event/InfoBoxEvent.js"
+            }, {
                 "type": "text/css",
                 "src": "../../../../resources/framework/bundle/infobox/css/infobox.css"
             }]

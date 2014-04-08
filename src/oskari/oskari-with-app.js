@@ -3,10 +3,11 @@
  *
  */
 define([
+    "lodash",
     "src/oskari/oskari",
     "src/oskari/base/module",
     "src/framework/oskariui/module"
-], function(Oskari, platform) {
+], function(_,Oskari, platform) {
     Oskari.VERSION = "2.1.0"; // Overwrite
 
     var cs = Oskari.clazz;
@@ -42,36 +43,31 @@ define([
                 startupSequenceLength = startupSequence.length,
                 modules = [];
 
-
-            // TODO: change startup sequense to an array of modules
-            for (var i = 0; i < startupSequenceLength; i++) {
-                modules.push(startupSequence[i].bundlename);
-            }
-
-//            Dynamic values cannot be optimized, change to static for optimization by listing the array values.
-//            Log the modules and temporarily replace startupSequence with the console output or include all necessary modules in the build.
-//            console.log('modules', modules);
-
-            require(modules, function(item) {
-                var module = null,
+            var startModules = function(moduleArray, callback) {
+                if (moduleArray.length === 0) {
+                    if (callback) {
+                        callback();
+                    }
+                    return me;
+                }
+                var moduleItem = moduleArray.shift(),
+                    moduleName = moduleItem.bundlename,
                     instance = null,
-                    identifier = null;
-                for (var i = 0, ilen = arguments.length; i < ilen; i++) {
+                    instancename = moduleItem.bundleinstancename;
 
-                    module = arguments[i];
-                    instance = module.start();
+                require([moduleName], function(module) {
+
+                    instance = module.start(instancename);
                     name = instance.getName();
                     
                     // store handle for observability while testing and debugging
                     me.instances[name] = instance;
-                }
 
-                if (callback) {
-                    callback(result);
-                }
-            });
-
-            return me;
+                    // recursively start all modules
+                    startModules(moduleArray, callback);
+                });
+            };
+            startModules(startupSequence, callback);
         },
         start: function() {
             var me = this;

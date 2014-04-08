@@ -13,11 +13,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
      */
 
     function () {
+        this.__name = "mapfull";
         this.map = null;
         this.core = null;
         this.sandbox = null;
         this.mapmodule = null;
-        this.state = undefined;
+        this.state;
         /**
          * @property {String} mapDivId
          * ID of the DOM element the map will be rendered to
@@ -26,6 +27,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
         this.mapDivId = "mapdiv";
         this.contentMapDivId = 'contentMap';
     }, {
+        getName: function () {
+            return this.__name;
+        },
         /**
          * @method getMapModule
          * Returns reference to the map module
@@ -102,7 +106,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
 
             module.start(me.sandbox);
 
-            map.render(me.mapDivId);
+            if (!me.nomaprender) {
+                map.render(me.mapDivId);
+            }
             // startup plugins
             if (me.conf.plugins) {
                 var plugins = this.conf.plugins;

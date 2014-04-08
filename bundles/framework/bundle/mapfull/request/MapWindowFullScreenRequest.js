@@ -22,7 +22,7 @@ function() {
      */
     getName : function() {
         return this.__name;
-    },
+    }
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}

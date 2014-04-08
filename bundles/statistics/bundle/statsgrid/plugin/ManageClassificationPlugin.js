@@ -164,16 +164,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             if (this._state.numberOfClasses < 3) {
                 this._state.numberOfClasses = 2;
             }
-            if ((this._state.filterMethod === null) || (typeof this._state.filterMethod === "undefined") ) {
+            if ((this._state.filterMethod === null) || (typeof this._state.filterMethod === "undefined")) {
                 this._state.filterMethod = "";
             }
-            if ((this._state.filterInput === null) || (typeof this._state.filterInput === "undefined") ) {
+            if ((this._state.filterInput === null) || (typeof this._state.filterInput === "undefined")) {
                 this._state.filterInput = [];
             }
-            if ((this._state.filterRegion === null) || (typeof this._state.filterRegion === "undefined") ) {
+            if ((this._state.filterRegion === null) || (typeof this._state.filterRegion === "undefined")) {
                 this._state.filterRegion = [];
             }
-            if ((this._state.municipalities === null) || (typeof this._state.municipalities === "undefined") ) {
+            if ((this._state.municipalities === null) || (typeof this._state.municipalities === "undefined")) {
                 this._state.municipalities = [];
             }
         },
@@ -386,7 +386,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 classify;
 
             //Check selected column - only data columns are handled
-            if (sortcol.field.indexOf('indicator') < 0) {
+            if (!sortcol || (sortcol && sortcol.field.indexOf('indicator') < 0)) {
                 return;
             }
 
@@ -570,6 +570,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 // Show legend in content
                 this.element.find('div.content').show();
             }
+
+            this._visibilityOn();
         },
 
         /**
@@ -591,6 +593,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 VIS_CLASSES: "",
                 VIS_COLORS: "choro:"
             });
+            this.resetUI();
         },
         _hasNonNumericValues: function (values) {
             for (var i = 0, valLen = values.length; i < valLen; ++i) {
@@ -735,8 +738,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 });
                 manualcls.find('.icon-info').click(function (event) {
                     // open helpityhelp...
-                    var desc =
-                        '<p>' + me._locale.classify.info + '</p>';
+                    var desc = '<p>' + me._locale.classify.info + '</p>';
                     me.showMessage(me._locale.classify.infoTitle, desc);
                 });
                 manualcls.hide();
@@ -819,17 +821,25 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
          * @param {String} message popup message
          */
         showMessage: function (title, message) {
+            var me = this;
             // Oskari components aren't available in a published map.
             if (!this._published) {
-                var loc = this._locale,
-                    dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                    okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                okBtn.setTitle(loc.buttons.ok);
-                okBtn.addClass('primary');
-                okBtn.setHandler(function () {
-                    dialog.close(true);
-                });
-                dialog.show(title, message, [okBtn]);
+                if (me.messageDialog) {
+                    me.messageDialog.close(true);
+                    me.messageDialog = null;
+                } else {
+                    var loc = this._locale,
+                        dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                        okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                    okBtn.setTitle(loc.buttons.ok);
+                    okBtn.addClass('primary');
+                    okBtn.setHandler(function () {
+                        dialog.close(true);
+                        me.messageDialog = null;
+                    });
+                    dialog.show(title, message, [okBtn]);
+                    me.messageDialog = dialog;
+                }
             }
         },
 
@@ -1080,7 +1090,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             //Main dialog
             var me = this;
             if (me.dialog) {
-                me.dialog.close();
+                me.dialog.close(true);
+                me.dialog = null;
+                return;
             }
             me.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
@@ -1114,8 +1126,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             // Set background color for current selected colors
             me._hiliSelectedColors();
 
-            var cancelBtn = me.dialog.createCloseButton(this._locale.colorset.cancel);
+            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            cancelBtn.setTitle(this._locale.colorset.cancel);
             cancelBtn.addClass('primary');
+            cancelBtn.setHandler(function () {
+                me.dialog.close(true);
+                me.dialog = null;
+            });
 
             me.dialog.addClass('tools_selection');
             me.dialog.show(this._locale.colorset.themeselection, me.content, [cancelBtn]);

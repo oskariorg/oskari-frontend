@@ -113,17 +113,14 @@ div#publisher-colour-inputs {
 
 div#publisher-custom-colours {
   padding: 10px 20px; }
-
-div#publisher-custom-colours div#publisher-custom-colours-bg, div#publisher-custom-colours div#publisher-custom-colours-title, div#publisher-custom-colours div#publisher-custom-colours-header, div#publisher-custom-colours div#publisher-custom-colours-iconcls {
-  margin-bottom: 12px; }
-
-div#publisher-custom-colours div.rgbInput {
-  padding: 5px;
-  border: 1px solid black; }
-
-div#publisher-custom-colours div.rgbInput input[type="text"] {
-  margin: 0 8px;
-  width: 30px; }
+  div#publisher-custom-colours div#publisher-custom-colours-bg, div#publisher-custom-colours div#publisher-custom-colours-title, div#publisher-custom-colours div#publisher-custom-colours-header, div#publisher-custom-colours div#publisher-custom-colours-iconcls {
+    margin-bottom: 12px; }
+  div#publisher-custom-colours div.rgbInput {
+    padding: 5px;
+    border: 1px solid black; }
+    div#publisher-custom-colours div.rgbInput input[type="text"] {
+      margin: 0 8px;
+      width: 30px; }
 
 .maincontainer ul.selectedLayersList {
   margin-left: 0px; }
@@ -145,7 +142,7 @@ div.basic_publisher .layer.selected {
     div.basic_publisher .layer.selected div.layer-info div.layer-title {
       display: inline; }
       div.basic_publisher .layer.selected div.layer-info div.layer-title h4 {
-        font: 10pt Arial, sans-serif;
+        font: 14pt Arial, sans-serif;
         padding: 0; }
     div.basic_publisher .layer.selected div.layer-info div.layer-tool-remove {
       float: right; }
@@ -182,7 +179,7 @@ div.basic_publisher ul.selectedLayersList {
   overflow: auto;
   list-style-type: none;
   padding: 0;
-  margin: 0; }
+  margin: 5px 0 0; }
   div.basic_publisher ul.selectedLayersList span {
     position: absolute;
     margin-left: -1.3em; }

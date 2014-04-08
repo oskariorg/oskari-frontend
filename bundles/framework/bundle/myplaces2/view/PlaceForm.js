@@ -10,8 +10,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
      * @static
      */
 
-    function (instance) {
+    function (instance, options) {
         this.instance = instance;
+        this.options = options;
         this.newCategoryId = '-new-';
         this.placeId = undefined;
         this.initialValues = undefined;
@@ -59,10 +60,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
          */
         getForm: function (categories) {
             var ui = this.template.clone(),
-                loc = this.instance.getLocalization('placeform');
+                loc = this.instance.getLocalization('placeform'),
+                isPublished = (this.options ? this.options.published : false);
             // TODO: if a place is given for editing -> populate fields here
-            // populate category options
-            if (categories) {
+            // populate category options (only if not in a published map)
+            if (categories && !isPublished) {
                 var selection = ui.find('select[name=category]'),
                     option,
                     i,
@@ -88,8 +90,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                 this._bindCategoryChange();
             }
 
+            if (isPublished) {
+                // remove the layer selections if in a publised map
+                ui.find('div#newLayerForm').remove();
+            } else {
+                // otherwise bind an event when selecting to create a new layer
+                this._bindCreateNewLayer();
+            }
+
+            // Hide the image preview at first
+            this._updateImageUrl('', ui);
             this._bindImageUrlChange();
-            this._bindCreateNewLayer();
 
             if (this.initialValues) {
                 ui.find('input[name=placename]').attr('value', this.initialValues.place.name);
@@ -115,6 +126,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
          * @return {Object}
          */
         getValues: function () {
+            var forcedCategory = (this.options ? this.options.category : undefined);
             var values = {};
             // infobox will make us lose our reference so search 
             // from document using the form-class
@@ -141,13 +153,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                     attention_text: placeAttention,
                     link: placeLink,
                     imageLink: imageLink,
-                    category: categorySelection
+                    category: forcedCategory || categorySelection
                 };
                 if (this.placeId) {
                     values.place.id = this.placeId;
                 }
             }
-            if (this.categoryForm) {
+            if (this.categoryForm && !forcedCategory) {
+                // add the values for a new category if present
+                // and not in a publised map
                 values.category = this.categoryForm.getValues();
             }
             return values;
@@ -223,11 +237,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
         },
 
         _updateImageUrl: function (src, form) {
-            var img = form.find('div.imagePreview').find('img');
-            img.attr('src', src);
-            form.find('a.myplaces_imglink').attr({
-                'href': src
-            });
+            var preview = form.find('div.imagePreview');
+
+            preview
+                .find('a.myplaces_imglink').attr('href', src)
+                .find('img').attr('src', src);
+
+            if (src) {
+                preview.show()
+            } else {
+                preview.hide();
+            }
         },
 
         /**

@@ -42,10 +42,6 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-methods', {
         }
 
         this._core.processRequest(this._core.getRequestBuilder('MapMoveRequest')(mapDomain.getX(), mapDomain.getY(), zoom, marker));
-        if (blnInitialMove === true) {
-            // clear history
-            this._core.processRequest(this._core.getRequestBuilder('ClearHistoryRequest')());
-        }
     },
 
     /**

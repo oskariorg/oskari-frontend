@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      *      localization data in JSON format
      */
 
-        function (instance, localization) {
+    function (instance, localization) {
         var me = this,
             p,
             f,
@@ -89,9 +89,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
         me._filterJsons = {};
         me._filterPopups = {};
-
-        // Publisher permissions
-        me._permissions = '';
 
     }, {
         __templates: {
@@ -659,8 +656,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'id': dat.id,
                     'checked': dat.checked
                 }).change(function (e) {
-                        me._refreshFields();
-                    });
+                    me._refreshFields();
+                });
                 opt.find('label').html(dat.label).attr({
                     'for': dat.id,
                     'class': 'params_checklabel'
@@ -1370,7 +1367,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var layer = this._getSelectedMapLayer();
 
             // No layers
-            if(!layer) return;
+            if (!layer) return;
 
             // Get the feature fields
             var selectedColumnmode = container.find('input[name=params]:checked').val();
@@ -1405,12 +1402,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             selections.style = this.getStyleValues();
             // Bbox
             selections.bbox = this.instance.getSandbox().getMap().getBbox();
-
-            // Publisher permissions
-            var pubPerm = layer.getPermission('publish');
-            if (typeof pubPerm !== "undefined") {
-                this.setPermissions(pubPerm);
-            }
 
             return selections;
         },
@@ -1527,8 +1518,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         if (response) {
                             if (response.error) {
                                 me.instance.showMessage(me.loc.error.title, me.loc.error[response.error] || response.error);
-                            }
-                            else
+                            } else
                                 me._handleAnalyseMapResponse(response);
                         }
                     },
@@ -1558,51 +1548,34 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 requestBuilder,
                 request;
 
-            // TODO: Handle WPS results when no FeatureCollection eg. aggregate
-            if (analyseJson.wpsLayerId + '' === "-1") {
-                this.instance.showMessage("Tulokset", analyseJson.result);
-            } else {
 
-                mapLayerService = this.instance.mapLayerService;
-                // Prefix the id to avoid collisions
-                // FIXME: temporary, server should respond with an actual
-                // id so that further analysis with this layer is possible.
-                analyseJson.id = this.layer_prefix + analyseJson.id + '_' + analyseJson.wpsLayerId;
-                // Create the layer model
-                mapLayer = mapLayerService.createMapLayer(analyseJson);
-                mapLayer.setWpsUrl(analyseJson.wpsUrl);
-                mapLayer.setWpsName(analyseJson.wpsName);
-                var pubPerm = me.getPermissions();
-                if (typeof pubPerm !== "undefined") {
-                    mapLayer.addPermission("publish", pubPerm);
-                }
-                //mapLayer.setWpsUrl('/karttatiili/wpshandler?');
-                //mapLayer.setWpsName('ana:analysis_data');
-                // Add the layer to the map layer service
-                mapLayerService.addLayer(mapLayer);
+            mapLayerService = this.instance.mapLayerService;
+            // Create the layer model
+            mapLayer = mapLayerService.createMapLayer(analyseJson);
+            // Add the layer to the map layer service
+            mapLayerService.addLayer(mapLayer);
 
-                // Request the layer to be added to the map.
-                // instance.js handles things from here on.
-                requestBuilder = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest');
-                if (requestBuilder) {
-                    request = requestBuilder(mapLayer.getId());
-                    this.instance.sandbox.request(this.instance, request);
-                }
-                // Remove old layers if any
-                if (analyseJson.mergeLayers) {
-                    var mlays = analyseJson.mergeLayers;
-                    if (mlays.length > 0) {
-                        // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
-                        // also we need to do it before service.remove() to avoid problems on other components
-                        var removeMLrequestBuilder = this.instance.sandbox.getRequestBuilder('RemoveMapLayerRequest'),
-                            i;
+            // Request the layer to be added to the map.
+            // instance.js handles things from here on.
+            requestBuilder = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest');
+            if (requestBuilder) {
+                request = requestBuilder(mapLayer.getId());
+                this.instance.sandbox.request(this.instance, request);
+            }
+            // Remove old layers if any
+            if (analyseJson.mergeLayers) {
+                var mlays = analyseJson.mergeLayers;
+                if (mlays.length > 0) {
+                    // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
+                    // also we need to do it before service.remove() to avoid problems on other components
+                    var removeMLrequestBuilder = this.instance.sandbox.getRequestBuilder('RemoveMapLayerRequest'),
+                        i;
 
-                        for (i in mlays) {
-                            if (mlays.hasOwnProperty(i)) {
-                                request = removeMLrequestBuilder(mlays[i]);
-                                this.instance.sandbox.request(this.instance, request);
-                                mapLayerService.removeLayer(mlays[i]);
-                            }
+                    for (i in mlays) {
+                        if (mlays.hasOwnProperty(i)) {
+                            request = removeMLrequestBuilder(mlays[i]);
+                            this.instance.sandbox.request(this.instance, request);
+                            mapLayerService.removeLayer(mlays[i]);
                         }
                     }
                 }
@@ -1657,9 +1630,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 me.instance.getSandbox().postRequestByName(
-                    rn,
-                    [
-                        {
+                    rn, [{
                             uuid: uuid
                         },
                         additionalUuids
@@ -1765,7 +1736,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (selectedLayer.getId().toString().indexOf(me.layer_prefix) > -1) return;
 
             if (selectedLayer.getFields && selectedLayer.getFields().length > me.max_analyse_layer_fields) {
-                me.instance.showMessage( me.loc.infos.title, me.loc.infos.layer+" "+selectedLayer.getName()+" "+me.loc.infos.over10);
+                me.instance.showMessage(me.loc.infos.title, me.loc.infos.layer + " " + selectedLayer.getName() + " " + me.loc.infos.over10);
             }
         },
         /**
@@ -1784,12 +1755,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
 
             var line_point_border_colors = [
-                    'e31a1c', '2171b5', '238b45', '88419d',
-                    '2b8cbe', '238b45', 'd94801', 'd7301f',
-                    '0570b0', '02818a', 'ce1256', '6a51a3',
-                    'ae017e', 'cb181d', '238443', '225ea8',
-                    'cc4c02'
-                ],
+                'e31a1c', '2171b5', '238b45', '88419d',
+                '2b8cbe', '238b45', 'd94801', 'd7301f',
+                '0570b0', '02818a', 'ce1256', '6a51a3',
+                'ae017e', 'cb181d', '238443', '225ea8',
+                'cc4c02'
+            ],
                 fill_colors = [
                     'fd8d3c', '6baed6', '66c2a4', '8c96c6',
                     '7bccc4', '74c476', 'fd8d3c', 'fc8d59',
@@ -1839,11 +1810,5 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
         setState: function (formState) {
 
-        },
-        getPermissions: function () {
-            return this._permissions;
-        },
-        setPermissions: function (permissions) {
-            this._permissions = permissions;
         }
     });

@@ -2,11 +2,13 @@ Oskari.registerLocalization({
   "lang": "fi",
   "key": "Search",
   "value": {
-    "title": "Paikkahaku",
+    "title": "Haku",
     "desc": "",
+    "tabTitle": "Paikkahaku",
     "contentErrorMsg": "Hakusanassa on kiellettyjä merkkejä.",
     "searchDescription": "Hae paikannimeä, osoitetta tai kiinteistötunnusta.",
     "searchButton": "Hae",
+    "searchAssistance": "Kirjoita hakusana",
     "searchResultCount": "Hakusi palautti ",
     "searchResultCount2": " tulosta",
     "searchResultDescriptionMoreResults": "Tarkentamalla hakua voit tiivistää tulosten joukkoa.",
@@ -24,8 +26,8 @@ Oskari.registerLocalization({
       "type": "Tyyppi"
     },
     "resultBox" : {
-    	"close" : "Sulje",
-    	"title" : "Paikkahaun tulokset"
+        "close" : "Sulje",
+        "title" : "Paikkahaun tulokset"
     }
   }
 });
