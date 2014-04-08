@@ -15,6 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         this.locale = locale;
         this.container = undefined;
         this.template = undefined;
+        this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     }, {
         __name: 'Oskari.mapframework.bundle.myplacesimport.Flyout',
         __templates: {
@@ -77,6 +78,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
 
             this.setTemplate(this.createUi());
             container.append(this.getTemplate());
+            /* progress */
+            this.progressSpinner.insertTo(container);
         },
         /**
          * Interface method implementation
@@ -152,7 +155,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                         if (me.__validateForm(form, locale)) {
                             e.preventDefault();
                         } else {
+                            me.progressSpinner.start();
                             me.container.find('iframe').on('load', function() {
+                                me.progressSpinner.stop();
                                 me.__finish(jQuery(this), locale);
                             });
                         }
