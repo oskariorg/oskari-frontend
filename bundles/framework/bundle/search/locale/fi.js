@@ -2,8 +2,9 @@ Oskari.registerLocalization({
   "lang": "fi",
   "key": "Search",
   "value": {
-    "title": "Paikkahaku",
+    "title": "Haku",
     "desc": "",
+    "tabTitle": "Paikkahaku",
     "contentErrorMsg": "Hakusanassa on kiellettyjä merkkejä.",
     "searchDescription": "Hae paikannimeä, osoitetta tai kiinteistötunnusta.",
     "searchButton": "Hae",
