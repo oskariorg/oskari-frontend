@@ -82,18 +82,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
          */
         init: function () {
 
-            var loc = this.instance.getLocalization('tools');
-            var user = this.instance.sandbox.getUser();
+            var loc = this.instance.getLocalization('tools'),
+                user = this.instance.sandbox.getUser();
 
             // different tooltip for guests - "Please log in to use"
             var guestPostfix = user.isLoggedIn() || this.conf.allowGuest === true ? '' : ' - ' + this.instance.getLocalization('guest').loginShort;
 
             // remove configured buttons and set tooltips
             for (var tool in this.buttons) {
-                if (this.conf.myplaces && this.conf.myplaces[tool] === false) {
-                    delete this.buttons[tool];
-                } else {
+                if (this.conf.myplaces && this.conf.myplaces[tool]) {
                     this.buttons[tool].tooltip = loc[tool].tooltip + guestPostfix;
+                } else {
+                    delete this.buttons[tool];
                 }
             }
         },
@@ -102,9 +102,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
          * implements Module protocol start methdod
          */
         start: function () {
-            var me = this;
-
-            var sandbox = me.instance.sandbox,
+            var me = this,
+                sandbox = me.instance.sandbox,
                 p;
             sandbox.register(me);
             for (p in me.eventHandlers) {
@@ -134,8 +133,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
          * Disables draw buttons
          */
         disableButtons: function () {
-            var sandbox = this.instance.sandbox;
-            var stateReqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
+            var sandbox = this.instance.sandbox,
+                stateReqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
             sandbox.request(this, stateReqBuilder(undefined, this.buttonGroup, false));
         },
         /**
@@ -158,8 +157,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
          * @param config params for StartDrawRequest
          */
         sendDrawRequest: function (config) {
-            var me = this;
-            var startRequest = this.instance.sandbox.getRequestBuilder('DrawPlugin.StartDrawingRequest')(config);
+            var me = this,
+                startRequest = this.instance.sandbox.getRequestBuilder('DrawPlugin.StartDrawingRequest')(config);
             this.instance.sandbox.request(this, startRequest);
 
             if (!config.geometry) {
@@ -219,8 +218,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
          * @param {Boolean} isCancel boolean param for StopDrawingRequest, true == canceled, false = finish drawing (dblclick)
          */
         sendStopDrawRequest: function (isCancel) {
-            var me = this;
-            var request = me.instance.sandbox.getRequestBuilder('DrawPlugin.StopDrawingRequest')(isCancel);
+            var me = this,
+                request = me.instance.sandbox.getRequestBuilder('DrawPlugin.StopDrawingRequest')(isCancel);
             me.instance.sandbox.request(me, request);
 
             var toolContainerRequest = me.instance.sandbox.getRequestBuilder('Toolbar.ToolContainerRequest')('reset', me.toolContentDivData);
@@ -309,8 +308,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
                 var me = this;
                 if (typeof event.getDrawingMode() !== "undefined") {
                     if (event.getDrawingMode() !== null) {
-                        var loc = this.instance.getLocalization('tools');
-                        var areaDialogContent = loc[event.getDrawingMode()].next;
+                        var loc = this.instance.getLocalization('tools'),
+                            areaDialogContent = loc[event.getDrawingMode()].next;
 
                         if (me.toolContentDivData.content !== areaDialogContent) {
                             me.toolContentDivData.content = areaDialogContent;
