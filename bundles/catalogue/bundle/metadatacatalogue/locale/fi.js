@@ -27,6 +27,8 @@ Oskari.registerLocalization({
         "other": "Muu",
         "transformation": "Muunnos",
         "view": "Katselu",
+        "Language": "Metatiedon kieli",
+        "ResourceLanguage": "Resurssin kieli",
         "modifySearch" : "Muokkaa hakua",
         "showSearch" : "Näytä kaikki hakutulokset",
         "metadataCatalogueResults": "Hakutulokset",

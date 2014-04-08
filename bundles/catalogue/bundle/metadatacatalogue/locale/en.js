@@ -27,6 +27,8 @@ Oskari.registerLocalization({
         "other": "Other",
         "transformation": "Transformation",
         "view": "View",
+        "Language": "Metadata language",
+        "ResourceLanguage": "Resource language",
         "modifySearch" : "Edit search",
         "showSearch" : "Show all search results",
         "metadataCatalogueResults": "Search results",

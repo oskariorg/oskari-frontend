@@ -27,6 +27,8 @@ Oskari.registerLocalization({
         "other": "Andra",
         "transformation": "Omvandling",
         "view": "Visning",
+        "Language": "Metadataspråk",
+        "ResourceLanguage": "Resursspråk",
         "modifySearch" : "Redigera sök",
         "showSearch" : "Visa alla resultatet",
         "metadataCatalogueResults": "Resultatet",
