@@ -991,6 +991,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             if (indicator) {
                 // click listener
+                fetchButton.unbind('click');
                 fetchButton.click(function (e) {
                     var element = jQuery(e.currentTarget),
                         year = jQuery('.statsgrid').find('.yearsel').find('.year').val(),
