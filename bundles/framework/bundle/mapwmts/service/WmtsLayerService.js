@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
             }
         }, conf || {});
 
-        console.log(httpGetConf);
+//        console.log(httpGetConf);
 
         OpenLayers.Request.GET(httpGetConf);
 
