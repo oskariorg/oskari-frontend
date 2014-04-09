@@ -1,5 +1,21 @@
 # Release Notes
 
+## 1.19.3
+
+### statsgrid
+
+Unbinding click button before assigning a new click listener so bindings don't accumulate
+
+## 1.19.2
+
+Removed random console.log() commands for Internet Explorer to work correctly
+
+## 1.19.1
+
+### myplaces2
+
+Fixed an issue where missing image url prevented edit myplace form from opening
+
 ## 1.19
 
 ### mapwmts
