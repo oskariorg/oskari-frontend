@@ -10,12 +10,18 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
         this.drawPluginId = undefined;
         this.drawPlugin   = undefined;
         this.featureLayer = undefined;
+        this.layerType    = undefined;
         this.isStarted    = undefined;
 
         this.init(view);
         this.start();
     }, {
+        /**
+         * @static
+         * @property _templates
+         */
         _templates: {
+            'help': '<div class="help icon-info"></div>',
             'layersContainer': '<div class="layers"></div>',
             'toolContainer': '<div class="toolContainer">' +
                     '<h4 class="title"></h4>' +
@@ -23,28 +29,76 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             'tool': '<div class="tool"></div>',
             'buttons': '<div class="buttons"></div>'
         },
+        /**
+         * @method getPanel
+         * @return {Oskari.userinterface.component.AccordionPanel}
+         */
         getPanel: function() {
             return this.panel;
         },
+        /**
+         * Returns the container where all the stuff is.
+         * 
+         * @method getPanelContainer
+         * @return {jQuery}
+         */
         getPanelContainer: function() {
             return this.getPanel().getContainer();
         },
+        /**
+         * @method getName
+         * @return {String}
+         */
         getName: function() {
             return this.instance.getName() + 'ContentPanel';
         },
+        /**
+         * Returns a list of all temporary features added.
+         * 
+         * @method getFeatures
+         * @return {Object[]}
+         */
         getFeatures: function() {
             return this.features;
         },
+        /**
+         * Returns the element which the layer list is rendered into.
+         * 
+         * @method getLayersContainer
+         * @return {jQuery}
+         */
         getLayersContainer: function() {
             return this.getPanelContainer().find('div.layers');
         },
+        /**
+         * Returns the type of the layer we fake here for the temporary features.
+         * 
+         * @method getLayerType
+         * @return {String}
+         */
+        getLayerType: function() {
+            return this.layerType;
+        },
+        /**
+         * Empties the layer list.
+         * 
+         * @method emptyLayers
+         */
         emptyLayers: function() {
             this.getLayersContainer().empty();
         },
+        /**
+         * @method onEvent
+         * @param  {Oskari.Event} event
+         */
         onEvent: function(event) {
             var handler = this.eventHandlers[event.getName()];
             if (handler) return handler.apply(this, [event]);
         },
+        /**
+         * @static
+         * @property eventHandlers
+         */
         eventHandlers: {
             'DrawPlugin.FinishedDrawingEvent': function (event) {
                 if (this.drawPluginId !== event.getCreatorId()) return;
@@ -52,6 +106,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 this._addGeometry(event.getDrawing());
             }
         },
+        /**
+         * Initializes the class.
+         * Creates draw plugin and feature layer and sets the class/instance variables.
+         * 
+         * @method init
+         * @param  {Oskari.analysis.bundle.analyse.view.StartAnalyse} view
+         */
         init: function(view) {
             this.view         = view;
             this.instance     = this.view.instance;
@@ -64,10 +125,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 line: 0,
                 area: 0
             };
-            this.panel        = this._createPanel();
+            this.panel        = this._createPanel(this.loc);
             this.drawPluginId = this.instance.getName();
             this.drawPlugin   = this._createDrawPlugin();
-            this.featureLayer = this._createFeatureLayer();;
+            this.featureLayer = this._createFeatureLayer(this.mapModule);
+            this.layerType    = 'ANALYSE_TEMP';
             this.isStarted    = false;
 
             for (var p in this.eventHandlers) {
@@ -76,12 +138,17 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 }
             }
         },
+        /**
+         * Adds the feature layer to the map, stops all other draw plugins
+         * and starts the draw plugin needed here.
+         * 
+         * @method start
+         */
         start: function() {
             // Already started so nothing to do here
             if (this.isStarted) return;    
 
             this._toggleDrawPlugins(false);
-            //this.featureLayer.setVisibility(true);
             this.mapModule.getMap().addLayer(this.featureLayer);
 
             this.mapModule.registerPlugin(this.drawPlugin);
@@ -89,6 +156,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
 
             this.isStarted = true;
         },
+        /**
+         * Destroys the created components and unsets the class/instance variables.
+         * 
+         * @method destroy
+         */
         destroy: function() {
             for (var p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
@@ -109,8 +181,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             this.panel        = undefined;
             this.drawPluginId = undefined;
             this.drawPlugin   = undefined;
+            this.layerType    = undefined;
             this.isStarted    = undefined;
         },
+        /**
+         * Removes the feature layer, stops the draw plugin and
+         * restarts all other draw plugins.
+         * 
+         * @method stop
+         */
         stop: function() {
             // Already stopped so nothing to do here
             if (!this.isStarted) return;
@@ -118,44 +197,91 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             this.mapModule.stopPlugin(this.drawPlugin);
             this.mapModule.unregisterPlugin(this.drawPlugin);
 
-            //this.featureLayer.setVisibility(false);
             this.mapModule.getMap().removeLayer(this.featureLayer);
             this._toggleDrawPlugins(true);
 
             this.isStarted = false;
         },
+        /**
+         * Returns the feature object by its id.
+         * 
+         * @method findFeatureById
+         * @param  {String} id
+         * @return {Object}
+         */
         findFeatureById: function(id) {
-            return _.find(this.features, function(feature) {
+            return _.find(this.getFeatures(), function(feature) {
                 return feature.getId() === id;
             });
         },
+        /**
+         * Removes the feature by given id from the feature layer
+         * and from the internal feature list.
+         * 
+         * @method removeGeometry
+         * @param  {String} id
+         */
+        removeGeometry: function(id) {
+            var arr = this.features || [],
+                i,
+                arrLen,
+                feature;
+
+            for (i = 0, arrLen = arr.length; i < arrLen; ++i) {
+                if (arr[i].getId() === id) {
+                    arr.splice(i, 1);
+                    break;
+                }
+            }
+
+            if (this.featureLayer) {
+                feature = this.featureLayer.getFeatureById(id);
+                this.featureLayer.destroyFeatures([feature]);
+            }
+
+            this.view.refreshAnalyseData();
+        },
+
+        /*
+         *******************
+         * PRIVATE METHODS *
+         *******************
+         */
+
         /**
          * Creates the content layer selection panel for analyse
          * 
          * @method _createPanel
          * @private
+         * @param {Object} loc
          * @return {Oskari.userinterface.component.AccordionPanel}
          *         Returns the created panel
          */
-        _createPanel: function () {
-            var me = this,
-                panel = Oskari.clazz.create(
+        _createPanel: function (loc) {
+            var panel = Oskari.clazz.create(
                     'Oskari.userinterface.component.AccordionPanel'),
                 panelContainer = panel.getContainer(),
                 layersCont = jQuery(this._templates.layersContainer).clone(),
-                tooltipCont = this.view.template.help.clone(),
-                dataBtn = this._createDataButton();
+                tooltipCont = jQuery(this._templates.help).clone(),
+                dataBtn = this._createDataButton(loc);
 
-            panel.setTitle(this.loc.content.label);
-            tooltipCont.attr('title', this.loc.content.tooltip);
+            panel.setTitle(loc.content.label);
+            tooltipCont.attr('title', loc.content.tooltip);
 
             panelContainer.append(tooltipCont);
             panelContainer.append(layersCont);
             dataBtn.insertTo(panelContainer);
-            panelContainer.append(this._createDrawButtons());
+            panelContainer.append(this._createDrawButtons(loc));
 
             return panel;
         },
+        /**
+         * Creates and returns the draw plugin needed here.
+         * 
+         * @method _createDrawPlugin
+         * @private
+         * @return {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin}
+         */
         _createDrawPlugin: function() {
             var drawPlugin = Oskari.clazz.create(
                     'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin', {
@@ -165,12 +291,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             
             return drawPlugin;
         },
-        _createDataButton: function() {
+        /**
+         * Creates and returns the data button which opens the layer selector.
+         * 
+         * @method _createDataButton
+         * @private
+         * @param {Object} loc
+         * @return {jQuery}
+         */
+        _createDataButton: function(loc) {
             var me = this,
                 button = Oskari.clazz.create(
                     'Oskari.userinterface.component.Button');
 
-            button.setTitle(this.loc.buttons.data);
+            button.setTitle(loc.buttons.data);
             button.addClass('primary');
             button.setHandler(function () {
                 me._modifyAnalyseData();
@@ -178,13 +312,22 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
 
             return button;
         },
-        _createDrawButtons: function() {
+        /**
+         * Creates and returns the draw buttons from which the user can draw
+         * temporary features which can be used in analysis.
+         * 
+         * @method _createDrawButtons
+         * @private
+         * @param {Object} loc
+         * @return {jQuery}
+         */
+        _createDrawButtons: function(loc) {
             var me = this,
                 toolContainer = jQuery(this._templates.toolContainer).clone(),
                 toolTemplate = jQuery(this._templates.tool),
                 tools = ['point', 'line', 'area'];
 
-            toolContainer.find('h4.title').html('Lisää kohde');
+            toolContainer.find('h4.title').html(loc.content.features.title);
 
             return _.foldl(tools, function(container, tool) {
                 var toolDiv = toolTemplate.clone();
@@ -199,18 +342,27 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 return container;
             }, toolContainer);
         },
+        /**
+         * Creates and returns the draw control buttons where the user
+         * can either save or discard the drawn feature.
+         * 
+         * @method _createDrawControls
+         * @private
+         * @return {jQuery}
+         */
         _createDrawControls: function () {
             var me = this,
+                loc = this.loc.content.features.buttons,
                 container = jQuery(this._templates.buttons).clone(),
                 cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
-            cancelBtn.setTitle('Peruuta');
+            cancelBtn.setTitle(loc.cancel);
             cancelBtn.setHandler(function () {
                 me._sendStopDrawRequest(true);
             });
 
-            finishBtn.setTitle('Tallenna');
+            finishBtn.setTitle(loc.finish);
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
                 me._sendStopDrawRequest();
@@ -222,23 +374,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             return container;
         },
         /**
-         * modify analyse data layers in selection box
+         * Sends a request to open the layer selector Flyout.
          * 
          * @method _modifyAnalyseData
          * @private
          */
         _modifyAnalyseData: function () {
-            var extension = this._getFakeExtension('LayerSelector'),
+            var extension = {
+                    getName: function () {
+                        return 'LayerSelector';
+                    }
+                },
                 rn = 'userinterface.UpdateExtensionRequest';
 
             this.sandbox.postRequestByName(rn, [extension, 'attach']);
-        },
-        _getFakeExtension: function (name) {
-            return {
-                getName: function () {
-                    return name;
-                }
-            };
         },
         /**
          * Resets currently selected place and sends a draw request to plugin
@@ -274,9 +423,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
         },
         /**
          * Sends a StartDrawRequest with given params.
-         * Changes the panel controls to match the application state (new/edit)
          * 
          * @method _sendDrawRequest
+         * @private
          * @param {Object} config params for StartDrawRequest
          */
         _sendDrawRequest: function (config) {
@@ -292,8 +441,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
         },
         /**
          * Sends a StopDrawingRequest.
-         * Changes the panel controls to match the application state (new/edit)
-         * if propagateEvent != true
          * 
          * @method _sendStopDrawRequest
          * @private
@@ -313,6 +460,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 sandbox.request(this.instance, request);
             }
         },
+        /**
+         * Adds the given geometry to the feature layer
+         * and to the internal list of features.
+         * 
+         * @method _addGeometry
+         * @private
+         * @param {OpenLayers.Geometry} geometry
+         */
         _addGeometry: function(geometry) {
             var mode = this._getDrawModeFromGeometry(geometry),
                 feature;
@@ -331,9 +486,23 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 this.view.refreshAnalyseData();
             }
         },
+        /**
+         * Creates a fake layer for analyse view which behaves
+         * like an Oskari layer in some sense
+         * (has all the methods needed in the view).
+         * 
+         * @method _createFakeLayer
+         * @private
+         * @param  {String} id the OpenLayers.Feature.Vector id
+         * @param  {String} mode either 'area', 'line' or 'point'
+         * @return {Object}
+         */
         _createFakeLayer: function(id, mode) {
-            var name = (mode + ' ' + (++this.featCounts[mode])),
-                featureLayer = this.featureLayer;
+            var loc = this.loc.content.features.modes,
+                name = (loc[mode] + ' ' + (++this.featCounts[mode])),
+                layerType = this.getLayerType(),
+                featureLayer = this.featureLayer,
+                formatter = new OpenLayers.Format.GeoJSON;
 
             return {
                 getId: function() {
@@ -343,7 +512,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                     return name;
                 },
                 isLayerOfType: function(type) {
-                    return type === 'ANALYSE_TEMP';
+                    return type === layerType;
                 },
                 getLayerType: function() {
                     return 'temp';
@@ -358,33 +527,18 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                     return (featureLayer.opacity * 100);
                 },
                 getFeature: function() {
-                    var feature = featureLayer.getFeatureById(id),
-                        formatter = new OpenLayers.Format.GeoJSON;
-
-                    return formatter.write(feature);
+                    return formatter.write(featureLayer.getFeatureById(id));
                 }
             };
         },
-        removeGeometry: function(id, mode) {
-            var arr = this.features || [],
-                i,
-                arrLen,
-                feature;
-
-            for (i = 0, arrLen = arr.length; i < arrLen; ++i) {
-                if (arr[i].getId() === id) {
-                    arr.splice(i, 1);
-                    break;
-                }
-            }
-
-            if (this.featureLayer) {
-                feature = this.featureLayer.getFeatureById(id);
-                this.featureLayer.destroyFeatures([feature]);
-            }
-
-            this.view.refreshAnalyseData();
-        },
+        /**
+         * Maps OpenLayers geometries into strings (draw modes).
+         * 
+         * @method _getDrawModeFromGeometry
+         * @private
+         * @param  {OpenLayers.Geometry} geometry
+         * @return {String} 'area'|'line'|'point'
+         */
         _getDrawModeFromGeometry : function(geometry) {
             var modes = {
                 'OpenLayers.Geometry.MultiPoint'      : 'point',
@@ -397,14 +551,27 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
 
             return (geometry ? modes[geometry.CLASS_NAME] : undefined);
         },
-        _createFeatureLayer: function() {
-            var layer = new OpenLayers.Layer.Vector('AnalyseFeatureLayer'),
-                map = this.mapModule.getMap();
+        /**
+         * Creates the feature layer where the drawn features are added to
+         * and adds it to the map.
+         * 
+         * @method _createFeatureLayer
+         * @private
+         * @return {OpenLayers.Layer.Vector}
+         */
+        _createFeatureLayer: function(mapModule) {
+            var layer = new OpenLayers.Layer.Vector('AnalyseFeatureLayer');
 
-            map.addLayer(layer);
+            mapModule.getMap().addLayer(layer);
 
             return layer;
         },
+        /**
+         * Destroys the feature layer and removes it from the map.
+         * 
+         * @method _destroyFeatureLayer
+         * @private
+         */
         _destroyFeatureLayer: function() {
             var map = this.mapModule.getMap();
 
@@ -415,6 +582,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 this.featureLayer = undefined;
             }
         },
+        /**
+         * Either starts or stops draw plugins which are added to the map module
+         * (except the one created in this class).
+         * 
+         * @method _toggleDrawPlugins
+         * @private
+         * @param  {Boolean} enabled
+         */
         _toggleDrawPlugins: function(enabled) {
             var me = this,
                 sandbox = this.sandbox,

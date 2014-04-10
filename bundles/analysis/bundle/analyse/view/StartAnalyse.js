@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
     }, {
         __templates: {
             "content": '<div class="layer_data"></div>',
-            "icons_layer": '<table class=layer-icons> <tr> <td><div class="layer-icon layer-wfs" title="Tietotuote"></div></td><td><div class="layer-info icon-info"></div></td><td><div class="filter icon-funnel"></div></td></tr></table>',
+            "icons_layer": '<table class=layer-icons> <tr> <td><div class="layer-icon layer-wfs" title="Tietotuote"></div></td><td><div class="layer-info icon-info"></div></td><td><div class="filter icon-funnel"></div></td><td><div class="icon-close"></div></td></tr></table>',
             "icons_temp_layer": '<div class="icon-close"></div>',
             "tool": '<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>',
             "buttons": '<div class="buttons"></div>',
@@ -601,12 +601,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     return me._eligibleForAnalyse(layer);
                 })
                 .map(function(layer) {
-                    var isTemp = layer.isLayerOfType('ANALYSE_TEMP'),
+                    var isTemp = layer.isLayerOfType(me.contentPanel.getLayerType()),
                         option = {
                             id: layer.getId(),
                             label: layer.getName(),
-                            temp: isTemp,
-                            mode: layer.getMode && layer.getMode()
+                            temp: isTemp
                         };
 
                     if (!isTemp) option.id = (me.id_prefix + 'layer_' + option.id);
@@ -619,7 +618,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 })
                 .value();
 
-            if (!selectedLayer) {
+            if (!selectedLayer && contentOptions.length) {
                 _.first(contentOptions).checked = 'checked';
             }
 
@@ -631,7 +630,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             contentOptionDivs = _.foldl(contentOptions, function (divs, datum) {
                 var opt = templateOpt.clone(),
                     isTemp = datum.temp,
-                    icons = (isTemp ? templateTempIcons.clone() : templateIcons.clone());
+                    icons = (isTemp ? templateTempIcons.clone() : templateIcons.clone()),
+                    removeLayer;
 
                 opt.find('input')
                     .attr({
@@ -652,17 +652,24 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     });
 
                 if (isTemp) {
-                    var removeTemp = function(id, mode) {
+                    removeLayer = function(id) {
                         return function() {
-                            contentPanel.removeGeometry(id, mode);
+                            contentPanel.removeGeometry(id);
                         };
                     };
 
                     icons.addClass('analyse-temp-feature');
-                    icons.click(removeTemp(datum.id, datum.mode));
+                    icons.click(removeLayer(datum.id));
                 } else {
+                    removeLayer = function(id) {
+                        return function() {
+                            me._removeLayerRequest(id);
+                        }
+                    };
+
                     me._infoRequest(icons, datum.id);
                     me._filterRequest(icons, datum.id);
+                    icons.find('div.icon-close').click(removeLayer(datum.id));
                 }
 
                 opt.append(icons);
@@ -675,19 +682,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 layersContainer.append(div)
             });
 
-            // Analyse name
-            me._modifyAnalyseName();
-            me._refreshFields();
-
             this.contentOptions = contentOptions;
             this.contentOptionsMap = contentOptionsMap;
             this.contentOptionDivs = contentOptionDivs;
+
+            // Refresh analyse name
+            me._modifyAnalyseName();
+            me._refreshFields();
+            me.refreshExtraParameters();
         },
         _eligibleForAnalyse: function(layer) {
             return (layer.isLayerOfType('WFS') ||
                     layer.isLayerOfType('ANALYSIS') ||
                     layer.isLayerOfType('MYPLACES') ||
-                    layer.isLayerOfType('ANALYSE_TEMP'));
+                    layer.isLayerOfType(this.contentPanel.getLayerType()));
         },
         /**
          * @method _addExtraParameters
@@ -903,11 +911,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 option = me.intersectOptions[i];
                 toolContainer = me.template.intersectOptionTool.clone();
                 label = option.label;
-                if (option.width && option.height) {
-                    label = label + ' (' + option.width + ' x ' + option.height + 'px)';
-                }
                 toolContainer.find('label').append(label).attr({
-                    'for': option.id,
+                    'for': 'intersect_' + option.id,
                     'class': 'params_radiolabel'
                 });
                 if (option.selected) {
@@ -917,7 +922,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 toolContainer.find('input').attr({
                     'value': option.id,
                     'name': 'intersect',
-                    'id': option.id
+                    'id': 'intersect_' + option.id
                 });
                 toolContainer.find('input').change(closureMagic(option));
             }
@@ -1368,11 +1373,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 layerType: layer.getLayerType()
             };
 
-            if (layer.isLayerOfType('ANALYSE_TEMP')) {
+            if (layer.isLayerOfType(this.contentPanel.getLayerType())) {
                 defaults.fields = [];
                 defaults.fieldTypes = {};
                 defaults.layerId = -1;
-                defaults.feature = layer.getFeature();
+                defaults.features = [layer.getFeature()];
             } else {
                 defaults.fields = fields;
                 defaults.fieldTypes = layer.getPropertyTypes();
@@ -1480,9 +1485,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var sandbox = this.instance.getSandbox();
             var url = sandbox.getAjaxUrl();
             var selections = me._gatherSelections();
-
-            console.log(JSON.stringify(selections));
-            return;
 
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
@@ -1632,7 +1634,25 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 );
             });
         },
+        /**
+         * Requests to remove a layer from the map.
+         * 
+         * @method _removeLayerRequest
+         * @private
+         * @param  {String} analyseLayerId
+         */
+        _removeLayerRequest: function(analyseLayerId) {
+            var layerId = analyseLayerId.replace(this.id_prefix + 'layer_', ''),
+                sandbox = this.instance.getSandbox(),
+                layer = sandbox.findMapLayerFromSelectedMapLayers(layerId),
+                reqBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest'),
+                request;
 
+            if (layer && reqBuilder) {
+                request = reqBuilder(layer.getId());
+                sandbox.request(this.instance, request);
+            }
+        },
         /**
          * Returns the Oskari layer object for currently selected layer
          *

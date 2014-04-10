@@ -11,7 +11,19 @@ Oskari.registerLocalization({
             "title": "Analyysi",
             "content": {
                 "label": "Aineisto",
-                "tooltip": "Lisää tietoaineisto painamalla [lisää tietoaineisto] painiketta"
+                "tooltip": "Lisää tietoaineisto painamalla [lisää tietoaineisto] painiketta",
+                "features": {
+                    "title": "Lisää kohde",
+                    "buttons": {
+                        "cancel": "Peruuta",
+                        "finish": "Valmis"
+                    },
+                    "modes": {
+                        "area": "Alue",
+                        "line": "Viiva",
+                        "point": "Piste"
+                    }
+                }
             },
             "method": {
                 "label": "Menetelmä",

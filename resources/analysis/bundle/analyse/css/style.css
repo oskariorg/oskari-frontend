@@ -29,7 +29,8 @@ div.basic_analyse > div.header {
   background-color: #FDF8D9;
   padding: 5px 10px; }
   div.basic_analyse > div.header div.icon-close {
-    float: right; }
+    float: right;
+    cursor: pointer; }
 div.basic_analyse div.analyse-select-featurelist {
   display: inline;
   margin-left: 6px; }
@@ -45,7 +46,8 @@ div.basic_analyse div.analyse-select-featurelist {
     div.basic_analyse div.analyse-select-featurelist ul li {
       list-style-type: none; }
 div.basic_analyse div.icon-info {
-  float: right; }
+  float: right;
+  cursor: pointer; }
 div.basic_analyse div.icon-menu {
   margin: -5px 100px; }
 div.basic_analyse div.location {
@@ -164,6 +166,7 @@ div.basic_analyse div.toolContainer div.tool.active {
 
 div.basic_analyse div.icon-close.analyse-temp-feature {
   display: inline-block;
+  cursor: pointer;
 }
 
 div.basic_analyse div.toolContainer div.buttons {
