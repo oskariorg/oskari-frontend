@@ -590,6 +590,8 @@ define([
                     form = element.parents('.add-layer-wrapper'),
                     baseUrl = me.options.instance.getSandbox().getAjaxUrl();
 
+                e.stopPropagation();
+
                 var serviceURL = form.find('#add-layer-interface').val();
 
                 me.model.set({
