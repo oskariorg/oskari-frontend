@@ -403,9 +403,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
         this.toggleControl();
 
         if (this.drawLayer) {
-            //this._map.removeLayer(this.drawLayer);
-            //this.drawLayer.destroyFeatures();
-            this.drawLayer.destroy();
+            this.drawLayer.destroyFeatures();
+            this._map.removeLayer(this.drawLayer);
             this.drawLayer = undefined;
         }
 

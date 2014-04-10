@@ -1,19 +1,18 @@
 Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
     function (view) {
-        this.view         = view;
-        this.instance     = view.instance;
-        this.loc          = view.loc;
-        this.features     = {
-            point: [],
-            line: [],
-            area: []
-        };
-        this.panel        = this._createPanel();
-        this.drawPluginId = this.instance.getName();
-        this.drawPlugin   = this._createDrawPlugin();
+        this.view         = undefined;
+        this.instance     = undefined;
+        this.sandbox      = undefined;
+        this.loc          = undefined;
+        this.mapModule    = undefined;
+        this.features     = undefined;
+        this.panel        = undefined;
+        this.drawPluginId = undefined;
+        this.drawPlugin   = undefined;
         this.featureLayer = undefined;
-        this.isStarted    = false;
+        this.isStarted    = undefined;
 
+        this.init(view);
         this.start();
     }, {
         _templates: {
@@ -53,49 +52,82 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 this._addGeometry(event.getDrawing());
             }
         },
+        init: function(view) {
+            this.view         = view;
+            this.instance     = this.view.instance;
+            this.sandbox      = this.instance.getSandbox();
+            this.loc          = this.view.loc;
+            this.mapModule    = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+            this.features     = [];
+            this.featCounts   = {
+                point: 0,
+                line: 0,
+                area: 0
+            };
+            this.panel        = this._createPanel();
+            this.drawPluginId = this.instance.getName();
+            this.drawPlugin   = this._createDrawPlugin();
+            this.featureLayer = this._createFeatureLayer();;
+            this.isStarted    = false;
+
+            for (var p in this.eventHandlers) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    this.sandbox.registerForEventByName(this, p);
+                }
+            }
+        },
         start: function() {
             // Already started so nothing to do here
-            if (this.isStarted) return;
+            if (this.isStarted) return;    
 
-            var sandbox = this.instance.getSandbox(),
-                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
-                p;
+            this._toggleDrawPlugins(false);
+            //this.featureLayer.setVisibility(true);
+            this.mapModule.getMap().addLayer(this.featureLayer);
 
-            for (p in this.eventHandlers) {
+            this.mapModule.registerPlugin(this.drawPlugin);
+            this.mapModule.startPlugin(this.drawPlugin);
+
+            this.isStarted = true;
+        },
+        destroy: function() {
+            for (var p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(this, p);
+                    this.sandbox.unregisterFromEventByName(this, p);
                 }
             }
 
-            this._toggleDrawPlugins(false);
-            this.featureLayer = this._createFeatureLayer();
+            this.stop();
+            this._destroyFeatureLayer();
 
-            mapModule.registerPlugin(this.drawPlugin);
-            mapModule.startPlugin(this.drawPlugin);
-
-            this.isStarted = true;
+            this.view         = undefined;
+            this.instance     = undefined;
+            this.sandbox      = undefined;
+            this.loc          = undefined;
+            this.mapModule    = undefined;
+            this.features     = undefined;
+            this.featCounts   = undefined;
+            this.panel        = undefined;
+            this.drawPluginId = undefined;
+            this.drawPlugin   = undefined;
+            this.isStarted    = undefined;
         },
         stop: function() {
             // Already stopped so nothing to do here
             if (!this.isStarted) return;
 
-            var sandbox = this.instance.getSandbox(),
-                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
-                p;
+            this.mapModule.stopPlugin(this.drawPlugin);
+            this.mapModule.unregisterPlugin(this.drawPlugin);
 
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
-                }
-            }
-
-            mapModule.stopPlugin(this.drawPlugin);
-            mapModule.unregisterPlugin(this.drawPlugin);
-
-            this._destroyFeatureLayer();
+            //this.featureLayer.setVisibility(false);
+            this.mapModule.getMap().removeLayer(this.featureLayer);
             this._toggleDrawPlugins(true);
 
             this.isStarted = false;
+        },
+        findFeatureById: function(id) {
+            return _.find(this.features, function(feature) {
+                return feature.getId() === id;
+            });
         },
         /**
          * Creates the content layer selection panel for analyse
@@ -196,11 +228,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          * @private
          */
         _modifyAnalyseData: function () {
-            var sandbox = this.instance.getSandbox(),
-                extension = this._getFakeExtension('LayerSelector'),
+            var extension = this._getFakeExtension('LayerSelector'),
                 rn = 'userinterface.UpdateExtensionRequest';
 
-            sandbox.postRequestByName(rn, [extension, 'attach']);
+            this.sandbox.postRequestByName(rn, [extension, 'attach']);
         },
         _getFakeExtension: function (name) {
             return {
@@ -218,7 +249,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          * @param {Object} config params for StartDrawRequest
          */
         _startNewDrawing: function (config) {
-            var sandbox = this.instance.getSandbox(),
+            var sandbox = this.sandbox,
                 evtB = sandbox.getEventBuilder(
                     'DrawPlugin.SelectedDrawingEvent'),
                 gfiReqBuilder = sandbox.getRequestBuilder(
@@ -249,7 +280,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          * @param {Object} config params for StartDrawRequest
          */
         _sendDrawRequest: function (config) {
-            var sandbox = this.instance.getSandbox(),
+            var sandbox = this.sandbox,
                 reqBuilder = sandbox.getRequestBuilder(
                     'DrawPlugin.StartDrawingRequest'),
                 request;
@@ -269,7 +300,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          * @param {Boolean} isCancel boolean param for StopDrawingRequest, true == canceled, false = finish drawing (dblclick)
          */
         _sendStopDrawRequest: function (isCancel) {
-            var sandbox = this.instance.getSandbox(),
+            var sandbox = this.sandbox,
                 reqBuilder = sandbox.getRequestBuilder('DrawPlugin.StopDrawingRequest'),
                 request;
 
@@ -288,25 +319,60 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
 
             if (mode) {
                 feature = new OpenLayers.Feature.Vector(geometry);
-                this.features[mode].push({
-                    id: feature.id
-                });
+                this.features.push(this._createFakeLayer(
+                    feature.id, mode)
+                );
 
                 if (this.featureLayer) {
                     this.featureLayer.addFeatures([feature]);
                 }
+                this.drawPlugin.stopDrawing();
 
                 this.view.refreshAnalyseData();
             }
         },
+        _createFakeLayer: function(id, mode) {
+            var name = (mode + ' ' + (++this.featCounts[mode])),
+                featureLayer = this.featureLayer;
+
+            return {
+                getId: function() {
+                    return id;
+                },
+                getName: function() {
+                    return name;
+                },
+                isLayerOfType: function(type) {
+                    return type === 'ANALYSE_TEMP';
+                },
+                getLayerType: function() {
+                    return 'temp';
+                },
+                getMode: function() {
+                    return mode;
+                },
+                hasFeatureData: function() {
+                    return false;
+                },
+                getOpacity: function() {
+                    return (featureLayer.opacity * 100);
+                },
+                getFeature: function() {
+                    var feature = featureLayer.getFeatureById(id),
+                        formatter = new OpenLayers.Format.GeoJSON;
+
+                    return formatter.write(feature);
+                }
+            };
+        },
         removeGeometry: function(id, mode) {
-            var arr = this.features[mode] || [],
+            var arr = this.features || [],
                 i,
                 arrLen,
                 feature;
 
             for (i = 0, arrLen = arr.length; i < arrLen; ++i) {
-                if (arr[i].id === id) {
+                if (arr[i].getId() === id) {
                     arr.splice(i, 1);
                     break;
                 }
@@ -333,20 +399,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
         },
         _createFeatureLayer: function() {
             var layer = new OpenLayers.Layer.Vector('AnalyseFeatureLayer'),
-                map = this.instance
-                    .getSandbox()
-                    .findRegisteredModuleInstance('MainMapModule')
-                    .getMap();
+                map = this.mapModule.getMap();
 
             map.addLayer(layer);
 
             return layer;
         },
         _destroyFeatureLayer: function() {
-            var map = this.instance
-                .getSandbox()
-                .findRegisteredModuleInstance('MainMapModule')
-                .getMap();
+            var map = this.mapModule.getMap();
 
             if (this.featureLayer) {
                 map.removeLayer(this.featureLayer);
@@ -357,8 +417,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
         },
         _toggleDrawPlugins: function(enabled) {
             var me = this,
-                sandbox = this.instance.getSandbox(),
-                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
+                sandbox = this.sandbox,
+                mapModule = this.mapModule,
                 drawPlugins = _.filter(mapModule.getPluginInstances(), function(plugin) {
                     return (plugin.getName().match(/DrawPlugin$/) &&
                             plugin.getName() !== me.drawPlugin.getName());

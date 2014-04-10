@@ -470,7 +470,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         if (me.contentOptionDivs[p].find('input').prop('checked')) {
                             layer = {
                                 id: me.contentOptionsMap[p].id,
-                                name: me.contentOptionsMap[p].label
+                                name: me.contentOptionsMap[p].label,
+                                temp: me.contentOptionsMap[p].temp
                             };
                             layers.push(layer);
                         }
@@ -582,123 +583,111 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 layersContainer = contentPanel.getLayersContainer(),
                 layers = this.instance.getSandbox().findAllSelectedMapLayers(),
-                features = contentPanel.getFeatures();
+                features = contentPanel.getFeatures(),
+                selectedLayer = me._getSelectedMapLayer(),
+                templateOpt = this.template.option,
+                templateIcons  = this.template.icons_layer,
+                templateTempIcons = this.template.icons_temp_layer,
+                contentOptions,
+                contentOptionsMap,
+                contentOptionDivs;
+
+            layers = layers.concat(features);
             // Add property types for WFS layer, if not there
             this._addPropertyTypes(layers);
-            var options = [],
-                ii = 0,
-                selected_layer = me._getSelectedMapLayer(),
-                i,
-                option,
-                f,
-                dat,
-                opt,
-                icons,
-                type,
-                fLen,
-                removeTemp;
-            // request updates for map tiles
-            for (i = 0; i < layers.length; i++) {
-                if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS') || layers[i].isLayerOfType('MYPLACES')) {
-                    option = {
-                        id: me.id_prefix + 'layer_' + layers[i].getId(),
-                        label: layers[i].getName()
-                    };
-                    ii++;
-                    if (selected_layer) {
-                        // keep previous setup
-                        if (selected_layer.getName() === layers[i].getName()) {
-                            option.checked = "checked";
-                        }
-                    } else if (ii === 1) {
-                        option.checked = "checked";
-                    }
-
-                    options.push(option);
-                }
-            }
-            me.contentOptions = options;
-            me.contentOptionsMap = {};
-            for (f = 0; f < me.contentOptions.length; f++) {
-                me.contentOptionsMap[me.contentOptions[f].id] = me.contentOptions[f];
-            }
-
-            me.contentOptionDivs = {};
-            for (f = 0; f < me.contentOptions.length; f++) {
-                dat = me.contentOptions[f];
-
-                opt = me.template.option.clone();
-                opt.find('input').attr({
-                    'id': dat.id,
-                    'checked': dat.checked
-                }).change(function (e) {
-                    me._refreshFields();
-                });
-                opt.find('label').html(dat.label).attr({
-                    'for': dat.id,
-                    'class': 'params_checklabel'
-                });
-                me.contentOptionDivs[dat.id] = opt;
-                // Icons
-                icons = me.template.icons_layer.clone();
-                //cb info
-                me._infoRequest(icons, dat.id);
-                //cb filter
-                me._filterRequest(icons, dat.id);
-
-                opt.append(icons);
-                layersContainer.append(opt);
-            }
-
-            // Drawn temp features
-            for (type in features) {
-                if (features.hasOwnProperty(type)) {
-                    for (i = 0, fLen = features[type].length; i < fLen; ++i) {
-                        dat = features[type][i];
-                        opt = me.template.option.clone();
-
-                        opt.find('input').attr({
-                            'id': dat.id,
-                            'checked': dat.checked
-                        }).change(function (e) {
-                            me._refreshFields();
-                        });
-                        opt.find('label').html(type + ' ' + (i+1)).attr({
-                            'for': dat.id,
-                            'class': 'params_checklabel'
-                        });
-
-                        removeTemp = function(id, type) {
-                            return function() {
-                                contentPanel.removeGeometry(id, type);
-                            };
+            
+            contentOptions = _.chain(layers)
+                .filter(function(layer) {
+                    return me._eligibleForAnalyse(layer);
+                })
+                .map(function(layer) {
+                    var isTemp = layer.isLayerOfType('ANALYSE_TEMP'),
+                        option = {
+                            id: layer.getId(),
+                            label: layer.getName(),
+                            temp: isTemp,
+                            mode: layer.getMode && layer.getMode()
                         };
 
-                        icons = me.template.icons_temp_layer.clone();
-                        icons.addClass('analyse-temp-feature');
-                        icons.click(removeTemp(dat.id, type));
-                        opt.append(icons);
+                    if (!isTemp) option.id = (me.id_prefix + 'layer_' + option.id);
 
-                        layersContainer.append(opt);
+                    if (selectedLayer && selectedLayer.getName() === layer.getName()) {
+                        option.checked = 'checked';
                     }
-                }
+
+                    return option;
+                })
+                .value();
+
+            if (!selectedLayer) {
+                _.first(contentOptions).checked = 'checked';
             }
+
+            contentOptionsMap = _.foldl(contentOptions, function(map, option) {
+                map[option.id] = option;
+                return map;
+            }, {});
+
+            contentOptionDivs = _.foldl(contentOptions, function (divs, datum) {
+                var opt = templateOpt.clone(),
+                    isTemp = datum.temp,
+                    icons = (isTemp ? templateTempIcons.clone() : templateIcons.clone());
+
+                opt.find('input')
+                    .attr({
+                        'id': datum.id,
+                        'checked': datum.checked
+                    })
+                    .change(function (e) {
+                        me._refreshFields();
+                        me._modifyAnalyseName();
+                        me.showInfos();
+                    });
+
+                opt.find('label')
+                    .html(datum.label)
+                    .attr({
+                        'for': datum.id,
+                        'class': 'params_checklabel'
+                    });
+
+                if (isTemp) {
+                    var removeTemp = function(id, mode) {
+                        return function() {
+                            contentPanel.removeGeometry(id, mode);
+                        };
+                    };
+
+                    icons.addClass('analyse-temp-feature');
+                    icons.click(removeTemp(datum.id, datum.mode));
+                } else {
+                    me._infoRequest(icons, datum.id);
+                    me._filterRequest(icons, datum.id);
+                }
+
+                opt.append(icons);
+
+                divs[datum.id] = opt;
+                return divs;
+            }, {});
+
+            _.each(contentOptionDivs, function(div) {
+                layersContainer.append(div)
+            });
 
             // Analyse name
             me._modifyAnalyseName();
-            var clickMagic = function () {
-                return function () {
-                    me._modifyAnalyseName();
-                    me.showInfos();
-                };
-            };
-
-            // layer changed cb
-            layersContainer
-                .find('input[name="selectedlayer"]')
-                .click(clickMagic());
-
             me._refreshFields();
+
+            this.contentOptions = contentOptions;
+            this.contentOptionsMap = contentOptionsMap;
+            this.contentOptionDivs = contentOptionDivs;
+        },
+        _eligibleForAnalyse: function(layer) {
+            return (layer.isLayerOfType('WFS') ||
+                    layer.isLayerOfType('ANALYSIS') ||
+                    layer.isLayerOfType('MYPLACES') ||
+                    layer.isLayerOfType('ANALYSE_TEMP'));
         },
         /**
          * @method _addExtraParameters
@@ -1373,16 +1362,24 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
 
             var title = container.find('.settings_name_field').val();
-
-            // Get method specific selections
-            var selections = this._getMethodSelections(layer, {
+            var defaults = {
                 name: title,
                 method: methodName,
-                fields: fields,
-                fieldTypes: layer.getPropertyTypes(),
-                layerId: layer.getId(),
                 layerType: layer.getLayerType()
-            });
+            };
+
+            if (layer.isLayerOfType('ANALYSE_TEMP')) {
+                defaults.fields = [];
+                defaults.fieldTypes = {};
+                defaults.layerId = -1;
+                defaults.feature = layer.getFeature();
+            } else {
+                defaults.fields = fields;
+                defaults.fieldTypes = layer.getPropertyTypes();
+                defaults.layerId = layer.getId();
+            }
+            // Get method specific selections
+            var selections = this._getMethodSelections(layer, defaults);
 
             // Styles
             selections.style = this.getStyleValues();
@@ -1420,6 +1417,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // intersect
             var intersectLayerId = container.find('input[name=intersect]:checked').val();
             intersectLayerId = intersectLayerId && intersectLayerId.replace((this.id_prefix + 'layer_'), '');
+            var intersectFeatures = undefined;
+            var tempLayer = this.contentOptionsMap[intersectLayerId];
+            if (tempLayer && tempLayer.temp) {
+                tempLayer = this.contentPanel.findFeatureById(tempLayer.id);
+                intersectLayerId = -1;
+                intersectFeatures = [tempLayer.getFeature()];
+            }
             var spatialOperator = container.find('input[name=spatial]:checked').val();
             spatialOperator = spatialOperator && spatialOperator.replace(this.id_prefix, '');
             // layer union
@@ -1446,7 +1450,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 'intersect': {
                     methodParams: {
                         layerId: intersectLayerId,
-                        operator: spatialOperator // TODO: param name?
+                        operator: spatialOperator, // TODO: param name?
+                        features: intersectFeatures
                     }
                 },
                 'layer_union': {
@@ -1475,6 +1480,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var sandbox = this.instance.getSandbox();
             var url = sandbox.getAjaxUrl();
             var selections = me._gatherSelections();
+
+            console.log(JSON.stringify(selections));
+            return;
 
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
@@ -1633,12 +1641,23 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @return {Object/null} an Oskari layer or null if no layer selected
          */
         _getSelectedMapLayer: function () {
-            var selectedLayer = this._selectedLayers();
-            selectedLayer = selectedLayer && selectedLayer[0];
-            selectedLayer = selectedLayer && selectedLayer.id;
-            selectedLayer = selectedLayer && selectedLayer.replace((this.id_prefix + 'layer_'), '');
+            var selectedLayer = this._selectedLayers(),
+                selectedLayer = selectedLayer && selectedLayer[0],
+                layerId;
 
-            return this.instance.getSandbox().findMapLayerFromSelectedMapLayers(selectedLayer);
+            if (!selectedLayer) return;
+
+            if (selectedLayer.temp) {
+                layerId = selectedLayer.id;
+
+                return this.contentPanel.findFeatureById(layerId);
+            } else {
+                layerId = selectedLayer.id.replace((this.id_prefix + 'layer_'), '');
+
+                return (this.instance
+                    .getSandbox()
+                    .findMapLayerFromSelectedMapLayers(layerId));
+            }
         },
 
         /**
@@ -1687,7 +1706,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     }
                 }
             });
-
 
             return isIt;
         },
