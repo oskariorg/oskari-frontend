@@ -1004,6 +1004,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     });
                 });
                 // click listener
+                removeButton.unbind('click');
                 removeButton.click(function (e) {
                     var year = jQuery('.statsgrid').find('.yearsel').find('.year').val(),
                         gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
