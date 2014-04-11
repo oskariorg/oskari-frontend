@@ -171,9 +171,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 if (event._creator !== this.getName() && event._fromPosition !== event._toPosition) {
                     // Layer order has been changed by someone else, resort layers
                     this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
-                    this.publisher.maplayerPanel.handleLayerOrderChanged(event._movedMapLayer, event._fromPosition, event._toPosition);
-                    if (this.publisher && event._creator !== this.publisher.maplayerPanel.plugin.getName()) {
-                        this.publisher.maplayerPanel.handleLayerSelectionChanged();
+                    if (this.publisher) {
+                        this.publisher.maplayerPanel.handleLayerOrderChanged(event._movedMapLayer, event._fromPosition, event._toPosition);
+                        if(event._creator !== this.publisher.maplayerPanel.plugin.getName()) {
+                            this.publisher.maplayerPanel.handleLayerSelectionChanged();
+                        }
                     }
                 }
             },

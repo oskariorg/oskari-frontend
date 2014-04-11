@@ -237,14 +237,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
         },
 
         _updateImageUrl: function (src, form) {
+            if (form === null || form === undefined) {
+                return;
+            }
+            var source = src || '';
             var preview = form.find('div.imagePreview');
 
             preview
-                .find('a.myplaces_imglink').attr('href', src)
-                .find('img').attr('src', src);
+                .find('a.myplaces_imglink').attr('href', source)
+                .find('img').attr('src', source);
 
             if (src) {
-                preview.show()
+                preview.show();
             } else {
                 preview.hide();
             }
