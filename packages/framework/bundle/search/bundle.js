@@ -40,6 +40,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.search.SearchBundle", function (
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/search/request/AddTabRequestHandler.js"
         }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/search/request/AddSearchResultActionRequest.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/search/request/RemoveSearchResultActionRequest.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/search/request/SearchResultActionRequestHandler.js"
+        }, {
             "type": "text/css",
             "src": "../../../../resources/framework/bundle/search/css/style.css"
         }],

@@ -110,6 +110,8 @@ table.layer-icons {
   display: inline-table; }
   table.layer-icons div.icon-info {
     float: none; }
+  table.layer-icons div.icon-close {
+    cursor: pointer; }
 
 /* Analyse filter CSS */
 div.analyse-filter-popup-content {

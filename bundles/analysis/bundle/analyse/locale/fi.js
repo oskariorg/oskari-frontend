@@ -13,7 +13,7 @@ Oskari.registerLocalization({
                 "label": "Aineisto",
                 "tooltip": "Lisää tietoaineisto painamalla [lisää tietoaineisto] painiketta",
                 "features": {
-                    "title": "Lisää kohde",
+                    "title": "Piirrä kohde",
                     "buttons": {
                         "cancel": "Peruuta",
                         "finish": "Valmis"
@@ -23,6 +23,10 @@ Oskari.registerLocalization({
                         "line": "Viiva",
                         "point": "Piste"
                     }
+                },
+                "search": {
+                    "title": "Hae paikkahaulla",
+                    "resultLink": "Tee paikkamerkintä"
                 }
             },
             "method": {

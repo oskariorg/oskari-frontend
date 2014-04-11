@@ -29,6 +29,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
         // last sort parameters are saved so we can change sort direction
         // if the same column is sorted again
         this.lastSort = null;
+        // Actions that get added to the search result popup
+        this.resultActions = {};
 
         this._searchContainer = null;
         this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
@@ -369,9 +371,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
 
             var loc = this.instance.getLocalization('resultBox');
 
+            var resultActions = {};
+            var action;
+            for (var name in this.resultActions) {
+                if (this.resultActions.hasOwnProperty(name)) {
+                    action = this.resultActions[name];
+                    resultActions[name] = action(result);
+                }
+            }
+
             var contentItem = {
                 html: "<h3>" + result.name + "</h3>" + "<p>" + result.village + '<br/>' + result.type + "</p>",
-                actions: {}
+                actions: resultActions
             };
             var content = [contentItem];
 
@@ -382,8 +393,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 var request = rB(popupId);
                 sandbox.request(me.instance.getName(), request);
             };
-
-
 
             var rN = 'InfoBox.ShowInfoBoxRequest';
             var rB = sandbox.getRequestBuilder(rN);
@@ -471,6 +480,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             panel.setContent(item.content);
             panel.setPriority(item.priority);
             me.tabsContainer.addPanel(panel);
+        },
+        addSearchResultAction: function(action) {
+            this.resultActions[action.name] = action.callback;
+        },
+        removeSearchResultAction: function(name) {
+            delete this.resultActions[name];
         }
     }, {
         /**

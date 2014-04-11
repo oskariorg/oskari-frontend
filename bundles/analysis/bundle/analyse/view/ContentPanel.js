@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
         this.drawPlugin   = undefined;
         this.featureLayer = undefined;
         this.layerType    = undefined;
+        this.linkAction   = undefined;
         this.isStarted    = undefined;
 
         this.init(view);
@@ -22,12 +23,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          */
         _templates: {
             'help': '<div class="help icon-info"></div>',
+            'buttons': '<div class="buttons"></div>',
             'layersContainer': '<div class="layers"></div>',
             'toolContainer': '<div class="toolContainer">' +
                     '<h4 class="title"></h4>' +
                 '</div>',
             'tool': '<div class="tool"></div>',
-            'buttons': '<div class="buttons"></div>'
+            'drawControls': '<div class="buttons"></div>',
+            'search': '<div class="analyse-search"></div>'
         },
         /**
          * @method getPanel
@@ -100,10 +103,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          * @property eventHandlers
          */
         eventHandlers: {
-            'DrawPlugin.FinishedDrawingEvent': function (event) {
+            'DrawPlugin.FinishedDrawingEvent': function(event) {
                 if (this.drawPluginId !== event.getCreatorId()) return;
 
-                this._addGeometry(event.getDrawing());
+                this.addGeometry(event.getDrawing());
             }
         },
         /**
@@ -130,6 +133,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             this.drawPlugin   = this._createDrawPlugin();
             this.featureLayer = this._createFeatureLayer(this.mapModule);
             this.layerType    = 'ANALYSE_TEMP';
+            this.linkAction   = this.loc.content.search.resultLink;
             this.isStarted    = false;
 
             for (var p in this.eventHandlers) {
@@ -145,6 +149,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          * @method start
          */
         start: function() {
+            var sandbox = this.sandbox,
+                rn = 'Search.AddSearchResultActionRequest',
+                reqBuilder,
+                request;
+
             // Already started so nothing to do here
             if (this.isStarted) return;    
 
@@ -153,6 +162,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
 
             this.mapModule.registerPlugin(this.drawPlugin);
             this.mapModule.startPlugin(this.drawPlugin);
+
+            reqBuilder = sandbox.getRequestBuilder(rn);
+            if (reqBuilder) {
+                request = reqBuilder(
+                    this.linkAction, this._getSearchResultAction(), this);
+                sandbox.request(this.instance, request);
+            }
 
             this.isStarted = true;
         },
@@ -182,6 +198,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             this.drawPluginId = undefined;
             this.drawPlugin   = undefined;
             this.layerType    = undefined;
+            this.linkAction   = undefined;
             this.isStarted    = undefined;
         },
         /**
@@ -191,6 +208,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          * @method stop
          */
         stop: function() {
+            var sandbox = this.sandbox,
+                rn = 'Search.RemoveSearchResultActionRequest',
+                reqBuilder,
+                request;
+
             // Already stopped so nothing to do here
             if (!this.isStarted) return;
 
@@ -199,6 +221,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
 
             this.mapModule.getMap().removeLayer(this.featureLayer);
             this._toggleDrawPlugins(true);
+
+            reqBuilder = sandbox.getRequestBuilder(rn);
+            if (reqBuilder) {
+                request = reqBuilder(this.linkAction);
+                sandbox.request(this.instance, request);
+            }
 
             this.isStarted = false;
         },
@@ -213,6 +241,33 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             return _.find(this.getFeatures(), function(feature) {
                 return feature.getId() === id;
             });
+        },
+        /**
+         * Adds the given geometry to the feature layer
+         * and to the internal list of features.
+         * 
+         * @method addGeometry
+         * @private
+         * @param {OpenLayers.Geometry} geometry
+         * @param {String} name optional name for the temp feature
+         */
+        addGeometry: function(geometry, name) {
+            var mode = this._getDrawModeFromGeometry(geometry),
+                feature;
+
+            if (mode) {
+                feature = new OpenLayers.Feature.Vector(geometry);
+                this.getFeatures().push(
+                    this._createFakeLayer(feature.id, mode, name)
+                );
+
+                if (this.featureLayer) {
+                    this.featureLayer.addFeatures([feature]);
+                }
+                this.drawPlugin.stopDrawing();
+
+                this.view.refreshAnalyseData();
+            }
         },
         /**
          * Removes the feature by given id from the feature layer
@@ -262,15 +317,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                     'Oskari.userinterface.component.AccordionPanel'),
                 panelContainer = panel.getContainer(),
                 layersCont = jQuery(this._templates.layersContainer).clone(),
-                tooltipCont = jQuery(this._templates.help).clone(),
-                dataBtn = this._createDataButton(loc);
+                tooltipCont = jQuery(this._templates.help).clone();
 
             panel.setTitle(loc.content.label);
             tooltipCont.attr('title', loc.content.tooltip);
 
             panelContainer.append(tooltipCont);
             panelContainer.append(layersCont);
-            dataBtn.insertTo(panelContainer);
+            panelContainer.append(this._createDataButtons(loc));
             panelContainer.append(this._createDrawButtons(loc));
 
             return panel;
@@ -292,25 +346,37 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             return drawPlugin;
         },
         /**
-         * Creates and returns the data button which opens the layer selector.
+         * Creates and returns the data button which opens the layer selector
+         * and the search button which opens the search flyout.
          * 
-         * @method _createDataButton
+         * @method _createDataButtons
          * @private
          * @param {Object} loc
          * @return {jQuery}
          */
-        _createDataButton: function(loc) {
+        _createDataButtons: function(loc) {
             var me = this,
-                button = Oskari.clazz.create(
+                buttons = jQuery(this._templates.buttons).clone(),
+                dataButton = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Button'),
+                searchButton = Oskari.clazz.create(
                     'Oskari.userinterface.component.Button');
 
-            button.setTitle(loc.buttons.data);
-            button.addClass('primary');
-            button.setHandler(function () {
-                me._modifyAnalyseData();
+            dataButton.setTitle(loc.buttons.data);
+            dataButton.addClass('primary');
+            dataButton.setHandler(function () {
+                me._openFlyoutAs('LayerSelector');
             });
+            dataButton.insertTo(buttons);
 
-            return button;
+            searchButton.setTitle(loc.content.search.title);
+            searchButton.addClass('primary');
+            searchButton.setHandler(function() {
+                me._openFlyoutAs('Search');
+            });
+            searchButton.insertTo(buttons)
+
+            return buttons;
         },
         /**
          * Creates and returns the draw buttons from which the user can draw
@@ -327,7 +393,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 toolTemplate = jQuery(this._templates.tool),
                 tools = ['point', 'line', 'area'];
 
-            toolContainer.find('h4.title').html(loc.content.features.title);
+            toolContainer.find('h4').html(loc.content.features.title);
 
             return _.foldl(tools, function(container, tool) {
                 var toolDiv = toolTemplate.clone();
@@ -353,7 +419,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
         _createDrawControls: function () {
             var me = this,
                 loc = this.loc.content.features.buttons,
-                container = jQuery(this._templates.buttons).clone(),
+                container = jQuery(this._templates.drawControls).clone(),
                 cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
@@ -374,20 +440,23 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             return container;
         },
         /**
-         * Sends a request to open the layer selector Flyout.
+         * Sends a request to open a Flyout impersonating
+         * as the bundle provided in the name param.
          * 
-         * @method _modifyAnalyseData
+         * @method _openFlyoutAs
          * @private
+         * @param  {String} name
          */
-        _modifyAnalyseData: function () {
+        _openFlyoutAs: function(name) {
             var extension = {
                     getName: function () {
-                        return 'LayerSelector';
+                        return name;
                     }
                 },
                 rn = 'userinterface.UpdateExtensionRequest';
 
-            this.sandbox.postRequestByName(rn, [extension, 'attach']);
+            this.sandbox.postRequestByName(
+                rn, [extension, 'attach', rn, '0', '424']);
         },
         /**
          * Resets currently selected place and sends a draw request to plugin
@@ -461,32 +530,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             }
         },
         /**
-         * Adds the given geometry to the feature layer
-         * and to the internal list of features.
-         * 
-         * @method _addGeometry
-         * @private
-         * @param {OpenLayers.Geometry} geometry
-         */
-        _addGeometry: function(geometry) {
-            var mode = this._getDrawModeFromGeometry(geometry),
-                feature;
-
-            if (mode) {
-                feature = new OpenLayers.Feature.Vector(geometry);
-                this.features.push(this._createFakeLayer(
-                    feature.id, mode)
-                );
-
-                if (this.featureLayer) {
-                    this.featureLayer.addFeatures([feature]);
-                }
-                this.drawPlugin.stopDrawing();
-
-                this.view.refreshAnalyseData();
-            }
-        },
-        /**
          * Creates a fake layer for analyse view which behaves
          * like an Oskari layer in some sense
          * (has all the methods needed in the view).
@@ -495,11 +538,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          * @private
          * @param  {String} id the OpenLayers.Feature.Vector id
          * @param  {String} mode either 'area', 'line' or 'point'
+         * @param {String} name fake layer's name (optional, generates it if not given)
          * @return {Object}
          */
-        _createFakeLayer: function(id, mode) {
+        _createFakeLayer: function(id, mode, name) {
             var loc = this.loc.content.features.modes,
-                name = (loc[mode] + ' ' + (++this.featCounts[mode])),
+                name = name || (loc[mode] + ' ' + (++this.featCounts[mode])),
                 layerType = this.getLayerType(),
                 featureLayer = this.featureLayer,
                 formatter = new OpenLayers.Format.GeoJSON;
@@ -603,5 +647,28 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 if (enabled) mapModule.startPlugin(plugin);
                 else mapModule.stopPlugin(plugin);
             });
+        },
+        /**
+         * Returns a function that gets called in search bundle with
+         * the search result as an argument which in turn returns
+         * a function that gets called when the user clicks on the link
+         * in the search result popup.
+         * 
+         * @method _getSearchResultAction
+         * @private
+         * @return {Function}
+         */
+        _getSearchResultAction: function() {
+            var me = this;
+
+            return function(result) {
+                return function() {
+                    var geometry = new OpenLayers.Geometry.Point(
+                            result.lon, result.lat),
+                        name = (result.name + ' (' + result.village + ')');
+
+                    me.addGeometry(geometry, name);
+                };
+            };
         }
 });
