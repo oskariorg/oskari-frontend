@@ -171,6 +171,12 @@ div.basic_analyse div.icon-close.analyse-temp-feature {
   cursor: pointer;
 }
 
+div.basic_analyse div.toolContainer {
+  margin: 5px;
+}
+div.basic_analyse div.toolContainer h4 {
+  padding: 0;
+}
 div.basic_analyse div.toolContainer div.buttons {
   display: inline-block;
   float: right;

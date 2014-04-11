@@ -26,7 +26,7 @@ Oskari.registerLocalization({
                 },
                 "search": {
                     "title": "Hae paikkahaulla",
-                    "resultLink": "Tee paikkamerkintä"
+                    "resultLink": "Tuo analyysiin"
                 }
             },
             "method": {

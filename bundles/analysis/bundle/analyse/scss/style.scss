@@ -107,11 +107,14 @@ div.basic_analyse {
     }
 
     div.toolContainer {
+        margin: 5px;
+        h4 {
+            padding: 0;
+        }
         div.tool {
             display: inline-block;
             cursor: pointer;
         }
-
         div.buttons {
             display: inline-block;
             float: right;
