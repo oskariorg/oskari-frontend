@@ -9,9 +9,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.e
  * @static
  * @param {OpenLayers.Geometry} geometry the feature geometry that was finished
  */
-function(geometry, drawingMode) {
+function(geometry, drawingMode, creatorId) {
     this._drawing = geometry;
     this._drawingMode = drawingMode;
+    this._creatorId = creatorId;
 }, {
     /** @static @property __name event name */
     __name : "DrawPlugin.AddedFeatureEvent",
@@ -38,6 +39,9 @@ function(geometry, drawingMode) {
      */
     getDrawingMode : function() {
         return this._drawingMode;
+    },
+    getCreatorId: function() {
+        return this._creatorId;
     }
 }, {
     /**

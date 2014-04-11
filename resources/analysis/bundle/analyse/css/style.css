@@ -29,7 +29,8 @@ div.basic_analyse > div.header {
   background-color: #FDF8D9;
   padding: 5px 10px; }
   div.basic_analyse > div.header div.icon-close {
-    float: right; }
+    float: right;
+    cursor: pointer; }
 div.basic_analyse div.analyse-select-featurelist {
   display: inline;
   margin-left: 6px; }
@@ -45,7 +46,8 @@ div.basic_analyse div.analyse-select-featurelist {
     div.basic_analyse div.analyse-select-featurelist ul li {
       list-style-type: none; }
 div.basic_analyse div.icon-info {
-  float: right; }
+  float: right;
+  cursor: pointer; }
 div.basic_analyse div.icon-menu {
   margin: -5px 100px; }
 div.basic_analyse div.location {
@@ -108,6 +110,8 @@ table.layer-icons {
   display: inline-table; }
   table.layer-icons div.icon-info {
     float: none; }
+  table.layer-icons div.icon-close {
+    cursor: pointer; }
 
 /* Analyse filter CSS */
 div.analyse-filter-popup-content {
@@ -138,18 +142,42 @@ div.analyse-filter-popup-content {
 
 div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px; }
-  div.analyse-filter-popup-content div.filter-option div.manage-filter-option {
-    display: inline-block; }
-    div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.add-filter-option, div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.remove-filter-option {
-      display: inline-block;
-      font-size: 200%;
-      font-weight: bold;
-      cursor: pointer; }
-  div.analyse-filter-popup-content div.filter-option input[name="attribute-value"] {
-    width: 120px; }
-  div.analyse-filter-popup-content div.filter-option input[name="case-sensitive"] {
-    margin-right: 5px; }
-  div.analyse-filter-popup-content div.filter-option select.attribute {
-    width: 150px; }
-  div.analyse-filter-popup-content div.filter-option select.operator, div.analyse-filter-popup-content div.filter-option select.boolean {
-    width: 60px; }
+div.analyse-filter-popup-content div.filter-option div.manage-filter-option {
+  display: inline-block; }
+  div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.add-filter-option, div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.remove-filter-option {
+    display: inline-block;
+    font-size: 200%;
+    font-weight: bold;
+    cursor: pointer; }
+div.analyse-filter-popup-content div.filter-option input[name="attribute-value"] {
+  width: 120px; }
+div.analyse-filter-popup-content div.filter-option input[name="case-sensitive"] {
+  margin-right: 5px; }
+div.analyse-filter-popup-content div.filter-option select.attribute {
+  width: 150px; }
+div.analyse-filter-popup-content div.filter-option select.operator, div.analyse-filter-popup-content div.filter-option select.boolean {
+  width: 60px; }
+
+div.basic_analyse div.toolContainer div.tool {
+  display: inline-block;
+  cursor: pointer;
+}
+div.basic_analyse div.toolContainer div.tool.active {
+  background-color: #aaa;
+}
+
+div.basic_analyse div.icon-close.analyse-temp-feature {
+  display: inline-block;
+  cursor: pointer;
+}
+
+div.basic_analyse div.toolContainer {
+  margin: 5px;
+}
+div.basic_analyse div.toolContainer h4 {
+  padding: 0;
+}
+div.basic_analyse div.toolContainer div.buttons {
+  display: inline-block;
+  float: right;
+}

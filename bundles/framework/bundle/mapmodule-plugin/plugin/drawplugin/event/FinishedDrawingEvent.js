@@ -10,9 +10,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.e
  * @param {OpenLayers.Geometry} geometry the drawing that was finished
  * @param {Boolean} blnEdit true if the geometry was opened in edit mode
  */
-function(geometry, blnEdit) {
+function(geometry, blnEdit, creatorId) {
     this._drawing = geometry;
     this._modification = (blnEdit == true);
+    this._creatorId = creatorId;
 }, {
     /** @static @property __name event name */
     __name : "DrawPlugin.FinishedDrawingEvent",
@@ -39,6 +40,9 @@ function(geometry, blnEdit) {
      */
     isModification : function() {
         return this._modification;
+    },
+    getCreatorId: function() {
+        return this._creatorId;
     }
 }, {
     /**

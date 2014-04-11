@@ -1,5 +1,51 @@
 # Release Notes
 
+## 1.20
+
+### analysis/analyse
+
+Analysis source features can now be drawn on the map directly from within the analyse view and from place search results.
+
+Layers can now be removed from analysis and from the map by clicking the close icon in the layers listing.
+
+### search
+
+Other bundles can now insert (and remove) actions to search results via `Search.AddSearchResultActionRequest` (removing via `Search.RemoveSearchResultActionRequest`):
+
+```javascript
+var reqBuilder = sandbox
+        .getRequestBuilder('Search.AddSearchResultActionRequest'),
+    callback = function(searchResult) {
+        // This is called in search bundle with the search result
+        return function() {
+            // This is what gets called when the link gets clicked
+            alert(searchResult.name);
+        };
+    },
+    request;
+
+if (reqBuilder) {
+    request = reqBuilder('Link name', callback);
+    sandbox.request(this, request);
+}
+```
+
+## 1.19.3
+
+### statsgrid
+
+Unbinding click button before assigning a new click listener so bindings don't accumulate
+
+## 1.19.2
+
+Removed random console.log() commands for Internet Explorer to work correctly
+
+## 1.19.1
+
+### myplaces2
+
+Fixed an issue where missing image url prevented edit myplace form from opening
+
 ## 1.19
 
 ### mapwmts
