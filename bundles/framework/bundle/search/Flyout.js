@@ -182,7 +182,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                     resultList.empty();
 
                     // try to remove markers if request is available when field is emptied
-                    var reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkerRequest');
+                    var reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
                     if (reqBuilder) {
                         sandbox.request(me.instance.getName(), reqBuilder());
                     }
