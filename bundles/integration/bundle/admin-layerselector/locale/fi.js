@@ -100,6 +100,7 @@ Oskari.registerLocalization({
             "groupName": "Ryhmätason nimi",
             "subLayers": "Alatasot",
             "addSubLayer": "Lisää alataso",
+            "editSubLayer": "Muokkaa alatasoa",
 
             "wmsInterfaceAddress": "WMS-rajapinnan osoitteet",
             "wmsUrl": "WMS-rajapinnan osoitteet",

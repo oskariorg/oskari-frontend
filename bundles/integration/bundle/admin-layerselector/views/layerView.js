@@ -1,9 +1,9 @@
 define([
-    "text!_bundle/templates/layerRowTemplate.html",
-    "_bundle/views/adminLayerSettingsView",
-    "text!_bundle/templates/group/subLayerTemplate.html",
-    'text!_bundle/templates/adminGroupSettingsTemplate.html'
-],
+        "text!_bundle/templates/layerRowTemplate.html",
+        "_bundle/views/adminLayerSettingsView",
+        "text!_bundle/templates/group/subLayerTemplate.html",
+        'text!_bundle/templates/adminGroupSettingsTemplate.html'
+    ],
     function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate, AdminGroupSettingsTemplate) {
         return Backbone.View.extend({
             tagName: 'div',
@@ -114,8 +114,7 @@ define([
                             }
                         }
 
-                        sandbox.postRequestByName(rn, [
-                            {
+                        sandbox.postRequestByName(rn, [{
                                 uuid: uuid
                             },
                             additionalUuids
@@ -157,37 +156,74 @@ define([
             },
 
             toggleSubLayerSettings: function (e) {
-                var element = jQuery(e.currentTarget).parents('.add-sublayer-wrapper');
-                var groupElement = jQuery(e.currentTarget).parents('.add-group-wrapper');
-                var groupButtons = groupElement.find('.add-group-send');
+                var me = this,
+                    dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    element = jQuery(e.currentTarget).parents('.add-sublayer-wrapper');
 
-                //show layer settings
-                if (!element.hasClass('show-edit-sublayer')) {
-                    e.stopPropagation();
-                    groupButtons.hide();
+                e.stopPropagation();
 
-                    var subLayerId = element.attr('sublayer-id'),
-                        subLayer = this._getSubLayerById(subLayerId);
-                    var parentId = this.model.getId();
+                var subLayerId = element.attr('sublayer-id'),
+                    subLayer = this._getSubLayerById(subLayerId),
+                    parentId = this.model.getId(),
+                    isEdit = subLayerId !== null && subLayerId !== undefined;
 
-                    // create AdminLayerSettingsView
-                    var settings = new AdminLayerSettingsView({
-                        model: subLayer,
-                        instance: this.options.instance,
-                        layerTabModel: this.options.layerTabModel,
-                        baseLayerId: parentId
+                // create AdminLayerSettingsView
+                var settings = new AdminLayerSettingsView({
+                    model: subLayer,
+                    instance: this.options.instance,
+                    layerTabModel: this.options.layerTabModel,
+                    baseLayerId: parentId,
+                    groupId: element.parents('.accordion').attr('lcid')
+                });
+                // Create buttons for the popup and hide the form buttons...
+                var container = jQuery('<div class="admin-layerselector"><div class="layer"></div></div>'),
+                    buttons = [],
+                    saveButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                    cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                    exitPopup = function () {
+                        settings.undelegateEvents();
+                        settings.$el.removeData().unbind();
+                        settings.remove();
+                        Backbone.View.prototype.remove.call(settings);
+                        dialog.close();
+                        // TODO refresh parent layer view
+                        // call trigger on parent element's dom...
+                        // see adminAction
+                    };
+                saveButton.setTitle(this.instance.getLocalization('add'));
+                saveButton.addClass('primary');
+                saveButton.setHandler(function () {
+                    var el = {
+                        currentTarget: settings.$el.find('.admin-add-sublayer-ok')
+                    };
+                    settings.addLayer(el, exitPopup);
+                    //exitPopup();
+                });
+                cancelButton.setHandler(function () {
+                    exitPopup();
+                });
+                cancelButton.setTitle(this.instance.getLocalization('cancel'));
+                buttons.push(saveButton);
+                if (isEdit) {
+                    var deleteButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                    deleteButton.setTitle(this.instance.getLocalization('delete'));
+                    deleteButton.setHandler(function () {
+                        var el = {
+                            currentTarget: settings.$el.find('.admin-remove-sublayer')
+                        };
+                        settings.removeLayer(el, exitPopup);
+                        //exitPopup();
                     });
-                    element.append(settings.$el);
-
-                    // TODO when backend works and we have new jQuery UI
-                    //this.$el.find("#add-layer-inspire-theme").tagit({availableTags: ["Hallinnolliset yksiköt", "Hydrografia", "Kiinteistöt", "Kohteet", "Koordinaattijärjestelmät", "Korkeus", "Liikenneverkot", "Maankäyttö", "Maanpeite","Maaperä","Merialueet", "Metatieto"]});
-                    element.addClass('show-edit-sublayer');
-                } else {
-                    //hide layer settings
-                    element.removeClass('show-edit-sublayer');
-                    element.find('.admin-add-layer').remove();
-                    groupButtons.show();
+                    buttons.push(deleteButton);
                 }
+                buttons.push(cancelButton);
+                container.find('.layer').append(settings.$el);
+                // show the dialog
+                var titleKey = isEdit ? 'editSubLayer' : 'addSubLayer';
+                dialog.show(this.instance.getLocalization('admin')[titleKey], container, buttons);
+                // Move layer next to whatever opened it
+                dialog.moveTo(e.currentTarget, 'right');
+                dialog.makeModal();
             },
 
             /**

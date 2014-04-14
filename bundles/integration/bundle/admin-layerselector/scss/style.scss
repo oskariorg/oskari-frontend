@@ -175,6 +175,11 @@ div.admin-layerselector {
             float : left;
             margin-right : 5px;
             margin-top: 3px;
+
+            &[type=checkbox] {
+                margin-top: 0;
+            }
+
         }
 
         select {
@@ -446,4 +451,29 @@ div.admin-layerselector {
         margin-top: 2px;
         margin-bottom: 5px;
     }
+}
+
+div.divmanazerpopup div.content div.admin-layerselector {
+
+    margin-right: 20px;
+
+    div.layer {
+        padding: 0;
+
+        div.admin-add-layer {
+            padding: 0;
+            overflow: visible;
+
+            div.add-layer-record {
+                margin-right: 20px;
+            }
+            /* Buttons are created in the popup, we don't need the form buttons */
+            div.add-layer-send {
+                display: none;
+            }
+
+        }
+
+    }
+
 }

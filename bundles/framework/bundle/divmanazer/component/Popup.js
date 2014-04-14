@@ -144,7 +144,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 return;
             }
 
-            var targetWidth = tar.outerWidth(),
+            var windowWidth = jQuery(window).height(),
+                windowHeight = jQuery(window).height(),
+                targetWidth = tar.outerWidth(),
                 targetHeight = tar.outerHeight(),
                 dialogWidth = me.dialog.outerWidth(),
                 dialogHeight = me.dialog.outerHeight(),
@@ -167,6 +169,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 top = (top + targetHeight) + 5;
                 left = left + (targetWidth / 2) - (dialogWidth / 2);
             }
+            top = Math.min(top, windowHeight - dialogHeight);
+            // TODO fix left like above
             if (left < 0) {
                 left = 0;
             }
