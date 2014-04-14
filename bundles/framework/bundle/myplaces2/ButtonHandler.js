@@ -327,6 +327,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
              * @param {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.SelectedDrawingEvent} event
              */
             'DrawPlugin.SelectedDrawingEvent': function (event) {
+                if (this.instance.view.drawPluginId !== event.getCreatorId()) return;
+
                 if (!event.getPlace()) {
                     // cleanup
                     // ask toolbar to select default tool
@@ -340,6 +342,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
              * @param {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.FinishedDrawingEvent} event
              */
             'DrawPlugin.FinishedDrawingEvent': function (event) {
+                if (this.instance.view.drawPluginId !== event.getCreatorId()) return;
                 // set ignore so we don't cancel our drawing unintentionally
                 this.ignoreEvents = true;
                 // ask toolbar to select default tool
@@ -360,6 +363,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
              * @param {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.AddedFeatureEvent} event
              */
             'DrawPlugin.AddedFeatureEvent': function (event) {
+                if (this.instance.view.drawPluginId !== event.getCreatorId()) return;
+
                 var drawingMode = event.getDrawingMode();
                 if (drawingMode !== undefined) {
                     if (drawingMode !== null) {
@@ -383,6 +388,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             },
 
             'DrawPlugin.ActiveDrawingEvent': function (event) {
+                if (this.instance.view.drawPluginId !== event.getCreatorId()) return;
+                
                 var geom = event.getDrawing(),
                     mode = event.getDrawMode(),
                     resultText = this.instance.getDrawPlugin().getMapModule().formatMeasurementResult(geom, mode);

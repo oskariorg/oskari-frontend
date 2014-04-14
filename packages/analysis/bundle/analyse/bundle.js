@@ -44,7 +44,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundle", function() {
             "src" : "../../../../bundles/analysis/bundle/analyse/view/AnalyseFilterMethods.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/analysis/bundle/analyse/view/Categoryform.js"
+            "src" : "../../../../bundles/analysis/bundle/analyse/view/ContentPanel.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/analysis/bundle/analyse/view/PersonalDataTab.js"

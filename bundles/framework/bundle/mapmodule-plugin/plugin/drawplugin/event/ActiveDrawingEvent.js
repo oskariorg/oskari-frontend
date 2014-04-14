@@ -9,9 +9,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.e
  * @static
  * @param {OpenLayers.Geometry} geometry the drawing that is being drawn
  */
-function(geometry, mode) {
+function(geometry, mode, creatorId) {
     this._drawing = geometry;
     this._drawMode = mode;
+    this._creatorId = creatorId;
 }, {
     /** @static @property __name event name */
     __name : "DrawPlugin.ActiveDrawingEvent",
@@ -33,6 +34,9 @@ function(geometry, mode) {
     },
     getDrawMode : function() {
         return this._drawMode;
+    },
+    getCreatorId: function() {
+        return this._creatorId;
     }
 }, {
     /**
