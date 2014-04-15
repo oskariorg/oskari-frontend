@@ -15,6 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         this.mapModule = null;
         this.pluginName = null;
         this.dotForm = null;
+        this._markers = [];
         this._sandbox = null;
         this._map = null;
         this._svg = false;
@@ -54,6 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                             var data = {
                                 x: 389000,  // Testing
                                 y: 6667000,
+                                msg: "Piste 1",
                                 color: values.color,
                                 shape: values.shape,
                                 size: values.size
@@ -70,6 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 tooltip: 'poista',
                 sticky: true,
                 callback: function () {
+me.getState();
                     me.removeMarkers();
                 }
             }
@@ -81,8 +84,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
     }, {
         /** @static @property __name plugin name */
         __name: 'MarkersPlugin',
-
-        _markers: [],
 
         /**
          * @method getName
@@ -346,13 +347,16 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 point = new OpenLayers.Geometry.Point(data.x, data.y),
                 marker = new OpenLayers.Feature.Vector(point,null,{
                     externalGraphic: iconSrc,
-                    graphicWidth: 50,
-                    graphicHeight: 50,
-                    fillOpacity: 1
+                    graphicWidth: 50+10*data.size,
+                    graphicHeight: 50+10*data.size,
+                    fillOpacity: 1,
+                    label: data.msg
                 }),
                 i;
 
-            this._markers[id] = marker;
+            this._markers.push(data);
+
+//            this._markers[id] = data;
             if (events) {
                 for (i in events) {
                     if (events.hasOwnProperty(i)) {
@@ -367,11 +371,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             // Save generated icon
             me._prevIconUrl = iconSrc;
 
-/*            var state = {
-                markerLayer: markerLayers[0]
-            };
-            me.setState(state);
-*/
         },
 
         // Make sure the marker layer is topmost
@@ -414,30 +413,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 }
             }
             me._buttonsAdded = true;
-        },
-        /**
-         * Performs an action when the tool gets clicked.
-         *
-         * @method _startTool
-         */
-        _startTool: function() {
-alert("...");
-            var sandbox = this.getSandbox(),
-                reqBuilder = sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest'),
-                toolbarReqBuilder = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest'),
-                request, toolbarRequest;
-
-            if (reqBuilder) {
-                // open the flyout
-                request = reqBuilder(this, 'attach', this.getName());
-                sandbox.request(this, request);
-            }
-
-            if (toolbarReqBuilder) {
-                // ask toolbar to select the default tool
-                toolbarRequest = toolbarReqBuilder();
-                sandbox.request(this, toolbarRequest);
-            }
         },
 
         /**
@@ -528,6 +503,14 @@ alert("...");
          * @return {Object} bundle state as JSON
          */
         getState: function () {
+            this.state = "[";
+            for (var i=0; i<this._markers.length; i++) {
+                if (i > 0) {
+                    this.state = this.state+",";
+                }
+                this.state = this.state+JSON.stringify(this._markers[i]);
+            }
+            this.state = this.state+"]";
             return this.state;
         },
 
