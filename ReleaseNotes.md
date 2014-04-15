@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.20
+
+### mapmodule-plugin
+
+Now has getState/getStateParameters/setState-functions and forwards calls to these methods to any registered plugins that have the same methods. GetState gathers and object with properties named after plugins and setState assumes to get the same kind of Object as parameter.
+
 ## 1.19
 
 ### mapwmts
