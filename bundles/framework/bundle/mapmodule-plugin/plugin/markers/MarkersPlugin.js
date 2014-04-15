@@ -20,8 +20,19 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         this._map = null;
         this._svg = false;
         this._defaultIconUrl = "/Oskari/resources/framework/bundle/mapmodule-plugin/images/marker.png";
-        this._defaultSVGIconUrl = "";
+        this._prevIconUrl = "";
         this._preSVGIconUrl ="data:image/svg+xml,";
+        this._font = {
+            name: 'dot-markers',
+            baseIndex: 57344
+        }
+        this._defaultData = {
+            x: 389000,
+            y: 6667000,
+            color: "ffd100",
+            shape: 2,
+            size: 3
+        }
         this._localization = null;
         this.buttonGroup = "markers";
         this.buttons = {
@@ -30,14 +41,27 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 tooltip: 'lisää',
                 sticky: true,
                 callback: function () {
+                    // var lonLat = selectPointOnMap();
+                    var lonLat = new OpenLayers.LonLat(389000,6667000);
+
+
+
 
 
 // Testausta
 var reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
 if (reqBuilder) {
-    var request = reqBuilder(389000, 6667000, null, null, null);
+    var data = {
+        x: 389000,
+        y: 6667000,
+        color: "00ff00",
+        shape: 6,
+        size: 5
+    };
+    var request = reqBuilder(data);
     me._sandbox.request(me.getName(), request);
 }
+
 
                 }
             },
@@ -149,7 +173,6 @@ if (reqBuilder) {
             }
             this._sandbox.addRequestHandler('MapModulePlugin.AddMarkerRequest', me.requestHandlers.addMarkerHandler);
             this._sandbox.addRequestHandler('MapModulePlugin.RemoveMarkersRequest', me.requestHandlers.removeMarkersHandler);
-//            this._sandbox.registerAsStateful(this.mediator.bundleId, this);
 
             // Is SVG supported?
             this._svg = document.implementation.hasFeature('http://www.w3.org/TR/SVG11/feature#Image', '1.1');
@@ -160,19 +183,15 @@ if (reqBuilder) {
                 paper.clear();
 
                 // Testing
-                // var rect = paper.rect(0, 0, 100, 100);
-                // rect.attr("fill", "#fff");
-                // rect.attr("stroke", "#000");
                 var lines = paper.path("M0 0L99 99 M0 99 L99 0");
                 lines.attr("stroke", "#000");
 
-                var font = paper.getFont("dot-markers");
-                var baseFontIndex = 57344;
-                var charIndex = 6;
+                var font = paper.getFont(me._font.name);
+                var charIndex = me.getFont().baseIndex+me._defaultData.shape;
                 var size = 100;
-                paper.print(0,55,String.fromCharCode(charIndex+baseFontIndex),font,size).attr({"stroke-width": 1, fill: "#ff0000", "stroke": "#b4b4b4"});
-
-                this._defaultSVGIconUrl = this._preSVGIconUrl+paper.toSVG();
+                var color = "#"+me._defaultData.color;
+                paper.print(0,55,String.fromCharCode(charIndex),font,size).attr({"stroke-width": 1, fill: color, "stroke": "#b4b4b4"});
+                this._prevIconUrl = this._preSVGIconUrl+paper.toSVG();
             }
             this._registerTools();
         },
@@ -288,7 +307,7 @@ if (reqBuilder) {
             }
         },
 
-        addMapMarker: function (x, y, id, events, iconUrl) {
+        addMapMarker: function (data, id, events) {
             var me = this;
             if (!id) {
                 id = this._markers.length + 1;
@@ -296,19 +315,35 @@ if (reqBuilder) {
             }
 //            var offset = new OpenLayers.Pixel(-(size.w / 2), -size.h);
 
+            // Image data already available
             var iconSrc = null;
             if (me._svg) {
-                if (iconUrl) {
-                    iconSrc = iconUrl;
+                if ((typeof data.iconUrl !== "undefined")&&(data.iconUrl !== null)) {
+                    iconSrc = data.iconUrl;
                 } else {
-                    iconSrc = me._defaultSVGIconUrl;
+                    // Construct image
+                    if (typeof Raphael !== "undefined") {
+                        var paper = Raphael(-100,-100,100,100);
+                        paper.clear();
+
+                        // Testing
+                        var lines = paper.path("M0 0L99 99 M0 99 L99 0");
+                        lines.attr("stroke", "#000");
+
+                        var font = paper.getFont(me._font.name);
+                        var charIndex = me.getFont().baseIndex+data.shape;
+                        var size = 100;
+                        var color = "#"+data.color;
+                        paper.print(0,55,String.fromCharCode(charIndex),font,size).attr({"stroke-width": 1, fill: color, "stroke": "#b4b4b4"});
+                        iconSrc = this._preSVGIconUrl+paper.toSVG();
+                    }
                 }
             } else {
                 iconSrc = me._defaultIconUrl;
             }
 
             var markerLayers = this._map.getLayersByName("OskariMarkers"),
-                point = new OpenLayers.Geometry.Point(x, y),
+                point = new OpenLayers.Geometry.Point(data.x, data.y),
                 marker = new OpenLayers.Feature.Vector(point,null,{
                     externalGraphic: iconSrc,
                     graphicWidth: 50,
@@ -329,10 +364,14 @@ if (reqBuilder) {
             markerLayers[0].addFeatures([marker]);
             this.raiseMarkers(markerLayers[0]);
 
-            var state = {
+            // Save generated icon
+            me._prevIconUrl = iconSrc;
+
+/*            var state = {
                 markerLayer: markerLayers[0]
             };
             me.setState(state);
+*/
         },
 
         // Make sure the marker layer is topmost
@@ -445,6 +484,22 @@ alert("...");
          */
         getState: function () {
             return this.state;
+        },
+
+        /**
+         * @method getFont
+         * @return {Object} font
+         */
+        getFont: function () {
+            return this._font;
+        },
+
+        /**
+         * @method getIcon
+         * @return {Object} icon
+         */
+        getIcon: function () {
+            return this._prevIconUrl;
         }
     }, {
         /**

@@ -119,6 +119,8 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
             '<div class="column22">' +
             '<label>' + this.loc.preview.label + '</label>' +
             '<div class="preview"></div>' +
+            '<label>' + "Testi" + '</label>' +
+            '<div class="dotLabel"></div>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -165,7 +167,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
          * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory[]} categories array containing available categories
          * @return {jQuery} jquery reference for the form
          */
-        showForm: function (renderButton, state) {
+        showForm: function (renderButton, state, dialogLocation) {
             var me = this;
             if (state !== null && state !== undefined) {
                 jQuery.extend(true, me.values, state.dot);
@@ -383,7 +385,12 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
                 renderDialog.close();
             });
             renderDialog.show(title, dialogContent, [saveBtn, cancelBtn]);
-            renderDialog.moveTo(renderButton, 'top');
+            // Dialog location
+            if (typeof dialogLocation === 'string') {
+                renderDialog.moveTo(renderButton, dialogLocation);
+            } else {
+                renderDialog.moveTo(renderButton, 'top');
+            }
             return renderDialog;
         },
 

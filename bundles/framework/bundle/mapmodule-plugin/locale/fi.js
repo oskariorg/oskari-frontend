@@ -67,6 +67,9 @@ Oskari.registerLocalization({
         "measure": {
           "line": "Mittaa etäisyys",
           "area": "Mittaa alue"
+        },
+        "MarkersPlugin": {
+
         }
       }
     }

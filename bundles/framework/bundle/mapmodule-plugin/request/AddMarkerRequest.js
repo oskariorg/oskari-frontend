@@ -1,7 +1,6 @@
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerRequest', function (x, y, id, events, iconUrl) {
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerRequest', function (data, id, events, iconUrl) {
     this._creator = null;
-    this._x = x;
-    this._y = y;
+    this._data = data;
     this._id = id;
     this._events = events;
     this._iconUrl = iconUrl;
@@ -10,20 +9,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
     getName: function () {
         return this.__name;
     },
+    getData: function () {
+        return this._data;
+    },
     getX: function () {
-        return this._x;
+        return this._data.x;
     },
     getY: function () {
-        return this._y;
+        return this._data.y;
+    },
+    getIconUrl: function () {
+        return this._data.iconUrl;
     },
     getID: function () {
         return this._id;
     },
     getEvents: function () {
         return this._events;
-    },
-    getIconUrl: function () {
-        return this._iconUrl;
     }
 }, {
     'protocol': ['Oskari.mapframework.request.Request']

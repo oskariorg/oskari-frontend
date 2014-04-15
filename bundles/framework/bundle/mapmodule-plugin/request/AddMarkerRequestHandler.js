@@ -4,7 +4,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
 }, {
     handleRequest: function (core, request) {
         this.sandbox.printDebug("[Oskari.mapframework.bundle.mapmodule.request.AddMarkerRequestHandler] Add Marker");
-        this.markersPlugin.addMapMarker(request.getX(), request.getY(), request.getID(), request.getEvents(), request.getIconUrl());
+        this.markersPlugin.addMapMarker(request.getData(), request.getID(), request.getEvents());
     }
 }, {
     protocol: ['Oskari.mapframework.core.RequestHandler']
