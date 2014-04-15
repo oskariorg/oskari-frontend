@@ -1,9 +1,6 @@
 /**
  * @class Oskari.mapframework.mapmodule.MarkersPlugin
  * Provides marker functionality for the map.
- * This will be extended to provide support for multiple markers etc.
- * Maybe also refactored into a new class structure.
- * @deprecated mapmodule handles markers for now.
  */
 Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
@@ -12,10 +9,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
      * @static
      */
 
-    function () {
+    function (conf) {
         var me = this;
+        this.conf = conf;
         this.mapModule = null;
         this.pluginName = null;
+        this.dialog = null;
+        this.dotForm = null;
         this._sandbox = null;
         this._map = null;
         this._svg = false;
@@ -25,14 +25,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         this._font = {
             name: 'dot-markers',
             baseIndex: 57344
-        }
+        };
         this._defaultData = {
             x: 389000,
             y: 6667000,
-            color: "ffd100",
+            color: "ffde00",
             shape: 2,
             size: 3
-        }
+        };
         this._localization = null;
         this.buttonGroup = "markers";
         this.buttons = {
@@ -41,28 +41,28 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 tooltip: 'lisää',
                 sticky: true,
                 callback: function () {
-                    // var lonLat = selectPointOnMap();
-                    var lonLat = new OpenLayers.LonLat(389000,6667000);
-
-
-
-
-
-// Testausta
-var reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
-if (reqBuilder) {
-    var data = {
-        x: 389000,
-        y: 6667000,
-        color: "00ff00",
-        shape: 6,
-        size: 5
-    };
-    var request = reqBuilder(data);
-    me._sandbox.request(me.getName(), request);
-}
-
-
+                    var loc = me.getMapModule().getLocalization('plugin', true)[me.__name].form;
+                    me.dotForm = Oskari.clazz.create("Oskari.userinterface.component.visualization-form.DotForm", me, loc, me._defaultData);
+                    if (me.dialog) {
+                        me.dialog.close(true);
+                    }
+                    me.dialog = me.dotForm.showForm(jQuery("div.selection-line")[0],null,"right");
+                    me.dotForm.setSaveHandler(function() {
+                        var values = me.dotForm.getValues();
+                        var reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+                        if (reqBuilder) {
+                            var data = {
+                                x: 389000,  // Testing
+                                y: 6667000,
+                                color: values.color,
+                                shape: values.shape,
+                                size: values.size
+                            };
+                            var request = reqBuilder(data);
+                            me._sandbox.request(me.getName(), request);
+                        }
+                        me.dialog.close(true);
+                    });
                 }
             },
             'clear': {
@@ -183,8 +183,8 @@ if (reqBuilder) {
                 paper.clear();
 
                 // Testing
-                var lines = paper.path("M0 0L99 99 M0 99 L99 0");
-                lines.attr("stroke", "#000");
+                // var lines = paper.path("M0 0L99 99 M0 99 L99 0");
+                // lines.attr("stroke", "#000");
 
                 var font = paper.getFont(me._font.name);
                 var charIndex = me.getFont().baseIndex+me._defaultData.shape;
@@ -327,8 +327,8 @@ if (reqBuilder) {
                         paper.clear();
 
                         // Testing
-                        var lines = paper.path("M0 0L99 99 M0 99 L99 0");
-                        lines.attr("stroke", "#000");
+                        // var lines = paper.path("M0 0L99 99 M0 99 L99 0");
+                        // lines.attr("stroke", "#000");
 
                         var font = paper.getFont(me._font.name);
                         var charIndex = me.getFont().baseIndex+data.shape;
@@ -438,6 +438,51 @@ alert("...");
                 toolbarRequest = toolbarReqBuilder();
                 sandbox.request(this, toolbarRequest);
             }
+        },
+
+        /**
+         * Convert hexadecimal color values to decimal values (255,255,255)
+         * Green: hexToRgb("#0033ff").g
+         * http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+         *
+         * @method hex
+         * hexadecimal color value e.g. '#00ff99'
+         */
+        hexToRgb: function(hex) {
+            // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+            var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+                return r + r + g + g + b + b;
+            });
+
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        },
+
+        /**
+         * Convert rgb values to hexadecimal color values
+         *
+         * @method rgbToHex
+         * @param {String} rgb decimal color values e.g. 'rgb(255,0,0)'
+         */
+        rgbToHex: function (rgb) {
+            if (rgb.charAt(0) === '#') {
+                return rgb.substring(1);
+            }
+            var parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/),
+                j;
+            delete (parts[0]);
+            for (j = 1; j <= 3; ++j) {
+                parts[j] = parseInt(parts[j], 10).toString(16);
+                if (parts[j].length === 1) {
+                    parts[j] = '0' + parts[j];
+                }
+            }
+            return parts.join('');
         },
 
         /**

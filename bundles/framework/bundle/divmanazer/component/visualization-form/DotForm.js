@@ -14,6 +14,9 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
         this.creator = creator;
         this.loc = loc;
         this.defaultValues = defaultValues;
+        this.saveButton = null;
+        this.cancelButton = null;
+        this.saveButtonHandler = null;
 
         this.values = {
             size: this.defaultValues.size,
@@ -372,9 +375,14 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
             var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             saveBtn.setTitle(me.loc.buttons.save);
             saveBtn.addClass('primary showSelection');
-            saveBtn.setHandler(function () {
-                renderDialog.close();
-            });
+            if (this.saveButtonHandler !== null ){
+                saveBtn.setHandler(this.saveButtonHandler);
+            } else {
+                saveBtn.setHandler(function () {
+                    renderDialog.close();
+                });
+            }
+            this.saveButton = saveBtn;
 
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(me.loc.buttons.cancel);
@@ -384,6 +392,8 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
                 me.values.shape = me.defaultValues.shape;
                 renderDialog.close();
             });
+            this.cancelButton = cancelBtn;
+
             renderDialog.show(title, dialogContent, [saveBtn, cancelBtn]);
             // Dialog location
             if (typeof dialogLocation === 'string') {
@@ -417,6 +427,23 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
             }
         },
 
+        /**
+         * @method setSaveHandler
+         * Sets a user defined handler for the save button
+         * @param {function} handler Save button handler
+         */
+        setSaveHandler: function(handler) {
+            this.saveButtonHandler = handler;
+            if (this.saveButton !== null) {
+                this.saveButton.setHandler(handler);
+            }
+        },
+
+        /**
+         * @method updatePreview
+         * Performs a preview update
+         * @param {Object} dialog
+         */
         _updatePreview: function (dialog) {
             var me = this;
             var view = dialog === undefined || dialog === null ? jQuery(".pointform") : dialog;
