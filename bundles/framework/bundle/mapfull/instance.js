@@ -396,6 +396,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
             var state = this.getState(),
                 link = 'zoomLevel=' + state.zoom + '&coord=' + state.east + '_' + state.north + '&mapLayers=',
                 selectedLayers = state.selectedLayers,
+                mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 layers = '',
                 layer = null,
                 i = 0,
@@ -420,6 +421,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                     }
                 }
             }
+            link = link + mapmodule.getStateParameters();
             return link + layers;
         },
 
