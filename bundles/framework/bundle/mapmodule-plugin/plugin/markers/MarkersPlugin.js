@@ -497,7 +497,33 @@ me.getState();
         setState: function (state) {
             this.state = state;
         },
+        /**
+         * Returns markers parameter for map link if any markers on map
+         * @return {String} link parameters
+         */
+        getStateParameters: function () {
+            var state = this.getState();
+            if(!state || !state.markers) {
+                return "";
+            }
 
+            var FIELD_SEPARATOR = "|";
+            var MARKER_SEPARATOR = "___";
+            var markerParams = [];
+            _.each(state.markers, function(marker) {
+                var str = marker.shape + FIELD_SEPARATOR +
+                        marker.size + FIELD_SEPARATOR +
+                        marker.color + FIELD_SEPARATOR +
+                        marker.x + "_" + marker.y + FIELD_SEPARATOR +
+                        marker.msg;
+                markerParams.push(str);
+            });
+            if(markerParams.length > 0) {
+                 //markers=shape|size|hexcolor|x_y|User input text___shape|size|hexcolor|x_y|input 2";
+                return "&markers=" + markerParams.join(MARKER_SEPARATOR);
+            }
+            return "";
+        },
         /**
          * @method getState
          * @return {Object} bundle state as JSON
