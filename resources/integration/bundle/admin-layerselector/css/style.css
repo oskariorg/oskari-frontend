@@ -114,6 +114,8 @@ div.admin-layerselector {
       float: left;
       margin-right: 5px;
       margin-top: 3px; }
+      div.admin-layerselector div.layer input[type=checkbox], div.admin-layerselector div.create-layer input[type=checkbox] {
+        margin-top: 0; }
     div.admin-layerselector div.layer select, div.admin-layerselector div.create-layer select {
       width: 309px;
       padding: 8px 10px 8px 10px;
@@ -295,3 +297,16 @@ div.admin-layerselector {
   div.admin-layerselector .fetch-wms-button {
     margin-top: 2px;
     margin-bottom: 5px; }
+
+div.divmanazerpopup div.content div.admin-layerselector {
+  margin-right: 20px; }
+  div.divmanazerpopup div.content div.admin-layerselector div.layer {
+    padding: 0; }
+    div.divmanazerpopup div.content div.admin-layerselector div.layer div.admin-add-layer {
+      padding: 0;
+      overflow: visible;
+      /* Buttons are created in the popup, we don't need the form buttons */ }
+      div.divmanazerpopup div.content div.admin-layerselector div.layer div.admin-add-layer div.add-layer-record {
+        margin-right: 20px; }
+      div.divmanazerpopup div.content div.admin-layerselector div.layer div.admin-add-layer div.add-layer-send {
+        display: none; }

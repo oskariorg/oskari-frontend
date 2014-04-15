@@ -71,6 +71,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             tools.find('div.filter').css({
                 'height': '16px',
                 'width': '16px',
+                'cursor': 'pointer',
                 'background': 'url("/Oskari/resources/analysis/bundle/analyse/icons/icon-funnel.png")'
             });
             // </remove this>

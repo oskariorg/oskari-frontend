@@ -11,7 +11,23 @@ Oskari.registerLocalization({
             "title": "Analysis",
             "content": {
                 "label": "Data",
-                "tooltip": "Add analyse data - push [Add data] button"
+                "tooltip": "Add analyse data - push [Add data] button",
+                "features": {
+                    "title": "Draw a feature",
+                    "buttons": {
+                        "cancel": "Cancel",
+                        "finish": "Done"
+                    },
+                    "modes": {
+                        "area": "Area",
+                        "line": "Line",
+                        "point": "Point"
+                    }
+                },
+                "search": {
+                    "title": "Search places",
+                    "resultLink": "Add to analyse"
+                }
             },
 
             "method": {

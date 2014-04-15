@@ -97,6 +97,7 @@ Oskari.registerLocalization({
             "groupName": "Group layer name",
             "subLayers": "Sublayers",
             "addSubLayer": "Add sublayer",
+            "editSubLayer": "Edit sublayer",
 
             "wmsInterfaceAddress": "WMS interface URL",
             "wmsUrl": "WMS interface URL",

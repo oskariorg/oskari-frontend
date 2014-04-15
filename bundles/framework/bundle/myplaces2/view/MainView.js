@@ -16,6 +16,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
         this.options = options;
         this.popupId = 'myplacesForm';
         this.form = undefined;
+        this.drawPluginId = this.instance.getName();
     }, {
         __name: 'MyPlacesMainView',
         /**
@@ -57,7 +58,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
 
             // register plugin for map (drawing for my places)
             var pluginConfig = {
-                "id": 'MyPlaces',
+                id: this.drawPluginId,
                 multipart: true
             };
             var drawPlugin = Oskari.clazz.create('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin', pluginConfig);
@@ -121,9 +122,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
              * @param {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.FinishedDrawingEvent} event
              */
             'DrawPlugin.FinishedDrawingEvent': function (event) {
+                if (this.drawPluginId !== event.getCreatorId()) return;
+
                 this._handleFinishedDrawingEvent(event);
             },
             'DrawPlugin.ActiveDrawingEvent': function(event) {
+                if (this.drawPluginId !== event.getCreatorId()) return;
+                
                 if (this.form) {
                     this.form.setMeasurementResult(event.getDrawing(), event.getDrawMode());
                 }

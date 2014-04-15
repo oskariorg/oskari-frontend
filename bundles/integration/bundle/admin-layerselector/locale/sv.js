@@ -100,6 +100,7 @@ Oskari.registerLocalization({
             "groupName": "Gruppnivåns namn",
             "subLayers": "Undernivå",
             "addSubLayer": "Tillägg en undernivå",
+            "editSubLayer": "Editera undernivå",
 
             "wmsInterfaceAddress": "WMS-gränssnittets address",
             "wmsUrl": "WMS-gränssnittets address",
