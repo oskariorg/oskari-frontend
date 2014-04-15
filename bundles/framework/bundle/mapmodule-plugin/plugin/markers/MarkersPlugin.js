@@ -72,7 +72,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 tooltip: 'poista',
                 sticky: true,
                 callback: function () {
-me.getState();
                     me.removeMarkers();
                 }
             }
@@ -195,6 +194,12 @@ me.getState();
                 this._prevIconUrl = this._preSVGIconUrl+paper.toSVG();
             }
             this._registerTools();
+            if ((typeof this.state === "undefined") || (this.state === null)) {
+                this.state = {
+                    markers: []
+                }
+            }
+            this.setState(this.state);
         },
         /**
          * @method stopPlugin
@@ -295,10 +300,6 @@ me.getState();
                 markerLayers[0].removeAllFeatures();
             }
             this._markers.length = 0;
-            var state = {
-                markerLayer: markerLayers
-            }
-            me.setState(state);
         },
 
         getMapMarkerBounds: function () {
@@ -350,7 +351,16 @@ me.getState();
                     graphicWidth: 50+10*data.size,
                     graphicHeight: 50+10*data.size,
                     fillOpacity: 1,
-                    label: data.msg
+                    label: data.msg,
+                    fontColor: "${favColor}",
+                    fontSize: "12px",
+                    fontFamily: "Courier New, monospace",
+                    fontWeight: "bold",
+                    labelAlign: "c",
+                    labelXOffset: 10+10*data.size,
+                    labelYOffset: 10+10*data.size,
+                    labelOutlineColor: "white",
+                    labelOutlineWidth: 3
                 }),
                 i;
 
@@ -496,6 +506,9 @@ me.getState();
          */
         setState: function (state) {
             this.state = state;
+            for (var i=0; i<this.state.markers.length; i++) {
+                this.addMapMarker(this.state.markers[i]);
+            }
         },
 
         /**
