@@ -78,7 +78,7 @@ me.getState();
             }
         };
         this.state = {
-            markerLayer: null
+            markers: []
         };
         this._buttonsAdded = false;
     }, {
@@ -503,14 +503,10 @@ me.getState();
          * @return {Object} bundle state as JSON
          */
         getState: function () {
-            this.state = "[";
+            this.state.markers = [];
             for (var i=0; i<this._markers.length; i++) {
-                if (i > 0) {
-                    this.state = this.state+",";
-                }
-                this.state = this.state+JSON.stringify(this._markers[i]);
+                this.state.markers.push(this._markers[i]);
             }
-            this.state = this.state+"]";
             return this.state;
         },
 
