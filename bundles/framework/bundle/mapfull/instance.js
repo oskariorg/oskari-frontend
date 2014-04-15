@@ -421,8 +421,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                     }
                 }
             }
-            link = link + mapmodule.getStateParameters();
-            return link + layers;
+            return link + layers + mapmodule.getStateParameters();
         },
 
         /**
