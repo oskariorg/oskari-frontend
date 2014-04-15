@@ -130,6 +130,7 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Térkép-tétegek",
                 "defaultLayer": "Alapértelmezett réteg",
                 "useAsDefaultLayer": "Legyen alapértelmezett réteg"

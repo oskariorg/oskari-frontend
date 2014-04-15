@@ -129,7 +129,8 @@ Oskari.registerLocalization({
                 }
             },
             "layers": {
-                "add": "Lisää taso",
+                "add": "Luo uusi piirtotaso",
+                "addselect": "Lisää piirtotaso karttatasoksi",
                 "label": "Karttatasot",
                 "defaultLayer": "(Oletusvalinta)",
                 "useAsDefaultLayer": "Käytä oletuksena"

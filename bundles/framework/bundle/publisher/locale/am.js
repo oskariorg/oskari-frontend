@@ -130,6 +130,7 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Քարտեզի շերտեր",
                 "defaultLayer": "(Սկզբնական շերտ)",
                 "useAsDefaultLayer": "Օգտագործել որպես հիմքային շերտ"

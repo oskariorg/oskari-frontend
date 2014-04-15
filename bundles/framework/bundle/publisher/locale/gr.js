@@ -128,6 +128,7 @@ Oskari.registerLocalization({
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Επίπεδα χάρτη",
                 "defaultLayer": "(Προεπιλεγμένο επίπεδο)",
                 "useAsDefaultLayer": "Χρήση ως προεπιλεγμένο επίπεδο"

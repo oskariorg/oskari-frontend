@@ -128,6 +128,7 @@ Oskari.registerLocalization({
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Slojevi karte",
                 "defaultLayer": "(Zadani sloj)",
                 "useAsDefaultLayer": "Koristi kao zadani sloj"

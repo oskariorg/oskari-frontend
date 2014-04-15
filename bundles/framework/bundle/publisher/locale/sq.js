@@ -129,6 +129,7 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Shtresat e hartës",
                 "defaultLayer": "(Shtresa automatike/e parazgjedhur)",
                 "useAsDefaultLayer": "Përdor si shtresë automatike/të parazgjedhur"

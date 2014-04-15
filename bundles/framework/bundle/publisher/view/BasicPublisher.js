@@ -1427,13 +1427,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 if (tool.config) {
                     tool.config.toolStyle = styleConfig;
                 }
-                if (tool._isPluginStarted && tool.plugin.changeToolStyle) {
+                if (tool._isPluginStarted && tool.plugin && tool.plugin.changeToolStyle) {
                     tool.plugin.changeToolStyle(styleConfig);
-                }
-                // tools in toolbar plugin needs to be configured
-                if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
-                    if (me.toolsPanel.toolbarConfig && me.toolsPanel.toolbarConfig.classes) {
-                        me.toolsPanel.toolbarConfig.classes = tool.plugin.getToolConfs();
+                    // tools in toolbar plugin needs to be configured
+                    if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
+                        if (me.toolsPanel.toolbarConfig && me.toolsPanel.toolbarConfig.classes) {
+                            me.toolsPanel.toolbarConfig.classes = tool.plugin.getToolConfs();
+                        }
                     }
                 }
             }

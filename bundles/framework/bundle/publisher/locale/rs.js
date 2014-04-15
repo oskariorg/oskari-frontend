@@ -130,6 +130,7 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Slojevi",
                 "defaultLayer": "Početni sloj",
                 "useAsDefaultLayer": "Upotrebi kao početni sloj"

@@ -1,5 +1,16 @@
 # Release Notes
 
+## 1.20
+
+### publisher
+
+Added draw layer selection.
+Improved published view editing state handling.
+
+### admin-layerselector bundle
+
+Removed underscore from comp.js
+
 ## 1.19.3
 
 ### statsgrid
