@@ -17,6 +17,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
         this.saveButton = null;
         this.cancelButton = null;
         this.saveButtonHandler = null;
+        this.renderDialog = null;
 
         this.values = {
             size: this.defaultValues.size,
@@ -176,10 +177,10 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
                 jQuery.extend(true, me.values, state.dot);
             }
 
-            var renderDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            me.renderDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
-            renderDialog.addClass('renderdialog');
-            renderDialog.addClass('pointvisualization');
+            me.renderDialog.addClass('renderdialog');
+            me.renderDialog.addClass('pointvisualization');
             var title = me.loc.title;
 
             // Shape selection
@@ -379,7 +380,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
                 saveBtn.setHandler(this.saveButtonHandler);
             } else {
                 saveBtn.setHandler(function () {
-                    renderDialog.close();
+                    me.renderDialog.close();
                 });
             }
             this.saveButton = saveBtn;
@@ -390,18 +391,27 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
                 me.values.size = me.defaultValues.size;
                 me.values.color = me.defaultValues.color;
                 me.values.shape = me.defaultValues.shape;
-                renderDialog.close();
+                me.renderDialog.close();
             });
             this.cancelButton = cancelBtn;
 
-            renderDialog.show(title, dialogContent, [saveBtn, cancelBtn]);
+            me.renderDialog.show(title, dialogContent, [saveBtn, cancelBtn]);
             // Dialog location
             if (typeof dialogLocation === 'string') {
-                renderDialog.moveTo(renderButton, dialogLocation);
+                me.renderDialog.moveTo(renderButton, dialogLocation);
             } else {
-                renderDialog.moveTo(renderButton, 'top');
+                me.renderDialog.moveTo(renderButton, 'top');
             }
-            return renderDialog;
+            return me.renderDialog;
+        },
+
+        /**
+         * @method getDialog
+         * Returns reference to the render dialog of the dot form
+         * @private
+         */
+        getDialog: function() {
+            return this.renderDialog;
         },
 
         /**

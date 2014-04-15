@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         this.conf = conf;
         this.mapModule = null;
         this.pluginName = null;
-        this.dialog = null;
         this.dotForm = null;
         this._sandbox = null;
         this._map = null;
@@ -43,10 +42,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 callback: function () {
                     var loc = me.getMapModule().getLocalization('plugin', true)[me.__name].form;
                     me.dotForm = Oskari.clazz.create("Oskari.userinterface.component.visualization-form.DotForm", me, loc, me._defaultData);
-                    if (me.dialog) {
-                        me.dialog.close(true);
+                    var dialog = me.dotForm.getDialog();
+                    if (dialog) {
+                        dialog.close(true);
                     }
-                    me.dialog = me.dotForm.showForm(jQuery("div.selection-line")[0],null,"right");
+                    me.dotForm.showForm(jQuery("div.selection-line")[0],null,"right");
                     me.dotForm.setSaveHandler(function() {
                         var values = me.dotForm.getValues();
                         var reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                             var request = reqBuilder(data);
                             me._sandbox.request(me.getName(), request);
                         }
-                        me.dialog.close(true);
+                        me.dotForm.getDialog().close(true);
                     });
                 }
             },
