@@ -76,7 +76,8 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                         markup: pretty,
                         layerId: datum.layerId,
                         layerName: layerName,
-                        type: datum.type
+                        type: datum.type,
+                        isMyPlace: !!datum.layerId.match('myplaces_')
                     };
                 }
             })
@@ -112,7 +113,11 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         if (datum.presentationType === 'JSON' || (datum.content && datum.content.parsed)) {
             // This is for my places info popup
             if (datum.layerId && typeof datum.layerId === 'string' && datum.layerId.match('myplaces_')) {
-                return me._formatMyPlacesGfi(datum);
+                return _.foldl(datum.content.parsed.places, function(div, place) {
+                    div.append(me._formatMyPlacesGfi(place));
+
+                    return div;
+                }, jQuery('<div></div>'));
             }
 
             var even = false,
@@ -309,11 +314,17 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
     _formatMyPlacesGfi: function (place) {
         var me = this,
             content = me.template.myPlacesWrapper.clone(),
+            desc = content.find('p.myplaces_desc'),
             img = content.find('a.myplaces_imglink'),
             link = content.find('a.myplaces_link');
 
         content.find('h3.myplaces_header').html(place.name);
-        content.find('p.myplaces_desc').html(place.place_desc);
+
+        if (place.place_desc) {
+            desc.html(place.place_desc);
+        } else {
+            desc.remove();
+        }
 
         if (place.image_url) {
             img.attr({
