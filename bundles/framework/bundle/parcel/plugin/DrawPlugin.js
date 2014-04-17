@@ -627,6 +627,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             return this.editLayer.features[0].geometry;
         },
         /**
+         * Returns the number of boundary geometry points from the edit layer
+         * @method
+         */
+        getNewPointsCount: function () {
+            if (this.editLayer.features.length === 0) return 0;
+            var f = this.editLayer.features[0];
+            if (f === null || f === undefined) return 0;
+            return f.geometry.getVertices().length;
+
+        },
+        /**
          * Returns the operating geometry
          * @method
          */

@@ -37,6 +37,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             }
         }
 
+        // Layout params, pdf template
+        this.layoutParams = "";
+
         /* page sizes listed in localisations */
         this.sizeOptions = this.loc.size.options;
 
@@ -68,6 +71,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
         this.accordion = null;
         this.mainPanel = null;
+        this.sizePanel = null;
 
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
@@ -85,7 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             "tool": '<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>',
             "buttons": '<div class="buttons"></div>',
             "help": '<div class="help icon-info"></div>',
-            "main": '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/><input name="tiles" type="hidden" value="" id="oskari_tiles"/></form>' + '</div>',
+            "main": '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/><input name="tiles" type="hidden" value="" id="oskari_tiles"/><input name="tabledata" type="hidden" value="" id="oskari_print_tabledata"/></form>' + '</div>',
             "format": '<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>',
             "formatOptionTool": '<div class="tool ">' + '<input type="radio" name="format" />' + '<label></label></div>',
             "legend": '<div class="printout_legend_cont printout_settings_cont"><div class="printout_legend_label"></div></div>',
@@ -115,10 +119,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
             this.accordion = accordion;
 
-            var sizePanel = this._createSizePanel();
-            sizePanel.open();
+            this.sizePanel = this._createSizePanel();
+            this.sizePanel.open();
 
-            accordion.addPanel(sizePanel);
+            accordion.addPanel(this.sizePanel);
 
             var settingsPanel = this._createSettingsPanel();
             accordion.addPanel(settingsPanel);
@@ -539,7 +543,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * @param {Object} printUrl Url to print service action route GetPreview
          * @param {Object} selections map data as returned by _gatherSelections()
          */
-        openPostURLinWindow: function (geoJson, tileData, printUrl, selections) {
+        openPostURLinWindow: function (geoJson, tileData, tableData, printUrl, selections) {
             var me = this;
             var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
             if (this._isLandscape(selections)) {
@@ -556,7 +560,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             if (tileData) {
                 me.mainPanel.find('input[name=tiles]').val(tileData);
             }
-
+            if (tableData) {
+                me.mainPanel.find('input[name=tabledata]').val(tableData);
+            }
             window.open('about:blank', 'map_popup_111', wopParm);
             me.mainPanel.find('#oskari_print_formID').submit();
         },
@@ -588,6 +594,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
             var saveFileArgs = "";
             if(selections.saveFile) saveFileArgs = "&saveFile=" + selections.saveFile;
+            var layoutArgs = me._getLayoutParams();
 
             var contentOptions = [],
                 p;
@@ -601,21 +608,63 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var contentOptionArgs = contentOptions.join('');
             var formatArgs = "&format=" + selections.format;
 
-            var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs + saveFileArgs;
+            var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs + saveFileArgs + layoutArgs;
             url = url + parameters;
 
             // We need to use the POST method if there's GeoJSON or tile data.
-            if (this.instance.geoJson || !jQuery.isEmptyObject(this.instance.tileData)) {
-                var stringifiedJson = this._stringifyGeoJson(this.instance.geoJson);
-                var stringifiedTileData = this._stringifyTileData(this.instance.tileData);
+            if (this.instance.geoJson || !jQuery.isEmptyObject(this.instance.tileData) || this.instance.tableJson ) {
+                var stringifiedJson = this._stringifyGeoJson(this.instance.geoJson),
+                    stringifiedTileData = this._stringifyTileData(this.instance.tileData),
+                    stringifiedTableData = this._stringifyTableData(this.instance.tableJson);
 
                 this.instance.getSandbox().printDebug("PRINT POST URL " + url);
-                this.openPostURLinWindow(stringifiedJson, stringifiedTileData, url, selections);
+                this.openPostURLinWindow(stringifiedJson, stringifiedTileData, stringifiedTableData, url, selections);
             } else {
                 // Otherwise GET is satisfiable.
                 this.instance.getSandbox().printDebug("PRINT URL " + url);
                 this.openURLinWindow(url, selections);
             }
+        },
+        /**
+         * @method  modifyUIConfig4Parcel
+         * Modify default UI config.
+         * @param {Object} printParams, parameters for printing pdf via print service
+         */
+        modifyUIConfig4Parcel: function (printParams) {
+            var me = this;
+            var container = me.mainPanel;
+            container.find('div.header h3').empty();
+            container.find('div.header h3').append(me.loc.title+ " (3/3)");
+
+            // Print title
+            container.find('.printout_title_field').attr("value",printParams.pageTitle);
+
+            if(me.sizePanel) me.sizePanel.close();
+            container.find('div.accordion_panel').first().next().hide();
+
+        },
+        /**
+         * @method setLayoutParams
+         * Set params for backend print layout.
+         * @param {Object} printParams, parameters for printing pdf via print service
+         */
+        setLayoutParams: function (printParams) {
+            var me = this;
+            var params = "";
+            if(printParams.pageTemplate) params = "&pageTemplate="+printParams.pageTemplate;
+            if(printParams.pageMapRect) params = params + "&pageMapRect="+printParams.pageMapRect;
+            if(printParams.tableTemplate) params = params + "&tableTemplate="+printParams.tableTemplate;
+            me.layoutParams = params;
+
+        },
+        /**
+         * @method getLayoutParams
+         * Get params for backend print layout.
+         */
+        _getLayoutParams: function () {
+
+          return this.layoutParams;
+
         },
         /**
      * @method _isLandscape
@@ -676,6 +725,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 // [ [{}, ...], [{}, ...], ... ]
                 returnArr = [].concat.apply([], dataArr);
                 return JSON.stringify(returnArr);
+            }
+            return null;
+        },
+        _stringifyTableData: function (tableData) {
+            if (!jQuery.isEmptyObject(tableData)) {
+                return JSON.stringify(tableData);
             }
             return null;
         },
