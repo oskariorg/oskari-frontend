@@ -137,7 +137,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingTool",
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/parcel/view/PlaceForm.js"
+                    "src": "../../../../bundles/framework/bundle/parcel/view/StartPrintView.js"
+                },
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/bundle/parcel/view/ParcelPrintForm1.js"
+                },
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/bundle/parcel/view/ParcelPrintForm2.js"
                 },
                 {
                     "type": "text/javascript",
@@ -154,6 +162,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingTool",
                 {
                     "type": "text/javascript",
                     "src": "../../../../bundles/framework/bundle/parcel/instance.js"
+                },
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/bundle/parcel/Flyout.js"
+                },
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../libraries/jquery/plugins/jquery.cookie.js"
                 },
                 // css
                 {

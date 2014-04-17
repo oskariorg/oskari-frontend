@@ -4,6 +4,7 @@ Oskari.registerLocalization({
     "value": {
         "title": "...",
         "desc": "",
+        "flyouttitle": "Tryckning",
         "tools": {
             "line": {
                 "tooltip": "...",
@@ -41,32 +42,50 @@ Oskari.registerLocalization({
             "save": "...",
             "movePlaces": "..."
         },
-        "placeform": {
-            "title": "...",
-            "tooltip": "...",
+        "parcelprintform1": {
+            "title": "Tulosta näkymä (1/3)",
+            "tooltip": "Anna määräalan tiedot ja jatka",
             "placename": {
-                "placeholder": "..."
+                "placeholder": "Tunnus *"
             },
             "ptitle": {
-                "placeholder": "..."
+                "placeholder": "Piirroksen otsikko"
             },
             "subtitle": {
-                "placeholder": "..."
+                "placeholder": "Piirroksen alaotsikko"
             },
             "description": {
-                "placeholder": "..."
+                "placeholder": "Yleiskuvaus"
             },
             "parent_property_id": {
-                "placeholder": "..."
+                "placeholder": "Kantatilan tunnus"
             },
             "parent_property_quality": {
-                "placeholder": "..."
+                "placeholder": "Kantatilan lähdeaineisto"
             },
             "reporter": {
-                "placeholder": "..."
+                "placeholder": "Piirroksen laatija *"
             },
             "area": {
-                "placeholder": "..."
+                "placeholder": "Pinta-ala n. (m²)"
+            },
+            "buttons": {
+                "continue": "Jatka",
+                "break": "Peruuta"
+            }
+        },
+        "parcelprintform2": {
+            "title": "Tulosta näkymä (2/3)",
+            "pointnumber": "Kohde",
+            "pointdesc": "Selitys",
+            "tooltip": "Anna uusien rajamerkkien tiedot ja jatka",
+            "point": {
+                "placeholder": "Anna rajamerkin lisätietoja esim. etäisyys xx pyykistä 201",
+                "label": "Rajapyykki"
+            },
+            "buttons": {
+                "continue": "Jatka",
+                "break": "Peruuta"
             }
         },
         "qualitycodes": {
@@ -109,7 +128,21 @@ Oskari.registerLocalization({
             "placeName": "..."
         },
         "page": {
-            "title": "..."
+            "title": "...",
+            "parentparcel": "Emäkiinteistö:",
+            "partparcel": "Määräala:",
+            "footnote": "Rantaviivan todellinen paikka määräytyy toimituksessa"
+        },
+        "StartPrintView": {
+            "text": "TODO: Översätta-> Tämän tulostus-toiminnon yhteydessä annettavat tiedot tallentuvat vain pdf-tulosteelle",
+            "infoseen": {
+                "label": "Inte see denna dialog i fortsätting "
+            },
+            "buttons": {
+                "continue": "Starta trycka",
+                "previous": "Före",
+                "cancel": "Avbryta"
+            }
         }
     }
 });

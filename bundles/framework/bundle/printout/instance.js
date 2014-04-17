@@ -27,6 +27,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
         this.isMapStateChanged = true;
         this.state = undefined;
         this.geoJson = undefined;
+        this.tableJson = undefined;
         // Additional data for each printable layer
         this.tileData = undefined;
         this.printService = undefined;
@@ -284,13 +285,34 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 if (!me.printout) {
                     var map = jQuery('#contentMap');
                     me.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.backendConfiguration);
-                    this.printout.render(map);
-                    this.printout.setEnabled(false);
-                    this.printout.hide();
+                    me.printout.render(map);
+                    me.printout.setEnabled(false);
+                    me.printout.hide();
                 }
                 me.printout.printMap(printParams);
+            },
+            /**
+             * Bundles could plot with prespcefied parcel conf
+             * @method Printout.PrintWithParcelUIEvent
+             * @param {Object} event
+             */
+            'Printout.PrintWithParcelUIEvent': function (event) {
+                var me= this;
+                var contentId = event.getContentId(),
+                    printParams = event.getPrintParams(),
+                    geoJson = event.getGeoJsonData(),
+                    tableJson = event.getTableData();
+
+                if(geoJson) me.geoJson = geoJson;
+                if(tableJson) me.tableJson = tableJson;
+                me.setPublishMode(true);
+                // configure UI
+                me.printout.modifyUIConfig4Parcel(printParams);
+                me.printout.setLayoutParams(printParams);
             }
         },
+
+
 
         /**
          * @method stop

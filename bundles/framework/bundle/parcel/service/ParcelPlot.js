@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
                 fillColor: "#FF0000",
                 fillOpacity: 0.2,
                 labelAlign: "bm",
-                label: "${nimi}\n${area} ha",
+                label: "${nimi}\n n. ${area} ha",
                 fontColor: "#000000",
                 fontSize: "22px",
                 fontFamily: "SansSerif",
@@ -53,7 +53,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
                 strokeDashstyle: "dash",
                 fillColor: "#FF0000",
                 fillOpacity: 1.0,
-                label: "- ${length} -",
+                label: "n. ${length} m",
                 labelAlign: "cm",
                 labelXOffset: "${deltax}",
                 labelYOffset: "${deltay}"
@@ -88,13 +88,56 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
     }, {
         /**
          * @method plotParcel
+         * Plot feature to temp layer and send plot data to printout service
+         * @param {OpenLayers.Feature.Vector} feature (new boundaries, which are added in parcel application)
+         * @param {} values  print legend and margin properties
+         * @param {Function} cb Requires information about the success as boolean parameter.
+         */
+        plotParcel: function (feature, values, cb) {
+            var me = this;
+
+            me._plotNewParcel(feature, values.place.name, values.place.desc, cb);
+            me._plotNewBoundary(feature, cb);
+
+            cb(true);
+
+            // Create geojson graphics for print
+            var geojsCollection = me._createGeoJSON();
+
+
+            // Center map to feature
+            me._centerMap2Parcel(feature, values);
+
+            var printParams = me._getPrintParams(values.place);
+            // Trigger plot dialog
+            // me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'attach', 'Printout'])
+            // $('.tool-print').trigger('click');
+
+            // Print pdf without preview UI
+            // var eventBuilder = me.instance.sandbox.getEventBuilder('Printout.PrintWithoutUIEvent');
+
+            //Add extra table rows for printout
+            var tables = me._appendTableRows(values);
+
+            // Print pdf with preview UI and with parcel preconfig
+            var eventBuilder = me.instance.sandbox.getEventBuilder('Printout.PrintWithParcelUIEvent');
+
+            if (eventBuilder) {
+                // Send print params and GeoJSON for printing
+                var event = eventBuilder(me.instance.getName(), printParams, geojsCollection, tables);
+                me.instance.sandbox.notifyAll(event);
+            }
+        },
+
+        /**
+         * @method plotParcel
          * Plot feature to temp layer
          * @param {OpenLayers.Feature.Vector} feature (new boundaries, which are added in parcel application)
          * @param {String} placeName Name of the place.
          * @param {String} placeDescription Description of the place.
          * @param {Function} cb Requires information about the success as boolean parameter.
          */
-        plotParcel: function (feature, values, cb) {
+        plotParcelWithoutPrint: function (feature, values, cb) {
             var me = this;
             me._plotNewParcel(feature, values.name, values.desc, cb);
             me._plotNewBoundary(feature, cb);
@@ -105,19 +148,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
 
             // Center map to feature
             me._centerMap2Parcel(feature, values);
-
-            var printParams = me._getPrintParams(values);
-            // Trigger plot dialog
-            // me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'attach', 'Printout'])
-            // $('.tool-print').trigger('click');
-
-            // Print pdf
-            var eventBuilder = me.instance.sandbox.getEventBuilder('Printout.PrintWithoutUIEvent');
-            if (eventBuilder) {
-                // Send print params and GeoJSON for printing
-                var event = eventBuilder(me.instance.getName(), printParams, geojsCollection);
-                me.instance.sandbox.notifyAll(event);
-            }
         },
 
         /**
@@ -263,7 +293,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
                         line = new OpenLayers.Geometry.LineString(points);
                         //line.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
                         lineFeature = new OpenLayers.Feature.Vector(line, null, this.boundaryLayer.style);
-                        lineFeature.attributes.length = lineFeature.geometry.getLength().toFixed(2);
+                        lineFeature.attributes.length = lineFeature.geometry.getLength().toFixed(0);  // unit m, no decimals
                         lineFeature.attributes.deltax = deltax;
                         lineFeature.attributes.deltay = -deltay;
                         features.push(lineFeature);
@@ -427,6 +457,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
             return printStyle;
         },
         /**
+         * TODO: define plot layout params in bundle config
          *  Get / define plot attributes
          * @param values new part parcel and plot attributes
          * @private
@@ -436,17 +467,52 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
                 maplinkArgs = sandbox.generateMapLinkParameters(),
                 loc = this.instance.getLocalization('page'),
                 selections = {
-                    pageTitle: loc.title + " " + values.parent_property_id,
+                    pageTitle: loc.title,
                     pageSize: values.size,
                     maplinkArgs: maplinkArgs,
                     format: "application/pdf",
                     pageDate: true,
                     pageLogo: true,
                     pageScale: true,
-                    saveFile: values.name
+                    saveFile: values.name,
+                    pageTemplate: "template.pdf",
+                    pageMapRect: "1.0,1.5,19,15",
+                    tableTemplate: "LayoutTemplatePointTable"
                 };
 
             return selections;
+
+        },
+        /**
+         *  Add table rows to parcel printout
+         *  - table2 for extra information
+         *  - table3 for bottom foot note
+         * @param values new part parcel and plot attributes
+         * @private
+         */
+        _appendTableRows: function (values) {
+
+            var rows = [],
+                footrows = [],
+                loc = this.instance.getLocalization('page'),
+                row1 = {},
+                row2 = {},
+                rowFoot = {};
+
+            row1.col1 = loc.parentparcel;
+            row1.col2 = values.place.parent_property_id;
+            rows.push(row1);
+            row2.col1 = loc.partparcel;
+            row2.col2 = values.place.name;
+            rows.push(row2);
+            values.tables.table2 = rows;
+
+            rowFoot.col1 = loc.footnote;
+            footrows.push(rowFoot);
+            values.tables.table3 = footrows;
+
+            return values.tables;
+
 
         },
         _setEditsVisible: function () {

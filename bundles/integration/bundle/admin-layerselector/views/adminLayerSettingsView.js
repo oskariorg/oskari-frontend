@@ -386,6 +386,7 @@ define([
                 data.inspireTheme = form.find('#add-layer-inspire-theme').val();
                 data.metadataId = form.find('#add-layer-datauuid').val();
                 data.xslt = form.find('#add-layer-xslt').val();
+                data.gfiContent = form.find('#add-layer-gfi-content').val();
                 data.gfiType = form.find('#add-layer-responsetype').val();
 
                 data.realtime = form.find('#add-layer-realtime').is(':checked');

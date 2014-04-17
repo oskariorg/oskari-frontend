@@ -138,6 +138,7 @@ Oskari.registerLocalization({
             "legendImage": "Legenda image",
             "legendImageDesc": "URL for legenda image",
             "legendImagePlaceholder": "URL for legenda image",
+            "gfiContent": "NOT TRANSLATED",
             "gfiResponseType": "GFI response type",
             "gfiResponseTypeDesc": "Response type for Get Feature Info (GFI)",
             "gfiStyle": "GFI style",
