@@ -111,99 +111,34 @@ function(instance) {
      */
     _handleFinishedDrawingEvent : function(event) {
         var center = event.getDrawing().geometry.getCentroid();
-        var lonlat = {
-            lon : center.x,
-            lat : center.y
-        };
-        this.showPlaceForm(lonlat);
+
+        // Start printing (shows 3 forms one by one)
+        this._startPrint();
     },
-    /**
-     * @method showPlaceForm
-     * Displays a form popup on given location. Prepopulates the form if place is given
-     * @param {OpenLayers.LonLat} location location to point with the popup
-     */
-    showPlaceForm : function(location) {
-        var me = this;
-        var sandbox = this.instance.sandbox;
-        sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
-        var loc = this.instance.getLocalization();
-        this.form = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.view.PlaceForm', this.instance);
+        /**
+         * Start print
+         *
+         */
 
-        // Get default value from the feature.
-        var defaultValues = {
-            place : {}
-        };
-        var feature = this.drawPlugin.getDrawing();
-        var oldpreparcel = this.drawPlugin.getOldPreParcel();
-        if (feature) {
-            defaultValues.place.area = this.drawPlugin.getParcelGeometry().getArea().toFixed(0);
-            if (feature.attributes) {
-                if (this.instance.conf.pid) {
-                    defaultValues.place.name = this.instance.conf.pid;
-                }
-                else {
-                    // Should never be here in KVP use
-                    defaultValues.place.name = feature.attributes.name + '-K';
-                }
-                if (this.instance.conf.printContent) {
-                    defaultValues.place.desc = this.instance.conf.printContent;
-                }
-                defaultValues.place.parent_property_id = feature.attributes.name;
-                defaultValues.place.parent_property_quality = this._decodeQuality('q' + feature.attributes.quality);
+        _startPrint: function () {
+            var me = this;
 
+            // Show info or not
+            if (jQuery.cookie('parcelprint_info_seen') !== '1') {
+                me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'attach']);
+
+            } else {
+                this.instance.setParcelPrintMode(true);
             }
-            // Override if old values available
-            if (oldpreparcel) {
-                defaultValues.place.id = oldpreparcel.id;
-                defaultValues.place.name = oldpreparcel.preparcel_id;
-                defaultValues.place.title = oldpreparcel.title;
-                defaultValues.place.subtitle = oldpreparcel.subtitle;
-                defaultValues.place.desc = oldpreparcel.description;
-                defaultValues.place.parent_property_id = oldpreparcel.parent_property_id;
-                defaultValues.place.parent_property_quality = oldpreparcel.parent_property_quality;
-                defaultValues.place.reporter = oldpreparcel.reporter;
-                defaultValues.place.area_unit = oldpreparcel.area_unit;
-            }
-        }
-        // Set the default values for the form.
-        this.form.setValues(defaultValues);
+        },
 
 
-
-        var content = [{
-            html : me.form.getForm(),
-            useButtons : true,
-            primaryButton : loc.buttons.save,
-            actions : {}
-        }];
-        // cancel button
-        content[0].actions[loc.buttons.cancel] = function() {
-            me._cleanupPopup();
-            // ask toolbar to select default tool
-            var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
-            me.instance.sandbox.request(me, toolbarRequest);
-        };
-        // print button
-        content[0].actions[loc.buttons.print] = function() {
-            me._printForm();
-        };
-        // save button
-        content[0].actions[loc.buttons.save] = function() {
-            me._saveForm();
-        };
-
-        // Enable / disable input fields
-        if (!oldpreparcel)me.form.enableDisableFields();
-
-        var request = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, loc.placeform.title, content, location, true);
-        sandbox.request(me.getName(), request);
-    },
     /**
      * @method _validateForm
      * Validates form data, returns an object array if any errors.
      * Error objects have field and error properties ({field : 'name', error: 'Name missing'}).
      * @private
-     * @param {Object} values form values as returned by Oskari.mapframework.bundle.parcel.view.PlaceForm.getValues()
+     * @param {Object} values form values as returned by Oskari.mapframework.bundle.parcel.view.ParcelForm1.getValues()
      * @return {Object[]}
      */
     _validateForm : function(values) {

@@ -87,19 +87,32 @@ function(instance) {
             cb();
         }
     },
-    /**
-     * @method _plotParcel
-     * Plot preparcel features via plot server asynchronously and gives the success information via callback.
-     * @param {OpenLayers.Feature.Vector} feature The feature whose data will be saved to the server by using WFST.
-     * @param {String} placeName Name of the place.
-     * @param {String} placeDescription Description of the place.
-     * @param {Fuction} cb Requires information about the success as boolean parameter.
-     */
-    _plotParcel : function(feature, values, cb) {
-        if (feature) {
-        	this._plot.plotParcel(feature, values, cb);
-        }
-    },
+        /**
+         * @method _plotParcel
+         * Plot preparcel features via plot server asynchronously and gives the success information via callback.
+         * @param {OpenLayers.Feature.Vector} feature The feature whose data will be saved to the server by using WFST.
+         * @param {String} placeName Name of the place.
+         * @param {String} placeDescription Description of the place.
+         * @param {Fuction} cb Requires information about the success as boolean parameter.
+         */
+        _plotParcel: function (feature, values, cb) {
+            if (feature) {
+                this._plot.plotParcel(feature, values, cb);
+            }
+        },
+        /**
+         * @method plotParcelWithoutPrint
+         * Plot preparcel features via plot server asynchronously and gives the success information via callback.
+         * @param {OpenLayers.Feature.Vector} preparcel feature .
+         * @param {String} placeName Name of the place.
+         * @param {String} placeDescription Description of the place.
+         * @param {Fuction} cb Requires information about the success as boolean parameter.
+         */
+        plotParcelWithoutPrint: function (feature, values, cb) {
+            if (feature) {
+                this._plot.plotParcelWithoutPrint(feature, values, cb);
+            }
+        },
     /**
      * @method savePlace
      * Saves preparcel features to the server asynchronously and gives the success information via callback.
