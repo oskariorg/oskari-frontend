@@ -30,6 +30,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 '</div>',
             'tool': '<div class="tool"></div>',
             'drawControls': '<div class="buttons"></div>',
+            'filterControls': '<div class="filters"></div>',
             'search': '<div class="analyse-search"></div>'
         },
         /**
@@ -326,6 +327,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             panelContainer.append(layersCont);
             panelContainer.append(this._createDataButtons(loc));
             panelContainer.append(this._createDrawButtons(loc));
+            panelContainer.append(this._createFilterButtons(loc));
 
             return panel;
         },
@@ -409,6 +411,36 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             }, toolContainer);
         },
         /**
+         * Creates and returns the filter buttons from which the user can filter
+         * features which are going to be used in analysis.
+         *
+         * @method _createFilterButtons
+         * @private
+         * @param {Object} loc
+         * @return {jQuery}
+         */
+        _createFilterButtons: function(loc) {
+            var me = this,
+                toolContainer = jQuery(this._templates.toolContainer).clone(),
+                toolTemplate = jQuery(this._templates.tool),
+                tools = ['point', 'line', 'edit', 'remove'];
+
+            toolContainer.find('h4').html(loc.content.filter.title);
+
+            return _.foldl(tools, function(container, tool) {
+                var toolDiv = toolTemplate.clone();
+                toolDiv.addClass('selection-' + tool);
+                toolDiv.click(function() {
+                    /*me._startNewDrawing({
+                        drawMode: tool
+                    });*/
+                });
+                container.append(toolDiv);
+
+                return container;
+            }, toolContainer);
+        },
+        /**
          * Creates and returns the draw control buttons where the user
          * can either save or discard the drawn feature.
          * 
@@ -435,6 +467,29 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             });
 
             cancelBtn.insertTo(container);
+            finishBtn.insertTo(container);
+
+            return container;
+        },
+        /**
+         * Creates and returns the filter control buttons.
+         *
+         * @method _createFilterControls
+         * @private
+         * @return {jQuery}
+         */
+        _createFilterControls: function () {
+            var me = this,
+                loc = this.loc.content.filter.buttons,
+                container = jQuery(this._templates.filterControls).clone(),
+                finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+
+            finishBtn.setTitle(loc.finish);
+            finishBtn.addClass('primary');
+            finishBtn.setHandler(function () {
+
+            });
+
             finishBtn.insertTo(container);
 
             return container;

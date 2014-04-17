@@ -24,6 +24,18 @@ Oskari.registerLocalization({
                         "point": "Piste"
                     }
                 },
+                "filter": {
+                    "title": "Viivan tai alueen rajaus",
+                    "buttons": {
+                        "finish": "Valmis"
+                    },
+                    "modes": {
+                        "mark": "Pistemäinen viivamaisen kohteen rajaus",
+                        "split": "Alueen tai pisteeen aluerajaus ",
+                        "cut": "Alueen leikkaus",
+                        "clear": "Rajauksen poistaminen"
+                    }
+                },
                 "search": {
                     "title": "Hae paikkahaulla",
                     "resultLink": "Tuo analyysiin"
