@@ -97,7 +97,7 @@ div.basic_analyse {
         
     }
 
-    div.tool {
+    div.tool, div.filter {
         margin: 5px;
     }
 
@@ -121,6 +121,20 @@ div.basic_analyse {
         }
     }
 
+    div.filterContainer {
+        margin: 5px;
+        h4 {
+            padding: 0;
+        }
+        div.filter {
+            display: inline-block;
+            cursor: pointer;
+        }
+        div.buttons {
+            display: inline-block;
+            float: right;
+        }
+    }
 
 }
 
@@ -131,7 +145,7 @@ div.basic_analyse div.form div.field input, div.field select {
 }
 
 
-div.basic_analyse div.tool input, div.basic_analyse div.analyse_settings_cont input {
+div.basic_analyse div.tool input, div.basic_analyse div.filter input, div.basic_analyse div.analyse_settings_cont input {
     margin-right: 10px;
 }
 

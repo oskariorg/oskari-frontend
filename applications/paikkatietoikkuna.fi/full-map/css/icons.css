@@ -646,7 +646,7 @@
     background-position: -1589px -32px !important;
 }
 
-.selection-line {
+.selection-edit {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -654,7 +654,7 @@
     background-position: -1621px 0px !important;
 }
 
-.selection-line:hover {
+.selection-edit:hover {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -662,7 +662,7 @@
     background-position: -1621px -32px !important;
 }
 
-.selection-point {
+.selection-line {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -670,7 +670,7 @@
     background-position: -1653px 0px !important;
 }
 
-.selection-point:hover {
+.selection-line:hover {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -678,7 +678,7 @@
     background-position: -1653px -32px !important;
 }
 
-.selection-remove {
+.selection-point {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -686,7 +686,7 @@
     background-position: -1685px 0px !important;
 }
 
-.selection-remove:hover {
+.selection-point:hover {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -694,7 +694,7 @@
     background-position: -1685px -32px !important;
 }
 
-.selection-square {
+.selection-remove {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -702,7 +702,7 @@
     background-position: -1717px 0px !important;
 }
 
-.selection-square:hover {
+.selection-remove:hover {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -710,7 +710,7 @@
     background-position: -1717px -32px !important;
 }
 
-.selection_edit {
+.selection-square {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;
@@ -718,7 +718,7 @@
     background-position: -1749px 0px !important;
 }
 
-.selection_edit:hover {
+.selection-square:hover {
     width: 32px;
     height: 32px;
     background-image: url('../icons/icons.png') !important;

@@ -29,8 +29,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                     '<h4 class="title"></h4>' +
                 '</div>',
             'tool': '<div class="tool"></div>',
+            'filterContainer': '<div class="filterContainer">' +
+                '<h4 class="title"></h4>' +
+                '</div>',
+            'filter': '<div class="filter"></div>',
             'drawControls': '<div class="buttons"></div>',
-            'filterControls': '<div class="filters"></div>',
             'search': '<div class="analyse-search"></div>'
         },
         /**
@@ -421,24 +424,54 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          */
         _createFilterButtons: function(loc) {
             var me = this,
-                toolContainer = jQuery(this._templates.toolContainer).clone(),
-                toolTemplate = jQuery(this._templates.tool),
-                tools = ['point', 'line', 'edit', 'remove'];
+                filterContainer = jQuery(this._templates.filterContainer).clone(),
+                filterTemplate = jQuery(this._templates.filter),
+                filters = ['point', 'line', 'edit', 'remove'];
 
-            toolContainer.find('h4').html(loc.content.filter.title);
+                filterContainer.find('h4').html(loc.content.filter.title);
 
-            return _.foldl(tools, function(container, tool) {
-                var toolDiv = toolTemplate.clone();
-                toolDiv.addClass('selection-' + tool);
-                toolDiv.click(function() {
+
+
+
+//            toolContainer.find('div.filters').append(this._createFilterControls());
+
+/*            // remove old draw buttons and append new ones
+            this.getPanelContainer()
+                .find('div.toolContainer')
+                .find('div.buttons').remove().end()
+                .append(this._createDrawControls());
+
+
+
+  */
+
+            return _.foldl(filters, function(container, filter) {
+                var filterDiv = filterTemplate.clone();
+                filterDiv.addClass('selection-' + filter);
+                filterDiv.click(function() {
                     /*me._startNewDrawing({
                         drawMode: tool
                     });*/
                 });
-                container.append(toolDiv);
+                container.append(filterDiv);
+
+/*
+                finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                finishBtn.setTitle(loc.finish);
+                finishBtn.addClass('primary');
+                finishBtn.setHandler(function () {
+
+                });
+
+                container.append(finishBtn);
+*/
+
+//                toolContainer.find('div.filters').append(me._createFilterControls());
+
+
 
                 return container;
-            }, toolContainer);
+            }, filterContainer);
         },
         /**
          * Creates and returns the draw control buttons where the user
@@ -479,6 +512,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          * @return {jQuery}
          */
         _createFilterControls: function () {
+debugger;
             var me = this,
                 loc = this.loc.content.filter.buttons,
                 container = jQuery(this._templates.filterControls).clone(),
