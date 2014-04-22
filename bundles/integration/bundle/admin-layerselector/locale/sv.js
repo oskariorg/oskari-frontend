@@ -141,6 +141,7 @@ Oskari.registerLocalization({
             "legendaImage": "Förklarings&shy;bildens address",
             "legendaImageDesc": "Förklarings&shy;bildens address",
             "legendaImagePlaceholder": "Förklarings&shy;bildens address",
+            "gfiContent": "NOT TRANSLATED",
             "gfiResponseType": "GFI svartyp",
             "gfiResponseTypeDesc": "Svarets typ dvs Get Feature Info (GFI)",
             "gfiStyle": "GFI stil",

@@ -841,12 +841,15 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var wmsUrls,
                 i;
             layer.setWmsName(jsonLayer.wmsName);
+            layer.setGfiContent(jsonLayer.gfiContent);
+
             if (jsonLayer.wmsUrl) {
                 wmsUrls = jsonLayer.wmsUrl.split(",");
                 for (i = 0; i < wmsUrls.length; i++) {
                     layer.addWmsUrl(wmsUrls[i]);
                 }
             }
+
             // default to enabled, only check if it is disabled
             layer.setFeatureInfoEnabled(jsonLayer.gfi !== 'disabled');
             layer.setVersion(jsonLayer.version);

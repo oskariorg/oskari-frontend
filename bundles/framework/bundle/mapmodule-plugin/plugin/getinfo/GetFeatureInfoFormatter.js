@@ -69,15 +69,16 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             .map(function(datum) {
                 var layer = sandbox.findMapLayerFromSelectedMapLayers(datum.layerId),
                     layerName = layer ? layer.getName() : '',
-                    pretty = me._formatGfiDatum(datum);
+                    pretty = me._formatGfiDatum(datum),
+                    layerIdString = datum.layerId + '';
 
                 if (pretty !== null && pretty !== undefined) {
                     return {
                         markup: pretty,
-                        layerId: datum.layerId,
+                        layerId: layerIdString,
                         layerName: layerName,
                         type: datum.type,
-                        isMyPlace: !!datum.layerId.match('myplaces_')
+                        isMyPlace: !!layerIdString.match('myplaces_')
                     };
                 }
             })
@@ -106,10 +107,12 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             html = '',
             contentType = (typeof datum.content),
             hasHtml = false;
+
         if (contentType === 'string') {
             hasHtml = (datum.content.indexOf('<html') >= 0);
             hasHtml = hasHtml || (datum.content.indexOf('<HTML') >= 0);
         }
+
         if (datum.presentationType === 'JSON' || (datum.content && datum.content.parsed)) {
             // This is for my places info popup
             if (datum.layerId && typeof datum.layerId === 'string' && datum.layerId.match('myplaces_')) {
@@ -170,9 +173,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 }
                 response.append(table);
             }
-            return response;
-        }
-        if (hasHtml) {
+        } else if (hasHtml) {
             // html has to be put inside a container so jquery behaves
             var parsedHTML = jQuery("<div></div>").append(datum.content);
             // Remove stuff from head etc. that we don't need/want
@@ -185,6 +186,9 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             response.append(parsedHTML.html());
         } else {
             response.append(datum.content);
+        }
+        if (datum.gfiContent) {
+            response.append('\n' + datum.gfiContent);
         }
         return response;
     },
