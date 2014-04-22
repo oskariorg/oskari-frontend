@@ -123,7 +123,8 @@ Oskari.registerLocalization({
         },
         "validation": {
             "title": "Tiedoissa puutteita:",
-            "placeName": "Kohteen nimi puuttuu."
+            "placeName": "Kohteen nimi puuttuu.",
+            "reporter": "Piirroksen laatijan nimi puuttuu."
         },
         "page": {
             "title": "Määräalakartta",

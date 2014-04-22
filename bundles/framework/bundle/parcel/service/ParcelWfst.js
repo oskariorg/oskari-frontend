@@ -28,6 +28,10 @@ function(instance) {
         featureType : instance.conf.parcelFeatureType,
         featureNS : 'http://xml.nls.fi/ktjkiiwfs/2010/02',
         featurePrefix : 'ktjkiiwfs',
+        readOptions: {meThis: this},
+        parseResponse: function(request, options) {
+            return options.meThis._parseResponse(request, options);
+        },
         url : instance.conf.queryUrl
     });
     this.protocols['registerUnit'] = new OpenLayers.Protocol.WFS({
@@ -150,7 +154,7 @@ function(instance) {
             filter : filter,
             callback : function(response) {
                 dialog.close();
-                if (response && response.features && response.features.length > 0) {
+                if (response && response.features.polFeatures && response.features.polFeatures.length > 0) {
                     cb(response.features);
 
                 } else {
@@ -242,5 +246,48 @@ function(instance) {
             newFid = parseInt(newFid.match(/(\d+)$/)[0], 10);
         }
         return newFid;
-    }
+    },
+        /**
+         * Custom parser for Parcel WFS request
+         *
+         * @param request  OpenLayers.Protocool.WFS parseResponse param
+         * @param options  OpenLayers.Protocool.WFS parseResponse param
+         * @returns {{}}  Parcel polygons and polygon boundary points
+         * @private
+         */
+        _parseResponse: function (request, options) {
+            var me = this;
+            var featureSet = {};
+            var pointFeatures = [];
+            var formatgml = new OpenLayers.Format.GML();
+            var format = new OpenLayers.Format.XML();
+
+            // Point features
+            var document = format.read(request.responseText).documentElement;
+            if (document) {
+                var featureNodes = document.getElementsByTagName("ktjkiiwfs:rajamerkinTietoja");
+                for (var i = 0; i < featureNodes.length; i++) {
+                    var pf = formatgml.parseFeature(featureNodes[i]);
+                    if (pf) {
+                        pointFeatures.push(pf)
+                    }
+                }
+            }
+
+            // Polygon features
+            var gmlOptionsm = {
+                featureType: me.instance.conf.parcelFeatureType,
+                featurePrefix: "ktjkiiwfs",
+                featureNS: "http://xml.nls.fi/ktjkiiwfs/2010/02"
+            };
+
+            var gmlOptionsInm = OpenLayers.Util.extend(
+                OpenLayers.Util.extend({}, gmlOptionsm)
+            );
+            var formatm = new OpenLayers.Format.GML.v3(gmlOptionsInm);
+            var polFeatures = formatm.read(request.responseText);
+            featureSet.polFeatures = polFeatures;
+            featureSet.pointFeatures = pointFeatures;
+            return featureSet;
+        }
 });

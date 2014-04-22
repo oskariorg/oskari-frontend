@@ -20,6 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
         this.parcelLayer = null;
         this.boundaryLayer = null;
         this.pointLayer = null;
+        this.oldPointLayer = null;
         this._map = null;
         this.geoJson = null;
 
@@ -83,6 +84,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
         });
         this.pointLayer = new OpenLayers.Layer.Vector("NewPoints", {
             styleMap: smPoint
+        });
+        // Default style for new boundary points in parcel application (parcel view)
+        var smOldPoint = new OpenLayers.StyleMap({
+            'default': {
+                strokeColor: "#00FF00",
+                strokeOpacity: 1,
+                strokeWidth: 1,
+                fillColor: "#00FF00",
+                fillOpacity: 0.5,
+                pointRadius: 6,
+                label: "${numero}",
+                graphicName: "triangle",
+                labelXOffset: 10,
+                labelYOffset: 10,
+                fontFamily: "Arial",
+                fontSize: "12px"
+            }
+        });
+        this.oldPointLayer = new OpenLayers.Layer.Vector("OldPoints", {
+            styleMap: smOldPoint
         });
 
     }, {
@@ -351,6 +372,42 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
             drawplug.getMarkerLayer().setVisibility(false);
         },
         /**
+         * Clear plot extra graphics and set parcel edit layers on
+         */
+        cancelPlotParcel: function () {
+            this.clearParcelMap();
+            this._setEditsVisible();
+
+        },
+        /**
+         * @method _plotOldParcel points
+         * Plot old parcel point features to OL temp layer (boundary monuments).
+         * @param [{OpenLayers.Feature.Vector}] features to be plotted as an old Parcel points.
+         *
+         */
+         plotOldParcelPoints: function (pointfeatures) {
+            var me = this,
+                drawplug = this.instance.getDrawPlugin();
+
+            if (drawplug.getMap().getLayerIndex(this.oldPointLayer == -1)) {
+                drawplug.getMap().addLayer(this.oldPointLayer);
+                drawplug.getMap().setLayerIndex(this.oldPointLayer, 1004);
+            }
+
+            // remove possible old drawing
+            this.oldPointLayer.removeAllFeatures();
+
+
+                if (pointfeatures.length > 0) {
+                    // Plot extra graphics for Parcel map
+
+                    this.oldPointLayer.addFeatures(pointfeatures);
+                    this.oldPointLayer.redraw();
+
+                }
+
+        },
+        /**
          /**
          * @method _createGeoJSON
          * Create GeoJSON graphics + styles for backend print task
@@ -433,6 +490,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
             };
             geojs.styles.push(this._getDefaultStyle(this.pointLayer.styleMap));
             geojsCollection.push(geojs);
+
+            // Old boundary points graphics
+            var opoint = JSON.parse(geojson_format.write(this.oldPointLayer.features));
+            geojs = {
+                "type": "geojson",
+                "name": this.oldPointLayer.name,
+                "id": this.oldPointLayer.name,
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": opoint.features
+                },
+                "styles": []
+            };
+            geojs.styles.push(this._getDefaultStyle(this.oldPointLayer.styleMap));
+            geojsCollection.push(geojs);
+
 
             return geojsCollection;
         },
