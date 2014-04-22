@@ -29,11 +29,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                     '<h4 class="title"></h4>' +
                 '</div>',
             'tool': '<div class="tool"></div>',
-            'filterContainer': '<div class="filterContainer">' +
+            'drawControls': '<div class="buttons"></div>',
+            'drawFilterContainer': '<div class="drawFilterContainer">' +
                 '<h4 class="title"></h4>' +
                 '</div>',
-            'filter': '<div class="filter"></div>',
-            'drawControls': '<div class="buttons"></div>',
+            'drawFilter': '<div class="drawFilter"></div>',
+            'drawFilterControls': '<div class="buttons"></div>',
             'search': '<div class="analyse-search"></div>'
         },
         /**
@@ -111,6 +112,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 if (this.drawPluginId !== event.getCreatorId()) return;
 
                 this.addGeometry(event.getDrawing());
+            },
+            'WFSFeaturesSelectedEvent': function(event) {
+                var wfsFeatureIds = event.getWfsFeatureIds();
+                if (wfsFeatureIds.length > 0) {
+                    this._operateDrawFilters(wfsFeatureIds,event.getMapLayer());
+                }
             }
         },
         /**
@@ -330,7 +337,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             panelContainer.append(layersCont);
             panelContainer.append(this._createDataButtons(loc));
             panelContainer.append(this._createDrawButtons(loc));
-            panelContainer.append(this._createFilterButtons(loc));
+            panelContainer.append(this._createDrawFilterButtons(loc));
 
             return panel;
         },
@@ -414,64 +421,36 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             }, toolContainer);
         },
         /**
-         * Creates and returns the filter buttons from which the user can filter
-         * features which are going to be used in analysis.
+         * Creates and returns the draw filter buttons from which the user can filter
+         * by drawing which features are going to be used in analysis.
          *
-         * @method _createFilterButtons
+         * @method _createDrawFilterButtons
          * @private
          * @param {Object} loc
          * @return {jQuery}
          */
-        _createFilterButtons: function(loc) {
+        _createDrawFilterButtons: function(loc) {
             var me = this,
-                filterContainer = jQuery(this._templates.filterContainer).clone(),
-                filterTemplate = jQuery(this._templates.filter),
-                filters = ['point', 'line', 'edit', 'remove'];
+                drawFilterContainer = jQuery(this._templates.drawFilterContainer).clone(),
+                drawFilterTemplate = jQuery(this._templates.drawFilter),
+                drawFilters = ['point', 'line', 'edit', 'remove'];
 
-                filterContainer.find('h4').html(loc.content.filter.title);
+            drawFilterContainer.find('h4').html(loc.content.drawFilter.title);
 
-
-
-
-//            toolContainer.find('div.filters').append(this._createFilterControls());
-
-/*            // remove old draw buttons and append new ones
-            this.getPanelContainer()
-                .find('div.toolContainer')
-                .find('div.buttons').remove().end()
-                .append(this._createDrawControls());
-
-
-
-  */
-
-            return _.foldl(filters, function(container, filter) {
-                var filterDiv = filterTemplate.clone();
-                filterDiv.addClass('selection-' + filter);
-                filterDiv.click(function() {
-                    /*me._startNewDrawing({
-                        drawMode: tool
-                    });*/
+            return _.foldl(drawFilters, function(container, drawFilter) {
+                var drawFilterDiv = drawFilterTemplate.clone();
+                var groupName = 'selection-';
+                drawFilterDiv.addClass(groupName + drawFilter);
+                drawFilterDiv.addClass('disabled');
+                drawFilterDiv.click(function() {
+                    me._startNewDrawFiltering({
+                        drawMode: "area"
+                    });
                 });
-                container.append(filterDiv);
-
-/*
-                finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                finishBtn.setTitle(loc.finish);
-                finishBtn.addClass('primary');
-                finishBtn.setHandler(function () {
-
-                });
-
-                container.append(finishBtn);
-*/
-
-//                toolContainer.find('div.filters').append(me._createFilterControls());
-
-
+                container.append(drawFilterDiv);
 
                 return container;
-            }, filterContainer);
+            }, drawFilterContainer);
         },
         /**
          * Creates and returns the draw control buttons where the user
@@ -507,15 +486,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
         /**
          * Creates and returns the filter control buttons.
          *
-         * @method _createFilterControls
+         * @method _createDrawFilterControls
          * @private
          * @return {jQuery}
          */
-        _createFilterControls: function () {
-debugger;
+        _createDrawFilterControls: function () {
             var me = this,
-                loc = this.loc.content.filter.buttons,
-                container = jQuery(this._templates.filterControls).clone(),
+                loc = this.loc.content.drawFilter.buttons,
+                container = jQuery(this._templates.drawFilterControls).clone(),
                 finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
             finishBtn.setTitle(loc.finish);
@@ -528,6 +506,11 @@ debugger;
 
             return container;
         },
+
+        _enableDrawFilterButton: function(){
+//...
+        },
+
         /**
          * Sends a request to open a Flyout impersonating
          * as the bundle provided in the name param.
@@ -579,6 +562,32 @@ debugger;
                 .find('div.buttons').remove().end()
                 .append(this._createDrawControls());
         },
+
+        _startNewDrawFiltering: function (config) {
+            var sandbox = this.sandbox,
+                evtB = sandbox.getEventBuilder(
+                    'DrawPlugin.SelectedDrawingEvent'),
+                gfiReqBuilder = sandbox.getRequestBuilder(
+                    'MapModulePlugin.GetFeatureInfoActivationRequest');
+
+            // notify components to reset any saved "selected place" data
+            if (evtB) sandbox.notifyAll(evtB());
+
+            // notify plugin to start drawing new geometry
+            this._sendDrawRequest(config);
+
+            // disable gfi requests
+            if (gfiReqBuilder) {
+                sandbox.request(this.instance, gfiReqBuilder(false));
+            }
+
+            // remove old draw buttons and append new ones
+            this.getPanelContainer()
+                .find('div.drawFilterContainer')
+                .find('div.buttons').remove().end()
+                .append(this._createDrawFilterControls());
+        },
+
         /**
          * Sends a StartDrawRequest with given params.
          * 
@@ -759,5 +768,20 @@ debugger;
                     me.addGeometry(geometry, name);
                 };
             };
+        },
+
+        _operateDrawFilters: function(wfsFeatureIds,layer) {
+
+            if (wfsFeatureIds.length < 0) {
+                // Disabloi kaikki buttonit
+                return;
+            }
+//            var wfsFeature =
+
+
+//            if () {
+
+//            }
+
         }
 });

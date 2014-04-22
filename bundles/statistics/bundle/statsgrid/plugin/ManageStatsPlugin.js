@@ -2666,7 +2666,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         },
 
         /**
-         * Highlights a municipality given by the event and shows only hilighted municipalities in the grid
+         * Highlights a municipality given by the event and shows only highlighted municipalities in the grid
          *
          * @method _featureSelectedEvent
          * @private
@@ -2679,7 +2679,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 item = this.getItemByCode(featureAtts[property]);
 
             if (this.grid && item) {
-                //if area is hilighted => remember it and change grid item to 'checked' state
+                //if area is highlighted => remember it and change grid item to 'checked' state
                 this.selectedMunicipalities[featureAtts[property]] = isHighlighted;
                 if (isHighlighted) {
                     item.sel = 'checked';

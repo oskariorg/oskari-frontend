@@ -24,7 +24,7 @@ Oskari.registerLocalization({
                         "point": "Piste"
                     }
                 },
-                "filter": {
+                "drawFilter": {
                     "title": "Viivan tai alueen rajaus",
                     "buttons": {
                         "finish": "Valmis"
