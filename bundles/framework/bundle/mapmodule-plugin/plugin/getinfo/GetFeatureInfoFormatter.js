@@ -77,7 +77,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                         layerId: datum.layerId,
                         layerName: layerName,
                         type: datum.type,
-                        isMyPlace: !!datum.layerId.match('myplaces_')
+                        isMyPlace: !!('' + datum.layerId).match('myplaces_')
                     };
                 }
             })
