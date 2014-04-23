@@ -125,7 +125,8 @@ Oskari.registerLocalization({
         },
         "validation": {
             "title": "...",
-            "placeName": "..."
+            "placeName": "...",
+            "reporter": "Piirroksen laatijan nimi puuttuu."
         },
         "page": {
             "title": "...",

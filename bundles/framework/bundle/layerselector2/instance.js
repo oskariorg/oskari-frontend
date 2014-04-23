@@ -207,6 +207,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
                     // refresh layer count
                     me.plugins['Oskari.userinterface.Tile'].refresh();
                 }
+            },
+            'BackendStatus.BackendStatusChangedEvent': function (event) {
+                var layerId = event.getLayerId(),
+                    status = event.getStatus(),
+                    mapLayerService = this.sandbox
+                        .getService('Oskari.mapframework.service.MapLayerService'),
+                    layer;
+
+                if (layerId === null || layerId === undefined) {
+                    // Massive update so just recreate the whole ui
+                    this.plugins['Oskari.userinterface.Flyout'].populateLayers();
+                } else {
+                    layer = mapLayerService.findMapLayer(layerId);
+                    this.plugins['Oskari.userinterface.Flyout']
+                        .handleLayerModified(layer);
+                }
             }
         },
 

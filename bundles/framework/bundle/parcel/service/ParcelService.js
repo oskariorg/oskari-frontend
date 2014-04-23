@@ -290,14 +290,26 @@ function(instance) {
 
         this._wfst2.getPreParcelData(parcel_id, initialLoadCallBackPreParcelData);
      },
-    /**
-     * @method clearParcelMap
-     * Remove openlayers graphics of parcel Map
-     */
-    clearParcelMap : function() {
+        /**
+         * @method clearParcelMap
+         * Remove openlayers graphics of parcel Map
+         */
+        clearParcelMap: function () {
             this._plot.clearParcelMap();
-        
-    },
+
+        },
+        /**
+         * @method clearParcelMap
+         * Remove openlayers graphics of parcel Map
+         */
+        plotOldParcelPoints: function (features) {
+            this._plot.plotOldParcelPoints(features);
+
+        },
+        cancelPlotParcel: function () {
+            this._plot.cancelPlotParcel();
+
+        },
     /**
      * @method saveRegisterUnit
      * Saves feature to the server asynchronously and gives the success information via callback.

@@ -375,6 +375,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
             // ask toolbar to select default tool
             var toolbarRequest = me.getSandbox().getRequestBuilder('Toolbar.SelectToolButtonRequest')();
             me.getSandbox().request(me.getMainView(), toolbarRequest);
+            // Clear plot extra and put  parcel marker edit mode on
+            this.getService().cancelPlotParcel();
+
         },
         setParcelPrintPrevious: function () {
             var me = this;
@@ -382,7 +385,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
                 me.parcelprint2.setEnabled(false);
                 me.parcelprint2.hide();
             }
-            me.setParcelPrintMode(true);
+            me.parcelprint1.show();  //setParcelPrintMode(true);
         },
         /**
          * @method stop
