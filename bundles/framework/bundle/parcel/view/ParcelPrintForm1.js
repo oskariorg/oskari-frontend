@@ -95,6 +95,14 @@ function(instance) {
             continueButton.addClass('primary');
             continueButton.setTitle(loc.buttons['continue']);
             continueButton.setHandler(function () {
+                //Validate values
+                var formValues = me.getValues();
+                // validation
+                var errors = me.instance.getMainView()._validateForm(formValues);
+                if (errors.length != 0) {
+                    me.instance.getMainView()._showValidationErrorMessage(errors);
+                    return;
+                }
                 me.instance.setParcelPrint2(true);
             });
             continueButton.insertTo(content.find('div.buttons'));

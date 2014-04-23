@@ -150,6 +150,12 @@ function(instance) {
                 error : loc.placeName
             });
         }
+        if (!values.place.reporter) {
+            errors.push({
+                name : 'reporter',
+                error : loc.reporter
+            });
+        }
         return errors;
     },
     /**
