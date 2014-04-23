@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Connection',
      */
 
     function (config, plugin) {
-        this.config = config;
+        this.config = config || {};
         this.plugin = plugin;
         this.cometd = jQuery.cometd;
 
