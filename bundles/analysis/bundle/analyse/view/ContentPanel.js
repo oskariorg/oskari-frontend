@@ -116,7 +116,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             'WFSFeaturesSelectedEvent': function(event) {
                 var wfsFeatureIds = event.getWfsFeatureIds();
                 if (wfsFeatureIds.length > 0) {
-                    this._operateDrawFilters(wfsFeatureIds,event.getMapLayer());
+                    this._operateDrawFilters(wfsFeatureIds);
                 }
             }
         },
@@ -439,12 +439,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
 
             return _.foldl(drawFilters, function(container, drawFilter) {
                 var drawFilterDiv = drawFilterTemplate.clone();
-                var groupName = 'selection-';
+                var groupName = 'analysis-selection-';
                 drawFilterDiv.addClass(groupName + drawFilter);
                 drawFilterDiv.addClass('disabled');
                 drawFilterDiv.click(function() {
                     me._startNewDrawFiltering({
-                        drawMode: "area"
+                        drawFilterMode: drawFilter
                     });
                 });
                 container.append(drawFilterDiv);
@@ -499,7 +499,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             finishBtn.setTitle(loc.finish);
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
-
+                // Disable all buttons
+                me._disableAllDrawFilterButtons();
             });
 
             finishBtn.insertTo(container);
@@ -564,6 +565,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
         },
 
         _startNewDrawFiltering: function (config) {
+
+          // Enable and disable correct buttons
+           if (config.drawFilterMode === "remove") {
+               this._disableAllDrawFilterButtons();
+           } else {
+               // Disable the remove button
+               jQuery('div.DrawFilter.analysis-selection-remove').addClass('disabled');
+           }
+
             var sandbox = this.sandbox,
                 evtB = sandbox.getEventBuilder(
                     'DrawPlugin.SelectedDrawingEvent'),
@@ -574,7 +584,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             if (evtB) sandbox.notifyAll(evtB());
 
             // notify plugin to start drawing new geometry
-            this._sendDrawRequest(config);
+            this._sendDrawFilterRequest(config);
 
             // disable gfi requests
             if (gfiReqBuilder) {
@@ -624,6 +634,25 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
 
             if (reqBuilder) {
                 request = reqBuilder(isCancel);
+                sandbox.request(this.instance, request);
+            }
+        },
+        /**
+         * Sends a StartDrawFilterRequest with given params.
+         *
+         * @method _sendDrawFilterRequest
+         * @private
+         * @param {Object} config params for StartDrawFilterRequest
+         */
+        _sendDrawFilterRequest: function (config) {
+debugger;
+            var sandbox = this.sandbox,
+                reqBuilder = sandbox.getRequestBuilder(
+                    'GeometryEditorLayerPlugin.StartDrawFilteringRequest'),
+                request;
+
+            if (reqBuilder) {
+                request = reqBuilder(config);
                 sandbox.request(this.instance, request);
             }
         },
@@ -770,18 +799,46 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             };
         },
 
-        _operateDrawFilters: function(wfsFeatureIds,layer) {
+        _operateDrawFilters: function(wfsFeatureIds) {
+            var preSelector = 'div.DrawFilter.analysis-selection-';
+            var pointButton = jQuery(preSelector+'point');
+            var lineButton = jQuery(preSelector+'line');
+            var editButton = jQuery(preSelector+'edit');
+            var removeButton = jQuery(preSelector+'remove');
 
-            if (wfsFeatureIds.length < 0) {
-                // Disabloi kaikki buttonit
+            if (wfsFeatureIds.length !== 1) {
+                // Disable all buttons
+                this._disableAllDrawFilterButtons();
                 return;
             }
-//            var wfsFeature =
 
+            // var type = wfsFeatureIds[0].getGeometryType();
+            var type = 'point';
 
-//            if () {
+            // Enable or disable buttons depending on the selected feature type
+            switch(type) {
+                case 'line':
+                    pointButton.removeClass('disabled');
+                    lineButton.addClass('disabled');
+                    editButton.addClass('disabled');
+                    removeButton.addClass('disabled');
+                    break;
+                case 'area':
+                    pointButton.addClass('disabled');
+                    lineButton.removeClass('disabled');
+                    editButton.removeClass('disabled');
+                    removeButton.addClass('disabled');
+                    break;
+                default:
+                    pointButton.addClass('disabled');
+                    lineButton.addClass('disabled');
+                    editButton.addClass('disabled');
+                    removeButton.addClass('disabled');
+                    break;
+            }
+        },
 
-//            }
-
+        _disableAllDrawFilterButtons: function() {
+            jQuery('div.drawFilter').addClass('disabled');
         }
 });

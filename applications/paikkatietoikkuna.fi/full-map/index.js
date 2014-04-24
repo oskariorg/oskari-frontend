@@ -75,6 +75,27 @@ jQuery(document).ready(function () {
     function start(appSetup, appConfig, cb) {
         var app = Oskari.app;
 
+// Testing for Geoimetry Editor bundle
+/*appSetup.startupSequence.unshift({
+    "instanceProps":{
+
+    },
+    "title":"GeometryEditor",
+    "fi":"geometryeditor",
+    "sv":"?",
+    "en":"?",
+    "bundlename":"geometryeditor",
+    "metadata":{
+        "Import-Bundle":{
+            "geometryeditor":{
+                "bundlePath":"/Oskari/packages/framework/bundle/"
+            }
+        }
+    }
+});*/
+appConfig.mapfull.conf.plugins.push({"id":"Oskari.mapframework.bundle.geometryeditor.plugin.GeometryEditorLayerPlugin"});
+appSetup.startupSequence[1].metadata["Import-Bundle"].geometryeditor={bundlePath: "/Oskari/packages/framework/bundle/"};
+
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
         app.startApplication(function (startupInfos) {
