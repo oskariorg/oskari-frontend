@@ -25,38 +25,36 @@
  */
 Oskari.clazz.define("Oskari.sample.bundle.myfirstbundle.SimpleHelloWorldBundleInstance",
 
-/**
- * @method create called automatically on construction
- * @static
- */
-function() {
-}, {
     /**
-     * @method start
-     * BundleInstance protocol method
+     * @method create called automatically on construction
+     * @static
      */
-    start : function() {
-        //  **************************************
-        //    Your code here
-        //  **************************************
-        alert('Hello World');
-        //  **************************************
-        //    Your code ends
-        //  **************************************
-    },
 
-    /**
-     * @method stop
-     * BundleInstance protocol method
-     */
-    stop : function() {
-    },
-    /**
-     * @method update
-     * BundleInstance protocol method
-     */
-    update : function() {
-    }
-}, {
-    protocol : ['Oskari.bundle.BundleInstance']
-});
+    function () {}, {
+        /**
+         * @method start
+         * BundleInstance protocol method
+         */
+        start: function () {
+            //  **************************************
+            //    Your code here
+            //  **************************************
+            alert('Hello World');
+            //  **************************************
+            //    Your code ends
+            //  **************************************
+        },
+
+        /**
+         * @method stop
+         * BundleInstance protocol method
+         */
+        stop: function () {},
+        /**
+         * @method update
+         * BundleInstance protocol method
+         */
+        update: function () {}
+    }, {
+        protocol: ['Oskari.bundle.BundleInstance']
+    });

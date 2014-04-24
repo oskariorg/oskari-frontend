@@ -38,9 +38,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             var conf = me.conf;
             // Let's use statsgrid's locale files.
             // They are linked from the bundle.js file.
-            var locale = Oskari.getLocalization('StatsGrid');
-            var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
-            var sandbox = Oskari.getSandbox(sandboxName);
+            var locale = Oskari.getLocalization('StatsGrid'),
+                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
+                sandbox = Oskari.getSandbox(sandboxName);
             this.sandbox = sandbox;
             sandbox.register(this);
 
@@ -236,18 +236,17 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
         _adjustDataContainer: function () {
             var content = jQuery('#contentMap'),
                 contentWidth = content.width(),
-                marginWidth = content.css('margin-left').split('px')[0];
-            var maxContentWidth = jQuery(window).width() - marginWidth;
-
-            var mapWidth = jQuery('#mapdiv').width(),
-                mapHeight = jQuery('#mapdiv').height();
+                marginWidth = content.css('margin-left').split('px')[0],
+                maxContentWidth = jQuery(window).width() - marginWidth,
+                mapDiv = this.mapModule.getMapEl(),
+                mapWidth = mapDiv.width(),
+                mapHeight = mapDiv.height();
 
             // how many columns * 80px
-            var gridWidth = this._calculateGridWidth(); //maxContentWidth - mapWidth;
-            var gridHeight = mapHeight;
-
-            var elLeft = jQuery('.oskariui-left');
-            var elCenter = jQuery('.oskariui-center');
+            var gridWidth = this._calculateGridWidth(), //maxContentWidth - mapWidth;
+                gridHeight = mapHeight,
+                elLeft = jQuery('.oskariui-left'),
+                elCenter = jQuery('.oskariui-center');
 
             if (this.gridVisible) {
                 if (gridWidth > 400) {
@@ -280,7 +279,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
 
         },
         _calculateGridWidth: function () {
-            if (this.state && this.state.indicators != null) {
+            if (this.state && this.state.indicators !== null && this.state.indicators !== undefined) {
                 //indicators + municipality (name & code)
                 var columns = this.state.indicators.length + 2;
                 //slickgrid column width is 80 by default
@@ -290,10 +289,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
         },
 
         _adjustMapPluginLocations: function () {
-            var zoomBar = jQuery('.mapplugin.pzbDiv');
-            var panButtons = jQuery('.mapplugin.panbuttonDiv');
-            var zoomBarTop;
+            var zoomBar = jQuery('.mapplugin.pzbDiv'),
+                panButtons = jQuery('.mapplugin.panbuttonDiv'),
+                zoomBarTop;
 
+            // This shouldn't be done anymore...
             if (zoomBar && zoomBar.length && !panButtons.length) {
                 zoomBar.css('top', '35px');
             }

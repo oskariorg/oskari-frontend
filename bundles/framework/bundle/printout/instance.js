@@ -89,7 +89,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
             if (me.started) {
                 return;
             }
-
             me.started = true;
             var conf = this.conf;
             var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
@@ -128,6 +127,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
             };
             var tool;
             for (tool in btns) {
+                // Button not in UI - activated in an other route
+                if(conf.buttons  &&  conf.buttons[tool] === false) continue;
                 if (btns.hasOwnProperty(tool)) {
                     sandbox.request(this, addBtnRequestBuilder(tool, this.buttonGroup, btns[tool]));
                 }
