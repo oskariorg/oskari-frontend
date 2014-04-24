@@ -360,6 +360,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 });
                 toolContainer.find('input[name=params]').change(closureMagic(option));
             }
+
+            // Check that params selection is allowed for the selected layer
+            this._checkParamsSelection();
         },
 
         /**
