@@ -78,8 +78,7 @@ div.basic_analyse div.drawFilter {
 }
 div.basic_analyse div.drawFilter.disabled {
     opacity: 0.4;
-    filter: alpha(opacity=40);
-    /* For IE8 and earlier */
+/*    cursor: default !important; */
 }
 div.basic_analyse div.icon-close.analyse-temp-feature {
     display: inline-block;

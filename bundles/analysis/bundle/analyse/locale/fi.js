@@ -25,7 +25,7 @@ Oskari.registerLocalization({
                     }
                 },
                 "drawFilter": {
-                    "title": "Viivan tai alueen rajaus",
+                    "title": "Kohteen leikkaus",
                     "buttons": {
                         "finish": "Valmis"
                     },

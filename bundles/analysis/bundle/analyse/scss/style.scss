@@ -105,8 +105,9 @@ div.basic_analyse {
         margin: 5px;
     }
 
-  div.basic_analyse div.drawFilter.disabled {
-        opacity:0.4;
+    div.basic_analyse div.drawFilter.disabled {
+        opacity: 0.4;
+        cursor: default !important;
     }
 
     div.icon-close.analyse-temp-feature {

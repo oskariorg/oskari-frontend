@@ -93,7 +93,9 @@ jQuery(document).ready(function () {
         }
     }
 });*/
-appConfig.mapfull.conf.plugins.push({"id":"Oskari.mapframework.bundle.geometryeditor.plugin.GeometryEditorLayerPlugin"});
+//appConfig.mapfull.conf.plugins.push({"id":"Oskari.mapframework.bundle.geometryeditor.plugin.GeometryEditorLayerPlugin"});
+
+
 appSetup.startupSequence[1].metadata["Import-Bundle"].geometryeditor={bundlePath: "/Oskari/packages/framework/bundle/"};
 
         app.setApplicationSetup(appSetup);

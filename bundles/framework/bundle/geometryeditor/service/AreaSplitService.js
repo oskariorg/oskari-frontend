@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.geometryeditor.GeometryEditorService
+ * @class Oskari.mapframework.bundle.geometryeditor.service.LineSplitService
  * Methods for handling geometry editor
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.geometryeditor.service.GeometryEditorService',
+Oskari.clazz.define('Oskari.mapframework.bundle.geometryeditor.service.AreaSplitService',
 
     /**
      * @method create called automatically on construction
@@ -13,10 +13,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometryeditor.service.GeometryE
         function (instance) {
         this.instance = instance;
         this.sandbox = instance.sandbox;
-        this.loc = instance.getLocalization('AnalyseView');
+        this.loc = instance.getLocalization('GeometryEditor');
     }, {
-        __name: "GeometryEditor.GeometryEditorService",
-        __qname: "Oskari.mapframework.bundle.geometryeditor.service.GeometryEditorService",
+        __name: "DrawFilterPlugin.AreSplitService",
+        __qname: "Oskari.mapframework.bundle.geometryeditor.service.AreaSplitService",
 
         getQName: function () {
             return this.__qname;

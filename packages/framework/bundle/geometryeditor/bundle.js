@@ -23,16 +23,25 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geometryeditor.GeometryEditorBun
 
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/geometryeditor/plugin/GeometryEditorLayerPlugin.js"
+                "src": "../../../../bundles/framework/bundle/geometryeditor/plugin/DrawFilterPlugin.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/geometryeditor/domain/GeometryEditorLayer.js"
-            }, {
-                "type" : "text/javascript",
-                "src" : "../../../../bundles/framework/bundle/geometryeditor/event/GeometryEditorChangeEvent.js"
+                "src": "../../../../bundles/framework/bundle/geometryeditor/request/StartDrawFilteringRequest.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/geometryeditor/domain/GeometryEditorLayerModelBuilder.js"
+                "src": "../../../../bundles/framework/bundle/geometryeditor/request/StartDrawFilteringRequestHandler.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/geometryeditor/request/StopDrawFilteringRequest.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/geometryeditor/request/StopDrawFilteringRequestHandler.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/geometryeditor/event/ActiveDrawFilteringEvent.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/geometryeditor/event/FinishedDrawFilteringEvent.js"
             }],
             "locales": [{
                 "lang": "fi",
