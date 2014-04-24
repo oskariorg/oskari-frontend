@@ -82,7 +82,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.handler.ButtonHandler",
                 }
             },
             'save': {
-                iconCls: 'tool-save-view',
+                iconCls: 'tool-print',
                 tooltip: '',
                 sticky: true,
                 callback: function () {
