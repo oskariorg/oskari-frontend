@@ -214,8 +214,8 @@ Oskari.registerLocalization({
             },
             "infos": {
                 "title": "Tiedoksi",
-                "layer": "Tasolla -",
-                "over10": "- yli kymmenen ominaisuutta - Valitse listalta korkeintaan 10"
+                "layer": "Tasolla ",
+                "over10": " on yli kymmenen ominaisuustietoa - valitse listalta korkeintaan 10"
             }
         },
         "StartView": {

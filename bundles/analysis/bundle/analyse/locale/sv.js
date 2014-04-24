@@ -213,8 +213,8 @@ Oskari.registerLocalization({
             },
             "infos": {
                 "title": "Info",
-                "layer": "Lagring -",
-                "over10": "- över 10 attribut - Väljä max 10 från list för analys"
+                "layer": "Lagring ",
+                "over10": " har över 10 attribut - väljä max 10 från list för analys"
             }
 
         },

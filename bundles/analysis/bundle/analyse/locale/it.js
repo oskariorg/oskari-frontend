@@ -214,8 +214,8 @@ Oskari.registerLocalization({
             },
             "infos": {
                 "title": "Info",
-                "layer": "Layer -",
-                "over10": "- sopra i 10 attributi - Seleziona un massimo di 10 attributi"
+                "layer": "Layer ",
+                "over10": " sopra i 10 attributi - seleziona un massimo di 10 attributi"
             }
         },
         "StartView": {
