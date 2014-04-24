@@ -30,12 +30,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
      *  }
      */
 
-    function (id, imageUrl, options) {
+    function (id, imageUrl, options, mapDivId) {
         this._options = {
             resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
             srsName: 'EPSG:3067',
             units: 'm'
         };
+        this._mapDivId = mapDivId;
         // override defaults
         var key;
         if (options) {
@@ -50,18 +51,64 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Adds containers for map control plugins
          */
         _addMapControlPluginContainers: function () {
-            var containerClasses = ['bottom center', 'top center', 'right center', 'left center', 'bottom right', 'bottom left', 'top right', 'top left'],
+            var containerClasses = ['bottom center', 'center top', 'center right', 'center left', 'bottom right', 'bottom left', 'right top', 'left top'],
                 containerDiv,
-                mapDiv = jQuery('#mapdiv'),
+                mapDiv = this.getMapEl(),
                 i;
+
             for (i = 0; i < containerClasses.length; i++) {
                 containerDiv = jQuery('<div class="mapplugins"><div class="mappluginsContainer"><div class="mappluginsContent"></div></div></div>');
                 containerDiv.addClass(containerClasses[i]);
                 containerDiv.attr('data-location', containerClasses[i]);
                 mapDiv.append(containerDiv);
             }
+        },
+        _getMapControlPluginContainer: function (containerClasses) {
+            var splitClasses = (containerClasses + '').split(' '),
+                selector = '.mapplugins.' + splitClasses.join('.'),
+                containerDiv,
+                mapDiv = this.getMapEl();
 
+            containerDiv = mapDiv.find(selector);
+            if (!containerDiv.length) {
+                var containersClasses = ['bottom center', 'center top', 'center right', 'center left', 'bottom right', 'bottom left', 'right top', 'left top'],
+                    currentClasses,
+                    previousFound = null,
+                    current,
+                    classesMatch,
+                    i,
+                    j;
 
+                for (i = 0; i < containersClasses.length; i++) {
+                    currentClasses = containersClasses[i].split(' ');
+                    current = mapDiv.find('.mapplugins.' + currentClasses.join('.'));
+                    if (current.length) {
+                        // container was found in DOM
+                        previousFound = current;
+                    } else {
+                        // container not in DOM, see if it's the one we're supposed to add
+                        classesMatch = true;
+                        for (j = 0; j < currentClasses.length; j++) {
+                            if (jQuery.inArray(currentClasses[j], splitClasses) < 0) {
+                                classesMatch = false;
+                                break;
+                            }
+                        }
+                        if (classesMatch) {
+                            // It's the one we're supposed to add
+                            containerDiv = jQuery('<div class="mapplugins"><div class="mappluginsContainer"><div class="mappluginsContent"></div></div></div>');
+                            containerDiv.addClass(containerClasses);
+                            containerDiv.attr('data-location', containerClasses);
+                            if (previousFound !== null && previousFound.length) {
+                                previousFound.after(containerDiv);
+                            } else {
+                                mapDiv.prepend(containerDiv);
+                            }
+                        }
+                    }
+                }
+            }
+            return containerDiv;
         },
         /**
          * @method setMapControlPlugin
@@ -72,8 +119,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         setMapControlPlugin: function (element, containerClasses, position) {
             // Get the container
-            var containerSelector = '.mapplugins.' + (containerClasses + " ").split(' ').join('.') + ' .mappluginsContainer .mappluginsContent',
-                container = jQuery(containerSelector),
+            var container = this._getMapControlPluginContainer(containerClasses),
+                content =  container.find('.mappluginsContainer .mappluginsContent'),
                 pos = position + '',
                 inverted = /^(?=.*\bbottom\b)((?=.*\bleft\b)|(?=.*\bright\b)).+/.test(containerClasses), // bottom corner container?
                 precedingPlugin = null,
@@ -84,7 +131,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             if (!containerClasses) {
                 throw 'No container classes.';
             }
-            if (!container || !container.length) {
+            if (!content || !content.length) {
                 throw 'Container with classes "' + containerSelector + '" not found.';
             }
             // Add slot to element
@@ -93,24 +140,40 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             element.detach();
             // Get container's children, iterate through them
             if (position !== null && position !== undefined) {
-                container.find('.mapplugin').each(function () {
-                    curr = $(this);
+                content.find('.mapplugin').each(function () {
+                    curr = jQuery(this);
                     // if plugin's slot isn't bigger (or smaller for bottom corners) than ours, store it to precedingPlugin
                     if ((!inverted && curr.attr('data-position') <= pos) ||
-                            (inverted && curr.attr('data-position') > pos)) {
+                        (inverted && curr.attr('data-position') > pos)) {
                         precedingPlugin = curr;
                     }
                 });
                 if (!precedingPlugin) {
                     // no preceding plugin found, just slap our plugin to the beginning of the container
-                    container.prepend(element);
+                    content.prepend(element);
                 } else {
                     // preceding plugin found, insert ours after it.
                     precedingPlugin.after(element);
                 }
             } else {
                 // no position given, add to end
-                container.append(element);
+                content.append(element);
+            }
+            // Make sure container is visible
+            container.css('display', '');
+        },
+        /**
+         * @method removeMapControlPlugin
+         * Removes a map control plugin instance from the map DOM
+         * @param  {Object} element Control container (jQuery)
+         */
+        removeMapControlPlugin: function (element) {
+            var container = element.parents('.mapplugins'),
+                content = element.parents('.mappluginsContent');
+            // TODO take this into use in all UI plugins so we can hide unused containers...
+            element.remove();
+            if (content.children().length === 0) {
+                container.css('display', 'none');
             }
         },
         /**
@@ -122,9 +185,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         _initImpl: function (sandbox, options, map) {
             var scales = this._calculateScalesFromResolutions(options.resolutions, map.units);
             this._mapScales = scales;
-            
+
             this._createBaseLayer();
 
+            // TODO remove this whenever we're ready to add the containers when needed
             this._addMapControlPluginContainers();
             return map;
         },
@@ -144,19 +208,20 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
         },
         /**
-         * Changed to resolutions based map zoom levels, but we need to 
+         * Changed to resolutions based map zoom levels, but we need to
          * calculate scales array for backward compatibility
-         * 
+         *
          * @param  {Number[]} resolutions configured resolutions array
          * @param  {String} units         OpenLayers unit (m/degree etc)
          * @return {Number[]}             calculated matching scales array
          * @private
          */
-        _calculateScalesFromResolutions : function(resolutions, units) {
-            var scales = [];
-            for (var i = 0; i < resolutions.length; ++i) {
-
-                var calculatedScale = OpenLayers.Util.getScaleFromResolution(resolutions[i], units);
+        _calculateScalesFromResolutions: function (resolutions, units) {
+            var scales = [],
+                i,
+                calculatedScale;
+            for (i = 0; i < resolutions.length; ++i) {
+                calculatedScale = OpenLayers.Util.getScaleFromResolution(resolutions[i], units);
                 // rounding off the resolution to scale calculation
                 calculatedScale = calculatedScale * 100000000;
                 calculatedScale = Math.round(calculatedScale);
@@ -190,7 +255,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {OpenLayers.Map}
          */
         _createMap: function () {
-            this.getSandbox().printWarn("Depricated. Use _createMapImpl instead.")
+            this.getSandbox().printWarn("_createMap is deprecated. Use _createMapImpl instead.");
             this._createMapImpl();
         },
         /**
@@ -204,22 +269,21 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             // this is done BEFORE enhancement writes the values to map domain
             // object... so we will move the map to correct location
             // by making a MapMoveRequest in application startup
-            var lonlat = new OpenLayers.LonLat(0, 0);
-
-            var mapExtent = new OpenLayers.Bounds(0, 0, 10000000, 10000000);
+            var lonlat = new OpenLayers.LonLat(0, 0),
+                mapExtent = new OpenLayers.Bounds(0, 0, 10000000, 10000000);
             // FIXME use some cleaner check
             if (this._options !== null &&
-                    this._options !== undefined &&
-                    this._options.maxExtent !== null &&
-                    this._options.maxExtent !== undefined &&
-                    this._options.maxExtent.left !== null &&
-                    this._options.maxExtent.left !== undefined &&
-                    this._options.maxExtent.bottom !== null &&
-                    this._options.maxExtent.bottom !== undefined &&
-                    this._options.maxExtent.right !== null &&
-                    this._options.maxExtent.right !== undefined &&
-                    this._options.maxExtent.top !== null &&
-                    this._options.maxExtent.top !== undefined) {
+                this._options !== undefined &&
+                this._options.maxExtent !== null &&
+                this._options.maxExtent !== undefined &&
+                this._options.maxExtent.left !== null &&
+                this._options.maxExtent.left !== undefined &&
+                this._options.maxExtent.bottom !== null &&
+                this._options.maxExtent.bottom !== undefined &&
+                this._options.maxExtent.right !== null &&
+                this._options.maxExtent.right !== undefined &&
+                this._options.maxExtent.top !== null &&
+                this._options.maxExtent.top !== undefined) {
                 mapExtent = new OpenLayers.Bounds(this._options.maxExtent.left, this._options.maxExtent.bottom, this._options.maxExtent.right, this._options.maxExtent.top);
             }
             this._map = new OpenLayers.Map({
@@ -232,7 +296,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 center: lonlat,
                 // https://github.com/openlayers/openlayers/blob/master/notes/2.13.md#map-property-fallthrough-defaults-to-false
                 // fallThrough: true is needed for statsgrid drag resizing
-                fallThrough : true,
+                fallThrough: true,
                 theme: null,
                 zoom: 0,
                 zoomMethod: null
@@ -637,7 +701,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Ignores the call if map is in stealth mode.
          */
         _updateDomain: function () {
-            this.getSandbox().printWarn("Depricated. Use _updateDomainImpl instead.")
+            this.getSandbox().printWarn("_updateDomain is deprecated. Use _updateDomainImpl instead.");
             this._updateDomainImpl();
         },
         /**
@@ -683,7 +747,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @return {OpenLayers.LonLat} transformed coordinates
          */
         transformCoordinates: function (pLonlat, srs) {
-            this.getSandbox().printWarn("Depricated. Use _transformCoordinates instead if called from plugin. Otherwise, use Requests instead.");
+            this.getSandbox().printWarn("transformCoordinates is deprecated. Use _transformCoordinates instead if called from plugin. Otherwise, use Requests instead.");
 
             return this._transformCoordinates(pLonlat, srs);
         },
@@ -696,7 +760,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         _transformCoordinates: function (pLonlat, srs) {
             return pLonlat.transform(
-                new OpenLayers.Projection(srs), 
+                new OpenLayers.Projection(srs),
                 this.getMap().getProjectionObject()
             );
         },
@@ -730,7 +794,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var me = this,
                 markerLayers = this._getMapLayersByName("Markers");
 
-            _.each(markerLayers, function(markerLayer) {
+            _.each(markerLayers, function (markerLayer) {
                 me._map.removeLayer(markerLayer, false);
             });
 
@@ -765,7 +829,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             'SearchClearedEvent': function (event) {
                 this._removeMarkers();
             },
-            'LayerToolsEditModeEvent' : function (event) {
+            'LayerToolsEditModeEvent': function (event) {
                 this._isInLayerToolsEditMode = event.isInMode();
             }
         },
@@ -779,7 +843,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param  {Boolean} isBaseMap
          * @return {undefined}
          */
-        _afterMapLayerAddEvent: function(event) {
+        _afterMapLayerAddEvent: function (event) {
             var map = this.getMap(),
                 layer = event.getMapLayer(),
                 keepLayersOrder = event.getKeepLayersOrder(),
@@ -787,14 +851,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 layerPlugins = this.getLayerPlugins(),
                 markerLayers = this._getMapLayersByName("Markers");
 
-            _.each(layerPlugins, function(plugin) {
+            _.each(layerPlugins, function (plugin) {
                 if (_.isFunction(plugin.addMapLayerToMap)) {
                     plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
                 }
             });
 
             // Make sure the marker layers are always on top
-            _.each(markerLayers, function(markerLayer) {
+            _.each(markerLayers, function (markerLayer) {
                 map.raiseLayer(markerLayer, map.layers.length);
             });
         },
@@ -870,7 +934,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 el.addClass(classToAdd);
             }
         },
-        isInLayerToolsEditMode : function () {
+        isInLayerToolsEditMode: function () {
             return this._isInLayerToolsEditMode;
         },
 
@@ -884,12 +948,31 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             }
         },
 
-        _addMapControlImpl : function(ctl) {
+        _addMapControlImpl: function (ctl) {
             this._map.addControl(ctl);
         },
 
-        _removeMapControlImpl : function(ctl) {
+        _removeMapControlImpl: function (ctl) {
             this._map.removeControl(ctl);
+        },
+        /**
+         * @method getMapEl
+         * Get jQuery map element
+         */
+        getMapEl: function () {
+            var mapDiv = jQuery('#' + this._mapDivId);
+            if (!mapDiv.length) {
+                this.getSandbox().printWarn('mapDiv not found with #' + this._mapDivId);
+            }
+            return mapDiv;
+        },
+
+        /**
+         * @method getMapElDom
+         * Get DOM map element
+         */
+        getMapElDom: function () {
+            return this.getMapEl().get(0);
         }
 
     }, {
@@ -898,5 +981,5 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @static
          */
         'protocol': ['Oskari.mapframework.module.Module'],
-        "extend" : ["Oskari.mapping.mapmodule.AbstractMapModule"]
+        "extend": ["Oskari.mapping.mapmodule.AbstractMapModule"]
     });

@@ -18,7 +18,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
         this.core = null;
         this.sandbox = null;
         this.mapmodule = null;
-        this.state;
         /**
          * @property {String} mapDivId
          * ID of the DOM element the map will be rendered to
@@ -58,7 +57,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
          */
         _createUi: function () {
             var me = this,
-                module = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', "Main", me.conf.imageLocation, me.conf.mapOptions);
+                module = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', "Main", me.conf.imageLocation, me.conf.mapOptions, me.mapDivId);
 
             me.mapmodule = module;
             var map = me.sandbox.register(module);
@@ -117,8 +116,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                         plugins[i].instance = Oskari.clazz.create(plugins[i].id, plugins[i].config);
                         module.registerPlugin(plugins[i].instance);
                         module.startPlugin(plugins[i].instance);
-                    }
-                    catch(e) {
+                    } catch (e) {
                         // something wrong with plugin (e.g. implementation not imported) -> log a warning
                         me.sandbox.printWarn('Unable to start plugin: ' + plugins[i].id);
                     }
@@ -228,13 +226,57 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
             sandbox.addRequestHandler('MapFull.MapResizeEnabledRequest', me.mapResizeEnabledRequestHandler);
             sandbox.addRequestHandler('MapFull.MapWindowFullScreenRequest', me.mapWindowFullScreenRequestHandler);
 
-            // To-do: Find a more elegant location for registering Raphael font
+            // TODO: Find a more elegant location for registering Raphael font
             //
             // Dot previews use icons from the JSON based font below. A copy of identical ttf
             // file is needed by back end renderer (e.g. GeoServer). Conversion from
             // ttf to js is achieved by cufon at http://cufon.shoqolate.com/generate/.
             if (typeof Raphael !== "undefined") {
-                Raphael.registerFont({"w": 512, "face": {"font-family": "dot-markers", "font-weight": 400, "font-stretch": "normal", "units-per-em": "512", "panose-1": "2 0 5 3 0 0 0 0 0 0", "ascent": "480", "descent": "-32", "bbox": "0 -480 512 32", "underline-thickness": "0", "underline-position": "0", "unicode-range": "U+E000-U+F000"}, "glyphs": {" ": {}, "\ue000": {"d": "288,-426v-21,-4,-35,-2,-42,5v-2,2,-2,4,-1,7v2,5,5,10,9,18v4,8,6,13,7,15v-3,3,-9,9,-18,17v-13,12,-13,12,-19,18v-7,7,-1,15,18,24v8,4,17,7,26,8v23,5,39,3,49,-5v3,-3,4,-6,3,-9r-9,-18v-4,-9,-4,-10,-8,-18v-3,-6,-4,-9,-5,-11v2,-2,2,-3,11,-11v9,-8,9,-8,15,-14v6,-5,1,-12,-15,-20v-7,-3,-14,-5,-21,-6xm262,-256r9,-48r-12,-2r-9,50r12,0"}, "\ue001": {"d": "320,-427r-127,0r0,126r35,0r28,45r28,-45r36,0r0,-126"}, "\ue002": {"d": "256,-429v-17,0,-30,5,-42,17v-12,12,-18,26,-18,43v0,10,5,24,15,43v10,19,20,35,30,48r15,21v40,-53,60,-90,60,-112v0,-17,-6,-31,-18,-43v-12,-12,-25,-17,-42,-17xm256,-344v-7,0,-12,-2,-17,-7v-5,-5,-7,-10,-7,-17v0,-7,2,-13,7,-18v5,-5,10,-7,17,-7v7,0,13,2,18,7v5,5,7,11,7,18v0,7,-2,12,-7,17v-5,5,-11,7,-18,7"}, "\ue003": {"d": "262,-257r17,-71r-12,-2r-17,73r12,0xm240,-380v0,12,4,22,12,31v8,9,19,13,31,13v12,0,22,-4,31,-13v9,-9,13,-19,13,-31v0,-12,-4,-22,-13,-30v-9,-8,-19,-13,-31,-13v-12,0,-23,5,-31,13v-8,8,-12,18,-12,30"}, "\ue004": {"d": "262,-257r41,-169r-13,0r-40,169r12,0xm164,-427r18,45r-38,44r115,0r21,-89r-116,0"}, "\ue005": {"d": "196,-256v0,17,6,30,18,42v12,12,25,18,42,18v17,0,30,-6,42,-18v12,-12,18,-25,18,-42v0,-17,-6,-30,-18,-42v-12,-12,-25,-18,-42,-18v-17,0,-30,6,-42,18v-12,12,-18,25,-18,42"}, "\ue006": {"d": "284,-331r0,-93r-56,0r0,93r-39,0r67,75r67,-75r-39,0"}, "\uf000": {"d": "0,-480r512,512r-512,0r0,-512", "w": 0}, "\u00a0": {}}});
+                Raphael.registerFont({
+                    "w": 512,
+                    "face": {
+                        "font-family": "dot-markers",
+                        "font-weight": 400,
+                        "font-stretch": "normal",
+                        "units-per-em": "512",
+                        "panose-1": "2 0 5 3 0 0 0 0 0 0",
+                        "ascent": "480",
+                        "descent": "-32",
+                        "bbox": "0 -480 512 32",
+                        "underline-thickness": "0",
+                        "underline-position": "0",
+                        "unicode-range": "U+E000-U+F000"
+                    },
+                    "glyphs": {
+                        " ": {},
+                        "\ue000": {
+                            "d": "288,-426v-21,-4,-35,-2,-42,5v-2,2,-2,4,-1,7v2,5,5,10,9,18v4,8,6,13,7,15v-3,3,-9,9,-18,17v-13,12,-13,12,-19,18v-7,7,-1,15,18,24v8,4,17,7,26,8v23,5,39,3,49,-5v3,-3,4,-6,3,-9r-9,-18v-4,-9,-4,-10,-8,-18v-3,-6,-4,-9,-5,-11v2,-2,2,-3,11,-11v9,-8,9,-8,15,-14v6,-5,1,-12,-15,-20v-7,-3,-14,-5,-21,-6xm262,-256r9,-48r-12,-2r-9,50r12,0"
+                        },
+                        "\ue001": {
+                            "d": "320,-427r-127,0r0,126r35,0r28,45r28,-45r36,0r0,-126"
+                        },
+                        "\ue002": {
+                            "d": "256,-429v-17,0,-30,5,-42,17v-12,12,-18,26,-18,43v0,10,5,24,15,43v10,19,20,35,30,48r15,21v40,-53,60,-90,60,-112v0,-17,-6,-31,-18,-43v-12,-12,-25,-17,-42,-17xm256,-344v-7,0,-12,-2,-17,-7v-5,-5,-7,-10,-7,-17v0,-7,2,-13,7,-18v5,-5,10,-7,17,-7v7,0,13,2,18,7v5,5,7,11,7,18v0,7,-2,12,-7,17v-5,5,-11,7,-18,7"
+                        },
+                        "\ue003": {
+                            "d": "262,-257r17,-71r-12,-2r-17,73r12,0xm240,-380v0,12,4,22,12,31v8,9,19,13,31,13v12,0,22,-4,31,-13v9,-9,13,-19,13,-31v0,-12,-4,-22,-13,-30v-9,-8,-19,-13,-31,-13v-12,0,-23,5,-31,13v-8,8,-12,18,-12,30"
+                        },
+                        "\ue004": {
+                            "d": "262,-257r41,-169r-13,0r-40,169r12,0xm164,-427r18,45r-38,44r115,0r21,-89r-116,0"
+                        },
+                        "\ue005": {
+                            "d": "196,-256v0,17,6,30,18,42v12,12,25,18,42,18v17,0,30,-6,42,-18v12,-12,18,-25,18,-42v0,-17,-6,-30,-18,-42v-12,-12,-25,-18,-42,-18v-17,0,-30,6,-42,18v-12,12,-18,25,-18,42"
+                        },
+                        "\ue006": {
+                            "d": "284,-331r0,-93r-56,0r0,93r-39,0r67,75r67,-75r-39,0"
+                        },
+                        "\uf000": {
+                            "d": "0,-480r512,512r-512,0r0,-512",
+                            "w": 0
+                        },
+                        "\u00a0": {}
+                    }
+                });
             }
         },
         /**
@@ -255,17 +297,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
         },
 
         /**
-   * @method _createServices
-   * Setup services for this application. 
-   * Mainly Oskari.mapframework.service.MapLayerService, but also hacks in WMTS support
-   * and if conf.disableDevelopmentMode == 'true' -> disables debug messaging and 
-   * initializes Oskari.mapframework.service.UsageSnifferService to provide 
-   * feedback to server about map usage.
+       * @method _createServices
+       * Setup services for this application. 
+       * Mainly Oskari.mapframework.service.MapLayerService, but also hacks in WMTS support
+       * and if conf.disableDevelopmentMode == 'true' -> disables debug messaging and 
+       * initializes Oskari.mapframework.service.UsageSnifferService to provide 
+       * feedback to server about map usage.
 
-   * @param {Object} conf
-   *    JSON configuration for the application
-   * @private
-   */
+       * @param {Object} conf
+       *    JSON configuration for the application
+       * @private
+       */
         _createServices: function (conf) {
             var me = this,
                 services = [], // create services that are available in this application
@@ -384,9 +426,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 }
                 // check if we have a style selected and doesn't have THE magic string
                 if (layer.getCurrentStyle &&
-                        layer.getCurrentStyle() &&
-                        layer.getCurrentStyle().getName() &&
-                        layer.getCurrentStyle().getName() !== "!default!") {
+                    layer.getCurrentStyle() &&
+                    layer.getCurrentStyle().getName() &&
+                    layer.getCurrentStyle().getName() !== "!default!") {
                     layerJson.style = layer.getCurrentStyle().getName();
                 }
                 state.selectedLayers.push(layerJson);
@@ -409,9 +451,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 layer = null,
                 i = 0,
                 ilen = 0;
-            if(this.conf && this.conf.link) {
+            if (this.conf && this.conf.link) {
                 // add additional link params (version etc)
-                for(var key in this.conf.link) {
+                for (var key in this.conf.link) {
                     link = key + '=' + this.conf.link[key] + '&' + link;
                 }
             }
@@ -439,6 +481,26 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
         toggleFullScreen: function () {
             jQuery('#' + this.contentMapDivId).toggleClass('oskari-map-window-fullscreen');
             this.mapmodule.updateSize();
+        },
+
+        /**
+         * @method getMapEl
+         * Get jQuery map element
+         */
+        getMapEl: function () {
+            var mapDiv = jQuery('#' + this.mapDivId);
+            if (!mapDiv.length) {
+                me.sandbox.printWarn('mapDiv not found with id ' + this._mapDivId);
+            }
+            return mapDiv;
+        },
+
+        /**
+         * @method getMapElDom
+         * Get DOM map element
+         */
+        getMapElDom: function () {
+            return this.getMapEl().get(0);
         }
     }, {
         /**

@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
             var me = this;
             // Do not enter the mode if it's already on.
             if (!me.isVisible || !isShown) {
-                me.isVisible = !!isShown;
+                me.isVisible = !! isShown;
 
                 // Update the layer if current layer is null or if the layer has changed.
                 if (
@@ -171,7 +171,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 elCenter.removeClass('span12');
                 elCenter.width((100 - leftWidth) + '%');
                 // remove toolbar's height
-                jQuery('#mapdiv').height(jQuery(window).height() - jQuery('#contentMap').find('.oskariui-menutoolbar').height());
+                mapModule.getMapEl().height(jQuery(window).height() - jQuery('#contentMap').find('.oskariui-menutoolbar').height());
                 //window resize is handled in mapfull - instance.js
                 elLeft.empty();
                 elLeft.removeClass('oskari-closed');
@@ -220,7 +220,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
 
                 // remove width from center-div
                 elCenter.width('').addClass('span12');
-                jQuery('#mapdiv').height(jQuery(window).height());
+                mapModule.getMapEl().height(jQuery(window).height());
 
                 elLeft.resizable().resizable('destroy');
                 elLeft.addClass('oskari-closed');

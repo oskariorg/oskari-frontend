@@ -10,7 +10,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
  */
 
     function (config) {
-        this.config = config;
+        this.config = config || {};
 
         this._sandbox = null;
         this._map = null;

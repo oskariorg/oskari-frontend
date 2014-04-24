@@ -759,8 +759,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 contentWidth = content.width(),
                 marginWidth = content.css('margin-left').split('px')[0],
                 maxContentWidth = jQuery(window).width() - marginWidth - 40,
-                mapWidth = jQuery('#mapdiv').width(),
-                mapHeight = jQuery('#mapdiv').height();
+                mapDiv = me.mapModule.getMapEl(),
+                mapWidth = mapDiv.width(),
+                mapHeight = mapDiv.height();
 
             // how many columns * 80px
             var gridWidth = me._calculateGridWidth(), //maxContentWidth - mapWidth;
