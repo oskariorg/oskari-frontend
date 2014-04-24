@@ -89,7 +89,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
             if (me.started) {
                 return;
             }
-alert('tetprint');
             me.started = true;
             var conf = this.conf;
             var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
