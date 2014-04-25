@@ -178,7 +178,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
             'AfterMapLayerAddEvent': function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    this.analyse.refreshAnalyseData();
+                    this.analyse.refreshAnalyseData(event.getMapLayer().getId());
                 }
             },
             'AfterMapLayerRemoveEvent': function (event) {

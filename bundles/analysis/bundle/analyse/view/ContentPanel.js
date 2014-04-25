@@ -266,7 +266,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 }
                 this.drawPlugin.stopDrawing();
 
-                this.view.refreshAnalyseData();
+                this.view.refreshAnalyseData(feature.id);
             }
         },
         /**
