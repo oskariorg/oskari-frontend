@@ -214,8 +214,8 @@ Oskari.registerLocalization({
             },
             "infos": {
                 "title": "Info",
-                "layer": "Layer -",
-                "over10": "- over 10 fields - Select max 10 from a list for analyse"
+                "layer": "Layer ",
+                "over10": " has over 10 property fields - select max 10 from a list for analyse"
             }
         },
         "StartView": {
