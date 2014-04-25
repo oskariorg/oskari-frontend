@@ -670,7 +670,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         option = {
                             id: layer.getId(),
                             label: layer.getName(),
-                            temp: isTemp
+                            temp: isTemp,
+                            icon: layer.getLayerType()
                         };
 
                     if (!isTemp) option.id = (me.id_prefix + 'layer_' + option.id);
@@ -736,6 +737,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me._infoRequest(icons, datum.id);
                     me._filterRequest(icons, datum.id);
                     icons.find('div.icon-close').click(removeLayer(datum.id));
+                    icons.find('.layer-icon').addClass('layer-' + datum.icon);
                 }
 
                 opt.append(icons);
@@ -759,9 +761,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me._checkParamsSelection();
         },
         _eligibleForAnalyse: function(layer) {
-            return (layer.isLayerOfType('WFS') ||
-                    layer.isLayerOfType('ANALYSIS') ||
-                    layer.isLayerOfType('MYPLACES') ||
+            return ((layer.hasFeatureData && layer.hasFeatureData()) ||
                     layer.isLayerOfType(this.contentPanel.getLayerType()));
         },
         /**

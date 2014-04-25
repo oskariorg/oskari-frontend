@@ -165,26 +165,26 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                 if (this.analyse && this.analyse.isEnabled && this.isMapStateChanged) {
                     this.isMapStateChanged = false;
                     this.getSandbox().printDebug("ANALYSE REFRESH");
-                    //this.analyse.refreshAnalyseData(true);
+                    //this.analyse.refreshAnalyseData();
                 }
             },
             'AfterMapMoveEvent': function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    //this.analyse.refreshAnalyseData(false);
+                    //this.analyse.refreshAnalyseData();
                 }
                 this.isMapStateChanged = true;
             },
             'AfterMapLayerAddEvent': function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    this.analyse.refreshAnalyseData(false);
+                    this.analyse.refreshAnalyseData();
                 }
             },
             'AfterMapLayerRemoveEvent': function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    this.analyse.refreshAnalyseData(false);
+                    this.analyse.refreshAnalyseData();
                     // Remove the filter JSON of the layer
                     var layer = event.getMapLayer();
                     this.analyse.removeFilterJson(layer.getId());
@@ -193,7 +193,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
             'AfterChangeMapLayerStyleEvent': function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    //this.analyse.refreshAnalyseData(false);
+                    //this.analyse.refreshAnalyseData();
                 }
             },
             /**
