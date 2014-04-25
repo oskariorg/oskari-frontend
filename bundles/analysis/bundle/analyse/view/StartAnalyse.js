@@ -578,8 +578,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @private
          * Add analyse data layer to selection box
          * @param {jQuery} contentPanel  content panel for data layer selections
+         * @param String inserted_layer_id  id of last inserted layer
          */
-        _addAnalyseData: function (contentPanel) {
+        _addAnalyseData: function (contentPanel, inserted_layer_id) {
             var me = this,
                 layersContainer = contentPanel.getLayersContainer(),
                 layers = this.instance.getSandbox().findAllSelectedMapLayers(),
@@ -609,10 +610,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         };
 
                     if (!isTemp) option.id = (me.id_prefix + 'layer_' + option.id);
-
-                    if (selectedLayer && selectedLayer.getName() === layer.getName()) {
+                    
+                    // Checked is the last inserted layer or current selected layer, if layer_id is not available
+                    if (inserted_layer_id && inserted_layer_id === layer.getId()) {
                         option.checked = 'checked';
                     }
+                    else if (!inserted_layer_id && selectedLayer && selectedLayer.getName() === layer.getName()) {
+                        option.checked = 'checked';
+                    }
+
 
                     return option;
                 })
@@ -621,6 +627,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (!selectedLayer && contentOptions.length) {
                 _.first(contentOptions).checked = 'checked';
             }
+
 
             contentOptionsMap = _.foldl(contentOptions, function(map, option) {
                 map[option.id] = option;
@@ -1311,10 +1318,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * refresh analyse data layers in selection box
          *
          */
-        refreshAnalyseData: function () {
+        refreshAnalyseData: function (layer_id) {
             // Remove old
             this.contentPanel.emptyLayers();
-            this._addAnalyseData(this.contentPanel);
+            this._addAnalyseData(this.contentPanel, layer_id);
 
         },
         /**
