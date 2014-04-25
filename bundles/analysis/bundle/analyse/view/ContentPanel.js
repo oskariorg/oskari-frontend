@@ -121,14 +121,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          */
         eventHandlers: {
             'DrawPlugin.FinishedDrawingEvent': function(event) {
-                if (this.drawPluginId !== event.getCreatorId()) return;
+                if (this.drawPluginId !== event.getCreatorId()) {
+                    return;
+                }
 
                 this.addGeometry(event.getDrawing());
+                this.drawPlugin.stopDrawing();
             },
             'DrawFilterPlugin.FinishedDrawFilteringEvent': function(event) {
-debugger;
-                if (this.drawFilterPluginId !== event.getCreatorId()) return;
-                // Todo
+                if (this.drawFilterPluginId !== event.getCreatorId()) {
+                    return;
+                }
+                this.addGeometry(event.getSelection());
+                this.drawFilterPlugin.stopDrawFiltering();
+
             },
             'WFSFeaturesSelectedEvent': function(event) {
                 var wfsFeatureIds = event.getWfsFeatureIds();
@@ -209,11 +215,6 @@ debugger;
 // Testing
 var type = 'point';
 
-var start_lonlat = new OpenLayers.LonLat(384000,6671000);
-var start_point = new OpenLayers.Geometry.Point(start_lonlat.lon,start_lonlat.lat);
-var end_lonlat = new OpenLayers.LonLat(395000,6671000);
-var end_point = new OpenLayers.Geometry.Point(end_lonlat.lon,end_lonlat.lat);
-this.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([start_point, end_point]));
 
 
 
@@ -318,8 +319,6 @@ this.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Li
                 if (this.featureLayer) {
                     this.featureLayer.addFeatures([feature]);
                 }
-                this.drawPlugin.stopDrawing();
-                this.drawFilterPlugin.stopDrawFiltering();
 
                 this.view.refreshAnalyseData();
             }
@@ -500,17 +499,29 @@ this.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Li
                 var drawFilterDiv = drawFilterTemplate.clone();
                 var groupName = 'analysis-selection-';
                 drawFilterDiv.addClass(groupName + drawFilter);
-// Commented out for testing
-//                drawFilterDiv.addClass('disabled');
+                drawFilterDiv.addClass('disabled');
+// Test
+if (drawFilterDiv.hasClass('analysis-selection-point')) drawFilterDiv.removeClass('disabled');
                 drawFilterDiv.click(function() {
-
                     if (jQuery(this).hasClass('disabled')) {
                         return;
                     }
+// Test
+var lonlat;
+var points = [];
+lonlat = new OpenLayers.LonLat(370000,6672000);
+points.push(new OpenLayers.Geometry.Point(lonlat.lon,lonlat.lat));
+lonlat = new OpenLayers.LonLat(384000,6671000);
+points.push(new OpenLayers.Geometry.Point(lonlat.lon,lonlat.lat));
+lonlat = new OpenLayers.LonLat(395000,6671000);
+points.push(new OpenLayers.Geometry.Point(lonlat.lon,lonlat.lat));
+lonlat = new OpenLayers.LonLat(400000,6650000);
+points.push(new OpenLayers.Geometry.Point(lonlat.lon,lonlat.lat));
+me.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(points));
 
                     me._startNewDrawFiltering({
                         mode: drawFilter,
-                        selectedGeometry: me.getSelectedGeometry()
+                        sourceGeometry: me.getSelectedGeometry()
                     });
                 });
                 container.append(drawFilterDiv);
@@ -566,8 +577,9 @@ this.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Li
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
                 // Disable all buttons
-// Commented out for testing
-//                me._disableAllDrawFilterButtons();
+                me._disableAllDrawFilterButtons();
+// Test
+jQuery("div.analysis-selection-point").removeClass('disabled');
                 me._sendStopDrawFilterRequest();
                 jQuery(this).remove();
             });

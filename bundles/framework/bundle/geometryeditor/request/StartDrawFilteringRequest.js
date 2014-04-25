@@ -16,8 +16,8 @@ function(config) {
     }
 
     // Selected geometry
-    if (config.selectedGeometry) {
-        this._selectedGeometry = config.selectedGeometry;
+    if (config.sourceGeometry) {
+        this._sourceGeometry = config.sourceGeometry;
     }
 
 }, {
@@ -48,8 +48,8 @@ function(config) {
         return this._geometry;
     },
 
-    getSelectedGeometry : function() {
-        return this._selectedGeometry;
+    getSourceGeometry : function() {
+        return this._sourceGeometry;
     }
 }, {
     'protocol' : ['Oskari.mapframework.request.Request']

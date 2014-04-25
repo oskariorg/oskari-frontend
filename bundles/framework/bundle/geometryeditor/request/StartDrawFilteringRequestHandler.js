@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.GeometryEditor.DrawFil
         this.drawFilterPlugin.startDrawFiltering({
             drawMode : request.getMode(),
             geometry : request.getGeometry(),
-            selectedGeometry : request.getSelectedGeometry(),
+            sourceGeometry : request.getSourceGeometry(),
             isModify : request.isModify(),
             style : ''
         });
