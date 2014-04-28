@@ -165,26 +165,26 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                 if (this.analyse && this.analyse.isEnabled && this.isMapStateChanged) {
                     this.isMapStateChanged = false;
                     this.getSandbox().printDebug("ANALYSE REFRESH");
-                    this.analyse.refreshAnalyseData(true);
+                    //this.analyse.refreshAnalyseData();
                 }
             },
             'AfterMapMoveEvent': function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    this.analyse.refreshAnalyseData(false);
+                    //this.analyse.refreshAnalyseData();
                 }
                 this.isMapStateChanged = true;
             },
             'AfterMapLayerAddEvent': function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    this.analyse.refreshAnalyseData(false);
+                    this.analyse.refreshAnalyseData(event.getMapLayer().getId());
                 }
             },
             'AfterMapLayerRemoveEvent': function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    this.analyse.refreshAnalyseData(false);
+                    this.analyse.refreshAnalyseData();
                     // Remove the filter JSON of the layer
                     var layer = event.getMapLayer();
                     this.analyse.removeFilterJson(layer.getId());
@@ -193,7 +193,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
             'AfterChangeMapLayerStyleEvent': function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    this.analyse.refreshAnalyseData(false);
+                    //this.analyse.refreshAnalyseData();
                 }
             },
             /**
@@ -315,7 +315,8 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                 map.addClass('mapAnalyseMode');
                 me.sandbox.mapMode = 'mapAnalyseMode';
                 // Hide flyout, it's not needed...
-                jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().hide();
+                jQuery(me.plugins['Oskari.userinterface.Flyout'].container)
+                    .parent().parent().hide();
                 /* Why would we close analyse here?
                 // me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
                 var request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
@@ -335,9 +336,6 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                 }
                 this.analyse.show();
                 this.analyse.setEnabled(true);
-
-                // Show info
-                this.analyse.showInfos();
 
             } else {
                 map.removeClass('mapAnalyseMode');

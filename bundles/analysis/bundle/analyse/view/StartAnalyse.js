@@ -146,7 +146,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var contentPanel = Oskari.clazz.create(
                 'Oskari.analysis.bundle.analyse.view.ContentPanel', this);
             this.contentPanel = contentPanel;
-            this._addAnalyseData(contentPanel);
 
             var methodPanel = this._createMethodPanel();
 
@@ -185,7 +184,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             /* progress */
             me.progressSpinner.insertTo(container);
 
-
+            this._addAnalyseData(contentPanel);
+            // Show the possible warning of exceeding the feature property count.
+            this.showInfos();
         },
         /**
          * @method _createMethodPanel
@@ -316,7 +317,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             var closureMagic = function (tool) {
                 return function () {
-                    var size = columnsContainer.find('input[name=params]:checked').val(),
+                    var featureList = columnsContainer.find('.analyse-featurelist'),
                         i;
                     // reset previous setting
                     for (i = 0; i < me.paramsOptions.length; ++i) {
@@ -324,6 +325,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     }
                     tool.selected = true;
 
+                    if (tool.id === 'oskari_analyse_select') {
+                        featureList.show();
+                    } else {
+                        featureList.hide();
+                    }
                 };
             };
 
@@ -354,6 +360,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 });
                 toolContainer.find('input[name=params]').change(closureMagic(option));
             }
+
+            // Check that params selection is allowed for the selected layer
+            this._checkParamsSelection();
         },
 
         /**
@@ -385,32 +394,88 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @param {jQuery object} featureList
          */
         _appendFields: function (featureList) {
-            var selectedLayer = this._getSelectedMapLayer();
-            if (!selectedLayer) {
-                return;
-            }
+            var me = this,
+                selectedLayer = this._getSelectedMapLayer();
+
+            if (!selectedLayer) return;
 
             var fields = ((selectedLayer.getFields && selectedLayer.getFields()) ? selectedLayer.getFields().slice() : []),
                 locales = ((selectedLayer.getLocales && selectedLayer.getLocales()) ? selectedLayer.getLocales().slice() : []),
                 i,
                 featureListElement,
-                localizedLabel;
+                localizedLabel,
+                elementId;
 
             for (i = 0; i < fields.length; ++i) {
                 // Get only the fields which originate from the service,
                 // that is, exclude those which are added by Oskari (starts with '__').
                 if (!fields[i].match(/^__/)) {
                     localizedLabel = locales[i] || fields[i];
+                    elementId = (selectedLayer.getId() + '_' + fields[i]);
                     featureListElement = this.template.featureListElement.clone();
-                    featureListElement.find('input').val(fields[i]);
-                    featureListElement.find('label').append(localizedLabel).attr({
-                        'for': fields[i]
-                    });
+
+                    featureListElement
+                        .find('input')
+                        .prop('id', elementId)
+                        .prop('name', 'analyse-feature-property')
+                        .val(fields[i]);
+                    featureListElement
+                        .find('label')
+                        .html(localizedLabel)
+                        .attr({
+                            'for': elementId
+                        });
                     featureList.find('ul').append(featureListElement);
                 }
             }
-        },
 
+            this._preselectProperties(featureList.find('ul'));
+            featureList
+                .find('ul li')
+                .change(function() {
+                    me._checkPropertyList(featureList.find('ul'));
+                });
+        },
+        /**
+         * Preselects the max number of feature properties permitted
+         * (defaults to 10).
+         * 
+         * @method _preselectProperties
+         * @private
+         * @param  {jQuery} propertyList
+         */
+        _preselectProperties: function(propertyList) {
+            var maxNumOfFields = this.max_analyse_layer_fields;
+
+            propertyList
+                .find('input[name=analyse-feature-property]')
+                .each(function(index) {
+                    if (index < maxNumOfFields) {
+                        jQuery(this).prop('checked', true);
+                    } else {
+                        jQuery(this).prop('disabled', true);
+                    }
+                });
+        },
+        /**
+         * Checks if the number of checked properties is over
+         * the permitted limit and if so, disables the other
+         * properties.
+         * 
+         * @method _checkPropertyList
+         * @private
+         * @param  {jQuery} propertyList
+         */
+        _checkPropertyList: function(propertyList) {
+            var checked = propertyList.find('li input:checked'),
+                unchecked = propertyList.find('li input:not(:checked)');
+
+            if (checked.length >= this.max_analyse_layer_fields) {
+                unchecked.prop('disabled', true);
+            } else {
+                unchecked.prop('disabled', false);
+            }
+        },
         /**
          * Refreshes the fields list after a layer has been added or changed.
          *
@@ -578,8 +643,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @private
          * Add analyse data layer to selection box
          * @param {jQuery} contentPanel  content panel for data layer selections
+         * @param String inserted_layer_id  id of last inserted layer
          */
-        _addAnalyseData: function (contentPanel) {
+        _addAnalyseData: function (contentPanel, inserted_layer_id) {
             var me = this,
                 layersContainer = contentPanel.getLayersContainer(),
                 layers = this.instance.getSandbox().findAllSelectedMapLayers(),
@@ -605,14 +671,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         option = {
                             id: layer.getId(),
                             label: layer.getName(),
-                            temp: isTemp
+                            temp: isTemp,
+                            icon: layer.getLayerType()
                         };
 
                     if (!isTemp) option.id = (me.id_prefix + 'layer_' + option.id);
-
-                    if (selectedLayer && selectedLayer.getName() === layer.getName()) {
+                    
+                    // Checked is the last inserted layer or current selected layer, if layer_id is not available
+                    if (inserted_layer_id && inserted_layer_id === layer.getId()) {
                         option.checked = 'checked';
                     }
+                    else if (!inserted_layer_id && selectedLayer && selectedLayer.getName() === layer.getName()) {
+                        option.checked = 'checked';
+                    }
+
 
                     return option;
                 })
@@ -621,6 +693,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (!selectedLayer && contentOptions.length) {
                 _.first(contentOptions).checked = 'checked';
             }
+
 
             contentOptionsMap = _.foldl(contentOptions, function(map, option) {
                 map[option.id] = option;
@@ -642,6 +715,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         me._refreshFields();
                         me._modifyAnalyseName();
                         me.showInfos();
+                        me._checkParamsSelection();
                     });
 
                 opt.find('label')
@@ -670,6 +744,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me._infoRequest(icons, datum.id);
                     me._filterRequest(icons, datum.id);
                     icons.find('div.icon-close').click(removeLayer(datum.id));
+                    icons.find('.layer-icon').addClass('layer-' + datum.icon);
                 }
 
                 opt.append(icons);
@@ -690,11 +765,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me._modifyAnalyseName();
             me._refreshFields();
             me.refreshExtraParameters();
+            me._checkParamsSelection();
         },
         _eligibleForAnalyse: function(layer) {
-            return (layer.isLayerOfType('WFS') ||
-                    layer.isLayerOfType('ANALYSIS') ||
-                    layer.isLayerOfType('MYPLACES') ||
+            return ((layer.hasFeatureData && layer.hasFeatureData()) ||
                     layer.isLayerOfType(this.contentPanel.getLayerType()));
         },
         /**
@@ -1311,10 +1385,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * refresh analyse data layers in selection box
          *
          */
-        refreshAnalyseData: function () {
+        refreshAnalyseData: function (layer_id) {
             // Remove old
             this.contentPanel.emptyLayers();
-            this._addAnalyseData(this.contentPanel);
+            this._addAnalyseData(this.contentPanel, layer_id);
 
         },
         /**
@@ -1751,17 +1825,73 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          *
          */
         showInfos: function () {
-            var me = this;
-            var selectedLayer = me._getSelectedMapLayer();
-            if (!selectedLayer) {
-                return;
-            }
-            // Not analysis layers
-            if (selectedLayer.getId().toString().indexOf(me.layer_prefix) > -1) return;
+            var me = this,
+                selectedLayer = me._getSelectedMapLayer(),
+                isAnalyseLayer,
+                exceedsFieldsCount,
+                tooManyFieldsMsg;
 
-            if (selectedLayer.getFields && selectedLayer.getFields().length > me.max_analyse_layer_fields) {
-                me.instance.showMessage(me.loc.infos.title, me.loc.infos.layer + " " + selectedLayer.getName() + " " + me.loc.infos.over10);
+            // No layer selected - nothing to do here
+            if (!selectedLayer) return;
+
+            isAnalyseLayer = selectedLayer.getId().toString()
+                .indexOf(me.layer_prefix) > -1;
+            // No checks for analysis layers
+            if (isAnalyseLayer) return;
+
+            exceedsFieldsCount = (selectedLayer.getFields &&
+                selectedLayer.getFields().length > me.max_analyse_layer_fields);
+
+            if (exceedsFieldsCount) {
+                tooManyFieldsMsg = (me.loc.infos.layer +
+                    " " + selectedLayer.getName() +
+                    " " + me.loc.infos.over10);
+                me.instance.showMessage(me.loc.infos.title, tooManyFieldsMsg);
             }
+        },
+        /**
+         * Check if the selected layer has more fields available
+         * than the permitted maximum number and if so,
+         * disable the 'all fields' selection.
+         * 
+         * @method _checkParamsSelection
+         * @private
+         */
+        _checkParamsSelection: function() {
+            var selectedLayer = this._getSelectedMapLayer(),
+                exceedsFieldsCount = (
+                    selectedLayer &&
+                    selectedLayer.getFields &&
+                    (selectedLayer.getFields().length >
+                    this.max_analyse_layer_fields)
+                );
+
+            if (exceedsFieldsCount) {
+                this._disableAllParamsSelection();
+            } else {
+                this._enableAllParamsSelection();
+            }
+        },
+        _enableAllParamsSelection: function() {
+            var paramsCont = jQuery('.analyse-columns-container');
+
+            paramsCont
+                .find('#oskari_analyse_all')
+                .prop('disabled', false)
+                .prop('checked', true)
+                .change();
+        },
+        _disableAllParamsSelection: function() {
+            var paramsCont = jQuery('.analyse-columns-container');
+
+            paramsCont
+                .find('#oskari_analyse_all')
+                .prop('disabled', true);
+
+            paramsCont
+                .find('#oskari_analyse_select')
+                .prop('checked', true)
+                .change();
         },
         /**
          * Change default colors for analyse in random range order

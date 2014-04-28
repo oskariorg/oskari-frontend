@@ -8,6 +8,8 @@ Analysis source features can now be drawn on the map directly from within the an
 
 Layers can now be removed from analysis and from the map by clicking the close icon in the layers listing.
 
+For layers which have over the maximum amount of feature properties permitted (defaults to 10) the 'select all properties' selection is now disabled, 'choose from the list' option autoselected and the first properties selected.
+
 ### search
 
 Other bundles can now insert (and remove) actions to search results via `Search.AddSearchResultActionRequest` (removing via `Search.RemoveSearchResultActionRequest`):
@@ -38,6 +40,10 @@ Improved published view editing state handling.
 ### admin-layerselector bundle
 
 Removed underscore from comp.js
+
+### backendstatus
+
+Sends a new event - `BackendStatus.BackendStatusChangedEvent` instead of `MapLayerEvent` now. Also, if the amount of changed layers exceeds 100 a so called bulk update event is sent instead of single events for each changed layer. It's basically the same event without any params.
 
 ## 1.19.3
 
