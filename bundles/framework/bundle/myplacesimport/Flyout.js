@@ -24,6 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                     '<div class="info"></div>' +
                     '<div class="state"></div>' +
                 '</div>',
+            help: '<div class="help icon-info"></div>',
             file: '<div class="file-import">' +
                     '<form id="myplacesimport-form" method="post" enctype="multipart/form-data" target="myplacesimport-target">' +
                         '<input type="file" name="file-import"></input>' +
@@ -71,10 +72,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          */
         startPlugin: function () {
             var container = this.getEl(),
-                iframe = jQuery(this.__templates.iframe).clone();
+                iframe = jQuery(this.__templates.iframe).clone(),
+                tooltipCont = jQuery(this.__templates.help).clone();
 
             container.addClass('myplacesimport');
             container.append(iframe);
+            tooltipCont.attr('title', this.locale.help);
+            container.append(tooltipCont);
 
             this.setTemplate(this.createUi());
             container.append(this.getTemplate());

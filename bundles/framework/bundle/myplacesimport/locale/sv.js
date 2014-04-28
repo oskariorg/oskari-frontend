@@ -3,7 +3,8 @@ Oskari.registerLocalization({
     "key": "MyPlacesImport",
     "value": {
         "title": "NOT TRANSLATED",
-        "desc": "",
+        "desc": "Voit tuoda omia aineistoja shape-formaatissa zip-muodossa tai kml/kmz tiedostoja.",
+        "help": "Anna tämän toiminnon lähtöaineistoksi (Browse...) zip tiedoston nimi tai url-linkki vastaavaan tiedostoon. \nZip-tiedoston saat lataamalla koneellesi shape-siirtoformaatissa olevan aineiston \nja muodostamalla näistä tiedostoista (.shp, . shx, .dbf, .prj) zip-tiedosto \ntai lataa koneellesi Googlen kml/kmz tiedostoja. \ntai käytä tiedoston url-linkkiä. ",
         "tool": {
             "tooltip": "NOT TRANSLATED"
         },
