@@ -16,8 +16,8 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoad
      * builds backend URL URI or whatever it's called n
      */
     getURLForView: function (subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace, cb, dataType) {
-        var url = this.urls[subsetId];
-        var uri = url + "uuid=" + uuid;
+        var url = this.urls[subsetId],
+            uri = url + "uuid=" + uuid;
 
         /*dev only */
         if (this.dev) {
@@ -80,12 +80,11 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoad
      * Helper to circumvent jQuery ajax html hassles
      */
     loadGeonetworkAjaxHTML: function (handler, viewId, metadata_uuid, metadata_RS_Identifier_Code, metadata_RS_Identifier_CodeSpace) {
-        var uri = this.getURLForView(viewId, metadata_uuid, metadata_RS_Identifier_Code, metadata_RS_Identifier_CodeSpace);
-
-        var request = OpenLayers.Request.GET({
-            url: uri,
-            callback: handler
-        });
+        var uri = this.getURLForView(viewId, metadata_uuid, metadata_RS_Identifier_Code, metadata_RS_Identifier_CodeSpace),
+            request = OpenLayers.Request.GET({
+                url: uri,
+                callback: handler
+            });
     },
     /**
      * @method openMetadata

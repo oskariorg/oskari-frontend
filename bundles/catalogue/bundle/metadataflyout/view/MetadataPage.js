@@ -244,9 +244,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          */
         showMetadataView: function (viewId, target) {
             this.instance.getSandbox().printDebug("ShowMetadataView " + viewId);
-            var tabs = this.tabs;
-            var views = this.views;
-            var titles = this.titles,
+            var tabs = this.tabs,
+                views = this.views,
+                titles = this.titles,
                 v;
 
             for (v in views) {
@@ -281,15 +281,15 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * @method loadMetadataForState
          */
         loadMetadataForState: function () {
-            var me = this;
-            var views = this.views;
+            var me = this,
+                views = this.views;
 
             if (!this.contentState || !this.contentState.metadata || !this.contentState.metadata.uuid) {
                 return false;
             }
 
-            var viewId = this.contentState.view;
-            var metadata = this.contentState.metadata;
+            var viewId = this.contentState.view,
+                metadata = this.contentState.metadata;
 
             views[viewId].empty();
 
@@ -307,8 +307,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
                 jQuery.each(newContent.find('td.metadataContent'), function (n, p) {
 
-                    var part = jQuery(p);
-                    var parent = part.parent();
+                    var part = jQuery(p),
+                        parent = part.parent();
                     /*parent.remove(part);*/
 
                     var newContainerPart = jQuery('<td class="metadataContent"/>');
@@ -341,13 +341,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 /* Let's fix HREFs to click events */
                 /* We cannot modify the source */
 
-                var links = newContent.find("a[href]");
-                var isMetaLink = new RegExp("^\\?.*");
+                var links = newContent.find("a[href]"),
+                    isMetaLink = new RegExp("^\\?.*");
 
                 jQuery.each(links, function (index, ahref) {
-
-                    var el = jQuery(ahref);
-                    var href = el.attr('href');
+                    var el = jQuery(ahref),
+                        href = el.attr('href');
 
                     if (!href) {
                         return;
@@ -356,8 +355,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                         return;
                     }
 
-                    var splits = href.split("&");
-                    var argMap = {};
+                    var splits = href.split("&"),
+                        argMap = {};
                     jQuery.each(splits, function (index, part) {
                         var keyVal = part.split("=");
                         argMap[keyVal[0]] = keyVal[1];
@@ -368,9 +367,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                         viewId: viewId,
                         uuid: argMap.uuid
                     }, function (arg) {
-                        var data = arg.data;
-                        var uuid = data.uuid;
-
+                        var data = arg.data,
+                            uuid = data.uuid;
                         me.showMetadata(uuid);
                     });
                 });
@@ -387,8 +385,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
         },
         _updatePanel: function () {
-            var me = this;
-            var metadataJson = me.contentState.metadataJson;
+            var me = this,
+                metadataJson = me.contentState.metadataJson;
             if (!metadataJson) {
                 return;
             }
@@ -421,9 +419,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * @method processJSON
          */
         processJSON: function (metadataJson) {
-            var me = this;
-            var browseGraphicUrl = metadataJson.browseGraphic;
-            var extentEnvelope = metadataJson.env;
+            var me = this,
+                browseGraphicUrl = metadataJson.browseGraphic,
+                extentEnvelope = metadataJson.env;
             /*
              * Let's display the browse graphic image
              */
@@ -431,9 +429,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             if (browseGraphicUrl) {
 
-                var img = jQuery('<img />');
-
-                var url = null;
+                var img = jQuery('<img />'),
+                    url = null;
                 if (this.instance.getLoader().dev) {
                     url = 'espoo_johtokartta_s.png';
                 } else {
@@ -505,8 +502,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             var inputText = el.html();
 
             //URLs starting with http://, https://, or ftp://
-            var replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
-            var replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+            var replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim,
+                replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
 
             //URLs starting with www. (without // before it, or it'd re-link the ones done above)
             var replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;

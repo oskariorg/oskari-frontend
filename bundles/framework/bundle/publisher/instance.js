@@ -173,7 +173,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
                     if (this.publisher) {
                         this.publisher.maplayerPanel.handleLayerOrderChanged(event._movedMapLayer, event._fromPosition, event._toPosition);
-                        if(event._creator !== this.publisher.maplayerPanel.plugin.getName()) {
+                        if (event._creator !== this.publisher.maplayerPanel.plugin.getName()) {
                             this.publisher.maplayerPanel.handleLayerSelectionChanged();
                         }
                     }
