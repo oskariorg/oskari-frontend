@@ -38,6 +38,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
         this.hotspot = null;
         this.sld = null;
         this.templateLanguageLink = null;
+        this.drawFilterPlugin = null;
+        this.drawFilterPluginId = null;
     }, {
         /**
          * @method getName
@@ -73,6 +75,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          */
         init: function (sandbox) {
             var me = this;
+
+            this.drawFilterPluginId = this.instance.getName();
+            this.drawFilterPlugin = Oskari.clazz.create(
+                'Oskari.mapframework.ui.module.common.geometryeditor.DrawFilterPlugin', {
+                    id: this.drawFilterPluginId
+            });
+
             // This layer will first contain the downloaded feature. After the split is done, that feature
             // removed from the layer
             this.drawLayer = new OpenLayers.Layer.Vector("Parcel Draw Layer", {

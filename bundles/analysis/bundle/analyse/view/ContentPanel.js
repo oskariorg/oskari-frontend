@@ -211,15 +211,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             }
 
             this.isStarted = true;
-
-// Testing
-var type = 'point';
-
-
-
-
-
-
         },
         /**
          * Destroys the created components and unsets the class/instance variables.
@@ -499,25 +490,47 @@ var type = 'point';
                 var drawFilterDiv = drawFilterTemplate.clone();
                 var groupName = 'analysis-selection-';
                 drawFilterDiv.addClass(groupName + drawFilter);
-                drawFilterDiv.addClass('disabled');
 // Test
-if (drawFilterDiv.hasClass('analysis-selection-point')) drawFilterDiv.removeClass('disabled');
+if (drawFilterDiv.hasClass('analysis-selection-remove')) {
+               drawFilterDiv.addClass('disabled');
+}
+
+// Test
+//jQuery(".analysis-selection-point").removeClass('disabled');
+//jQuery(".analysis-selection-edit").removeClass('disabled');
+//if (drawFilterDiv.hasClass('analysis-selection-point')) drawFilterDiv.removeClass('disabled');
+//if (drawFilterDiv.hasClass('analysis-selection-edit')) drawFilterDiv.removeClass('disabled');
+
                 drawFilterDiv.click(function() {
                     if (jQuery(this).hasClass('disabled')) {
                         return;
                     }
+
 // Test
-var lonlat;
-var points = [];
-lonlat = new OpenLayers.LonLat(370000,6672000);
-points.push(new OpenLayers.Geometry.Point(lonlat.lon,lonlat.lat));
-lonlat = new OpenLayers.LonLat(384000,6671000);
-points.push(new OpenLayers.Geometry.Point(lonlat.lon,lonlat.lat));
-lonlat = new OpenLayers.LonLat(395000,6671000);
-points.push(new OpenLayers.Geometry.Point(lonlat.lon,lonlat.lat));
-lonlat = new OpenLayers.LonLat(400000,6650000);
-points.push(new OpenLayers.Geometry.Point(lonlat.lon,lonlat.lat));
-me.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(points));
+if (drawFilter === "point") {
+    var lonlat;
+    var points = [];
+    lonlat = new OpenLayers.LonLat(370000, 6672000);
+    points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+    lonlat = new OpenLayers.LonLat(384000, 6671000);
+    points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+    lonlat = new OpenLayers.LonLat(395000, 6671000);
+    points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+    lonlat = new OpenLayers.LonLat(400000, 6650000);
+    points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+    me.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(points));
+} else if (~["line","edit"].indexOf(drawFilter)) {
+    var lonlat;
+    var points = [];
+    lonlat = new OpenLayers.LonLat(388000, 6679000);
+    points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+    lonlat = new OpenLayers.LonLat(398000, 6666000);
+    points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+    lonlat = new OpenLayers.LonLat(378000, 6666000);
+    points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+    me.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon([new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(points))]));
+}
+
 
                     me._startNewDrawFiltering({
                         mode: drawFilter,
@@ -579,8 +592,9 @@ me.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Line
                 // Disable all buttons
                 me._disableAllDrawFilterButtons();
 // Test
-jQuery("div.analysis-selection-point").removeClass('disabled');
-                me._sendStopDrawFilterRequest();
+//jQuery("div.analysis-selection-point").removeClass('disabled');
+                var config = {};
+                me._sendStopDrawFilterRequest(config);
                 jQuery(this).remove();
             });
 
@@ -643,11 +657,23 @@ jQuery("div.analysis-selection-point").removeClass('disabled');
 
         _startNewDrawFiltering: function (config) {
           // Enable and disable correct buttons
-           if (config.drawFilterMode === "remove") {
+           if (config.mode === "remove") {
                this._disableAllDrawFilterButtons();
-           } else {
+               this.selectedGeometry = null;
                // Disable the remove button
-               jQuery('div.DrawFilter.analysis-selection-remove').addClass('disabled');
+               jQuery('div.drawFilter.analysis-selection-remove').addClass('disabled');
+               // Remove the finish button
+                this.getPanelContainer()
+                    .find('div.drawFilterContainer')
+                    .find('div.buttons').remove();
+           } else {
+               // Enable the remove button
+               jQuery('div.drawFilter.analysis-selection-remove').removeClass('disabled');
+                // remove old draw buttons and append new ones
+                this.getPanelContainer()
+                    .find('div.drawFilterContainer')
+                    .find('div.buttons').remove().end()
+                    .append(this._createDrawFilterControls());
            }
 
             var sandbox = this.sandbox,
@@ -667,11 +693,6 @@ jQuery("div.analysis-selection-point").removeClass('disabled');
                 sandbox.request(this.instance, gfiReqBuilder(false));
             }
 
-            // remove old draw buttons and append new ones
-            this.getPanelContainer()
-                .find('div.drawFilterContainer')
-                .find('div.buttons').remove().end()
-                .append(this._createDrawFilterControls());
         },
 
         /**
@@ -959,6 +980,6 @@ jQuery("div.analysis-selection-point").removeClass('disabled');
         },
 
         _disableAllDrawFilterButtons: function() {
-            jQuery('div.drawFilter').addClass('disabled');
+//            jQuery('div.drawFilter').addClass('disabled');
         }
 });

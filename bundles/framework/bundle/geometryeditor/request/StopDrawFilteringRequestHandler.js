@@ -10,11 +10,11 @@ Oskari.clazz.define(
                 this.sandbox.printDebug("[Oskari.mapframework.ui.module.common.GeometryEditor.DrawFilterPlugin.request.StopDrawFilteringRequestPluginHandler] Stop draw filtering");
                 if(request.isCancel()) {
                     // we wish to clear the drawing without sending further events
-                    this.drawFilterPlugin.stopDrawFilter();
+                    this.drawFilterPlugin.stopDrawFiltering();
                 }
                 else {
                     // pressed finished drawing, act like dblclick
-                    this.drawFilterPlugin.finishDrawFilter();
+                    this.drawFilterPlugin.finishDrawFiltering();
                 }
             }
         },{

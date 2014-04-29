@@ -7,20 +7,43 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     this._sandbox = null;
     this._map = null;
     this.drawControls = null;
+    this.modifyControls = null;
     this.sourceLayer = null;
-    this.selectionLayer = null;
+    this.targetLayer = null;
     this.markerLayer = null;
     this.markers = [];
-    this.markerSize = new OpenLayers.Size(21, 25);
-    this.markerOffset = new OpenLayers.Pixel(-(this.markerSize.w/2), -this.markerSize.h);
+    this.markerSize = new OpenLayers.Size(21,25);
+    this.markerOffset = new OpenLayers.Pixel(-(this.markerSize.w/2),-this.markerSize.h);
     this.markerIcon = new OpenLayers.Icon('/Oskari/resources/framework/bundle/geometryeditor/images/marker.png', this.markerSize, this.markerOffset);
     this.activeMarker = null;
     this.startIndex = null;
     this.endIndex = null;
     this.editMode = false;
     this.currentDrawMode = null;
+    this.selectedFeatureIndex = 0;
     this.prefix = "DrawFilterPlugin.";
     this.creatorId = undefined;
+    // Todo: defaults from configuration
+    this.sourceStyle = {
+        point: {},
+        edit: {}
+    };
+    this.targetStyle = {
+        point: {},
+        edit: {}
+    };
+    this.selectionStyle = {
+        point: {},
+        edit: {}
+    };
+    this.sourceListeners = {
+        point: {},
+        edit: {}
+    };
+    this.targetListeners = {
+        point: {},
+        edit: {}
+    };
 
     if (config && config.id) {
         // Note that the events and requests need to match the configured
@@ -35,6 +58,82 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     this.multipart = (config && config.multipart === true);
 }, {
     __name: 'DrawFilterPlugin',
+
+    /**
+     * Initializes the plugin:
+     * - layer that is used for drawing
+     * - drawControls
+     * - registers for listening to requests
+     * @param sandbox reference to Oskari sandbox
+     * @method
+     */
+    init: function (sandbox) {
+        var me = this;
+        this.requestHandlers = {
+            startDrawFilteringHandler: Oskari.clazz.create('Oskari.mapframework.ui.module.common.GeometryEditor.DrawFilterPlugin.request.StartDrawFilteringRequestPluginHandler', sandbox, me),
+            stopDrawFilteringHandler: Oskari.clazz.create('Oskari.mapframework.ui.module.common.GeometryEditor.DrawFilterPlugin.request.StopDrawFilteringRequestPluginHandler', sandbox, me)
+        };
+
+        OpenLayers.Util.applyDefaults(this.sourceStyle.point, OpenLayers.Feature.Vector.style['default']);
+        this.sourceStyle["point"].strokeColor = "#0000ff";
+        this.sourceStyle["point"].strokeWidth = 2;
+
+        OpenLayers.Util.applyDefaults(this.sourceStyle.edit, OpenLayers.Feature.Vector.style['default']);
+
+        OpenLayers.Util.applyDefaults(this.targetStyle.point, OpenLayers.Feature.Vector.style['default']);
+        this.targetStyle["point"].strokeColor = "#ff0000";
+        this.targetStyle["point"].strokeWidth = 3;
+
+        OpenLayers.Util.applyDefaults(this.targetStyle.edit, OpenLayers.Feature.Vector.style['default']);
+        this.targetStyle["edit"].fillColor = "#000000";
+        this.targetStyle["edit"].fillOpacity = 0.2;
+
+        OpenLayers.Util.applyDefaults(this.selectionStyle.edit, OpenLayers.Feature.Vector.style['default']);
+        this.selectionStyle.fillColor = "#ffff00";
+        this.selectionStyle.fillOpacity = 0.4;
+
+        this.targetListeners["edit"] = function(layer) {
+            // send an event that the drawing has been completed
+//debugger;
+            me.finishedDrawing();
+        };
+
+        this.sourceLayer = new OpenLayers.Layer.Vector(this.prefix + "sourceLayer");
+        this.targetLayer = new OpenLayers.Layer.Vector(this.prefix + "targetLayer");
+
+        this.drawControls = {
+            line: new OpenLayers.Control.DrawFeature(me.targetLayer, OpenLayers.Handler.Path),
+            edit: new OpenLayers.Control.DrawFeature(me.targetLayer, OpenLayers.Handler.Polygon)
+        };
+
+        this.modifyControls = {
+            select: new OpenLayers.Control.SelectFeature([me.targetLayer]),
+            modify: new OpenLayers.Control.ModifyFeature(me.sourceLayer, {
+                clickout: false,
+                toggle: false
+            })
+        };
+
+        this._map.addLayers([me.sourceLayer,me.targetLayer]);
+
+        for (var key in this.drawControls) {
+            if (this.drawControls.hasOwnProperty(key)) {
+                this._map.addControl(this.drawControls[key]);
+            }
+        }
+
+        for (key in this.modifyControls) {
+            if (this.modifyControls.hasOwnProperty(key)) {
+                this._map.addControl(this.modifyControls[key]);
+            }
+        }
+
+        // Marker layer
+        this.markerLayer = new OpenLayers.Layer.Markers(this.prefix + "MarkerLayer", {});
+        var index = Math.max(this._map.Z_INDEX_BASE.Feature, this.markerLayer.getZIndex()) + 1;
+        this.markerLayer.setZIndex(index);
+        this._map.addLayers([me.markerLayer]);
+    },
 
     getName: function () {
         return this.prefix + this.pluginName;
@@ -60,98 +159,146 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * @method
      */
     startDrawFiltering: function (params) {
-        var me = this;
         this.sourceLayer.destroyFeatures();
-        this.selectionLayer.destroyFeatures();
+        this.sourceLayer.style = this.sourceStyle[params.drawMode];
+        this.sourceLayer.eventListeners = this.sourceListeners[params.drawMode];
+        this.targetLayer.destroyFeatures();
+        this.targetLayer.style = this.targetStyle[params.drawMode];
+if (params.drawMode === 'edit') {
+    this.targetLayer.events.register("featuresadded", this, this.targetListeners[params.drawMode]);
+}
         this.markerLayer.clearMarkers();
+/*
+        // Set a high enough z-index value for the target layer
+        var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.targetLayer.getZIndex())+1;
+        this.targetLayer.setZIndex(zIndex);
+        this.targetLayer.redraw();
+
+                // Marker layer
+        this.markerLayer = new OpenLayers.Layer.Markers(this.prefix + "MarkerLayer", {});
+        var index = Math.max(this._map.Z_INDEX_BASE.Feature, this.markerLayer.getZIndex()) + 1;
+        this.markerLayer.setZIndex(index);
+*/
+
+
+
+        switch (params.drawMode) {
+            case "point":
+                this._pointSplit(params);
+                break;
+            case "line":
+                this._lineSplit(params);
+                break;
+            case "edit":
+                this._editSplit(params);
+                break;
+            case "remove":
+                // Nothing to do
+                break;
+            default:
+        }
+    },
+
+    _pointSplit: function(params) {
+        var me = this;
+        var i, x, y;
+        this.toggleControl();
         this.startIndex = null;
         this.endIndex = null;
+        var line = params.sourceGeometry;
+        this.sourceLayer.addFeatures([line]);
+        var linePoints = line.geometry.components;
 
-        if (params.drawMode === "point") {
-            var line = params.sourceGeometry;
-            this.sourceLayer.addFeatures([line]);
-            var linePoints = line.geometry.components;
+        var extent = this._map.getExtent();
+        var width = extent.right-extent.left;
+        var height = extent.top-extent.bottom;
+        var optimalExtent = new OpenLayers.Bounds(
+            extent.left+0.1*width,
+            extent.bottom+0.1*height,
+            extent.right-0.1*width,
+            extent.top-0.1*height
+        );
 
-            var extent = this._map.getExtent();
-            var width = extent.right-extent.left;
-            var height = extent.top-extent.bottom;
-            var optimalExtent = new OpenLayers.Bounds(
-                extent.left+0.1*width,
-                extent.bottom+0.1*height,
-                extent.right-0.1*width,
-                extent.top-0.1*height
-            );
-
-            // Search visible location for the first marker
-            var lonlat = null;
-            var index = null;
-            for (var i=0; i<linePoints.length; i++) {
-                var x = linePoints[i].x;
-                var y = linePoints[i].y;
-                if (optimalExtent.contains(x,y)) {
+        // Search visible location for the first marker
+        var lonlat = null;
+        var index = null;
+        for (i=0; i<linePoints.length; i++) {
+            x = linePoints[i].x;
+            y = linePoints[i].y;
+            if (optimalExtent.contains(x,y)) {
+                lonlat = new OpenLayers.LonLat(x,y);
+                index = i;
+                break;
+            }
+        }
+        if (lonlat === null) {
+            lonlat = new OpenLayers.LonLat(linePoints[0].x,linePoints[0].y);
+            for (i=0; i<linePoints.length; i++) {
+                x = linePoints[i].x;
+                y = linePoints[i].y;
+                if (extent.contains(x,y)) {
                     lonlat = new OpenLayers.LonLat(x,y);
                     index = i;
                     break;
                 }
             }
-            if (lonlat === null) {
-                lonlat = new OpenLayers.LonLat(linePoints[0].x,linePoints[0].y);
-                for (var i=0; i<linePoints.length; i++) {
-                    var x = linePoints[i].x;
-                    var y = linePoints[i].y;
-                    if (extent.contains(x,y)) {
-                        lonlat = new OpenLayers.LonLat(x,y);
-                        index = i;
-                        break;
-                    }
-                }
-            }
-            var marker1 = new OpenLayers.Marker(lonlat,this.markerIcon.clone());
-            marker1.index = index;
-            marker1.events.register("mousedown", me, me._selectActiveMarker);
-            marker1.markerMouseOffset = new OpenLayers.LonLat(0, 0);
+        }
+        var marker1 = new OpenLayers.Marker(lonlat,this.markerIcon.clone());
+        marker1.index = index;
+        marker1.events.register("mousedown", me, me._selectActiveMarker);
+        marker1.markerMouseOffset = new OpenLayers.LonLat(0, 0);
 
-            // Search visible location for the second marker
-            lonlat = null;
-            for (var i=linePoints.length-1; i>=0; i--) {
-                var x = linePoints[i].x;
-                var y = linePoints[i].y;
-                if (optimalExtent.contains(x,y)) {
+        // Search visible location for the second marker
+        lonlat = null;
+        for (i=linePoints.length-1; i>=0; i--) {
+            x = linePoints[i].x;
+            y = linePoints[i].y;
+            if (optimalExtent.contains(x,y)) {
+                lonlat = new OpenLayers.LonLat(x,y);
+                index = i-1;
+                break;
+            }
+        }
+        if (lonlat === null) {
+            lonlat = new OpenLayers.LonLat(linePoints[0].x,linePoints[0].y);
+            for (i=linePoints-1; i>=0; i--) {
+                x = linePoints[i].x;
+                y = linePoints[i].y;
+                if (extent.contains(x,y)) {
                     lonlat = new OpenLayers.LonLat(x,y);
                     index = i-1;
                     break;
                 }
             }
-            if (lonlat === null) {
-                lonlat = new OpenLayers.LonLat(linePoints[0].x,linePoints[0].y);
-                for (var i=linePoints-1; i>=0; i--) {
-                    var x = linePoints[i].x;
-                    var y = linePoints[i].y;
-                    if (extent.contains(x,y)) {
-                        lonlat = new OpenLayers.LonLat(x,y);
-                        index = i-1;
-                        break;
-                    }
-                }
-            }
-            var marker2 = new OpenLayers.Marker(lonlat,this.markerIcon.clone());
-            marker2.index = index;
-            marker2.events.register("mousedown", me, this._selectActiveMarker);
-            marker2.markerMouseOffset = new OpenLayers.LonLat(0, 0);
-
-            this.markers.push(marker1);
-            this.markers.push(marker2);
-
-            this.markerLayer.addMarker(this.markers[0]);
-            this.markerLayer.addMarker(this.markers[1]);
-
-            // Set a high enough z-index value
-            var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.markerLayer.getZIndex())+1;
-            this.markerLayer.setZIndex(zIndex);
-
-            // Update output layer
-            this.updateSelectionLayer();
         }
+        var marker2 = new OpenLayers.Marker(lonlat,this.markerIcon.clone());
+        marker2.index = index;
+        marker2.events.register("mousedown", me, this._selectActiveMarker);
+        marker2.markerMouseOffset = new OpenLayers.LonLat(0, 0);
+
+        this.markers.push(marker1);
+        this.markers.push(marker2);
+
+        this.markerLayer.addMarker(this.markers[0]);
+        this.markerLayer.addMarker(this.markers[1]);
+
+        // Set a high enough z-index value
+        var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.markerLayer.getZIndex())+1;
+        this.markerLayer.setZIndex(zIndex);
+
+        // Update output layer
+        this.updateTargetLayer();
+    },
+
+    _lineSplit: function(params) {
+
+    },
+
+    _editSplit: function(params) {
+        var me = this;
+        var multiPolygon = params.sourceGeometry;
+        this.sourceLayer.addFeatures([multiPolygon]);
+        this.toggleControl(params.drawMode);
     },
 
     _selectActiveMarker: function (evt) {
@@ -186,7 +333,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.activeMarker.lonlat = projection.lonlat;
         this.activeMarker.index = projection.index;
         this.markerLayer.redraw();
-        this.updateSelectionLayer();
+        this.updateTargetLayer();
     },
 
     pointProjection: function (q, p0, p1) {
@@ -351,9 +498,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             this.sourceLayer.destroyFeatures();
             this.sourceLayer.redraw();
         }
-        if (this.selectionLayer) {
-            this.selectionLayer.destroyFeatures();
-            this.selectionLayer.redraw();
+        if (this.targetLayer) {
+            this.targetLayer.destroyFeatures();
+            this.targetLayer.redraw();
         }
         if (this.markerLayer) {
             this.markerLayer.clearMarkers();
@@ -361,7 +508,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
 
-    finishDrawFilter: function () {
+    finishDrawFiltering: function () {
         var evtBuilder = this._sandbox.getEventBuilder('DrawFilterPlugin.FinishedDrawFilteringEvent');
         var event = evtBuilder(this.getSelection(), this.editMode, this.creatorId);
         this._sandbox.notifyAll(event);
@@ -374,7 +521,62 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * sends a '[this.prefix] + FinishedDrawingEvent' with the drawn the geometry.
      * @method
      */
-    finishedDrawing: function (isForced) {
+    finishedDrawing: function() {
+        this.toggleControl();
+        // No manual feature additions anymore
+        this.targetLayer.events.remove("featuresadded");
+
+        var inPolygon = this.targetLayer.features[0].clone();
+        var outMultiPolygon = this.sourceLayer.features[0].clone();
+        var polyComponents = outMultiPolygon.geometry.components;
+
+        this.targetLayer.destroyFeatures();
+        for (var i = 0; i < polyComponents.length; i++) {
+            var outPolygon = polyComponents[i];
+            var inside = true;
+            // Is inside?
+            for (var j = 0; j < inPolygon.geometry.components[0].components.length; j++) {
+                if (!outPolygon.containsPoint(inPolygon.geometry.components[0].components[j])) {
+                    inside = false;
+                    break;
+                }
+            }
+            if (!inside) {
+                continue;
+            }
+
+            // Validity check
+            if ((outPolygon.components[0].intersects(inPolygon.geometry.components[0])) || (this.checkSelfIntersection(inPolygon.geometry.components[0]))) {
+                this.targetLayer.destroyFeatures(inPolygon);
+                continue;
+            }
+
+            outPolygon.addComponent(inPolygon.geometry.components[0]);
+            this.sourceLayer.destroyFeatures();
+            this.targetLayer.addFeatures([inPolygon]);
+            for (j = 0; j < polyComponents.length; j++) {
+                var newFeature = new OpenLayers.Feature.Vector(polyComponents[j]);
+                this.targetLayer.addFeatures([newFeature]);
+            }
+            this.modifyControls.modify.activate();
+
+            var editPoints = inPolygon.geometry.components[0].components;
+            var editFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString([new OpenLayers.Geometry.LineString(editPoints)]));
+            editFeature.numPoints = editPoints.length;
+//debugger;
+//            this.sourceLayer.addFeatures([editFeature]);
+            // Set a high enough z-index value
+//            var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.sourceLayer.getZIndex())+1;
+//            this.sourceLayer.setZIndex(zIndex);
+//            this.sourceLayer.redraw();
+//            this.modifyControls.modify.activate();
+            break;
+        }
+        this.targetLayer.features[0].style = this.selectionStyle;
+        this.selectedFeatureIndex = 0;
+        this.targetLayer.redraw();
+
+
 
 return;
 /*
@@ -425,6 +627,62 @@ return;
         }
 */
     },
+
+    /*
+     * @method checkSelfIntersection
+     *
+     * @param {}
+     */
+    checkSelfIntersection: function (polygon) {
+        var outer = polygon.components;
+        var segments = [];
+        for (var i = 1; i < outer.length; i++) {
+            var segment = new OpenLayers.Geometry.LineString([outer[i - 1].clone(), outer[i].clone()]);
+            segments.push(segment);
+        }
+        for (var j = 0; j < segments.length; j++) {
+            if (this.segmentIntersects(segments[j], segments)) {
+                return true;
+            }
+        }
+        return false;
+    },
+
+    /*
+     * @method segmentIntersects
+     *
+     * @param {}
+     * @param {}
+     */
+    segmentIntersects: function (segment, segments) {
+        for (var i = 0; i < segments.length; i++) {
+            if (!segments[i].equals(segment)) {
+                if ((segments[i].intersects(segment) && !this.startOrStopEquals(segments[i], segment))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    },
+
+    /*
+     * @method startOrStopEquals
+     *
+     * @param {}
+     */
+    startOrStopEquals: function (segment1, segment2) {
+        if (segment1.components[0].equals(segment2.components[0])) {
+            return true;
+        }
+        if (segment1.components[0].equals(segment2.components[1])) {
+            return true;
+        }
+        if (segment1.components[1].equals(segment2.components[0])) {
+            return true;
+        }
+        return (segment1.components[1].equals(segment2.components[1]));
+    },
+
     /**
      * Enables the given draw control
      * Disables all the other draw controls
@@ -434,11 +692,9 @@ return;
      */
     toggleControl: function (drawMode) {
         this.currentDrawMode = drawMode;
-
-/*        var key, control, activeDrawing, event;
-        for (key in this.drawControls) {
+        for (var key in this.drawControls) {
             if (this.drawControls.hasOwnProperty(key)) {
-                control = this.drawControls[key];
+                var control = this.drawControls[key];
                 if (drawMode === key) {
                     control.activate();
                 } else {
@@ -446,92 +702,9 @@ return;
                 }
             }
         }
-*/
-    },
-    /**
-     * Initializes the plugin:
-     * - layer that is used for drawing
-     * - drawControls
-     * - registers for listening to requests
-     * @param sandbox reference to Oskari sandbox
-     * @method
-     */
-    init: function (sandbox) {
-        var me = this;
-        this.requestHandlers = {
-            startDrawFilteringHandler: Oskari.clazz.create('Oskari.mapframework.ui.module.common.GeometryEditor.DrawFilterPlugin.request.StartDrawFilteringRequestPluginHandler', sandbox, me),
-            stopDrawFilteringHandler: Oskari.clazz.create('Oskari.mapframework.ui.module.common.GeometryEditor.DrawFilterPlugin.request.StopDrawFilteringRequestPluginHandler', sandbox, me)
-        };
-
-        this.sourceLayer = new OpenLayers.Layer.Vector(this.prefix + "sourceLayer", {
-            style: {
-             strokeColor: "#0000ff",
-             strokeWidth: 2,
-             fillOpacity: 0,
-             cursor: "pointer"
-             },
-            eventListeners: {
-/*                "featuresadded": function (layer) {
-                    // send an event that the drawing has been completed
-                    me.finishedDrawing();
-                },
-                'vertexmodified': function (event) {
-                    me._sendActiveGeometry(me.getDrawing());
-                } */
-            }
-        });
-
-        this.selectionLayer = new OpenLayers.Layer.Vector(this.prefix + "selectionLayer", {
-            style: {
-             strokeColor: "#ff0000",
-             strokeWidth: 4,
-             fillOpacity: 0,
-             cursor: "pointer"
-             },
-            eventListeners: {
-            }
-        });
-
-        this.drawControls = {
-        };
-
-        this.modifyControls = {
-/*            modify: new OpenLayers.Control.ModifyFeature(me.sourceLayer, {
-                standalone: true
-            })
-*/      };
-/*        this.modifyControls.select = new OpenLayers.Control.SelectFeature(me.sourceLayer, {
-            onBeforeSelect: this.modifyControls.modify.beforeSelectFeature,
-            onSelect: this.modifyControls.modify.selectFeature,
-            onUnselect: this.modifyControls.modify.unselectFeature,
-            scope: this.modifyControls.modify
-        });
-*/
-        this._map.addLayers([me.sourceLayer,me.selectionLayer]);
-
-/*        var key;
-        for (key in this.drawControls) {
-            if (this.drawControls.hasOwnProperty(key)) {
-                this._map.addControl(this.drawControls[key]);
-            }
-        }
-        for (key in this.modifyControls) {
-            if (this.modifyControls.hasOwnProperty(key)) {
-                this._map.addControl(this.modifyControls[key]);
-            }
-        }
-        // no harm in activating straight away
-        this.modifyControls.modify.activate();
-*/
-
-        // Marker layer
-        this.markerLayer = new OpenLayers.Layer.Markers(this.prefix + "MarkerLayer", {});
-        var index = Math.max(this._map.Z_INDEX_BASE.Feature, this.markerLayer.getZIndex()) + 1;
-        this.markerLayer.setZIndex(index);
-        this._map.addLayers([me.markerLayer]);
     },
 
-    updateSelectionLayer: function() {
+    updateTargetLayer: function() {
         var markerData = [];
         var markerDataUnordered = [{
             x: this.markers[0].lonlat.lon,
@@ -551,12 +724,12 @@ return;
         }
         // Only end point has moved
         if ((this.startIndex === markerData[0].index)&&(this.endIndex === markerData[1].index)) {
-            this.selectionLayer.features[0].geometry.components[0].x = markerData[0].x;
-            this.selectionLayer.features[0].geometry.components[0].y = markerData[0].y;
-            var lastIndex = this.selectionLayer.features[0].geometry.components.length-1;
-            this.selectionLayer.features[0].geometry.components[lastIndex].x = markerData[1].x;
-            this.selectionLayer.features[0].geometry.components[lastIndex].y = markerData[1].y;
-            this.selectionLayer.redraw();
+            this.targetLayer.features[0].geometry.components[0].x = markerData[0].x;
+            this.targetLayer.features[0].geometry.components[0].y = markerData[0].y;
+            var lastIndex = this.targetLayer.features[0].geometry.components.length-1;
+            this.targetLayer.features[0].geometry.components[lastIndex].x = markerData[1].x;
+            this.targetLayer.features[0].geometry.components[lastIndex].y = markerData[1].y;
+            this.targetLayer.redraw();
             return;
         }
         this.startIndex = markerData[0].index;
@@ -564,18 +737,22 @@ return;
         // Create a new selected feature
         var points = [];
         points.push(new OpenLayers.Geometry.Point(markerData[0].x,markerData[0].y));
-        for (var i=markerData[0].index+1; i<=markerData[1].index; i++) {
+        for (var i = markerData[0].index+1; i<=markerData[1].index; i++) {
             points.push(this.sourceLayer.features[0].geometry.components[i].clone());
         }
         points.push(new OpenLayers.Geometry.Point(markerData[1].x,markerData[1].y));
-        var newSelection = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(points));
-        this.selectionLayer.destroyFeatures();
-        this.selectionLayer.addFeatures([newSelection]);
-        this.selectionLayer.redraw();
+        var newTarget = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(points));
+        this.targetLayer.destroyFeatures();
+        this.targetLayer.addFeatures([newTarget]);
+        this.targetLayer.redraw();
     },
 
     getSelection: function () {
-        return this.selectionLayer.features[0].geometry.clone();
+        if (this.targetLayer.features.length > this.selectedFeatureIndex) {
+            return this.targetLayer.features[this.selectedFeatureIndex].geometry.clone();
+        } else {
+            return null;
+        }
     },
 
     /**
@@ -586,7 +763,7 @@ return;
      * @param  {OpenLayers.Geometry} geometry
      * @return {OpenLayers.Geometry}
      */
-    getActiveDrawing: function (geometry) {
+/*    getActiveDrawing: function (geometry) {
         var prevGeom = this.getDrawing(),
             composedGeom;
 
@@ -597,7 +774,7 @@ return;
         }
         return geometry;
     },
-
+*/
     /**
      * Returns active draw control names
      * @method
@@ -669,10 +846,6 @@ return;
             this._map.removeLayer(this.markerLayer);
             this.markerLayer = undefined;
       }
-
-        if (this._map.geometryEditor) {
-            delete this._map.geometryEditor;
-        }
 
         sandbox.removeRequestHandler('DrawFilterPlugin.StartDrawFilteringRequest', this.requestHandlers.startDrawFilteringHandler);
         sandbox.removeRequestHandler('DrawFilterPlugin.StopDrawFilteringRequest', this.requestHandlers.stopDrawFilteringHandler);
