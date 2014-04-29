@@ -309,6 +309,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
         setAnalyseMode: function (blnEnabled) {
             var me = this,
                 map = jQuery('#contentMap'),
+                mapmodule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 tools = jQuery('#maptools');
 
             if (blnEnabled) {
@@ -350,6 +351,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                     this.analyse.hide();
                 }
             }
+            mapmodule.updateSize();
         },
         displayContent: function (isOpen) {
             if (isOpen) {
