@@ -9,7 +9,8 @@ Oskari.registerLocalization({
         },
         "flyout": {
             "title": "Omien aineistojen tuonti",
-            "description": "Voit tuoda omia aineistoja shape-formaatissa zip-muodossa tai kmz tiedostoja.",
+            "description": "Voit tuoda omia aineistoja shape-formaatissa zip-muodossa tai kml/kmz tiedostoja.",
+            "help": "Anna tämän toiminnon lähtöaineistoksi (Browse...) zip tiedoston nimi tai url-linkki vastaavaan tiedostoon. \nZip-tiedoston saat lataamalla koneellesi shape-siirtoformaatissa olevan aineiston \nja muodostamalla näistä tiedostoista (.shp, . shx, .dbf, .prj) zip-tiedosto \ntai lataa koneellesi Googlen kml/kmz tiedostoja. \ntai käytä tiedoston url-linkkiä. ",
             "actions": {
                 "cancel": "Peruuta",
                 "next": "Seuraava"

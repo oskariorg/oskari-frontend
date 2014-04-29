@@ -2,9 +2,9 @@ div.notLoggedIn {
   padding: 10px; }
 
 
-/*#contentMap.mapanalyseMode {
- margin-left: 255px;
- }*/
+#contentMap.mapAnalyseMode {
+  margin-left: 384px; }
+
 #contentMap div.basic_analyse {
   background: white;
   position: absolute;
@@ -29,8 +29,7 @@ div.basic_analyse > div.header {
   background-color: #FDF8D9;
   padding: 5px 10px; }
   div.basic_analyse > div.header div.icon-close {
-    float: right;
-    cursor: pointer; }
+    float: right; }
 div.basic_analyse div.analyse-select-featurelist {
   display: inline;
   margin-left: 6px; }
@@ -58,6 +57,19 @@ div.basic_analyse div.previewNotes {
   margin-bottom: 2px; }
 div.basic_analyse div.tool {
   margin: 5px; }
+div.basic_analyse div.icon-close.analyse-temp-feature {
+  display: inline-block;
+  cursor: pointer; }
+div.basic_analyse div.toolContainer {
+  margin: 5px; }
+  div.basic_analyse div.toolContainer h4 {
+    padding: 0; }
+  div.basic_analyse div.toolContainer div.tool {
+    display: inline-block;
+    cursor: pointer; }
+  div.basic_analyse div.toolContainer div.buttons {
+    display: inline-block;
+    float: right; }
 
 div.basic_analyse div.form div.field input, div.field select {
   width: 80%;
@@ -142,42 +154,18 @@ div.analyse-filter-popup-content {
 
 div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px; }
-div.analyse-filter-popup-content div.filter-option div.manage-filter-option {
-  display: inline-block; }
-  div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.add-filter-option, div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.remove-filter-option {
-    display: inline-block;
-    font-size: 200%;
-    font-weight: bold;
-    cursor: pointer; }
-div.analyse-filter-popup-content div.filter-option input[name="attribute-value"] {
-  width: 120px; }
-div.analyse-filter-popup-content div.filter-option input[name="case-sensitive"] {
-  margin-right: 5px; }
-div.analyse-filter-popup-content div.filter-option select.attribute {
-  width: 150px; }
-div.analyse-filter-popup-content div.filter-option select.operator, div.analyse-filter-popup-content div.filter-option select.boolean {
-  width: 60px; }
-
-div.basic_analyse div.toolContainer div.tool {
-  display: inline-block;
-  cursor: pointer;
-}
-div.basic_analyse div.toolContainer div.tool.active {
-  background-color: #aaa;
-}
-
-div.basic_analyse div.icon-close.analyse-temp-feature {
-  display: inline-block;
-  cursor: pointer;
-}
-
-div.basic_analyse div.toolContainer {
-  margin: 5px;
-}
-div.basic_analyse div.toolContainer h4 {
-  padding: 0;
-}
-div.basic_analyse div.toolContainer div.buttons {
-  display: inline-block;
-  float: right;
-}
+  div.analyse-filter-popup-content div.filter-option div.manage-filter-option {
+    display: inline-block; }
+    div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.add-filter-option, div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.remove-filter-option {
+      display: inline-block;
+      font-size: 200%;
+      font-weight: bold;
+      cursor: pointer; }
+  div.analyse-filter-popup-content div.filter-option input[name="attribute-value"] {
+    width: 120px; }
+  div.analyse-filter-popup-content div.filter-option input[name="case-sensitive"] {
+    margin-right: 5px; }
+  div.analyse-filter-popup-content div.filter-option select.attribute {
+    width: 150px; }
+  div.analyse-filter-popup-content div.filter-option select.operator, div.analyse-filter-popup-content div.filter-option select.boolean {
+    width: 60px; }

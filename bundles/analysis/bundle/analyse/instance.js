@@ -312,6 +312,8 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                 tools = jQuery('#maptools');
 
             if (blnEnabled) {
+                map.addClass('mapAnalyseMode');
+                me.sandbox.mapMode = 'mapAnalyseMode';
                 // Hide flyout, it's not needed...
                 jQuery(me.plugins['Oskari.userinterface.Flyout'].container)
                     .parent().parent().hide();
@@ -336,6 +338,10 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                 this.analyse.setEnabled(true);
 
             } else {
+                map.removeClass('mapAnalyseMode');
+                if (me.sandbox._mapMode === 'mapAnalyseMode') {
+                    delete me.sandbox._mapMode;
+                }
                 if (this.analyse) {
                     // Reset tile state
                     var request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
@@ -396,10 +402,10 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                 var layer = this.mapLayerService.findMapLayer(layerId);
 
                 if (layer && layer.isLayerOfType('ANALYSIS')) {
-                     this.showMessage(
-                    loc.success.layerAdded.title,
-                    loc.success.layerAdded.message.replace(/\{layer\}/, layer.getName())
-                );
+                    this.showMessage(
+                        loc.success.layerAdded.title,
+                        loc.success.layerAdded.message.replace(/\{layer\}/, layer.getName())
+                    );
                 }
             }
             // maplayers changed so update the tab content in personaldata

@@ -245,13 +245,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
             return null;
         },
         /**
-         * @method update
-         * Implements BundleInstance protocol update method - does nothing atm
-         */
-        "update": function () {
-
-        },
-        /**
          * @method setParcelPrintMode
          * Starts parcel print mode with 1st form
          *

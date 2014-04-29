@@ -21,6 +21,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (!selections) {
                 this._notifyValidationError(this.loc.error.noParameters);
                 noErrors = false;
+                return noErrors;
             }
             if (!selections.layerId) {
                 this._notifyValidationError(this.loc.error.noLayer);

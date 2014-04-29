@@ -41,9 +41,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
             this.container = jQuery(el);
         },
         startPlugin: function () {
-            var me = this;
-            var locale = me.locale;
-            var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+            var me = this,
+                locale = me.locale,
+                accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
             me.accordion = accordion;
 
             accordion.insertTo(me.container);
@@ -86,7 +86,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                 data,
                 page,
                 panel;
-                
+
             for (p in this.pages) {
                 if (this.pages.hasOwnProperty(p)) {
                     pageInfo = this.pages[p];
