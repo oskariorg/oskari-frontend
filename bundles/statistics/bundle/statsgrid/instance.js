@@ -259,10 +259,19 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @return {String} statsgrid state
          */
         getStateParameters: function () {
-            // If the state is null or an empty object, nothing to do here!
-            if (!this.state || jQuery.isEmptyObject(this.state)) {
+            var me = this,
+                view = me.getView(),
+                state = me.state;
+
+            // If there's no view or it's not visible, nothing to do here!
+            if (!view || !view.isVisible) {
                 return null;
             }
+            // If the state is null or an empty object, nothing to do here!
+            if (!state || jQuery.isEmptyObject(state)) {
+                return null;
+            }
+            console.log("Creating state string...");
 
             var i = null,
                 ilen = null,
@@ -273,16 +282,25 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 stateValues = null,
                 indicatorValues = null,
                 colorsValues = null,
-                state = this.state,
                 colors = state.colors || {},
-                keys = ['layerId', 'currentColumn', 'methodId', 'numberOfClasses', 'classificationMode', 'manualBreaksInput', 'allowClassification'],
+                keys = [
+                    'layerId',
+                    'currentColumn',
+                    'methodId',
+                    'numberOfClasses',
+                    'classificationMode',
+                    'manualBreaksInput',
+                    'allowClassification'
+                ],
                 colorKeys = ['set', 'index', 'flipped'],
                 indicators = state.indicators || [],
                 value;
             // Note! keys needs to be handled in the backend as well.
             // Therefore the key order is important as well as actual values.
-            // 'classificationMode' can be an empty string but it must be the fifth value.
-            // 'manualBreaksInput' can be an empty string but it must be the sixth value.
+            // 'classificationMode' can be an empty string but it must be the
+            // fifth value.
+            // 'manualBreaksInput' can be an empty string but it must be the
+            // sixth value.
             for (i = 0, ilen = keys.length, ilast = ilen - 1; i < ilen; i++) {
                 value = state[keys[i]];
                 if (value !== null && value !== undefined) {
@@ -364,12 +382,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @param {Object} layer
          */
         _createPrintParams: function (layer) {
-            if (!layer) return;
+            if (!layer) {
+                return;
+            }
 
             var oLayers = this.mapModule.getOLMapLayers(layer.getId());
-            if (!oLayers) return;
-            var data = {};
-            var oLayer = _.first(oLayers),
+            if (!oLayers) {
+                return;
+            }
+            var data = {},
+                oLayer = _.first(oLayers),
                 tile = {
                     // The max extent of the layer
                     bbox: oLayer.maxExtent.toArray(),
@@ -409,17 +431,18 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
          * @param {Object} event
          */
         _afterStatsVisualizationChangeEvent: function (event) {
-            var params = event.getParams(),
+            var me = this,
+                params = event.getParams(),
                 layer = event.getLayer();
 
             // Saving state
-            this.state.methodId = params.methodId;
-            this.state.numberOfClasses = params.numberOfClasses;
-            this.state.manualBreaksInput = params.manualBreaksInput;
-            this.state.colors = params.colors;
-            this.state.classificationMode = params.classificationMode;
+            me.state.methodId = params.methodId;
+            me.state.numberOfClasses = params.numberOfClasses;
+            me.state.manualBreaksInput = params.manualBreaksInput;
+            me.state.colors = params.colors;
+            me.state.classificationMode = params.classificationMode;
             // Send data to printout bundle
-            this._createPrintParams(layer);
+            me._createPrintParams(layer);
         },
 
         /**
