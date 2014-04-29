@@ -408,6 +408,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                             dialog.show(showMore, content);
                             dialog.moveTo(link, 'bottom');
+                            if (me.dialog) me.dialog.close(true);
+                            me.dialog = dialog;
                         });
 
                     // helper function for visibleFields

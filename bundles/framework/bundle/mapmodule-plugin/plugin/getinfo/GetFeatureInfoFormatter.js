@@ -371,7 +371,9 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
 
         for (key in node) {
             var value = node[key];
-            if (!value || !key) {
+
+            if (value === null || value === undefined ||
+                key === null || key === undefined) {
                 continue;
             }
             var vType = (typeof value).toLowerCase(),
