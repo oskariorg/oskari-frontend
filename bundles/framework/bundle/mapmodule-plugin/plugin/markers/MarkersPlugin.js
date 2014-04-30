@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         this._svg = false;
         this._defaultIconUrl = "/Oskari/resources/framework/bundle/mapmodule-plugin/images/marker.png";
         this._prevIconUrl = "";
-        this._preSVGIconUrl ="data:image/svg+xml,";
+        this._preSVGIconUrl ="data:image/svg+xml;base64,";
         this._font = {
             name: 'dot-markers',
             baseIndex: 57344
@@ -337,7 +337,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                         var size = 100;
                         var color = "#"+data.color;
                         paper.print(0,55,String.fromCharCode(charIndex),font,size).attr({"stroke-width": 1, fill: color, "stroke": "#b4b4b4"});
-                        iconSrc = this._preSVGIconUrl+paper.toSVG();
+                        // Base64 encoding for cross-browser compatibility
+                        iconSrc = this._preSVGIconUrl+jQuery.base64.encode(paper.toSVG());
                     }
                 }
             } else {
