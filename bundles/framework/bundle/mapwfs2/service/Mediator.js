@@ -61,6 +61,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator',
                 '/wfs/feature': function () {
                     self.getWFSFeature.apply(self, arguments);
                 },
+                '/wfs/featureGeometries': function () {
+                    self.getWFSFeatureGeometries.apply(self, arguments);
+                },
                 '/wfs/mapClick': function () {
                     self.getWFSMapClick.apply(self, arguments);
                 },
@@ -238,6 +241,29 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(data.data);
         sandbox.notifyAll(infoEvent);
     },
+    /**
+     * @method getWFSFeatureGeometries
+     * @param {Object} data
+     *
+     * get highlighted fea geometries
+     * Creates WFSFeatureGeometriesSelectedEvent
+     */
+    getWFSFeatureGeometries: function (data) {
+        var sandbox = this.plugin.getSandbox();
+        var layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId);
+        var keepPrevious = data.data.keepPrevious;
+
+
+        if (keepPrevious) {
+            if (data.data.geometries) layer.addClickedGeometries(data.data.geometries);
+        } else {
+            if (data.data.geometries) layer.setClickedGeometries(data.data.geometries);
+        }
+
+       // var event = sandbox.getEventBuilder("WFSFeatureGeometriesSelectedEvent")(layer, keepPrevious);
+       // sandbox.notifyAll(event);
+
+    },
 
     /**
      * @method getWFSFilter
@@ -355,15 +381,17 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
      * @param {Number} id
      * @param {String[]} featureIds
      * @param {Boolean} keepPrevious
+     * @param {Boolean} geomRequest  response geometries, if true
      *
      * sends message to /service/wfs/highlightFeatures
      */
-    highlightMapLayerFeatures: function (id, featureIds, keepPrevious) {
+    highlightMapLayerFeatures: function (id, featureIds, keepPrevious, geomRequest) {
         if (this.connection.isConnected()) {
             this.cometd.publish('/service/wfs/highlightFeatures', {
                 "layerId": id,
                 "featureIds": featureIds,
-                "keepPrevious": keepPrevious
+                "keepPrevious": keepPrevious,
+                "geomRequest": geomRequest
             });
         }
     },
@@ -464,13 +492,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
      *
      * sends message to /service/wfs/setMapClick
      */
-    setMapClick: function (lonlat, keepPrevious) {
+    setMapClick: function (lonlat, keepPrevious, geomRequest) {
         if (this.connection.isConnected()) {
             this.lonlat = lonlat;
             this.cometd.publish('/service/wfs/setMapClick', {
                 "longitude": lonlat.lon,
                 "latitude": lonlat.lat,
-                "keepPrevious": keepPrevious
+                "keepPrevious": keepPrevious,
+                "geomRequest": geomRequest
             });
         }
     },
@@ -507,4 +536,5 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
             });
         }
     }
+
 });
