@@ -25,11 +25,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     // Source layer listeners
     this.sourceListeners = {
         point: {},
+        line: {},
         edit: {}
     };
     // Target layer listeners
     this.targetListeners = {
         point: {},
+        line: {},
         edit: {}
     };
     // Source layer style
@@ -40,6 +42,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 strokeColor: "#0000ff",
                 strokeWidth: 2
             }),
+            "select": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["select"]),
+            "temporary": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["temporary"]),
+            "delete": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["delete"])
+        }),
+        line: new OpenLayers.StyleMap({
+            "default": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["default"]),
             "select": new OpenLayers.Style(
                 OpenLayers.Feature.Vector.style["select"]),
             "temporary": new OpenLayers.Style(
@@ -65,6 +77,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 strokeColor: "#ff0000",
                 strokeWidth: 3
             }),
+            "select": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["select"]),
+            "temporary": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["temporary"]),
+            "delete": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["delete"])
+        }),
+        line: new OpenLayers.StyleMap({
+            "default": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["default"]),
             "select": new OpenLayers.Style(
                 OpenLayers.Feature.Vector.style["select"]),
             "temporary": new OpenLayers.Style(
@@ -177,9 +199,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             }
         });
 
+        this.targetListeners["line"] = function(layer) {
+            // send an event that the line drawing has been completed
+            me.finishedLineDrawing();
+        };
+
         this.targetListeners["edit"] = function(layer) {
-            // send an event that the drawing has been completed
-            me.finishedDrawing();
+            // send an event that the polygon drawing has been completed
+            me.finishedEditDrawing();
         };
 
         this.sourceLayer = new OpenLayers.Layer.Vector(this.prefix + "sourceLayer");
@@ -197,8 +224,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             selectFeature: new OpenLayers.Control.SelectFeature(me.targetLayer, {
                 clickout: false, toggle: false,
                 multiple: false, hover: false,
-                // toggleKey: "ctrlKey", // ctrl key removes from selection
-                // multipleKey: "shiftKey", // shift key adds to selection
                 box: false
             }),
             modifyFeature: new OpenLayers.Control.OskariModifyFeature(me.targetLayer, {
@@ -217,8 +242,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
         // Marker layer
         this.markerLayer = new OpenLayers.Layer.Markers(this.prefix + "MarkerLayer", {});
-//        var index = Math.max(this._map.Z_INDEX_BASE.Feature, this.markerLayer.getZIndex()) + 1;
-//        this.markerLayer.setZIndex(index);
         this._map.addLayers([me.markerLayer]);
 
         this._updateLayerOrder();
@@ -364,7 +387,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     },
 
     _lineSplit: function(params) {
-
+        var me = this;
+        var multiPolygon = params.sourceGeometry;
+        this.targetLayer.events.register("featuresadded", this, this.targetListeners[params.drawMode]);
+        this.sourceLayer.addFeatures([multiPolygon]);
+        this.toggleControl(params.drawMode);
     },
 
     _editSplit: function(params) {
@@ -586,16 +613,23 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         var evtBuilder = this._sandbox.getEventBuilder('DrawFilterPlugin.FinishedDrawFilteringEvent');
         var event = evtBuilder(this.getSelection(), this.editMode, this.creatorId);
         this._sandbox.notifyAll(event);
-        //this.stopDrawFiltering();
     },
 
     /**
-     * Called when drawing is finished.
-     * Disables all draw controls and
-     * sends a '[this.prefix] + FinishedDrawingEvent' with the drawn the geometry.
+     * Called when line drawing is finished.
+     * Disables all draw controls
      * @method
      */
-    finishedDrawing: function() {
+    finishedLineDrawing: function() {
+        this.toggleControl();
+    },
+
+    /**
+     * Called when polygon drawing is finished.
+     * Disables all draw controls
+     * @method
+     */
+    finishedEditDrawing: function() {
         this.toggleControl();
         // No manual feature additions anymore
         this.targetLayer.events.remove("featuresadded");
@@ -638,55 +672,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.drawControls.modifyFeature.activate();
         this.drawControls.modifyFeature.selectFeature(this.targetLayer.features[0]);
         this.targetLayer.redraw();
-
-return;
-/*
-        if (!this.multipart || isForced) {
-            // not a multipart, stop editing
-            var activeControls = this._getActiveDrawControls(),
-                i,
-                components;
-            for (i = 0; i < activeControls.length; i++) {
-                // only lines and polygons have the finishGeometry function
-                if (typeof this.drawControls[activeControls[i]].handler.finishGeometry === typeof Function) {
-                    // No need to finish geometry if already finished
-                    switch (activeControls[i]) {
-                        case "line":
-                            if (this.drawControls.line.handler.line.geometry.components.length < 2) {
-                                continue;
-                            }
-                            break;
-                        case "area":
-                            components = this.drawControls.area.handler.polygon.geometry.components;
-                            if (components[components.length - 1].components.length < 3) {
-                                continue;
-                            }
-                            break;
-                    }
-                    this.drawControls[activeControls[i]].handler.finishGeometry();
-                }
-            }
-            this.toggleControl();
-        }
-
-        if (!this.editMode) {
-            // programmatically select the drawn feature ("not really supported by openlayers")
-            // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
-            var lastIndex = this.sourceLayer.features.length - 1;
-            this.modifyControls.select.select(this.sourceLayer.features[lastIndex]);
-        }
-
-        var evtBuilder, event;
-        if (!this.multipart || isForced) {
-            evtBuilder = this._sandbox.getEventBuilder('DrawFilterPlugin.FinishedDrawingEvent');
-            event = evtBuilder(this.getDrawing(), this.editMode, this.creatorId);
-            this._sandbox.notifyAll(event);
-        } else {
-            evtBuilder = this._sandbox.getEventBuilder('DrawFilterPlugin.AddedFeatureEvent');
-            event = evtBuilder(this.getDrawing(), this.currentDrawMode, this.creatorId);
-            this._sandbox.notifyAll(event);
-        }
-*/
     },
 
     /*
@@ -830,26 +815,6 @@ return;
     },
 
     /**
-     * Clones the drawing on the map and adds the geometry
-     * currently being drawn to it.
-     *
-     * @method getActiveDrawing
-     * @param  {OpenLayers.Geometry} geometry
-     * @return {OpenLayers.Geometry}
-     */
-/*    getActiveDrawing: function (geometry) {
-        var prevGeom = this.getDrawing(),
-            composedGeom;
-
-        if (prevGeom !== null && prevGeom !== undefined) {
-            composedGeom = prevGeom.clone();
-            composedGeom.addComponent(geometry);
-            return composedGeom;
-        }
-        return geometry;
-    },
-*/
-    /**
      * Returns active draw control names
      * @method
      */
@@ -866,35 +831,6 @@ return;
         return activeDrawControls;
     },
 
-    _sendActiveGeometry: function (geometry, drawMode) {
-/*
-        var eventBuilder = this._sandbox.getEventBuilder('DrawFilterPlugin.ActiveDrawingEvent'),
-            event,
-            featClass;
-
-        if (drawMode === null || drawMode === undefined) {
-            featClass = geometry.CLASS_NAME;
-            switch (featClass) {
-                case "OpenLayers.Geometry.LineString":
-                case "OpenLayers.Geometry.MultiLineString":
-                    drawMode = 'line';
-                    break;
-                case "OpenLayers.Geometry.Polygon":
-                case "OpenLayers.Geometry.MultiPolygon":
-                    drawMode = 'area';
-                    break;
-                default:
-                    return;
-            }
-        }
-
-        if (eventBuilder) {
-            event = eventBuilder(geometry, drawMode, this.creatorId);
-            this._sandbox.notifyAll(event);
-        }
-*/
-    },
-
     register: function () {
 
     },
@@ -907,7 +843,7 @@ return;
 
     },
     stopPlugin: function (sandbox) {
-//        this.toggleControl();
+        this.toggleControl();
 
         if (this.sourceLayer) {
             this.sourceLayer.destroyFeatures();
@@ -915,11 +851,17 @@ return;
             this.sourceLayer = undefined;
         }
 
-      if (this.markerLayer) {
+        if (this.targetLayer) {
+            this.targetLayer.destroyFeatures();
+            this._map.removeLayer(this.targetLayer);
+            this.targetLayer = undefined;
+        }
+
+        if (this.markerLayer) {
             this.markerLayer.clearMarkers();
             this._map.removeLayer(this.markerLayer);
             this.markerLayer = undefined;
-      }
+        }
 
         sandbox.removeRequestHandler('DrawFilterPlugin.StartDrawFilteringRequest', this.requestHandlers.startDrawFilteringHandler);
         sandbox.removeRequestHandler('DrawFilterPlugin.StopDrawFilteringRequest', this.requestHandlers.stopDrawFilteringHandler);
@@ -927,16 +869,21 @@ return;
 
         this._sandbox = null;
     },
+
     /* @method start
      * called from sandbox
      */
-    start: function (sandbox) {},
+    start: function (sandbox) {
+    },
+
     /**
      * @method stop
      * called from sandbox
      *
      */
-    stop: function (sandbox) {}
+    stop: function (sandbox) {
+    }
+
 }, {
     'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.GeometryEditor.Plugin"]
 });
