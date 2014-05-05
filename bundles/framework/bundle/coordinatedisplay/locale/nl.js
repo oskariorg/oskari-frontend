@@ -1,5 +1,5 @@
 Oskari.registerLocalization({
-    "lang": "en",
+    "lang": "nl",
     "key": "coordinatedisplay",
     "value": {
         "title": "",

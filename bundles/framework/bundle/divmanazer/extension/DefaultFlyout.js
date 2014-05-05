@@ -99,8 +99,39 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
          * @method getLocalization
          * @return JSON localisation subset 'flyout'
          */
+        /**
+         * @method getLocalization
+         * @return JSON localisation subset 'flyout'
+         */
         getLocalization: function () {
-            return this.locale;
+            return this.locale ? this.locale : (this.instance ? this.instance.getLocalization().flyout : undefined);
+        },
+
+        getSandbox: function () {
+            return this.instance.getSandbox();
+        },
+
+        getExtension: function () {
+            return this.instance;
+        },
+
+        /* o2 helpers for notifications and requetss */
+        slicer: Array.prototype.slice,
+
+        issue: function () {
+            var requestName = arguments[0],
+            	args = this.slicer.apply(arguments, [1]),
+            	builder = this.getSandbox().getRequestBuilder(requestName),
+            	request = builder.apply(builder, args);
+            return this.getSandbox().request(this.getExtension(), request);
+        },
+
+        notify: function () {
+            var eventName = arguments[0],
+            	args = this.slicer.apply(arguments, [1]),
+            	builder = this.getSandbox().getEventBuilder(eventName),
+            	evt = builder.apply(builder, args);
+            return this.getSandbox().notifyAll(evt);
         }
 
 
