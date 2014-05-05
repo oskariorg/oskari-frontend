@@ -260,8 +260,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             if (data.data.geometries) layer.setClickedGeometries(data.data.geometries);
         }
 
-       // var event = sandbox.getEventBuilder("WFSFeatureGeometriesSelectedEvent")(layer, keepPrevious);
-       // sandbox.notifyAll(event);
+        var event = sandbox.getEventBuilder("WFSFeatureGeometriesEvent")(layer, keepPrevious);
+        sandbox.notifyAll(event);
 
     },
 

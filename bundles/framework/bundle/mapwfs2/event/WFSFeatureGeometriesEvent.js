@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.event.WFSFeatureGeometriesEvent
  *
- * Used to get feature geometries of those WFS Features, which has been selected
+ * Used to get feature geometries of those WFS Features, which has been highlighted
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeatureGeometriesEvent',
 /**
