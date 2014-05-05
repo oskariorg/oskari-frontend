@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "catalogue.bundle.metadataflyout",
     "value": {
@@ -16,16 +17,16 @@ Oskari.registerLocalization({
         "layer": {
             "name": "Metadata",
             "description": "",
-            "orgName": "Metadata",
+            "orgName": "Metadata catalogue",
             "inspire": "Metadata"
         },
         "flyout": {
             "title": "Metadata",
-            "abstract": "Abstract",
-            "inspire": "INSPIRE",
-            "jhs": "JHS",
-            "xml": "XML",
-            "map": "Geographic Extent",
+            "abstract": "Basic information",
+            "inspire": "Inspire metadata",
+            "jhs": "JHS 158 metadata",
+            "xml": "ISO 19139 XML file",
+            "map": "Geographic extent",
             "pdf": "Printout",
             "select_metadata_prompt": "Select metadata by clicking the icons.",
             "metadata_printout_title": "METADATA PRINTOUT",
@@ -33,40 +34,40 @@ Oskari.registerLocalization({
             "tabs": {
                 "abstract": {
                     "abstract": "",
-                    "jhs": "Show JHS",
-                    "inspire": "Show INSPIRE",
+                    "jhs": "Show JHS 158 metadata",
+                    "inspire": "Show INSPIRE metadata",
                     "xml": {
-                        "text": "Open ISO 19139 XML",
+                        "text": "Open ISO 19139 XML file",
                         "target": "_blank"
                     },
                     "pdf": {
-                        "text": "Open PDF-printout",
+                        "text": "Open PDF printout",
                         "target": "_blank"
                     }
                 },
                 "jhs": {
-                    "abstract": "Show abstract",
+                    "abstract": "Show basic information",
                     "jhs": "",
-                    "inspire": "Show INSPIRE",
+                    "inspire": "Show INSPIRE metadata",
                     "xml": {
-                        "text": "Open ISO 19139 XML",
+                        "text": "Open ISO 19139 XML file",
                         "target": "_blank"
                     },
                     "pdf": {
-                        "text": "Open PDF-printout",
+                        "text": "Open metadata in PDF printout",
                         "target": "_blank"
                     }
                 },
                 "inspire": {
-                    "abstract": "Show abstract",
-                    "jhs": "Show JHS",
+                    "abstract": "Show basic information",
+                    "jhs": "Show JHS metadata",
                     "inspire": "",
                     "xml": {
-                        "text": "Open ISO 19139 XML",
+                        "text": "Open ISO 19139 XML file",
                         "target": "_blank"
                     },
                     "pdf": {
-                        "text": "Open PDF-printout",
+                        "text": "Open metadata in PDF printout",
                         "target": "_blank"
                     }
                 }
@@ -74,7 +75,8 @@ Oskari.registerLocalization({
         },
         "tile": {
             "title": "Metadata",
-            "tooltip": "Metadata contains information about terms of use and availability of data."
+            "tooltip": "The terms of use and the availability of the dataset are documented in the metadata description."
         }
     }
-});
+}
+);
