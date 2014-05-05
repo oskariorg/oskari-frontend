@@ -22,30 +22,66 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     this.currentDrawMode = null;
     this.prefix = "DrawFilterPlugin.";
     this.creatorId = undefined;
-    // Todo: defaults from configuration
-    this.sourceStyle = {
-        point: {},
-        edit: {}
-    };
-    this.targetStyle = {
-        point: {},
-        edit: {}
-    };
-    this.selectionStyle = {
-        point: {},
-        edit: {}
-    };
-    this.editStyle = {
-        point: {},
-        edit: {}
-    };
+    // Source layer listeners
     this.sourceListeners = {
         point: {},
         edit: {}
     };
+    // Target layer listeners
     this.targetListeners = {
         point: {},
         edit: {}
+    };
+    // Source layer style
+    // Todo: defaults from configuration
+    this.sourceStyleMaps = {
+        point: new OpenLayers.StyleMap({
+            "default": new OpenLayers.Style({
+                strokeColor: "#0000ff",
+                strokeWidth: 2
+            }),
+            "select": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["select"]),
+            "temporary": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["temporary"]),
+            "delete": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["delete"])
+        }),
+        edit: new OpenLayers.StyleMap({
+            "default": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["default"]),
+            "select": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["select"]),
+            "temporary": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["temporary"]),
+            "delete": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["delete"])
+        })
+    };
+    // Target layer style
+    this.targetStyleMaps = {
+        point: new OpenLayers.StyleMap({
+            "default": new OpenLayers.Style({
+                strokeColor: "#ff0000",
+                strokeWidth: 3
+            }),
+            "select": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["select"]),
+            "temporary": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["temporary"]),
+            "delete": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["delete"])
+        }),
+        edit: new OpenLayers.StyleMap({
+            "default": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["default"]),
+            "select": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["select"]),
+            "temporary": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["temporary"]),
+            "delete": new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style["delete"])
+        })
     };
 
     if (config && config.id) {
@@ -141,24 +177,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             }
         });
 
-        OpenLayers.Util.applyDefaults(this.sourceStyle.point, OpenLayers.Feature.Vector.style['default']);
-        this.sourceStyle["point"].strokeColor = "#0000ff";
-        this.sourceStyle["point"].strokeWidth = 2;
-
-        OpenLayers.Util.applyDefaults(this.sourceStyle.edit, OpenLayers.Feature.Vector.style['default']);
-
-        OpenLayers.Util.applyDefaults(this.targetStyle.point, OpenLayers.Feature.Vector.style['default']);
-        this.targetStyle["point"].strokeColor = "#ff0000";
-        this.targetStyle["point"].strokeWidth = 3;
-
-        OpenLayers.Util.applyDefaults(this.targetStyle.edit, OpenLayers.Feature.Vector.style['default']);
-        this.targetStyle["edit"].fillColor = "#000000";
-        this.targetStyle["edit"].fillOpacity = 0.2;
-
-        OpenLayers.Util.applyDefaults(this.selectionStyle.edit, OpenLayers.Feature.Vector.style['default']);
-        this.selectionStyle.fillColor = "#ffff00";
-        this.selectionStyle.fillOpacity = 0.4;
-
         this.targetListeners["edit"] = function(layer) {
             // send an event that the drawing has been completed
             me.finishedDrawing();
@@ -179,8 +197,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             selectFeature: new OpenLayers.Control.SelectFeature(me.targetLayer, {
                 clickout: false, toggle: false,
                 multiple: false, hover: false,
-                toggleKey: "ctrlKey", // ctrl key removes from selection
-                multipleKey: "shiftKey", // shift key adds to selection
+                // toggleKey: "ctrlKey", // ctrl key removes from selection
+                // multipleKey: "shiftKey", // shift key adds to selection
                 box: false
             }),
             modifyFeature: new OpenLayers.Control.OskariModifyFeature(me.targetLayer, {
@@ -199,9 +217,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
         // Marker layer
         this.markerLayer = new OpenLayers.Layer.Markers(this.prefix + "MarkerLayer", {});
-        var index = Math.max(this._map.Z_INDEX_BASE.Feature, this.markerLayer.getZIndex()) + 1;
-        this.markerLayer.setZIndex(index);
+//        var index = Math.max(this._map.Z_INDEX_BASE.Feature, this.markerLayer.getZIndex()) + 1;
+//        this.markerLayer.setZIndex(index);
         this._map.addLayers([me.markerLayer]);
+
+        this._updateLayerOrder();
     },
 
     getName: function () {
@@ -229,27 +249,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      */
     startDrawFiltering: function (params) {
         this.sourceLayer.destroyFeatures();
-        this.sourceLayer.style = this.sourceStyle[params.drawMode];
+        this.sourceLayer.styleMap = this.sourceStyleMaps[params.drawMode];
         this.sourceLayer.eventListeners = this.sourceListeners[params.drawMode];
         this.targetLayer.destroyFeatures();
-////        this.targetLayer.style = this.targetStyle[params.drawMode];
-if (params.drawMode === 'edit') {
-    this.targetLayer.events.register("featuresadded", this, this.targetListeners[params.drawMode]);
-}
+        this.targetLayer.styleMap = this.targetStyleMaps[params.drawMode];
         this.markerLayer.clearMarkers();
-/*
-        // Set a high enough z-index value for the target layer
-        var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.targetLayer.getZIndex())+1;
-        this.targetLayer.setZIndex(zIndex);
-        this.targetLayer.redraw();
-
-                // Marker layer
-        this.markerLayer = new OpenLayers.Layer.Markers(this.prefix + "MarkerLayer", {});
-        var index = Math.max(this._map.Z_INDEX_BASE.Feature, this.markerLayer.getZIndex()) + 1;
-        this.markerLayer.setZIndex(index);
-*/
-
-
+        this._updateLayerOrder();
 
         switch (params.drawMode) {
             case "point":
@@ -352,8 +357,7 @@ if (params.drawMode === 'edit') {
         this.markerLayer.addMarker(this.markers[1]);
 
         // Set a high enough z-index value
-        var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.markerLayer.getZIndex())+1;
-        this.markerLayer.setZIndex(zIndex);
+        this._updateLayerOrder();
 
         // Update output layer
         this.updateTargetLine();
@@ -366,6 +370,7 @@ if (params.drawMode === 'edit') {
     _editSplit: function(params) {
         var me = this;
         var multiPolygon = params.sourceGeometry;
+        this.targetLayer.events.register("featuresadded", this, this.targetListeners[params.drawMode]);
         this.sourceLayer.addFeatures([multiPolygon]);
         this.toggleControl(params.drawMode);
     },
@@ -596,13 +601,6 @@ if (params.drawMode === 'edit') {
         this.targetLayer.events.remove("featuresadded");
 
         var inPolygon = this.targetLayer.features[0].clone();
-/*        inPolygon.events.on({
-           "featuremodified": function(event) {
-               console.log("...");
-           }
-        });*/
-
-
         var outMultiPolygon = this.sourceLayer.features[0].clone();
         var polyComponents = outMultiPolygon.geometry.components;
 
@@ -634,42 +632,12 @@ if (params.drawMode === 'edit') {
                 var newFeature = new OpenLayers.Feature.Vector(polyComponents[j]);
                 this.targetLayer.addFeatures([newFeature]);
             }
-//            this.modifyControls.modify.activate();
-
-//            var editPoints = inPolygon.geometry.components[0].components;
-//            var editFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString([new OpenLayers.Geometry.LineString(editPoints)]));
-//            editFeature.numPoints = editPoints.length;
-//debugger;
-//            this.sourceLayer.addFeatures([editFeature]);
-            // Set a high enough z-index value
-//            var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.sourceLayer.getZIndex())+1;
-//            this.sourceLayer.setZIndex(zIndex);
-//            this.sourceLayer.redraw();
-
-
-//            this.modifyControls.modify.activate();
-
-//this.targetLayer.destroyFeatures();
-
-
-//                        me.controls.modify.selectFeature(editFeature);
-//                        me.controls.modify.clickout = false;
-//                        me.controls.modify.toggle = false;
-
-
             break;
         }
 
-this.drawControls.modifyFeature.activate();
-this.drawControls.modifyFeature.selectFeature(this.targetLayer.features[0]);
-//this.drawControls.selectFeature.activate();
-//this.drawControls.selectFeature.select(this.targetLayer.features[0]);
-
-//        this.targetLayer.features[0].style = this.selectionStyle;
-//        this.selectedFeatureIndex = 0;
+        this.drawControls.modifyFeature.activate();
+        this.drawControls.modifyFeature.selectFeature(this.targetLayer.features[0]);
         this.targetLayer.redraw();
-
-
 
 return;
 /*
@@ -840,13 +808,25 @@ return;
         this.targetLayer.redraw();
     },
 
-    getSelection: function () {
+    getSelection: function() {
         var selectedFeatures = this.targetLayer.selectedFeatures;
         if (selectedFeatures.length > 0) {
             return selectedFeatures[0].geometry.clone();
         } else {
             return null;
         }
+    },
+
+    _updateLayerOrder: function() {
+        var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.sourceLayer.getZIndex())+1;
+        this.sourceLayer.setZIndex(zIndex);
+        this.sourceLayer.redraw();
+        zIndex = zIndex+1;
+        this.targetLayer.setZIndex(zIndex);
+        this.targetLayer.redraw();
+        zIndex = zIndex+1;
+        this.markerLayer.setZIndex(zIndex);
+        this.markerLayer.redraw();
     },
 
     /**
