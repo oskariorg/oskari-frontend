@@ -1,50 +1,51 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "FeatureData2",
     "value": {
-        "title": "Object data",
+        "title": "Feature data",
         "desc": "",
-        "loading": "Loading",
+        "loading": "Loading...",
         "showmore": "Show",
-        "nodata": "Selected map layers contain no attribute data.",
+        "nodata": "The selected map layers contain no feature data.",
         "featureNameAll": "Data type",
-        "errorscale": "Data cannot be shown at this scale level. Please change the scale level.",
-        "errordata": "Data provided by the server contains errors. Please move the map slightly to update it.",
-        "columnSelectorTooltip": "Show columns",
+        "errorscale": "The feature data on this map layer cannot be shown on this scale level. Please change the scale level at scale bar.",
+        "errordata": "The feature data at the server contains errors. Please update the map by moving it slightly.",
+        "columnSelectorTooltip": "Select visible columns.",
         "popup": {
-            "title": "Select features on the map",
-            "instructions": " ",
+            "title": "Select features on the map.",
+            "instructions": "NOT TRANSLATED",
             "link": {
-                "title": "Select more"
+                "title": "Select more features"
             },
             "button": {
                 "cancel": "Cancel",
                 "empty": "Remove selection",
-                "show": "View places",
+                "show": "Show features",
                 "close": "Close",
                 "edit": "Edit"
             },
             "tools": {
                 "point": {
-                    "tooltip": "Add point"
+                    "tooltip": "Add a point feature to the map."
                 },
                 "line": {
-                    "tooltip": "Add line"
+                    "tooltip": "Add a line feature to the map."
                 },
                 "polygon": {
-                    "tooltip": "Add polygon"
+                    "tooltip": "Add an area feature to the map."
                 },
                 "square": {
-                    "tooltip": "Add rectangle"
+                    "tooltip": "Add a rectangular area feature to the map."
                 },
                 "circle": {
-                    "tooltip": "Add circle"
+                    "tooltip": "Add a circular area feature to the map."
                 },
                 "select": {
-                    "tooltip": "Select objects"
-
+                    "tooltip": "Select features"
                 }
             }
         }
     }
-});
+}
+);

@@ -1,99 +1,101 @@
-Oskari.registerLocalization({
-  "lang": "en",
-  "key": "DivManazer",
-  "value": {
-    "VisualizationForm": {
-      "tooltips": {
-        "dot": "Edit point style",
-        "area": "Edit area style",
-        "line": "Edit line style"
-      },
-      "dot": {
-        "title": "Point feature portrayal",
-        "tooltip": "",
-        "symbol": {
-          "label": "Point feature icon"
-        },
-        "size": {
-          "label": "Size"
-        },
-        "color": {
-          "label": "Colour",
-          "labelOr": "or",
-          "labelCustom": "Custom RGB color (0-255)"
-        },
-        "preview": {
-          "label": "Preview"
-        },
-        "buttons": {
-          "save": "Save",
-          "cancel": "Cancel"
+Oskari.registerLocalization(
+{
+    "lang": "en",
+    "key": "DivManazer",
+    "value": {
+        "VisualizationForm": {
+            "tooltips": {
+                "dot": "Edit point feature style",
+                "area": "Edit area feature style",
+                "line": "Edit line feature style"
+            },
+            "dot": {
+                "title": "Point feature style",
+                "tooltip": "",
+                "symbol": {
+                    "label": "Icon"
+                },
+                "size": {
+                    "label": "Size"
+                },
+                "color": {
+                    "label": "Colour",
+                    "labelOr": "or",
+                    "labelCustom": "Custom colour (RGB 0-255)"
+                },
+                "preview": {
+                    "label": "Preview"
+                },
+                "buttons": {
+                    "save": "Save",
+                    "cancel": "Cancel"
+                }
+            },
+            "line": {
+                "title": "Line feature style",
+                "tooltip": "",
+                "style": {
+                    "label": "Dash"
+                },
+                "cap": {
+                    "label": "Endings"
+                },
+                "corner": {
+                    "label": "Corners"
+                },
+                "width": {
+                    "label": "Width"
+                },
+                "color": {
+                    "label": "Colour",
+                    "labelOr": "or",
+                    "labelCustom": "Custom colour (RGB 0-255)"
+                },
+                "preview": {
+                    "label": "Preview"
+                },
+                "buttons": {
+                    "save": "Save",
+                    "cancel": "Cancel"
+                }
+            },
+            "area": {
+                "title": "Area feature style",
+                "tooltip": "",
+                "linestyle": {
+                    "label": "Line dash"
+                },
+                "linecap": {
+                    "label": "Line endings"
+                },
+                "linecorner": {
+                    "label": "Line corners"
+                },
+                "linewidth": {
+                    "label": "Line width"
+                },
+                "linecolor": {
+                    "label": "Line colour",
+                    "labelOr": "or",
+                    "labelCustom": "Custom colour (RGB 0-255)"
+                },
+                "color": {
+                    "label": "Fill colour",
+                    "labelOr": "or",
+                    "labelCustom": "Custom colour (RGB 0-255)"
+                },
+                "fill": {
+                    "label": "Fill pattern"
+                },
+                "preview": {
+                    "label": "Preview"
+                },
+                "buttons": {
+                    "save": "Save",
+                    "cancel": "Cancel"
+                }
+            }
         }
-      },
-      "line": {
-        "title": "Line portrayal",
-        "tooltip": "",
-        "style": {
-          "label": "Line style"
-        },
-        "cap": {
-          "label": "Line endigs"
-        },
-        "corner": {
-          "label": "Corners"
-        },
-        "width": {
-          "label": "Width"
-        },
-        "color": {
-          "label": "Colour",
-          "labelOr": "or",
-          "labelCustom": "Custom RGB colour (0-255)"
-        },
-        "preview": {
-          "label": "Preview"
-        },
-        "buttons": {
-          "save": "Save",
-          "cancel": "Cancel"
-        }
-      },
-      "area": {
-        "title": "Area portrayal",
-        "tooltip": "",
-        "linestyle": {
-          "label": "Area line style"
-        },
-        "linecap": {
-          "label": "Area line endings"
-        },
-        "linecorner": {
-          "label": "Corners"
-        },
-        "linewidth": {
-          "label": "Width"
-        },
-        "linecolor": {
-          "label": "Line colour",
-          "labelOr": "or",
-          "labelCustom": "Custom RGB colour (0-255)"
-        },
-        "color": {
-          "label": "Area fill colour",
-          "labelOr": "or",
-          "labelCustom": "Own RGB colour (0-255)"
-        },
-        "fill": {
-          "label": "Area fill pattern"
-        },
-        "preview": {
-          "label": "Preview"
-        },
-        "buttons": {
-          "save": "Save",
-          "cancel": "Cancel"
-        }
-      }
     }
-  }
-});
+}
+);
