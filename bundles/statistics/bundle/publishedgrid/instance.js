@@ -46,9 +46,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
 
             sandbox.registerAsStateful(this.mediator.bundleId, this);
 
-            // Show the grid on startup, defaults to true.
-            var showGrid = ((me.state && me.state.gridShown !== undefined) ? me.state.gridShown : true);
-
             // Find the map module.
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             this.mapModule = mapModule;
@@ -113,6 +110,104 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
         },
 
         /**
+         * Get state parameters.
+         * Returns string with statsgrid state. State value keys are before the '-' separator and
+         * the indiators are after the '-' separator. The indicators are further separated by ',' and
+         * both state values and indicator values are separated by '+'.
+         * Note that we're returning the state even when there's no view.
+         *
+         * @method getStateParameters
+         * @return {String} statsgrid state
+         */
+        getStateParameters: function () {
+            var me = this,
+                state = me.state;
+
+            // If the state is null or an empty object, nothing to do here!
+            if (!state || jQuery.isEmptyObject(state)) {
+                return null;
+            }
+
+            var i = null,
+                ilen = null,
+                ilast = null,
+                statsgridState = "statsgrid=",
+                valueSeparator = "+",
+                indicatorSeparator = ",",
+                stateValues = null,
+                indicatorValues = null,
+                colorsValues = null,
+                colors = state.colors || {},
+                keys = [
+                    'layerId',
+                    'currentColumn',
+                    'methodId',
+                    'numberOfClasses',
+                    'classificationMode',
+                    'manualBreaksInput',
+                    'allowClassification'
+                ],
+                colorKeys = ['set', 'index', 'flipped'],
+                indicators = state.indicators || [],
+                value;
+            // Note! keys needs to be handled in the backend as well.
+            // Therefore the key order is important as well as actual values.
+            // 'classificationMode' can be an empty string but it must be the
+            // fifth value.
+            // 'manualBreaksInput' can be an empty string but it must be the
+            // sixth value.
+            for (i = 0, ilen = keys.length, ilast = ilen - 1; i < ilen; i++) {
+                value = state[keys[i]];
+                if (value !== null && value !== undefined) {
+                    // skip undefined and null
+                    stateValues += value;
+                }
+                if (i !== ilast) {
+                    stateValues += valueSeparator;
+                }
+            }
+
+
+
+            // handle indicators separately
+            for (i = 0, ilen = indicators.length, ilast = ilen - 1; i < ilen; i++) {
+                indicatorValues += indicators[i].id;
+                indicatorValues += valueSeparator;
+                indicatorValues += indicators[i].year;
+                indicatorValues += valueSeparator;
+                indicatorValues += indicators[i].gender;
+                if (i !== ilast) {
+                    indicatorValues += indicatorSeparator;
+                }
+            }
+
+            // handle colors separately
+            var colorArr = [],
+                cKey;
+            colors.flipped = colors.flipped === true;
+            for (i = 0, ilen = colorKeys.length; i < ilen; ++i) {
+                cKey = colorKeys[i];
+                if (colors.hasOwnProperty(cKey) && colors[cKey] !== null && colors[cKey] !== undefined) {
+                    colorArr.push(colors[cKey]);
+                }
+            }
+            if (colorArr.length === 3) {
+                colorsValues = colorArr.join(',');
+            }
+
+            var ret = null;
+            if (stateValues && indicatorValues) {
+                ret = statsgridState + stateValues + "-" + indicatorValues + "-";
+                if (colorsValues) {
+                    ret += colorsValues;
+                }
+                ret += "-1"; // always enable mode
+            }
+
+            return ret;
+        },
+
+        /**
          * @method createUI
          * Creates the UI based on the given state (what indicators to use and so on).
          */
@@ -145,7 +240,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
 
         isLayerVisible: function () {
             var ret = false,
-                layer = this.sandbox.findMapLayerFromSelectedMapLayers(me.state.layerId);
+                layer = this.sandbox.findMapLayerFromSelectedMapLayers(this.state.layerId);
             if (layer) {
                 ret = true;
             }
@@ -201,11 +296,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
          * @param {Object} elementToHide The element the button should hide.
          */
         _createShowHideButton: function (elementToHide) {
-            var me = this;
-            var buttonContainer = jQuery(me.mapModule.getMap().div);
-            var button = jQuery(
-                '<div id="publishedgridToggle" class="hidePublishedGrid"></div>'
-            );
+            var me = this,
+                buttonContainer = jQuery(me.mapModule.getMap().div),
+                button = jQuery(
+                    '<div id="publishedgridToggle" class="hidePublishedGrid"></div>'
+                );
 
             button.click(function (event) {
                 event.preventDefault();
@@ -234,11 +329,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             buttonContainer.append(button);
         },
         _adjustDataContainer: function () {
-            var content = jQuery('#contentMap'),
-                contentWidth = content.width(),
-                marginWidth = content.css('margin-left').split('px')[0],
-                maxContentWidth = jQuery(window).width() - marginWidth,
-                mapDiv = this.mapModule.getMapEl(),
+            var mapDiv = this.mapModule.getMapEl(),
                 mapWidth = mapDiv.width(),
                 mapHeight = mapDiv.height();
 
@@ -264,7 +355,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
 
                 gridWidth = '0px';
                 gridHeight = '0px';
-                contentWidth = '100%';
+                //contentWidth = '100%';
             }
             elLeft.css({
                 'width': gridWidth,
@@ -290,8 +381,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
 
         _adjustMapPluginLocations: function () {
             var zoomBar = jQuery('.mapplugin.pzbDiv'),
-                panButtons = jQuery('.mapplugin.panbuttonDiv'),
-                zoomBarTop;
+                panButtons = jQuery('.mapplugin.panbuttonDiv');
 
             // This shouldn't be done anymore...
             if (zoomBar && zoomBar.length && !panButtons.length) {
