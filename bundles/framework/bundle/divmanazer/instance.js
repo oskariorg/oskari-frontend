@@ -284,6 +284,12 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
                 tile.fadeIn(200);
 
                 me.tileContainer.append(tile);
+
+                // give the flyout a proper x offset
+                if (flyout) {
+                    var offsetLeft = tile.offset().left + tile.width();
+                    flyout.css('left', offsetLeft);
+                }
             }
 
             viewPlugin = plugins['Oskari.userinterface.View'];
