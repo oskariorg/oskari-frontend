@@ -69,6 +69,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
             this.ui.bind('click', this.handler);
         },
         /**
+         * @method setPrimary
+         * Sets primary status of the button
+         */
+        setPrimary: function (primary) {
+            this.ui.toggleClass('primary', primary);
+        },
+        /**
          * @method destroy
          * Destroys the button/removes it from document
          */
