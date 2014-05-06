@@ -1,40 +1,41 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sv",
     "key": "MyPlacesImport",
     "value": {
-        "title": "NOT TRANSLATED",
-        "desc": "Voit tuoda omia aineistoja shape-formaatissa zip-muodossa tai kml/kmz tiedostoja.",
+        "title": "Datamängd importering",
+        "desc": "Du kan importera dina egna datamängder i shape-format, zip-format eller kml/kmz-format.",
         "help": "Anna tämän toiminnon lähtöaineistoksi (Browse...) zip tiedoston nimi tai url-linkki vastaavaan tiedostoon. \nZip-tiedoston saat lataamalla koneellesi shape-siirtoformaatissa olevan aineiston \nja muodostamalla näistä tiedostoista (.shp, . shx, .dbf, .prj) zip-tiedosto \ntai lataa koneellesi Googlen kml/kmz tiedostoja. \ntai käytä tiedoston url-linkkiä. ",
         "tool": {
-            "tooltip": "NOT TRANSLATED"
+            "tooltip": "Importera egen datamängd"
         },
         "flyout": {
-            "title": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
+            "title": "Datamängd importering",
+            "description": "Du kan importera dina egna datamängder i shape-format, zip-format eller kml/kmz-format.",
             "actions": {
-                "cancel": "NOT TRANSLATED",
-                "next": "NOT TRANSLATED"
+                "cancel": "Avbryt",
+                "next": "Nästa"
             },
             "file": {
-                "submit": "NOT TRANSLATED"
+                "submit": "Skicka"
             },
             "layer": {
-                "title": "NOT TRANSLATED",
-                "name": "NOT TRANSLATED",
-                "desc": "NOT TRANSLATED",
-                "source": "NOT TRANSLATED",
-                "style": "NOT TRANSLATED"
+                "title": "Spara kartlager information:",
+                "name": "Namn",
+                "desc": "Beskrivning",
+                "source": "Datakälla",
+                "style": "Kartlager stil"
             },
             "validations": {
                 "error": {
-                    "title": "NOT TRANSLATED",
-                    "message": "NOT TRANSLATED"
+                    "title": "Fel",
+                    "message": "Fil och kartlager namn fattas."
                 }
             },
             "finish": {
                 "success": {
-                    "title": "NOT TRANSLATED",
-                    "message": "NOT TRANSLATED"
+                    "title": "Importering av datamängd lyckades.",
+                    "message": "Du hittar kartlager i \"Mina uppgifter\"."
                 },
                 "failure": {
                     "title": "NOT TRANSLATED"
@@ -42,18 +43,18 @@ Oskari.registerLocalization({
             }
         },
         "tab": {
-            "title": "Aineistot",
+            "title": "Datamängder",
             "grid": {
-                "name": "NOT TRANSLATED",
-                "description": "NOT TRANSLATED",
-                "source": "NOT TRANSLATED",
-                "remove": " ",
+                "name": "Namn",
+                "description": "Beskrivning",
+                "source": "Datakälla",
+                "remove": "NOT TRANSLATED",
                 "removeButton": "NOT TRANSLATED"
             },
             "confirmDeleteMsg": "Vill du ta bort:",
             "buttons": {
                 "ok": "OK",
-                "cancel": "Avbryta",
+                "cancel": "Avbryt",
                 "delete": "Ta bort"
             },
             "notification": {
@@ -66,8 +67,9 @@ Oskari.registerLocalization({
             }
         },
         "layer": {
-            "organization": "NOT TRANSLATED",
-            "inspire": "NOT TRANSLATED"
+            "organization": "Egna datamängder",
+            "inspire": "Egna datamängder"
         }
     }
-});
+}
+);

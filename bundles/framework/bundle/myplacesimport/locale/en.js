@@ -1,41 +1,41 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "MyPlacesImport",
     "value": {
         "title": "NOT TRANSLATED",
-        "desc": "Voit tuoda omia aineistoja shape-formaatissa zip-muodossa tai kml/kmz tiedostoja.",
+        "desc": "You can import your own datasets in the shape, zip or kml/kmz format.",
         "help": "Anna tämän toiminnon lähtöaineistoksi (Browse...) zip tiedoston nimi tai url-linkki vastaavaan tiedostoon. \nZip-tiedoston saat lataamalla koneellesi shape-siirtoformaatissa olevan aineiston \nja muodostamalla näistä tiedostoista (.shp, . shx, .dbf, .prj) zip-tiedosto \ntai lataa koneellesi Googlen kml/kmz tiedostoja. \ntai käytä tiedoston url-linkkiä. ",
-
         "tool": {
-            "tooltip": "NOT TRANSLATED"
+            "tooltip": "Import your own dataset"
         },
         "flyout": {
-            "title": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
+            "title": "Dataset Import",
+            "description": "You can import your own datasets in the shape, zip or kml/kmz format.",
             "actions": {
-                "cancel": "NOT TRANSLATED",
-                "next": "NOT TRANSLATED"
+                "cancel": "Cancel",
+                "next": "Next"
             },
             "file": {
-                "submit": "NOT TRANSLATED"
+                "submit": "Send"
             },
             "layer": {
-                "title": "NOT TRANSLATED",
+                "title": "Save the map layer information:",
                 "name": "Name",
                 "desc": "Description",
-                "source": "Tietolähde",
-                "style": "Tason tyyli"
+                "source": "Data source",
+                "style": "Map layer style"
             },
             "validations": {
                 "error": {
                     "title": "Error",
-                    "message": "NOT TRANSLATED"
+                    "message": "The file and the name of the map layer are missing."
                 }
             },
             "finish": {
                 "success": {
-                    "title": "NOT TRANSLATED",
-                    "message": "NOT TRANSLATED"
+                    "title": "The map layer import succeeded.",
+                    "message": "You can find the map layer from the menu \"My Data\"."
                 },
                 "failure": {
                     "title": "NOT TRANSLATED"
@@ -43,12 +43,12 @@ Oskari.registerLocalization({
             }
         },
         "tab": {
-            "title": "NOT TRANSLATED",
+            "title": "Datasets",
             "grid": {
                 "name": "Name",
                 "description": "Description",
-                "source": "NOT TRANSLATED",
-                "remove": " ",
+                "source": "Data source",
+                "remove": "NOT TRANSLATED",
                 "removeButton": "Delete"
             },
             "confirmDeleteMsg": "Do you want to delete:",
@@ -67,8 +67,9 @@ Oskari.registerLocalization({
             }
         },
         "layer": {
-            "organization": "NOT TRANSLATED",
-            "inspire": "NOT TRANSLATED"
+            "organization": "Own datasets",
+            "inspire": "Own datasets"
         }
     }
-});
+}
+);
