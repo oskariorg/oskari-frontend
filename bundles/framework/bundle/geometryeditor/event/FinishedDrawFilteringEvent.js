@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
  * @param {Boolean} blnEdit true if the geometry was opened in edit mode
  */
 function(geometry, blnEdit, creatorId) {
-    this._selection = geometry;
+    this._filtered = geometry;
     this._modification = (blnEdit == true);
     this._creatorId = creatorId;
 }, {
@@ -26,12 +26,12 @@ function(geometry, blnEdit, creatorId) {
         return this.__name;
     },
     /**
-     * @method getSelection
-     * Returns the selection geometry
+     * @method getFiltered
+     * Returns the filtered geometry
      * @return {OpenLayers.Geometry}
      */
-    getSelection : function() {
-        return this._selection;
+    getFiltered : function() {
+        return this._filtered;
     },
     /**
      * @method isModification
