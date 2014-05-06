@@ -271,7 +271,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             if (!state || jQuery.isEmptyObject(state)) {
                 return null;
             }
-            console.log("Creating state string...");
 
             var i = null,
                 ilen = null,
