@@ -62,6 +62,7 @@ Oskari.registerLocalization(
                 "history_forward": "Move forward",
                 "measureline": "Measure distance",
                 "measurearea": "Measure area",
+                "drawTools" : "Drawing tools",
                 "point": "Allow users to add point features.",
                 "line": "Allow users to add line features.",
                 "area": "Allow users to add area features."
@@ -131,7 +132,7 @@ Oskari.registerLocalization(
             "layers": {
                 "add": "Create new layer for new features.",
                 "label": "Map Layers",
-                "addselect": "Add drawlayer to map",
+                "addselect": "Add a drawing layer to the map",
                 "defaultLayer": "(Default map layer)",
                 "useAsDefaultLayer": "Use as the default layer."
             },
