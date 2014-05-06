@@ -132,7 +132,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 if (this.drawFilterPluginId !== event.getCreatorId()) {
                     return;
                 }
-                this.addGeometry(event.getSelection());
+                this.addGeometry(event.getFiltered());
                 this.drawFilterPlugin.stopDrawFiltering();
 
             },

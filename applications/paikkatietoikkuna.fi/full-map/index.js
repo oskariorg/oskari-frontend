@@ -74,7 +74,9 @@ jQuery(document).ready(function () {
 
     function start(appSetup, appConfig, cb) {
         var app = Oskari.app;
-        
+
+appSetup.startupSequence[1].metadata["Import-Bundle"].geometryeditor={bundlePath: "/Oskari/packages/framework/bundle/"};
+
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
         app.startApplication(function (startupInfos) {
