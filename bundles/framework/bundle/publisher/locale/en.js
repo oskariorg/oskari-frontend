@@ -62,6 +62,10 @@ Oskari.registerLocalization(
                 "history_forward": "Move forward",
                 "measureline": "Measure distance",
                 "measurearea": "Measure area",
+<<<<<<< HEAD
+=======
+                "drawTools" : "Drawing tools",
+>>>>>>> 9b6c36cd846fe2e4bc60009db8ca5437d2d9f578
                 "point": "Allow users to add point features.",
                 "line": "Allow users to add line features.",
                 "area": "Allow users to add area features."
@@ -130,8 +134,8 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "add": "Create new layer for new features.",
-                "addselect": "Add the new layer to the map layer.",
                 "label": "Map Layers",
+                "addselect": "Add a drawing layer to the map",
                 "defaultLayer": "(Default map layer)",
                 "useAsDefaultLayer": "Use as the default layer."
             },
@@ -222,4 +226,8 @@ Oskari.registerLocalization(
         }
     }
 }
+<<<<<<< HEAD
 );
+=======
+);
+>>>>>>> 9b6c36cd846fe2e4bc60009db8ca5437d2d9f578
