@@ -94,12 +94,13 @@ function(instance) {
      * @private
      * Callback function that gets the loaded feature and its feature type.
      * Calls the {Oskari.mapframework.bundle.parcel.plugin.DrawPlugin} to draw the feature into the UI.
-     * @param {OpenLayers.Feature.Vector} Feature that has been loaded.
+     * @param {OpenLayers.Feature.Vector} FeatureSet that has been loaded (polygons and boundary points
      * @param {String} featureType Feature type of the feature.
      */
-    _loadCallback : function(feature, featureType) {
-        if (feature) {
-            this.instance.getDrawPlugin().drawFeature(feature, featureType);
+    _loadCallback : function(featureSet, featureType) {
+        if (featureSet) {
+            this.instance.getDrawPlugin().drawFeature(featureSet.polFeatures, featureType);
+            if(featureSet.pointFeatures) this.instance.getService().plotOldParcelPoints(featureSet.pointFeatures);
         }
     }
 }, {

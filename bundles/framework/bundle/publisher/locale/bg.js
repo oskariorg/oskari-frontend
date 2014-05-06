@@ -130,6 +130,7 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Картни слоеве",
                 "defaultLayer": "( Слой по подразбиране )",
                 "useAsDefaultLayer": "Използване като слой по подразбиране"

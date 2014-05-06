@@ -24,6 +24,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
 		"scripts" : [{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/backendstatus/instance.js"
+		}, {
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/backendstatus/event/BackendStatusChangedEvent.js"
 		}],
 		"locales" : [{
 			"lang" : "fi",

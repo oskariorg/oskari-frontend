@@ -33,10 +33,10 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-methods', {
             zoom = mapDomain.getZoom(),
             marker = mapDomain.isMarkerVisible();
 
-        if (blnInitialMove === true && zoom == 12) {
+        if (blnInitialMove === true && zoom == 13) {
             // workaround, openlayers needs to be nudged a bit to actually draw
-            // the map images if we enter at zoomlevel 12
-            // so if zoom == 12 -> send a dummy request to get openlayers working
+            // the map images if we enter at zoomlevel 13
+            // so if zoom == 13 -> send a dummy request to get openlayers working
             // correctly
             // TODO: find out why OL needs this
             this._core.processRequest(this._core.getRequestBuilder('MapMoveRequest')(mapDomain.getX(), mapDomain.getY(), 0, false));

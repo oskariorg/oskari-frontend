@@ -258,7 +258,7 @@ function() {
                 categoryHandler.saveCategory(category);
 
                 dialog.close();
-                me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+                me.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
             });
             buttons.push(cancelBtn);
             buttons.push(saveBtn);

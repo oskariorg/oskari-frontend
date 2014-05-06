@@ -97,6 +97,7 @@ Oskari.registerLocalization({
             "groupName": "Group layer name",
             "subLayers": "Sublayers",
             "addSubLayer": "Add sublayer",
+            "editSubLayer": "Edit sublayer",
 
             "wmsInterfaceAddress": "WMS interface URL",
             "wmsUrl": "WMS interface URL",
@@ -137,6 +138,7 @@ Oskari.registerLocalization({
             "legendImage": "Legenda image",
             "legendImageDesc": "URL for legenda image",
             "legendImagePlaceholder": "URL for legenda image",
+            "gfiContent": "NOT TRANSLATED",
             "gfiResponseType": "GFI response type",
             "gfiResponseTypeDesc": "Response type for Get Feature Info (GFI)",
             "gfiStyle": "GFI style",

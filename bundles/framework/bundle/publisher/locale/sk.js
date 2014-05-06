@@ -129,6 +129,7 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Mapové vrstvy",
                 "defaultLayer": "(Predvolená vrstva)",
                 "useAsDefaultLayer": "Použiť ako predvolenú vrstvu"

@@ -11,7 +11,23 @@ Oskari.registerLocalization({
             "title": "Analys",
             "content": {
                 "label": "Material",
-                "tooltip": "Tillsätta material - trycka  [tillsätta material] knappen"
+                "tooltip": "Tillsätta material - trycka  [tillsätta material] knappen",
+                "features": {
+                    "title": "Piirrä kohde",
+                    "buttons": {
+                        "cancel": "Peruuta",
+                        "finish": "Valmis"
+                    },
+                    "modes": {
+                        "area": "Alue",
+                        "line": "Viiva",
+                        "point": "Piste"
+                    }
+                },
+                "search": {
+                    "title": "Hae paikkahaulla",
+                    "resultLink": "Tuo analyysiin"
+                }
             },
             "method": {
                 "label": "Metod",
@@ -197,8 +213,8 @@ Oskari.registerLocalization({
             },
             "infos": {
                 "title": "Info",
-                "layer": "Lagring -",
-                "over10": "- över 10 attribut - Väljä max 10 från list för analys"
+                "layer": "Lagring ",
+                "over10": " har över 10 attribut - väljä max 10 från list för analys"
             }
 
         },

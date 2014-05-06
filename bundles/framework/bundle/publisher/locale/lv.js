@@ -129,6 +129,7 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Kartes slāņi",
                 "defaultLayer": "(Noklusējuma slānis)",
                 "useAsDefaultLayer": "Izmantot kā noklusējuma slāni"

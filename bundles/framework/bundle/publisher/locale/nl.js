@@ -128,6 +128,7 @@ Oskari.registerLocalization({
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Kaartlagen",
                 "defaultLayer": "(standaard laag)",
                 "useAsDefaultLayer": "Gebruik als standaardlaag"

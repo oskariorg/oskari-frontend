@@ -250,6 +250,17 @@
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">
+            <label for="add-layer-gfi-content" class="add-layer-label" title="<%= instance.getLocalization('admin').gfiContent %>"><%= instance.getLocalization('admin').gfiContent %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <textarea rows="3" cols="50" id="add-layer-gfi-content" class="add-layer-input long"><%= model.getGfiContent() %></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
             <label class="add-class-label" title="<%= instance.getLocalization('admin').realtime %>" ><%= instance.getLocalization('admin').realtime %>
             </label>
         </div>

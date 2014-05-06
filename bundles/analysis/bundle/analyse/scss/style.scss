@@ -4,9 +4,9 @@ div.notLoggedIn {
 div.analyse {
 
 }
-/*#contentMap.mapanalyseMode {
- margin-left: 255px;
- }*/
+#contentMap.mapAnalyseMode {
+    margin-left: 384px;
+}
 #contentMap div.basic_analyse {
     background: white;
     position: absolute;
@@ -79,6 +79,7 @@ div.basic_analyse {
 
     div.icon-info {
         float: right;
+        cursor: pointer;
     }
 
     div.icon-menu {
@@ -99,6 +100,27 @@ div.basic_analyse {
     div.tool {
         margin: 5px;
     }
+
+    div.icon-close.analyse-temp-feature {
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    div.toolContainer {
+        margin: 5px;
+        h4 {
+            padding: 0;
+        }
+        div.tool {
+            display: inline-block;
+            cursor: pointer;
+        }
+        div.buttons {
+            display: inline-block;
+            float: right;
+        }
+    }
+
 
 }
 
@@ -173,6 +195,9 @@ table.layer-icons {
 
     div.icon-info {
         float: none;
+    }
+    div.icon-close {
+        cursor: pointer;
     }
 
 }

@@ -1,19 +1,56 @@
-div.parcelform div.help {
-	float:right;
+#contentMap div.parcelprintform1 {
+  background: white;
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1500;
+  width: 255px;
+}
+#contentMap div.parcelprintform2 {
+  overflow: auto;
+  background: white;
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1501;
+  width: 255px;
+}
+
+div.parcelprintform1 > div.header, div.parcelprintform2 > div.header {
+  background-color: #72B5CC !important;
+}
+div.parcelprintform1 div.help, div.parcelprintform2 div.help {
+  float:right;
+}
+div.parcelprintform1 div.icon-close, div.parcelprintform2 div.icon-close {
+  float:right;
 }
 /* Wide fields for place inputs  */
-div.parcelform div.field {
-	padding-bottom:10px;
+div.parcelprintform1 div.field, div.parcelprintform2 div.field {
+  padding-bottom:10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
-div.parcelform  {
-  width: 300px;
-  height: 500px}
-div.parcelform input {
-	width:80%;
+
+div.parcelprintform1 input, div.parcelprintform2 input {
+  width:80%;
 }
-div.parcelform textarea, div.parcelform select {
-	width:80%;
+div.parcelprintform1 textarea, div.parcelprintform1 select, div.parcelprintform2 textarea, div.parcelprintform2 select {
+  width:80%;
 }
+/* Buttons */
+div.parcelprintform1 div.buttons, div.parcelprintform2 div.buttons {
+  margin-left: 10px;
+  margin-right: 10px;
+  display: inline-flex;
+}
+div.parcelprintform1 div.buttons input, div.parcelprintform2 div.buttons input {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
 div.parcel div.buttons div.button {
 	margin:10px;
 	padding: 10px;
@@ -28,6 +65,8 @@ circle.parceleditor {
   cursor:move;
 }
 
-#contentMap div.basic_printout {
+/* #contentMap div.basic_printout {
   left: auto ! important;
-}
+} */
+#contentMap div.basic_printout {
+  height: 100% !important; }

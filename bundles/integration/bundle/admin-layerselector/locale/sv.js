@@ -100,6 +100,7 @@ Oskari.registerLocalization({
             "groupName": "Gruppnivåns namn",
             "subLayers": "Undernivå",
             "addSubLayer": "Tillägg en undernivå",
+            "editSubLayer": "Editera undernivå",
 
             "wmsInterfaceAddress": "WMS-gränssnittets address",
             "wmsUrl": "WMS-gränssnittets address",
@@ -140,6 +141,7 @@ Oskari.registerLocalization({
             "legendaImage": "Förklarings&shy;bildens address",
             "legendaImageDesc": "Förklarings&shy;bildens address",
             "legendaImagePlaceholder": "Förklarings&shy;bildens address",
+            "gfiContent": "NOT TRANSLATED",
             "gfiResponseType": "GFI svartyp",
             "gfiResponseTypeDesc": "Svarets typ dvs Get Feature Info (GFI)",
             "gfiStyle": "GFI stil",

@@ -1,57 +1,47 @@
 div.metadataCatalogueDescription {
   margin: 0;
-  margin-bottom: 8px;
-}
+  margin-bottom: 8px; }
 
 div.metadataCatalogueContainer {
-  height: 90%;
-}
+  height: 90%; }
 
 div.metadataCatalogueContainer div.main {
   width: 100%;
-  height: 100%;
-}
+  height: 100%; }
 
 div.metadataCatalogueContainer div.moreLess {
-  padding: 10px 0;
-}
+  padding: 10px 0; }
 
 div.metadataOptions div.rowLabel {
   display: table-cell;
   vertical-align: middle;
   margin-left: 0;
   min-width: 130px;
-  width: 130px;
-}
+  width: 130px; }
 
 div.metadataOptions div.checkboxes {
   display: table-cell;
   vertical-align: middle;
   margin-left: 130px;
-  width: auto;
-}
+  width: auto; }
 
 div.metadataOptions div.metadataType {
   display: table-cell;
   vertical-align: middle;
   padding-right: 10px;
   width: auto;
-  white-space: nowrap;
-}
+  white-space: nowrap; }
 
 div.metadataOptions div.metadataRow {
-  margin-bottom: 10px;
-}
+  margin-bottom: 10px; }
 
 div.metadataOptions div.rowLabel {
-  white-space: nowrap;
-}
+  white-space: nowrap; }
 
 div.metadataResultHeader {
   display: table;
   width: 100%;
-  height: 35px;
-}
+  height: 35px; }
 
 div.metadataResultHeader div.resultHeaderContainer {
   display: table-row;
@@ -69,70 +59,58 @@ div.metadataResultHeader div.resultLinks {
 
 div.metadataResultHeader div.panelHeader {
   margin-top: 10px;
-  margin-bottom: 20px;
-}
+  margin-bottom: 20px; }
 
 div.metadataCatalogueContainer th.name, td.name {
-  text-align: left;
-}
+  text-align: left; }
 
 div.metadataCatalogueContainer td.name {
-  padding-left: 8px;
-}
+  padding-left: 8px; }
 
 div.metadataCatalogueContainer th.rating, td.rating {
-  text-align: right;
-}
+  text-align: right; }
 
 div.metadataCatalogueContainer th.info, td.info {
   text-align: right;
-  width: 16px;
-}
+  width: 16px; }
 
 div.metadataCatalogueContainer th.remove, td.remove {
   text-align: right;
-  width: 16px;
-}
+  width: 16px; }
 
 div.metadataCatalogueContainer td.info div.layerInfo {
   width: 16px;
   height: 16px;
   margin-left: 5px;
-  float: right;
-}
+  float: right; }
 
 div.metadataCatalogueContainer td.remove div.resultRemove {
   width: 16px;
   height: 16px;
   margin-left: 5px;
   margin-right: 5px;
-  float: right;
-}
+  float: right; }
 
 div.metadataCatalogueContainer tr.resultRow {
   padding-left: 10px;
-  outline: 1pt solid #c0d0e0;
-}
+  outline: 1pt solid #c0d0e0; }
 
 div.metadataCatalogueContainer tr.spacerRow {
-  height: 7px;
-}
+  height: 7px; }
 
 div.metadataCatalogueContainer td {
   border: none;
 }
 
 div.metadataCatalogueContainer td.spacer {
-  padding: 0;
-}
+  padding: 0; }
 
 div.metadataCatalogueContainer table.metadataSearchResult {
   float: left;
 }
 
 div.metadataCatalogueContainer ul.layerList {
-  padding-left: 35px;
-}
+  padding-left: 35px; }
 
 div.metadataCatalogueContainer a.showLink {
   display: inline-block;

@@ -1,5 +1,66 @@
 # Release Notes
 
+## 1.20
+
+### analysis/analyse
+
+Analysis source features can now be drawn on the map directly from within the analyse view and from place search results.
+
+Layers can now be removed from analysis and from the map by clicking the close icon in the layers listing.
+
+For layers which have over the maximum amount of feature properties permitted (defaults to 10) the 'select all properties' selection is now disabled, 'choose from the list' option autoselected and the first properties selected.
+
+### search
+
+Other bundles can now insert (and remove) actions to search results via `Search.AddSearchResultActionRequest` (removing via `Search.RemoveSearchResultActionRequest`):
+
+```javascript
+var reqBuilder = sandbox
+        .getRequestBuilder('Search.AddSearchResultActionRequest'),
+    callback = function(searchResult) {
+        // This is called in search bundle with the search result
+        return function() {
+            // This is what gets called when the link gets clicked
+            alert(searchResult.name);
+        };
+    },
+    request;
+
+if (reqBuilder) {
+    request = reqBuilder('Link name', callback);
+    sandbox.request(this, request);
+}
+```
+
+### publisher
+
+Added draw layer selection.
+Improved published view editing state handling.
+
+### admin-layerselector bundle
+
+Removed underscore from comp.js
+
+### backendstatus
+
+Sends a new event - `BackendStatus.BackendStatusChangedEvent` instead of `MapLayerEvent` now. Also, if the amount of changed layers exceeds 100 a so called bulk update event is sent instead of single events for each changed layer. It's basically the same event without any params.
+
+## 1.19.3
+
+### statsgrid
+
+Unbinding click button before assigning a new click listener so bindings don't accumulate
+
+## 1.19.2
+
+Removed random console.log() commands for Internet Explorer to work correctly
+
+## 1.19.1
+
+### myplaces2
+
+Fixed an issue where missing image url prevented edit myplace form from opening
+
 ## 1.19
 
 ### mapwmts

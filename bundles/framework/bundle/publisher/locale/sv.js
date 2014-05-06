@@ -130,6 +130,7 @@ Oskari.registerLocalization({
             },
             "layers": {
                 "add": "Tillägg kartlager",
+                "addselect": "NOT TRANSLATED",
                 "label": "Kartlager",
                 "defaultLayer": "(Förvald kartlager)",
                 "useAsDefaultLayer": "Använd som förvald kartlager"

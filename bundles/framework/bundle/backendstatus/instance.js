@@ -419,7 +419,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 return;
             }
 
-            var evtBuilder = sandbox.getEventBuilder('MapLayerEvent'),
+            var evtBuilder = sandbox.getEventBuilder('BackendStatus.BackendStatusChangedEvent'),
                 changeNotifications = {};
 
             /* let's update AllKnown */
@@ -471,7 +471,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
 
             this.backendExtendedStatus = extendedStatuses;
 
-            var maplayers = {};
+            var eventData = [],
+                edLen;
 
             for (p in changeNotifications) {
                 if (changeNotifications.hasOwnProperty(p)) {
@@ -482,7 +483,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                         maplayer.setBackendStatus(this.backendStatus[p].status);
                         /* forcing DOWN to be notified - we do not know if layerselector2 has shown the msg or not...*/
                         if (changeNotifications[p].changed || "DOWN" === maplayer.getBackendStatus()) {
-                            maplayers[p] = maplayer;
+                            if (sandbox.isLayerAlreadySelected(maplayer.getId())) {
+                                // If the layer's been selected, notify immediately
+                                evt = evtBuilder(maplayer.getId(), maplayer.getBackendStatus());
+                                sandbox.notifyAll(evt);
+                            } else {
+                                // Otherwise we can wait a bit to see if we're sending a bulk update.
+                                eventData.push({
+                                    layerId: maplayer.getId(),
+                                    status: maplayer.getBackendStatus()
+                                });
+                            }
                         }
                     }
                 }
@@ -492,10 +503,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 me._pendingAjaxQuery.timestamp = null;
                 me.backendStatus = {};
             } else {
-                var evt;
-                for (p in maplayers) {
-                    if (maplayers.hasOwnProperty(p)) {
-                        evt = evtBuilder(p, 'update');
+                edLen = eventData.length;
+
+                if (edLen > 100) {
+                    // If too many have changed, just ask to do a bulk update
+                    evt = evtBuilder();
+                    sandbox.notifyAll(evt);
+                } else {
+                    // Otherwise we're fine sending multiple events
+                    for (p = 0; p < edLen; ++p) {
+                        evt = evtBuilder(eventData[p].layerId, eventData[p].status);
                         sandbox.notifyAll(evt);
                     }
                 }

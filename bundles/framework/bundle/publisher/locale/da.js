@@ -129,6 +129,7 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Kortlag",
                 "defaultLayer": "(Standardlag)",
                 "useAsDefaultLayer": "Brug som standardlag"

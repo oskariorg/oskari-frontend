@@ -22,6 +22,8 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
 
         /* Layer Type */
         this._layerType = "WMS";
+
+        this._gfiContent = null;
     }, {
         /**
          * @method addWmsUrl
@@ -102,6 +104,20 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
          */
         getAvailableQueryFormats: function () {
             return this._availableQueryFormats || [];
+        },
+        /**
+         * @method setGfiContent
+         * @param {String} gfiContent GetFeatureInfo content
+         */
+        setGfiContent: function (gfiContent) {
+            this._gfiContent = gfiContent;
+        },
+        /**
+         * @method getGfiContent
+         * @return {String} gfiContent GetFeatureInfo content
+         */
+        getGfiContent: function () {
+            return this._gfiContent;
         }
     }, {
         "extend": ["Oskari.mapframework.domain.AbstractLayer"]

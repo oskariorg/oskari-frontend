@@ -228,7 +228,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
                         layerId: _layer.getWmsName(),
                         isBaseLayer: false,
                         displayInLayerSwitcher: false,
-                        visibility: _layer.isInScale(this.getMapModule().getMap().getScale()),
+                        visibility: true,
                         buffer: 0
                     },
                     layerParams = _layer.getParams(),

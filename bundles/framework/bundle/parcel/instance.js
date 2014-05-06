@@ -48,6 +48,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
         this.sandbox = null;
         this.parcelService = undefined;
         this.idPrefix = 'parcel';
+        this.plugins = {};
     }, {
         /**
          * @method getName
@@ -145,7 +146,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
                 mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
                 me = this,
                 i,
-                layerId;
+                layerId,
+                p;
             this.sandbox = sandbox;
             if (me.conf && me.conf.proxyUrl) {
                 // Use proxy if requesting features cross-domain.
@@ -196,6 +198,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
             });
 
             loginBar.append(languageLink);
+            sandbox.register(me);
+            for (p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(me, p);
+                }
+            }
+            //Let's extend UI
+            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+            sandbox.request(this, request);
+
+            // Parcel print start ui
+            me._createPrintStartUi();
         },
         /**
          * @method _changeLanguage
@@ -224,11 +238,231 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
             dialog.makeModal();
         },
         /**
+         * @method init
+         * Implements Module protocol init method - does nothing atm
+         */
+        "init": function () {
+            return null;
+        },
+        /**
+         * @method setParcelPrintMode
+         * Starts parcel print mode with 1st form
+         *
+         * @param {Boolean} blnEnabled
+         */
+        setParcelPrintMode: function (blnEnabled) {
+            var me = this,
+                map = jQuery('#contentMap'),
+                tools = jQuery('#maptools');
+
+            if (blnEnabled) {
+                // Hide flyout, it's not needed...
+                jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().hide();
+                // proceed with parcel print view
+                if (!this.parcelprint1) {
+                    this.parcelprint1 = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.view.ParcelPrintForm1', this, this.getLocalization('ParcelPrintForm1'));
+                    this.parcelprint1.render(map, me.getMainView());
+                } else {
+                    // Update data UI
+                    this.parcelprint1.refreshData(me.getMainView());
+                }
+                // Disable keyboard arrow effects to map move
+                this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+
+                //Add parcel plot on a map for to see boundary monuments - not final
+                // Callback handles the end of the asynchronous operation.
+                var cb = function(blnSuccess) {
+                    if (blnSuccess) {
+
+                    }
+                }
+                this.getService().plotParcelWithoutPrint(this.getDrawPlugin().getDrawing(),this.parcelprint1.getValues().place , cb);
+
+                this.parcelprint1.show();
+                this.parcelprint1.setEnabled(true);
+
+                // Show info
+               // this.parcelprint1.showInfos();
+
+            } else {
+                if (this.parcelprint1) {
+                    this.parcelprint1.setEnabled(false);
+                    this.parcelprint1.hide();
+                    this.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+                }
+            }
+        },
+        /**
+         * @method setParcelPrint2
+         * Continue parcel print mode with 2nd form
+         *
+         * @param {Boolean} blnEnabled
+         */
+        setParcelPrint2: function (blnEnabled) {
+            var me = this,
+                map = jQuery('#contentMap'),
+                tools = jQuery('#maptools');
+
+            if (blnEnabled) {
+                // Hide previous form
+                if (this.parcelprint1) {
+                    this.parcelprint1.setEnabled(false);
+                    this.parcelprint1.hide();
+                }
+                // proceed with parcel print 2nd view
+                if (!this.parcelprint2) {
+                    this.parcelprint2 = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.view.ParcelPrintForm2', this, this.getLocalization('ParcelPrintForm2'));
+                    this.parcelprint2.render(map, me.getMainView());
+                } else {
+                    // Update data UI
+                    this.parcelprint2.refreshData(me.getMainView());
+                }
+                this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+                this.parcelprint2.show();
+                this.parcelprint2.setEnabled(true);
+
+                // Show info
+                // this.parcelprint2.showInfos();
+
+            } else {
+                if (this.parcelprint2) {
+                    this.parcelprint2.setEnabled(false);
+                    this.parcelprint2.hide();
+                    this.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+                }
+            }
+        },
+
+        requestParcelPrintFinal: function () {
+            var me = this,
+                values = {};
+            if (me.parcelprint2) {
+                me.parcelprint2.setEnabled(false);
+                me.parcelprint2.hide();
+                this.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+            }
+            values.place = this.parcelprint1.getValues().place
+            values.tables = me.parcelprint2.getValues();
+
+            // Start PTI printout
+            var cb = function(blnSuccess) {
+                if (blnSuccess) {
+
+                }
+            }
+            this.getService().printPlace(this.getDrawPlugin().getDrawing(),this.getDrawPlugin().getFeatureType(), values , cb);
+
+
+        },
+        setParcelPrintBreak: function () {
+            var me = this;
+            if (me.parcelprint1) {
+                me.parcelprint1.setEnabled(false);
+                me.parcelprint1.hide();
+            }
+            if (me.parcelprint2) {
+                me.parcelprint2.setEnabled(false);
+                me.parcelprint2.hide();
+            }
+            this.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+            // ask toolbar to select default tool
+            var toolbarRequest = me.getSandbox().getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+            me.getSandbox().request(me.getMainView(), toolbarRequest);
+            // Clear plot extra and put  parcel marker edit mode on
+            this.getService().cancelPlotParcel();
+
+        },
+        setParcelPrintPrevious: function () {
+            var me = this;
+            if (me.parcelprint2) {
+                me.parcelprint2.setEnabled(false);
+                me.parcelprint2.hide();
+            }
+            me.parcelprint1.show();  //setParcelPrintMode(true);
+        },
+        /**
          * @method stop
          * implements BundleInstance protocol stop method - does nothing atm
          */
         stop : function() {
             this.sandbox = null;
+        },
+        /**
+         * @method onEvent
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+            return handler.apply(this, [event]);
+        },
+        /**
+         * @property {Object} eventHandlers
+         * @static
+         */
+        eventHandlers: {
+            /**
+             * @method userinterface.ExtensionUpdatedEvent
+             */
+            'userinterface.ExtensionUpdatedEvent': function (event) {
+
+                var me = this;
+                if (event.getExtension().getName() !== me.getName()) {
+                    // not me -> do nothing
+                    return;
+                }
+
+                var isOpen = event.getViewState() !== "close";
+
+                me.displayContent(isOpen);
+
+            }
+        },
+        /**
+         *  Display parcel print info start
+         * @param isOpen
+         */
+        displayContent: function (isOpen) {
+            if (isOpen) {
+                this.plugins['Oskari.userinterface.Flyout'].refresh();
+            }
+        },
+        /**
+         * @method _createPrintStartUi
+         * @private
+         * (re)creates the UI for parcelprint info
+         */
+        _createPrintStartUi: function () {
+            var me = this;
+            this.plugins['Oskari.userinterface.Flyout'].createUi();
+        },
+        /**
+         * @method startExtension
+         * implements Oskari.userinterface.Extension protocol startExtension method
+         * Creates a flyout
+         * Oskari.mapframework.bundle.parcel.Flyout
+         */
+        startExtension: function () {
+            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.Flyout', this);
+        },
+        /**
+         * @method stopExtension
+         * implements Oskari.userinterface.Extension protocol stopExtension method
+         * Clears references to flyout and tile
+         */
+        stopExtension: function () {
+            this.plugins['Oskari.userinterface.Flyout'] = null;
+        },
+        /**
+         * @method getPlugins
+         * implements Oskari.userinterface.Extension protocol getPlugins method
+         * @return {Object} references to flyout and tile
+         */
+        getPlugins: function () {
+            return this.plugins;
         }
     }, {
         /**

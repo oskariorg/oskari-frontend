@@ -165,26 +165,26 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                 if (this.analyse && this.analyse.isEnabled && this.isMapStateChanged) {
                     this.isMapStateChanged = false;
                     this.getSandbox().printDebug("ANALYSE REFRESH");
-                    this.analyse.refreshAnalyseData(true);
+                    //this.analyse.refreshAnalyseData();
                 }
             },
             'AfterMapMoveEvent': function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    this.analyse.refreshAnalyseData(false);
+                    //this.analyse.refreshAnalyseData();
                 }
                 this.isMapStateChanged = true;
             },
             'AfterMapLayerAddEvent': function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    this.analyse.refreshAnalyseData(false);
+                    this.analyse.refreshAnalyseData(event.getMapLayer().getId());
                 }
             },
             'AfterMapLayerRemoveEvent': function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    this.analyse.refreshAnalyseData(false);
+                    this.analyse.refreshAnalyseData();
                     // Remove the filter JSON of the layer
                     var layer = event.getMapLayer();
                     this.analyse.removeFilterJson(layer.getId());
@@ -193,7 +193,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
             'AfterChangeMapLayerStyleEvent': function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    this.analyse.refreshAnalyseData(false);
+                    //this.analyse.refreshAnalyseData();
                 }
             },
             /**
@@ -309,12 +309,15 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
         setAnalyseMode: function (blnEnabled) {
             var me = this,
                 map = jQuery('#contentMap'),
+                mapmodule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 tools = jQuery('#maptools');
 
             if (blnEnabled) {
-
+                map.addClass('mapAnalyseMode');
+                me.sandbox.mapMode = 'mapAnalyseMode';
                 // Hide flyout, it's not needed...
-                jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().hide();
+                jQuery(me.plugins['Oskari.userinterface.Flyout'].container)
+                    .parent().parent().hide();
                 /* Why would we close analyse here?
                 // me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
                 var request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
@@ -335,10 +338,11 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                 this.analyse.show();
                 this.analyse.setEnabled(true);
 
-                // Show info
-                this.analyse.showInfos();
-
             } else {
+                map.removeClass('mapAnalyseMode');
+                if (me.sandbox._mapMode === 'mapAnalyseMode') {
+                    delete me.sandbox._mapMode;
+                }
                 if (this.analyse) {
                     // Reset tile state
                     var request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
@@ -347,6 +351,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                     this.analyse.hide();
                 }
             }
+            mapmodule.updateSize();
         },
         displayContent: function (isOpen) {
             if (isOpen) {
@@ -399,10 +404,10 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                 var layer = this.mapLayerService.findMapLayer(layerId);
 
                 if (layer && layer.isLayerOfType('ANALYSIS')) {
-                     this.showMessage(
-                    loc.success.layerAdded.title,
-                    loc.success.layerAdded.message.replace(/\{layer\}/, layer.getName())
-                );
+                    this.showMessage(
+                        loc.success.layerAdded.title,
+                        loc.success.layerAdded.message.replace(/\{layer\}/, layer.getName())
+                    );
                 }
             }
             // maplayers changed so update the tab content in personaldata

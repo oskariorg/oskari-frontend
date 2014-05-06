@@ -133,9 +133,22 @@ Oskari.clazz
 
                 // UI exists and we can hook up the request handler
                 this.requestHandlers = {
-                    addTabRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.search.request.AddTabRequestHandler', sandbox, this.plugins['Oskari.userinterface.Flyout'])
+                    addTabRequestHandler: Oskari.clazz.create(
+                        'Oskari.mapframework.bundle.search.request.AddTabRequestHandler',
+                        sandbox, this.plugins['Oskari.userinterface.Flyout']),
+                    addSearchResultActionRequestHandler: Oskari.clazz.create(
+                        'Oskari.mapframework.bundle.search.request.SearchResultActionRequestHandler',
+                        sandbox, this.plugins['Oskari.userinterface.Flyout'])
                 };
-                sandbox.addRequestHandler('Search.AddTabRequest', this.requestHandlers.addTabRequestHandler);
+                sandbox.addRequestHandler(
+                    'Search.AddTabRequest',
+                    this.requestHandlers.addTabRequestHandler);
+                sandbox.addRequestHandler(
+                    'Search.AddSearchResultActionRequest',
+                    this.requestHandlers.addSearchResultActionRequestHandler);
+                sandbox.addRequestHandler(
+                    'Search.RemoveSearchResultActionRequest',
+                    this.requestHandlers.addSearchResultActionRequestHandler);
             },
             /**
              * @method init

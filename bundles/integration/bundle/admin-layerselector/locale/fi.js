@@ -100,6 +100,7 @@ Oskari.registerLocalization({
             "groupName": "Ryhmätason nimi",
             "subLayers": "Alatasot",
             "addSubLayer": "Lisää alataso",
+            "editSubLayer": "Muokkaa alatasoa",
 
             "wmsInterfaceAddress": "WMS-rajapinnan osoitteet",
             "wmsUrl": "WMS-rajapinnan osoitteet",
@@ -140,6 +141,7 @@ Oskari.registerLocalization({
             "legendImage": "Legenda-kuvan osoite",
             "legendImageDesc": "Legenda-kuvan osoite",
             "legendImagePlaceholder": "Legenda-kuvan osoite",
+            "gfiContent": "GFI lisäsisältö",
             "gfiResponseType": "GFI vastauksen tyyppi",
             "gfiResponseTypeDesc": "Vastauksen tyyppi eli Get Feature Info (GFI)",
             "gfiStyle": "GFI:n tyyli",

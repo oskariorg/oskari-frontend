@@ -173,7 +173,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
                     if (this.publisher) {
                         this.publisher.maplayerPanel.handleLayerOrderChanged(event._movedMapLayer, event._fromPosition, event._toPosition);
-                        if(event._creator !== this.publisher.maplayerPanel.plugin.getName()) {
+                        if (event._creator !== this.publisher.maplayerPanel.plugin.getName()) {
                             this.publisher.maplayerPanel.handleLayerSelectionChanged();
                         }
                     }
@@ -182,11 +182,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
             /**
              * @method MapLayerEvent
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
+             *
+             * Calls flyouts handleLayerSelectionChanged() and handleDrawLayerSelectionChanged() functions
              */
             'MapLayerEvent': function (event) {
                 this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
-                if (this.publisher) {
+                if ((this.publisher) && (event.getOperation() === 'add')) {
+                    // handleLayerSelectionChanged and handleDrawLayerSelectionChanged both rebuild the DOM
                     this.publisher.maplayerPanel.handleLayerSelectionChanged();
+                    this.publisher.toolsPanel.handleDrawLayerSelectionChanged(event.getLayerId());
                 }
             },
             /**

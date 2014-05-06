@@ -11,7 +11,23 @@ Oskari.registerLocalization({
             "title": "Analisi",
             "content": {
                 "label": "Dati",
-                "tooltip": "Aggiungi dati da analizzare"
+                "tooltip": "Aggiungi dati da analizzare",
+                "features": {
+                    "title": "Draw a feature",
+                    "buttons": {
+                        "cancel": "Cancel",
+                        "finish": "Done"
+                    },
+                    "modes": {
+                        "area": "Area",
+                        "line": "Line",
+                        "point": "Point"
+                    }
+                },
+                "search": {
+                    "title": "Search places",
+                    "resultLink": "Add to analyse"
+                }
             },
 
             "method": {
@@ -198,8 +214,8 @@ Oskari.registerLocalization({
             },
             "infos": {
                 "title": "Info",
-                "layer": "Layer -",
-                "over10": "- sopra i 10 attributi - Seleziona un massimo di 10 attributi"
+                "layer": "Layer ",
+                "over10": " sopra i 10 attributi - seleziona un massimo di 10 attributi"
             }
         },
         "StartView": {

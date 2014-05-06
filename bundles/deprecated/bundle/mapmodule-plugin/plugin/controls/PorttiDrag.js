@@ -1,29 +1,29 @@
 OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
-  
+
     /** 
      * Property: started
-     * {Boolean} When a mousedown or touchstart event is received, 
-     *   we want to record it, but not set 'dragging' until the mouse 
+     * {Boolean} When a mousedown or touchstart event is received,
+     *   we want to record it, but not set 'dragging' until the mouse
      *   moves after starting.
      */
     started: false,
 
     /**
      * Property: stopDown
-     * {Boolean} Stop propagation of mousedown events from getting 
+     * {Boolean} Stop propagation of mousedown events from getting
      *   to listeners on the same element.  Default is true.
      */
     stopDown: true,
 
     /** 
-     * Property: dragging 
-     * {Boolean} 
+     * Property: dragging
+     * {Boolean}
      */
     dragging: false,
 
     /**
      * Property: touch
-     * {Boolean} When a touchstart event is fired, touch will be true 
+     * {Boolean} When a touchstart event is fired, touch will be true
      *   and all mouse related listeners will do nothing.
      */
     touch: false,
@@ -53,32 +53,32 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      * {Function}
      */
     oldOnselectstart: null,
-    
+
     /**
      * Property: interval
-     * {Integer} In order to increase performance, an interval (in 
-     *   milliseconds) can be set to reduce the number of drag events 
-     *   called. If set, a new drag event will not be set until the 
-     *   interval has passed. 
-     *   Defaults to 0, meaning no interval. 
+     * {Integer} In order to increase performance, an interval (in
+     *   milliseconds) can be set to reduce the number of drag events
+     *   called. If set, a new drag event will not be set until the
+     *   interval has passed.
+     *   Defaults to 0, meaning no interval.
      */
     interval: 0,
-    
+
     /**
      * Property: timeoutId
      * {String} The id of the timeout used for the mousedown interval.
      *   This is "private", and should be left alone.
      */
     timeoutId: null,
-    
+
     /**
      * APIProperty: documentDrag
-     * {Boolean} If set to true, the handler will also handle mouse 
-     *   moves when the cursor has moved out of the map viewport. 
+     * {Boolean} If set to true, the handler will also handle mouse
+     *   moves when the cursor has moved out of the map viewport.
      *   Default is false.
      */
     documentDrag: false,
-    
+
     /**
      * Property: documentEvents
      * {Boolean} Are we currently observing document events?
@@ -88,38 +88,46 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
     /**
      * Constructor: OpenLayers.Handler.Drag
      * Returns OpenLayers.Handler.Drag
-     * 
+     *
      * Parameters:
      * control - {<OpenLayers.Control>} The control that is making use of
-     *   this handler.  If a handler is being used without a control, 
+     *   this handler.  If a handler is being used without a control,
      *   the handlers setMap method must be overridden to deal properly
      *   with the map.
      * callbacks - {Object} An object containing a single function to be
      *   called when the drag operation is finished. The callback should
      *   expect to recieve a single argument, the pixel location of the
      *   event. Callbacks for 'move' and 'done' are supported. You can
-     *   also speficy callbacks for 'down', 'up', and 'out' to respond 
+     *   also speficy callbacks for 'down', 'up', and 'out' to respond
      *   to those events.
-     * options - {Object} 
+     * options - {Object}
      */
-    initialize: function(control, callbacks, options) {
+    initialize: function (control, callbacks, options) {
         OpenLayers.Handler.prototype.initialize.apply(this, arguments);
-        
+
         if (this.documentDrag === true) {
             var me = this;
-            this._docMove = function(evt) {
+            this._docMove = function (evt) {
                 me.mousemove({
-                    xy: {x: evt.clientX, y: evt.clientY},
+                    xy: {
+                        x: evt.clientX,
+                        y: evt.clientY
+                    },
                     element: document
                 });
             };
-            this._docUp = function(evt) {
-                me.mouseup({xy: {x: evt.clientX, y: evt.clientY}});
+            this._docUp = function (evt) {
+                me.mouseup({
+                    xy: {
+                        x: evt.clientX,
+                        y: evt.clientY
+                    }
+                });
             };
         }
     },
 
-    
+
     /**
      * Method: dragstart
      * This private method is factorized from mousedown and touchstart
@@ -135,7 +143,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
         var propagate = true;
         this.dragging = false;
         if (this.checkModifiers(evt) &&
-               (OpenLayers.Event.isLeftClick(evt) ||
+            (OpenLayers.Event.isLeftClick(evt) ||
                 OpenLayers.Event.isSingleTouch(evt))) {
             this.started = true;
             this.start = evt.xy;
@@ -148,7 +156,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
 
             // OpenLayers.Event.stop(evt);
 
-            if(!this.oldOnselectstart) {
+            if (!this.oldOnselectstart) {
                 this.oldOnselectstart = document.onselectstart ?
                     document.onselectstart : OpenLayers.Function.True;
             }
@@ -176,12 +184,11 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      */
     dragmove: function (evt) {
         this.lastMoveEvt = evt;
-        if (this.started && 
-            !this.timeoutId && 
-            (evt.xy.x != this.last.x || 
-             evt.xy.y != this.last.y)) {
-            if(this.documentDrag === true && this.documentEvents) {
-                if(evt.element === document) {
+        if (this.started && !this.timeoutId &&
+            (evt.xy.x != this.last.x ||
+                evt.xy.y != this.last.y)) {
+            if (this.documentDrag === true && this.documentEvents) {
+                if (evt.element === document) {
                     this.adjustXY(evt);
                     // do setEvent manually because the documentEvents
                     // are not registered with the map
@@ -199,7 +206,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
 
             this.move(evt);
             this.callback("move", [evt.xy]);
-            if(!this.oldOnselectstart) {
+            if (!this.oldOnselectstart) {
                 this.oldOnselectstart = document.onselectstart;
                 document.onselectstart = OpenLayers.Function.False;
             }
@@ -221,7 +228,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      */
     dragend: function (evt) {
         if (this.started) {
-            if(this.documentDrag === true && this.documentEvents) {
+            if (this.documentDrag === true && this.documentEvents) {
                 this.adjustXY(evt);
                 this.removeDocumentEvents();
             }
@@ -233,7 +240,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
             );
             this.up(evt);
             this.callback("up", [evt.xy]);
-            if(dragged) {
+            if (dragged) {
                 this.callback("done", [evt.xy]);
             }
             document.onselectstart = this.oldOnselectstart;
@@ -255,8 +262,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      * Parameters:
      * evt - {Event} The mouse down event
      */
-    down: function(evt) {
-    },
+    down: function (evt) {},
 
     /**
      * Method: move
@@ -267,8 +273,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      * evt - {Event} The mouse move event
      *
      */
-    move: function(evt) {
-    },
+    move: function (evt) {},
 
     /**
      * Method: up
@@ -278,8 +283,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      * Parameters:
      * evt - {Event} The mouse up event
      */
-    up: function(evt) {
-    },
+    up: function (evt) {},
 
     /**
      * Method: out
@@ -289,12 +293,11 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      * Parameters:
      * evt - {Event} The mouse out event
      */
-    out: function(evt) {
-    },
+    out: function (evt) {},
 
     /**
-     * The methods below are part of the magic of event handling. 
-     * Because they are named like browser events, they are registered 
+     * The methods below are part of the magic of event handling.
+     * Because they are named like browser events, they are registered
      * as listeners for the events they represent.
      */
 
@@ -308,7 +311,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      * Returns:
      * {Boolean} Let the event propagate.
      */
-    mousedown: function(evt) {
+    mousedown: function (evt) {
         return this.dragstart(evt);
     },
 
@@ -322,7 +325,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      * Returns:
      * {Boolean} Let the event propagate.
      */
-    touchstart: function(evt) {
+    touchstart: function (evt) {
         if (!this.touch) {
             this.touch = true;
             // unregister mouse listeners
@@ -347,7 +350,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      * Returns:
      * {Boolean} Let the event propagate.
      */
-    mousemove: function(evt) {
+    mousemove: function (evt) {
         return this.dragmove(evt);
     },
 
@@ -361,7 +364,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      * Returns:
      * {Boolean} Let the event propagate.
      */
-    touchmove: function(evt) {
+    touchmove: function (evt) {
         return this.dragmove(evt);
     },
 
@@ -369,12 +372,12 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      * Method: removeTimeout
      * Private. Called by mousemove() to remove the drag timeout.
      */
-    removeTimeout: function() {
+    removeTimeout: function () {
         this.timeoutId = null;
         // if timeout expires while we're still dragging (mouseup
         // hasn't occurred) then call mousemove to move to the
         // correct position
-        if(this.dragging) {
+        if (this.dragging) {
             this.mousemove(this.lastMoveEvt);
         }
     },
@@ -389,7 +392,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      * Returns:
      * {Boolean} Let the event propagate.
      */
-    mouseup: function(evt) {
+    mouseup: function (evt) {
         return this.dragend(evt);
     },
 
@@ -403,7 +406,7 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      * Returns:
      * {Boolean} Let the event propagate.
      */
-    touchend: function(evt) {
+    touchend: function (evt) {
         // override evt.xy with last position since touchend does 
         // not have any touch position
         evt.xy = this.last;
@@ -422,21 +425,21 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
      */
     mouseout: function (evt) {
         if (this.started && OpenLayers.Util.mouseLeft(evt, this.map.eventsDiv)) {
-            if(this.documentDrag === true) {
+            if (this.documentDrag === true) {
                 this.addDocumentEvents();
             } else {
                 var dragged = (this.start != this.last);
-                this.started = false; 
+                this.started = false;
                 this.dragging = false;
                 OpenLayers.Element.removeClass(
                     this.map.viewPortDiv, "olDragDown"
                 );
                 this.out(evt);
                 this.callback("out", []);
-                if(dragged) {
+                if (dragged) {
                     this.callback("done", [evt.xy]);
                 }
-                if(document.onselectstart) {
+                if (document.onselectstart) {
                     document.onselectstart = this.oldOnselectstart;
                 }
             }
@@ -447,12 +450,12 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
     /**
      * Method: click
      * The drag handler captures the click event.  If something else
-     * registers for clicks on the same element, its listener will 
+     * registers for clicks on the same element, its listener will
      * not be called after a drag.
-     * 
-     * Parameters: 
-     * evt - {Event} 
-     * 
+     *
+     * Parameters:
+     * evt - {Event}
+     *
      * Returns:
      * {Boolean} Let the event propagate.
      */
@@ -464,13 +467,13 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
     /**
      * Method: activate
      * Activate the handler.
-     * 
+     *
      * Returns:
      * {Boolean} The handler was successfully activated.
      */
-    activate: function() {
+    activate: function () {
         var activated = false;
-        if(OpenLayers.Handler.prototype.activate.apply(this, arguments)) {
+        if (OpenLayers.Handler.prototype.activate.apply(this, arguments)) {
             this.dragging = false;
             activated = true;
         }
@@ -478,15 +481,15 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
     },
 
     /**
-     * Method: deactivate 
+     * Method: deactivate
      * Deactivate the handler.
-     * 
+     *
      * Returns:
      * {Boolean} The handler was successfully deactivated.
      */
-    deactivate: function() {
+    deactivate: function () {
         var deactivated = false;
-        if(OpenLayers.Handler
+        if (OpenLayers.Handler
             .prototype.deactivate.apply(this, arguments)) {
             this.touch = false;
             this.started = false;
@@ -500,48 +503,48 @@ OpenLayers.Handler.PorttiDrag = OpenLayers.Class(OpenLayers.Handler, {
         }
         return deactivated;
     },
-    
+
     /**
      * Method: adjustXY
-     * Converts event coordinates that are relative to the document 
-     * body to ones that are relative to the map viewport. The latter 
+     * Converts event coordinates that are relative to the document
+     * body to ones that are relative to the map viewport. The latter
      * is the default in OpenLayers.
-     * 
+     *
      * Parameters:
      * evt - {Object}
      */
-    adjustXY: function(evt) {
+    adjustXY: function (evt) {
         var pos = OpenLayers.Util.pagePosition(this.map.viewPortDiv);
         evt.xy.x -= pos[0];
         evt.xy.y -= pos[1];
     },
-    
+
     /**
      * Method: addDocumentEvents
-     * Start observing document events when documentDrag is true and 
+     * Start observing document events when documentDrag is true and
      * the mouse cursor leaves the map viewport while dragging.
      */
-    addDocumentEvents: function() {
+    addDocumentEvents: function () {
         OpenLayers.Element.addClass(document.body, "olDragDown");
         this.documentEvents = true;
         OpenLayers.Event.observe(document, "mousemove", this._docMove);
         OpenLayers.Event.observe(document, "mouseup", this._docUp);
     },
-    
+
     /**
      * Method: removeDocumentEvents
-     * Stops observing document events when documentDrag is true and 
+     * Stops observing document events when documentDrag is true and
      * the mouse cursor re-enters the map viewport while dragging.
      */
-    removeDocumentEvents: function() {
+    removeDocumentEvents: function () {
         OpenLayers.Element.removeClass(document.body, "olDragDown");
         this.documentEvents = false;
-        OpenLayers.Event.stopObserving(document, 
-                                       "mousemove", 
-                                       this._docMove);
-        OpenLayers.Event.stopObserving(document, 
-                                       "mouseup", 
-                                       this._docUp);
+        OpenLayers.Event.stopObserving(document,
+            "mousemove",
+            this._docMove);
+        OpenLayers.Event.stopObserving(document,
+            "mouseup",
+            this._docUp);
     },
 
     CLASS_NAME: "OpenLayers.Handler.PorttiDrag"

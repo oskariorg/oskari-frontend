@@ -3,6 +3,7 @@ Oskari.registerLocalization({
     "key": "Parcel",
     "value": {
         "title": "Kohteet",
+        "flyouttitle": "Tulostus",
         "desc": "",
         "tools": {
             "line": {
@@ -38,11 +39,11 @@ Oskari.registerLocalization({
             "save": "Tallenna",
             "movePlaces": "Siirrä kohteet ja poista"
         },
-        "placeform": {
-            "title": "Määräalan tiedot",
-            "tooltip": "Anna määräalan tiedot ja tulosta tai tallenna",
+        "parcelprintform1": {
+            "title": "Tulosta näkymä (1/3)",
+            "tooltip": "Anna määräalan tiedot ja jatka",
             "placename": {
-                "placeholder": "Tunnus"
+                "placeholder": "Tunnus *"
             },
             "ptitle": {
                 "placeholder": "Piirroksen otsikko"
@@ -60,10 +61,29 @@ Oskari.registerLocalization({
                 "placeholder": "Kantatilan lähdeaineisto"
             },
             "reporter": {
-                "placeholder": "Piirroksen laatija"
+                "placeholder": "Piirroksen laatija *"
             },
             "area": {
-                "placeholder": "Pinta-ala (m²)"
+                "placeholder": "Pinta-ala n. (m²)"
+            },
+            "buttons": {
+                "continue": "Jatka",
+                "break": "Peruuta"
+            }
+        },
+        "parcelprintform2": {
+            "title": "Tulosta näkymä (2/3)",
+            "pointnumber": "Kohde",
+            "pointdesc": "Selitys",
+            "tooltip": "Anna uusien rajamerkkien tiedot ja jatka",
+            "point": {
+                "placeholder": "Anna rajapyykin lisätietoja esim. etäisyys xx m pyykistä 201",
+                "label": "Rajapyykki"
+            },
+            "buttons": {
+                "continue": "Jatka",
+                "previous": "Edellinen",
+                "break": "Peruuta"
             }
         },
         "qualitycodes": {
@@ -103,13 +123,27 @@ Oskari.registerLocalization({
         },
         "validation": {
             "title": "Tiedoissa puutteita:",
-            "placeName": "Kohteen nimi puuttuu."
+            "placeName": "Kohteen nimi puuttuu.",
+            "reporter": "Piirroksen laatijan nimi puuttuu."
         },
         "page": {
-            "title": "Määräalakartta / Emäkiinteistö"
+            "title": "Määräalakartta",
+            "parentparcel": "Emäkiinteistö:",
+            "partparcel": "Määräala:",
+            "footnote": "Rantaviivan todellinen paikka määräytyy toimituksessa"
         },
         "language": {
             "change": "Ruotsiksi"
+        },
+        "StartPrintView": {
+            "text": "Tämän tulostus-toiminnon yhteydessä annettavat tiedot tallentuvat vain pdf-tulosteelle",
+            "infoseen": {
+                "label": "Älä näytä tätä viestiä uudelleen"
+            },
+            "buttons": {
+                "continue": "Aloita tulostus",
+                "cancel": "Poistu"
+            }
         }
     }
 });

@@ -11,10 +11,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
     this.editMode = false;
     this.currentDrawMode = null;
     this.prefix = "DrawPlugin.";
+    this.creatorId = undefined;
 
     if (config && config.id) {
-        // Note that the events and requests need to match the configured prefix based on the id!
+        // Note that the events and requests need to match the configured
+        // prefix based on the id!
         this.prefix = config.id + ".";
+        this.creatorId = config.id;
     }
     // graphicFill, instance
     if (config && config.graphicFill) {
@@ -32,8 +35,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
     },
     setMapModule: function (mapModule) {
         this.mapModule = mapModule;
-        this._map = mapModule.getMap();
-        this.pluginName = mapModule.getName() + this.__name;
+
+        if (mapModule) {
+            this._map = mapModule.getMap();
+            this.pluginName = mapModule.getName() + this.__name;
+        } else {
+            this._map = null;
+            this.pluginName = null;
+        }
     },
     /**
      * Enables the draw control for given params.drawMode.
@@ -86,7 +95,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
         } catch (error) {
             // happens when the sketch isn't even started -> reset state
             this.stopDrawing();
-            var event = this._sandbox.getEventBuilder('DrawPlugin.SelectedDrawingEvent')();
+            var evtBuilder = this._sandbox.getEventBuilder('DrawPlugin.SelectedDrawingEvent');
+            var event = evtBuilder(null, null, this.creatorId);
             this._sandbox.notifyAll(event);
         }
     },
@@ -133,12 +143,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
             this.modifyControls.select.select(this.drawLayer.features[lastIndex]);
         }
 
-        var event;
+        var evtBuilder, event;
         if (!this.multipart || isForced) {
-            event = this._sandbox.getEventBuilder('DrawPlugin.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
+            evtBuilder = this._sandbox.getEventBuilder('DrawPlugin.FinishedDrawingEvent');
+            event = evtBuilder(this.getDrawing(), this.editMode, this.creatorId);
             this._sandbox.notifyAll(event);
         } else {
-            event = this._sandbox.getEventBuilder('DrawPlugin.AddedFeatureEvent')(this.getDrawing(), this.currentDrawMode);
+            evtBuilder = this._sandbox.getEventBuilder('DrawPlugin.AddedFeatureEvent');
+            event = evtBuilder(this.getDrawing(), this.currentDrawMode, this.creatorId);
             this._sandbox.notifyAll(event);
         }
     },
@@ -233,9 +245,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
         };
 
         if (this.graphicFill !== null && this.graphicFill !== undefined) {
-            var str = this.graphicFill;
-            var format = new OpenLayers.Format.SLD();
-            var obj = format.read(str),
+            var str = this.graphicFill,
+                format = new OpenLayers.Format.SLD(),
+                obj = format.read(str),
                 p;
             if (obj && obj.namedLayers) {
                 for (p in obj.namedLayers) {
@@ -290,12 +302,18 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
             (featClass === "OpenLayers.Geometry.MultiPolygon")) {
             return this.drawLayer.features[0].geometry;
         }
-
-        var drawing = null;
-        var components = [],
-            i;
+        var drawing = null,
+            components = [],
+            i,
+            geom;
         for (i = 0; i < this.drawLayer.features.length; i++) {
-            components.push(this.drawLayer.features[i].geometry);
+            geom = this.drawLayer.features[i].geometry;
+            // Remove unfinished polygons
+            if (geom.CLASS_NAME === 'OpenLayers.Geometry.Polygon' && geom.components.length && geom.components[0].CLASS_NAME === 'OpenLayers.Geometry.LinearRing' && geom.components[0].components.length < 4) {
+                // Unfinished poly, ignore.
+            } else {
+                components.push(geom);
+            }
         }
         switch (featClass) {
         case "OpenLayers.Geometry.Point":
@@ -350,7 +368,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
 
     _sendActiveGeometry: function (geometry, drawMode) {
         var eventBuilder = this._sandbox.getEventBuilder('DrawPlugin.ActiveDrawingEvent'),
-            event, featClass;
+            event,
+            featClass;
 
         if (drawMode === null || drawMode === undefined) {
             featClass = geometry.CLASS_NAME;
@@ -369,7 +388,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
         }
 
         if (eventBuilder) {
-            event = eventBuilder(geometry, drawMode);
+            event = eventBuilder(geometry, drawMode, this.creatorId);
             this._sandbox.notifyAll(event);
         }
     },
@@ -388,13 +407,19 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
 
     },
     stopPlugin: function (sandbox) {
+        this.toggleControl();
+
+        if (this.drawLayer) {
+            this.drawLayer.destroyFeatures();
+            this._map.removeLayer(this.drawLayer);
+            this.drawLayer = undefined;
+        }
 
         sandbox.removeRequestHandler('DrawPlugin.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
         sandbox.removeRequestHandler('DrawPlugin.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
         sandbox.removeRequestHandler('DrawPlugin.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
         sandbox.unregister(this);
 
-        this._map = null;
         this._sandbox = null;
     },
     /* @method start

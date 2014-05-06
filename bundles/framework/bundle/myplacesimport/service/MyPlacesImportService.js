@@ -32,12 +32,12 @@ function(instance) {
     },
     /**
      * Returns the url used to send the file data to.
-     * 
+     *
      * @method getFileImportUrl
      * @return {String}
      */
     getFileImportUrl: function() {
-        return this.urls.create;
+        return this.urls.create+'&epsg='+this.sandbox.getMap().getSrsName();
     },
     /**
      * Retrieves the user layers (with the id param only the specified layer)

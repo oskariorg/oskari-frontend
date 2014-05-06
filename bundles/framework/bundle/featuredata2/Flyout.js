@@ -22,7 +22,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
         this.tabsContainer = null;
         this.selectedTab = null;
         this.active = false;
-        this.mapDivId = "#mapdiv";
         this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
         // Resizability of the flyout
         this.resizable = true;
@@ -65,12 +64,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
             this.tabsContainer =
                 Oskari.clazz.create('Oskari.userinterface.component.TabContainer',
                     this.instance.getLocalization('nodata'));
-
-            var mapmodule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule'),
-                newMapDivId = mapmodule.getMap().div;
-            if (newMapDivId) {
-                this.mapDivId = newMapDivId;
-            }
         },
         /**
          * @method stopPlugin
@@ -415,6 +408,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                             dialog.show(showMore, content);
                             dialog.moveTo(link, 'bottom');
+                            if (me.dialog) me.dialog.close(true);
+                            me.dialog = dialog;
                         });
 
                     // helper function for visibleFields
@@ -444,7 +439,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 panel.grid.setDataModel(model);
                 panel.grid.renderTo(panel.getContainer());
                 // define flyout size to adjust correctly to arbitrary tables
-                var mapdiv = jQuery(me.mapDivId),
+                var mapdiv = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule').getMapEl(),
                     content = jQuery('div.oskari-flyoutcontent.featuredata'),
                     flyout = content.parent().parent();
                 if (!me.resized) {
@@ -470,20 +465,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
          * Adds features to the model data
          */
         _addFeatureValues: function (model, fields, hiddenFields, features, selectedFeatures) {
-            for (var i = 0; i < features.length; i++) {
+            var i,
+                j,
+                k;
+            for (i = 0; i < features.length; i++) {
                 featureData = {};
                 values = features[i];
 
                 // remove from selected if in feature list
                 if (selectedFeatures !== null && selectedFeatures !== undefined && selectedFeatures.length > 0) {
-                    for (var k = 0; k < selectedFeatures.length; k++) {
+                    for (k = 0; k < selectedFeatures.length; k++) {
                         if (values[0] == selectedFeatures[k][0]) { // fid match
                             selectedFeatures.splice(k, 1);
                         }
                     }
                 }
 
-                for (var j = 0; j < fields.length; j++) {
+                for (j = 0; j < fields.length; j++) {
                     if (values[j] === null || values[j] === undefined || values[j] === "") {
                         featureData[fields[j]] = "";
                     } else {
@@ -505,7 +503,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
          * Checks if the arrays are equal
          */
         _isArrayEqual: function (current, old) {
-            if (old.length != current.length) { // same size?
+            if (old.length !== current.length) {
+                // arrays have different lengths, no way are they equal
                 return false;
             }
 
@@ -552,11 +551,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
 
             var layer = event.getMapLayer(),
                 panel = this.layers['' + layer.getId()],
-                fids = event.getWfsFeatureIds();
+                fids = event.getWfsFeatureIds(),
+                i;
             if (fids !== null && fids !== undefined && fids.length > 0) {
                 panel.grid.select(fids[0], event.isKeepSelection());
                 if (fids.length > 1) {
-                    for (var i = 1; i < fids.length; ++i) {
+                    for (i = 1; i < fids.length; ++i) {
                         panel.grid.select(fids[i], true);
                     }
                 }
@@ -576,7 +576,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 return;
             }
 
-            this.active = (isEnabled == true);
+            this.active = !!isEnabled;
             var sandbox = this.instance.sandbox,
                 request;
 

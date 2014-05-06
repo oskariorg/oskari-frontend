@@ -129,6 +129,7 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Шари карти",
                 "defaultLayer": "(Типовий шар)",
                 "useAsDefaultLayer": "Використовувати як типовий"

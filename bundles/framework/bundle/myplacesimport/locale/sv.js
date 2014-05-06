@@ -2,55 +2,72 @@ Oskari.registerLocalization({
     "lang": "sv",
     "key": "MyPlacesImport",
     "value": {
-        "title": "Omien aineistojen tuonti",
-        "desc": "",
+        "title": "NOT TRANSLATED",
+        "desc": "Voit tuoda omia aineistoja shape-formaatissa zip-muodossa tai kml/kmz tiedostoja.",
+        "help": "Anna tämän toiminnon lähtöaineistoksi (Browse...) zip tiedoston nimi tai url-linkki vastaavaan tiedostoon. \nZip-tiedoston saat lataamalla koneellesi shape-siirtoformaatissa olevan aineiston \nja muodostamalla näistä tiedostoista (.shp, . shx, .dbf, .prj) zip-tiedosto \ntai lataa koneellesi Googlen kml/kmz tiedostoja. \ntai käytä tiedoston url-linkkiä. ",
         "tool": {
-            "tooltip": "Tuo oma aineisto"
+            "tooltip": "NOT TRANSLATED"
         },
         "flyout": {
-            "title": "Omien aineistojen tuonti",
-            "description": "Voit tuoda omia aineistoja shape-formaatissa zip-muodossa eller .kmz fil.",
+            "title": "NOT TRANSLATED",
+            "description": "NOT TRANSLATED",
             "actions": {
-                "cancel": "Peruuta",
-                "next": "Seuraava"
+                "cancel": "NOT TRANSLATED",
+                "next": "NOT TRANSLATED"
             },
             "file": {
-                "submit": "Lähetä"
+                "submit": "NOT TRANSLATED"
             },
             "layer": {
-                "title": "Tallenna tason tiedot:",
-                "name": "Nimi",
-                "desc": "Kuvaus",
-                "source": "Tietolähde",
-                "style": "Tason tyyli"
+                "title": "NOT TRANSLATED",
+                "name": "NOT TRANSLATED",
+                "desc": "NOT TRANSLATED",
+                "source": "NOT TRANSLATED",
+                "style": "NOT TRANSLATED"
             },
             "validations": {
                 "error": {
-                    "title": "Virhe",
-                    "message": "Tiedosto ja tason nimi puuttuvat."
+                    "title": "NOT TRANSLATED",
+                    "message": "NOT TRANSLATED"
                 }
             },
             "finish": {
                 "success": {
-                    "title": "Tason tuonti onnistui",
-                    "message": "Löydät tason omat tiedot -valikosta"
+                    "title": "NOT TRANSLATED",
+                    "message": "NOT TRANSLATED"
                 },
                 "failure": {
-                    "title": "Tason tuonti epäonnistui. Yritä myöhemmin uudelleen."
+                    "title": "NOT TRANSLATED"
                 }
             }
         },
         "tab": {
             "title": "Aineistot",
             "grid": {
-                "name": "Nimi",
-                "description": "Kuvaus",
-                "source": "Tietolähde"
+                "name": "NOT TRANSLATED",
+                "description": "NOT TRANSLATED",
+                "source": "NOT TRANSLATED",
+                "remove": " ",
+                "removeButton": "NOT TRANSLATED"
+            },
+            "confirmDeleteMsg": "Vill du ta bort:",
+            "buttons": {
+                "ok": "OK",
+                "cancel": "Avbryta",
+                "delete": "Ta bort"
+            },
+            "notification": {
+                "deletedTitle": "Ta bort kartlager",
+                "deletedMsg": "Kartlagret borttaget"
+            },
+            "error": {
+                "title": "Fel!",
+                "generic": "Systemfel. Försök på nytt senare."
             }
         },
         "layer": {
-            "organization": "Omat aineistot",
-            "inspire": "Omat aineistot"
+            "organization": "NOT TRANSLATED",
+            "inspire": "NOT TRANSLATED"
         }
     }
 });

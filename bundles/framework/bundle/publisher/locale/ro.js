@@ -130,6 +130,7 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Straturi hartă",
                 "defaultLayer": "(Strat implicit)",
                 "useAsDefaultLayer": "Folosire ca strat implicit"

@@ -131,6 +131,7 @@ Oskari.registerLocalization(
             "layers": {
                 "add": "Create new layer for new features.",
                 "label": "Map Layers",
+                "addselect": "Add drawlayer to map",
                 "defaultLayer": "(Default map layer)",
                 "useAsDefaultLayer": "Use as the default layer."
             },

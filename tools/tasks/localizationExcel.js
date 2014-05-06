@@ -230,9 +230,15 @@ module.exports = function (grunt) {
                                 pathStack.pop();
                             }
                         }
+                    } else if (toString.call(node) === "[object Array]") {
+                        var i;
+                        for (i = 0; i < node.length; i++) {
+                            pathStack.push(i);
+                            printNodePath(node[i], pathStack);
+                            pathStack.pop();
+                        }
                     } else {
-                        // TODO we need to support array...
-                        // it's used in printout
+                        // ignore...
                     }
                 },
                 writeExcelFile = function () {

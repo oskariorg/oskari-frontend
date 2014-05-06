@@ -9,7 +9,8 @@ Oskari.registerLocalization({
         },
         "flyout": {
             "title": "Omien aineistojen tuonti",
-            "description": "Voit tuoda omia aineistoja shape-formaatissa zip-muodossa tai kmz tiedostoja.",
+            "description": "Voit tuoda omia aineistoja shape-formaatissa zip-muodossa tai kml/kmz tiedostoja.",
+            "help": "Anna tämän toiminnon lähtöaineistoksi (Browse...) zip tiedoston nimi tai url-linkki vastaavaan tiedostoon. \nZip-tiedoston saat lataamalla koneellesi shape-siirtoformaatissa olevan aineiston \nja muodostamalla näistä tiedostoista (.shp, . shx, .dbf, .prj) zip-tiedosto \ntai lataa koneellesi Googlen kml/kmz tiedostoja. \ntai käytä tiedoston url-linkkiä. ",
             "actions": {
                 "cancel": "Peruuta",
                 "next": "Seuraava"
@@ -45,7 +46,22 @@ Oskari.registerLocalization({
             "grid": {
                 "name": "Nimi",
                 "description": "Kuvaus",
-                "source": "Tietolähde"
+                "source": "Tietolähde",
+                "remove": " "
+            },
+            "confirmDeleteMsg": "Haluatko poistaa tason:",
+            "buttons": {
+                "ok": "OK",
+                "cancel": "Peruuta",
+                "delete": "Poista"
+            },
+            "notification": {
+                "deletedTitle": "Karttatason poisto",
+                "deletedMsg": "Karttataso poistettu."
+            },
+            "error": {
+                "title": "Virhe!",
+                "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin."
             }
         },
         "layer": {

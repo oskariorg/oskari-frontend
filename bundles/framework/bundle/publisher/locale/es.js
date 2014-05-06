@@ -130,6 +130,7 @@ Oskari.registerLocalization(
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Capas",
                 "defaultLayer": "(Capa por defecto)",
                 "useAsDefaultLayer": "Usar como capa por defecto"

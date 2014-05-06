@@ -228,12 +228,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             contentPanel.empty();
             me.container = contentPanel;
 
-            // tooltip
+            // layer tooltip
             var tooltipCont = this.templateHelp.clone();
             tooltipCont.attr('title', this.loc.layerselection.tooltip);
             contentPanel.append(tooltipCont);
 
-            // tool selection
+            // layer selection
             var toolContainer = this.templateTool.clone();
             toolContainer.find('label').attr('for', 'show-map-layers-checkbox').append(this.loc.layerselection.label);
             if (this.showLayerSelection) {

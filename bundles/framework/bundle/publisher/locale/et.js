@@ -128,6 +128,7 @@ Oskari.registerLocalization({
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Kaardikihid",
                 "defaultLayer": "(Vaikimisi kiht)",
                 "useAsDefaultLayer": "Kasuta kui vaikimisi kihti"

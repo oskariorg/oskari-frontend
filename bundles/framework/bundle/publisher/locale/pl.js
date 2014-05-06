@@ -128,6 +128,7 @@ Oskari.registerLocalization({
             },
             "layers": {
                 "add": "NOT TRANSLATED",
+                "addselect": "NOT TRANSLATED",
                 "label": "Warstwy mapy",
                 "defaultLayer": "(Domyślna warstwa)",
                 "useAsDefaultLayer": "Zastosuj jako domyślną warstwę"
