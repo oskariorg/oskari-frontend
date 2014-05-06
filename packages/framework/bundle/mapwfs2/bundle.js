@@ -52,7 +52,10 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapwfs2/event/WFSFeaturesSelectedEvent.js"
-        }, {
+        },{
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapwfs2/event/WFSFeatureGeometriesEvent.js"
+        },{
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapwfs2/event/WFSImageEvent.js"
         }, {

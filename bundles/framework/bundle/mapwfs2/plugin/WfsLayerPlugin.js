@@ -349,6 +349,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
             var srs = this.getSandbox().getMap().getSrsName(),
                 bbox = this.getSandbox().getMap().getExtent(),
                 zoom = this.getSandbox().getMap().getZoom(),
+                geomRequest = false,
                 fids;
 
             // clean tiles for printing
@@ -394,7 +395,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
                     if (layers[j].hasFeatureData()) {
                         fids = this.getAllFeatureIds(layers[j]);
                         this.removeHighlightImages(layers[j]);
-                        this.getIO().highlightMapLayerFeatures(layers[j].getId(), fids, false);
+                        this.getIO().highlightMapLayerFeatures(layers[j].getId(), fids, false, geomRequest);
                     }
                 }
             }
@@ -466,6 +467,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
                 var layer = event.getMapLayer();
                 var ids = layer.getClickedFeatureListIds();
                 var tmpIds = event.getWfsFeatureIds();
+                var geomRequest = true;
+
                 if (!event.isKeepSelection()) {
                     layer.setClickedFeatureListIds(event.getWfsFeatureIds());
                 } else {
@@ -499,7 +502,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
                     this.getHighlightImage(layer, srs, [bbox.left, bbox.bottom, bbox.right, bbox.top], zoom, event.getWfsFeatureIds());
                 }
 
-                this.getIO().highlightMapLayerFeatures(layer.getId(), event.getWfsFeatureIds(), event.isKeepSelection());
+                this.getIO().highlightMapLayerFeatures(layer.getId(), event.getWfsFeatureIds(), event.isKeepSelection(), geomRequest);
             }
         },
 
@@ -511,8 +514,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
             if (this.getSandbox().getMap().isMoving()) {
                 return;
             }
-            var lonlat = event.getLonLat();
-            var keepPrevious = this.getSandbox().isCtrlKeyDown();
+            var lonlat = event.getLonLat(),
+                keepPrevious = this.getSandbox().isCtrlKeyDown();
+
             this.getIO().setMapClick(lonlat, keepPrevious);
         },
 

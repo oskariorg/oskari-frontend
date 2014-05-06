@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "coordinatedisplay",
     "value": {
@@ -9,10 +10,10 @@ Oskari.registerLocalization({
                 "EPSG:3067": "ETRS89-TM35FIN"
             },
             "compass": {
-                "N": "N: ",
-                "E": "E: "
+                "N": "N:",
+                "E": "E:"
             }
         }
-
     }
-});
+}
+);

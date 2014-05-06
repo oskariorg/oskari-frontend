@@ -929,9 +929,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          * @param indicator meta data
          */
         createDemographicsSelects: function (container, indicator) {
-            var me = this;
-
-            var selectors = container.find('.selectors-container');
+            var me = this,
+                selectors = container.find('.selectors-container');
             // year & gender are in a different container than indicator select
             var parameters = selectors.find('.parameters-cont'),
                 newIndicator = parameters.find('.new-indicator-cont'),
@@ -1151,7 +1150,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var me = this,
                 columnId = me._getIndicatorColumnId(indicatorId, gender, year),
                 columns = me.grid.getColumns(),
-                indicatorName = meta.title[Oskari.getLang()];
+                indicatorName = meta.title[Oskari.getLang()] || meta.title;
 
             if (me.isIndicatorInGrid(columnId)) {
                 return false;
@@ -1617,6 +1616,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          * @param callback what to do after we have fetched metadata for all the indicators
          */
         getSotkaIndicatorsMeta: function (container, indicators, callback) {
+
             var me = this,
                 fetchedIndicators = 0,
                 i;
@@ -1625,6 +1625,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             for (i = 0; i < indicators.length; i++) {
                 var indicatorData = indicators[i],
                     indicator = indicatorData.id;
+                if (indicator === null || indicator === undefined) {
+                    indicator = indicatorData.indicator;
+                }
 
                 // ajax call
                 me.statsService.fetchStatsData(
@@ -1641,7 +1644,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             me.addIndicatorMeta(data);
                             var j;
                             for (j = 0; j < indicators.length; j++) {
-                                if (indicators[j].id === data.id) {
+                                if (indicators[j].id === null || indicators[j].id === undefined) {
+                                    indicators[j].id = indicators[j].indicator;
+                                }
+                                if (indicators[j].id + '' === data.id + '') {
                                     me.indicators[j] = data;
                                 }
                             }
@@ -1687,6 +1693,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     year = indicatorData.year,
                     gender = indicatorData.gender || 'total';
 
+                if (indicator === null || indicator === undefined) {
+                    indicator = indicatorData.indicator;
+                }
+
                 // ajax call
                 me.statsService.fetchStatsData(
                     // url
@@ -1703,6 +1713,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             //save the data to the right indicator for later use
                             for (j = 0; j < indicators.length; j++) {
                                 ind = indicators[j];
+                                if (ind.id === null || ind.id === undefined) {
+                                    ind.id = ind.indicator;
+                                }
+
                                 // FIXME use ===
                                 if (ind.id == data[0].indicator &&
                                     ind.year == data[0].year &&
@@ -1718,6 +1732,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                                 //add these to the grid!!
                                 for (j = 0; j < indicators.length; j++) {
                                     ind = indicators[j];
+                                    if (ind.id === null || ind.id === undefined) {
+                                        ind.id = ind.indicator;
+                                    }
                                     if (ind) {
                                         indicatorColumnId = me._getIndicatorColumnId(ind.id, ind.gender, ind.year);
                                         var indData = indicatorsData[indicatorColumnId];
@@ -1827,7 +1844,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     me.getSotkaIndicatorsData(container, indicators.sotka, function () {
 
                         if (state.currentColumn !== null && state.currentColumn !== undefined) {
-                            if (state.municipalities) {
+                            if (state.municipalities && state.municipalities.length) {
                                 me._showSelectedAreas(state.municipalities);
                             }
 

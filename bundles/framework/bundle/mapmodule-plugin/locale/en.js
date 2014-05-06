@@ -1,8 +1,9 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "MapModule",
     "value": {
-        "status_update_map": "Updating map",
+        "status_update_map": "Loading the map...",
         "zoombar_tooltip": {
             "zoomLvl-0": "Background map",
             "zoomLvl-1": "Country",
@@ -22,53 +23,54 @@ Oskari.registerLocalization({
             "LogoPlugin": {
                 "terms": "Terms of Use",
                 "dataSources": "Data sources",
-                "layersHeader": "Map layers",
+                "layersHeader": "Map Layers",
                 "indicatorsHeader": "Indicators"
             },
             "DataSourcePlugin": {
-                "link": "Data Source",
+                "link": "Data source",
                 "popup": {
                     "title": "Data Sources",
-                    "content": " "
+                    "content": "NOT TRANSLATED"
                 },
                 "button": {
                     "close": "Close"
                 }
             },
             "LayerSelectionPlugin": {
-                "title": "Object data",
-                "chooseDefaultBaseLayer": "Select background map layer"
+                "title": "Map layers",
+                "chooseDefaultBaseLayer": "Select the background map"
             },
             "SearchPlugin": {
-                "placeholder": "Find places",
-                "search": "Find",
-                "close": "Close search results",
-                "noresults": "No results found",
+                "placeholder": "Search location",
+                "search": "Search",
+                "close": "Close search results.",
+                "noresults": "No results found. Please refine your search.",
                 "toomanyresults": "Over 100 results found. Please refine your search.",
                 "column_name": "Name",
                 "column_village": "Municipality",
                 "column_type": "Type"
             },
             "GetInfoPlugin": {
-                "title": "Map layers",
-                "layer": "Layer",
-                "places": "Places",
+                "title": "Feature Data",
+                "layer": "Map layer",
+                "places": "Features",
                 "description": "Description",
-                "link": "URL-address",
+                "link": "Web address",
                 "name": "Name"
             },
             "PublisherToolbarPlugin": {
                 "test": "test",
                 "history": {
-                    "reset": "Return to default view",
-                    "back": "Back",
-                    "next": "Next"
+                    "reset": "Return to the default view",
+                    "back": "Return to the previous view",
+                    "next": "Move to the next view"
                 },
                 "measure": {
-                    "line": "Measure distance",
-                    "area": "Measure area"
+                    "line": "Measure a distance",
+                    "area": "Measure an area"
                 }
             }
         }
     }
-});
+}
+);

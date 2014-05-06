@@ -1,0 +1,139 @@
+{
+    "conf": {
+        "WMTS": [
+            {
+                "id": "ELF Regional",
+                "resource": "/Oskari/applications/elf/elf-wmts.xml",
+                "TileMatrixSet": "LAEA"
+            }
+        ],
+        "WMTS-v0.1": [
+            {
+                "id": "ELF Basemap",
+                "resource": "/Oskari/applications/elf/statkart-wmts.xml",
+                "TileMatrixSet": "EPSG:3035",
+                "baseLayer": "elf_basemap"
+            }, {
+                "id": "ELF Regional",
+                "resource": "/Oskari/applications/elf/elf-wmts.xml",
+                "TileMatrixSet": "LAEA"
+            }
+        ],
+        "layers": {
+            "AU_AdministrativeBoundary": {
+                "minScale": 1500000
+            },
+            "HY_PhysicalWaters_LandWaterBoundary": {
+                "minScale": 1500000
+            },
+            "HY_PhysicalWaters_StandingWater": {
+                "minScale": 1500000
+            },
+            "HY_PhysicalWaters_Watercourse": {
+                "minScale": 1500000
+            },
+            "TN_RailTransportNetwork_RailwayLink": {
+                "minScale": 1500000
+            },
+            "TN_RoadTransportNetwork_RoadLink": {
+                "minScale": 1500000
+            }
+        },
+        "WFS": [
+            {
+                "dataUrl_uuid": "472b3e52-5ba8-4967-8785-4fa13955b42e",
+                "wmsName": "ueber_lantmateriet",
+                "styles": [
+                    {
+                        "title": "default",
+                        "legend": "default",
+                        "name": "default"
+                    }
+                ],
+                "descriptionLink": "",
+                "orgName": "lantmateriet.se",
+                "type": "wfslayer",
+                "legendImage": "",
+                "formats": {},
+                "isQueryable": true,
+                "id": "ueber_lantmateriet",
+                "minScale": 150000,
+                "dataUrl": "/catalogue/ui/metadata.html?uuid=472b3e52-5ba8-4967-8785-4fa13955b42e",
+                "style": "default",
+                "wmsUrl": "ueber",
+                "admin": {},
+                "orderNumber": 1,
+                "name": "ELF NamedPlace - lantmateriet.se",
+                "permissions": {
+                    "publish": "no_publication_permission"
+                },
+                "opacity": 100,
+                "subtitle": "",
+                "inspire": "ELF GN",
+                "maxScale": 1
+            }, {
+                "dataUrl_uuid": "472b3e52-5ba8-4967-8785-4fa13955b42e",
+                "wmsName": "ueber_geonorge",
+                "styles": [
+                    {
+                        "title": "default",
+                        "legend": "default",
+                        "name": "default"
+                    }
+                ],
+                "descriptionLink": "",
+                "orgName": "geonorge.no",
+                "type": "wfslayer",
+                "legendImage": "",
+                "formats": {},
+                "isQueryable": true,
+                "id": "ueber_geonorge",
+                "minScale": 150000,
+                "dataUrl": "/catalogue/ui/metadata.html?uuid=472b3e52-5ba8-4967-8785-4fa13955b42e",
+                "style": "default",
+                "wmsUrl": "ueber",
+                "admin": {},
+                "orderNumber": 1,
+                "name": "ELF NamedPlace - geonorge.no",
+                "permissions": {
+                    "publish": "no_publication_permission"
+                },
+                "opacity": 100,
+                "subtitle": "",
+                "inspire": "ELF GN",
+                "maxScale": 1
+            }, {
+                "dataUrl_uuid": "472b3e52-5ba8-4967-8785-4fa13955b42e",
+                "wmsName": "ueber_nls_fi",
+                "styles": [
+                    {
+                        "title": "default",
+                        "legend": "default",
+                        "name": "default"
+                    }
+                ],
+                "descriptionLink": "",
+                "orgName": "nls.fi",
+                "type": "wfslayer",
+                "legendImage": "",
+                "formats": {},
+                "isQueryable": true,
+                "id": "ueber_nls_fi",
+                "minScale": 150000,
+                "dataUrl": "/catalogue/ui/metadata.html?uuid=472b3e52-5ba8-4967-8785-4fa13955b42e",
+                "style": "default",
+                "wmsUrl": "ueber",
+                "admin": {},
+                "orderNumber": 1,
+                "name": "ELF NamedPlace - nls.fi",
+                "permissions": {
+                    "publish": "no_publication_permission"
+                },
+                "opacity": 100,
+                "subtitle": "",
+                "inspire": "ELF GN",
+                "maxScale": 1
+            }
+        ]
+    }
+}

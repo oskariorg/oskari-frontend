@@ -1,35 +1,37 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "Toolbar",
     "value": {
         "buttons": {
             "link": {
                 "tooltip": "Link",
-                "ok": "Ok",
-                "title": "Link to map view"
+                "ok": "OK",
+                "title": "Make a link to the map view."
             },
             "print": {
-                "tooltip": "Print"
+                "tooltip": "Print out the map view."
             },
             "history": {
-                "reset": "Return to default view",
-                "back": "Back",
-                "next": "Next"
+                "reset": "Return to the default map view.",
+                "back": "Return to the previous map view.",
+                "next": "Move to the next map view."
             },
-            "pan": "Pan map view",
-            "zoom": "Zoom in",
+            "pan": "Pan the map view by dragging mouse on the map.",
+            "zoom": "Zoom in the map view.",
             "measure": {
-                "line": "Measure distance",
-                "area": "Measure area"
+                "line": "Measure a line on the map.",
+                "area": "Measure an area on the map."
             }
         },
         "measure": {
-            "title": "Measurements",
+            "title": "Measurement Results",
             "close": "Cancel",
             "guidance": {
-                "measureline": "Measure a line on the map. Double-click to stop measuring.",
-                "measurearea": "Measure an area on the map. Double-click to stop measuring."
+                "measureline": "Draw a line and measure its distance on the map. Click the start point of the line to start measuring. After that click all breakpoints of the line. Double-click the end point of the line to stop measuring.",
+                "measurearea": "Draw an area and measure it on the map. Click the start point of the area's border line to start measuring. After that click all breakpoints of the border line. Double-click the end point of the border line to stop measuring."
             }
         }
     }
-});
+}
+);

@@ -1,33 +1,34 @@
-Oskari.registerLocalization({
-    "lang" : "en",
-    "key" : "MapWfs2",
-    "value" : {
-        "title" : "MapWfs2",
-        "desc" : "",
+Oskari.registerLocalization(
+{
+    "lang": "en",
+    "key": "MapWfs2",
+    "value": {
+        "title": "MapWfs2",
+        "desc": "",
         "object-data": "Object data",
         "default-style": "Default style",
         "own-style": "Own style",
-        "tile" : {
-            "title" : "MapWfs2"
+        "tile": {
+            "title": "MapWfs2"
         },
-        "flyout" : {
-            "title" : "MapWfs2",
-            "message" : "MapWfs2"
+        "flyout": {
+            "title": "MapWfs2",
+            "message": "MapWfs2"
         },
-        "error" : {
+        "error": {
             "title": "Error",
-            "connection_not_available": "Connection to the WFS background service is not available.",
+            "connection_not_available": "Connection to the WFS background service is unavailable.",
             "connection_broken": "Connection to the WFS background service broke down.",
-            "wfs_no_permissions": "No permission to use WFS layer ({layer}).",
-            "wfs_configuring_layer_failed": "Configuring WFS layer ({layer}) failed.",
-            "wfs_request_failed": "WFS layer's ({layer}) request failed.",
-            "features_parsing_failed": "Feature parsing of WFS layer ({layer}) failed."
+            "wfs_no_permissions": "You do not have the permission to use WFS layer {layer}.",
+            "wfs_configuring_layer_failed": "Configuring WFS layer {layer} failed.",
+            "wfs_request_failed": "Request to WFS layer {layer} failed.",
+            "features_parsing_failed": "The feature parsing of WFS layer {layer}) failed."
         },
         "button": {
             "cancel": "Cancel",
-            "show": "View places",
+            "show": "Show places",
             "close": "Close",
-            "edit" : "Edit"
+            "edit": "Edit"
         },
         "popup": {
             "title": "Own style",
@@ -37,4 +38,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

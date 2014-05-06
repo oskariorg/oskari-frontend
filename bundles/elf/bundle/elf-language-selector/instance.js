@@ -6,7 +6,7 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
 }, {
     templates : {
         "fi" : {
-            "content" : '<a href="?lang=fi#">suomi</a><br /><br /><a href="?lang=sv#">ruotsi</a><br />' + '<a href="?lang=en#">englanti</a><br /><br /><a href="?lang=de#">saksa</a><br />' + '<a href="?lang=es#">espanja</a><br /><br /><a href="?lang=cs#">tsekki</a><br />'
+            "content" : '<a href="?lang=fi#">eesti</a><br /><a href="?lang=fi#">suomi</a><br /><br /><a href="?lang=sv#">ruotsi</a><br />' + '<a href="?lang=en#">englanti</a><br /><br /><a href="?lang=de#">saksa</a><br />' + '<a href="?lang=es#">espanja</a><br /><br /><a href="?lang=cs#">tsekki</a><br />'
         },
         "sv" : {
             "content" : '<a href="?lang=fi#">finska</a><br /><br /><a href="?lang=sv#">svenska</a><br />' + '<a href="?lang=en#">engelska</a><br /><br /><a href="?lang=de#">tyska</a><br />' + '<a href="?lang=es#">spanska</a><br /><br /><a href="?lang=cs#">tjeckiska</a><br />'
@@ -15,7 +15,7 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
             "content" : '<a href="?lang=fi#">Finnisch</a><br /><br /><a href="?lang=sv#">Schwedisch</a><br />' + '<a href="?lang=en#">Englisch</a><br /><br /><a href="?lang=de#">Deutsch</a><br />' + '<a href="?lang=es#">Spanisch</a><br /><br /><a href="?lang=cs#">Tschechisch</a><br />'
         },
         "en" : {
-            "content" : '<a href="?lang=fi#">Finnish</a><br /><br /><a href="?lang=sv#">Swedish</a><br />' + '<a href="?lang=en#">English</a><br /><br /><a href="?lang=de#">German</a><br />' + '<a href="?lang=es#">Spanish</a><br /><br /><a href="?lang=cs#">Czech</a><br />'
+            "content" : '<a href="?lang=et#">Estonian</a><br /><a href="?lang=hr#">Croatian</a><br /><a href="?lang=pl#">Polish</a><br /><a href="?lang=pt#">Portuguese</a><br /><a href="?lang=fi#">Finnish</a><br /><br /><a href="?lang=sv#">Swedish</a><br />' + '<a href="?lang=en#">English</a><br /><br /><a href="?lang=de#">German</a><br />' + '<a href="?lang=es#">Spanish</a><br /><br /><a href="?lang=cs#">Czech</a><br />'
         },
         "cs" : {
             "content" : '<a href="?lang=fi#">Finština</a><br /><br /><a href="?lang=sv#">Švédština</a><br />' + '<a href="?lang=en#">Angličtina</a><br /><br /><a href="?lang=de#">Němčina</a><br />' + '<a href="?lang=es#">Španělština</a><br /><br /><a href="?lang=cs#">Čeština</a><br />'
@@ -83,11 +83,11 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
         this.conf = {
             "name" : "elf-language-selector"
         };
-        this._localization = this.locales[Oskari.getLang()];
+        this._localization = this.locales[Oskari.getLang()]||this.locales['en'];
 
         this.setDefaultTile(this._localization.tile.title);
 
-        var content = jQuery(this.templates[Oskari.getLang()].content);
+        var content = jQuery((this.templates[Oskari.getLang()]||this.templates['en']).content);
         this.popOver = Oskari.clazz.create('Oskari.userinterface.component.Popover', this.getLocalization().popover.title, content);
         this.popOver.setPlacement('right');
 
@@ -122,5 +122,5 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
         }
     }
 }, {
-    "extend" : ["Oskari.userinterface.extension.EnhancedExtension"]
+    "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
 });

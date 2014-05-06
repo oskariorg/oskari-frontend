@@ -61,6 +61,7 @@ Oskari.registerLocalization({
                 "history_forward": "Gå framåt",
                 "measureline": "Mäta avstånd",
                 "measurearea": "Mäta område",
+                "drawTools" : "Ritningsverktyg",
                 "point" : "Tillåter punkter",
                 "line" : "Tillåter linjer",
                 "area" : "Tillåter områden"
@@ -130,7 +131,7 @@ Oskari.registerLocalization({
             },
             "layers": {
                 "add": "Tillägg kartlager",
-                "addselect": "NOT TRANSLATED",
+                "addselect": "Tillägg ritningslager som kartlager",
                 "label": "Kartlager",
                 "defaultLayer": "(Förvald kartlager)",
                 "useAsDefaultLayer": "Använd som förvald kartlager"

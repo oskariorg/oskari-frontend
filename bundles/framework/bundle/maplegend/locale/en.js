@@ -1,8 +1,10 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "maplegend",
     "value": {
-        "title": "Legends",
+        "title": "Map legends",
         "desc": ""
     }
-});
+}
+);

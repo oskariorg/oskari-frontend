@@ -422,7 +422,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 jQuery('input#amount_class').val(newValue);
                 me._state.numberOfClasses = newValue;
             }
-            var classes = me._state.numberOfClasses,
+            var classes = parseInt(me._state.numberOfClasses, 10),
                 gcol_data = params.COL_VALUES;
             gcol_data = gcol_data.slice(0);
             var codes = params.VIS_CODES;
