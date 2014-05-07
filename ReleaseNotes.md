@@ -1,5 +1,17 @@
 # Release Notes
 
+## 1.21
+
+### search
+
+The default UI for search can now be disabled through config:
+
+```javascript
+{
+    "disableDefault": true
+}
+```
+
 ## 1.20
 
 ### analysis/analyse
