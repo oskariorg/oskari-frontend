@@ -186,6 +186,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
             if (this.pointLayer) {
                 this.pointLayer.removeAllFeatures();
             }
+            if (this.oldPointLayer) {
+                this.oldPointLayer.removeAllFeatures();
+            }
         },
         /**
          * @method _plotNewParcel

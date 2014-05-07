@@ -244,6 +244,18 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             this.classifyPlugin.setState(this.state);
             // Reset the classify plugin
             this.classifyPlugin.resetUI(this.state);
+
+            if (state.isActive) {
+                var view = this.getView(),
+                    layerId = this.state.layerId,
+                    layer = null;
+
+                if (layerId !== null && layerId !== undefined) {
+                    layer = this.sandbox.getService('Oskari.mapframework.service.MapLayerService').findMapLayer(layerId);
+                }
+                // view._layer isn't set if we call this without a layer...
+                view.prepareMode(true, layer, false);
+            }
         },
         getState: function () {
             return this.state;
@@ -271,7 +283,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             if (!state || jQuery.isEmptyObject(state)) {
                 return null;
             }
-            console.log("Creating state string...");
 
             var i = null,
                 ilen = null,
@@ -314,7 +325,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
 
             // handle indicators separately
             for (i = 0, ilen = indicators.length, ilast = ilen - 1; i < ilen; i++) {
-                indicatorValues += indicators[i].indicator;
+                if (indicators[i].id === null || indicators[i].id === undefined) {
+                    indicators[i].id = indicators[i].indicator;
+                }
+                indicatorValues += indicators[i].id;
                 indicatorValues += valueSeparator;
                 indicatorValues += indicators[i].year;
                 indicatorValues += valueSeparator;
@@ -325,10 +339,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             }
 
             // handle colors separately
-            var colorArr = [];
+            var colorArr = [],
+                cKey;
             colors.flipped = colors.flipped === true;
             for (i = 0, ilen = colorKeys.length; i < ilen; ++i) {
-                var cKey = colorKeys[i];
+                cKey = colorKeys[i];
                 if (colors.hasOwnProperty(cKey) && colors[cKey] !== null && colors[cKey] !== undefined) {
                     colorArr.push(colors[cKey]);
                 }
@@ -339,10 +354,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
 
             var ret = null;
             if (stateValues && indicatorValues) {
-                ret = statsgridState + stateValues + "-" + indicatorValues;
+                ret = statsgridState + stateValues + "-" + indicatorValues + "-";
                 if (colorsValues) {
-                    ret += "-" + colorsValues;
+                    ret += colorsValues;
                 }
+                // Should the mode be open or not
+                ret += (view && view.isVisible) ? "-1" : "-0";
             }
 
             return ret;

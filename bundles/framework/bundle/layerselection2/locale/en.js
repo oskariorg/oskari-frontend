@@ -1,45 +1,46 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "LayerSelection",
     "value": {
-        "title": "Selected layers",
+        "title": "Selected Layers",
         "desc": "",
         "layer": {
             "style": "Style",
-            "show": "Show",
-            "hide": "Hide",
-            "hidden": "The map has been temporarily hidden.",
-            "out-of-scale": "Data in this map layer cannot be shown at the selected scale level.",
-            "move-to-scale": "Go to a suitable scale level.",
+            "show": "Show.",
+            "hide": "Hide.",
+            "hidden": "The map layer has been temporarily hidden.",
+            "out-of-scale": "The map layer cannot be shown at this scale level.",
+            "move-to-scale": "Please move to a suitable scale level.",
             "out-of-content-area": "The map layer contains no data at this location.",
-            "move-to-content-area": "Locate",
+            "move-to-content-area": "Please move to a suitable location.",
             "description": "Description",
-            "object-data": "Object data",
+            "object-data": "Feature data",
             "rights": {
                 "notavailable": "Publication prohibited.",
-                "guest": "Log in to publish this map layer.",
-                "loggedin": "Publication permitted",
-                "official": "Publication permitted for use by authorities.",
-                "need-login": "You must log in.",
+                "guest": "Please log in to publish the map layer in an embedded map.",
+                "loggedin": "Publication permitted.",
+                "official": "Publication permitted only for use by authorities.",
+                "need-login": "You need to log in to publish the map level in an embedded map.",
                 "can_be_published_by_provider": {
-                    "label": "Publication permitted for data providers.",
-                    "tooltip": "Data provider rights are required to publish this map layer. If you are a data provider, please contact the support service of Paikkatietoikkuna and request rights to publish."
+                    "label": "Publication permitted as a data provider.",
+                    "tooltip": "Only the data provider can publish the map layer in an embedded map.  If you are a data provider, please contact the support service of Paikkatietoikkuna."
                 },
                 "can_be_published": {
-                    "label": "Publication permitted",
-                    "tooltip": "The map layer can be published in an embedded map window without limiting the number of users."
+                    "label": "Publication permitted.",
+                    "tooltip": "The map layer can be published in an embedded map. The limit of the usage is not limited."
                 },
                 "can_be_published_map_user": {
-                    "label": "Publication permitted",
-                    "tooltip": "The map layer can be published in an embedded map window and the number of users per week may be limited."
+                    "label": "Publication permitted.",
+                    "tooltip": "The map layer can be published in an embedded map. The limit of the usage may be limited."
                 },
                 "no_publication_permission": {
                     "label": "Publication prohibited.",
-                    "tooltip": "The data provider has not granted permission to publish this map layer in an embedded map window."
+                    "tooltip": "The map layer cannot be published in an embedded map. The data provider has not granted permission to that."
                 },
                 "can_be_published_by_authority": {
-                    "label": "Publication permitted",
-                    "tooltip": "The map layer can be published in an embedded map window without usage limits."
+                    "label": "Publication permitted.",
+                    "tooltip": "The map layer can be published in an embedded map. The limit of the usage is not limited."
                 }
             },
             "tooltip": {
@@ -49,4 +50,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

@@ -44,8 +44,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
          * @param {Object} data The data which gets displayed in the grid
          */
         sendStatsData: function (layer, data) {
-            var me = this;
-            var eventBuilder = me.sandbox.getEventBuilder('StatsGrid.SotkadataChangedEvent');
+            var me = this,
+                eventBuilder = me.sandbox.getEventBuilder('StatsGrid.SotkadataChangedEvent');
             if (eventBuilder) {
                 var event = eventBuilder(layer, data);
                 me.sandbox.notifyAll(event);
@@ -146,7 +146,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
          * param url to correct action route
          * param successCb (success callback)
          * param errorCb (error callback)
-         * param ignoreCache (ignore & refres cache)
+         * param ignoreCache (ignore & refresh cache)
          */
         fetchStatsData: function (url, successCb, errorCb, ignoreCache) {
             var me = this;
