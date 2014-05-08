@@ -5,6 +5,11 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
 
 }, {
     templates : {
+        "link": '<a></a>',
+        "flyout": '<div class="langSelection">' +
+                '<select></select>' +
+                '<a class="btn">Choose</a>' +
+            '</div>',
         "fi" : {
             "content" : '<a href="?lang=fi#">eesti</a><br /><a href="?lang=fi#">suomi</a><br /><br /><a href="?lang=sv#">ruotsi</a><br />' + '<a href="?lang=en#">englanti</a><br /><br /><a href="?lang=de#">saksa</a><br />' + '<a href="?lang=es#">espanja</a><br /><br /><a href="?lang=cs#">tsekki</a><br />'
         },
@@ -28,52 +33,64 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
 
     locales : {
         "fi" : {
+            "name": "Suomi",
+            "title" : "Valitse kieli",
             "tile" : {
                 "title" : "kieli"
             },
-            "popover" : {
-                "title" : "Valitse kieli"
+            "flyout": {
+                "button": "Valitse"
             }
         },
         "sv" : {
+            "name": "Svenska",
+            "title" : "Välj språk",
             "tile" : {
                 "title" : "språk"
             },
-            "popover" : {
-                "title" : "Välj språk"
+            "flyout": {
+                "button": "Välj"
             }
         },
         "en" : {
+            "name": "English",
+            "title" : "Change language",
             "tile" : {
                 "title" : "language"
             },
-            "popover" : {
-                "title" : "Change language"
+            "flyout": {
+                "button": "Change"
             }
         },
 
         "es" : {
+            "name": "Español",
+            "title" : "idioma",
             "tile" : {
                 "title" : "idioma"
             },
-            "popover" : {
-                "title" : "idioma"
+            "flyout": {
+                "button": "idioma"
             }
         },
         "de" : {
+            "name": "Deutsch",
+            "title" : "Sprache",
             "tile" : {
                 "title" : "Sprache"
             },
-            "popover" : {
-                "title" : "Sprache"
+            "flyout": {
+                "button": "Sprache"
             }
         },
         "cs" : {
+            "name": "Czech",
+            "title" : "Jazyk",
             "tile" : {
                 "title" : "Jazyk"
             },
-            "popover" : {
-                "title" : "Jazyk"
+            "flyout": {
+                "button": "Jazyk"
             }
         }
 
@@ -81,46 +98,66 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
 
     startPlugin : function() {
         this.conf = {
-            "name" : "elf-language-selector"
+            "name" : "elf-language-selector",
+            "elemId": "langSelector"
         };
-        this._localization = this.locales[Oskari.getLang()]||this.locales['en'];
 
-        this.setDefaultTile(this._localization.tile.title);
+        var sandbox = this.getSandbox();
 
-        var content = jQuery((this.templates[Oskari.getLang()]||this.templates['en']).content);
-        this.popOver = Oskari.clazz.create('Oskari.userinterface.component.Popover', this.getLocalization().popover.title, content);
-        this.popOver.setPlacement('right');
+        var elem = jQuery('#' + this.conf.elemId);
+        var langName = this._localization.name;
+        elem.append('<p>' + langName + '</p>');
 
+        var changeLink = jQuery(this.templates.link).clone();
+        var changeLinkText = this._localization.title;
+        var rn = 'userinterface.UpdateExtensionRequest';
+        var self = this;
+
+        changeLink
+            .text(changeLinkText)
+            .attr({
+                'href': '#'
+            })
+            .click(function (e) {
+                e.preventDefault();
+                sandbox.postRequestByName(rn, [self, 'attach', rn]);
+            });
+        elem.append(changeLink);
     },
 
     stopPlugin : function() {
 
     },
 
-    displayContent : function(isOpen) {
-        var container = jQuery(this.getTile().container);
-        this.popOver.attachTo(container);
-        if (isOpen) {
-            this.popOver.show();
-        } else {
-            this.popOver.hide();
+    getFlyoutContent : function () {
+        var container = jQuery(this.templates.flyout).clone(),
+            languages = this.locales,
+            langList = container.find('select'),
+            langOption = jQuery('<option></option>'),
+            link = container.find('a'),
+            loc, opt, firstLang;
+
+        for (loc in languages) {
+            opt = langOption.clone();
+            opt.val(loc);
+            opt.text(languages[loc].name);
+            langList.append(opt);
         }
+
+        langList.on('change', function (e) {
+            var langCode = e.target.value;
+
+            link.attr('href', '?lang=' + langCode);
+        });
+
+        firstLang = langList.find('option:selected').val();
+        link.attr('href', '?lang=' + firstLang)
+            .text(this._localization.flyout.button);
+
+        return container;
     },
 
-    eventHandlers : {
-        /**
-         * @method userinterface.ExtensionUpdatedEvent
-         */
-        'userinterface.ExtensionUpdatedEvent' : function(event) {
-
-            var me = this;
-            if (event.getExtension().getName() !== me.getName()) {
-                return;
-            }
-            var isOpen = event.getViewState() !== "close";
-            me.displayContent(isOpen);
-        }
-    }
+    eventHandlers : {}
 }, {
-    "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
+    "extend" : ["Oskari.elf.extension.EnhancedExtension"]
 });

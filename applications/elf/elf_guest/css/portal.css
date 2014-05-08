@@ -991,3 +991,16 @@ select {
 	float:right;
 	margin:0 5px 0 0;
 }
+
+#langSelector {
+	position: absolute;
+	bottom: 0;
+	margin: 10px;
+	color: white;
+}
+#langSelector p {
+	margin-bottom: 5px;
+}
+#langSelector a {
+	color: white;
+}
