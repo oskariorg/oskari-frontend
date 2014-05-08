@@ -766,7 +766,7 @@ ul.footer-wrp p {
   background: -moz-linear-gradient(top, #217ad4, #3a97ee);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#217ad4', endColorstr='#3a97ee'); }
 
-input[type="text"] {
+input[type="text"], input[type="password"], input[type="search"] {
   font: 13px/100% Arial, sans-serif;
   color: #878787;
   padding: 8px 35px 8px 10px;

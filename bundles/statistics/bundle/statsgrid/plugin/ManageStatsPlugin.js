@@ -750,9 +750,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 // Warn the user if they're not logged in
                 if (!me._sandbox || !me._sandbox.getUser().isLoggedIn()) {
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                        okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                    okBtn.setTitle(me._locale.buttons.ok);
-                    okBtn.addClass('primary');
+                        okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
+                    okBtn.setPrimary(true);
                     okBtn.setHandler(function () {
                         dialog.close(true);
                         me.createIndicatorForm(container);
