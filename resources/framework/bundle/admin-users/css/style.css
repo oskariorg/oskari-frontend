@@ -1,0 +1,47 @@
+.admin-users > input {
+  clear: both;
+  float: right;
+  margin-right: 6px;
+  margin-bottom: 8px; }
+.admin-users .accordion {
+  background-color: #F3F3F3;
+  border: 1pt solid #C0D0D0;
+  clear: both;
+  display: block;
+  list-style-type: none; }
+  .admin-users .accordion:after {
+    content: "";
+    display: table;
+    clear: both; }
+  .admin-users .accordion .accordion-header h3 {
+    line-height: 40px;
+    float: left;
+    padding: 0 0 0 10px; }
+  .admin-users .accordion .accordion-header input {
+    float: right;
+    margin: 5px 5px 5px 0; }
+.admin-users form {
+  margin-bottom: 2em; }
+  .admin-users form fieldset {
+    border: none;
+    clear: both;
+    padding: 10px; }
+    .admin-users form fieldset:nth-of-type(2) input:last-child {
+      float: right; }
+  .admin-users form label {
+    clear: both;
+    display: block;
+    margin-bottom: 8px; }
+    .admin-users form label:after {
+      content: "";
+      display: table;
+      clear: both; }
+    .admin-users form label span {
+      display: block;
+      float: left;
+      width: 12em;
+      line-height: 34px; }
+    .admin-users form label input {
+      display: block;
+      float: left;
+      width: 15em; }

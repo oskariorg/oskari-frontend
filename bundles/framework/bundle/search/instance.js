@@ -22,6 +22,7 @@ Oskari.clazz
             this.localization = null;
             this.service = null;
             this.tabPriority = 1.0;
+            this.disableDefault = false;
         }, {
             /**
              * @static
@@ -106,6 +107,11 @@ Oskari.clazz
                 // Default tab priority
                 if (this.conf && typeof this.conf.priority === 'number') {
                     this.tabPriority = this.conf.priority;
+                }
+
+                // Create default UI or not?
+                if (this.conf && this.conf.disableDefault === true) {
+                    this.disableDefault = true;
                 }
 
                 var servName =

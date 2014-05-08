@@ -160,6 +160,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
          * Creates the UI for a fresh start
          */
         createUi: function () {
+            // Do not create the default UI if configured so
+            if (this.instance.disableDefault) return;
+
             var me = this;
             var sandbox = me.instance.getSandbox();
 
@@ -475,12 +478,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             // Change into tab mode if not already
             if (me.tabsContainer.panels.length === 0) {
                 me.tabsContainer.insertTo(flyout);
-                var defaultPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
-                var searchContainer = jQuery("div.searchContainer");
-                defaultPanel.setTitle(me.getTabTitle());
-                defaultPanel.setContent(searchContainer);
-                defaultPanel.setPriority(me.instance.tabPriority);
-                me.tabsContainer.addPanel(defaultPanel);
+
+                if (me.instance.disableDefault !== true) {
+                    var defaultPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+                    var searchContainer = jQuery("div.searchContainer");
+                    defaultPanel.setTitle(me.getTabTitle());
+                    defaultPanel.setContent(searchContainer);
+                    defaultPanel.setPriority(me.instance.tabPriority);
+                    me.tabsContainer.addPanel(defaultPanel);
+                }
             }
 
             var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
