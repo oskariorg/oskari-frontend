@@ -23,6 +23,15 @@ Oskari.clazz.define("Oskari.elf.geolocator.Bundle", function() {
         "scripts" : [{
             "type" : "text/javascript",
             "src" : "../../../../bundles/elf/bundle/elf-geolocator/instance.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/bundle/elf-geolocator/GeoLocatorSearchTab.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/elf/bundle/elf-geolocator/service/GeoLocatorSearchService.js"
+        }, {
+            "type" : "text/css",
+            "src" : "../../../../resources/elf/bundle/elf-geolocator/css/style.css"
         }],
         "locales" : [{
             "lang": "fi",

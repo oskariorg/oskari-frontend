@@ -9,6 +9,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
             iconCls: 'icon-geolocator',
             sticky: true
         };
+        this.searchUrl = undefined;
     }, {
         __name : 'elf-geolocator',
         getName : function () {
@@ -36,7 +37,29 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
             request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest');
             sandbox.request(this, request(this));
 
+            // Create the tool for searching places by clicking on the map
             this.registerTool();
+
+            if (conf && conf.searchUrl) {
+                this.searchUrl = conf.searchUrl;
+            } else {
+                this.searchUrl = sandbox.getAjaxUrl() +
+                    'action_route=GetGeoLocatorSearchResult';
+            }
+
+            // Create the search service
+            this.searchService = Oskari.clazz.create(
+                'Oskari.elf.geolocator.service.GeoLocatorSearchService',
+                this, this.searchUrl);
+
+            // Create the search tab
+            this.tab = Oskari.clazz.create(
+                'Oskari.elf.geolocator.GeoLocatorSeachTab',
+                this);
+            this.tab.requestToAddTab();
+        },
+        getSearchService: function () {
+            return this.searchService;
         },
         /**
          * Requests the tool to be added to the toolbar.
@@ -53,7 +76,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
             this.tool.callback = function() {
                 //me.startTool();
             };
-            this.tool.tooltip = 'loc.tool.tooltip';
+            this.tool.tooltip = loc.tool.tooltip;
 
             if (reqBuilder) {
                 request = reqBuilder(this.toolName, this.buttonGroup, this.tool);
