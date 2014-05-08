@@ -874,7 +874,7 @@ ul.footer-wrp p {
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#217ad4', endColorstr='#3a97ee');
 }
 
-input[type="text"], input[type="password"], input[type="search"] {
+input[type="text"] {
 	font: 13px/100% Arial, sans-serif;
 	color: #878787;
 	padding: 8px 35px 8px 10px;
@@ -990,17 +990,4 @@ select {
 .mml-map #logo.no-hover #logo-only {
 	float:right;
 	margin:0 5px 0 0;
-}
-
-#langSelector {
-	position: absolute;
-	bottom: 0;
-	margin: 10px;
-	color: white;
-}
-#langSelector p {
-	margin-bottom: 5px;
-}
-#langSelector a {
-	color: white;
 }
