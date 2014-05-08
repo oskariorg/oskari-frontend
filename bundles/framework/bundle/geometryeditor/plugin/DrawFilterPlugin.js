@@ -929,6 +929,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
 
+    // Todo: split the split function
     _splitGeometryByLine: function(polygons, splitGeom) {
         var me = this;
         // Transform and scale coordinates

@@ -467,7 +467,7 @@
                         "bundlePath": "../../../packages/analysis/bundle/"
                     },
                     "geometryeditor": {
-                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                        "bundlePath": "../../../packages/framework/bundle/"
                     }
                 }
             }
