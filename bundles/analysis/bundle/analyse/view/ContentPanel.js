@@ -149,6 +149,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                     var feature = wkt.read(data);
                     if (feature.geometry.CLASS_NAME == "OpenLayers.Geometry.LineString") {
                         this.selectedGeometry = new OpenLayers.Feature.Vector(feature.geometry);
+                    } else if (feature.geometry.CLASS_NAME == "OpenLayers.Geometry.MultiPolygon") {
+                        this.selectedGeometry = new OpenLayers.Feature.Vector(feature.geometry);
                     } else if (feature.geometry.CLASS_NAME == "OpenLayers.Geometry.Polygon") {
                         this.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon([feature.geometry]));
                     }

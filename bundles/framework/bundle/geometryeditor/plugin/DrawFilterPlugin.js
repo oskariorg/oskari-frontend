@@ -747,7 +747,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         var newFeatures = this._splitGeometryByLine(multiPolygon,line);
         if ((newFeatures !== null)&&(newFeatures.length > 0)) {
             // Add split line
-            this.sourceLayer.addFeatures([newFeatures[1]]);
+            // this.sourceLayer.addFeatures([newFeatures[1]]);
             // Add new polygons
             var polygons = newFeatures[0].geometry.components;
             for(var i=0; i<polygons.length; i++) {
