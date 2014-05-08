@@ -280,6 +280,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.targetLayer.destroyFeatures();
         this.targetLayer.styleMap = this.targetStyleMaps[params.drawMode];
         this.markerLayer.clearMarkers();
+        this.markers = [];
+        this.activeMarker = null;
         this._updateLayerOrder();
 
         switch (params.drawMode) {
@@ -1503,74 +1505,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
 
-    _generateJSTSPolygons: function(olOldFeatures,olLinearRings,olPoints,clipSourcePolygons,clipHole,jstsOldPolygons,jstsOldPolygon,jstsLine,jstsParser,scale){
-        var i, j, k, l, m = 0;
-        var finished;
-        var clipPolygon;
-        var clipPoint;
-        for (i = olOldFeatures.length - 1; i >= 0; i--) {
-            if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
-                var multi = (olOldFeatures[i].id.indexOf("Multi") !== -1);
-                if (!multi) {
-                    jstsOldPolygon = jstsParser.read(olOldFeatures[i]);
-                    if (!jstsOldPolygon.isValid()) {
-                        return -1;
-                    }
-                    jstsOldPolygons.push(jstsOldPolygon);
-                }
-
-                finished = (m > 0);
-                while (!finished) {
-                    clipPolygon = new ClipperLib.Polygon();
-                    if (multi) {
-                        olLinearRings = olOldFeatures[i].components[m].components;
-                    } else {
-                        olLinearRings = olOldFeatures[i].components;
-                    }
-                    if (olLinearRings[0].getArea() >= 0.0) {
-                        olPoints = olLinearRings[0].components;
-                    } else {
-                        olPoints = olLinearRings[0].components.reverse();
-                    }
-                    for (j = 0; j < olPoints.length - 1; j++) {
-                        clipPoint = new ClipperLib.IntPoint(olPoints[j].x, olPoints[j].y);
-                        clipPolygon.push(clipPoint);
-                    }
-
-                    l = clipSourcePolygons.length;
-                    clipSourcePolygons[l] = [];
-                    clipSourcePolygons[l].push(clipPolygon);
-                    for (j = 1; j < olLinearRings.length; j++) {
-                        clipHole = new ClipperLib.Polygon();
-                        if (olLinearRings[j].getArea() <= 0.0) {
-                            olPoints = olLinearRings[j].components;
-                        } else {
-                            olPoints = olLinearRings[j].components.reverse();
-                        }
-                        for (k = 0; k < olPoints.length - 1; k++) {
-                            clipPoint = new ClipperLib.IntPoint(olPoints[k].x, olPoints[k].y);
-                            clipHole.push(clipPoint);
-                        }
-                        clipSourcePolygons[l].push(clipHole);
-                    }
-                    // Scaling for integer operations
-                    l = clipSourcePolygons.length - 1;
-                    clipSourcePolygons[l] = this.scaleup(clipSourcePolygons[l], scale);
-                    if (multi) {
-                        m = m + 1;
-                        if (m === olOldFeatures[i].components.length) {
-                            finished = true;
-                        }
-                    } else {
-                        finished = true;
-                    }
-                }
-            } else if (olOldFeatures[i].id.indexOf("LineString") !== -1) {
-                jstsLine = jstsParser.read(olOldFeatures[i]);
-            }
-        }
-    },
-
     /*
      * @method scaleup
      *
@@ -1729,18 +1663,39 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return point.references.length >= 2;
     },
 
+    /**
+     * @method _enableGfi
+     * Enables/disables the gfi functionality
+     * @param {Boolean} blnEnable true to enable, false to disable
+     */
+    _enableGfi : function(blnEnable) {
+        var gfiReqBuilder = this._sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+        if(gfiReqBuilder) {
+            this._sandbox.request(this.getName(), gfiReqBuilder(blnEnable));
+        }
+    },
+
     register: function () {
 
     },
+
     unregister: function () {},
+
     startPlugin: function (sandbox) {
+        var me = this;
         this._sandbox = sandbox;
         sandbox.register(this);
         sandbox.addRequestHandler('DrawFilterPlugin.StartDrawFilteringRequest', this.requestHandlers.startDrawFilteringHandler);
         sandbox.addRequestHandler('DrawFilterPlugin.StopDrawFilteringRequest', this.requestHandlers.stopDrawFilteringHandler);
-
+        for (var p in me.eventHandlers) {
+            if (me.eventHandlers.hasOwnProperty(p)) {
+                me._sandbox.registerForEventByName(me, p);
+            }
+        }
+        this._enableGfi(false);
     },
     stopPlugin: function (sandbox) {
+        var me = this;
         this.toggleControl();
 
         if (this.sourceLayer) {
@@ -1761,8 +1716,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             this.markerLayer = undefined;
         }
 
+        for (var p in me.eventHandlers) {
+            if (me.eventHandlers.hasOwnProperty(p)) {
+                me._sandbox.unregisterFromEventByName(me, p);
+            }
+        }
+
         sandbox.removeRequestHandler('DrawFilterPlugin.StartDrawFilteringRequest', this.requestHandlers.startDrawFilteringHandler);
         sandbox.removeRequestHandler('DrawFilterPlugin.StopDrawFilteringRequest', this.requestHandlers.stopDrawFilteringHandler);
+
+        this._enableGfi(true);
         sandbox.unregister(this);
 
         this._sandbox = null;
@@ -1780,8 +1743,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      *
      */
     stop: function (sandbox) {
-    }
+    },
+    /**
+     * @property {Object} eventHandlers
+     * @static
+     */
+    eventHandlers: {
+        'AfterMapMoveEvent': function (event) {
+            this._updateLayerOrder();
+        }
+    },
 
+    /**
+     * @method onEvent
+     * Event is handled forwarded to correct #eventHandlers if found or discarded
+     * if not.
+     * @param {Oskari.mapframework.event.Event} event a Oskari event object
+     */
+    onEvent: function (event) {
+        return this.eventHandlers[event.getName()].apply(this, [event]);
+    }
 }, {
     'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.GeometryEditor.Plugin"]
 });

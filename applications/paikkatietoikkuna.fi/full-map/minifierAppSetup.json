@@ -465,6 +465,9 @@
                 "Import-Bundle": {
                     "analyse": {
                         "bundlePath": "../../../packages/analysis/bundle/"
+                    },
+                    "geometryeditor": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
                     }
                 }
             }
