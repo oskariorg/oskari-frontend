@@ -11,7 +11,7 @@
         "metadata" : { 
             "Import-Bundle" : { 
                 "openlayers-default-theme" : { "bundlePath" : "../../../packages/openlayers/bundle/" },
-                "openlayers-single-full" : { "bundlePath" : "../../../packages/openlayers/bundle/" }
+                "openlayers-full-map" : { "bundlePath" : "../../../packages/openlayers/bundle/" }
             },
             "Require-Bundle-Instance" : [  ]
         }
