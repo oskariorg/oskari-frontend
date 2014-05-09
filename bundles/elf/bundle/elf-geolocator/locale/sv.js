@@ -19,10 +19,17 @@ Oskari.registerLocalization({
             "exonymTitle": "Eksonyymihaku",
             "exonymDesc": "Paikkojen ulkomaalaiset nimet",
             "searchButton": "Hae",
+            "resultsTitle": "Hakutulokset",
             "backButton": "Takaisin",
+            "noResults": "Ei hakutuloksia",
             "errors": {
                 "searchTermMissing": "Hakusana on pakollinen kenttä",
                 "searchFailed": "Haku epäonnistui. Yritä myöhemmin uudelleen."
+            },
+            "grid": {
+                "name": "Nimi",
+                "village": "Alue",
+                "type": "Tyyppi"
             }
         }
     }

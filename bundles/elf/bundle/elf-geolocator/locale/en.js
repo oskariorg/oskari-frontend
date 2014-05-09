@@ -19,10 +19,17 @@ Oskari.registerLocalization({
             "exonymTitle": "Exonym search",
             "exonymDesc": "Foreign names of places",
             "searchButton": "Search",
+            "resultsTitle": "Search results",
             "backButton": "Back",
+            "noResults": "No search results",
             "errors": {
                 "searchTermMissing": "Search term is required",
                 "searchFailed": "Search has failed. Please try again later."
+            },
+            "grid": {
+                "name": "Name",
+                "village": "Region",
+                "type": "Type"
             }
         }
     }

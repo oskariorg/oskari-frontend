@@ -16,30 +16,43 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         for (var t in this.__templates) {
             this.templates[t] = jQuery(this.__templates[t]);
         }
+        this.resultsGrid = this.__initResultsGrid();
+        this.progressSpinner = Oskari.clazz.create(
+            'Oskari.userinterface.component.ProgressSpinner');
         this.tabContent = this.__initContent();
     }, {
         __templates: {
-            container: '<div class="geolocator">' +
-                    '<div class="geolocator-search">' +
-                        '<div class="errors"></div>' +
-                        '<div class="search-fields"></div>' +
-                        '<div class="search-additionals">' +
-                            '<div class="input-fields"></div>' +
-                        '</div>' +
-                        '<div class="commit"></div>' +
-                    '</div>' +
-                    '<div class="geolocator-results">' +
-                        '<div class="search-results"></div>' +
-                    '</div>' +
-                '</div>',
+            container: '<div class="geolocator">'
+                +    '<div class="geolocator-search">'
+                +        '<div class="errors"></div>'
+                +        '<form>'
+                +            '<div class="search-fields"></div>'
+                +            '<div class="search-additionals">'
+                +                '<div class="input-fields"></div>'
+                +            '</div>'
+                +            '<div class="commit">'
+                +                '<input type="submit" />'
+                +            '</div>'
+                +        '</form>'
+                +    '</div>'
+                +    '<div class="geolocator-results">'
+                +        '<div class="header-results">'
+                +           '<p>'
+                +               '<span class="title"></span>'
+                +               '<span class="back elf-fake-link"></span>'
+                +           '</p>'
+                +        '</div>'
+                +        '<div class="search-results"></div>'
+                +    '</div>'
+                +'</div>',
             button: '<input type="button" />',
-            addInput: '<div class="additional-input">' +
-                    '<div class="controls">' +
-                        '<input type="checkbox" />' +
-                        '<label></label>' +
-                    '</div>' +
-                '</div>',
-            result: '<div></div>'
+            addInput: '<div class="additional-input">'
+                +    '<div class="controls">'
+                +        '<input type="checkbox" />'
+                +        '<label></label>'
+                +    '</div>'
+                +'</div>',
+            result: '<div class="result"></div>'
         },
         getTitle: function () {
             return this.loc.title;
@@ -68,14 +81,14 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                 regionInput = Oskari.clazz.create(
                     'Oskari.userinterface.component.FormInput',
                     'elf-geolocator-region', this.sandbox),
-                searchButton = this.templates.button.clone(),
+                searchButton = searchUi.find('div.commit input[type="submit"]'),
                 fuzzyCheck = this.templates.addInput.clone(),
                 exonymCheck = this.templates.addInput.clone(),
-                backButton = this.templates.button.clone();
+                backButton = resultsUi.find('div.header-results span.back');
 
             searchInput.setRequired(true, this.loc.errors.searchTermMissing);
             searchInput.addClearButton();
-            searchInput.getField().addClass('search-field')
+            searchInput.getField().addClass('search-field');
             searchInput.setLabel(this.loc.searchTitle);
             searchInput.setPlaceholder(this.loc.searchPlaceholder);
 
@@ -108,7 +121,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
 
             searchButton
                 .val(this.loc.searchButton)
-                .on('click', function (e) {
+                .on('click submit', function (e) {
+                    e.preventDefault();
                     var values = me.__getValues();
 
                     me.__removeErrors(container);
@@ -123,7 +137,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                 });
 
             backButton
-                .val(this.loc.backButton)
+                .text(this.loc.backButton)
                 .on('click', function (e) {
                     resultsUi.hide();
                     searchUi.show();
@@ -139,17 +153,27 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                     .append(fuzzyCheck)
                     .append(exonymCheck);
 
-            container.find('div.commit')
-                .append(searchButton);
+            resultsUi.find('div.header-results span.title')
+                .append(this.__getSearchResultsTitle());
 
-            resultsUi
-                .prepend(backButton)
-                .hide();
+            this.progressSpinner
+                .insertTo(resultsUi.find('div.search-results'));
+
+            resultsUi.hide();
 
             this.searchInput = searchInput;
             this.regionInput = regionInput;
 
             return container;
+        },
+        __getSearchResultsTitle: function (count) {
+            var title = this.loc.resultsTitle;
+
+            if (count !== undefined && count !== null) {
+                title += (' (' + count + ')');
+            }
+
+            return title;
         },
         __getValues: function () {
             var values = {},
@@ -174,6 +198,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         __doSearch: function (values) {
             var me = this;
 
+            me.__beforeSearch();
+
             this.instance.getSearchService().doSearch(values,
                 function (results) {
                     me.__handleSearchResult(results);
@@ -182,9 +208,22 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                     me.__handleSearchResult();
                 });
         },
+        __beforeSearch: function () {
+            var container = this.getContent().find('div.geolocator-results');
+
+            container.find('div.search-results')
+                .addClass('loading')
+                .empty();
+            container.find('div.header-results span.title')
+                .text(this.__getSearchResultsTitle());
+            this.progressSpinner.start();
+        },
         __handleSearchResult: function (results) {
-            var container = this.getContent().find('div.search-results');
-            container.empty();
+            var container = this.getContent().find('div.geolocator-results');
+
+            this.progressSpinner.stop();
+            container.find('div.search-results')
+                .removeClass('loading');
 
             if (results) {
                 this.__renderSearchResults(results, container);
@@ -193,20 +232,111 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             }
         },
         __renderSearchResults: function (results, container) {
-            var resultTemplate = this.templates.result,
-                resultDiv;
+            var resultsTitle = container.find('div.header-results span.title'),
+                resultsContainer = container.find('div.search-results'),
+                resultsGrid = this.resultsGrid,
+                resultsModel;
 
-            _.each(results.locations, function (result) {
-                resultDiv = resultTemplate.clone();
-                resultDiv
-                    .append(result.name)
-                    .append(' - ')
-                    .append(result.au);
-                container.append(resultDiv);
-            });
+            resultsTitle
+                .text(this.__getSearchResultsTitle(results.totalCount));
+
+            if (results.totalCount <= 0) {
+                resultsContainer.append(this.loc.noResults);
+            } else {
+                resultsModel = this.__getGridModel(results.locations);
+                resultsGrid
+                    .setDataModel(resultsModel);
+                resultsGrid
+                    .renderTo(resultsContainer);
+            }
         },
         __handleSearchError: function (container) {
-            container.append(this.loc.errors.searchFailed);
+            container
+                .find('div.search-results')
+                .append(this.loc.errors.searchFailed);
+        },
+        __initResultsGrid: function () {
+            var me = this,
+                grid = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Grid'),
+                visibleFields = ['name', 'village', 'type'];
+
+            grid.setVisibleFields(visibleFields);
+
+            grid.setColumnValueRenderer('name', function (name, data) {
+                var link = jQuery('<span class="elf-fake-link"></span>');
+
+                link.append(name).on('click', function (e) {
+                    me.__resultClicked(data);
+                });
+
+                return link;
+            });
+
+            _.each(visibleFields, function (field) {
+                grid.setColumnUIName(field, me.loc.grid[field]);
+            });
+
+            return grid;
+        },
+        __resultClicked: function (result) {
+            var instance = this.instance,
+                sandbox = instance.getSandbox(),
+                zoomLevel = sandbox.getMap().getZoom(),
+                srsName = sandbox.getMap().getSrsName(),
+                lonlat = new OpenLayers.LonLat(result.lon, result.lat),
+                popupId = "elf-geolocator-search-result",
+                moveReqBuilder = sandbox
+                    .getRequestBuilder('MapMoveRequest'),
+                infoBoxReqBuilder = sandbox
+                    .getRequestBuilder('InfoBox.ShowInfoBoxRequest'),
+                moveReq,
+                infoBoxReq,
+                infoBoxContent;
+
+            if (moveReqBuilder) {
+                moveReq = moveReqBuilder(
+                    result.lon, result.lat, zoomLevel, false, srsName);
+                sandbox.request(instance, moveReq);
+            }
+
+            if (infoBoxReqBuilder) {
+                infoBoxContent = {
+                    html: this.__getInfoBoxHtml(result),
+                    actions: {}
+                };
+                infoBoxReq = infoBoxReqBuilder(
+                    popupId, this.loc.resultsTitle,
+                    [infoBoxContent], lonlat, true);
+                sandbox.request(instance, infoBoxReq);
+            }
+        },
+        __getInfoBoxHtml: function (result) {
+            var template = '<h3><%= name %></h3>'
+                    + '<p><%= village %></p>'
+                    + '<p><%= type %></p>';
+
+            return _.template(template, result);
+        },
+        __getGridModel: function (results) {
+            var gridModel = Oskari.clazz.create(
+                    'Oskari.userinterface.component.GridModel');
+
+            gridModel.setIdField('id');
+
+            _.each(results, function (result) {
+                gridModel.addData({
+                    'id': result.id,
+                    'name': result.name,
+                    'village': result.village,
+                    'type': result.type,
+                    'rank': result.rank,
+                    'lon': result.lon,
+                    'lat': result.lat
+                });
+            });
+
+            return gridModel;
         },
         __addErrors: function (errors) {
             var container = this.getContent(),
