@@ -32,16 +32,14 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                         '<div class="search-results"></div>' +
                     '</div>' +
                 '</div>',
-            field: '<div class="search-field">' +
-                    '<input type="text" />' +
-                '</div>',
             button: '<input type="button" />',
             addInput: '<div class="additional-input">' +
                     '<div class="controls">' +
                         '<input type="checkbox" />' +
                         '<label></label>' +
                     '</div>' +
-                '</div>'
+                '</div>',
+            result: '<div></div>'
         },
         getTitle: function () {
             return this.loc.title;
@@ -195,6 +193,17 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             }
         },
         __renderSearchResults: function (results, container) {
+            var resultTemplate = this.templates.result,
+                resultDiv;
+
+            _.each(results.locations, function (result) {
+                resultDiv = resultTemplate.clone();
+                resultDiv
+                    .append(result.name)
+                    .append(' - ')
+                    .append(result.au);
+                container.append(resultDiv);
+            });
         },
         __handleSearchError: function (container) {
             container.append(this.loc.errors.searchFailed);
