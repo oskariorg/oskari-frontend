@@ -9,10 +9,9 @@ Oskari.clazz.define('Oskari.userinterface.component.buttons.SaveButton',
      * @static
      */
     function () {
-        this.title = Oskari.getLocalization('DivManazer').buttons.save;
         this.ui.attr('type', 'submit');
-        setTitle(this.title);
-        setPrimary(true);
+        this.setTitle(Oskari.getLocalization('DivManazer').buttons.save);
+        this.setPrimary(true);
     },
     {},
     {
