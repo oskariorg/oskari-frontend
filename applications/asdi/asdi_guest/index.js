@@ -217,12 +217,24 @@ jQuery(document).ready(function() {
                if( state === 'attach' && ( tileInfo && tileInfo.el && flyoutInfo && flyoutInfo.el ))  {
                	/* Let's open flyout to bottom & left relative to tile for this demo */
                	//console.log(tileInfo, flyoutInfo);
-               	var pos = jQuery(tileInfo.el).position();
-               	var bot = jQuery(tileInfo.el).height();
-               	
-               	jQuery(flyoutInfo.el).css("left",pos.left+"px");
-               	jQuery(flyoutInfo.el).css("top", (pos.top+bot)+"px");
-               		
+            	 	var pos = jQuery(tileInfo.el).position();
+                   	var bot = jQuery(tileInfo.el).height();
+                   	var rig = jQuery(tileInfo.el).width();
+                   	var w = jQuery(flyoutInfo.el).width();
+                   	var winw = jQuery( window ).width();
+                   	
+                   	var flytopos = {
+                   		left: pos.left,
+                   		top:  pos.top+bot
+                   	};
+                   	
+                   	if( ( pos.left + w ) > winw ) {
+                   		flytopos.left = pos.left + rig - w;  
+                   	}  
+                   	
+                   	jQuery(flyoutInfo.el).css("left",flytopos.left+"px");
+                   	jQuery(flyoutInfo.el).css("top", flytopos.top+"px");
+                   	               		
                }
 
 
