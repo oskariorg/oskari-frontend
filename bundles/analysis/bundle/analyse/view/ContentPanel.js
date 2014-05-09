@@ -411,7 +411,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          *
          * @method _createDrawFilterPlugin
          * @private
-         * @return {Oskari.mapframework.ui.module.common.GeometryEditor.DrawFilterPlugin}
+         * @return {Oskari.mapframework.ui.module.common.geometryeditor.DrawFilterPlugin}
          */
         _createDrawFilterPlugin: function() {
             var drawFilterPlugin = Oskari.clazz.create(
@@ -511,40 +511,40 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                     if (jQuery(this).hasClass('disabled')) {
                         return;
                     }
+
+ // Test data for development. Remove when bundle is stable.
+/*
+ if (drawFilter === "point") {
+ var lonlat;
+ var points = [];
+ lonlat = new OpenLayers.LonLat(370000, 6672000);
+ points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+ lonlat = new OpenLayers.LonLat(384000, 6671000);
+ points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+ lonlat = new OpenLayers.LonLat(395000, 6671000);
+ points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+ lonlat = new OpenLayers.LonLat(400000, 6650000);
+ points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+ me.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(points));
+ } else if (~["line","edit"].indexOf(drawFilter)) {
+ var lonlat;
+ var points = [];
+ lonlat = new OpenLayers.LonLat(388000, 6679000);
+ points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+ lonlat = new OpenLayers.LonLat(398000, 6666000);
+ points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+ lonlat = new OpenLayers.LonLat(378000, 6666000);
+ points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+ }
+ me.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon([new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(points))]));
+*/
+
                     me._startNewDrawFiltering({
                         mode: drawFilter,
                         sourceGeometry: me.getSelectedGeometry()
                     });
-
                 });
                 container.append(drawFilterDiv);
-                /*
-                 // Test
-                 if (drawFilter === "point") {
-                 var lonlat;
-                 var points = [];
-                 lonlat = new OpenLayers.LonLat(370000, 6672000);
-                 points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
-                 lonlat = new OpenLayers.LonLat(384000, 6671000);
-                 points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
-                 lonlat = new OpenLayers.LonLat(395000, 6671000);
-                 points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
-                 lonlat = new OpenLayers.LonLat(400000, 6650000);
-                 points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
-                 me.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(points));
-                 } else if (~["line","edit"].indexOf(drawFilter)) {
-                 var lonlat;
-                 var points = [];
-                 lonlat = new OpenLayers.LonLat(388000, 6679000);
-                 points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
-                 lonlat = new OpenLayers.LonLat(398000, 6666000);
-                 points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
-                 lonlat = new OpenLayers.LonLat(378000, 6666000);
-                 points.push(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
-                 }
-                 me.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon([new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(points))]));
-                 */
-
                 return container;
             }, drawFilterContainer);
         },
