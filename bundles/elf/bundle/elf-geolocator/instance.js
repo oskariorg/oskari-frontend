@@ -74,6 +74,12 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
             // Create the tool for searching places by clicking on the map
             this.registerTool();
         },
+        /**
+         * Returns the search service.
+         * 
+         * @method getSearchService
+         * @return {Oskari.elf.geolocator.service.GeoLocatorSearchService}
+         */
         getSearchService: function () {
             return this.searchService;
         },
@@ -101,12 +107,29 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
                 sandbox.request(this, request);
             }
         },
-        startTool: function (plugin) {
+        /**
+         * Starts the tool
+         * (for now only sets its `active` property to true)
+         * 
+         * @method startTool
+         */
+        startTool: function () {
             this.tool.active = true;
         },
+        /**
+         * Stops the tool
+         * (for now only sets its `active` property to false)
+         * 
+         * @method stopTool
+         */
         stopTool: function () {
             this.tool.active = false;
         },
+        /**
+         * Sends a request to select the default tool.
+         * 
+         * @method selectDefaultTool
+         */
         selectDefaultTool: function () {
             // ask toolbar to select default tool
             var sandbox = this.getSandbox(),
@@ -119,6 +142,14 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
                 sandbox.request(this, toolBarReq);
             }
         },
+        /**
+         * Sends the search request to the search service
+         * and handles the response.
+         * 
+         * @method __handleMapClick
+         * @private
+         * @param  {Object} lonlat
+         */
         __handleMapClick: function (lonlat) {
             var me = this;
 
@@ -126,11 +157,25 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
                 lon: lonlat.lon,
                 lat: lonlat.lat
             }, function (response) {
-                me.resultClicked(_.first(response.locations));
+                console.log(response);
+                if (response) {
+                    me.resultClicked(_.first(response.locations));
+                }
             }, function () {
+                me.getSandbox().printWarn(
+                    'ELF ReverseGeoCode search failed',
+                    [].slice.call(arguments));
             });
         },
+        /**
+         * Sends a map move and infobox requests for the given result.
+         * 
+         * @method resultClicked
+         * @param  {Object} result
+         */
         resultClicked: function (result) {
+            if (!result) return;
+
             var sandbox = this.getSandbox(),
                 zoomLevel = sandbox.getMap().getZoom(),
                 srsName = sandbox.getMap().getSrsName(),
@@ -161,6 +206,14 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
                 sandbox.request(this, infoBoxReq);
             }
         },
+        /**
+         * Returns the content for the infobox.
+         * 
+         * @method __getInfoBoxHtml
+         * @private
+         * @param  {Object} result
+         * @return {String}
+         */
         __getInfoBoxHtml: function (result) {
             var template = '<h3><%= name %></h3>'
                     + '<p><%= village %></p>'
