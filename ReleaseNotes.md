@@ -12,6 +12,14 @@ The default UI for search can now be disabled through config:
 }
 ```
 
+### elf-language-selector
+
+Opens the language selector in a Flyout
+
+### elf-geolocator
+
+*New bundle!* Creates a service and a user interface for ELF Geolocator search API. Creates an UI for search bundle to perform text searches and adds a button to the toolbar for reverse geocode search.
+
 ## 1.20
 
 ### analysis/analyse
