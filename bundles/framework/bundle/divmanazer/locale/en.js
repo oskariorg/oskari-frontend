@@ -1,8 +1,16 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "en",
     "key": "DivManazer",
     "value": {
+        "buttons": {
+            "add": "Add",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "edit": "Edit",
+            "ok": "OK",
+            "save": "Save",
+            "search": "Search"
+        },
         "VisualizationForm": {
             "tooltips": {
                 "dot": "Edit point feature style",
@@ -97,5 +105,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});
