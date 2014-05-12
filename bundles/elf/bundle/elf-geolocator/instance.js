@@ -16,6 +16,20 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
         getName : function () {
             return this.__name;
         },
+        eventHandlers: {
+            'MapClickedEvent': function (event) {
+                if (this.tool.active === true) {
+                    this.stopTool();
+                    this.selectDefaultTool();
+                    this.__handleMapClick(event.getLonLat());
+                }
+            },
+            'Toolbar.ToolSelectedEvent': function (event) {
+                if (event.getToolId() !== this.toolName) {
+                    this.stopTool();
+                }
+            }
+        },
         /**
          * BundleInstance protocol method
          * 
@@ -109,29 +123,50 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
             var me = this;
 
             this.searchService.doSearch({
-                lon: lonlat.lat,
-                lat: lonlat.lon
+                lon: lonlat.lon,
+                lat: lonlat.lat
             }, function (response) {
-                console.log(response);
-                me.tab.__resultClicked(
-                    _.first(response.locations));
+                me.resultClicked(_.first(response.locations));
             }, function () {
-                console.log([].slice.call(arguments));
             });
         },
-        eventHandlers: {
-            'MapClickedEvent': function (event) {
-                if (this.tool.active === true) {
-                    this.stopTool();
-                    this.selectDefaultTool();
-                    this.__handleMapClick(event.getLonLat());
-                }
-            },
-            'Toolbar.ToolSelectedEvent': function (event) {
-                if (event.getToolId() !== this.toolName) {
-                    this.stopTool();
-                }
+        resultClicked: function (result) {
+            var sandbox = this.getSandbox(),
+                zoomLevel = sandbox.getMap().getZoom(),
+                srsName = sandbox.getMap().getSrsName(),
+                lonlat = new OpenLayers.LonLat(result.lon, result.lat),
+                popupId = "elf-geolocator-search-result",
+                moveReqBuilder = sandbox
+                    .getRequestBuilder('MapMoveRequest'),
+                infoBoxReqBuilder = sandbox
+                    .getRequestBuilder('InfoBox.ShowInfoBoxRequest'),
+                moveReq,
+                infoBoxReq,
+                infoBoxContent;
+
+            if (moveReqBuilder) {
+                moveReq = moveReqBuilder(
+                    result.lon, result.lat, zoomLevel, false, srsName);
+                sandbox.request(this, moveReq);
             }
+
+            if (infoBoxReqBuilder) {
+                infoBoxContent = {
+                    html: this.__getInfoBoxHtml(result),
+                    actions: {}
+                };
+                infoBoxReq = infoBoxReqBuilder(
+                    popupId, this.getLocalization('tab').resultsTitle,
+                    [infoBoxContent], lonlat, true);
+                sandbox.request(this, infoBoxReq);
+            }
+        },
+        __getInfoBoxHtml: function (result) {
+            var template = '<h3><%= name %></h3>'
+                    + '<p><%= village %></p>'
+                    + '<p><%= type %></p>';
+
+            return _.template(template, result);
         }
     }, {
         "extend" : ["Oskari.userinterface.extension.DefaultExtension"]

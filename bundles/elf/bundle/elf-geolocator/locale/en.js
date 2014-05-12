@@ -13,7 +13,7 @@ Oskari.registerLocalization({
             "searchPlaceholder": "Search location by place name, address or real estate unit identifier",
             "regionTitle": "Region filter",
             "regionPlaceholder": "Filter the search by municipality or administrative unit",
-            "additionalsTitle": "Advanced search",
+            "additionalsTitle": "Search options",
             "fuzzyTitle": "Fuzzy search",
             "fuzzyDesc": "Places with similar names to the search term",
             "exonymTitle": "Exonym search",
