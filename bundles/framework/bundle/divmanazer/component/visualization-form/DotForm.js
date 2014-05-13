@@ -18,11 +18,13 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
         this.cancelButton = null;
         this.saveButtonHandler = null;
         this.renderDialog = null;
+        this.messageEnabled = false;
 
         this.values = {
             size: this.defaultValues.size,
             color: this.defaultValues.color,
-            shape: this.defaultValues.shape
+            shape: this.defaultValues.shape,
+            message: ""
         };
 
         // Minimum dot size
@@ -123,8 +125,6 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
             '<div class="column22">' +
             '<label>' + this.loc.preview.label + '</label>' +
             '<div class="preview"></div>' +
-            '<label>' + "Testi" + '</label>' +
-            '<div class="dotLabel"></div>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -142,6 +142,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
         this.templateColorSource = jQuery('<input type="checkbox" name="colorInput" value = "custom" class="color-source">');
         this.templateColorValue = jQuery('<label class="color-label"></label><br><input type="text" name="color-input" value="0" disabled="disabled" class="custom-color">');
         this.templateSizerValue = jQuery('<div class="sizer-value"></div>');
+        this.templateMessage = jQuery('<div class = "message"><label class="message-label"></label><div class="field"><input type="text" name="message-text" class="message-text"/></div></div>');
         this.previewSize = 50;
     }, {
         /**
@@ -154,7 +155,8 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
             return {
                 size: this.values.size,
                 color: this.values.color,
-                shape: this.values.shape
+                shape: this.values.shape,
+                message: this.values.message
             };
         },
         /**
@@ -175,6 +177,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
             var me = this;
             if (state !== null && state !== undefined) {
                 jQuery.extend(true, me.values, state.dot);
+                this.messageEnabled = state.messageEnabled;
             }
 
             me.renderDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -372,6 +375,18 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
             });
 
             this._updatePreview(dialogContent);
+
+            // Optional dot message
+            if (this.messageEnabled) {
+                var messageContainer = this.templateMessage.clone();
+                messageContainer.find("label.message-label").html(this.loc.message.label);
+                var input = messageContainer.find("input.message-text");
+                input.attr("placeholder",this.loc.message.hint);
+                input.bind('input', function() {
+                    me.values.message = jQuery(this).val();
+                });
+                messageContainer.insertAfter(dialogContent.find('div.preview'));
+            }
 
             var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             saveBtn.setTitle(me.loc.buttons.save);

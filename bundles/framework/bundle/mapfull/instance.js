@@ -114,7 +114,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 var plugins = this.conf.plugins;
                 for (var i = 0; i < plugins.length; i++) {
                     try {
-                        plugins[i].instance = Oskari.clazz.create(plugins[i].id, plugins[i].config);
+                        plugins[i].instance = Oskari.clazz.create(plugins[i].id, plugins[i].config, plugins[i].state);
                         module.registerPlugin(plugins[i].instance);
                         module.startPlugin(plugins[i].instance);
                     }

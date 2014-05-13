@@ -14,8 +14,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
      *
      * @param {String} id
      *      Unigue ID for this map
-     * @param {String} imageUrl
-     *      base url for marker etc images
      * @param {Array} map options, example data:
      *  {
      *      resolutions : [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
@@ -30,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
      *  }
      */
 
-    function (id, imageUrl, options) {
+    function (id, options) {
         this._options = {
             resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
             srsName: 'EPSG:3067',
@@ -665,10 +663,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             mapVO.setMaxExtent(this._map.getMaxExtent());
 
             mapVO.setBbox(this._map.calculateBounds());
-
-            // TODO: not sure if this is supposed to work like this
-            // this resets the marker set by url control parameter so dont do it
-            //mapVO.setMarkerVisible(this._hasMarkers());
         },
 
         /**
@@ -697,60 +691,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 this.getMap().getProjectionObject()
             );
         },
-
-        /**
-         * @method _drawMarker
-         * @private
-         * Adds a marker on the center of the map
-         */
-        _drawMarker: function () {
-            // FIXME: not really sure if markers are supposed to be handled here
-            this._removeMarkers();
-            var centerMapLonLat = this._getMapCenter(),
-                layerMarkers = new OpenLayers.Layer.Markers("Markers");
-            this._map.addLayer(layerMarkers);
-
-            var size = new OpenLayers.Size(32, 32),
-                offset = new OpenLayers.Pixel(-16, -size.h),
-                icon = new OpenLayers.Icon(this.getImageUrl() + '/framework/bundle/mapmodule-plugin/images/marker.png', size, offset),
-                marker = new OpenLayers.Marker(centerMapLonLat, icon);
-            layerMarkers.addMarker(marker);
-        },
-        /**
-         * Removes any markers from the map
-         *
-         * @method _removeMarkers
-         * @private
-         * @return {OpenLayers.Layer} marker layers
-         */
-        _removeMarkers: function () {
-            var me = this,
-                markerLayers = this._getMapLayersByName("Markers");
-
-            _.each(markerLayers, function(markerLayer) {
-                me._map.removeLayer(markerLayer, false);
-            });
-
-            return markerLayers;
-        },
-        /**
-         * @method _hasMarkers
-         * @private
-         * Returns true if there are any markers on the map
-         * @return {Boolean}
-         */
-        _hasMarkers: function () {
-            var markerLayer = this._getMapLayersByName("Markers"),
-                i;
-            if (markerLayer) {
-                for (i = 0; i < markerLayer.length; i++) {
-                    if (markerLayer[i] && markerLayer[i].markers && markerLayer[i].markers.length > 0) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        },
         /**
          * @property eventHandlers
          * @static
@@ -758,9 +698,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         eventHandlers: {
             'AfterMapLayerAddEvent': function (event) {
                 this._afterMapLayerAddEvent(event);
-            },
-            'SearchClearedEvent': function (event) {
-                this._removeMarkers();
             },
             'LayerToolsEditModeEvent' : function (event) {
                 this._isInLayerToolsEditMode = event.isInMode();
@@ -782,18 +719,21 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 keepLayersOrder = event.getKeepLayersOrder(),
                 isBaseMap = event.isBasemap(),
                 layerPlugins = this.getLayerPlugins(),
-                markerLayers = this._getMapLayersByName("Markers");
+                layerFunctions = [];
 
             _.each(layerPlugins, function(plugin) {
                 if (_.isFunction(plugin.addMapLayerToMap)) {
-                    plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
+                    var layerFunction = plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
+                    if (_.isFunction(layerFunction)) {
+                        layerFunctions.push(layerFunction);
+                    }
                 }
             });
 
-            // Make sure the marker layers are always on top
-            _.each(markerLayers, function(markerLayer) {
-                map.raiseLayer(markerLayer, map.layers.length);
-            });
+            // Execute each layer function
+            for (var i=0; i<layerFunctions.length; i++) {
+                layerFunctions[i].apply();
+            }
         },
         /**
          * @method getOLMapLayers

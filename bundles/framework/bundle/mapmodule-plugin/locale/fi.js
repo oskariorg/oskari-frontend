@@ -91,6 +91,10 @@ Oskari.registerLocalization({
           "preview": {
             "label": "Esikatselu"
           },
+          "message": {
+            "label": "Viesti",
+            "hint": "Kirjoita viestiteksti"
+          },
           "buttons": {
             "save": "Tallenna",
             "cancel": "Peruuta"
