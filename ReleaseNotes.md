@@ -12,6 +12,30 @@ The default UI for search can now be disabled through config:
 }
 ```
 
+### mapmodule-plugin/MarkersPlugin
+
+New marker functionality:
+
+Dynamic point symbol visualizations are now available also for markers. They can be created by url parameters or set on the map by the user.
+
+Marker handling is removed from map-module.js. Instead, new markers can be added via requests as follows:
+
+```javascript
+var reqBuilder = this.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+if (reqBuilder) {
+    var data = {
+        x: lonlat.lon,
+        y: lonlat.lat,
+        msg: null,
+        color: "ff0000",
+        shape: 3,
+        size: 3
+    };
+    var request = reqBuilder(data);
+    this.sandbox.request(this.getName(), request);
+}
+```
+
 ### elf-language-selector
 
 Opens the language selector in a Flyout

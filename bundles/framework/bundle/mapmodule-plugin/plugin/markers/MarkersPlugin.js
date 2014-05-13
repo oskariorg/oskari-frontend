@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
      */
 
     function (conf, state) {
-debugger;
         var me = this;
         this.conf = conf;
         this.state = state;
@@ -37,14 +36,13 @@ debugger;
         };
         this._strokeStyle = {
             "stroke-width": 1,
-            "fill": color,
             "stroke": "#b4b4b4"
         };
         this._localization = null;
         this.buttonGroup = "markers";
         this.buttons = {
             'add': {
-                iconCls: 'selection-line', // to-do
+                iconCls: 'marker-share',
                 tooltip: 'lisää',
                 sticky: true,
                 callback: function () {
@@ -75,7 +73,7 @@ debugger;
                 }
             },
             'clear': {
-                iconCls: 'selection-remove', // to-do
+                iconCls: 'selection-remove',
                 tooltip: 'poista',
                 sticky: true,
                 callback: function () {
@@ -198,13 +196,8 @@ debugger;
                 this._prevIconUrl = this._preSVGIconUrl+paper.toSVG();
             }
             this._registerTools();
-            if ((typeof this.state === "undefined") || (this.state === null)) {
-                this.state = {
-                    markers: []
-                }
-            } else {
-                this.addMapMarkers(this.state.markers);
-            }
+
+            // Creates markers on the map
             this.setState(this.state);
         },
         /**
@@ -319,15 +312,15 @@ debugger;
 
         addMapMarkers: function (markers) {
             for (var i=0; i<markers.length; i++) {
-                this.addMapMarker(markers(i));
+                this.addMapMarker(markers[i]);
             }
         },
 
-        addMapMarker: function (marker, events) {
+        addMapMarker: function (markerData, events) {
             var me = this,
                 i;
             // Coordinates are needed
-            if ((typeof marker.x === "undefined")||(typeof marker.y === "undefined")) {
+            if ((typeof markerData.x === "undefined")||(typeof markerData.y === "undefined")) {
                 return;
             }
 
@@ -336,47 +329,31 @@ debugger;
             // Image data already available
             var iconSrc = null;
             if (me._svg) {
-                if ((typeof marker.iconUrl !== "undefined")&&(marker.iconUrl !== null)) {
-                    iconSrc = marker.iconUrl;
+                if ((typeof markerData.iconUrl !== "undefined")&&(markerData.iconUrl !== null)) {
+                    iconSrc = markerData.iconUrl;
                 } else {
                     // Construct image
-                    iconSrc = this.constuctImage(marker);
-                    if (typeof Raphael !== "undefined") {
-                        var paper = Raphael(-100,-100,100,100);
-                        paper.clear();
-
-                        // Testing
-                        // var lines = paper.path("M0 0L99 99 M0 99 L99 0");
-                        // lines.attr("stroke", "#000");
-
-                        var font = paper.getFont(me._font.name);
-                        var charIndex = me.getFont().baseIndex+marker.shape;
-                        var size = 100;
-                        var color = "#"+marker.color;
-                        paper.print(0,55,String.fromCharCode(charIndex),font,size).attr({"stroke-width": 1, "fill": color, "stroke": "#b4b4b4"});
-                        // Base64 encoding for cross-browser compatibility
-                        iconSrc = this._preSVGIconUrl+jQuery.base64.encode(paper.toSVG());
-                    }
+                    iconSrc = this.constructImage(markerData);
                 }
             } else {
                 iconSrc = me._defaultIconUrl;
             }
 
             var markerLayers = this._map.getLayersByName("Markers"),
-                point = new OpenLayers.Geometry.Point(marker.x, marker.y),
-                marker = new OpenLayers.Feature.Vector(point,null,{
+                point = new OpenLayers.Geometry.Point(markerData.x, markerData.y),
+                newMarker = new OpenLayers.Feature.Vector(point,null,{
                     externalGraphic: iconSrc,
-                    graphicWidth: 50+10*marker.size,
-                    graphicHeight: 50+10*marker.size,
+                    graphicWidth: 50+10*markerData.size,
+                    graphicHeight: 50+10*markerData.size,
                     fillOpacity: 1,
-                    label: marker.msg,
+                    label: markerData.msg,
                     fontColor: "${favColor}",
                     fontSize: "12px",
                     fontFamily: "Courier New, monospace",
                     fontWeight: "bold",
                     labelAlign: "c",
-                    labelXOffset: 10+10*marker.size,
-                    labelYOffset: 10+10*marker.size,
+                    labelXOffset: 10+10*markerData.size,
+                    labelYOffset: 10+10*markerData.size,
                     labelOutlineColor: "white",
                     labelOutlineWidth: 3
                 });
@@ -384,12 +361,12 @@ debugger;
             if (events) {
                 for (i in events) {
                     if (events.hasOwnProperty(i)) {
-                        marker.events.register(i, marker, events[i]);
+                        newMarker.events.register(i, newMarker, events[i]);
                     }
                 }
             }
-            this._markers.push(marker);
-            markerLayers[0].addFeatures([marker]);
+            this._markers.push(markerData);
+            markerLayers[0].addFeatures([newMarker]);
             this.raiseMarkerLayer(markerLayers[0]);
 
             // Save generated icon
@@ -399,7 +376,7 @@ debugger;
 
         constructImage: function(marker) {
             var me = this;
-            var shape, size, color;
+            var size, color;
             var iconSrc = me._defaultIconUrl;
             if (typeof Raphael !== "undefined") {
                 var paper = Raphael(-100,-100,100,100);
@@ -413,11 +390,7 @@ debugger;
                 } else {
                     charIndex += me._defaultData.shape;
                 }
-                if (typeof marker.size === "number") {
-                    size = marker.size;
-                } else {
-                    size = me._defaultData.size;
-                }
+                size = 100;
                 if (typeof marker.color === "string") {
                     color = "#"+marker.color;
                 } else {
@@ -425,7 +398,12 @@ debugger;
                 }
 
                 // Create image
-                paper.print(0,55,String.fromCharCode(charIndex),font,size).attr(me._strokeStyle);
+                paper.print(0,55,String.fromCharCode(charIndex),font,size).attr({
+                    "fill": color,
+                    "stroke_width": me._strokeStyle.stroke_width,
+                    "stroke": me._strokeStyle.stroke
+                });
+
                 // Base64 encoding for cross-browser compatibility
                 iconSrc = me._preSVGIconUrl+jQuery.base64.encode(paper.toSVG());
             }
