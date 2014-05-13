@@ -75,30 +75,35 @@ Oskari.registerLocalization({
           "clear": "Poista kaikki markerit"
         },
         "form": {
-          "title": "Pistekohteen esitystapa",
-          "tooltip": "",
-          "symbol": {
-            "label": "Pistekohteen kuvake"
-          },
-          "size": {
-            "label": "Koko"
-          },
-          "color": {
-            "label": "Väri",
-            "labelOr": "tai",
-            "labelCustom": "Oma RGB-väri (0-255)"
-          },
-          "preview": {
-            "label": "Esikatselu"
-          },
-          "message": {
-            "label": "Viesti",
-            "hint": "Kirjoita viestiteksti"
-          },
-          "buttons": {
-            "save": "Tallenna",
-            "cancel": "Peruuta"
-          }
+            "title": "Pistekohteen esitystapa",
+            "tooltip": "",
+            "symbol": {
+                "label": "Pistekohteen kuvake"
+            },
+            "size": {
+                "label": "Koko"
+            },
+            "color": {
+                "label": "Väri",
+                "labelOr": "tai",
+                "labelCustom": "Oma RGB-väri (0-255)"
+            },
+            "preview": {
+                "label": "Esikatselu"
+            },
+            "message": {
+                "label": "Viesti",
+                "hint": "Kirjoita viestiteksti"
+            },
+            "buttons": {
+                "save": "Tallenna",
+                "cancel": "Peruuta"
+            }
+        },
+        "dialog": {
+          "title": "Markerin lisäys",
+          "message": "Valitse kartalta uusi sijainti klikkaamalla.",
+          "cancel": "Peruuta"
         }
       }
     }
