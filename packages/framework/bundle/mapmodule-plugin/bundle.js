@@ -105,10 +105,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
                     "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/markers/MarkersPlugin.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/request/RemoveMarkerRequest.js"
+                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/request/AddMarkerRequest.js"
                 }, {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/request/MarkerRequestHandler.js"
+                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/request/AddMarkerRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/request/RemoveMarkersRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/request/RemoveMarkersRequestHandler.js"
                 },
                 /**
                  * Search plugin

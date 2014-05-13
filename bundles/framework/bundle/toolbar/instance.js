@@ -107,6 +107,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             if (this._addDefaultButtons) {
                 this._addDefaultButtons();
             }
+
+            // Toolbar available
+            var eventBuilder = sandbox.getEventBuilder('Toolbar.ToolbarLoadedEvent');
+            var event = eventBuilder();
+            sandbox.notifyAll(event);
         },
         /**
          * @static

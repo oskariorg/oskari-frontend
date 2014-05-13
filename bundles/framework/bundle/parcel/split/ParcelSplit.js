@@ -397,6 +397,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                 }
                 this.drawPlugin.editLayer.addFeatures(newFeatures[1]);
                 break;
+            default:
             }
             OpenLayers.Feature.Vector.style['default'].strokeWidth = '2';
             this.drawPlugin.drawLayer.features[0].style = this.drawPlugin.selectStyle;
@@ -578,8 +579,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                     }
                     for (; from < len; from++) {
                         if (from in this &&
-                            this[from] === elt)
+                            this[from] === elt) {
                             return from;
+                        }
                     }
                     return -1;
                 };
@@ -865,7 +867,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                 for (j = 1; j < olPoints.length - 1; j++) {
                     if (!this.equalArrays(olPoints[j].references, olPoints[j - 1].references)) {
                         if (sharedEdge) {
-                            if (olPoints[j].references.length > 2) olLineStringPoints.push(olPoints[j]);
+                            if (olPoints[j].references.length > 2) {
+                                olLineStringPoints.push(olPoints[j]);
+                            }
                             olNewLineStringsTmp.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
                             olLineStringPoints = [];
                         }
