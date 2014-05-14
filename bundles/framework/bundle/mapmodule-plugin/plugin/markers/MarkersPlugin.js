@@ -686,6 +686,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          *  Updates the bundle state.
          */
         updateState: function() {
+            if ((typeof this.state === "undefined")||(this.state === null)) {
+                this.state = {};
+            }
             this.state.markers = [];
             for (var i=0; i<this._markers.length; i++) {
                 this.state.markers.push(this._markers[i]);
