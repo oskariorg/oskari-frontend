@@ -1,107 +1,111 @@
 {
-	"startupSequence": [
-		{
-			"instanceProps": {},
-			"title": "OpenLayers",
-			"bundleinstancename": "openlayers-default-theme",
-			"fi": "OpenLayers",
-			"sv": "?",
-			"en": "OpenLayers",
-			"bundlename": "openlayers-default-theme",
-			"metadata": {
-				"Import-Bundle": {
-					"openlayers-default-theme": {
-						"bundlePath": "../../../packages/openlayers/bundle/"
-					},
-					"openlayers-full-map": {
-						"bundlePath": "../../../packages/openlayers/bundle/"
-					}
-				},
-				"Require-Bundle-Instance": []
-			}
-		}, {
-			"instanceProps": {},
-			"title": "Map",
-			"bundleinstancename": "mapfull",
-			"fi": "Map",
-			"sv": "?",
-			"en": "Map",
-			"bundlename": "mapfull",
-			"metadata": {
-				"Import-Bundle": {
-					"mapwmts": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "mapwfs2": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-                    "mapmyplaces": {
+    "startupSequence": [{      
+            "bundleinstancename": "oskariui",
+            "bundlename": "oskariui",
+            "instanceProps": {},
+            "metadata": {
+                "Import-Bundle": {
+                    "oskariui": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {         
+            "bundleinstancename": "openlayers-default-theme",
+            "bundlename": "openlayers-default-theme",
+            "instanceProps": {},
+            "metadata": {
+                "Import-Bundle": {
+                    "openlayers-default-theme": {
+                        "bundlePath": "../../../packages/openlayers/bundle/"
+                    },
+                    "openlayers-2_13_1-full-map": {
+                        "bundlePath": "../../../packages/openlayers/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
+
+        {        
+            "bundleinstancename": "mapfull",
+            "bundlename": "mapfull",
+            "instanceProps": {},
+            "metadata": {
+                "Import-Bundle": {
+
+                    "core-base": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
-	                "mapstats": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "mapanalysis": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "mapuserlayers": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "service-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "event-map-layer": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "request-map-layer": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "mapmodule-plugin": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "event-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "mapfull": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "core-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "oskariui": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "request-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "domain": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "core-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "request-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "sandbox-base": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "service-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "sandbox-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
-	                "event-map": {
-	                    "bundlePath": "../../../packages/framework/bundle/"
-	                },
+                    "core-map": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "domain": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "event-base": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "event-map": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "event-map-layer": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "mapfull": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "mapmodule-plugin": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "mapwmts": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "request-base": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "request-map": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "request-map-layer": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "sandbox-base": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "sandbox-map": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "service-base": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "service-map": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "mapwfs2": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
 	                "ui-components": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                }
-				},
-				"Require-Bundle-Instance": []
-			}
-		}, {
+
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "bundleinstancename": "divmanazer",
+            "bundlename": "divmanazer",
+            "instanceProps": {},
+            "metadata": {
+                "Import-Bundle": {
+                    "divmanazer": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
 			"instanceProps": {},
 			"title": "Oskari DIV Manazer",
 			"bundleinstancename": "divmanazer",
@@ -263,7 +267,7 @@
 			}
 		}, {
 			"instanceProps": {},
-			"title": "Koordinaattin�ytt�",
+			"title": "Koordinaatit",
 			"bundleinstancename": "coordinatedisplay",
 			"fi": "coordinatedisplay",
 			"sv": "?",
@@ -421,86 +425,22 @@
 				"Require-Bundle-Instance": []
 			},
 			"instanceProps": {}
-		}, {
-			"bundleinstancename": "statsgrid",
-			"bundlename": "statsgrid",
-			"metadata": {
-				"Import-Bundle": {
-					"statsgrid": {
-						"bundlePath": "../../../packages/statistics/bundle/"
-					},
-					"geostats": {
-						"bundlePath": "../../../packages/libraries/bundle/"
-					}
-				}
-			}
-		}, {
-			"instanceProps": {},
-			"title": "Karttatasot",
-			"bundleinstancename": "admin-layerselector",
-			"fi": "admin layerselector",
-			"sv": "admin layerselector",
-			"en": "admin layerselector",
-			"bundlename": "admin-layerselector",
-			"metadata": {
-				"Import-Bundle": {
-					"admin-layerselector": {
-						"bundlePath": "../../../packages/integration/bundle/"
-					},
-					"bb": {
-						"bundlePath": "../../../packages/integration/bundle/"
-					}
-				},
-				"Require-Bundle-Instance": []
-			}
-		},
-		  {
-            "title": "Analyse",
-            "fi": "Analyysi",
-            "sv": "Analys",
-            "en": "Analyse",
-            "bundlename": "analyse",
-            "bundleinstancename": "analyse",
+		}, 		
+		{
+            "instanceProps": {},
+            "title": "ELF",
+            "bundleinstancename": "elf-language-selector",
+            "bundlename": "elf-language-selector",
             "metadata": {
                 "Import-Bundle": {
-                    "analyse": {
-                        "bundlePath": "../../../packages/analysis/bundle/"
-                    },
-                    "geometryeditor": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                    "elf-language-selector": {
+                        "bundlePath": "../../../packages/elf/bundle/"
                     }
-                }
+                },
+                "Require-Bundle-Instance": []
             }
-        }, {
-        	"title": "Admin Layer Rights",
-        	"fi": "Tasojen Oikeuksienhallinta",
-        	"sv": "",
-        	"en": "",
-        	"bundlename": "admin-layerrights",
-        	"bundleinstancename": "admin-layerrights",
-        	"metadata": {
-        		"Import-Bundle": {
-        			"admin-layerrights": {
-        				"bundlePath": "../../../packages/framework/bundle/"
-        			}
-        		}
-        	}
-        }, {
-		    "title" : "myplacesimport",
-		    "fi" : "myplacesimport",
-		    "sv" : "myplacesimport",
-		    "en" : "myplacesimport",
-		    "bundlename" : "myplacesimport",
-		    "bundleinstancename" : "myplacesimport",
-		    "metadata" : {
-		        "Import-Bundle" : {
-		            "myplacesimport" : {
-		                "bundlePath" : "../../../packages/framework/bundle/"
-		            }
-		        },
-		        "Require-Bundle-Instance" : []
-		    },
-		    "instanceProps" : {}
-		}
-	]
+        }
+		
+
+    ]
 }

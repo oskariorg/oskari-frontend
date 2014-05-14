@@ -174,7 +174,15 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                         if (control.createVertices && geometry.CLASS_NAME != "OpenLayers.Geometry.MultiPoint") {
                             for(i=0, len=geometry.components.length; i<len-1; ++i) {
                                 var prevVertex = geometry.components[i];
-                                var nextVertex = geometry.components[i + 1];
+                                var j = i + 1;
+                                if (i === len-2) {
+                                    if (geometry.components[i].id === geometry.components[0].id) {
+                                        j = 1;
+                                    } else {
+                                        j = 0;
+                                    }
+                                }
+                                var nextVertex = geometry.components[j];
                                 if(prevVertex.CLASS_NAME == "OpenLayers.Geometry.Point" &&
                                    nextVertex.CLASS_NAME == "OpenLayers.Geometry.Point") {
                                     if((me.isSharedEdge(prevVertex))||(me.isSharedEdge(nextVertex))) {
@@ -215,7 +223,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.targetLayer = new OpenLayers.Layer.Vector(this.prefix + "targetLayer",{
             eventListeners:  {
                 "featuremodified": function(event) {
-                    // Update adjacent polygons
+                    // Update features
+                    me.sourceLayer.redraw();
                     this.redraw();
                 }
             }
@@ -461,13 +470,39 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         // Is marker provided with reference information
         if (typeof this.activeMarker.reference !== "undefined") {
             projection = this.activeMarkerReferenceProjection(lonlat);
+            this.activeMarker.lonlat = projection.lonlat;
+            this.activeMarker.reference.point.x = this.activeMarker.lonlat.lon;
+            this.activeMarker.reference.point.x0 = this.activeMarker.lonlat.lon;
+            this.activeMarker.reference.point.y = this.activeMarker.lonlat.lat;
+            this.activeMarker.reference.point.y0 = this.activeMarker.lonlat.lat;
+            if (projection.p.length > 0) {
+                var lines = this.sourceLayer.features[0].geometry.components;
+                for (var i = 0; i < lines.length; i++) {
+                    // Two point lines
+                    if (lines[i].components.length === 2) {
+                        lines[i].components[0].short = i;
+                        lines[i].components[1].short = i;
+                        lines[i].components[0].shortLink = lines[i].components[1];
+                        lines[i].components[1].shortLink = lines[i].components[0];
+                    }
+                }
+                this.updatePolygons(projection.p, projection.p0);
+            }
+            // Update line and polygons
+            this.sourceLayer.redraw();
+            this.targetLayer.redraw();
+            // Updates the middle point
+            var selectedFeature = this.targetLayer.selectedFeatures[0];
+            this.drawControls.modifyFeature.deactivate();
+            this.drawControls.modifyFeature.activate();
+            this.drawControls.modifyFeature.selectFeature(selectedFeature);
         } else {
             projection = this.activeMarkerProjection(lonlat);
+            this.updateTargetLine();
         }
         this.activeMarker.lonlat = projection.lonlat;
         this.activeMarker.index = projection.index;
         this.markerLayer.redraw();
-        this.updateTargetLine();
     },
 
     pointProjection: function (q, p0, p1) {
@@ -700,6 +735,190 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return projection;
     },
 
+    /*
+     * @method updatePolygons
+     *
+     * @param {}
+     * @param {}
+     */
+    updatePolygons: function (p, p0) {
+        var pInd = -1;
+        var p0Ind = -1;
+        var i, j, k, l, m, n;
+        var marker = this.activeMarker;
+        var markers = this.markers;
+
+        // Search the correct point
+        pLoop: for (i = 0; i < 2; i++) {
+            for (j = 0; j < 2; j++) {
+                if (p[i].id === p0[j].id) {
+                    pInd = i;
+                    p0Ind = (j + 1) % 2;
+                    break pLoop;
+                }
+            }
+        }
+        if (pInd < 0) { // This should not happen
+            return;
+        }
+        var remPolygon = null;
+
+        // Remove the point from old polygon
+        var features = this.targetLayer.features;
+        var fInd;
+        for (i = 0; i < features.length; i++) {
+            if (features[i].geometry.id === p[pInd].references[0]) {
+                remPolygon = features[i].geometry;
+                fInd = i;
+                break;
+            }
+        }
+
+        var mInd = -1;
+        i = 0;
+        var removed = false;
+        while (i < features[fInd].geometry.components[0].components.length) {
+            if (features[fInd].geometry.components[0].components[i].id === p[pInd].id) { // Removable point
+                features[fInd].geometry.components[0].components.splice(i, 1);
+                if (i === 0) {
+                    features[fInd].geometry.components[0].components.splice(features[fInd].geometry.components[0] - 1, 1);
+                    features[fInd].geometry.components[0].components.push(features[fInd].geometry.components[0].components[0]);
+                }
+                removed = true;
+                if (mInd >= 0) {
+                    break;
+                } else {
+                    continue;
+                }
+            } else {
+                if (features[fInd].geometry.components[0].components[i].id === p0[p0Ind].id) { // Marker
+                    mInd = i;
+                }
+                // Collect marker indexes
+                /*                for (j=0; j<markers.length; j++) {
+                if (j === features[fInd].geometry.components[0].components[i].markerPoint) {
+                    markerIndexes[0].push([features[fInd].geometry.components[0].components[i].markerPoint,i]);
+                }
+                }*/
+                if (removed) {
+                    break;
+                }
+            }
+            i = i + 1;
+        }
+        // Add the point to new polygon
+        var point = p[pInd];
+        addPoint: for (i = 0; i < 2; i++) {
+            if (p0[p0Ind].references[i] === p[pInd].references[0]) {
+                continue;
+            }
+            var addPolygon;
+            for (j = 0; j < features.length; j++) {
+                if (features[j].geometry.id === p0[p0Ind].references[i]) {
+                    addPolygon = features[j].geometry;
+                    var cornerInd = -1;
+                    var prevInd = -1;
+                    var nextInd = -1;
+                    for (k = 0; k < features[j].geometry.components[0].components.length - 1; k++) {
+                        var markerFound = false;
+                        if (!markerFound) {
+                            if (features[j].geometry.components[0].components[k].id === p0[p0Ind].id) {
+                                cornerInd = k;
+                                prevInd = (k === 0) ? features[j].geometry.components[0].components.length - 2 : k - 1;
+                                nextInd = (k === features[j].geometry.components[0].components.length - 2) ? 0 : k + 1;
+                                markerFound = true;
+                            }
+                            // Collect marker indexes
+                            /*                            for (l=0; l<markers.length; l++) {
+                            if (l === features[j].geometry.components[0].components[k].markerPoint) {
+                                markerIndexes[1].push([features[j].geometry.components[0].components[k].markerPoint,k]);
+                            }
+                            } */
+                        }
+                    }
+                    // Check if point is on the boundary and handle cases which include two point split lines
+                    if ((features[j].geometry.components[0].components[prevInd].boundaryPoint) && ((features[j].geometry.components[0].components[prevInd].short < 0) || (features[j].geometry.components[0].components[prevInd].lineId !== marker.reference.lineId))) {
+                        features[j].geometry.components[0].components.splice(prevInd + 1, 0, point);
+                        if (cornerInd !== 0) {
+                            cornerInd = cornerInd + 1;
+                        }
+                    } else {
+                        if (nextInd !== 0) {
+                            features[j].geometry.components[0].components.splice(nextInd, 0, point);
+                        } else {
+                            features[j].geometry.components[0].components.splice(features[j].geometry.components[0].components.length - 1, 0, point);
+                        }
+                    }
+                    p[pInd].references = [addPolygon.id];
+                    /*                    for (k=0; k<markerIndexes[1].length; k++) {
+                    if (markerIndexes[1][k][0].id !== features[j].geometry.components[0].components[markerIndexes[1][k][1]]) {
+                        markerIndexes[1][k][0] = features[j].geometry.components[0].components[markerIndexes[1][k][1]+1];
+                    }
+                    }*/
+                    break addPoint;
+                }
+            }
+        }
+
+        // Update marker references
+        for (i = 0; i < markers.length; i++) {
+            marker = markers[i];
+
+            k = 0;
+            for (m = 0; m < features.length; m++) {
+                var refPoints = null;
+                var markerInd = -1;
+                refPoints = features[m].geometry.components[0].components;
+
+                // TODO: Use the markerIndexes array instead of this slow loop
+                for (l = 0; l < refPoints.length; l++) {
+                    if (refPoints[l].id === marker.reference.point.id) {
+                        markerInd = l;
+                        break;
+                    }
+                }
+
+                if (markerInd === -1) {
+                    continue;
+                }
+
+                marker.reference.segments.p[k][0][0] = refPoints[markerInd];
+                if ((refPoints[markerInd + 1].boundaryPoint) && (refPoints[markerInd + 1].short !== marker.reference.line)) {
+                    marker.reference.segments.p[k][0][1] = refPoints[markerInd + 1];
+                    var newInd1;
+                    if (markerInd === refPoints.length - 2) {
+                        newInd1 = 1;
+                    } else if (markerInd === refPoints.length - 1) {
+                        newInd1 = 2;
+                    } else {
+                        newInd1 = markerInd + 2;
+                    }
+                    marker.reference.segments.p[k][1][0] = refPoints[newInd1];
+                    marker.reference.segments.p[k][1][1] = refPoints[markerInd + 1];
+
+                    var newInd2 = (markerInd === 0) ? refPoints.length - 2 : markerInd - 1;
+                    marker.reference.segments.p[k][2][0] = refPoints[newInd2];
+                    marker.reference.segments.p[k][2][1] = refPoints[markerInd];
+                } else {
+                    var newInd3 = (markerInd === 0) ? refPoints.length - 2 : markerInd - 1;
+                    marker.reference.segments.p[k][0][1] = refPoints[newInd3];
+
+                    var newInd4 = (newInd3 === 0) ? refPoints.length - 2 : newInd3 - 1;
+                    marker.reference.segments.p[k][1][0] = refPoints[newInd4];
+                    marker.reference.segments.p[k][1][1] = refPoints[newInd3];
+
+                    marker.reference.segments.p[k][2][0] = refPoints[markerInd + 1];
+                    marker.reference.segments.p[k][2][1] = refPoints[markerInd];
+                }
+                // Marker is always shared by two polygons
+                if (k === 1) {
+                    break;
+                } else {
+                    k = k + 1;
+                }
+            }
+        }
+    },
 
     /**
      * Disables all draw controls and
@@ -767,7 +986,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             var i, j, ngbs = [], refs = [];
             var eventGeometry = event.feature.geometry;
             var linearRing = eventGeometry.components[0];
-            for (i=1; i<linearRing.components.length-2; i++) {
+            for (i=1; i<linearRing.components.length-1; i++) {
                 if (vertex.id === linearRing.components[i].id) {
                     ngbs = [linearRing.components[i-1].id,linearRing.components[i+1].id];
                     refs = linearRing.components[i-1].references;
@@ -785,13 +1004,25 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                     continue;
                 }
                 var points = geometry.components[0].components;
-                for (j=0; j<points.length-2; j++) {
+                for (j=0; j<points.length-1; j++) {
                     if ((ngbs.indexOf(points[j].id)>=0)&&(ngbs.indexOf(points[j+1].id)>=0)) {
                         vertex.references = [eventGeometry.id,geometry.id];
                         vertex.markerPoint = -1;
                         points.splice(j+1,0,vertex);
                         me.targetLayer.redraw();
                         break updatePolygon;
+                    }
+                }
+            }
+            // Update also the split line
+            var lines = me.sourceLayer.features[0].geometry.components;
+            for(i=0; i<lines.length; i++) {
+                points = lines[i].components;
+                for (j=0; j<points.length-1; j++) {
+                    if ((ngbs.indexOf(points[j].id)>=0)&&(ngbs.indexOf(points[j+1].id)>=0)) {
+                        points.splice(j+1,0,vertex);
+                        me.sourceLayer.redraw();
+                        break;
                     }
                 }
             }
@@ -929,6 +1160,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
 
+    // Todo: split the split function
     _splitGeometryByLine: function(polygons, splitGeom) {
         var me = this;
         // Transform and scale coordinates
@@ -1013,10 +1245,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         // IE8 compatibility
         this._enableIE8();
 
-        // Input data
-        // this._generateJSTSPolygons(olOldFeatures,olLinearRings,olPoints,clipSourcePolygons,clipHole,jstsOldPolygons,jstsOldPolygon,jstsLine,jstsParser,scale);
-
-///
         for (i = olOldFeatures.length - 1; i >= 0; i--) {
             if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
                 var multi = (olOldFeatures[i].id.indexOf("Multi") !== -1);
@@ -1078,7 +1306,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 jstsLine = jstsParser.read(olOldFeatures[i]);
             }
         }
-///
 
         // Splitting
         union = null;
@@ -1412,7 +1639,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 this.markerLayer.addMarker(marker);
             }
         }
-
+        this.markers = this.markerLayer.markers;
 
         // Update boundary info
         for (i = 0; i < olNewFeatures[0].geometry.components.length; i++) {

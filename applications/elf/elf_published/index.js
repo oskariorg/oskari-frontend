@@ -7,7 +7,7 @@ jQuery(document).ready(function() {
 			jQuery.cookie('JSESSIONID') === '' ) {
 	jQuery.cookie('JSESSIONID','_'+(new Date().getTime()));
 	}
-
+	
     if(!ajaxUrl) {
         alert('Ajax URL not set - cannot proceed');
         return;
