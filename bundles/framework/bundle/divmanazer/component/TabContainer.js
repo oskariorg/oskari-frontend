@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                     panel.setPriority(this.panels[0].getPriority()-1.0);
                 } else if (typeof panel.getPriority() !== 'number') {
                     // Set as last item
-                    panel.setPriority(this.panels[this.panels.lenght-1].getPriority()+1.0);
+                    panel.setPriority(this.panels[this.panels.length-1].getPriority()+1.0);
                 }
             }
 
