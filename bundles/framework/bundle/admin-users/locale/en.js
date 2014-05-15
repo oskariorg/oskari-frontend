@@ -7,12 +7,13 @@ Oskari.registerLocalization({
         "tile": {
             "title": "A: Users"
         },
-        "firstname": "First name",
-        "lastname": "Last name",
-        "username": "User name",
-        "password": "Password",
-        "password_retype": "Retype password",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "user": "User name",
+        "pass": "Password",
+        "pass_retype": "Retype password",
         "password_mismatch": "Passwords don't match.",
+        "password_too_short": "Password should be at least 8 characters.",
         "form_invalid": "Missing/invalid fields",
         "field_required": "Field \"{fieldName}\" is required.",
         "confirm_delete": "Are you sure you wish to delete user {user}?",
