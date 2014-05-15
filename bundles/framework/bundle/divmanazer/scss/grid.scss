@@ -1,15 +1,17 @@
 th {
+
     &.asc {
         background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/asc_arrow.png');
-        background-repeat:no-repeat;
-        background-position:center center;
+        background-repeat: no-repeat;
+        background-position: center center;
     }
 
     &.desc {
         background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png');
-        background-repeat:no-repeat;
-        background-position:center center;
+        background-repeat: no-repeat;
+        background-position: center center;
     }
+
 }
 
 div.column-selector-placeholder {
@@ -66,11 +68,41 @@ div.column-selector {
     }
 }
 
-table.oskari-grid td {
-    max-width: 110px;
-    overflow: hidden;
-    padding: 5px;
-    font-size : 12px;
-    color: #3C3C3C;
-    text-overflow: ellipsis;
+table.oskari-grid {
+
+    td {
+        padding: 5px;
+    }
+
+    td, th {
+        min-height: 28px;
+        max-width: 110px;
+        overflow: hidden;
+        font-size : 12px;
+        border: 1px solid #E6E6E6;
+        color: #3C3C3C;
+        text-overflow: ellipsis;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    th {
+        background-color: #F3F3F3;
+        font-weight: bold;
+
+        a {
+            color: #3C3C3C;
+            line-height: 28px;
+            padding: 5px;
+        }
+    }
+
+    > tr > th, > tbody > tr > th {
+        text-align: left;
+    }
+
+    tr:last-child td {
+        border: 1px solid #E6E6E6;
+    }
+
 }

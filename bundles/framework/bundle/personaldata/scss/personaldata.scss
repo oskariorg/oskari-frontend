@@ -1,42 +1,76 @@
-/* account tab */
-div.tab-content div.account div.dataField {
-	padding : 10px;
-}
-div.tab-content div.account div.dataField div.label {
-	float: left;
-	width : 40%;
-}
+/* Account tab
+div.tab-content {
+    
+    div.account {
 
-/* My Views tab*/
+        table {
+
+            tr {
+                font-size: 12px;
+
+                td, th {
+                    border: 1px solid #E6E6E6;
+                    line-height: 28px;
+                    padding: 0 0 0 10px;
+                    text-align: left;
+                }
+
+                th {
+                    background-color: #F3F3F3;
+                }
+
+            }
+
+        }
+
+    }
+
+}*/
+
+/* My Views tab */
 div.view {
 	padding: 5px;
-}
-div.view.odd {
-    background-color : #f3f3f3;
-}
-div.view div.name {
-	display: inline-block;
-}
-div.view div.tools {
-	float: right;
+
+    &.odd {
+        background-color : #F3F3F3;
+    }
+
+    div.name {
+        display: inline-block;
+    }
+
+    div.tools {
+        float: right;
+
+        div {
+            display: inline-block;
+            margin-right : 5px;
+        }
+
+    }
+
 }
 
-div.view div.tools div {
-	display: inline-block;
-	margin-right : 5px;
-}
+div.personaldata {
 
-div.personaldata td div.icon {
-    display: inline-block;
-    vertical-align: top;
-}
+    a.categoryOp {
+        margin : 5px;
 
-div.personaldata a.categoryOp {
-    margin : 5px;
-}
+        div.icon {
+          display: inline-block;
+        }
 
-div.personaldata a.categoryOp div.icon {
-  display: inline-block;
+    }
+
+    td {
+
+        div.icon {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+    }
+
 }
 
 textarea#view_description {
