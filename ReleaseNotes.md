@@ -2,6 +2,10 @@
 
 ## 1.21
 
+### admin-layerselector
+
+Previously didn't startup correctly with small number of layer (under 30), this has now been fixed.
+
 ### search
 
 The default UI for search can now be disabled through config:
