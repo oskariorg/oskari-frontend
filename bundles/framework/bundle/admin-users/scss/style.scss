@@ -18,7 +18,7 @@
 
     .accordion {
         background-color: #F3F3F3;
-        border: 1pt solid #C0D0D0;
+        border: 1pt solid #999;
         clear: both;
         display: block;
         list-style-type: none;
@@ -32,6 +32,7 @@
         .accordion-header {
 
             h3 {
+                font-size: 16px;
                 line-height: 40px;
                 float: left;
                 padding: 0 0 0 10px;
