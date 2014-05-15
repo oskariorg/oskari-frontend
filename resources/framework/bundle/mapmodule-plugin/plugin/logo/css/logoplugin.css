@@ -14,7 +14,8 @@
     display: inline-block;
     height: 25px;
     width: 25px;
-    vertical-align: bottom; }
+    vertical-align: bottom;
+    cursor: pointer; }
   .logoplugin .terms {
     display: inline-block;
     margin: 5px; }
