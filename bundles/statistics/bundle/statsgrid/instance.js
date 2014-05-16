@@ -113,6 +113,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             this.classifyPlugin = classifyPlugin;
 
             this.setState(this.state);
+
+            var layerPresent = this._isLayerPresent(),
+                tile = this.plugins['Oskari.userinterface.Tile'];
+            if (layerPresent && tile) {
+                tile.enable();
+            }
         },
         "eventHandlers": {
             /**
@@ -147,19 +153,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             },
             'AfterMapLayerRemoveEvent': function (event) {
                 this._afterMapLayerRemoveEvent(event);
-            },
-            /**
-             * @method MapLayerEvent
-             * @param {Oskari.mapframework.event.common.MapLayerEvent} event
-             *
-             */
-            'MapLayerEvent': function (event) {
-                // Enable tile when stats layer is available
-                var layerPresent = this._isLayerPresent(),
-                    tile = this.plugins['Oskari.userinterface.Tile'];
-                if (layerPresent && tile) {
-                    tile.enable();
-                }
             }
         },
         isLayerVisible: function () {
