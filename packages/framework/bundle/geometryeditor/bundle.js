@@ -42,16 +42,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geometryeditor.GeometryEditorBun
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/geometryeditor/event/FinishedDrawFilteringEvent.js"
-            }/*, {
+            }, {
                 "type" : "text/javascript",
                 "src" : "../../../../libraries/clipper/clipper.js"
             }, {
                 "type" : "text/javascript",
                 "src" : "../../../../libraries/jsts/jsts.js"
-            }, {
-                "type" : "text/javascript",
-                "src" : "../../../../libraries/jsts/javascript.util.js"
-            }*/],
+            }],
             "locales": [{
                 "lang": "fi",
                 "type": "text/javascript",

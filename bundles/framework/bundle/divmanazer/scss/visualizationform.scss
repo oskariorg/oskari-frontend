@@ -87,7 +87,6 @@ div.simpleColorChooser {
   border: 1px solid;
   margin: 5px; }
 
-
 div.pointform div.column1 {
   float: left;
   width: 160px;
@@ -212,6 +211,10 @@ div.renderdialog input.color-source {
 div.renderdialog input.linewidth {
   width: 50px;
   margin-top: 5px; }
+
+div.renderdialog input.message-text {
+  width: 120px;
+}
 
 div.pointvisualization {
   width: 510px; }

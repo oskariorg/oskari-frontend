@@ -36,7 +36,7 @@ module.exports = function (grunt) {
             'OpenLayers.2_13_1-full-map.js',
             'Popover.js',
             'proj4js-compressed.js',
-            'raphael.min.js',
+            'raphael_export_icons.js',
             'slick.core.js',
             'slick.formatters.js.',
             'slick.editors.js',
