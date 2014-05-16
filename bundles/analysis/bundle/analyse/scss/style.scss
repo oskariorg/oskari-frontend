@@ -138,6 +138,11 @@ div.basic_analyse {
           opacity: 0.4;
           cursor: default !important;
         }
+        div.drawFilter.selected {
+          opacity: 1.0;
+          background-color: #333438;
+          cursor: default !important;
+        }
         div.buttons {
             display: inline-block;
             float: right;

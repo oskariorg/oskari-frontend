@@ -82,6 +82,10 @@ div.basic_analyse div.drawFilterContainer {
   div.basic_analyse div.drawFilterContainer div.drawFilter.disabled {
     opacity: 0.4;
     cursor: default !important; }
+  div.basic_analyse div.drawFilterContainer div.drawFilter.selected {
+    opacity: 1.0;
+    background-color: #333438;
+    cursor: default !important; }
   div.basic_analyse div.drawFilterContainer div.buttons {
     display: inline-block;
     float: right; }

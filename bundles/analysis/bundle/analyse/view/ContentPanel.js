@@ -16,6 +16,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
         this.linkAction         = undefined;
         this.isStarted          = undefined;
         this.selectedGeometry   = undefined;
+        this.drawFilterMode     = undefined;
+        this.helpDialog         = undefined;
 
         this.init(view);
         this.start();
@@ -140,6 +142,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 if (!this.instance.analyse.isEnabled) {
                     return;
                 }
+                if (this.drawFilterMode) {
+                    return;
+                }
                 var clickedGeometries = event.getGeometries();
                 if (clickedGeometries.length > 0) {
                     var clickedGeometry = clickedGeometries[0];
@@ -155,6 +160,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                         this.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon([feature.geometry]));
                     }
                     this._operateDrawFilters();
+                }
+            },
+            'WFSFeaturesSelectedEvent': function(event) {
+                if (this.drawFilterMode) {
+                    return;
+                }
+                if (event.getWfsFeatureIds().length === 0) {
+                    this.selectedGeometry = null;
+                    this._disableAllDrawFilterButtons();
                 }
             }
         },
@@ -572,7 +586,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             finishBtn.setTitle(loc.finish);
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
-                me._sendStopDrawRequest();
+                me._sendStopDrawRequest(false);
             });
 
             cancelBtn.insertTo(container);
@@ -593,15 +607,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 container = jQuery(this._templates.drawFilterControls).clone(),
                 finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
+            this.drawFilterMode = true;
             finishBtn.setTitle(loc.finish);
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
+                this.drawFilterMode = false;
                 // Disable all buttons
                 me._disableAllDrawFilterButtons();
-// Test
-//jQuery("div.analysis-selection-point").removeClass('disabled');
-                var config = {};
-                me._sendStopDrawFilterRequest(config);
+                me._sendStopDrawFilterRequest(false);
                 jQuery(this).remove();
             });
 
@@ -663,25 +676,34 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
         },
 
         _startNewDrawFiltering: function (config) {
-          // Enable and disable correct buttons
-           if (config.mode === "remove") {
-               this._disableAllDrawFilterButtons();
-               this.selectedGeometry = null;
-               // Disable the remove button
-               jQuery('div.drawFilter.analysis-selection-remove').addClass('disabled');
-               // Remove the finish button
-                this.getPanelContainer()
-                    .find('div.drawFilterContainer')
-                    .find('div.buttons').remove();
-           } else {
-               // Enable the remove button
-               jQuery('div.drawFilter.analysis-selection-remove').removeClass('disabled');
+            var me = this;
+            // Enable and disable correct buttons
+            if (config.mode === "remove") {
+                this._cancelDrawFilter();
+            } else {
+                // Enable only the remove button
+                this._disableAllDrawFilterButtons();
+                jQuery('div.drawFilter.analysis-selection-remove').removeClass('disabled');
+                jQuery('div.drawFilter.analysis-selection-'+config.mode).addClass('selected');
                 // remove old draw buttons and append new ones
                 this.getPanelContainer()
                     .find('div.drawFilterContainer')
                     .find('div.buttons').remove().end()
                     .append(this._createDrawFilterControls());
-           }
+                // Create help dialog
+                this.helpDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var diaLoc = this.loc.content.drawFilter.dialog;
+                var controlButtons = [];
+                var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                cancelBtn.setTitle(diaLoc.cancel);
+                cancelBtn.setHandler(function() {
+                    me._cancelDrawFilter();
+                });
+                cancelBtn.addClass('primary');
+                controlButtons.push(cancelBtn);
+                this.helpDialog.show(diaLoc.modes[config.mode].title,diaLoc.modes[config.mode].message,controlButtons);
+                this.helpDialog.moveTo('div.drawFilter.analysis-selection-'+config.mode, 'bottom');
+            }
 
             var sandbox = this.sandbox,
                 evtB = sandbox.getEventBuilder(
@@ -700,6 +722,19 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 sandbox.request(this.instance, gfiReqBuilder(false));
             }
 
+        },
+
+        _cancelDrawFilter: function() {
+            this.drawFilterMode = false;
+            this._sendStopDrawFilterRequest(true);
+            this._disableAllDrawFilterButtons();
+            this.selectedGeometry = null;
+            // Disable the remove button
+            jQuery('div.drawFilter.analysis-selection-remove').addClass('disabled');
+            // Remove the finish button
+            this.getPanelContainer()
+                .find('div.drawFilterContainer')
+                .find('div.buttons').remove();
         },
 
         /**
@@ -985,5 +1020,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
 
         _disableAllDrawFilterButtons: function() {
             jQuery('div.drawFilter').addClass('disabled');
+            jQuery('div.drawFilter').removeClass('selected');
+            // Close the help dialog
+            if (this.helpDialog) {
+                this.helpDialog.close(true);
+            }
         }
 });
