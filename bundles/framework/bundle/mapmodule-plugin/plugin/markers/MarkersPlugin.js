@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
      */
 
     function (conf, state) {
-debugger;
         var me = this;
         this.conf = conf;
         this.state = state;
