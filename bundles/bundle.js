@@ -97,18 +97,18 @@ Oskari = (function () {
      * request to load built js packs using this path pattern .../<bundles-path>/<bundle-name>/build/<any-ohther>.js
      */
     var supportBundleAsync = false,
-        mode = 'dev',
+        mode = "dev",
         // 'static' / 'dynamic'
         instTs = new Date().getTime(),
         basePathForBundles = null,
         pathBuilders = {
-            'default': function (fn, bpath) {
+            "default": function (fn, bpath) {
                 if (basePathForBundles) {
                     return basePathForBundles + fn;
                 }
                 return fn;
             },
-            'dev': function (fn, bpath) {
+            "dev": function (fn, bpath) {
                 if (basePathForBundles) {
                     return basePathForBundles + fn + "?ts=" + instTs;
                 }
@@ -129,9 +129,9 @@ Oskari = (function () {
     }
 
     var isNotPackMode = {
-        'dev': true,
-        'default': true,
-        'static': true
+        "dev": true,
+        "default": true,
+        "static": true
     };
 
     function isPackedMode() {
@@ -2639,6 +2639,13 @@ Oskari = (function () {
                 bi,
                 configProps,
                 yy;
+
+            if (!recData.hasOwnProperty("bundleinstancename")) {
+                if (console && console.warn) {
+                    console.warn("Bundle is missing bundleinstancename, using bundlename in its place.", recData);
+                }
+                bundleinstancename = bundlename;
+            }
 
             me.loadBundleDeps(metas, function (manager) {
                 var ip;

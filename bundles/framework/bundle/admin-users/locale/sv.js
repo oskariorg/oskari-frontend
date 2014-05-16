@@ -7,12 +7,13 @@ Oskari.registerLocalization({
         "tile": {
             "title": "NOT TRANSLATED"
         },
-        "firstname": "NOT TRANSLATED",
-        "lastname": "NOT TRANSLATED",
-        "username": "NOT TRANSLATED",
-        "password": "NOT TRANSLATED",
-        "password_retype": "NOT TRANSLATED",
+        "firstName": "NOT TRANSLATED",
+        "lastName": "NOT TRANSLATED",
+        "user": "NOT TRANSLATED",
+        "pass": "NOT TRANSLATED",
+        "pass_retype": "NOT TRANSLATED",
         "password_mismatch": "NOT TRANSLATED",
+        "password_too_short": "NOT TRANSLATED",
         "form_invalid": "NOT TRANSLATED",
         "field_required": "NOT TRANSLATED",
         "confirm_delete": "NOT TRANSLATED",

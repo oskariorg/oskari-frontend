@@ -17,11 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
 
     function (instance) {
         this.instance = instance;
-        // FIXME we need a real config
-        this.config = instance.conf;
-        this.config = {
-            restUrl: 'restUrl'
-        };
+        this.sandbox = instance.getSandbox();
         this.container = null;
         this.state = {};
         this.templates = {};
@@ -65,13 +61,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
                 btn;
             // FIXME make this a form as well
             me.templates.search = jQuery(
-                '<div><input type="search"></input></div>'
+                '<div><input type="search"></input><div class="icon-close"></div></div>'
             );
             me.templates.search.find('input').keypress(
                 function (event) {
                     if (event.keyCode == 10 || event.keyCode == 13) {
                         me._filterList(event, me);
                     }
+                }
+            );
+            me.templates.search.find('div.icon-close').click(
+                function (event) {
+                    jQuery(event.target).parent().find("input[type=search]").val("");
+                    me._filterList(event, me);
                 }
             );
             btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SearchButton');
@@ -89,30 +91,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
                     '    <input type="hidden" name="id" />' +
                     '    <label>' +
                     '        <span></span>' +
-                    '        <input type="text" name="firstname" required="required" />' +
+                    '        <input type="text" name="firstName" required="required" />' +
                     '    </label>' +
                     '    <label>' +
                     '        <span></span>' +
-                    '        <input type="text" name="lastname" required="required" />' +
+                    '        <input type="text" name="lastName" required="required" />' +
                     '    </label>' +
                     '    <label>' +
                     '        <span></span>' +
-                    '        <input type="text" name="username" required="required" />' +
+                    '        <input type="text" name="user" required="required" />' +
                     '    </label>' +
                     // Make these two required if we're creating a new user
                     '    <label>' +
                     '        <span></span>' +
-                    '        <input type="password" name="password" autocomplete="off" />' +
+                    '        <input type="password" name="pass" autocomplete="off" />' +
                     '    </label>' +
                     '    <label>' +
                     '        <span></span>' +
-                    '        <input type="password" name="password_retype" autocomplete="off" />' +
+                    '        <input type="password" name="pass_retype" autocomplete="off" />' +
                     '    </label>' +
                     '</fieldset>' +
                     '<fieldset></fieldset>' +
                     '</form>'
             );
-            me.templates.form.attr('action', me.config.restUrl);
+            //me.templates.form.attr('action', me.sandbox.getAjaxUrl() + me.instance.conf.restUrl);
             me.templates.form.find('input').each(function (index) {
                 var el = jQuery(this);
                 el.prev('span').html(me._getLocalization(el.attr('name')));
@@ -221,9 +223,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
         /**
          * @method _createList
          */
-        _createList: function (users, filter) {
-            var me = this,
-                list = me.templates.list.clone(),
+        _createList: function (me, users, filter) {
+            var list = me.templates.list.clone(),
                 i,
                 user,
                 hasFilter = filter !== null && filter !== undefined && filter.length > 0,
@@ -231,7 +232,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
             me.users = users;
             for (i = 0; i < users.length; i++) {
                 user = users[i];
-                matches = !hasFilter || user.firstname.contains(filter) || user.lastname.contains(filter) || user.username.contains(filter);
+                matches = !hasFilter || user.firstName.contains(filter) || user.lastName.contains(filter) || user.user.contains(filter);
                 if (matches) {
                     list.append(me._populateItem(me.templates.item.clone(true), user));
                 }
@@ -259,12 +260,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
             // get users with ajax
             jQuery.ajax({
                 type: 'GET',
-                url: me.config.restUrl,
-                success: me._createList,
+                url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl,
+                success: function (data) {
+                    me._createList(me, data.users, me.state.filter);
+                },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    var error = me._getErrorText(jqXHR, textStatus, errorThrown);
+
                     me._openPopup(
                         me._getLocalization('fetch_failed'),
-                        errorThrown.message
+                        error
                     );
                 }
             });
@@ -272,12 +277,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
             for (var i = 1; i <= 1000; i++) {
                 userList.push({
                     id: i,
-                    firstname: 'first' + i,
-                    lastname: 'last' + i,
-                    username: 'user' + i
+                    firstName: 'first' + i,
+                    lastName: 'last' + i,
+                    user: 'user' + i
                 });
             }
-            me._createList(userList, me.state.filter);*/
+            me._createList(me, userList, me.state.filter);*/
+        },
+
+        _getErrorText: function (jqXHR, textStatus, errorThrown) {
+            var error = errorThrown.message || errorThrown;
+            try {
+                var err = JSON.parse(jqXHR.responseText).error;
+                if (err !== null && err !== undefined) {
+                    error = err;
+                }
+            } catch (e) {
+
+            }
+            return error;
         },
 
         /**
@@ -285,19 +303,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
          * Gets user id based on event target and deletes it
          */
         _deleteUser: function (event, me) {
-            var item = jQuery(event.target).parents('li');
+            var item = jQuery(event.target).parents('li'),
+                uid = parseInt(item.attr('data-id')),
+                user = me._getUser(uid);
+
+            if (!window.confirm(me._getLocalization("confirm_delete").replace("{user}", user.user))) {
+                return;
+            }
             // It's more than likely that the delete will succeed...
             item.hide();
             jQuery.ajax({
                 type: 'DELETE',
-                url: me.config.restUrl,
-                data: {
-                    id: item.attr('data-id')
-                },
+                url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl + "&id=" + uid,
                 error: function (jqXHR, textStatus, errorThrown) {
+                    var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(
                         me._getLocalization('delete_failed'),
-                        errorThrown.message
+                        error
                     );
                     item.show();
                 },
@@ -315,8 +337,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
         _populateItem: function (item, user) {
             item.attr('data-id', user.id);
             item.find('h3').html(
-                user.username +
-                    " (" + user.firstname + " " + user.lastname + ")"
+                user.user +
+                    " (" + user.firstName + " " + user.lastName + ")"
             );
             return item;
         },
@@ -378,7 +400,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
          * that password field values match.
          */
         _formIsValid: function (form, me) {
-            var errors = [];
+            var errors = [],
+                pass;
             // check that required fields have values
             form.find('input[required]').each(function (index) {
                 if (!this.value.length) {
@@ -386,8 +409,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
                 }
             });
             // check that password and password_retype have matching values
-            if (form.find('input[name=password]').val() !== form.find('input[name=password_retype]').val()) {
+            pass = form.find('input[name=pass]').val();
+            if ( pass !== form.find('input[name=pass_retype]').val()) {
                 errors.push(me._getLocalization("password_mismatch"));
+            }
+            if (pass.length > 0 && pass.length < 8) {
+                errors.push(me._getLocalization("password_too_short"));
             }
             if (errors.length) {
                 me._openPopup(
@@ -414,14 +441,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
             if (me._formIsValid(frm, me)) {
                 jQuery.ajax({
                     type: frm.attr('method'),
-                    url: frm.attr('action'),
+                    url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl,
                     data: frm.serialize(),
                     success: function (data) {
                         me._closeForm(frm);
-                        me.fetchUsers(me.state.filter);
+                        // FIXME fetch users
+                        me.fetchUsers(me);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        me._openPopup(me._getLocalization('save_failed'), errorThrown.message);
+                        var error = me._getErrorText(jqXHR, textStatus, errorThrown);
+                        me._openPopup(me._getLocalization('save_failed'), error);
                     }
                 });
             }
@@ -441,12 +470,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
                     el.val(user[elName]);
                 } else {
                     // password is required when creating a new user
-                    if (elName === 'password' || elName === 'password_retype') {
+                    if (elName === 'pass' || elName === 'pass_retype') {
                         el.attr('required', 'required');
                     }
                 }
             });
-            fragment.attr('method', user ? 'POST' : 'PUT');
+            fragment.attr('method', user ? 'PUT' : 'POST');
             fragment.submit(function (event) {
                 return me._submitForm(event, me);
             });
