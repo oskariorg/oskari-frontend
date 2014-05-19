@@ -16,8 +16,8 @@ Oskari.registerLocalization(
                 "label" : "Älä näytä tätä viestiä uudelleen"
             },
             "page1": {
-                "title": "Tervetuloa Määräalatyökaluun",
-                "message" : "Tässä versiossa määräalojen tallentaminen ei ole mahdollista."
+                "title": "Tervetuloa Määräalatulosteen piirtotyökaluun",
+                "message" : "Määräalaluonnos on kertaluonteinen ja lopputulos on ladattavissa pdf-tulosteena. Määräalan pinta-ala on suuntaa antava, ja määräalan lopullinen paikka sekä rajat määräytyvät kiinteistötoimituksessa. Työkalun suorituskyvyssä on selainkohtaisia eroja. Työkalun käytössä suositellaan käytettävän Chrome-selainta versio 34 tai uudempi. Tuettavat selaimet ovat Internet Explorer 10 tai uudempi, Firefox 29 tai uudempi, Chrome 34 tai uudempi."
             },
             "page2": {
                 "title": "Haku",
