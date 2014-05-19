@@ -452,8 +452,19 @@
                 },
                 "Require-Bundle-Instance": []
             }
+        }, {
+            "instanceProps": {},
+            "title": "ELF Geolocator",
+            "bundleinstancename": "elf-geolocator",
+            "bundlename": "elf-geolocator",
+            "metadata": {
+                "Import-Bundle": {
+                    "elf-geolocator": {
+                        "bundlePath": "../../../packages/elf/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
         }
-		
-
     ]
 }
