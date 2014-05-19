@@ -520,7 +520,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 var groupName = 'analysis-selection-';
                 drawFilterDiv.addClass(groupName + drawFilter);
                 drawFilterDiv.addClass('disabled');
-
+                drawFilterDiv.attr('title',me.loc.content.drawFilter.tooltip[drawFilter]);
                 drawFilterDiv.click(function() {
                     if (jQuery(this).hasClass('disabled')) {
                         return;
