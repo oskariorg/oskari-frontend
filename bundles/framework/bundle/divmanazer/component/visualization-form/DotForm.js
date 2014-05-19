@@ -146,8 +146,6 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
         this.previewSize = 50;
     }, {
         /**
-         * Returns the values.
-         *
          * @method getValues
          * @return {Object}
          */
@@ -170,6 +168,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
         },
         /**
          * @method showForm
+         * Shows point visualization settings dialog
          * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory[]} categories array containing available categories
          * @return {jQuery} jquery reference for the form
          */

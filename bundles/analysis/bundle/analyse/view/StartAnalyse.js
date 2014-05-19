@@ -1575,7 +1575,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     if (filterJson.featureIds) {
                         this._getSelectedFeatureIds(layer, filterJson);
                     }
-                    data.filter = JSON.stringify(filterJson);
+                    data.filter1 = JSON.stringify(filterJson);
+                }
+                if (selections.method === "intersect") {
+                    var intersectLayerId = selections.methodParams.layerId,
+                        ilayer = sandbox.findMapLayerFromSelectedMapLayers(intersectLayerId),
+                        ifilterJson = this.getFilterJson(intersectLayerId);
+                    if (ifilterJson) {
+                        // If the user wanted to include only selected/clicked
+                        // features, get them now from the layer.
+                        if (ifilterJson.featureIds) {
+                            this._getSelectedFeatureIds(ilayer, ifilterJson);
+                        }
+                        data.filter2 = JSON.stringify(ifilterJson);
+                    }
                 }
 
                 // Send the data for analysis to the backend

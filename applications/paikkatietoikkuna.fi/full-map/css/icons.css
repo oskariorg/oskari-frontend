@@ -574,12 +574,20 @@
     background-position: -1373px 0px !important;
 }
 
+.marker-share {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1401px 0px !important;
+}
+
 .marker-square {
     width: 28px;
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1401px 0px !important;
+    background-position: -1433px 0px !important;
 }
 
 .marker-stud {
@@ -587,7 +595,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1429px 0px !important;
+    background-position: -1461px 0px !important;
 }
 
 .marker {
@@ -595,7 +603,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1457px 0px !important;
+    background-position: -1489px 0px !important;
 }
 
 .myplaces-area {
@@ -603,7 +611,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1489px 0px !important;
+    background-position: -1521px 0px !important;
 }
 
 .myplaces-draw-area {
@@ -611,7 +619,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1517px 0px !important;
+    background-position: -1549px 0px !important;
 }
 
 .myplaces-draw-line {
@@ -619,7 +627,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1549px 0px !important;
+    background-position: -1581px 0px !important;
 }
 
 .myplaces-draw-point {
@@ -627,7 +635,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1581px 0px !important;
+    background-position: -1613px 0px !important;
 }
 
 .myplaces-line {
@@ -635,7 +643,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1613px 0px !important;
+    background-position: -1645px 0px !important;
 }
 
 .myplaces-point {
@@ -643,7 +651,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1641px 0px !important;
+    background-position: -1673px 0px !important;
 }
 
 .selection-area {
@@ -651,7 +659,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1669px 0px !important;
+    background-position: -1701px 0px !important;
 }
 
 .selection-area:hover {
@@ -659,7 +667,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1669px -32px !important;
+    background-position: -1701px -32px !important;
 }
 
 .selection-circle {
@@ -667,7 +675,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1701px 0px !important;
+    background-position: -1733px 0px !important;
 }
 
 .selection-circle:hover {
@@ -675,7 +683,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1701px -32px !important;
+    background-position: -1733px -32px !important;
 }
 
 .selection-edit {
@@ -683,7 +691,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1733px 0px !important;
+    background-position: -1765px 0px !important;
 }
 
 .selection-edit:hover {
@@ -691,7 +699,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1733px -32px !important;
+    background-position: -1765px -32px !important;
 }
 
 .selection-line {
@@ -699,7 +707,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1765px 0px !important;
+    background-position: -1797px 0px !important;
 }
 
 .selection-line:hover {
@@ -707,7 +715,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1765px -32px !important;
+    background-position: -1797px -32px !important;
 }
 
 .selection-point {
@@ -715,7 +723,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1797px 0px !important;
+    background-position: -1829px 0px !important;
 }
 
 .selection-point:hover {
@@ -723,7 +731,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1797px -32px !important;
+    background-position: -1829px -32px !important;
 }
 
 .selection-remove {
@@ -731,7 +739,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1829px 0px !important;
+    background-position: -1861px 0px !important;
 }
 
 .selection-remove:hover {
@@ -739,7 +747,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1829px -32px !important;
+    background-position: -1861px -32px !important;
 }
 
 .selection-square {
@@ -747,7 +755,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1861px 0px !important;
+    background-position: -1893px 0px !important;
 }
 
 .selection-square:hover {
@@ -755,7 +763,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1861px -32px !important;
+    background-position: -1893px -32px !important;
 }
 
 .tool-draw-cut {
@@ -763,7 +771,7 @@
     height: 36px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1893px 0px !important;
+    background-position: -1925px 0px !important;
 }
 
 .tool-feature-selection {
@@ -771,7 +779,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1928px 0px !important;
+    background-position: -1960px 0px !important;
 }
 
 .tool-feature-selection:hover {
@@ -779,7 +787,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1928px -32px !important;
+    background-position: -1960px -32px !important;
 }
 
 .tool-history-back {
@@ -787,7 +795,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1960px 0px !important;
+    background-position: -1992px 0px !important;
 }
 
 .tool-history-forward {
@@ -795,7 +803,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1992px 0px !important;
+    background-position: -2024px 0px !important;
 }
 
 .tool-link {
@@ -803,7 +811,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2024px 0px !important;
+    background-position: -2056px 0px !important;
 }
 
 .tool-measure-area {
@@ -811,7 +819,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2056px 0px !important;
+    background-position: -2088px 0px !important;
 }
 
 .tool-measure-line {
@@ -819,7 +827,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2088px 0px !important;
+    background-position: -2120px 0px !important;
 }
 
 .tool-pan {
@@ -827,7 +835,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2120px 0px !important;
+    background-position: -2152px 0px !important;
 }
 
 .tool-print {
@@ -835,7 +843,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2152px 0px !important;
+    background-position: -2184px 0px !important;
 }
 
 .tool-reset {
@@ -843,7 +851,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2184px 0px !important;
+    background-position: -2216px 0px !important;
 }
 
 .tool-save-view {
@@ -851,7 +859,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2216px 0px !important;
+    background-position: -2248px 0px !important;
 }
 
 .tool-zoombox {
@@ -859,7 +867,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2248px 0px !important;
+    background-position: -2280px 0px !important;
 }
 
 .upload-material {
@@ -867,6 +875,6 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2280px 0px !important;
+    background-position: -2312px 0px !important;
 }
 

@@ -29,11 +29,28 @@ Oskari.registerLocalization({
                     "buttons": {
                         "finish": "Valmis"
                     },
-                    "modes": {
-                        "mark": "Pistemäinen viivamaisen kohteen rajaus",
-                        "split": "Alueen tai pisteeen aluerajaus ",
-                        "cut": "Alueen leikkaus",
-                        "clear": "Rajauksen poistaminen"
+                    "tooltip": {
+                        "point": "Viivarajaus",
+                        "line": "Aluerajaus viivalla",
+                        "edit": "Alueen leikkaus",
+                        "remove": "Rajauksen poistaminen"
+                    },
+                    "dialog": {
+                        "cancel": "Peruuta",
+                        "modes": {
+                            "point": {
+                                "title": "Viivarajaus",
+                                "message": "Valitse rajattava viiva siirtämällä markereita."
+                            },
+                            "line": {
+                                "title": "Aluerajaus viivalla",
+                                "message": "Jaa alue viivalla. Lopeta viivapiirto kaksoisklikkaamalla."
+                            },
+                            "edit": {
+                                "title": "Alueen leikkaus",
+                                "message": "Leikkaa alue toisella alueella."
+                            }
+                        }
                     }
                 },
                 "search": {

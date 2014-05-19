@@ -118,7 +118,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                         module.startPlugin(plugins[i].instance);
                     } catch (e) {
                         // something wrong with plugin (e.g. implementation not imported) -> log a warning
-                        me.sandbox.printWarn('Unable to start plugin: ' + plugins[i].id);
+                        me.sandbox.printWarn('Unable to start plugin: ' + plugins[i].id + ": " + e);
                     }
                 }
             }
