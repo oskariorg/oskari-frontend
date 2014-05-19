@@ -183,15 +183,15 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 paper.clear();
 
                 // Testing
-                // var lines = paper.path("M0 0L99 99 M0 99 L99 0");
-                // lines.attr("stroke", "#000");
+                var lines = paper.path("M0 0L99 99 M0 99 L99 0");
+                lines.attr("stroke", "#000");
 
                 var font = paper.getFont(me._font.name);
                 var charIndex = me.getFont().baseIndex+me._defaultData.shape;
                 var size = 100;
                 var color = "#"+me._defaultData.color;
                 paper.print(0,55,String.fromCharCode(charIndex),font,size).attr({"stroke-width": 1, fill: color, "stroke": "#b4b4b4"});
-                this._prevIconUrl = this._preSVGIconUrl+paper.toSVG();
+                this._prevIconUrl = this._preSVGIconUrl+jQuery.base64.encode(paper.toSVG());
             }
             this._registerTools();
 
@@ -407,12 +407,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 iconSrc = me._defaultIconUrl;
             }
 
+            // Testing
+            // iconSrc = this._prevIconUrl;
 
             // Handling the size parameter
-            if (typeof markerData.shape === "number") {
-                size = markerData.shape;
+            if (typeof markerData.size === "number") {
+                size = markerData.size;
             } else {
-                size = parseInt(markerData.shape,10);
+                size = parseInt(markerData.size,10);
             }
             if (isNaN(size)) {
                 return;
@@ -422,17 +424,17 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 point = new OpenLayers.Geometry.Point(markerData.x, markerData.y),
                 newMarker = new OpenLayers.Feature.Vector(point,null,{
                     externalGraphic: iconSrc,
-                    graphicWidth: 50+10*markerData.size,
-                    graphicHeight: 50+10*markerData.size,
+                    graphicWidth: 50+10*size,
+                    graphicHeight: 50+10*size,
                     fillOpacity: 1,
                     label: markerData.msg,
                     fontColor: "$000000",
                     fontSize: "16px",
                     fontFamily: "Arial",
                     fontWeight: "bold",
-                    labelAlign: "c",
-                    labelXOffset: 10+15*markerData.size,
-                    labelYOffset: 16,
+                    labelAlign: "lm",
+                    labelXOffset: 10+2*size,
+                    labelYOffset: 8,
                     labelOutlineColor: "white",
                     labelOutlineWidth: 1
                 });
