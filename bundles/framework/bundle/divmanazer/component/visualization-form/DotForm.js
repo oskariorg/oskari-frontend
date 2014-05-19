@@ -14,11 +14,17 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
         this.creator = creator;
         this.loc = loc;
         this.defaultValues = defaultValues;
+        this.saveButton = null;
+        this.cancelButton = null;
+        this.saveButtonHandler = null;
+        this.renderDialog = null;
+        this.messageEnabled = false;
 
         this.values = {
             size: this.defaultValues.size,
             color: this.defaultValues.color,
-            shape: this.defaultValues.shape
+            shape: this.defaultValues.shape,
+            message: ""
         };
 
         // Minimum dot size
@@ -136,6 +142,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
         this.templateColorSource = jQuery('<input type="checkbox" name="colorInput" value = "custom" class="color-source">');
         this.templateColorValue = jQuery('<label class="color-label"></label><br><input type="text" name="color-input" value="0" disabled="disabled" class="custom-color">');
         this.templateSizerValue = jQuery('<div class="sizer-value"></div>');
+        this.templateMessage = jQuery('<div class = "message"><label class="message-label"></label><div class="field"><input type="text" name="message-text" class="message-text"/></div></div>');
         this.previewSize = 50;
     }, {
         /**
@@ -148,7 +155,8 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
             return {
                 size: this.values.size,
                 color: this.values.color,
-                shape: this.values.shape
+                shape: this.values.shape,
+                message: this.values.message
             };
         },
         /**
@@ -165,16 +173,17 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
          * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory[]} categories array containing available categories
          * @return {jQuery} jquery reference for the form
          */
-        showForm: function (renderButton, state) {
+        showForm: function (renderButton, state, dialogLocation) {
             var me = this;
             if (state !== null && state !== undefined) {
                 jQuery.extend(true, me.values, state.dot);
+                this.messageEnabled = state.messageEnabled;
             }
 
-            var renderDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            me.renderDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
-            renderDialog.addClass('renderdialog');
-            renderDialog.addClass('pointvisualization');
+            me.renderDialog.addClass('renderdialog');
+            me.renderDialog.addClass('pointvisualization');
             var title = me.loc.title;
 
             // Shape selection
@@ -367,12 +376,29 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
 
             this._updatePreview(dialogContent);
 
+            // Optional dot message
+            if (this.messageEnabled) {
+                var messageContainer = this.templateMessage.clone();
+                messageContainer.find("label.message-label").html(this.loc.message.label);
+                var input = messageContainer.find("input.message-text");
+                input.attr("placeholder",this.loc.message.hint);
+                input.bind('input', function() {
+                    me.values.message = jQuery(this).val();
+                });
+                messageContainer.insertAfter(dialogContent.find('div.preview'));
+            }
+
             var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             saveBtn.setTitle(me.loc.buttons.save);
             saveBtn.addClass('primary showSelection');
-            saveBtn.setHandler(function () {
-                renderDialog.close();
-            });
+            if (this.saveButtonHandler !== null ){
+                saveBtn.setHandler(this.saveButtonHandler);
+            } else {
+                saveBtn.setHandler(function () {
+                    me.renderDialog.close();
+                });
+            }
+            this.saveButton = saveBtn;
 
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(me.loc.buttons.cancel);
@@ -380,11 +406,27 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
                 me.values.size = me.defaultValues.size;
                 me.values.color = me.defaultValues.color;
                 me.values.shape = me.defaultValues.shape;
-                renderDialog.close();
+                me.renderDialog.close();
             });
-            renderDialog.show(title, dialogContent, [saveBtn, cancelBtn]);
-            renderDialog.moveTo(renderButton, 'top');
-            return renderDialog;
+            this.cancelButton = cancelBtn;
+
+            me.renderDialog.show(title, dialogContent, [saveBtn, cancelBtn]);
+            // Dialog location
+            if (typeof dialogLocation === 'string') {
+                me.renderDialog.moveTo(renderButton, dialogLocation);
+            } else {
+                me.renderDialog.moveTo(renderButton, 'top');
+            }
+            return me.renderDialog;
+        },
+
+        /**
+         * @method getDialog
+         * Returns reference to the render dialog of the dot form
+         * @private
+         */
+        getDialog: function() {
+            return this.renderDialog;
         },
 
         /**
@@ -410,6 +452,23 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
             }
         },
 
+        /**
+         * @method setSaveHandler
+         * Sets a user defined handler for the save button
+         * @param {function} handler Save button handler
+         */
+        setSaveHandler: function(handler) {
+            this.saveButtonHandler = handler;
+            if (this.saveButton !== null) {
+                this.saveButton.setHandler(handler);
+            }
+        },
+
+        /**
+         * @method updatePreview
+         * Performs a preview update
+         * @param {Object} dialog
+         */
         _updatePreview: function (dialog) {
             var me = this;
             var view = dialog === undefined || dialog === null ? jQuery(".pointform") : dialog;

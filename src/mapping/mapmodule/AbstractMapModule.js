@@ -837,7 +837,50 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
             }
             return layerResolutions;
         },
-
+        /**
+         * Returns state for mapmodule including plugins that have getState() function
+         * @method getState
+         * @return {Object} properties for each pluginName
+         */
+        getState : function() {
+            var state = {},
+                pluginName;
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getState) {
+                    state[pluginName] = this._pluginInstances[pluginName].getState();
+                }
+            }
+            return state;
+        },
+        /**
+         * Returns state for mapmodule including plugins that have getStateParameters() function
+         * @method getStateParameters
+         * @return {String} link parameters for map state
+         */
+        getStateParameters: function () {
+            var params = "",
+                pluginName;
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getStateParameters) {
+                    params = params + this._pluginInstances[pluginName].getStateParameters();
+                }
+            }
+            return params;
+        },
+        /**
+         * Sets state for mapmodule including plugins that have setState() function
+         * NOTE! Not used for now
+         * @method setState
+         * @param {Object} properties for each pluginName
+         */
+        setState : function(state) {
+            var pluginName;
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName) && state[pluginName] && this._pluginInstances[pluginName].setState) {
+                    this._pluginInstances[pluginName].setState(state[pluginName]);
+                }
+            }
+        },
         /* IMPL specific */
 
         _crs2MapImpl: Oskari.AbstractFunc("_crs2MapImpl"),

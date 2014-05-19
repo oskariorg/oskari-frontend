@@ -2,6 +2,10 @@
 
 ## 1.21
 
+### admin-layerselector
+
+Previously didn't startup correctly with small number of layer (under 30), this has now been fixed.
+
 ### search
 
 The default UI for search can now be disabled through config:
@@ -64,6 +68,10 @@ Removed underscore from comp.js
 ### backendstatus
 
 Sends a new event - `BackendStatus.BackendStatusChangedEvent` instead of `MapLayerEvent` now. Also, if the amount of changed layers exceeds 100 a so called bulk update event is sent instead of single events for each changed layer. It's basically the same event without any params.
+
+### mapmodule-plugin
+
+Now has getState/getStateParameters/setState-functions and forwards calls to these methods to any registered plugins that have the same methods. GetState gathers and object with properties named after plugins and setState assumes to get the same kind of Object as parameter.
 
 ## 1.19.3
 

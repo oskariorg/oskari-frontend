@@ -113,7 +113,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 var plugins = this.conf.plugins;
                 for (var i = 0; i < plugins.length; i++) {
                     try {
-                        plugins[i].instance = Oskari.clazz.create(plugins[i].id, plugins[i].config);
+                        plugins[i].instance = Oskari.clazz.create(plugins[i].id, plugins[i].config, plugins[i].state);
                         module.registerPlugin(plugins[i].instance);
                         module.startPlugin(plugins[i].instance);
                     } catch (e) {
@@ -447,6 +447,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
             var state = this.getState(),
                 link = 'zoomLevel=' + state.zoom + '&coord=' + state.east + '_' + state.north + '&mapLayers=',
                 selectedLayers = state.selectedLayers,
+                mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 layers = '',
                 layer = null,
                 i = 0,
@@ -471,7 +472,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                     }
                 }
             }
-            return link + layers;
+            return link + layers + mapmodule.getStateParameters();
         },
 
         /**

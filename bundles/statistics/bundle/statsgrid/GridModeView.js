@@ -26,9 +26,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
             var me = this,
                 sandbox = me.instance.getSandbox();
 
-            me.toolbar = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatsToolbar', {
-                title: me.getTitle()
-            }, me.instance);
+            me.toolbar = Oskari.clazz.create(
+                'Oskari.statistics.bundle.statsgrid.StatsToolbar', {
+                    title: me.getTitle()
+                },
+                me.instance);
 
             me.requestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.StatsGridRequestHandler', me);
             sandbox.addRequestHandler('StatsGrid.StatsGridRequest', me.requestHandler);
@@ -64,7 +66,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                     me.instance.gridPlugin.setLayer(me._layer);
                     // Save the changed layer to the state.
                     me.instance.state.layerId = me._layer.getId();
-                    me.toolbar.changeName(me.instance.getLocalization('tile').title + ' - ' + me._layer.getName());
                     me._layer.setOpacity(100);
                 }
                 // use default layer if we're showing the UI and don't have a layer
@@ -83,7 +84,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                         me.instance.gridPlugin.setLayer(me._layer);
                         // Save the changed layer to the state.
                         me.instance.state.layerId = me._layer.getId();
-                        me.toolbar.changeName(me.instance.getLocalization('tile').title + ' - ' + me._layer.getName());
                         me._layer.setOpacity(100);
                     }
                 } else if (!me.isVisible && me._layer) {
@@ -130,6 +130,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
         showMode: function (isShown, blnFromExtensionEvent) {
             var me = this,
                 sandbox = me.instance.getSandbox();
+
             me.toolbar.show(isShown);
 
             var mapModule = me.instance.getSandbox().findRegisteredModuleInstance('MainMapModule'),
@@ -253,7 +254,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
          * called by host to stop view operations
          */
         stopPlugin: function () {
-            this.toolbar.destroy();
             sandbox.removeRequestHandler('StatsGrid.StatsGridRequest', this.requestHandler);
         }
     }, {

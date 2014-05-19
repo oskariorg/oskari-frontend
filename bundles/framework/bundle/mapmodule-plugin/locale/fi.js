@@ -68,6 +68,38 @@ Oskari.registerLocalization({
           "line": "Mittaa etäisyys",
           "area": "Mittaa alue"
         }
+      },
+      "MarkersPlugin": {
+        "buttons": {
+          "add": "Lisää uusi marker",
+          "clear": "Poista kaikki markerit"
+        },
+        "form": {
+          "title": "Pistekohteen esitystapa",
+          "tooltip": "",
+          "symbol": {
+            "label": "Pistekohteen kuvake"
+          },
+          "size": {
+            "label": "Koko"
+          },
+          "color": {
+            "label": "Väri",
+            "labelOr": "tai",
+            "labelCustom": "Oma RGB-väri (0-255)"
+          },
+          "preview": {
+            "label": "Esikatselu"
+          },
+          "message": {
+            "label": "Viesti",
+            "hint": "Kirjoita viestiteksti"
+          },
+          "buttons": {
+            "save": "Tallenna",
+            "cancel": "Peruuta"
+          }
+        }
       }
     }
   }

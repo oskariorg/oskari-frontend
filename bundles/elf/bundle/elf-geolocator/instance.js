@@ -115,6 +115,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
          */
         startTool: function () {
             this.tool.active = true;
+            jQuery('#mapdiv').addClass('elf-reverse-geocode');
         },
         /**
          * Stops the tool
@@ -124,6 +125,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
          */
         stopTool: function () {
             this.tool.active = false;
+            jQuery('#mapdiv').removeClass('elf-reverse-geocode');
         },
         /**
          * Sends a request to select the default tool.
@@ -157,7 +159,6 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
                 lon: lonlat.lon,
                 lat: lonlat.lat
             }, function (response) {
-                console.log(response);
                 if (response) {
                     me.resultClicked(_.first(response.locations));
                 }

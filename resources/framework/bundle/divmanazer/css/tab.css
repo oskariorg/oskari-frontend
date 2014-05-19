@@ -2,43 +2,47 @@ div.oskariTabs {
   /* tab headers */
   /* "tab" content */ }
   div.oskariTabs div.tabsHeader {
-    background: url('/Oskari/resources/framework/bundle/divmanazer/images/tab_bg.png') repeat-x scroll center bottom;
-    /* #FFFFFF*/
-    clear: left;
+    clear: both;
     float: left;
-    font: 12pt Arial, sans-serif;
+    font-size: 14px;
+    color: #3C3C3C;
     font-weight: bold;
-    overflow: hidden;
+    margin-bottom: -1px;
     padding: 0;
     width: 100%; }
     div.oskariTabs div.tabsHeader ul {
-      float: left;
-      list-style: none outside none;
+      display: block;
       margin: 0;
       padding: 0;
-      text-align: center; }
+      width: 100%;
+      white-space: nowrap; }
       div.oskariTabs div.tabsHeader ul li {
-        display: block;
-        float: left;
-        list-style: none outside none;
+        display: inline-block;
+        border-style: solid;
+        border-color: #999;
+        border-width: 1px 1px 0 1px;
         margin: 10px 0 0;
-        padding: 0;
-        right: 50%; }
+        padding: 0; }
+        div.oskariTabs div.tabsHeader ul li:first-of-type {
+          -webkit-border-top-left-radius: 2px;
+          -moz-border-radius-topleft: 2px;
+          border-top-left-radius: 2px; }
+        div.oskariTabs div.tabsHeader ul li:last-of-type {
+          -webkit-border-top-right-radius: 2px;
+          -moz-border-radius-topright: 2px;
+          border-top-right-radius: 2px; }
         div.oskariTabs div.tabsHeader ul li.active a {
-          border-left: 1px solid #999999;
-          border-right: 1px solid #999999;
-          border-top: 1px solid #999999;
-          border-bottom: 0px solid #999999;
-          color: #000000; }
+          background: none repeat scroll 0 0 #FAFAFA;
+          font-weight: bold;
+          padding-bottom: 11px; }
         div.oskariTabs div.tabsHeader ul li.fill a {
           width: 100%; }
         div.oskariTabs div.tabsHeader ul li a {
-          background: none repeat scroll 0 0 #FFFFFF;
-          border-bottom: 1px solid #999999;
-          color: #3333FF;
+          background: none repeat scroll 0 0 #F3F3F3;
+          color: #000;
           display: block;
-          float: left;
-          padding: 10px 20px;
+          font-weight: normal;
+          padding: 10px 15px;
           position: relative;
           text-decoration: none; }
         div.oskariTabs div.tabsHeader ul li input[type="button"] {
@@ -46,11 +50,8 @@ div.oskariTabs {
         div.oskariTabs div.tabsHeader ul li select {
           margin-right: 10px; }
   div.oskariTabs div.tabsContent {
-    border-left: 1px solid #999999;
-    border-right: 1px solid #999999;
-    border-top: 0px solid #999999;
-    border-bottom: 1px solid #999999;
-    color: #000000;
+    border: 1px solid #999;
+    color: #3C3C3C;
     height: 90%; }
   div.oskariTabs div.tab-content {
     padding: 10px;

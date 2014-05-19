@@ -7,12 +7,13 @@ Oskari.registerLocalization({
         "tile": {
             "title": "A: Käyttäjät"
         },
-        "firstname": "Etunimi",
-        "lastname": "Sukunimi",
-        "username": "Nimimerkki",
-        "password": "Salasana",
-        "password_retype": "Salasana uudestaan",
+        "firstName": "Etunimi",
+        "lastName": "Sukunimi",
+        "user": "Nimimerkki",
+        "pass": "Salasana",
+        "pass_retype": "Salasana uudestaan",
         "password_mismatch": "Salasanat eivät täsmää.",
+        "password_too_short": "Salasanan pitää olla vähintään 8 merkkiä.",
         "form_invalid": "Puuttuvia/vääräarvoisia kenttiä",
         "field_required": "Kenttä \"{fieldName}\" on pakollinen",
         "confirm_delete": "Haluatko varmasti poistaa käyttäjän {user}?",
