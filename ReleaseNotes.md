@@ -2,6 +2,15 @@
 
 ## 1.21
 
+### core/sandbox
+
+sandbox.getRequestBuilder('RequestName') now returns undefined if either request or requestHandler is missing. 
+Previously only returned undefined if request was missing. This solves some timing issues with minified code.
+
+### MaplayerService
+
+Now returns null if trying to create unrecognized layer type instead of throwing an error. Also logs a mention in console if this happens.
+
 ### admin-layerselector
 
 Previously didn't startup correctly with small number of layer (under 30), this has now been fixed.
@@ -13,6 +22,30 @@ The default UI for search can now be disabled through config:
 ```javascript
 {
     "disableDefault": true
+}
+```
+
+### mapmodule-plugin/MarkersPlugin
+
+New marker functionality:
+
+Dynamic point symbol visualizations are now available also for markers. They can be created by url parameters or set on the map by the user.
+
+Marker handling is removed from map-module.js. Instead, new markers can be added via requests as follows:
+
+```javascript
+var reqBuilder = this.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+if (reqBuilder) {
+    var data = {
+        x: lonlat.lon,
+        y: lonlat.lat,
+        msg: null,
+        color: "ff0000",
+        shape: 3,
+        size: 3
+    };
+    var request = reqBuilder(data);
+    this.sandbox.request(this.getName(), request);
 }
 ```
 

@@ -23,10 +23,7 @@ function(config) {
     },
 
     isModify : function() {
-        if (this._continueCurrent) {
-            return true;
-        }
-        return false;
+        return this._continueCurrent;
     },
 
     drawModes : {

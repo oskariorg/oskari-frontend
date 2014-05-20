@@ -323,28 +323,48 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcelinfo.plugin.ParcelInfoPlug
          * @param event Event send by the layer when feature is modified.
          */
         _updateInfo: function (event) {
-            var me = this;
+            var me = this,
+                area;
             // Update the info only for the selected feature.
             if (event && event.feature && event.feature.geometry && event.feature === me._selectedFeature) {
                 me.update({
                     'info': {
                         'name': event.feature.attributes.nimi || event.feature.attributes.name || '',
-                        'area': event.feature.geometry.getArea().toFixed(0),
+                        'area': me._getAreaAsString(event.feature.geometry.getArea()),
                         'length': event.feature.geometry.getLength().toFixed(0)
                     }
                 });
                 // Updates polygon in case of edit line modified
             } else if (me._selectedFeature) {
-
                 me.update({
                     'info': {
                         'name': me._selectedFeature.attributes.nimi || me._selectedFeature.attributes.name || '',
-                        'area': me._selectedFeature.geometry.getArea().toFixed(0),
+                        'area': me._getAreaAsString(me._selectedFeature.geometry.getArea()),
                         'length': me._selectedFeature.geometry.getLength().toFixed(0)
                     }
                 });
             }
+        },
+
+        /**
+         *
+         * @param area
+         *
+         *  Handles appropriate geometry area rounding.
+         *
+         * @returns {string|*} Rounded geometry area
+         * @private
+         */
+        _getAreaAsString: function(area) {
+            var c;
+            if (area > 5000) {
+                c = 100;
+            } else {
+                c = 10;
+            }
+            return (Math.round(area/c)*c).toFixed(0);
         }
+
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}

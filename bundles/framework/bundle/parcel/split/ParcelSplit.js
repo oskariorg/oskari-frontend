@@ -400,8 +400,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
             default:
             }
             OpenLayers.Feature.Vector.style['default'].strokeWidth = '2';
-            this.drawPlugin.drawLayer.features[0].style = this.drawPlugin.selectStyle;
-            this.drawPlugin.selectedFeature = 0;
+            this.drawPlugin.selectedFeature = this.drawPlugin.drawLayer.features.length-1;
+            this.drawPlugin.drawLayer.features[this.drawPlugin.selectedFeature].style = this.drawPlugin.selectStyle;
             this.map.editLayer = editLayer;
             parcelLayer.redraw();
             editLayer.redraw();
