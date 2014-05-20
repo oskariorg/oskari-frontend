@@ -396,8 +396,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
                 messageContainer.insertAfter(dialogContent.find('div.preview'));
             }
 
-            var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            saveBtn.setTitle(me.loc.buttons.save);
+            var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
             saveBtn.addClass('primary showSelection');
             if (this.saveButtonHandler !== null ){
                 saveBtn.setHandler(this.saveButtonHandler);
@@ -408,8 +407,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
             }
             this.saveButton = saveBtn;
 
-            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            cancelBtn.setTitle(me.loc.buttons.cancel);
+            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
             cancelBtn.setHandler(function () {
                 me.values.size = me.defaultValues.size;
                 me.values.color = me.defaultValues.color;
