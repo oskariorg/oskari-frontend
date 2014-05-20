@@ -131,7 +131,10 @@ Oskari.registerLocalization({
         "page": {
             "title": "...",
             "parentparcel": "Emäkiinteistö:",
+            "title_childparcel": "Erotettava määräala",
             "partparcel": "Määräala:",
+            "parcel_desc": "Yleiskuvaus:",
+            "parcel_user": "Laatija:",
             "footnote": "Rantaviivan todellinen paikka määräytyy toimituksessa"
         },
         "StartPrintView": {
