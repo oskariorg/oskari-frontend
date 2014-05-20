@@ -134,9 +134,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                                 tooltip: loc.link.tooltip,
                                 sticky: false,
                                 callback: function () {
-                                    linkParams = me.getSandbox().generateMapLinkParameters({
-                                        showMarker: true
-                                    });
+                                    linkParams = me.getSandbox().generateMapLinkParameters({});
+                                    // This is kinda ugly...
+                                    // Only show marker if there's no markers.
+                                    if (linkParams.indexOf("&markers=") === -1) {
+                                        linkParams += "&showMarker=true";
+                                    } 
                                     pcn = 'Oskari.userinterface.component.Popup';
                                     okcn = 'Oskari.userinterface.component.Button';
                                     dialog = Oskari.clazz.create(pcn);
