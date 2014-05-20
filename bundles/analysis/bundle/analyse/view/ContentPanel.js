@@ -611,7 +611,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             finishBtn.setTitle(loc.finish);
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
-                this.drawFilterMode = false;
+                me.drawFilterMode = false;
                 // Disable all buttons
                 me._disableAllDrawFilterButtons();
                 me._sendStopDrawFilterRequest(false);
