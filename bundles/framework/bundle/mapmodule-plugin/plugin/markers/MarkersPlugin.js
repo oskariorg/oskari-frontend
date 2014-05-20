@@ -177,22 +177,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             // Is SVG supported?
             this._svg = document.implementation.hasFeature('http://www.w3.org/TR/SVG11/feature#Image', '1.1');
 
-            // Create default marker
-            if (typeof Raphael !== "undefined") {
-                var paper = Raphael(-100,-100,100,100);
-                paper.clear();
-
-                // Testing
-                var lines = paper.path("M0 0L99 99 M0 99 L99 0");
-                lines.attr("stroke", "#000");
-
-                var font = paper.getFont(me._font.name);
-                var charIndex = me.getFont().baseIndex+me._defaultData.shape;
-                var size = 100;
-                var color = "#"+me._defaultData.color;
-                paper.print(0,55,String.fromCharCode(charIndex),font,size).attr({"stroke-width": 1, fill: color, "stroke": "#b4b4b4"});
-                this._prevIconUrl = this._preSVGIconUrl+jQuery.base64.encode(paper.toSVG());
-            }
+            // Register marker tools
             this._registerTools();
 
             // Creates markers on the map
@@ -392,8 +377,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 return;
             }
 
-//            var offset = new OpenLayers.Pixel(-(size.w / 2), -size.h);
-
             // Image data already available
             var iconSrc = null;
             if (me._svg) {
@@ -407,25 +390,15 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 iconSrc = me._defaultIconUrl;
             }
 
-            // Testing
-            // iconSrc = this._prevIconUrl;
-
-            // Handling the size parameter
-            if (typeof markerData.size === "number") {
-                size = markerData.size;
-            } else {
-                size = parseInt(markerData.size,10);
-            }
-            if (isNaN(size)) {
-                return;
-            }
+            // Size validity already checked in the constructImage function
+            size = this._getSizeInPixels(markerData.size);
 
             var markerLayers = this._map.getLayersByName("Markers"),
                 point = new OpenLayers.Geometry.Point(markerData.x, markerData.y),
                 newMarker = new OpenLayers.Feature.Vector(point,null,{
                     externalGraphic: iconSrc,
-                    graphicWidth: 50+10*size,
-                    graphicHeight: 50+10*size,
+                    graphicWidth: size,
+                    graphicHeight: size,
                     fillOpacity: 1,
                     label: markerData.msg,
                     fontColor: "$000000",
@@ -433,7 +406,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     fontFamily: "Arial",
                     fontWeight: "bold",
                     labelAlign: "lm",
-                    labelXOffset: 10+2*size,
+                    labelXOffset: 8+2*markerData.size,
                     labelYOffset: 8,
                     labelOutlineColor: "white",
                     labelOutlineWidth: 1
@@ -468,8 +441,21 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             var size, color;
             var iconSrc = me._defaultIconUrl;
             if (typeof Raphael !== "undefined") {
-                var paper = Raphael(-100,-100,100,100);
+                // Handling the size parameter
+                if (typeof marker.size !== "number") {
+                    marker.size = parseInt(marker.size,10);
+                }
+                size = marker.size;
+                if (isNaN(size)) {
+                    return;
+                }
+                size = this._getSizeInPixels(size);
+                var paper = Raphael(0,0,size,size);
                 paper.clear();
+
+                // Test lines for pixel level accuracy
+                // var lines = paper.path("M0 0L"+size+" "+size+" M0 "+size+" L"+size+" 0");
+                // lines.attr("stroke", "#000");
 
                 // Construct marker parameters
                 var font = paper.getFont(me._font.name);
@@ -484,7 +470,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                         charIndex += me._defaultData.shape;
                     }
                 }
-                size = 100;
+
                 if (typeof marker.color === "string") {
                     color = "#"+marker.color;
                 } else {
@@ -492,7 +478,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 }
 
                 // Create image
-                paper.print(0,55,String.fromCharCode(charIndex),font,size).attr({
+                paper.print(0,55*size/100,String.fromCharCode(charIndex),font,size).attr({
                     "fill": color,
                     "stroke_width": me._strokeStyle.stroke_width,
                     "stroke": me._strokeStyle.stroke
@@ -502,6 +488,17 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 iconSrc = me._preSVGIconUrl+jQuery.base64.encode(paper.toSVG());
             }
             return iconSrc;
+        },
+
+        /**
+         * Converts from abstract marker size to real pixel size
+         *
+         * @param size Abstract size
+         * @returns {number} Size in pixels
+         * @private
+         */
+        _getSizeInPixels: function(size) {
+            return 40+10*size;
         },
 
         /**
