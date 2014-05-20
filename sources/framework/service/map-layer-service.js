@@ -521,6 +521,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         unregisterLayerModel: function (type) {
             this.typeMapping[type] = undefined;
+            delete this.typeMapping[type];
         },
 
         /**
@@ -547,6 +548,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         unregisterLayerModelBuilder: function (type) {
             this.modelBuilderMapping[type] = undefined;
+            delete this.modelBuilderMapping[type];
         },
         /**
          * @method createMapLayer
@@ -730,9 +732,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options);
             if (!layer) {
-                console.log('disabled map layer error throwing. Unknown layer type', mapLayerJson.type);
+                this._sandbox.printDebug("[MapLayerService] Unknown layer type: " + mapLayerJson.type);
                 return null;
-                throw "Unknown layer type '" + mapLayerJson.type + "'";
             }
             //these may be implemented as jsonHandler
             if (mapLayerJson.type === 'wmslayer') {
