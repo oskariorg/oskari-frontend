@@ -144,12 +144,12 @@ function(instance) {
     _validateForm : function(values) {
         var errors = [];
         var loc = this.instance.getLocalization('validation');
-        if (!values.place.name) {
+      /*  if (!values.place.name) {
             errors.push({
                 name : 'name',
                 error : loc.placeName
             });
-        }
+        }  */
         if (!values.place.reporter) {
             errors.push({
                 name : 'reporter',

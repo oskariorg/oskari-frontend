@@ -2,6 +2,15 @@
 
 ## 1.21
 
+### core/sandbox
+
+sandbox.getRequestBuilder('RequestName') now returns undefined if either request or requestHandler is missing. 
+Previously only returned undefined if request was missing. This solves some timing issues with minified code.
+
+### MaplayerService
+
+Now returns null if trying to create unrecognized layer type instead of throwing an error. Also logs a mention in console if this happens.
+
 ### admin-layerselector
 
 Previously didn't startup correctly with small number of layer (under 30), this has now been fixed.
