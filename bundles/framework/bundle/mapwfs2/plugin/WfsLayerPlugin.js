@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
-    /**
+/**
  * @method create called automatically on construction
  * @static
 
@@ -35,6 +35,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
         this._tilesToUpdate = null;
         this._tileData = null;
         this._tileDataTemp = null;
+
+        // highlight enabled or disabled
+        this._highlighted = true;
 
         this.errorTriggers = {
             "connection_not_available": {
@@ -163,10 +166,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
             }
 
             this.requestHandlers = {
-                showOwnStyleHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequestHandler', this)
+                showOwnStyleHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequestHandler', this),
+                activateHighlightHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.request.ActivateHighlightRequestHandler', this)
             };
 
             sandbox.addRequestHandler('ShowOwnStyleRequest', this.requestHandlers.showOwnStyleHandler);
+            sandbox.addRequestHandler('WfsLayerPlugin.ActivateHighlightRequest', this.requestHandlers.activateHighlightHandler);
         },
 
         /**
@@ -395,7 +400,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
                     if (layers[j].hasFeatureData()) {
                         fids = this.getAllFeatureIds(layers[j]);
                         this.removeHighlightImages(layers[j]);
-                        this.getIO().highlightMapLayerFeatures(layers[j].getId(), fids, false, geomRequest);
+                        if (this._highlighted) {
+                            this.getIO().highlightMapLayerFeatures(layers[j].getId(), fids, false, geomRequest);
+                        }
                     }
                 }
             }
@@ -501,8 +508,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
                     layer.setClickedFeatureListIds(event.getWfsFeatureIds());
                     this.getHighlightImage(layer, srs, [bbox.left, bbox.bottom, bbox.right, bbox.top], zoom, event.getWfsFeatureIds());
                 }
-
-                this.getIO().highlightMapLayerFeatures(layer.getId(), event.getWfsFeatureIds(), event.isKeepSelection(), geomRequest);
+                if (this._highlighted) {
+                    this.getIO().highlightMapLayerFeatures(layer.getId(), event.getWfsFeatureIds(), event.isKeepSelection(), geomRequest);
+                }
             }
         },
 
@@ -1254,6 +1262,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
             // send as an event forward to WFSPlugin (draws)
             var event = this.getSandbox().getEventBuilder("WFSImageEvent")(layer, imageUrl, bbox, imageSize, "highlight", false, false);
             this.getSandbox().notifyAll(event);
+        },
+
+        /**
+         * Enable or disable WFS highlight
+         *
+         * @param highlighted Truth value of highlight activation
+         */
+        setHighlighted: function(highlighted) {
+            this._highlighted = highlighted;
         }
 
     }, {

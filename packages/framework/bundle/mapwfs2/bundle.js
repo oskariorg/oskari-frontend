@@ -69,6 +69,12 @@ function() {
             "src" : "../../../../bundles/framework/bundle/mapwfs2/request/ShowOwnStyleRequestHandler.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapwfs2/request/ActivateHighlightRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapwfs2/request/ActivateHighlightRequestHandler.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapwfs2/domain/QueuedTile.js"
         }, {
             "type" : "text/javascript",
