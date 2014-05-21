@@ -17,8 +17,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsService',
         this.sandbox = instance.sandbox;
         this.eventName = 'StatsGrid.UserIndicatorEvent';
     }, {
-        __name: "StatsGrid.UserIndicatorsService",
-        __qname: "Oskari.statistics.bundle.statsgrid.UserIndicatorsService",
+        __name: 'StatsGrid.UserIndicatorsService',
+        __qname: 'Oskari.statistics.bundle.statsgrid.UserIndicatorsService',
 
         getQName: function () {
             return this.__qname;
@@ -40,8 +40,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsService',
         },
 
         getUserIndicator: function (indicatorId, successCb, errorCb) {
-            var url = this.sandbox.getAjaxUrl() + 'action_route=GetUserIndicators&id=' + indicatorId;
-            this._get(url, successCb, errorCb);
+            var url = this.sandbox.getAjaxUrl() +
+                    'action_route=GetUserIndicators&id=' + indicatorId,
+                normalizeIndicator = this._normalizeIndicator,
+                successWrapper = function (indicator) {
+                    successCb(normalizeIndicator(indicator));
+                }
+            this._get(url, successWrapper, errorCb);
         },
 
         saveUserIndicator: function (indicator, successCb, errorCb) {
@@ -81,7 +86,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsService',
                 dataType: 'json',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 success: function (response) {
@@ -102,7 +107,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsService',
 
             jQuery.ajax(params);
         },
-
         _objectifyIndicator: function (indicator, response) {
             var retIndicator = {
                 id: response.id,
@@ -113,7 +117,28 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsService',
             };
 
             return retIndicator;
-        }
+        },
+        /**
+         * Normalizes the indicator to be used like a sotkanet indicator in statsplugin.
+         *
+         * @method _normalizeIndicator
+         * @param  {Object} indicator
+         * @return {Object}
+         */
+        _normalizeIndicator: function (indicator) {
+            var retIndicator = _.clone(indicator, true);
+
+            retIndicator.ownIndicator = true;
+            retIndicator.gender = 'total';
+            retIndicator.organization = {
+                'title': retIndicator.organization
+            };
+            retIndicator.meta = {
+                'title': retIndicator.title
+            };
+
+            return retIndicator;
+        },
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });
