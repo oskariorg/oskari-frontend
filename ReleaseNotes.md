@@ -57,6 +57,10 @@ Opens the language selector in a Flyout
 
 *New bundle!* Creates a service and a user interface for ELF Geolocator search API. Creates an UI for search bundle to perform text searches and adds a button to the toolbar for reverse geocode search.
 
+### analysis/analyse
+
+Existing WFS area and line features can now be cut with a new geometry editor bundle and used as analysis source features.
+
 ## 1.20
 
 ### analysis/analyse

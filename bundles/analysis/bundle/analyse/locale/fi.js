@@ -44,7 +44,7 @@ Oskari.registerLocalization({
                             },
                             "line": {
                                 "title": "Aluerajaus viivalla",
-                                "message": "Jaa alue viivalla. Lopeta viivapiirto kaksoisklikkaamalla."
+                                "message": "Jaa alue viivalla. Lopeta viivapiirto kaksoisklikkaamalla. Tämän jälkeen voit muokata halkaisuviivaa sekä siirtää leikkauspisteitä ulkoreunaa pitkin."
                             },
                             "edit": {
                                 "title": "Alueen leikkaus",

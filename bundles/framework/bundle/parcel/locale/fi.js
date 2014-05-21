@@ -41,7 +41,7 @@ Oskari.registerLocalization({
         },
         "parcelprintform1": {
             "title": "Tulosta näkymä (1/3)",
-            "tooltip": "Anna määräalan tiedot ja jatka",
+            "tooltip": "Täytä lomakkeella pyydettävät tiedot. \nTiedot tulostuvat lopulliseen määräalatulosteeseen. \n\nPiirroksen otsikko - Tulosteen otsikko. \nTulostuu lopulliseen määräalatulosteeseen esim. Määräala tilasta Pölkkyniemi \nPiirroksen laatija - Tulosteen laatijan tiedot \nEmätilan tunnus - Kiinteistö, josta määräala lohkotaan \nPinta-ala - Määräalan pinta-ala. Pinta-ala on aina suuntaa-antava. \nLopullinen pinta-ala määräytyy kiinteistötoimituksessa",
             "placename": {
                 "placeholder": "Tunnus *"
             },
@@ -55,7 +55,7 @@ Oskari.registerLocalization({
                 "placeholder": "Yleiskuvaus"
             },
             "parent_property_id": {
-                "placeholder": "Kantatilan tunnus"
+                "placeholder": "Emäkiinteistön tunnus"
             },
             "parent_property_quality": {
                 "placeholder": "Kantatilan lähdeaineisto"
@@ -75,10 +75,10 @@ Oskari.registerLocalization({
             "title": "Tulosta näkymä (2/3)",
             "pointnumber": "Kohde",
             "pointdesc": "Selitys",
-            "tooltip": "Anna uusien rajamerkkien tiedot ja jatka",
+            "tooltip": "Voit antaa määräalan uusille rajapisteille sijaintiin liittyvän kuvauksen. \nKuvaus voidaan antaa jokaiselle uudelle rajapisteelle erikseen. \nKuvaus helpottaa kiinteistötoimituksen tekemistä ja yksilöi uusien rajojen paikan tarkemmin. \nEsim. ”Rajapiste sijaitsee rajalinjalla, minkä määrittävät pyykit nro 4 ja nro",
             "point": {
-                "placeholder": "Anna rajapyykin lisätietoja esim. etäisyys xx m pyykistä 201",
-                "label": "Rajapyykki"
+                "placeholder": "Anna kulmapisteen lisätietoja esim. etäisyys xx m pyykistä 201",
+                "label": "Kulmapiste"
             },
             "buttons": {
                 "continue": "Jatka",
@@ -128,9 +128,12 @@ Oskari.registerLocalization({
         },
         "page": {
             "title": "Määräalakartta",
+            "title_childparcel": "Erotettava määräala",
             "parentparcel": "Emäkiinteistö:",
             "partparcel": "Määräala:",
-            "footnote": "Rantaviivan todellinen paikka määräytyy toimituksessa"
+            "parcel_desc": "Otsikko:",
+            "parcel_user": "Laatija:",
+            "footnote": "Määräalan lopullinen paikka ja rajat määräytyvät kiinteistötoimituksessa"
         },
         "language": {
             "change": "Ruotsiksi"
