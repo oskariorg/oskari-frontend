@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * - drawControls
      * - registers for listening to requests
      * @param sandbox reference to Oskari sandbox
-     * @method
+     * @method init
      */
     init: function (sandbox) {
         var me = this;
@@ -259,12 +259,29 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this._updateLayerOrder();
     },
 
+    /**
+     * @method getName
+     * Returns the name based on the plugin name
+     * @returns {string} Name
+     */
     getName: function () {
         return this.prefix + this.pluginName;
     },
+
+    /**
+     * @method getMapModule
+     * Returns the map module
+     * @returns {*} Map module
+     */
     getMapModule: function () {
         return this.mapModule;
     },
+
+    /**
+     * @method setMapModule
+     * Set the map module
+     * @param mapModule Map module
+     */
     setMapModule: function (mapModule) {
         this.mapModule = mapModule;
 
@@ -277,10 +294,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
     /**
+     * @method startDrawFiltering
      * Enables the draw filtering control for given params.drawMode.
      * Clears the layer of any previously drawn features.
-     * @param params includes mode, geometry, sourceGeometry and style
-     * @method
+     * @param params Includes mode, geometry, sourceGeometry and style
      */
     startDrawFiltering: function (params) {
         this.sourceLayer.destroyFeatures();
@@ -310,6 +327,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
 
+    /**
+     * @method _pointSplit
+     * Starts the functionality of line split by marker points
+     * @param params Source geometry
+     * @private
+     */
     _pointSplit: function(params) {
         var me = this;
         var i, x, y;
@@ -400,6 +423,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.updateTargetLine();
     },
 
+    /**
+     * @method _lineSplit
+     * Starts the functionality of area split by line
+     * @param params Parameters for the split process, including source geometry
+     * @private
+     */
     _lineSplit: function(params) {
         var me = this;
         var multiPolygon = params.sourceGeometry;
@@ -408,6 +437,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.toggleControl(params.drawMode);
     },
 
+    /**
+     * @method _editSplit
+     * Starts the functionality of area dividing by another area
+     * @param params
+     * @private Parameters for the split process, including source geometry
+     */
     _editSplit: function(params) {
         var me = this;
         var multiPolygon = params.sourceGeometry;
@@ -416,6 +451,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.toggleControl(params.drawMode);
     },
 
+    /**
+     * @method _selectActiveBaseMarker
+     * Selects an active marker
+     * @param evt Event
+     * @private
+     */
     _selectActiveBaseMarker: function (evt) {
         OpenLayers.Event.stop(evt);
         var me = this;
@@ -429,10 +470,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         me._map.events.register("mousemove", me, me.moveActiveMarker);
     },
 
-    /*
+    /**
      * @method selectActiveMarker
-     *
-     * @param {} evt
+     * Selects an active marker and updates inner structure of line points
+     * @param {} evt Event
      */
     selectActiveMarker: function (evt) {
         // Handle two point lines
@@ -451,16 +492,31 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this._selectActiveBaseMarker(evt);
     },
 
+    /**
+     * @method moveActiveMarker
+     * Moves an active marker
+     * @param evt Event
+     */
     moveActiveMarker: function(evt) {
         this.updateActiveMarker(evt);
     },
 
+    /**
+     * @method freezeActiveMarker
+     * Freezes an active marker
+     * @param evt Event
+     */
     freezeActiveMarker: function(evt) {
         this._map.events.unregister("mousemove", this, this.moveActiveMarker);
         this._map.events.unregister("mouseup", this, this.freezeActiveMarker);
         this.updateActiveMarker(evt);
     },
 
+    /**
+     * @method updateActiveMarker
+     * Updates an active marker
+     * @param evt Event
+     */
     updateActiveMarker: function(evt) {
         OpenLayers.Event.stop(evt);
         var lonlat = this._map.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x, evt.xy.y));
@@ -472,9 +528,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             projection = this.activeMarkerReferenceProjection(lonlat);
             this.activeMarker.lonlat = projection.lonlat;
             this.activeMarker.reference.point.x = this.activeMarker.lonlat.lon;
-            this.activeMarker.reference.point.x0 = this.activeMarker.lonlat.lon;
             this.activeMarker.reference.point.y = this.activeMarker.lonlat.lat;
-            this.activeMarker.reference.point.y0 = this.activeMarker.lonlat.lat;
             if (projection.p.length > 0) {
                 var lines = this.sourceLayer.features[0].geometry.components;
                 for (var i = 0; i < lines.length; i++) {
@@ -505,6 +559,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.markerLayer.redraw();
     },
 
+    /**
+     * @method pointProjection
+     * Returns coordinates of point projection on li ne segment
+     * @param q Point
+     * @param p0 Start point of the line segment
+     * @param p1 End point of the line segment
+     * @returns {*} Projection point
+     */
     pointProjection: function (q, p0, p1) {
         var dotProduct = function (a, b) {
             return a.x*b.x+a.y*b.y;
@@ -551,6 +613,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return pq;
     },
 
+    /**
+     * @method getDistance
+     * Returns a distance between two points
+     * @param p1 First point
+     * @param p2 Second point
+     * @returns {*} Distance
+     */
     getDistance: function (p1, p2) {
         var x1;
         var isNumber = function isNumber(n) {
@@ -602,6 +671,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     },
 
+    /**
+     * @method activeMarkerProjection
+     * Returns a projection of the marker location on the line
+     * @param refLonlat Point to be projected
+     * @returns {*} Projection data
+     */
     activeMarkerProjection: function (refLonlat) {
         var projection = {
             lonlat: null,
@@ -654,6 +729,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return projection;
     },
 
+    /**
+     * @method activeMarkerReferenceProjection
+     * Returns a projection of the marker location on the line
+     * @param refLonlat Point to be projected
+     * @returns {*} Projection data with references
+     */
     activeMarkerReferenceProjection: function (refLonlat) {
         var me = this;
         var projection = {
@@ -735,11 +816,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return projection;
     },
 
-    /*
+    /**
      * @method updatePolygons
-     *
-     * @param {}
-     * @param {}
+     * Updates polygons after corner movements
+     * @param p Corner point
+     * @param p0 Default point
      */
     updatePolygons: function (p, p0) {
         var pInd = -1;
@@ -921,9 +1002,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     },
 
     /**
+     * @method stopDrawFiltering
      * Disables all draw controls and
      * clears the layer of any drawn features
-     * @method
      */
     stopDrawFiltering: function () {
         // disable all draw controls
@@ -943,6 +1024,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
 
+    /**
+     * @method finishDrawFiltering
+     * Finishes operation of geometry filtering by drawing
+     */
     finishDrawFiltering: function () {
         var evtBuilder = this._sandbox.getEventBuilder('DrawFilterPlugin.FinishedDrawFilteringEvent');
         var event = evtBuilder(this.getFiltered(), this.editMode, this.creatorId);
@@ -950,9 +1035,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     },
 
     /**
+     * @method finishedLineDrawing
      * Called when line drawing is finished.
      * Disables all draw controls
-     * @method
      */
     finishedLineDrawing: function() {
         var me = this;
@@ -1031,9 +1116,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     },
 
     /**
+     * @method finishedEditDrawing
      * Called when polygon drawing is finished.
      * Disables all draw controls
-     * @method
      */
     finishedEditDrawing: function() {
         this.toggleControl();
@@ -1086,8 +1171,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /*
      * @method checkSelfIntersection
-     *
-     * @param {}
+     * Checks if polygon is self-intersecting
+     * @param polygon Polygon
+     * @returns {boolean} Result
      */
     checkSelfIntersection: function (polygon) {
         var outer = polygon.components;
@@ -1106,9 +1192,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /*
      * @method segmentIntersects
-     *
-     * @param {}
-     * @param {}
+     * Checks if a line segment intersects other line segments
+     * @param segment A line segment to be tested
+     * @param segments Line segments
+     * @returns {boolean} Result
      */
     segmentIntersects: function (segment, segments) {
         for (var i = 0; i < segments.length; i++) {
@@ -1123,8 +1210,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /*
      * @method startOrStopEquals
-     *
-     * @param {}
+     * Check if either point of a line segments equals with another line segment's points
+     * @param segment1 First line segment
+     * @param segment2 Second line segment
+     * @returns {*} Result
      */
     startOrStopEquals: function (segment1, segment2) {
         if (segment1.components[0].equals(segment2.components[0])) {
@@ -1140,11 +1229,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     },
 
     /**
+     * @method toggleControl
      * Enables the given draw control
      * Disables all the other draw controls
      * @param drawMode draw control to activate (if undefined, disables all
      * controls)
-     * @method
      */
     toggleControl: function (drawMode) {
         this.currentDrawMode = drawMode;
@@ -1160,7 +1249,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
 
-    // Todo: split the split function
+    /**
+     * @method _splitGeometryByLine
+     * Splits an area by a line.
+     * @param polygons Polygons
+     * @param splitGeom Splitting line
+     * @returns {*} Split geometry
+     * @private
+     */
     _splitGeometryByLine: function(polygons, splitGeom) {
         var me = this;
         // Transform and scale coordinates
@@ -1513,11 +1609,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             nextIndex = olEndPoints.length;
             lastIndex = olNewLineStrings[k].components.length - 1;
             olEndPoints[nextIndex] = [olNewLineStrings[k].components[0], olNewLineStrings[k].components[lastIndex]];
-            // Fixed endpoints
-            olEndPoints[nextIndex][0].x0 = olEndPoints[nextIndex][0].x;
-            olEndPoints[nextIndex][0].y0 = olEndPoints[nextIndex][0].y;
-            olEndPoints[nextIndex][1].x0 = olEndPoints[nextIndex][1].x;
-            olEndPoints[nextIndex][1].y0 = olEndPoints[nextIndex][1].y;
             olSolutionLineStrings.push(olNewLineStrings[k]);
         }
 
@@ -1653,6 +1744,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return olNewFeatures;
     },
 
+
+    /**
+     * @method _enableIE8
+     * Enable functions needed by libraries for older browsers
+     * @private
+     */
     _enableIE8: function() {
         // IE8 compatibility
         if (!Array.prototype.indexOf) {
@@ -1734,10 +1831,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /*
      * @method scaleup
-     *
-     * @param {} poly
-     * @param {} scale
-     * @return {} returns scaled integer-valued polygon
+     * Scales float values to big integer values
+     * @param {} poly Input values
+     * @param {} scale Scaling factor
+     * @return {} Scaled values
      */
     scaleup: function (poly, scale) {
         var i, j;
@@ -1755,9 +1852,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /*
      * @method equalArrays
-     *
-     * @param {}
-     * @param {}
+     * Checks if two arrays contain equal items
+     * @param array1 First array
+     * @param array2 Second array
+     * @returns {boolean} Result
      */
     equalArrays: function (array1, array2) {
         var temp = [];
@@ -1792,6 +1890,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return true;
     },
 
+    /**
+     * @method updateTargetLine
+     * Updates line geometry after user modifications
+     */
     updateTargetLine: function() {
         var markerData = [];
         var markerDataUnordered = [{
@@ -1836,6 +1938,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     },
 
 
+    /**
+     * @method getFiltered
+     * Returns filtered geometry
+     * @returns {*} Filtered geometry
+     */
     getFiltered: function() {
         if (this.targetLayer.features.length === 0) {
             return null;
@@ -1848,21 +1955,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
 
-    _updateLayerOrder: function() {
-        var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.sourceLayer.getZIndex())+1;
-        this.sourceLayer.setZIndex(zIndex);
-        this.sourceLayer.redraw();
-        zIndex = zIndex+1;
-        this.targetLayer.setZIndex(zIndex);
-        this.targetLayer.redraw();
-        zIndex = zIndex+1;
-        this.markerLayer.setZIndex(zIndex);
-        this.markerLayer.redraw();
-    },
-
     /**
-     * Returns active draw control names
-     * @method
+     * @method _getActiveDrawControls
+     * Returns active draw controls
+     * @returns {Array} Draw control names
+     * @private
      */
     _getActiveDrawControls: function () {
         var activeDrawControls = [],
@@ -1875,6 +1972,23 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             }
         }
         return activeDrawControls;
+    },
+
+    /**
+     * @method _updateLayerOrder
+     * Sets correct order of the layer
+     * @private
+     */
+    _updateLayerOrder: function() {
+        var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.sourceLayer.getZIndex())+1;
+        this.sourceLayer.setZIndex(zIndex);
+        this.sourceLayer.redraw();
+        zIndex = zIndex+1;
+        this.targetLayer.setZIndex(zIndex);
+        this.targetLayer.redraw();
+        zIndex = zIndex+1;
+        this.markerLayer.setZIndex(zIndex);
+        this.markerLayer.redraw();
     },
 
     isSharedEdge: function(point) {
@@ -1892,7 +2006,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /**
      * @method _enableGfi
-     * Enables/disables the gfi functionality
+     * Enables or disables GFI functionality
      * @param {Boolean} blnEnable true to enable, false to disable
      */
     _enableGfi : function(blnEnable) {
@@ -1902,12 +2016,27 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
 
+    /**
+     * @method register
+     * Performs bundle registering commands
+     */
     register: function () {
 
     },
 
-    unregister: function () {},
+    /**
+     * @method unregister
+     * Performs bundle unregistering commands
+     */
+    unregister: function () {
 
+    },
+
+    /**
+     * @method startPlugin
+     * Performs plugin startup commands
+     * @param sandbox Oskari sandbox
+     */
     startPlugin: function (sandbox) {
         var me = this;
         this._sandbox = sandbox;
@@ -1921,6 +2050,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
         this._enableGfi(false);
     },
+
+    /**
+     * @method stopPlugin
+     * Performs plugin stop commands
+     * @param sandbox
+     */
     stopPlugin: function (sandbox) {
         var me = this;
         this.toggleControl();
@@ -1959,15 +2094,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     },
 
     /* @method start
-     * called from sandbox
+     * Called from sandbox
      */
     start: function (sandbox) {
     },
 
     /**
      * @method stop
-     * called from sandbox
-     *
+     * Called from sandbox
      */
     stop: function (sandbox) {
     },
@@ -1983,7 +2117,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /**
      * @method onEvent
-     * Event is handled forwarded to correct #eventHandlers if found or discarded
+     * Event is forwarded to correct #eventHandlers if found or discarded
      * if not.
      * @param {Oskari.mapframework.event.Event} event a Oskari event object
      */
