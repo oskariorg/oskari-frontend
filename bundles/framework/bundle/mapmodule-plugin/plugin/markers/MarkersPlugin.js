@@ -161,6 +161,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                         clearBtn.setTitle(loc.buttons.clear);
                         clearBtn.setHandler(function () {
                             me.removeMarkers();
+                            me.stopMarkerAdd();
                         });
                         controlButtons.push(clearBtn);
                         cancelBtn.setHandler(function () {
