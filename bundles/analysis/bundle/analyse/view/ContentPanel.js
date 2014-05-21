@@ -611,10 +611,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             finishBtn.setTitle(loc.finish);
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
-                this.drawFilterMode = false;
+                me.drawFilterMode = false;
                 // Disable all buttons
                 me._disableAllDrawFilterButtons();
                 me._sendStopDrawFilterRequest(false);
+                me._activateWFSLayer(true);
                 jQuery(this).remove();
             });
 
@@ -651,22 +652,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          * @param {Object} config params for StartDrawRequest
          */
         _startNewDrawing: function (config) {
-            var sandbox = this.sandbox,
-                evtB = sandbox.getEventBuilder(
-                    'DrawPlugin.SelectedDrawingEvent'),
-                gfiReqBuilder = sandbox.getRequestBuilder(
-                    'MapModulePlugin.GetFeatureInfoActivationRequest');
-
-            // notify components to reset any saved "selected place" data
-            if (evtB) sandbox.notifyAll(evtB());
+            // Disable WFS highlight and GFI dialog
+            this._activateWFSLayer(false);
 
             // notify plugin to start drawing new geometry
             this._sendDrawRequest(config);
-
-            // disable gfi requests
-            if (gfiReqBuilder) {
-                sandbox.request(this.instance, gfiReqBuilder(false));
-            }
 
             // remove old draw buttons and append new ones
             this.getPanelContainer()
@@ -683,6 +673,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             } else {
                 // Enable only the remove button
                 this._disableAllDrawFilterButtons();
+                this._activateWFSLayer(false);
                 jQuery('div.drawFilter.analysis-selection-remove').removeClass('disabled');
                 jQuery('div.drawFilter.analysis-selection-'+config.mode).addClass('selected');
                 // remove old draw buttons and append new ones
@@ -705,29 +696,18 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 this.helpDialog.moveTo('div.drawFilter.analysis-selection-'+config.mode, 'bottom');
             }
 
-            var sandbox = this.sandbox,
-                evtB = sandbox.getEventBuilder(
-                    'DrawFilterPlugin.SelectedDrawingEvent'),
-                gfiReqBuilder = sandbox.getRequestBuilder(
-                    'MapModulePlugin.GetFeatureInfoActivationRequest');
-
-            // notify components to reset any saved "selected place" data
-            if (evtB) sandbox.notifyAll(evtB());
+            // Disable WFS highlight and GFI dialog
+            this._activateWFSLayer(false);
 
             // notify plugin to start draw filtering new geometries
             this._sendDrawFilterRequest(config);
-
-            // disable gfi requests
-            if (gfiReqBuilder) {
-                sandbox.request(this.instance, gfiReqBuilder(false));
-            }
-
         },
 
         _cancelDrawFilter: function() {
             this.drawFilterMode = false;
             this._sendStopDrawFilterRequest(true);
             this._disableAllDrawFilterButtons();
+            this._activateWFSLayer(true);
             this.selectedGeometry = null;
             // Disable the remove button
             jQuery('div.drawFilter.analysis-selection-remove').addClass('disabled');
@@ -1024,6 +1004,29 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             // Close the help dialog
             if (this.helpDialog) {
                 this.helpDialog.close(true);
+            }
+        },
+
+        _activateWFSLayer: function(activate) {
+            var sandbox = this.sandbox,
+                evtB = sandbox.getEventBuilder(
+                    'DrawFilterPlugin.SelectedDrawingEvent'),
+                gfiReqBuilder = sandbox.getRequestBuilder(
+                    'MapModulePlugin.GetFeatureInfoActivationRequest'),
+                hiReqBuilder = sandbox.getRequestBuilder(
+                    'WfsLayerPlugin.ActivateHighlightRequest');
+
+            // notify components to reset any saved "selected place" data
+            if (evtB) sandbox.notifyAll(evtB());
+
+            // enable or disable gfi requests
+            if (gfiReqBuilder) {
+                sandbox.request(this.instance, gfiReqBuilder(activate));
+            }
+
+            // enable or disable wfs highlight
+            if (hiReqBuilder) {
+                sandbox.request(this.instance, hiReqBuilder(activate));
             }
         }
 });

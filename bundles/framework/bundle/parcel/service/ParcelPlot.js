@@ -115,9 +115,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
          * @param {Function} cb Requires information about the success as boolean parameter.
          */
         plotParcel: function (feature, values, cb) {
-            var me = this;
+            var me = this,
+                loc = this.instance.getLocalization('page');
 
-            me._plotNewParcel(feature, values.place.name, values.place.desc, cb);
+            me._plotNewParcel(feature, loc.title_childparcel, values.place.title, cb);
             me._plotNewBoundary(feature, cb);
 
             cb(true);
@@ -159,8 +160,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
          * @param {Function} cb Requires information about the success as boolean parameter.
          */
         plotParcelWithoutPrint: function (feature, values, cb) {
-            var me = this;
-            me._plotNewParcel(feature, values.name, values.desc, cb);
+            var me = this,
+                loc = this.instance.getLocalization('page');
+
+            me._plotNewParcel(feature, loc.title_childparcel, values.title, cb);
             me._plotNewBoundary(feature, cb);
 
             cb(true);
@@ -396,15 +399,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
                 drawplug.getMap().addLayer(this.oldPointLayer);
                 drawplug.getMap().setLayerIndex(this.oldPointLayer, 1004);
             }
-
             // remove possible old drawing
             this.oldPointLayer.removeAllFeatures();
 
+            // Filter off unnumbered points
+            var filterpf = [];
+            for (var key in pointfeatures) {
+               if(pointfeatures[key].attributes["numero"]) filterpf.push(pointfeatures[key]);
+            }
 
-                if (pointfeatures.length > 0) {
+                if (filterpf.length > 0) {
                     // Plot extra graphics for Parcel map
+                    // Filter off unnumber points
 
-                    this.oldPointLayer.addFeatures(pointfeatures);
+
+                    this.oldPointLayer.addFeatures(filterpf);
                     this.oldPointLayer.redraw();
 
                 }
@@ -542,6 +551,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
             var sandbox = this.instance.getSandbox(),
                 maplinkArgs = sandbox.generateMapLinkParameters(),
                 loc = this.instance.getLocalization('page'),
+            //TODO: configure values based on paper size and orientation
                 selections = {
                     pageTitle: loc.title,
                     pageSize: values.size,
@@ -552,8 +562,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
                     pageScale: true,
                     saveFile: values.name,
                     pageTemplate: "template.pdf",
-                    pageMapRect: "1.0,1.5,19,15",
-                    tableTemplate: "LayoutTemplatePointTable"
+                    pageMapRect: "1.0,1.5,19,19",  // Map area on A4 paper
+                    tableTemplate: "LayoutTemplatePointTable"  // .json file name for plot layout (backend)
                 };
 
             return selections;
@@ -573,14 +583,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
                 loc = this.instance.getLocalization('page'),
                 row1 = {},
                 row2 = {},
+                row3 = {},
                 rowFoot = {};
 
             row1.col1 = loc.parentparcel;
             row1.col2 = values.place.parent_property_id;
             rows.push(row1);
-            row2.col1 = loc.partparcel;
-            row2.col2 = values.place.name;
+            row2.col1 = loc.parcel_desc;
+            row2.col2 = values.place.title;
             rows.push(row2);
+            row3.col1 = loc.parcel_user;
+            row3.col2 = values.place.reporter;
+            rows.push(row3);
             values.tables.table2 = rows;
 
             rowFoot.col1 = loc.footnote;

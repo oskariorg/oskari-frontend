@@ -486,12 +486,20 @@
     background-position: -1374px 0px !important;
 }
 
+.icon-question {
+    width: 30px;
+    height: 30px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1392px 0px !important;
+}
+
 .icon-restore {
     width: 16px;
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1392px 0px !important;
+    background-position: -1422px 0px !important;
 }
 
 .icon-restore:hover {
@@ -499,7 +507,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1392px -16px !important;
+    background-position: -1422px -16px !important;
 }
 
 .icon-select-geometry {
@@ -507,7 +515,7 @@
     height: 23px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1408px 0px !important;
+    background-position: -1438px 0px !important;
 }
 
 .icon-snapshot-active {
@@ -515,7 +523,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1431px 0px !important;
+    background-position: -1461px 0px !important;
 }
 
 .icon-snapshot-disabled {
@@ -523,7 +531,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1463px 0px !important;
+    background-position: -1493px 0px !important;
 }
 
 .icon-snapshot-normal {
@@ -531,7 +539,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1495px 0px !important;
+    background-position: -1525px 0px !important;
 }
 
 .icon-split-active {
@@ -539,7 +547,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1527px 0px !important;
+    background-position: -1557px 0px !important;
 }
 
 .icon-split-disabled {
@@ -547,7 +555,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1559px 0px !important;
+    background-position: -1589px 0px !important;
 }
 
 .icon-split-normal {
@@ -555,7 +563,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1591px 0px !important;
+    background-position: -1621px 0px !important;
 }
 
 .icon-table {
@@ -563,7 +571,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1623px 0px !important;
+    background-position: -1653px 0px !important;
 }
 
 .icon-zoom-active {
@@ -571,7 +579,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1639px 0px !important;
+    background-position: -1669px 0px !important;
 }
 
 .icon-zoom-disabled {
@@ -579,7 +587,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1671px 0px !important;
+    background-position: -1701px 0px !important;
 }
 
 .icon-zoom-normal {
@@ -587,7 +595,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1703px 0px !important;
+    background-position: -1733px 0px !important;
 }
 
 .layer-base {
@@ -595,7 +603,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1735px 0px !important;
+    background-position: -1765px 0px !important;
 }
 
 .layer-gfi-1 {
@@ -603,7 +611,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1751px 0px !important;
+    background-position: -1781px 0px !important;
 }
 
 .layer-gfi-2 {
@@ -611,7 +619,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1767px 0px !important;
+    background-position: -1797px 0px !important;
 }
 
 .layer-group {
@@ -619,7 +627,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1783px 0px !important;
+    background-position: -1813px 0px !important;
 }
 
 .layer-stats {
@@ -627,7 +635,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1799px 0px !important;
+    background-position: -1829px 0px !important;
 }
 
 .layer-vector {
@@ -635,7 +643,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1815px 0px !important;
+    background-position: -1845px 0px !important;
 }
 
 .layer-wfs {
@@ -643,7 +651,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1831px 0px !important;
+    background-position: -1861px 0px !important;
 }
 
 .layer-wms {
@@ -651,7 +659,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1847px 0px !important;
+    background-position: -1877px 0px !important;
 }
 
 .layer-wmts {
@@ -659,7 +667,7 @@
     height: 16px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1863px 0px !important;
+    background-position: -1893px 0px !important;
 }
 
 .marker {
@@ -667,7 +675,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1879px 0px !important;
+    background-position: -1909px 0px !important;
 }
 
 .myplaces-area {
@@ -675,7 +683,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1911px 0px !important;
+    background-position: -1941px 0px !important;
 }
 
 .myplaces-draw-area {
@@ -683,7 +691,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1939px 0px !important;
+    background-position: -1969px 0px !important;
 }
 
 .myplaces-draw-line {
@@ -691,7 +699,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1971px 0px !important;
+    background-position: -2001px 0px !important;
 }
 
 .myplaces-draw-point {
@@ -699,7 +707,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2003px 0px !important;
+    background-position: -2033px 0px !important;
 }
 
 .myplaces-line {
@@ -707,7 +715,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2035px 0px !important;
+    background-position: -2065px 0px !important;
 }
 
 .myplaces-point {
@@ -715,7 +723,7 @@
     height: 28px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2063px 0px !important;
+    background-position: -2093px 0px !important;
 }
 
 .parcel-clear {
@@ -723,7 +731,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2091px 0px !important;
+    background-position: -2121px 0px !important;
 }
 
 .parcel-draw-area {
@@ -731,7 +739,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2123px 0px !important;
+    background-position: -2153px 0px !important;
 }
 
 .parcel-draw-line {
@@ -739,7 +747,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2155px 0px !important;
+    background-position: -2185px 0px !important;
 }
 
 .parcel-selector {
@@ -747,7 +755,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2187px 0px !important;
+    background-position: -2217px 0px !important;
 }
 
 .selection-area {
@@ -755,7 +763,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2219px 0px !important;
+    background-position: -2249px 0px !important;
 }
 
 .selection-area:hover {
@@ -763,7 +771,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2219px -32px !important;
+    background-position: -2249px -32px !important;
 }
 
 .selection-circle {
@@ -771,7 +779,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2251px 0px !important;
+    background-position: -2281px 0px !important;
 }
 
 .selection-circle:hover {
@@ -779,7 +787,23 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2251px -32px !important;
+    background-position: -2281px -32px !important;
+}
+
+.selection-edit {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2313px 0px !important;
+}
+
+.selection-edit:hover {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2313px -32px !important;
 }
 
 .selection-line {
@@ -787,7 +811,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2283px 0px !important;
+    background-position: -2345px 0px !important;
 }
 
 .selection-line:hover {
@@ -795,7 +819,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2283px -32px !important;
+    background-position: -2345px -32px !important;
 }
 
 .selection-point {
@@ -803,7 +827,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2315px 0px !important;
+    background-position: -2377px 0px !important;
 }
 
 .selection-point:hover {
@@ -811,7 +835,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2315px -32px !important;
+    background-position: -2377px -32px !important;
 }
 
 .selection-remove {
@@ -819,7 +843,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2347px 0px !important;
+    background-position: -2409px 0px !important;
 }
 
 .selection-remove:hover {
@@ -827,7 +851,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2347px -32px !important;
+    background-position: -2409px -32px !important;
 }
 
 .selection-square {
@@ -835,7 +859,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2379px 0px !important;
+    background-position: -2441px 0px !important;
 }
 
 .selection-square:hover {
@@ -843,23 +867,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2379px -32px !important;
-}
-
-.selection_edit {
-    width: 32px;
-    height: 32px;
-    background-image: url('../icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -2411px 0px !important;
-}
-
-.selection_edit:hover {
-    width: 32px;
-    height: 32px;
-    background-image: url('../icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -2411px -32px !important;
+    background-position: -2441px -32px !important;
 }
 
 .tool-draw-cut {
@@ -867,7 +875,7 @@
     height: 36px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2443px 0px !important;
+    background-position: -2473px 0px !important;
 }
 
 .tool-feature-selection {
@@ -875,7 +883,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2478px 0px !important;
+    background-position: -2508px 0px !important;
 }
 
 .tool-feature-selection:hover {
@@ -883,7 +891,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2478px -32px !important;
+    background-position: -2508px -32px !important;
 }
 
 .tool-history-back {
@@ -891,7 +899,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2510px 0px !important;
+    background-position: -2540px 0px !important;
 }
 
 .tool-history-forward {
@@ -899,7 +907,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2542px 0px !important;
+    background-position: -2572px 0px !important;
 }
 
 .tool-link {
@@ -907,7 +915,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2574px 0px !important;
+    background-position: -2604px 0px !important;
 }
 
 .tool-measure-area {
@@ -915,7 +923,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2606px 0px !important;
+    background-position: -2636px 0px !important;
 }
 
 .tool-measure-line {
@@ -923,7 +931,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2638px 0px !important;
+    background-position: -2668px 0px !important;
 }
 
 .tool-pan {
@@ -931,7 +939,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2670px 0px !important;
+    background-position: -2700px 0px !important;
 }
 
 .tool-print {
@@ -939,7 +947,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2702px 0px !important;
+    background-position: -2732px 0px !important;
 }
 
 .tool-reset {
@@ -947,7 +955,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2734px 0px !important;
+    background-position: -2764px 0px !important;
 }
 
 .tool-save-view {
@@ -955,7 +963,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2766px 0px !important;
+    background-position: -2796px 0px !important;
 }
 
 .tool-zoombox {
@@ -963,6 +971,6 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -2798px 0px !important;
+    background-position: -2828px 0px !important;
 }
 

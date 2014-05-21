@@ -264,7 +264,8 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * Returns object containing plugins that have been registered to the map.
          * @return {Object} contains plugin ids as keys and plugin objects as values
          */
-        getPluginInstances: function () {
+        getPluginInstances
+: function () {
             return this._pluginInstances;
         },
         /**
@@ -511,19 +512,20 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
             }
 
             // FIXME: relies on OL2 implementation, refactor to use Impl
-            var scale = this.getMap().getScale();
+            var scale = this.getMap().getScale(),
+                i;
 
             if (scale < minScale) {
                 // zoom out
-                //for(var i = this._mapScales.length; i > zoomLevel; i--) {
-                for (var i = zoomLevel; i > 0; i--) {
+                //for(i = this._mapScales.length; i > zoomLevel; i--) {
+                for (i = zoomLevel; i > 0; i--) {
                     if (this._mapScales[i] >= minScale) {
                         return i;
                     }
                 }
             } else if (scale > maxScale) {
                 // zoom in
-                for (var i = zoomLevel; i < this._mapScales.length; i++) {
+                for (i = zoomLevel; i < this._mapScales.length; i++) {
                     if (this._mapScales[i] <= maxScale) {
                         return i;
                     }
@@ -592,8 +594,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
 
             this.startPlugins(sandbox);
             this.updateCurrentState();
-            this.started = this._startImpl();;
+            this.started = this._startImpl();
         },
+
         _startImpl: function () {
             return true;
         },
@@ -736,7 +739,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
                     newLayerArr.push(prevDef);
                     prevDef = null;
                 }
-                if (!(layerArr[n].impl === layerImpl)) {
+                if (layerArr[n].impl !== layerImpl) {
                     newLayerArr.push(layerArr[n]);
                 }
             }
@@ -780,9 +783,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @return {Number[]} calculated mapscales that are within given bounds
          */
         calculateLayerMinMaxResolutions: function (maxScale, minScale) {
-            var minScaleZoom = undefined;
-            var maxScaleZoom = undefined;
-            for (var i = 0; i < this._mapScales.length; i++) {
+            var minScaleZoom,
+                maxScaleZoom,
+                i;
+            for (i = 0; i < this._mapScales.length; i++) {
                 if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
                     if (minScaleZoom === undefined) {
                         minScaleZoom = i;
@@ -843,11 +847,13 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @return {Object} properties for each pluginName
          */
         getState : function() {
-            var state = {},
+            var state = {
+                    "plugins": {}
+                },
                 pluginName;
             for (pluginName in this._pluginInstances) {
                 if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getState) {
-                    state[pluginName] = this._pluginInstances[pluginName].getState();
+                    state.plugins[pluginName] = this._pluginInstances[pluginName].getState();
                 }
             }
             return state;
