@@ -1250,104 +1250,33 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     },
 
     /**
-     * @method _splitGeometryByLine
-     * Splits an area by a line.
-     * @param polygons Polygons
-     * @param splitGeom Splitting line
-     * @returns {*} Split geometry
-     * @private
+     * @method preProcessGeometry
+     * Pre-processes geometries
+     * @param olOldFeatures Old OpenLayers features
+     * @param jstsOldPolygon Old JSTS polygon
+     * @param jstsParser JSTS patser
+     * @param jstsOldPolygons Old JSTS polygons
+     * @param finished Is search finished
+     * @param clipPolygon Clipper polygon
+     * @param olLinearRings OpenLayers linear rings
+     * @param olPoints OpenLayers points
+     * @param clipPoint Clipper point
+     * @param clipSourcePolygons Clipper source polygons
+     * @param clipHole Clipper hole
+     * @param scale Scale factor
+     * @param jstsLine JSTS line
+     * @returns {{clipPolygon: *, olPoints: *, clipPoint: *, clipHole: *, jstsLine: *}} Output data
      */
-    _splitGeometryByLine: function(polygons, splitGeom) {
-        var me = this;
-        // Transform and scale coordinates
-        var origin = new OpenLayers.Geometry.Point(0.0, 0.0);
-        var reference = [polygons.geometry.components[0].components[0].components[0].x,
-            polygons.geometry.components[0].components[0].components[0].y
-        ];
-        var scaleFactor = 10000.0;
-        polygons.geometry.move(-reference[0], -reference[1]);
-        polygons.geometry.resize(scaleFactor, origin);
-
-        splitGeom.geometry.move(-reference[0], -reference[1]);
-        splitGeom.geometry.resize(scaleFactor, origin);
-
-        // OpenLayers variables
-        var lineStyle = {
-            strokeColor: '#0000ff',
-            strokeOpacity: 1,
-            strokeWidth: 2
-        };
-        var olOldFeatures = polygons.geometry.components.concat(splitGeom.geometry);
-        var olNewFeatures = [new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon()),
-            new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(), null, lineStyle)
-        ];
-        var olSolutionPolygons = olNewFeatures[0].geometry.components;
-        var olSolutionLineStrings = olNewFeatures[1].geometry.components;
-        var olNewPolygons = [];
-        var olNewLineStrings = [];
-        var olNewLineStringsTmp = [];
-        var olPoint;
-        var olPoints = [];
-        var olHolePoints = [];
-        var olEndPoints = [];
-        var olLinearRingPoints = [];
-        var olLinearRings;
-        var olLineStringPoints = [];
-        var olPolygon;
-
-        // JSTS variables
-        var jstsParser = new jsts.io.OpenLayersParser();
-        var jstsPoints;
-        var jstsOldPolygon;
-        var jstsOldPolygons = [];
-        var jstsNewPolygons = [];
-        var jstsLine = null;
-
-        // Clipper variables
-        var clipPoint, clipPoints;
-        var clipPolygon, clipHole;
-        var clipValidationTarget = [];
-        var clipSourcePolygons = [];
-        var clipSubjectPolygons = [];
-        var clipTargetPolygons = [];
-        var clipSolutionPolygon, clipSolutionPolygons;
-        var clipSolutionHoles;
-
-        var cpr;
-        var success;
-        var clipType;
-
-        var union = null;
-        var polygonizer;
-
-        var polygonIndexes = [];
-        var pointIndexes = [];
-        var sharedEdge = false;
-        var crossRing = false;
-        var found = false;
-        var finished = false;
-
-        var i, j, k, l, m, n, o, p;
-        var lastIndex;
-        var nextIndex;
-        var foundIndex;
-
-        var epsilon = 1.0e6; // about 10 cm x 10 cm
-
-        // Scaling factor for integer operations
-        var scale = 1;
-        var marker;
-
-        // IE8 compatibility
-        this._enableIE8();
-
+    preProcessGeometry: function (olOldFeatures, jstsOldPolygon, jstsParser, jstsOldPolygons, finished, clipPolygon, olLinearRings, olPoints, clipPoint, clipSourcePolygons, clipHole, scale, jstsLine) {
+        var i, j, k, l, m;
+        jstsLine = null;
         for (i = olOldFeatures.length - 1; i >= 0; i--) {
             if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
                 var multi = (olOldFeatures[i].id.indexOf("Multi") !== -1);
                 if (!multi) {
                     jstsOldPolygon = jstsParser.read(olOldFeatures[i]);
                     if (!jstsOldPolygon.isValid()) {
-                        return -1;
+                        break;
                     }
                     jstsOldPolygons.push(jstsOldPolygon);
                 }
@@ -1402,216 +1331,43 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 jstsLine = jstsParser.read(olOldFeatures[i]);
             }
         }
+        return {clipPolygon: clipPolygon, olPoints: olPoints, clipPoint: clipPoint, clipHole: clipHole, jstsLine: jstsLine};
+    },
 
-        // Splitting
-        union = null;
-        for (i = 0; i < jstsOldPolygons.length; i++) {
-            if (jstsLine !== null) {
-                union = jstsOldPolygons[i].getExteriorRing().union(jstsLine);
-            } else {
-                if (union === null) {
-                    union = jstsOldPolygons[i].getExteriorRing();
-                } else {
-                    union = jstsOldPolygons[i].getExteriorRing().union(union);
-                }
-                if (i < jstsOldPolygons.length - 1) {
-                    continue;
-                }
-            }
-            polygonizer = new jsts.operation.polygonize.Polygonizer();
-            polygonizer.add(union);
-            jstsNewPolygons = polygonizer.getPolygons();
-
-            clipPoints = [];
-            olPoints = [];
-            olNewLineStrings = [];
-            for (j = 0; j < jstsNewPolygons.array.length; j++) {
-                clipTargetPolygons = [];
-                clipPolygon = new ClipperLib.Polygon();
-                jstsPoints = jstsNewPolygons.array[j].shell.points;
-                for (k = 0; k < jstsPoints.length - 1; k++) {
-                    clipPoint = new ClipperLib.IntPoint(jstsPoints[k].x, jstsPoints[k].y);
-                    clipPolygon.push(clipPoint);
-                }
-                clipTargetPolygons.push(clipPolygon);
-                // Scaling for integer operations
-                clipTargetPolygons = this.scaleup(clipTargetPolygons, scale);
-                cpr = new ClipperLib.Clipper();
-                for (k = 0; k < clipSourcePolygons.length; k++) {
-                    cpr.AddPolygons(clipSourcePolygons[k], ClipperLib.PolyType.ptSubject);
-                }
-                cpr.AddPolygons(clipTargetPolygons, ClipperLib.PolyType.ptClip);
-
-                clipSolutionPolygons = new ClipperLib.Polygons();
-                clipType = ClipperLib.ClipType.ctIntersection;
-                // Cut intersections
-                success = cpr.Execute(clipType, clipSolutionPolygons);
-                if (!success) {
-                    return -2;
-                }
-
-                if (clipSolutionPolygons.length === 0) {
-                    continue;
-                }
-
-                // Polygons to OpenLayers format
-                polygonIndexes = [];
-                olNewPolygons = [];
-                sharedEdge = false;
-                for (k = 0; k < clipSolutionPolygons.length; k++) {
-                    // Jsts occasionally returns "empty" polygons
-                    if (Math.abs(cpr.Area(clipSolutionPolygons[k])) < epsilon) continue;
-
-                    clipValidationTarget.push(clipSolutionPolygons[k]);
-                    if (cpr.Area(clipSolutionPolygons[k]) > 0) {
-                        clipSolutionPolygon = clipSolutionPolygons[k];
-                        olLinearRingPoints = [];
-                        for (l = 0; l < clipSolutionPolygon.length; l++) {
-                            clipPoint = clipSolutionPolygon[l];
-                            foundIndex = -1;
-                            for (m = 0; m < clipPoints.length; m++) {
-                                if ((clipPoint.X === clipPoints[m].X) && (clipPoint.Y === clipPoints[m].Y)) {
-                                    foundIndex = m;
-                                    break;
-                                }
-                            }
-                            if (foundIndex >= 0) {
-                                olLinearRingPoints.push(olPoints[foundIndex]);
-                            } else {
-                                clipPoints.push(clipPoint);
-                                olPoints.push(new OpenLayers.Geometry.Point(clipPoint.X / scale, clipPoint.Y / scale));
-                                lastIndex = olPoints.length - 1;
-                                olPoints[lastIndex].references = [];
-                                olPoints[lastIndex].markerPoint = -1;
-                                olPoints[lastIndex].boundaryPoint = false;
-                                olPoints[lastIndex].short = -1;
-                                olLinearRingPoints.push(olPoints[lastIndex]);
-                            }
-                        }
-                        olNewPolygons.push(new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(olLinearRingPoints)));
-                        lastIndex = olNewPolygons.length - 1;
-                        for (l = 0; l < olNewPolygons[lastIndex].components[0].components.length - 1; l++) {
-                            olNewPolygons[lastIndex].components[0].components[l].references.push(olNewPolygons[lastIndex].id);
-                        }
-                        polygonIndexes.push(k);
-                    }
-                }
-
-                // Holes to OpenLayers format
-                for (k = 0; k < clipSolutionPolygons.length; k++) {
-                    if (cpr.Area(clipSolutionPolygons[k]) < 0.0) {
-                        clipTargetPolygons = [];
-                        clipTargetPolygons.push(clipSolutionPolygons[k]);
-                        for (l = 0; l < polygonIndexes.length; l++) {
-
-                            // Check which polygon contains the hole
-                            cpr = new ClipperLib.Clipper();
-                            clipSubjectPolygons = [];
-                            clipSubjectPolygons.push(clipSolutionPolygons[polygonIndexes[l]]);
-                            cpr.AddPolygons(clipSubjectPolygons, ClipperLib.PolyType.ptSubject);
-                            cpr.AddPolygons(clipTargetPolygons, ClipperLib.PolyType.ptClip);
-                            clipSolutionHoles = new ClipperLib.Polygons();
-                            clipType = ClipperLib.ClipType.ctIntersection;
-                            success = cpr.Execute(clipType, clipSolutionHoles);
-                            if (!success) {
-                                return -3;
-                            }
-
-                            if (clipSolutionHoles.length > 0) {
-                                clipHole = clipSolutionPolygons[k];
-                                olHolePoints = [];
-                                for (m = 0; m < clipHole.length; m++) {
-                                    clipPoint = clipHole[m];
-                                    olHolePoints.push(new OpenLayers.Geometry.Point(clipPoint.X / scale, clipPoint.Y / scale));
-                                }
-                                olNewPolygons[l].components.push(new OpenLayers.Geometry.LinearRing(olHolePoints));
-                                break;
-                            }
-                        }
-                    }
-                }
-                for (k = 0; k < olNewPolygons.length; k++) {
-                    olSolutionPolygons.push(olNewPolygons[k]);
+    /**
+     * @method updateBoundaryInfo
+     * Updates boundary information
+     * @param olNewFeatures New OpenLayers features
+     */
+    updateBoundaryInfo: function (olNewFeatures) {
+        var i, j;
+        for (i = 0; i < olNewFeatures[0].geometry.components.length; i++) {
+            var olNewPoints = olNewFeatures[0].geometry.components[i].components[0].components;
+            for (j = 0; j < olNewPoints.length; j++) {
+                if ((olNewPoints[j].references.length === 1) || (olNewPoints[j].markerPoint >= 0)) {
+                    olNewPoints[j].boundaryPoint = true;
                 }
             }
         }
+    },
 
-        // Inverse transform and scale
-        olPoints = olNewFeatures[0].geometry.getVertices();
-        pointIndexes = [];
-        for (i = 0; i < olPoints.length; i++) {
-            if (pointIndexes.indexOf(olPoints[i].id) < 0) {
-                // olPoint not handled yet
-                olPoints[i].x = olPoints[i].x / scaleFactor + reference[0];
-                olPoints[i].y = olPoints[i].y / scaleFactor + reference[1];
-                pointIndexes.push(olPoints[i].id);
-            }
-        }
-
-        // Lines to OpenLayers format
-        for (i = 0; i < olSolutionPolygons.length; i++) {
-            olPoints = olSolutionPolygons[i].components[0].components;
-            sharedEdge = (olPoints[0].references.length > 1);
-            crossRing = sharedEdge;
-            olLineStringPoints = [];
-            olNewLineStringsTmp = [];
-            if (sharedEdge) {
-                olLineStringPoints.push(olPoints[0]);
-            }
-            for (j = 1; j < olPoints.length - 1; j++) {
-                if (!this.equalArrays(olPoints[j].references, olPoints[j - 1].references)) {
-                    if (sharedEdge) {
-                        if (olPoints[j].references.length > 2) olLineStringPoints.push(olPoints[j]);
-                        olNewLineStringsTmp.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
-                        olLineStringPoints = [];
-                    }
-                }
-                sharedEdge = (olPoints[j].references.length > 1);
-                if (sharedEdge) {
-                    olLineStringPoints.push(olPoints[j]);
-                }
-            }
-            if (sharedEdge) {
-                if ((crossRing) && (olNewLineStringsTmp.length > 0) && (this.equalArrays(olPoints[olPoints.length - 2].references, olPoints[0].references))) {
-                    for (j = olLineStringPoints.length - 1; j >= 0; j--) {
-                        olNewLineStringsTmp[0].components.splice(0, 0, olLineStringPoints[j]);
-                    }
-                } else {
-                    if (olPoints[0].references.length > 2) olLineStringPoints.push(olPoints[0]);
-                    olNewLineStringsTmp.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
-                }
-            }
-            for (j = 0; j < olNewLineStringsTmp.length; j++) {
-                olNewLineStrings.push(olNewLineStringsTmp[j]);
-            }
-        }
-
-        lineStringLoop: for (k = 0; k < olNewLineStrings.length; k++) {
-            // Check for duplicates
-            for (l = 0; l < olSolutionLineStrings.length; l++) {
-                for (m = 0; m < olNewLineStrings[k].components.length; m++) {
-                    olPoint = olNewLineStrings[k].components[m];
-                    found = false;
-                    for (n = 0; n < olSolutionLineStrings[l].components.length; n++) {
-                        if (olPoint.id === olSolutionLineStrings[l].components[n].id) {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        break;
-                    }
-                }
-                if (found) {
-                    continue lineStringLoop;
-                }
-            }
-            nextIndex = olEndPoints.length;
-            lastIndex = olNewLineStrings[k].components.length - 1;
-            olEndPoints[nextIndex] = [olNewLineStrings[k].components[0], olNewLineStrings[k].components[lastIndex]];
-            olSolutionLineStrings.push(olNewLineStrings[k]);
-        }
-
+    /**
+     * @method createBoundaryMarkers
+     * Creates boundary m arkers
+     * @param olSolutionLineStrings Solution OpenLayers linestrings
+     * @param olEndPoints OpenLayers end points
+     * @param marker Marker
+     * @param olSolutionPolygons Solution OpenLayers polygons
+     * @param olPolygon OpenLayers polygon
+     * @param olPoints OpenLayers points
+     * @param lastIndex Index
+     * @param olPoint OpenLayers points
+     * @param sharedEdge Edge share flag
+     * @param found Found flag
+     * @returns {{olPoints: *, lastIndex: *, olPoint: *, sharedEdge: *, found: *}} Output data
+     */
+    createBoundaryMarkers: function (olSolutionLineStrings, olEndPoints, marker, olSolutionPolygons, olPolygon, olPoints, lastIndex, olPoint, sharedEdge, found) {
+        var me = this, i, j, k, l, m, n, o, p;
         for (k = 0; k < olSolutionLineStrings.length; k++) {
             // Markers
             intersections: for (l = 0; l < 2; l++) {
@@ -1686,20 +1442,20 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                                         for (p = 0; p < olPoint.references.length; p++) {
                                             if (olPoint.references[p] !== olSolutionPolygons[n].id) {
                                                 endPoints:
-                                                for (i = 0; i < olEndPoints.length; i++) {
-                                                    for (j = 0; j < 2; j++) {
-                                                        if (olEndPoints[i][j].id === olPoint.id) {
-                                                            if (olEndPoints[i][j].references.length !== 2) {
-                                                                continue;
+                                                    for (i = 0; i < olEndPoints.length; i++) {
+                                                        for (j = 0; j < 2; j++) {
+                                                            if (olEndPoints[i][j].id === olPoint.id) {
+                                                                if (olEndPoints[i][j].references.length !== 2) {
+                                                                    continue;
+                                                                }
+                                                                if ((olSolutionLineStrings[k].components.length === 2) && (this.equalArrays(olPoints[o].references, olPoint.references))) {
+                                                                    continue;
+                                                                }
+                                                                found = true;
+                                                                break endPoints;
                                                             }
-                                                            if ((olSolutionLineStrings[k].components.length === 2) && (this.equalArrays(olPoints[o].references, olPoint.references))) {
-                                                                continue;
-                                                            }
-                                                            found = true;
-                                                            break endPoints;
                                                         }
                                                     }
-                                                }
                                                 if (!found) {
                                                     sharedEdge = true;
                                                     break;
@@ -1731,16 +1487,438 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             }
         }
         this.markers = this.markerLayer.markers;
+        return {olPoints: olPoints, lastIndex: lastIndex, olPoint: olPoint, sharedEdge: sharedEdge, found: found};
+    },
 
-        // Update boundary info
-        for (i = 0; i < olNewFeatures[0].geometry.components.length; i++) {
-            var olNewPoints = olNewFeatures[0].geometry.components[i].components[0].components;
-            for (j = 0; j < olNewPoints.length; j++) {
-                if ((olNewPoints[j].references.length === 1) || (olNewPoints[j].markerPoint >= 0)) {
-                    olNewPoints[j].boundaryPoint = true;
+    /**
+     * @method postProcessLineStrings
+     * Post-processes linestrings
+     * @param olNewLineStrings New OpenLayers linestrings
+     * @param olSolutionLineStrings Solution OpenLayers linestrings
+     * @param olPoint OpenLayers point
+     * @param found Found flag
+     * @param nextIndex next index value
+     * @param olEndPoints OpenLayers end points
+     * @param lastIndex Last index value
+     * @returns {{olPoint: *, found: *, lastIndex: *}} Output data
+     */
+    postProcessLineStrings: function (olNewLineStrings, olSolutionLineStrings, olPoint, found, nextIndex, olEndPoints, lastIndex) {
+        var k, l, m, n;
+
+        lineStringLoop: for (k = 0; k < olNewLineStrings.length; k++) {
+            // Check for duplicates
+            for (l = 0; l < olSolutionLineStrings.length; l++) {
+                for (m = 0; m < olNewLineStrings[k].components.length; m++) {
+                    olPoint = olNewLineStrings[k].components[m];
+                    found = false;
+                    for (n = 0; n < olSolutionLineStrings[l].components.length; n++) {
+                        if (olPoint.id === olSolutionLineStrings[l].components[n].id) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        break;
+                    }
+                }
+                if (found) {
+                    continue lineStringLoop;
+                }
+            }
+            nextIndex = olEndPoints.length;
+            lastIndex = olNewLineStrings[k].components.length - 1;
+            olEndPoints[nextIndex] = [olNewLineStrings[k].components[0], olNewLineStrings[k].components[lastIndex]];
+            olSolutionLineStrings.push(olNewLineStrings[k]);
+        }
+        return {olPoint: olPoint, found: found, lastIndex: lastIndex};
+    },
+
+    /**
+     * @method convertLinesToOL
+     * Converts lines to OpenLayers format
+     * @param olSolutionPolygons Solution OpenLayers polygons
+     * @param olPoints OpenLayers points
+     * @param sharedEdge Edge share flag
+     * @param crossRing Ring crossing flag
+     * @param olLineStringPoints OpenLayers linestring points
+     * @param olNewLineStringsTmp New temporary OpenLayers linestrings
+     * @param olNewLineStrings New OpenLayers line strings
+     * @returns {{olPoints: *, sharedEdge: *}} Output data
+     */
+    convertLinesToOL: function (olSolutionPolygons, olPoints, sharedEdge, crossRing, olLineStringPoints, olNewLineStringsTmp, olNewLineStrings) {
+        var i, j;
+
+        for (i = 0; i < olSolutionPolygons.length; i++) {
+            olPoints = olSolutionPolygons[i].components[0].components;
+            sharedEdge = (olPoints[0].references.length > 1);
+            crossRing = sharedEdge;
+            olLineStringPoints = [];
+            olNewLineStringsTmp = [];
+            if (sharedEdge) {
+                olLineStringPoints.push(olPoints[0]);
+            }
+            for (j = 1; j < olPoints.length - 1; j++) {
+                if (!this.equalArrays(olPoints[j].references, olPoints[j - 1].references)) {
+                    if (sharedEdge) {
+                        if (olPoints[j].references.length > 2) olLineStringPoints.push(olPoints[j]);
+                        olNewLineStringsTmp.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
+                        olLineStringPoints = [];
+                    }
+                }
+                sharedEdge = (olPoints[j].references.length > 1);
+                if (sharedEdge) {
+                    olLineStringPoints.push(olPoints[j]);
+                }
+            }
+            if (sharedEdge) {
+                if ((crossRing) && (olNewLineStringsTmp.length > 0) && (this.equalArrays(olPoints[olPoints.length - 2].references, olPoints[0].references))) {
+                    for (j = olLineStringPoints.length - 1; j >= 0; j--) {
+                        olNewLineStringsTmp[0].components.splice(0, 0, olLineStringPoints[j]);
+                    }
+                } else {
+                    if (olPoints[0].references.length > 2) olLineStringPoints.push(olPoints[0]);
+                    olNewLineStringsTmp.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
+                }
+            }
+            for (j = 0; j < olNewLineStringsTmp.length; j++) {
+                olNewLineStrings.push(olNewLineStringsTmp[j]);
+            }
+        }
+        return {olPoints: olPoints, sharedEdge: sharedEdge};
+    },
+
+    /**
+     * @method transformInverseScale
+     * Performs inverse coordinates transformation and scaling
+     *
+     * @param olPoints OpenLayers points
+     * @param olNewFeatures new OpenLayers features
+     * @param pointIndexes Point indexes
+     * @param scaleFactor Scale factor
+     * @param reference Reference coordinates
+     * @returns {*} OpenLayers points
+     */
+    transformInverseScale: function (olPoints, olNewFeatures, pointIndexes, scaleFactor, reference) {
+        var i;
+        olPoints = olNewFeatures[0].geometry.getVertices();
+        pointIndexes = [];
+        for (i = 0; i < olPoints.length; i++) {
+            if (pointIndexes.indexOf(olPoints[i].id) < 0) {
+                // olPoint not handled yet
+                olPoints[i].x = olPoints[i].x / scaleFactor + reference[0];
+                olPoints[i].y = olPoints[i].y / scaleFactor + reference[1];
+                pointIndexes.push(olPoints[i].id);
+            }
+        }
+        return olPoints;
+    },
+
+    /**
+     * @method splitRawPolygons
+     * Splits raw polygons
+     *
+     * @param union JSTS union
+     * @param jstsOldPolygons Old JSTS polygons
+     * @param jstsLine JSTS line
+     * @param polygonizer JSTS polygonizer
+     * @param jstsNewPolygons New JSTS polygons
+     * @param clipPoints Clipper points
+     * @param olPoints OpenLayers points
+     * @param olNewLineStrings New OpenLayers linestrings
+     * @param clipTargetPolygons Target Clipper polygons
+     * @param clipPolygon Clipper polygon
+     * @param jstsPoints JSTS point
+     * @param clipPoint Clipper point
+     * @param scale Scale factor
+     * @param cpr Clipper instance
+     * @param clipSourcePolygons Source Clipper polygons
+     * @param clipSolutionPolygons Solution Clipper polygons
+     * @param clipType Type of clip operation
+     * @param success Success flag
+     * @param polygonIndexes Polygon indexes
+     * @param olNewPolygons New openLayers polygons
+     * @param sharedEdge Edge share flag
+     * @param epsilon Epsilon value of the process
+     * @param clipValidationTarget Clipper polygon array for validation
+     * @param clipSolutionPolygon Solution Clipper polygons
+     * @param olLinearRingPoints openLayers linearring points
+     * @param foundIndex Found index
+     * @param lastIndex Last index
+     * @param clipSubjectPolygons Subject Clipper polygons
+     * @param clipSolutionHoles Solution Clipper holes
+     * @param clipHole Clipper hole
+     * @param olHolePoints OpenLayers hole points
+     * @param olSolutionPolygons Solution OpenLayers polygons
+     * @returns {{olPoints: *, olNewLineStrings: *, clipPolygon: *, clipPoint: *, sharedEdge: *, lastIndex: *, clipHole: *}} Output data
+     */
+    splitRawPolygons: function (union, jstsOldPolygons, jstsLine, polygonizer, jstsNewPolygons, clipPoints, olPoints, olNewLineStrings, clipTargetPolygons, clipPolygon, jstsPoints, clipPoint, scale, cpr, clipSourcePolygons, clipSolutionPolygons, clipType, success, polygonIndexes, olNewPolygons, sharedEdge, epsilon, clipValidationTarget, clipSolutionPolygon, olLinearRingPoints, foundIndex, lastIndex, clipSubjectPolygons, clipSolutionHoles, clipHole, olHolePoints, olSolutionPolygons) {
+        var i, j, k, l, m;
+
+        union = null;
+        for (i = 0; i < jstsOldPolygons.length; i++) {
+            if (jstsLine !== null) {
+                union = jstsOldPolygons[i].getExteriorRing().union(jstsLine);
+            } else {
+                if (union === null) {
+                    union = jstsOldPolygons[i].getExteriorRing();
+                } else {
+                    union = jstsOldPolygons[i].getExteriorRing().union(union);
+                }
+                if (i < jstsOldPolygons.length - 1) {
+                    continue;
+                }
+            }
+            polygonizer = new jsts.operation.polygonize.Polygonizer();
+            polygonizer.add(union);
+            jstsNewPolygons = polygonizer.getPolygons();
+
+            clipPoints = [];
+            olPoints = [];
+            olNewLineStrings = [];
+            for (j = 0; j < jstsNewPolygons.array.length; j++) {
+                clipTargetPolygons = [];
+                clipPolygon = new ClipperLib.Polygon();
+                jstsPoints = jstsNewPolygons.array[j].shell.points;
+                for (k = 0; k < jstsPoints.length - 1; k++) {
+                    clipPoint = new ClipperLib.IntPoint(jstsPoints[k].x, jstsPoints[k].y);
+                    clipPolygon.push(clipPoint);
+                }
+                clipTargetPolygons.push(clipPolygon);
+                // Scaling for integer operations
+                clipTargetPolygons = this.scaleup(clipTargetPolygons, scale);
+                cpr = new ClipperLib.Clipper();
+                for (k = 0; k < clipSourcePolygons.length; k++) {
+                    cpr.AddPolygons(clipSourcePolygons[k], ClipperLib.PolyType.ptSubject);
+                }
+                cpr.AddPolygons(clipTargetPolygons, ClipperLib.PolyType.ptClip);
+
+                clipSolutionPolygons = new ClipperLib.Polygons();
+                clipType = ClipperLib.ClipType.ctIntersection;
+                // Cut intersections
+                success = cpr.Execute(clipType, clipSolutionPolygons);
+                if (!success) {
+//                    return -2;
+                }
+
+                if (clipSolutionPolygons.length === 0) {
+                    continue;
+                }
+
+                // Polygons to OpenLayers format
+                polygonIndexes = [];
+                olNewPolygons = [];
+                sharedEdge = false;
+                for (k = 0; k < clipSolutionPolygons.length; k++) {
+                    // Jsts occasionally returns "empty" polygons
+                    if (Math.abs(cpr.Area(clipSolutionPolygons[k])) < epsilon) continue;
+
+                    clipValidationTarget.push(clipSolutionPolygons[k]);
+                    if (cpr.Area(clipSolutionPolygons[k]) > 0) {
+                        clipSolutionPolygon = clipSolutionPolygons[k];
+                        olLinearRingPoints = [];
+                        for (l = 0; l < clipSolutionPolygon.length; l++) {
+                            clipPoint = clipSolutionPolygon[l];
+                            foundIndex = -1;
+                            for (m = 0; m < clipPoints.length; m++) {
+                                if ((clipPoint.X === clipPoints[m].X) && (clipPoint.Y === clipPoints[m].Y)) {
+                                    foundIndex = m;
+                                    break;
+                                }
+                            }
+                            if (foundIndex >= 0) {
+                                olLinearRingPoints.push(olPoints[foundIndex]);
+                            } else {
+                                clipPoints.push(clipPoint);
+                                olPoints.push(new OpenLayers.Geometry.Point(clipPoint.X / scale, clipPoint.Y / scale));
+                                lastIndex = olPoints.length - 1;
+                                olPoints[lastIndex].references = [];
+                                olPoints[lastIndex].markerPoint = -1;
+                                olPoints[lastIndex].boundaryPoint = false;
+                                olPoints[lastIndex].short = -1;
+                                olLinearRingPoints.push(olPoints[lastIndex]);
+                            }
+                        }
+                        olNewPolygons.push(new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(olLinearRingPoints)));
+                        lastIndex = olNewPolygons.length - 1;
+                        for (l = 0; l < olNewPolygons[lastIndex].components[0].components.length - 1; l++) {
+                            olNewPolygons[lastIndex].components[0].components[l].references.push(olNewPolygons[lastIndex].id);
+                        }
+                        polygonIndexes.push(k);
+                    }
+                }
+
+                // Holes to OpenLayers format
+                for (k = 0; k < clipSolutionPolygons.length; k++) {
+                    if (cpr.Area(clipSolutionPolygons[k]) < 0.0) {
+                        clipTargetPolygons = [];
+                        clipTargetPolygons.push(clipSolutionPolygons[k]);
+                        for (l = 0; l < polygonIndexes.length; l++) {
+
+                            // Check which polygon contains the hole
+                            cpr = new ClipperLib.Clipper();
+                            clipSubjectPolygons = [];
+                            clipSubjectPolygons.push(clipSolutionPolygons[polygonIndexes[l]]);
+                            cpr.AddPolygons(clipSubjectPolygons, ClipperLib.PolyType.ptSubject);
+                            cpr.AddPolygons(clipTargetPolygons, ClipperLib.PolyType.ptClip);
+                            clipSolutionHoles = new ClipperLib.Polygons();
+                            clipType = ClipperLib.ClipType.ctIntersection;
+                            success = cpr.Execute(clipType, clipSolutionHoles);
+                            if (!success) {
+//                                return -3;
+                            }
+
+                            if (clipSolutionHoles.length > 0) {
+                                clipHole = clipSolutionPolygons[k];
+                                olHolePoints = [];
+                                for (m = 0; m < clipHole.length; m++) {
+                                    clipPoint = clipHole[m];
+                                    olHolePoints.push(new OpenLayers.Geometry.Point(clipPoint.X / scale, clipPoint.Y / scale));
+                                }
+                                olNewPolygons[l].components.push(new OpenLayers.Geometry.LinearRing(olHolePoints));
+                                break;
+                            }
+                        }
+                    }
+                }
+                for (k = 0; k < olNewPolygons.length; k++) {
+                    olSolutionPolygons.push(olNewPolygons[k]);
                 }
             }
         }
+        return {olPoints: olPoints, olNewLineStrings: olNewLineStrings, clipPolygon: clipPolygon, clipPoint: clipPoint, sharedEdge: sharedEdge, lastIndex: lastIndex, clipHole: clipHole};
+    },
+
+    /**
+     * @method _splitGeometryByLine
+     * Splits an area by a line.
+     * @param polygons Polygons
+     * @param splitGeom Splitting line
+     * @returns {*} Split geometry
+     * @private
+     */
+    _splitGeometryByLine: function(polygons, splitGeom) {
+        var me = this,
+        // Transform and scale coordinates
+        origin = new OpenLayers.Geometry.Point(0.0, 0.0),
+        reference = [polygons.geometry.components[0].components[0].components[0].x,
+            polygons.geometry.components[0].components[0].components[0].y
+            ],
+        scaleFactor = 10000.0;
+        polygons.geometry.move(-reference[0], -reference[1]);
+        polygons.geometry.resize(scaleFactor, origin);
+
+        splitGeom.geometry.move(-reference[0], -reference[1]);
+        splitGeom.geometry.resize(scaleFactor, origin);
+
+        // OpenLayers variables
+        var lineStyle = {
+            strokeColor: '#0000ff',
+            strokeOpacity: 1,
+            strokeWidth: 2
+            },
+        olOldFeatures = polygons.geometry.components.concat(splitGeom.geometry),
+        olNewFeatures = [new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon()),
+            new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(), null, lineStyle)
+            ],
+        olSolutionPolygons = olNewFeatures[0].geometry.components,
+        olSolutionLineStrings = olNewFeatures[1].geometry.components,
+        olNewPolygons = [],
+        olNewLineStrings = [],
+        olNewLineStringsTmp = [],
+        olPoint,
+        olPoints = [],
+        olHolePoints = [],
+        olEndPoints = [],
+        olLinearRingPoints = [],
+        olLinearRings,
+        olLineStringPoints = [],
+        olPolygon,
+
+        // JSTS variables
+        jstsParser = new jsts.io.OpenLayersParser(),
+        jstsPoints,
+        jstsOldPolygon,
+        jstsOldPolygons = [],
+        jstsNewPolygons = [],
+        jstsLine = null,
+
+        // Clipper variables
+        clipPoint, clipPoints,
+        clipPolygon, clipHole,
+        clipValidationTarget = [],
+        clipSourcePolygons = [],
+        clipSubjectPolygons = [],
+        clipTargetPolygons = [],
+        clipSolutionPolygon, clipSolutionPolygons,
+        clipSolutionHoles,
+
+        cpr,
+        success,
+        clipType,
+
+        union = null,
+        polygonizer,
+
+        polygonIndexes = [],
+        pointIndexes = [],
+        sharedEdge = false,
+        crossRing = false,
+        found = false,
+        finished = false,
+
+        i, j, k, l, m, n, o, p,
+        lastIndex,
+        nextIndex,
+        foundIndex,
+
+        epsilon = 1.0e6, // about 10 cm x 10 cm
+
+        // Scaling factor for integer operations
+        scale = 1,
+        marker;
+
+        // IE8 compatibility
+        this._enableIE8();
+
+        // Preprocess geometry
+        var preProcessed = this.preProcessGeometry(olOldFeatures, jstsOldPolygon, jstsParser, jstsOldPolygons, finished, clipPolygon, olLinearRings, olPoints, clipPoint, clipSourcePolygons, clipHole, scale, jstsLine);
+        clipPolygon = preProcessed.clipPolygon;
+        olPoints = preProcessed.olPoints;
+        clipPoint = preProcessed.clipPoint;
+        clipHole = preProcessed.clipHole;
+        jstsLine = preProcessed.jstsLine;
+        if (jstsLine === null) {
+            return -1;
+        }
+
+        // Splitting
+        var splitPolygons = this.splitRawPolygons(union, jstsOldPolygons, jstsLine, polygonizer, jstsNewPolygons, clipPoints, olPoints, olNewLineStrings, clipTargetPolygons, clipPolygon, jstsPoints, clipPoint, scale, cpr, clipSourcePolygons, clipSolutionPolygons, clipType, success, polygonIndexes, olNewPolygons, sharedEdge, epsilon, clipValidationTarget, clipSolutionPolygon, olLinearRingPoints, foundIndex, lastIndex, clipSubjectPolygons, clipSolutionHoles, clipHole, olHolePoints, olSolutionPolygons);
+        olPoints = splitPolygons.olPoints;
+        olNewLineStrings = splitPolygons.olNewLineStrings;
+        clipPolygon = splitPolygons.clipPolygon;
+        clipPoint = splitPolygons.clipPoint;
+        sharedEdge = splitPolygons.sharedEdge;
+        lastIndex = splitPolygons.lastIndex;
+        clipHole = splitPolygons.clipHole;
+        // Inverse transform and scale
+        olPoints = this.transformInverseScale(olPoints, olNewFeatures, pointIndexes, scaleFactor, reference);
+
+        // Lines to OpenLayers format
+        var convertedOLLines = this.convertLinesToOL(olSolutionPolygons, olPoints, sharedEdge, crossRing, olLineStringPoints, olNewLineStringsTmp, olNewLineStrings);
+        olPoints = convertedOLLines.olPoints;
+        sharedEdge = convertedOLLines.sharedEdge;
+
+        // Post-process line strings
+        var postLineStrings = this.postProcessLineStrings(olNewLineStrings, olSolutionLineStrings, olPoint, found, nextIndex, olEndPoints, lastIndex);
+        olPoint = postLineStrings.olPoint;
+        found = postLineStrings.found;
+        lastIndex = postLineStrings.lastIndex;
+
+        // Create boundary markers
+        var createdMarkers = this.createBoundaryMarkers(olSolutionLineStrings, olEndPoints, marker, olSolutionPolygons, olPolygon, olPoints, lastIndex, olPoint, sharedEdge, found);
+
+        // Update boundary info
+        this.updateBoundaryInfo(olNewFeatures);
         return olNewFeatures;
     },
 
