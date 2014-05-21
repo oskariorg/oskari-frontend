@@ -692,6 +692,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 });
                 cancelBtn.addClass('primary');
                 controlButtons.push(cancelBtn);
+                this.helpDialog.addClass("drawfilterdialog");
                 this.helpDialog.show(diaLoc.modes[config.mode].title,diaLoc.modes[config.mode].message,controlButtons);
                 this.helpDialog.moveTo('div.drawFilter.analysis-selection-'+config.mode, 'bottom');
             }
