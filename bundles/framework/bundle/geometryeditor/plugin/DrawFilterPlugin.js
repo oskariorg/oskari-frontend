@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * - drawControls
      * - registers for listening to requests
      * @param sandbox reference to Oskari sandbox
-     * @method
+     * @method init
      */
     init: function (sandbox) {
         var me = this;
@@ -259,12 +259,29 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this._updateLayerOrder();
     },
 
+    /**
+     * @method getName
+     * Returns the name based on the plugin name
+     * @returns {string} Name
+     */
     getName: function () {
         return this.prefix + this.pluginName;
     },
+
+    /**
+     * @method getMapModule
+     * Returns the map module
+     * @returns {*} Map module
+     */
     getMapModule: function () {
         return this.mapModule;
     },
+
+    /**
+     * @method setMapModule
+     * Set the map module
+     * @param mapModule Map module
+     */
     setMapModule: function (mapModule) {
         this.mapModule = mapModule;
 
@@ -277,10 +294,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
     /**
+     * @method startDrawFiltering
      * Enables the draw filtering control for given params.drawMode.
      * Clears the layer of any previously drawn features.
-     * @param params includes mode, geometry, sourceGeometry and style
-     * @method
+     * @param params Includes mode, geometry, sourceGeometry and style
      */
     startDrawFiltering: function (params) {
         this.sourceLayer.destroyFeatures();
@@ -310,6 +327,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
 
+    /**
+     * @method _pointSplit
+     * Starts the functionality of line split by marker points
+     * @param params Source geometry
+     * @private
+     */
     _pointSplit: function(params) {
         var me = this;
         var i, x, y;
@@ -400,6 +423,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.updateTargetLine();
     },
 
+    /**
+     * @method _lineSplit
+     * Starts the functionality of area split by line
+     * @param params Parameters for the split process, including source geometry
+     * @private
+     */
     _lineSplit: function(params) {
         var me = this;
         var multiPolygon = params.sourceGeometry;
@@ -408,6 +437,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.toggleControl(params.drawMode);
     },
 
+    /**
+     * @method _editSplit
+     * Starts the functionality of area dividing by another area
+     * @param params
+     * @private Parameters for the split process, including source geometry
+     */
     _editSplit: function(params) {
         var me = this;
         var multiPolygon = params.sourceGeometry;
@@ -416,6 +451,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.toggleControl(params.drawMode);
     },
 
+    /**
+     * @method _selectActiveBaseMarker
+     * Selects an active marker
+     * @param evt Event
+     * @private
+     */
     _selectActiveBaseMarker: function (evt) {
         OpenLayers.Event.stop(evt);
         var me = this;
@@ -429,10 +470,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         me._map.events.register("mousemove", me, me.moveActiveMarker);
     },
 
-    /*
+    /**
      * @method selectActiveMarker
-     *
-     * @param {} evt
+     * Selects an active marker and updates inner structure of line points
+     * @param {} evt Event
      */
     selectActiveMarker: function (evt) {
         // Handle two point lines
@@ -451,16 +492,31 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this._selectActiveBaseMarker(evt);
     },
 
+    /**
+     * @method moveActiveMarker
+     * Moves an active marker
+     * @param evt Event
+     */
     moveActiveMarker: function(evt) {
         this.updateActiveMarker(evt);
     },
 
+    /**
+     * @method freezeActiveMarker
+     * Freezes an active marker
+     * @param evt Event
+     */
     freezeActiveMarker: function(evt) {
         this._map.events.unregister("mousemove", this, this.moveActiveMarker);
         this._map.events.unregister("mouseup", this, this.freezeActiveMarker);
         this.updateActiveMarker(evt);
     },
 
+    /**
+     * @method updateActiveMarker
+     * Updates an active marker
+     * @param evt Event
+     */
     updateActiveMarker: function(evt) {
         OpenLayers.Event.stop(evt);
         var lonlat = this._map.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x, evt.xy.y));
@@ -472,9 +528,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             projection = this.activeMarkerReferenceProjection(lonlat);
             this.activeMarker.lonlat = projection.lonlat;
             this.activeMarker.reference.point.x = this.activeMarker.lonlat.lon;
-            this.activeMarker.reference.point.x0 = this.activeMarker.lonlat.lon;
             this.activeMarker.reference.point.y = this.activeMarker.lonlat.lat;
-            this.activeMarker.reference.point.y0 = this.activeMarker.lonlat.lat;
             if (projection.p.length > 0) {
                 var lines = this.sourceLayer.features[0].geometry.components;
                 for (var i = 0; i < lines.length; i++) {
@@ -505,6 +559,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.markerLayer.redraw();
     },
 
+    /**
+     * @method pointProjection
+     * Returns coordinates of point projection on li ne segment
+     * @param q Point
+     * @param p0 Start point of the line segment
+     * @param p1 End point of the line segment
+     * @returns {*} Projection point
+     */
     pointProjection: function (q, p0, p1) {
         var dotProduct = function (a, b) {
             return a.x*b.x+a.y*b.y;
@@ -551,6 +613,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return pq;
     },
 
+    /**
+     * @method getDistance
+     * Returns a distance between two points
+     * @param p1 First point
+     * @param p2 Second point
+     * @returns {*} Distance
+     */
     getDistance: function (p1, p2) {
         var x1;
         var isNumber = function isNumber(n) {
@@ -602,6 +671,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     },
 
+    /**
+     * @method activeMarkerProjection
+     * Returns a projection of the marker location on the line
+     * @param refLonlat Point to be projected
+     * @returns {*} Projection data
+     */
     activeMarkerProjection: function (refLonlat) {
         var projection = {
             lonlat: null,
@@ -654,6 +729,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return projection;
     },
 
+    /**
+     * @method activeMarkerReferenceProjection
+     * Returns a projection of the marker location on the line
+     * @param refLonlat Point to be projected
+     * @returns {*} Projection data with references
+     */
     activeMarkerReferenceProjection: function (refLonlat) {
         var me = this;
         var projection = {
@@ -735,11 +816,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return projection;
     },
 
-    /*
+    /**
      * @method updatePolygons
-     *
-     * @param {}
-     * @param {}
+     * Updates polygons after corner movements
+     * @param p Corner point
+     * @param p0 Default point
      */
     updatePolygons: function (p, p0) {
         var pInd = -1;
@@ -921,9 +1002,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     },
 
     /**
+     * @method stopDrawFiltering
      * Disables all draw controls and
      * clears the layer of any drawn features
-     * @method
      */
     stopDrawFiltering: function () {
         // disable all draw controls
@@ -943,6 +1024,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
 
+    /**
+     * @method finishDrawFiltering
+     * Finishes operation of geometry filtering by drawing
+     */
     finishDrawFiltering: function () {
         var evtBuilder = this._sandbox.getEventBuilder('DrawFilterPlugin.FinishedDrawFilteringEvent');
         var event = evtBuilder(this.getFiltered(), this.editMode, this.creatorId);
@@ -950,9 +1035,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     },
 
     /**
+     * @method finishedLineDrawing
      * Called when line drawing is finished.
      * Disables all draw controls
-     * @method
      */
     finishedLineDrawing: function() {
         var me = this;
@@ -1031,9 +1116,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     },
 
     /**
+     * @method finishedEditDrawing
      * Called when polygon drawing is finished.
      * Disables all draw controls
-     * @method
      */
     finishedEditDrawing: function() {
         this.toggleControl();
@@ -1086,8 +1171,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /*
      * @method checkSelfIntersection
-     *
-     * @param {}
+     * Checks if polygon is self-intersecting
+     * @param polygon Polygon
+     * @returns {boolean} Result
      */
     checkSelfIntersection: function (polygon) {
         var outer = polygon.components;
@@ -1106,9 +1192,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /*
      * @method segmentIntersects
-     *
-     * @param {}
-     * @param {}
+     * Checks if a line segment intersects other line segments
+     * @param segment A line segment to be tested
+     * @param segments Line segments
+     * @returns {boolean} Result
      */
     segmentIntersects: function (segment, segments) {
         for (var i = 0; i < segments.length; i++) {
@@ -1123,8 +1210,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /*
      * @method startOrStopEquals
-     *
-     * @param {}
+     * Check if either point of a line segments equals with another line segment's points
+     * @param segment1 First line segment
+     * @param segment2 Second line segment
+     * @returns {*} Result
      */
     startOrStopEquals: function (segment1, segment2) {
         if (segment1.components[0].equals(segment2.components[0])) {
@@ -1140,11 +1229,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     },
 
     /**
+     * @method toggleControl
      * Enables the given draw control
      * Disables all the other draw controls
      * @param drawMode draw control to activate (if undefined, disables all
      * controls)
-     * @method
      */
     toggleControl: function (drawMode) {
         this.currentDrawMode = drawMode;
@@ -1160,98 +1249,34 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
 
-    // Todo: split the split function
-    _splitGeometryByLine: function(polygons, splitGeom) {
-        var me = this;
-        // Transform and scale coordinates
-        var origin = new OpenLayers.Geometry.Point(0.0, 0.0);
-        var reference = [polygons.geometry.components[0].components[0].components[0].x,
-            polygons.geometry.components[0].components[0].components[0].y
-        ];
-        var scaleFactor = 10000.0;
-        polygons.geometry.move(-reference[0], -reference[1]);
-        polygons.geometry.resize(scaleFactor, origin);
-
-        splitGeom.geometry.move(-reference[0], -reference[1]);
-        splitGeom.geometry.resize(scaleFactor, origin);
-
-        // OpenLayers variables
-        var lineStyle = {
-            strokeColor: '#0000ff',
-            strokeOpacity: 1,
-            strokeWidth: 2
-        };
-        var olOldFeatures = polygons.geometry.components.concat(splitGeom.geometry);
-        var olNewFeatures = [new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon()),
-            new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(), null, lineStyle)
-        ];
-        var olSolutionPolygons = olNewFeatures[0].geometry.components;
-        var olSolutionLineStrings = olNewFeatures[1].geometry.components;
-        var olNewPolygons = [];
-        var olNewLineStrings = [];
-        var olNewLineStringsTmp = [];
-        var olPoint;
-        var olPoints = [];
-        var olHolePoints = [];
-        var olEndPoints = [];
-        var olLinearRingPoints = [];
-        var olLinearRings;
-        var olLineStringPoints = [];
-        var olPolygon;
-
-        // JSTS variables
-        var jstsParser = new jsts.io.OpenLayersParser();
-        var jstsPoints;
-        var jstsOldPolygon;
-        var jstsOldPolygons = [];
-        var jstsNewPolygons = [];
-        var jstsLine = null;
-
-        // Clipper variables
-        var clipPoint, clipPoints;
-        var clipPolygon, clipHole;
-        var clipValidationTarget = [];
-        var clipSourcePolygons = [];
-        var clipSubjectPolygons = [];
-        var clipTargetPolygons = [];
-        var clipSolutionPolygon, clipSolutionPolygons;
-        var clipSolutionHoles;
-
-        var cpr;
-        var success;
-        var clipType;
-
-        var union = null;
-        var polygonizer;
-
-        var polygonIndexes = [];
-        var pointIndexes = [];
-        var sharedEdge = false;
-        var crossRing = false;
-        var found = false;
-        var finished = false;
-
-        var i, j, k, l, m, n, o, p;
-        var lastIndex;
-        var nextIndex;
-        var foundIndex;
-
-        var epsilon = 1.0e6; // about 10 cm x 10 cm
-
-        // Scaling factor for integer operations
-        var scale = 1;
-        var marker;
-
-        // IE8 compatibility
-        this._enableIE8();
-
+    /**
+     * @method preProcessGeometry
+     * Pre-processes geometries
+     * @param olOldFeatures Old OpenLayers features
+     * @param jstsOldPolygon Old JSTS polygon
+     * @param jstsParser JSTS patser
+     * @param jstsOldPolygons Old JSTS polygons
+     * @param finished Is search finished
+     * @param clipPolygon Clipper polygon
+     * @param olLinearRings OpenLayers linear rings
+     * @param olPoints OpenLayers points
+     * @param clipPoint Clipper point
+     * @param clipSourcePolygons Clipper source polygons
+     * @param clipHole Clipper hole
+     * @param scale Scale factor
+     * @param jstsLine JSTS line
+     * @returns {{clipPolygon: *, olPoints: *, clipPoint: *, clipHole: *, jstsLine: *}} Output data
+     */
+    preProcessGeometry: function (olOldFeatures, jstsOldPolygon, jstsParser, jstsOldPolygons, finished, clipPolygon, olLinearRings, olPoints, clipPoint, clipSourcePolygons, clipHole, scale, jstsLine) {
+        var i, j, k, l, m;
+        jstsLine = null;
         for (i = olOldFeatures.length - 1; i >= 0; i--) {
             if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
                 var multi = (olOldFeatures[i].id.indexOf("Multi") !== -1);
                 if (!multi) {
                     jstsOldPolygon = jstsParser.read(olOldFeatures[i]);
                     if (!jstsOldPolygon.isValid()) {
-                        return -1;
+                        break;
                     }
                     jstsOldPolygons.push(jstsOldPolygon);
                 }
@@ -1306,221 +1331,43 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 jstsLine = jstsParser.read(olOldFeatures[i]);
             }
         }
+        return {clipPolygon: clipPolygon, olPoints: olPoints, clipPoint: clipPoint, clipHole: clipHole, jstsLine: jstsLine};
+    },
 
-        // Splitting
-        union = null;
-        for (i = 0; i < jstsOldPolygons.length; i++) {
-            if (jstsLine !== null) {
-                union = jstsOldPolygons[i].getExteriorRing().union(jstsLine);
-            } else {
-                if (union === null) {
-                    union = jstsOldPolygons[i].getExteriorRing();
-                } else {
-                    union = jstsOldPolygons[i].getExteriorRing().union(union);
-                }
-                if (i < jstsOldPolygons.length - 1) {
-                    continue;
-                }
-            }
-            polygonizer = new jsts.operation.polygonize.Polygonizer();
-            polygonizer.add(union);
-            jstsNewPolygons = polygonizer.getPolygons();
-
-            clipPoints = [];
-            olPoints = [];
-            olNewLineStrings = [];
-            for (j = 0; j < jstsNewPolygons.array.length; j++) {
-                clipTargetPolygons = [];
-                clipPolygon = new ClipperLib.Polygon();
-                jstsPoints = jstsNewPolygons.array[j].shell.points;
-                for (k = 0; k < jstsPoints.length - 1; k++) {
-                    clipPoint = new ClipperLib.IntPoint(jstsPoints[k].x, jstsPoints[k].y);
-                    clipPolygon.push(clipPoint);
-                }
-                clipTargetPolygons.push(clipPolygon);
-                // Scaling for integer operations
-                clipTargetPolygons = this.scaleup(clipTargetPolygons, scale);
-                cpr = new ClipperLib.Clipper();
-                for (k = 0; k < clipSourcePolygons.length; k++) {
-                    cpr.AddPolygons(clipSourcePolygons[k], ClipperLib.PolyType.ptSubject);
-                }
-                cpr.AddPolygons(clipTargetPolygons, ClipperLib.PolyType.ptClip);
-
-                clipSolutionPolygons = new ClipperLib.Polygons();
-                clipType = ClipperLib.ClipType.ctIntersection;
-                // Cut intersections
-                success = cpr.Execute(clipType, clipSolutionPolygons);
-                if (!success) {
-                    return -2;
-                }
-
-                if (clipSolutionPolygons.length === 0) {
-                    continue;
-                }
-
-                // Polygons to OpenLayers format
-                polygonIndexes = [];
-                olNewPolygons = [];
-                sharedEdge = false;
-                for (k = 0; k < clipSolutionPolygons.length; k++) {
-                    // Jsts occasionally returns "empty" polygons
-                    if (Math.abs(cpr.Area(clipSolutionPolygons[k])) < epsilon) continue;
-
-                    clipValidationTarget.push(clipSolutionPolygons[k]);
-                    if (cpr.Area(clipSolutionPolygons[k]) > 0) {
-                        clipSolutionPolygon = clipSolutionPolygons[k];
-                        olLinearRingPoints = [];
-                        for (l = 0; l < clipSolutionPolygon.length; l++) {
-                            clipPoint = clipSolutionPolygon[l];
-                            foundIndex = -1;
-                            for (m = 0; m < clipPoints.length; m++) {
-                                if ((clipPoint.X === clipPoints[m].X) && (clipPoint.Y === clipPoints[m].Y)) {
-                                    foundIndex = m;
-                                    break;
-                                }
-                            }
-                            if (foundIndex >= 0) {
-                                olLinearRingPoints.push(olPoints[foundIndex]);
-                            } else {
-                                clipPoints.push(clipPoint);
-                                olPoints.push(new OpenLayers.Geometry.Point(clipPoint.X / scale, clipPoint.Y / scale));
-                                lastIndex = olPoints.length - 1;
-                                olPoints[lastIndex].references = [];
-                                olPoints[lastIndex].markerPoint = -1;
-                                olPoints[lastIndex].boundaryPoint = false;
-                                olPoints[lastIndex].short = -1;
-                                olLinearRingPoints.push(olPoints[lastIndex]);
-                            }
-                        }
-                        olNewPolygons.push(new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(olLinearRingPoints)));
-                        lastIndex = olNewPolygons.length - 1;
-                        for (l = 0; l < olNewPolygons[lastIndex].components[0].components.length - 1; l++) {
-                            olNewPolygons[lastIndex].components[0].components[l].references.push(olNewPolygons[lastIndex].id);
-                        }
-                        polygonIndexes.push(k);
-                    }
-                }
-
-                // Holes to OpenLayers format
-                for (k = 0; k < clipSolutionPolygons.length; k++) {
-                    if (cpr.Area(clipSolutionPolygons[k]) < 0.0) {
-                        clipTargetPolygons = [];
-                        clipTargetPolygons.push(clipSolutionPolygons[k]);
-                        for (l = 0; l < polygonIndexes.length; l++) {
-
-                            // Check which polygon contains the hole
-                            cpr = new ClipperLib.Clipper();
-                            clipSubjectPolygons = [];
-                            clipSubjectPolygons.push(clipSolutionPolygons[polygonIndexes[l]]);
-                            cpr.AddPolygons(clipSubjectPolygons, ClipperLib.PolyType.ptSubject);
-                            cpr.AddPolygons(clipTargetPolygons, ClipperLib.PolyType.ptClip);
-                            clipSolutionHoles = new ClipperLib.Polygons();
-                            clipType = ClipperLib.ClipType.ctIntersection;
-                            success = cpr.Execute(clipType, clipSolutionHoles);
-                            if (!success) {
-                                return -3;
-                            }
-
-                            if (clipSolutionHoles.length > 0) {
-                                clipHole = clipSolutionPolygons[k];
-                                olHolePoints = [];
-                                for (m = 0; m < clipHole.length; m++) {
-                                    clipPoint = clipHole[m];
-                                    olHolePoints.push(new OpenLayers.Geometry.Point(clipPoint.X / scale, clipPoint.Y / scale));
-                                }
-                                olNewPolygons[l].components.push(new OpenLayers.Geometry.LinearRing(olHolePoints));
-                                break;
-                            }
-                        }
-                    }
-                }
-                for (k = 0; k < olNewPolygons.length; k++) {
-                    olSolutionPolygons.push(olNewPolygons[k]);
+    /**
+     * @method updateBoundaryInfo
+     * Updates boundary information
+     * @param olNewFeatures New OpenLayers features
+     */
+    updateBoundaryInfo: function (olNewFeatures) {
+        var i, j;
+        for (i = 0; i < olNewFeatures[0].geometry.components.length; i++) {
+            var olNewPoints = olNewFeatures[0].geometry.components[i].components[0].components;
+            for (j = 0; j < olNewPoints.length; j++) {
+                if ((olNewPoints[j].references.length === 1) || (olNewPoints[j].markerPoint >= 0)) {
+                    olNewPoints[j].boundaryPoint = true;
                 }
             }
         }
+    },
 
-        // Inverse transform and scale
-        olPoints = olNewFeatures[0].geometry.getVertices();
-        pointIndexes = [];
-        for (i = 0; i < olPoints.length; i++) {
-            if (pointIndexes.indexOf(olPoints[i].id) < 0) {
-                // olPoint not handled yet
-                olPoints[i].x = olPoints[i].x / scaleFactor + reference[0];
-                olPoints[i].y = olPoints[i].y / scaleFactor + reference[1];
-                pointIndexes.push(olPoints[i].id);
-            }
-        }
-
-        // Lines to OpenLayers format
-        for (i = 0; i < olSolutionPolygons.length; i++) {
-            olPoints = olSolutionPolygons[i].components[0].components;
-            sharedEdge = (olPoints[0].references.length > 1);
-            crossRing = sharedEdge;
-            olLineStringPoints = [];
-            olNewLineStringsTmp = [];
-            if (sharedEdge) {
-                olLineStringPoints.push(olPoints[0]);
-            }
-            for (j = 1; j < olPoints.length - 1; j++) {
-                if (!this.equalArrays(olPoints[j].references, olPoints[j - 1].references)) {
-                    if (sharedEdge) {
-                        if (olPoints[j].references.length > 2) olLineStringPoints.push(olPoints[j]);
-                        olNewLineStringsTmp.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
-                        olLineStringPoints = [];
-                    }
-                }
-                sharedEdge = (olPoints[j].references.length > 1);
-                if (sharedEdge) {
-                    olLineStringPoints.push(olPoints[j]);
-                }
-            }
-            if (sharedEdge) {
-                if ((crossRing) && (olNewLineStringsTmp.length > 0) && (this.equalArrays(olPoints[olPoints.length - 2].references, olPoints[0].references))) {
-                    for (j = olLineStringPoints.length - 1; j >= 0; j--) {
-                        olNewLineStringsTmp[0].components.splice(0, 0, olLineStringPoints[j]);
-                    }
-                } else {
-                    if (olPoints[0].references.length > 2) olLineStringPoints.push(olPoints[0]);
-                    olNewLineStringsTmp.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
-                }
-            }
-            for (j = 0; j < olNewLineStringsTmp.length; j++) {
-                olNewLineStrings.push(olNewLineStringsTmp[j]);
-            }
-        }
-
-        lineStringLoop: for (k = 0; k < olNewLineStrings.length; k++) {
-            // Check for duplicates
-            for (l = 0; l < olSolutionLineStrings.length; l++) {
-                for (m = 0; m < olNewLineStrings[k].components.length; m++) {
-                    olPoint = olNewLineStrings[k].components[m];
-                    found = false;
-                    for (n = 0; n < olSolutionLineStrings[l].components.length; n++) {
-                        if (olPoint.id === olSolutionLineStrings[l].components[n].id) {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        break;
-                    }
-                }
-                if (found) {
-                    continue lineStringLoop;
-                }
-            }
-            nextIndex = olEndPoints.length;
-            lastIndex = olNewLineStrings[k].components.length - 1;
-            olEndPoints[nextIndex] = [olNewLineStrings[k].components[0], olNewLineStrings[k].components[lastIndex]];
-            // Fixed endpoints
-            olEndPoints[nextIndex][0].x0 = olEndPoints[nextIndex][0].x;
-            olEndPoints[nextIndex][0].y0 = olEndPoints[nextIndex][0].y;
-            olEndPoints[nextIndex][1].x0 = olEndPoints[nextIndex][1].x;
-            olEndPoints[nextIndex][1].y0 = olEndPoints[nextIndex][1].y;
-            olSolutionLineStrings.push(olNewLineStrings[k]);
-        }
-
+    /**
+     * @method createBoundaryMarkers
+     * Creates boundary m arkers
+     * @param olSolutionLineStrings Solution OpenLayers linestrings
+     * @param olEndPoints OpenLayers end points
+     * @param marker Marker
+     * @param olSolutionPolygons Solution OpenLayers polygons
+     * @param olPolygon OpenLayers polygon
+     * @param olPoints OpenLayers points
+     * @param lastIndex Index
+     * @param olPoint OpenLayers points
+     * @param sharedEdge Edge share flag
+     * @param found Found flag
+     * @returns {{olPoints: *, lastIndex: *, olPoint: *, sharedEdge: *, found: *}} Output data
+     */
+    createBoundaryMarkers: function (olSolutionLineStrings, olEndPoints, marker, olSolutionPolygons, olPolygon, olPoints, lastIndex, olPoint, sharedEdge, found) {
+        var me = this, i, j, k, l, m, n, o, p;
         for (k = 0; k < olSolutionLineStrings.length; k++) {
             // Markers
             intersections: for (l = 0; l < 2; l++) {
@@ -1595,20 +1442,20 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                                         for (p = 0; p < olPoint.references.length; p++) {
                                             if (olPoint.references[p] !== olSolutionPolygons[n].id) {
                                                 endPoints:
-                                                for (i = 0; i < olEndPoints.length; i++) {
-                                                    for (j = 0; j < 2; j++) {
-                                                        if (olEndPoints[i][j].id === olPoint.id) {
-                                                            if (olEndPoints[i][j].references.length !== 2) {
-                                                                continue;
+                                                    for (i = 0; i < olEndPoints.length; i++) {
+                                                        for (j = 0; j < 2; j++) {
+                                                            if (olEndPoints[i][j].id === olPoint.id) {
+                                                                if (olEndPoints[i][j].references.length !== 2) {
+                                                                    continue;
+                                                                }
+                                                                if ((olSolutionLineStrings[k].components.length === 2) && (this.equalArrays(olPoints[o].references, olPoint.references))) {
+                                                                    continue;
+                                                                }
+                                                                found = true;
+                                                                break endPoints;
                                                             }
-                                                            if ((olSolutionLineStrings[k].components.length === 2) && (this.equalArrays(olPoints[o].references, olPoint.references))) {
-                                                                continue;
-                                                            }
-                                                            found = true;
-                                                            break endPoints;
                                                         }
                                                     }
-                                                }
                                                 if (!found) {
                                                     sharedEdge = true;
                                                     break;
@@ -1640,19 +1487,447 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             }
         }
         this.markers = this.markerLayer.markers;
+        return {olPoints: olPoints, lastIndex: lastIndex, olPoint: olPoint, sharedEdge: sharedEdge, found: found};
+    },
 
-        // Update boundary info
-        for (i = 0; i < olNewFeatures[0].geometry.components.length; i++) {
-            var olNewPoints = olNewFeatures[0].geometry.components[i].components[0].components;
-            for (j = 0; j < olNewPoints.length; j++) {
-                if ((olNewPoints[j].references.length === 1) || (olNewPoints[j].markerPoint >= 0)) {
-                    olNewPoints[j].boundaryPoint = true;
+    /**
+     * @method postProcessLineStrings
+     * Post-processes linestrings
+     * @param olNewLineStrings New OpenLayers linestrings
+     * @param olSolutionLineStrings Solution OpenLayers linestrings
+     * @param olPoint OpenLayers point
+     * @param found Found flag
+     * @param nextIndex next index value
+     * @param olEndPoints OpenLayers end points
+     * @param lastIndex Last index value
+     * @returns {{olPoint: *, found: *, lastIndex: *}} Output data
+     */
+    postProcessLineStrings: function (olNewLineStrings, olSolutionLineStrings, olPoint, found, nextIndex, olEndPoints, lastIndex) {
+        var k, l, m, n;
+
+        lineStringLoop: for (k = 0; k < olNewLineStrings.length; k++) {
+            // Check for duplicates
+            for (l = 0; l < olSolutionLineStrings.length; l++) {
+                for (m = 0; m < olNewLineStrings[k].components.length; m++) {
+                    olPoint = olNewLineStrings[k].components[m];
+                    found = false;
+                    for (n = 0; n < olSolutionLineStrings[l].components.length; n++) {
+                        if (olPoint.id === olSolutionLineStrings[l].components[n].id) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        break;
+                    }
+                }
+                if (found) {
+                    continue lineStringLoop;
+                }
+            }
+            nextIndex = olEndPoints.length;
+            lastIndex = olNewLineStrings[k].components.length - 1;
+            olEndPoints[nextIndex] = [olNewLineStrings[k].components[0], olNewLineStrings[k].components[lastIndex]];
+            olSolutionLineStrings.push(olNewLineStrings[k]);
+        }
+        return {olPoint: olPoint, found: found, lastIndex: lastIndex};
+    },
+
+    /**
+     * @method convertLinesToOL
+     * Converts lines to OpenLayers format
+     * @param olSolutionPolygons Solution OpenLayers polygons
+     * @param olPoints OpenLayers points
+     * @param sharedEdge Edge share flag
+     * @param crossRing Ring crossing flag
+     * @param olLineStringPoints OpenLayers linestring points
+     * @param olNewLineStringsTmp New temporary OpenLayers linestrings
+     * @param olNewLineStrings New OpenLayers line strings
+     * @returns {{olPoints: *, sharedEdge: *}} Output data
+     */
+    convertLinesToOL: function (olSolutionPolygons, olPoints, sharedEdge, crossRing, olLineStringPoints, olNewLineStringsTmp, olNewLineStrings) {
+        var i, j;
+
+        for (i = 0; i < olSolutionPolygons.length; i++) {
+            olPoints = olSolutionPolygons[i].components[0].components;
+            sharedEdge = (olPoints[0].references.length > 1);
+            crossRing = sharedEdge;
+            olLineStringPoints = [];
+            olNewLineStringsTmp = [];
+            if (sharedEdge) {
+                olLineStringPoints.push(olPoints[0]);
+            }
+            for (j = 1; j < olPoints.length - 1; j++) {
+                if (!this.equalArrays(olPoints[j].references, olPoints[j - 1].references)) {
+                    if (sharedEdge) {
+                        if (olPoints[j].references.length > 2) olLineStringPoints.push(olPoints[j]);
+                        olNewLineStringsTmp.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
+                        olLineStringPoints = [];
+                    }
+                }
+                sharedEdge = (olPoints[j].references.length > 1);
+                if (sharedEdge) {
+                    olLineStringPoints.push(olPoints[j]);
+                }
+            }
+            if (sharedEdge) {
+                if ((crossRing) && (olNewLineStringsTmp.length > 0) && (this.equalArrays(olPoints[olPoints.length - 2].references, olPoints[0].references))) {
+                    for (j = olLineStringPoints.length - 1; j >= 0; j--) {
+                        olNewLineStringsTmp[0].components.splice(0, 0, olLineStringPoints[j]);
+                    }
+                } else {
+                    if (olPoints[0].references.length > 2) olLineStringPoints.push(olPoints[0]);
+                    olNewLineStringsTmp.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
+                }
+            }
+            for (j = 0; j < olNewLineStringsTmp.length; j++) {
+                olNewLineStrings.push(olNewLineStringsTmp[j]);
+            }
+        }
+        return {olPoints: olPoints, sharedEdge: sharedEdge};
+    },
+
+    /**
+     * @method transformInverseScale
+     * Performs inverse coordinates transformation and scaling
+     *
+     * @param olPoints OpenLayers points
+     * @param olNewFeatures new OpenLayers features
+     * @param pointIndexes Point indexes
+     * @param scaleFactor Scale factor
+     * @param reference Reference coordinates
+     * @returns {*} OpenLayers points
+     */
+    transformInverseScale: function (olPoints, olNewFeatures, pointIndexes, scaleFactor, reference) {
+        var i;
+        olPoints = olNewFeatures[0].geometry.getVertices();
+        pointIndexes = [];
+        for (i = 0; i < olPoints.length; i++) {
+            if (pointIndexes.indexOf(olPoints[i].id) < 0) {
+                // olPoint not handled yet
+                olPoints[i].x = olPoints[i].x / scaleFactor + reference[0];
+                olPoints[i].y = olPoints[i].y / scaleFactor + reference[1];
+                pointIndexes.push(olPoints[i].id);
+            }
+        }
+        return olPoints;
+    },
+
+    /**
+     * @method splitRawPolygons
+     * Splits raw polygons
+     *
+     * @param union JSTS union
+     * @param jstsOldPolygons Old JSTS polygons
+     * @param jstsLine JSTS line
+     * @param polygonizer JSTS polygonizer
+     * @param jstsNewPolygons New JSTS polygons
+     * @param clipPoints Clipper points
+     * @param olPoints OpenLayers points
+     * @param olNewLineStrings New OpenLayers linestrings
+     * @param clipTargetPolygons Target Clipper polygons
+     * @param clipPolygon Clipper polygon
+     * @param jstsPoints JSTS point
+     * @param clipPoint Clipper point
+     * @param scale Scale factor
+     * @param cpr Clipper instance
+     * @param clipSourcePolygons Source Clipper polygons
+     * @param clipSolutionPolygons Solution Clipper polygons
+     * @param clipType Type of clip operation
+     * @param success Success flag
+     * @param polygonIndexes Polygon indexes
+     * @param olNewPolygons New openLayers polygons
+     * @param sharedEdge Edge share flag
+     * @param epsilon Epsilon value of the process
+     * @param clipValidationTarget Clipper polygon array for validation
+     * @param clipSolutionPolygon Solution Clipper polygons
+     * @param olLinearRingPoints openLayers linearring points
+     * @param foundIndex Found index
+     * @param lastIndex Last index
+     * @param clipSubjectPolygons Subject Clipper polygons
+     * @param clipSolutionHoles Solution Clipper holes
+     * @param clipHole Clipper hole
+     * @param olHolePoints OpenLayers hole points
+     * @param olSolutionPolygons Solution OpenLayers polygons
+     * @returns {{olPoints: *, olNewLineStrings: *, clipPolygon: *, clipPoint: *, sharedEdge: *, lastIndex: *, clipHole: *}} Output data
+     */
+    splitRawPolygons: function (union, jstsOldPolygons, jstsLine, polygonizer, jstsNewPolygons, clipPoints, olPoints, olNewLineStrings, clipTargetPolygons, clipPolygon, jstsPoints, clipPoint, scale, cpr, clipSourcePolygons, clipSolutionPolygons, clipType, success, polygonIndexes, olNewPolygons, sharedEdge, epsilon, clipValidationTarget, clipSolutionPolygon, olLinearRingPoints, foundIndex, lastIndex, clipSubjectPolygons, clipSolutionHoles, clipHole, olHolePoints, olSolutionPolygons) {
+        var i, j, k, l, m;
+
+        union = null;
+        for (i = 0; i < jstsOldPolygons.length; i++) {
+            if (jstsLine !== null) {
+                union = jstsOldPolygons[i].getExteriorRing().union(jstsLine);
+            } else {
+                if (union === null) {
+                    union = jstsOldPolygons[i].getExteriorRing();
+                } else {
+                    union = jstsOldPolygons[i].getExteriorRing().union(union);
+                }
+                if (i < jstsOldPolygons.length - 1) {
+                    continue;
+                }
+            }
+            polygonizer = new jsts.operation.polygonize.Polygonizer();
+            polygonizer.add(union);
+            jstsNewPolygons = polygonizer.getPolygons();
+
+            clipPoints = [];
+            olPoints = [];
+            olNewLineStrings = [];
+            for (j = 0; j < jstsNewPolygons.array.length; j++) {
+                clipTargetPolygons = [];
+                clipPolygon = new ClipperLib.Polygon();
+                jstsPoints = jstsNewPolygons.array[j].shell.points;
+                for (k = 0; k < jstsPoints.length - 1; k++) {
+                    clipPoint = new ClipperLib.IntPoint(jstsPoints[k].x, jstsPoints[k].y);
+                    clipPolygon.push(clipPoint);
+                }
+                clipTargetPolygons.push(clipPolygon);
+                // Scaling for integer operations
+                clipTargetPolygons = this.scaleup(clipTargetPolygons, scale);
+                cpr = new ClipperLib.Clipper();
+                for (k = 0; k < clipSourcePolygons.length; k++) {
+                    cpr.AddPolygons(clipSourcePolygons[k], ClipperLib.PolyType.ptSubject);
+                }
+                cpr.AddPolygons(clipTargetPolygons, ClipperLib.PolyType.ptClip);
+
+                clipSolutionPolygons = new ClipperLib.Polygons();
+                clipType = ClipperLib.ClipType.ctIntersection;
+                // Cut intersections
+                success = cpr.Execute(clipType, clipSolutionPolygons);
+                if (!success) {
+//                    return -2;
+                }
+
+                if (clipSolutionPolygons.length === 0) {
+                    continue;
+                }
+
+                // Polygons to OpenLayers format
+                polygonIndexes = [];
+                olNewPolygons = [];
+                sharedEdge = false;
+                for (k = 0; k < clipSolutionPolygons.length; k++) {
+                    // Jsts occasionally returns "empty" polygons
+                    if (Math.abs(cpr.Area(clipSolutionPolygons[k])) < epsilon) continue;
+
+                    clipValidationTarget.push(clipSolutionPolygons[k]);
+                    if (cpr.Area(clipSolutionPolygons[k]) > 0) {
+                        clipSolutionPolygon = clipSolutionPolygons[k];
+                        olLinearRingPoints = [];
+                        for (l = 0; l < clipSolutionPolygon.length; l++) {
+                            clipPoint = clipSolutionPolygon[l];
+                            foundIndex = -1;
+                            for (m = 0; m < clipPoints.length; m++) {
+                                if ((clipPoint.X === clipPoints[m].X) && (clipPoint.Y === clipPoints[m].Y)) {
+                                    foundIndex = m;
+                                    break;
+                                }
+                            }
+                            if (foundIndex >= 0) {
+                                olLinearRingPoints.push(olPoints[foundIndex]);
+                            } else {
+                                clipPoints.push(clipPoint);
+                                olPoints.push(new OpenLayers.Geometry.Point(clipPoint.X / scale, clipPoint.Y / scale));
+                                lastIndex = olPoints.length - 1;
+                                olPoints[lastIndex].references = [];
+                                olPoints[lastIndex].markerPoint = -1;
+                                olPoints[lastIndex].boundaryPoint = false;
+                                olPoints[lastIndex].short = -1;
+                                olLinearRingPoints.push(olPoints[lastIndex]);
+                            }
+                        }
+                        olNewPolygons.push(new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(olLinearRingPoints)));
+                        lastIndex = olNewPolygons.length - 1;
+                        for (l = 0; l < olNewPolygons[lastIndex].components[0].components.length - 1; l++) {
+                            olNewPolygons[lastIndex].components[0].components[l].references.push(olNewPolygons[lastIndex].id);
+                        }
+                        polygonIndexes.push(k);
+                    }
+                }
+
+                // Holes to OpenLayers format
+                for (k = 0; k < clipSolutionPolygons.length; k++) {
+                    if (cpr.Area(clipSolutionPolygons[k]) < 0.0) {
+                        clipTargetPolygons = [];
+                        clipTargetPolygons.push(clipSolutionPolygons[k]);
+                        for (l = 0; l < polygonIndexes.length; l++) {
+
+                            // Check which polygon contains the hole
+                            cpr = new ClipperLib.Clipper();
+                            clipSubjectPolygons = [];
+                            clipSubjectPolygons.push(clipSolutionPolygons[polygonIndexes[l]]);
+                            cpr.AddPolygons(clipSubjectPolygons, ClipperLib.PolyType.ptSubject);
+                            cpr.AddPolygons(clipTargetPolygons, ClipperLib.PolyType.ptClip);
+                            clipSolutionHoles = new ClipperLib.Polygons();
+                            clipType = ClipperLib.ClipType.ctIntersection;
+                            success = cpr.Execute(clipType, clipSolutionHoles);
+                            if (!success) {
+//                                return -3;
+                            }
+
+                            if (clipSolutionHoles.length > 0) {
+                                clipHole = clipSolutionPolygons[k];
+                                olHolePoints = [];
+                                for (m = 0; m < clipHole.length; m++) {
+                                    clipPoint = clipHole[m];
+                                    olHolePoints.push(new OpenLayers.Geometry.Point(clipPoint.X / scale, clipPoint.Y / scale));
+                                }
+                                olNewPolygons[l].components.push(new OpenLayers.Geometry.LinearRing(olHolePoints));
+                                break;
+                            }
+                        }
+                    }
+                }
+                for (k = 0; k < olNewPolygons.length; k++) {
+                    olSolutionPolygons.push(olNewPolygons[k]);
                 }
             }
         }
+        return {olPoints: olPoints, olNewLineStrings: olNewLineStrings, clipPolygon: clipPolygon, clipPoint: clipPoint, sharedEdge: sharedEdge, lastIndex: lastIndex, clipHole: clipHole};
+    },
+
+    /**
+     * @method _splitGeometryByLine
+     * Splits an area by a line.
+     * @param polygons Polygons
+     * @param splitGeom Splitting line
+     * @returns {*} Split geometry
+     * @private
+     */
+    _splitGeometryByLine: function(polygons, splitGeom) {
+        var me = this,
+        // Transform and scale coordinates
+        origin = new OpenLayers.Geometry.Point(0.0, 0.0),
+        reference = [polygons.geometry.components[0].components[0].components[0].x,
+            polygons.geometry.components[0].components[0].components[0].y
+            ],
+        scaleFactor = 10000.0;
+        polygons.geometry.move(-reference[0], -reference[1]);
+        polygons.geometry.resize(scaleFactor, origin);
+
+        splitGeom.geometry.move(-reference[0], -reference[1]);
+        splitGeom.geometry.resize(scaleFactor, origin);
+
+        // OpenLayers variables
+        var lineStyle = {
+            strokeColor: '#0000ff',
+            strokeOpacity: 1,
+            strokeWidth: 2
+            },
+        olOldFeatures = polygons.geometry.components.concat(splitGeom.geometry),
+        olNewFeatures = [new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon()),
+            new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(), null, lineStyle)
+            ],
+        olSolutionPolygons = olNewFeatures[0].geometry.components,
+        olSolutionLineStrings = olNewFeatures[1].geometry.components,
+        olNewPolygons = [],
+        olNewLineStrings = [],
+        olNewLineStringsTmp = [],
+        olPoint,
+        olPoints = [],
+        olHolePoints = [],
+        olEndPoints = [],
+        olLinearRingPoints = [],
+        olLinearRings,
+        olLineStringPoints = [],
+        olPolygon,
+
+        // JSTS variables
+        jstsParser = new jsts.io.OpenLayersParser(),
+        jstsPoints,
+        jstsOldPolygon,
+        jstsOldPolygons = [],
+        jstsNewPolygons = [],
+        jstsLine = null,
+
+        // Clipper variables
+        clipPoint, clipPoints,
+        clipPolygon, clipHole,
+        clipValidationTarget = [],
+        clipSourcePolygons = [],
+        clipSubjectPolygons = [],
+        clipTargetPolygons = [],
+        clipSolutionPolygon, clipSolutionPolygons,
+        clipSolutionHoles,
+
+        cpr,
+        success,
+        clipType,
+
+        union = null,
+        polygonizer,
+
+        polygonIndexes = [],
+        pointIndexes = [],
+        sharedEdge = false,
+        crossRing = false,
+        found = false,
+        finished = false,
+
+        i, j, k, l, m, n, o, p,
+        lastIndex,
+        nextIndex,
+        foundIndex,
+
+        epsilon = 1.0e6, // about 10 cm x 10 cm
+
+        // Scaling factor for integer operations
+        scale = 1,
+        marker;
+
+        // IE8 compatibility
+        this._enableIE8();
+
+        // Preprocess geometry
+        var preProcessed = this.preProcessGeometry(olOldFeatures, jstsOldPolygon, jstsParser, jstsOldPolygons, finished, clipPolygon, olLinearRings, olPoints, clipPoint, clipSourcePolygons, clipHole, scale, jstsLine);
+        clipPolygon = preProcessed.clipPolygon;
+        olPoints = preProcessed.olPoints;
+        clipPoint = preProcessed.clipPoint;
+        clipHole = preProcessed.clipHole;
+        jstsLine = preProcessed.jstsLine;
+        if (jstsLine === null) {
+            return -1;
+        }
+
+        // Splitting
+        var splitPolygons = this.splitRawPolygons(union, jstsOldPolygons, jstsLine, polygonizer, jstsNewPolygons, clipPoints, olPoints, olNewLineStrings, clipTargetPolygons, clipPolygon, jstsPoints, clipPoint, scale, cpr, clipSourcePolygons, clipSolutionPolygons, clipType, success, polygonIndexes, olNewPolygons, sharedEdge, epsilon, clipValidationTarget, clipSolutionPolygon, olLinearRingPoints, foundIndex, lastIndex, clipSubjectPolygons, clipSolutionHoles, clipHole, olHolePoints, olSolutionPolygons);
+        olPoints = splitPolygons.olPoints;
+        olNewLineStrings = splitPolygons.olNewLineStrings;
+        clipPolygon = splitPolygons.clipPolygon;
+        clipPoint = splitPolygons.clipPoint;
+        sharedEdge = splitPolygons.sharedEdge;
+        lastIndex = splitPolygons.lastIndex;
+        clipHole = splitPolygons.clipHole;
+        // Inverse transform and scale
+        olPoints = this.transformInverseScale(olPoints, olNewFeatures, pointIndexes, scaleFactor, reference);
+
+        // Lines to OpenLayers format
+        var convertedOLLines = this.convertLinesToOL(olSolutionPolygons, olPoints, sharedEdge, crossRing, olLineStringPoints, olNewLineStringsTmp, olNewLineStrings);
+        olPoints = convertedOLLines.olPoints;
+        sharedEdge = convertedOLLines.sharedEdge;
+
+        // Post-process line strings
+        var postLineStrings = this.postProcessLineStrings(olNewLineStrings, olSolutionLineStrings, olPoint, found, nextIndex, olEndPoints, lastIndex);
+        olPoint = postLineStrings.olPoint;
+        found = postLineStrings.found;
+        lastIndex = postLineStrings.lastIndex;
+
+        // Create boundary markers
+        var createdMarkers = this.createBoundaryMarkers(olSolutionLineStrings, olEndPoints, marker, olSolutionPolygons, olPolygon, olPoints, lastIndex, olPoint, sharedEdge, found);
+
+        // Update boundary info
+        this.updateBoundaryInfo(olNewFeatures);
         return olNewFeatures;
     },
 
+
+    /**
+     * @method _enableIE8
+     * Enable functions needed by libraries for older browsers
+     * @private
+     */
     _enableIE8: function() {
         // IE8 compatibility
         if (!Array.prototype.indexOf) {
@@ -1734,10 +2009,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /*
      * @method scaleup
-     *
-     * @param {} poly
-     * @param {} scale
-     * @return {} returns scaled integer-valued polygon
+     * Scales float values to big integer values
+     * @param {} poly Input values
+     * @param {} scale Scaling factor
+     * @return {} Scaled values
      */
     scaleup: function (poly, scale) {
         var i, j;
@@ -1755,9 +2030,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /*
      * @method equalArrays
-     *
-     * @param {}
-     * @param {}
+     * Checks if two arrays contain equal items
+     * @param array1 First array
+     * @param array2 Second array
+     * @returns {boolean} Result
      */
     equalArrays: function (array1, array2) {
         var temp = [];
@@ -1792,6 +2068,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return true;
     },
 
+    /**
+     * @method updateTargetLine
+     * Updates line geometry after user modifications
+     */
     updateTargetLine: function() {
         var markerData = [];
         var markerDataUnordered = [{
@@ -1836,6 +2116,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     },
 
 
+    /**
+     * @method getFiltered
+     * Returns filtered geometry
+     * @returns {*} Filtered geometry
+     */
     getFiltered: function() {
         if (this.targetLayer.features.length === 0) {
             return null;
@@ -1848,21 +2133,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
 
-    _updateLayerOrder: function() {
-        var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.sourceLayer.getZIndex())+1;
-        this.sourceLayer.setZIndex(zIndex);
-        this.sourceLayer.redraw();
-        zIndex = zIndex+1;
-        this.targetLayer.setZIndex(zIndex);
-        this.targetLayer.redraw();
-        zIndex = zIndex+1;
-        this.markerLayer.setZIndex(zIndex);
-        this.markerLayer.redraw();
-    },
-
     /**
-     * Returns active draw control names
-     * @method
+     * @method _getActiveDrawControls
+     * Returns active draw controls
+     * @returns {Array} Draw control names
+     * @private
      */
     _getActiveDrawControls: function () {
         var activeDrawControls = [],
@@ -1875,6 +2150,23 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             }
         }
         return activeDrawControls;
+    },
+
+    /**
+     * @method _updateLayerOrder
+     * Sets correct order of the layer
+     * @private
+     */
+    _updateLayerOrder: function() {
+        var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.sourceLayer.getZIndex())+1;
+        this.sourceLayer.setZIndex(zIndex);
+        this.sourceLayer.redraw();
+        zIndex = zIndex+1;
+        this.targetLayer.setZIndex(zIndex);
+        this.targetLayer.redraw();
+        zIndex = zIndex+1;
+        this.markerLayer.setZIndex(zIndex);
+        this.markerLayer.redraw();
     },
 
     isSharedEdge: function(point) {
@@ -1892,7 +2184,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /**
      * @method _enableGfi
-     * Enables/disables the gfi functionality
+     * Enables or disables GFI functionality
      * @param {Boolean} blnEnable true to enable, false to disable
      */
     _enableGfi : function(blnEnable) {
@@ -1902,12 +2194,27 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
     },
 
+    /**
+     * @method register
+     * Performs bundle registering commands
+     */
     register: function () {
 
     },
 
-    unregister: function () {},
+    /**
+     * @method unregister
+     * Performs bundle unregistering commands
+     */
+    unregister: function () {
 
+    },
+
+    /**
+     * @method startPlugin
+     * Performs plugin startup commands
+     * @param sandbox Oskari sandbox
+     */
     startPlugin: function (sandbox) {
         var me = this;
         this._sandbox = sandbox;
@@ -1921,6 +2228,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
         this._enableGfi(false);
     },
+
+    /**
+     * @method stopPlugin
+     * Performs plugin stop commands
+     * @param sandbox
+     */
     stopPlugin: function (sandbox) {
         var me = this;
         this.toggleControl();
@@ -1959,15 +2272,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     },
 
     /* @method start
-     * called from sandbox
+     * Called from sandbox
      */
     start: function (sandbox) {
     },
 
     /**
      * @method stop
-     * called from sandbox
-     *
+     * Called from sandbox
      */
     stop: function (sandbox) {
     },
@@ -1983,7 +2295,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /**
      * @method onEvent
-     * Event is handled forwarded to correct #eventHandlers if found or discarded
+     * Event is forwarded to correct #eventHandlers if found or discarded
      * if not.
      * @param {Oskari.mapframework.event.Event} event a Oskari event object
      */

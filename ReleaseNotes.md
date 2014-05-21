@@ -61,6 +61,12 @@ Opens the language selector in a Flyout
 
 Existing WFS area and line features can now be cut with a new geometry editor bundle and used as analysis source features.
 
+### statistics/statsgrid
+
+The toolbar from the top has been removed and the tool added to the side toolbar when going to stats mode.
+
+Data source select has been added (only two options now - SOTKAnet and user indicators).
+
 ## 1.20
 
 ### analysis/analyse

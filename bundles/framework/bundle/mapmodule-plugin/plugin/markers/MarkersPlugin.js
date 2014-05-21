@@ -161,6 +161,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                         clearBtn.setTitle(loc.buttons.clear);
                         clearBtn.setHandler(function () {
                             me.removeMarkers();
+                            me.stopMarkerAdd();
                         });
                         controlButtons.push(clearBtn);
                         cancelBtn.setHandler(function () {
@@ -211,7 +212,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
             sandbox.removeRequestHandler('MapModulePlugin.RemoveMarkersRequest', this.requestHandlers.removeMarkersHandler);
             sandbox.removeRequestHandler('MapModulePlugin.AddMarkerRequest', this.requestHandlers.addMarkerHandler);
-            sandbox.unregisterStateful(this.mediator.bundleId);
             sandbox.unregister(this);
             this._map = null;
             this._sandbox = null;

@@ -71,7 +71,7 @@ Oskari.registerLocalization({
             },
             "MarkersPlugin": {
                 "buttons": {
-                    "add": "Paikkamerkintä",
+                    "add": "Karttamerkintä",
                     "clear": "Poista kaikki merkinnät"
                 },
                 "form": {
@@ -97,7 +97,7 @@ Oskari.registerLocalization({
                     }
                 },
                 "dialog": {
-                    "title": "Paikkamerkintä",
+                    "title": "Karttamerkintä",
                     "message": "Valitse kartalta uusi sijainti klikkaamalla."
                 }
             }
