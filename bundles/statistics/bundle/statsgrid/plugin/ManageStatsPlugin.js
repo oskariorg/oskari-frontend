@@ -1936,36 +1936,39 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 me.getSotkaIndicatorsMeta(container, indicators.sotka, function () {
                     //send ajax calls and build the grid
                     me.getSotkaIndicatorsData(container, indicators.sotka, function () {
-
-                        if (state.currentColumn !== null && state.currentColumn !== undefined) {
-                            if (state.municipalities && state.municipalities.length) {
-                                me._showSelectedAreas(state.municipalities);
-                            }
-
-                            // current column is needed for rendering map
-                            // sendstats
-                            var column = me._getColumnById(state.currentColumn);
-                            // Filter
-                            if ((state.filterMethod !== null) && (typeof state.filterMethod !== "undefined") &&
-                                (state.filterInput !== null) && (typeof state.filterInput !== "undefined") && (state.filterInput.length > 0)) {
-                                me.filterColumn(column, state.filterMethod, state.filterInput);
-                                state.filterInput = [];
-                            }
-
-                            // Area filter
-                            if ((state.filterRegion !== null) && (typeof state.filterRegion !== "undefined") && (state.filterRegion.length > 0)) {
-                                me.filterColumnByRegion(column, state.filterRegion);
-                                state.filterRegion = [];
-                            }
-
-                            me.stateIndicatorsLoaded = true;
-                            me.sendStatsData(column);
-                            me.grid.setSortColumn(state.currentColumn, true);
-                        }
+                        me._afterStateIndicatorsLoaded(state);
                     });
                 });
             } else {
-                me.stateIndicatorsLoaded = true;
+                me._afterStateIndicatorsLoaded(state);
+            }
+        },
+
+        _afterStateIndicatorsLoaded: function (state) {
+            this.stateIndicatorsLoaded = true;
+
+            if (state.currentColumn !== null && state.currentColumn !== undefined) {
+                if (state.municipalities && state.municipalities.length) {
+                    this._showSelectedAreas(state.municipalities);
+                }
+
+                // current column is needed for rendering map
+                var column = this._getColumnById(state.currentColumn);
+                // Filter
+                if ((state.filterMethod !== null) && (typeof state.filterMethod !== "undefined") &&
+                    (state.filterInput !== null) && (typeof state.filterInput !== "undefined") && (state.filterInput.length > 0)) {
+                    this.filterColumn(column, state.filterMethod, state.filterInput);
+                    state.filterInput = [];
+                }
+
+                // Area filter
+                if ((state.filterRegion !== null) && (typeof state.filterRegion !== "undefined") && (state.filterRegion.length > 0)) {
+                    this.filterColumnByRegion(column, state.filterRegion);
+                    state.filterRegion = [];
+                }
+
+                this.sendStatsData(column);
+                this.grid.setSortColumn(state.currentColumn, true);
             }
         },
         /**
@@ -2242,7 +2245,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var me = this,
                 dataView = this.dataView,
                 grid = this.grid,
-                regions = _.clone(this.regionCategories[category], true),
+                regions = this.regionCategories[category],
                 currColumn;
 
             _.each(regions, function (item) {
