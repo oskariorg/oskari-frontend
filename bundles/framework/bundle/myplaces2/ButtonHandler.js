@@ -154,10 +154,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             if (!user.isLoggedIn()) {
                 // disable toolbar buttons for guests
                 this.disableButtons();
-            }
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
+            } else {
+                // logged in user -> listen to events as normal
+                for (p in me.eventHandlers) {
+                    if (me.eventHandlers.hasOwnProperty(p)) {
+                        sandbox.registerForEventByName(me, p);
+                    }
                 }
             }
         },

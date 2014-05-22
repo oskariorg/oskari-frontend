@@ -17,14 +17,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
         this.layerContainers = {};
         this._createUI();
     }, {
+
         getTitle: function () {
             //"use strict";
             return this.title;
         },
+
         getTabPanel: function () {
             //"use strict";
             return this.tabPanel;
         },
+
         getState: function () {
             //"use strict";
             var state = {
@@ -41,6 +44,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
         }*/
             return state;
         },
+
         setState: function (state) {
             //"use strict";
             if (!state) {
@@ -57,6 +61,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
             }
             */
         },
+
         _createUI: function () {
             //"use strict";
             var me = this;
@@ -75,6 +80,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
             me.accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
             me.accordion.insertTo(this.tabPanel.getContainer());
         },
+
         getFilterField: function () {
             //"use strict";
             if (this.filterField) {
@@ -93,6 +99,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
             this.filterField = field;
             return field;
         },
+
         _searchTrigger: function (keyword) {
             //"use strict";
             var me = this;
@@ -111,6 +118,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
                 }, 500);
             }
         },
+
         _relatedSearchTrigger: function (keyword) {
             //"use strict";
             var me = this;
@@ -124,6 +132,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
                 me._search(keyword);
             }*/
         },
+
         tabSelected: function () {
             //"use strict";
             // update data if now done so yet
@@ -151,9 +160,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
                 });
             }
         },
+
         tabUnselected: function () {
             //"use strict";
         },
+
         /**
          * @method _getLayerGroups
          * @private
@@ -225,6 +236,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
             }
             return layer;
         },
+
         /**
          * @method _getMapLayerJsonBase
          * Returns a base model for maplayer json to create my places map layer
@@ -245,6 +257,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
                 };
             return json;
         },
+
         showLayerGroups: function (groups) {
             //"use strict";
             var me = this,
@@ -296,6 +309,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
                 }
             }
         },
+
         /**
          * @method _search
          * @private
@@ -343,6 +357,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
             // TODO: check if there are no groups visible -> show 'no matches'
             // notification?
         },
+
         setLayerSelected: function (layerId, isSelected) {
             //"use strict";
             var layerCont = this.layerContainers[layerId];
@@ -350,9 +365,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLay
                 layerCont.setSelected(isSelected);
             }
         },
+
         updateLayerContent: function (layerId, layer) {
             //"use strict";
             // empty the listing to trigger refresh when this tab is selected again
+            this.accordion.removeMessage();
             this.showLayerGroups([]);
             this.tabSelected();
         }
