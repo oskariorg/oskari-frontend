@@ -33,7 +33,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             //"use strict";
             // TODO assúme boolean and clean up everyhting that passes somehting else
             // checking since we dont assume param is boolean
-            if (bln == true) {
+            if (bln) {
                 this.ui.show();
             } else {
                 this.ui.hide();
@@ -43,7 +43,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             //"use strict";
             // TODO assúme boolean and clean up everyhting that passes somehting else
             // checking since we dont assume param is boolean
-            this.ui.find('input').attr('checked', (isSelected == true));
+            this.ui.find('input').attr('checked', !!isSelected);
         },
 
         /**
@@ -150,11 +150,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 if (subLayers && subLayers.length > 0) {
                     subLmeta = true;
                     for (s = 0; s < subLayers.length; s += 1) {
-
                         subUuid = subLayers[s].getMetadataIdentifier();
-                        if (!subUuid || subUuid == "" ) {
-                          subLmeta = false;      
-                          break;
+                        if (!subUuid || subUuid === "") {
+                            subLmeta = false;
+                            break;
                         }
                     }
                 }

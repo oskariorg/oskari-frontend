@@ -604,6 +604,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                 group.layerListPanel.setTitle(group.getTitle() + ' (' + layers.length +
                     ')');
             }
+
+            this.accordion.removeMessage();
         },
         setLayerSelected: function (layerId, isSelected) {
             //"use strict";
