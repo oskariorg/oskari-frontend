@@ -13,7 +13,7 @@ Oskari.clazz.define(
                     this.drawFilterPlugin.stopDrawFiltering();
                 }
                 else {
-                    // pressed finished drawing, act like dblclick
+                    // pressed finished drawing
                     this.drawFilterPlugin.finishDrawFiltering();
                 }
             }
