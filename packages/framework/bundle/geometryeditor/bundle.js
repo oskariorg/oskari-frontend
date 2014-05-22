@@ -38,9 +38,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geometryeditor.GeometryEditorBun
                 "src": "../../../../bundles/framework/bundle/geometryeditor/request/StopDrawFilteringRequestHandler.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/geometryeditor/event/ActiveDrawFilteringEvent.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/geometryeditor/event/FinishedDrawFilteringEvent.js"
             }, {
                 "type" : "text/javascript",
