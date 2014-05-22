@@ -5,7 +5,7 @@ div.layerselector2 div.layer {
   background-color: #ffffff;
   clear: both;
   min-height: 13px; }
-  div.layerselector2 div.layer.odd {
+  div.layerselector2 div.layer:nth-child(even) {
     background-color: #f3f3f3; }
   div.layerselector2 div.layer input {
     float: left;
