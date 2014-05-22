@@ -124,7 +124,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 subUuid,
                 checkbox,
                 elBackendStatus,
-                mapLayerId;
+                mapLayerId,
+                layerInfo;
 
             icon.addClass(layer.getIconClassname());
 
@@ -159,9 +160,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 }
             }
             if (layer.getMetadataIdentifier() || subLmeta) {
-
-                tools.find('div.layer-info').addClass('icon-info');
-                tools.find('div.layer-info').click(function () {
+                layerInfo = tools.find('div.layer-info');
+                layerInfo.addClass('icon-info');
+                layerInfo.click(function () {
                     rn = 'catalogue.ShowMetadataRequest';
                     uuid = layer.getMetadataIdentifier();
                     additionalUuids = [];
@@ -191,9 +192,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             }
 
             // setup id
-            jQuery(layerDiv).attr('layer_id', layer.getId());
-            jQuery(layerDiv).find('.layer-title').append(layer.getName());
-            jQuery(layerDiv).find('input').change(function () {
+            layerDiv.attr('layer_id', layer.getId());
+            layerDiv.find('.layer-title').append(layer.getName());
+            layerDiv.find('input').change(function () {
                 checkbox = jQuery(this);
                 if (checkbox.is(':checked')) {
                     sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), false, layer.isBaseLayer()]);
@@ -204,7 +205,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
 
             /* set sticky */
             if (layer.isSticky()) {
-                jQuery(layerDiv).find('input').attr('disabled', 'disabled');
+                layerDiv.find('input').attr('disabled', 'disabled');
             }
 
             /*

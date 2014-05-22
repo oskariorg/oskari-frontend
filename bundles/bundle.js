@@ -1449,8 +1449,7 @@ Oskari = (function () {
          * commits any script loading requests
          */
         "commit": function () {
-            var head = document.getElementsByTagName("head")[0],
-                fragment = document.createDocumentFragment(),
+            var fragment = document.createDocumentFragment(),
                 me = this,
                 numFiles = me.filesRequested,
                 onFileLoaded,
@@ -1459,12 +1458,10 @@ Oskari = (function () {
                 def,
                 fn,
                 st;
-            if (numFiles === 0) {
-                me.callback();
-                me.manager.notifyLoaderStateChanged(me, true);
-                return;
+            if (me.head === undefined) {
+                me.head = document.getElementsByTagName("head")[0];
             }
-            if (preloaded()) {
+            if (numFiles === 0 || preloaded()) {
                 me.callback();
                 me.manager.notifyLoaderStateChanged(me, true);
                 return;
@@ -1497,7 +1494,7 @@ Oskari = (function () {
                 }
             }
             if (f) {
-                head.appendChild(fragment);
+                me.head.appendChild(fragment);
             }
         },
         /**
