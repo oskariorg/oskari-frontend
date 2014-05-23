@@ -82,7 +82,6 @@ Oskari.registerLocalization({
             "layerTypeDesc": "Layer type: WMS, WFS, WMTS",
             "type": "Layer type",
             "typePlaceholder": "Choose layer type",
-            "normalLayer": "Normal layer",
             "baseLayer": "Base layer",
             "groupLayer": "Group layer",
             "interfaceVersion": "Interface version",
@@ -135,14 +134,21 @@ Oskari.registerLocalization({
             "maxScalePlaceholder": "Layer's maximum scale",
             "srsName": "Coordinate system",
             "srsNamePlaceholder": "Coordinate system",
-            "legendImage": "Legenda image",
-            "legendImageDesc": "URL for legenda image",
-            "legendImagePlaceholder": "URL for legenda image",
+            "legendImage": "Legend image",
+            "legendImageDesc": "URL for legend image",
+            "legendImagePlaceholder": "URL for legend image",
+
             "gfiContent": "NOT TRANSLATED",
             "gfiResponseType": "GFI response type",
             "gfiResponseTypeDesc": "Response type for Get Feature Info (GFI)",
             "gfiStyle": "GFI style",
             "gfiStyleDesc": "GFI style (XSLT)",
+
+            "matrixSetId" : "WMTS Matrix set id",
+            "matrixSetIdDesc" : "WMTS Matrix set id",
+            "matrixSet" : "WMTS Matrix set",
+            "matrixSetDesc" : "WMTS Matrix set",
+
             "realtime": "Real time layer",
             "refreshRate": "Refresh rate (in seconds)",
 
