@@ -29,14 +29,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
         };
         this._createUI();
     }, {
+
         getTitle: function () {
             //"use strict";
             return this.title;
         },
+
         getTabPanel: function () {
             //"use strict";
             return this.tabPanel;
         },
+
         getState: function () {
             //"use strict";
             var state = {
@@ -53,6 +56,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
         }*/
             return state;
         },
+
         setState: function (state) {
             //"use strict";
             if (!state) {
@@ -199,10 +203,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             //"use strict";
             var me = this,
                 i,
+                groupsLength = groups.length,
                 group,
                 layers,
+                localization,
                 groupPanel,
                 groupContainer,
+                layersLength,
                 n,
                 layer,
                 layerWrapper,
@@ -210,25 +217,26 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                 selectedLayers;
 
             me.accordion.removeAllPanels();
-            me.layerContainers = undefined;
             me.layerContainers = {};
             me.layerGroups = groups;
-            for (i = 0; i < groups.length; i += 1) {
+            localization = me.instance.getLocalization();
+            for (i = 0; i < groupsLength; i += 1) {
                 group = groups[i];
                 layers = group.getLayers();
+                layersLength = layers.length;
                 groupPanel = Oskari.clazz.create(
                     'Oskari.userinterface.component.AccordionPanel');
-                groupPanel.setTitle(group.getTitle() + ' (' + layers.length +
+                groupPanel.setTitle(group.getTitle() + ' (' + layersLength +
                     ')');
                 group.layerListPanel = groupPanel;
 
                 groupContainer = groupPanel.getContainer();
-                for (n = 0; n < layers.length; n += 1) {
+                for (n = 0; n < layersLength; n += 1) {
                     layer = layers[n];
                     layerWrapper =
                         Oskari.clazz.create(
                             'Oskari.mapframework.bundle.layerselector2.view.Layer',
-                            layer, me.instance.sandbox, me.instance.getLocalization()
+                            layer, me.instance.sandbox, localization
                     );
                     layerContainer = layerWrapper.getContainer();
                     groupContainer.append(layerContainer);
@@ -239,7 +247,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             }
 
             selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
-            for (i = 0; i < selectedLayers.length; i += 1) {
+            layersLength = selectedLayers.length;
+            for (i = 0; i < layersLength; i += 1) {
                 me.setLayerSelected(selectedLayers[i].getId(), true);
             }
 
@@ -247,7 +256,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
         },
 
         /**
-         * @method _filterLayers
+         * @method filterLayers
          * @private
          * @param {String} keyword
          *      keyword to filter layers by
@@ -292,11 +301,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                     layerCont.setVisible(bln);
                     if (bln) {
                         visibleLayerCount += 1;
-                        if (visibleLayerCount % 2 === 1) {
-                            layerCont.getContainer().addClass('odd');
-                        } else {
-                            layerCont.getContainer().removeClass('odd');
-                        }
                         // open the panel if matching layers
                         group.layerListPanel.open();
                     }
@@ -593,17 +597,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                     layerId = layer.getId();
                     layerCont = this.layerContainers[layerId];
                     layerCont.setVisible(true);
-                    if (n % 2 === 1) {
-                        layerCont.getContainer().addClass('odd');
-                    } else {
-                        layerCont.getContainer().removeClass('odd');
-                    }
                 }
                 group.layerListPanel.setVisible(true);
                 group.layerListPanel.close();
                 group.layerListPanel.setTitle(group.getTitle() + ' (' + layers.length +
                     ')');
             }
+
+            this.accordion.removeMessage();
         },
         setLayerSelected: function (layerId, isSelected) {
             //"use strict";

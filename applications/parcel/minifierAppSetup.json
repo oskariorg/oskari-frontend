@@ -79,6 +79,9 @@
                     },
                     "event-map": {
                         "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "ui-components": {
+                        "bundlePath": "../../packages/framework/bundle/"
                     }
                 },
                 "Require-Bundle-Instance": []

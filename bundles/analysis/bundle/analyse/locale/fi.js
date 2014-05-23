@@ -78,6 +78,11 @@ Oskari.registerLocalization({
                     "classForPreview": "union",
                     "tooltip": "Kohteiden yhdistäminen taulukosta valitsemalla tai yhteisten ominaisuustietoarvojen perusteella"
                 }, {
+                    "id": "oskari_analyse_cut",
+                    "label": "Leikkaus",
+                    "classForPreview": "cut",
+                    "tooltip": ""
+                }, {
                     "id": "oskari_analyse_intersect",
                     "label": "Leikkaavien kohteiden suodatus",
                     "classForPreview": "intersect",

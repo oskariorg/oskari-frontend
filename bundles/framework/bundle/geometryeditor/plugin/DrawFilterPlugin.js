@@ -112,11 +112,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.prefix = config.id + ".";
         this.creatorId = config.id;
     }
-    // graphicFill, instance
-    if (config && config.graphicFill) {
-        this.graphicFill = config.graphicFill;
-    }
-    this.multipart = (config && config.multipart === true);
 }, {
     __name: 'DrawFilterPlugin',
 
@@ -185,7 +180,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                                 var nextVertex = geometry.components[j];
                                 if(prevVertex.CLASS_NAME == "OpenLayers.Geometry.Point" &&
                                    nextVertex.CLASS_NAME == "OpenLayers.Geometry.Point") {
-                                    if((me.isSharedEdge(prevVertex))||(me.isSharedEdge(nextVertex))) {
+                                    if(((me.isSharedEdge(prevVertex))||(me.isSharedEdge(nextVertex)))||(me.isShortLine([prevVertex,nextVertex]))) {
                                         var x = (prevVertex.x + nextVertex.x) / 2;
                                         var y = (prevVertex.y + nextVertex.y) / 2;
                                         var point = new OpenLayers.Feature.Vector(
@@ -1866,7 +1861,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         found = false,
         finished = false,
 
-        i, j, k, l, m, n, o, p,
         lastIndex,
         nextIndex,
         foundIndex,
@@ -2169,6 +2163,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.markerLayer.redraw();
     },
 
+    /**
+     * @method isSharedEdge
+     * Checks if point is shared with two polygons
+     * @param point Point
+     * @returns {boolean} Result
+     */
     isSharedEdge: function(point) {
         if (point.references === null){
             return false;
@@ -2180,6 +2180,26 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             return false;
         }
         return point.references.length >= 2;
+    },
+
+    /**
+     * @method isShortLine
+     * Checks if segment defined by two points is actually full split line between two polygons
+     * @param points Points
+     * @returns {boolean} Result
+     */
+    isShortLine: function(points) {
+        var lineRefs = [];
+        for (var i=0; i<2; i++) {
+            if (typeof points[i].markerPoint === "undefined") {
+                return false;
+            }
+            if (points[i].markerPoint < 0) {
+                return false;
+            }
+            lineRefs.push(this.markers[points[i].markerPoint-1].reference.line);
+        }
+        return (lineRefs[0] === lineRefs[1]);
     },
 
     /**
