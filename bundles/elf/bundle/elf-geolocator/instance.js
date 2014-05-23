@@ -31,27 +31,12 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
             }
         },
         /**
-         * BundleInstance protocol method
+         * DefaultExtension method for doing stuff after the bundle has started.
          * 
-         * @method start
+         * @method afterStart
          */
-        start: function () {
-            var conf = this.conf,
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName),
-                request;
-
-            this.sandbox = sandbox;
-            sandbox.register(this);
-
-            // stateful
-            if (conf && conf.stateful === true) {
-                sandbox.registerAsStateful(this.mediator.bundleId, this);
-            }
-
-            request = sandbox
-                .getRequestBuilder('userinterface.AddExtensionRequest');
-            sandbox.request(this, request(this));
+        afterStart: function (sandbox) {
+            var conf = this.conf;
 
             if (conf && conf.searchUrl) {
                 this.searchUrl = conf.searchUrl;

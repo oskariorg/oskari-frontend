@@ -97,6 +97,10 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
             request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
 
             sandbox.request(this, request);
+
+            this.afterStart(sandbox);
+        },
+        afterStart: function (sandbox) {
         },
         /**
          * @method stop
