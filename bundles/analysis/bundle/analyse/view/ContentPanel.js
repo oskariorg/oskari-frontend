@@ -331,7 +331,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 feature;
 
             if (mode) {
-                feature = new OpenLayers.Feature.Vector(geometry,null,{strokeWidth: 3, strokeColor: '#000000'});
+                var style = OpenLayers.Util.extend({}, OpenLayers.Feature.Vector.style['default']);
+                style.fillOpacity = 0.7;
+                style.graphicOpacity = 1;
+                style.strokeWidth = 2;
+                style.strokeColor = "#000000";
+                style.strokeOpacity = 1;
+                feature = new OpenLayers.Feature.Vector(geometry,null,style);
                 this.getFeatures().push(
                     this._createFakeLayer(feature.id, mode, name)
                 );
