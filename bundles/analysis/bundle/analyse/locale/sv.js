@@ -24,6 +24,35 @@ Oskari.registerLocalization({
                         "point": "Piste"
                     }
                 },
+                "drawFilter": {
+                    "title": "NOT TRANSLATED",
+                    "buttons": {
+                        "finish": "NOT TRANSLATED"
+                    },
+                    "tooltip": {
+                        "point": "NOT TRANSLATED",
+                        "line": "NOT TRANSLATED",
+                        "edit": "NOT TRANSLATED",
+                        "remove": "NOT TRANSLATED"
+                    },
+                    "dialog": {
+                        "cancel": "NOT TRANSLATED",
+                        "modes": {
+                            "point": {
+                                "title": "NOT TRANSLATED",
+                                "message": "NOT TRANSLATED"
+                            },
+                            "line": {
+                                "title": "NOT TRANSLATED",
+                                "message": "NOT TRANSLATED"
+                            },
+                            "edit": {
+                                "title": "NOT TRANSLATED",
+                                "message": "NOT TRANSLATED"
+                            }
+                        }
+                    }
+                },
                 "search": {
                     "title": "Hae paikkahaulla",
                     "resultLink": "Tuo analyysiin"
@@ -47,6 +76,11 @@ Oskari.registerLocalization({
                     "id": "oskari_analyse_union",
                     "label": "Union",
                     "classForPreview": "union",
+                    "tooltip": ""
+                }, {
+                    "id": "oskari_analyse_cut",
+                    "label": "NOT TRANSLATED",
+                    "classForPreview": "cut",
                     "tooltip": ""
                 }, {
                     "id": "oskari_analyse_intersect",

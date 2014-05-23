@@ -19,7 +19,7 @@ div.layerselector2 {
         clear: both;
         min-height: 13px;
 
-        &.odd {
+        &:nth-child(even) {
             background-color : #f3f3f3;
         }
 
