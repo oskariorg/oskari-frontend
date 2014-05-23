@@ -12,7 +12,8 @@ function() {
 
     //Internal id for this map layer
     this._WmtsMatrixSetId = null;
-    this._WmtsMatrixSetData = null;
+    this._OriginalWmtsMatrixSetData = null;
+    this._WmtsMatrixSet = null;
     this._WmtsLayerDef = null;
 
     /* Layer Type */
@@ -47,26 +48,40 @@ function() {
         return this._WmtsMatrixSetId;
     },
     /**
+     * @method setOriginalMatrixSetData
+     * @return {String} matrixSetId
+     */
+    setOriginalMatrixSetData : function(matrixSetId) {
+        this._OriginalWmtsMatrixSetData = matrixSetId;
+    },
+    /**
+     * @method getOriginalMatrixSetData
+     * @return {String}
+     */
+    getOriginalMatrixSetData : function() {
+        return this._OriginalWmtsMatrixSetData;
+    },
+    /**
      * @method setWmtsMatrixSet
      * @return {Object} matrixSet
      */
     setWmtsMatrixSet : function(matrixSet) {
-        this._WmtsMatrixSetData = matrixSet;
+        this._WmtsMatrixSet = matrixSet;
     },
     /**
      * @method getWmtsMatrixSet
      * @return {Object}
      */
     getWmtsMatrixSet : function() {
-        return this._WmtsMatrixSetData;
+        return this._WmtsMatrixSet;
     },
     /**
      * Usable in textarea etc
      * @method getWmtsMatrixSetAsString
      * @return {String}
      */
-    getWmtsMatrixSetAsString : function() {
-        var value = this.getWmtsMatrixSet();
+    getOriginalWmtsMatrixSetAsString : function() {
+        var value = this.getOriginalMatrixSetData();
         if(!value) {
             return "";
         }

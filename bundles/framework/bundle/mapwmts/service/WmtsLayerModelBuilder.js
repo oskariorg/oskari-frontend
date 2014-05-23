@@ -43,6 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
          * layer.setWmtsLayerDef(mapLayerJson.tileLayerData);
          */
 
+        layer.setOriginalMatrixSetData(mapLayerJson.tileMatrixSetData);
         layer.setFeatureInfoEnabled(true);
         if (mapLayerJson.tileMatrixSetData && mapLayerJson.tileLayerData) {
             /* ver 2 */
