@@ -2,10 +2,15 @@
 
 ## 1.21
 
-### core/sandbox
+### core/sandbox/Layers
 
 sandbox.getRequestBuilder('RequestName') now returns undefined if either request or requestHandler is missing. 
 Previously only returned undefined if request was missing. This solves some timing issues with minified code.
+
+AbstractLayer now has set/getLayerName() as it's a common field for most layers. LayerName is functional configurations while name is for UI.
+
+WmsLayer now forwards calls for wmsUrl/wmsName methods to AbstractLayers layerUrl/layerName methods. The API remains the same and urls can be accessed with both ways. 
+WmtsLayer does the same for wmtsUrl/wmtsName.
 
 ### MaplayerService
 
