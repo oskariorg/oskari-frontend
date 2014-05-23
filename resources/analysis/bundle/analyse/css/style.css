@@ -189,6 +189,5 @@ div.analyse-filter-popup-content div.filter-option {
   div.analyse-filter-popup-content div.filter-option select.operator, div.analyse-filter-popup-content div.filter-option select.boolean {
     width: 60px; }
 
-  div.divmanazerpopup.drawfilterdialog {
-      max-width: 400px;
-  }
+div.divmanazerpopup.drawfilterdialog {
+  max-width: 400px; }

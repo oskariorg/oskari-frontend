@@ -123,12 +123,6 @@ define([
                                     //,layerTabModel: this.layerGroupingModel
                                 });
 
-                                //odds and even rows
-                                if (visibleLayerCount % 2 == 1) {
-                                    layerView.$el.addClass('odd');
-                                } else {
-                                    layerView.$el.removeClass('odd');
-                                }
                                 visibleLayerCount++;
                                 // Add layerView to group container
                                 groupContainer.append(layerView.$el);

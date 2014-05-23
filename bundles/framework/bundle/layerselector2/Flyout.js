@@ -20,6 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         this.state = null;
         this.layerTabs = [];
     }, {
+
         /**
          * @method getName
          * @return {String} the name for the component
@@ -28,6 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             //"use strict";
             return 'Oskari.mapframework.bundle.layerselector2.Flyout';
         },
+
         /**
          * @method setEl
          * @param {Object} el
@@ -72,6 +74,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 this.layerTabs.push(publishedTab);
             }
         },
+
         /**
          * @method stopPlugin
          *
@@ -80,6 +83,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         stopPlugin: function () {
             //"use strict";
         },
+
         /**
          * @method getTitle
          * @return {String} localized text for the title of the flyout
@@ -88,6 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             //"use strict";
             return this.instance.getLocalization('title');
         },
+
         /**
          * @method getDescription
          * @return {String} localized text for the description of the flyout
@@ -96,6 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             //"use strict";
             return this.instance.getLocalization('desc');
         },
+
         /**
          * @method getOptions
          * Interface method implementation, does nothing atm
@@ -103,6 +109,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         getOptions: function () {
             //"use strict";
         },
+
         /**
          * @method setState
          * @param {String} state
@@ -113,6 +120,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             //"use strict";
             this.state = state;
         },
+
         setContentState: function (state) {
             //"use strict";
             var i,
@@ -130,6 +138,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 }
             }
         },
+
         getContentState: function () {
             //"use strict";
             var state = {},
@@ -144,6 +153,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             }
             return state;
         },
+
         /**
          * @method createUi
          * Creates the UI for a fresh start
@@ -166,6 +176,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             //me.tabContainer.addTabChangeListener(me._tabsChanged); // -> filter with same keyword when changing tabs?
             me.populateLayers();
         },
+
         populateLayers: function () {
             //"use strict";
             var sandbox = this.instance.getSandbox(),
@@ -317,6 +328,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             //var layerListContainer = jQuery(this.container).find('div.layerList');
             //this._populateLayerList(layerListContainer);
         },
+
         /**
          * @method handleLayerRemoved
          * @param {String} layerId
@@ -333,6 +345,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             //this._populateLayerList(layerListContainer);
         }
     }, {
+
         /**
          * @property {String[]} protocol
          * @static

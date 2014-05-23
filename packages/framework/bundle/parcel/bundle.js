@@ -171,6 +171,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingTool",
                     "type": "text/javascript",
                     "src": "../../../../libraries/jquery/plugins/jquery.cookie.js"
                 },
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../libraries/clipper/clipper.js"
+                },
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../libraries/jsts/jsts.js"
+                },
                 // css
                 {
                     "type": "text/css",
