@@ -690,7 +690,7 @@ define([
                 else if(layerType === 'wmtslayer') {
                     var format = new OpenLayers.Format.WMTSCapabilities();
                     var caps = format.read(response);
-                    me.model.setWmtsMatrixSet(caps);
+                    me.model.setOriginalMatrixSetData(caps);
                     me.model.change();
                 }
             },
