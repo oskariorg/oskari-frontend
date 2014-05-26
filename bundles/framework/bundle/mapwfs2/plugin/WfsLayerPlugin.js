@@ -245,6 +245,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
              * @param {Object} event
              */
             "AfterMapMoveEvent": function (event) {
+            	if( this.config && this.config.deferSetLocation ) {
+            		this.getSandbox().printDebug("setLocation deferred (to aftermapmove)");
+            		return;
+            	}
                 this.mapMoveHandler();
             },
 
@@ -294,6 +298,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
              */
             "MapLayerVisibilityChangedEvent": function (event) {
                 this.mapLayerVisibilityChangedHandler(event);
+                if (event.getMapLayer().hasFeatureData()) {
+                	if( this.config && this.config.deferSetLocation ) {
+                		this.getSandbox().printDebug("sending deferred setLocation");
+                		this.mapMoveHandler();
+                	}
+                }
             },
 
             /**
@@ -351,6 +361,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
          * @method mapMoveHandler
          */
         mapMoveHandler: function () {
+        	
+        	
+        	
             var srs = this.getSandbox().getMap().getSrsName(),
                 bbox = this.getSandbox().getMap().getExtent(),
                 zoom = this.getSandbox().getMap().getZoom(),
@@ -548,7 +561,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
          * @method mapLayerVisibilityChangedHandler
          */
         mapLayerVisibilityChangedHandler: function (event) {
-            if (event.getMapLayer().hasFeatureData()) {
+            if (event.getMapLayer().hasFeatureData()) {            	
                 this.getIO().setMapLayerVisibility(
                     event.getMapLayer().getId(),
                     event.getMapLayer().isVisible()
