@@ -134,9 +134,9 @@ Oskari.registerLocalization({
             "maxScalePlaceholder": "1 (1:1) Maximimittakaava ",
             "srsName": "Koordinaatti&shy;järjestelmä",
             "srsNamePlaceholder": "Koordinaattijärjestelmä",
-            "legendImage": "Legenda-kuvan osoite",
-            "legendImageDesc": "Legenda-kuvan osoite",
-            "legendImagePlaceholder": "Legenda-kuvan osoite",
+            "legendImage": "Karttaselitteen osoite",
+            "legendImageDesc": "Karttaselitteen osoitee",
+            "legendImagePlaceholder": "Karttaselitteen osoite",
 
             "gfiContent": "GFI lisäsisältö",
             "gfiResponseType": "GFI vastauksen tyyppi",
