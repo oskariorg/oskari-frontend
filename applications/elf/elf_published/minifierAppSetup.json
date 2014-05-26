@@ -20,7 +20,7 @@
                     "openlayers-default-theme": {
                         "bundlePath": "../../../packages/openlayers/bundle/"
                     },
-                    "openlayers-2_13_1-full-map": {
+                    "openlayers-full-map": {
                         "bundlePath": "../../../packages/openlayers/bundle/"
                     }
                 },
