@@ -171,25 +171,6 @@ jQuery(document).ready(function() {
           
         }
         
-        /* TEMPORARY: */
-  
-        /* TEMPORARY: */
-        /* Let's load WMTS EU WFS stuff from JSON */
-        /*var wfsLayerSources = appConfigElf.conf.WFS;
-        
-        if( wfsLayerSources ) {
-        	 var wlen = wfsLayerSources.length;
-
-             for(var w = 0; w < wlen; w++) {
-               var wobj = wfsLayerSources[w]
-        	
-               var wfsLayerDef = layerService.createMapLayer( wobj );
-               layerService.addLayer(wfsLayerDef);
-             }
-        
-        }
-        */
-        
 
     }
 
