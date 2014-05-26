@@ -871,8 +871,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             for (p in lps) {
                 if (lps.hasOwnProperty(p)) {
                     layersPlugin = lps[p];
+                    if (!layersPlugin) {
+                        this.getSandbox().printWarn("LayerPlugins has no entry for \"" + p + "\"");
+                    }
                     // find the actual openlayers layers (can be many)
-                    layerList = layersPlugin.getOLMapLayers(layer);
+                    layerList = layersPlugin ? layersPlugin.getOLMapLayers(layer): null;
                     if (layerList) {
                         // if found -> add to results
                         // otherwise continue looping
