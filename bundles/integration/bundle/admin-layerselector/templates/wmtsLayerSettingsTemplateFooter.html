@@ -1,6 +1,16 @@
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">
+            <label for="add-layer-style" class="add-layer-label" title="<%= instance.getLocalization('admin').styleDesc %>"><%= instance.getLocalization('admin').style %></label>
+        </div>
+        <div class="add-layer-input-area">
+                <input type="text" id="add-layer-style" class="add-layer-input long" value="<%= model.getCurrentStyle().getName() %>" />
+                <div class="icon-close"></div>
+        </div>
+    </div>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
             <label for="add-layer-matrixSetId" class="add-layer-label" title="<%= instance.getLocalization('admin').matrixSetIdDesc %>"><%= instance.getLocalization('admin').matrixSetId %></label>
         </div>
         <div class="add-layer-input-area">
@@ -21,4 +31,3 @@
             </div>
         </div>
     </div>
-
