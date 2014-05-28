@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "DivManazer",
     "value": {
@@ -105,4 +106,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

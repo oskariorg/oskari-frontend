@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "LayerSelector",
     "value": {
@@ -6,18 +7,18 @@ Oskari.registerLocalization({
         "desc": "",
         "errors": {
             "title": "Virhe!",
-            "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin.",
-            "loadFailed": "Karttatasojen latauksessa tapahtui virhe. Lataa sivu selaimeesi uudelleen ja valitse karttatasot.",
-            "noResults": "Haulla ei löytynyt yhtään tulosta.",
-            "noResultsForKeyword": "Karttatasoja ei löydy tällä avainsanalla.",
-            "minChars": "Kirjoita ainakin 4 merkkiä."
+            "generic": "Järjestelmässä tapahtui virhe. Yritä myöhemmin uudelleen.",
+            "loadFailed": "Karttatasojen lataaminen epäonnistui. Päivitä sivu selaimessasi ja valitse karttatasot uudelleen.",
+            "noResults": "Antamallasi hakusanalla ei löytynyt yhtään karttatasoa.",
+            "noResultsForKeyword": "Antamallasi hakusanalla ei löytynyt yhtään karttatasoa.",
+            "minChars": "Antamasi hakusana on liian lyhyt. Hakusanassa on oltava vähintään neljä merkkiä."
         },
         "loading": "Haetaan...",
         "filter": {
             "text": "Hae karttatasoja",
             "keywordsTitle": "Avainsanat:",
-            "shortDescription": "Hae karttasoa nimeen, tiedontuottajaan ja avainsanaan perustuen.",
-            "description": "Voit hakea karttatasoja kirjoittamalla osan karttatason nimestä, tiedontuottajan nimestä tai karttatasoa kuvailevasta avainsanasta. Avainsanahaku käynnistyy, kun vähintään 4 merkkiä on kirjoitettu hakukenttään.",
+            "shortDescription": "Hae karttatasoa karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella.",
+            "description": "Voi hakea karttatasoa karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Voit kirjoittaa nimen kokonaan tai vain osan nimestä. Hakusanassa on oltava vähintään neljä merkkiä.",
             "inspire": "Aiheittain",
             "organization": "Tiedontuottajittain",
             "published": "Käyttäjät",
@@ -61,4 +62,5 @@ Oskari.registerLocalization({
             "yk": "Yläkäsite"
         }
     }
-});
+}
+);

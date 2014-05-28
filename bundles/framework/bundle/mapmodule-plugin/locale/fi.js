@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "MapModule",
     "value": {
@@ -11,7 +12,7 @@ Oskari.registerLocalization({
             "zoomLvl-4": "Kunta",
             "zoomLvl-5": "",
             "zoomLvl-6": "",
-            "zoomLvl-7": "Kunnan osa",
+            "zoomLvl-7": "Kunnanosa",
             "zoomLvl-8": "",
             "zoomLvl-9": "",
             "zoomLvl-10": "Katu",
@@ -26,10 +27,10 @@ Oskari.registerLocalization({
                 "indicatorsHeader": "Indikaattorit"
             },
             "DataSourcePlugin": {
-                "link": "Aineistolähde",
+                "link": "Aineiston lähde",
                 "popup": {
                     "title": "Tietolähteet",
-                    "content": " "
+                    "content": "NOT TRANSLATED"
                 },
                 "button": {
                     "close": "Sulje"
@@ -37,24 +38,24 @@ Oskari.registerLocalization({
             },
             "LayerSelectionPlugin": {
                 "title": "Karttatasot",
-                "chooseDefaultBaseLayer": "Valitse karttapohja"
+                "chooseDefaultBaseLayer": "Valitse taustakartta"
             },
             "SearchPlugin": {
-                "placeholder": "Hae paikkoja/osoitteita",
+                "placeholder": "Hae kohteita paikannimen tai osoitteen perusteella.",
                 "search": "Hae",
                 "close": "Sulje hakutulokset",
-                "noresults": "Haulla ei löytynyt tuloksia",
-                "toomanyresults": "Löytyi yli 100 tulosta, tarkenna hakua.",
+                "noresults": "Antamallasi hakusanalla ei löytynyt yhtään kohdetta.",
+                "toomanyresults": "Hakusi tuotti yli 100 hakutulosta. Anna tarkempi hakusana.",
                 "column_name": "Nimi",
                 "column_village": "Kunta",
                 "column_type": "Tyyppi"
             },
             "GetInfoPlugin": {
                 "title": "Kohdetiedot",
-                "layer": "Taso",
+                "layer": "Karttataso",
                 "places": "Kohteet",
                 "description": "Kuvaus",
-                "link": "URL-osoite",
+                "link": "Verkko-osoite",
                 "name": "Nimi"
             },
             "PublisherToolbarPlugin": {
@@ -103,4 +104,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

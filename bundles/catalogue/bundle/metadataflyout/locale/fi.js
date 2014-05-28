@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "catalogue.bundle.metadataflyout",
     "value": {
@@ -22,51 +23,51 @@ Oskari.registerLocalization({
         "flyout": {
             "title": "Metatieto",
             "abstract": "Perustiedot",
-            "inspire": "INSPIRE",
-            "jhs": "JHS",
-            "xml": "XML",
+            "inspire": "Inspire-metatiedot",
+            "jhs": "JHS 158-metatiedot",
+            "xml": "ISO 19139 XML-tiedosto",
             "map": "Kattavuus",
             "pdf": "Tuloste",
             "select_metadata_prompt": "Valitse metatieto kuvakkeista painamalla.",
-            "metadata_printout_title": "METATIETOTULOSTE",
+            "metadata_printout_title": "METATIETOKUVAUS",
             "linkto": "Metatietolinkki",
             "tabs": {
                 "abstract": {
                     "abstract": "",
-                    "jhs": "Näytä JHS",
-                    "inspire": "Näytä INSPIRE",
+                    "jhs": "Näytä JHS 158-metatiedot",
+                    "inspire": "Näytä Inspire-metatiedot",
                     "xml": {
-                        "text": "Avaa ISO 19139 XML",
+                        "text": "Avaa ISO 19139 XML-tiedosto",
                         "target": "_blank"
                     },
                     "pdf": {
-                        "text": "Avaa PDF -tuloste",
+                        "text": "Avaa PDF-tuloste",
                         "target": "_blank"
                     }
                 },
                 "jhs": {
                     "abstract": "Näytä perustiedot",
                     "jhs": "",
-                    "inspire": "Näytä INSPIRE",
+                    "inspire": "Näytä Inspire-metatiedot",
                     "xml": {
-                        "text": "Avaa ISO 19139 XML",
+                        "text": "Avaa ISO 19139 XML-tiedosto",
                         "target": "_blank"
                     },
                     "pdf": {
-                        "text": "Avaa PDF -tuloste",
+                        "text": "Avaa PDF-tuloste",
                         "target": "_blank"
                     }
                 },
                 "inspire": {
                     "abstract": "Näytä perustiedot",
-                    "jhs": "Näytä JHS",
+                    "jhs": "Näytä JHS-metatiedot",
                     "inspire": "",
                     "xml": {
-                        "text": "Avaa ISO 19139 XML",
+                        "text": "Avaa ISO 19139 XML-tiedosto",
                         "target": "_blank"
                     },
                     "pdf": {
-                        "text": "Avaa PDF -tuloste",
+                        "text": "Avaa PDF-tuloste",
                         "target": "_blank"
                     }
                 }
@@ -74,7 +75,8 @@ Oskari.registerLocalization({
         },
         "tile": {
             "title": "Metatieto",
-            "tooltip": "Metatiedoista selviää aineiston käyttöehdot ja saatavuus."
+            "tooltip": "Metatieto on tietoa tiedosta, tässä tapauksessa joko paikkatietoaineistosta, -aineistosarjasta tai -palvelusta. Metatiedoista selviää mm. kyseisen tietoresurssin käyttöehdot ja saatavuus."
         }
     }
-});
+}
+);

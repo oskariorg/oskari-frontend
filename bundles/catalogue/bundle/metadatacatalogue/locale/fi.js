@@ -1,15 +1,16 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "catalogue.bundle.metadatacatalogue",
     "value": {
         "tabTitle": "Metatietohaku",
-        "metadataCatalogueDescription": "Hae paikkatietoaineistoja tai palveluita.",
+        "metadataCatalogueDescription": "Hae paikkatietoaineistoja, -aineistosarjoja tai -palveluita.",
         "metadataCatalogueButton": "Hae",
         "assistance": "Kirjoita hakusana",
         "showMore": "Lisää hakuehtoja",
         "showLess": "Piilota laajennettu haku",
         "emptyOption": "* Ei valintaa *",
-        "type": "Tyyppi",
+        "type": "Resurssin tyyppi",
         "serviceType": "Palvelun tyyppi",
         "Title": "Resurssin nimi",
         "OrganisationName": "Vastaava organisaatio",
@@ -29,12 +30,12 @@ Oskari.registerLocalization({
         "view": "Katselu",
         "Language": "Metatiedon kieli",
         "ResourceLanguage": "Resurssin kieli",
-        "modifySearch" : "Muokkaa hakua",
-        "showSearch" : "Näytä kaikki hakutulokset",
+        "modifySearch": "Muokkaa hakua",
+        "showSearch": "Näytä kaikki hakutulokset",
         "metadataCatalogueResults": "Hakutulokset",
         "show": "Näytä karttataso",
         "hide": "Poista karttataso",
-        "contentErrorMsg": "Hakusana ei saa sisältää merkkejä ",
+        "contentErrorMsg": "Hakusana ei saa sisältää merkkejä",
         "metadataoptionservice_alert_title": "Virhe",
         "metadataoptionservice_not_found_anything_text": "Vaihtoehtojen noutaminen epäonnistui.",
         "metadatasearchservice_alert_title": "Virhe",
@@ -44,4 +45,5 @@ Oskari.registerLocalization({
             "name": "Nimi"
         }
     }
-});
+}
+);

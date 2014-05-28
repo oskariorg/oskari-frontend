@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "FeatureData2",
     "value": {
@@ -8,12 +9,12 @@ Oskari.registerLocalization({
         "showmore": "Näytä",
         "nodata": "Valitsemillasi karttatasoilla ei ole kohdetietoja.",
         "featureNameAll": "Tietotyyppi",
-        "errorscale": "Tällä mittakaavatasolla ei voida näyttää kohdetietoja. Muuta mittakaavatasoa.",
+        "errorscale": "Kohdetietoja ei voida näyttää tällä mittakaavatasolla. Siirry sopivalle mittakaavatasolle mittakaavasäätimen avulla.",
         "errordata": "Palvelimelta saatu tieto oli virheellistä. Siirrä hieman karttaa päivittääksesi tiedot.",
         "columnSelectorTooltip": "Näytä sarakkeet",
         "popup": {
             "title": "Valitse kohteita kartalta",
-            "instructions": " ",
+            "instructions": "NOT TRANSLATED",
             "link": {
                 "title": "Lisää valinta"
             },
@@ -46,4 +47,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);
