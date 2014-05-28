@@ -1,0 +1,46 @@
+
+
+<% if(!model.getId()){ %>
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-interface" class="add-layer-label"  title="<%= instance.getLocalization('admin').interfaceAddress %>"><%= instance.getLocalization('admin').interfaceAddress %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <input type="text" id="add-layer-interface" class="add-layer-input mid"
+                    placeholder="<%= instance.getLocalization('admin').interfaceAddress %>" 
+                    <% if(model.getLayerUrls) { %>value="<%= model.getLayerUrls().join() %>"<% } %> />
+                <div class="icon-close mid"></div>
+            </div>
+                    <button id="add-layer-wms-button" class="fetch-wms-button"><%= instance.getLocalization('admin').getInfo %></button>
+        </div>
+    </div>
+<% } %>
+
+<% if(capabilities) { %>
+    <div class="add-layer-record capabilities">
+        <div class="add-layer-label-area">
+            <label class="add-layer-label"><%= instance.getLocalization('admin').capabilitiesLabel %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <%= capabilitiesTemplate({
+                    capabilities: capabilities, 
+                    capabilitiesTemplate: capabilitiesTemplate, 
+                    isSub : false }) %>
+            </div>
+        </div>
+    </div>
+<% } %>
+
+
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-url" class="add-layer-label" title="<%= instance.getLocalization('admin').wmsInterfaceAddressDesc %>"><%= instance.getLocalization('admin').wmsInterfaceAddress %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <textarea rows="3" cols="40" id="add-layer-url" class="add-layer-input long" required><%= model.getLayerUrls().join() %></textarea>
+    </div>
+</div>
+
+<input type="hidden" id="add-layer-interface-version" value="1.0.0" />

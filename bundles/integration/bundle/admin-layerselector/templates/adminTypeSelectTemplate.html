@@ -6,7 +6,9 @@
         <div class="add-layer-input-area">
             <select id="add-layer-type" class="admin-layer-type">
                 <option value=""><%= localization.typePlaceholder %></option>
-                <option value="wmslayer"><%= localization.normalLayer %></option>
+        <%  _.each(supportedTypes, function(type) { %>
+                <option value="<%= type.id %>"><%= localization.layertypes[type.localeKey] %></option>
+        <% }); %>
                 <option value="base"><%= localization.baseLayer %></option>
                 <option value="groupMap"><%= localization.groupLayer %></option>
             </select>

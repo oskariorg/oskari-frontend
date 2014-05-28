@@ -482,11 +482,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 me,
                 enabledPlugins
             );
-            // Why do we copy these around? it's confusing.
-            //me.tools = me.toolsPanel.getTools();
+
             me.toolsPanel.init();
             return me.toolsPanel.getPanel(me.data);
         },
+
         _changeToolLayout: function (layout, event) {
             // iterate plugins
             var me = this,
@@ -1049,7 +1049,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             if (this.toolsPanel.hasFeatureDataBundle()) {
                 selections.featuredata2 = {
                     selectionTools: false
-                }
+                };
             }
 
             if (errors.length > 0) {

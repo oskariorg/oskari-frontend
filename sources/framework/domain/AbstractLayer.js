@@ -105,12 +105,16 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
 
         // Layers service urls
         me._layerUrls = [];
+        // Layers service name
+        me._layerName = null;
 
         me._baseLayerId = -1;
 
         // Realtime
         me._realtime = false;
         me._refreshRate = null;
+        
+        this._gfiContent = null;
 
     }, {
         /**
@@ -910,20 +914,75 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
             return this._featureData;
         },
         /**
-         * @method addLayerUrl
-         * @param {String} layerUrl
-         * Apppends the url to layer array of wms image urls
+         * @method getLayerName
+         * @return {String} layer functional (not UI) name
          */
-        addLayerUrl: function (layerUrl) {
-            this._layerUrls.push(layerUrl);
+        getLayerName: function () {
+            return this._layerName;
         },
         /**
-         * @method getWmsUrls
+         * @method setLayerName
+         * @param {String} layer functional (not UI) name
+         */
+        setLayerName: function (name) {
+            this._layerName = name;
+        },
+        /**
+         * @method addLayerUrl
+         * @param {String} layerUrl
+         * Apppends the url to layer array of image urls
+         */
+        addLayerUrl: function (layerUrl) {
+            var list = this.getLayerUrls()
+                listLen = list.length,
+                foundExisting = false;
+            for (var i = 0; i < listLen; ++i) {
+                var url = list[i];
+                if (url == layerUrl) {
+                    foundExisting = true;
+                    break;
+                }
+            }
+            if (!foundExisting) {
+                // only add if isn't added yet
+                list.push(layerUrl);
+            }
+        },
+        /**
+         * @method getLayerUrls
          * @return {String[]}
-         * Gets array of layer wms image urls
+         * Returns array of layer image urls
+         */
+        setLayerUrls: function (urlList) {
+            if(Object.prototype.toString.call( urlList ) === '[object Array]') {
+                this._layerUrls = urlList;
+            }
+            // if url is single url, wrap it as list
+            else if (typeof someVar === 'string') {
+                this._layerUrls = [urlList];
+            }
+        },
+        /**
+         * @method getLayerUrls
+         * @return {String[]}
+         * Returns array of layer image urls
          */
         getLayerUrls: function () {
+            if(!this._layerUrls) {
+                this._layerUrls = [];
+            }
             return this._layerUrls;
+        },
+        /**
+         * @method getLayerUrl
+         * @return {String}
+         * Returns first url of layer urls array
+         */
+        getLayerUrl: function () {
+            var list = this.getLayerUrls();
+            if(list && list.length > 0) {
+                return list[0];
+            }
         },
         /**
          * @method setRealtime
@@ -953,5 +1012,19 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         getRefreshRate: function() {
             return this._refreshRate;
+        },
+        /**
+         * @method setGfiContent
+         * @param {String} gfiContent GetFeatureInfo content
+         */
+        setGfiContent: function (gfiContent) {
+            this._gfiContent = gfiContent;
+        },
+        /**
+         * @method getGfiContent
+         * @return {String} gfiContent GetFeatureInfo content
+         */
+        getGfiContent: function () {
+            return this._gfiContent;
         }
     });
