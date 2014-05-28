@@ -78,11 +78,13 @@ Oskari.registerLocalization({
                     "label": "Union",
                     "classForPreview": "union",
                     "tooltip": ""
+/*              TODO: Uncomment this to enable clipping functionality
                 }, {
-                    "id": "oskari_analyse_cut",
+                    "id": "oskari_analyse_clip",
                     "label": "NOT TRANSLATED",
-                    "classForPreview": "cut",
+                    "classForPreview": "clip",
                     "tooltip": ""
+*/
                 }, {
                     "id": "oskari_analyse_intersect",
                     "label": "Intersect",

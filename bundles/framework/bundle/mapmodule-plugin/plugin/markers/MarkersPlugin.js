@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             "stroke": "#b4b4b4"
         };
         this._localization = null;
-        this.buttonGroup = "markers";
+        this.buttonGroup = "selectiontools";
         this.buttons = null;
         this.dialog = null;
         this._buttonsAdded = false;
@@ -421,7 +421,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     graphicWidth: size,
                     graphicHeight: size,
                     fillOpacity: 1,
-                    label: markerData.msg,
+                    label: decodeURIComponent(markerData.msg),
                     fontColor: "$000000",
                     fontSize: "16px",
                     fontFamily: "Arial",
@@ -684,7 +684,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     marker.size + FIELD_SEPARATOR +
                     marker.color + FIELD_SEPARATOR +
                     marker.x + "_" + marker.y + FIELD_SEPARATOR +
-                    marker.msg;
+                    encodeURIComponent(marker.msg);
                 markerParams.push(str);
             });
             if (markerParams.length > 0) {
