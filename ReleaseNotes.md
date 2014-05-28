@@ -72,6 +72,21 @@ The toolbar from the top has been removed and the tool added to the side toolbar
 
 Data source select has been added (only two options now - SOTKAnet and user indicators).
 
+### /Oskari/bundles/mapframework/bundle/mapwfs2/plugin/WFSLayerPlugin
+
+New optional plugin config setting to defer setLocation calls from AfterMapMoveEvent to MapLayerVisibilityChangedEvent
+to drop some WFS queries to backend servers.
+
+
+```javascript
+{
+   "id": "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
+   "config": {
+      "deferSetLocation" : true
+   }
+}
+```
+
 ## 1.20
 
 ### analysis/analyse
