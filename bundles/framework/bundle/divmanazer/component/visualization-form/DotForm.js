@@ -471,6 +471,18 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
         },
 
         /**
+         * @method setCancelHandler
+         * Sets a user defined handler for the cancel button
+         * @param {function} handler Cancel button handler
+         */
+        setCancelHandler: function(handler) {
+            this.cancelButtonHandler = handler;
+            if (this.cancelButton !== null) {
+                this.cancelButton.setHandler(handler);
+            }
+        },
+
+        /**
          * @method updatePreview
          * Performs a preview update
          * @param {Object} dialog
