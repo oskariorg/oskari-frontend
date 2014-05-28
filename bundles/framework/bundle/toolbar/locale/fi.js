@@ -1,35 +1,37 @@
-Oskari.registerLocalization({
-  "lang": "fi",
-  "key": "Toolbar",
-  "value": {
-    "buttons": {
-      "link": {
-        "tooltip": "Linkki",
-        "ok": "Ok",
-        "title": "Linkki karttanäkymään"
-      },
-      "print": {
-        "tooltip": "Tulosta"
-      },
-      "history": {
-        "reset": "Paluu oletusnäkymään",
-        "back": "Takaisin",
-        "next": "Eteenpäin"
-      },
-      "pan": "Liikuta karttaa",
-      "zoom": "Lähennä",
-      "measure": {
-        "line": "Mittaa etäisyys",
-        "area": "Mittaa alue"
-      }
-    },
-    "measure" : {
-        "title" : "Mittaustulokset",
-        "close" : "Lopeta",
-        "guidance" : {
-            "measureline" : "Osoita mitattava matka kartalta. Lopeta mittaaminen hiiren kaksoisnapautuksella.",
-            "measurearea" : "Osoita mitattava alue kartalta. Lopeta mittaaminen hiiren kaksoisnapautuksella."
+Oskari.registerLocalization(
+{
+    "lang": "fi",
+    "key": "Toolbar",
+    "value": {
+        "buttons": {
+            "link": {
+                "tooltip": "Tee linkki karttanäkymään.",
+                "ok": "OK",
+                "title": "Linkki karttanäkymään"
+            },
+            "print": {
+                "tooltip": "Tulosta karttanäkymä."
+            },
+            "history": {
+                "reset": "Siirry oletusnäkymään.",
+                "back": "Siirry edelliseen karttanäkymään.",
+                "next": "Siirry seuraavaan karttanäkymään."
+            },
+            "pan": "Siirrä karttaa hiirellä raahaamalla.",
+            "zoom": "Lähennä karttaa.",
+            "measure": {
+                "line": "Mittaa etäisyys pisteiden välillä.",
+                "area": "Mittaa alueen pinta-ala."
+            }
+        },
+        "measure": {
+            "title": "Mittaustulokset",
+            "close": "Lopeta",
+            "guidance": {
+                "measureline": "Piirrä mitattava etäisyys klikkaamalla viivamaisen kohteen taitepisteitä hiirellä. Lopeta piirtäminen kaksoisklikkaamalla karttaa loppupisteessä.",
+                "measurearea": "Piirrä mitattava alue klikkaamalla alueen kulmapisteitä hiirellä. Lopeta piirtäminen kaksoisklikkaamalla karttaa alkupisteessä."
+            }
         }
     }
-  }
-});
+}
+);

@@ -62,7 +62,7 @@ Oskari.registerLocalization(
                 "history_forward": "Move forward",
                 "measureline": "Measure distance",
                 "measurearea": "Measure area",
-                "drawTools" : "Drawing tools",
+                "drawTools": "Drawing tools",
                 "point": "Allow users to add point features.",
                 "line": "Allow users to add line features.",
                 "area": "Allow users to add area features."
@@ -222,4 +222,5 @@ Oskari.registerLocalization(
             }
         }
     }
-});
+}
+);
