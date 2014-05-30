@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "MapModule",
     "value": {
@@ -103,4 +104,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);
