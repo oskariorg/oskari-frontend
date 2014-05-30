@@ -154,10 +154,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var outputPanel = this._createOutputPanel();
             //outputPanel.open();
 
-            contentPanel.getPanel().open();
+            contentPanel.getDataPanel().open();
+            contentPanel.getDrawToolsPanel().open();
             methodPanel.open();
             settingsPanel.open();
-            accordion.addPanel(contentPanel.getPanel());
+            accordion.addPanel(contentPanel.getDataPanel());
+            accordion.addPanel(contentPanel.getDrawToolsPanel());
             accordion.addPanel(methodPanel);
             accordion.addPanel(settingsPanel);
             accordion.addPanel(outputPanel);
@@ -264,11 +266,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             panel.setTitle(this.loc.settings.label);
+            var headerPanel = panel.getHeader();
             var contentPanel = panel.getContainer();
             // tooltip
             var tooltipCont = this.template.help.clone();
             tooltipCont.attr('title', this.loc.settings.tooltip);
-            contentPanel.append(tooltipCont);
+            tooltipCont.addClass('header-icon-info');
+            headerPanel.append(tooltipCont);
 
             // Changing part of parameters ( depends on method)
             var extra = this.template.paramsOptionExtra.clone();
@@ -497,11 +501,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             panel.setTitle(me.loc.output.label);
+            var headerPanel = panel.getHeader();
             var contentPanel = panel.getContainer();
             // tooltip
             var tooltipCont = me.template.help.clone();
             tooltipCont.attr('title', me.loc.output.tooltip);
-            contentPanel.append(tooltipCont);
+            tooltipCont.addClass('header-icon-info');
+            headerPanel.append(tooltipCont);
             // title
             var colorTitle = me.template.title_color.clone();
             colorTitle.find('.output_color_label').html(me.loc.output.color_label);

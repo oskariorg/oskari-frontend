@@ -134,7 +134,15 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
         getContainer: function () {
             return this.html.find('div.content');
         },
-
+        /**
+         * Returns the header of the panel.
+         * 
+         * @method getHeader
+         * @return {jQuery} refrence to this panels header DOM element
+         */
+        getHeader: function () {
+            return this.html.find('div.header');
+        },
         /**
          * @method insertTo
          * Adds this panel to given container.

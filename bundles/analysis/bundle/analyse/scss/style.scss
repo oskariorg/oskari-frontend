@@ -111,7 +111,8 @@ div.basic_analyse {
     }
 
     div.toolContainer {
-        margin: 5px;
+        margin: 5px 15px 5px 5px;
+        display: inline-block;
         h4 {
             padding: 0;
         }
@@ -127,6 +128,7 @@ div.basic_analyse {
 
     div.drawFilterContainer {
         margin: 5px;
+        display: inline-block;
         h4 {
             padding: 0;
         }
@@ -147,6 +149,10 @@ div.basic_analyse {
             display: inline-block;
             float: right;
         }
+    }
+
+    div.header-icon-info {
+        margin: 10px;
     }
 
 }
@@ -314,4 +320,8 @@ div.analyse-filter-popup-content div.filter-option {
 
 div.divmanazerpopup.drawfilterdialog {
     max-width: 400px;
+}
+
+div.divmanazerpopup.analyse-draw-dialog {
+    max-width: 280px;
 }
