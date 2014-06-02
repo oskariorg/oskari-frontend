@@ -23,48 +23,40 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             return 'Oskari.mapframework.bundle.routesearch.Flyout';
         },
 
-        _getSearchSuggestions: function (field, event) {
+        _getSearchSuggestions: function (field, request, response) {
             var me = this,
-                target = jQuery(event.target),
-                searchKey = target.val(),
                 i,
                 location,
-                suggestionEl = me.getEl().find('#' + field + 'Suggestions');
+                fieldName = field.attr('name');
 
-            if (me.state[field] && me.state[field].name === searchKey) {
-                return;
-            }
-
-            suggestionEl.empty();
-
-            me.state[field] = {
-                "name": searchKey
+            me.state[fieldName] = {
+                "name": request.term
             };
-            if (searchKey && searchKey.length > 2) {
+            if (request.term && request.term.length > 2) {
                 me.service.doSearch(
-                    searchKey,
+                    request.term,
                     function (data) {
                         // onSuccess
-                        console.log("onSuccess", data);
                         if (data && data.totalCount) {
-                            // Result(s), show them to the user somehow
-                            for (i = 0; i < data.totalCount; i++) {
-                                location = data.locations[i];
-                                suggestionEl.append("<li>" + location.name + ", " + location.village + "</li>");
-                            }
+                            response(data.locations);
                         } else {
-                            // No result
+                            response([]);
                         }
                     },
-                    function (data) {
-                        // onError
-                        console.log("onError", data);
-                    }
+                    function (data) {}
                 );
             }
         },
 
+        _setSearchLocation: function (field, event, ui) {
+            var fieldName = field.attr('name');
+            this.state[fieldName] = ui.item;
+            inputVal = ui.item.name + ', ' + ui.item.village;
+            field.val(inputVal);
+        },
+
         _reverseGeoCode: function (field, lonLat) {
+            // FIXME
             console.log(field, lonLat);
         },
 
@@ -107,9 +99,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 ajaxUrl = null,
                 el = me.getEl().addClass('routesearch'),
                 contents = jQuery(me._templates.main),
-                timers = {},
                 i,
-                field,
                 fields = ['from', 'to'],
                 tmp;/*
                 cancelBtn =
@@ -127,7 +117,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                         'action_route=GetSearchResult';
             }
             // FIXME temp
-            ajaxUrl = "http://localhost:8080/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=GetSearchResult"
+            ajaxUrl =
+                "http://localhost:8080/web/fi/kartta?" +
+                "p_p_id=Portti2Map_WAR_portti2mapportlet&" +
+                "p_p_lifecycle=2&" +
+                "action_route=GetSearchResult"
             me.service = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.search.service.SearchService',
                 ajaxUrl
@@ -136,24 +130,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             contents.eq(1).find('strong').html(me.locale.routingService);
 
             for (i = 0; i < fields.length; i++) {
-                field = fields[i];
+                var field = fields[i];
                 tmp = Oskari.clazz.create(
                         'Oskari.userinterface.component.FormInput', field);
                 tmp.addClearButton();
                 tmp.setLabel(me.locale[field]);
-                timers[field] = 0;
-                tmp.bindChange(function (event) {
-                    event.stopPropagation(); // JUST BECAUSE TEST ENV FAILS
-                    var evt = event;
-                    if (timers[field]) {
-                        clearTimeout(timers[field]);
-                    }
-                    timers[field] = setTimeout(function () {
-                        me._getSearchSuggestions(field, event);
-                        timers[field] = null;
-                    }, 300);
 
-                }, true);
+                tmp.getField().find('input[type=text]').autocomplete({
+                    delay: 300,
+                    minLength: 2,
+                    select: function(event, ui) {
+                        event.preventDefault();
+                        me._setSearchLocation($(this), event, ui);
+                    },
+                    source: function (request, response) {
+                        me._getSearchSuggestions($(this), request, response);
+                    }
+                }).data("autocomplete")._renderItem = function(ul, item) {
+                        return jQuery("<li>")
+                            //.attr("data-value", item)
+                            .append(
+                                jQuery('<a href="#">')
+                                    .text(item.name + ", " + item.village)
+                            )
+                            .appendTo(ul);
+                        }
 
                 contents.eq(0).append(tmp.getField());
                 tmp = Oskari.clazz.create(
