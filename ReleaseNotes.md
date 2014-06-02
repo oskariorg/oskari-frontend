@@ -87,6 +87,14 @@ to drop some WFS queries to backend servers.
 }
 ```
 
+### analysis/analyse
+
+The drawing of a new feature as well as editing one has been moved to a new accordion panel.
+
+### divmanazer
+
+Added a new function `getHeader` to `component/AccordionPanel.js`
+
 ## 1.20
 
 ### analysis/analyse

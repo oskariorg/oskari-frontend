@@ -11,22 +11,44 @@ Oskari.registerLocalization({
             "title": "Analys",
             "content": {
                 "label": "Material",
+                "drawToolsLabel": "NOT TRANSLATED",
                 "tooltip": "Tillsätta material - trycka  [tillsätta material] knappen",
+                "drawToolsTooltip": "Du kan tilllägga en objekt för att göra analys.\nDu kan dela objekten i två delar och efter det göra analys till en av dem",
                 "features": {
-                    "title": "Piirrä kohde",
+                    "title": "Tillägg en objekt",
                     "buttons": {
-                        "cancel": "Peruuta",
-                        "finish": "Valmis"
+                        "cancel": "Avbryt",
+                        "finish": "OK"
+                    },
+                    "tooltips": {
+                        "point": "Tillägg punkt",
+                        "line": "Tillägg linje",
+                        "area": "Tillägg område"
                     },
                     "modes": {
-                        "area": "Alue",
-                        "line": "Viiva",
-                        "point": "Piste"
+                        "area": "Område",
+                        "line": "Linje",
+                        "point": "Punkt"
+                    }
+                },
+                "drawDialog": {
+                    "point": {
+                        "title": "Tillägg punkt",
+                        "add": "Tillägg punkt genom att klicka på kartan."
+                    },
+                    "line": {
+                        "title": "Tillägg linje",
+                        "add": "Tillägg en brytningspunkt på linjen genom att klicka på kartan. Sluta rita genom att dubbelklicka."
+                    },
+                    "area": {
+                        "title": "Tillägg område",
+                        "add": "Tillägg områdets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka. Håll ned Alt-tangenten för att skapa hål i polygonerna."
                     }
                 },
                 "drawFilter": {
                     "title": "NOT TRANSLATED",
                     "buttons": {
+                        "cancel": "NOT TRANSLATED",
                         "finish": "NOT TRANSLATED"
                     },
                     "tooltip": {
@@ -36,7 +58,6 @@ Oskari.registerLocalization({
                         "remove": "NOT TRANSLATED"
                     },
                     "dialog": {
-                        "cancel": "NOT TRANSLATED",
                         "modes": {
                             "point": {
                                 "title": "NOT TRANSLATED",
@@ -179,7 +200,7 @@ Oskari.registerLocalization({
             "buttons": {
                 "save": "Lagra",
                 "analyse": "Fortsätta analys",
-                "data": "Öka data",
+                "data": "Välj kartlager",
                 "cancel": "Avbryta",
                 "ok": "OK"
             },

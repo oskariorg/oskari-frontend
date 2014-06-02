@@ -162,17 +162,19 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                         clearBtn.setHandler(function () {
                             me.removeMarkers();
                             me.stopMarkerAdd();
+                            me.enableGfi(true);
                         });
                         controlButtons.push(clearBtn);
                         cancelBtn.setHandler(function () {
                             me.stopMarkerAdd();
+                            me.enableGfi(true);
                         });
                         cancelBtn.addClass('primary');
                         controlButtons.push(cancelBtn);
 
                         me.dialog.show(diaLoc.title, diaLoc.message, controlButtons);
                         me.mapModule.getMapEl().addClass("cursor-crosshair");
-                        me.dialog.moveTo('#toolbar div.toolrow[tbgroup=default-markers]', 'bottom');
+                        me.dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'bottom');
                     }
                 }
                 /*,
@@ -355,6 +357,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     me._sandbox.request(me.getName(), request);
                 }
                 me.dotForm.getDialog().close(true);
+                me.enableGfi(true);
+            });
+
+            me.dotForm.setCancelHandler(function() {
+                me.dotForm.getDialog().close();
+                me.enableGfi(true);
             });
         },
 
@@ -364,7 +372,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         stopMarkerAdd: function () {
             var me = this;
             me._map.events.unregister('click', me, me._showForm);
-            me.enableGfi(true);
             if (me.dialog) {
                 me.mapModule.getMapEl().removeClass("cursor-crosshair");
                 me.dialog.close(true);
@@ -620,6 +627,27 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param {Boolean} blnEnable true to enable, false to disable
          */
         enableGfi: function (blnEnable) {
+            var sandbox = this._sandbox,
+                evtB = sandbox.getEventBuilder(
+                    'DrawFilterPlugin.SelectedDrawingEvent'),
+                gfiReqBuilder = sandbox.getRequestBuilder(
+                    'MapModulePlugin.GetFeatureInfoActivationRequest'),
+                hiReqBuilder = sandbox.getRequestBuilder(
+                    'WfsLayerPlugin.ActivateHighlightRequest');
+
+            // notify components to reset any saved "selected place" data
+            if (evtB) sandbox.notifyAll(evtB());
+
+            // enable or disable gfi requests
+            if (gfiReqBuilder) {
+                sandbox.request(this.pluginName, gfiReqBuilder(blnEnable));
+            }
+
+            // enable or disable wfs highlight
+            if (hiReqBuilder) {
+                sandbox.request(this.pluginName, hiReqBuilder(blnEnable));
+            }
+
             var gfiReqBuilder = this._sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
             if (gfiReqBuilder) {
                 this._sandbox.request(this, gfiReqBuilder(blnEnable));
