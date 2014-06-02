@@ -139,6 +139,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 if (this.drawFilterPluginId !== event.getCreatorId()) {
                     return;
                 }
+                var geometries = event.getFiltered();
+                if (geometries === null) {
+                    this._cancelDrawFilter();
+                }
                 this.addGeometry(event.getFiltered());
                 this.drawFilterPlugin.stopDrawFiltering();
 

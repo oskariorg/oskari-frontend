@@ -291,6 +291,20 @@
                     }
                 }
             }
+        }, {
+            "title": "Background Layer Selection",
+            "fi": "Taustakartan valinta",
+            "bundleinstancename": "BackgroundLayerSelectionPlugin",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "BackgroundLayerSelectionPlugin",
+            "metadata": {
+                "Import-Bundle": {
+                    "parcelinfo": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    }
+                }
+            }
         }
     ]
 }

@@ -1,6 +1,7 @@
 /* Override popup styles */
 .divmanazerpopup.parceltour {
-  font-family: Arial, sans-serif; }
+  font-family: Arial, sans-serif;
+  left: 25%; }
 
 .divmanazerpopup.parceltour h3 {
   margin: 0;
