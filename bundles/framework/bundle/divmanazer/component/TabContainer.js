@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
         }
         this.template = jQuery('<div class="oskariTabs">' + this.emptyMsg + '</div>');
 
-        this.templateTabs = jQuery('<div class="tabsHeader"><ul class="tabsItem"></ul></div><br clear="all"/>' +
+        this.templateTabs = jQuery('<div class="tabsHeader"><ul class="tabsItem"></ul></div>' +
             '<div class="tabsContent tabsContentItem"></div>');
 
         this.ui = this.template.clone();
