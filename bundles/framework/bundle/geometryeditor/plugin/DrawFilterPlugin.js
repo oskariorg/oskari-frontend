@@ -1049,11 +1049,15 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             this.sourceLayer.addFeatures([newFeatures[1]]);
             // Add new polygons
             var polygons = newFeatures[0].geometry.components;
+            var selectedIndex = 0;
             for(var i=0; i<polygons.length; i++) {
                 this.targetLayer.addFeatures([new OpenLayers.Feature.Vector(polygons[i])]);
+                if ((this.markers.length > 0)&&(polygons[i].id === this.markers[0].reference.point.references[0])) {
+                    selectedIndex = i;
+                }
             }
             this.drawControls.modifyFeature.activate();
-            this.drawControls.modifyFeature.selectFeature(this.targetLayer.features[0]);
+            this.drawControls.modifyFeature.selectFeature(this.targetLayer.features[selectedIndex]);
         }
 
         // Point added on the border line between two polygons
@@ -1120,12 +1124,20 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         // No manual feature additions anymore
         this.targetLayer.events.remove("featuresadded");
 
+        if (this.targetLayer.features.length === 0) {
+            this.finishDrawFiltering();
+            return;
+        }
+
         var inPolygon = this.targetLayer.features[0].clone();
         var outMultiPolygon = this.sourceLayer.features[0].clone();
         var polyComponents = outMultiPolygon.geometry.components;
 
         this.targetLayer.destroyFeatures();
         for (var i = 0; i < polyComponents.length; i++) {
+            if (typeof inPolygon.geometry.components[0].components === "undefined") {
+                break;
+            }
             var outPolygon = polyComponents[i];
             var inside = true;
             // Is inside?
@@ -1159,9 +1171,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             break;
         }
 
-        this.drawControls.modifyFeature.activate();
-        this.drawControls.modifyFeature.selectFeature(this.targetLayer.features[0]);
-        this.targetLayer.redraw();
+        if (this.targetLayer.features.length > 0) {
+            this.drawControls.modifyFeature.activate();
+            this.drawControls.modifyFeature.selectFeature(this.targetLayer.features[0]);
+            this.targetLayer.redraw();
+        } else {
+            this.finishDrawFiltering();
+        }
     },
 
     /*
@@ -2148,7 +2164,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
     /**
      * @method _updateLayerOrder
-     * Sets correct order of the layer
+     * Sets correct order for the layers
      * @private
      */
     _updateLayerOrder: function() {
