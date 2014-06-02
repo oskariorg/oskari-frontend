@@ -31,6 +31,7 @@ module.exports = function (grunt) {
             'jquery.event.drag-2.0.min.js',
             'jquery.placeholder.js',
             'jquery-ui-1.9.1.custom.min.js',
+            'jquery-ui-1.9.2.custom.min.js',
             'jscolor.js',
             'lodash.js',
             'OpenLayers.2_13_1-full-map.js',

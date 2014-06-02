@@ -1,0 +1,18 @@
+.routesearch > div:last-child input {
+  float: right;
+  margin-bottom: 20px;
+  margin-left: 12px; }
+.routesearch > div .oskarifield {
+  margin-bottom: 12px; }
+  .routesearch > div .oskarifield label {
+    display: block;
+    clear: both; }
+    .routesearch > div .oskarifield label span {
+      display: block; }
+  .routesearch > div .oskarifield input {
+    margin-top: 6px; }
+    .routesearch > div .oskarifield input[type=text] {
+      margin-right: 12px;
+      width: 330px; }
+  .routesearch > div .oskarifield .icon-close {
+    margin-left: -20px; }
