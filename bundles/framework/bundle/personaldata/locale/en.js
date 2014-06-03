@@ -17,8 +17,8 @@ Oskari.registerLocalization(
                     "name": "Name",
                     "description": "Description",
                     "publish": "Published",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "Edit",
+                    "delete": "Delete"
                 },
                 "popup": {
                     "edit": "Edit the map view",
