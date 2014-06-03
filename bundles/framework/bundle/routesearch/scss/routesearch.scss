@@ -1,0 +1,48 @@
+$fieldWidth: 330px;
+
+.routesearch {
+    >div {
+
+        &:last-child {
+
+            input {
+                float: right;
+                margin-bottom: 20px;
+                margin-left: 12px;
+            }
+
+        }
+
+        .oskarifield {
+
+            margin-bottom: 12px;
+
+            label {
+                display: block;
+                clear: both;
+
+                span {
+                    display: block;
+                }
+
+            }
+
+            input {
+                margin-top: 6px;
+
+                &[type=text] {
+                    margin-right: 12px;
+                    width: $fieldWidth;
+                }
+
+            }
+
+            .icon-close {
+                margin-left: -20px;
+            }
+
+        }
+
+    }
+
+}

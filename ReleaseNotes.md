@@ -4,8 +4,7 @@
 
 ### core/sandbox/Layers
 
-sandbox.getRequestBuilder('RequestName') now returns undefined if either request or requestHandler is missing. 
-Previously only returned undefined if request was missing. This solves some timing issues with minified code.
+`sandbox.getRequestBuilder('RequestName')` now returns `undefined` if either request or request handler is missing. Previously only returned `undefined` if request was missing. This solves some timing issues with minified code.
 
 AbstractLayer now has set/getLayerName() as it's a common field for most layers. LayerName is functional configurations while name is for UI.
 
@@ -66,6 +65,8 @@ Opens the language selector in a Flyout
 
 Existing WFS area and line features can now be cut with a new geometry editor bundle and used as analysis source features.
 
+The drawing of a new feature as well as editing one has been moved to a new accordion panel.
+
 ### statistics/statsgrid
 
 The toolbar from the top has been removed and the tool added to the side toolbar when going to stats mode.
@@ -86,10 +87,6 @@ to drop some WFS queries to backend servers.
    }
 }
 ```
-
-### analysis/analyse
-
-The drawing of a new feature as well as editing one has been moved to a new accordion panel.
 
 ### divmanazer
 

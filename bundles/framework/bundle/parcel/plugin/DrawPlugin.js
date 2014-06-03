@@ -359,6 +359,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                 saveDrawingHandler: Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.SaveDrawingRequestHandler', me)
             };
 
+            // Keep markers enabled
+            this._map.events.register("addlayer",this,function() {
+                this._updateLayerOrder();
+            });
+            this._map.events.register("changelayer",this,function() {
+                this._updateLayerOrder();
+            });
+            this._map.events.register("removelayer",this,function() {
+                this._updateLayerOrder();
+            });
+
             // Todo: styles from file
             /* OpenLayers.Request.GET({
                 url: "/Oskari/resources/parcel/sld/parcel.xml",
@@ -383,6 +394,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
         startPlugin: function (sandbox) {
             this._sandbox = sandbox;
             sandbox.register(this);
+            for (p in this.eventHandlers) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(this, p);
+                }
+            }
             sandbox.addRequestHandler('Parcel.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
             sandbox.addRequestHandler('Parcel.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
             sandbox.addRequestHandler('Parcel.CancelDrawingRequest', this.requestHandlers.cancelDrawingHandler);
@@ -691,6 +707,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             sandbox.notifyAll(event);
         },
         /**
+         * @property {Object} eventHandlers
+         * @static
+         */
+        eventHandlers: {
+            'AfterRearrangeSelectedMapLayerEvent': function (event) {
+                this._updateLayerOrder();
+            }
+        },
+        /**
+         * @method onEvent
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         */
+        onEvent: function (event) {
+            return this.eventHandlers[event.getName()].apply(this, [event]);
+        },
+        /**
          * @method register
          * Does nothing atm.
          */
@@ -783,6 +816,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             // Reproduce the original OL 2.12 behaviour
             jQuery('svg').find('circle').css('cursor', 'move');
             jQuery('div.olMapViewport').find('oval').css('cursor', 'move'); // IE8
+        },
+
+        /**
+         * @method _updateLayerOrder
+         * Sets correct order for the layers
+         * @private
+         */
+        _updateLayerOrder: function() {
+            if (this.markerLayer === null) {
+                return;
+            }
+            var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.markerLayer.getZIndex())+1;
+            this.markerLayer.setZIndex(zIndex);
+            this.markerLayer.redraw();
         },
 
         createEditor: function (features, data, preparcel) {

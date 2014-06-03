@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.service.SearchService',
  * @param {String}
  *            searchUrl ajax URL to actual search implementation
  */
-function(searchUrl) {
+function (searchUrl) {
 
     /* searchUrl url that will give us results */
     this._searchUrl = searchUrl;
@@ -48,16 +48,16 @@ function(searchUrl) {
 	 *            onComplete callback method for search completion
      */
     doSearch : function(searchString, onSuccess, onError) {
-        var lang = Oskari.getLang();
-        var epsg = Oskari.getSandbox().getMap().getSrsName();
+        var lang = Oskari.getLang(),
+            epsg = Oskari.getSandbox().getMap().getSrsName();
         jQuery.ajax({
             dataType : "json",
             type : "POST",
             beforeSend: function(x) {
-              if(x && x.overrideMimeType) {
-               x.overrideMimeType("application/json");
-              }
-             },
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/json");
+                }
+            },
             url : this._searchUrl,
             data : {
                 "searchKey" : searchString,

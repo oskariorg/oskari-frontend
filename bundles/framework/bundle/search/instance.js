@@ -89,9 +89,9 @@ Oskari.clazz
 
                 me.started = true;
 
-                var conf = this.conf;
-                var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
-                var sandbox = Oskari.getSandbox(sandboxName);
+                var conf = this.conf,
+                    sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
+                    sandbox = Oskari.getSandbox(sandboxName);
 
                 me.sandbox = sandbox;
 
@@ -127,9 +127,9 @@ Oskari.clazz
                 }
 
                 //Let's extend UI
-                var reqName = 'userinterface.AddExtensionRequest';
-                var reqBuilder = sandbox.getRequestBuilder(reqName);
-                var request = reqBuilder(this);
+                var reqName = 'userinterface.AddExtensionRequest',
+                    reqBuilder = sandbox.getRequestBuilder(reqName),
+                    request = reqBuilder(this);
                 sandbox.request(this, request);
 
                 sandbox.registerAsStateful(this.mediator.bundleId, this);
@@ -207,9 +207,9 @@ Oskari.clazz
                     }
                 }
 
-                var reqName = 'userinterface.RemoveExtensionRequest';
-                var reqBuilder = sandbox.getRequestBuilder(reqName);
-                var request = reqBuilder(this);
+                var reqName = 'userinterface.RemoveExtensionRequest',
+                    reqBuilder = sandbox.getRequestBuilder(reqName),
+                    request = reqBuilder(this);
 
                 sandbox.request(this, request);
 
