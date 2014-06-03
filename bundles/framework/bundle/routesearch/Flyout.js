@@ -58,7 +58,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
 
         _reverseGeoCode: function(field, lonLat) {
             // FIXME
-            console.log(field, lonLat);
         },
 
         disableMapClick: function() {
@@ -167,7 +166,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     me._fromMapButtonHandler(field, event);
                 });
                 /* jshint ignore:end */
-                tmp.insertTo(contents.eq(0).find('.oskarifield:eq(' + i + ')'));
+                // FIXME ucomment when reverse geocode works
+                //tmp.insertTo(contents.eq(0).find('.oskarifield:eq(' + i + ')'));
 
                 // Suggestions list
                 contents.eq(2).append(
