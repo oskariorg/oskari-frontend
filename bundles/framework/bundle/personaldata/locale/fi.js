@@ -17,8 +17,8 @@ Oskari.registerLocalization(
                     "name": "Nimi",
                     "description": "Kuvaus",
                     "publish": "Julkaisu",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "edit": "Muokkaa",
+                    "delete": "Poista"
                 },
                 "popup": {
                     "edit": "Karttanäkymän muokkaus",

@@ -16,8 +16,8 @@ Oskari.registerLocalization({
           "name": "Namn",
           "description": "Beskrivning", 
           "publish": "Vyn är offentlig",
-          "edit": " ",
-          "delete": " "
+          "edit": "Ändra",
+          "delete": "Ta bort"
         },
         "popup": {
           "edit": "Editera vyn",
