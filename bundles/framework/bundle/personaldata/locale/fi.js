@@ -69,9 +69,9 @@ Oskari.registerLocalization(
                     "domain": "Julkaisupaikka",
                     "publish": "Tila",
                     "show": "Toiminnot",
-                    "html": "NOT TRANSLATED",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "html": "HTML-koodi",
+                    "edit": "Muokkaa",
+                    "delete": "Poista"
                 },
                 "published": {
                     "desc": "Voit liittää kartan internet-sivustollesi lisäämällä sinne alla olevan HTML-koodin:"

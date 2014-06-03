@@ -69,9 +69,9 @@ Oskari.registerLocalization(
                     "domain": "Website",
                     "publish": "Status",
                     "show": "Actions",
-                    "html": "NOT TRANSLATED",
-                    "edit": "NOT TRANSLATED",
-                    "delete": "NOT TRANSLATED"
+                    "html": "HTML code",
+                    "edit": "Edit",
+                    "delete": "Delete"
                 },
                 "published": {
                     "desc": "Embed the map by adding the HTML code below to your website:"
