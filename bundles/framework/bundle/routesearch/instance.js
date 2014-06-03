@@ -37,7 +37,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleIns
                     return;
                 }
                 if (!doOpen) {
-                    console.log("disableMapClick");
                     this.plugins['Oskari.userinterface.Flyout'].disableMapClick();
                 }
             }
@@ -48,7 +47,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleIns
          * Registers the map click handler so we can pass the clicks to flyout.
          */
         registerMapClickHandler: function () {
-            console.log("registerMapClickHandler");
             if (this.eventHandlers.MapClickedEvent) {
                 return;
             }
@@ -65,21 +63,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleIns
          * Unregisters the map click handler
          */
         unregisterMapClickHandler: function () {
-            console.log("unregisterMapClickHandler");
             delete this.eventHandlers.MapClickedEvent;
             this.sandbox.unregisterFromEventByName(this, 'MapClickedEvent');
-        },
-
-        /**
-         * Sends the search request to the search service
-         * and handles the response.
-         * 
-         * @method __handleMapClick
-         * @private
-         * @param {OpenLayers.LonLat} lonlat
-         */
-        __handleMapClick: function (lonlat) {
-            console.log("Map Clicked:", lonlat);
         }
     },
     {

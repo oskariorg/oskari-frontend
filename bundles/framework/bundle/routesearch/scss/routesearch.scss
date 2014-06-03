@@ -1,17 +1,6 @@
-$fieldWidth: 330px;
-
 .routesearch {
-    >div {
 
-        &:last-child {
-
-            input {
-                float: right;
-                margin-bottom: 20px;
-                margin-left: 12px;
-            }
-
-        }
+    > div {
 
         ul {
             list-style-type: none;
@@ -26,16 +15,13 @@ $fieldWidth: 330px;
                     color: #FAFAFA;
                     text-shadow: 1px 1px 1px #3C3C3C;
 
-                    &:hover {
-
-                    }
-
                     &.disabled {
                         background: none;
                         background-color: #E6E6E6;
                         color: #3C3C3C;
                         text-shadow: -1px -1px 1px #FFFFFF;
                     }
+
                 }
 
             }
@@ -43,7 +29,6 @@ $fieldWidth: 330px;
         }
 
         .oskarifield {
-
             margin-bottom: 12px;
 
             label {
@@ -61,7 +46,7 @@ $fieldWidth: 330px;
 
                 &[type=text] {
                     margin-right: 12px;
-                    width: $fieldWidth;
+                    width: 330px;
                 }
 
             }

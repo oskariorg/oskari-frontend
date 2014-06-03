@@ -193,13 +193,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     me._fromMapButtonHandler(field, event);
                 });
                 /* jshint ignore:end */
-                // FIXME ucomment when reverse geocode works
-                //tmp.insertTo(contents.eq(0).find('.oskarifield:eq(' + i + ')'));
-
-                // Suggestions list
-                contents.eq(2).append(
-                    '<ol id="' + field + 'Suggestions' + '"></ol>'
-                );
+                /* FIXME ucomment when reverse geocode works
+                tmp.insertTo(contents.eq(0).find('.oskarifield:eq(' + i + ')'));
+                */
             }
 
             el.append(contents);
@@ -238,7 +234,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     'Google Maps',
                     '#88BE44',
                     function (fromLoc, toLoc) {
-                        var url = 'http://www.google.fi/maps/dir/';
+                        var url = 'https://www.google.fi/maps/dir/';
                         url += encodeURIComponent(fromLoc.name);
                         if (fromLoc.village) {
                             url += ',+' + encodeURIComponent(fromLoc.village);
@@ -267,7 +263,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                             url += ',_' +
                                 encodeURIComponent(
                                     fromLoc.village.replace(' ', '_')
-                                );
+                            );
                         }
                         url += ',_Finland';
                         url += '/' + encodeURIComponent(
@@ -293,41 +289,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
          * @param {Function} urlBuilder Function (fromLoc, toLoc)
          */
         _routingService: function (name, color, urlBuilder) {
-            var ret = {
-                name: name,
-                color: color,
-                urlBuilder: urlBuilder,
-                getButton: function (fromLoc, toLoc) {
-                    var me = this,
-                        el = this.el;
+            var me = this,
+                ret = {
+                    name: name,
+                    color: color,
+                    urlBuilder: urlBuilder,
+                    getButton: function (fromLoc, toLoc) {
+                        var el = this.el;
 
-                    if (!el) {
-                        el = jQuery('<a class="button">' + me.name + '</a>');
-                        this.el = el;
-                    }
-                    if (fromLoc && fromLoc.name && toLoc && toLoc.name) {
-                        el
-                            .attr('href', me.urlBuilder(fromLoc, toLoc))
-                            .attr('target', '_blank')
-                            .removeClass('disabled')
-                            .css('background-color', me.color)
-                            .unbind('click');
-                    } else {
-                        el
-                            .attr('href', '#')
-                            .removeAttr('target')
-                            .addClass('disabled')
-                            .css('background-color', '')
-                            .click(
-                                function (event) {
-                                    event.preventDefault();
-                                    return false;
-                                }
+                        if (!el) {
+                            el = jQuery(
+                                '<a class="button">' + this.name + '</a>'
                             );
+                            this.el = el;
+                        }
+                        if (fromLoc && fromLoc.name && toLoc && toLoc.name) {
+                            el
+                                .attr('href', this.urlBuilder(fromLoc, toLoc))
+                                .attr('target', '_blank')
+                                .removeClass('disabled')
+                                .css('background-color', this.color)
+                                .prop('title', this.name)
+                                .unbind('click');
+                        } else {
+                            el
+                                .attr('href', '#')
+                                .removeAttr('target')
+                                .addClass('disabled')
+                                .css('background-color', '')
+                                .prop('title', me.locale.selectLocations)
+                                .click(
+                                    function (event) {
+                                        event.preventDefault();
+                                        return false;
+                                    }
+                            );
+                        }
+                        return el;
                     }
-                    return el;
-                }
-            };
+                };
             return ret;
         },
 
@@ -363,4 +363,4 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
     }, {
         'extend': ['Oskari.userinterface.extension.DefaultFlyout']
     }
-    );
+);
