@@ -5,12 +5,14 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
     function() {
+        this.fields = ['from', 'to'];
         this.state = {};
+        this.services = [];
         this._templates = {};
         this._templates.main =
             '<div>' +
             '</div>' +
-            '<div style="display:none;">' + // Hidden at start (no results yet)
+            '<div>' + // Hidden at start (no results yet)
         '    <strong></strong>' +
             '    <ul></ul>' +
             '</div>' +
@@ -101,7 +103,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 contents = jQuery(me._templates.main),
                 i,
                 field,
-                fields = ['from', 'to'],
+                fields = me.fields,
                 tmp;
             /*
                 cancelBtn =
@@ -187,10 +189,154 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             cancelBtn.insertTo(contents.eq(2));*/
 
             el.append(contents);
+            me._initRoutingServices();
+            me._updateRoutingLinks();
         },
 
-        _updateRoutingLinks: function() {
-            // All the data needed should be in this.state
+        _initRoutingServices: function() {
+            var matka = {},
+                google = {},
+                here = {};
+
+            matka.baseUrl = "http://www.matka.fi/fi/?";
+            google.baseUrl = "http://www.google.fi/maps/dir/";
+
+            var me = this;
+
+            me.services.push(
+                me._routingService(
+                    'Matka.fi',
+                    '#2651A6',
+                    function(fromLoc, toLoc) {
+                        var url = 'http://www.matka.fi/fi/?keya=';
+                        url += encodeURIComponent(fromLoc.name);
+                        if (fromLoc.village) {
+                            url += '%2C+' + encodeURIComponent(fromLoc.village);
+                        }
+                        url += '&keyb=' + encodeURIComponent(toLoc.name);
+                        if (toLoc.village) {
+                            url += '%2C+' + encodeURIComponent(toLoc.village);
+                        }
+                        return url;
+                    }
+                )
+            );
+
+            me.services.push(
+                me._routingService(
+                    'Google Maps',
+                    '#A5D275',
+                    function(fromLoc, toLoc) {
+                        var url = 'http://www.google.fi/maps/dir/';
+                        url += encodeURIComponent(fromLoc.name);
+                        if (fromLoc.village) {
+                            url += ',+' + encodeURIComponent(fromLoc.village);
+                        }
+                        url += ',+Finland';
+                        url += '/' + encodeURIComponent(toLoc.name);
+                        if (toLoc.village) {
+                            url += ',+' + encodeURIComponent(toLoc.village);
+                        }
+                        url += ',+Finland';
+                        return url;
+                    }
+                )
+            );
+
+            me.services.push(
+                me._routingService(
+                    'HERE',
+                    '#124191',
+                    function(fromLoc, toLoc) {
+                        var url = 'http://here.com/directions/drive/';
+                        url += encodeURIComponent(
+                            fromLoc.name.replace(' ', '_')
+                        );
+                        if (fromLoc.village) {
+                            url += ',_' +
+                                encodeURIComponent(
+                                    fromLoc.village.replace(' ', '_')
+                            );
+                        }
+                        url += ',_Finland';
+                        url += '/' + encodeURIComponent(
+                            toLoc.name.replace(' ', '_')
+                        );
+                        if (toLoc.village) {
+                            url += ',_' + encodeURIComponent(
+                                toLoc.village.replace(' ', '_')
+                            );
+                        }
+                        url += ',_Finland';
+                        return url;
+                    }
+                )
+            );
+        },
+
+        _routingService: function(name, color, urlBuilder) {
+            var ret = {
+                name: name,
+                color: color,
+                urlBuilder: urlBuilder,
+                getButton: function(fromLoc, toLoc) {
+                    var me = this,
+                        el;
+
+                    if (!this.el) {
+                        el = jQuery('<a>' + me.name + '</a>');
+                        this.el = el;
+                    }
+                    if (fromLoc && fromLoc.name && toLoc && toLoc.name) {
+                        el.attr('href', me.urlBuilder(fromLoc, toLoc));
+                        el.attr('target', '_blank');
+                        el.removeClass('disabled');
+                        el.css('background-color', me.color);
+                        el.unbind('click');
+                    } else {
+                        el.attr('href', '#');
+                        el.removeAttr('target');
+                        el.addClass('disabled');
+                        el.css('background-color', '');
+                        el.click(
+                            function(event) {
+                                event.preventDefault();
+                                return false;
+                            }
+                        );
+                    }
+                    return el;
+                }
+            };
+            return ret;
+        },
+
+        _updateRoutingLinks: function(createButtons) {
+            var me = this,
+                buttons = [],
+                locations = [],
+                routingService,
+                i;
+
+            for (i = 0; i < me.fields.length; i++) {
+                locations.push(me.state[me.fields[i]]);
+            }
+
+            for (i = 0; i < me.services.length; i++) {
+                routingService = me.services[i];
+                console.log(routingService);
+                button = routingService.getButton.apply(
+                    routingService,
+                    locations
+                );
+                if (createButtons) {
+                    var ulli = me.getEl().find('ul'),
+                        lilli = jQuery('<li>');
+                    console.log("ul", ulli);
+                    lilli.append(button);
+                    ulli.append(lilli);
+                }
+            }
         }
     }, {
         'extend': ['Oskari.userinterface.extension.DefaultFlyout']
