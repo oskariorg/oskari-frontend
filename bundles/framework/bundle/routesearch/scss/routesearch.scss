@@ -13,6 +13,31 @@ $fieldWidth: 330px;
 
         }
 
+        ul {
+            list-style-type: none;
+            margin-top: 6px;
+
+            li {
+                float: left;
+                margin: 6px 2px;
+
+                a {
+                    border: 1px solid #B7B7B7;
+                    color: #FAFAFA;
+                    text-shadow: 1px 1px 1px #3C3C3C;
+
+                    &.disabled {
+                        background: none;
+                        background-color: #E6E6E6;
+                        color: #3C3C3C;
+                        text-shadow: -1px -1px 1px #FFFFFF;
+                    }
+                }
+
+            }
+
+        }
+
         .oskarifield {
 
             margin-bottom: 12px;

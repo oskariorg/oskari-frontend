@@ -28,11 +28,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             var me = this,
                 i,
                 location,
-                fieldName = field.attr('name');
+                fieldName = field.element[0].name;
 
             me.state[fieldName] = {
                 "name": request.term
             };
+            console.log(fieldName, me.state[fieldName]);
+            me._updateRoutingLinks();
             if (request.term && request.term.length > 2) {
                 me.service.doSearch(
                     request.term,
@@ -50,12 +52,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
         },
 
         _setSearchLocation: function(field, event, ui) {
-            var fieldName = field.attr('name'),
+            var me = this,
+                fieldName = field.attr('name'),
                 tmp = jQuery('<a>');
-            this.state[fieldName] = ui.item;
+            me.state[fieldName] = ui.item;
             // We have to unescape the text somehow... ;)
             tmp.html(ui.item.name + ', ' + ui.item.village);
             field.val(tmp.text());
+            me._updateRoutingLinks();
         },
 
         _reverseGeoCode: function(field, lonLat) {
@@ -63,9 +67,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
         },
 
         disableMapClick: function() {
-            delete this.state.field;
-            this.mapEl.removeClass("cursor-crosshair");
-            this.instance.unregisterMapClickHandler();
+            var me = this;
+            delete me.state.field;
+            me.mapEl.removeClass("cursor-crosshair");
+            me.instance.unregisterMapClickHandler();
         },
 
         onMapClick: function(lonLat) {
@@ -148,7 +153,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                         me._setSearchLocation($(this), event, ui);
                     },
                     source: function(request, response) {
-                        me._getSearchSuggestions($(this), request, response);
+                        me._getSearchSuggestions(this, request, response);
                     }
                 }).data("autocomplete")._renderItem = function(ul, item) {
                     var li = jQuery("<li>"),
@@ -190,7 +195,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
 
             el.append(contents);
             me._initRoutingServices();
-            me._updateRoutingLinks();
+            me._updateRoutingLinks(true);
         },
 
         _initRoutingServices: function() {
@@ -281,10 +286,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 urlBuilder: urlBuilder,
                 getButton: function(fromLoc, toLoc) {
                     var me = this,
-                        el;
+                        el = this.el;
 
-                    if (!this.el) {
-                        el = jQuery('<a>' + me.name + '</a>');
+                    if (!el) {
+                        el = jQuery('<a class="button">' + me.name + '</a>');
                         this.el = el;
                     }
                     if (fromLoc && fromLoc.name && toLoc && toLoc.name) {
@@ -312,6 +317,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
         },
 
         _updateRoutingLinks: function(createButtons) {
+            console.log('_updateRoutingLinks');
             var me = this,
                 buttons = [],
                 locations = [],
@@ -324,17 +330,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
 
             for (i = 0; i < me.services.length; i++) {
                 routingService = me.services[i];
-                console.log(routingService);
                 button = routingService.getButton.apply(
                     routingService,
                     locations
                 );
                 if (createButtons) {
-                    var ulli = me.getEl().find('ul'),
-                        lilli = jQuery('<li>');
-                    console.log("ul", ulli);
-                    lilli.append(button);
-                    ulli.append(lilli);
+                    var ul = me.getEl().find('ul'),
+                        li = jQuery('<li>');
+
+                    li.append(button);
+                    ul.append(li);
                 }
             }
         }
