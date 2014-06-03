@@ -7,9 +7,7 @@
  *
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleInstance",
-    function () {
-        this.conf.flyoutClazz = 'Oskari.mapframework.bundle.routesearch.Flyout';
-    },
+    function () {},
     {
         /**
          * @method getName
@@ -17,6 +15,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleIns
          */
         "getName": function () {
             return 'RouteSearch';
+        },
+
+        /**
+         * @method startPlugin
+         */
+        startPlugin: function () {
+            this.setDefaultTile(this.getLocalization('tile').title);
         },
 
         eventHandlers: {
@@ -38,6 +43,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleIns
             }
         },
 
+        /**
+         * @method registerMapClickHandler
+         * Registers the map click handler so we can pass the clicks to flyout.
+         */
         registerMapClickHandler: function () {
             console.log("registerMapClickHandler");
             if (this.eventHandlers.MapClickedEvent) {
@@ -51,6 +60,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleIns
             this.sandbox.registerForEventByName(this, 'MapClickedEvent');
         },
 
+        /**
+         * @method unregisterMapClickHandler
+         * Unregisters the map click handler
+         */
         unregisterMapClickHandler: function () {
             console.log("unregisterMapClickHandler");
             delete this.eventHandlers.MapClickedEvent;
@@ -63,7 +76,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleIns
          * 
          * @method __handleMapClick
          * @private
-         * @param  {Object} lonlat
+         * @param {OpenLayers.LonLat} lonlat
          */
         __handleMapClick: function (lonlat) {
             console.log("Map Clicked:", lonlat);

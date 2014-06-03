@@ -2,6 +2,21 @@
   float: right;
   margin-bottom: 20px;
   margin-left: 12px; }
+.routesearch > div ul {
+  list-style-type: none;
+  margin-top: 6px; }
+  .routesearch > div ul li {
+    display: inline-block;
+    margin: 6px 2px; }
+    .routesearch > div ul li a {
+      border: 1px solid #B7B7B7;
+      color: #FAFAFA;
+      text-shadow: 1px 1px 1px #3C3C3C; }
+      .routesearch > div ul li a.disabled {
+        background: none;
+        background-color: #E6E6E6;
+        color: #3C3C3C;
+        text-shadow: -1px -1px 1px #FFFFFF; }
 .routesearch > div .oskarifield {
   margin-bottom: 12px; }
   .routesearch > div .oskarifield label {
