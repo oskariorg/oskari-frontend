@@ -1,325 +1,327 @@
-Oskari.registerLocalization({
-  "lang": "fi",
-  "key": "PublishedMyPlaces",
-  "value": {
-    "title": "Kohteet",
-    "desc": "",
-    "category": {
-      "defaultName": "Oma karttataso",
-      "organization": "Omat kohteet",
-      "inspire": "Omat kohteet"
-    },
-    "guest": {
-      "loginShort": "Kirjaudu sisään käyttääksesi"
-    },
-    "tab": {
+Oskari.registerLocalization(
+{
+    "lang": "fi",
+    "key": "PublishedMyPlaces",
+    "value": {
         "title": "Kohteet",
-        "nocategories": "Et ole vielä tallentanut kohteita.",
-        "publishCategory": {
-            "privateTooltip": "Taso on yksityinen. Muuta taso julkiseksi klikkaamalla.",
-            "publicTooltip": "Taso on julkinen. Muuta taso yksityiseksi klikkaamalla."
+        "desc": "",
+        "category": {
+            "defaultName": "Oma karttataso",
+            "organization": "Omat kohteet",
+            "inspire": "Omat kohteet"
         },
-        "addCategory": "Lisää taso",
-        "editCategory": "Muokkaa tasoa",
-        "deleteCategory": "Poista taso",
-        "edit": "Muokkaa",
-        "delete": "Poista",
-        "grid": {
-          "name": "Nimi",
-          "desc": "Kuvaus",
-          "createDate": "Luotu",
-          "updateDate": "Päivitetty",
-          "measurement": "Pituus/pinta-ala",
-          "edit": " ",
-          "delete": " "
+        "guest": {
+            "loginShort": "Kirjaudu sisään lisätäksesi omia kohteita."
+        },
+        "tab": {
+            "title": "Kohteet",
+            "nocategories": "Sinulla ei ole tallennettuja omia kohteita.",
+            "publishCategory": {
+                "privateTooltip": "Karttataso on yksityinen. Muuta karttataso julkiseksi klikkaamalla tästä.",
+                "publicTooltip": "Karttataso on julkinen. Muuta karttataso yksityiseksi klikkaamalla tästä."
+            },
+            "addCategory": "Lisää karttataso",
+            "editCategory": "Muokkaa karttatasoa",
+            "deleteCategory": "Poista karttataso",
+            "edit": "Muokkaa",
+            "delete": "Poista",
+            "grid": {
+                "name": "Kohteen nimi",
+                "desc": "Kuvaus",
+                "createDate": "Luontiaika",
+                "updateDate": "Muokkausaika",
+                "measurement": "Koko",
+                "edit": "NOT TRANSLATED",
+                "delete": "Kohteen poistaminen"
+            },
+            "notification": {
+                "delete": {
+                    "title": "Haluatko poistaa kohteen",
+                    "confirm": "Poista",
+                    "btnDelete": "Peruuta",
+                    "btnCancel": "Kohde on poistettu.",
+                    "success": "Kohteen poistaminen epäonnistui. Yritä myöhemmin uudelleen.",
+                    "error": "Kohteen poistaminen epäonnistui. Yritä myöhemmin uudelleen.",
+                    "cancel": "Mittaa etäisyys"
+                }
+            }
+        },
+        "tools": {
+            "measureline": {
+                "title": "Mittaa etäisyys",
+                "tooltip": "NOT TRANSLATED",
+                "add": "",
+                "next": "",
+                "edit": "0 m",
+                "noResult": "Mittaa pinta-ala"
+            },
+            "measurearea": {
+                "title": "Mittaa pinta-ala",
+                "tooltip": "NOT TRANSLATED",
+                "add": "",
+                "next": "",
+                "edit": "0 m²",
+                "noResult": "Lisää piste"
+            },
+            "point": {
+                "title": "Lisää piste",
+                "tooltip": "Piirrä piste klikkaamalla karttaa.",
+                "add": "Voit halutessasi piirtää useampia pisteitä samaan kohteeseen piirtämällä kartalle useamman pisteen.",
+                "next": "Siirrä pistettä raahaamalla sitä hiirellä.",
+                "edit": "Tallenna kohde",
+                "save": "Lisää viiva"
+            },
+            "line": {
+                "title": "Lisää viiva",
+                "tooltip": "Piirrä viiva klikkaamalla viivan taitepisteitä kartalla. Lopeta piirtäminen tuplaklikkaamalla tai painamalla \"Lopeta piirto\".",
+                "add": "Voit halutessasi piirtää useampia viivoja samaan kohteeseen piirtämällä kartalle useamman viivan.",
+                "next": "Muokkaa viivaa liikuttamalla viivan taitepisteitä hiirellä raahaamalla.",
+                "edit": "Tallenna kohde",
+                "save": "0 m",
+                "noResult": "Lisää alue"
+            },
+            "area": {
+                "title": "Lisää alue",
+                "tooltip": "Piirrä alue klikkaamalla reunaviivan taitepisteitä kartalla. Voit piirtää alueeseen reiän pitämällä ALT-näppäintä pohjassa. Lopeta piirtäminen tuplaklikkaamalla tai painamalla \"Lopeta piirto\".",
+                "add": "Voit halutessasi piirtää useampia alueita samaan kohteeseen piirtämällä kartalle useamman alueen.",
+                "next": "Muokkaa aluetta liikuttamalla reunaviivan taitepisteitä hiirellä raahaamalla.",
+                "edit": "Tallenna kohde",
+                "save": "0 m²",
+                "noResult": "OK"
+            }
+        },
+        "buttons": {
+            "ok": "Peruuta",
+            "cancel": "Lopeta",
+            "close": "Tallenna kohde",
+            "finish": "Tallenna",
+            "save": "Tallenna omiin kohteisiin",
+            "saveAsMyPlace": "Siirrä kohteet ja poista karttataso",
+            "movePlaces": "Poista karttataso",
+            "deleteCategory": "Poista karttataso kohteineen",
+            "deleteCategoryAndPlaces": "Muuta julkiseksi",
+            "changeToPublic": "Muuta yksityiseksi",
+            "changeToPrivate": "Anna kohteen tiedot"
+        },
+        "placeform": {
+            "title": "Piirtämäsi kohde tallennetaan Omiin tietoihisi valitsemallesi omalle karttatasolle. Kohteen tallentamista varten anna kohteelle vähintään nimi ja kuvaus. Lisäksi voit antaa kohteelle kartalla kohteessa näkyvän tekstin, verkko-osoitteen (josta saa lisätietoa kohteesta) ja/tai kuvalinkin (jonka kautta on nähtävillä kuva kohteesta). Lopuksi valitse karttataso, jolle kohde tallennetaan, tai luo uusi karttataso.",
+            "tooltip": "Kohteen nimi",
+            "placename": {
+                "placeholder": "Verkko-osoite lisätietoihin kohteesta"
+            },
+            "placelink": {
+                "placeholder": "Kohteen kuvaus"
+            },
+            "placedesc": {
+                "placeholder": "Kartalla kohteessa näkyvä teksti"
+            },
+            "placeAttention": {
+                "placeholder": "Viivan pituus:"
+            },
+            "measurement": {
+                "line": "Alueen pinta-ala:",
+                "area": "Karttataso"
+            },
+            "category": {
+                "label": "Luo uusi karttataso",
+                "newLayer": "tai valitse karttataso olemassa olevista karttatasoistasi:",
+                "choose": "Linkki kuvaan kohteesta"
+            },
+            "imagelink": {
+                "placeholder": "Kuvan esikatselu",
+                "previewLabel": "Uusi karttataso",
+                "add": "Karttatasolla olevien kohteiden esitystavat"
+            },
+            "rendering": {
+                "label": "Piste",
+                "point": {
+                    "tooltip": "Karttatason nimi"
+                }
+            }
+        },
+        "categoryform": {
+            "name": {
+                "label": "Karttatason nimi",
+                "placeholder": "Kohteiden esitystavat"
+            },
+            "drawing": {
+                "label": "Piste",
+                "point": {
+                    "label": "Väri",
+                    "color": "Koko",
+                    "size": "Viiva"
+                },
+                "line": {
+                    "label": "Väri",
+                    "color": "Leveys",
+                    "size": "Alue"
+                },
+                "area": {
+                    "label": "Täyttöväri",
+                    "fillcolor": "Reunaviivan väri",
+                    "linecolor": "Reunaviivan leveys",
+                    "size": "Näytettävät kohteen tiedot"
+                }
+            },
+            "visibleFields": {
+                "label": "Nimi",
+                "placename": "Kuvaus",
+                "placedesc": "Kuva",
+                "image": "Muokkaa karttatasoa"
+            },
+            "edit": {
+                "title": "Tallenna",
+                "save": "Peruuta",
+                "cancel": "Karttatason kohteiden esitystavat"
+            },
+            "rendering": {
+                "label": "Muokkaa pistemäisten kohteiden esitystapaa.",
+                "point": {
+                    "tooltip": "Muokkaa aluemaisten kohteiden esitystapaa."
+                },
+                "area": {
+                    "tooltip": "Muokkaa viivamaisten kohteiden esitystapaa."
+                },
+                "line": {
+                    "tooltip": "Pisteen esitystapa"
+                }
+            }
+        },
+        "pointform": {
+            "title": "NOT TRANSLATED",
+            "tooltip": "",
+            "symbol": {
+                "label": "Koko"
+            },
+            "size": {
+                "label": "Väri"
+            },
+            "color": {
+                "label": "tai",
+                "labelOr": "Oma RGB-väri (0-255)",
+                "labelCustom": "Esikatselu"
+            },
+            "preview": {
+                "label": "Tallenna"
+            },
+            "buttons": {
+                "save": "Peruuta",
+                "cancel": "Viivan esitystapa"
+            }
+        },
+        "lineform": {
+            "title": "NOT TRANSLATED",
+            "tooltip": "",
+            "style": {
+                "label": "Päädyt"
+            },
+            "cap": {
+                "label": "Kulmat"
+            },
+            "corner": {
+                "label": "Leveys"
+            },
+            "width": {
+                "label": "Väri"
+            },
+            "color": {
+                "label": "tai",
+                "labelOr": "Oma RGB-väri (0-255)",
+                "labelCustom": "Esikatselu"
+            },
+            "preview": {
+                "label": "Tallenna"
+            },
+            "buttons": {
+                "save": "Peruuta",
+                "cancel": "Alueen esitystapa"
+            }
+        },
+        "areaform": {
+            "title": "NOT TRANSLATED",
+            "tooltip": "",
+            "linestyle": {
+                "label": "Reunaviivan päädyt"
+            },
+            "linecap": {
+                "label": "Kulmat"
+            },
+            "linecorner": {
+                "label": "Reunaviivan leveys"
+            },
+            "linewidth": {
+                "label": "Reunaviivan väri"
+            },
+            "linecolor": {
+                "label": "tai",
+                "labelOr": "Oma RGB-väri (0-255)",
+                "labelCustom": "Täyttöväri"
+            },
+            "color": {
+                "label": "tai",
+                "labelOr": "Oma RGB-väri (0-255)",
+                "labelCustom": "Täyttökuvio"
+            },
+            "fill": {
+                "label": "Esikatselu"
+            },
+            "preview": {
+                "label": "Tallenna"
+            },
+            "buttons": {
+                "save": "Peruuta",
+                "cancel": "Kohde on tallennettu."
+            }
         },
         "notification": {
-          "delete": {
-            "title": "Kohteen poistaminen",
-            "confirm": "Haluatko poistaa kohteen?",
-            "btnDelete": "Poista",
-            "btnCancel": "Peruuta",
-            "success": "Kohde on poistettu.",
-            "error": "Kohteen poistaminen epäonnistui. Kokeile uudestaan myöhemmin.",
-            "cancel": "Kohdetta ei ole poistettu."
-          }
-        }
-    },
-    "tools": {
-      "measureline": {
-        "title": "Etäisyyden mittaus",
-        "tooltip": "Mittaa etäisyys",
-        "add": "",
-        "next": "",
-        "edit": "Muokkaa viivaa raahaamalla viivan taitepisteitä.",
-        "noResult": "0 m"
-      },
-      "measurearea": {
-        "title": "Mittaa pinta-ala",
-        "tooltip": "Pinta-alan mittaus",
-        "add": "",
-        "next": "",
-        "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
-        "noResult": "0 m²"
-      },
-      "point": {
-        "title": "Pisteen lisäys",
-        "tooltip": "Lisää piste",
-        "add": "Lisää piste klikkaamalla karttaa.",
-        "next": "Voit tallentaa tai piirtää pisteitä samaan kohteeseen.",
-        "edit": "Siirrä pistettä raahaamalla.",
-        "save": "Tallenna sijainti"
-      },
-      "line": {
-        "title": "Viivan lisäys",
-        "tooltip": "Lisää viiva",
-        "add": "Lisää viivan taitepiste klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'.",
-        "next": "Voit tallentaa tai piirtää lisää viivoja samaan kohteeseen.",
-        "edit": "Muokkaa viivaa raahaamalla viivan taitepisteitä.",
-        "save": "Tallenna muoto",
-        "noResult": "0 m"
-      },
-      "area": {
-        "title": "Alueen lisäys",
-        "tooltip": "Lisää alue",
-        "add": "Lisää alueen taitepisteet klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'. Voit piirtää alueeseen reiän pitämällä pohjassa Alt-näppäintä.",
-        "next": "Voit tallentaa tai piirtää lisää alueita samaan kohteeseen.",
-        "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
-        "save": "Tallenna muoto",
-        "noResult": "0 m²"
-      }
-    },
-    "buttons": {
-      "ok": "OK",
-      "cancel": "Peruuta",
-      "close": "Lopeta",
-      "finish": "Tallenna piirto",
-      "save": "Tallenna",
-      "saveAsMyPlace": "Tallenna omaksi paikaksi",
-      "movePlaces": "Siirrä kohteet ja poista",
-      "deleteCategory": "Poista",
-      "deleteCategoryAndPlaces": "Poista kohteineen",
-      "changeToPublic": "Muuta julkiseksi",
-      "changeToPrivate": "Muuta yksityiseksi"
-    },
-    "placeform": {
-      "title": "Kohteen tiedot",
-      "tooltip": "Kun lisäät kohteen kartalle, se tallentuu Omiin tietoihisi. Anna kohteelle nimi ja kuvaus. Voit valita, mille karttatasolle tallennat kohteen tai lisätä uuden karttatason valitsemalla 'Uusi taso' karttatasojen pudotusvalikosta.",
-      "placename": {
-        "placeholder": "Anna kohteelle nimi"
-      },
-      "placelink": {
-        "placeholder": "Anna URL-osoite"
-      },
-      "placedesc": {
-        "placeholder": "Kuvaile kohdetta"
-      },
-      "placeAttention": {
-        "placeholder": "Huomioteksti"
-      },
-      "measurement": {
-        "line": "Viivan pituus: ",
-        "area": "Alueen pinta-ala: "
-      },
-      "category": {
-        "label": "Karttataso",
-        "newLayer": "Luo uusi karttataso",
-        "choose": " tai valitse olemassa olevista tasoista:"
-      },
-      "imagelink": {
-        "placeholder": "Kuva-URL",
-        "previewLabel": "Valokuvan esikatselu",
-        "add": "Uusi taso"
-      },
-      "rendering": {
-        "label": "Tason kohteiden esitystavat",
-        "point": {
-          "tooltip": "Piste"
-        }
-      }
-    },
-    "categoryform": {
-      "name": {
-        "label": "Nimi",
-        "placeholder": "Anna tasolle nimi"
-      },
-      "drawing": {
-        "label": "Piirtojälki",
-        "point": {
-          "label": "Piste",
-          "color": "Väri",
-          "size": "Koko"
+            "placeAdded": {
+                "title": "Löydät kohteen Omat tiedot -valikosta.",
+                "message": "Karttataso on tallennettu."
+            },
+            "categorySaved": {
+                "title": "Karttatasoon tehtyjen muutosten tallentaminen onnistui.",
+                "message": "Karttatason poistaminen"
+            },
+            "categoryDelete": {
+                "title": "Karttataso \"{0}\" sisältää {1} kohdetta. Haluatko poistaa karttatason ja siirtää sen kohteet oletuskarttatasolle \"{2}\" vai haluatko poistaa karttatason kohteineen?",
+                "deleteConfirmMove": "Haluatko poistaa karttatason {0}?",
+                "deleteConfirm": "Karttataso on poistettu.",
+                "deleted": "Muuta karttataso julkiseksi"
+            },
+            "categoryToPublic": {
+                "title": "Olet muuttamassa karttatasoa \"{0}\" julkiseksi. Tämän jälkeen karttataso on julkisesti jaettavissa verkossa ja sen voi liittää karttatasona toiseen verkkopalveluun. Karttataso on myös muiden Paikkatietoikkunan käyttäjien katseltavissa.",
+                "message": "Muuta karttataso yksityiseksi"
+            },
+            "categoryToPrivate": {
+                "title": "Olet muuttamassa karttatasoa \"{0}\" yksityiseksi. Tämän jälkeen karttataso ei ole enää julkisesti jaettavissa verkossa ja sitä ei voi liittää karttatasona toiseen verkkopalveluun. Karttataso ei myöskään ole enää muiden Paikkatietoikkunan käyttäjien katseltavissa.",
+                "message": "Karttatason tallentaminen epäonnistui. Myöskään kohdetta ei tallennettu. Yritä myöhemmin uudelleen."
+            },
+            "error": {
+                "addCategory": "Karttatason tallentaminen epäonnistui. Yritä myöhemmin uudelleen.",
+                "editCategory": "Kohteen tallentaminen epäonnistui. Yritä myöhemmin uudelleen.",
+                "savePlace": "Virhe!",
+                "title": "Järjestelmässä tapahtui virhe. Yritä myöhemmin uudelleen.",
+                "generic": "Poistossa tapahtui virhe. Yritä myöhemmin uudelleen.",
+                "deleteCategory": "Oletuskarttatasoa ei voi poistaa.",
+                "deleteDefault": "Annetuissa tiedoissa on virheitä:"
+            }
         },
-        "line": {
-          "label": "Viiva",
-          "color": "Väri",
-          "size": "Paksuus"
-        },
-        "area": {
-          "label": "Alue",
-          "fillcolor": "Täyttöväri",
-          "linecolor": "Viivan väri",
-          "size": "Viivan paksuus"
+        "validation": {
+            "title": "Kohteen nimi puuttuu.",
+            "placeName": "Karttatason nimi puuttuu.",
+            "categoryName": "Kohteen nimessä on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (a-ö, A-Ö), numerot (0-9), välilyönti ja yhdysmerkki (-).",
+            "placeNameIllegal": "Kohteen kuvauksessa on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (a-ö, A-Ö), numerot (0-9), välilyönti ja yhdysmerkki (-).",
+            "descIllegal": "Karttatason nimessä on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (a-ö, A-Ö), numerot (0-9), välilyönti ja yhdysmerkki (-).",
+            "categoryNameIllegal": "Pisteen koko on virheellinen. Pisteen koon oltava välillä 1-5.",
+            "dotSize": "Pisteen väri on virheellinen. Väriarvojen on oltava välillä 0-255.",
+            "dotColor": "Pisteen kuvake on virheellinen.",
+            "dotShape": "Viivan leveys on virheellinen. Viivan leveyden on oltava välillä 1-50.",
+            "lineSize": "Viivan väri on virheellinen. Väriarvojen on oltava välillä 0-255.",
+            "lineColor": "Reunaviivan leveys on virheellinen. Leveyden on oltava välillä 0-50.",
+            "areaLineSize": "Reunaviivan väri on virheellinen. Väriarvojen on oltava välillä 0-255.",
+            "areaLineColor": "Täyttöväri on virheellinen. Väriarvojen on oltava välillä 0-255.",
+            "areaFillColor": "NOT TRANSLATED"
         }
-      },
-      "visibleFields": {
-        "label": "Näytettävät kohteen tiedot",
-        "placename": "Nimi",
-        "placedesc": "Kuvaus",
-        "image": "Kuva"
-      },
-      "edit": {
-        "title": "Muokkaa karttatasoa",
-        "save": "Tallenna",
-        "cancel": "Peruuta"
-      },
-      "rendering": {
-        "label": "Tason kohteiden esitystavat",
-        "point": {
-          "tooltip": "Muokkaa pisteen esitystapaa"
-        },
-        "area": {
-          "tooltip": "Muokkaa alueen esitystapaa"
-        },
-        "line": {
-          "tooltip": "Muokkaa viivan esitystapaa"
-        }
-      }
-    },
-    "pointform": {
-      "title": "Pistekohteen esitystapa",
-      "tooltip": "",
-      "symbol": {
-        "label": "Pistekohteen kuvake"
-      },
-      "size": {
-        "label": "Koko"
-      },
-      "color": {
-        "label": "Väri",
-        "labelOr": "tai",
-        "labelCustom": "Oma RGB-väri (0-255)"
-      },
-      "preview": {
-        "label": "Esikatselu"
-      },
-      "buttons": {
-        "save": "Tallenna",
-        "cancel": "Peruuta"
-      }
-    },
-    "lineform": {
-      "title": "Viivan esitystapa",
-      "tooltip": "",
-      "style": {
-        "label": "Viivan tyyli"
-      },
-      "cap": {
-        "label": "Viivan päädyt"
-      },
-      "corner": {
-        "label": "Kulmat"
-      },
-      "width": {
-        "label": "Leveys"
-      },
-      "color": {
-        "label": "Väri",
-        "labelOr": "tai",
-        "labelCustom": "Oma RGB-väri (0-255)"
-      },
-      "preview": {
-        "label": "Esikatselu"
-      },
-      "buttons": {
-        "save": "Tallenna",
-        "cancel": "Peruuta"
-      }
-    },
-    "areaform": {
-      "title": "Alueen esitystapa",
-      "tooltip": "",
-      "linestyle": {
-        "label": "Alueen viivan tyyli"
-      },
-      "linecap": {
-        "label": "Alueen viivan päädyt"
-      },
-      "linecorner": {
-        "label": "Kulmat"
-      },
-      "linewidth": {
-        "label": "Leveys"
-      },
-      "linecolor": {
-        "label": "Viivan väri",
-        "labelOr": "tai",
-        "labelCustom": "Oma RGB-väri (0-255)"
-      },
-      "color": {
-        "label": "Alueen täyttöväri",
-        "labelOr": "tai",
-        "labelCustom": "Oma RGB-väri (0-255)"
-      },
-      "fill": {
-        "label": "Alueen täyttökuvio"
-      },
-      "preview": {
-        "label": "Esikatselu"
-      },
-      "buttons": {
-        "save": "Tallenna",
-        "cancel": "Peruuta"
-      }
-    },
-    "notification": {
-      "placeAdded": {
-        "title": "Kohde tallennettu",
-        "message": "Löydät kohteen Omat Tiedot -valikosta."
-      },
-      "categorySaved": {
-        "title": "Karttataso tallennettu",
-        "message": "Karttatason muutokset on tallennettu."
-      },
-      "categoryDelete": {
-        "title": "Karttatason poisto",
-        "deleteConfirmMove": "Karttataso: {0} sisältää kohteita {1} kpl. Haluatko poistaa tason ja siirtää sen kohteet oletuskarttatasolle {2}?",
-        "deleteConfirm": "Haluatko poistaa karttatason {0}?",
-        "deleted": "Karttataso poistettu."
-      },
-      "categoryToPublic": {
-        "title": "Muuta karttataso julkiseksi",
-        "message": "Olet muuttamassa karttatasoa \"{0}\" julkiseksi. Voit jakaa julkisen karttatason verkossa tai julkaista sen karttana toiseen verkkopalveluun. Muut käyttäjät voivat myös katsoa karttatasoa Paikkatietoikkunassa."
-      },
-      "categoryToPrivate": {
-        "title": "Muuta karttataso yksityiseksi",
-        "message": "Olet muuttamassa karttatasoa \"{0}\" yksityiseksi. Tämän jälkeen et voi jakaa tai julkaista karttana, eivätkä muut käyttäjät näe sitä Paikkatietoikkunassa."
-      },
-      "error": {
-        "addCategory": "Tason tallennus epäonnistui. Kohdetta ei ole tallennettu.",
-        "editCategory": "Tason tallennus epäonnistui.",
-        "savePlace": "Kohteen tallentaminen ei onnistunut.",
-        "title": "Virhe!",
-        "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin.",
-        "deleteCategory": "Virhe poistossa!",
-        "deleteDefault": "Oletuskarttatasoa ei voi poistaa."
-      }
-    },
-    "validation": {
-      "title": "Tiedoissa puutteita:",
-      "placeName": "Kohteen nimi puuttuu.",
-      "categoryName": "Tason nimi puuttuu.",
-      "placeNameIllegal": "Kohteen nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
-      "descIllegal": "Kohteen kuvauksessa on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
-      "categoryNameIllegal": "Tason nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
-      "dotSize": "Pisteen koko ei ole sallituissa rajoissa (1-5).",
-      "dotColor": "Pisteen väri virheellinen.",
-      "dotShape": "Pisteen muoto virheellinen.",
-      "lineSize": "Viivan koko ei ole sallituissa rajoissa (1-50).",
-      "lineColor": "Viivan väri virheellinen.",
-      "areaLineSize": "Alueen viivan koko ei ole sallituissa rajoissa (0-50).",
-      "areaLineColor": "Alueen viivan väri virheellinen.",
-      "areaFillColor": "Alueen täyttöväri virheellinen."
     }
-  }
-});
+}
+);

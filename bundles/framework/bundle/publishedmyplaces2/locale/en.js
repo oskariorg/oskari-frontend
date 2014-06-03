@@ -1,325 +1,327 @@
-Oskari.registerLocalization({
-  "lang": "en",
-  "key": "PublishedMyPlaces",
-  "value": {
-    "title": "Places",
-    "desc": "",
-    "category": {
-      "defaultName": "My map layer",
-      "organization": "My places",
-      "inspire": "My places"
-    },
-    "guest": {
-      "loginShort": "Log in to use"
-    },
-    "tab": {
+Oskari.registerLocalization(
+{
+    "lang": "en",
+    "key": "PublishedMyPlaces",
+    "value": {
         "title": "Places",
-        "nocategories": "You have not yet saved the places.",
-        "publishCategory": {
-            "privateTooltip": "The map layer is private. Click the map layer to make it public.",
-            "publicTooltip": "The map layer is public. Click the map layer to make it private."
+        "desc": "",
+        "category": {
+            "defaultName": "My map layer",
+            "organization": "My Places",
+            "inspire": "My Places"
         },
-        "addCategory": "Add map layer",
-        "editCategory": "Edit map layer",
-        "deleteCategory": "Delete map layer",
-        "edit": "Edit",
-        "delete": "Delete",
-        "grid": {
-          "name": "Name",
-          "desc": "Description",
-          "createDate": "Created",
-          "updateDate": "Updated",
-          "measurement": "Length/area",
-          "edit": " ",
-          "delete": " "
+        "guest": {
+            "loginShort": "Log in to add your own places on a map."
+        },
+        "tab": {
+            "title": "Places",
+            "nocategories": "You do not have any saved places yet.",
+            "publishCategory": {
+                "privateTooltip": "This map layer is private. Click here to publish it.",
+                "publicTooltip": "This map layer is public. Click here to unpublish it."
+            },
+            "addCategory": "Add the map layer",
+            "editCategory": "Edit the map layer",
+            "deleteCategory": "Delete the map layer",
+            "edit": "Edit",
+            "delete": "Delete",
+            "grid": {
+                "name": "Place name",
+                "desc": "Place description",
+                "createDate": "Created",
+                "updateDate": "Updated",
+                "measurement": "Size",
+                "edit": "NOT TRANSLATED",
+                "delete": "NOT TRANSLATED"
+            },
+            "notification": {
+                "delete": {
+                    "title": "Delete Place",
+                    "confirm": "Do you want to delete this place?",
+                    "btnDelete": "Delete",
+                    "btnCancel": "Cancel",
+                    "success": "The place has been deleted.",
+                    "error": "The place could not be deleted. Please try gain later.",
+                    "cancel": "The place has not been deleted."
+                }
+            }
+        },
+        "tools": {
+            "measureline": {
+                "title": "Measure Distance",
+                "tooltip": "Measure Distance",
+                "add": "",
+                "next": "",
+                "edit": "You can edit the line by clicking and dragging its breakpoints.",
+                "noResult": "0 m"
+            },
+            "measurearea": {
+                "title": "Measure Area",
+                "tooltip": "Measure Area",
+                "add": "",
+                "next": "",
+                "edit": "You can edit the area by clicking and dragging its breakpoints on its edge line.",
+                "noResult": "0 m²"
+            },
+            "point": {
+                "title": "Add Point",
+                "tooltip": "Add a point to the \"My places\".",
+                "add": "Draw a point by clicking the map.",
+                "next": "One place can contain one or more points.",
+                "edit": "Move the point by clicking and dragging.",
+                "save": "Save as my place"
+            },
+            "line": {
+                "title": "Add Line",
+                "tooltip": "Add a line to the \"My places\".",
+                "add": "Draw a line by adding the break points to the map. You can add the break points by clicking the map. Stop drawing by double clicking or by clicking \"Finish drawing\".",
+                "next": "One place can contain one or more lines.",
+                "edit": "Edit the line by clicking and dragging its break points.",
+                "save": "Save as my place",
+                "noResult": "0 m"
+            },
+            "area": {
+                "title": "Add Area",
+                "tooltip": "Add an area to the \"My places\".",
+                "add": "Draw a line by adding the edge line's break points to the map. You can add the break points by clicking the map. Stop drawing by double clicking or by clicking \"Finish drawing\".",
+                "next": "One place can contain one or more areas.",
+                "edit": "Edit the area by clicking and dragging the break points on its edge line.",
+                "save": "Save as my place",
+                "noResult": "0 m²"
+            }
+        },
+        "buttons": {
+            "ok": "OK",
+            "cancel": "Cancel",
+            "close": "Cancel",
+            "finish": "Save as my place",
+            "save": "Save",
+            "saveAsMyPlace": "Save as my place",
+            "movePlaces": "Move the places and delete the layer",
+            "deleteCategory": "Delete",
+            "deleteCategoryAndPlaces": "Delete the map layer and its places",
+            "changeToPublic": "Publish",
+            "changeToPrivate": "Unpublish"
+        },
+        "placeform": {
+            "title": "Place data",
+            "tooltip": "The place is saved to \"My places\". You can view them on the menu \"My data\". Please give the data for the place. The place name and description are mandatory. You can also give the text to be shown on the map besides the place, the link to the website to get more information about the place and the link to the image about the place. Finally create a new map layer or select one of the existing map layers where the place will be added.",
+            "placename": {
+                "placeholder": "Place name"
+            },
+            "placelink": {
+                "placeholder": "Link to the information about the place"
+            },
+            "placedesc": {
+                "placeholder": "Place description"
+            },
+            "placeAttention": {
+                "placeholder": "Place text on the map"
+            },
+            "measurement": {
+                "line": "Line distance:",
+                "area": "Area size:"
+            },
+            "category": {
+                "label": "Map layer",
+                "newLayer": "Create a new map layer",
+                "choose": "or select one of your existing map layers:"
+            },
+            "imagelink": {
+                "placeholder": "Link to the image",
+                "previewLabel": "Image preview",
+                "add": "New map layer"
+            },
+            "rendering": {
+                "label": "Place style",
+                "point": {
+                    "tooltip": "Point"
+                }
+            }
+        },
+        "categoryform": {
+            "name": {
+                "label": "Name",
+                "placeholder": "Map layer name"
+            },
+            "drawing": {
+                "label": "Style",
+                "point": {
+                    "label": "Point",
+                    "color": "Colour",
+                    "size": "Size"
+                },
+                "line": {
+                    "label": "Line",
+                    "color": "Colour",
+                    "size": "Width"
+                },
+                "area": {
+                    "label": "Area",
+                    "fillcolor": "Fill colour",
+                    "linecolor": "Edge line colour",
+                    "size": "Edge line width"
+                }
+            },
+            "visibleFields": {
+                "label": "Visible place data",
+                "placename": "Name",
+                "placedesc": "Description",
+                "image": "Image"
+            },
+            "edit": {
+                "title": "Edit the map layer",
+                "save": "Save",
+                "cancel": "Cancel"
+            },
+            "rendering": {
+                "label": "Place style",
+                "point": {
+                    "tooltip": "Edit the point style"
+                },
+                "area": {
+                    "tooltip": "Edit the area style"
+                },
+                "line": {
+                    "tooltip": "Edit the line style"
+                }
+            }
+        },
+        "pointform": {
+            "title": "Point style",
+            "tooltip": "",
+            "symbol": {
+                "label": "Icon"
+            },
+            "size": {
+                "label": "Size"
+            },
+            "color": {
+                "label": "Colour",
+                "labelOr": "or",
+                "labelCustom": "Custom RGB color (0-255)"
+            },
+            "preview": {
+                "label": "Preview"
+            },
+            "buttons": {
+                "save": "Save",
+                "cancel": "Cancel"
+            }
+        },
+        "lineform": {
+            "title": "Line style",
+            "tooltip": "",
+            "style": {
+                "label": "Style"
+            },
+            "cap": {
+                "label": "Endings"
+            },
+            "corner": {
+                "label": "Corners"
+            },
+            "width": {
+                "label": "Width"
+            },
+            "color": {
+                "label": "Colour",
+                "labelOr": "or",
+                "labelCustom": "Custom RGB color (0-255)"
+            },
+            "preview": {
+                "label": "Preview"
+            },
+            "buttons": {
+                "save": "Save",
+                "cancel": "Cancel"
+            }
+        },
+        "areaform": {
+            "title": "Area Style",
+            "tooltip": "",
+            "linestyle": {
+                "label": "Edge line style"
+            },
+            "linecap": {
+                "label": "Edge line endings"
+            },
+            "linecorner": {
+                "label": "Edge line corners"
+            },
+            "linewidth": {
+                "label": "Edge line width"
+            },
+            "linecolor": {
+                "label": "Edge line color",
+                "labelOr": "or",
+                "labelCustom": "Custom RGB color (0-255)"
+            },
+            "color": {
+                "label": "Fill colour",
+                "labelOr": "or",
+                "labelCustom": "Custom RGB color (0-255)"
+            },
+            "fill": {
+                "label": "Fill pattern"
+            },
+            "preview": {
+                "label": "Preview"
+            },
+            "buttons": {
+                "save": "Save",
+                "cancel": "Cancel"
+            }
         },
         "notification": {
-          "delete": {
-            "title": "Delete place",
-            "confirm": "Do you want to delete this place?",
-            "btnDelete": "Delete",
-            "btnCancel": "Cancel",
-            "success": "The place has been deleted.",
-            "error": "The place could not be deleted. Please try again later.",
-            "cancel": "The object has not been deleted."
-          }
-        }
-    },
-    "tools": {
-      "measureline": {
-        "title": "Distance measurement",
-        "tooltip": "Measure distance",
-        "add": "",
-        "next": "",
-        "edit": "Edit the line by clicking and dragging its break points.",
-        "noResult": "0 m"
-      },
-      "measurearea": {
-        "title": "Area measurement",
-        "tooltip": "Measure area",
-        "add": "",
-        "next": "",
-        "edit": "Edit the shape of the area by clicking and dragging the break points on its edge line.",
-        "noResult": "0 m²"
-      },
-      "point": {
-        "title": "Adding point",
-        "tooltip": "Add point",
-        "add": "Add point by clicking the map.",
-        "next": "You can save or draw more points into the same drawing.",
-        "edit": "Move point by clicking and dragging.",
-        "save": "Save location"
-      },
-      "line": {
-        "title": "Adding line",
-        "tooltip": "Add line",
-        "add": "Add a break point on the line by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'.",
-        "next": "You can save or draw more lines into the same drawing.",
-        "edit": "Edit the line by clicking and dragging its break points.",
-        "save": "Save shape",
-        "noResult": "0 m"
-      },
-      "area": {
-        "title": "Adding area",
-        "tooltip": "Add area",
-        "add": "Add break points to your area polygon by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'. To create holes in polygons, hold down the Alt key.",
-        "next": "You can save or draw more polygons into the same drawing.",
-        "edit": "Edit the shape of the area by clicking and dragging the break points on its edge line.",
-        "save": "Save shape",
-        "noResult": "0 m²"
-      }
-    },
-    "buttons": {
-      "ok": "OK",
-      "cancel": "Cancel",
-      "close": "Cancel",
-      "finish": "Save drawing",
-      "save": "Save",
-      "saveAsMyPlace": "Save as my place",
-      "movePlaces": "Move places and delete",
-      "deleteCategory": "Delete",
-      "deleteCategoryAndPlaces": "Delete category and places",
-      "changeToPublic": "Make public",
-      "changeToPrivate": "Make private"
-    },
-    "placeform": {
-      "title": "Place data",
-      "tooltip": "A place put on the map will be saved in My places. Give the place a name and describe it. You can select the map layer where the place will be stored, or choose a new map layer by selecting 'New layer' in the map layer drop-down menu.",
-      "placename": {
-        "placeholder": "Give the place a name"
-      },
-      "placelink": {
-        "placeholder": "Give a URL"
-      },
-      "placedesc": {
-        "placeholder": "Describe the place"
-      },
-      "placeAttention": {
-            "placeholder": "Attention text"
-      },
-      "measurement": {
-        "line": "Line length: ",
-        "area": "Area: "
-      },
-      "category": {
-        "label": "Map layer",
-        "newLayer": "Create a new layer",
-        "choose": " or choose from your layers:"
-      },
-      "imagelink": {
-        "placeholder": "Image URL",
-        "previewLabel": "Image preview",
-        "add": "New layer..."
-      },
-      "rendering": {
-        "label": "Object rendering",
-        "point": {
-          "tooltip": "Point"
-        }
-      }
-    },
-    "categoryform": {
-      "name": {
-        "label": "Name",
-        "placeholder": "Give the map layer a name"
-      },
-      "drawing": {
-        "label": "Style",
-        "point": {
-          "label": "Point",
-          "color": "Colour",
-          "size": "Size"
+            "placeAdded": {
+                "title": "The place has been saved.",
+                "message": "You can find the place in the menu \"My data\"."
+            },
+            "categorySaved": {
+                "title": "The map layer has been saved.",
+                "message": "The map layer editings have been saved."
+            },
+            "categoryDelete": {
+                "title": "Delete the map layer",
+                "deleteConfirmMove": "The map layer \"{0}\" contains {1} places. Do you want to delete the map layer and move its places to the default map layer \"{2}\" or do you want to delete the map layer and its places?",
+                "deleteConfirm": "Do you want to delete the map layer {0}?",
+                "deleted": "The map layer has been deleted."
+            },
+            "categoryToPublic": {
+                "title": "Publish the map layer",
+                "message": "You are publishing the map layer \"{0}\". After that you can in public share the map layer in the internet or embed it as a map layer on another web service. Also other users in Paikkatietoikkuna can view the map layer."
+            },
+            "categoryToPrivate": {
+                "title": "Unpublish the map layer",
+                "message": "You are unpublishing the map layer \"{0}\". After that it will no longer be possible to share the map layer in the internet anymore or embed it on another website. Other users in Paikkatietoikkuna can no longer view the map layer."
+            },
+            "error": {
+                "addCategory": "The map layer could not be saved. The place has not been saved. Please try again later.",
+                "editCategory": "The map layer could not be saved. Please try again later.",
+                "savePlace": "The place could not be saved. Please try again later.",
+                "title": "Error!",
+                "generic": "The system error occurred. Please try again later.",
+                "deleteCategory": "The error occurred while deleting. Please try again later.",
+                "deleteDefault": "The default map layer cannot be deleted."
+            }
         },
-        "line": {
-          "label": "Line",
-          "color": "Colour",
-          "size": "Thickness"
-        },
-        "area": {
-          "label": "Area",
-          "fillcolor": "Fill-in colour",
-          "linecolor": "Line colour",
-          "size": "Line thickness"
+        "validation": {
+            "title": "The given data contains errors:",
+            "placeName": "Place name is missing.",
+            "categoryName": "Map layer name is missing.",
+            "placeNameIllegal": "The place name contains disallowed characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
+            "descIllegal": "The place description contains disallowed characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
+            "categoryNameIllegal": "The map layer name contains disallowed characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
+            "dotSize": "The point size is invalid. The size must be between 1 and 5.",
+            "dotColor": "The point colour is invalid. The colour values must be between 0 and 255.",
+            "dotShape": "The point shape is invalid.",
+            "lineSize": "The line width is invalid. The size must be between 0 and 50.",
+            "lineColor": "The line colour is invalid. The colour values must be between 0 and 255.",
+            "areaLineSize": "The edge line width is invalid. The size must be between 0 and 50.",
+            "areaLineColor": "The edge line colour is invalid. The colour values must be between 0 and 255.",
+            "areaFillColor": "The fill colour is invalid. The colour values must be between 0 and 255."
         }
-      },
-      "visibleFields": {
-        "label": "Visible fields",
-        "placename": "Name",
-        "placedesc": "Description",
-        "image": "Image"
-      },
-      "edit": {
-        "title": "Edit map layer",
-        "save": "Save",
-        "cancel": "Back"
-      },
-      "rendering": {
-        "label": "Layer's features' style",
-        "point": {
-          "tooltip": "Edit point style"
-        },
-        "area": {
-          "tooltip": "Edit area style"
-        },
-        "line": {
-          "tooltip": "Edit line style"
-        }
-      }
-    },
-    "pointform": {
-      "title": "Point feature portrayal",
-      "tooltip": "",
-      "symbol": {
-        "label": "Point feature icon"
-      },
-      "size": {
-        "label": "Size"
-      },
-      "color": {
-        "label": "Colour",
-        "labelOr": "or",
-        "labelCustom": "Custom RGB color (0-255)"
-      },
-      "preview": {
-        "label": "Preview"
-      },
-      "buttons": {
-        "save": "Save",
-        "cancel": "Cancel"
-      }
-    },
-    "lineform": {
-      "title": "Line portrayal",
-      "tooltip": "",
-      "style": {
-        "label": "Line style"
-      },
-      "cap": {
-        "label": "Line endigs"
-      },
-      "corner": {
-        "label": "Corners"
-      },
-      "width": {
-        "label": "Width"
-      },
-      "color": {
-        "label": "Colour",
-        "labelOr": "or",
-        "labelCustom": "Custom RGB colour (0-255)"
-      },
-      "preview": {
-        "label": "Preview"
-      },
-      "buttons": {
-        "save": "Save",
-        "cancel": "Cancel"
-      }
-    },
-    "areaform": {
-      "title": "Area portrayal",
-      "tooltip": "",
-      "linestyle": {
-        "label": "Area line style"
-      },
-      "linecap": {
-        "label": "Area line endings"
-      },
-      "linecorner": {
-        "label": "Corners"
-      },
-      "linewidth": {
-        "label": "Width"
-      },
-      "linecolor": {
-        "label": "Line colour",
-        "labelOr": "or",
-        "labelCustom": "Custom RGB colour (0-255)"
-      },
-      "color": {
-        "label": "Area fill colour",
-        "labelOr": "or",
-        "labelCustom": "Own RGB colour (0-255)"
-      },
-      "fill": {
-        "label": "Area fill pattern"
-      },
-      "preview": {
-        "label": "Preview"
-      },
-      "buttons": {
-        "save": "Save",
-        "cancel": "Cancel"
-      }
-    },
-    "notification": {
-      "placeAdded": {
-        "title": "The place has been saved",
-        "message": "The place can be found in the My data menu"
-      },
-      "categorySaved": {
-        "title": "Map layer saved",
-        "message": "Map layer edits saved"
-      },
-      "categoryDelete": {
-        "title": "Delete map layer",
-        "deleteConfirmMove": "Map layer {0} contains {1} objects. Do you want to delete the map layer and move the places on it to the default map layer {2} ?",
-        "deleteConfirm": "Delete map layer {0}?",
-        "deleted": "Map layer deleted"
-      },
-      "categoryToPublic": {
-        "title": "Make map layer public",        
-        "message": "You are making the map layer \"{0}\" public. You can share links to a public map layer with other internet users or embed the map layer as a map window on another website. Other users can also view the map layer in Paikkatietoikkuna."
-      },
-      "categoryToPrivate": {
-        "title": "Make map layer private",        
-        "message": "You are making the map layer \"{0}\" private. After this it will no longer be possible to share it with other users or embed it on another website. Other users can no longer view the map layer in Paikkatietoikkuna."
-      },
-      "error": {
-        "addCategory": "The map layer could not be saved. The place has not been saved.",
-        "editCategory": "The map layer could not be saved.",
-        "savePlace": "The place could not be saved.",
-        "title": "Error!",
-        "generic": "System error. Please try again later.",
-        "deleteCategory": "Error occurred while deleting!",
-        "deleteDefault": "The default map layer cannot be deleted."
-      }
-    },
-    "validation": {
-      "title": "Data contains errors:",
-      "placeName": "Place name missing.",
-      "categoryName": "Map layer name missing.",
-      "placeNameIllegal": "The object name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
-      "descIllegal": "The object description contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
-      "categoryNameIllegal": "The layer description contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
-      "dotSize": "The dot size does not fit the size limits (1-5).",
-      "dotColor": "Wrong dot colour.",
-      "dotShape": "Wrong dot shape.",
-      "lineSize": "The line size does not fit the size limits (1-50).",
-      "lineColor": "Wrong line colour.",
-      "areaLineSize": "The area edge size does not fit the limits (0-50).",
-      "areaLineColor": "Wrong area edge line colour.",
-      "areaFillColor": "Wrong fill-in colour."
     }
-  }
-});
+}
+);
