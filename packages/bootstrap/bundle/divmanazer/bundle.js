@@ -133,18 +133,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.bootstrap.UserInterfaceBundle",
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultLayout.js"
         },  {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedTile.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedFlyout.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedExtension.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/EnhancedView.js"
-        }, {
             "type" : "text/css",
             "src" : "../../../../resources/bootstrap/bundle/divmanazer/css/divman.css"
         }, {

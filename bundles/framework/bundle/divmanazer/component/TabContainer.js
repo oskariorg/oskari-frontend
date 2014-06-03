@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
         }
         this.template = jQuery('<div class="oskariTabs">' + this.emptyMsg + '</div>');
 
-        this.templateTabs = jQuery('<div class="tabsHeader"><ul class="tabsItem"></ul></div><br clear="all"/>' +
+        this.templateTabs = jQuery('<div class="tabsHeader"><ul class="tabsItem"></ul></div>' +
             '<div class="tabsContent tabsContentItem"></div>');
 
         this.ui = this.template.clone();
@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                     panel.setPriority(this.panels[0].getPriority()-1.0);
                 } else if (typeof panel.getPriority() !== 'number') {
                     // Set as last item
-                    panel.setPriority(this.panels[this.panels.lenght-1].getPriority()+1.0);
+                    panel.setPriority(this.panels[this.panels.length-1].getPriority()+1.0);
                 }
             }
 

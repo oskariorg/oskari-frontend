@@ -265,7 +265,8 @@ function(instance) {
             // Point features
             var document = format.read(request.responseText).documentElement;
             if (document) {
-                var featureNodes = document.getElementsByTagName("ktjkiiwfs:rajamerkinTietoja");
+                var featureNodes = document.getElementsByTagName("ktjkiiwfs:rajamerkinTietoja"); 
+                if(featureNodes.length === 0) featureNodes = document.getElementsByTagName("rajamerkinTietoja");  // crome
                 for (var i = 0; i < featureNodes.length; i++) {
                     var pf = formatgml.parseFeature(featureNodes[i]);
                     if (pf) {

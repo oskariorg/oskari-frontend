@@ -11,7 +11,7 @@
     height: auto;
     width: 100%;
     position: absolute;
-    top: 40px;
+    top: 0;
     bottom: 0;
   }
 
@@ -50,15 +50,9 @@
   }
 
   .indicator-cont {
-    float: left;
-    position: relative;
-    padding-right: 30px;
-
     .icon-info {
-      position: absolute;
-      right: 0px;
-      top: 0px;
-      margin: 7px;
+      display: inline-block;
+      margin: 0 0 5px 5px;
     }
 
   }
@@ -68,14 +62,15 @@
     height: 80%;
   }
 
+  .data-source-select {
+    margin-top: 5px;
+  }
+
   .parameters-cont {
     min-height: 115px;
-    float: left;
 
     button {
-      float: right;
-      clear: both;
-      margin: 8px 0 10px 0;
+      margin: 8px 0 10px 8px;
     }
 
     button:disabled, input:disabled, select:disabled {
@@ -91,7 +86,7 @@
     clear: both;
 
     label {
-      float: left;
+      display: inline-block;
       width: 80px;
       padding: 10px;
       font-weight: bold;
@@ -99,8 +94,6 @@
     }
 
     select {
-      float: right;
-
       &.indi {
         width: 200px;
       }
@@ -117,13 +110,16 @@
     position: relative;
     height: 20%;
     min-height: 157px;
-    padding-top: 10px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ie-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box; 
     min-width: 470px;
+
+    .indisel {
+      display: inline-block;
+    }
 
     .new-indicator-cont {
       float: left;

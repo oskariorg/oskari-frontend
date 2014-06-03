@@ -199,13 +199,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
             }
 
             var layers = [],
+                subLayers = layer.getSubLayers(),
                 layerIdPrefix = 'layer_',
                 i,
                 ilen;
             // insert layer or sublayers into array to handle them identically
-            if ((layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap == true) && (layer.getSubLayers().length > 0)) {
+            if (subLayers.length > 0) {
                 // replace layers with sublayers
-                layers = layer.getSubLayers();
+                layers = subLayers;
                 layerIdPrefix = 'basemap_';
             } else {
                 // add layer into layers
@@ -416,7 +417,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
                 newRes = this._calculateResolutions(layerList[i]);
                 isInScale = layerList[i].isInScale(scale);
                 // Make sure the sub exists before mucking about with it
-                if (newRes && isInScale && oLayers[i]) {
+                if (newRes && isInScale && oLayers && oLayers[i]) {
                     oLayers[i].addOptions({
                         resolutions: newRes
                     });
@@ -433,12 +434,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
          * @return {Array[Number]}
          */
         _calculateResolutions: function(layer) {
-            var minScale = layer.getMinScale(),
+            var mm = this.getMapModule(),
+                minScale = layer.getMinScale(),
                 maxScale = layer.getMaxScale();
 
             if (minScale || maxScale) {
-                // use resolutions instead of scales to minimize chance of transformation errors
-                return this.getMapModule().calculateLayerResolutions(maxScale, minScale);
+                // use resolutions instead of scales to minimiz
+                // chance of transformation errors
+                return mm.calculateLayerResolutions(maxScale, minScale);
             }
         }
     }, {

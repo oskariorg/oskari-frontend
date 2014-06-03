@@ -28,16 +28,16 @@ function(title, content, priority) {
      * @method getTitle
      * @return {String} tab title
      */
-   getTitle : function() {
+    getTitle : function() {
        return this._title;
-   },
+    },
     /**
      * @method getContent
      * @return {String} content for the tab to be added
      */
-  getContent : function() {
+    getContent : function() {
        return this._content;
-  },
+    },
     /**
      * @method isFirst
      * @return {Integer} tab order priority

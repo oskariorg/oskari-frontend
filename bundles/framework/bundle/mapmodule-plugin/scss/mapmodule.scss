@@ -4,6 +4,10 @@ $pluginMargin: 10px;
     position : relative;
 }
 
+div.olMap.cursor-crosshair {
+    cursor: crosshair;
+}
+
 div.mapplugins {
     position: absolute;
     text-align: center;

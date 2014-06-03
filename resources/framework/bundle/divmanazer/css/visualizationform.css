@@ -209,6 +209,9 @@ div.renderdialog input.linewidth {
   width: 50px;
   margin-top: 5px; }
 
+div.renderdialog input.message-text {
+  width: 120px; }
+
 div.pointvisualization {
   width: 510px; }
 

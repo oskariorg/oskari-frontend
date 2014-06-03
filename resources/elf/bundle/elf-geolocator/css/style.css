@@ -1,0 +1,51 @@
+div.geolocator-search div.errors {
+  color: red; }
+
+div.geolocator-search input.elf-error {
+  border: 1px solid red; }
+
+div.geolocator-search div.search-fields input[type="text"] {
+  width: 80% !important; }
+
+div.geolocator-search div.search-fields label {
+  display: block; }
+
+div.geolocator-search div.search-fields div.search-field {
+  margin: 8px 0 8px; }
+
+div.geolocator-search div.search-additionals {
+  margin: 15px 0 15px; }
+
+div.geolocator-search div.search-additionals div.input-fields {
+  width: 80%;
+  margin-top: 10px; }
+
+div.geolocator-search div.search-additionals div.input-fields div.additional-input {
+  display: inline-block;
+  width: 50%; }
+
+div.geolocator-search div.search-additionals div.input-fields div.additional-input div.controls label {
+  margin-left: 5px; }
+
+div.geolocator-results div.search-results {
+  margin-top: 15px;
+  /*overflow-y: auto;*/ }
+
+div.geolocator-results div.search-results.loading {
+  height: 100px; }
+
+div.geolocator-results div.search-results.loading div.spinner {
+  top: 50px;
+  margin: 50px auto 0; }
+
+div.geolocator-results div.search-results th {
+  text-align: left;
+  padding-left: 5px; }
+
+div.geolocator-results div.header-results span.back {
+  float: right; }
+
+.elf-fake-link {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #0085d1; }

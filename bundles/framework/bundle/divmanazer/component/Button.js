@@ -9,9 +9,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
      * @method create called automatically on construction
      * @static
      */
-
     function () {
-        //this.template = jQuery('<div class="oskaributton"><input type="button"/></div>');
         this.template = jQuery('<input type="button"/>');
         this.title = null;
         this.ui = this.template.clone();
@@ -26,6 +24,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
             this.title = pTitle;
             if (this.ui) {
                 this.ui.attr('value', pTitle);
+            } else {
+                console.err("No UI");
             }
         },
         /**
@@ -67,6 +67,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
             }
             this.handler = pHandler;
             this.ui.bind('click', this.handler);
+        },
+        /**
+         * @method setPrimary
+         * Sets primary status of the button
+         */
+        setPrimary: function (primary) {
+            this.ui.toggleClass('primary', primary);
         },
         /**
          * @method destroy

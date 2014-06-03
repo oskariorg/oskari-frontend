@@ -37,56 +37,56 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
  */
 
     function (id, imageUrl, options) {
-
-        this._id = id;
-        this._imageUrl = imageUrl;
-        this._options = {
+        var me = this;
+        me._id = id;
+        me._imageUrl = imageUrl;
+        me._options = {
             resolutions : [2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5],
             srsName : 'EPSG:3067',
             units : 'm'
         };
         if(options) {
             for(var key in options) {
-                this._options[key] = options[key];
+                me._options[key] = options[key];
             }
         }
 
-        this._controls = {};
-        this._layerPlugins = {};
+        me._controls = {};
+        me._layerPlugins = {};
 
         /** @static @property {String} _projectionCode SRS projection code, defaults
          * to 'EPSG:3067' */
-        this._projection = null;
-        this._projectionCode = this._options.srsName;
-        this._supportedFormats = {};
+        me._projection = null;
+        me._projectionCode = me._options.srsName;
+        me._supportedFormats = {};
 
-        this._map = null;
+        me._map = null;
 
         // _mapScales are calculated in _calculateScalesImpl based on resolutions in options
-        this._mapScales = [];
-        this._mapResolutions = this._options.resolutions;
+        me._mapScales = [];
+        me._mapResolutions = me._options.resolutions;
         // arr
-        this._maxExtent = this._options.maxExtent || {};
+        me._maxExtent = me._options.maxExtent || {};
         // props: left,bottom,right, top
-        if(this._maxExtent.left) {
-            this._extent = [this._maxExtent.left, this._maxExtent.bottom, this._maxExtent.right, this._maxExtent.top];
+        if(me._maxExtent.left) {
+            me._extent = [me._maxExtent.left, me._maxExtent.bottom, me._maxExtent.right, me._maxExtent.top];
         }
         else {
-            this._extent = [];   
+            me._extent = [];   
         }
         // arr
 
-        this._sandbox = null;
-        this._stealth = false;
+        me._sandbox = null;
+        me._stealth = false;
 
-        this._pluginInstances = {};
+        me._pluginInstances = {};
 
         // mapcontrols assumes this to be present before init or start
-        this._localization = null;
+        me._localization = null;
 
         /* array of { id: <id>, name: <name>, layer: layer, impl: layerImpl } */
-        this.layerDefs = [];
-        this.layerDefsById = {};
+        me.layerDefs = [];
+        me.layerDefsById = {};
     }, {
         /**
          * @method getImageUrl
@@ -155,6 +155,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @param {Oskari.mapframework.ui.module.common.mapmodule.Plugin} plug
          */
         setLayerPlugin: function (id, plug) {
+            if (id === null || id === undefined || !id.length) {
+                this._sandbox.printWarn("Setting layer plugin with a non-existent ID:", id, plug);
+            }
             this._layerPlugins[id] = plug;
         },
         /**
@@ -221,31 +224,31 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @return {Map}
          */
         init: function (sandbox) {
-
+            var me = this;
             sandbox.printDebug("Initializing oskari map module...#############################################");
 
-            this._sandbox = sandbox;
+            me._sandbox = sandbox;
 
-            if (this._options) {
-                if (this._options.resolutions) {
-                    this._mapResolutions = this._options.resolutions;
+            if (me._options) {
+                if (me._options.resolutions) {
+                    me._mapResolutions = me._options.resolutions;
                 }
-                if (this._options.srsName) {
-                    this._projectionCode = this._options.srsName;
+                if (me._options.srsName) {
+                    me._projectionCode = me._options.srsName;
                     // set srsName to Oskari.mapframework.domain.Map
-                    if (this._sandbox) {
-                        this._sandbox.getMap().setSrsName(this._projectionCode);
+                    if (me._sandbox) {
+                        me._sandbox.getMap().setSrsName(me._projectionCode);
                     }
                 }
             }
 
-            this._map = this._createMapImpl();
+            me._map = me._createMapImpl();
 
             // changed to resolutions based map zoom levels
             // -> calculate scales array for backward compatibility
-            this._calculateScalesImpl(this._mapResolutions);
+            me._calculateScalesImpl(me._mapResolutions);
 
-            return this._initImpl(this._sandbox, this._options, this._map);
+            return me._initImpl(me._sandbox, me._options, me._map);
         },
 
         /**
@@ -482,6 +485,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @return {Boolean} true if coordinates are in said boundaries
          */
         isValidLonLat: function (lon, lat) {
+            // FIXME isn't this projection dependent?
             var isOk = true;
             if (lat < 6250000 || lat > 8200000) {
                 isOk = false;
@@ -511,19 +515,20 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
             }
 
             // FIXME: relies on OL2 implementation, refactor to use Impl
-            var scale = this.getMap().getScale();
+            var scale = this.getMap().getScale(),
+                i;
 
             if (scale < minScale) {
                 // zoom out
-                //for(var i = this._mapScales.length; i > zoomLevel; i--) {
-                for (var i = zoomLevel; i > 0; i--) {
+                //for(i = this._mapScales.length; i > zoomLevel; i--) {
+                for (i = zoomLevel; i > 0; i--) {
                     if (this._mapScales[i] >= minScale) {
                         return i;
                     }
                 }
             } else if (scale > maxScale) {
                 // zoom in
-                for (var i = zoomLevel; i < this._mapScales.length; i++) {
+                for (i = zoomLevel; i < this._mapScales.length; i++) {
                     if (this._mapScales[i] <= maxScale) {
                         return i;
                     }
@@ -592,8 +597,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
 
             this.startPlugins(sandbox);
             this.updateCurrentState();
-            this.started = this._startImpl();;
+            this.started = this._startImpl();
         },
+
         _startImpl: function () {
             return true;
         },
@@ -670,11 +676,13 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * moved here to make generalization easier
          */
         getLayersByName: function (name) {
-            var results = [];
-            var layerDefs = this.layerDefs;
-            for (var l = 0; l < layerDefs.length; l++) {
+            var results = [],
+                layerDefs = this.layerDefs,
+                l,
+                ldef;
+            for (l = 0; l < layerDefs.length; l++) {
 
-                var ldef = layerDefs[l];
+                ldef = layerDefs[l];
 
                 if (ldef.name.indexOf(name) != -1) {
                     results.push(ldef.impl);
@@ -712,8 +720,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
             this._removeLayerImpl(layerImpl);
             delete this.layerDefsById[layer.getId()];
 
-            var newDefs = [];
-            for (var n = 0; n < this.layerDefs.length; n++) {
+            var newDefs = [],
+                n;
+            for (n = 0; n < this.layerDefs.length; n++) {
                 if (this.layerDefs[n].layer.getId() !== layer.getId()) {
                     newDefs.push(this.layerDefs[n]);
                     continue;
@@ -725,18 +734,17 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
         },
 
         setLayerIndex: function (layerImpl, index) {
-            var layerArr = this.getLayerDefs();
-            var layerIndex = this.getLayerIndex(layerImpl);
-            var newLayerArr = [];
-            var prevDef = layerArr[layerIndex];
-
-            var n = 0;
+            var layerArr = this.getLayerDefs(),
+                layerIndex = this.getLayerIndex(layerImpl),
+                newLayerArr = [],
+                prevDef = layerArr[layerIndex],
+                n = 0;
             for (n = 0; n < layerArr.length; n++) {
                 if (n === index && prevDef) {
                     newLayerArr.push(prevDef);
                     prevDef = null;
                 }
-                if (!(layerArr[n].impl === layerImpl)) {
+                if (layerArr[n].impl !== layerImpl) {
                     newLayerArr.push(layerArr[n]);
                 }
             }
@@ -752,9 +760,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
         },
 
         getLayerIndex: function (layerImpl) {
-            var layerArr = this.getLayerDefs();
+            var layerArr = this.getLayerDefs(),
+                n;
 
-            for (var n = 0; n < layerArr.length; n++) {
+            for (n = 0; n < layerArr.length; n++) {
                 if (layerArr[n].impl === layerImpl) {
                     return n;
                 }
@@ -764,9 +773,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
         },
 
         getMapScale: function () {
-            var size = this.getMapSize();
-            var extent = this.getMapExtent();
-            var res = (extent[2] - extent[0]) / size[0];
+            var size = this.getMapSize(),
+                extent = this.getMapExtent(),
+                res = (extent[2] - extent[0]) / size[0];
             return OpenLayers.Util.getScaleFromResolution(res, 'm');
 
         },
@@ -780,9 +789,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @return {Number[]} calculated mapscales that are within given bounds
          */
         calculateLayerMinMaxResolutions: function (maxScale, minScale) {
-            var minScaleZoom = undefined;
-            var maxScaleZoom = undefined;
-            for (var i = 0; i < this._mapScales.length; i++) {
+            var minScaleZoom,
+                maxScaleZoom,
+                i;
+            for (i = 0; i < this._mapScales.length; i++) {
                 if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
                     if (minScaleZoom === undefined) {
                         minScaleZoom = i;
@@ -811,8 +821,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @return {Number[]} calculated mapscales that are within given bounds
          */
         calculateLayerScales: function (maxScale, minScale) {
-            var layerScales = [];
-            for (var i = 0; i < this._mapScales.length; i++) {
+            var layerScales = [],
+                i;
+            for (i = 0; i < this._mapScales.length; i++) {
                 if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
                     layerScales.push(this._mapScales[i]);
                 }
@@ -828,8 +839,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * @return {Number[]} calculated resolutions that are within given bounds
          */
         calculateLayerResolutions: function (maxScale, minScale) {
-            var layerResolutions = [];
-            for (var i = 0; i < this._mapScales.length; i++) {
+            var layerResolutions = [],
+                i;
+            for (i = 0; i < this._mapScales.length; i++) {
                 if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
                     // resolutions are in the same order as scales so just use them
                     layerResolutions.push(this._options.resolutions[i]);
@@ -837,7 +849,52 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
             }
             return layerResolutions;
         },
-
+        /**
+         * Returns state for mapmodule including plugins that have getState() function
+         * @method getState
+         * @return {Object} properties for each pluginName
+         */
+        getState : function() {
+            var state = {
+                    "plugins": {}
+                },
+                pluginName;
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getState) {
+                    state.plugins[pluginName] = this._pluginInstances[pluginName].getState();
+                }
+            }
+            return state;
+        },
+        /**
+         * Returns state for mapmodule including plugins that have getStateParameters() function
+         * @method getStateParameters
+         * @return {String} link parameters for map state
+         */
+        getStateParameters: function () {
+            var params = "",
+                pluginName;
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getStateParameters) {
+                    params = params + this._pluginInstances[pluginName].getStateParameters();
+                }
+            }
+            return params;
+        },
+        /**
+         * Sets state for mapmodule including plugins that have setState() function
+         * NOTE! Not used for now
+         * @method setState
+         * @param {Object} properties for each pluginName
+         */
+        setState : function(state) {
+            var pluginName;
+            for (pluginName in this._pluginInstances) {
+                if (this._pluginInstances.hasOwnProperty(pluginName) && state[pluginName] && this._pluginInstances[pluginName].setState) {
+                    this._pluginInstances[pluginName].setState(state[pluginName]);
+                }
+            }
+        },
         /* IMPL specific */
 
         _crs2MapImpl: Oskari.AbstractFunc("_crs2MapImpl"),

@@ -21,14 +21,24 @@ function(instance) {
         '<div class="header">' +
         '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">'+
         '<div class="field">' +
-        '<div class="help icon-info" ' +
+        '<div class="help icon-question" ' +
         'title="' + loc.tooltip + '"></div>' +
-        '<label>' + loc.placename.placeholder + '</label>' +
-        '<input type="text" name="placename"  placeholder="' + loc.placename.placeholder + '"/>' +
+        '<div class="field">' +
+        '<label>'+loc.parent_property_id.placeholder+'</label>' +
         '</div>' +
+        '<div class="field">' +
+        '<label id="parent_property_id" name="parent_property_id" ></label>' +
+        '</div>' +
+        /* '<label>' + loc.placename.placeholder + '</label>' +
+        '<input type="text" name="placename"  placeholder="' + loc.placename.placeholder + '"/>' +
+        '</div>' + */
         '<div class="field">' +
         '<label>' + loc.ptitle.placeholder + '</label>' +
         '<input type="text" name="ptitle" placeholder="' + loc.ptitle.placeholder + '"/>' +
+        '</div>' +
+        '<div class="field">' +
+        '<label>' + loc.reporter.placeholder + '</label>' +
+        '<input type="text" name="reporter" placeholder="' + loc.reporter.placeholder + '"/>' +
         '</div>' +
       /* maybe later ? '<div class="field">' +
         '<label>' + loc.subtitle.placeholder + '</label>' +
@@ -38,22 +48,16 @@ function(instance) {
         '<label>' + loc.description.placeholder + '</label>' +
         '<textarea name="description" placeholder="' + loc.description.placeholder + '">' +
         '</textarea>' +
-        '</div>' +  */
-        '<div class="field">' +
-        '<label>' + loc.parent_property_id.placeholder + '</label>' +
-        '<input type="text" name="parent_property_id" disabled="disabled" placeholder="' + loc.parent_property_id.placeholder + '"/>' +
         '</div>' +
         '<div class="field">' +
         '<label>' + loc.parent_property_quality.placeholder + '</label>' +
         '<input type="text" name="parent_property_quality" disabled="disabled" placeholder="' + loc.parent_property_quality.placeholder + '"/>' +
-        '</div>' +
+        '</div>' + */
         '<div class="field">' +
         '<label>' + loc.area.placeholder + '</label>' +
-        '<input type="text" name="area" disabled="disabled" placeholder="' + loc.area.placeholder + '"/>' +
         '</div>' +
         '<div class="field">' +
-        '<label>' + loc.reporter.placeholder + '</label>' +
-        '<input type="text" name="reporter" placeholder="' + loc.reporter.placeholder + '"/>' +
+        '<label id="area_property_id" name="area_property_id" ></label>' +
         '</div>' +
         '<div class="buttons"></div>' +
         '</div></div>');
@@ -133,9 +137,10 @@ function(instance) {
             ui.find('textarea[name=description]').append(this.initialValues.place.desc);
             ui.find('input[name=ptitle]').attr('value',this.initialValues.place.title);
             ui.find('input[name=subtitle]').attr('value',this.initialValues.place.subtitle);
-            ui.find('input[name=parent_property_id]').attr('value',this.initialValues.place.parent_property_id);
+            ui.find('#parent_property_id').text(this.initialValues.place.parent_property_id);
             ui.find('input[name=parent_property_quality]').attr('value',this.initialValues.place.parent_property_quality);
-            ui.find('input[name=area]').attr('value',this.initialValues.place.area);
+           // ui.find('input[name=area]').attr('value',this.initialValues.place.area);
+            ui.find('#area_property_id').text(this.initialValues.place.area);
             ui.find('input[name=reporter]').attr('value',this.initialValues.place.reporter);
         }
         this._formUi = ui;
@@ -158,9 +163,9 @@ function(instance) {
             var description = onScreenForm.find('textarea[name=description]').val();
             var ptitle = onScreenForm.find('input[name=ptitle]').val();
             var subtitle = onScreenForm.find('input[name=subtitle]').val();
-            var parent_property_id = onScreenForm.find('input[name=parent_property_id]').val();
+            var parent_property_id = onScreenForm.find('#parent_property_id').text();
             var parent_property_quality = onScreenForm.find('input[name=parent_property_quality]').val();
-            var area = onScreenForm.find('input[name=area]').val();
+            var area = onScreenForm.find('#area_property_id').text();
             var reporter = onScreenForm.find('input[name=reporter]').val();
             var id = undefined;
             if(this.initialValues.place.id) id = this.initialValues.place.id;
@@ -239,9 +244,9 @@ function(instance) {
             onScreenForm.find('textarea[name=description]').val(data.place.desc);
             onScreenForm.find('input[name=ptitle]').val(data.place.title);
             onScreenForm.find('input[name=subtitle]').val(data.place.subtitle);
-            onScreenForm.find('input[name=parent_property_id]').val(data.place.parent_property_id);
+            onScreenForm.find('#parent_property_id').text(data.place.parent_property_id);
             onScreenForm.find('input[name=parent_property_quality]').val(data.place.parent_property_quality);
-             onScreenForm.find('input[name=area]').val(data.place.area);
+             onScreenForm.find('#area_property_id').text(data.place.area);
              onScreenForm.find('input[name=reporter]').val(data.place.reporter);
         }
         

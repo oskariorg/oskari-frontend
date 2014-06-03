@@ -22,6 +22,7 @@ Oskari.clazz
             this.localization = null;
             this.service = null;
             this.tabPriority = 1.0;
+            this.disableDefault = false;
         }, {
             /**
              * @static
@@ -88,9 +89,9 @@ Oskari.clazz
 
                 me.started = true;
 
-                var conf = this.conf;
-                var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
-                var sandbox = Oskari.getSandbox(sandboxName);
+                var conf = this.conf,
+                    sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
+                    sandbox = Oskari.getSandbox(sandboxName);
 
                 me.sandbox = sandbox;
 
@@ -108,6 +109,11 @@ Oskari.clazz
                     this.tabPriority = this.conf.priority;
                 }
 
+                // Create default UI or not?
+                if (this.conf && this.conf.disableDefault === true) {
+                    this.disableDefault = true;
+                }
+
                 var servName =
                     'Oskari.mapframework.bundle.search.service.SearchService';
                 this.service = Oskari.clazz.create(servName, ajaxUrl);
@@ -121,9 +127,9 @@ Oskari.clazz
                 }
 
                 //Let's extend UI
-                var reqName = 'userinterface.AddExtensionRequest';
-                var reqBuilder = sandbox.getRequestBuilder(reqName);
-                var request = reqBuilder(this);
+                var reqName = 'userinterface.AddExtensionRequest',
+                    reqBuilder = sandbox.getRequestBuilder(reqName),
+                    request = reqBuilder(this);
                 sandbox.request(this, request);
 
                 sandbox.registerAsStateful(this.mediator.bundleId, this);
@@ -201,9 +207,9 @@ Oskari.clazz
                     }
                 }
 
-                var reqName = 'userinterface.RemoveExtensionRequest';
-                var reqBuilder = sandbox.getRequestBuilder(reqName);
-                var request = reqBuilder(this);
+                var reqName = 'userinterface.RemoveExtensionRequest',
+                    reqBuilder = sandbox.getRequestBuilder(reqName),
+                    request = reqBuilder(this);
 
                 sandbox.request(this, request);
 

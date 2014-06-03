@@ -397,10 +397,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                 }
                 this.drawPlugin.editLayer.addFeatures(newFeatures[1]);
                 break;
+            default:
             }
             OpenLayers.Feature.Vector.style['default'].strokeWidth = '2';
-            this.drawPlugin.drawLayer.features[0].style = this.drawPlugin.selectStyle;
-            this.drawPlugin.selectedFeature = 0;
+            this.drawPlugin.selectedFeature = this.drawPlugin.drawLayer.features.length-1;
+            this.drawPlugin.drawLayer.features[this.drawPlugin.selectedFeature].style = this.drawPlugin.selectStyle;
             this.map.editLayer = editLayer;
             parcelLayer.redraw();
             editLayer.redraw();
@@ -578,8 +579,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                     }
                     for (; from < len; from++) {
                         if (from in this &&
-                            this[from] === elt)
+                            this[from] === elt) {
                             return from;
+                        }
                     }
                     return -1;
                 };
@@ -865,7 +867,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                 for (j = 1; j < olPoints.length - 1; j++) {
                     if (!this.equalArrays(olPoints[j].references, olPoints[j - 1].references)) {
                         if (sharedEdge) {
-                            if (olPoints[j].references.length > 2) olLineStringPoints.push(olPoints[j]);
+                            if (olPoints[j].references.length > 2) {
+                                olLineStringPoints.push(olPoints[j]);
+                            }
                             olNewLineStringsTmp.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
                             olLineStringPoints = [];
                         }
@@ -922,42 +926,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
             }
 
             for (k = 0; k < olSolutionLineStrings.length; k++) {
-                // Add middle point
-                /*                olComponents = olSolutionLineStrings[k].components;
-                if (olComponents.length === 2) {
-                    olPoint = new OpenLayers.Geometry.Point(0.5*(olComponents[0].x+olComponents[1].x),0.5*(olComponents[0].y+olComponents[1].y));
-                    olPoint.references = olComponents[0].references;
-                    olPoint.markerPoint = -2;
-                    olPoint.boundaryPoint = false;
-                    olSolutionLineStrings[k].components.splice(1,0,olPoint);
-                }
-                var prevPoint = olComponents[0];
-//olComponents[0].single = true;
-                var nextPoint = olComponents[2];
-//olComponents[2].single = true;
-                for (l = 0; l < olSolutionPolygons.length; l++) {
-                    var polygon = olSolutionPolygons[l];
-                    for (p = 0; p < olComponents[0].references.length; p++) {
-                        if (olComponents[0].references[p] === polygon.id) {
-                            var points = polygon.components[0].components;
-                            var polyLength = points.length - 1;
-                            for (m = 0; m < polyLength; m++) {
-                                n = m + 1;
-                                if ((points[m] === prevPoint) && (points[n] === nextPoint)) {
-                                    points.splice(n, 0, olPoint);
-olSolutionPolygons[l].middle = {index:[m,n],id:[prevPoint.id,nextPoint.id]};
-                                    break;
-                                }
-                                if ((points[n] === prevPoint) && (points[m] === nextPoint)) {
-                                    points.splice(n, 0, olPoint);
-olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-*/
                 // Markers
                 intersections: for (l = 0; l < 2; l++) {
                     if (olEndPoints[k][l].references.length !== 2) continue;
@@ -1075,36 +1043,6 @@ olSolutionPolygons[l].middle = {index:[m,n],id:[nextPoint.id,prevPoint.id]};
                     this.drawPlugin.markerLayer.addMarker(marker);
                 }
             }
-
-
-            /*
-            // Remove middle points
-            olComponents = olNewFeatures[0].geometry.components;
-            for (i = 0; i < olComponents.length; i++) {
-                for (j = 0; j < olComponents[i].components.length; j++) {
-                    k = 0;
-                    while (k < olComponents[i].components[j].components.length-1) {
-                        olPoint = olComponents[i].components[j].components[k];
-                        if (olPoint.markerPoint === -2) {
-                            olNewFeatures[0].geometry.components[i].components[j].components.splice(k,1);
-                        } else {
-                            k = k+1;
-                        }
-                    }
-                }
-            }
-            olComponents = olNewFeatures[1].geometry.components;
-            for (i = 0; i < olComponents.length; i++) {
-                for (j = 0; j < olComponents[i].components.length; j++) {
-                    olPoint = olComponents[i].components[j];
-                    if (olPoint.markerPoint === -2) {
-                        olNewFeatures[1].geometry.components[i].components.splice(j,1);
-                        break;
-                    }
-                }
-            }
-*/
-
 
             // Update boundary info
             for (i = 0; i < olNewFeatures[0].geometry.components.length; i++) {

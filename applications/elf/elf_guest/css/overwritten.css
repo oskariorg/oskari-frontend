@@ -25,6 +25,9 @@ table {
         width: 100%;
         height: 100%;
     }
+    #mapdiv.elf-reverse-geocode {
+        cursor: crosshair !important;
+    }
     #mapdivB {
         width: 100%;
         height: 100%;
@@ -105,3 +108,25 @@ table {
 
 }
 
+.elf-lang-selector .langSelection a.btn {
+    margin-left: 8px;
+    background: #D4D4D4 url(../images/portlet/header_bg.png) repeat-x 0 0;
+    border: 1px solid;
+    border-color: #C8C9CA #9E9E9E #9E9E9E #C8C9CA;
+    color: #34404F;
+    text-shadow: 1px 1px #FFF;
+    text-align: center;
+    cursor: pointer;
+    overflow: visible;
+    padding: 5px;
+    width: auto;
+    text-decoration: none;
+    font-weight: bold;
+    font: 1em Arial, Helvetica, Verdana, sans-serif;
+}
+
+.elf-lang-selector .langSelection a.btn:hover {
+    background: #B9CED9 url(../images/application/state_hover_bg.png) repeat-x 0 0;
+    border-color: #627782;
+    color: #369;
+}

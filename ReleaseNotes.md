@@ -1,5 +1,97 @@
 # Release Notes
 
+## 1.21
+
+### core/sandbox/Layers
+
+`sandbox.getRequestBuilder('RequestName')` now returns `undefined` if either request or request handler is missing. Previously only returned `undefined` if request was missing. This solves some timing issues with minified code.
+
+AbstractLayer now has set/getLayerName() as it's a common field for most layers. LayerName is functional configurations while name is for UI.
+
+WmsLayer now forwards calls for wmsUrl/wmsName methods to AbstractLayers layerUrl/layerName methods. The API remains the same and urls can be accessed with both ways. 
+WmtsLayer does the same for wmtsUrl/wmtsName.
+
+### MaplayerService
+
+Now returns null if trying to create unrecognized layer type instead of throwing an error. Also logs a mention in console if this happens.
+
+### admin-layerselector
+
+Previously didn't startup correctly with small number of layer (under 30), this has now been fixed.
+
+### search
+
+The default UI for search can now be disabled through config:
+
+```javascript
+{
+    "disableDefault": true
+}
+```
+
+### mapmodule-plugin/MarkersPlugin
+
+New marker functionality:
+
+Dynamic point symbol visualizations are now available also for markers. They can be created by url parameters or set on the map by the user.
+
+Marker handling is removed from map-module.js. Instead, new markers can be added via requests as follows:
+
+```javascript
+var reqBuilder = this.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+if (reqBuilder) {
+    var data = {
+        x: lonlat.lon,
+        y: lonlat.lat,
+        msg: null,
+        color: "ff0000",
+        shape: 3,
+        size: 3
+    };
+    var request = reqBuilder(data);
+    this.sandbox.request(this.getName(), request);
+}
+```
+
+### elf-language-selector
+
+Opens the language selector in a Flyout
+
+### elf-geolocator
+
+*New bundle!* Creates a service and a user interface for ELF Geolocator search API. Creates an UI for search bundle to perform text searches and adds a button to the toolbar for reverse geocode search.
+
+### analysis/analyse
+
+Existing WFS area and line features can now be cut with a new geometry editor bundle and used as analysis source features.
+
+The drawing of a new feature as well as editing one has been moved to a new accordion panel.
+
+### statistics/statsgrid
+
+The toolbar from the top has been removed and the tool added to the side toolbar when going to stats mode.
+
+Data source select has been added (only two options now - SOTKAnet and user indicators).
+
+### /Oskari/bundles/mapframework/bundle/mapwfs2/plugin/WFSLayerPlugin
+
+New optional plugin config setting to defer setLocation calls from AfterMapMoveEvent to MapLayerVisibilityChangedEvent
+to drop some WFS queries to backend servers.
+
+
+```javascript
+{
+   "id": "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
+   "config": {
+      "deferSetLocation" : true
+   }
+}
+```
+
+### divmanazer
+
+Added a new function `getHeader` to `component/AccordionPanel.js`
+
 ## 1.20
 
 ### analysis/analyse
@@ -44,6 +136,10 @@ Removed underscore from comp.js
 ### backendstatus
 
 Sends a new event - `BackendStatus.BackendStatusChangedEvent` instead of `MapLayerEvent` now. Also, if the amount of changed layers exceeds 100 a so called bulk update event is sent instead of single events for each changed layer. It's basically the same event without any params.
+
+### mapmodule-plugin
+
+Now has getState/getStateParameters/setState-functions and forwards calls to these methods to any registered plugins that have the same methods. GetState gathers and object with properties named after plugins and setState assumes to get the same kind of Object as parameter.
 
 ## 1.19.3
 

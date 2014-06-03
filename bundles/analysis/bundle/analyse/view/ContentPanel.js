@@ -1,18 +1,24 @@
 Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
     function (view) {
-        this.view         = undefined;
-        this.instance     = undefined;
-        this.sandbox      = undefined;
-        this.loc          = undefined;
-        this.mapModule    = undefined;
-        this.features     = undefined;
-        this.panel        = undefined;
-        this.drawPluginId = undefined;
-        this.drawPlugin   = undefined;
-        this.featureLayer = undefined;
-        this.layerType    = undefined;
-        this.linkAction   = undefined;
-        this.isStarted    = undefined;
+        this.view               = undefined;
+        this.instance           = undefined;
+        this.sandbox            = undefined;
+        this.loc                = undefined;
+        this.mapModule          = undefined;
+        this.features           = undefined;
+        this.dataPanel          = undefined;
+        this.drawToolsPanel     = undefined;
+        this.drawPluginId       = undefined;
+        this.drawPlugin         = undefined;
+        this.drawFilterPluginId = undefined;
+        this.drawFilterPlugin   = undefined;
+        this.featureLayer       = undefined;
+        this.layerType          = undefined;
+        this.linkAction         = undefined;
+        this.isStarted          = undefined;
+        this.selectedGeometry   = undefined;
+        this.drawFilterMode     = undefined;
+        this.helpDialog         = undefined;
 
         this.init(view);
         this.start();
@@ -29,24 +35,33 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                     '<h4 class="title"></h4>' +
                 '</div>',
             'tool': '<div class="tool"></div>',
-            'drawControls': '<div class="buttons"></div>',
+            'drawFilterContainer': '<div class="drawFilterContainer">' +
+                '<h4 class="title"></h4>' +
+                '</div>',
+            'drawFilter': '<div class="drawFilter"></div>',
             'search': '<div class="analyse-search"></div>'
         },
         /**
-         * @method getPanel
+         * @method getDataPanel
          * @return {Oskari.userinterface.component.AccordionPanel}
          */
-        getPanel: function() {
-            return this.panel;
+        getDataPanel: function() {
+            return this.dataPanel;
+        },
+        getDrawToolsPanel: function() {
+            return this.drawToolsPanel;
         },
         /**
          * Returns the container where all the stuff is.
          * 
-         * @method getPanelContainer
+         * @method getDataPanelContainer
          * @return {jQuery}
          */
-        getPanelContainer: function() {
-            return this.getPanel().getContainer();
+        getDataPanelContainer: function() {
+            return this.getDataPanel().getContainer();
+        },
+        getDrawToolsPanelContainer: function() {
+            return this.getDrawToolsPanel().getContainer();
         },
         /**
          * @method getName
@@ -65,13 +80,22 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             return this.features;
         },
         /**
+         * Returns a geometry selected by the user.
+         *
+         * @method getSelectedGeometry
+         * @return {Object[]}
+         */
+        getSelectedGeometry: function() {
+            return this.selectedGeometry;
+        },
+        /**
          * Returns the element which the layer list is rendered into.
          * 
          * @method getLayersContainer
          * @return {jQuery}
          */
         getLayersContainer: function() {
-            return this.getPanelContainer().find('div.layers');
+            return this.getDataPanelContainer().find('div.layers');
         },
         /**
          * Returns the type of the layer we fake here for the temporary features.
@@ -104,9 +128,57 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          */
         eventHandlers: {
             'DrawPlugin.FinishedDrawingEvent': function(event) {
-                if (this.drawPluginId !== event.getCreatorId()) return;
+                if (this.drawPluginId !== event.getCreatorId()) {
+                    return;
+                }
 
                 this.addGeometry(event.getDrawing());
+                this.drawPlugin.stopDrawing();
+            },
+            'DrawFilterPlugin.FinishedDrawFilteringEvent': function(event) {
+                if (this.drawFilterPluginId !== event.getCreatorId()) {
+                    return;
+                }
+                var geometries = event.getFiltered();
+                if (geometries === null) {
+                    this._cancelDrawFilter();
+                }
+                this.addGeometry(event.getFiltered());
+                this.drawFilterPlugin.stopDrawFiltering();
+
+            },
+            'WFSFeatureGeometriesEvent': function(event) {
+                if (!this.instance.analyse.isEnabled) {
+                    return;
+                }
+                if (this.drawFilterMode) {
+                    return;
+                }
+                var clickedGeometries = event.getGeometries();
+                if (clickedGeometries.length > 0) {
+                    var clickedGeometry = clickedGeometries[0];
+                    // var id = clickedGeometry[0];
+                    var data = clickedGeometry[1];
+                    var wkt = new OpenLayers.Format.WKT();
+                    var feature = wkt.read(data);
+                    if (feature.geometry.CLASS_NAME == "OpenLayers.Geometry.LineString") {
+                        this.selectedGeometry = new OpenLayers.Feature.Vector(feature.geometry);
+                    } else if (feature.geometry.CLASS_NAME == "OpenLayers.Geometry.MultiPolygon") {
+                        this.selectedGeometry = new OpenLayers.Feature.Vector(feature.geometry);
+                    } else if (feature.geometry.CLASS_NAME == "OpenLayers.Geometry.Polygon") {
+                        this.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon([feature.geometry]));
+                    }
+                    this._operateDrawFilters();
+                }
+            },
+            'WFSFeaturesSelectedEvent': function(event) {
+                if (this.drawFilterMode) {
+                    return;
+                }
+                if (event.getWfsFeatureIds().length === 0) {
+                    this.selectedGeometry = null;
+                    this._disableAllDrawFilterButtons();
+                }
             }
         },
         /**
@@ -117,24 +189,27 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          * @param  {Oskari.analysis.bundle.analyse.view.StartAnalyse} view
          */
         init: function(view) {
-            this.view         = view;
-            this.instance     = this.view.instance;
-            this.sandbox      = this.instance.getSandbox();
-            this.loc          = this.view.loc;
-            this.mapModule    = this.sandbox.findRegisteredModuleInstance('MainMapModule');
-            this.features     = [];
-            this.featCounts   = {
+            this.view               = view;
+            this.instance           = this.view.instance;
+            this.sandbox            = this.instance.getSandbox();
+            this.loc                = this.view.loc;
+            this.mapModule          = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+            this.features           = [];
+            this.featCounts         = {
                 point: 0,
                 line: 0,
                 area: 0
             };
-            this.panel        = this._createPanel(this.loc);
-            this.drawPluginId = this.instance.getName();
-            this.drawPlugin   = this._createDrawPlugin();
-            this.featureLayer = this._createFeatureLayer(this.mapModule);
-            this.layerType    = 'ANALYSE_TEMP';
-            this.linkAction   = this.loc.content.search.resultLink;
-            this.isStarted    = false;
+            this.dataPanel          = this._createDataPanel(this.loc);
+            this.drawToolsPanel     = this._createDrawToolsPanel(this.loc);
+            this.drawPluginId       = this.instance.getName();
+            this.drawPlugin         = this._createDrawPlugin();
+            this.drawFilterPluginId = this.instance.getName();
+            this.drawFilterPlugin   = this._createDrawFilterPlugin();
+            this.featureLayer       = this._createFeatureLayer(this.mapModule);
+            this.layerType          = 'ANALYSE_TEMP';
+            this.linkAction         = this.loc.content.search.resultLink;
+            this.isStarted          = false;
 
             for (var p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
@@ -158,10 +233,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             if (this.isStarted) return;    
 
             this._toggleDrawPlugins(false);
+            this._toggleDrawFilterPlugins(false);
             this.mapModule.getMap().addLayer(this.featureLayer);
 
             this.mapModule.registerPlugin(this.drawPlugin);
             this.mapModule.startPlugin(this.drawPlugin);
+
+            this.mapModule.registerPlugin(this.drawFilterPlugin);
+            this.mapModule.startPlugin(this.drawFilterPlugin);
 
             reqBuilder = sandbox.getRequestBuilder(rn);
             if (reqBuilder) {
@@ -187,19 +266,22 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             this.stop();
             this._destroyFeatureLayer();
 
-            this.view         = undefined;
-            this.instance     = undefined;
-            this.sandbox      = undefined;
-            this.loc          = undefined;
-            this.mapModule    = undefined;
-            this.features     = undefined;
-            this.featCounts   = undefined;
-            this.panel        = undefined;
-            this.drawPluginId = undefined;
-            this.drawPlugin   = undefined;
-            this.layerType    = undefined;
-            this.linkAction   = undefined;
-            this.isStarted    = undefined;
+            this.view              = undefined;
+            this.instance           = undefined;
+            this.sandbox            = undefined;
+            this.loc                = undefined;
+            this.mapModule          = undefined;
+            this.features           = undefined;
+            this.featCounts         = undefined;
+            this.dataPanel          = undefined;
+            this.drawToolsPanel     = undefined;
+            this.drawPluginId       = undefined;
+            this.drawPlugin         = undefined;
+            this.drawFilterPluginId = undefined;
+            this.drawFilterPlugin   = undefined;
+            this.layerType          = undefined;
+            this.linkAction         = undefined;
+            this.isStarted          = undefined;
         },
         /**
          * Removes the feature layer, stops the draw plugin and
@@ -219,8 +301,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             this.mapModule.stopPlugin(this.drawPlugin);
             this.mapModule.unregisterPlugin(this.drawPlugin);
 
+            this.mapModule.stopPlugin(this.drawFilterPlugin);
+            this.mapModule.unregisterPlugin(this.drawFilterPlugin);
+
             this.mapModule.getMap().removeLayer(this.featureLayer);
             this._toggleDrawPlugins(true);
+            this._toggleDrawFilterPlugins(true);
 
             reqBuilder = sandbox.getRequestBuilder(rn);
             if (reqBuilder) {
@@ -256,7 +342,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 feature;
 
             if (mode) {
-                feature = new OpenLayers.Feature.Vector(geometry);
+                var style = OpenLayers.Util.extend({}, OpenLayers.Feature.Vector.style['default']);
+                style.fillOpacity = 0.7;
+                style.graphicOpacity = 1;
+                style.strokeWidth = 2;
+                style.strokeColor = "#000000";
+                style.strokeOpacity = 1;
+                feature = new OpenLayers.Feature.Vector(geometry,null,style);
                 this.getFeatures().push(
                     this._createFakeLayer(feature.id, mode, name)
                 );
@@ -264,7 +356,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 if (this.featureLayer) {
                     this.featureLayer.addFeatures([feature]);
                 }
-                this.drawPlugin.stopDrawing();
 
                 this.view.refreshAnalyseData(feature.id);
             }
@@ -306,26 +397,44 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
         /**
          * Creates the content layer selection panel for analyse
          * 
-         * @method _createPanel
+         * @method _createDataPanel
          * @private
          * @param {Object} loc
          * @return {Oskari.userinterface.component.AccordionPanel}
          *         Returns the created panel
          */
-        _createPanel: function (loc) {
+        _createDataPanel: function (loc) {
             var panel = Oskari.clazz.create(
                     'Oskari.userinterface.component.AccordionPanel'),
+                panelHeader = panel.getHeader(),
                 panelContainer = panel.getContainer(),
                 layersCont = jQuery(this._templates.layersContainer).clone(),
                 tooltipCont = jQuery(this._templates.help).clone();
 
             panel.setTitle(loc.content.label);
             tooltipCont.attr('title', loc.content.tooltip);
+            tooltipCont.addClass('header-icon-info');
 
-            panelContainer.append(tooltipCont);
+            panelHeader.append(tooltipCont);
             panelContainer.append(layersCont);
             panelContainer.append(this._createDataButtons(loc));
+
+            return panel;
+        },
+        _createDrawToolsPanel: function (loc) {
+            var panel = Oskari.clazz.create(
+                    'Oskari.userinterface.component.AccordionPanel'),
+                panelHeader = panel.getHeader(),
+                panelContainer = panel.getContainer(),
+                tooltipCont = jQuery(this._templates.help).clone();
+
+            panel.setTitle(loc.content.drawToolsLabel);
+            tooltipCont.attr('title', loc.content.drawToolsTooltip);
+            tooltipCont.addClass('header-icon-info');
+
+            panelHeader.append(tooltipCont);
             panelContainer.append(this._createDrawButtons(loc));
+            panelContainer.append(this._createDrawFilterButtons(loc));
 
             return panel;
         },
@@ -344,6 +453,21 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                     });
             
             return drawPlugin;
+        },
+        /**
+         * Creates and returns the draw filter plugin needed here.
+         *
+         * @method _createDrawFilterPlugin
+         * @private
+         * @return {Oskari.mapframework.ui.module.common.geometryeditor.DrawFilterPlugin}
+         */
+        _createDrawFilterPlugin: function() {
+            var drawFilterPlugin = Oskari.clazz.create(
+                'Oskari.mapframework.ui.module.common.geometryeditor.DrawFilterPlugin', {
+                    id: this.drawFilterPluginId
+                });
+
+            return drawFilterPlugin;
         },
         /**
          * Creates and returns the data button which opens the layer selector
@@ -374,7 +498,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             searchButton.setHandler(function() {
                 me._openFlyoutAs('Search');
             });
-            searchButton.insertTo(buttons)
+            searchButton.insertTo(buttons);
 
             return buttons;
         },
@@ -398,6 +522,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             return _.foldl(tools, function(container, tool) {
                 var toolDiv = toolTemplate.clone();
                 toolDiv.addClass('add-' + tool);
+                toolDiv.attr('title', loc.content.features.tooltips[tool]);
                 toolDiv.click(function() {
                     me._startNewDrawing({
                         drawMode: tool
@@ -409,36 +534,106 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             }, toolContainer);
         },
         /**
+         * Creates and returns the draw filter buttons from which the user can filter
+         * by drawing which features are going to be used in analysis.
+         *
+         * @method _createDrawFilterButtons
+         * @private
+         * @param {Object} loc
+         * @return {jQuery}
+         */
+        _createDrawFilterButtons: function(loc) {
+            var me = this,
+                drawFilterContainer = jQuery(this._templates.drawFilterContainer).clone(),
+                drawFilterTemplate = jQuery(this._templates.drawFilter),
+                drawFilters = ['point', 'line', 'edit'];
+
+            drawFilterContainer.find('h4').html(loc.content.drawFilter.title);
+
+            return _.foldl(drawFilters, function(container, drawFilter) {
+                var drawFilterDiv = drawFilterTemplate.clone();
+                var groupName = 'analysis-selection-';
+                drawFilterDiv.addClass(groupName + drawFilter);
+                drawFilterDiv.addClass('disabled');
+                drawFilterDiv.attr('title',me.loc.content.drawFilter.tooltip[drawFilter]);
+                drawFilterDiv.click(function() {
+                    if (jQuery(this).hasClass('disabled')) {
+                        return;
+                    }
+                    me._startNewDrawFiltering({
+                        mode: drawFilter,
+                        sourceGeometry: me.getSelectedGeometry()
+                    });
+                });
+                container.append(drawFilterDiv);
+                return container;
+            }, drawFilterContainer);
+        },
+
+        /**
          * Creates and returns the draw control buttons where the user
          * can either save or discard the drawn feature.
          * 
          * @method _createDrawControls
          * @private
-         * @return {jQuery}
+         * @return {Oskari.userinterface.component.Button[]}
          */
         _createDrawControls: function () {
             var me = this,
                 loc = this.loc.content.features.buttons,
-                container = jQuery(this._templates.drawControls).clone(),
                 cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
             cancelBtn.setTitle(loc.cancel);
             cancelBtn.setHandler(function () {
                 me._sendStopDrawRequest(true);
+                me._closeHelpDialog();
+                me._activateWFSLayer(true);
             });
 
             finishBtn.setTitle(loc.finish);
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
-                me._sendStopDrawRequest();
+                me._sendStopDrawRequest(false);
+                me._closeHelpDialog();
+                me._activateWFSLayer(true);
             });
 
-            cancelBtn.insertTo(container);
-            finishBtn.insertTo(container);
-
-            return container;
+            return [cancelBtn, finishBtn];
         },
+        /**
+         * Creates and returns the filter control buttons.
+         *
+         * @method _createDrawFilterControls
+         * @private
+         * @return {Oskari.userinterface.component.Button[]}
+         */
+        _createDrawFilterControls: function () {
+            var me = this,
+                loc = this.loc.content.drawFilter.buttons,
+                finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+
+            this.drawFilterMode = true;
+
+            cancelBtn.setTitle(loc.cancel);
+            cancelBtn.setHandler(function () {
+                me._cancelDrawFilter();
+            });
+
+            finishBtn.setTitle(loc.finish);
+            finishBtn.addClass('primary');
+            finishBtn.setHandler(function () {
+                me.drawFilterMode = false;
+                // Disable all buttons
+                me._disableAllDrawFilterButtons();
+                me._sendStopDrawFilterRequest(false);
+                me._activateWFSLayer(true);
+            });
+
+            return [cancelBtn, finishBtn];
+        },
+
         /**
          * Sends a request to open a Flyout impersonating
          * as the bundle provided in the name param.
@@ -447,7 +642,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          * @private
          * @param  {String} name
          */
-        _openFlyoutAs: function(name) {
+        _openFlyoutAs: function (name) {
             var extension = {
                     getName: function () {
                         return name;
@@ -467,29 +662,75 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          * @param {Object} config params for StartDrawRequest
          */
         _startNewDrawing: function (config) {
-            var sandbox = this.sandbox,
-                evtB = sandbox.getEventBuilder(
-                    'DrawPlugin.SelectedDrawingEvent'),
-                gfiReqBuilder = sandbox.getRequestBuilder(
-                    'MapModulePlugin.GetFeatureInfoActivationRequest');
+            var controlButtons = this._createDrawControls(),
+                loc = this.loc.content.drawDialog,
+                dialogTitle = loc[config.drawMode].title,
+                dialogText = loc[config.drawMode].add;
 
-            // notify components to reset any saved "selected place" data
-            if (evtB) sandbox.notifyAll(evtB());
+            // Disable WFS highlight and GFI dialog
+            this._activateWFSLayer(false);
 
             // notify plugin to start drawing new geometry
             this._sendDrawRequest(config);
 
-            // disable gfi requests
-            if (gfiReqBuilder) {
-                sandbox.request(this.instance, gfiReqBuilder(false));
+            this.helpDialog = Oskari.clazz.create(
+                'Oskari.userinterface.component.Popup');
+            this.helpDialog.show(dialogTitle, dialogText, controlButtons);
+            this.helpDialog.addClass('analyse-draw-dialog');
+            this.helpDialog.
+                moveTo('div.tool.add-' + config.drawMode, 'bottom');
+        },
+
+        _startNewDrawFiltering: function (config) {
+            var me = this,
+                diaLoc = this.loc.content.drawFilter.dialog,
+                controlButtons = [],
+                dialogTitle,
+                dialogText;
+
+            // Enable and disable correct buttons
+            if (config.mode === "remove") {
+                this._cancelDrawFilter();
+            } else {
+                // Enable only the remove button
+                this._disableAllDrawFilterButtons();
+                this._activateWFSLayer(false);
+                jQuery('div.drawFilter.analysis-selection-remove').removeClass('disabled');
+                jQuery('div.drawFilter.analysis-selection-'+config.mode).addClass('selected');
+
+                // Create help dialog
+                this.helpDialog = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup');
+                dialogTitle = diaLoc.modes[config.mode].title;
+                dialogText = diaLoc.modes[config.mode].message;
+                controlButtons = this._createDrawFilterControls();
+                this.helpDialog.addClass("drawfilterdialog");
+                this.helpDialog.show(dialogTitle, dialogText, controlButtons);
+                this.helpDialog.
+                    moveTo('div.drawFilter.analysis-selection-'+config.mode, 'bottom');
             }
 
-            // remove old draw buttons and append new ones
-            this.getPanelContainer()
-                .find('div.toolContainer')
-                .find('div.buttons').remove().end()
-                .append(this._createDrawControls());
+            // Disable WFS highlight and GFI dialog
+            this._activateWFSLayer(false);
+
+            // notify plugin to start draw filtering new geometries
+            this._sendDrawFilterRequest(config);
         },
+
+        _cancelDrawFilter: function() {
+            this.drawFilterMode = false;
+            this._sendStopDrawFilterRequest(true);
+            this._disableAllDrawFilterButtons();
+            this._activateWFSLayer(true);
+            this.selectedGeometry = null;
+            // Disable the remove button
+            jQuery('div.drawFilter.analysis-selection-remove').addClass('disabled');
+            // Remove the finish button
+            this.getDrawToolsPanelContainer()
+                .find('div.drawFilterContainer')
+                .find('div.buttons').remove();
+        },
+
         /**
          * Sends a StartDrawRequest with given params.
          * 
@@ -520,12 +761,48 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 reqBuilder = sandbox.getRequestBuilder('DrawPlugin.StopDrawingRequest'),
                 request;
 
-            this.getPanelContainer()
+            this.getDrawToolsPanelContainer()
                 .find('div.toolContainer div.buttons')
                 .remove();
 
             if (reqBuilder) {
                 request = reqBuilder(isCancel);
+                sandbox.request(this.instance, request);
+            }
+        },
+        /**
+         * Sends a StartDrawFilteringRequest with given params.
+         *
+         * @method _sendDrawFilterRequest
+         * @private
+         * @param {Object} config params for StartDrawFilteringRequest
+         */
+        _sendDrawFilterRequest: function (config) {
+            var sandbox = this.sandbox,
+                reqBuilder = sandbox.getRequestBuilder(
+                    'DrawFilterPlugin.StartDrawFilteringRequest'),
+                request;
+
+            if (reqBuilder) {
+                request = reqBuilder(config);
+                sandbox.request(this.instance, request);
+            }
+        },
+        /**
+         * Sends a StopDrawFilteringRequest with given params.
+         *
+         * @method _sendStopDrawFilterRequest
+         * @private
+         * @param {Object} config params for StopDrawFilteringRequest
+         */
+        _sendStopDrawFilterRequest: function (config) {
+            var sandbox = this.sandbox,
+                reqBuilder = sandbox.getRequestBuilder(
+                    'DrawFilterPlugin.StopDrawFilteringRequest'),
+                request;
+
+            if (reqBuilder) {
+                request = reqBuilder(config);
                 sandbox.request(this.instance, request);
             }
         },
@@ -644,8 +921,35 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 });
 
             _.each(drawPlugins, function(plugin) {
-                if (enabled) mapModule.startPlugin(plugin);
-                else mapModule.stopPlugin(plugin);
+                if (enabled) {
+                    mapModule.startPlugin(plugin);
+                } else {
+                    mapModule.stopPlugin(plugin);
+                }
+            });
+        },
+        /**
+         * Either starts or stops draw filter plugins which are added to the map module
+         *
+         * @method _toggleDrawFilterPlugins
+         * @private
+         * @param  {Boolean} enabled
+         */
+        _toggleDrawFilterPlugins: function(enabled) {
+            var me = this,
+                sandbox = this.sandbox,
+                mapModule = this.mapModule,
+                drawFilterPlugins = _.filter(mapModule.getPluginInstances(), function(plugin) {
+                    return (plugin.getName().match(/DrawFilterPlugin$/) &&
+                        plugin.getName() !== me.drawFilterPlugin.getName());
+                });
+
+            _.each(drawFilterPlugins, function(plugin) {
+                if (enabled) {
+                    mapModule.startPlugin(plugin);
+                } else {
+                    mapModule.stopPlugin(plugin);
+                }
             });
         },
         /**
@@ -670,5 +974,77 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                     me.addGeometry(geometry, name);
                 };
             };
+        },
+
+        _operateDrawFilters: function() {
+            var preSelector = 'div.drawFilter.analysis-selection-';
+            var pointButton = jQuery(preSelector+'point');
+            var lineButton = jQuery(preSelector+'line');
+            var editButton = jQuery(preSelector+'edit');
+            var removeButton = jQuery(preSelector+'remove');
+
+            if ((typeof this.selectedGeometry === "undefined")||(this.selectedGeometry === null)) {
+                // Disable all buttons
+                this._disableAllDrawFilterButtons();
+                return;
+            }
+            var type = this.selectedGeometry.geometry.CLASS_NAME;
+            // Enable or disable buttons depending on the selected feature type
+            switch(type) {
+                case 'OpenLayers.Geometry.LineString':
+                    pointButton.removeClass('disabled');
+                    lineButton.addClass('disabled');
+                    editButton.addClass('disabled');
+                    removeButton.addClass('disabled');
+                    break;
+                case 'OpenLayers.Geometry.MultiPolygon':
+                    pointButton.addClass('disabled');
+                    lineButton.removeClass('disabled');
+                    editButton.removeClass('disabled');
+                    removeButton.addClass('disabled');
+                    break;
+                default:
+                    pointButton.addClass('disabled');
+                    lineButton.addClass('disabled');
+                    editButton.addClass('disabled');
+                    removeButton.addClass('disabled');
+                    break;
+            }
+        },
+
+        _disableAllDrawFilterButtons: function() {
+            jQuery('div.drawFilter').addClass('disabled');
+            jQuery('div.drawFilter').removeClass('selected');
+            // Close the help dialog
+            this._closeHelpDialog();
+        },
+
+        _closeHelpDialog: function () {            
+            if (this.helpDialog) {
+                this.helpDialog.close(true);
+            }
+        },
+
+        _activateWFSLayer: function(activate) {
+            var sandbox = this.sandbox,
+                evtB = sandbox.getEventBuilder(
+                    'DrawFilterPlugin.SelectedDrawingEvent'),
+                gfiReqBuilder = sandbox.getRequestBuilder(
+                    'MapModulePlugin.GetFeatureInfoActivationRequest'),
+                hiReqBuilder = sandbox.getRequestBuilder(
+                    'WfsLayerPlugin.ActivateHighlightRequest');
+
+            // notify components to reset any saved "selected place" data
+            if (evtB) sandbox.notifyAll(evtB());
+
+            // enable or disable gfi requests
+            if (gfiReqBuilder) {
+                sandbox.request(this.instance, gfiReqBuilder(activate));
+            }
+
+            // enable or disable wfs highlight
+            if (hiReqBuilder) {
+                sandbox.request(this.instance, hiReqBuilder(activate));
+            }
         }
 });

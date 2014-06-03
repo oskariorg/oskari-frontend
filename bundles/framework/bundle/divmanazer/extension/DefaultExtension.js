@@ -12,11 +12,10 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
      * @param tileClazz {String} an optional class name for
      *
      */
-
-    function (name, flyoutClazz, tileClazz, viewClazz) {
+    function (name, flyoutClazz, tileClazz, viewClazz, locale) {
         this.sandbox = null;
         this.plugins = {};
-        this._localization = null;
+        this._localization = locale;
         this.conf = {
             "name": name,
             "tileClazz": tileClazz || 'Oskari.userinterface.extension.DefaultTile',
@@ -52,8 +51,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * @method update
          * BundleInstance protocol method
          */
-        update: function () {
-        },
+        update: function () {},
         /**
          * @method getLocalization
          * Convenience method to call from Tile and Flyout
@@ -98,7 +96,9 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
 
             sandbox.request(this, request);
 
+            this.afterStart(sandbox);
         },
+        afterStart: function (sandbox) {},
         /**
          * @method stop
          * BundleInstance protocol method
@@ -126,6 +126,13 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
                 locTile,
                 locView;
 
+            me.startPlugin();
+
+            for (p in me.requestHandlers) {
+                if (me.requestHandlers.hasOwnProperty(p)) {
+                    sandbox.addRequestHandler(p, this);
+                }
+            }
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     sandbox.registerForEventByName(me, p);
@@ -150,6 +157,17 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
                     Oskari.clazz.create(me.conf.viewClazz, me, locView);
             }
         },
+
+        /* hook */
+        startPlugin: function () {
+
+        },
+
+        /* hook */
+        stopPlugin: function () {
+
+        },
+
         /**
          * @method stopExtension
          * Extension protocol method
@@ -164,6 +182,11 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
                     sandbox.unregisterFromEventByName(me, p);
                 }
             }
+            for (p in me.requestHandlers) {
+                if (me.requestHandlers.hasOwnProperty(p)) {
+                    sandbox.removeRequestHandler(p, this);
+                }
+            }
             for (pluginType in me.plugins) {
                 if (me.plugins.hasOwnProperty(pluginType)) {
                     if (pluginType) {
@@ -171,6 +194,8 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
                     }
                 }
             }
+
+            me.stopPlugin();
         },
         /**
          * @method getPlugins
@@ -203,6 +228,9 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
         "eventHandlers": {
 
         },
+        "requestHandlers": {
+
+        },
 
         /**
          * @method onEvent
@@ -218,6 +246,23 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
 
             return handler.apply(this, [event]);
         },
+
+        /* o2 support for handling requests with less code... */
+        handleRequest: function (core, request) {
+            return this.onRequest(request);
+        },
+
+        onRequest: function (request) {
+            var me = this;
+            var handler = me.requestHandlers[request.getName()];
+            if (!handler) {
+                return;
+            }
+
+            return handler.apply(this, [request]);
+        },
+
+
         /**
          * @method getLang
          * helper to get current language from Oskari
@@ -225,6 +270,63 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          */
         "getLang": function () {
             return Oskari.getLang();
+        },
+
+        /* O2 helpers */
+
+        getTile: function () {
+            return this.plugins['Oskari.userinterface.Tile'];
+        },
+        setTile: function (t) {
+            this.plugins['Oskari.userinterface.Tile'] = t;
+        },
+        setDefaultTile: function (txt) {
+            var tileCls = Oskari.cls().extend('Oskari.userinterface.extension.DefaultTile');
+            var tile = tileCls.create(this, {
+                title: txt || ''
+            });
+            this.plugins['Oskari.userinterface.Tile'] = tile;
+            return tile;
+        },
+        getFlyout: function () {
+            return this.plugins['Oskari.userinterface.Flyout'];
+        },
+        setFlyout: function (f) {
+            this.plugins['Oskari.userinterface.Flyout'] = f;
+        },
+
+        /* o2 helpers for notifications and requetss */
+        slicer: Array.prototype.slice,
+
+        notify: function (evt, retainEvent) {
+            return this.getSandbox().notifyAll(evt, retainEvent);
+        },
+
+        request: function (request) {
+            return this.getSandbox().request(this, request);
+        },
+
+        /**
+         * @method issue issues a request to sandbox and returns value from *the* registered requesthandler if any
+         *
+         */
+        issue: function () {
+            var requestName = arguments[0];
+            var args = this.slicer.apply(arguments, [1]);
+            var builder = this.getSandbox().getRequestBuilder(requestName);
+            var request = builder.apply(builder, args);
+            return this.getSandbox().request(this.getExtension(), request);
+        },
+
+        /**
+         *@method notify sends notification to any registered listeners
+         */
+        notify: function () {
+            var eventName = arguments[0];
+            var args = this.slicer.apply(arguments, [1]);
+            var builder = this.getSandbox().getEventBuilder(eventName);
+            var evt = builder.apply(builder, args);
+            return this.getSandbox().notifyAll(evt);
         }
     }, {
         protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']

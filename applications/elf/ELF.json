@@ -1,0 +1,43 @@
+{
+    "conf": {
+        "WMTS": [
+            {
+                "id": "ELF Regional",
+                "resource": "/Oskari/applications/elf/elf-wmts.xml",
+                "TileMatrixSet": "LAEA"
+            }
+        ],
+        "WMTS-v0.1": [
+            {
+                "id": "ELF Basemap",
+                "resource": "/Oskari/applications/elf/statkart-wmts.xml",
+                "TileMatrixSet": "EPSG:3035",
+                "baseLayer": "elf_basemap"
+            }, {
+                "id": "ELF Regional",
+                "resource": "/Oskari/applications/elf/elf-wmts.xml",
+                "TileMatrixSet": "LAEA"
+            }
+        ],
+        "layers": {
+            "AU_AdministrativeBoundary": {
+                "minScale": 1500000
+            },
+            "HY_PhysicalWaters_LandWaterBoundary": {
+                "minScale": 1500000
+            },
+            "HY_PhysicalWaters_StandingWater": {
+                "minScale": 1500000
+            },
+            "HY_PhysicalWaters_Watercourse": {
+                "minScale": 1500000
+            },
+            "TN_RailTransportNetwork_RailwayLink": {
+                "minScale": 1500000
+            },
+            "TN_RoadTransportNetwork_RoadLink": {
+                "minScale": 1500000
+            }
+        }
+    }
+}

@@ -11,17 +11,67 @@ Oskari.registerLocalization({
             "title": "Analyysi",
             "content": {
                 "label": "Aineisto",
-                "tooltip": "Lisää tietoaineisto painamalla [lisää tietoaineisto] painiketta",
+                "drawToolsLabel": "Kohdetyökalut",
+                "tooltip": "Lisää tietoaineisto painamalla [valitse karttatasot] painiketta",
+                "drawToolsTooltip": "Voit lisätä oman kohteen, jolle voit tehdä analyysin.\nKohdetta leikkaamalla voit jakaa kohteen kahdeksi eri kohteeksi. Tämän jälkeen voit tehdä analyysin toiselle kohteista",
                 "features": {
-                    "title": "Piirrä kohde",
+                    "title": "Kohteen lisäys",
                     "buttons": {
                         "cancel": "Peruuta",
                         "finish": "Valmis"
+                    },
+                    "tooltips": {
+                        "point": "Lisää piste",
+                        "line": "Lisää viiva",
+                        "area": "Lisää alue"
                     },
                     "modes": {
                         "area": "Alue",
                         "line": "Viiva",
                         "point": "Piste"
+                    }
+                },
+                "drawDialog": {
+                    "point": {
+                        "title": "Pisteen lisäys",
+                        "add": "Lisää piste klikkaamalla karttaa."
+                    },
+                    "line": {
+                        "title": "Viivan lisäys",
+                        "add": "Lisää viivan taitepiste klikkaamalla karttaa.\nLopeta piirto tuplaklikkauksella."
+                    },
+                    "area": {
+                        "title": "Alueen lisäys",
+                        "add": "Lisää alueen taitepisteet klikkaamalla karttaa.\nLopeta piirto tuplaklikkauksella.\nVoit piirtää alueeseen reiän pitämällä pohjassa Alt-näppäintä."
+                    }
+                },
+                "drawFilter": {
+                    "title": "Kohteen leikkaus",
+                    "buttons": {
+                        "cancel": "Peruuta",
+                        "finish": "Valmis"
+                    },
+                    "tooltip": {
+                        "point": "Viivarajaus",
+                        "line": "Aluerajaus viivalla",
+                        "edit": "Alueen leikkaus",
+                        "remove": "Rajauksen poistaminen"
+                    },
+                    "dialog": {
+                        "modes": {
+                            "point": {
+                                "title": "Viivarajaus",
+                                "message": "Valitse rajattava viiva siirtämällä markereita."
+                            },
+                            "line": {
+                                "title": "Aluerajaus viivalla",
+                                "message": "Jaa alue viivalla. Lopeta viivapiirto kaksoisklikkaamalla. Tämän jälkeen voit muokata halkaisuviivaa sekä siirtää leikkauspisteitä ulkoreunaa pitkin."
+                            },
+                            "edit": {
+                                "title": "Alueen leikkaus",
+                                "message": "Leikkaa alue toisella alueella."
+                            }
+                        }
                     }
                 },
                 "search": {
@@ -48,6 +98,13 @@ Oskari.registerLocalization({
                     "label": "Yhdiste",
                     "classForPreview": "union",
                     "tooltip": "Kohteiden yhdistäminen taulukosta valitsemalla tai yhteisten ominaisuustietoarvojen perusteella"
+/*              TODO: Uncomment this to enable clipping functionality
+                }, {
+                    "id": "oskari_analyse_clip",
+                    "label": "Leikkaus",
+                    "classForPreview": "clip",
+                    "tooltip": ""
+*/
                 }, {
                     "id": "oskari_analyse_intersect",
                     "label": "Leikkaavien kohteiden suodatus",
@@ -143,7 +200,7 @@ Oskari.registerLocalization({
             "buttons": {
                 "save": "Tallenna",
                 "analyse": "Jatka analyysia",
-                "data": "Päivitä tietoaineisto",
+                "data": "Valitse karttatasot",
                 "cancel": "Poistu",
                 "ok": "OK"
             },

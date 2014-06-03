@@ -1,0 +1,95 @@
+.admin-users {
+
+    > input {
+        clear: both;
+        float: right;
+        margin-right: 6px;
+        margin-bottom: 8px;
+    }
+
+    div.icon-close {
+        display: inline-block;
+        left: -25px;
+        margin-right: -15px;
+        margin-left: 0;
+        position: relative;
+        top: 3px;
+    }
+
+    .accordion {
+        background-color: #F3F3F3;
+        border: 1pt solid #999;
+        clear: both;
+        display: block;
+        list-style-type: none;
+
+        &:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .accordion-header {
+
+            h3 {
+                font-size: 16px;
+                line-height: 40px;
+                float: left;
+                padding: 0 0 0 10px;
+            }
+
+            input {
+                float: right;
+                margin: 5px 5px 5px 0;
+            }
+
+        }
+
+    }
+
+    form {
+
+        margin-bottom: 2em;
+
+        fieldset {
+            border: none;
+            clear: both;
+            padding: 10px;
+
+            &:nth-of-type(2) {
+                input:last-child {
+                    float: right;
+                }
+            }
+
+        }
+
+        label {
+            clear: both;
+            display: block;
+            margin-bottom: 8px;
+
+            &:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+
+            span {
+                display: block;
+                float: left;
+                width: 12em;
+                line-height: 34px;
+            }
+
+            input {
+                display: block;
+                float: left;
+                width: 15em;
+            }
+
+        }
+
+    }
+
+}

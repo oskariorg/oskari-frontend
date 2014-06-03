@@ -22,7 +22,7 @@ function(instance) {
         '<div class="header">' +
         '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">'+
         '<div class="field">' +
-        '<div class="help icon-info" ' +
+        '<div class="help icon-question" ' +
         'title="' + this.loc.tooltip + '"></div>' +
         '<div class="pointlist"></div>' +
         '<div class="buttons"></div>' +

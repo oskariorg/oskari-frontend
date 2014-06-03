@@ -97,18 +97,18 @@ Oskari = (function () {
      * request to load built js packs using this path pattern .../<bundles-path>/<bundle-name>/build/<any-ohther>.js
      */
     var supportBundleAsync = false,
-        mode = 'dev',
+        mode = "dev",
         // 'static' / 'dynamic'
         instTs = new Date().getTime(),
         basePathForBundles = null,
         pathBuilders = {
-            'default': function (fn, bpath) {
+            "default": function (fn, bpath) {
                 if (basePathForBundles) {
                     return basePathForBundles + fn;
                 }
                 return fn;
             },
-            'dev': function (fn, bpath) {
+            "dev": function (fn, bpath) {
                 if (basePathForBundles) {
                     return basePathForBundles + fn + "?ts=" + instTs;
                 }
@@ -129,9 +129,9 @@ Oskari = (function () {
     }
 
     var isNotPackMode = {
-        'dev': true,
-        'default': true,
-        'static': true
+        "dev": true,
+        "default": true,
+        "static": true
     };
 
     function isPackedMode() {
@@ -1449,8 +1449,7 @@ Oskari = (function () {
          * commits any script loading requests
          */
         "commit": function () {
-            var head = document.getElementsByTagName("head")[0],
-                fragment = document.createDocumentFragment(),
+            var fragment = document.createDocumentFragment(),
                 me = this,
                 numFiles = me.filesRequested,
                 onFileLoaded,
@@ -1459,12 +1458,10 @@ Oskari = (function () {
                 def,
                 fn,
                 st;
-            if (numFiles === 0) {
-                me.callback();
-                me.manager.notifyLoaderStateChanged(me, true);
-                return;
+            if (me.head === undefined) {
+                me.head = document.getElementsByTagName("head")[0];
             }
-            if (preloaded()) {
+            if (numFiles === 0 || preloaded()) {
                 me.callback();
                 me.manager.notifyLoaderStateChanged(me, true);
                 return;
@@ -1497,7 +1494,7 @@ Oskari = (function () {
                 }
             }
             if (f) {
-                head.appendChild(fragment);
+                me.head.appendChild(fragment);
             }
         },
         /**
@@ -2639,6 +2636,13 @@ Oskari = (function () {
                 bi,
                 configProps,
                 yy;
+
+            if (!recData.hasOwnProperty("bundleinstancename")) {
+                if (console && console.warn) {
+                    console.warn("Bundle is missing bundleinstancename, using bundlename in its place.", recData);
+                }
+                bundleinstancename = bundlename;
+            }
 
             me.loadBundleDeps(metas, function (manager) {
                 var ip;

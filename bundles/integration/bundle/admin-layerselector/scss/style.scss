@@ -210,7 +210,7 @@ div.admin-layerselector {
         min-height: 35px;
     }
 
-    div.layer.odd {
+    div.layer:nth-child(even) {
         background-color : #f3f3f3;
     }
 

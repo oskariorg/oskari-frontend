@@ -67,15 +67,6 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 layer_id = analyse_layer_id.replace((this.id_prefix + 'layer_'), ''),
                 layer = this.instance.mapLayerService.findMapLayer(layer_id);
 
-            // <remove this>
-            tools.find('div.filter').css({
-                'height': '16px',
-                'width': '16px',
-                'cursor': 'pointer',
-                'background': 'url("/Oskari/resources/analysis/bundle/analyse/icons/icon-funnel.png")'
-            });
-            // </remove this>
-
             tools.find('div.filter').bind('click', function () {
                 if (!me._filterPopups[layer.getId()]) {
                     me._createFilterDialog(layer);

@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 '<div><br></div>' +
                 '<div class="resultList"></div>' +
                 '</div>');
-            this.templateResultTable = jQuery('<table class="search_result">' + '<thead><tr></tr></thead>' + '<tbody></tbody>' + '</table>');
+            this.templateResultTable = jQuery('<table class="search_result oskari-grid">' + '<thead><tr></tr></thead>' + '<tbody></tbody>' + '</table>');
             this.templateResultTableHeader = jQuery('<th><a href="JavaScript:void(0);"></a></th>');
 
             this.templateResultTableRow = jQuery('<tr>' + '<td><a href="JavaScript:void(0);"></a></td>' + '<td></td>' + '<td></td>' + '</tr>');
@@ -160,10 +160,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
          * Creates the UI for a fresh start
          */
         createUi: function () {
-            var me = this;
-            var sandbox = me.instance.getSandbox();
+            // Do not create the default UI if configured so
+            if (this.instance.disableDefault) return;
 
-            var flyout = jQuery(this.container);
+            var me = this,
+                sandbox = me.instance.getSandbox(),
+                flyout = jQuery(this.container);
             flyout.empty();
 
             var searchContainer = this.template.clone();
@@ -192,7 +194,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                     resultList.empty();
 
                     // try to remove markers if request is available when field is emptied
-                    var reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkerRequest');
+                    var reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
                     if (reqBuilder) {
                         sandbox.request(me.instance.getName(), reqBuilder());
                     }
@@ -224,10 +226,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                     field.setEnabled(true);
                     button.setEnabled(true);
 
-                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    var okBtn = dialog.createCloseButton('OK');
-                    var title = me.instance.getLocalization('searchservice_search_alert_title');
-                    var msg = me.instance.getLocalization('searchservice_search_not_found_anything_text');
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                        okBtn = dialog.createCloseButton('OK'),
+                        title = me.instance.getLocalization('searchservice_search_alert_title'),
+                        msg = me.instance.getLocalization('searchservice_search_not_found_anything_text');
                     dialog.show(title, msg, [okBtn]);
                 });
             };
@@ -262,10 +264,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 resultList.append(this.instance.getLocalization('searchservice_search_alert_title') + this.instance.getLocalization(result.errorText));
                 return;
             } else if (result.totalCount === 0) {
-                var alK = 'searchservice_search_alert_title';
-                var al = inst.getLocalization(alK);
-                var nfK = 'searchservice_search_not_found_anything_text';
-                var nf = inst.getLocalization(nfK);
+                var alK = 'searchservice_search_alert_title',
+                    al = inst.getLocalization(alK),
+                    nfK = 'searchservice_search_not_found_anything_text',
+                    nf = inst.getLocalization(nfK);
                 resultList.append(al + ':' + nf);
                 return;
             } else {
@@ -288,9 +290,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 inst.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
             }
             // render results
-            var table = this.templateResultTable.clone();
-            var tableHeaderRow = table.find('thead tr');
-            var tableBody = table.find('tbody');
+            var table = this.templateResultTable.clone(),
+                tableHeaderRow = table.find('thead tr'),
+                tableBody = table.find('tbody');
             // header reference needs some closure magic to work here
 
             var headerClosureMagic = function (scopedValue) {
@@ -369,18 +371,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
         },
 
         _resultClicked: function (result) {
-            var me = this;
-            var popupId = "searchResultPopup";
-            var inst = this.instance;
-            var sandbox = inst.sandbox;
+            var me = this,
+                popupId = "searchResultPopup",
+                inst = this.instance,
+                sandbox = inst.sandbox;
             // good to go
             var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest');
             sandbox.request(me.instance.getName(), moveReqBuilder(result.lon, result.lat, result.zoomLevel, false));
 
-            var loc = this.instance.getLocalization('resultBox');
-
-            var resultActions = {};
-            var action;
+            var loc = this.instance.getLocalization('resultBox'),
+                resultActions = {},
+                action;
             for (var name in this.resultActions) {
                 if (this.resultActions.hasOwnProperty(name)) {
                     action = this.resultActions[name];
@@ -396,15 +397,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
 
             /* impl smashes action key to UI - we'll have to localize that here */
             contentItem.actions[loc.close] = function () {
-                var rN = 'InfoBox.HideInfoBoxRequest';
-                var rB = sandbox.getRequestBuilder(rN);
-                var request = rB(popupId);
+                var rN = 'InfoBox.HideInfoBoxRequest',
+                    rB = sandbox.getRequestBuilder(rN),
+                    request = rB(popupId);
                 sandbox.request(me.instance.getName(), request);
             };
 
-            var rN = 'InfoBox.ShowInfoBoxRequest';
-            var rB = sandbox.getRequestBuilder(rN);
-            var request = rB(popupId, loc.title, content, new OpenLayers.LonLat(result.lon, result.lat), true);
+            var rN = 'InfoBox.ShowInfoBoxRequest',
+                rB = sandbox.getRequestBuilder(rN),
+                request = rB(popupId, loc.title, content, new OpenLayers.LonLat(result.lon, result.lat), true);
             sandbox.request(this.instance.getName(), request);
         },
 
@@ -444,10 +445,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
          * @param {Boolean} pDescending true if sort direction is descending
          */
         _searchResultComparator: function (a, b, pAttribute, pDescending) {
-            var nameA = a[pAttribute].toLowerCase();
-            var nameB = b[pAttribute].toLowerCase();
-
-            var value = 0;
+            var nameA = a[pAttribute].toLowerCase(),
+                nameB = b[pAttribute].toLowerCase(),
+                value = 0;
             if (nameA === nameB || 'name' === pAttribute) {
                 // Because problem with address 1 and address 10 then
                 // id are ranked right
@@ -470,17 +470,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
          *
          */
         addTab: function (item) {
-            var me = this;
-            var flyout = jQuery(this.container);
+            var me = this,
+                flyout = jQuery(me.container);
             // Change into tab mode if not already
             if (me.tabsContainer.panels.length === 0) {
                 me.tabsContainer.insertTo(flyout);
-                var defaultPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
-                var searchContainer = jQuery("div.searchContainer");
-                defaultPanel.setTitle(me.getTabTitle());
-                defaultPanel.setContent(searchContainer);
-                defaultPanel.setPriority(me.instance.tabPriority);
-                me.tabsContainer.addPanel(defaultPanel);
+
+                if (me.instance.disableDefault !== true) {
+                    var defaultPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel'),
+                        searchContainer = jQuery("div.searchContainer");
+                    defaultPanel.setTitle(me.getTabTitle());
+                    defaultPanel.setContent(searchContainer);
+                    defaultPanel.setPriority(me.instance.tabPriority);
+                    me.tabsContainer.addPanel(defaultPanel);
+                }
             }
 
             var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');

@@ -21,7 +21,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
         this.template = jQuery(
             '<div class="userIndicatorsList">' +
             '<div class="indicatorsGrid"></div>' +
-            //'<button id="createNewIndicator">' + this.loc.newIndicator + '</button>' +
             '</div>'
         );
 
@@ -74,6 +73,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
             service.getUserIndicators(function (indicators) {
                 // success!
                 me._renderIndicators(indicators);
+                me._addDataSource(indicators);
             }, function () {
                 // error :(
                 me.showMessage(me.loc.error.title, me.loc.error.indicatorsError);
@@ -207,7 +207,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
             service = instance.getUserIndicatorsService();
 
             service.getUserIndicator(indicatorId, function (indicator) {
-                instance.addUserIndicator(me._normalizeIndicator(indicator));
+                indicator.id = ('user_' + indicator.id);
+                instance.addUserIndicator(indicator);
             }, function () {
                 // error :(
                 me.showMessage(me.loc.error.title, me.loc.error.indicatorError);
@@ -316,28 +317,24 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
                 me._showAddIndicatorForm();
             });
         },
+        _addDataSource: function (indicators) {
+            var sandbox = this.instance.getSandbox(),
+                dataSourceTitle = this.instance
+                    .getLocalization('tab').description,
+                reqBuilder = sandbox.getRequestBuilder('StatsGrid.AddDataSourceRequest'),
+                userIndicators = _.map(indicators, function (indicator) {
+                    indicator.ownIndicator = true;
 
-        /**
-         * Normalizes the indicator to be used like a sotkanet indicator in statsplugin.
-         *
-         * @method _normalizeIndicator
-         * @param  {Object} indicator
-         * @return {Object}
-         */
-        _normalizeIndicator: function (indicator) {
-            indicator.id = 'user_' + indicator.id;
-            indicator.ownIndicator = true;
-            indicator.gender = 'total';
-            indicator.organization = {
-                'title': indicator.organization
-            };
-            indicator.meta = {
-                'title': indicator.title
-            };
+                    return indicator;
+                }),
+                request;
 
-            return indicator;
+            if (reqBuilder) {
+                request = reqBuilder(
+                    'userIndicators', dataSourceTitle, userIndicators);
+                sandbox.request(this.instance, request);
+            }
         },
-
         /**
          * @method onEvent
          * @param {Oskari.mapframework.event.Event} event an Oskari event object

@@ -196,6 +196,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
         _handleCancel: function (e, me) {
             me.container.find('form.add-indicator').remove();
             me.container.find('.selectors-container').show();
+            me.container.find('.data-source-select').show();
             me.container.find('#municipalGrid').show();
         },
         /**

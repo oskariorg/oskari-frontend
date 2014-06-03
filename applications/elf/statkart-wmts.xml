@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="/xslt/WMTSGetCapabilities.xsl" ?><Capabilities xmlns="http://www.opengis.net/wmts/1.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xsi:schemaLocation="http://www.opengis.net/wmts/1.0 http://schemas.opengis.net/wmts/1.0/wmtsGetCapabilities_response.xsd" version="1.0.0">
+<Capabilities xmlns="http://www.opengis.net/wmts/1.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xsi:schemaLocation="http://www.opengis.net/wmts/1.0 http://schemas.opengis.net/wmts/1.0/wmtsGetCapabilities_response.xsd" version="1.0.0">
 <ows:ServiceIdentification>
   <ows:Title>Kartverket - Cachetjenester</ows:Title>
   <ows:Abstract>Grunnkart</ows:Abstract>
@@ -139,7 +139,8 @@
     </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:3857</TileMatrixSet>
     </TileMatrixSetLink>  </Layer>
   <Layer>
-    <ows:Title>europa</ows:Title>
+    <ows:Title>Europakart</ows:Title>
+    <ows:Abstract>Access Constraints: http://www.mapability.com/info/vmap0_index.html</ows:Abstract>
     <ows:WGS84BoundingBox>
       <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
       <ows:UpperCorner>180.0 90.0</ows:UpperCorner>
@@ -156,6 +157,15 @@
     </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:32633</TileMatrixSet>
     </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:32632</TileMatrixSet>
     </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:3857</TileMatrixSet>
+    </TileMatrixSetLink>  </Layer>
+  <Layer>
+    <ows:Title>topo2_direkte</ows:Title>
+    <ows:Identifier>topo2_direkte</ows:Identifier>
+    <Style isDefault="true">
+      <ows:Identifier>default</ows:Identifier>
+    </Style>
+    <Format>image/png</Format>
+    <TileMatrixSetLink>      <TileMatrixSet>EPSG:900913</TileMatrixSet>
     </TileMatrixSetLink>  </Layer>
   <Layer>
     <ows:Title>toporaster2</ows:Title>
@@ -267,16 +277,6 @@
     </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:3857</TileMatrixSet>
     </TileMatrixSetLink>  </Layer>
   <Layer>
-    <ows:Title>nordiccrossborder</ows:Title>
-    <ows:Identifier>nordiccrossborder</ows:Identifier>
-    <Style isDefault="true">
-      <ows:Identifier>default</ows:Identifier>
-    </Style>
-    <Format>image/jpeg</Format>
-    <Format>image/png</Format>
-    <TileMatrixSetLink>      <TileMatrixSet>EPSG:4258</TileMatrixSet>
-    </TileMatrixSetLink>  </Layer>
-  <Layer>
     <ows:Title>toporaster2_rik</ows:Title>
     <ows:Identifier>toporaster2_rik</ows:Identifier>
     <Style isDefault="true">
@@ -330,6 +330,69 @@
     <TileMatrixSetLink>      <TileMatrixSet>EPSG:4258</TileMatrixSet>
     </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:3035</TileMatrixSet>
     </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:3034</TileMatrixSet>
+    </TileMatrixSetLink>  </Layer>
+  <Layer>
+    <ows:Title>Europeiske grunnkart</ows:Title>
+    <ows:Abstract>Access Constraints: http://www.eea.europa.eu/data-and-maps/data/european-catchments-and-rivers-network#tab-metadata; http://www.gebco.net/data_and_products/gridded_bathymetry_data/documents/gebco_08.pdf; http://www.eurogeographics.org/content/eurogeographics-euroglobalmap-opendata</ows:Abstract>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
+      <ows:UpperCorner>180.0 90.0</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+    <ows:Identifier>egk</ows:Identifier>
+    <Style isDefault="true">
+      <ows:Identifier>default</ows:Identifier>
+    </Style>
+    <Format>image/png</Format>
+    <Format>image/jpeg</Format>
+    <TileMatrixSetLink>      <TileMatrixSet>EPSG:4326</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:25832</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:25833</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:25835</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:3035</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:900913</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:32635</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:32633</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:32632</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:3857</TileMatrixSet>
+    </TileMatrixSetLink>  </Layer>
+  <Layer>
+    <ows:Title>terreng_norgeskart</ows:Title>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
+      <ows:UpperCorner>180.0 90.0</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+    <ows:Identifier>terreng_norgeskart</ows:Identifier>
+    <Style isDefault="true">
+      <ows:Identifier>default</ows:Identifier>
+    </Style>
+    <Format>image/jpeg</Format>
+    <Format>image/png</Format>
+    <TileMatrixSetLink>      <TileMatrixSet>EPSG:4326</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:25832</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:25833</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:25835</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:900913</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:32635</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:32633</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:32632</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:3857</TileMatrixSet>
+    </TileMatrixSetLink>  </Layer>
+  <Layer>
+    <ows:Title>elf_basemap</ows:Title>
+    <ows:WGS84BoundingBox>
+      <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
+      <ows:UpperCorner>180.0 90.0</ows:UpperCorner>
+    </ows:WGS84BoundingBox>
+    <ows:Identifier>elf_basemap</ows:Identifier>
+    <Style isDefault="true">
+      <ows:Identifier>default</ows:Identifier>
+    </Style>
+    <Format>image/jpeg</Format>
+    <Format>image/png</Format>
+    <TileMatrixSetLink>      <TileMatrixSet>EPSG:4258</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:3035</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>EPSG:3034</TileMatrixSet>
+    </TileMatrixSetLink>    <TileMatrixSetLink>      <TileMatrixSet>InspireCRS84Quad</TileMatrixSet>
     </TileMatrixSetLink>  </Layer>
   <TileMatrixSet>
     <ows:Identifier>EPSG:4326</ows:Identifier>
@@ -1970,6 +2033,208 @@
     </TileMatrix>
   </TileMatrixSet>
   <TileMatrixSet>
+    <ows:Identifier>InspireCRS84Quad</ows:Identifier>
+    <ows:SupportedCRS>urn:ogc:def:crs:EPSG::4326</ows:SupportedCRS>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:0</ows:Identifier>
+      <ScaleDenominator>2.795411320143589E8</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>2</MatrixWidth>
+      <MatrixHeight>1</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:1</ows:Identifier>
+      <ScaleDenominator>1.3977056600717944E8</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>4</MatrixWidth>
+      <MatrixHeight>2</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:2</ows:Identifier>
+      <ScaleDenominator>6.988528300358972E7</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>8</MatrixWidth>
+      <MatrixHeight>4</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:3</ows:Identifier>
+      <ScaleDenominator>3.494264150179486E7</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>16</MatrixWidth>
+      <MatrixHeight>8</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:4</ows:Identifier>
+      <ScaleDenominator>1.747132075089743E7</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>32</MatrixWidth>
+      <MatrixHeight>16</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:5</ows:Identifier>
+      <ScaleDenominator>8735660.375448715</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>64</MatrixWidth>
+      <MatrixHeight>32</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:6</ows:Identifier>
+      <ScaleDenominator>4367830.1877243575</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>128</MatrixWidth>
+      <MatrixHeight>64</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:7</ows:Identifier>
+      <ScaleDenominator>2183915.0938621787</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>256</MatrixWidth>
+      <MatrixHeight>128</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:8</ows:Identifier>
+      <ScaleDenominator>1091957.5469310894</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>512</MatrixWidth>
+      <MatrixHeight>256</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:9</ows:Identifier>
+      <ScaleDenominator>545978.7734655447</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>1024</MatrixWidth>
+      <MatrixHeight>512</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:10</ows:Identifier>
+      <ScaleDenominator>272989.38673277234</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>2048</MatrixWidth>
+      <MatrixHeight>1024</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:11</ows:Identifier>
+      <ScaleDenominator>136494.69336638617</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>4096</MatrixWidth>
+      <MatrixHeight>2048</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:12</ows:Identifier>
+      <ScaleDenominator>68247.34668319309</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>8192</MatrixWidth>
+      <MatrixHeight>4096</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:13</ows:Identifier>
+      <ScaleDenominator>34123.67334159654</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>16384</MatrixWidth>
+      <MatrixHeight>8192</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:14</ows:Identifier>
+      <ScaleDenominator>17061.83667079827</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>32768</MatrixWidth>
+      <MatrixHeight>16384</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:15</ows:Identifier>
+      <ScaleDenominator>8530.918335399136</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>65536</MatrixWidth>
+      <MatrixHeight>32768</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:16</ows:Identifier>
+      <ScaleDenominator>4265.459167699568</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>131072</MatrixWidth>
+      <MatrixHeight>65536</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:17</ows:Identifier>
+      <ScaleDenominator>2132.729583849784</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>262144</MatrixWidth>
+      <MatrixHeight>131072</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:18</ows:Identifier>
+      <ScaleDenominator>1066.364791924892</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>524288</MatrixWidth>
+      <MatrixHeight>262144</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:19</ows:Identifier>
+      <ScaleDenominator>533.182395962446</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>1048576</MatrixWidth>
+      <MatrixHeight>524288</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:20</ows:Identifier>
+      <ScaleDenominator>266.591197981223</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>2097152</MatrixWidth>
+      <MatrixHeight>1048576</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>Inspirecrs84quad:21</ows:Identifier>
+      <ScaleDenominator>133.2955989906115</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>4194304</MatrixWidth>
+      <MatrixHeight>2097152</MatrixHeight>
+    </TileMatrix>
+  </TileMatrixSet>
+  <TileMatrixSet>
     <ows:Identifier>EPSG:3857</ows:Identifier>
     <ows:SupportedCRS>urn:ogc:def:crs:EPSG::3857</ows:SupportedCRS>
     <TileMatrix>
@@ -2163,172 +2428,6 @@
     </TileMatrix>
   </TileMatrixSet>
   <TileMatrixSet>
-    <ows:Identifier>EPSG:32635</ows:Identifier>
-    <ows:SupportedCRS>urn:ogc:def:crs:EPSG::32635</ows:SupportedCRS>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:0</ows:Identifier>
-      <ScaleDenominator>7.737142857142858E7</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>1</MatrixWidth>
-      <MatrixHeight>1</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:1</ows:Identifier>
-      <ScaleDenominator>3.868571428571429E7</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>2</MatrixWidth>
-      <MatrixHeight>2</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:2</ows:Identifier>
-      <ScaleDenominator>1.9342857142857146E7</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>4</MatrixWidth>
-      <MatrixHeight>4</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:3</ows:Identifier>
-      <ScaleDenominator>9671428.571428573</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>8</MatrixWidth>
-      <MatrixHeight>8</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:4</ows:Identifier>
-      <ScaleDenominator>4835714.285714286</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>16</MatrixWidth>
-      <MatrixHeight>16</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:5</ows:Identifier>
-      <ScaleDenominator>2417857.142857143</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>32</MatrixWidth>
-      <MatrixHeight>32</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:6</ows:Identifier>
-      <ScaleDenominator>1208928.5714285716</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>64</MatrixWidth>
-      <MatrixHeight>64</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:7</ows:Identifier>
-      <ScaleDenominator>604464.2857142858</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>128</MatrixWidth>
-      <MatrixHeight>128</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:8</ows:Identifier>
-      <ScaleDenominator>302232.1428571429</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>256</MatrixWidth>
-      <MatrixHeight>256</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:9</ows:Identifier>
-      <ScaleDenominator>151116.07142857145</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>512</MatrixWidth>
-      <MatrixHeight>512</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:10</ows:Identifier>
-      <ScaleDenominator>75558.03571428572</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>1024</MatrixWidth>
-      <MatrixHeight>1024</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:11</ows:Identifier>
-      <ScaleDenominator>37779.01785714286</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>2048</MatrixWidth>
-      <MatrixHeight>2048</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:12</ows:Identifier>
-      <ScaleDenominator>18889.50892857143</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>4096</MatrixWidth>
-      <MatrixHeight>4096</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:13</ows:Identifier>
-      <ScaleDenominator>9444.754464285716</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>8192</MatrixWidth>
-      <MatrixHeight>8192</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:14</ows:Identifier>
-      <ScaleDenominator>4722.377232142858</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>16384</MatrixWidth>
-      <MatrixHeight>16384</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:15</ows:Identifier>
-      <ScaleDenominator>2361.188616071429</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>32768</MatrixWidth>
-      <MatrixHeight>32768</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:16</ows:Identifier>
-      <ScaleDenominator>1180.5943080357144</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>65536</MatrixWidth>
-      <MatrixHeight>65536</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:17</ows:Identifier>
-      <ScaleDenominator>590.2971540178572</ScaleDenominator>
-      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>131072</MatrixWidth>
-      <MatrixHeight>131072</MatrixHeight>
-    </TileMatrix>
-  </TileMatrixSet>
-  <TileMatrixSet>
     <ows:Identifier>EPSG:900913</ows:Identifier>
     <ows:SupportedCRS>urn:ogc:def:crs:EPSG::900913</ows:SupportedCRS>
     <TileMatrix>
@@ -2519,6 +2618,172 @@
       <TileHeight>256</TileHeight>
       <MatrixWidth>1048576</MatrixWidth>
       <MatrixHeight>1048576</MatrixHeight>
+    </TileMatrix>
+  </TileMatrixSet>
+  <TileMatrixSet>
+    <ows:Identifier>EPSG:32635</ows:Identifier>
+    <ows:SupportedCRS>urn:ogc:def:crs:EPSG::32635</ows:SupportedCRS>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:0</ows:Identifier>
+      <ScaleDenominator>7.737142857142858E7</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>1</MatrixWidth>
+      <MatrixHeight>1</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:1</ows:Identifier>
+      <ScaleDenominator>3.868571428571429E7</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>2</MatrixWidth>
+      <MatrixHeight>2</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:2</ows:Identifier>
+      <ScaleDenominator>1.9342857142857146E7</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>4</MatrixWidth>
+      <MatrixHeight>4</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:3</ows:Identifier>
+      <ScaleDenominator>9671428.571428573</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>8</MatrixWidth>
+      <MatrixHeight>8</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:4</ows:Identifier>
+      <ScaleDenominator>4835714.285714286</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>16</MatrixWidth>
+      <MatrixHeight>16</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:5</ows:Identifier>
+      <ScaleDenominator>2417857.142857143</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>32</MatrixWidth>
+      <MatrixHeight>32</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:6</ows:Identifier>
+      <ScaleDenominator>1208928.5714285716</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>64</MatrixWidth>
+      <MatrixHeight>64</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:7</ows:Identifier>
+      <ScaleDenominator>604464.2857142858</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>128</MatrixWidth>
+      <MatrixHeight>128</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:8</ows:Identifier>
+      <ScaleDenominator>302232.1428571429</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>256</MatrixWidth>
+      <MatrixHeight>256</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:9</ows:Identifier>
+      <ScaleDenominator>151116.07142857145</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>512</MatrixWidth>
+      <MatrixHeight>512</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:10</ows:Identifier>
+      <ScaleDenominator>75558.03571428572</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>1024</MatrixWidth>
+      <MatrixHeight>1024</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:11</ows:Identifier>
+      <ScaleDenominator>37779.01785714286</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>2048</MatrixWidth>
+      <MatrixHeight>2048</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:12</ows:Identifier>
+      <ScaleDenominator>18889.50892857143</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>4096</MatrixWidth>
+      <MatrixHeight>4096</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:13</ows:Identifier>
+      <ScaleDenominator>9444.754464285716</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>8192</MatrixWidth>
+      <MatrixHeight>8192</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:14</ows:Identifier>
+      <ScaleDenominator>4722.377232142858</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>16384</MatrixWidth>
+      <MatrixHeight>16384</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:15</ows:Identifier>
+      <ScaleDenominator>2361.188616071429</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>32768</MatrixWidth>
+      <MatrixHeight>32768</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:16</ows:Identifier>
+      <ScaleDenominator>1180.5943080357144</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>65536</MatrixWidth>
+      <MatrixHeight>65536</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:32635:17</ows:Identifier>
+      <ScaleDenominator>590.2971540178572</ScaleDenominator>
+      <TopLeftCorner>-3500000.0 9045984.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>131072</MatrixWidth>
+      <MatrixHeight>131072</MatrixHeight>
     </TileMatrix>
   </TileMatrixSet>
   <TileMatrixSet>
@@ -2858,8 +3123,8 @@
     <ows:SupportedCRS>urn:ogc:def:crs:EPSG::3575</ows:SupportedCRS>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:0</ows:Identifier>
-      <ScaleDenominator>6.6121986607142866E7</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>5.0601127250000006E8</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>1</MatrixWidth>
@@ -2867,8 +3132,8 @@
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:1</ows:Identifier>
-      <ScaleDenominator>3.3060993303571433E7</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>2.5300563617857143E8</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>2</MatrixWidth>
@@ -2876,138 +3141,304 @@
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:2</ows:Identifier>
-      <ScaleDenominator>1.6530496651785716E7</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>1.265028180714286E8</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>4</MatrixWidth>
-      <MatrixHeight>4</MatrixHeight>
+      <MatrixHeight>3</MatrixHeight>
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:3</ows:Identifier>
-      <ScaleDenominator>8265248.325892858</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>6.32514090357143E7</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>8</MatrixWidth>
-      <MatrixHeight>8</MatrixHeight>
+      <MatrixHeight>5</MatrixHeight>
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:4</ows:Identifier>
-      <ScaleDenominator>4132624.162946429</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>3.162570452142857E7</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>16</MatrixWidth>
-      <MatrixHeight>16</MatrixHeight>
+      <MatrixHeight>10</MatrixHeight>
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:5</ows:Identifier>
-      <ScaleDenominator>2066312.0814732146</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>1.5812852260714285E7</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>32</MatrixWidth>
-      <MatrixHeight>32</MatrixHeight>
+      <MatrixHeight>20</MatrixHeight>
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:6</ows:Identifier>
-      <ScaleDenominator>1033156.0407366073</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>7906426.128571429</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>64</MatrixWidth>
-      <MatrixHeight>64</MatrixHeight>
+      <MatrixHeight>39</MatrixHeight>
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:7</ows:Identifier>
-      <ScaleDenominator>516578.02036830364</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>3953213.0642857146</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>128</MatrixWidth>
-      <MatrixHeight>128</MatrixHeight>
+      <MatrixHeight>78</MatrixHeight>
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:8</ows:Identifier>
-      <ScaleDenominator>258289.01018415182</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>1976606.5325000002</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>256</MatrixWidth>
-      <MatrixHeight>256</MatrixHeight>
+      <MatrixHeight>155</MatrixHeight>
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:9</ows:Identifier>
-      <ScaleDenominator>129144.50509207591</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>988303.2664285714</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>512</MatrixWidth>
-      <MatrixHeight>512</MatrixHeight>
+      <MatrixHeight>309</MatrixHeight>
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:10</ows:Identifier>
-      <ScaleDenominator>64572.252546037955</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>494151.6332142857</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>1024</MatrixWidth>
-      <MatrixHeight>1024</MatrixHeight>
+      <MatrixHeight>618</MatrixHeight>
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:11</ows:Identifier>
-      <ScaleDenominator>32286.126273018977</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>247075.8165714286</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>2048</MatrixWidth>
-      <MatrixHeight>2048</MatrixHeight>
+      <MatrixHeight>1236</MatrixHeight>
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:12</ows:Identifier>
-      <ScaleDenominator>16143.063136509489</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>123537.9082857143</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>4096</MatrixWidth>
-      <MatrixHeight>4096</MatrixHeight>
+      <MatrixHeight>2471</MatrixHeight>
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:13</ows:Identifier>
-      <ScaleDenominator>8071.531568254744</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>61768.95414285715</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>8192</MatrixWidth>
-      <MatrixHeight>8192</MatrixHeight>
+      <MatrixHeight>4942</MatrixHeight>
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:14</ows:Identifier>
-      <ScaleDenominator>4035.765784127372</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>30884.477071428573</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>16384</MatrixWidth>
-      <MatrixHeight>16384</MatrixHeight>
+      <MatrixHeight>9883</MatrixHeight>
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:15</ows:Identifier>
-      <ScaleDenominator>2017.882892063686</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>15442.238535714287</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>32768</MatrixWidth>
-      <MatrixHeight>32768</MatrixHeight>
+      <MatrixHeight>19767</MatrixHeight>
     </TileMatrix>
     <TileMatrix>
       <ows:Abstract>The grid was not well-defined, the scale therefore assumes 1m per map unit.</ows:Abstract>      <ows:Identifier>EPSG:3575:16</ows:Identifier>
-      <ScaleDenominator>1008.941446031843</ScaleDenominator>
-      <TopLeftCorner>-2977650.0 0.0</TopLeftCorner>
+      <ScaleDenominator>7721.119267857143</ScaleDenominator>
+      <TopLeftCorner>-1.8133594E7 1.07763E7</TopLeftCorner>
       <TileWidth>256</TileWidth>
       <TileHeight>256</TileHeight>
       <MatrixWidth>65536</MatrixWidth>
-      <MatrixHeight>65536</MatrixHeight>
+      <MatrixHeight>39533</MatrixHeight>
+    </TileMatrix>
+  </TileMatrixSet>
+  <TileMatrixSet>
+    <ows:Identifier>GlobalCRS84Pixel</ows:Identifier>
+    <ows:SupportedCRS>urn:ogc:def:crs:EPSG::4326</ows:SupportedCRS>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:0</ows:Identifier>
+      <ScaleDenominator>7.951392199519542E8</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>1</MatrixWidth>
+      <MatrixHeight>1</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:1</ows:Identifier>
+      <ScaleDenominator>3.975696099759771E8</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>2</MatrixWidth>
+      <MatrixHeight>1</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:2</ows:Identifier>
+      <ScaleDenominator>1.9878480498798856E8</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>3</MatrixWidth>
+      <MatrixHeight>2</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:3</ows:Identifier>
+      <ScaleDenominator>1.325232033253257E8</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>5</MatrixWidth>
+      <MatrixHeight>3</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:4</ows:Identifier>
+      <ScaleDenominator>6.626160166266285E7</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>9</MatrixWidth>
+      <MatrixHeight>5</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:5</ows:Identifier>
+      <ScaleDenominator>3.3130800831331424E7</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>17</MatrixWidth>
+      <MatrixHeight>9</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:6</ows:Identifier>
+      <ScaleDenominator>1.325232033253257E7</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>43</MatrixWidth>
+      <MatrixHeight>22</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:7</ows:Identifier>
+      <ScaleDenominator>6626160.166266285</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>85</MatrixWidth>
+      <MatrixHeight>43</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:8</ows:Identifier>
+      <ScaleDenominator>3313080.0831331424</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>169</MatrixWidth>
+      <MatrixHeight>85</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:9</ows:Identifier>
+      <ScaleDenominator>1656540.0415665712</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>338</MatrixWidth>
+      <MatrixHeight>169</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:10</ows:Identifier>
+      <ScaleDenominator>552180.0138555238</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>1013</MatrixWidth>
+      <MatrixHeight>507</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:11</ows:Identifier>
+      <ScaleDenominator>331308.00831331423</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>1688</MatrixWidth>
+      <MatrixHeight>844</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:12</ows:Identifier>
+      <ScaleDenominator>110436.00277110476</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>5063</MatrixWidth>
+      <MatrixHeight>2532</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:13</ows:Identifier>
+      <ScaleDenominator>55218.00138555238</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>10125</MatrixWidth>
+      <MatrixHeight>5063</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:14</ows:Identifier>
+      <ScaleDenominator>33130.80083133143</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>16875</MatrixWidth>
+      <MatrixHeight>8438</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:15</ows:Identifier>
+      <ScaleDenominator>11043.600277110474</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>50625</MatrixWidth>
+      <MatrixHeight>25313</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:16</ows:Identifier>
+      <ScaleDenominator>3313.080083133142</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>168750</MatrixWidth>
+      <MatrixHeight>84375</MatrixHeight>
+    </TileMatrix>
+    <TileMatrix>
+      <ows:Identifier>GlobalCRS84Pixel:17</ows:Identifier>
+      <ScaleDenominator>1104.3600277110472</ScaleDenominator>
+      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
+      <TileWidth>256</TileWidth>
+      <TileHeight>256</TileHeight>
+      <MatrixWidth>506250</MatrixWidth>
+      <MatrixHeight>253125</MatrixHeight>
     </TileMatrix>
   </TileMatrixSet>
   <TileMatrixSet>
@@ -3192,172 +3623,6 @@
       <TileHeight>256</TileHeight>
       <MatrixWidth>524288</MatrixWidth>
       <MatrixHeight>524288</MatrixHeight>
-    </TileMatrix>
-  </TileMatrixSet>
-  <TileMatrixSet>
-    <ows:Identifier>GlobalCRS84Pixel</ows:Identifier>
-    <ows:SupportedCRS>urn:ogc:def:crs:EPSG::4326</ows:SupportedCRS>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:0</ows:Identifier>
-      <ScaleDenominator>7.951392199519542E8</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>1</MatrixWidth>
-      <MatrixHeight>1</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:1</ows:Identifier>
-      <ScaleDenominator>3.975696099759771E8</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>2</MatrixWidth>
-      <MatrixHeight>1</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:2</ows:Identifier>
-      <ScaleDenominator>1.9878480498798856E8</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>3</MatrixWidth>
-      <MatrixHeight>2</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:3</ows:Identifier>
-      <ScaleDenominator>1.325232033253257E8</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>5</MatrixWidth>
-      <MatrixHeight>3</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:4</ows:Identifier>
-      <ScaleDenominator>6.626160166266285E7</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>9</MatrixWidth>
-      <MatrixHeight>5</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:5</ows:Identifier>
-      <ScaleDenominator>3.3130800831331424E7</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>17</MatrixWidth>
-      <MatrixHeight>9</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:6</ows:Identifier>
-      <ScaleDenominator>1.325232033253257E7</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>43</MatrixWidth>
-      <MatrixHeight>22</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:7</ows:Identifier>
-      <ScaleDenominator>6626160.166266285</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>85</MatrixWidth>
-      <MatrixHeight>43</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:8</ows:Identifier>
-      <ScaleDenominator>3313080.0831331424</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>169</MatrixWidth>
-      <MatrixHeight>85</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:9</ows:Identifier>
-      <ScaleDenominator>1656540.0415665712</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>338</MatrixWidth>
-      <MatrixHeight>169</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:10</ows:Identifier>
-      <ScaleDenominator>552180.0138555238</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>1013</MatrixWidth>
-      <MatrixHeight>507</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:11</ows:Identifier>
-      <ScaleDenominator>331308.00831331423</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>1688</MatrixWidth>
-      <MatrixHeight>844</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:12</ows:Identifier>
-      <ScaleDenominator>110436.00277110476</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>5063</MatrixWidth>
-      <MatrixHeight>2532</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:13</ows:Identifier>
-      <ScaleDenominator>55218.00138555238</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>10125</MatrixWidth>
-      <MatrixHeight>5063</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:14</ows:Identifier>
-      <ScaleDenominator>33130.80083133143</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>16875</MatrixWidth>
-      <MatrixHeight>8438</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:15</ows:Identifier>
-      <ScaleDenominator>11043.600277110474</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>50625</MatrixWidth>
-      <MatrixHeight>25313</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:16</ows:Identifier>
-      <ScaleDenominator>3313.080083133142</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>168750</MatrixWidth>
-      <MatrixHeight>84375</MatrixHeight>
-    </TileMatrix>
-    <TileMatrix>
-      <ows:Identifier>GlobalCRS84Pixel:17</ows:Identifier>
-      <ScaleDenominator>1104.3600277110472</ScaleDenominator>
-      <TopLeftCorner>90.0 -180.0</TopLeftCorner>
-      <TileWidth>256</TileWidth>
-      <TileHeight>256</TileHeight>
-      <MatrixWidth>506250</MatrixWidth>
-      <MatrixHeight>253125</MatrixHeight>
     </TileMatrix>
   </TileMatrixSet>
 </Contents>

@@ -57,11 +57,14 @@ div.basic_analyse div.previewNotes {
   margin-bottom: 2px; }
 div.basic_analyse div.tool {
   margin: 5px; }
+div.basic_analyse div.drawFilter {
+  margin: 5px; }
 div.basic_analyse div.icon-close.analyse-temp-feature {
   display: inline-block;
   cursor: pointer; }
 div.basic_analyse div.toolContainer {
-  margin: 5px; }
+  margin: 5px 15px 5px 5px;
+  display: inline-block; }
   div.basic_analyse div.toolContainer h4 {
     padding: 0; }
   div.basic_analyse div.toolContainer div.tool {
@@ -70,6 +73,26 @@ div.basic_analyse div.toolContainer {
   div.basic_analyse div.toolContainer div.buttons {
     display: inline-block;
     float: right; }
+div.basic_analyse div.drawFilterContainer {
+  margin: 5px;
+  display: inline-block; }
+  div.basic_analyse div.drawFilterContainer h4 {
+    padding: 0; }
+  div.basic_analyse div.drawFilterContainer div.drawFilter {
+    display: inline-block;
+    cursor: pointer; }
+  div.basic_analyse div.drawFilterContainer div.drawFilter.disabled {
+    opacity: 0.4;
+    cursor: default !important; }
+  div.basic_analyse div.drawFilterContainer div.drawFilter.selected {
+    opacity: 1.0;
+    background-color: #333438;
+    cursor: default !important; }
+  div.basic_analyse div.drawFilterContainer div.buttons {
+    display: inline-block;
+    float: right; }
+div.basic_analyse div.header-icon-info {
+  margin: 10px; }
 
 div.basic_analyse div.form div.field input, div.field select {
   width: 80%;
@@ -77,7 +100,7 @@ div.basic_analyse div.form div.field input, div.field select {
   filter: Alpha(opacity=100) !important;
   /* unquote for libsass bug */ }
 
-div.basic_analyse div.tool input, div.basic_analyse div.analyse_settings_cont input {
+div.basic_analyse div.tool input, div.basic_analyse div.drawFilter input, div.basic_analyse div.analyse_settings_cont input {
   margin-right: 10px; }
 
 .analyse_radiolabel, .analyse_checklabel {
@@ -169,3 +192,9 @@ div.analyse-filter-popup-content div.filter-option {
     width: 150px; }
   div.analyse-filter-popup-content div.filter-option select.operator, div.analyse-filter-popup-content div.filter-option select.boolean {
     width: 60px; }
+
+div.divmanazerpopup.drawfilterdialog {
+  max-width: 400px; }
+
+div.divmanazerpopup.analyse-draw-dialog {
+  max-width: 280px; }

@@ -68,9 +68,9 @@ Oskari.registerLocalization({
           "domain": "Kartinställnigar",
           "publish": "Status",
           "show" : "Aktions",
-          "html" : " ",
-          "edit": " ",
-          "delete": " "
+          "html" : "HTML-kod",
+          "edit": "Ändra",
+          "delete": "Ta bort"
         },
         "published": {
             "desc": "Inbädda kartan genom att tillägga HTML-koden nedan på din webbplats."

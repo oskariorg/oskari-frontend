@@ -38,6 +38,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
         this.hotspot = null;
         this.sld = null;
         this.templateLanguageLink = null;
+        this.drawFilterPlugin = null;
+        this.drawFilterPluginId = null;
     }, {
         /**
          * @method getName
@@ -73,6 +75,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          */
         init: function (sandbox) {
             var me = this;
+
+            // New plugin for the geometry operations
+            /*
+            this.drawFilterPluginId = this.instance.getName();
+            this.drawFilterPlugin = Oskari.clazz.create(
+                'Oskari.mapframework.ui.module.common.geometryeditor.DrawFilterPlugin', {
+                    id: this.drawFilterPluginId
+            });
+            */
+
             // This layer will first contain the downloaded feature. After the split is done, that feature
             // removed from the layer
             this.drawLayer = new OpenLayers.Layer.Vector("Parcel Draw Layer", {
@@ -126,96 +138,100 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                 var editFeature = this.features[0];
                 var endPoints = [],
                     i;
-                if (editFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiLineString") {
-                    // Handles the point added into the line
-                    for (i = 0; i < editFeature.geometry.components.length; i++) {
-                        var lineString = editFeature.geometry.components[i];
-                        for (var k = 0; k < lineString.components.length; k++) {
-                            var point = lineString.components[k];
-                            var newReferences = [];
-                            if (typeof point.references === "undefined") {
-                                var prevPoint = lineString.components[k - 1];
-                                var nextPoint = lineString.components[k + 1];
-                                for (var l = 0; l < prevPoint.references.length; l++) {
-                                    var refPoly = prevPoint.references[l];
-                                    var found = false;
-                                    for (var m = 0; m < nextPoint.references.length; m++) {
-                                        if (nextPoint.references[m] === refPoly) {
-                                            found = true;
-                                            break;
-                                        }
+
+                if (editFeature.geometry.CLASS_NAME !== "OpenLayers.Geometry.MultiLineString") {
+                    return;
+                }
+
+                if (typeof editFeature.geometry.components[0].components[0].markerPoint === "undefined") {
+                    return;
+                }
+
+                // Handles the point added into the line
+                for (i = 0; i < editFeature.geometry.components.length; i++) {
+                    var lineString = editFeature.geometry.components[i];
+                    for (var k = 0; k < lineString.components.length; k++) {
+                        var point = lineString.components[k];
+                        var newReferences = [];
+                        if (typeof point.references === "undefined") {
+                            var prevPoint = lineString.components[k - 1];
+                            var nextPoint = lineString.components[k + 1];
+                            for (var l = 0; l < prevPoint.references.length; l++) {
+                                var refPoly = prevPoint.references[l];
+                                var found = false;
+                                for (var m = 0; m < nextPoint.references.length; m++) {
+                                    if (nextPoint.references[m] === refPoly) {
+                                        found = true;
+                                        break;
                                     }
-                                    if (!found)
-                                        continue;
-                                    var polygon = null;
-                                    for (m = 0; m < me.drawLayer.features.length; m++) {
-                                        var feature = me.drawLayer.features[m];
-                                        if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.Polygon") {
-                                            if (feature.geometry.id === refPoly) {
-                                                polygon = feature.geometry;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    var points = polygon.components[0].components;
-                                    var polyLength = points.length - 1;
-                                    for (m = 0; m < polyLength; m++) {
-                                        var n = m + 1;
-                                        if ((points[m] === prevPoint) && (points[n] === nextPoint)) {
-                                            points.splice(n, 0, point);
-                                            newReferences.push(polygon.id);
-                                            break;
-                                        }
-                                        if ((points[n] === prevPoint) && (points[m] === nextPoint)) {
-                                            points.splice(n, 0, point);
-                                            newReferences.push(polygon.id);
+                                }
+                                if (!found)
+                                    continue;
+                                var polygon = null;
+                                for (m = 0; m < me.drawLayer.features.length; m++) {
+                                    var feature = me.drawLayer.features[m];
+                                    if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.Polygon") {
+                                        if (feature.geometry.id === refPoly) {
+                                            polygon = feature.geometry;
                                             break;
                                         }
                                     }
                                 }
-                                point.references = newReferences;
-                                point.short = -1;
+                                var points = polygon.components[0].components;
+                                var polyLength = points.length - 1;
+                                for (m = 0; m < polyLength; m++) {
+                                    var n = m + 1;
+                                    if ((points[m] === prevPoint) && (points[n] === nextPoint)) {
+                                        points.splice(n, 0, point);
+                                        newReferences.push(polygon.id);
+                                        break;
+                                    }
+                                    if ((points[n] === prevPoint) && (points[m] === nextPoint)) {
+                                        points.splice(n, 0, point);
+                                        newReferences.push(polygon.id);
+                                        break;
+                                    }
+                                }
                             }
-                        }
-                        // Fixed start and end points of the line
-                        if (lineString.components[0].references.length === 2) {
-                            lineString.components[0].x = lineString.components[0].x0;
-                            lineString.components[0].y = lineString.components[0].y0;
-                        }
-                        var lastIndex = lineString.components.length - 1;
-                        if (lineString.components[lastIndex].references.length === 2) {
-                            lineString.components[lastIndex].x = lineString.components[lastIndex].x0;
-                            lineString.components[lastIndex].y = lineString.components[lastIndex].y0;
-                        }
-
-                        // Updates middle points
-                        me.controls.modify.deactivate();
-                        me.controls.modify.activate();
-                        me.controls.modify.selectFeature(editFeature);
-                        me.controls.modify.clickout = false;
-                        me.controls.modify.toggle = false;
-
-                        endPoints.push(lineString.components[0].id);
-                        endPoints.push(lineString.components[lastIndex].id);
-
-                        if (lineString.components.length === 2) {
-                            lineString.components[0].short = i;
-                            lineString.components[1].short = i;
-                            lineString.components[0].shortLink = lineString.components[1];
-                            lineString.components[1].shortLink = lineString.components[0];
-                        } else {
-                            lineString.components[0].short = -1;
-                            lineString.components[lastIndex].short = -1;
+                            point.references = newReferences;
+                            point.short = -1;
                         }
                     }
+                    // Fixed start and end points of the line
+                    if (lineString.components[0].references.length === 2) {
+                        lineString.components[0].x = lineString.components[0].x0;
+                        lineString.components[0].y = lineString.components[0].y0;
+                    }
+                    var lastIndex = lineString.components.length - 1;
+                    if (lineString.components[lastIndex].references.length === 2) {
+                        lineString.components[lastIndex].x = lineString.components[lastIndex].x0;
+                        lineString.components[lastIndex].y = lineString.components[lastIndex].y0;
+                    }
 
-                    this.refresh();
-                    me.drawLayer.refresh();
+                    // Updates middle points
+                    me.controls.modify.deactivate();
+                    me.controls.modify.activate();
+                    me.controls.modify.selectFeature(editFeature);
+                    me.controls.modify.clickout = false;
+                    me.controls.modify.toggle = false;
 
-                    // Redo selection so the info box knows where we're at
-                    // me.controls.select.select(me.getDrawing());
+                    endPoints.push(lineString.components[0].id);
+                    endPoints.push(lineString.components[lastIndex].id);
 
+                    if (lineString.components.length === 2) {
+                        lineString.components[0].short = i;
+                        lineString.components[1].short = i;
+                        lineString.components[0].shortLink = lineString.components[1];
+                        lineString.components[1].shortLink = lineString.components[0];
+                    } else {
+                        lineString.components[0].short = -1;
+                        lineString.components[lastIndex].short = -1;
+                    }
                 }
+
+                this.refresh();
+                me.drawLayer.refresh();
+
                 // Hidden start and end points of the line
                 for (i = 0; i < endPoints.length; i++) {
                     jQuery("#" + endPoints[i]).css("display", "none");
@@ -242,8 +258,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             this.basicStyle.fillOpacity = 0.2;
 
             this.selectStyle = OpenLayers.Util.applyDefaults(this.selectStyle, OpenLayers.Feature.Vector.style['default']);
-            this.selectStyle.fillColor = "#ffff00";
-            this.selectStyle.fillOpacity = 0.4;
+            // this.selectStyle.fillColor = "#ffff00";
+            // this.selectStyle.fillOpacity = 0.4;
 
             // This layer will contain markers which show the points where the operation line
             // crosses with the border of the original layer. Those points may be moved to adjust
@@ -453,18 +469,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             this._map.zoomToExtent(this.drawLayer.getDataExtent());
 
             this.buttons.setEnabled(true);
-
-            /*
-             // Show tool buttons only after the parcel has been loaded.
-             // Because parcel may be removed only by loading a new one.
-             // The buttons can be shown after this. If a new parcel is loaded,
-             // buttons can still be shown.
-             if (!this.buttons) {
-             // handles toolbar buttons related to parcels
-             this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.ButtonHandler", this.instance);
-             this.buttons.start();
-             }
-             */
         },
         /**
          * Enables the draw control for given params.drawMode.
@@ -715,7 +719,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             this.splitSelection = false;
             // Clear parcel map layers
             this.instance.getService().clearParcelMap();
-
+            this.selectedFeature = -2;
+            this.updateInfobox();
         },
         /**
          * Handles the splitting of the parcel feature
@@ -845,12 +850,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @method updateInfobox
          */
         updateInfobox: function () {
+
             if (this.selectedFeature > -1) {
                 // Set selected
                 this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
             } else {
                 var features = this.drawLayer.features;
-                if (features) {
+                if ((features)&&(features.length > 0)) {
                     this.selectedFeature = 0;
                     for (var i = 0; i < features.length; i++) {
                         this.drawLayer.features[i].style = (i === this.selectedFeature) ? this.selectStyle : this.basicStyle;
@@ -858,6 +864,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                     //me.editLayer.redraw();
                     this.drawLayer.redraw();
                     this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
+                } else {
+                    // Clear info box
+                    // Todo: implement more elegant way to do this
+                    jQuery("#maptools .piBase .piLabelValue").html("")
+                    jQuery("#maptools .piBase .piValue").html("")
                 }
             }
         }

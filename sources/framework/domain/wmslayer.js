@@ -12,18 +12,10 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
 
     function () {
 
-        /* Name of wms layer */
-        this._wmsLayerName = null;
-
-        /* Array of wms urls for this layer */
-        this._wmsUrls = [];
-
         this._availableQueryFormats = [];
 
         /* Layer Type */
         this._layerType = "WMS";
-
-        this._gfiContent = null;
     }, {
         /**
          * @method addWmsUrl
@@ -31,18 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
          * Apppends the url to layer array of wms image urls
          */
         addWmsUrl: function (wmsUrl) {
-            var foundExisting = false;
-            for (var i = 0; i < this.getWmsUrls().length; ++i) {
-                var url = this.getWmsUrls()[i];
-                if (url == wmsUrl) {
-                    foundExisting = true;
-                    break;
-                }
-            }
-            if (!foundExisting) {
-                // only add if isn't added yet
-                this._wmsUrls.push(wmsUrl);
-            }
+            this.addLayerUrl(wmsUrl);
         },
         /**
          * @method getWmsUrls
@@ -50,7 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
          * Gets array of layer wms image urls
          */
         getWmsUrls: function () {
-            return this._wmsUrls;
+            return this.getLayerUrls();
         },
         /**
          * @method setWmsUrls
@@ -58,21 +39,21 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
          * Gets array of layer wms image urls
          */
         setWmsUrls: function (wmsUrls) {
-            this._wmsUrls = wmsUrls;
+            this.setLayerUrls(wmsUrls);
         },
         /**
          * @method setWmsName
          * @param {String} wmsName used to identify service f.ex. in GetFeatureInfo queries.
          */
         setWmsName: function (wmsName) {
-            this._wmsName = wmsName;
+            this.setLayerName(wmsName);
         },
         /**
          * @method getWmsName
          * @return {String} wmsName used to identify service f.ex. in GetFeatureInfo queries.
          */
         getWmsName: function () {
-            return this._wmsName;
+            return this.getLayerName();
         },
         /**
          * @method setVersion
@@ -104,20 +85,6 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
          */
         getAvailableQueryFormats: function () {
             return this._availableQueryFormats || [];
-        },
-        /**
-         * @method setGfiContent
-         * @param {String} gfiContent GetFeatureInfo content
-         */
-        setGfiContent: function (gfiContent) {
-            this._gfiContent = gfiContent;
-        },
-        /**
-         * @method getGfiContent
-         * @return {String} gfiContent GetFeatureInfo content
-         */
-        getGfiContent: function () {
-            return this._gfiContent;
         }
     }, {
         "extend": ["Oskari.mapframework.domain.AbstractLayer"]

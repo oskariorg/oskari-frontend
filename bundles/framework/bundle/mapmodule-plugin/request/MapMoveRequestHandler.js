@@ -31,7 +31,6 @@ function(sandbox, mapModule) {
     handleRequest : function(core, request) {
         var longitude = request.getCenterX();
         var latitude = request.getCenterY();
-        var marker = request.getMarker();
         var zoom = request.getZoom();
         var srsName = request.getSrsName();
 
@@ -54,9 +53,6 @@ function(sandbox, mapModule) {
             } else {
                 this.mapModule.zoomTo(zoom);
             }
-        }
-        if (marker) {
-            this.mapModule._drawMarker();
         }
 
         this.sandbox.printDebug("[MapMoveRequestHandler] map moved");

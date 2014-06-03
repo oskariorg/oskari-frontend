@@ -17,6 +17,9 @@
   z-index: 1501;
   width: 255px; }
 
+div.oskari-flyoutcontent parcelprint, div.oskari-alert {
+  color: #1F1F1F; }
+
 div.parcelprintform1 > div.header, div.parcelprintform2 > div.header {
   background-color: #72B5CC !important; }
 

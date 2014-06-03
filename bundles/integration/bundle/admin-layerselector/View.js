@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
      * @private
      * Updates layers listing after layers has been changed/MapLayerEvent has been received.
      */
-    _layerUpdateHandler: function () {
+    _layerUpdateHandler: function (blnForceCreate) {
         //console.log("admin-layerselector/View.js:_layerUpdateHandler");
         // TODO! currently update, add and initial additions execute
         // the same code. This needs to be updated when mapLayerService
@@ -103,7 +103,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
         var success = false;
         if (this.view !== null && this.view !== undefined) {
-            if(!this._scheduledLayers || this._scheduledLayers.length > 30) {
+            if(blnForceCreate || !this._scheduledLayers || this._scheduledLayers.length > 30) {
                 // if more than 30 layers require update -> make full re-render
                 success = this.view.createUI(mapLayerService.getAllLayers());
             }
@@ -178,7 +178,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             // If call for layers is ready before backbone is created,
             // we'll instantiate our view with that data 
             me._scheduleUpdateForLayer();
-            me._layerUpdateHandler();
+            me._layerUpdateHandler(true);
         });
     },
 

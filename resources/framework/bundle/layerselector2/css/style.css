@@ -1,126 +1,118 @@
-/* layer group container */
-div.layerselector2 div.layerGroup {
-  background-color: #f3f3f3;
-  border: 1pt solid #c0d0d0;
-  margin: 0;
-  padding: 0; }
-
-div.layerselector2 div.layerGroup.open {
-  background-color: #FFFFFF; }
-
-div.layerselector2 div.layerGroup div.groupIcon {
-  display: inline-block;
-  margin-left: 12px;
-  vertical-align: middle; }
-
-div.layerselector2 div.layerGroup div.groupHeader {
-  display: inline-block;
-  font-weight: bold;
-  padding: 8px 10px 8px 12px;
-  font: 14pt Arial, sans-serif; }
-
-/* layer container */
-div.layerselector2 div.layer {
-  padding: 6px 10px 6px 40px;
-  background-color: #ffffff; }
-
-div.layerselector2 div.layer.odd {
-  background-color: #f3f3f3; }
-
-div.layerselector2 div.layer input {
-  float: left;
-  margin-right: 5px; }
-
-div.layerselector2 div.layer div.layer-tools {
-  float: right; }
-
-div.layerselector2 div.layer div.layer-icon {
-  float: left;
-  width: 16px;
-  height: 16px;
-  background-repeat: no-repeat; }
-
-div.layerselector2 div.layer div.layer-info {
-  width: 16px;
-  height: 16px;
-  margin-left: 5px;
-  float: right; }
-
-div.layerselector2 div.tab-content {
-  padding: 0; }
-
-div.layerselector2 div.tab-content div.oskarifield {
-  padding: 10px;
-  position: relative; }
-  div.layerselector2 div.tab-content div.oskarifield .field-description {
-    padding: 3px 0;
-    color: #666; }
-    div.layerselector2 div.tab-content div.oskarifield .field-description .icon-info {
-      display: inline-block; }
-  div.layerselector2 div.tab-content div.oskarifield .related-keywords {
-    display: none;
-    overflow: hidden;
-    height: 30px;
-    line-height: 30px; }
-    div.layerselector2 div.tab-content div.oskarifield .related-keywords .keywords-title {
-      box-sizing: border-box;
-      height: 30px;
-      line-height: 30px;
-      color: black;
-      font-weight: bold;
-      float: left; }
-    div.layerselector2 div.tab-content div.oskarifield .related-keywords .keyword-cont {
-      display: block;
-      box-sizing: border-box;
-      height: 30px;
-      line-height: 30px;
-      padding: 0 10px;
-      color: #0085D1;
-      float: left; }
-      div.layerselector2 div.tab-content div.oskarifield .related-keywords .keyword-cont .keyword {
-        float: left;
-        min-width: 91px; }
-      div.layerselector2 div.tab-content div.oskarifield .related-keywords .keyword-cont .type {
-        background-color: #333438;
-        border: solid 2px #FFDE00;
-        color: #FFDE00;
-        width: 34px;
-        line-height: 16px;
-        padding: 3px;
-        margin: 2px;
-        float: right;
-        display: inline-block;
-        text-align: center; }
-    div.layerselector2 div.tab-content div.oskarifield .related-keywords .focus {
-      background-color: #333438;
-      color: white; }
-
 div.layerselector2 div.accordion div.accordion_panel div.content {
   padding: 0; }
-
-div.layerselector2 div.layer div.layer-backendstatus-icon {
-  float: left;
-  width: 20px;
-  height: 16px;
-  margin-right: 4px;
-  background-repeat: no-repeat; }
-
-div.layerselector2 div.layer div.backendstatus-down {
-  height: 20px !important;
-  margin-bottom: 2px;
-  cursor: pointer; }
-
-div.layerselector2 div.layer div.backendstatus-maintenance {
-  height: 20px !important;
-  margin-bottom: 2px;
-  cursor: pointer; }
-
-div.layerselector2 div.layer div.backendstatus-ok {
-  height: 20px !important;
-  margin-bottom: 2px;
-  margin-top: -2px;
-  cursor: pointer; }
-
-div.layerselector2 div.layer div.backendstatus-unknown {
-  height: 20px !important;
-  margin-bottom: 2px; }
+div.layerselector2 div.layer {
+  padding: 6px 10px 6px 40px;
+  background-color: #ffffff;
+  clear: both;
+  min-height: 13px; }
+  div.layerselector2 div.layer:nth-child(even) {
+    background-color: #f3f3f3; }
+  div.layerselector2 div.layer input {
+    float: left;
+    margin-right: 5px; }
+    div.layerselector2 div.layer input[type=checkbox] {
+      margin-top: -2px; }
+  div.layerselector2 div.layer div.layer-title {
+    font-size: 12px;
+    color: #3C3C3C; }
+  div.layerselector2 div.layer div.layer-tools {
+    float: right; }
+  div.layerselector2 div.layer div.layer-icon {
+    float: left;
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat; }
+  div.layerselector2 div.layer div.layer-info {
+    width: 16px;
+    height: 16px;
+    margin-left: 5px;
+    float: right; }
+  div.layerselector2 div.layer div.layer-backendstatus-icon {
+    float: left;
+    width: 20px;
+    height: 16px;
+    margin-right: 4px;
+    background-repeat: no-repeat; }
+  div.layerselector2 div.layer div.backendstatus-down {
+    height: 20px !important;
+    margin-bottom: 2px;
+    cursor: pointer; }
+  div.layerselector2 div.layer div.backendstatus-maintenance {
+    height: 20px !important;
+    margin-bottom: 2px;
+    cursor: pointer; }
+  div.layerselector2 div.layer div.backendstatus-ok {
+    height: 20px !important;
+    margin-bottom: 2px;
+    margin-top: -2px;
+    cursor: pointer; }
+  div.layerselector2 div.layer div.backendstatus-unknown {
+    height: 20px !important;
+    margin-bottom: 2px; }
+div.layerselector2 div.layerGroup {
+  background-color: #f3f3f3;
+  border: 1px solid #c0d0d0;
+  margin: 0;
+  padding: 0; }
+  div.layerselector2 div.layerGroup.open {
+    background-color: #FFFFFF; }
+  div.layerselector2 div.layerGroup div.groupIcon {
+    display: inline-block;
+    margin-left: 12px;
+    vertical-align: middle; }
+  div.layerselector2 div.layerGroup div.groupHeader {
+    display: inline-block;
+    font-weight: bold;
+    padding: 8px 10px 8px 12px;
+    font: 14pt Arial, sans-serif; }
+div.layerselector2 div.tab-content {
+  padding: 0; }
+  div.layerselector2 div.tab-content div.oskarifield {
+    padding: 10px;
+    position: relative; }
+    div.layerselector2 div.tab-content div.oskarifield input[type=text] {
+      width: 95%; }
+    div.layerselector2 div.tab-content div.oskarifield .icon-close {
+      margin-right: -20px; }
+    div.layerselector2 div.tab-content div.oskarifield .field-description {
+      padding: 3px 0;
+      color: #666; }
+      div.layerselector2 div.tab-content div.oskarifield .field-description .icon-info {
+        display: inline-block; }
+    div.layerselector2 div.tab-content div.oskarifield .related-keywords {
+      display: none;
+      overflow: hidden;
+      height: 30px;
+      line-height: 30px; }
+      div.layerselector2 div.tab-content div.oskarifield .related-keywords .keywords-title {
+        box-sizing: border-box;
+        height: 30px;
+        line-height: 30px;
+        color: black;
+        font-weight: bold;
+        float: left; }
+      div.layerselector2 div.tab-content div.oskarifield .related-keywords .keyword-cont {
+        display: block;
+        box-sizing: border-box;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        color: #0085D1;
+        float: left; }
+        div.layerselector2 div.tab-content div.oskarifield .related-keywords .keyword-cont .keyword {
+          float: left;
+          min-width: 91px; }
+        div.layerselector2 div.tab-content div.oskarifield .related-keywords .keyword-cont .type {
+          background-color: #333438;
+          border: solid 2px #FFDE00;
+          color: #FFDE00;
+          width: 34px;
+          line-height: 16px;
+          padding: 3px;
+          margin: 2px;
+          float: right;
+          display: inline-block;
+          text-align: center; }
+      div.layerselector2 div.tab-content div.oskarifield .related-keywords .focus {
+        background-color: #333438;
+        color: white; }

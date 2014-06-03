@@ -110,15 +110,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
             }
             // startup plugins
             if (me.conf.plugins) {
-                var plugins = this.conf.plugins;
-                for (var i = 0; i < plugins.length; i++) {
+                var plugins = this.conf.plugins,
+                    i;
+                for (i = 0; i < plugins.length; i++) {
                     try {
-                        plugins[i].instance = Oskari.clazz.create(plugins[i].id, plugins[i].config);
+                        plugins[i].instance = Oskari.clazz.create(plugins[i].id, plugins[i].config, plugins[i].state);
                         module.registerPlugin(plugins[i].instance);
                         module.startPlugin(plugins[i].instance);
                     } catch (e) {
                         // something wrong with plugin (e.g. implementation not imported) -> log a warning
-                        me.sandbox.printWarn('Unable to start plugin: ' + plugins[i].id);
+                        me.sandbox.printWarn('Unable to start plugin: ' + plugins[i].id + ": " + e);
                     }
                 }
             }
@@ -390,6 +391,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 }
             }
 
+            if (state.plugins) {
+                var plugins = mapmodule.getPluginInstances(),
+                    plugin,
+                    pluginName;
+                for (pluginName in state.plugins) {
+                    // Not finding the plugin is not that uncommon, just move on
+                    plugin = plugins[pluginName];
+                    if (plugin && plugin.setState) {
+                        plugin.setState(state.plugins[pluginName]);
+                    }
+                }
+
+            }
+
         },
         /**
          * @method getState
@@ -401,19 +416,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
             // get applications current state
             var map = this.sandbox.getMap(),
                 selectedLayers = this.sandbox.findAllSelectedMapLayers(),
+                mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 zoom = map.getZoom(),
                 lat = map.getX(),
                 lon = map.getY(),
                 i,
                 layer,
                 layerJson,
-                state = {
+                state = jQuery.extend({
                     north: lon,
                     east: lat,
                     zoom: map.getZoom(),
                     srs: map.getSrsName(),
                     selectedLayers: []
-                };
+                }, mapmodule.getState());
 
             for (i = 0; i < selectedLayers.length; i++) {
                 layer = selectedLayers[i];
@@ -433,7 +449,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 }
                 state.selectedLayers.push(layerJson);
             }
-
             return state;
         },
         /**
@@ -447,6 +462,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
             var state = this.getState(),
                 link = 'zoomLevel=' + state.zoom + '&coord=' + state.east + '_' + state.north + '&mapLayers=',
                 selectedLayers = state.selectedLayers,
+                mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 layers = '',
                 layer = null,
                 i = 0,
@@ -471,7 +487,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                     }
                 }
             }
-            return link + layers;
+            return link + layers + mapmodule.getStateParameters();
         },
 
         /**
