@@ -18,13 +18,17 @@ $fieldWidth: 330px;
             margin-top: 6px;
 
             li {
-                float: left;
+                display: inline-block;
                 margin: 6px 2px;
 
                 a {
                     border: 1px solid #B7B7B7;
                     color: #FAFAFA;
                     text-shadow: 1px 1px 1px #3C3C3C;
+
+                    &:hover {
+
+                    }
 
                     &.disabled {
                         background: none;

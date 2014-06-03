@@ -4,7 +4,7 @@
  * Renders the "route search" flyout.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
-    function() {
+    function () {
         this.fields = ['from', 'to'];
         this.state = {};
         this.services = [];
@@ -12,68 +12,95 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
         this._templates.main =
             '<div>' +
             '</div>' +
-            '<div>' + // Hidden at start (no results yet)
-        '    <strong></strong>' +
+            '<div>' +
+            '    <strong></strong>' +
             '    <ul></ul>' +
             '</div>' +
             '<div></div>';
         this.mapEl = this.instance.sandbox.findRegisteredModuleInstance(
-            'MainMapModule').getMapEl();
+            'MainMapModule'
+        ).getMapEl();
     }, {
-        getName: function() {
+
+        /**
+         * @method getName
+         */
+        getName: function () {
             return 'Oskari.mapframework.bundle.routesearch.Flyout';
         },
 
-        _getSearchSuggestions: function(field, request, response) {
+        /**
+         * @method _getSearchSuggestions
+         * @private
+         * @param {jQuery} field    JQuery UI autocomplete object
+         * @param {Object} request  Request
+         * @param {Object} response Response
+         */
+        _getSearchSuggestions: function (field, request, response) {
             var me = this,
-                i,
-                location,
                 fieldName = field.element[0].name;
 
             me.state[fieldName] = {
                 "name": request.term
             };
-            console.log(fieldName, me.state[fieldName]);
+
             me._updateRoutingLinks();
-            if (request.term && request.term.length > 2) {
+
+            if (request.term && request.term.length) {
                 me.service.doSearch(
                     request.term,
-                    function(data) {
+                    function (data) {
                         // onSuccess
-                        if (data && data.totalCount) {
-                            response(data.locations);
-                        } else {
-                            response([]);
-                        }
+                        response(data && data.totalCount ? data.locations : []);
                     },
-                    function(data) {}
+                    function () {}
                 );
             }
         },
 
-        _setSearchLocation: function(field, event, ui) {
+        /**
+         * @method _setSearchLocation
+         * @private
+         * @param {jQuery} field Input field
+         * @param {Event}  event Event
+         * @param {jQuery} ui    JQuery UI autocomplete object
+         */
+        _setSearchLocation: function (field, event, ui) {
             var me = this,
                 fieldName = field.attr('name'),
-                tmp = jQuery('<a>');
+                a = jQuery('<a>');
             me.state[fieldName] = ui.item;
             // We have to unescape the text somehow... ;)
-            tmp.html(ui.item.name + ', ' + ui.item.village);
-            field.val(tmp.text());
+            a.html(ui.item.name + ', ' + ui.item.village);
+            field.val(a.text());
             me._updateRoutingLinks();
         },
 
-        _reverseGeoCode: function(field, lonLat) {
+        /**
+         * @method _reverseGeoCode
+         * @private
+         * @param {String}            field  Active field name
+         * @param {OpenLayers.LonLat} lonLat Location
+         */
+        _reverseGeoCode: function (field, lonLat) {
             // FIXME
         },
 
-        disableMapClick: function() {
+        /**
+         * @method disableMapClick
+         */
+        disableMapClick: function () {
             var me = this;
             delete me.state.field;
             me.mapEl.removeClass("cursor-crosshair");
             me.instance.unregisterMapClickHandler();
         },
 
-        onMapClick: function(lonLat) {
+        /**
+         * @method onMapClick
+         * @param {OpenLayers.LonLat} lonLat Click location
+         */
+        onMapClick: function (lonLat) {
             var me = this;
             if (me.state.field) {
                 me._reverseGeoCode(me.state.field, lonLat);
@@ -81,7 +108,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             }
         },
 
-        _fromMapButtonHandler: function(field, event) {
+        /**
+         * @method _fromMapButtonHandler
+         * @private
+         * @param {String} field Active field name
+         * @param {Event}  event Map click event
+         */
+        _fromMapButtonHandler: function (field, event) {
             var me = this;
             if (me.state.field === field) {
                 // Deselect target on second click
@@ -93,15 +126,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             }
         },
 
-        _searchButtonHandler: function(event) {
-
-        },
-
         /**
          * @method startPlugin
          * called by host to start flyout operations
          */
-        startPlugin: function() {
+        startPlugin: function () {
             var me = this,
                 ajaxUrl = null,
                 el = me.getEl().addClass('routesearch'),
@@ -110,13 +139,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 field,
                 fields = me.fields,
                 tmp;
-            /*
-                cancelBtn =
-                    Oskari.clazz.create(
-                        'Oskari.userinterface.component.buttons.CancelButton'),
-                searchBtn =
-                    Oskari.clazz.create(
-                        'Oskari.userinterface.component.Button');*/
 
             if (me.instance.conf && me.instance.conf.url) {
                 ajaxUrl = me.instance.conf.url;
@@ -125,12 +147,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     me.getSandbox().getAjaxUrl() +
                     'action_route=GetSearchResult';
             }
-            // FIXME temp
-            ajaxUrl =
-                "http://localhost:8080/web/fi/kartta?" +
-                "p_p_id=Portti2Map_WAR_portti2mapportlet&" +
-                "p_p_lifecycle=2&" +
-                "action_route=GetSearchResult";
+
             me.service = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.search.service.SearchService',
                 ajaxUrl
@@ -141,21 +158,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             for (i = 0; i < fields.length; i++) {
                 field = fields[i];
                 tmp = Oskari.clazz.create(
-                    'Oskari.userinterface.component.FormInput', field);
+                    'Oskari.userinterface.component.FormInput',
+                    field
+                );
                 tmp.addClearButton();
                 tmp.setLabel(me.locale[field]);
                 /* jshint ignore:start */
                 tmp.getField().find('input[type=text]').autocomplete({
                     delay: 300,
-                    minLength: 2,
-                    select: function(event, ui) {
+                    minLength: 0,
+                    select: function (event, ui) {
                         event.preventDefault();
-                        me._setSearchLocation($(this), event, ui);
+                        me._setSearchLocation(jQuery(this), event, ui);
                     },
-                    source: function(request, response) {
+                    source: function (request, response) {
                         me._getSearchSuggestions(this, request, response);
                     }
-                }).data("autocomplete")._renderItem = function(ul, item) {
+                }).data("autocomplete")._renderItem = function (ul, item) {
                     var li = jQuery("<li>"),
                         a = jQuery('<a href="#">');
                     a.html(item.name + ", " + item.village);
@@ -166,10 +185,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 /* jshint ignore:end */
                 contents.eq(0).append(tmp.getField());
                 tmp = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Button');
+                    'Oskari.userinterface.component.Button'
+                );
                 tmp.setTitle(me.locale.fromMap);
                 /* jshint ignore:start */
-                tmp.setHandler(function(event) {
+                tmp.setHandler(function (event) {
                     me._fromMapButtonHandler(field, event);
                 });
                 /* jshint ignore:end */
@@ -178,41 +198,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
 
                 // Suggestions list
                 contents.eq(2).append(
-                    '<ol id="' + field + 'Suggestions' + '"></ol>');
-            }
-            /* I'll prolly remove the buttons
-            cancelBtn.setHandler(function (event) {
-                me.instance.sandbox.postRequestByName(
-                    'userinterface.UpdateExtensionRequest',
-                    [me.instance, 'close']
+                    '<ol id="' + field + 'Suggestions' + '"></ol>'
                 );
-            });
-            searchBtn.setTitle(me.locale.fetchRoute);
-            searchBtn.setHandler(me._searchButtonHandler);
-            searchBtn.setPrimary(true);
-            searchBtn.insertTo(contents.eq(2));
-            cancelBtn.insertTo(contents.eq(2));*/
+            }
 
             el.append(contents);
             me._initRoutingServices();
             me._updateRoutingLinks(true);
         },
 
-        _initRoutingServices: function() {
-            var matka = {},
-                google = {},
-                here = {};
-
-            matka.baseUrl = "http://www.matka.fi/fi/?";
-            google.baseUrl = "http://www.google.fi/maps/dir/";
-
+        /**
+         * @method _initRoutingServices
+         * @private
+         */
+        _initRoutingServices: function () {
             var me = this;
 
             me.services.push(
                 me._routingService(
                     'Matka.fi',
-                    '#2651A6',
-                    function(fromLoc, toLoc) {
+                    '#1A88CC',
+                    function (fromLoc, toLoc) {
                         var url = 'http://www.matka.fi/fi/?keya=';
                         url += encodeURIComponent(fromLoc.name);
                         if (fromLoc.village) {
@@ -230,8 +236,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             me.services.push(
                 me._routingService(
                     'Google Maps',
-                    '#A5D275',
-                    function(fromLoc, toLoc) {
+                    '#88BE44',
+                    function (fromLoc, toLoc) {
                         var url = 'http://www.google.fi/maps/dir/';
                         url += encodeURIComponent(fromLoc.name);
                         if (fromLoc.village) {
@@ -252,7 +258,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 me._routingService(
                     'HERE',
                     '#124191',
-                    function(fromLoc, toLoc) {
+                    function (fromLoc, toLoc) {
                         var url = 'http://here.com/directions/drive/';
                         url += encodeURIComponent(
                             fromLoc.name.replace(' ', '_')
@@ -261,7 +267,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                             url += ',_' +
                                 encodeURIComponent(
                                     fromLoc.village.replace(' ', '_')
-                            );
+                                );
                         }
                         url += ',_Finland';
                         url += '/' + encodeURIComponent(
@@ -279,12 +285,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             );
         },
 
-        _routingService: function(name, color, urlBuilder) {
+        /**
+         * @method _routingService
+         * @private
+         * @param {String}   name       Service name
+         * @param {String}   color      Service color (used for the button)
+         * @param {Function} urlBuilder Function (fromLoc, toLoc)
+         */
+        _routingService: function (name, color, urlBuilder) {
             var ret = {
                 name: name,
                 color: color,
                 urlBuilder: urlBuilder,
-                getButton: function(fromLoc, toLoc) {
+                getButton: function (fromLoc, toLoc) {
                     var me = this,
                         el = this.el;
 
@@ -293,22 +306,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                         this.el = el;
                     }
                     if (fromLoc && fromLoc.name && toLoc && toLoc.name) {
-                        el.attr('href', me.urlBuilder(fromLoc, toLoc));
-                        el.attr('target', '_blank');
-                        el.removeClass('disabled');
-                        el.css('background-color', me.color);
-                        el.unbind('click');
+                        el
+                            .attr('href', me.urlBuilder(fromLoc, toLoc))
+                            .attr('target', '_blank')
+                            .removeClass('disabled')
+                            .css('background-color', me.color)
+                            .unbind('click');
                     } else {
-                        el.attr('href', '#');
-                        el.removeAttr('target');
-                        el.addClass('disabled');
-                        el.css('background-color', '');
-                        el.click(
-                            function(event) {
-                                event.preventDefault();
-                                return false;
-                            }
-                        );
+                        el
+                            .attr('href', '#')
+                            .removeAttr('target')
+                            .addClass('disabled')
+                            .css('background-color', '')
+                            .click(
+                                function (event) {
+                                    event.preventDefault();
+                                    return false;
+                                }
+                            );
                     }
                     return el;
                 }
@@ -316,10 +331,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             return ret;
         },
 
-        _updateRoutingLinks: function(createButtons) {
-            console.log('_updateRoutingLinks');
+        /**
+         * @method _updateRoutingLinks
+         * @private
+         * @param {Boolean} createButtons Should the buttons be appended to ui
+         */
+        _updateRoutingLinks: function (createButtons) {
             var me = this,
-                buttons = [],
+                button,
                 locations = [],
                 routingService,
                 i;
@@ -335,15 +354,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     locations
                 );
                 if (createButtons) {
-                    var ul = me.getEl().find('ul'),
-                        li = jQuery('<li>');
-
-                    li.append(button);
-                    ul.append(li);
+                    me.getEl().find('ul').append(
+                        jQuery('<li>').append(button)
+                    );
                 }
             }
         }
     }, {
         'extend': ['Oskari.userinterface.extension.DefaultFlyout']
     }
-);
+    );
