@@ -1623,6 +1623,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (me._checkSelections(selections)) {
 
                 var data = {};
+
+                // Sorry - use intersect method for clip
+                if (selections.method === "clip") {
+                    selections.method = "intersect";
+                    selections.methodParams.operator="clip";
+
+                }
+
                 data.analyse = JSON.stringify(selections);
 
                 var layerId = selections.layerId;
@@ -1648,6 +1656,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         }
                         data.filter2 = JSON.stringify(ifilterJson);
                     }
+
                 }
 
                 // Send the data for analysis to the backend
