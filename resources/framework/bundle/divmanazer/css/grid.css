@@ -45,11 +45,11 @@ div.column-selector {
     position: absolute;
     top: 5px;
     right: 5px; }
-    div.column-selector div.close-selector-button ul.column-selector-list {
-      list-style-type: none;
-      padding-right: 30px; }
-    div.column-selector div.close-selector-button label.column-label {
-      padding-left: 5px; }
+  div.column-selector ul.column-selector-list {
+    list-style-type: none;
+    padding-right: 30px; }
+  div.column-selector label.column-label {
+    padding-left: 5px; }
 
 table.oskari-grid td {
   padding: 5px; }
