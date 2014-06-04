@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
             var url = this.url;
             this.protocols.categories = new OpenLayers.Protocol.WFS({
                 version: '1.1.0',
-                srsName: 'EPSG:3067',
+                srsName: Oskari.getSandbox().getMap().getSrsName(),
                 featureType: 'categories',
                 featureNS: this.featureNS,
                 url: url
@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
             // multilines to one continuous line on save
             var myPlacesProps = {
                 version: '1.0.0',
-                srsName: 'EPSG:3067',
+                srsName: Oskari.getSandbox().getMap().getSrsName(),
                 geometryName: 'geometry',
                 featureType: 'my_places',
                 featureNS: this.featureNS,
