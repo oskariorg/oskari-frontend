@@ -255,7 +255,7 @@ body {
 @media only screen and (min-width:600px) and (max-width:799px) {
 	.oskari-attached {
 		min-width: 520px;
-		max-width: 600px;
+		max-width: 700px;
 	}
 	.oskari-detached {
 		min-width: 520px;
@@ -270,18 +270,18 @@ body {
 	}
 	.oskari-detached {
 		min-width: 520px;
-		max-width: 600px;
+		max-width: 1000px;
 	}
 }
 
 @media only screen and (min-width:1200px) and (max-width:1599px) {
 	.oskari-attached {
 		min-width: 520px;
-		max-width: 600px;
+		max-width: 1000px;
 	}
 	.oskari-detached {
 		min-width: 520px;
-		max-width: 600px;
+		max-width: 1000px;
 	}
 }
 

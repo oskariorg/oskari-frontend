@@ -1,16 +1,17 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "MyPlacesImport",
     "value": {
         "title": "Omien aineistojen tuonti",
-        "desc": "",
+        "desc": "Voit tuoda omia aineistoja Paikkatietoikkunaan ja luoda niistä oman karttatason. Tuotavat aineistot voivat olla joko shp (shapefile) -, zip- tai kml/kmz (Google) -tiedostomuodossa.",
+        "help": "Valitse aineiston sisältävä tiedosto tai anna linkki vastaavaan tiedostoon. Tiedosto voi olla joko shp-, zip- tai kml/kmx-tiedostomuodossa. Voit luoda shapefile (shp) -siirtoformaatissa olevasta aineistosta zip-tiedoston pakkaamalla ko. aineistoon liittyvät shp-, shx-, dbf- ja prj-päätteiset tiedostot yhteen zip-tiedostoon. Myös Googlen karttapalvelusta saatavat kml/kmz-tiedostot on mahdollista pakata zip-tiedostoon.",
         "tool": {
-            "tooltip": "Tuo oma aineisto"
+            "tooltip": "Omien aineistojen tuonti"
         },
         "flyout": {
             "title": "Omien aineistojen tuonti",
-            "description": "Voit tuoda omia aineistoja shape-formaatissa zip-muodossa tai kml/kmz tiedostoja.",
-            "help": "Anna tämän toiminnon lähtöaineistoksi (Browse...) zip tiedoston nimi tai url-linkki vastaavaan tiedostoon. \nZip-tiedoston saat lataamalla koneellesi shape-siirtoformaatissa olevan aineiston \nja muodostamalla näistä tiedostoista (.shp, . shx, .dbf, .prj) zip-tiedosto \ntai lataa koneellesi Googlen kml/kmz tiedostoja. \ntai käytä tiedoston url-linkkiä. ",
+            "description": "Voit tuoda omia aineistoja Paikkatietoikkunaan ja luoda niistä oman karttatason. Tuotavat aineistot voivat olla joko shp (shapefile) -, zip- tai kml/kmz (Google) -tiedostomuodossa.",
             "actions": {
                 "cancel": "Peruuta",
                 "next": "Seuraava"
@@ -19,25 +20,25 @@ Oskari.registerLocalization({
                 "submit": "Lähetä"
             },
             "layer": {
-                "title": "Tallenna tason tiedot:",
+                "title": "Tallenna karttatason tiedot:",
                 "name": "Nimi",
                 "desc": "Kuvaus",
                 "source": "Tietolähde",
-                "style": "Tason tyyli"
+                "style": "Aineiston tyylimäärittelyt"
             },
             "validations": {
                 "error": {
                     "title": "Virhe",
-                    "message": "Tiedosto ja tason nimi puuttuvat."
+                    "message": "Tiedostoa ei ole valittu ja karttatason nimi puuttuu."
                 }
             },
             "finish": {
                 "success": {
-                    "title": "Tason tuonti onnistui",
-                    "message": "Löydät tason omat tiedot -valikosta"
+                    "title": "Aineiston tuonti onnistui.",
+                    "message": "Aineisto löytyy Omat tiedot -valikon Aineistot-välilehdeltä."
                 },
                 "failure": {
-                    "message": "Tason tuonti epäonnistui. Yritä myöhemmin uudelleen."
+                    "title": "Aineiston tuonti epäonnistui. Yritä myöhemmin uudelleen."
                 }
             }
         },
@@ -47,21 +48,22 @@ Oskari.registerLocalization({
                 "name": "Nimi",
                 "description": "Kuvaus",
                 "source": "Tietolähde",
-                "remove": " "
+                "remove": "NOT TRANSLATED",
+                "removeButton": "Poista"
             },
-            "confirmDeleteMsg": "Haluatko poistaa tason:",
+            "confirmDeleteMsg": "Haluatko poistaa aineiston:",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Peruuta",
                 "delete": "Poista"
             },
             "notification": {
-                "deletedTitle": "Karttatason poisto",
-                "deletedMsg": "Karttataso poistettu."
+                "deletedTitle": "Aineiston poisto",
+                "deletedMsg": "Aineisto on poistettu."
             },
             "error": {
                 "title": "Virhe!",
-                "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin."
+                "generic": "Järjestelmässä tapahtui virhe. Yritä myöhemmin uudelleen."
             }
         },
         "layer": {
@@ -69,4 +71,5 @@ Oskari.registerLocalization({
             "inspire": "Omat aineistot"
         }
     }
-});
+}
+);

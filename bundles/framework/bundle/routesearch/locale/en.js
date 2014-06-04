@@ -11,7 +11,8 @@ Oskari.registerLocalization({
             "to": "To",
             "fromMap": "NOT TRANSLATED",
             "routingService": "Routing Service",
-            "fetchRoute": "Fetch route"
+            "fetchRoute": "Fetch route",
+            "selectLocations": "Please select both locations"
         },
         "tile": {
             "title": "Route Search",

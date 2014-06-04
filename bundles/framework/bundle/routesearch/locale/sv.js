@@ -11,7 +11,8 @@ Oskari.registerLocalization({
             "to": "NOT TRANSLATED",
             "fromMap": "NOT TRANSLATED",
             "routingService": "NOT TRANSLATED",
-            "fetchRoute": "NOT TRANSLATED"
+            "fetchRoute": "NOT TRANSLATED",
+            "selectLocations": "NOT TRANSLATED"
         },
         "tile": {
             "title": "NOT TRANSLATED",

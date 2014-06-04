@@ -7,6 +7,7 @@ dist/
 .idea
 *.iml
 oskari.org/
+!applications/oskari.org/
 node_modules/
 tools/node_modules
 tools/validation

@@ -16,8 +16,8 @@ Oskari.registerLocalization({
           "name": "Namn",
           "description": "Beskrivning", 
           "publish": "Vyn är offentlig",
-          "edit": " ",
-          "delete": " "
+          "edit": "Ändra",
+          "delete": "Ta bort"
         },
         "popup": {
           "edit": "Editera vyn",
@@ -68,9 +68,9 @@ Oskari.registerLocalization({
           "domain": "Kartinställnigar",
           "publish": "Status",
           "show" : "Aktions",
-          "html" : " ",
-          "edit": " ",
-          "delete": " "
+          "html" : "HTML-kod",
+          "edit": "Ändra",
+          "delete": "Ta bort"
         },
         "published": {
             "desc": "Inbädda kartan genom att tillägga HTML-koden nedan på din webbplats."

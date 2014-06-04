@@ -1,13 +1,14 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "PersonalData",
     "value": {
-        "title": "My data",
-        "desc": "My data",
-        "notLoggedIn": "You can save map views and browse maps that you have embedded on other websites in My data. <a href='/web/en/login'>Log in</a>.",
+        "title": "My Data",
+        "desc": "My Data",
+        "notLoggedIn": "My data contains your user profile and all your saved features, map views, embedded maps, indicators, analysis and datasets. <a href='/web/en/login'>Log in to check your data</a>.",
         "tabs": {
             "myviews": {
-                "title": "My map views",
+                "title": "My Map Views",
                 "edit": "Edit",
                 "publish": "Publish",
                 "unpublish": "Unpublish",
@@ -16,25 +17,25 @@ Oskari.registerLocalization({
                     "name": "Name",
                     "description": "Description",
                     "publish": "Published",
-                    "edit": " ",
-                    "delete": " "
+                    "edit": "Edit",
+                    "delete": "Delete"
                 },
                 "popup": {
-                    "edit": "Edit view's information",
-                    "title": "Save map view",
-                    "label": "Name of map view:",
+                    "edit": "Edit the map view",
+                    "title": "Save the map view",
+                    "label": "The name of the map view",
                     "name_placeholder": "Give the map view a name",
                     "description_placeholder": "Give the map view a description",
                     "save": "Save",
                     "cancel": "Cancel",
-                    "error_noname": "Type the name",
-                    "deletetitle": "Confirm delete",
+                    "error_noname": "Type the name of the map view",
+                    "deletetitle": "Delete the map view",
                     "deletemsg": "Do you want to delete this map view?"
                 },
                 "save": {
                     "success": "The map view has been saved.",
-                    "error_noname": "The name field cannot be blank.",
-                    "error_illegalchars": "The name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
+                    "error_noname": "The name of the map view cannot be empty.",
+                    "error_illegalchars": "The name of the map view contains illegal characters. Allowed characters are the letters (a-z,å,ä,ö, A-Z,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
                     "msg": {
                         "view_name": "The name of the map view"
                     }
@@ -43,82 +44,82 @@ Oskari.registerLocalization({
                     "ok": "OK",
                     "save": "Save",
                     "cancel": "Cancel",
-                    "toolbarsave": "Save map view"
+                    "toolbarsave": "Save the map view"
                 },
                 "error": {
                     "title": "Error!",
-                    "generic": "System error. Please try again later.",
-                    "notsaved": "The map view could not be saved.",
-                    "notdeleted": "The map view could not be deleted.",
+                    "generic": "System error occurred. Please try again later.",
+                    "notsaved": "The map view could not be saved. Please try again later.",
+                    "notdeleted": "The map view could not be deleted. Please try again later.",
                     "makePublic": "The map view could not be published. Please try again later.",
                     "makePrivate": "The map view could not be unpublished. Please try again later.",
-                    "loadfailed": "The map views could not be downloaded."
+                    "loadfailed": "The map views could not be downloaded. Please try again later."
                 }
             },
             "publishedmaps": {
-                "title": "Embedded maps",
+                "title": "Embedded Maps",
                 "show": "Show on the map",
                 "getHTML": "HTML code",
                 "edit": "Edit",
-                "publish": "Publish map",
-                "unpublish": "Unpublish map",
+                "publish": "Publish the map",
+                "unpublish": "Unpublish the map",
                 "delete": "Delete",
                 "grid": {
                     "name": "Name",
-                    "domain": "Map settings",
+                    "domain": "Website",
                     "publish": "Status",
                     "show": "Actions",
-                    "html": " ",
-                    "edit": " ",
-                    "delete": " "
+                    "html": "HTML code",
+                    "edit": "Edit",
+                    "delete": "Delete"
                 },
                 "published": {
-                    "desc": "Embed the map by adding the HTML code below to your website."
+                    "desc": "Embed the map by adding the HTML code below to your website:"
                 },
                 "popup": {
-                    "edit": "Change map name",
-                    "title": "Save map",
-                    "label": "Map name",
+                    "edit": "Change the name of the map",
+                    "title": "Save the map",
+                    "label": "The name of the map",
                     "placeholder": "Give the map a name",
                     "save": "Save",
                     "cancel": "Cancel",
                     "error_noname": "Give the map a name",
-                    "deletetitle": "Delete map?",
-                    "deletemsg": "Do you want to delete the embedded map? It will no longer be shown on your website.",
-                    "showErrorTitle": "Incomplete view",
-                    "showConfirmMissing": "Some saved map layers are not available, do you still want to open this view?",
-                    "showConfirmNotLoaded": "Some map layers have not yet loaded, try again later."
+                    "deletetitle": "Delete the embedded map",
+                    "deletemsg": "Do you want to delete this embedded map? After deleting the map will no longer be shown on your website.",
+                    "showErrorTitle": "Incomplete map view",
+                    "showConfirmMissing": "The map view is incomplete. Some of the map layers are not available. Do you still want to open this map view?",
+                    "showConfirmNotLoaded": "All map layers could not yet be downloaded. Please try again later."
                 },
                 "save": {
                     "success": "The map has been saved.",
-                    "error_noname": "The name field cannot be blank.",
-                    "error_illegalchars": "The name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
+                    "error_noname": "The name of the map cannot be empty.",
+                    "error_illegalchars": "The name of the map contains illegal characters. Allowed characters are the letters (a-z,å,ä,ö, A-Z,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
                     "msg": {
-                        "view_name": "Map name"
+                        "view_name": "The name of the map"
                     }
                 },
                 "button": {
                     "ok": "OK",
                     "save": "Save",
                     "cancel": "Cancel",
-                    "toolbarsave": "Save map"
+                    "toolbarsave": "Save the map"
                 },
                 "error": {
                     "title": "Error!",
-                    "generic": "System error. Please try again later.",
-                    "notsaved": "The map could not be saved.",
-                    "notdeleted": "The map could not be deleted.",
-                    "makePublic": "The map could not be published. Please try again later.",
-                    "makePrivate": "The map could not be unpublished. Please try again later."
+                    "generic": "System error occurred. Please try again later.",
+                    "notsaved": "The embedded map could not be saved. Please try again later.",
+                    "notdeleted": "The embedded map could not be deleted. Please try again later.",
+                    "makePublic": "The embedded map could not be published. Please try again later.",
+                    "makePrivate": "The embedded map could not be unpublished. Please try again later."
                 }
             },
             "account": {
-                "title": "My account",
+                "title": "My Account",
                 "firstName": "First name",
-                "lastName": "Last name",
+                "lastName": "Surname",
                 "nickName": "Nickname",
                 "email": "E-mail",
-                "changeInfo": "Change your account information",
+                "changeInfo": "Update your account information",
                 "changePassword": "Change your password",
                 "removeAccount": "Delete your account",
                 "changeInfoUrl": "/web/en/profile"
@@ -129,4 +130,5 @@ Oskari.registerLocalization({
             "no": "No"
         }
     }
-});
+}
+);

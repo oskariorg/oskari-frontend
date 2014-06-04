@@ -7,9 +7,7 @@
  *
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleInstance",
-    function () {
-        this.conf.flyoutClazz = 'Oskari.mapframework.bundle.routesearch.Flyout';
-    },
+    function () {},
     {
         /**
          * @method getName
@@ -17,6 +15,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleIns
          */
         "getName": function () {
             return 'RouteSearch';
+        },
+
+        /**
+         * @method startPlugin
+         */
+        startPlugin: function () {
+            this.setDefaultTile(this.getLocalization('tile').title);
         },
 
         eventHandlers: {
@@ -32,14 +37,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleIns
                     return;
                 }
                 if (!doOpen) {
-                    console.log("disableMapClick");
                     this.plugins['Oskari.userinterface.Flyout'].disableMapClick();
                 }
             }
         },
 
+        /**
+         * @method registerMapClickHandler
+         * Registers the map click handler so we can pass the clicks to flyout.
+         */
         registerMapClickHandler: function () {
-            console.log("registerMapClickHandler");
             if (this.eventHandlers.MapClickedEvent) {
                 return;
             }
@@ -51,22 +58,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleIns
             this.sandbox.registerForEventByName(this, 'MapClickedEvent');
         },
 
+        /**
+         * @method unregisterMapClickHandler
+         * Unregisters the map click handler
+         */
         unregisterMapClickHandler: function () {
-            console.log("unregisterMapClickHandler");
             delete this.eventHandlers.MapClickedEvent;
             this.sandbox.unregisterFromEventByName(this, 'MapClickedEvent');
-        },
-
-        /**
-         * Sends the search request to the search service
-         * and handles the response.
-         * 
-         * @method __handleMapClick
-         * @private
-         * @param  {Object} lonlat
-         */
-        __handleMapClick: function (lonlat) {
-            console.log("Map Clicked:", lonlat);
         }
     },
     {
