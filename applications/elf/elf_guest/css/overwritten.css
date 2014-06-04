@@ -85,16 +85,7 @@ table {
         background-image: url('ELF_web_logo_small.jpg');
         background-repeat: no-repeat;
     }
-
-    .tool-reset {
-        display: none !important;
-    }
-    .tool-link {
-        display: none !important;
-    }
-    .layer-visibility {
-        display: none !important;
-    }
+    
 /*    li.layer {
         height: 120px !important;
     }
