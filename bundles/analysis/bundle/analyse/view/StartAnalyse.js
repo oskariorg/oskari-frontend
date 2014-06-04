@@ -281,7 +281,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me._addExtraParameters(contentPanel, me.id_prefix + "buffer");
 
             var columnsContainer = this.template.columnsContainer.clone();
-            this._createColumnsSelector(columnsContainer);
+            this._createColumnsSelector(columnsContainer, me.loc.params.label);
             contentPanel.append(columnsContainer);
 
             // Analyse NAME
@@ -309,14 +309,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @method _createColumnsSelector
          * @param {jQuery Object} columnsContainer the dom element the columns selector should be appended to.
          */
-        _createColumnsSelector: function (columnsContainer) {
+        _createColumnsSelector: function (columnsContainer, title) {
             var me = this,
                 columnsTitle = this.template.title_columns.clone(),
                 i,
                 option,
                 label,
                 toolContainer;
-            columnsTitle.find('.columns_title_label').html(this.loc.params.label);
+            columnsTitle.find('.columns_title_label').html(title);
             columnsContainer.append(columnsTitle);
 
             var closureMagic = function (tool) {
@@ -1376,14 +1376,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var columnsContainer = me.mainPanel.find('div.analyse-columns-container');
             if (me.id_prefix + 'aggregate' === method) {
                 columnsContainer.empty();
-                me._createColumnsDropdown(columnsContainer);
+                // me._createColumnsDropdown(columnsContainer);
+                me._createColumnsSelector(columnsContainer, me.loc.params.aggreLabel);
             } else if (me.id_prefix + 'aggregateText' === method) {
                 // nop
             } else if (me.id_prefix + 'aggregateNumeric' === method) {
                 // nop
             } else {
                 columnsContainer.empty();
-                me._createColumnsSelector(columnsContainer);
+                me._createColumnsSelector(columnsContainer, me.loc.params.label);
             }
 
             me._addExtraParameters(contentPanel.parent(), method);
@@ -1430,6 +1431,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
             dropdown.change(aggreMagic());
             columnsContainer.append(dropdown);
+
 
         },
         /**
