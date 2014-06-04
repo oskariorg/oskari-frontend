@@ -177,6 +177,7 @@ Oskari.registerLocalization({
             },
             "params": {
                 "label": "Selected columns",
+                "aggreLabel": "Aggregate attributes",
                 "tooltip": "",
                 "options": [{
                     "id": "oskari_analyse_all",
