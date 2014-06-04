@@ -21,16 +21,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         templates: {
             main: jQuery(
                 "<div class='mapplugin logoplugin' data-clazz='Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin'>" +
-                    "<div class='icon'></div>" +
-                    "<div class='terms'><a href='JavaScript:void(0);'></a></div>" +
-                    "<div class='data-sources'></div>" +
-                    "</div>"
+                "<div class='icon'></div>" +
+                "<div class='terms'><a href='JavaScript:void(0);'></a></div>" +
+                "<div class='data-sources'></div>" +
+                "</div>"
             ),
             dataSourcesDialog: jQuery(
                 "<div class='data-sources-dialog'>" +
-                    "<div class='layers'><h4></h4></div>" +
-                    "<div class='indicators'><h4></h4></div>" +
-                    "</div>"
+                "<div class='layers'><h4></h4></div>" +
+                "<div class='indicators'><h4></h4></div>" +
+                "</div>"
             )
         },
 
@@ -122,15 +122,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
          */
         stopPlugin: function (sandbox) {
             var me = this,
-                p;
+                p,
+                sb = sandbox || me._sandbox;
 
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    me._sandbox.unregisterFromEventByName(me, p);
+                    sb.unregisterFromEventByName(me, p);
                 }
             }
 
-            me._sandbox.unregister(me);
+            sb.unregister(me);
             me._map = null;
             me._sandbox = null;
 
@@ -167,15 +168,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 this._addIndicatorsToDataSourcesDialog(event.getIndicators());
             },
 
-            'LayerToolsEditModeEvent' : function (event) {
+            'LayerToolsEditModeEvent': function (event) {
                 // FIXME make sure event.isInMode() returns a boolean and remove !!
-                this.isInLayerToolsEditMode = !!event.isInMode();
+                this.isInLayerToolsEditMode = !! event.isInMode();
                 if (!this.isInLayerToolsEditMode) {
                     this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
                 }
             },
 
-            'MapSizeChangedEvent' : function (event) {
+            'MapSizeChangedEvent': function (event) {
                 if (this.dataSourcesDialog) {
                     var target = jQuery('div.logoplugin div.data-sources');
                     if (target) {
@@ -247,11 +248,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             }
 
             if (me.conf) {
-                if(me.conf.location) {
+                if (me.conf.location) {
                     containerClasses = me.conf.location.classes || containerClasses;
                     position = me.conf.location.position || position;
                 }
-                if(me.conf.font) {
+                if (me.conf.font) {
                     this.changeFont(me.conf.font);
                 }
             }
@@ -382,8 +383,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                     layer = layers[i];
                     layersCont.append(
                         '<div>' +
-                            layer.getName() + ' - ' + layer.getOrganizationName() +
-                            '</div>'
+                        layer.getName() + ' - ' + layer.getOrganizationName() +
+                        '</div>'
                     );
                 }
             }
@@ -429,8 +430,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                         indicator = indicators[i];
                         indicatorsCont.append(
                             '<div>' +
-                                indicator.title + ' - ' + indicator.organization +
-                                '</div>'
+                            indicator.title + ' - ' + indicator.organization +
+                            '</div>'
                         );
                     }
                 }

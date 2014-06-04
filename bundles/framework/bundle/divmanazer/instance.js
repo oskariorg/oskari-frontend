@@ -410,12 +410,20 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
         createTile: function (extension, plugin, count, extensionInfo) {
             var me = this,
                 //container = jQuery('#menubar'),
-                tile = this.compiledTemplates['Oskari.userinterface.Tile'].clone(true, true),
+                tile = this.compiledTemplates[
+                    'Oskari.userinterface.Tile'].clone(true, true),
+                tilePlugin = extension.plugins['Oskari.userinterface.Tile'],
                 title = tile.children('.oskari-tile-title'),
                 tileClick = function () {
                     //plugin.setExtensionState();
                     tile.off('click');
-                    me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
+                    if (tilePlugin.clickHandler) {
+                        tilePlugin.clickHandler(extensionInfo.state);
+                    } else {
+                        me.getSandbox().postRequestByName(
+                            'userinterface.UpdateExtensionRequest', [extension, 'toggle']
+                        );
+                    }
                     window.setTimeout(
                         function () {
                             tile.click(tileClick);
@@ -426,7 +434,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
             //status;
             title.append(plugin.getTitle());
             //status = tile.children('.oskari-tile-status');
-
 
             tile.click(tileClick);
 
