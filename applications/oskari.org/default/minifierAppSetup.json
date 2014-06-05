@@ -486,6 +486,22 @@
                 }
             }
         }, {
+            "title" : "Admin - Users",
+            "fi" : "admin-users",
+            "sv" : "admin-users",
+            "en" : "admin-users",
+            "bundlename" : "admin-users",
+            "bundleinstancename" : "admin-users",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "admin-users" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                     }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            "instanceProps" : {}
+        }, {
             "title" : "myplacesimport",
             "fi" : "myplacesimport",
             "sv" : "myplacesimport",
