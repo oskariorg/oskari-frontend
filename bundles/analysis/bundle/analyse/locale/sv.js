@@ -177,6 +177,7 @@ Oskari.registerLocalization({
             },
             "params": {
                 "label": "Väljad attribut data",
+                "aggreLabel": "Aggregate attribut",
                 "tooltip": "",
                 "options": [{
                     "id": "oskari_analyse_all",

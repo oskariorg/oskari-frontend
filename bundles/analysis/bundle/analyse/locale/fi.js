@@ -176,6 +176,7 @@ Oskari.registerLocalization({
             },
             "params": {
                 "label": "Säilytettävät ominaisuustiedot",
+                "aggreLabel": "Koostettavat ominaisuustiedot",
                 "tooltip": "",
                 "options": [{
                     "id": "oskari_analyse_all",
