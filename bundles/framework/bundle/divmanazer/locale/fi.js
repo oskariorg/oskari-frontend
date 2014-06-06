@@ -104,6 +104,17 @@ Oskari.registerLocalization(
                     "cancel": "Peruuta"
                 }
             }
+        },
+        "Grid": {
+            "columnSelector" : {
+                "title": "Ominaisuudet",
+                "tooltip": "Näytä sarakkeet"
+            },
+            "export": {
+                "title": "Aineiston vienti",
+                "csv": "CSV",
+                "excel": "Excel"
+            }
         }
     }
 }

@@ -103,6 +103,17 @@ Oskari.registerLocalization({
                     "cancel": "Tillbaka"
                 }
             }
+        },
+        "Grid": {
+            "columnSelector" : {
+                "title": "NOT TRANSLATED",
+                "tooltip": "NOT TRANSLATED"
+            },
+            "export": {
+                "title": "NOT TRANSLATED",
+                "csv": "CSV",
+                "excel": "Excel"
+            }
         }
     }
 });
