@@ -13,22 +13,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
      * @static
      */
 
-    function (columnSelectorTooltip) {
+    function () {
         this.model = null;
-        var columnSelectorButtonTitle = "";
-        if (columnSelectorTooltip !== null && columnSelectorTooltip !== undefined) {
-            columnSelectorButtonTitle = columnSelectorTooltip;
-        }
+        this._defaultLocKey = 'Grid';
+        this._loc = this._getLocalization('DivManazer');
         this.template = jQuery('<table class="oskari-grid"><thead><tr></tr></thead><tbody></tbody></table>');
         this.templateTableHeader = jQuery('<th><a href="JavaScript:void(0);"></a></th>');
         this.templateDiv = jQuery('<div></div>');
         this.templateRow = jQuery('<tr></tr>');
         this.templateCell = jQuery('<td></td>');
         this.templatePopupLink = jQuery('<a href="JavaScript: void(0);"></a>');
-        this.templateColumnSelectorButtonWrapper = jQuery('<div/>', {});
-        this.templateColumnSelectorButton = jQuery('<div/>', {
-            title: columnSelectorButtonTitle
-        });
+        this.templateTabTools = jQuery('<div class="tab-tools"></div>');
+        this.templateExporter = jQuery('<div class="exporter"></div>');
+        this.templateColumnSelectorTitle = jQuery('<div class="column-selector-title"></div>');
+        this.templateColumnSelectorWrapper = jQuery('<div/>', {});
         this.templateColumnSelector = jQuery('<div/>', {});
         this.templateColumnSelectorList = jQuery('<ul/>', {});
         this.templateColumnSelectorListItem = jQuery('<li>' +
@@ -39,12 +37,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             '</li>'
             );
         this.templateColumnSelectorClose = jQuery('<div class="icon-close close-selector-button"></div>');
+        this.csvButton = null;
         this.table = null;
         this.fieldNames = [];
         this.selectionListeners = [];
         this.additionalDataHandler = null;
         this.visibleColumnSelector = null;
         this.showColumnSelector = false;
+        this.showExcelExporter = false;
         this.resizableColumns = false;
 
         this.uiNames = {};
@@ -77,6 +77,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          */
         setColumnSelector: function (newShowColumnSelector) {
             this.showColumnSelector = newShowColumnSelector;
+        },
+        /**
+         * @method setExcelExporter
+         * Sets the Excel exporter visible or invisible
+         * @param {Boolean} newShowExcelExporter truth value for showing an Excel exporter
+         */
+        setExcelExporter: function (newShowExcelExporter) {
+            this.showExcelExporter = newShowExcelExporter;
         },
         /**
          * @method setResizableColumns
@@ -389,9 +397,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          */
         _renderColumnSelector: function (table, fieldNames) {
             // Utilize the templates
-            this.visibleColumnSelector = this.templateColumnSelectorButtonWrapper.clone();
+            this.visibleColumnSelector = this.templateColumnSelectorWrapper.clone();
             var me = this,
-                columnSelectorButton = this.templateColumnSelectorButton.clone(),
+                columnSelectorLabel = this.templateColumnSelectorTitle.clone(),
                 columnSelector = this.templateColumnSelector.clone(),
                 columnSelectorList = this.templateColumnSelectorList.clone(),
                 columnSelectorClose = this.templateColumnSelectorClose.clone(),
@@ -403,15 +411,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 checkboxInput;
 
             this.visibleColumnSelector.addClass('column-selector-placeholder');
-            columnSelectorButton.addClass('icon-menu');
             columnSelector.addClass('column-selector');
-
-            this.visibleColumnSelector.append(columnSelectorButton);
+            columnSelectorLabel.append(this._loc.columnSelector.title);
+            this.visibleColumnSelector.append(columnSelectorLabel);
             this.visibleColumnSelector.append(columnSelector);
 
             jQuery('input.column-selector-list-item').remove();
             // Open or close the checkbox dropdown list
-            columnSelectorButton.click(function () {
+            this.visibleColumnSelector.click(function () {
                 if (columnSelector.css('visibility') !== 'hidden') {
                     columnSelector.css('visibility', 'hidden');
                 } else {
@@ -470,7 +477,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     if (newFields.length > 0) {
                         me.setVisibleFields(newFields);
                     }
-                    me.renderTo(me.visibleColumnSelector.parent(), {
+                    me.renderTo(table.parent(), {
                         columnSelector: 'open'
                     });
                 });
@@ -533,7 +540,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * (e.g. columnSelector: open tells that we want to show columnselector)
          */
         renderTo: function (container, state) {
+            var me = this;
             container.empty();
+
+            // Tool row
+            if ((this.showColumnSelector)||(this.showExcelExporter)) {
+                var toolRow = this.templateTabTools.clone();
+                container.parent().children(".tab-tools").remove();
+                container.parent().prepend(toolRow);
+            }
+
             var fieldNames = this.fieldNames,
                 table = this.template.clone();
             // if visible fields not given, show all
@@ -552,10 +568,63 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
             if (this.showColumnSelector) {
                 this._renderColumnSelector(table, fieldNames);
-                container.append(this.visibleColumnSelector);
+                container.parent().find(".tab-tools").append(this.visibleColumnSelector);
                 if (state !== null && state !== undefined && state.columnSelector === 'open') {
                     this.visibleColumnSelector.find('.column-selector').css('visibility', 'visible');
                 }
+            }
+
+            // Exporter
+            // if (this.showExcelExporter) { // Todo: configure this
+            if (this.showColumnSelector) {
+                var exporter = me.templateExporter.clone();
+                var label = me._loc.export.title;
+                exporter.append(label);
+                me.csvButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                me.csvButton.setTitle(me._loc.export.csv);
+                me.csvButton.addClass("exportButton");
+
+                me.csvButton.setHandler(function() {
+                    var str = "";
+                    var i,j;
+                    // Header
+                    var header = me.table.find("thead th a");
+                    for (i=0; i<header.length; i++) {
+                        if (i > 0) {
+                            str = str+",";
+                        }
+                        str = str+"\""+jQuery(header[i]).html()+"\"";
+                    }
+                    str = str+"\n";
+
+                    // Body
+                    var rows = me.table.find("tbody tr");
+                    for (i=0; i<rows.length; i++) {
+                        var items = jQuery(rows[i]).find("td");
+                        for (j=0; j<items.length; j++) {
+                            if (j > 0) {
+                                str = str+",";
+                            }
+                            str = str+"\""+jQuery(items[j]).html()+"\"";
+                        }
+                        str = str+"\n";
+                    }
+
+                    // Output
+                    if (navigator.appName !== 'Microsoft Internet Explorer') {
+                        window.location = 'data:text/csv;charset=utf8,' + encodeURIComponent(str);
+                    } else {
+                        str = str.split("\n").join("<br />");
+                        var generator = window.open('', 'csv', 'height=400,width=600');
+                        generator.document.write('<html><head><title>CSV</title>');
+                        generator.document.write('</head><body >');
+                        generator.document.write(str);
+                        generator.document.write('</textArea>');
+                        generator.document.close();
+                    }
+                });
+                exporter.append(me.csvButton.getButton());
+                container.parent().find(".tab-tools").append(exporter);
             }
 
             container.append(table);
@@ -709,5 +778,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 value = value * -1;
             }
             return value;
+        },
+
+        /**
+         * Returns the localization object for the given key.
+         *
+         * @method _getLocalization
+         * @param  {String} locKey
+         * @return {Object/null}
+         */
+        _getLocalization: function (locKey) {
+            var locale = Oskari.getLocalization(locKey),
+                ret = null;
+            if (locale) {
+                ret = locale[this._defaultLocKey];
+            }
+            return ret;
         }
     });
