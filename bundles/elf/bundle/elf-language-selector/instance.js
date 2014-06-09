@@ -61,37 +61,6 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
             "flyout": {
                 "button": "Change"
             }
-        },
-
-        "es" : {
-            "name": "Español",
-            "title" : "idioma",
-            "tile" : {
-                "title" : "idioma"
-            },
-            "flyout": {
-                "button": "idioma"
-            }
-        },
-        "de" : {
-            "name": "Deutsch",
-            "title" : "Sprache",
-            "tile" : {
-                "title" : "Sprache"
-            },
-            "flyout": {
-                "button": "Sprache"
-            }
-        },
-        "cs" : {
-            "name": "Czech",
-            "title" : "Jazyk",
-            "tile" : {
-                "title" : "Jazyk"
-            },
-            "flyout": {
-                "button": "Jazyk"
-            }
         }
 
     },
