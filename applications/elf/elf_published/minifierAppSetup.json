@@ -50,7 +50,7 @@
                 },
                 "mapmodule-plugin": {
                     "bundlePath": "../../../packages/framework/bundle/"
-                },
+                },               
                 "event-base": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
@@ -88,6 +88,9 @@
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
                 "ui-components": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapmyplaces": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 }
             },
