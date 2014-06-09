@@ -2,6 +2,19 @@
 
 ## 1.21
 
+### core/sandbox/Layers
+
+`sandbox.getRequestBuilder('RequestName')` now returns `undefined` if either request or request handler is missing. Previously only returned `undefined` if request was missing. This solves some timing issues with minified code.
+
+AbstractLayer now has set/getLayerName() as it's a common field for most layers. LayerName is functional configurations while name is for UI.
+
+WmsLayer now forwards calls for wmsUrl/wmsName methods to AbstractLayers layerUrl/layerName methods. The API remains the same and urls can be accessed with both ways. 
+WmtsLayer does the same for wmtsUrl/wmtsName.
+
+### MaplayerService
+
+Now returns null if trying to create unrecognized layer type instead of throwing an error. Also logs a mention in console if this happens.
+
 ### admin-layerselector
 
 Previously didn't startup correctly with small number of layer (under 30), this has now been fixed.
@@ -47,6 +60,37 @@ Opens the language selector in a Flyout
 ### elf-geolocator
 
 *New bundle!* Creates a service and a user interface for ELF Geolocator search API. Creates an UI for search bundle to perform text searches and adds a button to the toolbar for reverse geocode search.
+
+### analysis/analyse
+
+Existing WFS area and line features can now be cut with a new geometry editor bundle and used as analysis source features.
+
+The drawing of a new feature as well as editing one has been moved to a new accordion panel.
+
+### statistics/statsgrid
+
+The toolbar from the top has been removed and the tool added to the side toolbar when going to stats mode.
+
+Data source select has been added (only two options now - SOTKAnet and user indicators).
+
+### /Oskari/bundles/mapframework/bundle/mapwfs2/plugin/WFSLayerPlugin
+
+New optional plugin config setting to defer setLocation calls from AfterMapMoveEvent to MapLayerVisibilityChangedEvent
+to drop some WFS queries to backend servers.
+
+
+```javascript
+{
+   "id": "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
+   "config": {
+      "deferSetLocation" : true
+   }
+}
+```
+
+### divmanazer
+
+Added a new function `getHeader` to `component/AccordionPanel.js`
 
 ## 1.20
 

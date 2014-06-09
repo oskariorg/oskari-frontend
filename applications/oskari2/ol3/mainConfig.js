@@ -5,7 +5,7 @@ require.config({
     "oskari-with-app": "src/oskari/oskari-with-app",
     "oskari-with-loader": "src/oskari/oskari-with-loader",
     jquery: "http://code.jquery.com/jquery-1.9.1",
-    "jquery-ui": "libraries/jquery/jquery-ui-1.9.1.custom",
+    "jquery-ui": "libraries/jquery/jquery-ui-1.9.2.custom",
     "dragevent": "libraries/jquery/jquery.event.drag-2.0.min",
     "jquery-migrate": "libraries/jquery/jquery-migrate-1.2.1-modified",
     css: "libraries/requirejs/lib/css",

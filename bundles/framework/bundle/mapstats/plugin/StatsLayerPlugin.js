@@ -236,8 +236,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
          * @method activateControls
          */
         activateControls: function () {
-            this._getFeatureControlHover.activate();
-            this._getFeatureControlSelect.activate();
+            var me = this;
+            if (me._getFeatureControlHover) {
+                me._getFeatureControlHover.activate();
+            }
+            if (me._getFeatureControlSelect) {
+                me._getFeatureControlSelect.activate();
+            }
         },
 
         /**
@@ -246,8 +251,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
          * @method deactivateControls
          */
         deactivateControls: function () {
-            this._getFeatureControlHover.deactivate();
-            this._getFeatureControlSelect.deactivate();
+            var me = this;
+            if (me._getFeatureControlHover) {
+                me._getFeatureControlHover.deactivate();
+            }
+            if (me._getFeatureControlSelect) {
+                me._getFeatureControlSelect.deactivate();
+            }
         },
         /**
          * Adds a single WMS layer to this map

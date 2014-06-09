@@ -11,12 +11,10 @@ Oskari.clazz.define('Oskari.mapframework.wmts.domain.WmtsLayer',
 function() {
 
     //Internal id for this map layer
-    this._WmtsName = null;
+    this._WmtsMatrixSetId = null;
+    this._OriginalWmtsMatrixSetData = null;
     this._WmtsMatrixSet = null;
     this._WmtsLayerDef = null;
-
-    // Description for layer
-    this._WmtsUrls = [];
 
     /* Layer Type */
     this._layerType = "WMTS";
@@ -26,14 +24,42 @@ function() {
      * @param {String} WmtsName used to identify service f.ex. in GetFeatureInfo queries.
      */
     setWmtsName : function(WmtsName) {
-        this._WmtsName = WmtsName;
+        this.setLayerName(WmtsName);
     },
     /**
      * @method getWmtsName
      * @return {String} wmsName used to identify service f.ex. in GetFeatureInfo queries.
      */
     getWmtsName : function() {
-        return this._WmtsName;
+        return this.getLayerName();
+    },
+    /**
+     * @method setWmtsMatrixSetId
+     * @return {String} matrixSetId
+     */
+    setWmtsMatrixSetId : function(matrixSetId) {
+        this._WmtsMatrixSetId = matrixSetId;
+    },
+    /**
+     * @method getWmtsMatrixSetId
+     * @return {String}
+     */
+    getWmtsMatrixSetId : function() {
+        return this._WmtsMatrixSetId;
+    },
+    /**
+     * @method setOriginalMatrixSetData
+     * @return {String} matrixSetId
+     */
+    setOriginalMatrixSetData : function(matrixSetId) {
+        this._OriginalWmtsMatrixSetData = matrixSetId;
+    },
+    /**
+     * @method getOriginalMatrixSetData
+     * @return {String}
+     */
+    getOriginalMatrixSetData : function() {
+        return this._OriginalWmtsMatrixSetData;
     },
     /**
      * @method setWmtsMatrixSet
@@ -48,6 +74,22 @@ function() {
      */
     getWmtsMatrixSet : function() {
         return this._WmtsMatrixSet;
+    },
+    /**
+     * Usable in textarea etc
+     * @method getWmtsMatrixSetAsString
+     * @return {String}
+     */
+    getOriginalWmtsMatrixSetAsString : function() {
+        var value = this.getOriginalMatrixSetData();
+        if(!value) {
+            return "";
+        }
+        try {
+            return JSON.stringify(value, null, 3);
+        } catch(err) {
+            return err;
+        }
     },
     /**
      * @method setWmtsLayerDef
@@ -69,7 +111,7 @@ function() {
      * Apppends the url to layer array of wmts image urls
      */
     addWmtsUrl : function(WmtsUrl) {
-        this._WmtsUrls.push(WmtsUrl);
+        this.addLayerUrl(WmtsUrl);
     },
     /**
      * @method getWmtsUrls
@@ -77,7 +119,7 @@ function() {
      * Gets array of layer wmts image urls
      */
     getWmtsUrls : function() {
-        return this._WmtsUrls;
+        return this.getLayerUrls();
     }
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]

@@ -13,6 +13,7 @@ Oskari.registerLocalization({
         },
         "tab": {
             "title": "Indicators",
+            "description": "Own indicators",
             "grid": {
                 "name": "Title",
                 "description": "Description",
@@ -125,6 +126,8 @@ Oskari.registerLocalization({
         "not_included": "Not included",
         "noMatch": "No results matched",
         "selectIndicator": "Select an indicator",
+        "noDataSource": "No data source matched",
+        "selectDataSource": "Select a data source",
         "filterTitle": "Filter out column data",
         "indicatorFilterDesc": "Filtered values are selected in the grid. You can set filtering separately for every column.",
         "filterIndicator": "Indicator:",

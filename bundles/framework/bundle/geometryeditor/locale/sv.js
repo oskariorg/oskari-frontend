@@ -1,8 +1,8 @@
 Oskari.registerLocalization({
-    "lang": "fi",
+    "lang": "sv",
     "key": "GeometryEditor",
     "value": {
-        "title": "Geometriaeditori",
+        "title": "NOT TRANSLATED",
         "desc": ""
     }
 });

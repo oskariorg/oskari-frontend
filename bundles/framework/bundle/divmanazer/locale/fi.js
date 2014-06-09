@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "DivManazer",
     "value": {
@@ -18,10 +19,10 @@ Oskari.registerLocalization({
                 "line": "Muokkaa viivan esitystapaa"
             },
             "dot": {
-                "title": "Pistekohteen esitystapa",
+                "title": "Pisteen esitystapa",
                 "tooltip": "",
                 "symbol": {
-                    "label": "Pistekohteen kuvake"
+                    "label": "Symboli"
                 },
                 "size": {
                     "label": "Koko"
@@ -43,10 +44,10 @@ Oskari.registerLocalization({
                 "title": "Viivan esitystapa",
                 "tooltip": "",
                 "style": {
-                    "label": "Viivan tyyli"
+                    "label": "Tyyli"
                 },
                 "cap": {
-                    "label": "Viivan päädyt"
+                    "label": "Päädyt"
                 },
                 "corner": {
                     "label": "Kulmat"
@@ -71,10 +72,10 @@ Oskari.registerLocalization({
                 "title": "Alueen esitystapa",
                 "tooltip": "",
                 "linestyle": {
-                    "label": "Alueen viivan tyyli"
+                    "label": "Viivan tyyli"
                 },
                 "linecap": {
-                    "label": "Alueen viivan päädyt"
+                    "label": "Viivan päädyt"
                 },
                 "linecorner": {
                     "label": "Kulmat"
@@ -88,12 +89,12 @@ Oskari.registerLocalization({
                     "labelCustom": "Oma RGB-väri (0-255)"
                 },
                 "color": {
-                    "label": "Alueen täyttöväri",
+                    "label": "Täyttöväri",
                     "labelOr": "tai",
                     "labelCustom": "Oma RGB-väri (0-255)"
                 },
                 "fill": {
-                    "label": "Alueen täyttökuvio"
+                    "label": "Täyttökuvio"
                 },
                 "preview": {
                     "label": "Esikatselu"
@@ -103,6 +104,18 @@ Oskari.registerLocalization({
                     "cancel": "Peruuta"
                 }
             }
+        },
+        "Grid": {
+            "columnSelector" : {
+                "title": "Ominaisuudet",
+                "tooltip": "Näytä sarakkeet"
+            },
+            "export": {
+                "title": "Aineiston vienti",
+                "csv": "CSV",
+                "excel": "Excel"
+            }
         }
     }
-});
+}
+);

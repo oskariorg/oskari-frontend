@@ -86,15 +86,27 @@ table {
         background-repeat: no-repeat;
     }
 
-    .tool-reset {
+
+
+
+
+    .marker-share {
+
         display: none !important;
     }
-    .tool-link {
+    .tool-print{
         display: none !important;
     }
-    .layer-visibility {
+
+    .layer-backendstatus-icon {
         display: none !important;
     }
+
+
+
+
+
+    
 /*    li.layer {
         height: 120px !important;
     }

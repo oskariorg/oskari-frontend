@@ -136,7 +136,7 @@ div.admin-layerselector {
         width: 309px; }
   div.admin-layerselector div.create-layer {
     min-height: 35px; }
-  div.admin-layerselector div.layer.odd {
+  div.admin-layerselector div.layer:nth-child(even) {
     background-color: #f3f3f3; }
   div.admin-layerselector div.tab-content {
     padding: 0; }

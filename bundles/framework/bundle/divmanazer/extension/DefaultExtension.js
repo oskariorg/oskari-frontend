@@ -12,8 +12,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
      * @param tileClazz {String} an optional class name for
      *
      */
-
-    function (name, flyoutClazz, tileClazz, viewClazz,locale) {
+    function (name, flyoutClazz, tileClazz, viewClazz, locale) {
         this.sandbox = null;
         this.plugins = {};
         this._localization = locale;
@@ -52,8 +51,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * @method update
          * BundleInstance protocol method
          */
-        update: function () {
-        },
+        update: function () {},
         /**
          * @method getLocalization
          * Convenience method to call from Tile and Flyout
@@ -97,7 +95,10 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
             request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
 
             sandbox.request(this, request);
+
+            this.afterStart(sandbox);
         },
+        afterStart: function (sandbox) {},
         /**
          * @method stop
          * BundleInstance protocol method
@@ -124,7 +125,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
                 locFlyout,
                 locTile,
                 locView;
-            
+
             me.startPlugin();
 
             for (p in me.requestHandlers) {
@@ -156,17 +157,17 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
                     Oskari.clazz.create(me.conf.viewClazz, me, locView);
             }
         },
-        
+
         /* hook */
         startPlugin: function () {
-            
+
         },
 
         /* hook */
         stopPlugin: function () {
-            
+
         },
-        
+
         /**
          * @method stopExtension
          * Extension protocol method
@@ -193,7 +194,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
                     }
                 }
             }
-            
+
             me.stopPlugin();
         },
         /**
@@ -245,7 +246,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
 
             return handler.apply(this, [event]);
         },
-        
+
         /* o2 support for handling requests with less code... */
         handleRequest: function (core, request) {
             return this.onRequest(request);
@@ -261,7 +262,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
             return handler.apply(this, [request]);
         },
 
-        
+
         /**
          * @method getLang
          * helper to get current language from Oskari
@@ -270,7 +271,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
         "getLang": function () {
             return Oskari.getLang();
         },
-        
+
         /* O2 helpers */
 
         getTile: function () {

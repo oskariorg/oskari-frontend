@@ -161,48 +161,56 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             'CtrlKeyUpRequest': function (request) {
                 this._handleCtrlKeyUpRequest();
                 return true;
-            },
-            '__default': function (request) {
-
-                this.printWarn("!!!");
-                this.printWarn("  There is no handler for");
-                this.printWarn("  '" + request.getName() + "'");
-                return false;
             }
         },
 
         /**
          * @method processRequest
          * Forwards requests to corresponding request handlers.
+         * If request doesn't have handler, prints warning to console.
          * @param {Oskari.mapframework.request.Request} request to forward
          * @return {Boolean} Returns true, if request was handled, false otherwise
          */
         processRequest: function (request) {
 
             var requestName = request.getName(),
-                handlerFunc = this.defaultRequestHandlers[requestName],
-                rv,
+                handlerFunc = this.__getRequestHandlerFunction(requestName);
+            if (handlerFunc) {
+                return handlerFunc(this, request);
+            } else {
+                this.printWarn("!!!");
+                this.printWarn("  There is no handler for");
+                this.printWarn("  '" + request.getName() + "'");
+                return false;
+            }
+        },
+        /**
+         * Determine handler for request form either internal (core) handlers or handlers 
+         * registered by bundles. 
+         * Wraps the functions to apply the correct scope and same parameters for each type.
+         * 
+         * @param  {String} requestName   name of the request to handle
+         * @return {function}             function to call for handling request
+         */
+        __getRequestHandlerFunction : function(requestName) {
+            var handlerFunc = this.defaultRequestHandlers[requestName],
                 handlerClsInstance;
             if (handlerFunc) {
-                rv = handlerFunc.apply(this, [request]);
+                // found from core handlers
+                return function(core, request) {
+                    handlerFunc.apply(core, [request]);
+                };
             } else {
+                // handlers registered by bundle
                 handlerClsInstance = this.externalHandlerCls[requestName];
-                if (handlerClsInstance) {
-                    // protocol: Oskari.mapframework.core.RequestHandler.handleRequest(core)
-                    rv = handlerClsInstance.handleRequest(this, request);
-                } else {
-                    handlerFunc = this.defaultRequestHandlers.__default;
-                    rv = handlerFunc.apply(this, [request]);
+                if (handlerClsInstance && handlerClsInstance.handleRequest) {
+                    return function(core, request) {
+                        handlerClsInstance.handleRequest.apply(handlerClsInstance, [core, request]);
+                    }
                 }
-
             }
-            // FIXME only properties should be deleted
-            delete request;
-
-            return rv;
+            return undefined;
         },
-
-
 
         /**
          * @method addRequestHandler
@@ -225,6 +233,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
         removeRequestHandler: function (requestName, handlerInstance) {
             if (this.externalHandlerCls[requestName] === handlerInstance) {
                 this.externalHandlerCls[requestName] = null;
+                delete this.externalHandlerCls[requestName];
             }
         },
 
@@ -264,6 +273,11 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
         getRequestBuilder: function (requestName) {
             var qname = this._getQNameForRequest(requestName);
             if (!qname) {
+                return undefined;
+            }
+            var handlerFunc = this.__getRequestHandlerFunction(requestName);
+            if(!handlerFunc) {
+                this.printDebug("#!#!# ! Request defined, but handler not registered. Perhaps timing issue?");
                 return undefined;
             }
             return Oskari.clazz.builder(qname);

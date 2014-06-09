@@ -154,10 +154,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var outputPanel = this._createOutputPanel();
             //outputPanel.open();
 
-            contentPanel.getPanel().open();
+            contentPanel.getDataPanel().open();
+            contentPanel.getDrawToolsPanel().open();
             methodPanel.open();
             settingsPanel.open();
-            accordion.addPanel(contentPanel.getPanel());
+            accordion.addPanel(contentPanel.getDataPanel());
+            accordion.addPanel(contentPanel.getDrawToolsPanel());
             accordion.addPanel(methodPanel);
             accordion.addPanel(settingsPanel);
             accordion.addPanel(outputPanel);
@@ -264,11 +266,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             panel.setTitle(this.loc.settings.label);
+            var headerPanel = panel.getHeader();
             var contentPanel = panel.getContainer();
             // tooltip
             var tooltipCont = this.template.help.clone();
             tooltipCont.attr('title', this.loc.settings.tooltip);
-            contentPanel.append(tooltipCont);
+            tooltipCont.addClass('header-icon-info');
+            headerPanel.append(tooltipCont);
 
             // Changing part of parameters ( depends on method)
             var extra = this.template.paramsOptionExtra.clone();
@@ -277,7 +281,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me._addExtraParameters(contentPanel, me.id_prefix + "buffer");
 
             var columnsContainer = this.template.columnsContainer.clone();
-            this._createColumnsSelector(columnsContainer);
+            this._createColumnsSelector(columnsContainer, me.loc.params.label);
             contentPanel.append(columnsContainer);
 
             // Analyse NAME
@@ -305,14 +309,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @method _createColumnsSelector
          * @param {jQuery Object} columnsContainer the dom element the columns selector should be appended to.
          */
-        _createColumnsSelector: function (columnsContainer) {
+        _createColumnsSelector: function (columnsContainer, title) {
             var me = this,
                 columnsTitle = this.template.title_columns.clone(),
                 i,
                 option,
                 label,
                 toolContainer;
-            columnsTitle.find('.columns_title_label').html(this.loc.params.label);
+            columnsTitle.find('.columns_title_label').html(title);
             columnsContainer.append(columnsTitle);
 
             var closureMagic = function (tool) {
@@ -497,11 +501,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             panel.setTitle(me.loc.output.label);
+            var headerPanel = panel.getHeader();
             var contentPanel = panel.getContainer();
             // tooltip
             var tooltipCont = me.template.help.clone();
             tooltipCont.attr('title', me.loc.output.tooltip);
-            contentPanel.append(tooltipCont);
+            tooltipCont.addClass('header-icon-info');
+            headerPanel.append(tooltipCont);
             // title
             var colorTitle = me.template.title_color.clone();
             colorTitle.find('.output_color_label').html(me.loc.output.color_label);
@@ -716,6 +722,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         me._modifyAnalyseName();
                         me.showInfos();
                         me._checkParamsSelection();
+                        me._refreshIntersectLayers();
                     });
 
                 opt.find('label')
@@ -802,6 +809,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             } else if (method === this.id_prefix + "aggregateText") {
                 // sum, count, min, max, med
                 me._aggregateExtraText(extra);
+
+            } else if (method === this.id_prefix + "clip") {
+                // clipping layer selection
+                me._intersectExtra(extra,false);
 
             } else if (method === this.id_prefix + "intersect") {
                 // intersecting layer selection
@@ -929,25 +940,32 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         /**
          * @method _intersectExtra
          * @private
-         * Add extra parameters for params UI according to method intersect
+         * Add extra parameters for params UI according to method needs
          * @param {jQuery} contentPanel  div to append extra params
+         * @param {boolean} full define if full or limited set of choices is shown
          */
-        _intersectExtra: function (contentPanel) {
+        _intersectExtra: function (contentPanel,full) {
             var me = this;
-
             // Set radiobuttons for selecting intersecting layer
             var options = [],
                 option,
                 p,
-                f;
+                f,
+                showSpatial = true;
+
+            // Show also spatial operator choice
+            if (!(typeof full === "undefined")) {
+                showSpatial = full;
+            }
+
             // Checked data layers
             if (me.contentOptionDivs) {
                 for (p in me.contentOptionsMap) {
                     if (me.contentOptionDivs[p] !== undefined) {
-                        // true or false var test = me.contentOptionDivs[p].find('input').prop('checked');
                         option = {
                             id: me.contentOptionsMap[p].id,
-                            label: me.contentOptionsMap[p].label
+                            label: me.contentOptionsMap[p].label,
+                            data: me.contentOptionDivs[p].find('input').prop('checked')
                         };
                         options.push(option);
                     }
@@ -989,6 +1007,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'for': 'intersect_' + option.id,
                     'class': 'params_radiolabel'
                 });
+                // Do not show option if it is selected as analysis data
+                if (option.data) {
+                    toolContainer.hide();
+                    option.selected = false;
+                }
                 if (option.selected) {
                     toolContainer.find('input').attr('checked', 'checked');
                 }
@@ -1001,48 +1024,50 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 toolContainer.find('input').change(closureMagic(option));
             }
 
-            //title spatial operator
-            var titlespa = this.template.title_extra.clone();
-            titlespa.find('.extra_title_label').html(this.loc.spatial.label);
-            contentPanel.append(titlespa);
+            // Show spatial operator choice
+            if (showSpatial) {
+                //title spatial operator
+                var titlespa = this.template.title_extra.clone();
+                titlespa.find('.extra_title_label').html(this.loc.spatial.label);
+                contentPanel.append(titlespa);
 
-            var closureMagic = function (tool) {
-                return function () {
-                    var size = contentPanel.find('input[name=spatial]:checked').val(),
-                        i;
-                    // reset previous setting
-                    for (i = 0; i < me.spatialOptions.length; ++i) {
-                        me.spatialOptions[i].selected = false;
-                    }
-                    tool.selected = true;
+                var closureMagic = function (tool) {
+                    return function () {
+                        var size = contentPanel.find('input[name=spatial]:checked').val(),
+                            i;
+                        // reset previous setting
+                        for (i = 0; i < me.spatialOptions.length; ++i) {
+                            me.spatialOptions[i].selected = false;
+                        }
+                        tool.selected = true;
 
+                    };
                 };
-            };
 
-            // spatial operators
-            for (i = 0; i < this.spatialOptions.length; ++i) {
-                option = this.spatialOptions[i];
-                toolContainer = this.template.spatialOptionTool.clone();
-                label = option.label;
-                if (option.width && option.height) {
-                    label = label + ' (' + option.width + ' x ' + option.height + 'px)';
+                // spatial operators
+                for (i = 0; i < this.spatialOptions.length; ++i) {
+                    option = this.spatialOptions[i];
+                    toolContainer = this.template.spatialOptionTool.clone();
+                    label = option.label;
+                    if (option.width && option.height) {
+                        label = label + ' (' + option.width + ' x ' + option.height + 'px)';
+                    }
+                    toolContainer.find('label').append(label).attr({
+                        'for': option.id,
+                        'class': 'params_radiolabel'
+                    });
+                    if (option.selected) {
+                        toolContainer.find('input').attr('checked', 'checked');
+                    }
+                    contentPanel.append(toolContainer);
+                    toolContainer.find('input').attr({
+                        'value': option.id,
+                        'name': 'spatial',
+                        'id': option.id
+                    });
+                    toolContainer.find('input').change(closureMagic(option));
                 }
-                toolContainer.find('label').append(label).attr({
-                    'for': option.id,
-                    'class': 'params_radiolabel'
-                });
-                if (option.selected) {
-                    toolContainer.find('input').attr('checked', 'checked');
-                }
-                contentPanel.append(toolContainer);
-                toolContainer.find('input').attr({
-                    'value': option.id,
-                    'name': 'spatial',
-                    'id': option.id
-                });
-                toolContainer.find('input').change(closureMagic(option));
             }
-
         },
         /**
          * @method _unionExtra
@@ -1230,6 +1255,34 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * Refreshes layer list in the intersect or clip parameters
+         *
+         * @method
+         * @private
+         */
+        _refreshIntersectLayers: function() {
+            var dataLayers = jQuery("div.basic_analyse div.analyse_option_cont.analyse_settings_cont input[type=radio]");
+            var paramLayer;
+
+            // No need to refresh?
+            if ((jQuery("div.basic_analyse div.extra_params input[type=radio][name=intersect]")).length === 0) {
+                return;
+            }
+
+            for (var i=0; i < dataLayers.length; i++) {
+                paramLayer = jQuery("div.basic_analyse div.extra_params input[type=radio][name=intersect][value="+jQuery(dataLayers[i]).attr("id")+"]");
+                for (var j=0; j < dataLayers.length; j++) {
+                    if (jQuery(dataLayers[i]).is(":checked")) {
+                        paramLayer.prop("checked", false);
+                        paramLayer.parent().hide();
+                    } else {
+                        paramLayer.parent().show();
+                    }
+                }
+            }
+        },
+
+        /**
          * Checks to see if the layer hiding behind the id is valid for layer union.
          * It performs checks to see if the layer is not the same as the selected layer,
          * the layer is of type 'analysis', and if the layer has the same feature fields
@@ -1323,14 +1376,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var columnsContainer = me.mainPanel.find('div.analyse-columns-container');
             if (me.id_prefix + 'aggregate' === method) {
                 columnsContainer.empty();
-                me._createColumnsDropdown(columnsContainer);
+                // me._createColumnsDropdown(columnsContainer);
+                me._createColumnsSelector(columnsContainer, me.loc.params.aggreLabel);
             } else if (me.id_prefix + 'aggregateText' === method) {
                 // nop
             } else if (me.id_prefix + 'aggregateNumeric' === method) {
                 // nop
             } else {
                 columnsContainer.empty();
-                me._createColumnsSelector(columnsContainer);
+                me._createColumnsSelector(columnsContainer, me.loc.params.label);
             }
 
             me._addExtraParameters(contentPanel.parent(), method);
@@ -1377,6 +1431,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
             dropdown.change(aggreMagic());
             columnsContainer.append(dropdown);
+
 
         },
         /**
@@ -1493,7 +1548,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // union
             var unionLayerId = container.find('input[name=union]:checked').val();
             unionLayerId = unionLayerId && unionLayerId.replace((this.id_prefix + 'layer_'), '');
-            // intersect
+            // clip, intersect
             var intersectLayerId = container.find('input[name=intersect]:checked').val();
             intersectLayerId = intersectLayerId && intersectLayerId.replace((this.id_prefix + 'layer_'), '');
             var intersectFeatures = undefined;
@@ -1524,6 +1579,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 'union': {
                     methodParams: {
                         layerId: unionLayerId
+                    }
+                },
+                'clip': {
+                    methodParams: {
+                        layerId: intersectLayerId,
+                        features: intersectFeatures
                     }
                 },
                 'intersect': {
@@ -1564,6 +1625,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (me._checkSelections(selections)) {
 
                 var data = {};
+
+                // Sorry - use intersect method for clip
+                if (selections.method === "clip") {
+                    selections.method = "intersect";
+                    selections.methodParams.operator="clip";
+
+                }
+
                 data.analyse = JSON.stringify(selections);
 
                 var layerId = selections.layerId;
@@ -1577,7 +1646,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     }
                     data.filter1 = JSON.stringify(filterJson);
                 }
-                if (selections.method === "intersect") {
+                if ((selections.method === "intersect")||(selections.method === "clip")) {
                     var intersectLayerId = selections.methodParams.layerId,
                         ilayer = sandbox.findMapLayerFromSelectedMapLayers(intersectLayerId),
                         ifilterJson = this.getFilterJson(intersectLayerId);
@@ -1589,6 +1658,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         }
                         data.filter2 = JSON.stringify(ifilterJson);
                     }
+
                 }
 
                 // Send the data for analysis to the backend

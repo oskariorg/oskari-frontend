@@ -5,7 +5,7 @@ div.layerselector2 div.layer {
   background-color: #ffffff;
   clear: both;
   min-height: 13px; }
-  div.layerselector2 div.layer.odd {
+  div.layerselector2 div.layer:nth-child(even) {
     background-color: #f3f3f3; }
   div.layerselector2 div.layer input {
     float: left;
@@ -71,7 +71,7 @@ div.layerselector2 div.tab-content {
     padding: 10px;
     position: relative; }
     div.layerselector2 div.tab-content div.oskarifield input[type=text] {
-      width: 95%; }
+      width: 90%; }
     div.layerselector2 div.tab-content div.oskarifield .icon-close {
       margin-right: -20px; }
     div.layerselector2 div.tab-content div.oskarifield .field-description {

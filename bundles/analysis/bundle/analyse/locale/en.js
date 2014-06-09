@@ -11,12 +11,19 @@ Oskari.registerLocalization({
             "title": "Analysis",
             "content": {
                 "label": "Data",
+                "drawToolsLabel": "Feature tools",
                 "tooltip": "Add analyse data - push [Add data] button",
+                "drawToolsTooltip": "You can add a new feature for analysis.\nYou can divide a feature into two features by clipping it and after that make analysis for one of them",
                 "features": {
-                    "title": "Draw a feature",
+                    "title": "Add a feature",
                     "buttons": {
                         "cancel": "Cancel",
                         "finish": "Done"
+                    },
+                    "tooltips": {
+                        "point": "Add point",
+                        "line": "Add line",
+                        "area": "Add area"
                     },
                     "modes": {
                         "area": "Area",
@@ -24,12 +31,54 @@ Oskari.registerLocalization({
                         "point": "Point"
                     }
                 },
+                "drawDialog": {
+                    "point": {
+                        "title": "Adding point",
+                        "add": "Add point by clicking the map."
+                    },
+                    "line": {
+                        "title": "Adding line",
+                        "add": "Add a break point on the line by clicking the map. Stop drawing by double clicking."
+                    },
+                    "area": {
+                        "title": "Adding area",
+                        "add": "Add break points to your area polygon by clicking the map. Stop drawing by double clicking. To create holes in polygons, hold down the Alt key."
+                    }
+                },
+                "drawFilter": {
+                    "title": "NOT TRANSLATED",
+                    "buttons": {
+                        "cancel": "NOT TRANSLATED",
+                        "finish": "NOT TRANSLATED"
+                    },
+                    "tooltip": {
+                        "point": "NOT TRANSLATED",
+                        "line": "NOT TRANSLATED",
+                        "edit": "NOT TRANSLATED",
+                        "remove": "NOT TRANSLATED"
+                    },
+                    "dialog": {
+                        "modes": {
+                            "point": {
+                                "title": "NOT TRANSLATED",
+                                "message": "NOT TRANSLATED"
+                            },
+                            "line": {
+                                "title": "NOT TRANSLATED",
+                                "message": "NOT TRANSLATED"
+                            },
+                            "edit": {
+                                "title": "NOT TRANSLATED",
+                                "message": "NOT TRANSLATED"
+                            }
+                        }
+                    }
+                },
                 "search": {
                     "title": "Search places",
                     "resultLink": "Add to analyse"
                 }
             },
-
             "method": {
                 "label": "Method",
                 "tooltip": "Select first data and after that the method",
@@ -49,6 +98,13 @@ Oskari.registerLocalization({
                     "label": "Union",
                     "classForPreview": "union",
                     "tooltip": ""
+/*              TODO: Uncomment this to enable clipping functionality
+                }, {
+                    "id": "oskari_analyse_clip",
+                    "label": "NOT TRANSLATED",
+                    "classForPreview": "clip",
+                    "tooltip": ""
+*/
                 }, {
                     "id": "oskari_analyse_intersect",
                     "label": "Intersect",
@@ -121,6 +177,7 @@ Oskari.registerLocalization({
             },
             "params": {
                 "label": "Selected columns",
+                "aggreLabel": "Aggregate attributes",
                 "tooltip": "",
                 "options": [{
                     "id": "oskari_analyse_all",
@@ -144,7 +201,7 @@ Oskari.registerLocalization({
             "buttons": {
                 "save": "Save",
                 "analyse": "Analyse",
-                "data": "Add data",
+                "data": "Select map layers",
                 "cancel": "Cancel",
                 "ok": "OK"
             },

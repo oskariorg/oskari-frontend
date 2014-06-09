@@ -15,16 +15,25 @@ th {
 }
 
 div.column-selector-placeholder {
-    border-style: none;
-    float: left;
-    opacity: 1.0;
-    margin: 0;
-    padding: 0;
-    right: 0;
-    width: 25px;
-    height: 7px;
-    max-width: 25px;
-    max-height: 7px;
+  border-style: none;
+  float: left;
+  opacity: 1.0;
+  margin-left: 8px;
+  padding: 0;
+  right: 0;
+  width: 200px;
+  height: 30px;
+  max-width: 200px;
+  max-height: 35px;
+}
+
+div.column-selector-title {
+  margin-top: 9px;
+  margin-left: 3px;
+  background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png');
+  background-repeat: no-repeat;
+  background-position: 120px 3px;
+  cursor: pointer;
 }
 
 div.icon-menu {
@@ -43,7 +52,8 @@ div.column-selector {
     position: absolute;
     visibility: hidden;
     background-color: white;
-    margin-top: 7px;
+    margin-top: 5px;
+    margin-left: 5px;
     margin-right: 50px;
     padding: 0;
     border: 1px solid;
@@ -55,17 +65,31 @@ div.column-selector {
         position: absolute;
         top: 5px;
         right: 5px;
-
-
-        ul.column-selector-list {
-            list-style-type: none;
-            padding-right: 30px;
-        }
-
-        label.column-label {
-            padding-left: 5px;
-        }
     }
+
+    ul.column-selector-list {
+        list-style-type: none;
+        padding-right: 30px;
+    }
+
+    label.column-label {
+        padding-left: 5px;
+    }
+
+}
+
+div.tab-tools {
+    height: 34px;
+    position: static;
+}
+
+div.exporter {
+    float: right;
+    text-align: left;
+}
+
+input.exportButton {
+    margin: 2px 10px;
 }
 
 table.oskari-grid {

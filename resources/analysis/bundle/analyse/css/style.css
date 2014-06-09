@@ -63,7 +63,8 @@ div.basic_analyse div.icon-close.analyse-temp-feature {
   display: inline-block;
   cursor: pointer; }
 div.basic_analyse div.toolContainer {
-  margin: 5px; }
+  margin: 5px 15px 5px 5px;
+  display: inline-block; }
   div.basic_analyse div.toolContainer h4 {
     padding: 0; }
   div.basic_analyse div.toolContainer div.tool {
@@ -73,7 +74,8 @@ div.basic_analyse div.toolContainer {
     display: inline-block;
     float: right; }
 div.basic_analyse div.drawFilterContainer {
-  margin: 5px; }
+  margin: 5px;
+  display: inline-block; }
   div.basic_analyse div.drawFilterContainer h4 {
     padding: 0; }
   div.basic_analyse div.drawFilterContainer div.drawFilter {
@@ -89,6 +91,8 @@ div.basic_analyse div.drawFilterContainer {
   div.basic_analyse div.drawFilterContainer div.buttons {
     display: inline-block;
     float: right; }
+div.basic_analyse div.header-icon-info {
+  margin: 10px; }
 
 div.basic_analyse div.form div.field input, div.field select {
   width: 80%;
@@ -188,3 +192,9 @@ div.analyse-filter-popup-content div.filter-option {
     width: 150px; }
   div.analyse-filter-popup-content div.filter-option select.operator, div.analyse-filter-popup-content div.filter-option select.boolean {
     width: 60px; }
+
+div.divmanazerpopup.drawfilterdialog {
+  max-width: 400px; }
+
+div.divmanazerpopup.analyse-draw-dialog {
+  max-width: 280px; }

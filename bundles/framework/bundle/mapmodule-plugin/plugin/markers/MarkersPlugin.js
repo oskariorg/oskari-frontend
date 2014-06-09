@@ -8,6 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
      * @method create called automatically on construction
      * @static
      */
+
     function (conf, state) {
         var me = this;
         this.conf = conf;
@@ -21,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         this._svg = false;
         this._defaultIconUrl = "/Oskari/resources/framework/bundle/mapmodule-plugin/images/marker.png";
         this._prevIconUrl = "";
-        this._preSVGIconUrl ="data:image/svg+xml;base64,";
+        this._preSVGIconUrl = "data:image/svg+xml;base64,";
         this._font = {
             name: 'dot-markers',
             baseIndex: 57344
@@ -38,7 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             "stroke": "#b4b4b4"
         };
         this._localization = null;
-        this.buttonGroup = "markers";
+        this.buttonGroup = "selectiontools";
         this.buttons = null;
         this.dialog = null;
         this._buttonsAdded = false;
@@ -63,6 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         getMapModule: function () {
             return this.mapModule;
         },
+
         /**
          * @method setMapModule
          * Sets the map module
@@ -104,14 +106,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * Interface method for the plugin protocol
          */
         register: function () {
-
+            this.getMapModule().setLayerPlugin('markers', this);
         },
         /**
          * @method unregister
          * Interface method for the plugin protocol
          */
         unregister: function () {
-
+            this.getMapModule().setLayerPlugin('markers', null);
         },
 
         /**
@@ -151,48 +153,45 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     callback: function () {
                         me.enableGfi(false);
                         me._map.events.register('click', me, me._showForm);
-                        var diaLoc = loc.dialog;
-                        var controlButtons = [];
-                        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                        cancelBtn.setTitle(diaLoc.cancel);
-                        cancelBtn.setHandler(function() {
-                            me.stopMarkerAdd()
+                        var diaLoc = loc.dialog,
+                            controlButtons = [],
+                            clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                            cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+
+                        clearBtn.setTitle(loc.buttons.clear);
+                        clearBtn.setHandler(function () {
+                            me.removeMarkers();
+                            me.stopMarkerAdd();
+                            me.enableGfi(true);
+                        });
+                        controlButtons.push(clearBtn);
+                        cancelBtn.setHandler(function () {
+                            me.stopMarkerAdd();
+                            me.enableGfi(true);
                         });
                         cancelBtn.addClass('primary');
                         controlButtons.push(cancelBtn);
-                        me.dialog.show(diaLoc.title,diaLoc.message,controlButtons);
-                        me.dialog.moveTo('#toolbar div.toolrow[tbgroup=default-markers]', 'bottom');
+
+                        me.dialog.show(diaLoc.title, diaLoc.message, controlButtons);
+                        me.mapModule.getMapEl().addClass("cursor-crosshair");
+                        me.dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'bottom');
                     }
-                },
+                }
+                /*,
                 'clear': {
                     iconCls: 'selection-remove',
                     tooltip: loc.buttons.clear,
                     sticky: true,
-                    callback: function () {
+                    callback: function() {
                         me.removeMarkers();
                     }
-                }
+                }*/
             };
 
             // Is SVG supported?
             this._svg = document.implementation.hasFeature('http://www.w3.org/TR/SVG11/feature#Image', '1.1');
 
-            // Create default marker
-            if (typeof Raphael !== "undefined") {
-                var paper = Raphael(-100,-100,100,100);
-                paper.clear();
-
-                // Testing
-                var lines = paper.path("M0 0L99 99 M0 99 L99 0");
-                lines.attr("stroke", "#000");
-
-                var font = paper.getFont(me._font.name);
-                var charIndex = me.getFont().baseIndex+me._defaultData.shape;
-                var size = 100;
-                var color = "#"+me._defaultData.color;
-                paper.print(0,55,String.fromCharCode(charIndex),font,size).attr({"stroke-width": 1, fill: color, "stroke": "#b4b4b4"});
-                this._prevIconUrl = this._preSVGIconUrl+jQuery.base64.encode(paper.toSVG());
-            }
+            // Register marker tools
             this._registerTools();
 
             // Creates markers on the map
@@ -215,7 +214,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
             sandbox.removeRequestHandler('MapModulePlugin.RemoveMarkersRequest', this.requestHandlers.removeMarkersHandler);
             sandbox.removeRequestHandler('MapModulePlugin.AddMarkerRequest', this.requestHandlers.addMarkerHandler);
-            sandbox.unregisterStateful(this.mediator.bundleId);
             sandbox.unregister(this);
             this._map = null;
             this._sandbox = null;
@@ -250,6 +248,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             },
             'SearchClearedEvent': function (event) {
                 this.removeMarkers();
+            },
+            'AfterRearrangeSelectedMapLayerEvent': function (event) {
+                this.raiseMarkerLayer();
             }
         },
 
@@ -267,9 +268,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @private
          */
         _createMapMarkerLayer: function () {
-            var me = this;
-            var sandbox = this._sandbox;
-            var markerLayer = new OpenLayers.Layer.Vector("Markers");
+            var me = this,
+                sandbox = this._sandbox,
+                markerLayer = new OpenLayers.Layer.Vector("Markers");
             this._map.addLayer(markerLayer);
             this.raiseMarkerLayer(markerLayer);
         },
@@ -278,10 +279,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          *
          * @returns {Function}
          */
-        addMapLayerToMap: function() {
-            return function() {
-                this.raiseMarkerLayer();
-            }
+        addMapLayerToMap: function () {
+            var me = this;
+            return function () {
+                me.raiseMarkerLayer();
+            };
         },
 
         /***********************************************************
@@ -301,8 +303,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * Removes all markers from the layer
          */
         removeMarkers: function () {
-            var me = this;
-            var markerLayers = this._map.getLayersByName("Markers");
+            var me = this,
+                markerLayers = this._map.getLayersByName("Markers");
             if (markerLayers !== null && markerLayers !== undefined && markerLayers[0] !== null && markerLayers[0] !== undefined) {
                 markerLayers[0].removeAllFeatures();
             }
@@ -325,20 +327,23 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param e
          * @private
          */
-        _showForm: function(e) {
+        _showForm: function (e) {
             var me = this;
             me.stopMarkerAdd();
-            var lonlat = me._map.getLonLatFromPixel(e.xy);
-            var loc = me.getLocalization().form;
+            var lonlat = me._map.getLonLatFromPixel(e.xy),
+                loc = me.getLocalization().form;
             me.dotForm = Oskari.clazz.create("Oskari.userinterface.component.visualization-form.DotForm", me, loc, me._defaultData);
             var dialog = me.dotForm.getDialog();
             if (dialog) {
                 dialog.close(true);
             }
-            me.dotForm.showForm(jQuery("div.selection-line")[0],{messageEnabled:true},"right");
-            me.dotForm.setSaveHandler(function() {
-                var values = me.dotForm.getValues();
-                var reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+            me.dotForm.showForm(jQuery("div.selection-line")[0], {
+                messageEnabled: true
+            }, "right");
+
+            me.dotForm.setSaveHandler(function () {
+                var values = me.dotForm.getValues(),
+                    reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
                 if (reqBuilder) {
                     var data = {
                         x: lonlat.lon,
@@ -352,17 +357,23 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     me._sandbox.request(me.getName(), request);
                 }
                 me.dotForm.getDialog().close(true);
+                me.enableGfi(true);
+            });
+
+            me.dotForm.setCancelHandler(function() {
+                me.dotForm.getDialog().close();
+                me.enableGfi(true);
             });
         },
 
         /**
          * Stops the marker location selector
          */
-        stopMarkerAdd: function() {
+        stopMarkerAdd: function () {
             var me = this;
             me._map.events.unregister('click', me, me._showForm);
-            me.enableGfi(true);
             if (me.dialog) {
+                me.mapModule.getMapEl().removeClass("cursor-crosshair");
                 me.dialog.close(true);
             }
             jQuery("div.tool.marker-share.selected").removeClass('selected'); // Todo: more elegant way?
@@ -373,7 +384,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param markers
          */
         addMapMarkers: function (markers) {
-            for (var i=0; i<markers.length; i++) {
+            for (var i = 0; i < markers.length; i++) {
                 this.addMapMarker(markers[i]);
             }
         },
@@ -388,16 +399,15 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 size,
                 i;
             // Coordinates are needed
-            if ((typeof markerData.x === "undefined")||(typeof markerData.y === "undefined")) {
+            if ((typeof markerData.x === "undefined") || (typeof markerData.y === "undefined")) {
+                me._sandbox.printWarn("Undefined coordinate in", markerData);
                 return;
             }
-
-//            var offset = new OpenLayers.Pixel(-(size.w / 2), -size.h);
 
             // Image data already available
             var iconSrc = null;
             if (me._svg) {
-                if ((typeof markerData.iconUrl !== "undefined")&&(markerData.iconUrl !== null)) {
+                if ((typeof markerData.iconUrl !== "undefined") && (markerData.iconUrl !== null)) {
                     iconSrc = markerData.iconUrl;
                 } else {
                     // Construct image
@@ -407,33 +417,25 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 iconSrc = me._defaultIconUrl;
             }
 
-            // Testing
-            // iconSrc = this._prevIconUrl;
-
-            // Handling the size parameter
-            if (typeof markerData.size === "number") {
-                size = markerData.size;
-            } else {
-                size = parseInt(markerData.size,10);
-            }
-            if (isNaN(size)) {
-                return;
-            }
+            // Size validity already checked in the constructImage function
+            size = this._getSizeInPixels(markerData.size);
 
             var markerLayers = this._map.getLayersByName("Markers"),
                 point = new OpenLayers.Geometry.Point(markerData.x, markerData.y),
-                newMarker = new OpenLayers.Feature.Vector(point,null,{
+                newMarker = new OpenLayers.Feature.Vector(point, null, {
                     externalGraphic: iconSrc,
-                    graphicWidth: 50+10*size,
-                    graphicHeight: 50+10*size,
+
+                    graphicWidth: size,
+                    graphicHeight: size,
                     fillOpacity: 1,
-                    label: markerData.msg,
+                    label: decodeURIComponent(markerData.msg),
                     fontColor: "$000000",
                     fontSize: "16px",
                     fontFamily: "Arial",
                     fontWeight: "bold",
+
                     labelAlign: "lm",
-                    labelXOffset: 10+2*size,
+                    labelXOffset: 8 + 2 * markerData.size,
                     labelYOffset: 8,
                     labelOutlineColor: "white",
                     labelOutlineWidth: 1
@@ -446,6 +448,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     }
                 }
             }
+
             this._markers.push(markerData);
             markerLayers[0].addFeatures([newMarker]);
             this.raiseMarkerLayer(markerLayers[0]);
@@ -455,7 +458,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
             // Update the state
             me.updateState();
-
         },
 
         /**
@@ -463,17 +465,30 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param marker
          * @returns {*}
          */
-        constructImage: function(marker) {
-            var me = this;
-            var size, color;
-            var iconSrc = me._defaultIconUrl;
+        constructImage: function (marker) {
+            var me = this,
+                size, color,
+                iconSrc = me._defaultIconUrl;
             if (typeof Raphael !== "undefined") {
-                var paper = Raphael(-100,-100,100,100);
+                // Handling the size parameter
+                if (typeof marker.size !== "number") {
+                    marker.size = parseInt(marker.size, 10);
+                }
+                size = marker.size;
+                if (isNaN(size)) {
+                    return;
+                }
+                size = this._getSizeInPixels(size);
+                var paper = Raphael(0, 0, size, size);
                 paper.clear();
 
+                // Test lines for pixel level accuracy
+                // var lines = paper.path("M0 0L"+size+" "+size+" M0 "+size+" L"+size+" 0");
+                // lines.attr("stroke", "#000");
+
                 // Construct marker parameters
-                var font = paper.getFont(me._font.name);
-                var charIndex = me.getFont().baseIndex;
+                var font = paper.getFont(me._font.name),
+                    charIndex = me.getFont().baseIndex;
                 if (typeof marker.shape === "number") {
                     charIndex += marker.shape;
                 } else {
@@ -484,24 +499,35 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                         charIndex += me._defaultData.shape;
                     }
                 }
-                size = 100;
+
                 if (typeof marker.color === "string") {
-                    color = "#"+marker.color;
+                    color = "#" + marker.color;
                 } else {
                     color = me._defaultData.color;
                 }
 
                 // Create image
-                paper.print(0,55,String.fromCharCode(charIndex),font,size).attr({
+                paper.print(0, 55 * size / 100, String.fromCharCode(charIndex), font, size).attr({
                     "fill": color,
                     "stroke_width": me._strokeStyle.stroke_width,
                     "stroke": me._strokeStyle.stroke
                 });
 
                 // Base64 encoding for cross-browser compatibility
-                iconSrc = me._preSVGIconUrl+jQuery.base64.encode(paper.toSVG());
+                iconSrc = me._preSVGIconUrl + jQuery.base64.encode(paper.toSVG());
             }
             return iconSrc;
+        },
+
+        /**
+         * Converts from abstract marker size to real pixel size
+         *
+         * @param size Abstract size
+         * @returns {number} Size in pixels
+         * @private
+         */
+        _getSizeInPixels: function (size) {
+            return 40 + 10 * size;
         },
 
         /**
@@ -509,7 +535,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          *
          * @param markerLayer
          */
-        raiseMarkerLayer: function(markerLayer) {
+        raiseMarkerLayer: function (markerLayer) {
             var layer = null;
             if (typeof markerLayer !== "undefined") {
                 layer = markerLayer;
@@ -525,20 +551,20 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          *
          * @method registerTool
          */
-        _registerTools: function() {
+        _registerTools: function () {
             var me = this;
             // Already registered?
             if (me._buttonsAdded) {
                 return;
             }
-            var loc = this.getLocalization();
-            var sandbox = this.getSandbox();
-            var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+            var loc = this.getLocalization(),
+                sandbox = this.getSandbox(),
+                reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
             if (typeof reqBuilder === "undefined") {
                 return;
             }
-            var request;
-            var tool;
+            var request,
+                tool;
             for (tool in me.buttons) {
                 if (me.buttons.hasOwnProperty(tool)) {
                     if (reqBuilder) {
@@ -558,10 +584,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @method hex
          * hexadecimal color value e.g. '#00ff99'
          */
-        hexToRgb: function(hex) {
+        hexToRgb: function (hex) {
             // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
             var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-            hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+            hex = hex.replace(shorthandRegex, function (m, r, g, b) {
                 return r + r + g + g + b + b;
             });
 
@@ -585,7 +611,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
             var parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/),
                 j;
-            delete (parts[0]);
+            delete(parts[0]);
             for (j = 1; j <= 3; ++j) {
                 parts[j] = parseInt(parts[j], 10).toString(16);
                 if (parts[j].length === 1) {
@@ -600,9 +626,30 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * Enables/disables the gfi functionality
          * @param {Boolean} blnEnable true to enable, false to disable
          */
-        enableGfi : function(blnEnable) {
+        enableGfi: function (blnEnable) {
+            var sandbox = this._sandbox,
+                evtB = sandbox.getEventBuilder(
+                    'DrawFilterPlugin.SelectedDrawingEvent'),
+                gfiReqBuilder = sandbox.getRequestBuilder(
+                    'MapModulePlugin.GetFeatureInfoActivationRequest'),
+                hiReqBuilder = sandbox.getRequestBuilder(
+                    'WfsLayerPlugin.ActivateHighlightRequest');
+
+            // notify components to reset any saved "selected place" data
+            if (evtB) sandbox.notifyAll(evtB());
+
+            // enable or disable gfi requests
+            if (gfiReqBuilder) {
+                sandbox.request(this.pluginName, gfiReqBuilder(blnEnable));
+            }
+
+            // enable or disable wfs highlight
+            if (hiReqBuilder) {
+                sandbox.request(this.pluginName, hiReqBuilder(blnEnable));
+            }
+
             var gfiReqBuilder = this._sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
-            if(gfiReqBuilder) {
+            if (gfiReqBuilder) {
                 this._sandbox.request(this, gfiReqBuilder(blnEnable));
             }
         },
@@ -617,7 +664,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          *      JSON object for complete data depending on localization
          *      structure and if parameter key is given
          */
-        getLocalization: function(key) {
+        getLocalization: function (key) {
             if (!this._localization) {
                 this._localization = this.getMapModule().getLocalization('plugin', true)[this.__name];
             }
@@ -632,7 +679,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          *
          * Returns sandbox for binding to Oskari app functionality
          */
-        getSandbox : function() {
+        getSandbox: function () {
             return this._sandbox;
         },
 
@@ -643,8 +690,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         setState: function (state) {
             this.state = state;
-            for (var i=0; i<this.state.markers.length; i++) {
-                this.addMapMarker(this.state.markers[i]);
+            if (this.state && this.state.markers) {
+                this.addMapMarkers(this.state.markers);
             }
         },
         /**
@@ -653,23 +700,23 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         getStateParameters: function () {
             var state = this.getState();
-            if(!state || !state.markers) {
+            if (!state || !state.markers) {
                 return "";
             }
 
-            var FIELD_SEPARATOR = "|";
-            var MARKER_SEPARATOR = "___";
-            var markerParams = [];
-            _.each(state.markers, function(marker) {
+            var FIELD_SEPARATOR = "|",
+                MARKER_SEPARATOR = "___",
+                markerParams = [];
+            _.each(state.markers, function (marker) {
                 var str = marker.shape + FIELD_SEPARATOR +
-                        marker.size + FIELD_SEPARATOR +
-                        marker.color + FIELD_SEPARATOR +
-                        marker.x + "_" + marker.y + FIELD_SEPARATOR +
-                        marker.msg;
+                    marker.size + FIELD_SEPARATOR +
+                    marker.color + FIELD_SEPARATOR +
+                    marker.x + "_" + marker.y + FIELD_SEPARATOR +
+                    encodeURIComponent(marker.msg);
                 markerParams.push(str);
             });
-            if(markerParams.length > 0) {
-                 //markers=shape|size|hexcolor|x_y|User input text___shape|size|hexcolor|x_y|input 2";
+            if (markerParams.length > 0) {
+                //markers=shape|size|hexcolor|x_y|User input text___shape|size|hexcolor|x_y|input 2";
                 return "&markers=" + markerParams.join(MARKER_SEPARATOR);
             }
             return "";
@@ -687,12 +734,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         /**
          *  Updates the bundle state.
          */
-        updateState: function() {
-            if ((typeof this.state === "undefined")||(this.state === null)) {
+        updateState: function () {
+            if ((typeof this.state === "undefined") || (this.state === null)) {
                 this.state = {};
             }
             this.state.markers = [];
-            for (var i=0; i<this._markers.length; i++) {
+            for (var i = 0; i < this._markers.length; i++) {
                 this.state.markers.push(this._markers[i]);
             }
         },
@@ -713,7 +760,17 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         getIcon: function () {
             return this._prevIconUrl;
+        },
+        /**
+         * @method getOLMapLayers
+         * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
+         * @param {Oskari.mapframework.domain.WmsLayer} layer
+         * @return null
+         */
+        getOLMapLayers: function (layer) {
+            return null;
         }
+
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}

@@ -1,6 +1,12 @@
 define([
         'text!_bundle/templates/adminTypeSelectTemplate.html',
         'text!_bundle/templates/adminLayerSettingsTemplate.html',
+
+        'text!_bundle/templates/wmsLayerSettingsTemplateHeader.html',
+        'text!_bundle/templates/wmsLayerSettingsTemplateFooter.html',
+        'text!_bundle/templates/wmtsLayerSettingsTemplateHeader.html',
+        'text!_bundle/templates/wmtsLayerSettingsTemplateFooter.html',
+
         'text!_bundle/templates/adminGroupSettingsTemplate.html',
         'text!_bundle/templates/group/subLayerTemplate.html',
         'text!_bundle/templates/capabilitiesTemplate.html',
@@ -10,6 +16,12 @@ define([
     function (
         TypeSelectTemplate,
         LayerSettingsTemplate,
+
+        LayerSettingsTemplateWMSHeader,
+        LayerSettingsTemplateWMSFooter,
+        LayerSettingsTemplateWMTSHeader,
+        LayerSettingsTemplateWMTSFooter,
+
         GroupSettingsTemplate,
         SubLayerTemplate,
         CapabilitiesTemplate,
@@ -65,6 +77,20 @@ define([
                 this.modelObj = layerModel;
                 this.typeSelectTemplate = _.template(TypeSelectTemplate);
                 this.layerTemplate = _.template(LayerSettingsTemplate);
+
+                this.supportedTypes = [
+                    {id : "wmslayer", localeKey : "wms"},
+                    {id : "wmtslayer", localeKey : "wmts"}
+                ];
+                this.layerTemplateHeader = {
+                    "wmslayer" : _.template(LayerSettingsTemplateWMSHeader),
+                    "wmtslayer" : _.template(LayerSettingsTemplateWMTSHeader)
+                };
+                this.layerTemplateFooter = {
+//                    "wmslayer" : _.template(LayerSettingsTemplateWMSFooter),
+                    "wmtslayer" : _.template(LayerSettingsTemplateWMTSFooter)
+                };
+
                 this.groupTemplate = _.template(GroupSettingsTemplate);
                 this.subLayerTemplate = _.template(SubLayerTemplate);
                 this.capabilitiesTemplate = _.template(CapabilitiesTemplate);
@@ -76,6 +102,7 @@ define([
                     this.listenTo(this.model, 'change', this.render);
                     //this.model.on('change', this.render, this);
                 }
+
 
                 this.render();
             },
@@ -108,12 +135,16 @@ define([
                     } else if (me.model.isLayerOfType('WMS')) {
                         me.$el.empty();
                         me.createLayerForm();
+                    } else if (me.model.isLayerOfType('WMTS')) {
+                        me.$el.empty();
+                        me.createLayerForm();
                     }
                 } else {
                     // otherwise create a new layer
                     // add html template
                     me.$el.html(me.typeSelectTemplate({
                         model: me.model,
+                        supportedTypes : me.supportedTypes,
                         localization: me.options.instance.getLocalization('admin')
                     }));
                 }
@@ -140,32 +171,38 @@ define([
                 jQuery('.admin-add-group').remove();
                 jQuery('.layer-type-wrapper').remove();
 
-
+                var layerType = e.currentTarget.value;
                 // Create a normal layer
-                if (e.currentTarget.value === 'wmslayer') {
-                    this.createLayerForm(e);
-                } else if (e.currentTarget.value === 'base' || e.currentTarget.value === 'groupMap') {
+                if (layerType === 'wmslayer') {
+                    this.createLayerForm(layerType);
+                } else if (layerType === 'wmtslayer') {
+                    this.createLayerForm(layerType);
+                } else if (layerType === 'base' || layerType === 'groupMap') {
                     // Create a base or a group layer
-                    var groupTitle = (e.currentTarget.value === 'base' ? 'baseName' : 'groupName');
+                    var groupTitle = (layerType === 'base' ? 'baseName' : 'groupName');
 
                     this.createGroupForm(groupTitle, e);
                 }
             },
 
-            createLayerForm: function (e) {
+            createLayerForm: function (layerType) {
                 var me = this,
                     supportedLanguages = Oskari.getSupportedLanguages(),
                     opacity = 100,
                     styles = [];
                 if (!me.model) {
-                    me.model = this._createNewModel('wmslayer');
+                    me.model = this._createNewModel(layerType);
                     this.listenTo(this.model, 'change', this.render);
                 }
+                // make sure we have correct layer type (from model)
+                layerType = me.model.getLayerType() + 'layer';
 
                 // This propably isn't the best way to get reference to inspire themes
                 var inspireGroups = this.instance.models.inspire.getGroupTitles();
                 me.$el.append(me.layerTemplate({
                     model: me.model,
+                    header : me.layerTemplateHeader[layerType],
+                    footer : me.layerTemplateFooter[layerType],
                     instance: me.options.instance,
                     inspireThemes: inspireGroups,
                     isSubLayer: me.options.baseLayerId,
@@ -203,7 +240,10 @@ define([
                         'type': type
                     });
                 } else {
-                    // only supporting WMS for now
+                    if(!type) {
+                        // if type is not defined, default to wms
+                        type = 'wmslayer';
+                    }
                     layer = mapLayerService.createLayerTypeInstance(type);
                 }
                 return new this.modelObj(layer);
@@ -349,7 +389,7 @@ define([
                 data.version = (wmsVersion !== "") ? wmsVersion : form.find('#add-layer-interface-version > option').first().val();
 
                 // base and group are always of type wmslayer
-                data.layerType = 'wmslayer';
+                data.layerType = me.model.getLayerType() + 'layer';
                 if (me.model.getId() !== null && me.model.getId() !== undefined) {
                     data.layer_id = me.model.getId();
                 }
@@ -363,15 +403,14 @@ define([
                     data['title_' + lang] = this.value;
                 });
 
-                // type can be either wmslayer, base or groupMap
-                data.type = form.find('#add-layer-type').val() || 'wmslayer';
-                data.wmsName = form.find('#add-layer-wms-id').val();
-                data.wmsUrl = form.find('#add-layer-wms-url').val();
-                if (data.wmsUrl != me.model.getWmsUrls().join() ||
-                    data.wmsName != me.model.getWmsName()) {
+                data.layerName = form.find('#add-layer-layerName').val();
+                data.layerUrl = form.find('#add-layer-url').val();
+                if (data.layerUrl != me.model.getLayerUrls().join() ||
+                    data.layerName != me.model.getLayerName()) {
                     var confirmMsg = me.instance.getLocalization('admin').confirmResourceKeyChange;
                     if (me.model.getId() && !confirm(confirmMsg)) {
                         // existing layer/cancel!!
+                        return;
                     }
                 }
 
@@ -385,9 +424,18 @@ define([
                 data.legendImage = form.find('#add-layer-legendImage').val();
                 data.inspireTheme = form.find('#add-layer-inspire-theme').val();
                 data.metadataId = form.find('#add-layer-datauuid').val();
-                data.xslt = form.find('#add-layer-xslt').val();
+
+                // layer type specific
+                // TODO: maybe something more elegant?
+                if(data.layerType === 'wmslayer') {
+                    data.xslt = form.find('#add-layer-xslt').val();
+                    data.gfiType = form.find('#add-layer-responsetype').val();
+                }
+                else if(data.layerType === 'wmtslayer') {
+                    data.matrixSetId = form.find('#add-layer-matrixSetId').val();
+                    data.matrixSet = form.find('#add-layer-matrixSet').val();
+                }
                 data.gfiContent = form.find('#add-layer-gfi-content').val();
-                data.gfiType = form.find('#add-layer-responsetype').val();
 
                 data.realtime = form.find('#add-layer-realtime').is(':checked');
                 data.refreshRate = form.find('#add-layer-refreshrate').val();
@@ -604,9 +652,10 @@ define([
                 e.stopPropagation();
 
                 var serviceURL = form.find('#add-layer-interface').val();
+                var layerType = form.find('#add-layer-layertype').val();
 
                 me.model.set({
-                    "_wmsUrls": [serviceURL]
+                    "_layerUrls": [serviceURL]
                 }, {
                     silent: true
                 });
@@ -614,17 +663,12 @@ define([
                 jQuery.ajax({
                     type: "POST",
                     data: {
-                        wmsurl: serviceURL
-                    },
-                    dataType: 'json',
-                    beforeSend: function (x) {
-                        if (x && x.overrideMimeType) {
-                            x.overrideMimeType("application/j-son;charset=UTF-8");
-                        }
+                        url: serviceURL,
+                        type : layerType
                     },
                     url: baseUrl + "action_route=GetWSCapabilities",
                     success: function (resp) {
-                        me.model.setCapabilitiesResponse(resp);
+                        me.__capabilitiesResponseHandler(layerType, resp);
                     },
                     error: function (jqXHR, textStatus) {
                         if (jqXHR.status !== 0) {
@@ -632,6 +676,23 @@ define([
                         }
                     }
                 });
+            },
+            /**
+             * Acts on capabilities response based on layer type
+             * @param  {String} layerType 'wmslayer'/'wmtslayer'
+             * @param  {String} response  GetWSCapabilities response
+             */
+            __capabilitiesResponseHandler : function(layerType, response) {
+                var me = this;
+                if(layerType === 'wmslayer') {
+                    me.model.setCapabilitiesResponse(response);
+                }
+                else if(layerType === 'wmtslayer') {
+                    var format = new OpenLayers.Format.WMTSCapabilities();
+                    var caps = format.read(response);
+                    me.model.setOriginalMatrixSetData(caps);
+                    me.model.change();
+                }
             },
             handleCapabilitiesSelection: function (e) {
                 var me = this,

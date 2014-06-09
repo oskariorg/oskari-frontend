@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "DivManazer",
     "value": {
@@ -103,6 +104,18 @@ Oskari.registerLocalization({
                     "cancel": "Cancel"
                 }
             }
+        },
+        "Grid": {
+            "columnSelector" : {
+                "title": "NOT TRANSLATED",
+                "tooltip": "NOT TRANSLATED"
+            },
+            "export": {
+                "title": "NOT TRANSLATED",
+                "csv": "CSV",
+                "excel": "Excel"
+            }
         }
     }
-});
+}
+);

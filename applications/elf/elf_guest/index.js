@@ -171,80 +171,51 @@ jQuery(document).ready(function() {
           
         }
         
-        /* TEMPORARY: */
-        /*
-         * @class Oskari.mapframework.bundle.mapwfs.domain.WfsLayerModelBuilder
-         * JSON-parsing for wfs layer
-         */
-        Oskari.clazz.category(
-            'Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder','locale-hacks',{
-            	 parseLayerData: function(layer, mapLayerJson, maplayerService) {
-            	        var me = this;
-            	        var toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
+        /* TEMPORARY */
+        /* Let's fix some legacy assumptions */
+        Oskari.clazz.category('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore','xxx', {
 
-            	        if(layer.isLayerOfType("WFS")) {
-            	            var locOwnStyle = (this.localization||{})['own-style']||'';
-            	            var toolOwnStyle = toolBuilder();
-            	            toolOwnStyle.setName("ownStyle");
-            	            toolOwnStyle.setTitle(locOwnStyle);
-            	            toolOwnStyle.setTooltip(locOwnStyle);
-            	            toolOwnStyle.setCallback(function() {
-            	                me.sandbox.postRequestByName('ShowOwnStyleRequest',[layer.getId()]);
-            	            });
-            	            layer.addTool(toolOwnStyle);
-            	        }
-            	        
-            	        // add object data tool
-            	        // TODO: should propably be configurable -> maybe through wfslayerplugin conf
-            	        // so we can disable if feature data bundle is not loaded
-            	        var locObjData = (this.localization||{})['object-data']||'';
-            	        var toolObjData = toolBuilder();
-            	        toolObjData.setName("objectData");
-            	        toolObjData.setTitle(locObjData);
-            	        toolObjData.setTooltip(locObjData);
-            	        toolObjData.setCallback(function() {
-            	            me.sandbox.postRequestByName('ShowFeatureDataRequest',[layer.getId()]);
-            	        });
-            	        layer.addTool(toolObjData);
-
-            	        // create a default style
-            	        var locDefaultStyle = (this.localization||{})['default-style']||'';
-            	        var defaultStyle = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-            	        defaultStyle.setName("default");
-            	        defaultStyle.setTitle(locDefaultStyle);
-            	        defaultStyle.setLegend("");
-
-            	        // check if default style comes and give localization for it if found
-            	        if(mapLayerJson.styles && mapLayerJson.styles.length > 0) {
-            	            for(var i = 0; i < mapLayerJson.styles.length; i++) {
-            	                if(mapLayerJson.styles[i].name === "default") {
-            	                    mapLayerJson.styles[i].title = locDefaultStyle;
-            	                    break;
-            	                }
-            	            }
-            	        }
-
-            	        // default style for WFS is given as last parameter
-            	        maplayerService.populateStyles(layer, mapLayerJson, defaultStyle);
-            	    }
-            });
-
-        /* TEMPORARY: */
-        /* Let's load WMTS EU WFS stuff from JSON */
-        var wfsLayerSources = appConfigElf.conf.WFS;
+            /**
+             * @method connect
+             *
+             * 'connects' to store (does not but might)
+             */
+            connect: function () {
+                var url = this.url;
+                this.protocols.categories = new OpenLayers.Protocol.WFS({
+                    version: '1.1.0',
+                    srsName: Oskari.getSandbox().getMap().getSrsName(),
+                    featureType: 'categories',
+                    featureNS: this.featureNS,
+                    url: url
+                });
+                // myplaces uses version 1.0.0 since with 1.1.0 geoserver connects
+                // multilines to one continuous line on save
+                var myPlacesProps = {
+                    version: '1.0.0',
+                    srsName: Oskari.getSandbox().getMap().getSrsName(),
+                    geometryName: 'geometry',
+                    featureType: 'my_places',
+                    featureNS: this.featureNS,
+                    url: url
+                };
+                if (this.options.maxFeatures) {
+                    myPlacesProps.maxFeatures = this.options.maxFeatures;
+                }
+                this.protocols.my_places = new OpenLayers.Protocol.WFS(myPlacesProps);
+            }
+        });
         
-        if( wfsLayerSources ) {
-        	 var wlen = wfsLayerSources.length;
-
-             for(var w = 0; w < wlen; w++) {
-               var wobj = wfsLayerSources[w]
-        	
-               var wfsLayerDef = layerService.createMapLayer( wobj );
-               layerService.addLayer(wfsLayerDef);
-             }
-        
-        }
-        
+        /* TEMPORARY */
+        /* force geodesic until fix is available in trunk */
+        var mapModule = Oskari.getSandbox().findRegisteredModuleInstance("MainMapModule"),
+        controlsPlugin = mapModule.getPluginInstance('ControlsPlugin');
+        if( controlsPlugin && controlsPlugin._measureControls && controlsPlugin._measureControls.area ) {
+    		controlsPlugin._measureControls.area.geodesic = true;
+    	}
+    	if( controlsPlugin && controlsPlugin._measureControls && controlsPlugin._measureControls.line ) {
+    		controlsPlugin._measureControls.line.geodesic = true;
+    	}
 
     }
 

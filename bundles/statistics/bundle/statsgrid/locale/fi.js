@@ -13,6 +13,7 @@ Oskari.registerLocalization({
         },
         "tab": {
             "title": "Indikaattorit",
+            "description": "Omat indikaattorit",
             "grid": {
                 "name": "Otsikko",
                 "description": "Kuvaus",
@@ -124,6 +125,8 @@ Oskari.registerLocalization({
         "showSelected": "Näytä vain valitut alueet taulukossa",
         "noMatch": "Indikaattoria ei löytynyt",
         "selectIndicator": "Valitse indikaattori",
+        "noDataSource": "Tietolähdettä ei löytynyt",
+        "selectDataSource": "Valitse tietolähde",
         "filterTitle": "Suodata sarakkeen arvoja",
         "indicatorFilterDesc": "Suodattamalla halutut tilastoyksiköt korostuvat taulukossa. Voit asettaa suodatuksen jokaiselle sarakkeelle erikseen.",
         "filterIndicator": "Muuttuja:",

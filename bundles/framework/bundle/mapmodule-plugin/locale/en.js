@@ -69,6 +69,38 @@ Oskari.registerLocalization(
                     "line": "Measure a distance",
                     "area": "Measure an area"
                 }
+            },
+            "MarkersPlugin": {
+                "buttons": {
+                    "add": "NOT TRANSLATED",
+                    "clear": "NOT TRANSLATED"
+                },
+                "form": {
+                    "title": "NOT TRANSLATED",
+                    "tooltip": "",
+                    "symbol": {
+                        "label": "NOT TRANSLATED"
+                    },
+                    "size": {
+                        "label": "NOT TRANSLATED"
+                    },
+                    "color": {
+                        "label": "NOT TRANSLATED",
+                        "labelOr": "NOT TRANSLATED",
+                        "labelCustom": "NOT TRANSLATED"
+                    },
+                    "preview": {
+                        "label": "NOT TRANSLATED"
+                    },
+                    "message": {
+                        "label": "NOT TRANSLATED",
+                        "hint": "NOT TRANSLATED"
+                    }
+                },
+                "dialog": {
+                    "title": "NOT TRANSLATED",
+                    "message": "NOT TRANSLATED"
+                }
             }
         }
     }

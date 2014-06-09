@@ -7,8 +7,8 @@ Oskari.registerLocalization(
         "desc": "",
         "layer": {
             "style": "Style",
-            "show": "Show.",
-            "hide": "Hide.",
+            "show": "Show",
+            "hide": "Hide",
             "hidden": "The map layer has been temporarily hidden.",
             "out-of-scale": "The map layer cannot be shown at this scale level.",
             "move-to-scale": "Please move to a suitable scale level.",
@@ -19,27 +19,27 @@ Oskari.registerLocalization(
             "rights": {
                 "notavailable": "Publication prohibited.",
                 "guest": "Please log in to publish the map layer in an embedded map.",
-                "loggedin": "Publication permitted.",
+                "loggedin": "Publication permitted",
                 "official": "Publication permitted only for use by authorities.",
                 "need-login": "You need to log in to publish the map level in an embedded map.",
                 "can_be_published_by_provider": {
-                    "label": "Publication permitted as a data provider.",
+                    "label": "Publication permitted as a data provider",
                     "tooltip": "Only the data provider can publish the map layer in an embedded map.  If you are a data provider, please contact the support service of Paikkatietoikkuna."
                 },
                 "can_be_published": {
-                    "label": "Publication permitted.",
+                    "label": "Publication permitted",
                     "tooltip": "The map layer can be published in an embedded map. The limit of the usage is not limited."
                 },
                 "can_be_published_map_user": {
-                    "label": "Publication permitted.",
+                    "label": "Publication permitted",
                     "tooltip": "The map layer can be published in an embedded map. The limit of the usage may be limited."
                 },
                 "no_publication_permission": {
-                    "label": "Publication prohibited.",
+                    "label": "Publication prohibited",
                     "tooltip": "The map layer cannot be published in an embedded map. The data provider has not granted permission to that."
                 },
                 "can_be_published_by_authority": {
-                    "label": "Publication permitted.",
+                    "label": "Publication permitted",
                     "tooltip": "The map layer can be published in an embedded map. The limit of the usage is not limited."
                 }
             },

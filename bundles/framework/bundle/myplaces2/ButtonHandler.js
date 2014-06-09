@@ -114,11 +114,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                 tool,
                 measureTool;
             sandbox.register(me);
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
-                }
-            }
 
             // request toolbar to add buttons
             var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
@@ -159,6 +154,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             if (!user.isLoggedIn()) {
                 // disable toolbar buttons for guests
                 this.disableButtons();
+            } else {
+                // logged in user -> listen to events as normal
+                for (p in me.eventHandlers) {
+                    if (me.eventHandlers.hasOwnProperty(p)) {
+                        sandbox.registerForEventByName(me, p);
+                    }
+                }
             }
         },
         /**

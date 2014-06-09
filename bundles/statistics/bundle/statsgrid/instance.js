@@ -62,14 +62,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             userIndicatorsService.init();
             this.userIndicatorsService = userIndicatorsService;
 
-            if (sandbox.getUser().isLoggedIn()) {
-                var userIndicatorsTab = Oskari.clazz.create(
-                    'Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
-                    this, locale.tab
-                );
-                this.userIndicatorsTab = userIndicatorsTab;
-            }
-
             // Register stats plugin for map which creates
             // - the indicator selection UI (unless 'published' param in the conf is true)
             // - the grid.
@@ -111,6 +103,19 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             mapModule.registerPlugin(classifyPlugin);
             mapModule.startPlugin(classifyPlugin);
             this.classifyPlugin = classifyPlugin;
+
+            var dataSourceRequestHandler = Oskari.clazz.create(
+                'Oskari.statistics.bundle.statsgrid.request.DataSourceRequestHandler',
+                this.gridPlugin);
+            sandbox.addRequestHandler('StatsGrid.AddDataSourceRequest', dataSourceRequestHandler);
+
+            if (sandbox.getUser().isLoggedIn()) {
+                var userIndicatorsTab = Oskari.clazz.create(
+                    'Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
+                    this, locale.tab
+                );
+                this.userIndicatorsTab = userIndicatorsTab;
+            }
 
             this.setState(this.state);
             this._enableTile();

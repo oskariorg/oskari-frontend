@@ -43,6 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
          * layer.setWmtsLayerDef(mapLayerJson.tileLayerData);
          */
 
+        layer.setOriginalMatrixSetData(mapLayerJson.tileMatrixSetData);
         layer.setFeatureInfoEnabled(true);
         if (mapLayerJson.tileMatrixSetData && mapLayerJson.tileLayerData) {
             /* ver 2 */
@@ -51,10 +52,10 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
         } else if (mapLayerJson.tileMatrixSetData && mapLayerJson.tileMatrixSetId) {
             /* ver 1 */
             var tileMatrixSetId = mapLayerJson.tileMatrixSetId;
+            layer.setWmtsMatrixSetId(tileMatrixSetId);
             if (mapLayerJson.tileMatrixSetData.contents && mapLayerJson.tileMatrixSetData.contents.tileMatrixSets) {
                 var tileMatrixSet = mapLayerJson.tileMatrixSetData.contents.tileMatrixSets[tileMatrixSetId];
                 layer.setWmtsMatrixSet(tileMatrixSet);
-
             }
 
 

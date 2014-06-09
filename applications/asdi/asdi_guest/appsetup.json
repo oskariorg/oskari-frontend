@@ -89,7 +89,59 @@
             },
             "Require-Bundle-Instance" : [  ]
         }
-      },    
+      },  
+      {
+			"instanceProps": {},
+			"title": "Haku",
+			"bundleinstancename": "search",
+			"fi": "search",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "search",
+			"metadata": {
+				"Import-Bundle": {
+					"search": {
+						"bundlePath": "../../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+	  },  
+	  {
+			"instanceProps": {},
+			"title": "metadatacatalogue",
+			"bundleinstancename": "metadatacatalogue",
+			"fi": "metadatacatalogue",
+			"sv": "metadatacatalogue",
+			"en": "metadatacatalogue",
+			"bundlename": "metadatacatalogue",
+			"metadata": {
+				"Import-Bundle": {
+					"metadatacatalogue": {
+						"bundlePath": "../../../packages/catalogue/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, 
+		{
+			"instanceProps": {},
+			"title": "metadataflyout",
+			"bundleinstancename": "metadataflyout",
+			"fi": "metadataflyout",
+			"sv": "metadataflyout",
+			"en": "metadataflyout",
+			"bundlename": "metadataflyout",
+			"metadata": {
+				"Import-Bundle": {
+					"metadataflyout": {
+						"bundlePath": "../../../packages/catalogue/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, 
+		
       { 
         "title" : "LayerSelector",
         "en" : "LayerSelector",
@@ -119,16 +171,16 @@
             "Require-Bundle-Instance" : [  ]
         }
       },{ 
-        "title" : "publishedstatehandler",
-        "en" : "publishedstatehandler",
-        "fi" : "publishedstatehandler",
-        "sv" : "publishedstatehandler",
-        "bundleinstancename" : "publishedstatehandler",
-        "bundlename" : "publishedstatehandler",
+        "title" : "statehandler",
+        "en" : "statehandler",
+        "fi" : "statehandler",
+        "sv" : "statehandler",
+        "bundleinstancename" : "statehandler",
+        "bundlename" : "statehandler",
         "instanceProps" : {  },
         "metadata" : { 
             "Import-Bundle" : { 
-                "publishedstatehandler" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+                "statehandler" : { "bundlePath" : "../../../packages/framework/bundle/" } 
             },
             "Require-Bundle-Instance" : [  ]
         }

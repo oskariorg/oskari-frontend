@@ -2,19 +2,18 @@ div.oskariTabs {
     /* tab headers */
      div.tabsHeader {
         clear: both;
-        float: left;
         font-size : 14px;
         color: #3C3C3C;
         font-weight: bold;
+        margin-right: 21px;
         margin-bottom: -1px;
         padding: 0;
-        width: 100%;
+        /*width: 100%;*/
 
         ul {
             display: block;
             margin: 0;
             padding: 0;
-            width: 100%;
             white-space: nowrap;
 
             li {

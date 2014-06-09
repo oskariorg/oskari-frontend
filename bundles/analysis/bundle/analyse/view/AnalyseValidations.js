@@ -82,10 +82,10 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 this._notifyValidationError('Aggregate functions not selected', errorTitle);
                 noErrors = false;
             }
-            if (!selections.methodParams.attribute) {
+         /*   if (!selections.methodParams.attribute) {
                 this._notifyValidationError('Aggregate attribute not selected', errorTitle);
                 noErrors = false;
-            }
+            }  */
             return noErrors;
         },
         /**
@@ -107,6 +107,23 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             this._notifyValidationError('No unions to itself', errorTitle);
             noErrors = false;
         }  */
+            return noErrors;
+        },
+        /**
+         * Validates selections for analysis method clip
+         *
+         * @method _validate_method_clip
+         * @private
+         * @param {Object} selections Selections for output JSON
+         * @param {String} errorTitle Error title to display to the user
+         * @return {Boolean} returns true if no validation errors, false otherwise
+         */
+        _validate_method_clip: function (selections, errorTitle) {
+            var noErrors = true;
+            if (!selections.methodParams.layerId) {
+                this._notifyValidationError('Clipping layer is not selected', errorTitle);
+                noErrors = false;
+            }
             return noErrors;
         },
         /**

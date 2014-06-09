@@ -316,7 +316,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                     container.css('height', (newContainerHeight - resizerHeight).toString() + 'px');
 
                     var tabsContent = jQuery('div.oskari-flyoutcontent.featuredata').find('div.tabsContent'),
-                        newMaxHeight = e.pageY - tabsContent[0].offsetTop - resizerHeight - bottomPadding;
+                        newMaxHeight = e.pageY - tabsContent[0].offsetTop - resizerHeight - bottomPadding,
+                        tabTools = jQuery('div.oskari-flyoutcontent.featuredata').find('div.tab-tools');
+                    if (tabTools.length > 0) {
+                        newMaxHeight = newMaxHeight - tabTools.height();
+                    }
+
                     flyout.find('div.tab-content').css('max-height', newMaxHeight.toString() + 'px');
                 }
             });

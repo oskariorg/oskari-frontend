@@ -32,12 +32,6 @@
                     "mapwmts": {
                         "bundlePath": "../../packages/framework/bundle/"
                     },
-                    "mapwfs": {
-                        "bundlePath": "../../packages/framework/bundle/"
-                    },
-                    "mapstats": {
-                        "bundlePath": "../../packages/framework/bundle/"
-                    },
                     "service-base": {
                         "bundlePath": "../../packages/framework/bundle/"
                     },
@@ -85,6 +79,9 @@
                     },
                     "event-map": {
                         "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "ui-components": {
+                        "bundlePath": "../../packages/framework/bundle/"
                     }
                 },
                 "Require-Bundle-Instance": []
@@ -116,22 +113,6 @@
             "metadata": {
                 "Import-Bundle": {
                     "toolbar": {
-                        "bundlePath": "../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
-            "title": "StateHandler",
-            "bundleinstancename": "statehandler",
-            "fi": "jquery",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "statehandler",
-            "metadata": {
-                "Import-Bundle": {
-                    "statehandler": {
                         "bundlePath": "../../packages/framework/bundle/"
                     }
                 },
@@ -203,39 +184,7 @@
             }
         }, {
             "instanceProps": {},
-            "title": "Omat tiedot",
-            "bundleinstancename": "personaldata",
-            "fi": "personaldata",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "personaldata",
-            "metadata": {
-                "Import-Bundle": {
-                    "personaldata": {
-                        "bundlePath": "../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
-            "title": "Karttajulkaisu",
-            "bundleinstancename": "publisher",
-            "fi": "jquery",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "publisher",
-            "metadata": {
-                "Import-Bundle": {
-                    "publisher": {
-                        "bundlePath": "../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
-            "title": "Koordinaattin�ytt�",
+            "title": "Koordinaattinäyttö",
             "bundleinstancename": "coordinatedisplay",
             "fi": "coordinatedisplay",
             "sv": "?",
@@ -244,38 +193,6 @@
             "metadata": {
                 "Import-Bundle": {
                     "coordinatedisplay": {
-                        "bundlePath": "../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
-            "title": "maplegend",
-            "fi": "maplegend",
-            "bundleinstancename": "maplegend",
-            "sv": "maplegend",
-            "en": "maplegend",
-            "bundlename": "maplegend",
-            "metadata": {
-                "Import-Bundle": {
-                    "maplegend": {
-                        "bundlePath": "../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
-            "title": "UserGuide",
-            "bundleinstancename": "userguide",
-            "fi": "userguide",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "userguide",
-            "metadata": {
-                "Import-Bundle": {
-                    "userguide": {
                         "bundlePath": "../../packages/framework/bundle/"
                     }
                 },
@@ -299,38 +216,6 @@
             }
         }, {
             "instanceProps": {},
-            "title": "Featuredata",
-            "bundleinstancename": "featuredata",
-            "fi": "Kohdetiedot",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "featuredata",
-            "metadata": {
-                "Import-Bundle": {
-                    "featuredata": {
-                        "bundlePath": "../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
-            "title": "Places",
-            "bundleinstancename": "myplaces2",
-            "fi": "Paikat",
-            "sv": "Platser",
-            "en": "Places",
-            "bundlename": "myplaces2",
-            "metadata": {
-                "Import-Bundle": {
-                    "myplaces2": {
-                        "bundlePath": "../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
             "title": "parceltour",
             "fi": "parceltour",
             "bundleinstancename": "parceltour",
@@ -341,22 +226,6 @@
                 "Import-Bundle": {
                     "parceltour": {
                         "bundlePath": "../../packages/parcel/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
-            "title": "backendstatus",
-            "fi": "backendstatus",
-            "bundleinstancename": "backendstatus",
-            "sv": "backendstatus",
-            "en": "backendstatus",
-            "bundlename": "backendstatus",
-            "metadata": {
-                "Import-Bundle": {
-                    "backendstatus": {
-                        "bundlePath": "../../packages/framework/bundle/"
                     }
                 },
                 "Require-Bundle-Instance": []
@@ -378,35 +247,6 @@
             },
             "instanceProps": {}
         }, {
-            "title": "PostProcessor",
-            "fi": "PostProcessor",
-            "sv": "PostProcessor",
-            "en": "PostProcessor",
-            "bundlename": "postprocessor",
-            "bundleinstancename": "postprocessor",
-            "metadata": {
-                "Import-Bundle": {
-                    "postprocessor": {
-                        "bundlePath": "../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            },
-            "instanceProps": {}
-        }, {
-            "bundleinstancename": "statsgrid",
-            "bundlename": "statsgrid",
-            "metadata": {
-                "Import-Bundle": {
-                    "statsgrid": {
-                        "bundlePath": "../../packages/statistics/bundle/"
-                    },
-                    "geostats": {
-                        "bundlePath": "../../packages/libraries/bundle/"
-                    }
-                }
-            }
-        },{
             "title": "Parcel",
             "fi": "Määräala",
             "bundleinstancename": "parcel",
@@ -416,6 +256,9 @@
             "metadata": {
                 "Import-Bundle": {
                     "parcel": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "geometryeditor": {
                         "bundlePath": "../../packages/framework/bundle/"
                     }
                 }
@@ -434,7 +277,8 @@
                     }
                 }
             }
-        }, {
+        },
+        {
             "title": "Parcel Info",
             "fi": "Paikan info",
             "bundleinstancename": "parcelinfo",

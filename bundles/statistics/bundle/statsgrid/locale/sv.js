@@ -13,6 +13,7 @@ Oskari.registerLocalization({
         },
         "tab": {
             "title": "Indikatorer",
+            "description": "Egen indikatorer",
             "grid": {
                 "name": "Titeln",
                 "description": "Beskrivning",
@@ -125,6 +126,8 @@ Oskari.registerLocalization({
         "not_included": "Inte inlcuded",
         "noMatch": "Inga matchade indikatorer",
         "selectIndicator": "Välja en indikator",
+        "noDataSource": "Inga matchade informationskällor",
+        "selectDataSource": "Välja en informationskälla",
         "filterTitle": "Filtrera kolumndata",
         "indicatorFilterDesc": "Filtrerade värdena kommer att väljas i tabellen. Du kan ställa in filtrering separat för varje kolumn.",
         "filterIndicator": "Indikator:",

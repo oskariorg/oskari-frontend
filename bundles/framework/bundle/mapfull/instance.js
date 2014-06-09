@@ -110,8 +110,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
             }
             // startup plugins
             if (me.conf.plugins) {
-                var plugins = this.conf.plugins;
-                for (var i = 0; i < plugins.length; i++) {
+                var plugins = this.conf.plugins,
+                    i;
+                for (i = 0; i < plugins.length; i++) {
                     try {
                         plugins[i].instance = Oskari.clazz.create(plugins[i].id, plugins[i].config, plugins[i].state);
                         module.registerPlugin(plugins[i].instance);
@@ -390,6 +391,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 }
             }
 
+            if (state.plugins) {
+                var plugins = mapmodule.getPluginInstances(),
+                    plugin,
+                    pluginName;
+                for (pluginName in state.plugins) {
+                    // Not finding the plugin is not that uncommon, just move on
+                    plugin = plugins[pluginName];
+                    if (plugin && plugin.setState) {
+                        plugin.setState(state.plugins[pluginName]);
+                    }
+                }
+
+            }
+
         },
         /**
          * @method getState
@@ -401,19 +416,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
             // get applications current state
             var map = this.sandbox.getMap(),
                 selectedLayers = this.sandbox.findAllSelectedMapLayers(),
+                mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 zoom = map.getZoom(),
                 lat = map.getX(),
                 lon = map.getY(),
                 i,
                 layer,
                 layerJson,
-                state = {
+                state = jQuery.extend({
                     north: lon,
                     east: lat,
                     zoom: map.getZoom(),
                     srs: map.getSrsName(),
                     selectedLayers: []
-                };
+                }, mapmodule.getState());
 
             for (i = 0; i < selectedLayers.length; i++) {
                 layer = selectedLayers[i];
@@ -433,7 +449,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 }
                 state.selectedLayers.push(layerJson);
             }
-
             return state;
         },
         /**
