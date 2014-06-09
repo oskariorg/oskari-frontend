@@ -645,7 +645,9 @@ Oskari.clazz
                         resultContainer,
                         cells,
                         titleText,
-                        layers,
+                        metadataIds = [],
+                        layers = [],
+                        newLayers,
                         row,
                         mapLayerService,
                         layerList;
@@ -662,12 +664,23 @@ Oskari.clazz
                     // Add title
                     jQuery(cells[0]).append(titleText);
                     jQuery(cells[0]).addClass(me.resultHeaders[0].prop);
-                    if ((row.id) && (row.id.length > 0)) {
+                    if (row.id instanceof Array) {
+                        metadataIds = row.id;
+                    } else {
+                        metadataIds = [row.id];
+                    }
+
+                    if ((metadataIds)&&(metadataIds.length > 0)) {
                         mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                        layers = mapLayerService.getLayersByMetadataId(row.id);
+                        for (j = 0; j < metadataIds.length; ++j) {
+                            newLayers = mapLayerService.getLayersByMetadataId(metadataIds[j]);
+                            if ((newLayers) && (newLayers.length > 0)) {
+                                layers = layers.concat(newLayers);
+                            }
+                        }
                         layerList = me.templates.layerList.clone();
                         // Add layer links
-                        for (var j = 0; j < layers.length; ++j) {
+                        for (j = 0; j < layers.length; ++j) {
                             me._addLayerLinks(layers[j], layerList);
                         }
                         jQuery(cells[0]).append(layerList);
@@ -679,7 +692,7 @@ Oskari.clazz
                             var rn = 'catalogue.ShowMetadataRequest';
                             me.sandbox.postRequestByName(rn, [
                                 {
-                                    uuid: row.id
+                                    uuid: metadataIds[0]
                                 }
                             ]);
                         });
