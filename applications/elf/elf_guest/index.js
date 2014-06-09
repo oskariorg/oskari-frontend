@@ -268,7 +268,7 @@ jQuery(document).ready(function() {
             }
         },
         data : getAppSetupParams,
-        url : ajaxUrl + 'action_route=GetAppSetup&lang=' + language,
+        url : ajaxUrl + 'action_route=GetAppSetup',
         success : function(app) {
             if(app.startupSequence && app.configuration) {
                 var appSetup = {
