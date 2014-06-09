@@ -114,12 +114,3 @@ div.metadataCatalogueContainer a.showLink {
 div.metadataCatalogueContainer a.modifyLink {
   display: inline-block;
   margin-left: 15px; }
-
-div.metadataCatalogueContainer div.layerInfo {
-  width: 16px;
-  height: 16px;
-  margin-left: 2px;
-  margin-bottom: -3px;
-  display: inline-block;
-}
-

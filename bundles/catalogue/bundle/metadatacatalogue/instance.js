@@ -80,12 +80,11 @@ Oskari.clazz
             resultTable: jQuery('<div class="resultTable"><table class="metadataSearchResult">' + '<thead><tr></tr></thead>' + '<tbody></tbody>' + '</table></div>'),
             resultTableHeader: jQuery('<th><a href="JavaScript:void(0);"></a></th>'),
             resultTableRow: jQuery('<tr class="spacerRow"><td class="spacer"></td></tr><tr class="resultRow">'
-                + '<td></td>' + '<td></td>' + '<td></td>'
+                + '<td></td>' + '<td></td>' + '<td><div class="layerInfo icon-info"></div></td>'
                 + '<td><div class="resultRemove icon-close"></div></td>' + '</tr>'),
             layerList: jQuery('<ul class="layerList"></ul>'),
             layerListItem: jQuery('<li></li>'),
-            layerLink: jQuery('<a href="JavaScript:void(0);" class="layerLink"></a>'),
-            layerInfo: jQuery('<div class="layerInfo icon-info"></div>')
+            layerLink: jQuery('<a href="JavaScript:void(0);" class="layerLink"></a>')
         },
         /**
          * @method getName
@@ -646,9 +645,7 @@ Oskari.clazz
                         resultContainer,
                         cells,
                         titleText,
-                        metadataIds = [],
-                        layers = [],
-                        newLayers,
+                        layers,
                         row,
                         mapLayerService,
                         layerList;
@@ -665,23 +662,12 @@ Oskari.clazz
                     // Add title
                     jQuery(cells[0]).append(titleText);
                     jQuery(cells[0]).addClass(me.resultHeaders[0].prop);
-                    if (row.id instanceof Array) {
-                        metadataIds = row.id;
-                    } else {
-                        metadataIds = [row.id];
-                    }
-
-                    if ((metadataIds)&&(metadataIds.length > 0)) {
+                    if ((row.id) && (row.id.length > 0)) {
                         mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                        for (j = 0; j < metadataIds.length; ++j) {
-                            newLayers = mapLayerService.getLayersByMetadataId(metadataIds[j]);
-                            if ((newLayers) && (newLayers.length > 0)) {
-                                layers = layers.concat(newLayers);
-                            }
-                        }
+                        layers = mapLayerService.getLayersByMetadataId(row.id);
                         layerList = me.templates.layerList.clone();
                         // Add layer links
-                        for (j = 0; j < layers.length; ++j) {
+                        for (var j = 0; j < layers.length; ++j) {
                             me._addLayerLinks(layers[j], layerList);
                         }
                         jQuery(cells[0]).append(layerList);
@@ -689,14 +675,14 @@ Oskari.clazz
                         //jQuery(cells[1]).append("*****");
                         jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
                         jQuery(cells[2]).addClass(me.resultHeaders[2].prop);
-                        /*jQuery(cells[2]).find('div.layerInfo').click(function () {
+                        jQuery(cells[2]).find('div.layerInfo').click(function () {
                             var rn = 'catalogue.ShowMetadataRequest';
                             me.sandbox.postRequestByName(rn, [
                                 {
-                                    uuid: metadataIds[0]
+                                    uuid: row.id
                                 }
                             ]);
-                        });*/
+                        });
                         jQuery(cells[3]).addClass(me.resultHeaders[3].prop);
                         jQuery(cells[3]).find('div.resultRemove').click(function () {
                             jQuery("table.metadataSearchResult tr.res"+i).hide();
@@ -719,8 +705,7 @@ Oskari.clazz
                 builder,
                 request,
                 layerListItem,
-                layerLink,
-                layerInfo;
+                layerLink;
             layerSelected = false;
             selectedLayers = me.sandbox.findAllSelectedMapLayers();
             for (var k = 0; k < selectedLayers.length; ++k) {
@@ -731,9 +716,8 @@ Oskari.clazz
                 }
             }
             layerLink = me.templates.layerLink.clone();
-            layerInfo = me.templates.layerInfo.clone();
-            showText = me.getLocalization("show");
-            hideText = me.getLocalization("hide");
+            showText = me.getLocalization("show"),
+                hideText = me.getLocalization("hide");
 
             // Check if layer is already selected and visible
             if ((layerSelected)&&(layer.isVisible())) {
@@ -742,7 +726,7 @@ Oskari.clazz
                 layerLink.html(showText);
             }
 
-            // Click bindings
+            // Click binding
             layerLink.click(function() {
                 visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
                 // Hide layer
@@ -773,21 +757,10 @@ Oskari.clazz
                     jQuery(this).html(hideText);
                 }
             });
-            layerInfo.click(function () {
-                var rn = 'catalogue.ShowMetadataRequest';
-                me.sandbox.postRequestByName(rn, [
-                    {
-                        uuid: layer.getMetadataIdentifier()
-                    }
-                ]);
-            });
-
-
             layerListItem = me.templates.layerListItem.clone();
             layerListItem.text(layer.getName());
             layerListItem.append("&nbsp;&nbsp;");
             layerListItem.append(layerLink);
-            layerListItem.append(layerInfo);
             layerList.append(layerListItem);
         },
 
