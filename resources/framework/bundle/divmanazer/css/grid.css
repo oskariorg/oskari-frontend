@@ -17,8 +17,7 @@ div.column-selector-placeholder {
   width: 200px;
   height: 30px;
   max-width: 200px;
-  max-height: 35px;
-}
+  max-height: 35px; }
 
 div.column-selector-title {
   margin-top: 9px;
@@ -26,8 +25,7 @@ div.column-selector-title {
   background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png');
   background-repeat: no-repeat;
   background-position: 120px 3px;
-  cursor: pointer;
-}
+  cursor: pointer; }
 
 div.icon-menu {
   position: absolute;
@@ -63,18 +61,15 @@ div.column-selector {
     padding-left: 5px; }
 
 div.tab-tools {
-    height: 34px;
-    position: static;
-}
+  height: 34px;
+  position: static; }
 
 div.exporter {
-    float: right;
-    text-align: left;
-}
+  float: right;
+  text-align: left; }
 
 input.exportButton {
-    margin: 2px 10px;
-}
+  margin: 2px 10px; }
 
 table.oskari-grid td {
   padding: 5px; }
