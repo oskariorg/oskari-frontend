@@ -670,6 +670,9 @@ Oskari.clazz
                         // Optional complementary layers
                         if ((row.uuid)&&(row.uuid.length > 0)) {
                             for (j = 0; j < row.uuid.length; ++j) {
+                                if (row.uuid[j] === row.id) {
+                                    continue;
+                                }
                                 newLayers = mapLayerService.getLayersByMetadataId(row.uuid[j]);
                                 if ((newLayers) && (newLayers.length > 0)) {
                                     layers = layers.concat(newLayers);
