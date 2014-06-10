@@ -107,12 +107,12 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
         }
 
         /* request handler */
-        /*this._requestHandlers['catalogue.ShowMetadataRequest'] =
+        this._requestHandlers['catalogue.ShowMetadataRequest'] =
             Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.request.ShowMetadataRequestHandler', sandbox, this);
 
         sandbox.addRequestHandler('catalogue.ShowMetadataRequest', this._requestHandlers['catalogue.ShowMetadataRequest']);
 
-
+        /*
         var layerSpec = {};
 
         for (p in this.layerSpec) {
@@ -215,8 +215,8 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
             p;
 
         /* request handler cleanup */
-/*        sandbox.removeRequestHandler('catalogue.ShowMetadataRequest', this._requestHandlers['catalogue.ShowMetadataRequest']);
-*/
+        sandbox.removeRequestHandler('catalogue.ShowMetadataRequest', this._requestHandlers['catalogue.ShowMetadataRequest']);
+
         /* sandbox cleanup */
 
         for (p in this.eventHandlers) {
