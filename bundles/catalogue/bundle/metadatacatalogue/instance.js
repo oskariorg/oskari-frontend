@@ -686,6 +686,19 @@ Oskari.clazz
                                 }
                             }
                         }
+                        // Check for duplicates
+                        j = 0;
+                        layer_loop:
+                        while (j < layers.length) {
+                            for (k = 0; k < j; ++k) {
+                                if (layers[k].getId() === layers[j].getId()) {
+                                    layers.splice(j,1);
+                                    continue layer_loop;
+                                }
+                            }
+                            j = j+1;
+                        }
+
                         // Add layer links
                         layerList = me.templates.layerList.clone();
                         for (j = 0; j < layers.length; ++j) {
