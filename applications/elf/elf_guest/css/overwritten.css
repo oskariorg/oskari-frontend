@@ -51,10 +51,7 @@ table {
         border: 0;
     }
 
-    div.main {
-        margin-left: 32px;
-        margin-top: 4px;
-    }
+    
     .oskari-tile {
 	height: auto !important;
 	min-height: 31px !important;
