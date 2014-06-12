@@ -82,6 +82,9 @@ Oskari.registerLocalization({
                 }, {
                     "id": "oskari_analyse_StdDev",
                     "label": "Deviazione standard"
+                }, {
+                    "id": "oskari_analyse_Median",
+                    "label": "NOT TRANSLATED"
                 }],
                 "attribute": "Scegli un attributo"
             },

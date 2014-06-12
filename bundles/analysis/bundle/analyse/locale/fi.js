@@ -127,16 +127,19 @@ Oskari.registerLocalization({
                     "label": "Summa"
                 }, {
                     "id": "oskari_analyse_Min",
-                    "label": "Minimi"
+                    "label": "Pienin arvo"
                 }, {
                     "id": "oskari_analyse_Max",
-                    "label": "Maksimi"
+                    "label": "Suurin arvo"
                 }, {
                     "id": "oskari_analyse_Average",
                     "label": "Keskiarvo"
                 }, {
                     "id": "oskari_analyse_StdDev",
                     "label": "Keskihajonta"
+                }, {
+                    "id": "oskari_analyse_Median",
+                    "label": "Mediaani"
                 }],
                 "attribute": "Valitse ominaisuustieto"
             },

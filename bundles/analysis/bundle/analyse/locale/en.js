@@ -98,7 +98,7 @@ Oskari.registerLocalization({
                     "label": "Union",
                     "classForPreview": "union",
                     "tooltip": ""
-/*              TODO: Uncomment this to enable clipping functionality
+                    /*              TODO: Uncomment this to enable clipping functionality
                 }, {
                     "id": "oskari_analyse_clip",
                     "label": "NOT TRANSLATED",
@@ -138,6 +138,9 @@ Oskari.registerLocalization({
                 }, {
                     "id": "oskari_analyse_StdDev",
                     "label": "Standard deviation"
+                }, {
+                    "id": "oskari_analyse_Median",
+                    "label": "Median"
                 }],
                 "attribute": "Choose an attribute"
             },

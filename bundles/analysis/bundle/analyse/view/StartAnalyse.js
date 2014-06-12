@@ -787,7 +787,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         updateFilterIcon: function (layerId, element) {
-            console.log("updateFilterIcon");
             var me = this,
                 filter,
                 filterIcon,
@@ -798,7 +797,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // See if user has opened the filter popup
             if (me._userSetFilter[layerId]) {
-                console.log("user set filter for " + layerId);
                 // See if layer has no active filter
                 filter = me.getFilterJson(layerId);
                 if (!filter.featureIds && !filter.bbox && !filter.filters) {
@@ -808,19 +806,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     removed = tmp;
                 }
                 if (!icons || !icons.length) {
-                    console.log("No element set, trying to find it...");
                     icons = me.contentPanel.getLayersContainer()
                         .find('#' + me.id_prefix + 'layer_' + layerId)
                         .siblings('.layer-icons');
-                    console.log(icons);
                 }
                 filterIcon = icons.find('.filter');
-                console.log(filterIcon);
                 filterIcon
                     .removeClass(removed)
                     .addClass(added);
-            } else {
-                console.log("No user set filter for " + layerId);
             }
         },
 
