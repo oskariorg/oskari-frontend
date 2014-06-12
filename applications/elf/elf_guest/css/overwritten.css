@@ -142,3 +142,18 @@ table {
     border-color: #627782;
     color: #369;
 }
+
+
+.logoplugin .icon {
+	background-image: url('ELF-logo-small.png') !important;
+	display: inline-block;
+	height: 25px;
+	width: 25px;
+	vertical-align: bottom;
+	cursor: pointer;
+}
+
+
+div.layerselection2 div.object-data {
+display: none !important;
+}

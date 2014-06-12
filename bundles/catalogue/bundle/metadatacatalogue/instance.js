@@ -669,15 +669,34 @@ Oskari.clazz
 
                         // Optional complementary layers
                         if ((row.uuid)&&(row.uuid.length > 0)) {
+                            row_loop:
                             for (j = 0; j < row.uuid.length; ++j) {
+                                // Check for duplicates
                                 if (row.uuid[j] === row.id) {
                                     continue;
+                                }
+                                for (k = 0; k < j; ++k) {
+                                    if (row.uuid[k] === row.uuid[j]) {
+                                        continue row_loop;
+                                    }
                                 }
                                 newLayers = mapLayerService.getLayersByMetadataId(row.uuid[j]);
                                 if ((newLayers) && (newLayers.length > 0)) {
                                     layers = layers.concat(newLayers);
                                 }
                             }
+                        }
+                        // Check for duplicates
+                        j = 0;
+                        layer_loop:
+                        while (j < layers.length) {
+                            for (k = 0; k < j; ++k) {
+                                if (layers[k].getId() === layers[j].getId()) {
+                                    layers.splice(j,1);
+                                    continue layer_loop;
+                                }
+                            }
+                            j = j+1;
                         }
 
                         // Add layer links
