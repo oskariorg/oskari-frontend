@@ -12,38 +12,23 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
             ii,
             style,
             wmsUrls;
-        layer.setWmtsName(mapLayerJson.wmsName);
-        if (mapLayerJson.wmsUrl) {
-            wmsUrls = mapLayerJson.wmsUrl.split(",");
-            for (i = 0; i < wmsUrls.length; i++) {
-                layer.addWmtsUrl(wmsUrls[i]);
-            }
+
+        if(mapLayerJson.wmsName) {
+            layer.setWmtsName(mapLayerJson.wmsName);
         }
-
-        var styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style');
-
-        var styleSpec;
-
-        for (i = 0, ii = mapLayerJson.styles.length; i < ii; ++i) {
-            styleSpec = mapLayerJson.styles[i];
-            style = styleBuilder();
-            style.setName(styleSpec.identifier);
-            style.setTitle(styleSpec.identifier);
-
-            layer.addStyle(style);
-            if (styleSpec.isDefault) {
-                layer.selectStyle(styleSpec.identifier);
-                break;
-            }
+        if(mapLayerJson.wmsUrl) {
+            layer.setLayerUrls(maplayerService.parseUrls(mapLayerJson.wmsUrl));
         }
-
-        /*
-         * layer.setWmtsMatrixSet(mapLayerJson.tileMatrixSetData);
-         *
-         * layer.setWmtsLayerDef(mapLayerJson.tileLayerData);
-         */
+        maplayerService.populateStyles(layer, mapLayerJson);
 
         layer.setOriginalMatrixSetData(mapLayerJson.tileMatrixSetData);
+        var tileMatrixSetId = mapLayerJson.tileMatrixSetId;
+        
+        if (mapLayerJson.formats) {
+            layer.setQueryFormat(mapLayerJson.formats.value);
+            layer.setAvailableQueryFormats(mapLayerJson.formats.available);
+        }
+        layer.setWmtsMatrixSetId(tileMatrixSetId);
         layer.setFeatureInfoEnabled(true);
         if (mapLayerJson.tileMatrixSetData && mapLayerJson.tileLayerData) {
             /* ver 2 */
@@ -51,8 +36,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
             layer.setWmtsLayerDef(mapLayerJson.tileLayerData);
         } else if (mapLayerJson.tileMatrixSetData && mapLayerJson.tileMatrixSetId) {
             /* ver 1 */
-            var tileMatrixSetId = mapLayerJson.tileMatrixSetId;
-            layer.setWmtsMatrixSetId(tileMatrixSetId);
             if (mapLayerJson.tileMatrixSetData.contents && mapLayerJson.tileMatrixSetData.contents.tileMatrixSets) {
                 var tileMatrixSet = mapLayerJson.tileMatrixSetData.contents.tileMatrixSets[tileMatrixSetId];
                 layer.setWmtsMatrixSet(tileMatrixSet);
