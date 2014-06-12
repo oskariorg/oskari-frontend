@@ -125,6 +125,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/bundle/divmanazer/component/buttons/CancelButton.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/buttons/CloseButton.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/divmanazer/component/buttons/DeleteButton.js"
             }, {
                 "type": "text/javascript",
@@ -211,18 +214,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
          }*/
         ],
         "locales": [{
-            "lang": "fi",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/divmanazer/locale/fi.js"
-        }, {
-            "lang": "sv",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/divmanazer/locale/sv.js"
-        }, {
-            "lang": "en",
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/divmanazer/locale/en.js"
-        }, {
             "lang": "cs",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/divmanazer/locale/cs.js"
@@ -231,9 +222,25 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/divmanazer/locale/de.js"
         }, {
+            "lang": "en",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/en.js"
+        }, {
             "lang": "es",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/divmanazer/locale/es.js"
+        }, {
+            "lang": "fi",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/fi.js"
+        }, {
+            "lang": "it",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/it.js"
+        }, {
+            "lang": "sv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/sv.js"
         }]
     },
     "bundle": {

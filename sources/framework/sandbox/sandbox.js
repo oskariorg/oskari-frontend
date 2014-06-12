@@ -447,7 +447,6 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
          * @param {Boolean} retainEvent true to not send event but only print debug which modules are listening, usually left undefined (optional)
          */
         notifyAll: function (event, retainEvent) {
-
             var eventName;
             if (!retainEvent) {
 
