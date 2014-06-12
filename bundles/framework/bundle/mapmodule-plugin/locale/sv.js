@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sv",
     "key": "MapModule",
     "value": {
@@ -29,7 +30,7 @@ Oskari.registerLocalization({
                 "link": "Datakälla",
                 "popup": {
                     "title": "Datakällor",
-                    "content": " "
+                    "content": "NOT TRANSLATED"
                 },
                 "button": {
                     "close": "Stäng"
@@ -103,4 +104,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);
