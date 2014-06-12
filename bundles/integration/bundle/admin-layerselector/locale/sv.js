@@ -58,10 +58,10 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
-            "capabilitiesLabel" : "WMSCapabilities",
-            "confirmResourceKeyChange" : "TRANSLATION MISSING",
-            "confirmDeleteLayerGroup" : "TRANSLATION MISSING",
-            "confirmDeleteLayer" : "TRANSLATION MISSING",
+            "capabilitiesLabel" : "Capabilities",
+            "confirmResourceKeyChange" : "Du har ändrat gränssnittjänstens unik namn- eller URL-address. För säkerhets skull, nuvarande rättigheter till kartlager ska raderas. Fortsätt?",
+            "confirmDeleteLayerGroup" : "Kartlagergrupp blir raderad. Fortsätt?",
+            "confirmDeleteLayer" : "Kartlager blir raderad. Fortsätt?",
             "layertypes" : {
                 "wms": "WMS Lager",
                 "wfs": "WFS Lager",
@@ -98,17 +98,17 @@ Oskari.registerLocalization({
             "addSubLayer": "Tillägg en undernivå",
             "editSubLayer": "Editera undernivå",
 
-            "wmsInterfaceAddress": "WMS-gränssnittets address",
-            "wmsUrl": "WMS-gränssnittets address",
-            "wmsInterfaceAddressDesc": "WMS-gränssnittets URL-address separerat med komma",
-            "wmsServiceMetaId": "WMS metadata tagg",
-            "wmsServiceMetaIdDesc": "WMS-tjänstens metadata filtagg",
+            "wmsInterfaceAddress": "Gränssnittets address",
+            "wmsUrl": "Gränssnittets address eller addresser",
+            "wmsInterfaceAddressDesc": "Gränssnittets URL-addresser separerat med komma",
+            "wmsServiceMetaId": "Gränssnittjänstens metadata-tagg",
+            "wmsServiceMetaIdDesc": "Gränssnittjänstens metadata-filtagg",
             "layerNameAndDesc": "Lagrets namn och kort beskrivning",
 
             "metaInfoIdDesc": "Geodata&shy;registrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
             "metaInfoId": "Metadatans filtagg",
-            "wmsName": "WMS namn",
-            "wmsNameDesc": "WMS lager dvs unikt namn",
+            "wmsName": "Unik namn för kartlager",
+            "wmsNameDesc": "Unik eller teknisk namn för kartlager",
 
             "addInspireName": "Ämnets namn",
             "addInspireNameTitle": "Ämnets namn",
@@ -138,16 +138,16 @@ Oskari.registerLocalization({
             "legendaImageDesc": "Förklarings&shy;bildens address",
             "legendaImagePlaceholder": "Förklarings&shy;bildens address",
 
-            "gfiContent": "NOT TRANSLATED",
+            "gfiContent": "Tilläggande text för GFI-dialog",
             "gfiResponseType": "GFI svartyp",
             "gfiResponseTypeDesc": "Svarets typ dvs Get Feature Info (GFI)",
             "gfiStyle": "GFI stil",
             "gfiStyleDesc": "GFI stil (XSLT)",
 
-            "matrixSetId" : "WMTS Matrix set id",
-            "matrixSetIdDesc" : "WMTS Matrix set id",
-            "matrixSet" : "WMTS Matrix set",
-            "matrixSetDesc" : "WMTS Matrix set",
+            "matrixSetId" : "WMTS MatrixSetId",
+            "matrixSetIdDesc" : "WMTS-tjänstens MatrixSetId",
+            "matrixSet" : "Teknisk beskrivning av WMTS-tjänsten",
+            "matrixSetDesc" : "Teknisk beskrivning av WMTS-tjänsten i JSON-format",
             
             "realtime": "Reaaliaikataso",
             "refreshRate": "Virkistystaajuus (sekunneissa)",
@@ -176,7 +176,7 @@ Oskari.registerLocalization({
             },
 
             "interfaceAddress": "Gränssnitten address",
-            "interfaceAddressDesc": "WMS address för lager definitionen",
+            "interfaceAddressDesc": "Gränssnittjänstens URL utan ? och tillläggande parameter",
             "viewingRightsRoles": "Kollar rättigheter roller",
             "metadataReadFailure": "Fetching layer metadata failed.",
             "mandatory_field_missing": "Nödvändig uppgift: ",

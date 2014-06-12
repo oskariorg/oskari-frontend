@@ -1,6 +1,6 @@
 <ul>
     <% if(capabilities.self) { %>
-    	<li class="capabilitieslayer groupLevelLayer" data-wmsname="<%= capabilities.self.wmsName %>"><%= capabilities.self.title %></li>
+    	<li class="capabilitieslayer groupLevelLayer" data-layername="<%= capabilities.self.layerName %>"><%= capabilities.self.title %></li>
 	<% } %>
     <% _.each(capabilities.groups, function(cap) { %>
         <li class="groupTitle closed"><div class="icon-arrow-right inline-icon"></div> <%= cap.title %>
@@ -8,6 +8,6 @@
         </li>
     <% }); %>
     <% _.each(capabilities.layers, function(layer) { %>
-        <li class="capabilitieslayer" data-wmsname="<%= layer.wmsName %>"><%= layer.title %></li>
+        <li class="capabilitieslayer" data-layername="<%= layer.layerName %>" data-additionalId="<%= layer.additionalId %>"><%= layer.title %></li>
     <% }); %>
 </ul>

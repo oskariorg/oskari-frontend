@@ -1,5 +1,15 @@
 # Release Notes
 
+## 1.22
+
+### integration/admin-layerselector
+
+Now has initial support for WMTS layers.
+
+### core/MapLayerService
+
+Now parses generic layerName and url properties from layerJSON to AbstractLayers setLayerName() and setLayerUrls() methods.
+
 ## 1.21
 
 ### core/sandbox/Layers

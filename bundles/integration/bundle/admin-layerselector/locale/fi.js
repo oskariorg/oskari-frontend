@@ -58,10 +58,10 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
-            "capabilitiesLabel" : "WMSCapabilities",
-            "confirmResourceKeyChange" : "Olet muuttanut wmsname- tai url-kentän arvoja. Tietoturvasyistä karttatason käyttöoikeudet poistetaan ja ne täytyy asettaa uudelleen. Haluatko jatkaa?",
-            "confirmDeleteLayerGroup" : "Tasoryhmän poisto. Haluatko jatkaa?",
-            "confirmDeleteLayer" : "Tason poisto. Haluatko jatkaa?",
+            "capabilitiesLabel" : "Capabilities",
+            "confirmResourceKeyChange" : "Olet muuttanut Karttatason yksilöivä nimi- tai Rajapinnan osoite -kentän arvoja. Tietoturvasyistä karttatason käyttöoikeudet poistetaan ja ne täytyy asettaa uudelleen. Haluatko jatkaa?",
+            "confirmDeleteLayerGroup" : "Karttatasoryhmä poistetaan. Haluatko jatkaa?",
+            "confirmDeleteLayer" : "Karttataso poistetaan. Haluatko jatkaa?",
             "layertypes" : {
                 "wms": "WMS Taso",
                 "wfs": "WFS Taso",
@@ -98,17 +98,17 @@ Oskari.registerLocalization({
             "addSubLayer": "Lisää alataso",
             "editSubLayer": "Muokkaa alatasoa",
 
-            "wmsInterfaceAddress": "WMS-rajapinnan osoitteet",
-            "wmsUrl": "WMS-rajapinnan osoitteet",
-            "wmsInterfaceAddressDesc": "WMS-rajapinnan URL-osoitteet pilkulla eroteltuna",
-            "wmsServiceMetaId": "WMS metatiedon tunniste",
-            "wmsServiceMetaIdDesc": "WMS-palvelun metatiedon tiedostotunniste",
+            "wmsInterfaceAddress": "Rajapinnan osoitteet",
+            "wmsUrl": "Rajapinnan osoitteet",
+            "wmsInterfaceAddressDesc": "Rajapinnan URL-osoite tai osoitteet pilkulla eroteltuna",
+            "wmsServiceMetaId": "Palvelun metatiedon tunniste",
+            "wmsServiceMetaIdDesc": "Rajapintapalvelun palvelun metatiedon tiedostotunniste",
             "layerNameAndDesc": "Tason nimi ja kuvaus",
 
             "metaInfoIdDesc": "Paikkatieto&shy;hakemiston metatiedon tiedostotunniste, joka yksilöi metatiedon XML kuvailun",
             "metaInfoId": "Metatiedon tiedosto&shy;tunniste",
-            "wmsName": "WMS nimi",
-            "wmsNameDesc": "WMS taso eli uniikki nimi",
+            "wmsName": "Karttatason yksilöivä nimi",
+            "wmsNameDesc": "Karttatason yksilöivä eli tekninen nimi",
 
             "addInspireName": "Aiheen nimi",
             "addInspireNameTitle": "Aiheen nimi",
@@ -138,16 +138,16 @@ Oskari.registerLocalization({
             "legendImageDesc": "Karttaselitteen osoitee",
             "legendImagePlaceholder": "Karttaselitteen osoite",
 
-            "gfiContent": "GFI lisäsisältö",
+            "gfiContent": "Kohdetietoikkunan lisäsisältö",
             "gfiResponseType": "GFI vastauksen tyyppi",
             "gfiResponseTypeDesc": "Vastauksen tyyppi eli Get Feature Info (GFI)",
             "gfiStyle": "GFI:n tyyli",
             "gfiStyleDesc": "GFI:n tyyli (XSLT)",
 
-            "matrixSetId" : "WMTS Matrix set id",
-            "matrixSetIdDesc" : "WMTS Matrix set id",
-            "matrixSet" : "WMTS Matrix set",
-            "matrixSetDesc" : "WMTS Matrix set",
+            "matrixSetId" : "WMTS-tiilimatrisin tunniste",
+            "matrixSetIdDesc" : "WMTS-tiilimatriisin tunniste (TileMatrixSet id)",
+            "matrixSet" : "WMTS-tason JSON",
+            "matrixSetDesc" : "WMTS-tason tiedot JSON-muodossa",
 
             "realtime": "Reaaliaikataso",
             "refreshRate": "Virkistystaajuus (sekunneissa)",
@@ -176,7 +176,7 @@ Oskari.registerLocalization({
             },
 
             "interfaceAddress": "Rajapinnan osoite",
-            "interfaceAddressDesc": "WMS&shy;-tasomäärittelyjen osoite",
+            "interfaceAddressDesc": "Rajapinnan osoite ilman ?-merkkiä ja sen jälkeisiä parametreja",
             "viewingRightsRoles": "Katseluoikeudet rooleille",
             "metadataReadFailure": "Tason metatiedon haku epäonnistui.",
             "mandatory_field_missing": "Pakollinen tieto: ",
