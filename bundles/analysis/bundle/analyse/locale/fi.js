@@ -141,8 +141,12 @@ Oskari.registerLocalization({
                 "attribute": "Valitse ominaisuustieto"
             },
             "buffer_size": {
-                "label": "Vyöhykkeen koko (m)",
+                "label": "Vyöhykkeen koko",
                 "tooltip": "Anna vyöhykkeen koko"
+            },
+            "buffer_units": {
+                "m": "Metriä",
+                "km": "Kilometriä"
             },
             "analyse_name": {
                 "label": "Analyysin nimi",

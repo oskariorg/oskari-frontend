@@ -86,8 +86,12 @@ Oskari.registerLocalization({
                 "attribute": "Scegli un attributo"
             },
             "buffer_size": {
-                "label": "Dimensione Buffer (metri)",
+                "label": "Dimensione Buffer",
                 "tooltip": "Enter buffer size"
+            },
+            "buffer_units": {
+                "m": "Metri",
+                "km": "Chilometri"
             },
             "analyse_name": {
                 "label": "Nome dell'analisi",
