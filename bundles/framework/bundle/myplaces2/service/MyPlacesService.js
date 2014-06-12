@@ -233,7 +233,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
          */
         parseDate: function (dateStr) {
 
-            if (!dateStr && dateStr.length < 10) {
+            if (!dateStr) return [];
+
+            if (dateStr.length < 10) {
                 return [];
             }
             var year = dateStr.substring(0, 4);

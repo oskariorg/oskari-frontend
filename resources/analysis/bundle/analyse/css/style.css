@@ -93,6 +93,8 @@ div.basic_analyse div.drawFilterContainer {
     float: right; }
 div.basic_analyse div.header-icon-info {
   margin: 10px; }
+div.basic_analyse select.settings_buffer_units {
+  width: 80px; }
 
 div.basic_analyse div.form div.field input, div.field select {
   width: 80%;

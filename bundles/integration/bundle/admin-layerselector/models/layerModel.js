@@ -58,10 +58,12 @@ if (!Function.prototype.bind) {
                 var me = this,
                     sortFunction = me._getPropertyComparatorFor('title');
                 capabilities.layers.sort(sortFunction);
-                capabilities.groups.sort(sortFunction);
-                _.each(capabilities.groups, function (group) {
-                    me._sortCapabilities(group);
-                });
+                if(capabilities.groups) {
+                    capabilities.groups.sort(sortFunction);
+                    _.each(capabilities.groups, function (group) {
+                        me._sortCapabilities(group);
+                    }); 
+                }
             },
             _getPropertyComparatorFor: function (property) {
                 return function (a, b) {
@@ -82,12 +84,20 @@ if (!Function.prototype.bind) {
                 var sb = Oskari.getSandbox();
                 sb.printDebug("Found:", capabilitiesNode);
                 var mapLayerService = sb.getService('Oskari.mapframework.service.MapLayerService'),
-                    mapLayer = mapLayerService.createMapLayer(capabilitiesNode);
+                    mapLayer = mapLayerService.createMapLayer(capabilitiesNode),
+                    dataToKeep = null;
                 // clear existing values
                 var capabilities = this.get("capabilities");
+                var typeFunction = this._typeHandlers[mapLayer.getLayerType()];
+                if(typeFunction) {
+                    dataToKeep = typeFunction.apply(this);
+                }
                 this.clear({
                     silent: true
                 });
+                if(dataToKeep && typeFunction) {
+                    typeFunction.apply(this, [dataToKeep, mapLayer]);
+                }
                 this.set(mapLayer, {
                     silent: true
                 });
@@ -95,15 +105,33 @@ if (!Function.prototype.bind) {
                 this.setCapabilitiesResponse(capabilities);
             },
             /**
-             * Recursive function to search capabilities by wmsName.
+             * Extra handling per layertype. If data is not given assume getter, otherwise setup data.
+             * @type {Object}
+             */
+            _typeHandlers : {
+                "wmts" : function(data, mapLayer) {
+                    if(!data) {
+                        return {
+                            tileMatrix : this.getOriginalMatrixSetData()
+                        };  
+                    }
+                    else {
+                        mapLayer.setOriginalMatrixSetData(data.tileMatrix);
+                    }
+                }
+
+            },
+            /**
+             * Recursive function to search capabilities by layerName.
              * Recursion uses the second parameter internally, but it's optional.
              * If not set, it will be fetched from models attributes.
-             * @param  {String} wmsName      name to search for
+             * @param  {String} layerName      name to search for
              * @param  {Object} capabilities (optional capabilities object)
+             * @param  {String} additionalId additional id used for searching (optional)
              * @return {Boolean}             true if name was found
              */
-            setupCapabilities: function (wmsName, capabilities) {
-                if (!wmsName) {
+            setupCapabilities: function (layerName, capabilities, additionalId) {
+                if (!layerName) {
                     return;
                 }
                 var me = this;
@@ -111,12 +139,18 @@ if (!Function.prototype.bind) {
                     capabilities = this.get('capabilities');
                 }
                 // layer node
-                if (capabilities.wmsName == wmsName) {
-                    me._setupFromCapabilitiesValues(capabilities);
-                    return true;
+                if (capabilities.layerName == layerName) {
+                    if(!additionalId) {
+                        me._setupFromCapabilitiesValues(capabilities);
+                        return true;
+
+                    } else if(capabilities.additionalId == additionalId) {
+                        me._setupFromCapabilitiesValues(capabilities);
+                        return true;
+                    }
                 }
                 // group node
-                if (capabilities.self && capabilities.self.wmsName == wmsName) {
+                if (capabilities.self && capabilities.self.layerName == layerName) {
                     me._setupFromCapabilitiesValues(capabilities.self);
                     return true;
                 }
@@ -125,14 +159,14 @@ if (!Function.prototype.bind) {
                 // check layers directly under this 
                 _.each(capabilities.layers, function (layer) {
                     if (!found) {
-                        found = me.setupCapabilities(wmsName, layer);
+                        found = me.setupCapabilities(layerName, layer, additionalId);
                     }
                 });
                 // if not found, check any groups under this 
-                if (!found) {
+                if (!found && capabilities.groups) {
                     _.each(capabilities.groups, function (group) {
                         if (!found) {
-                            found = me.setupCapabilities(wmsName, group);
+                            found = me.setupCapabilities(layerName, group, additionalId);
                         }
                     });
                 }

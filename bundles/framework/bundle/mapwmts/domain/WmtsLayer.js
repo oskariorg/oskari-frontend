@@ -15,7 +15,7 @@ function() {
     this._OriginalWmtsMatrixSetData = null;
     this._WmtsMatrixSet = null;
     this._WmtsLayerDef = null;
-
+    this._availableQueryFormats = [];
     /* Layer Type */
     this._layerType = "WMTS";
 }, {
@@ -120,6 +120,23 @@ function() {
      */
     getWmtsUrls : function() {
         return this.getLayerUrls();
+    },
+    /**
+     * Possible options for #setQueryFormat()
+     * @method setAvailableQueryFormats
+     * @param {String[]} options for GFI output
+     */
+    setAvailableQueryFormats: function (options) {
+        
+        this._availableQueryFormats = options || [];
+    },
+    /**
+     * Possible options for #setQueryFormat()
+     * @method getAvailableQueryFormats
+     * @return {String[]} options for GFI output
+     */
+    getAvailableQueryFormats: function () {
+        return this._availableQueryFormats || [];
     }
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]

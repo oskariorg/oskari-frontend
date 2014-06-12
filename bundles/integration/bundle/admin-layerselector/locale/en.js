@@ -58,10 +58,10 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
-            "capabilitiesLabel" : "WMSCapabilities",
-            "confirmResourceKeyChange" : "By changing the values of wmsname and url the layer permissions will reset. Continue?",
-            "confirmDeleteLayerGroup" : "Delete layer group. Continue?",
-            "confirmDeleteLayer" : "Delete layer. Continue?",
+            "capabilitiesLabel" : "Capabilities",
+            "confirmResourceKeyChange" : "For security reasons, changing the values of Map layer unique name or Interface URL will reset the layer permissions and they need to be set again using the Layer rights management tool. Continue?",
+            "confirmDeleteLayerGroup" : "You're about to delete the layer group. Continue?",
+            "confirmDeleteLayer" : "You're about to delete the layer. Continue?",
             "layertypes" : {
                 "wms": "WMS layer",
                 "wfs": "WFS layer",
@@ -98,17 +98,17 @@ Oskari.registerLocalization({
             "addSubLayer": "Add sublayer",
             "editSubLayer": "Edit sublayer",
 
-            "wmsInterfaceAddress": "WMS interface URL",
-            "wmsUrl": "WMS interface URL",
-            "wmsInterfaceAddressDesc": "WMS interface URL-addresses separated with commas",
-            "wmsServiceMetaId": "WMS metadata id",
-            "wmsServiceMetaIdDesc": "Metadata id of WMS service",
+            "wmsInterfaceAddress": "Interface URL",
+            "wmsUrl": "Interface URL or URLs",
+            "wmsInterfaceAddressDesc": "A single interface URL or a comma-separated list of interface URLs",
+            "wmsServiceMetaId": "Service metadata identification",
+            "wmsServiceMetaIdDesc": "Service metadata identification string",
             "layerNameAndDesc": "Name and description of the layer",
 
             "metaInfoIdDesc": "Metadata id to identify xml description of this metadata",
             "metaInfoId": "Metadata Id",
-            "wmsName": "WMS name",
-            "wmsNameDesc": "WMS layer i.e. unique name",
+            "wmsName": "Map layer unique name",
+            "wmsNameDesc": "Map layer unique or technical name",
 
             "addInspireName": "Class name",
             "addInspireNameTitle": "Name of the Inspire class",
@@ -138,16 +138,16 @@ Oskari.registerLocalization({
             "legendImageDesc": "URL for legend image",
             "legendImagePlaceholder": "URL for legend image",
 
-            "gfiContent": "NOT TRANSLATED",
+            "gfiContent": "Additional content for GFI dialog",
             "gfiResponseType": "GFI response type",
             "gfiResponseTypeDesc": "Response type for Get Feature Info (GFI)",
             "gfiStyle": "GFI style",
             "gfiStyleDesc": "GFI style (XSLT)",
 
-            "matrixSetId" : "WMTS Matrix set id",
-            "matrixSetIdDesc" : "WMTS Matrix set id",
-            "matrixSet" : "WMTS Matrix set",
-            "matrixSetDesc" : "WMTS Matrix set",
+            "matrixSetId" : "WMTS TileMatrixSet id",
+            "matrixSetIdDesc" : "WMTS TileMatrixSet identification",
+            "matrixSet" : "WMTS layer JSON",
+            "matrixSetDesc" : "WMTS layer JSON content",
 
             "realtime": "Real time layer",
             "refreshRate": "Refresh rate (in seconds)",
@@ -176,7 +176,7 @@ Oskari.registerLocalization({
             },
 
             "interfaceAddress": "interface URL",
-            "interfaceAddressDesc": "URL for WMS layer definitions",
+            "interfaceAddressDesc": "Interface URL without ?-character and succeeding parameters",
             "viewingRightsRoles": "Viewing Rights roles",
             "metadataReadFailure": "Fetching layer metadata failed.",
             "mandatory_field_missing": "Field is required: ",

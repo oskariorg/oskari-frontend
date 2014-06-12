@@ -87,7 +87,7 @@ define([
                     "wmtslayer" : _.template(LayerSettingsTemplateWMTSHeader)
                 };
                 this.layerTemplateFooter = {
-//                    "wmslayer" : _.template(LayerSettingsTemplateWMSFooter),
+                    "wmslayer" : _.template(LayerSettingsTemplateWMSFooter),
                     "wmtslayer" : _.template(LayerSettingsTemplateWMTSFooter)
                 };
 
@@ -689,9 +689,10 @@ define([
                 }
                 else if(layerType === 'wmtslayer') {
                     var format = new OpenLayers.Format.WMTSCapabilities();
-                    var caps = format.read(response);
+                    var caps = format.read(response.xml);
                     me.model.setOriginalMatrixSetData(caps);
-                    me.model.change();
+                    me.model.setCapabilitiesResponse(response);
+                    //me.model.change();
                 }
             },
             handleCapabilitiesSelection: function (e) {
@@ -699,10 +700,11 @@ define([
                     current = jQuery(e.currentTarget);
                 // stop propagation so handler on outer tags won't be triggered as well
                 e.stopPropagation();
-                var wmsName = current.attr('data-wmsname');
-                if (wmsName) {
+                var layerName = current.attr('data-layername');
+                var additionalId = current.attr('data-additionalId');
+                if (layerName) {
                     // actual layer node -> populate model
-                    me.model.setupCapabilities(wmsName);
+                    me.model.setupCapabilities(layerName, null, additionalId);
                 } else {
                     // toggle class to hide submenu
                     current.toggleClass('closed');

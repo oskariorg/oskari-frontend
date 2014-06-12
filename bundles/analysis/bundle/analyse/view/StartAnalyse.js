@@ -26,6 +26,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         me.id_prefix = 'oskari_analyse_';
         me.layer_prefix = 'analysis_';
         me.max_analyse_layer_fields = 10;
+        // unit -> multiplier
+        me.bufferUnits = {
+            'm': 1,
+            'km': 1000
+        };
 
         /* templates */
         me.template = {};
@@ -110,7 +115,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             "intersectOptionTool": '<div class="tool ">' + '<input type="radio" name="intersect" />' + '<label></label></div>',
             "unionOptionTool": '<div class="tool ">' + '<input type="radio" name="union" />' + '<label></label></div>',
             "layerUnionOptionTool": '<div class="tool"><input type="checkbox" name="layer_union" /><label></label></div>',
-            "title": '<div class="analyse_title_cont analyse_settings_cont"><div class="settings_buffer_label"></div><input class="settings_buffer_field" type="text"></div>',
+            "title": '<div class="analyse_title_cont analyse_settings_cont"><div class="settings_buffer_label"></div><input class="settings_buffer_field" type="text"><select class="settings_buffer_units"></select></div>',
             "title_name": '<div class="analyse_title_name analyse_settings_cont"><div class="settings_name_label"></div><input class="settings_name_field" type="text"></div>',
             "title_color": '<div class="analyse_title_colcont analyse_output_cont"><div class="output_color_label"></div></div>',
             "title_columns": '<div class="analyse_title_columns analyse_output_cont"><div class="columns_title_label"></div></div>',
@@ -834,11 +839,19 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 extra = contentPanel.find('.extra_params');
             if (method === this.id_prefix + "buffer") {
                 var bufferTitle = me.template.title.clone();
+                var bufferUnitSelect = bufferTitle.find('select.settings_buffer_units');
                 bufferTitle.find('.settings_buffer_label').html(me.loc.buffer_size.label);
                 bufferTitle.find('.settings_buffer_field').attr({
                     'value': '',
                     'placeholder': me.loc.buffer_size.tooltip
                 });
+                for (var unit in me.bufferUnits) {
+                    bufferUnitSelect.append(
+                        '<option value="' + unit + '">' +
+                        me.loc.buffer_units[unit] +
+                        '</option>'
+                    );
+                }
 
                 extra.append(bufferTitle);
 
@@ -1583,6 +1596,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // buffer
             var bufferSize = container.find('.settings_buffer_field').val();
+            var bufferUnit = container.find('.settings_buffer_units option:selected').val();
+            var bufferUnitMultiplier = this.bufferUnits[bufferUnit] || 1;
+            bufferSize *= bufferUnitMultiplier;
             // aggregate
             var aggregateFunctions = container.find('input[name=aggre]:checked');
             aggregateFunctions = jQuery.map(aggregateFunctions, function (val, i) {

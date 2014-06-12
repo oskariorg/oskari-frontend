@@ -262,6 +262,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setName(newLayerConf.name);
             }
 
+            if (newLayerConf.layerName) {
+                layer.setLayerName(newLayerConf.layerName);
+            }
+
             if (newLayerConf.subtitle) {
                 layer.setDescription(newLayerConf.subtitle);
             }
@@ -750,6 +754,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             layer.setAsNormalLayer();
             layer.setId(mapLayerJson.id);
             layer.setName(mapLayerJson.name);
+            if(mapLayerJson.layerName) {
+                layer.setLayerName(mapLayerJson.layerName);
+            }
 
             if (mapLayerJson.opacity !== null && mapLayerJson.opacity !== undefined) {
                 layer.setOpacity(mapLayerJson.opacity);
@@ -809,7 +816,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             if (mapLayerJson.url) {
-                layer.addLayerUrl(mapLayerJson.url);
+                layer.setLayerUrls(this.parseUrls(mapLayerJson.url));
             }
 
             layer.setLegendImage(mapLayerJson.legendImage);
@@ -827,6 +834,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             return layer;
         },
+        parseUrls : function(commaSeparatedUrlList) {
+            if(!commaSeparatedUrlList) {
+                return [];
+            }
+            return commaSeparatedUrlList.split(",");
+        },
 
         /**
          * @method _populateWmsMapLayerAdditionalData
@@ -839,16 +852,13 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Oskari.mapframework.domain.WmsLayer} returns the same layer object with populated values for convenience
          */
         _populateWmsMapLayerAdditionalData: function (layer, jsonLayer) {
-            var wmsUrls,
-                i;
-            layer.setWmsName(jsonLayer.wmsName);
+            if(jsonLayer.wmsName) {
+                layer.setWmsName(jsonLayer.wmsName);
+            }
             layer.setGfiContent(jsonLayer.gfiContent);
 
-            if (jsonLayer.wmsUrl) {
-                wmsUrls = jsonLayer.wmsUrl.split(",");
-                for (i = 0; i < wmsUrls.length; i++) {
-                    layer.addWmsUrl(wmsUrls[i]);
-                }
+            if(jsonLayer.wmsUrl) {
+                layer.setLayerUrls(this.parseUrls(jsonLayer.wmsUrl));
             }
 
             // default to enabled, only check if it is disabled
@@ -900,6 +910,21 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     if (blnMultipleStyles) {
                         styleJson = jsonLayer.styles[i];
                     }
+                    // setup backwards compatibility for WMTS layer style
+                    if(styleJson.identifier) {
+                        //   use identifier as name and title if not set explicitly
+                        if(!styleJson.name) {
+                            styleJson.name = styleJson.identifier;
+                        }
+                        if(!styleJson.title) {
+                            styleJson.title = styleJson.identifier;
+                        }
+                        // use isDefault styles identifier as default style if not set
+                        if(styleJson.isDefault && !jsonLayer.style) {
+                            jsonLayer.style = styleJson.identifier;
+                        }
+                    }
+                    // /WMTS style backwards compatibility end
 
                     style = styleBuilder();
                     style.setName(styleJson.name);
@@ -916,17 +941,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // set the default style
                 layer.selectStyle(jsonLayer.style);
             }
-            
             if(defaultStyle) {
                 layer.addStyle(defaultStyle);
                 layer.selectStyle(defaultStyle.getName());
-            } else {
-                style = styleBuilder();
-                style.setName("");
-                style.setTitle("");
-                style.setLegend("");
-                layer.addStyle(style);
-                layer.selectStyle("");
             }
 
             return layer;

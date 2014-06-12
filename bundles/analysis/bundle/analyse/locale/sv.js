@@ -142,8 +142,12 @@ Oskari.registerLocalization({
                 "attribute": "Välj ett attribut"
             },
             "buffer_size": {
-                "label": "Zon storlek (m)",
+                "label": "Zon storlek",
                 "tooltip": "Passa zon storlek"
+            },
+            "buffer_units": {
+                "m": "Meter",
+                "km": "Kilometer"
             },
             "analyse_name": {
                 "label": "Analys namn",

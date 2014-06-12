@@ -86,6 +86,15 @@
                     "mapwfs2": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
+                    "mapanalysis": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "mapmyplaces": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
+                    "mapstats": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
 	                "ui-components": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                }
@@ -132,6 +141,22 @@
 			"metadata": {
 				"Import-Bundle": {
 					"toolbar": {
+						"bundlePath": "../../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"instanceProps": {},
+			"title": "Info Box",
+			"bundleinstancename": "infobox",
+			"fi": "infobox",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "infobox",
+			"metadata": {
+				"Import-Bundle": {
+					"infobox": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
 				},
