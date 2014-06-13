@@ -115,6 +115,11 @@ Oskari.registerLocalization({
                     "label": "Union of analyse layers",
                     "classForPreview": "layer_union",
                     "tooltip": "Unifies analyse layers with the same feature fields"
+                }, {
+                    "id": "oskari_analyse_areas_and_sectors",
+                    "label": "Areas and sectors",
+                    "classForPreview": "areas_and_sectors",
+                    "tooltip": "NOT TRANSLATED"
                 }]
             },
             "aggregate": {
@@ -173,6 +178,11 @@ Oskari.registerLocalization({
                 "label": "Chosen layers for union input",
                 "notAnalyseLayer": "Choose an analysis layer",
                 "noLayersAvailable": "No layers found with the same feature fields"
+            },
+            "areas_and_sectors": {
+                "area_count": "Area count",
+                "area_size": "Area size",
+                "sector_count": "Sector count"
             },
             "spatial": {
                 "label": "Spatial operator",

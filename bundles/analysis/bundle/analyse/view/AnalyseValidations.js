@@ -168,6 +168,29 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
             return noErrors;
         },
+
+        /**
+         * Validates selections for analysis method areas and sectors
+         *
+         * @method _validate_method_areas_and_sectors
+         * @private
+         * @param {Object} selections Selections for output JSON
+         * @param {String} errorTitle Error title to display to the user
+         * @return {Boolean} returns true if no validation errors, false otherwise
+         */
+        _validate_method_areas_and_sectors: function (selections, errorTitle) {
+            var areaCount = selections.methodParams.areaCount,
+                areaSize = selections.methodParams.areaSize,
+                sectorCount = selections.methodParams.sectorCount,
+                noErrors = true;
+
+            // FIXME add validation once we know:
+            // - which fields are mandatory
+            // - what are the allowed ranges
+
+            return noErrors;
+        },
+
         /**
          * Notifies the user of a validation error.
          *

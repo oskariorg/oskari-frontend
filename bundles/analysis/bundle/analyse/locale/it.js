@@ -59,6 +59,11 @@ Oskari.registerLocalization({
                     "label": "Union of analyse layers",
                     "classForPreview": "layer_union",
                     "tooltip": "Unifica i layer con gli stessi attributi"
+                }, {
+                    "id": "oskari_analyse_areas_and_sectors",
+                    "label": "Areas and sectors",
+                    "classForPreview": "areas_and_sectors",
+                    "tooltip": "NOT TRANSLATED"
                 }]
             },
             "aggregate": {
@@ -117,6 +122,11 @@ Oskari.registerLocalization({
                 "label": "Scegli un layer per l'unione",
                 "notAnalyseLayer": "Scegli un layer da analizzare",
                 "noLayersAvailable": "Nessun layer trovato con gli stessi attributi"
+            },
+            "areas_and_sectors": {
+                "area_count": "NOT TRANSLATED",
+                "area_size": "NOT TRANSLATED",
+                "sector_count": "NOT TRANSLATED"
             },
             "spatial": {
                 "label": "Operatore spaziale",

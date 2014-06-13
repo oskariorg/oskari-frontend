@@ -114,6 +114,11 @@ Oskari.registerLocalization({
                     "label": "Analyysitasojen yhdiste",
                     "classForPreview": "layer_union",
                     "tooltip": "Yhdistää analyysitasoja, joilla on samat ominaisuustietokentät"
+                }, {
+                    "id": "oskari_analyse_areas_and_sectors",
+                    "label": "Vyöhykkeet ja sektorit",
+                    "classForPreview": "areas_and_sectors",
+                    "tooltip": "NOT TRANSLATED"
                 }]
             },
             "aggregate": {
@@ -172,6 +177,14 @@ Oskari.registerLocalization({
                 "label": "Valitut yhdistettävät tasot",
                 "notAnalyseLayer": "Valitse jokin analyysitaso",
                 "noLayersAvailable": "Tasoja, joilla on samat ominaisuustietokentät ei löytynyt"
+            },
+            "areas_and_sectors": {
+                "area_count": "Vyöhykkeiden lukumäärä",
+                "area_count_tooltip": "Anna vyöhykkeiden lukumäärä",
+                "area_size": "Vyöhykkeiden koko",
+                "area_size_tooltip": "Anna vyöhykkeiden koko",
+                "sector_count": "Sektoreiden lukumäärä",
+                "sector_count_tooltip": "Anna sektoreiden lukumäärä",
             },
             "spatial": {
                 "label": "Spatiaalinen operaattori",
