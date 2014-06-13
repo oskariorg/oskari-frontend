@@ -23,7 +23,7 @@ Oskari.registerLocalization({
             "title": "Metadata",
             "abstract": "Abstrakt",
             "inspire": "INSPIRE",
-            "jhs": "JHS",
+            "jhs": "ISO 19115",
             "xml": "XML",
             "map": "Omfattning",
             "pdf": "Utskrift",
@@ -33,7 +33,7 @@ Oskari.registerLocalization({
             "tabs": {
                 "abstract": {
                     "abstract": "",
-                    "jhs": "Visa JHS",
+                    "jhs": "Visa ISO 19115",
                     "inspire": "Visa INSPIRE",
                     "xml": {
                         "text": "Öppna ISO 19139 XML",
@@ -59,7 +59,7 @@ Oskari.registerLocalization({
                 },
                 "inspire": {
                     "abstract": "Visa basuppgifter",
-                    "jhs": "Visa JHS",
+                    "jhs": "Visa ISO 19115",
                     "inspire": "",
                     "xml": {
                         "text": "Öppna ISO 19139 XML",
