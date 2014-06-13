@@ -127,25 +127,32 @@ Oskari.registerLocalization({
                     "label": "Summa"
                 }, {
                     "id": "oskari_analyse_Min",
-                    "label": "Minimi"
+                    "label": "Pienin arvo"
                 }, {
                     "id": "oskari_analyse_Max",
-                    "label": "Maksimi"
+                    "label": "Suurin arvo"
                 }, {
                     "id": "oskari_analyse_Average",
                     "label": "Keskiarvo"
                 }, {
                     "id": "oskari_analyse_StdDev",
                     "label": "Keskihajonta"
+                }, {
+                    "id": "oskari_analyse_Median",
+                    "label": "Mediaani"
                 },{
                     "id": "oskari_analyse_NoDataCount",
                     "label": "Tietosuojatut kohteet"
-                }],
+                  }],
                 "attribute": "Valitse ominaisuustieto"
             },
             "buffer_size": {
-                "label": "Vyöhykkeen koko (m)",
+                "label": "Vyöhykkeen koko",
                 "tooltip": "Anna vyöhykkeen koko"
+            },
+            "buffer_units": {
+                "m": "Metriä",
+                "km": "Kilometriä"
             },
             "analyse_name": {
                 "label": "Analyysin nimi",

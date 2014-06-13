@@ -1,11 +1,11 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "fi",
     "key": "DivManazer",
     "value": {
         "buttons": {
             "add": "Lisää",
             "cancel": "Peruuta",
+            "close": "Poistu",
             "delete": "Poista",
             "edit": "Muokkaa",
             "ok": "OK",
@@ -106,7 +106,7 @@ Oskari.registerLocalization(
             }
         },
         "Grid": {
-            "columnSelector" : {
+            "columnSelector": {
                 "title": "Ominaisuudet",
                 "tooltip": "Näytä sarakkeet"
             },
@@ -117,5 +117,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

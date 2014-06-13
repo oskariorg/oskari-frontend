@@ -8,8 +8,8 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
         __filterTemplates: {
             "filterContent": '<div class="analyse-filter-popup-content">' +
-                //'<div class="analyse-filter filter-title"></div>' +
-                '</div>',
+            //'<div class="analyse-filter filter-title"></div>' +
+            '</div>',
             "filterContentBBOX": '<div class="analyse-filter analyse-filter-popup-bbox">' + '<div class="bbox-title"></div>' + '<div class="bbox-radio">' + '<div class="bbox-on">' + '<input id="analyse-filter-bbox-on" type="radio" name="filter-bbox" value="true" />' + '<label for="analyse-filter-bbox-on"></label>' + '</div>' + '<div class="bbox-off">' + '<input id="analyse-filter-bbox-off" type="radio" name="filter-bbox" value="false" checked="checked" />' + '<label for="analyse-filter-bbox-off"></label>' + '</div>' + '</div>' + '</div>',
             "filterClickedFeatures": '<div class="analyse-filter analyse-filter-clicked-features">' + '<div class="clicked-features-title"></div>' + '<input type="checkbox" name="analyse-clicked-features" id="analyse-clicked-features" />' + '<label for="analyse-clicked-features"></label>' + '</div>',
             "filterContentValues": '<div class="analyse-filter analyse-filter-popup-values">' + '<div class="values-title"></div>' + '</div>',
@@ -49,7 +49,24 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @return {JSON}
          */
         getFilterJson: function (layer_id) {
-            return this._filterJsons[layer_id];
+            var ret = this._filterJsons[layer_id],
+                sandbox = this.instance.getSandbox(),
+                layer = sandbox.findMapLayerFromSelectedMapLayers(layer_id);
+            if (!ret) {
+                // There's no user set values for the filter
+                ret = {};
+                this._getSelectedFeatureIds(layer, ret);
+                // Set selected features only to true if there's a selection
+                ret.featureIds = ret.featureIds && ret.featureIds.length;
+                if (!ret.featureIds) {
+                    // Set bbox if there's no selection
+                    ret.bbox = this.instance.getSandbox().getMap().getBbox();
+                }
+                // 'save' the filter settings so they don't live after the user
+                // has seen them
+                this.setFilterJson(layer_id, ret);
+            }
+            return ret;
         },
 
         /**
@@ -95,6 +112,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 prevJson;
 
             me._filterPopups[layer.getId()] = true;
+            me._userSetFilter[layer.getId()] = true;
 
             closeButton.setTitle(this.loc.buttons.cancel);
             closeButton.addClass('analyse-close-filter');
@@ -128,6 +146,8 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     // and close the dialog
                     me.setFilterJson(layer.getId(), filterJson);
                     me._closePopup(popup, layer.getId());
+                    // Update filter icon
+                    me.updateFilterIcon(layer.getId());
                 }
             });
 
@@ -233,8 +253,8 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                     // The boolean operator selection
                     if (filter.boolean) {
-                        var lastFilter = dialog.find('div.filter-option').last();
-                        var boolSelect = this._createBooleanSelect();
+                        var lastFilter = dialog.find('div.filter-option').last(),
+                            boolSelect = this._createBooleanSelect();
 
                         jQuery(boolSelect.find('option')).filter(function () {
                             return (jQuery(this).val() == filter.boolean);
@@ -535,7 +555,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // NOTE! This is quite an ugly hack, used so that we don't send empty filters to backend.
             emptyFilter = filterValues.filters[0];
             if (domFilters.length === 1 &&
-                    (!emptyFilter.attribute && !emptyFilter.value)) {
+                (!emptyFilter.attribute && !emptyFilter.value)) {
                 delete filterValues.filters;
             }
 

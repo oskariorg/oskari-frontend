@@ -5,6 +5,7 @@ Oskari.registerLocalization({
         "buttons": {
             "add": "NOT TRANSLATED",
             "cancel": "NOT TRANSLATED",
+            "close": "NOT TRANSLATED",
             "delete": "NOT TRANSLATED",
             "edit": "NOT TRANSLATED",
             "ok": "NOT TRANSLATED",

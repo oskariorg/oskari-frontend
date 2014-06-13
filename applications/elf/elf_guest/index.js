@@ -69,50 +69,51 @@ jQuery(document).ready(function() {
 
                 for(var n = 0; n < capsLayers.length; n++) {
 
-                    var spec = capsLayers[n];
-
-                    var mapLayerId = spec.identifier;
-                    var mapLayerSysId = mapLayerId.split('.').join('_');
-                    var mapLayerName = spec.identifier;
-
-                    var minScale = appConfigElf.conf.layers && appConfigElf.conf.layers[mapLayerSysId] ? appConfigElf.conf.layers[mapLayerSysId].minScale : undefined;
-
-                    var mapLayerJson = {
-                        wmtsName : mapLayerId,
-                        descriptionLink : "",
-                        orgName : wmtsName,
-                        type : "wmtslayer",
-                        legendImage : "",
-                        formats : {
-                            value : "text/html"
-                        },
-                        isQueryable : true,
-                        minScale : minScale,
-                        style : "",
-                        dataUrl : "",
-                        name : mapLayerId,
-                        title : spec.title,
-                        opacity : 100,
-                        inspire : wmtsName,
-                        maxScale : 1
+                    var spec = capsLayers[n],
+                    mapLayerId = spec.identifier,
+                    mapLayerSysId = mapLayerId.split('.').join('_'),
+                    mapLayerName = spec.identifier,
+                    layerExtraInfo =  appConfigElf.conf.layers ? appConfigElf.conf.layers[mapLayerSysId]||{}: {},
+                    minScale =  layerExtraInfo.minScale,
+                    metadataid = layerExtraInfo.metadataid,
+                    mapLayerJson = {
+                      wmtsName : mapLayerId,
+                      descriptionLink : "",
+                      orgName : wmtsName,
+                      type : "wmtslayer",
+                      legendImage : "",
+                      formats : {
+                        value : "text/html"
+                      },
+                      isQueryable : true,
+                      minScale : minScale,
+                      style : "",
+                      dataUrl : "",
+                      name : mapLayerId,
+                      title : spec.title,
+                      opacity : 100,
+                      inspire : wmtsName,
+                      maxScale : 1
                     };
 
-                    var layer = Oskari.clazz.create('Oskari.mapframework.wmts.domain.WmtsLayer');
+                var layer = Oskari.clazz.create('Oskari.mapframework.wmts.domain.WmtsLayer');
 
-                    layer.setAsNormalLayer();
-                    layer.setId(mapLayerSysId);
-                    layer.setName(mapLayerJson.title);
-                    layer.setWmtsName(mapLayerJson.wmtsName);
-                    layer.setOpacity(mapLayerJson.opacity);
-                    layer.setMaxScale(mapLayerJson.maxScale);
-                    layer.setMinScale(mapLayerJson.minScale);
-                    layer.setDescription(mapLayerJson.info);
-                    layer.setDataUrl(mapLayerJson.dataUrl);
-                    layer.setOrganizationName(mapLayerJson.orgName);
-                    layer.setInspireName(mapLayerJson.inspire);
-                    layer.setWmtsMatrixSet(matrixSet)
-                    layer.setWmtsLayerDef(spec);
-                    layer.setVisible(true);
+                layer.setAsNormalLayer();
+                layer.setId(mapLayerSysId);
+                layer.setName(mapLayerJson.title);
+                layer.setWmtsName(mapLayerJson.wmtsName);
+                layer.setOpacity(mapLayerJson.opacity);
+                layer.setMaxScale(mapLayerJson.maxScale);
+                layer.setMinScale(mapLayerJson.minScale);
+                layer.setDescription(mapLayerJson.info);
+                layer.setDataUrl(mapLayerJson.dataUrl);
+                layer.setOrganizationName(mapLayerJson.orgName);
+                layer.setInspireName(mapLayerJson.inspire);
+                layer.setWmtsMatrixSet(matrixSet)
+                layer.setWmtsLayerDef(spec);
+                layer.setVisible(true);
+                layer.setMetadataIdentifier(metadataid);
+
 
                     layer.addWmtsUrl(getTileUrl);
 

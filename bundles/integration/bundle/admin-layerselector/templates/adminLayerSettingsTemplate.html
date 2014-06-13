@@ -104,7 +104,6 @@
         </div>
     </div>
 
-    <% if(model.getStyles().length > 0) { %>
     <div class="add-layer-record">
         <div class="add-layer-label-area">
             <label for="add-layer-style" class="add-layer-label" title="<%= instance.getLocalization('admin').styleDesc %>"><%= instance.getLocalization('admin').style %></label>
@@ -117,12 +116,12 @@
                     <% if(model.getCurrentStyle().getName() == model.getStyles()[i].getName() ) { %>selected<% } %> ><%= model.getStyles()[i].getTitle() %></option>
                 <% } %>
             </select>
-            <% } else { %>
-                <%= model.getCurrentStyle().getTitle() %>
+            <% } else if(model.getCurrentStyle().getTitle()) { %>
+                <input type="text" id="add-layer-style" class="add-layer-input long" value="<%= model.getCurrentStyle().getName() %>" />
+                <div class="icon-close"></div>
             <% } %>
         </div>
     </div>
-    <% } %>
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">
@@ -147,18 +146,6 @@
             </div>
         </div>
     </div>
-
-    <!-- div class="add-layer-record">
-        <div class="add-layer-label-area">
-            <label for="add-layer-srsname" class="add-layer-label" title="<%= instance.getLocalization('admin').srsName %>"><%= instance.getLocalization('admin').srsName %></label>
-        </div>
-        <div class="add-layer-input-area">
-            <div class="input-controls">
-                <input type="text" id="add-layer-srsname" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').srsNamePlaceholder %>" <% if(model && model.admin) { %>value="<%= model.admin.epsg %>"<% } %> required />
-                <div class="icon-close"></div>
-            </div>
-        </div>
-    </div -->
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">

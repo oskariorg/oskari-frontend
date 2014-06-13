@@ -5,6 +5,7 @@ Oskari.registerLocalization({
         "buttons": {
             "add": "Tillägg",
             "cancel": "Tillbaka",
+            "close": "Avbryta",
             "delete": "Ta bort",
             "edit": "Editera",
             "ok": "OK",
