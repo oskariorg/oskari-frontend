@@ -138,6 +138,9 @@ Oskari.registerLocalization({
                 }, {
                     "id": "oskari_analyse_StdDev",
                     "label": "Standard deviation"
+                },{
+                    "id": "oskari_analyse_NoDataCount",
+                    "label": "Unauthorized features"
                 }],
                 "attribute": "Choose an attribute"
             },

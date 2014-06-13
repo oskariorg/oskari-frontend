@@ -138,6 +138,9 @@ Oskari.registerLocalization({
                 }, {
                     "id": "oskari_analyse_StdDev",
                     "label": "Medel spridning"
+                },{
+                    "id": "oskari_analyse_NoDataCount",
+                    "label": "Skyddad objekter"
                 }],
                 "attribute": "Välj ett attribut"
             },

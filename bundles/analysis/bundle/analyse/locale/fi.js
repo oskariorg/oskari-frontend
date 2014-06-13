@@ -137,6 +137,9 @@ Oskari.registerLocalization({
                 }, {
                     "id": "oskari_analyse_StdDev",
                     "label": "Keskihajonta"
+                },{
+                    "id": "oskari_analyse_NoDataCount",
+                    "label": "Tietosuojatut kohteet"
                 }],
                 "attribute": "Valitse ominaisuustieto"
             },
