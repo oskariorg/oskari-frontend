@@ -231,10 +231,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.RealtimePlugin'
                 refreshRate = this._getRefreshRate(layer.getRefreshRate()),
                 reqB = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
                 req = (reqB ? reqB(layer.getId(), true) : undefined),
+                evtB = sandbox.getEventBuilder('Realtime.RefreshLayerEvent'),
+                evt = (evtB ? evtB(layer) : undefined),
                 interval;
 
             interval = setInterval(function () {
                 if (req) sandbox.request(me, req);
+                if (evt) sandbox.notifyAll(evt);
             }, refreshRate);
 
             return interval;
