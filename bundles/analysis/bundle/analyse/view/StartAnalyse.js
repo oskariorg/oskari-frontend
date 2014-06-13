@@ -1663,6 +1663,28 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @method _getAggregateLocalization
+         * @private
+         * @param {String}  funcKey Aggregate function key
+         * @return {String} Localized aggregate function name
+         * Get localized name for aggregate function
+         */
+        _getAggregateLocalization: function (funcKey) {
+            var fullKey = 'oskari_analyse_' + funcKey,
+                ret = null,
+                i;
+
+            for (i = 0; i < this.loc.aggregate.options.length; i++) {
+                if (this.loc.aggregate.options[i].id === fullKey) {
+                    ret = this.loc.aggregate.options[i].label;
+                    break;
+                }
+            }
+
+            return ret;
+        },
+
+        /**
          * @method _analyseMap
          * @private
          * Check parameters and execute analyse.
@@ -1672,7 +1694,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 sandbox = this.instance.getSandbox(),
                 url = sandbox.getAjaxUrl(),
-                selections = me._gatherSelections();
+                selections = me._gatherSelections(),
+                i;
 
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
@@ -1684,6 +1707,19 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     selections.method = "intersect";
                     selections.methodParams.operator = "clip";
 
+                }
+
+                if (selections.methodParams.functions &&
+                        selections.methodParams.functions.length) {
+
+                    selections.methodParams.locales = [];
+                    for (i = 0; i < selections.methodParams.functions.length; i++) {
+                        selections.methodParams.locales.push(
+                            this._getAggregateLocalization(
+                                selections.methodParams.functions[i]
+                            )
+                        );
+                    }
                 }
 
                 data.analyse = JSON.stringify(selections);
