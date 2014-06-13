@@ -98,7 +98,7 @@ Oskari.registerLocalization({
                     "label": "Union",
                     "classForPreview": "union",
                     "tooltip": ""
-/*              TODO: Uncomment this to enable clipping functionality
+                    /*              TODO: Uncomment this to enable clipping functionality
                 }, {
                     "id": "oskari_analyse_clip",
                     "label": "NOT TRANSLATED",
@@ -128,16 +128,22 @@ Oskari.registerLocalization({
                     "label": "Summa"
                 }, {
                     "id": "oskari_analyse_Min",
-                    "label": "Minimum"
+                    "label": "Minsta värde"
                 }, {
                     "id": "oskari_analyse_Max",
-                    "label": "Maximum"
+                    "label": "Största värde"
                 }, {
                     "id": "oskari_analyse_Average",
-                    "label": "Medeltal"
+                    "label": "Medelvärde"
                 }, {
                     "id": "oskari_analyse_StdDev",
-                    "label": "Medel spridning"
+                    "label": "Standardavvikelse"
+                }, {
+                    "id": "oskari_analyse_Median",
+                    "label": "Median"
+                },{
+                    "id": "oskari_analyse_NoDataCount",
+                    "label": "Skyddad objekter"
                 }],
                 "attribute": "Välj ett attribut"
             },

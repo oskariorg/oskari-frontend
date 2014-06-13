@@ -217,6 +217,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
             }
             if (layer) {
                 layer.setPropertyTypes(propertyJson.propertyTypes);
+                layer.setWpsLayerParams(propertyJson.wps_params);
             }
         }
     }, {

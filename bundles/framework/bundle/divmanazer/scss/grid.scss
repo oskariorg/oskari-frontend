@@ -88,8 +88,12 @@ div.exporter {
     text-align: left;
 }
 
-input.exportButton {
-    margin: 2px 10px;
+input.csvExportButton {
+  margin: 3px 5px 2px 10px;
+}
+
+input.excelExportButton {
+  margin: 3px 10px 2px 5px;
 }
 
 table.oskari-grid {

@@ -731,6 +731,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         me.showInfos();
                         me._checkParamsSelection();
                         me._refreshIntersectLayers();
+                        me.refreshExtraParameters();
                     });
 
                 opt.find('label')
@@ -787,7 +788,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         updateFilterIcon: function (layerId, element) {
-            console.log("updateFilterIcon");
             var me = this,
                 filter,
                 filterIcon,
@@ -798,7 +798,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // See if user has opened the filter popup
             if (me._userSetFilter[layerId]) {
-                console.log("user set filter for " + layerId);
                 // See if layer has no active filter
                 filter = me.getFilterJson(layerId);
                 if (!filter.featureIds && !filter.bbox && !filter.filters) {
@@ -808,19 +807,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     removed = tmp;
                 }
                 if (!icons || !icons.length) {
-                    console.log("No element set, trying to find it...");
                     icons = me.contentPanel.getLayersContainer()
                         .find('#' + me.id_prefix + 'layer_' + layerId)
                         .siblings('.layer-icons');
-                    console.log(icons);
                 }
                 filterIcon = icons.find('.filter');
-                console.log(filterIcon);
                 filterIcon
                     .removeClass(removed)
                     .addClass(added);
-            } else {
-                console.log("No user set filter for " + layerId);
             }
         },
 
@@ -927,7 +921,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'for': option.id,
                     'class': 'params_radiolabel'
                 });
-                toolContainer.find('input').attr('checked', 'checked');
+                if ( i !== this.aggreOptions.length - 1 )toolContainer.find('input').attr('checked', 'checked');
 
                 contentPanel.append(toolContainer);
                 toolContainer.find('input').attr({
@@ -936,6 +930,19 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'id': option.id
                 });
                 toolContainer.find('input').change(closureMagic(option));
+
+                // Hide last one, no no data
+                if ( i === this.aggreOptions.length - 1 )
+                {
+                    if(this._getNoDataValue())
+                    {
+                        toolContainer.find('input').attr('checked', 'checked');
+                    }
+                    else {
+                        toolContainer.find('input').removeAttr('checked');
+                        toolContainer.hide();
+                    }
+                }
             }
 
         },
@@ -1633,7 +1640,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 'aggregate': {
                     methodParams: {
                         functions: aggregateFunctions, // TODO: param name?
-                        attribute: aggregateAttribute
+                        attribute: aggregateAttribute,
+                        no_data: me._getNoDataValue()
                     }
                 },
                 'union': {
@@ -1670,6 +1678,28 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * @method _getAggregateLocalization
+         * @private
+         * @param {String}  funcKey Aggregate function key
+         * @return {String} Localized aggregate function name
+         * Get localized name for aggregate function
+         */
+        _getAggregateLocalization: function (funcKey) {
+            var fullKey = 'oskari_analyse_' + funcKey,
+                ret = null,
+                i;
+
+            for (i = 0; i < this.loc.aggregate.options.length; i++) {
+                if (this.loc.aggregate.options[i].id === fullKey) {
+                    ret = this.loc.aggregate.options[i].label;
+                    break;
+                }
+            }
+
+            return ret;
+        },
+
+        /**
          * @method _analyseMap
          * @private
          * Check parameters and execute analyse.
@@ -1679,7 +1709,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 sandbox = this.instance.getSandbox(),
                 url = sandbox.getAjaxUrl(),
-                selections = me._gatherSelections();
+                selections = me._gatherSelections(),
+                i;
 
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
@@ -1691,6 +1722,19 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     selections.method = "intersect";
                     selections.methodParams.operator = "clip";
 
+                }
+
+                if (selections.methodParams.functions &&
+                        selections.methodParams.functions.length) {
+
+                    selections.methodParams.locales = [];
+                    for (i = 0; i < selections.methodParams.functions.length; i++) {
+                        selections.methodParams.locales.push(
+                            this._getAggregateLocalization(
+                                selections.methodParams.functions[i]
+                            )
+                        );
+                    }
                 }
 
                 data.analyse = JSON.stringify(selections);
@@ -1913,7 +1957,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             filterJson.featureIds = (layer.getClickedFeatureListIds ? layer.getClickedFeatureListIds().slice() : []);
         },
         /**
-         * Add field property types {fieldname1:type1,...} to layer
+         * Add field property types {fieldname1:type1,...} to layer and wps_params
          * @param layers selected layers
          * @private
          */
@@ -1930,7 +1974,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
         /**
          * Check if wfs field type is numeric
-         * @param layers
+         * @param fieldName  property name
          * @private
          */
         _isNumericField: function (fieldName) {
@@ -1947,6 +1991,25 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             });
 
             return isIt;
+        },
+        /**
+         * Get selected wfs layer's no_data value for wps analyse
+         * There is no no_value for selected layer, if return value is undefined
+         * @return no_data value
+         * @private
+         */
+        _getNoDataValue: function () {
+            var me = this,
+                no_data,
+                selectedLayer = me._getSelectedMapLayer(),
+                params = selectedLayer.getWpsLayerParams();
+            jQuery.each(params, function (key, value) {
+                if (key === "no_data") {
+                    no_data = value;
+                }
+            });
+
+            return no_data;
         },
         /**
          * Modify analyse name when analyse layer is changed
