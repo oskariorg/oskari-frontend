@@ -295,7 +295,10 @@ Oskari.registerLocalization({
                 "Unable_to_process_aggregate_union": "Unable to process aggregate union",
                 "Unable_to_get_features_for_union": "Unable to get features for union",
                 "Unable_to_store_analysis_data": "Unable to store analysis data",
-                "Unable_to_get_analysisLayer_data": "Unable to get analysisLayer data"
+                "Unable_to_get_analysisLayer_data": "Unable to get analysisLayer data",
+                "timeout": "Analysis request timed out",
+                "error": "Analysis failed for an unknown reason",
+                "parsererror": "Server returned invalid analysis data"
             },
             "infos": {
                 "title": "Info",

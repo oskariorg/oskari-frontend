@@ -1096,7 +1096,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 titlespa.find('.extra_title_label').html(this.loc.spatial.label);
                 contentPanel.append(titlespa);
 
-                var closureMagic = function (tool) {
+                var selectSpatial = function (tool) {
                     return function () {
                         var size = contentPanel.find('input[name=spatial]:checked').val(),
                             i;
@@ -1130,7 +1130,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'name': 'spatial',
                         'id': option.id
                     });
-                    toolContainer.find('input').change(closureMagic(option));
+                    toolContainer.find('input').change(selectSpatial(option));
                 }
             }
         },
@@ -1176,7 +1176,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             title.find('.extra_title_label').html(me.loc.union.label);
             contentPanel.append(title);
 
-            var closureMagic = function (tool) {
+            var selectUnion = function (tool) {
                 return function () {
                     var size = contentPanel.find('input[name=aggre]:checked').val(),
                         i;
@@ -1209,7 +1209,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'name': 'union',
                     'id': option.id
                 });
-                toolContainer.find('input').change(closureMagic(option));
+                toolContainer.find('input').change(selectUnion(option));
             }
 
             //title spatial operator
@@ -1764,7 +1764,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 sandbox = this.instance.getSandbox(),
                 url = sandbox.getAjaxUrl(),
                 selections = me._gatherSelections(),
-                i;
+                i,
+                showError = function (error) {
+                    me.instance.showMessage(
+                        me.loc.error.title,
+                        me.loc.error[error] || error
+                    );
+                };
 
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
@@ -1803,8 +1809,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         // no bbox filter when selected features
                         this._getSelectedFeatureIds(layer, filterJson);
                         delete filterJson.bbox;
-                    }
-                    else {
+                    } else {
                         filterJson.featureIds = [];
                     }
                     data.filter1 = JSON.stringify(filterJson);
@@ -1826,24 +1831,24 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 // Send the data for analysis to the backend
                 me.progressSpinner.start();
-                me.instance.analyseService.sendAnalyseData(data,
+                me.instance.analyseService.sendAnalyseData(
+                    data,
                     // Success callback
-
                     function (response) {
                         me.progressSpinner.stop();
                         if (response) {
                             if (response.error) {
-                                me.instance.showMessage(me.loc.error.title, me.loc.error[response.error] || response.error);
+                                showError(response.error);
                             } else
                                 me._handleAnalyseMapResponse(response);
                         }
                     },
                     // Error callback
-
                     function (jqXHR, textStatus, errorThrown) {
                         me.progressSpinner.stop();
-
-                    });
+                        showError(textStatus);
+                    }
+                );
             }
 
         },

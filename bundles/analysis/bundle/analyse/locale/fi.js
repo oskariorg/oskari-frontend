@@ -297,8 +297,10 @@ Oskari.registerLocalization({
                 "Unable_to_process_aggregate_union": "Yhdisteen koosteen prosessointi epäonnistui",
                 "Unable_to_get_features_for_union": "Koosteen input kohteiden haku epäonnistui",
                 "Unable_to_store_analysis_data": "Analyysin tallennus epäonnistui",
-                "Unable_to_get_analysisLayer_data": "Analyysitason tietojen parsinta epäonnistui"
-
+                "Unable_to_get_analysisLayer_data": "Analyysitason tietojen parsinta epäonnistui",
+                "timeout": "Analyysi epäonnistui - pyyntö aikakatkaistiin",
+                "error": "Valitettavasti analyysi ei onnistunut",
+                "parsererror": "Palvelin palautti viallista analyysidataa"
             },
             "infos": {
                 "title": "Tiedoksi",
