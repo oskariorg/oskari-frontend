@@ -146,7 +146,7 @@ Oskari.registerLocalization({
                     "id": "oskari_analyse_Median",
                     "label": "Mediaani"
                 },{
-                    "id": "oskari_analyse_NoDataCount",
+                    "id": "oskari_analyse_NoDataCnt",
                     "label": "Tietosuojatut kohteet"
                   }],
                 "attribute": "Valitse ominaisuustieto"

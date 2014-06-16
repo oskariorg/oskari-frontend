@@ -147,7 +147,7 @@ Oskari.registerLocalization({
                     "id": "oskari_analyse_Median",
                     "label": "Median"
                 },{
-                    "id": "oskari_analyse_NoDataCount",
+                    "id": "oskari_analyse_NoDataCnt",
                     "label": "Unauthorized features"
                 }],
                 "attribute": "Choose an attribute"

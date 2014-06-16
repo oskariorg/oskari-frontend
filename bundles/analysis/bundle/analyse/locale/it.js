@@ -91,7 +91,7 @@ Oskari.registerLocalization({
                     "id": "oskari_analyse_Median",
                     "label": "NOT TRANSLATED"
                 },{
-                    "id": "oskari_analyse_NoDataCount",
+                    "id": "oskari_analyse_NoDataCnt",
                     "label": "Unauthorized features"
                 }],
                 "attribute": "Scegli un attributo"
