@@ -2,8 +2,8 @@ Oskari.registerLocalization({
     "lang": "sv",
     "key": "Analyse",
     "value": {
-        "title": "Analys",
-        "flyouttitle": "Analys",
+        "title": "Analys <font color=red>(BETA)</font>",
+        "flyouttitle": "Analys <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analys",
         "notLoggedIn": "Endast loggad andvändare can göra analys . <a href='/web/sv/login'>Logga in</a>.",
@@ -329,7 +329,7 @@ Oskari.registerLocalization({
         "personalDataTab": {
             "grid": {
                 "name": "Namn",
-                "delete": " "
+                "delete": "Ta bort"
             },
             "title": "Analyser",
             "confirmDeleteMsg": "Vill du ta bort:",

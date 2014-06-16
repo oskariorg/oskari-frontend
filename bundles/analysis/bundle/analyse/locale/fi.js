@@ -2,8 +2,8 @@ Oskari.registerLocalization({
     "lang": "fi",
     "key": "Analyse",
     "value": {
-        "title": "Analyysi",
-        "flyouttitle": "Analyysi",
+        "title": "Analyysi <font color=red>(BETA)</font>",
+        "flyouttitle": "Analyysi <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analyysi",
         "notLoggedIn": "Vain kirjautunut käyttäjä voi tehdä WFS tasoille analyysejä. <a href='/web/fi/login'>Kirjaudu palveluun</a>.",
@@ -328,7 +328,7 @@ Oskari.registerLocalization({
         "personalDataTab": {
             "grid": {
                 "name": "Nimi",
-                "delete": " "
+                "delete": "Poista"
             },
             "title": "Analyysit",
             "confirmDeleteMsg": "Haluatko poistaa analyysin:",
