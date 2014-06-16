@@ -19,7 +19,7 @@ Oskari.registerLocalization({
                 "description": "Description",
                 "organization": "Data source",
                 "year": "Year",
-                "delete": " "
+                "delete": "Delete"
             },
             "deleteTitle": "Deleting indicator",
             "destroyIndicator": "Delete",

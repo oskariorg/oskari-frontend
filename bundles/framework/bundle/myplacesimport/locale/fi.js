@@ -48,7 +48,7 @@ Oskari.registerLocalization(
                 "name": "Nimi",
                 "description": "Kuvaus",
                 "source": "Tietolähde",
-                "remove": "NOT TRANSLATED",
+                "remove": "Poista",
                 "removeButton": "Poista"
             },
             "confirmDeleteMsg": "Haluatko poistaa aineiston:",

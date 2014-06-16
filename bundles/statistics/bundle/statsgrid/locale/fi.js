@@ -19,7 +19,7 @@ Oskari.registerLocalization({
                 "description": "Kuvaus",
                 "organization": "Tietolähde",
                 "year": "Vuosi",
-                "delete": " "
+                "delete": "Poista"
             },
             "deleteTitle": "Indikaattorin poistaminen",
             "destroyIndicator": "Poista",
