@@ -2,8 +2,8 @@ Oskari.registerLocalization({
     "lang": "it",
     "key": "Analyse",
     "value": {
-        "title": "Analisi",
-        "flyouttitle": "Analisi",
+        "title": "Analisi <font color=red>(BETA)</font>",
+        "flyouttitle": "Analisi <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analisi",
         "notLoggedIn": "Solo gli utenti registrati possono fare analisi. <a href='/web/en/login'>Log in</a>.",
@@ -193,7 +193,15 @@ Oskari.registerLocalization({
                         "boolean": "Operatore logico",
                         "operator": "Operatore",
                         "attribute-value": "Valore"
-                    }
+                    },
+                    "equals": "=",
+                    "like": "~=",
+                    "notEquals": "≠",
+                    "notLike": "~≠",
+                    "greaterThan": ">",
+                    "lessThan": "<",
+                    "greaterThanOrEqualTo": "≥",
+                    "lessThanOrEqualTo": "≤"
                 },
                 "validation": {
                     "title": "I seguenti errori impediscono l'aggiornamento del filtro:",
@@ -231,7 +239,10 @@ Oskari.registerLocalization({
                 "Unable_to_process_aggregate_union": "Impossibile processare l'unione",
                 "Unable_to_get_features_for_union": "Impossibile ottenere feature dall'unione",
                 "Unable_to_store_analysis_data": "Impossibile memorizzare i parametri dell'analisi",
-                "Unable_to_get_analysisLayer_data": "Impossibile ottenere i dati del layer da analizzare"
+                "Unable_to_get_analysisLayer_data": "Impossibile ottenere i dati del layer da analizzare",
+                "timeout": "Analysis request timed out",
+                "error": "Analysis failed for an unknown reason",
+                "parsererror": "Server returned invalid analysis data"
             },
             "infos": {
                 "title": "Info",
@@ -282,7 +293,7 @@ Oskari.registerLocalization({
         "personalDataTab": {
             "grid": {
                 "name": "Nome",
-                "delete": " "
+                "delete": "Cancella"
             },
             "title": "Analisi",
             "confirmDeleteMsg": "Vuoi cancellare:",

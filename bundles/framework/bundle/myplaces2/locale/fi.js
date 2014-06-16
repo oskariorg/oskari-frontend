@@ -32,8 +32,8 @@ Oskari.registerLocalization(
                 "createDate": "Luontiaika",
                 "updateDate": "Muokkausaika",
                 "measurement": "Koko",
-                "edit": "NOT TRANSLATED",
-                "delete": "NOT TRANSLATED"
+                "edit": "Muokkaa",
+                "delete": "Poista"
             },
             "notification": {
                 "delete": {

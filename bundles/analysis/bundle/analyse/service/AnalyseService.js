@@ -67,7 +67,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
          * @param {Function} failure the failure callback
          */
         _getAnalysisLayers: function (mysuccess, failure) {
-
             var url = this.sandbox.getAjaxUrl() + 'action_route=GetAnalysisLayers';
             jQuery.ajax({
                 type: 'GET',
@@ -97,14 +96,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
             // Request analyis layers via the backend
             me._getAnalysisLayers(
                 // Success callback
-
                 function (response) {
                     if (response) {
                         me._handleAnalysisLayersResponse(response);
                     }
                 },
                 // Error callback
-
                 function (jqXHR, textStatus, errorThrown) {
                     me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayersFailed);
                 }
@@ -129,6 +126,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
                 layerarr = analysislayersJson.analysislayers,
                 i,
                 analyseJson;
+
             for (i in layerarr) {
                 if (layerarr.hasOwnProperty(i)) {
                     analyseJson = layerarr[i];
@@ -188,14 +186,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
             // Request analyis layers via the backend
             me._getWFSLayerPropertiesAndTypes(layer_id,
                 // Success callback
-
                 function (response) {
                     if (response) {
                         me._handleWFSLayerPropertiesAndTypesResponse(response);
                     }
                 },
                 // Error callback
-
                 function (jqXHR, textStatus, errorThrown) {
                     me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayerTypesFailed);
                 });
@@ -209,9 +205,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
          * @param {JSON} propertyJson properties and property types of WFS layer JSON returned by server.
          */
         _handleWFSLayerPropertiesAndTypesResponse: function (propertyJson) {
-            var me = this;
-            // alert(JSON.stringify(propertyJson));
-            var layer = null;
+            var me = this,
+                layer = null;
+
             if (propertyJson.layer_id) {
                 layer = me.instance.getSandbox().findMapLayerFromSelectedMapLayers(propertyJson.layer_id);
             }
