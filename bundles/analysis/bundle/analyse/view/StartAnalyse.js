@@ -1800,7 +1800,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     // If the user wanted to include only selected/clicked
                     // features, get them now from the layer.
                     if (filterJson.featureIds) {
+                        // no bbox filter when selected features
                         this._getSelectedFeatureIds(layer, filterJson);
+                        delete filterJson.bbox;
+                    }
+                    else {
+                        filterJson.featureIds = [];
                     }
                     data.filter1 = JSON.stringify(filterJson);
                 }
@@ -2008,7 +2013,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (!layer || !filterJson) {
                 return;
             }
-            filterJson.featureIds = (layer.getClickedFeatureListIds ? layer.getClickedFeatureListIds().slice() : []);
+            filterJson.featureIds = (layer.getClickedFeatureListIds() ? layer.getClickedFeatureListIds().slice() : []);
         },
         /**
          * Add field property types {fieldname1:type1,...} to layer and wps_params
