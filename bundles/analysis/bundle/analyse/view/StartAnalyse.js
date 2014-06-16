@@ -2066,14 +2066,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 no_data,
                 selectedLayer = me._getSelectedMapLayer(),
-                params = selectedLayer.getWpsLayerParams();
-            if (params) {
-                jQuery.each(params, function (key, value) {
-                    if (key === "no_data") {
-                        no_data = value;
-                    }
-                });
-            }
+                params = selectedLayer.getWpsLayerParams() || {};
+
+			jQuery.each(params, function (key, value) {
+                if (key === "no_data") {
+                    no_data = value;
+                }
+            });
 
             return no_data;
         },

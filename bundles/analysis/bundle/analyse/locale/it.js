@@ -2,8 +2,8 @@ Oskari.registerLocalization({
     "lang": "it",
     "key": "Analyse",
     "value": {
-        "title": "Analisi",
-        "flyouttitle": "Analisi",
+        "title": "Analisi <font color=red>(BETA)</font>",
+        "flyouttitle": "Analisi <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analisi",
         "notLoggedIn": "Solo gli utenti registrati possono fare analisi. <a href='/web/en/login'>Log in</a>.",
@@ -293,7 +293,7 @@ Oskari.registerLocalization({
         "personalDataTab": {
             "grid": {
                 "name": "Nome",
-                "delete": " "
+                "delete": "Cancella"
             },
             "title": "Analisi",
             "confirmDeleteMsg": "Vuoi cancellare:",
