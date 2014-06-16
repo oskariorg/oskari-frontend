@@ -21,7 +21,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
         this._clickedFeatureIds = []; // clicked feature ids (map)
         this._clickedFeatureListIds = []; // clicked feature ids (list)
         this._clickedGeometries = []; // clicked feature geometries [[id, geom]..]
-        this._propertyTypes = {}; // name and describeFeatureType type (hashmap, json)
+        this._propertyTypes = {}; // name and describeFeatureType type (hashmap, json) (Analysis populates)
+        this._wpsLayerParams = {}; // wfs/wps analysis layer params (hashmap, json)    (Analysis populates)
         this._styles = []; /* Array of styles that this layer supports */
         this._customStyle = null;
 
@@ -195,6 +196,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
          */
         getPropertyTypes: function () {
             return this._propertyTypes;
+        },
+        /**
+         * @method setWpsLayerParams
+         * @param {json} wpsLayerParams
+         */
+        setWpsLayerParams: function (wpsLayerParams) {
+            this._wpsLayerParams = wpsLayerParams;
+        },
+
+        /**
+         * @method getWpsLayerParams
+         * @return {json} wpsLayerParams
+         */
+        getWpsLayerParams: function () {
+            return this._wpsLayerParams;
         },
 
         /**

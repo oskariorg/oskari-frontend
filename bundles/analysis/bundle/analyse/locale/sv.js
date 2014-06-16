@@ -2,8 +2,8 @@ Oskari.registerLocalization({
     "lang": "sv",
     "key": "Analyse",
     "value": {
-        "title": "Analys",
-        "flyouttitle": "Analys",
+        "title": "Analys <font color=red>(BETA)</font>",
+        "flyouttitle": "Analys <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analys",
         "notLoggedIn": "Endast loggad andvändare can göra analys . <a href='/web/sv/login'>Logga in</a>.",
@@ -98,7 +98,7 @@ Oskari.registerLocalization({
                     "label": "Union",
                     "classForPreview": "union",
                     "tooltip": ""
-/*              TODO: Uncomment this to enable clipping functionality
+                    /*              TODO: Uncomment this to enable clipping functionality
                 }, {
                     "id": "oskari_analyse_clip",
                     "label": "NOT TRANSLATED",
@@ -128,22 +128,32 @@ Oskari.registerLocalization({
                     "label": "Summa"
                 }, {
                     "id": "oskari_analyse_Min",
-                    "label": "Minimum"
+                    "label": "Minsta värde"
                 }, {
                     "id": "oskari_analyse_Max",
-                    "label": "Maximum"
+                    "label": "Största värde"
                 }, {
                     "id": "oskari_analyse_Average",
-                    "label": "Medeltal"
+                    "label": "Medelvärde"
                 }, {
                     "id": "oskari_analyse_StdDev",
-                    "label": "Medel spridning"
+                    "label": "Standardavvikelse"
+                }, {
+                    "id": "oskari_analyse_Median",
+                    "label": "Median"
+                },{
+                    "id": "oskari_analyse_NoDataCount",
+                    "label": "Skyddad objekter"
                 }],
                 "attribute": "Välj ett attribut"
             },
             "buffer_size": {
-                "label": "Zon storlek (m)",
+                "label": "Zon storlek",
                 "tooltip": "Passa zon storlek"
+            },
+            "buffer_units": {
+                "m": "Meter",
+                "km": "Kilometer"
             },
             "analyse_name": {
                 "label": "Analys namn",
@@ -177,6 +187,7 @@ Oskari.registerLocalization({
             },
             "params": {
                 "label": "Väljad attribut data",
+                "aggreLabel": "Aggregate attribut",
                 "tooltip": "",
                 "options": [{
                     "id": "oskari_analyse_all",
@@ -318,7 +329,7 @@ Oskari.registerLocalization({
         "personalDataTab": {
             "grid": {
                 "name": "Namn",
-                "delete": " "
+                "delete": "Ta bort"
             },
             "title": "Analyser",
             "confirmDeleteMsg": "Vill du ta bort:",

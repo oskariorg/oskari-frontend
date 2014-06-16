@@ -1,11 +1,11 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "en",
     "key": "DivManazer",
     "value": {
         "buttons": {
             "add": "Add",
             "cancel": "Cancel",
+            "close": "Close",
             "delete": "Delete",
             "edit": "Edit",
             "ok": "OK",
@@ -104,7 +104,17 @@ Oskari.registerLocalization(
                     "cancel": "Cancel"
                 }
             }
+        },
+        "Grid": {
+            "columnSelector": {
+                "title": "NOT TRANSLATED",
+                "tooltip": "NOT TRANSLATED"
+            },
+            "export": {
+                "title": "NOT TRANSLATED",
+                "csv": "CSV",
+                "excel": "Excel"
+            }
         }
     }
-}
-);
+});

@@ -1,5 +1,23 @@
 # Release Notes
 
+## 1.22
+
+### integration/admin-layerselector
+
+Now has initial support for WMTS layers.
+
+### core/MapLayerService
+
+Now parses generic layerName and url properties from layerJSON to AbstractLayers setLayerName() and setLayerUrls() methods.
+
+### analysis/analyse
+
+Added an option to select the measurement unit (meters or kilometers) for buffer size.
+
+### divmanazer/Grid
+
+Implemented front-end based CSV export and some UI polishing.
+
 ## 1.21
 
 ### core/sandbox/Layers

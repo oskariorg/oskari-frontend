@@ -155,6 +155,10 @@ div.basic_analyse {
         margin: 10px;
     }
 
+    select.settings_buffer_units {
+        width: 80px;
+    }
+
 }
 
 div.basic_analyse div.form div.field input, div.field select {
@@ -215,8 +219,8 @@ label.params_checklabel {
 // for local use .icon-funnel {
 //    background-image: url("../icons/icon-funnel.png") !important;
 //    background-repeat: no-repeat !important;
-//    height: 16px;
-//    width: 16px;
+//    height: 18px !important;
+//    width: 18px !important;
 //} 
 table.layer-icons {
     font-family: Arial,sans-serif;

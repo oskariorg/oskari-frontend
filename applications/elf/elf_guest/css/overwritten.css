@@ -51,10 +51,7 @@ table {
         border: 0;
     }
 
-    div.main {
-        margin-left: 32px;
-        margin-top: 4px;
-    }
+    
     .oskari-tile {
 	height: auto !important;
 	min-height: 31px !important;
@@ -86,15 +83,27 @@ table {
         background-repeat: no-repeat;
     }
 
-    .tool-reset {
+
+
+
+
+    .marker-share {
+
         display: none !important;
     }
-    .tool-link {
+    .tool-print{
         display: none !important;
     }
-    .layer-visibility {
+
+    .layer-backendstatus-icon {
         display: none !important;
     }
+
+
+
+
+
+    
 /*    li.layer {
         height: 120px !important;
     }
@@ -129,4 +138,19 @@ table {
     background: #B9CED9 url(../images/application/state_hover_bg.png) repeat-x 0 0;
     border-color: #627782;
     color: #369;
+}
+
+
+.logoplugin .icon {
+	background-image: url('ELF-logo-small.png') !important;
+	display: inline-block;
+	height: 25px;
+	width: 25px;
+	vertical-align: bottom;
+	cursor: pointer;
+}
+
+
+div.layerselection2 div.object-data {
+display: none !important;
 }

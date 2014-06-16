@@ -171,6 +171,49 @@ jQuery(document).ready(function() {
           
         }
         
+        Oskari.clazz.category('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore','xxx', {
+
+            /**
+             * @method connect
+             *
+             * 'connects' to store (does not but might)
+             */
+            connect: function () {
+                var url = this.url;
+                this.protocols.categories = new OpenLayers.Protocol.WFS({
+                    version: '1.1.0',
+                    srsName: Oskari.getSandbox().getMap().getSrsName(),
+                    featureType: 'categories',
+                    featureNS: this.featureNS,
+                    url: url
+                });
+                // myplaces uses version 1.0.0 since with 1.1.0 geoserver connects
+                // multilines to one continuous line on save
+                var myPlacesProps = {
+                    version: '1.0.0',
+                    srsName: Oskari.getSandbox().getMap().getSrsName(),
+                    geometryName: 'geometry',
+                    featureType: 'my_places',
+                    featureNS: this.featureNS,
+                    url: url
+                };
+                if (this.options.maxFeatures) {
+                    myPlacesProps.maxFeatures = this.options.maxFeatures;
+                }
+                this.protocols.my_places = new OpenLayers.Protocol.WFS(myPlacesProps);
+            }
+        });
+        
+        /* TEMPORARY */
+        /* force geodesic until fix is available in trunk */
+        var mapModule = Oskari.getSandbox().findRegisteredModuleInstance("MainMapModule"),
+        controlsPlugin = mapModule.getPluginInstance('ControlsPlugin');
+        if( controlsPlugin && controlsPlugin._measureControls && controlsPlugin._measureControls.area ) {
+    		controlsPlugin._measureControls.area.geodesic = true;
+    	}
+    	if( controlsPlugin && controlsPlugin._measureControls && controlsPlugin._measureControls.line ) {
+    		controlsPlugin._measureControls.line.geodesic = true;
+    	}
 
     }
 

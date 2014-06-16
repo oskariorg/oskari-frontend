@@ -2,8 +2,8 @@ Oskari.registerLocalization({
     "lang": "it",
     "key": "Analyse",
     "value": {
-        "title": "Analisi",
-        "flyouttitle": "Analisi",
+        "title": "Analisi <font color=red>(BETA)</font>",
+        "flyouttitle": "Analisi <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analisi",
         "notLoggedIn": "Solo gli utenti registrati possono fare analisi. <a href='/web/en/login'>Log in</a>.",
@@ -82,12 +82,22 @@ Oskari.registerLocalization({
                 }, {
                     "id": "oskari_analyse_StdDev",
                     "label": "Deviazione standard"
+                }, {
+                    "id": "oskari_analyse_Median",
+                    "label": "NOT TRANSLATED"
+                },{
+                    "id": "oskari_analyse_NoDataCount",
+                    "label": "Unauthorized features"
                 }],
                 "attribute": "Scegli un attributo"
             },
             "buffer_size": {
-                "label": "Dimensione Buffer (metri)",
+                "label": "Dimensione Buffer",
                 "tooltip": "Enter buffer size"
+            },
+            "buffer_units": {
+                "m": "Metri",
+                "km": "Chilometri"
             },
             "analyse_name": {
                 "label": "Nome dell'analisi",
@@ -121,6 +131,7 @@ Oskari.registerLocalization({
             },
             "params": {
                 "label": "Selected columns",
+                "aggreLabel": "Aggregate attributes",
                 "tooltip": "",
                 "options": [{
                     "id": "oskari_analyse_all",
@@ -261,7 +272,7 @@ Oskari.registerLocalization({
         "personalDataTab": {
             "grid": {
                 "name": "Nome",
-                "delete": " "
+                "delete": "Cancella"
             },
             "title": "Analisi",
             "confirmDeleteMsg": "Vuoi cancellare:",

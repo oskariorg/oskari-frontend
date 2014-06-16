@@ -5,6 +5,7 @@ Oskari.registerLocalization({
         "buttons": {
             "add": "Tillägg",
             "cancel": "Tillbaka",
+            "close": "Avbryta",
             "delete": "Ta bort",
             "edit": "Editera",
             "ok": "OK",
@@ -102,6 +103,17 @@ Oskari.registerLocalization({
                     "save": "Lagra",
                     "cancel": "Tillbaka"
                 }
+            }
+        },
+        "Grid": {
+            "columnSelector" : {
+                "title": "NOT TRANSLATED",
+                "tooltip": "NOT TRANSLATED"
+            },
+            "export": {
+                "title": "NOT TRANSLATED",
+                "csv": "CSV",
+                "excel": "Excel"
             }
         }
     }

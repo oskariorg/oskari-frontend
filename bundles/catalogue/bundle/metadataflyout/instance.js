@@ -112,7 +112,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 
         sandbox.addRequestHandler('catalogue.ShowMetadataRequest', this._requestHandlers['catalogue.ShowMetadataRequest']);
 
-        /* layer && layer plugin */
+        /*
         var layerSpec = {};
 
         for (p in this.layerSpec) {
@@ -136,12 +136,12 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         var layerPlugin = Oskari.clazz.create('Oskari.mapframework.mapmodule.MetadataLayerPlugin');
         layerPlugin.setMapLayer(mapLayer);
-        /* must have this one before register */
+
 
         mapModule.registerPlugin(layerPlugin);
         mapModule.startPlugin(layerPlugin);
         this.layerPlugin = layerPlugin;
-
+*/
         /*layerPlugin.addMapLayerToMap(mapLayer, true, false);*/
 
         /* */

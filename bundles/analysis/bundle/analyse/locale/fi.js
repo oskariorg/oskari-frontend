@@ -2,8 +2,8 @@ Oskari.registerLocalization({
     "lang": "fi",
     "key": "Analyse",
     "value": {
-        "title": "Analyysi",
-        "flyouttitle": "Analyysi",
+        "title": "Analyysi <font color=red>(BETA)</font>",
+        "flyouttitle": "Analyysi <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analyysi",
         "notLoggedIn": "Vain kirjautunut käyttäjä voi tehdä WFS tasoille analyysejä. <a href='/web/fi/login'>Kirjaudu palveluun</a>.",
@@ -98,13 +98,12 @@ Oskari.registerLocalization({
                     "label": "Yhdiste",
                     "classForPreview": "union",
                     "tooltip": "Kohteiden yhdistäminen taulukosta valitsemalla tai yhteisten ominaisuustietoarvojen perusteella"
-/*              TODO: Uncomment this to enable clipping functionality
+
                 }, {
                     "id": "oskari_analyse_clip",
                     "label": "Leikkaus",
                     "classForPreview": "clip",
                     "tooltip": ""
-*/
                 }, {
                     "id": "oskari_analyse_intersect",
                     "label": "Leikkaavien kohteiden suodatus",
@@ -128,22 +127,32 @@ Oskari.registerLocalization({
                     "label": "Summa"
                 }, {
                     "id": "oskari_analyse_Min",
-                    "label": "Minimi"
+                    "label": "Pienin arvo"
                 }, {
                     "id": "oskari_analyse_Max",
-                    "label": "Maksimi"
+                    "label": "Suurin arvo"
                 }, {
                     "id": "oskari_analyse_Average",
                     "label": "Keskiarvo"
                 }, {
                     "id": "oskari_analyse_StdDev",
                     "label": "Keskihajonta"
-                }],
+                }, {
+                    "id": "oskari_analyse_Median",
+                    "label": "Mediaani"
+                },{
+                    "id": "oskari_analyse_NoDataCount",
+                    "label": "Tietosuojatut kohteet"
+                  }],
                 "attribute": "Valitse ominaisuustieto"
             },
             "buffer_size": {
-                "label": "Vyöhykkeen koko (m)",
+                "label": "Vyöhykkeen koko",
                 "tooltip": "Anna vyöhykkeen koko"
+            },
+            "buffer_units": {
+                "m": "Metriä",
+                "km": "Kilometriä"
             },
             "analyse_name": {
                 "label": "Analyysin nimi",
@@ -177,6 +186,7 @@ Oskari.registerLocalization({
             },
             "params": {
                 "label": "Säilytettävät ominaisuustiedot",
+                "aggreLabel": "Koostettavat ominaisuustiedot",
                 "tooltip": "",
                 "options": [{
                     "id": "oskari_analyse_all",
@@ -318,7 +328,7 @@ Oskari.registerLocalization({
         "personalDataTab": {
             "grid": {
                 "name": "Nimi",
-                "delete": " "
+                "delete": "Poista"
             },
             "title": "Analyysit",
             "confirmDeleteMsg": "Haluatko poistaa analyysin:",

@@ -2,8 +2,8 @@ Oskari.registerLocalization({
     "lang": "en",
     "key": "Analyse",
     "value": {
-        "title": "Analysis",
-        "flyouttitle": "Analysis",
+        "title": "Analysis <font color=red>(BETA)</font>",
+        "flyouttitle": "Analysis <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analysis",
         "notLoggedIn": "Only logged user can create analysis. <a href='/web/en/login'>Log in</a>.",
@@ -98,7 +98,7 @@ Oskari.registerLocalization({
                     "label": "Union",
                     "classForPreview": "union",
                     "tooltip": ""
-/*              TODO: Uncomment this to enable clipping functionality
+                    /*              TODO: Uncomment this to enable clipping functionality
                 }, {
                     "id": "oskari_analyse_clip",
                     "label": "NOT TRANSLATED",
@@ -138,12 +138,22 @@ Oskari.registerLocalization({
                 }, {
                     "id": "oskari_analyse_StdDev",
                     "label": "Standard deviation"
+                },{
+                    "id": "oskari_analyse_Median",
+                    "label": "Median"
+                },{
+                    "id": "oskari_analyse_NoDataCount",
+                    "label": "Unauthorized features"
                 }],
                 "attribute": "Choose an attribute"
             },
             "buffer_size": {
-                "label": "Buffer size (meters)",
+                "label": "Buffer size",
                 "tooltip": "Enter buffer size"
+            },
+            "buffer_units": {
+                "m": "Meters",
+                "km": "Kilometers"
             },
             "analyse_name": {
                 "label": "Name of analysis",
@@ -177,6 +187,7 @@ Oskari.registerLocalization({
             },
             "params": {
                 "label": "Selected columns",
+                "aggreLabel": "Aggregate attributes",
                 "tooltip": "",
                 "options": [{
                     "id": "oskari_analyse_all",
@@ -317,7 +328,7 @@ Oskari.registerLocalization({
         "personalDataTab": {
             "grid": {
                 "name": "Name",
-                "delete": " "
+                "delete": "Delete"
             },
             "title": "Analysis",
             "confirmDeleteMsg": "Do you want to delete:",

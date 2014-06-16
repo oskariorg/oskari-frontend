@@ -18,263 +18,110 @@
 <link rel='stylesheet' id='twentytwelve-fonts-css'
 	href='//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700&#038;subset=latin,latin-ext'
 	type='text/css' media='all' />
-<link rel='stylesheet' id='twentytwelve-style-css'
-	href='css/style.css'
+<link rel='stylesheet' id='twentytwelve-style-css' href='css/style.css'
 	type='text/css' media='all' />
 <!--[if lt IE 9]>
 <link rel='stylesheet' id='twentytwelve-ie-css'  href='http://arctic-sdi.org/wp-content/themes/twentytwelve/css/ie.css?ver=20121010' type='text/css' media='all' />
 <![endif]-->
-<link rel="EditURI" type="application/rsd+xml" title="RSD"
-	href="http://arctic-sdi.org/xmlrpc.php?rsd" />
-<link rel="wlwmanifest" type="application/wlwmanifest+xml"
-	href="http://arctic-sdi.org/wp-includes/wlwmanifest.xml" />
-<meta name="generator" content="WordPress 3.9" />
-<style type="text/css">
-.recentcomments a {
-	display: inline !important;
-	padding: 0 !important;
-	margin: 0 !important;
-}
-</style>
-<style type="text/css" id="custom-background-css">
-body.custom-background {
-	/*background-color: #568ebf;*/
-	
-}
-</style>
 
-<link rel="stylesheet"
-	href="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.2.12/jquery.jgrowl.min.css" />
 <script
 	src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<script
-	src="//cdnjs.cloudflare.com/ajax/libs/jquery-jgrowl/1.2.12/jquery.jgrowl.min.js"></script>
-
-
 <link rel="stylesheet" type="text/css" href="css/icons.css" />
+<link rel="stylesheet" type="text/css" href="css/forms.css" />
+<link rel="stylesheet" type="text/css" href="css/portal.css" />
+<link rel="stylesheet" type="text/css" href="css/overwritten.css" />
 <style type="text/css">
 @media screen {
-	#contentMap {
-		
+	#login {
+		margin-left: 5px;
 	}
-	.mapcontainer {
-		position: relative;
+	#login input[type="text"],#login input[type="password"] {
+		width: 90%;
+		margin-bottom: 5px;
+		background-image: url("/Oskari${path}/images/forms/input_shadow.png");
+		background-repeat: no-repeat;
+		padding-left: 5px;
+		padding-right: 5px;
+		border: 1px solid #B7B7B7;
+		border-radius: 4px 4px 4px 4px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+		color: #878787;
+		font: 13px/100% Arial, sans-serif;
 	}
-	div.mapplugin.coordinates {
-		border-radius: 5px !important;
-		height: 40px !important;
+	#login input[type="submit"] {
+		width: 90%;
+		margin-bottom: 5px;
+		padding-left: 5px;
+		padding-right: 5px;
+		border: 1px solid #B7B7B7;
+		border-radius: 4px 4px 4px 4px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+		color: #878787;
+		font: 13px/100% Arial, sans-serif;
 	}
-	.oskari-flyouttoolbar {
-		height: 47px !important;
-		width: 100% !important;
-		background-color: #020202 !important;
-		border-top: #fdfdfd !important;
-		border-bottom: #000000 !important;
+	#login p.error {
+		font-weight: bold;
+		color: red;
+		margin-bottom: 10px;
 	}
-	.oskari-flyout-title p {
-		color: white !important;
+	#login a {
+		color: #FFF;
+		padding: 5px;
 	}
-	.oskari-flyoutheading {
-		border: 0 !important;
-		height: 0px !important;
-		width: 100% !important;
-	}
-	.oskari-tile-closed {
-		border-top: 1px solid #484846 !important;
-		border-bottom: 1px solid #ededed !important;
-		background-color: white !important;
-	}
-	.oskari-tile-closed .oskari-tile-title {
-		color: black !important;
-	}
-	.oskari-tile-attached .oskari-tile-title {
-		color: white !important;
-	}
-	.oskari-tile-detached .oskari-tile-title {
-		color: white !important;
-	}
-	.oskari-tile-attached {
-		background-color: black !important;
-		border-bottom: 0;
-		border-bottom: 1px solid black !important;
-	}
-	.oskari-tile-detached {
-		background-color: black !important;
-		border-bottom: 0;
-		border-bottom: 1px solid black !important;
-	}
-	.oskari-tile {
-		border-top: 1px solid white !important;
-		display: inline-block !important;
-	}
-	.oskari-flyout {
-		max-width: 580px !important;
-	}
-	.publishedToolbarContent.light {
-		background-color: black !important;
-	}
-	body {
-		margin: 0 !important;
-	}
-	.projselector {
-		font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-		margin: 0;
-		padding: 0;
-	}
-	.hotsselector {
-		font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-		margin: 0;
-		padding: 0;
-	}
-	div.projselector {
-		height: 32px !important;
-		position: absolute;
-		width: 120px;
-		top: 2px;
-		left: 1px;
-	}
-	div.hotsselector {
-		height: 32px !important;
-		position: absolute;
-		width: 120px;
-		top: 2px;
-		left: 1px;
-	}
-	#toolbar {
-		width: 100%;
-		background-color: rgb(99, 99, 99);
-		height: 34px !important;
-		margin-top: 0px !important;
-	}
-	#toolbar div.toolrow {
-		border-top: 0 !important;
-		padding: 0px 0px !important;
-		display: inline-block !important;
-		height: 34px;
-	}
-	div.toolrow.hotsselector {
-		position: relative;
-		width: 120px;
-	}
-	div.toolrow.projselector {
-		position: relative;
-		width: 120px;
-	}
-	select.hotsselector {
-		font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-		position: absolute;
-		
-		text-align: center;
-		cursor: default;
-		color: white;
-		padding: 2px 6px 3px;
-		border: 1px inset;
-		box-sizing: border-box;
-		background-color: rgb(99, 99, 99);
-		font-size: 11px;
-	}
-	select.projselector {
-		font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-		position: absolute;
-		
-		text-align: center;
-		cursor: default;
-		color: white;
-		padding: 2px 6px 3px;
-		border: 1px inset ;
-		box-sizing: border-box;
-		background-color: rgb(99, 99, 99);
-		font-size: 11px;
-	}
-	
-	#menubar {
-		height: 36px;
+	div.featuredataplugin.mapplugin {
+		top: inherit !important;
+		bottom: 30px !important;
 	}
 }
 </style>
 
 
 </head>
+<body>
 
-<body class="home blog custom-background custom-font-enabled">
-	<div id="page" class="hfeed site">
-		<header id="masthead" class="site-header" role="banner">
-			<hgroup>
-				<h1 class="site-title">
-					<a href="http://arctic-sdi.org/" title="Arctic SDI" rel="home">Arctic
-						SDI</a>
-				</h1>
-				<h2 class="site-description">Arctic Spatial Data Infrastructure</h2>
-			</hgroup>
-
-			<!-- nav id="site-navigation" class="main-navigation" role="navigation">
-			<h3 class="menu-toggle">Menu</h3>
-			<a class="assistive-text" href="#content" title="Skip to content">Skip to content</a>
-			<div class="menu-navigation-container"><ul id="menu-navigation" class="nav-menu"><li id="menu-item-20" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-20"><a href="/">Map</a></li>
-</ul></div>		</nav-->
-			<!-- #site-navigation -->
-			<nav id="site-navigation" class="xmain-navigation" role="navigation">
-				<div id="menubar"></div>
-
-				<div id="toolbar" class="publishedToolbarContent"></div>
-			</nav>
-			<!-- #site-navigation -->
-
-			<a href="http://arctic-sdi.org/"></a>
-		</header>
-		<!-- #masthead -->
-
-		<div id="main" class="x wrapper">
-			<div id="primary" class="xsite-content">
-				<div id="content" role="main">
-
-
-
-
-
-					<div class="container">
-						<div class="mapcontainer">
-							<div id="contentMap">
-								<div id="mapdiv"></div>
-							</div>
-						</div>
-					</div>
-
-					<!-- ############# Javascript ################# -->
-
-					<!--  OSKARI -->
-					<script type="text/javascript" src="../../../bundles/bundle.js"></script>
-
-					<!--  OPENLAYERS -->
-					<script type="text/javascript"
-						src="../../../packages/openlayers/startup.js"></script>
-
-					<!--
-        <script type="text/javascript" src="full.js">
-        </script>
-        -->
-					<script type="text/javascript" src="index.js"></script>
-
-
-
-				</div>
-				<!-- #main .wrapper -->
-			</div>
+	<nav id="maptools">
+		<div id="logobar"></div>
+		<div id="menubar"></div>
+		<div id="divider"></div>
+		<div id="toolbar"></div>
+		<div id="login">
 		</div>
-
-		<footer id="colophon" role="contentinfo">
-			<div class="site-info">
-				<a href="http://oskari.org/"
-					title="Semantic Personal Publishing Platform">powered by Oskari</a>
-			</div>
-			<!-- .site-info -->
-		</footer>
-		<!-- #colophon -->
+		<div id="langSelector"></div>
+	</nav>
+	<div id="contentMap">
+		<div id="mapdiv"></div>
 	</div>
-	<!-- #page -->
 
-	<script type='text/javascript'
-		src='http://arctic-sdi.org/wp-content/themes/twentytwelve/js/navigation.js?ver=1.0'></script>
+
+	<!-- ############# Javascript ################# -->
+
+	<!--  OSKARI -->
+
+	<script type="text/javascript">
+		var ajaxUrl = '?';
+		var viewId = '1';
+		var language = 'en';
+		var preloaded = false;
+		var controlParams = 
+		{
+			viewId : viewId
+		};
+	</script>
+
+	<script type="text/javascript" src="../../../bundles/bundle.js">
+		
+	</script>
+	
+	<script type="text/javascript"
+        src="/Oskari/packages/openlayers/startup.js">
+</script>
+
+	<script type="text/javascript" src="index.js">
+		
+	</script>
+
+
+	<!-- ############# /Javascript ################# -->
 </body>
 </html>

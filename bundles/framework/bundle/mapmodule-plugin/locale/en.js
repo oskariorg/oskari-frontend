@@ -72,34 +72,34 @@ Oskari.registerLocalization(
             },
             "MarkersPlugin": {
                 "buttons": {
-                    "add": "NOT TRANSLATED",
-                    "clear": "NOT TRANSLATED"
+                    "add": "Map marker",
+                    "clear": "Delete all markers"
                 },
                 "form": {
-                    "title": "NOT TRANSLATED",
+                    "title": "Point feature style",
                     "tooltip": "",
                     "symbol": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Icon"
                     },
                     "size": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Size"
                     },
                     "color": {
-                        "label": "NOT TRANSLATED",
-                        "labelOr": "NOT TRANSLATED",
-                        "labelCustom": "NOT TRANSLATED"
+                        "label": "Colour",
+                        "labelOr": "or",
+                        "labelCustom": "Custom colour (RGB 0-255)"
                     },
                     "preview": {
-                        "label": "NOT TRANSLATED"
+                        "label": "Preview"
                     },
                     "message": {
-                        "label": "NOT TRANSLATED",
-                        "hint": "NOT TRANSLATED"
+                        "label": "The text on the map",
+                        "hint": "Write a text to be shown on the map."
                     }
                 },
                 "dialog": {
-                    "title": "NOT TRANSLATED",
-                    "message": "NOT TRANSLATED"
+                    "title": "Map marker",
+                    "message": "Select a new location for the marker by clicking the map."
                 }
             }
         }

@@ -69,50 +69,51 @@ jQuery(document).ready(function() {
 
                 for(var n = 0; n < capsLayers.length; n++) {
 
-                    var spec = capsLayers[n];
-
-                    var mapLayerId = spec.identifier;
-                    var mapLayerSysId = mapLayerId.split('.').join('_');
-                    var mapLayerName = spec.identifier;
-
-                    var minScale = appConfigElf.conf.layers && appConfigElf.conf.layers[mapLayerSysId] ? appConfigElf.conf.layers[mapLayerSysId].minScale : undefined;
-
-                    var mapLayerJson = {
-                        wmtsName : mapLayerId,
-                        descriptionLink : "",
-                        orgName : wmtsName,
-                        type : "wmtslayer",
-                        legendImage : "",
-                        formats : {
-                            value : "text/html"
-                        },
-                        isQueryable : true,
-                        minScale : minScale,
-                        style : "",
-                        dataUrl : "",
-                        name : mapLayerId,
-                        title : spec.title,
-                        opacity : 100,
-                        inspire : wmtsName,
-                        maxScale : 1
+                    var spec = capsLayers[n],
+                    mapLayerId = spec.identifier,
+                    mapLayerSysId = mapLayerId.split('.').join('_'),
+                    mapLayerName = spec.identifier,
+                    layerExtraInfo =  appConfigElf.conf.layers ? appConfigElf.conf.layers[mapLayerSysId]||{}: {},
+                    minScale =  layerExtraInfo.minScale,
+                    metadataid = layerExtraInfo.metadataid,
+                    mapLayerJson = {
+                      wmtsName : mapLayerId,
+                      descriptionLink : "",
+                      orgName : wmtsName,
+                      type : "wmtslayer",
+                      legendImage : "",
+                      formats : {
+                        value : "text/html"
+                      },
+                      isQueryable : true,
+                      minScale : minScale,
+                      style : "",
+                      dataUrl : "",
+                      name : mapLayerId,
+                      title : spec.title,
+                      opacity : 100,
+                      inspire : wmtsName,
+                      maxScale : 1
                     };
 
-                    var layer = Oskari.clazz.create('Oskari.mapframework.wmts.domain.WmtsLayer');
+                var layer = Oskari.clazz.create('Oskari.mapframework.wmts.domain.WmtsLayer');
 
-                    layer.setAsNormalLayer();
-                    layer.setId(mapLayerSysId);
-                    layer.setName(mapLayerJson.title);
-                    layer.setWmtsName(mapLayerJson.wmtsName);
-                    layer.setOpacity(mapLayerJson.opacity);
-                    layer.setMaxScale(mapLayerJson.maxScale);
-                    layer.setMinScale(mapLayerJson.minScale);
-                    layer.setDescription(mapLayerJson.info);
-                    layer.setDataUrl(mapLayerJson.dataUrl);
-                    layer.setOrganizationName(mapLayerJson.orgName);
-                    layer.setInspireName(mapLayerJson.inspire);
-                    layer.setWmtsMatrixSet(matrixSet)
-                    layer.setWmtsLayerDef(spec);
-                    layer.setVisible(true);
+                layer.setAsNormalLayer();
+                layer.setId(mapLayerSysId);
+                layer.setName(mapLayerJson.title);
+                layer.setWmtsName(mapLayerJson.wmtsName);
+                layer.setOpacity(mapLayerJson.opacity);
+                layer.setMaxScale(mapLayerJson.maxScale);
+                layer.setMinScale(mapLayerJson.minScale);
+                layer.setDescription(mapLayerJson.info);
+                layer.setDataUrl(mapLayerJson.dataUrl);
+                layer.setOrganizationName(mapLayerJson.orgName);
+                layer.setInspireName(mapLayerJson.inspire);
+                layer.setWmtsMatrixSet(matrixSet)
+                layer.setWmtsLayerDef(spec);
+                layer.setVisible(true);
+                layer.setMetadataIdentifier(metadataid);
+
 
                     layer.addWmtsUrl(getTileUrl);
 
@@ -171,6 +172,51 @@ jQuery(document).ready(function() {
           
         }
         
+        /* TEMPORARY */
+        /* Let's fix some legacy assumptions */
+        Oskari.clazz.category('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore','xxx', {
+
+            /**
+             * @method connect
+             *
+             * 'connects' to store (does not but might)
+             */
+            connect: function () {
+                var url = this.url;
+                this.protocols.categories = new OpenLayers.Protocol.WFS({
+                    version: '1.1.0',
+                    srsName: Oskari.getSandbox().getMap().getSrsName(),
+                    featureType: 'categories',
+                    featureNS: this.featureNS,
+                    url: url
+                });
+                // myplaces uses version 1.0.0 since with 1.1.0 geoserver connects
+                // multilines to one continuous line on save
+                var myPlacesProps = {
+                    version: '1.0.0',
+                    srsName: Oskari.getSandbox().getMap().getSrsName(),
+                    geometryName: 'geometry',
+                    featureType: 'my_places',
+                    featureNS: this.featureNS,
+                    url: url
+                };
+                if (this.options.maxFeatures) {
+                    myPlacesProps.maxFeatures = this.options.maxFeatures;
+                }
+                this.protocols.my_places = new OpenLayers.Protocol.WFS(myPlacesProps);
+            }
+        });
+        
+        /* TEMPORARY */
+        /* force geodesic until fix is available in trunk */
+        var mapModule = Oskari.getSandbox().findRegisteredModuleInstance("MainMapModule"),
+        controlsPlugin = mapModule.getPluginInstance('ControlsPlugin');
+        if( controlsPlugin && controlsPlugin._measureControls && controlsPlugin._measureControls.area ) {
+    		controlsPlugin._measureControls.area.geodesic = true;
+    	}
+    	if( controlsPlugin && controlsPlugin._measureControls && controlsPlugin._measureControls.line ) {
+    		controlsPlugin._measureControls.line.geodesic = true;
+    	}
 
     }
 

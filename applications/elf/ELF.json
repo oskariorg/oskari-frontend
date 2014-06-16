@@ -1,10 +1,11 @@
 {
     "conf": {
-        "WMTS": [
+    	"WMTS": [],
+        "WMTS-v0.2": [
             {
                 "id": "ELF Regional",
                 "resource": "/Oskari/applications/elf/elf-wmts.xml",
-                "TileMatrixSet": "LAEA"
+                "TileMatrixSet": "GoogleMapsCompatible"
             }
         ],
         "WMTS-v0.1": [
@@ -21,10 +22,11 @@
         ],
         "layers": {
             "AU_AdministrativeBoundary": {
-                "minScale": 1500000
+                "minScale": 1500000,
+                "metadataid": "0bbbf947-73a1-498f-9cf6-6d1fc4d7e150"
             },
             "HY_PhysicalWaters_LandWaterBoundary": {
-                "minScale": 1500000
+                "minScale": 1500000                
             },
             "HY_PhysicalWaters_StandingWater": {
                 "minScale": 1500000
@@ -33,10 +35,12 @@
                 "minScale": 1500000
             },
             "TN_RailTransportNetwork_RailwayLink": {
-                "minScale": 1500000
+                "minScale": 1500000,
+                "metadataid": "0bbbf947-73a1-498f-9cf6-6d1fc4d7e150"
             },
             "TN_RoadTransportNetwork_RoadLink": {
-                "minScale": 1500000
+                "minScale": 1500000,
+                "metadataid": "0bbbf947-73a1-498f-9cf6-6d1fc4d7e150"
             }
         }
     }

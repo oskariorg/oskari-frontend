@@ -1,16 +1,6 @@
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">
-            <label for="add-layer-style" class="add-layer-label" title="<%= instance.getLocalization('admin').styleDesc %>"><%= instance.getLocalization('admin').style %></label>
-        </div>
-        <div class="add-layer-input-area">
-                <input type="text" id="add-layer-style" class="add-layer-input long" value="<%= model.getCurrentStyle().getName() %>" />
-                <div class="icon-close"></div>
-        </div>
-    </div>
-
-    <div class="add-layer-record">
-        <div class="add-layer-label-area">
             <label for="add-layer-matrixSetId" class="add-layer-label" title="<%= instance.getLocalization('admin').matrixSetIdDesc %>"><%= instance.getLocalization('admin').matrixSetId %></label>
         </div>
         <div class="add-layer-input-area">
@@ -28,6 +18,39 @@
         <div class="add-layer-input-area">
             <div class="input-controls">
                 <textarea rows="3" cols="50" id="add-layer-matrixSet" class="add-layer-input long"><%= model.getOriginalWmtsMatrixSetAsString() %></textarea>
+            </div>
+        </div>
+    </div>
+
+    <% if(model.getAvailableQueryFormats().length > 0) { %>
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-responsetype" class="add-layer-label" title="<%= instance.getLocalization('admin').gfiResponseTypeDesc %>">
+                <%= instance.getLocalization('admin').gfiResponseType %>
+            </label>
+        </div>
+        <div class="add-layer-input-area">
+            <% if(model.getAvailableQueryFormats().length > 1) { %>
+            <select id="add-layer-responsetype">
+                 <% for(var i = 0; i < model.getAvailableQueryFormats().length; i++) { %>
+                <option value="<%= model.getAvailableQueryFormats()[i] %>" 
+                    <% if(model.getQueryFormat() == model.getAvailableQueryFormats()[i] ) { %>selected<% } %> ><%= model.getAvailableQueryFormats()[i] %></option>
+                <% } %>
+            </select>
+            <% } else { %>
+                <div id="add-layer-responsetype"><%= model.getQueryFormat() %></div>
+            <% } %>
+        </div>
+    </div>
+    <% } %>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-xslt" class="add-layer-label" title="<%= instance.getLocalization('admin').gfiStyleDesc %>"><%= instance.getLocalization('admin').gfiStyle %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <textarea rows="3" cols="50" id="add-layer-xslt" class="add-layer-input long"><%= model.getGfiXslt() %></textarea>
             </div>
         </div>
     </div>

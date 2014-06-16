@@ -76,7 +76,9 @@ function(url, uuid, sandbox, defaultName) {
      * empty array if param is undefined or less than 10 characters
      */
     parseDate : function(dateStr) {
-        if (!dateStr && dateStr.length < 10) {
+        if (!dateStr) return [];
+
+        if (dateStr.length < 10) {
             return [];
         }
         var year = dateStr.substring(0, 4);
