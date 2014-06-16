@@ -115,6 +115,11 @@ Oskari.registerLocalization({
                     "label": "Analyysitasojen yhdiste",
                     "classForPreview": "layer_union",
                     "tooltip": "Yhdistää analyysitasoja, joilla on samat ominaisuustietokentät"
+                }, {
+                    "id": "oskari_analyse_areas_and_sectors",
+                    "label": "NOT TRANSLATED",
+                    "classForPreview": "areas_and_sectors",
+                    "tooltip": "NOT TRANSLATED"
                 }]
             },
             "aggregate": {
@@ -173,6 +178,11 @@ Oskari.registerLocalization({
                 "label": "Andra lager för union input",
                 "notAnalyseLayer": "Välj ett analys lag",
                 "noLayersAvailable": "Tasoja, joilla on samat ominaisuustietokentät ei löytynyt"
+            },
+            "areas_and_sectors": {
+                "area_count": "NOT TRANSLATED",
+                "area_size": "NOT TRANSLATED",
+                "sector_count": "NOT TRANSLATED"
             },
             "spatial": {
                 "label": "Spatial operator",

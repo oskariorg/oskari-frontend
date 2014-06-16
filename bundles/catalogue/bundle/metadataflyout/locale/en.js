@@ -24,7 +24,7 @@ Oskari.registerLocalization(
             "title": "Metadata",
             "abstract": "Basic information",
             "inspire": "Inspire metadata",
-            "jhs": "JHS 158 metadata",
+            "jhs": "ISO 19115 metadata",
             "xml": "ISO 19139 XML file",
             "map": "Geographic extent",
             "pdf": "Printout",
@@ -34,7 +34,7 @@ Oskari.registerLocalization(
             "tabs": {
                 "abstract": {
                     "abstract": "",
-                    "jhs": "Show JHS 158 metadata",
+                    "jhs": "Show ISO 19115 metadata",
                     "inspire": "Show INSPIRE metadata",
                     "xml": {
                         "text": "Open ISO 19139 XML file",
@@ -60,7 +60,7 @@ Oskari.registerLocalization(
                 },
                 "inspire": {
                     "abstract": "Show basic information",
-                    "jhs": "Show JHS metadata",
+                    "jhs": "Show ISO 19115 metadata",
                     "inspire": "",
                     "xml": {
                         "text": "Open ISO 19139 XML file",

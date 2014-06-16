@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.RefreshInfoBoxRe
                 } else {
                     // Send a status report of the popup (is it open)
                     evtB = sandbox.getEventBuilder('InfoBox.InfoBoxEvent');
-                    evt = evtB(popupId, true);
+                    evt = evtB(popupId, true, contentId);
                     sandbox.notifyAll(evt);
                 }
             }

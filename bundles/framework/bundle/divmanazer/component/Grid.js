@@ -38,6 +38,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             );
         this.templateColumnSelectorClose = jQuery('<div class="icon-close close-selector-button"></div>');
         this.csvButton = null;
+        this.excelButton = null;
         this.table = null;
         this.fieldNames = [];
         this.selectionListeners = [];
@@ -580,10 +581,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 var exporter = me.templateExporter.clone();
                 var label = me._loc.export.title;
                 exporter.append(label);
+
+                // CSV
                 me.csvButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 me.csvButton.setTitle(me._loc.export.csv);
-                me.csvButton.addClass("exportButton");
-
+                me.csvButton.addClass("csvExportButton");
                 me.csvButton.setHandler(function() {
                     var str = "";
                     var i,j;
@@ -624,6 +626,32 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     }
                 });
                 exporter.append(me.csvButton.getButton());
+
+                // Excel
+                me.excelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                me.excelButton.setTitle(me._loc.export.excel);
+                me.excelButton.addClass("excelExportButton");
+
+                me.excelButton.setHandler(function() {
+//                    if (navigator.appName !== 'Microsoft Internet Explorer') {
+                        var uri = 'data:application/vnd.ms-excel;base64,',
+                            template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
+                            format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) };
+                        var ctx = {worksheet: 'Worksheet', table: me.table.html()};
+                        window.location.href = uri + jQuery.base64.encode(format(template, ctx));
+/*                    } else {
+                         var ExcelApp = new ActiveXObject("Excel.Application");
+                         var ExcelSheet = new ActiveXObject("Excel.Sheet");
+                         ExcelSheet.Application.Visible = true;
+
+                         me.table.find('th, td').each(function(i){
+                         ExcelSheet.ActiveSheet.Cells(i+1,i+1).Value = this.innerHTML;
+                         });
+                    }
+*/
+                });
+                exporter.append(me.excelButton.getButton());
+
                 container.parent().find(".tab-tools").append(exporter);
             }
 

@@ -126,7 +126,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             "methodOptionTool": '<div class="tool ">' + '<input type="radio" name="method" />' + '<label></label></div>',
             "featureListSelect": '<div class="analyse-select-featurelist"><a href="#">...</a></div>',
             "featureList": '<div class="analyse-featurelist"><ul></ul></div>',
-            "featureListElement": '<li><input type="checkbox"/><label></label></li>'
+            "featureListElement": '<li><input type="checkbox"/><label></label></li>',
+            'areasAndSectorsExtra': '<div class="analyse_areas_and_sectors_cont analyse_settings_cont"><label><span></span><input class="settings_area_size_field" type="text" pattern="[0-9]+"><select class="settings_area_size_units"></select></label><label><span></span><input class="settings_area_count_field" type="text" pattern="[0-9]+"></label><label><span></span><input class="settings_sector_count_field" type="text" pattern="^0*[1-9]$|^0*1[0-2]$"></label></div>',
 
         },
         /**
@@ -832,8 +833,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 extra = contentPanel.find('.extra_params');
             if (method === this.id_prefix + "buffer") {
-                var bufferTitle = me.template.title.clone();
-                var bufferUnitSelect = bufferTitle.find('select.settings_buffer_units');
+                var bufferTitle = me.template.title.clone(),
+                    bufferUnitSelect = bufferTitle.find('select.settings_buffer_units');
                 bufferTitle.find('.settings_buffer_label').html(me.loc.buffer_size.label);
                 bufferTitle.find('.settings_buffer_field').attr({
                     'value': '',
@@ -877,6 +878,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             } else if (method === this.id_prefix + "layer_union") {
                 // unfiy two or more analyse layers
                 me._layerUnionExtra(extra);
+            } else if (method === this.id_prefix + "areas_and_sectors") {
+                me._areasAndSectorsExtra(extra);
             }
         },
         /**
@@ -921,7 +924,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'for': option.id,
                     'class': 'params_radiolabel'
                 });
-                if ( i !== this.aggreOptions.length - 1 )toolContainer.find('input').attr('checked', 'checked');
+                if (i !== this.aggreOptions.length - 1) toolContainer.find('input').attr('checked', 'checked');
 
                 contentPanel.append(toolContainer);
                 toolContainer.find('input').attr({
@@ -932,13 +935,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 toolContainer.find('input').change(closureMagic(option));
 
                 // Hide last one, no no data
-                if ( i === this.aggreOptions.length - 1 )
-                {
-                    if(this._getNoDataValue())
-                    {
+                if (i === this.aggreOptions.length - 1) {
+                    if (this._getNoDataValue()) {
                         toolContainer.find('input').attr('checked', 'checked');
-                    }
-                    else {
+                    } else {
                         toolContainer.find('input').removeAttr('checked');
                         toolContainer.hide();
                     }
@@ -1320,23 +1320,58 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * Add params ui for areas and sectors.
+         *
+         * @method _areasAndSectorsExtra
+         * @param  {jQuery} contentPanel
+         * @return {undefined}
+         */
+        _areasAndSectorsExtra: function (contentPanel) {
+            var me = this,
+                loc = me.loc.areas_and_sectors,
+                extraParams = me.template.areasAndSectorsExtra.clone(),
+                unitsSelect = extraParams.find('.settings_area_size_units'),
+                unit,
+                labels = extraParams.find('label'),
+                keys = ['area_size', 'area_count', 'sector_count'];
+
+            for (unit in me.bufferUnits) {
+                unitsSelect.append(
+                    '<option value="' + unit + '">' +
+                    me.loc.buffer_units[unit] +
+                    '</option>'
+                );
+            }
+
+            labels.each(function (i) {
+                this.getElementsByTagName('SPAN')[0].innerHTML = loc[keys[i]];
+                this.getElementsByTagName('INPUT')[0].placeholder =
+                    loc[keys[i] + '_tooltip'];
+            });
+
+            contentPanel.append(extraParams);
+        },
+
+        /**
          * Refreshes layer list in the intersect or clip parameters
          *
          * @method
          * @private
          */
         _refreshIntersectLayers: function () {
-            var dataLayers = jQuery("div.basic_analyse div.analyse_option_cont.analyse_settings_cont input[type=radio]");
-            var paramLayer;
+            var dataLayers = jQuery("div.basic_analyse div.analyse_option_cont.analyse_settings_cont input[type=radio]"),
+                paramLayer,
+                i,
+                j;
 
             // No need to refresh?
             if ((jQuery("div.basic_analyse div.extra_params input[type=radio][name=intersect]")).length === 0) {
                 return;
             }
 
-            for (var i = 0; i < dataLayers.length; i++) {
+            for (i = 0; i < dataLayers.length; i++) {
                 paramLayer = jQuery("div.basic_analyse div.extra_params input[type=radio][name=intersect][value=" + jQuery(dataLayers[i]).attr("id") + "]");
-                for (var j = 0; j < dataLayers.length; j++) {
+                for (j = 0; j < dataLayers.length; j++) {
                     if (jQuery(dataLayers[i]).is(":checked")) {
                         paramLayer.prop("checked", false);
                         paramLayer.parent().hide();
@@ -1602,9 +1637,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 methodName = defaultSelections.method;
 
             // buffer
-            var bufferSize = container.find('.settings_buffer_field').val();
-            var bufferUnit = container.find('.settings_buffer_units option:selected').val();
-            var bufferUnitMultiplier = this.bufferUnits[bufferUnit] || 1;
+            var bufferSize = container.find('.settings_buffer_field').val(),
+                bufferUnit = container.find('.settings_buffer_units option:selected').val(),
+                bufferUnitMultiplier = this.bufferUnits[bufferUnit] || 1;
             bufferSize *= bufferUnitMultiplier;
             // aggregate
             var aggregateFunctions = container.find('input[name=aggre]:checked');
@@ -1629,6 +1664,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             spatialOperator = spatialOperator && spatialOperator.replace(this.id_prefix, '');
             // layer union
             var layerUnionLayers = this._getLayerUnionLayers(container);
+
+            var areaCount = container.find('input.settings_area_count_field').val(),
+                areaSize = container.find('input.settings_area_size_field').val(),
+                areaUnit = container.find('.settings_area_size_units option:selected').val(),
+                areaUnitMultiplier = this.bufferUnits[areaUnit] || 1,
+                sectorCount = container.find('input.settings_sector_count_field').val();
+
+            areaSize *= areaUnitMultiplier;
 
             var methodSelections = {
                 'buffer': {
@@ -1666,6 +1709,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     methodParams: {
                         layers: layerUnionLayers
                     }
+                },
+                'areas_and_sectors': {
+                    methodParams: {
+                        areaCount: areaCount,
+                        areaDistance: areaSize,
+                        sectorCount: sectorCount
+                    },
+                    opacity: layer.getOpacity()
                 }
             };
             var s;
@@ -1725,7 +1776,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 if (selections.methodParams.functions &&
-                        selections.methodParams.functions.length) {
+                    selections.methodParams.functions.length) {
 
                     selections.methodParams.locales = [];
                     for (i = 0; i < selections.methodParams.functions.length; i++) {
@@ -2008,11 +2059,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 no_data,
                 selectedLayer = me._getSelectedMapLayer(),
                 params = selectedLayer.getWpsLayerParams();
-            jQuery.each(params, function (key, value) {
-                if (key === "no_data") {
-                    no_data = value;
-                }
-            });
+            if (params) {
+                jQuery.each(params, function (key, value) {
+                    if (key === "no_data") {
+                        no_data = value;
+                    }
+                });
+            }
 
             return no_data;
         },
