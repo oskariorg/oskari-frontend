@@ -249,7 +249,15 @@ Oskari.registerLocalization({
                         "boolean": "Looginen operaattori",
                         "operator": "Operaattori",
                         "attribute-value": "Arvo"
-                    }
+                    },
+                    "equals": "=",
+                    "like": "~=",
+                    "notEquals": "≠",
+                    "notLike": "~≠",
+                    "greaterThan": ">",
+                    "lessThan": "<",
+                    "greaterThanOrEqualTo": "≥",
+                    "lessThanOrEqualTo": "≤"
                 },
                 "validation": {
                     "title": "Seuraavat virheet estivät suodattimen päivityksen:",

@@ -384,8 +384,13 @@ div.analyse-filter-popup-content div.filter-option {
             width: 150px;
         }
 
-        &.operator, &.boolean {
+        &.boolean {
+            margin-top: 10px;
             width: 60px;
+        }
+
+        &.operator {
+            width: 210px;
         }
 
     }
