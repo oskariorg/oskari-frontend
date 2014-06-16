@@ -247,9 +247,17 @@ Oskari.registerLocalization({
                         "case-sensitive": "",
                         "attribute": "Attribute",
                         "boolean": "Logical operator",
-                        "operator": "Oprator",
+                        "operator": "Operator",
                         "attribute-value": "Value"
-                    }
+                    },
+                    "equals": "equals",
+                    "like": "is like",
+                    "notEquals": "does not equal",
+                    "notLike": "is not like",
+                    "greaterThan": "isgreater than",
+                    "lessThan": "isless than",
+                    "greaterThanOrEqualTo": "is greater than or equal to",
+                    "lessThanOrEqualTo": "is less than or equal to"
                 },
                 "validation": {
                     "title": "Following errors prevented refreshing the filter:",

@@ -193,7 +193,15 @@ Oskari.registerLocalization({
                         "boolean": "Operatore logico",
                         "operator": "Operatore",
                         "attribute-value": "Valore"
-                    }
+                    },
+                    "equals": "=",
+                    "like": "~=",
+                    "notEquals": "≠",
+                    "notLike": "~≠",
+                    "greaterThan": ">",
+                    "lessThan": "<",
+                    "greaterThanOrEqualTo": "≥",
+                    "lessThanOrEqualTo": "≤"
                 },
                 "validation": {
                     "title": "I seguenti errori impediscono l'aggiornamento del filtro:",
