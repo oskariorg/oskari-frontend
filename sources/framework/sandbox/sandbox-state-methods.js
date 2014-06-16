@@ -74,5 +74,30 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'state-methods', {
                 }
             }
         }
+    },
+    setSessionExpiring: function (minutes, callback) {
+        console.log('Set timeout in ' + minutes + ' minutes');
+        var milliSeconds = 60 * 1000 * minutes,
+            expireTimeout = setTimeout(function () {
+                callback();
+            }, milliSeconds);
+    },
+    extendSession: function (errorCallback) {
+        console.log('Extending session');
+        var url = this.getAjaxUrl() + 'action_route=GetCurrentUser',
+            currentUuid = this.getUser().getUuid(),
+            successCallback = function (res, textStatus, jqXHR) {
+                console.log('Session extended');
+                var resUuid = jqXHR.getResponseHeader('currentUserUid');
+                if (resUuid !== currentUuid) {
+                    console.log('Wrong uuid!');
+                    console.log('SERVER:', resUuid);
+                    console.log('BROWSER', currentUuid);
+                    // the uuid in response was not what we expected
+                    errorCallback();
+                }
+            };
+
+        this.ajax(url, successCallback, errorCallback);
     }
 });
