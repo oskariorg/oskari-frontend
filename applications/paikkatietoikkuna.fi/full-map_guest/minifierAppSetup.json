@@ -396,6 +396,16 @@
 					}
 				}
 			}
+		}, {
+		    "bundlename" : "routesearch",
+		    "bundleinstancename" : "routesearch",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "routesearch" : {
+		                "bundlePath" : "../../../packages/framework/bundle/"
+		            }
+		        }
+		    }
 		}
 	]
 }
