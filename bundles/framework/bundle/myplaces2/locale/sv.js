@@ -31,8 +31,8 @@ Oskari.registerLocalization({
           "createDate": "Skapad",
           "updateDate": "Uppdaterad",
           "measurement": "Längd/area",
-          "edit": " ",
-          "delete": " "
+          "edit": "Editera",
+          "delete": "Ta bort"
         },
         "notification": {
           "delete": {

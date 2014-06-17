@@ -2,8 +2,8 @@ Oskari.registerLocalization({
     "lang": "sv",
     "key": "Analyse",
     "value": {
-        "title": "Analys",
-        "flyouttitle": "Analys",
+        "title": "Analys <font color=red>(BETA)</font>",
+        "flyouttitle": "Analys <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analys",
         "notLoggedIn": "Endast loggad andvändare can göra analys . <a href='/web/sv/login'>Logga in</a>.",
@@ -147,7 +147,7 @@ Oskari.registerLocalization({
                     "id": "oskari_analyse_Median",
                     "label": "Median"
                 },{
-                    "id": "oskari_analyse_NoDataCount",
+                    "id": "oskari_analyse_NoDataCnt",
                     "label": "Skyddad objekter"
                 }],
                 "attribute": "Välj ett attribut"
@@ -249,7 +249,15 @@ Oskari.registerLocalization({
                         "boolean": "Looginen operaattori",
                         "operator": "Operaattori",
                         "attribute-value": "Arvo"
-                    }
+                    },
+                    "equals": "=",
+                    "like": "~=",
+                    "notEquals": "≠",
+                    "notLike": "~≠",
+                    "greaterThan": ">",
+                    "lessThan": "<",
+                    "greaterThanOrEqualTo": "≥",
+                    "lessThanOrEqualTo": "≤"
                 },
                 "validation": {
                     "title": "Seuraavat virheet estivät suodattimen päivityksen:",
@@ -287,7 +295,10 @@ Oskari.registerLocalization({
                 "Unable_to_process_aggregate_union": "Unable to process aggregate union",
                 "Unable_to_get_features_for_union": "Unable to get features for union",
                 "Unable_to_store_analysis_data": "Unable to store analysis data",
-                "Unable_to_get_analysisLayer_data": "Unable to get analysisLayer data"
+                "Unable_to_get_analysisLayer_data": "Unable to get analysisLayer data",
+                "timeout": "Analysis request timed out",
+                "error": "Analysis failed for an unknown reason",
+                "parsererror": "Server returned invalid analysis data"
             },
             "infos": {
                 "title": "Info",
@@ -339,7 +350,7 @@ Oskari.registerLocalization({
         "personalDataTab": {
             "grid": {
                 "name": "Namn",
-                "delete": " "
+                "delete": "Ta bort"
             },
             "title": "Analyser",
             "confirmDeleteMsg": "Vill du ta bort:",

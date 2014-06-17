@@ -211,6 +211,7 @@ Oskari.registerLocalization({
             "show": "Εμφάνιση",
             "hide": "Απόκρυψη",
             "hidden": "Ο χάρτης είναι προσωρινά κρυμμένος.",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Επιτρέπεται η δημοσίευση",

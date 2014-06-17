@@ -48,7 +48,7 @@ Oskari.registerLocalization(
                 "name": "Name",
                 "description": "Description",
                 "source": "Data source",
-                "remove": "NOT TRANSLATED",
+                "remove": "Delete",
                 "removeButton": "Delete"
             },
             "confirmDeleteMsg": "Do you want to delete:",

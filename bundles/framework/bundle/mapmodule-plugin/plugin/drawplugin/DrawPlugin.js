@@ -52,6 +52,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin',
      * @method
      */
     startDrawing: function (params) {
+        // make the drawlayer go on top, just using 1000 as delta for now (quickfix)
+        // TODO: add a "bringToTop" function to mapmodule and add proper layer indexing
+        this._map.raiseLayer(this.drawLayer, 1000);
         if (params.isModify) {
             // preselect it for modification
             this.modifyControls.select.select(this.drawLayer.features[0]);

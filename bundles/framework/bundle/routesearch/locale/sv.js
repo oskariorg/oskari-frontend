@@ -2,20 +2,20 @@ Oskari.registerLocalization({
     "lang": "sv",
     "key": "RouteSearch",
     "value": {
-        "title": "NOT TRANSLATED",
+        "title": "Ruttsök",
         "desc": "",
         "flyout": {
-            "title": "NOT TRANSLATED",
+            "title": "Ruttsök",
             "description": "",
-            "from": "NOT TRANSLATED",
-            "to": "NOT TRANSLATED",
-            "fromMap": "NOT TRANSLATED",
-            "routingService": "NOT TRANSLATED",
-            "fetchRoute": "NOT TRANSLATED",
-            "selectLocations": "NOT TRANSLATED"
+            "from": "Från",
+            "to": "Till",
+            "fromMap": "Välj en plats på kartan",
+            "routingService": "Routningstjänst",
+            "fetchRoute": "Sök rutt",
+            "selectLocations": "Välj båda platserna"
         },
         "tile": {
-            "title": "NOT TRANSLATED",
+            "title": "Ruttsök",
             "description": ""
         }
     }

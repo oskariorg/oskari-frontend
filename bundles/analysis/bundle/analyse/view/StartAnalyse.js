@@ -127,7 +127,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             "featureListSelect": '<div class="analyse-select-featurelist"><a href="#">...</a></div>',
             "featureList": '<div class="analyse-featurelist"><ul></ul></div>',
             "featureListElement": '<li><input type="checkbox"/><label></label></li>',
-            'areasAndSectorsExtra': '<div class="analyse_areas_and_sectors_cont analyse_settings_cont"><label><span></span><input class="settings_area_size_field" type="text" pattern="[0-9]+"><select class="settings_area_size_units"></select></label><label><span></span><input class="settings_area_count_field" type="text" pattern="[0-9]+"></label><label><span></span><input class="settings_sector_count_field" type="text" pattern="^0*[1-9]$|^0*1[0-2]$"></label></div>',
+            'areasAndSectorsExtra': '<div class="analyse_areas_and_sectors_cont analyse_settings_cont"><label><span></span><input class="settings_area_size_field" type="text" pattern="[0-9]+"></label><select class="settings_area_size_units"></select><label><span></span><input class="settings_area_count_field" type="text" pattern="[0-9]+"></label><label><span></span><input class="settings_sector_count_field" type="text" pattern="^0*[1-9]$|^0*1[0-2]$"></label></div>',
 
         },
         /**
@@ -1096,7 +1096,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 titlespa.find('.extra_title_label').html(this.loc.spatial.label);
                 contentPanel.append(titlespa);
 
-                var closureMagic = function (tool) {
+                var selectSpatial = function (tool) {
                     return function () {
                         var size = contentPanel.find('input[name=spatial]:checked').val(),
                             i;
@@ -1130,7 +1130,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         'name': 'spatial',
                         'id': option.id
                     });
-                    toolContainer.find('input').change(closureMagic(option));
+                    toolContainer.find('input').change(selectSpatial(option));
                 }
             }
         },
@@ -1176,7 +1176,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             title.find('.extra_title_label').html(me.loc.union.label);
             contentPanel.append(title);
 
-            var closureMagic = function (tool) {
+            var selectUnion = function (tool) {
                 return function () {
                     var size = contentPanel.find('input[name=aggre]:checked').val(),
                         i;
@@ -1209,7 +1209,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'name': 'union',
                     'id': option.id
                 });
-                toolContainer.find('input').change(closureMagic(option));
+                toolContainer.find('input').change(selectUnion(option));
             }
 
             //title spatial operator
@@ -1348,6 +1348,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 this.getElementsByTagName('INPUT')[0].placeholder =
                     loc[keys[i] + '_tooltip'];
             });
+
+            // FIXME remove this when sectors are supported
+            jQuery(labels[2]).hide();
 
             contentPanel.append(extraParams);
         },
@@ -1761,7 +1764,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 sandbox = this.instance.getSandbox(),
                 url = sandbox.getAjaxUrl(),
                 selections = me._gatherSelections(),
-                i;
+                i,
+                showError = function (error) {
+                    me.instance.showMessage(
+                        me.loc.error.title,
+                        me.loc.error[error] || error
+                    );
+                };
 
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
@@ -1800,8 +1809,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         // no bbox filter when selected features
                         this._getSelectedFeatureIds(layer, filterJson);
                         delete filterJson.bbox;
-                    }
-                    else {
+                    } else {
                         filterJson.featureIds = [];
                     }
                     data.filter1 = JSON.stringify(filterJson);
@@ -1823,24 +1831,24 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 // Send the data for analysis to the backend
                 me.progressSpinner.start();
-                me.instance.analyseService.sendAnalyseData(data,
+                me.instance.analyseService.sendAnalyseData(
+                    data,
                     // Success callback
-
                     function (response) {
                         me.progressSpinner.stop();
                         if (response) {
                             if (response.error) {
-                                me.instance.showMessage(me.loc.error.title, me.loc.error[response.error] || response.error);
+                                showError(response.error);
                             } else
                                 me._handleAnalyseMapResponse(response);
                         }
                     },
                     // Error callback
-
                     function (jqXHR, textStatus, errorThrown) {
                         me.progressSpinner.stop();
-
-                    });
+                        showError(textStatus);
+                    }
+                );
             }
 
         },
@@ -2057,8 +2065,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         _getNoDataValue: function () {
             var me = this,
                 no_data,
-                selectedLayer = me._getSelectedMapLayer(),
-                params = selectedLayer.getWpsLayerParams();
+                selectedLayer = me._getSelectedMapLayer();
+            if ( !selectedLayer) return no_data;
+            var params = selectedLayer.getWpsLayerParams();
             if (params) {
                 jQuery.each(params, function (key, value) {
                     if (key === "no_data") {

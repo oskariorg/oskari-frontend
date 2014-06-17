@@ -201,8 +201,11 @@ div.analyse-filter-popup-content div.filter-option {
     margin-right: 5px; }
   div.analyse-filter-popup-content div.filter-option select.attribute {
     width: 150px; }
-  div.analyse-filter-popup-content div.filter-option select.operator, div.analyse-filter-popup-content div.filter-option select.boolean {
+  div.analyse-filter-popup-content div.filter-option select.boolean {
+    margin-top: 10px;
     width: 60px; }
+  div.analyse-filter-popup-content div.filter-option select.operator {
+    width: 210px; }
 
 div.divmanazerpopup.drawfilterdialog {
   max-width: 400px; }

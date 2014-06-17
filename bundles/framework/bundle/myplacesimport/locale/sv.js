@@ -38,7 +38,7 @@ Oskari.registerLocalization(
                     "message": "Du hittar kartlager i \"Mina uppgifter\"."
                 },
                 "failure": {
-                    "title": "NOT TRANSLATED"
+                    "title": "Systemfel. Försök på nytt senare."
                 }
             }
         },
@@ -48,8 +48,8 @@ Oskari.registerLocalization(
                 "name": "Namn",
                 "description": "Beskrivning",
                 "source": "Datakälla",
-                "remove": "NOT TRANSLATED",
-                "removeButton": "NOT TRANSLATED"
+                "remove": "Ta bort",
+                "removeButton": "Ta bort"
             },
             "confirmDeleteMsg": "Vill du ta bort:",
             "buttons": {
