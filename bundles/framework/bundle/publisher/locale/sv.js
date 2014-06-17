@@ -214,6 +214,7 @@ Oskari.registerLocalization({
             "show": "Visa",
             "hide": "Göm",
             "hidden": "Kartan är tillfälligt gömd.",
+            "selectAsBaselayer": "Bakgrundskartlager",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Får publiceras",

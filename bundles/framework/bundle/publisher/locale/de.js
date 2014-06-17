@@ -152,6 +152,7 @@ Oskari.registerLocalization({
             "show": "Zeige",
             "hide": "Verberge",
             "hidden": "Diese Karte wurde vorübergehend ausgeblendet.",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Veröffentlichung erlaubt",
