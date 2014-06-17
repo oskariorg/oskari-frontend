@@ -1,11 +1,11 @@
 th.asc {
   background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/asc_arrow.png');
   background-repeat: no-repeat;
-  background-position: center center; }
+  background-position: right center; }
 th.desc {
   background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png');
   background-repeat: no-repeat;
-  background-position: center center; }
+  background-position: right center; }
 
 div.column-selector-placeholder {
   border-style: none;
@@ -20,7 +20,7 @@ div.column-selector-placeholder {
   max-height: 35px; }
 
 div.column-selector-title {
-  margin-top: 9px;
+  margin-top: 10px;
   margin-left: 3px;
   background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png');
   background-repeat: no-repeat;
@@ -39,12 +39,15 @@ div.icon-menu {
   max-height: 7px; }
 
 div.column-selector {
+  max-height: 350px;
+  width: 270px;
+  overflow: auto;
   position: absolute;
   visibility: hidden;
   background-color: white;
   margin-top: 5px;
-  margin-left: 5px;
-  margin-right: 50px;
+  margin-left: 2px;
+  margin-right: 5px;
   padding: 0;
   border: 1px solid;
   z-index: 10001; }
@@ -96,3 +99,23 @@ table.oskari-grid > tr > th, table.oskari-grid > tbody > tr > th {
   text-align: left; }
 table.oskari-grid tr:last-child td {
   border: 1px solid #E6E6E6; }
+
+table.oskari-grid th.closedSubTable {
+  background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/icon-arrow-right.png');
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+table.oskari-grid th.openSubTable {
+  background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/icon-arrow-left.png');
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+table.oskari-grid th.hidden {
+  display: none;
+}
+
+table.oskari-grid td.hidden {
+  display: none;
+}
