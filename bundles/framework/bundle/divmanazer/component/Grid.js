@@ -373,8 +373,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
             fullFieldNames = [];
             data = dataArray[0];
-            i = 0;
-            while (i < fieldNames.length) {
+            for (i = 0; i < fieldNames.length; i += 1) {
                 key = fieldNames[i];
                 value = data[key];
                 if (typeof value === 'object') {
@@ -382,13 +381,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     for (field in value) {
                         if (value.hasOwnProperty(field)) {
                             fullFieldNames.push({key: key+'.'+field, baseKey: key, type: 'default', visibility: 'hidden'});
-                            i = i+1;
                         }
                     }
                 } else {
                     fullFieldNames.push({key: key, baseKey: key, type: 'default', visibility: 'shown'});
                 }
-                i = i+1;
             }
 
             for (i = 0; i < fullFieldNames.length; i += 1) {
