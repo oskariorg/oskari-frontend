@@ -1,5 +1,6 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
+ * @clas
+s Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
  *
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService',
@@ -52,8 +53,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                 this.skipLoading = blnSkipLoad;
                 return;
             }
-            var loadedCategories = false;
-            var loadedPlaces = false;
+            var loadedCategories = false,
+                loadedPlaces = false;
 
             // function to 
             var allLoaded = function () {
@@ -105,8 +106,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
          * @param callback function
          */
         _createDefaultCategory: function (callback) {
-            var me = this;
-            var defaultCategory = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
+            var me = this,
+                defaultCategory = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
             defaultCategory.setName(me.defaultCategoryName);
             if (!me.defaultCategoryName) {
                 // should not happen
@@ -167,8 +168,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
          * @param {Function} callback function to call when done, receives boolean as argument(true == successful)
          */
         _movePlacesToCategory: function (oldCategoryId, newCategoryId, callback) {
-            var me = this;
-            var placesInDeleteCategory = me.getPlacesInCategory(oldCategoryId),
+            var me = this,
+                placesInDeleteCategory = me.getPlacesInCategory(oldCategoryId),
                 i;
             if (placesInDeleteCategory.length === 0) {
                 // no places to move -> callback right away
@@ -197,8 +198,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
          * @param {Function} callback function to call when done, receives boolean as argument(true == successful)
          */
         _deletePlacesInCategory: function (categoryId, callback) {
-            var placesInDeleteCategory = this.getPlacesInCategory(categoryId);
-            var idList = [],
+            var me = this,
+                placesInDeleteCategory = me.getPlacesInCategory(categoryId),
+                idList = [],
                 i;
             for (i = 0; i < placesInDeleteCategory.length; i++) {
                 idList.push(placesInDeleteCategory[i].getId());
@@ -208,7 +210,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                 callback(true);
                 return;
             }
-            var me = this;
             var callBackWrapper = function (success, list) {
                 if (success) {
                     var i;
@@ -219,7 +220,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                 }
                 callback(success);
             };
-            this.wfstStore.deleteMyPlaces(idList, callBackWrapper);
+            me.wfstStore.deleteMyPlaces(idList, callBackWrapper);
         },
         /**
          * @method parseDate
@@ -232,18 +233,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
          * empty array if param is undefined or less than 10 characters
          */
         parseDate: function (dateStr) {
-
-            if (!dateStr) return [];
+            if (!dateStr) {
+                return [];
+            }
 
             if (dateStr.length < 10) {
                 return [];
             }
-            var year = dateStr.substring(0, 4);
-            var month = dateStr.substring(5, 7);
-            var day = dateStr.substring(8, 10);
-            var returnValue = [day + '.' + month + '.' + year];
 
-            var time = '';
+            var year = dateStr.substring(0, 4),
+                month = dateStr.substring(5, 7),
+                day = dateStr.substring(8, 10),
+                returnValue = [day + '.' + month + '.' + year],
+                time = '';
             // TODO: error handling
             if (dateStr.length === 29) {
                 time = dateStr.substring(11);
@@ -251,10 +253,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                 time = splitted[0];
                 // take out milliseconds
                 time = time.split('.')[0];
-                var timeComps = time.split(':');
-                var hour = timeComps[0];
-                var min = timeComps[1];
-                var sec = timeComps[2];
+                var timeComps = time.split(':'),
+                    hour = timeComps[0],
+                    min = timeComps[1],
+                    sec = timeComps[2];
                 /*
              var timezone = splitted[1];
              timezone = timezone.split(':')[0];
@@ -323,7 +325,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
          * @param {Function} callback function to call when done, receives boolean as argument(true == successful)
          */
         _deleteEmptyCategory: function (categoryId, callback) {
-
             var me = this;
             var callBackWrapper = function (success, list) {
                 if (success) {
@@ -361,8 +362,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
          *      first argument(true == successful), categoryModel as second parameter and boolean as third parameter (true if the category was new)
          */
         saveCategory: function (categoryModel, callback) {
-            var me = this;
-            var isNew = !(categoryModel.getId());
+            var me = this,
+                isNew = !(categoryModel.getId());
 
             var callBackWrapper = function (success, list) {
                 if (isNew && success) {
@@ -482,8 +483,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
          * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlace[]}
          */
         findMyPlaceByLonLat: function (lonlat, zoom) {
-            var places = [];
-            var myPlacesList = this.getAllMyPlaces(),
+            var places = [],
+                myPlacesList = this.getAllMyPlaces(),
                 i,
                 olGeometry,
                 hoverOnPlace,
@@ -571,8 +572,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
          *      first argument(true == successful), myplaceModel as second parameter and boolean as third parameter (true if the category was new)
          */
         saveMyPlace: function (myplaceModel, callback) {
-            var me = this;
-            var isNew = !(myplaceModel.getId());
+            var me = this,
+                isNew = !(myplaceModel.getId());
 
             var callBackWrapper = function (success, list) {
                 if (isNew && success) {
@@ -625,13 +626,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
          * @param {Function} callback function receives a boolean parameter with true on successful operation
          */
         publishCategory: function (categoryId, makePublic, callback) {
-            var category = this.findCategory(categoryId);
+            var me = this,
+                category = me.findCategory(categoryId);
             if (!category) {
                 // category not found
                 callback(false);
             }
-            var me = this;
-            var ajaxUrl = this._sandbox.getAjaxUrl();
+            var ajaxUrl = me._sandbox.getAjaxUrl();
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
