@@ -211,6 +211,7 @@ Oskari.registerLocalization({
             "show": "Toon",
             "hide": "Verberg",
             "hidden": "De kaart is tijdelijk verborgen.",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Publicatie toegestaan",

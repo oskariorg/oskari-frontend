@@ -213,6 +213,7 @@ Oskari.registerLocalization(
             "show": "Mostrar",
             "hide": "Ocultar",
             "hidden": "Se ha ocultado el mapa temporalmente.",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Publicación permitida",

@@ -225,6 +225,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
                 if (this.enabled) {
                     this._handleInfoResult(evt.getData());
                 }
+            },
+            'Realtime.RefreshLayerEvent': function(evt) {
+                this._refreshGfiInfo('update', evt.getMapLayer().getId());
             }
         },
         /**
@@ -264,23 +267,22 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
          * 
          * @method _buildLayerIdList
          * @private
+         * @param {Oskari.Layer[]} layers to build the list from (optional)
          * @return
          * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
          */
-        _buildLayerIdList: function () {
+        _buildLayerIdList: function (layers) {
             var me = this,
-                selected = me._sandbox.findAllSelectedMapLayers(),
-                layerIds;
-
-            layerIds = _.chain(selected)
-                .filter(function(layer) {
-                    return me._isQualified(layer);
-                })
-                .map(function(layer) {
-                    return layer.getId();
-                })
-                .value()
-                .join(',');
+                selected = layers || me._sandbox.findAllSelectedMapLayers(),
+                layerIds = _.chain(selected)
+                    .filter(function(layer) {
+                        return me._isQualified(layer);
+                    })
+                    .map(function(layer) {
+                        return layer.getId();
+                    })
+                    .value()
+                    .join(',');
 
             return layerIds || null;
         },
@@ -355,10 +357,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
          * @param {OpenLayers.LonLat}
          *            lonlat coordinates
          */
-        handleGetInfo: function (lonlat) {
+        handleGetInfo: function (lonlat, layers) {
             var me = this,
                 dteMs = (new Date()).getTime(),
-                layerIds = me._buildLayerIdList(),
+                layerIds = me._buildLayerIdList(layers),
                 ajaxUrl = this._sandbox.getAjaxUrl(),
                 mapVO = me._sandbox.getMap(),
                 olMap = me.mapModule.getMap(),
@@ -508,9 +510,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
          * @param  {String} contentId (optional)
          */
         _refreshGfiInfo: function(operation, contentId) {
+            var reqB, req;
+
             if (this.clickLocation) {
-                var reqB = this._sandbox.getRequestBuilder('InfoBox.RefreshInfoBoxRequest'),
-                    req;
+                reqB = this._sandbox.getRequestBuilder('InfoBox.RefreshInfoBoxRequest');
 
                 if (reqB) {
                     req = reqB(this.infoboxId, operation, contentId);
@@ -527,20 +530,33 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
          * @param  {Object} evt
          */
         _handleInfoBoxEvent: function(evt) {
-            var me = this,
+            var sandbox = this._sandbox,
                 clickLoc = this.clickLocation,
-                clickEventB, clickEvent;
+                contentId = evt.getContentId(),
+                contentLayer, clickEventB, clickEvent;
 
             if (evt.getId() === this.infoboxId &&
                 evt.isOpen() &&
                 _.isObject(clickLoc)) {
-                clickEventB = this._sandbox.getEventBuilder('MapClickedEvent');
-                clickEvent = clickEventB(clickLoc.lonlat);
-                // Timeout needed since the layer plugins haven't
-                // necessarily done their job of adding the layer yet.
-                setTimeout(function() {
-                    me._sandbox.notifyAll(clickEvent);
-                }, 0);
+                if (contentId) {
+                    // If there's a specific layer id and it's selected
+                    // we can directly get info for that
+                    contentLayer = sandbox.findMapLayerFromSelectedMapLayers(contentId);
+                    if (contentLayer) {
+                        this.handleGetInfo(clickLoc.lonlat, [contentLayer]);
+                    }
+                } else {
+                    // Otherwise, we need to actually send `MapClickedEvent`
+                    // and not just call `handleGetInfo` since then
+                    // we'd only get the WMS feature info.
+                    clickEventB = sandbox.getEventBuilder('MapClickedEvent');
+                    clickEvent = clickEventB(clickLoc.lonlat);
+                    // Timeout needed since the layer plugins haven't
+                    // necessarily done their job of adding the layer yet.
+                    setTimeout(function() {
+                        sandbox.notifyAll(clickEvent);
+                    }, 0);
+                }
             }
         }
     }, {

@@ -2,8 +2,8 @@ Oskari.registerLocalization({
     "lang": "it",
     "key": "Analyse",
     "value": {
-        "title": "Analisi",
-        "flyouttitle": "Analisi",
+        "title": "Analisi <font color=red>(BETA)</font>",
+        "flyouttitle": "Analisi <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analisi",
         "notLoggedIn": "Solo gli utenti registrati possono fare analisi. <a href='/web/en/login'>Log in</a>.",
@@ -59,6 +59,11 @@ Oskari.registerLocalization({
                     "label": "Union of analyse layers",
                     "classForPreview": "layer_union",
                     "tooltip": "Unifica i layer con gli stessi attributi"
+                }, {
+                    "id": "oskari_analyse_areas_and_sectors",
+                    "label": "Areas and sectors",
+                    "classForPreview": "areas_and_sectors",
+                    "tooltip": "NOT TRANSLATED"
                 }]
             },
             "aggregate": {
@@ -86,7 +91,7 @@ Oskari.registerLocalization({
                     "id": "oskari_analyse_Median",
                     "label": "NOT TRANSLATED"
                 },{
-                    "id": "oskari_analyse_NoDataCount",
+                    "id": "oskari_analyse_NoDataCnt",
                     "label": "Unauthorized features"
                 }],
                 "attribute": "Scegli un attributo"
@@ -117,6 +122,11 @@ Oskari.registerLocalization({
                 "label": "Scegli un layer per l'unione",
                 "notAnalyseLayer": "Scegli un layer da analizzare",
                 "noLayersAvailable": "Nessun layer trovato con gli stessi attributi"
+            },
+            "areas_and_sectors": {
+                "area_count": "NOT TRANSLATED",
+                "area_size": "NOT TRANSLATED",
+                "sector_count": "NOT TRANSLATED"
             },
             "spatial": {
                 "label": "Operatore spaziale",
@@ -183,7 +193,15 @@ Oskari.registerLocalization({
                         "boolean": "Operatore logico",
                         "operator": "Operatore",
                         "attribute-value": "Valore"
-                    }
+                    },
+                    "equals": "=",
+                    "like": "~=",
+                    "notEquals": "≠",
+                    "notLike": "~≠",
+                    "greaterThan": ">",
+                    "lessThan": "<",
+                    "greaterThanOrEqualTo": "≥",
+                    "lessThanOrEqualTo": "≤"
                 },
                 "validation": {
                     "title": "I seguenti errori impediscono l'aggiornamento del filtro:",
@@ -221,7 +239,10 @@ Oskari.registerLocalization({
                 "Unable_to_process_aggregate_union": "Impossibile processare l'unione",
                 "Unable_to_get_features_for_union": "Impossibile ottenere feature dall'unione",
                 "Unable_to_store_analysis_data": "Impossibile memorizzare i parametri dell'analisi",
-                "Unable_to_get_analysisLayer_data": "Impossibile ottenere i dati del layer da analizzare"
+                "Unable_to_get_analysisLayer_data": "Impossibile ottenere i dati del layer da analizzare",
+                "timeout": "Analysis request timed out",
+                "error": "Analysis failed for an unknown reason",
+                "parsererror": "Server returned invalid analysis data"
             },
             "infos": {
                 "title": "Info",
@@ -272,7 +293,7 @@ Oskari.registerLocalization({
         "personalDataTab": {
             "grid": {
                 "name": "Nome",
-                "delete": " "
+                "delete": "Cancella"
             },
             "title": "Analisi",
             "confirmDeleteMsg": "Vuoi cancellare:",

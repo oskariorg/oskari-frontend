@@ -295,7 +295,16 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
             feats.push(ef);
         }
 
-        var event = me.getSandbox().getEventBuilder("FeaturesAvailableEvent")(this.layer, feats, "application/nlsfi-x-openlayers-feature", "EPSG:3067", "replace");
+        console.log("metadataflyout.showExtentOnMap", Oskari.getSandbox().getMap().getSrsName(), "should match", "EPSG:3067");
+
+        var event = me.getSandbox().getEventBuilder("FeaturesAvailableEvent")(
+            this.layer,
+            feats,
+            "application/nlsfi-x-openlayers-feature",
+            Oskari.getSandbox().getMap().getSrsName(),
+            //"EPSG:3067",
+            "replace"
+        );
 
         me.sandbox.notifyAll(event);
     },

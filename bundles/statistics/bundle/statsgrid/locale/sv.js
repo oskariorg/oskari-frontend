@@ -19,7 +19,7 @@ Oskari.registerLocalization({
                 "description": "Beskrivning",
                 "organization": "Upphov",
                 "year": "År",
-                "delete": " "
+                "delete": "Ta bort"
             },
             "deleteTitle": "NOT TRANSLATED",
             "destroyIndicator": "Radera",

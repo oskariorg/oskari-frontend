@@ -211,6 +211,7 @@ Oskari.registerLocalization({
             "show": "Prikaži",
             "hide": "Sakrij",
             "hidden": "Karta je privremeno sakrivena.",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Dopušteno objavljivanje",

@@ -211,6 +211,7 @@ Oskari.registerLocalization({
             "show": "Näita",
             "hide": "Peida",
             "hidden": "Kaart on ajutiselt peidetud.",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Avaldamine lubatud",

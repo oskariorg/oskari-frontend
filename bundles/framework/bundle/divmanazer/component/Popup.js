@@ -25,17 +25,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         show: function (title, message, buttons) {
             var me = this,
                 contentDiv = this.dialog.find('div.content'),
-                actionDiv,
+                actionDiv = this.dialog.find('div.actions'),
                 i,
                 contentHeight,
                 reasonableHeight;
-            this.dialog.find('h3').html(title);
-            contentDiv.html(message);
 
+            this.setTitle(title);
+            this.setContent(message);
+
+            // Remove previous buttons
+            actionDiv.empty();
             if (buttons && buttons.length > 0) {
-                actionDiv = this.dialog.find('div.actions');
-                // TODO: save button references and clean up previous buttons
-                actionDiv.empty();
                 for (i = 0; i < buttons.length; i += 1) {
                     buttons[i].insertTo(actionDiv);
                 }
@@ -222,7 +222,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         _stopKeydownPropagation : function(e) {
             e.stopPropagation();
         },
-
+        setTitle: function (title) {
+            this.dialog.find('h3').html(title);
+        },
+        getTitle: function () {
+            return this.dialog.find('h3')[0].textContent;
+        },
         /** 
          * @method setContent
          * Sets dialog content element

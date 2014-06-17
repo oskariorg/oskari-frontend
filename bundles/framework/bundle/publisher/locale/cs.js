@@ -152,6 +152,7 @@ Oskari.registerLocalization({
             "show": "Zobrazit",
             "hide": "Skrýt",
             "hidden": "Mapa byla dočasně skryta.",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Publikace povolena",

@@ -319,7 +319,31 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // values: equals, like, not equals, not like, greater than, less than,
             //         greater or equal than, less or equal than
             this._appendOptionValues(opSelect, null, [
-                '=', '~=', '≠', '~≠', '>', '<', '≥', '≤'
+                {
+                    id: '=',
+                    name: this.loc.filter.values['equals']
+                }, {
+                    id: '~=',
+                    name: this.loc.filter.values['like']
+                }, {
+                    id: '≠',
+                    name: this.loc.filter.values['notEquals']
+                }, {
+                    id: '~≠',
+                    name: this.loc.filter.values['notLike']
+                }, {
+                    id: '>',
+                    name: this.loc.filter.values['greaterThan']
+                }, {
+                    id: '<',
+                    name: this.loc.filter.values['lessThan']
+                }, {
+                    id: '≥',
+                    name: this.loc.filter.values['greaterThanOrEqualTo']
+                }, {
+                    id: '≤',
+                    name: this.loc.filter.values['lessThanOrEqualTo']
+                }
             ]);
 
             // Placeholder to the attribute value input.

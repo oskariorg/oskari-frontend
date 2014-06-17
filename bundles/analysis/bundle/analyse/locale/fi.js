@@ -2,8 +2,8 @@ Oskari.registerLocalization({
     "lang": "fi",
     "key": "Analyse",
     "value": {
-        "title": "Analyysi",
-        "flyouttitle": "Analyysi",
+        "title": "Analyysi <font color=red>(BETA)</font>",
+        "flyouttitle": "Analyysi <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analyysi",
         "notLoggedIn": "Vain kirjautunut käyttäjä voi tehdä WFS tasoille analyysejä. <a href='/web/fi/login'>Kirjaudu palveluun</a>.",
@@ -114,6 +114,11 @@ Oskari.registerLocalization({
                     "label": "Analyysitasojen yhdiste",
                     "classForPreview": "layer_union",
                     "tooltip": "Yhdistää analyysitasoja, joilla on samat ominaisuustietokentät"
+                }, {
+                    "id": "oskari_analyse_areas_and_sectors",
+                    "label": "Vyöhykkeet ja sektorit",
+                    "classForPreview": "areas_and_sectors",
+                    "tooltip": "NOT TRANSLATED"
                 }]
             },
             "aggregate": {
@@ -141,7 +146,7 @@ Oskari.registerLocalization({
                     "id": "oskari_analyse_Median",
                     "label": "Mediaani"
                 },{
-                    "id": "oskari_analyse_NoDataCount",
+                    "id": "oskari_analyse_NoDataCnt",
                     "label": "Tietosuojatut kohteet"
                   }],
                 "attribute": "Valitse ominaisuustieto"
@@ -172,6 +177,14 @@ Oskari.registerLocalization({
                 "label": "Valitut yhdistettävät tasot",
                 "notAnalyseLayer": "Valitse jokin analyysitaso",
                 "noLayersAvailable": "Tasoja, joilla on samat ominaisuustietokentät ei löytynyt"
+            },
+            "areas_and_sectors": {
+                "area_count": "Vyöhykkeiden lukumäärä",
+                "area_count_tooltip": "Anna vyöhykkeiden lukumäärä",
+                "area_size": "Vyöhykkeiden koko",
+                "area_size_tooltip": "Anna vyöhykkeiden koko",
+                "sector_count": "Sektoreiden lukumäärä",
+                "sector_count_tooltip": "Anna sektoreiden lukumäärä",
             },
             "spatial": {
                 "label": "Spatiaalinen operaattori",
@@ -238,7 +251,15 @@ Oskari.registerLocalization({
                         "boolean": "Looginen operaattori",
                         "operator": "Operaattori",
                         "attribute-value": "Arvo"
-                    }
+                    },
+                    "equals": "on yhtäsuuri kuin",
+                    "like": "on likimäärin yhtäsuuri kuin",
+                    "notEquals": "on erisuuri kuin",
+                    "notLike": "on likimäärin erisuuri kuin",
+                    "greaterThan": "on suurempi kuin",
+                    "lessThan": "on pienempi kuin",
+                    "greaterThanOrEqualTo": "on suurempi tai yhtä suuri kuin",
+                    "lessThanOrEqualTo": "on pienempi tai yhtä pieni kuin"
                 },
                 "validation": {
                     "title": "Seuraavat virheet estivät suodattimen päivityksen:",
@@ -276,8 +297,10 @@ Oskari.registerLocalization({
                 "Unable_to_process_aggregate_union": "Yhdisteen koosteen prosessointi epäonnistui",
                 "Unable_to_get_features_for_union": "Koosteen input kohteiden haku epäonnistui",
                 "Unable_to_store_analysis_data": "Analyysin tallennus epäonnistui",
-                "Unable_to_get_analysisLayer_data": "Analyysitason tietojen parsinta epäonnistui"
-
+                "Unable_to_get_analysisLayer_data": "Analyysitason tietojen parsinta epäonnistui",
+                "timeout": "Analyysi epäonnistui - pyyntö aikakatkaistiin",
+                "error": "Valitettavasti analyysi ei onnistunut",
+                "parsererror": "Palvelin palautti viallista analyysidataa"
             },
             "infos": {
                 "title": "Tiedoksi",
@@ -328,7 +351,7 @@ Oskari.registerLocalization({
         "personalDataTab": {
             "grid": {
                 "name": "Nimi",
-                "delete": " "
+                "delete": "Poista"
             },
             "title": "Analyysit",
             "confirmDeleteMsg": "Haluatko poistaa analyysin:",

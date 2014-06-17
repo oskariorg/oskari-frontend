@@ -9,7 +9,7 @@ Oskari.registerLocalization({
             "description": "",
             "from": "From",
             "to": "To",
-            "fromMap": "NOT TRANSLATED",
+            "fromMap": "Select location from map",
             "routingService": "Routing Service",
             "fetchRoute": "Fetch route",
             "selectLocations": "Please select both locations"
