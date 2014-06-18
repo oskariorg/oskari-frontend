@@ -168,6 +168,7 @@ Oskari.registerLocalization({
                 "tooltip": "Anna parametrit analyysia varten. Parametrit riippuvat valitusta suodattimesta ja menetelmästä"
             },
             "intersect": {
+                "target": "Leikattava taso",
                 "label": "Leikkaava taso"
             },
             "union": {

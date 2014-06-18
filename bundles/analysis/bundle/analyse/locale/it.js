@@ -113,6 +113,7 @@ Oskari.registerLocalization({
                 "tooltip": "Inserisci i parametri dell'analisi"
             },
             "intersect": {
+                "target": "Layer di base",
                 "label": "Layer da incrociare"
             },
             "union": {
