@@ -1046,9 +1046,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
             // title
             var title = me.template.title_extra.clone(),
+                targetTitle = me.template.title_extra.clone(),
+                targetLayer = _.find(options, {'data': true}),
+                targetLayerElem = jQuery('<span></span>'),
                 i,
                 toolContainer,
                 label;
+
+            optopt = options;
+
+            targetTitle.find('.extra_title_label').html(me.loc.intersect.target);
+            targetLayerElem.html((targetLayer ? targetLayer.label : ''));
+            contentPanel.append(targetTitle);
+            contentPanel.append(targetLayerElem);
+
             title.find('.extra_title_label').html(me.loc.intersect.label);
             contentPanel.append(title);
 
@@ -1066,6 +1077,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             };
 
             for (i = 0; i < me.intersectOptions.length; ++i) {
+                var optionChecked = (i === 0 ? 'checked' : undefined);
                 option = me.intersectOptions[i];
                 toolContainer = me.template.intersectOptionTool.clone();
                 label = option.label;
@@ -1085,7 +1097,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 toolContainer.find('input').attr({
                     'value': option.id,
                     'name': 'intersect',
-                    'id': 'intersect_' + option.id
+                    'id': 'intersect_' + option.id,
+                    'checked': optionChecked
                 });
                 toolContainer.find('input').change(closureMagic(option));
             }
