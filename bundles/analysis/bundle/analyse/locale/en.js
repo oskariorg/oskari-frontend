@@ -46,30 +46,30 @@ Oskari.registerLocalization({
                     }
                 },
                 "drawFilter": {
-                    "title": "NOT TRANSLATED",
+                    "title": "Clip a feature",
                     "buttons": {
-                        "cancel": "NOT TRANSLATED",
-                        "finish": "NOT TRANSLATED"
+                        "cancel": "Cancel",
+                        "finish": "Finish"
                     },
                     "tooltip": {
-                        "point": "NOT TRANSLATED",
-                        "line": "NOT TRANSLATED",
-                        "edit": "NOT TRANSLATED",
-                        "remove": "NOT TRANSLATED"
+                        "point": "Clip a line",
+                        "line": "Clip an area with a line",
+                        "edit": "Clip an area",
+                        "remove": "Remove clip"
                     },
                     "dialog": {
                         "modes": {
                             "point": {
-                                "title": "NOT TRANSLATED",
-                                "message": "NOT TRANSLATED"
+                                "title": "Clip a line",
+                                "message": "Define the clip line by moving the markers."
                             },
                             "line": {
-                                "title": "NOT TRANSLATED",
-                                "message": "NOT TRANSLATED"
+                                "title": "Clip an area with a line", 
+                                "message": "Clip an area with a line. Finish drawing with a double click. After this you can edit the clip line and move the clipping points alonog the perimeter."
                             },
                             "edit": {
-                                "title": "NOT TRANSLATED",
-                                "message": "NOT TRANSLATED"
+                                "title": "Clip an area",
+                                "message": "Clip an area with another area."
                             }
                         }
                     }

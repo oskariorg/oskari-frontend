@@ -2080,6 +2080,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 no_data,
                 selectedLayer = me._getSelectedMapLayer();
             if ( !selectedLayer) return no_data;
+            if ( selectedLayer.getLayerType() !== 'WFS') return no_data; 
             var params = selectedLayer.getWpsLayerParams();
             if (params) {
                 jQuery.each(params, function (key, value) {

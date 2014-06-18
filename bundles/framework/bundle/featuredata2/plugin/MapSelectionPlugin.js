@@ -254,8 +254,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.MapSelection
         }
         var featClass = this.drawLayer.features[0].geometry.CLASS_NAME;
         if ((featClass === "OpenLayers.Geometry.MultiPoint") ||
-                (featClass === "OpenLayers.Geometry.MultiLineString") ||
-                (featClass === "OpenLayers.Geometry.MultiPolygon")) {
+            (featClass === "OpenLayers.Geometry.MultiLineString") ||
+            (featClass === "OpenLayers.Geometry.MultiPolygon")) {
             return this.drawLayer.features[0].geometry;
         }
 
@@ -290,8 +290,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.MapSelection
      * @method getFeaturesAsGeoJSON
      */
     getFeaturesAsGeoJSON: function () {
-        var selection = this.geojson_format.write(this.getFeatures());
-        var json = JSON.parse(selection);
+        var selection = this.geojson_format.write(this.getFeatures()),
+            json = JSON.parse(selection);
         json.crs = this._getSRS();
         return json;
     },
@@ -301,10 +301,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.MapSelection
      */
     getFullScreenSelection: function () {
         // create selection geometry from bbox
-        var bbox = this._sandbox.getMap().getBbox();
-        var geometry = bbox.toGeometry();
-        var selection = this.geojson_format.write(geometry);
-        var json = JSON.parse(selection);
+        var bbox = this._sandbox.getMap().getBbox(),
+            geometry = bbox.toGeometry(),
+            selection = this.geojson_format.write(geometry),
+            json = JSON.parse(selection);
 
         var geojs = {
             "type": "FeatureCollection",
@@ -327,11 +327,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.MapSelection
      * @method _getSRS
      */
     _getSRS: function () {
-        // FIXME: should be gotten from MapModule._projectionCode
         return {
-            "type": "EPSG",
+            "type": "name",
             "properties": {
-                "code": 3067
+                "name": this._sandbox.getMap().getSrsName()
             }
         };
     },

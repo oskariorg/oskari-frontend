@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.23
+
+### divmanazer/Grid
+
+Implemented expandable/collapsible subtables. Improved export permission handling.
+
 ## 1.22
 
 ### integration/admin-layerselector

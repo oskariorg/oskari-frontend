@@ -3,13 +3,13 @@ th {
     &.asc {
         background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/asc_arrow.png');
         background-repeat: no-repeat;
-        background-position: center center;
+        background-position: right center;
     }
 
     &.desc {
         background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png');
         background-repeat: no-repeat;
-        background-position: center center;
+        background-position: right center;
     }
 
 }
@@ -28,8 +28,8 @@ div.column-selector-placeholder {
 }
 
 div.column-selector-title {
-  margin-top: 9px;
-  margin-left: 3px;
+  margin-top: 10px;
+  margin-left: 2px;
   background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png');
   background-repeat: no-repeat;
   background-position: 120px 3px;
@@ -49,12 +49,15 @@ div.icon-menu {
 }
 
 div.column-selector {
+    max-height: 350px;
+    width: 270px;
+    overflow: auto;
     position: absolute;
     visibility: hidden;
     background-color: white;
     margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 50px;
+    margin-left: 3px;
+    margin-right: 5px;
     padding: 0;
     border: 1px solid;
     z-index: 10001;
@@ -112,6 +115,10 @@ table.oskari-grid {
         text-overflow: ellipsis;
         padding-left: 10px;
         padding-right: 10px;
+
+        .hidden {
+          display: none;
+        }
     }
 
     th {
@@ -122,6 +129,18 @@ table.oskari-grid {
             color: #3C3C3C;
             line-height: 28px;
             padding: 5px;
+        }
+
+        &.closedSubTable {
+          background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/icon-arrow-right.png');
+          background-repeat: no-repeat;
+          background-position: right center;
+        }
+
+        &.openSubTable {
+          background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/icon-arrow-left.png');
+          background-repeat: no-repeat;
+          background-position: right center;
         }
     }
 
