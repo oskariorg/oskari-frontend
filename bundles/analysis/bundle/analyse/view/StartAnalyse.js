@@ -1047,7 +1047,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var title = me.template.title_extra.clone(),
                 targetTitle = me.template.title_extra.clone(),
                 targetLayer = _.find(options, {'data': true}),
-                targetLayerElem = jQuery('</span>'),
+                targetLayerElem = jQuery('<span></span>'),
                 i,
                 toolContainer,
                 label;
