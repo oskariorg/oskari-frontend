@@ -169,7 +169,7 @@ Oskari.registerLocalization({
                 "tooltip": "Passa parameterna för analys"
             },
             "intersect": {
-                "target": "Baslag",
+                "target": "Baslager",
                 "label": "Intersect lag"
             },
             "union": {
