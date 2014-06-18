@@ -26,6 +26,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         me.id_prefix = 'oskari_analyse_';
         me.layer_prefix = 'analysis_';
         me.max_analyse_layer_fields = 10;
+        me.max_areaCount = 12;
         // unit -> multiplier
         me.bufferUnits = {
             'm': 1,
@@ -1045,9 +1046,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
             // title
             var title = me.template.title_extra.clone(),
+                targetTitle = me.template.title_extra.clone(),
+                targetLayer = _.find(options, {'data': true}),
+                targetLayerElem = jQuery('<span></span>'),
                 i,
                 toolContainer,
                 label;
+
+            optopt = options;
+
+            targetTitle.find('.extra_title_label').html(me.loc.intersect.target);
+            targetLayerElem.html((targetLayer ? targetLayer.label : ''));
+            contentPanel.append(targetTitle);
+            contentPanel.append(targetLayerElem);
+
             title.find('.extra_title_label').html(me.loc.intersect.label);
             contentPanel.append(title);
 
@@ -1065,6 +1077,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             };
 
             for (i = 0; i < me.intersectOptions.length; ++i) {
+                var optionChecked = (i === 0 ? 'checked' : undefined);
                 option = me.intersectOptions[i];
                 toolContainer = me.template.intersectOptionTool.clone();
                 label = option.label;
@@ -1084,7 +1097,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 toolContainer.find('input').attr({
                     'value': option.id,
                     'name': 'intersect',
-                    'id': 'intersect_' + option.id
+                    'id': 'intersect_' + option.id,
+                    'checked': optionChecked
                 });
                 toolContainer.find('input').change(closureMagic(option));
             }
@@ -1675,6 +1689,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 sectorCount = container.find('input.settings_sector_count_field').val();
 
             areaSize *= areaUnitMultiplier;
+            if(areaCount > 12) areaCount = me.max_areaCount;
 
             var methodSelections = {
                 'buffer': {
@@ -2067,6 +2082,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 no_data,
                 selectedLayer = me._getSelectedMapLayer();
             if ( !selectedLayer) return no_data;
+            if ( selectedLayer.getLayerType() !== 'WFS') return no_data;
             var params = selectedLayer.getWpsLayerParams();
             if (params) {
                 jQuery.each(params, function (key, value) {
