@@ -6,6 +6,10 @@
 
 Implemented expandable/collapsible subtables. Improved export permission handling.
 
+### mapmodule/ControlsPlugin
+
+Initial pinch-zoom support for Windows Phone
+
 ## 1.22
 
 ### integration/admin-layerselector
