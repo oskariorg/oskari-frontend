@@ -56,6 +56,7 @@ Oskari.registerLocalization({
             "buttons" : {
                 "save" : "Hae tuloste",
                 "ok" : "OK",
+                "back" : "Edellinen",
                 "cancel" : "Peruuta"
             },
             "location" : {

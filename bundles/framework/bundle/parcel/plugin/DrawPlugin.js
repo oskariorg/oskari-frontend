@@ -660,7 +660,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             if (this.editLayer.features.length === 0) return 0;
             var f = this.editLayer.features[0];
             if (f === null || f === undefined) return 0;
-            return f.geometry.getVertices().length;
+            // Is closed geometry - filter last point
+            var closed = false,
+                nodes = f.geometry.getVertices();
+            if(nodes.length > 1)
+                closed = ((nodes[0].x-nodes[nodes.length-1].x == 0) && (nodes[0].y-nodes[nodes.length-1].y == 0));
+            if (closed) return nodes.length-1;
+            else return nodes.length;
 
         },
         /**

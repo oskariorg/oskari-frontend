@@ -72,6 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         this.accordion = null;
         this.mainPanel = null;
         this.sizePanel = null;
+        this.backBtn = null;
 
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
@@ -475,8 +476,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             cancelBtn.setTitle(this.loc.buttons.cancel);
             cancelBtn.setHandler(function () {
                 me.instance.setPublishMode(false);
+                // Send print canceled event
+                me.instance.sendCanceledEvent('cancel');
             });
             cancelBtn.insertTo(buttonCont);
+
+            me.backBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            me.backBtn.setTitle(this.loc.buttons.back);
+            me.backBtn.setHandler(function () {
+                me.instance.setPublishMode(false);
+                // Send print canceled event previous
+                me.instance.sendCanceledEvent('previous');
+            });
+            me.backBtn.insertTo(buttonCont);
+            me.backBtn.hide();
 
             var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             saveBtn.setTitle(this.loc.buttons.save);
@@ -641,6 +654,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             if(me.sizePanel) me.sizePanel.close();
             container.find('div.accordion_panel').first().next().hide();
+
+            //Add back step button
+            me.backBtn.show();
 
         },
         /**
