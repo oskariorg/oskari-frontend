@@ -100,7 +100,10 @@ function(instance) {
     _loadCallback : function(featureSet, featureType) {
         if (featureSet) {
             this.instance.getDrawPlugin().drawFeature(featureSet.polFeatures, featureType);
-            if(featureSet.pointFeatures) this.instance.getService().plotOldParcelPoints(featureSet.pointFeatures);
+            this.instance.getDrawPlugin().operatingFeature = null;
+            if(featureSet.pointFeatures) {
+                this.instance.getService().plotOldParcelPoints(featureSet.pointFeatures);
+            }
         }
     }
 }, {

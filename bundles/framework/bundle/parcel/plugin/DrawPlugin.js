@@ -96,8 +96,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                         if (layer.features[0].geometry.CLASS_NAME === "OpenLayers.Geometry.LineString") {
                             var loc = me.instance.getLocalization('notification').calculating;
                             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            dialog.show(loc.title, "");
-                            // The popup dialog doesn't work without short delay
+                            var controlButtons = [];
+                            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+                            cancelBtn.setHandler(function () {
+                            });
+                            cancelBtn.addClass('primary');
+                            // controlButtons.push(cancelBtn);
+                            dialog.show(loc.title, "", controlButtons);
+                            // The popup dialog doesn't work without a short delay
                             setTimeout(function () {
                                 me.processFeatures();
                                 dialog.close();
