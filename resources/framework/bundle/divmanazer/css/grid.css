@@ -113,10 +113,10 @@ table.oskari-grid th._openSubTable {
   background-position: right center;
 }
 
-table.oskari-grid th.hidden {
+table.oskari-grid th._hidden {
   display: none;
 }
 
-table.oskari-grid td.hidden {
+table.oskari-grid td._hidden {
   display: none;
 }

@@ -176,7 +176,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             cell.addClass(baseKey);
                             cell.append(value[field]);
                             if (hidden) {
-                                cell.addClass('hidden');
+                                cell.addClass('_hidden');
                             }
                             row.append(cell);
                             columnIndex = columnIndex+1;
@@ -413,18 +413,18 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     link.bind('click', function() {
                         var parentItem = jQuery(this).parent();
                         var thisKey = jQuery.grep(jQuery(parentItem).attr('class').split(/\s+/),function(s){
-                            return ((s !== '_base')&&(s !== '_openSubTable')&&(s !== '_closedSubTable'));
+                            return (['_base','_openSubTable','_closedSubTable','_hidden'].indexOf(s) < 0) ;
                         })[0];
                         if (parentItem.hasClass('_closedSubTable')) {
-                            table.find('th.hidden.'+thisKey).removeClass('hidden');
+                            table.find('th._hidden.'+thisKey).removeClass('_hidden');
                             // jQuery(this).parent().addClass('hidden');
-                            table.find('td.hidden.'+thisKey).removeClass('hidden');
+                            table.find('td._hidden.'+thisKey).removeClass('_hidden');
                             // table.find('td.base.'+thisKey).addClass('hidden');
                             parentItem.removeClass('_closedSubTable');
                             parentItem.addClass('_openSubTable');
                         } else {
-                            table.find('th.'+thisKey).not('._base').addClass('hidden');
-                            table.find('td.'+thisKey).not('._base').addClass('hidden');
+                            table.find('th.'+thisKey).not('._base').addClass('_hidden');
+                            table.find('td.'+thisKey).not('._base').addClass('_hidden');
                             parentItem.removeClass('_openSubTable');
                             parentItem.addClass('_closedSubTable');
                         }
@@ -432,7 +432,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 }
 
                 if (fullFieldNames[i].visibility === 'hidden') {
-                    header.addClass('hidden');
+                    header.addClass('_hidden');
                 }
                 header.addClass(fullFieldNames[i].baseKey);
                 headerContainer.append(header);
