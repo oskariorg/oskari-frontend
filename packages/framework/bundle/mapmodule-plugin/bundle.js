@@ -49,12 +49,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/controls/PorttiKeyboard.js"
-                }, {
+                }, /*{
                     "type": "text/javascript",
                     "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/controls/PorttiMouse.js"
-                }, {
+                },*/ {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/controls/OskariWindowsPinchZoom.js"
+                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/controls/OskariNavigation.js"
+//                    "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/controls/OskariWindowsPinchZoom.js"
                 }, {
 
 

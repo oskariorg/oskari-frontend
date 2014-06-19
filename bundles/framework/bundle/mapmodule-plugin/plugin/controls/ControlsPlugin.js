@@ -374,14 +374,17 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
 
             // mouse control
             if (this.conf.mouseControls !== false) {
-                this._mouseControls = new OpenLayers.Control.PorttiMouse(this.conf.mouse);
+                //this._mouseControls = new OpenLayers.Control.PorttiMouse(this.conf.mouse);
+                this._mouseControls = new OskariNavigation();
                 this._mouseControls.setup(this.getMapModule());
             }
             // touch control for windows phone
+            /*
             if (this.conf.touchControls !== false) {
                 this._touchControlsWin = new OpenLayers.Control.OskariWindowsPinchZoom(this.conf.touch);
                 this._touchControlsWin.setup(this.getMapModule());
             }
+            */
         }
     }, {
         /**
