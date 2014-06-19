@@ -23,6 +23,11 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
             this.map.viewPortDiv.oncontextmenu = OpenLayers.Function.False;
         }
         // <custom hooking>
+        if (window.navigator.msPointerEnabled)
+        {
+        	// setup class for mobile IE
+          	jQuery(this.mapmodule.getMapEl()).css("ms-touch-action", "none");
+        }
         var me = this;
         var hook = function(actualmethod, ctx) {
         	return function() {
