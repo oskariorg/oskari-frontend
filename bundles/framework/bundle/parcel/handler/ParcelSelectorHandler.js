@@ -101,6 +101,7 @@ function(instance) {
         if (featureSet) {
             this.instance.getDrawPlugin().drawFeature(featureSet.polFeatures, featureType);
             this.instance.getDrawPlugin().operatingFeature = null;
+            this.instance.getDrawPlugin().backupFeatures = null;
             if(featureSet.pointFeatures) {
                 this.instance.getService().plotOldParcelPoints(featureSet.pointFeatures);
             }
