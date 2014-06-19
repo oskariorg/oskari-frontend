@@ -158,8 +158,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             cell = this.templateCell.clone();
             baseKey = key;
             subKeys = this.table.find("th>a");
-            hidden = jQuery(this.table.find("th")[columnIndex]).hasClass("closedSubTable");
-            cell.addClass('base');
+            hidden = jQuery(this.table.find("th")[columnIndex]).hasClass("_closedSubTable");
+            cell.addClass('_base');
             cell.addClass(baseKey);
             row.append(cell);
             columnIndex = columnIndex+1;
@@ -407,24 +407,26 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 if (fullFieldNames[i].type === 'default') {
                     link.bind('click', headerClosureMagic(fullFieldNames[i].key));
                 } else if (fullFieldNames[i].type === 'object') {
-                    header.addClass('closedSubTable');
-                    header.addClass('base');
+                    header.addClass('_closedSubTable');
+                    header.addClass('_base');
                     // Expand or close subtable
                     link.bind('click', function() {
-                        var parent = jQuery(this).parent();
-                        var thisKey = jQuery(this).html();
-                        if (parent.hasClass('closedSubTable')) {
+                        var parentItem = jQuery(this).parent();
+                        var thisKey = jQuery.grep(jQuery(parentItem).attr('class').split(/\s+/),function(s){
+                            return ((s !== '_base')&&(s !== '_openSubTable')&&(s !== '_closedSubTable'));
+                        })[0];
+                        if (parentItem.hasClass('_closedSubTable')) {
                             table.find('th.hidden.'+thisKey).removeClass('hidden');
                             // jQuery(this).parent().addClass('hidden');
                             table.find('td.hidden.'+thisKey).removeClass('hidden');
                             // table.find('td.base.'+thisKey).addClass('hidden');
-                            parent.removeClass('closedSubTable');
-                            parent.addClass('openSubTable');
+                            parentItem.removeClass('_closedSubTable');
+                            parentItem.addClass('_openSubTable');
                         } else {
-                            table.find('th.'+thisKey).not('.base').addClass('hidden');
-                            table.find('td.'+thisKey).not('.base').addClass('hidden');
-                            parent.removeClass('openSubTable');
-                            parent.addClass('closedSubTable');
+                            table.find('th.'+thisKey).not('._base').addClass('hidden');
+                            table.find('td.'+thisKey).not('._base').addClass('hidden');
+                            parentItem.removeClass('_openSubTable');
+                            parentItem.addClass('_closedSubTable');
                         }
                     });
                 }

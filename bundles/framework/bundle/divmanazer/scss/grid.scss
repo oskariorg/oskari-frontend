@@ -131,13 +131,13 @@ table.oskari-grid {
             padding: 5px;
         }
 
-        &.closedSubTable {
+        &._closedSubTable {
           background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/icon-arrow-right.png');
           background-repeat: no-repeat;
           background-position: right center;
         }
 
-        &.openSubTable {
+        &._openSubTable {
           background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/icon-arrow-left.png');
           background-repeat: no-repeat;
           background-position: right center;
