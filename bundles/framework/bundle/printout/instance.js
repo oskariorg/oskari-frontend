@@ -471,6 +471,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 }
             }
         },
+        /**
+         *  Send plotout canceled event
+         */
+        sendCanceledEvent: function (state) {
+            var me = this;
+            var eventBuilder = me.sandbox.getEventBuilder('Printout.PrintCanceledEvent');
+
+            if (eventBuilder) {
+                var event = eventBuilder(state);
+                me.sandbox.notifyAll(event);
+            }
+        },
         displayContent: function (isOpen) {
             if (isOpen) {
                 this.plugins['Oskari.userinterface.Flyout'].refresh();

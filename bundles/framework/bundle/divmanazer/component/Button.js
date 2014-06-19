@@ -82,6 +82,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
         destroy: function () {
             this.ui.remove();
         },
+        /**
+         * @method hide
+         * Hide the button/hide  it in the document
+         */
+        hide: function () {
+            this.ui.hide();
+        },
+        /**
+         * @method show
+         * Show the button/show it in the document
+         */
+        show: function () {
+            this.ui.show();
+        },
 
         /**
          * @method insertTo

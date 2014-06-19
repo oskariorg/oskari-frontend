@@ -189,9 +189,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
             if (this.pointLayer) {
                 this.pointLayer.removeAllFeatures();
             }
-            if (this.oldPointLayer) {
+      /*      if (this.oldPointLayer) {
                 this.oldPointLayer.removeAllFeatures();
-            }
+            } */
         },
         /**
          * @method _plotNewParcel
@@ -303,7 +303,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
                         deltay,
                         points,
                         line,
-                        lineFeature;
+                        lineFeature,
+                        closed = false;
+
+                    if(nodes.length > 1)
+                    closed = ((nodes[0].x-nodes[nodes.length-1].x == 0) && (nodes[0].y-nodes[nodes.length-1].y == 0));
 
                     for (var j = 0; j < nodes.length - 1; j++) {
                         lon = nodes[j].x;
@@ -328,7 +332,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
                         var pointFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(lon, lat), null, this.pointLayer.style);
                         pointFeature.attributes.pnro = pno++;
                         pointfeatures.push(pointFeature);
-                        if (j === nodes.length - 2) {
+                        if (j === nodes.length - 2 && !closed) {
                             pointFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(lon2, lat2), null, this.pointLayer.style);
                             pointFeature.attributes.pnro = pno++;
                             pointfeatures.push(pointFeature);
