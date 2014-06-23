@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         }
 
         // Layout params, pdf template
-        this.layoutParams = "";
+        this.layoutParams = {};
 
         /* page sizes listed in localisations */
         this.sizeOptions = this.loc.size.options;
@@ -607,7 +607,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
             var saveFileArgs = "";
             if(selections.saveFile) saveFileArgs = "&saveFile=" + selections.saveFile;
-            var layoutArgs = me._getLayoutParams();
+            var layoutArgs = me._getLayoutParams(selections.pageSize);
 
             var contentOptions = [],
                 p;
@@ -666,20 +666,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          */
         setLayoutParams: function (printParams) {
             var me = this;
-            var params = "";
-            if(printParams.pageTemplate) params = "&pageTemplate="+printParams.pageTemplate;
-            if(printParams.pageMapRect) params = params + "&pageMapRect="+printParams.pageMapRect;
-            if(printParams.tableTemplate) params = params + "&tableTemplate="+printParams.tableTemplate;
-            me.layoutParams = params;
+            me.layoutParams = printParams;
 
         },
         /**
          * @method getLayoutParams
          * Get params for backend print layout.
+         * pdf template based on page Size
          */
-        _getLayoutParams: function () {
+        _getLayoutParams: function (pageSize) {
+            var params = "";
+            if(this.printParams.pageTemplate) params = "&pageTemplate="+this.printParams.pageTemplate+"_"+pageSize+".pdf";
+            if(this.printParams.pageMapRect) params = params + "&pageMapRect="+this.printParams.pageMapRect;
+            if(this.printParams.tableTemplate) params = params + "&tableTemplate="+this.printParams.tableTemplate+"_"+pageSize;
 
-          return this.layoutParams;
+          return params;
 
         },
         /**
