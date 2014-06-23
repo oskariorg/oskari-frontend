@@ -107,7 +107,7 @@ Oskari.registerLocalization({
         },
         "Grid": {
             "columnSelector": {
-                "title": "Ominaisuudet",
+                "title": "Ominaisuudet (testi)",
                 "tooltip": "Näytä sarakkeet"
             },
             "export": {
