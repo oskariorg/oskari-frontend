@@ -565,11 +565,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
                     pageLogo: true,
                     pageScale: true,
                     saveFile: values.name,
-                    pageTemplate: "template.pdf",
-                    pageMapRect: "1.0,1.5,19,19",  // Map area on A4 paper
+                    pageTemplate: this.instance.base_pdf_template,
+                    pageMapRect: this.instance.pageMapRect,  // Map area on A4 paper
                     tableTemplate: "LayoutTemplatePointTable"  // .json file name for plot layout (backend)
                 };
-
+    debugger;
             return selections;
 
         },
