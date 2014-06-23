@@ -50,18 +50,18 @@ Oskari.registerLocalization({
             "cancel": "Avbryta",
             "filter": "Filter"
         },
-        "sotka": {
+        "stats": {
             "municipality": "Kommun",
             "code": "Kod",
             "errorTitle": "Fel",
-            "regionDataError": "Fel att få Sotka regionen data.",
-            "regionDataXHRError": "Fel vid laddning av Sotka regionen data",
-            "indicatorsDataError": "Fel att få Sotka indikatorer.",
-            "indicatorsDataXHRError": "Fel vid laddning av Sotka indikatorer.",
-            "indicatorMetaError": "Fel att få Sotka indikator metadata",
-            "indicatorMetaXHRError": "Fel vid laddning av Sotka indikator metadata",
-            "indicatorDataError": "Fel att få Sotka indikator data",
-            "indicatorDataXHRError": "Fel vid laddning av Sotka indikator data",
+            "regionDataError": "Fel att få  regionen data.",
+            "regionDataXHRError": "Fel vid laddning av regionen data",
+            "indicatorsDataError": "Fel att få indikatorer.",
+            "indicatorsDataXHRError": "Fel vid laddning av indikatorer.",
+            "indicatorMetaError": "Fel att få indikator metadata",
+            "indicatorMetaXHRError": "Fel vid laddning av indikator metadata",
+            "indicatorDataError": "Fel att få indikator data",
+            "indicatorDataXHRError": "Fel vid laddning av indikator data",
             "descriptionTitle": "Beskrivning",
             "sourceTitle": "Upphov"
 
