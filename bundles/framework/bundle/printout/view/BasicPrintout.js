@@ -676,9 +676,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          */
         _getLayoutParams: function (pageSize) {
             var params = "";
-            if(this.printParams.pageTemplate) params = "&pageTemplate="+this.printParams.pageTemplate+"_"+pageSize+".pdf";
-            if(this.printParams.pageMapRect) params = params + "&pageMapRect="+this.printParams.pageMapRect;
-            if(this.printParams.tableTemplate) params = params + "&tableTemplate="+this.printParams.tableTemplate+"_"+pageSize;
+            if(this.layoutParams.pageTemplate) params = "&pageTemplate="+this.layoutParams.pageTemplate+"_"+pageSize+".pdf";
+            if(this.layoutParams.pageMapRect) params = params + "&pageMapRect="+this.layoutParams.pageMapRect;
+            if(this.layoutParams.tableTemplate) params = params + "&tableTemplate="+this.layoutParams.tableTemplate+"_"+pageSize;
 
           return params;
 
