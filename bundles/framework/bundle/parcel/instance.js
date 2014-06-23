@@ -48,6 +48,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
         this.sandbox = null;
         this.parcelService = undefined;
         this.idPrefix = 'parcel';
+        this.base_pdf_template = 'template';
+        this.pageMapRect = [];
         this.plugins = {};
     }, {
         /**
@@ -147,6 +149,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
                 me = this,
                 i,
                 layerId,
+                //template,
                 p;
             this.sandbox = sandbox;
             if (me.conf && me.conf.proxyUrl) {
@@ -166,6 +169,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
                     mapLayerService.makeLayerSticky(layerId,true);
                 }
             }
+
+            if(me.conf && me.conf.base_pdf_template) {
+                me.base_pdf_template = me.conf.base_pdf_template
+                }
+
+            if(me.conf && me.conf.pageMapRect) {
+                me.pageMapRect = me.conf.pageMapRect
+                }
+
+            
             // back end communication
             me.parcelService = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelService', me);
             me.sandbox.registerService(me.parcelService);
