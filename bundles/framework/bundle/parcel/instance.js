@@ -393,6 +393,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
             }
             me.parcelprint1.show();  //setParcelPrintMode(true);
         },
+        _setPrintoutPrevious: function () {
+            var me = this;
+            if (me.parcelprint2) {
+                me.parcelprint2.setEnabled(true);
+                this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+                me.parcelprint2.show();
+            }
+        },
         /**
          * @method stop
          * implements BundleInstance protocol stop method - does nothing atm
@@ -431,6 +439,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
                 var isOpen = event.getViewState() !== "close";
 
                 me.displayContent(isOpen);
+
+            },
+            /**
+             * @method Printout.PrintCanceledEvent
+             */
+            'Printout.PrintCanceledEvent': function (event) {
+
+                var me = this;
+               // Return to previous printout form
+                if(event.getState() === 'previous')
+                me._setPrintoutPrevious();
+                else if (event.getState() === 'cancel')
+                me.setParcelPrintBreak();
 
             }
         },

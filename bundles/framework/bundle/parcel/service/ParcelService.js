@@ -299,7 +299,7 @@ function(instance) {
 
         },
         /**
-         * @method clearParcelMap
+         * @method plotOldParcelPoints
          * Remove openlayers graphics of parcel Map
          */
         plotOldParcelPoints: function (features) {

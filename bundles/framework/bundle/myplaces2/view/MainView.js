@@ -43,10 +43,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
          * implements Module protocol start methdod
          */
         start: function () {
-            var me = this;
-
-            var sandbox = this.instance.sandbox,
+            var me = this,
+                sandbox = me.instance.sandbox,
                 p;
+
             sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
@@ -94,7 +94,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
@@ -126,9 +125,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
 
                 this._handleFinishedDrawingEvent(event);
             },
-            'DrawPlugin.ActiveDrawingEvent': function(event) {
+            'DrawPlugin.ActiveDrawingEvent': function (event) {
                 if (this.drawPluginId !== event.getCreatorId()) return;
-                
+
                 if (this.form) {
                     this.form.setMeasurementResult(event.getDrawing(), event.getDrawMode());
                 }
@@ -141,11 +140,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
          * @param {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.FinishedDrawingEvent} event
          */
         _handleFinishedDrawingEvent: function (event) {
-            var center = event.getDrawing().getCentroid();
-            var lonlat = {
-                lon: center.x,
-                lat: center.y
-            };
+            var center = event.getDrawing().getCentroid(),
+                lonlat = {
+                    lon: center.x,
+                    lat: center.y
+                };
             this.showPlaceForm(lonlat);
         },
         /**
@@ -155,8 +154,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
          * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlace} place prepoluate form with place data (optional)
          */
         showPlaceForm: function (location, place) {
-            var me = this;
-            var sandbox = this.instance.sandbox;
+            var me = this,
+                sandbox = me.instance.sandbox;
             sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             var loc = this.instance.getLocalization();
             this.form = Oskari.clazz.create(
@@ -190,7 +189,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                 html: me.form.getForm(categories),
                 useButtons: true,
                 primaryButton: loc.buttons.save,
-                actions: {}
+                actions: {},
+                layerId: me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryID())
             }];
             // cancel button
             content[0].actions[loc.buttons.cancel] = function () {
@@ -209,10 +209,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
         },
         /**
          * Destroys the opened form popup(s) from the screen.
-         * 
+         *
          * @method deletePlaceForm
          */
-        deletePlaceForm: function() {
+        deletePlaceForm: function () {
             var sandbox = this.instance.sandbox,
                 requestB = sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest'),
                 request;
@@ -231,9 +231,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
          * @return {Object[]}
          */
         _validateForm: function (values) {
-            var errors = [];
-            var categoryHandler = this.instance.getCategoryHandler();
-            if(categoryHandler && categoryHandler.validateCategoryFormValues) {
+            var errors = [],
+                categoryHandler = this.instance.getCategoryHandler();
+            if (categoryHandler && categoryHandler.validateCategoryFormValues) {
                 errors = categoryHandler.validateCategoryFormValues(values.category);
             }
 
@@ -258,10 +258,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             return errors;
         },
         _showValidationErrorMessage: function (errors) {
-            var loc = this.instance.getLocalization();
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var okBtn = dialog.createCloseButton(loc.buttons.ok);
-            var content = jQuery('<ul></ul>'),
+            var loc = this.instance.getLocalization(),
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = dialog.createCloseButton(loc.buttons.ok),
+                content = jQuery('<ul></ul>'),
                 i,
                 row;
             for (i = 0; i < errors.length; ++i) {
@@ -283,8 +283,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             if (!this.form) {
                 return;
             }
-            var me = this;
-            var formValues = this.form.getValues();
+            var me = this,
+                formValues = this.form.getValues();
             // validation
             var errors = this._validateForm(formValues);
             if (errors.length !== 0) {
@@ -294,9 +294,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             // validation passed -> go save stuff
             // new category given -> save it first 
             if (formValues.category) {
-
                 var category = this.instance.getCategoryHandler().getCategoryFromFormValues(formValues.category);
-
                 var serviceCallback = function (blnSuccess, model, blnNew) {
                     if (blnSuccess) {
                         // add category as a maplayer to oskari maplayer service
@@ -337,8 +335,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                 me.instance.showMessage(loc.title, loc.savePlace);
                 return;
             }
-            var place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlace');
-            var oldCategory = -1;
+            var place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlace'),
+                oldCategory = -1;
             if (values.id) {
                 place = this.instance.getService().findMyPlace(values.id);
                 oldCategory = place.getCategoryID();
@@ -357,12 +355,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             var serviceCallback = function (blnSuccess, model, blnNew) {
                 if (blnSuccess) {
                     // add map layer to map (we could check if its already there but core will handle that)
-                    var layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryID());
-                    var requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
-                    var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
-                        updateRequest;
-
-                    var request = requestBuilder(layerId, true);
+                    var layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryID()),
+                        requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest'),
+                        updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
+                        updateRequest,
+                        request = requestBuilder(layerId, true);
                     sandbox.request(me, request);
 
                     if (!blnNew) {

@@ -64,6 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelWfst',
             featurePrefix: 'ktjkiiwfs',
             url: urlCommit
         });
+        this.response = null;
     }, {
 
         /**
@@ -153,15 +154,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelWfst',
                 value: lit
             });
             var loc = this.instance.getLocalization('notification').placeLoading,
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.show(loc.title, loc.message);
-            protocol.read({
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                controlButtons,
+                cancelBtn;
+            controlButtons = [];
+            cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+            cancelBtn.setHandler(function () {
+                if (me.response) {
+                    protocol.abort(me.response);
+                    me.response = null;
+                }
+                dialog.close();
+            });
+            cancelBtn.addClass('primary');
+            controlButtons.push(cancelBtn);
+
+            dialog.show(loc.title, loc.message, controlButtons);
+            this.response = protocol.read({
                 filter: filter,
                 callback: function (response) {
                     dialog.close();
-                    if (response && response.features.polFeatures && response.features.polFeatures.length > 0) {
+                    if (response && response.features && response.features.polFeatures && response.features.polFeatures.length > 0) {
                         cb(response.features);
-
                     } else {
                         var locError = me.instance.getLocalization('notification').error;
                         me.instance.showMessage(locError.title, locError.loadPlace);

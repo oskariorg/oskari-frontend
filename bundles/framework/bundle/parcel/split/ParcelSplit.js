@@ -386,7 +386,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                 break;
             case "OpenLayers.Geometry.MultiPolygon":
                 break;
-                case "OpenLayers.Geometry.LineString":
+            case "OpenLayers.Geometry.LineString":
                 var newFeatures = this.splitLine(baseMultiPolygon, this.drawPlugin.operatingFeature);
                 this.drawPlugin.drawLayer.removeAllFeatures();
                 this.drawPlugin.selectedFeature = 0;

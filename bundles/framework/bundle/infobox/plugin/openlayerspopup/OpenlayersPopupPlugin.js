@@ -23,8 +23,9 @@ jQuery.fn.outerHTML = function (arg) {
         }
 
         if (jQuery.isFunction(arg)) {
-            if ((fnRet = arg.call(pass, i, el[inOrOut])) !== false)
+            if ((fnRet = arg.call(pass, i, el[inOrOut])) !== false) {
                 el[inOrOut] = fnRet;
+            }
         } else {
             el[inOrOut] = arg;
         }
@@ -136,7 +137,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          * }]
          */
         popup: function (id, title, contentData, lonlat, colourScheme, font) {
-            if (_.isEmpty(contentData)) return;
+            if (_.isEmpty(contentData)) {
+                return;
+            }
 
             var me = this,
                 currPopup = this._popups[id],
@@ -255,13 +258,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             return _.foldl(contentData, function (contentDiv, datum, index) {
                 var useButtons = (datum.useButtons === true),
                     primaryButton = datum.primaryButton,
-                    contentWrapper = me._contentWrapper.clone();
+                    contentWrapper = me._contentWrapper.clone(),
+                    key,
+                    actionLink,
+                    btn,
+                    link;
 
                 contentWrapper.append(datum.html);
 
-                for (var key in datum.actions) {
-                    var actionLink, btn, link;
-
+                for (key in datum.actions) {
                     if (useButtons) {
                         actionLink = me._actionButton.clone();
                         btn = actionLink.find('input');
@@ -298,8 +303,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                     if (link.hasClass('olPopupCloseBox')) { // Close button
                         me.close(id);
                     } else { // Action links
-                        var i = link.attr('contentdata');
-                        var text = link.attr('value');
+                        var i = link.attr('contentdata'),
+                            text = link.attr('value');
                         if (!text) {
                             text = link.html();
                         }
@@ -323,10 +328,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          * @return {Object[]}
          */
         _getChangedContentData: function (oldData, newData) {
-            var retData;
+            var retData,
+                i,
+                j;
 
-            for (var i = 0, oLen = oldData.length; i < oLen; ++i) {
-                for (var j = 0, nLen = newData.length; j < nLen; ++j) {
+            for (i = 0, oLen = oldData.length; i < oLen; ++i) {
+                for (j = 0, nLen = newData.length; j < nLen; ++j) {
                     if (newData[j].layerId &&
                         newData[j].layerId === oldData[i].layerId) {
                         oldData[i] = newData[j];
@@ -498,7 +505,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         _changeColourScheme: function (colourScheme, div, id) {
             div = div || jQuery('div#' + id);
 
-            if (!colourScheme || !div) return;
+            if (!colourScheme || !div) {
+                return;
+            }
 
             var gfiHeaderArrow = div.find('div.popupHeaderArrow'),
                 gfiHeader = div.find('div.popupHeader'),
@@ -553,20 +562,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             if (!div || !fontId) return;
 
             // The elements where the font style should be applied to.
-            var elements = [];
+            var elements = [],
+                k,
+                el;
+
             elements.push(div);
             elements.push(div.find('table.getinforesult_table'));
 
             // Remove possible old font classes.
-            for (var j = 0; j < elements.length; j++) {
-                var el = elements[j];
+            for (j = 0; j < elements.length; j++) {
+                el = elements[j];
                 // FIXME create function outside the loop
                 el.removeClass(function () {
                     var removeThese = '',
-                        classNames = this.className.split(' ');
+                        classNames = this.className.split(' '),
+                        i;
 
                     // Check if there are any old font classes.
-                    for (var i = 0; i < classNames.length; ++i) {
+                    for (i = 0; i < classNames.length; ++i) {
                         if (/oskari-publisher-font-/.test(classNames[i])) {
                             removeThese += classNames[i] + ' ';
                         }
@@ -589,8 +602,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             // destroys all if id not given
             // deletes reference to the same id will work next time also
             if (!id) {
-                for (var pid in this._popups) {
-                    var popup = this._popups[pid];
+                var pid,
+                    popup;
+                for (pid in this._popups) {
+                    popup = this._popups[pid];
                     if (!position ||
                         position.lon !== popup.lonlat.lon ||
                         position.lat !== popup.lonlat.lat) {

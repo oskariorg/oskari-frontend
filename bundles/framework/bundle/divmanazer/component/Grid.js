@@ -154,24 +154,26 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 hidden,
                 found,
                 field,
-                cell;
+                cell,
+                index;
             cell = this.templateCell.clone();
             baseKey = key;
-            subKeys = this.table.find("th>a");
-            hidden = jQuery(this.table.find("th")[columnIndex]).hasClass("closedSubTable");
+            index = columnIndex;
+            subKeys = this.table.find("th");
+            hidden = jQuery(this.table.find("th")[index]).hasClass("closedSubTable");
             cell.addClass('base');
             cell.addClass(baseKey);
             row.append(cell);
-            columnIndex = columnIndex+1;
+            index = index+1;
             do {
-                if (columnIndex === subKeys.length) {
+                if (index === subKeys.length) {
                     break;
                 }
                 found = false;
                 // Let's not assume field order
                 for (field in value) {
                     if (value.hasOwnProperty(field)) {
-                        if (jQuery(subKeys[columnIndex]).html() === baseKey+"."+field) {
+                        if ((jQuery(subKeys[index]).data("key") === baseKey)&&(jQuery(subKeys[index]).data("value") === field)) {
                             cell = this.templateCell.clone();
                             cell.addClass(baseKey);
                             cell.append(value[field]);
@@ -179,13 +181,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                                 cell.addClass('hidden');
                             }
                             row.append(cell);
-                            columnIndex = columnIndex+1;
+                            index = index+1;
                             found = true;
                             break;
                         }
                     }
                 }
             } while (found);
+            return index;
         },
 
         /**
@@ -322,6 +325,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 data,
                 fullFieldNames,
                 fieldName,
+                baseKey,
                 uiName,
                 key,
                 value,
@@ -365,7 +369,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     return false;
                 };
             };
-
             // Expand the table
             dataArray = this.model.getData();
             if (dataArray.length === 0) {
@@ -377,14 +380,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 key = fieldNames[i];
                 value = data[key];
                 if (typeof value === 'object') {
-                    fullFieldNames.push({key: key, baseKey: key, type: 'object', visibility: 'shown'});
+                    fullFieldNames.push({key: key, baseKey: key, subKey: key, type: 'object', visibility: 'shown'});
                     for (field in value) {
                         if (value.hasOwnProperty(field)) {
-                            fullFieldNames.push({key: key+'.'+field, baseKey: key, type: 'default', visibility: 'hidden'});
+                            fullFieldNames.push({key: key+'.'+field, baseKey: key, subKey: field, type: 'default', visibility: 'hidden'});
                         }
                     }
                 } else {
-                    fullFieldNames.push({key: key, baseKey: key, type: 'default', visibility: 'shown'});
+                    fullFieldNames.push({key: key, baseKey: key, subKey: field, type: 'default', visibility: 'shown'});
                 }
             }
 
@@ -392,9 +395,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 header = this.templateTableHeader.clone();
                 link = header.find('a');
                 fieldName = fullFieldNames[i].key;
-                uiName = this.uiNames[fieldName];
+                baseKey = fullFieldNames[i].baseKey;
+                uiName = this.uiNames[baseKey];
                 if (!uiName) {
                     uiName = fieldName;
+                } else if (fieldName !== fullFieldNames[i][key]) {
+                    uiName = fieldName.replace(baseKey,uiName);
                 }
                 link.append(uiName);
                 if (me.lastSort && fieldName === me.lastSort.attr) {
@@ -411,20 +417,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     header.addClass('base');
                     // Expand or close subtable
                     link.bind('click', function() {
-                        var parent = jQuery(this).parent();
-                        var thisKey = jQuery(this).html();
-                        if (parent.hasClass('closedSubTable')) {
+                        var parentItem = jQuery(this).parent();
+                        var thisKey = parentItem.data("key");
+                        if (parentItem.hasClass('closedSubTable')) {
                             table.find('th.hidden.'+thisKey).removeClass('hidden');
                             // jQuery(this).parent().addClass('hidden');
                             table.find('td.hidden.'+thisKey).removeClass('hidden');
                             // table.find('td.base.'+thisKey).addClass('hidden');
-                            parent.removeClass('closedSubTable');
-                            parent.addClass('openSubTable');
+                            parentItem.removeClass('closedSubTable');
+                            parentItem.addClass('openSubTable');
                         } else {
                             table.find('th.'+thisKey).not('.base').addClass('hidden');
                             table.find('td.'+thisKey).not('.base').addClass('hidden');
-                            parent.removeClass('openSubTable');
-                            parent.addClass('closedSubTable');
+                            parentItem.removeClass('openSubTable');
+                            parentItem.addClass('closedSubTable');
                         }
                     });
                 }
@@ -432,7 +438,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 if (fullFieldNames[i].visibility === 'hidden') {
                     header.addClass('hidden');
                 }
+
                 header.addClass(fullFieldNames[i].baseKey);
+                header.data("key",fullFieldNames[i].baseKey);
+                header.data("value",fullFieldNames[i].subKey);
                 headerContainer.append(header);
             }
         },
@@ -471,7 +480,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     value = data[key];
                     // Handle subtables
                     if (typeof value === 'object') {
-                        this._createSubTable(row,columnIndex,key,value);
+                        columnIndex = this._createSubTable(row,columnIndex,key,value);
                         // cell.append(this._createAdditionalDataField(value)); // old version
                     } else {
                         cell = this.templateCell.clone();

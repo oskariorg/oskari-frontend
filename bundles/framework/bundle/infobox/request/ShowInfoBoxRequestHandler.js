@@ -9,7 +9,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.ShowInfoBoxReque
      * @param {Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin} popupPlugin
      *          reference to plugin that handles the popups
      */
-
     function (popupPlugin) {
         this.popupPlugin = popupPlugin;
     }, {
@@ -22,10 +21,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.ShowInfoBoxReque
          *      request to handle
          */
         handleRequest: function (core, request) {
-
             if (request.getHidePrevious()) {
                 this.popupPlugin.close(undefined, request.getPosition());
             }
+
             this.popupPlugin.popup(
                 request.getId(),
                 request.getTitle(),
