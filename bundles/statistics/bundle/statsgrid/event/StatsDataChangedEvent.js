@@ -1,9 +1,9 @@
 /**
- * @class Oskari.statistics.bundle.statsgrid.event.SotkadataChangedEvent
+ * @class Oskari.statistics.bundle.statsgrid.event.StatsDataChangedEvent
  * 
  * 
  */
-Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.SotkadataChangedEvent',
+Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.StatsDataChangedEvent',
 /**
  * @method create called automatically on construction
  * @static
@@ -20,7 +20,7 @@ function(layer, params) {
      * @return {String} The event name.
      */
     getName : function() {
-        return "StatsGrid.SotkadataChangedEvent";
+        return "StatsGrid.StatsDataChangedEvent";
     },
     /**
     * @method getLayer

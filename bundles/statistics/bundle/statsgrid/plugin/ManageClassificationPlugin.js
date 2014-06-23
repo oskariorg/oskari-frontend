@@ -312,12 +312,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 this.isSelectHilightedMode = false;
             },
             /**
-             * @method SotkadataChangedEvent
-             * @param {MapStats.SotkadataChangedEvent} event
+             * @method StatsDataChangedEvent
+             * @param {MapStats.StatsDataChangedEvent} event
              *
              * Creates classification of stats column data and shows it on geostats legend html
              */
-            'StatsGrid.SotkadataChangedEvent': function (event) {
+            'StatsGrid.StatsDataChangedEvent': function (event) {
                 // Create a new classification for thematic data, if selected
                 // thematic data column is changed in (ManageStatsOut)-grid
                 // stats Oskari layer, which send the event
@@ -356,9 +356,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
         /**
          * @method classifyData
-         * Classify Sotka indicator column data
+         * Classify Stats indicator column data
          * Parses the data from the grid for geostats and backend so that it can be shown on the map.
-         * @param event  Data sent by 'MapStats.SotkadataChangedEvent' (eg. in  ManageStatsOut.js)
+         * @param event  Data sent by 'MapStats.StatsDataChangedEvent' (eg. in  ManageStatsOut.js)
          */
         classifyData: function (event) {
             // return, if no old data
@@ -1100,9 +1100,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
             // Content HTML / Color set select HTML
 
-            var colorset_sotka = jQuery('<div class="colorset_sotka"><br>' + this._locale.colorset.setselection + '<br><select id="colo_set"></select><br></div>');
-            me.content.append(colorset_sotka);
-            var sel = colorset_sotka.find('select'),
+            var colorset_stats = jQuery('<div class="colorset_stats"><br>' + this._locale.colorset.setselection + '<br><select id="colo_set"></select><br></div>');
+            me.content.append(colorset_stats);
+            var sel = colorset_stats.find('select'),
                 opt = jQuery('<option value="' + "seq" + '">' + this._locale.colorset.sequential + '</option>');
             sel.append(opt);
             opt = jQuery('<option value="' + "qual" + '">' + this._locale.colorset.qualitative + '</option>');

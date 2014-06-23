@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
          */
         sendStatsData: function (layer, data) {
             var me = this,
-                eventBuilder = me.sandbox.getEventBuilder('StatsGrid.SotkadataChangedEvent');
+                eventBuilder = me.sandbox.getEventBuilder('StatsGrid.StatsDataChangedEvent');
             if (eventBuilder) {
                 var event = eventBuilder(layer, data);
                 me.sandbox.notifyAll(event);

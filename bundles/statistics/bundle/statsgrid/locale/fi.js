@@ -50,18 +50,18 @@ Oskari.registerLocalization({
             "cancel": "Peruuta",
             "filter": "Suodata"
         },
-        "sotka": {
+        "stats": {
             "municipality": "Kunta",
             "code": "Koodi",
             "errorTitle": "Virhe",
-            "regionDataError": "Virhe kuntatietojen haussa SOTKAnetistä.",
-            "regionDataXHRError": "Kuntatietojen haku: virhe yhteydessä SOTKAnettiin.",
-            "indicatorsDataError": "Virhe indikaattorien haussa SOTKAnetistä.",
-            "indicatorsDataXHRError": "Indikaattorien haku: virhe yhteydessä SOTKAnettiin.",
-            "indicatorMetaError": "Virhe indikaattorien metadatan haussa SOTKAnetistä",
-            "indicatorMetaXHRError": "Indikaattorin metadata: virhe yhteydessä SOTKAnettiin.",
-            "indicatorDataError": "Virhe indikaattorien datan haussa SOTKAnetistä",
-            "indicatorDataXHRError": "Indikaattorin data: virhe yhteydessä SOTKAnettiin.",
+            "regionDataError": "Virhe kuntatietojen haussa statistiikkalähteestä.",
+            "regionDataXHRError": "Kuntatietojen haku: virhe yhteydessä statistiikkalähteeseen.",
+            "indicatorsDataError": "Virhe indikaattorien haussa statistiikkalähteestä.",
+            "indicatorsDataXHRError": "Indikaattorien haku: virhe yhteydessä statistiikkalähteeseen.",
+            "indicatorMetaError": "Virhe indikaattorien metadatan haussa statistiikkalähteestä.",
+            "indicatorMetaXHRError": "Indikaattorin metadata: virhe yhteydessä statistiikkalähteeseen.",
+            "indicatorDataError": "Virhe indikaattorien datan haussa statistiikkalähteestä.",
+            "indicatorDataXHRError": "Indikaattorin data: virhe yhteydessä statistiikkalähteeseen.",
             "descriptionTitle": "Indikaattorin kuvaus",
             "sourceTitle": "Indikaattorin lähde"
         },
