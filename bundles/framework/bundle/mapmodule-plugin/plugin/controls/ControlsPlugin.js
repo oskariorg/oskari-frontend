@@ -47,10 +47,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
         /**
          * @method hasUI
          * @return {Boolean} true
-         * This plugin doesn't have a UI so always returns false
+         * This plugin doesn't have a UI, BUT it is controllable in publisher so it is added to map
+         * when publisher starts -> always return true to NOT get second navControl on map when publisher starts
          */
         hasUI: function () {
-            return false;
+            return true;
         },
         /**
          * @method getMapModule
@@ -235,7 +236,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
             }
 
             this.getMapModule().addMapControl('mouseControls', this._mouseControls);
-            this.getMapModule().addMapControl('touchWPControls', this._touchControlsWin);
         },
         /**
          * @method _removeMapControls
@@ -262,10 +262,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
 
             this._mouseControls.deactivate();
             this.getMapModule().removeMapControl('mouseControls', this._mouseControls);
-
-            if (this.conf.touchControls !== false) {
-                this.getMapModule().removeMapControl('touchWPControls', this._touchControlsWin);
-            }
         },
 
         /**
@@ -374,13 +370,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
 
             // mouse control
             if (this.conf.mouseControls !== false) {
-                this._mouseControls = new OpenLayers.Control.PorttiMouse(this.conf.mouse);
+                //this._mouseControls = new OpenLayers.Control.PorttiMouse(this.conf.mouse);
+                this._mouseControls = new OskariNavigation();
                 this._mouseControls.setup(this.getMapModule());
-            }
-            // touch control for windows phone
-            if (this.conf.touchControls !== false) {
-                this._touchControlsWin = new OpenLayers.Control.OskariWindowsPinchZoom(this.conf.touch);
-                this._touchControlsWin.setup(this.getMapModule());
             }
         }
     }, {

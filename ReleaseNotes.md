@@ -6,9 +6,13 @@
 
 Implemented expandable/collapsible subtables. Improved export permission handling.
 
-### mapmodule/ControlsPlugin
+### mapmodule/ControlsPlugin - touch controls
 
-Initial pinch-zoom support for Windows Phone
+Major changes in mouse/touch controls handling. PorttiMouse has been removed and OskariNavigation is now used in it's place. 
+OskariNavigation extends OpenLayers.Control.Navigation and hooks Oskari events to appropriate places. It also uses an extended version
+of OpenLayer.Control.PinchZoom (OskariPinchZoom) which hooks Oskari event to pinchDone.
+
+Also changed hasUI to return true so ControlsPlugin works correctly with publisher-bundle.
 
 ## 1.22
 
