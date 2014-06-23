@@ -158,6 +158,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             cell = this.templateCell.clone();
             baseKey = key;
 //            subKeys = this.table.find("th>a");
+debugger;
             subKeys = this.table.find("th");
             hidden = jQuery(this.table.find("th")[columnIndex]).hasClass("closedSubTable");
             cell.addClass('base');
@@ -165,12 +166,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             row.append(cell);
             columnIndex = columnIndex+1;
 console.log("createSubTable");
+console.log(columnIndex);
 console.log(cell);
 console.log(baseKey);
 console.log(subKeys);
 console.log(hidden);
 console.log(row);
-console.log(columnIndex);
             do {
                 if (columnIndex === subKeys.length) {
                     break;
@@ -203,6 +204,7 @@ console.log(jQuery(subKeys[columnIndex]).data());
                     }
                 }
             } while (found);
+console.log("c1 "+columnIndex);
         },
 
         /**
@@ -522,7 +524,9 @@ console.log("?");
 console.log(key);
 console.log(value);
                     if (typeof value === 'object') {
+console.log("ci1: "+columnIndex);
                         this._createSubTable(row,columnIndex,key,value);
+console.log("ci2: "+columnIndex);
                         // cell.append(this._createAdditionalDataField(value)); // old version
                     } else {
                         cell = this.templateCell.clone();
