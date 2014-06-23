@@ -23,6 +23,7 @@ div.layerselection2 {
 			}
 			
 			div.layer-title {
+				cursor: move;
 				display: inline;
 
 				h4 {
@@ -103,5 +104,7 @@ div.layerselection2 {
 			position: absolute;
 			margin-left: -1.3em;
 		}
+
 	}
+
 }
