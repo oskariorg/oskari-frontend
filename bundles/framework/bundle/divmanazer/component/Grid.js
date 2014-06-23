@@ -366,7 +366,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     return false;
                 };
             };
-
+debugger;
             // Expand the table
             dataArray = this.model.getData();
             if (dataArray.length === 0) {
