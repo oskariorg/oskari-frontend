@@ -1,3 +1,11 @@
+/**
+The draw method has been copypasted from OpenLayers.Control.Navigation and custom code hooks have been 
+added to it as needed to get Oskari events sent from map movements and hovering. Kinetic movement messes up location
+on Oskari so disabling it.
+
+Note! Windows Phone pinch zoom requires fractionalZoom to be used and an additional css-class to be added
+to map div. 
+*/
 OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
 
     /**
@@ -23,13 +31,14 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
             this.map.viewPortDiv.oncontextmenu = OpenLayers.Function.False;
         }
         // <custom hooking>
+		OpenLayers.Control.DragPan.prototype.enableKinetic = false;
         if (window.navigator.msPointerEnabled)
         {
         	// setup class for mobile IE
           	jQuery(this.mapmodule.getMapEl()).css("ms-touch-action", "none");
         }
         var me = this;
-        var hook = function(actualmethod, ctx) {
+        var movementHook = function(actualmethod, ctx) {
         	return function() {
         		var c = ctx || me;
         		actualmethod.apply(c, arguments);
@@ -40,14 +49,14 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
         	return function() {
         		var c = ctx || me;
         		actualmethod.apply(c, arguments);
-        		me.sendMapClickEvent(arguments[0]);
+        		me.__sendMapClickEvent(arguments[0]);
         	}
         }
 
         var clickCallbacks = { 
             'click': clickHook(this.defaultClick),
-            'dblclick': hook(this.defaultDblClick), 
-            'dblrightclick': hook(this.defaultDblRightClick) 
+            'dblclick': movementHook(this.defaultDblClick), 
+            'dblrightclick': movementHook(this.defaultDblRightClick) 
         };
         // </custom hooking>
         var clickOptions = {
@@ -58,7 +67,6 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
             this, clickCallbacks, clickOptions
         );
         
-		OpenLayers.Control.DragPan.prototype.enableKinetic = false;
         this.dragPan = new OpenLayers.Control.DragPan(
             OpenLayers.Util.extend({
                 map: this.map,
@@ -67,9 +75,9 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
         );
         // <custom hooking>
         var originalPanDone = this.dragPan.panMapDone;
-        this.dragPan.panMapDone = hook(originalPanDone, this.dragPan);
+        this.dragPan.panMapDone = movementHook(originalPanDone, this.dragPan);
         // used by MouseWheel up/down
-        this.wheelChange = hook(this.wheelChange);
+        this.wheelChange = movementHook(this.wheelChange);
         // </custom hooking>
 
         this.zoomBox = new OpenLayers.Control.ZoomBox(
@@ -77,7 +85,7 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
 
         // <custom hooking>
         var originalzoomBox = this.zoomBox.zoomBox;
-        this.zoomBox.zoomBox = hook(originalzoomBox, this.zoomBox);
+        this.zoomBox.zoomBox = movementHook(originalzoomBox, this.zoomBox);
         // </custom hooking>
         
         this.dragPan.draw();
@@ -91,16 +99,12 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
             this, {up : this.wheelUp, down: this.wheelDown},
             OpenLayers.Util.extend(wheelOptions, this.mouseWheelOptions)
         );
-        var originalPanDone = this.handlers.wheel.panMapDone;
-        if (OpenLayers.Control.PinchZoom) {
-            this.pinchZoom = new OpenLayers.Control.PinchZoom(
-                OpenLayers.Util.extend(
-                    {map: this.map}, this.pinchZoomOptions));
-	        // <custom hooking>
-	        var originalpinchDone = this.pinchZoom.pinchDone;
-	        this.pinchZoom.pinchDone = hook(originalpinchDone, this.pinchZoom);
-	        // </custom hooking>
 
+        if (OpenLayers.Control.PinchZoom) {
+	        // <custom hooking>
+            this.pinchZoom = new OskariPinchZoom(OpenLayers.Util.extend(
+                    {map: this.map}, this.pinchZoomOptions));
+	        // </custom hooking>
         }
 
 	    // <custom hooking>
@@ -109,8 +113,8 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
     },
     __addHoverSupport : function() {
 		var hoverCallbacks = {
-			"move" : this.defaultHoverMove,
-			"pause" : this.defaultHoverPause
+			"move" : this.__defaultHoverMove,
+			"pause" : this.__defaultHoverPause
 		};
 		// trying to prevent IE8 from dying to hover events
 		var hoverOptions = {
@@ -131,17 +135,17 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
 		this.handlers.hover = new OpenLayers.Handler.Hover(this, hoverCallbacks, hoverOptions);
 		this.handlers.hover.activate();
     },
-	defaultHoverMove : function(evt) {
+	__defaultHoverMove : function(evt) {
 		var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
 		this._hoverEvent.set(lonlat.lon, lonlat.lat, false, evt.pageX, evt.pageY);
 		this.sandbox.notifyAll(this._hoverEvent, true);
 	},
-	defaultHoverPause : function(evt) {
+	__defaultHoverPause : function(evt) {
 		var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
 		this._hoverEvent.set(lonlat.lon, lonlat.lat, true, evt.pageX, evt.pageY);
 		this.sandbox.notifyAll(this._hoverEvent);
 	},
-	sendMapClickEvent : function(evt) {
+	__sendMapClickEvent : function(evt) {
 		/* may be this should dispatch to mapmodule */
 		var lonlat = this.map.getLonLatFromViewPortPx(evt.xy),
 			event = this._mapClickedBuilder(lonlat, evt.xy.x, evt.xy.y);
