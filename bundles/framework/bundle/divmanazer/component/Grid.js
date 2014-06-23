@@ -159,37 +159,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             cell = this.templateCell.clone();
             baseKey = key;
             index = columnIndex;
-//            subKeys = this.table.find("th>a");
             subKeys = this.table.find("th");
             hidden = jQuery(this.table.find("th")[index]).hasClass("closedSubTable");
             cell.addClass('base');
             cell.addClass(baseKey);
             row.append(cell);
             index = index+1;
-console.log("createSubTable");
-console.log(index);
-console.log(cell);
-console.log(baseKey);
-console.log(subKeys);
-console.log(hidden);
-console.log(row);
             do {
                 if (index === subKeys.length) {
                     break;
                 }
-console.log("A");
                 found = false;
                 // Let's not assume field order
                 for (field in value) {
                     if (value.hasOwnProperty(field)) {
-console.log(baseKey);
-console.log(field);
-console.log("!!!!!!!!!!!");
-console.log(subKeys[index]);
-console.log(jQuery(subKeys[index]));
-console.log(jQuery(subKeys[index]).data());
-//                        if (jQuery(subKeys[columnIndex]).html() === baseKey+"."+field) {
-//debugger;
                         if ((jQuery(subKeys[index]).data("key") === baseKey)&&(jQuery(subKeys[index]).data("value") === field)) {
                             cell = this.templateCell.clone();
                             cell.addClass(baseKey);
@@ -386,8 +369,6 @@ console.log(jQuery(subKeys[index]).data());
                     return false;
                 };
             };
-//debugger;
-console.log("...");
             // Expand the table
             dataArray = this.model.getData();
             if (dataArray.length === 0) {
@@ -396,13 +377,9 @@ console.log("...");
             fullFieldNames = [];
             data = dataArray[0];
             for (i = 0; i < fieldNames.length; i += 1) {
-console.log("i: "+i);
                 key = fieldNames[i];
                 value = data[key];
-console.log(key);
-console.log(value);
                 if (typeof value === 'object') {
-console.log("a");
                     fullFieldNames.push({key: key, baseKey: key, subKey: key, type: 'object', visibility: 'shown'});
                     for (field in value) {
                         if (value.hasOwnProperty(field)) {
@@ -410,36 +387,21 @@ console.log("a");
                         }
                     }
                 } else {
-console.log("b");
                     fullFieldNames.push({key: key, baseKey: key, subKey: field, type: 'default', visibility: 'shown'});
                 }
-console.log(fullFieldNames);
             }
 
             for (i = 0; i < fullFieldNames.length; i += 1) {
-console.log("I: "+i);
                 header = this.templateTableHeader.clone();
                 link = header.find('a');
                 fieldName = fullFieldNames[i].key;
                 baseKey = fullFieldNames[i].baseKey;
                 uiName = this.uiNames[baseKey];
-console.log(header);
-console.log(link);
-console.log(fieldName);
-console.log(baseKey);
-console.log(this.uiNames);
-console.log(uiName);
-console.log(fullFieldNames);
-console.log(fullFieldNames[i][key]);
-console.log(fullFieldNames[i].key);
                 if (!uiName) {
-console.log("A");
                     uiName = fieldName;
                 } else if (fieldName !== fullFieldNames[i][key]) {
-console.log("B");
                     uiName = fieldName.replace(baseKey,uiName);
                 }
-console.log(uiName);
                 link.append(uiName);
                 if (me.lastSort && fieldName === me.lastSort.attr) {
                     if (me.lastSort.descending) {
@@ -456,10 +418,6 @@ console.log(uiName);
                     // Expand or close subtable
                     link.bind('click', function() {
                         var parentItem = jQuery(this).parent();
-//debugger;
-//                        var thisKey = jQuery.grep(jQuery(parentItem).attr('class').split(/\s+/),function(s){
-//                            return (['base','openSubTable','closedSubTable','hidden'].indexOf(s) < 0) ;
-//                        })[0];
                         var thisKey = parentItem.data("key");
                         if (parentItem.hasClass('closedSubTable')) {
                             table.find('th.hidden.'+thisKey).removeClass('hidden');
@@ -521,13 +479,8 @@ console.log(uiName);
                     key = fieldNames[f];
                     value = data[key];
                     // Handle subtables
-console.log("?");
-console.log(key);
-console.log(value);
                     if (typeof value === 'object') {
-console.log("ci1: "+columnIndex);
                         columnIndex = this._createSubTable(row,columnIndex,key,value);
-console.log("ci2: "+columnIndex);
                         // cell.append(this._createAdditionalDataField(value)); // old version
                     } else {
                         cell = this.templateCell.clone();
