@@ -62,6 +62,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Nyomtatási kép mentése",
                 "ok": "OK",
+                "back" : "NOT TRANSLATED",
                 "cancel": "Mégse"
             },
             "location": {

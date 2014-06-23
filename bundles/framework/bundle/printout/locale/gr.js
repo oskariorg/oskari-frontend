@@ -58,6 +58,7 @@ Oskari.registerLocalization({
             "buttons": {
                 "save": "Λήψη εκτύπωσης",
                 "ok": "OK",
+                "back" : "NOT TRANSLATED",
                 "cancel": "Ακύρωση"
             },
             "location": {
