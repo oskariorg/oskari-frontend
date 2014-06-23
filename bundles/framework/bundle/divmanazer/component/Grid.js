@@ -518,6 +518,9 @@ console.log(uiName);
                     key = fieldNames[f];
                     value = data[key];
                     // Handle subtables
+console.log("?");
+console.log(key);
+console.log(value);
                     if (typeof value === 'object') {
                         this._createSubTable(row,columnIndex,key,value);
                         // cell.append(this._createAdditionalDataField(value)); // old version
