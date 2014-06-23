@@ -104,6 +104,7 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
 	        // <custom hooking>
             this.pinchZoom = new OskariPinchZoom(OpenLayers.Util.extend(
                     {map: this.map}, this.pinchZoomOptions));
+            this.pinchZoom.setup(this.mapmodule);
 	        // </custom hooking>
         }
 
