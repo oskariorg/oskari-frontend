@@ -1,7 +1,7 @@
 /**
-The draw method has been copypasted from OpenLayers.Control.Navigation and custom code hooks have been 
-added to it as needed to get Oskari events sent from map movements and hovering. Kinetic movement messes up location
-on Oskari so disabling it.
+The draw method has been copy/pasted from OpenLayers.Control.Navigation and custom code hooks have been 
+added to it as needed to get Oskari events sent from map movements and hovering. Kinetic movement has been disabled since it 
+messes up location on Oskari.
 
 Note! Windows Phone pinch zoom requires fractionalZoom to be used and an additional css-class to be added
 to map div. 
