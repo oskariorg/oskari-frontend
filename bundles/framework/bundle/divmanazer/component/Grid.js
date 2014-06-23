@@ -409,10 +409,13 @@ console.log(fieldName);
 console.log(baseKey);
 console.log(this.uiNames);
 console.log(uiName);
+console.log(fullFieldNames);
+console.log(fullFieldNames[i][key]);
+console.log(fullFieldNames[i].key);
                 if (!uiName) {
 console.log("A");
                     uiName = fieldName;
-                } else if (fieldName !== fullFieldNames[i].key) {
+                } else if (fieldName !== fullFieldNames[i][key]) {
 console.log("B");
                     uiName = fieldName.replace(baseKey,uiName);
                 }
