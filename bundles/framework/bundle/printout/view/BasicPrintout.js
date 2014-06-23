@@ -675,12 +675,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * pdf template based on page Size
          */
         _getLayoutParams: function (pageSize) {
-            var params = "";
-            if(this.layoutParams.pageTemplate) params = "&pageTemplate="+this.layoutParams.pageTemplate+"_"+pageSize+".pdf";
-            if(this.layoutParams.pageMapRect) params = params + "&pageMapRect="+this.layoutParams.pageMapRect;
-            if(this.layoutParams.tableTemplate) params = params + "&tableTemplate="+this.layoutParams.tableTemplate+"_"+pageSize;
+            var params = "",
+                ind = this._getPageMapRectInd(pageSize);
+            if (this.layoutParams.pageTemplate) params = "&pageTemplate="+ this.layoutParams.pageTemplate + "_" + pageSize + ".pdf";
+            if (this.layoutParams.pageMapRect) {
+                if (ind < this.layoutParams.pageMapRect.length)  params = params + "&pageMapRect=" + this.layoutParams.pageMapRect[ind];
+            }
+            if (this.layoutParams.tableTemplate) params = params + "&tableTemplate=" + this.layoutParams.tableTemplate + "_" + pageSize;
 
-          return params;
+            return params;
 
         },
         /**
@@ -851,6 +854,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             }
 
         },
+        /**
+         * get index of pagesize for mapRectangle bbox
+         * @param pageSize
+         * @private
+         */
+        _getPageMapRectInd : function (pageSize) {
+            var ind=0;
+            if(pageSize === "A4_Landscape")ind=1;
+            if(pageSize === "A3")ind=2;
+            if(pageSize === "A3_Landscape")ind=3;
+            return ind;
+
+        },
+
         /**
          * @method _printMapInfo
          *  Get print info data
