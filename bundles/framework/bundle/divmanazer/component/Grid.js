@@ -154,26 +154,27 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 hidden,
                 found,
                 field,
-                cell;
+                cell,
+                index;
             cell = this.templateCell.clone();
             baseKey = key;
+            index = columnIndex;
 //            subKeys = this.table.find("th>a");
-debugger;
             subKeys = this.table.find("th");
-            hidden = jQuery(this.table.find("th")[columnIndex]).hasClass("closedSubTable");
+            hidden = jQuery(this.table.find("th")[index]).hasClass("closedSubTable");
             cell.addClass('base');
             cell.addClass(baseKey);
             row.append(cell);
-            columnIndex = columnIndex+1;
+            index = index+1;
 console.log("createSubTable");
-console.log(columnIndex);
+console.log(index);
 console.log(cell);
 console.log(baseKey);
 console.log(subKeys);
 console.log(hidden);
 console.log(row);
             do {
-                if (columnIndex === subKeys.length) {
+                if (index === subKeys.length) {
                     break;
                 }
 console.log("A");
@@ -184,12 +185,12 @@ console.log("A");
 console.log(baseKey);
 console.log(field);
 console.log("!!!!!!!!!!!");
-console.log(subKeys[columnIndex]);
-console.log(jQuery(subKeys[columnIndex]));
-console.log(jQuery(subKeys[columnIndex]).data());
+console.log(subKeys[index]);
+console.log(jQuery(subKeys[index]));
+console.log(jQuery(subKeys[index]).data());
 //                        if (jQuery(subKeys[columnIndex]).html() === baseKey+"."+field) {
 //debugger;
-                        if ((jQuery(subKeys[columnIndex]).data("key") === baseKey)&&(jQuery(subKeys[columnIndex]).data("value") === field)) {
+                        if ((jQuery(subKeys[index]).data("key") === baseKey)&&(jQuery(subKeys[index]).data("value") === field)) {
                             cell = this.templateCell.clone();
                             cell.addClass(baseKey);
                             cell.append(value[field]);
@@ -197,14 +198,14 @@ console.log(jQuery(subKeys[columnIndex]).data());
                                 cell.addClass('hidden');
                             }
                             row.append(cell);
-                            columnIndex = columnIndex+1;
+                            index = index+1;
                             found = true;
                             break;
                         }
                     }
                 }
             } while (found);
-console.log("c1 "+columnIndex);
+            return index;
         },
 
         /**
@@ -525,7 +526,7 @@ console.log(key);
 console.log(value);
                     if (typeof value === 'object') {
 console.log("ci1: "+columnIndex);
-                        this._createSubTable(row,columnIndex,key,value);
+                        columnIndex = this._createSubTable(row,columnIndex,key,value);
 console.log("ci2: "+columnIndex);
                         // cell.append(this._createAdditionalDataField(value)); // old version
                     } else {
