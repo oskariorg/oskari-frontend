@@ -376,9 +376,13 @@ console.log("...");
             fullFieldNames = [];
             data = dataArray[0];
             for (i = 0; i < fieldNames.length; i += 1) {
+console.log("i: "+i);
                 key = fieldNames[i];
                 value = data[key];
+console.log(key);
+console.log(value);
                 if (typeof value === 'object') {
+console.log("a");
                     fullFieldNames.push({key: key, baseKey: key, type: 'object', visibility: 'shown'});
                     for (field in value) {
                         if (value.hasOwnProperty(field)) {
@@ -386,21 +390,33 @@ console.log("...");
                         }
                     }
                 } else {
+console.log("b");
                     fullFieldNames.push({key: key, baseKey: key, type: 'default', visibility: 'shown'});
                 }
+console.log(fullFieldNames);
             }
 
             for (i = 0; i < fullFieldNames.length; i += 1) {
+console.log("I: "+i);
                 header = this.templateTableHeader.clone();
                 link = header.find('a');
                 fieldName = fullFieldNames[i].key;
-                baseKey = fullFieldNames[i].Basekey;
+                baseKey = fullFieldNames[i].baseKey;
                 uiName = this.uiNames[baseKey];
+console.log(header);
+console.log(link);
+console.log(fieldName);
+console.log(baseKey);
+console.log(this.uiNames);
+console.log(uiName);
                 if (!uiName) {
+console.log("A");
                     uiName = fieldName;
                 } else if (fieldName !== fullFieldNames[i].key) {
+console.log("B");
                     uiName = fieldName.replace(baseKey,uiName);
                 }
+console.log(uiName);
                 link.append(uiName);
                 if (me.lastSort && fieldName === me.lastSort.attr) {
                     if (me.lastSort.descending) {
