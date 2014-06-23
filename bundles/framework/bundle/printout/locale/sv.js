@@ -56,6 +56,7 @@ Oskari.registerLocalization({
             "buttons" : {
                 "save" : "Ladda ned utskriften",
                 "ok" : "OK",
+                "back" : "föregående",
                 "cancel" : "Avbryt"
             },
             "location" : {

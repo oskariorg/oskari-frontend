@@ -158,8 +158,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             cell = this.templateCell.clone();
             baseKey = key;
             subKeys = this.table.find("th>a");
-            hidden = jQuery(this.table.find("th")[columnIndex]).hasClass("closedSubTable");
-            cell.addClass('base');
+            hidden = jQuery(this.table.find("th")[columnIndex]).hasClass("_closedSubTable");
+            cell.addClass('_base');
             cell.addClass(baseKey);
             row.append(cell);
             columnIndex = columnIndex+1;
@@ -176,7 +176,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             cell.addClass(baseKey);
                             cell.append(value[field]);
                             if (hidden) {
-                                cell.addClass('hidden');
+                                cell.addClass('_hidden');
                             }
                             row.append(cell);
                             columnIndex = columnIndex+1;
@@ -322,6 +322,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 data,
                 fullFieldNames,
                 fieldName,
+                baseKey,
                 uiName,
                 key,
                 value,
@@ -392,9 +393,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 header = this.templateTableHeader.clone();
                 link = header.find('a');
                 fieldName = fullFieldNames[i].key;
-                uiName = this.uiNames[fieldName];
+                baseKey = fullFieldNames[i].Basekey;
+                uiName = this.uiNames[baseKey];
                 if (!uiName) {
                     uiName = fieldName;
+                } else if (fieldName !== fullFieldNames[i].key) {
+                    uiName = fieldName.replace(baseKey,uiName);
                 }
                 link.append(uiName);
                 if (me.lastSort && fieldName === me.lastSort.attr) {
@@ -407,30 +411,32 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 if (fullFieldNames[i].type === 'default') {
                     link.bind('click', headerClosureMagic(fullFieldNames[i].key));
                 } else if (fullFieldNames[i].type === 'object') {
-                    header.addClass('closedSubTable');
-                    header.addClass('base');
+                    header.addClass('_closedSubTable');
+                    header.addClass('_base');
                     // Expand or close subtable
                     link.bind('click', function() {
-                        var parent = jQuery(this).parent();
-                        var thisKey = jQuery(this).html();
-                        if (parent.hasClass('closedSubTable')) {
-                            table.find('th.hidden.'+thisKey).removeClass('hidden');
+                        var parentItem = jQuery(this).parent();
+                        var thisKey = jQuery.grep(jQuery(parentItem).attr('class').split(/\s+/),function(s){
+                            return (['_base','_openSubTable','_closedSubTable','_hidden'].indexOf(s) < 0) ;
+                        })[0];
+                        if (parentItem.hasClass('_closedSubTable')) {
+                            table.find('th._hidden.'+thisKey).removeClass('_hidden');
                             // jQuery(this).parent().addClass('hidden');
-                            table.find('td.hidden.'+thisKey).removeClass('hidden');
+                            table.find('td._hidden.'+thisKey).removeClass('_hidden');
                             // table.find('td.base.'+thisKey).addClass('hidden');
-                            parent.removeClass('closedSubTable');
-                            parent.addClass('openSubTable');
+                            parentItem.removeClass('_closedSubTable');
+                            parentItem.addClass('_openSubTable');
                         } else {
-                            table.find('th.'+thisKey).not('.base').addClass('hidden');
-                            table.find('td.'+thisKey).not('.base').addClass('hidden');
-                            parent.removeClass('openSubTable');
-                            parent.addClass('closedSubTable');
+                            table.find('th.'+thisKey).not('._base').addClass('_hidden');
+                            table.find('td.'+thisKey).not('._base').addClass('_hidden');
+                            parentItem.removeClass('_openSubTable');
+                            parentItem.addClass('_closedSubTable');
                         }
                     });
                 }
 
                 if (fullFieldNames[i].visibility === 'hidden') {
-                    header.addClass('hidden');
+                    header.addClass('_hidden');
                 }
                 header.addClass(fullFieldNames[i].baseKey);
                 headerContainer.append(header);

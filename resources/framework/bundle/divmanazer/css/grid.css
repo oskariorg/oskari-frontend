@@ -101,22 +101,22 @@ table.oskari-grid > tr > th, table.oskari-grid > tbody > tr > th {
 table.oskari-grid tr:last-child td {
   border: 1px solid #E6E6E6; }
 
-table.oskari-grid th.closedSubTable {
+table.oskari-grid th._closedSubTable {
   background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/icon-arrow-right.png');
   background-repeat: no-repeat;
   background-position: right center;
 }
 
-table.oskari-grid th.openSubTable {
+table.oskari-grid th._openSubTable {
   background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/icon-arrow-left.png');
   background-repeat: no-repeat;
   background-position: right center;
 }
 
-table.oskari-grid th.hidden {
+table.oskari-grid th._hidden {
   display: none;
 }
 
-table.oskari-grid td.hidden {
+table.oskari-grid td._hidden {
   display: none;
 }

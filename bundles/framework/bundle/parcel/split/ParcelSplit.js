@@ -382,11 +382,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                         quality: attributes.lahdeaineisto
                     };
                 }
+                this.drawPlugin.selectedFeature = this.drawPlugin.drawLayer.features.length-1;
                 break;
             case "OpenLayers.Geometry.MultiPolygon":
+                break;
             case "OpenLayers.Geometry.LineString":
                 var newFeatures = this.splitLine(baseMultiPolygon, this.drawPlugin.operatingFeature);
                 this.drawPlugin.drawLayer.removeAllFeatures();
+                this.drawPlugin.selectedFeature = 0;
                 for (i = 0; i < newFeatures[0].geometry.components.length; i++) {
                     this.drawPlugin.drawLayer.addFeatures(new OpenLayers.Feature.Vector(newFeatures[0].geometry.components[i]));
                     this.drawPlugin.drawLayer.features[i].style = this.drawPlugin.basicStyle;
@@ -394,13 +397,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                         name: attributes.tekstiKartalla,
                         quality: attributes.lahdeaineisto
                     };
+                    if ((this.drawPlugin.markerLayer.markers.length > 0)&&(this.drawPlugin.drawLayer.features[i].geometry.id === this.drawPlugin.markerLayer.markers[0].reference.point.references[0])) {
+                        this.drawPlugin.selectedFeature = i;
+                    }
                 }
                 this.drawPlugin.editLayer.addFeatures(newFeatures[1]);
                 break;
             default:
             }
             OpenLayers.Feature.Vector.style['default'].strokeWidth = '2';
-            this.drawPlugin.selectedFeature = this.drawPlugin.drawLayer.features.length-1;
             this.drawPlugin.drawLayer.features[this.drawPlugin.selectedFeature].style = this.drawPlugin.selectStyle;
             this.map.editLayer = editLayer;
             parcelLayer.redraw();

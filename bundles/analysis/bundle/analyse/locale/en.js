@@ -169,6 +169,7 @@ Oskari.registerLocalization({
                 "tooltip": "Enter parameters for analysis"
             },
             "intersect": {
+                "target": "Base layer",
                 "label": "Intersecting layer"
             },
             "union": {

@@ -58,6 +58,7 @@ Oskari.registerLocalization({
             "buttons": {
                 "save": "Get Printout",
                 "ok": "OK",
+                "back" : "Previous",
                 "cancel": "Cancel"
             },
             "location": {

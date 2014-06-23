@@ -96,8 +96,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                         if (layer.features[0].geometry.CLASS_NAME === "OpenLayers.Geometry.LineString") {
                             var loc = me.instance.getLocalization('notification').calculating;
                             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            dialog.show(loc.title, "");
-                            // The popup dialog doesn't work without short delay
+                            var controlButtons = [];
+                            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+                            cancelBtn.setHandler(function () {
+                            });
+                            cancelBtn.addClass('primary');
+                            // controlButtons.push(cancelBtn);
+                            dialog.show(loc.title, "", controlButtons);
+                            // The popup dialog doesn't work without a short delay
                             setTimeout(function () {
                                 me.processFeatures();
                                 dialog.close();
@@ -654,7 +660,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             if (this.editLayer.features.length === 0) return 0;
             var f = this.editLayer.features[0];
             if (f === null || f === undefined) return 0;
-            return f.geometry.getVertices().length;
+            // Is closed geometry - filter last point
+            var closed = false,
+                nodes = f.geometry.getVertices();
+            if(nodes.length > 1)
+                closed = ((nodes[0].x-nodes[nodes.length-1].x == 0) && (nodes[0].y-nodes[nodes.length-1].y == 0));
+            if (closed) return nodes.length-1;
+            else return nodes.length;
 
         },
         /**
