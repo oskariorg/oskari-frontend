@@ -254,7 +254,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
         /**
          * @method createStatsOut
-         * Get Sotka data and show it in SlickGrid
+         * Get data and show it in SlickGrid
          * @param {Object} container to where slick grid and pull downs will be appended
          */
         createStatsOut: function (container) {
@@ -307,11 +307,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
                 // Indicators
                 // success -> createIndicators
-                this.getSotkaIndicators(container);
+                this.getStatsIndicators(container);
 
             }
             // Regions: success createMunicipalityGrid
-            this.getSotkaRegionData(container);
+            this.getStatsRegionData(container);
         },
         createDataSourceSelect: function (container) {
             var me = this,
@@ -387,10 +387,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         },
         /**
          * Fetch region data - we need to know all the regions / municipalities
-         * @method getSotkaRegionData
+         * @method getStatsRegionData
          * @param {Object} container element where indicator-selector should be added
          */
-        getSotkaRegionData: function (container) {
+        getStatsRegionData: function (container) {
             var me = this;
             // call ajax function (params: url, successFallback, errorCallback)
             me.statsService.fetchStatsData(me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
@@ -407,12 +407,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             me.loadStateIndicators(me._state, container);
                         }
                     } else {
-                        me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.regionDataError);
+                        me.showMessage(me._locale.stats.errorTitle, me._locale.stats.regionDataError);
                     }
                 },
                 // error callback
                 function (jqXHR, textStatus) {
-                    me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.regionDataXHRError);
+                    me.showMessage(me._locale.stats.errorTitle, me._locale.stats.regionDataXHRError);
                 });
         },
 
@@ -725,12 +725,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         },
 
         /**
-         * Fetch all Sotka indicators
+         * Fetch all Stats indicators
          *
-         * @method getSotkaIndicators
+         * @method getStatsIndicators
          * @param container element
          */
-        getSotkaIndicators: function (container) {
+        getStatsIndicators: function (container) {
             var me = this,
                 sandbox = me._sandbox;
             // make the AJAX call
@@ -744,12 +744,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         me.createIndicatorsSelect(container, indicatorsdata);
                         me.createDemographicsSelects(container, null);
                     } else {
-                        me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.indicatorsDataError);
+                        me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorsDataError);
                     }
                 },
                 // error callback
                 function (jqXHR, textStatus) {
-                    me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.indicatorsDataXHRError);
+                    me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorsDataXHRError);
                 });
         },
 
@@ -796,7 +796,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 } else {
                     me.deleteIndicatorInfoButton(container);
                     me.deleteDemographicsSelect(container);
-                    me.getSotkaIndicatorMeta(container, indicatorId);
+                    me.getStatsIndicatorMeta(container, indicatorId);
                 }
             });
 
@@ -908,13 +908,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             me.addIndicatorDataToGrid(container, data.indicatorId, 'total', data.year, data.data, indicator);
         },
         /**
-         * Get Sotka indicator meta data
+         * Get Stats indicator meta data
          *
-         * @method getSotkaIndicatorMeta
+         * @method getStatsIndicatorMeta
          * @param container parent element.
          * @param indicator id
          */
-        getSotkaIndicatorMeta: function (container, indicator) {
+        getStatsIndicatorMeta: function (container, indicator) {
             var me = this,
                 sandbox = me._sandbox;
             // fetch meta data for given indicator
@@ -932,12 +932,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             me._warnOfInvalidIndicator(container, indicatorMeta);
                         }
                     } else {
-                        me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.indicatorMetaError);
+                        me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorMetaError);
                     }
                 },
                 // error callback
                 function (jqXHR, textStatus) {
-                    me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.indicatorMetaXHRError);
+                    me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorMetaXHRError);
                 });
 
         },
@@ -946,7 +946,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          * If it does not, we cannot display it in the grid at the moment.
          *
          * @method _hasRegionCategoryValues
-         * @param  {Object} metadata indicator metadata from SOTKAnet
+         * @param  {Object} metadata indicator metadata
          * @return {Boolean}
          */
         _hasRegionCategoryValues: function (metadata) {
@@ -1006,7 +1006,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // show meta data
             infoIcon.click(function (e) {
                 var lang = Oskari.getLang(),
-                    desc = '<h4 class="indicator-msg-popup">' + me._locale.sotka.descriptionTitle + '</h4><p>' + indicator.description[lang] + '</p><br/><h4 class="indicator-msg-popup">' + me._locale.sotka.sourceTitle + '</h4><p>' + indicator.organization.title[lang] + '</p>';
+                    desc = '<h4 class="indicator-msg-popup">' + me._locale.stats.descriptionTitle + '</h4><p>' + indicator.description[lang] + '</p><br/><h4 class="indicator-msg-popup">' + me._locale.stats.sourceTitle + '</h4><p>' + indicator.organization.title[lang] + '</p>';
                 me.showMessage(indicator.title[lang], desc);
             });
         },
@@ -1090,9 +1090,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         year = jQuery('.statsgrid').find('.yearsel').find('.year').val(),
                         gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
                     gender = gender !== null && gender !== undefined ? gender : 'total';
-                    // me.getSotkaIndicatorData(container,indicator, gender, year);
+                    // me.getStatsIndicatorData(container,indicator, gender, year);
                     var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
-                    me.getSotkaIndicatorData(container, indicator.id, gender, year, function () {
+                    me.getStatsIndicatorData(container, indicator.id, gender, year, function () {
                         me.addIndicatorMeta(indicator);
                     });
                 });
@@ -1170,16 +1170,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         },
 
         /**
-         * Get Sotka data for one indicator
+         * Get data for one indicator
          *
-         * @method getSotkaIndicatorData
+         * @method getStatsIndicatorData
          * @param container parent element
          * @param indicatorId id
          * @param gender (male / female / total)
          * @param year selected year
          * @param {Function} cb optional callback which gets executed after a successful fetch
          */
-        getSotkaIndicatorData: function (container, indicatorId, gender, year, cb) {
+        getStatsIndicatorData: function (container, indicatorId, gender, year, cb) {
             var me = this,
                 gndrs = gender !== null && gender !== undefined ? gender : 'total';
             // ajax call
@@ -1205,13 +1205,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         // Show the data in the grid.
                         me.addIndicatorDataToGrid(container, indicatorId, gndrs, year, data, me.indicators[me.indicators.length - 1]);
                     } else {
-                        me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.indicatorDataError);
+                        me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorDataError);
                     }
                 },
                 // error callback
 
                 function (jqXHR, textStatus) {
-                    me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.indicatorDataXHRError);
+                    me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorDataXHRError);
                 }
             );
         },
@@ -1703,13 +1703,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
 
         /**
-         * Get Sotka metadata for given indicators
+         * Get metadata for given indicators
          *
-         * @method getSotkaIndicatorsMeta
+         * @method getStatsIndicatorsMeta
          * @param indicators for which we fetch data
          * @param callback what to do after we have fetched metadata for all the indicators
          */
-        getSotkaIndicatorsMeta: function (container, indicators, callback) {
+        getStatsIndicatorsMeta: function (container, indicators, callback) {
 
             var me = this,
                 fetchedIndicators = 0,
@@ -1753,14 +1753,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             }
 
                         } else {
-                            me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.indicatorDataError);
+                            me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorDataError);
                         }
                     },
                     // error callback
                     // FIXME create function outside loop
 
                     function (jqXHR, textStatus) {
-                        me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.indicatorDataXHRError);
+                        me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorDataXHRError);
                         //keep track of returned ajax calls
                         fetchedIndicators++;
                     }
@@ -1769,13 +1769,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         },
 
         /**
-         * Get Sotka data for given indicators
+         * Get data for given indicators
          *
-         * @method getSotkaIndicatorsData
+         * @method getStatsIndicatorsData
          * @param indicators for which we fetch data
          * @param callback what to do after we have fetched data for all the indicators
          */
-        getSotkaIndicatorsData: function (container, indicators, callback) {
+        getStatsIndicatorsData: function (container, indicators, callback) {
             var me = this,
                 fetchedIndicators = 0,
                 indicatorsData = {},
@@ -1838,14 +1838,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                                 callback();
                             }
                         } else {
-                            me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.indicatorDataError);
+                            me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorDataError);
                         }
                     },
                     // error callback
                     // FIXME create function outside loop
 
                     function (jqXHR, textStatus) {
-                        me.showMessage(me._locale.sotka.errorTitle, me._locale.sotka.indicatorDataXHRError);
+                        me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorDataXHRError);
                         fetchedIndicators++;
                     }
                 );
@@ -1919,6 +1919,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // First, let's clear out the old data from the grid.
             me.clearDataFromGrid();
 
+            // FIXME change sotka to something general
             var indicators = _.groupBy(state.indicators || [], function (indicator) {
                 return (indicator.ownIndicator ? 'user' : 'sotka');
             });
@@ -1931,11 +1932,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 me.addIndicatorMeta(indicator);
             });
 
+            // FIXME change sotka to something general
             if (indicators.sotka && indicators.sotka.length > 0) {
                 //send ajax calls and build the grid
-                me.getSotkaIndicatorsMeta(container, indicators.sotka, function () {
+                me.getStatsIndicatorsMeta(container, indicators.sotka, function () {
                     //send ajax calls and build the grid
-                    me.getSotkaIndicatorsData(container, indicators.sotka, function () {
+                    me.getStatsIndicatorsData(container, indicators.sotka, function () {
                         me._afterStateIndicatorsLoaded(state);
                     });
                 });
@@ -2238,7 +2240,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          * and updates each indicator column's values.
          *
          * @method changeGridRegion
-         * @param  {String} category category name from SOTKAnet
+         * @param  {String} category category name
          * @return {undefined}
          */
         changeGridRegion: function (category) {
@@ -2298,7 +2300,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          * and changes the name of the region column.
          *
          * @method _setSelectedRegionCategory
-         * @param {String} category category name from SOTKAnet
+         * @param {String} category category name
          */
         _setSelectedRegionCategory: function (category) {
             var column = this._getColumnById('municipality'),

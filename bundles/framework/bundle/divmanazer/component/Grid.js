@@ -322,6 +322,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 data,
                 fullFieldNames,
                 fieldName,
+                baseKey,
                 uiName,
                 key,
                 value,
@@ -392,9 +393,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 header = this.templateTableHeader.clone();
                 link = header.find('a');
                 fieldName = fullFieldNames[i].key;
-                uiName = this.uiNames[fieldName];
+                baseKey = fullFieldNames[i].Basekey;
+                uiName = this.uiNames[baseKey];
                 if (!uiName) {
                     uiName = fieldName;
+                } else if (fieldName !== fullFieldNames[i].key) {
+                    uiName = fieldName.replace(baseKey,uiName);
                 }
                 link.append(uiName);
                 if (me.lastSort && fieldName === me.lastSort.attr) {

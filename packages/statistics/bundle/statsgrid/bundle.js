@@ -47,7 +47,7 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "src": "../../../../bundles/statistics/bundle/statsgrid/plugin/ManageStatsPlugin.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid/event/SotkadataChangedEvent.js"
+                "src": "../../../../bundles/statistics/bundle/statsgrid/event/StatsDataChangedEvent.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/bundle/statsgrid/event/ModeChangedEvent.js"
