@@ -185,7 +185,8 @@ Oskari.registerLocalization({
             "no_layer_with_id": "Tasoa ei löytynyt ID:llä "
         },
         "cancel": "Peruuta",
-        "add": "Tallenna",
+        "add": "Lisää",
+        "save": "Tallenna",
         "delete": "Poista"
     }
 });

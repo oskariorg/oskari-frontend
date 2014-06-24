@@ -1,9 +1,9 @@
 define([
         'text!_bundle/templates/filterLayersTemplate.html',
-        'text!_bundle/templates/adminAddInspireBtnTemplate.html',
-        'text!_bundle/templates/adminAddInspireTemplate.html',
-        'text!_bundle/templates/adminAddOrgBtnTemplate.html',
-        'text!_bundle/templates/adminAddOrgTemplate.html',
+        'text!_bundle/templates/addGroupingBtnTemplate.html',
+        'text!_bundle/templates/addGroupingTemplate.html',
+//        'text!_bundle/templates/adminAddInspireTemplate.html',
+//        'text!_bundle/templates/adminAddOrgTemplate.html',
         'text!_bundle/templates/adminAddLayerBtnTemplate.html',
         'text!_bundle/templates/tabPanelTemplate.html',
         'text!_bundle/templates/accordionPanelTemplate.html',
@@ -12,10 +12,10 @@ define([
         '_bundle/views/layerView'
     ],
     function (FilterLayersTemplate,
-        AdminAddInspireButtonTemplate,
-        AdminAddInspireTemplate,
-        AdminAddOrganizationButtonTemplate,
-        AdminAddOrganizationTemplate,
+        AddGroupingButtonTemplate,
+        AddGroupingTemplate,
+//        AdminAddInspireTemplate,
+//        AdminAddOrganizationTemplate,
         AdminAddLayerBtnTemplate,
         TabPanelTemplate,
         AccordionPanelTemplate,
@@ -41,18 +41,16 @@ define([
                 "click .admin-add-layer-btn": "toggleAddLayer",
                 "click .admin-add-layer-cancel": "hideAddLayer",
 
-                "click .admin-edit-class-btn": "toggleGroupingSettings",
-                "click .admin-edit-org-btn": "toggleGroupingSettings",
-                "click .admin-add-class-cancel": "toggleGroupingSettings",
-                "click .admin-add-org-cancel": "toggleGroupingSettings",
+                "click .admin-edit-grouping-btn": "toggleGroupingSettings",
+                "click .admin-add-grouping-cancel": "toggleGroupingSettings",
+//                "click .admin-add-org-cancel": "toggleGroupingSettings",
 
-                "click .admin-add-org-btn": "toggleAddOrg",
-                "click .admin-add-class-btn": "toggleAddClass",
+                "click .admin-add-grouping-btn": "toggleAddLayerGrouping",
 
-                "click .admin-add-org-ok": "saveOrganization",
-                "click .admin-remove-org": "removeOrganization",
-                "click .admin-add-class-ok": "saveClass",
-                "click .admin-remove-class": "removeClass",
+                "click .admin-add-grouping-ok": "saveOrganization",
+                "click .admin-remove-grouping": "removeOrganization",
+//                "click .admin-add-theme-ok": "saveTheme",
+//                "click .admin-remove-theme": "removeTheme",
                 "click .show-add-class": "catchClicks"
             },
 
@@ -73,10 +71,11 @@ define([
                     this.$el.trigger(e);
                 });
 
-                this.addInspireButtonTemplate = _.template(AdminAddInspireButtonTemplate);
-                this.addInspireTemplate = _.template(AdminAddInspireTemplate);
-                this.addOrganizationButtonTemplate = _.template(AdminAddOrganizationButtonTemplate);
-                this.addOrganizationTemplate = _.template(AdminAddOrganizationTemplate);
+                this.addGroupingButtonTemplate = _.template(AddGroupingButtonTemplate);
+                this.addGroupingTemplate = _.template(AddGroupingTemplate);
+
+                //this.addInspireTemplate = _.template(AdminAddInspireTemplate);
+                //this.addOrganizationTemplate = _.template(AdminAddOrganizationTemplate);
                 this.addLayerBtnTemplate = _.template(AdminAddLayerBtnTemplate);
                 this.filterTemplate = _.template(FilterLayersTemplate);
                 this.tabTemplate = _.template(TabPanelTemplate);
@@ -131,6 +130,7 @@ define([
                             }
                         }
                         // At this point we want to add new layer button only for organization
+                        // if we enable on inspire tab -> layer will use the inspire theme id as organization id
                         if (this.options.tabId == 'organization') {
                             groupContainer.append(this.addLayerBtnTemplate({
                                 instance: this.options.instance
@@ -141,16 +141,9 @@ define([
                             "lcId" : group.id
                         });
                         
-                        groupPanel.find('.accordion-header').append((this.options.tabId == 'inspire') ?
-                            this.addInspireTemplate({
-                                data: group,
-                                instance: this.options.instance
-                            }) :
-                            this.addOrganizationTemplate({
-                                data: group,
-                                instance: this.options.instance
-                            })
-                        );
+                        // grouping edit panels
+                        groupPanel.find('.accordion-header')
+                            .append(this.__createGroupingPanel(this.options.tabId, group));
                         // add group panel to this tab
                         this.$el.append(jQuery(tab).append(groupPanel));
 
@@ -160,27 +153,23 @@ define([
                         instance: this.options.instance
                     }));
                     
+                    // grouping add panel
                     var newGroup = this.layerGroupingModel.getTemplateGroup();
-
+                    var btnConfig = {};
                     if (this.options.tabId == 'inspire') {
-                        this.$el.find('.oskarifield').append(
-                            this.addInspireButtonTemplate({
-                                instance: this.options.instance
-                            })).append(
-                            this.addInspireTemplate({
-                                data: newGroup,
-                                instance: this.options.instance
-                            }));
-                    } else {
-                        this.$el.find('.oskarifield').append(
-                            this.addOrganizationButtonTemplate({
-                                instance: this.options.instance
-                            })).append(
-                            this.addOrganizationTemplate({
-                                data: newGroup,
-                                instance: this.options.instance
-                            }));
+                        btnConfig.title = this.options.instance.getLocalization('admin').addInspire;
+                        btnConfig.desc = this.options.instance.getLocalization('admin').addInspireDesc;
                     }
+                    else {
+                        btnConfig.title = this.options.instance.getLocalization('admin').addOrganization;
+                        btnConfig.desc = this.options.instance.getLocalization('admin').addOrganizationDesc;
+
+                    }
+                    var groupingPanelContainer = this.$el.find('.oskarifield');
+                    groupingPanelContainer.append(this.addGroupingButtonTemplate({ loc: btnConfig }));
+                    groupingPanelContainer.append(this.__createGroupingPanel(this.options.tabId, newGroup));
+
+
 
                     /*// TODO: at some point it could be nice to filter layers also.
                 var selectedLayers = this.options.instance.sandbox.findAllSelectedMapLayers();
@@ -193,6 +182,45 @@ define([
                     // hide layers
                     this.$el.find('div.content').hide();
                 }
+            },
+            /**
+             * Creates a panel for adding of editing data producer/inspire theme groupings
+             * @param  {String} tabId ['inspire' | 'organization']
+             * @param  {Object} model data to populate the form with
+             * @return {DOMElement}  element ready to be added to UI
+             */
+            __createGroupingPanel : function(tabId, model) {
+                var instance = this.options.instance,
+                    adminLoc = instance.getLocalization('admin'),
+                    groupingConfig = {
+                        "data": model,
+                        // localizations
+                        "title": adminLoc.addOrganizationName,
+                        "desc" : adminLoc.addOrganizationNameTitle,
+                        "localeInput" : adminLoc,
+                        "btnLoc" : {
+                            "add" : {
+                                "title" : instance.getLocalization('add'),
+                                "desc" : adminLoc.addNewOrganization
+                            },
+                            "save" : {
+                                "title" : instance.getLocalization('save')
+                            },
+                            "delete" : {
+                                "title" : instance.getLocalization('delete')
+                            },
+                            "cancel" : {
+                                "title" : instance.getLocalization('cancel')
+                            }
+                        }
+                };
+                // override some UI texts for inspire theme form
+                if(tabId === 'inspire') {
+                    groupingConfig.title = adminLoc.addInspireName;
+                    groupingConfig.desc = adminLoc.addInspireNameTitle;
+                    groupingConfig.btnLoc.add.desc = adminLoc.addNewClass;
+                }
+                return this.addGroupingTemplate(groupingConfig);
             },
             /**
              * This method should show only those layers that matches with filter
@@ -244,11 +272,11 @@ define([
 
             /**
              * Shows "add organization" settings when admin clicks
-             * add grouping (organization)
+             * add grouping (organization/inspire theme)
              *
-             * @method toggleAddOrg
+             * @method toggleAddLayerGrouping
              */
-            toggleAddOrg: function (e) {
+            toggleAddLayerGrouping: function (e) {
                 var elem = jQuery(e.currentTarget).parent().find('.admin-add-class');
                 if (elem.hasClass('show-add-class')) {
                     elem.removeClass('show-add-class');
@@ -256,16 +284,6 @@ define([
                     elem.addClass('show-add-class');
                 }
             },
-            /**
-             * Shows "add class" settings when admin clicks
-             * add grouping (class)
-             *
-             * @method toggleAddClass
-             */
-            toggleAddClass: function (e) {
-                alert('Backend component is not ready yet.');
-            },
-
             /**
              * Shows layer settings when admin clicks
              * add or edit layer (class / organization)
@@ -371,7 +389,6 @@ define([
                         return;
                     }
                     element.parents('.show-add-class').removeClass('show-add-class');
-                    addClass.find('.admin-edit-org-btn').html(me.options.instance.getLocalization('edit'))
                 });
             },
             /**
@@ -379,9 +396,8 @@ define([
              *
              * @method saveClass
              */
-            saveClass: function (e) {
-                //TODO
-                alert('Backend component is not ready yet.');
+            saveTheme: function (e) {
+                this.saveOrganization(e);
             },
             /**
              * Remove organizations
@@ -414,9 +430,8 @@ define([
              *
              * @method removeClass
              */
-            removeClass: function (e) {
-                //TODO
-                alert('Backend component is not ready yet.');
+            removeTheme: function (e) {
+                this.removeOrganization(e);
             },
 
             /**

@@ -186,6 +186,7 @@ Oskari.registerLocalization({
         },
         "cancel": "Tillbaka",
         "add": "Tillägg",
+        "save": "Lagra",
         "delete": "Ta bort"
     }
 });
