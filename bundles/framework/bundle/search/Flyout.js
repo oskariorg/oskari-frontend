@@ -161,24 +161,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
          */
         createUi: function () {
             // Do not create the default UI if configured so
-            if (this.instance.disableDefault) return;
+            if (this.instance.disableDefault) {
+                return;
+            }
 
             var me = this,
                 sandbox = me.instance.getSandbox(),
-                flyout = jQuery(this.container);
+                flyout = jQuery(me.container);
             flyout.empty();
 
-            var searchContainer = this.template.clone();
-            this._searchContainer = searchContainer;
+            var searchContainer = me.template.clone();
+            me._searchContainer = searchContainer;
 
             var searchDescription = searchContainer.find('div.searchDescription');
-            searchDescription.html(this.instance.getLocalization('searchDescription'));
+            searchDescription.html(me.instance.getLocalization('searchDescription'));
 
             var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
             field.setPlaceholder(me.instance.getLocalization("searchAssistance"));
 
             var regex = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*\*?$/;
-            field.setContentCheck(true, this.instance.getLocalization('contentErrorMsg'), regex);
+            field.setContentCheck(true, me.instance.getLocalization('invalid_characters'), regex);
 
             field.bindChange(function (event) {
                 if (me.state === null) {
@@ -214,10 +216,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 var info = searchContainer.find('div.info');
                 info.empty();
 
-
                 // TODO: make some gif go round and round so user knows
                 // something is happening
                 var searchKey = field.getValue(true);
+
+                if (!me._validateSearchKey(field.getValue(false))) {
+                    field.setEnabled(true);
+                    button.setEnabled(true);
+                    return;
+                }
+
                 me.instance.service.doSearch(searchKey, function (data) {
                     field.setEnabled(true);
                     button.setEnabled(true);
@@ -226,11 +234,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                     field.setEnabled(true);
                     button.setEnabled(true);
 
-                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                        okBtn = dialog.createCloseButton('OK'),
-                        title = me.instance.getLocalization('searchservice_search_alert_title'),
+                    var errorKey = data ? data.responseText : null,
                         msg = me.instance.getLocalization('searchservice_search_not_found_anything_text');
-                    dialog.show(title, msg, [okBtn]);
+
+                    if (errorKey && me.instance.getLocalization(errorKey)) {
+                        msg = me.instance.getLocalization(errorKey);
+                    }
+
+                    me._showError(msg);
                 });
             };
 
@@ -245,20 +256,56 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
 
         },
 
+        _validateSearchKey: function (key) {
+            var me = this;
+            // empty string
+            if (key === null || key === undefined || key.length === 0) {
+                me._showError(me.instance.getLocalization('cannot_be_empty'));
+                return false;
+            }
+            // too many stars
+            if ((key.match(/\*/g) || []).length > 1) {
+                me._showError(me.instance.getLocalization('too_many_stars'));
+                return false;
+            }
+            // not enough characters accompanying a star
+            if (key.indexOf('*') > -1 && key.length < 5) {
+                me._showError(me.instance.getLocalization('too_short'));
+                return false;
+            }
+            // invalid characters (or a star in the wrong place...)
+            if (!/^[a-zåäöA-ZÅÄÖ \.,\?\!0-9]+\**$/.test(key)) {
+                me._showError(me.instance.getLocalization('invalid_characters'));
+                return false;
+            }
+            return true;
+        },
+
+        _showError: function (error) {
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okButton = dialog.createCloseButton('OK');
+
+            dialog.show(
+                    this.instance.getLocalization('searchservice_search_alert_title'),
+                    error, [okButton]
+            );
+        },
+
         _renderResults: function (result, searchKey) {
             if (!result || typeof result.totalCount !== 'number') {
                 return;
             }
 
-            var resultList = this._searchContainer.find('div.resultList');
-            resultList.empty();
-            this.lastResult = result;
-            var me = this;
+            var me = this,
+                resultList = me._searchContainer.find('div.resultList');
 
-            var info = this._searchContainer.find('div.info');
+            resultList.empty();
+            me.lastResult = result;
+
+            var info = me._searchContainer.find('div.info');
             info.empty();
 
-            var inst = this.instance;
+            var inst = me.instance;
             // error handling
             if (result.totalCount === -1) {
                 resultList.append(this.instance.getLocalization('searchservice_search_alert_title') + this.instance.getLocalization(result.errorText));
@@ -492,10 +539,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             panel.setPriority(item.priority);
             me.tabsContainer.addPanel(panel);
         },
-        addSearchResultAction: function(action) {
+        addSearchResultAction: function (action) {
             this.resultActions[action.name] = action.callback;
         },
-        removeSearchResultAction: function(name) {
+        removeSearchResultAction: function (name) {
             delete this.resultActions[name];
         }
     }, {

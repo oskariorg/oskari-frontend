@@ -1,11 +1,10 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "sl",
     "key": "Search",
     "value": {
         "title": "Iskanje lokacije",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Išči po imenu kraja, naslovu ali po identifikatorju enote nepremičnine.",
         "searchButton": "Išči",
         "searchResultCount": "Rezultati iskanja",
@@ -29,5 +28,4 @@ Oskari.registerLocalization(
             "title": "Rezultati iskanja"
         }
     }
-}
-);
+});
