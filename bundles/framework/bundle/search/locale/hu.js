@@ -1,11 +1,10 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "hu",
     "key": "Search",
     "value": {
         "title": "Keresés helye",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Keresés a hely neve, címe vagy ingatlan-nyílvántartási azonosítója alapján.",
         "searchButton": "Keresés",
         "searchResultCount": "A keresés",
@@ -29,5 +28,4 @@ Oskari.registerLocalization(
             "title": "Keresési eredmények"
         }
     }
-}
-);
+});

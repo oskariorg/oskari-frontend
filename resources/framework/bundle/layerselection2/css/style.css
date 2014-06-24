@@ -17,6 +17,7 @@ div.layerselection2 .layer.selected {
       width: 16px;
       background-repeat: no-repeat; }
     div.layerselection2 .layer.selected div.layer-info div.layer-title {
+      cursor: move;
       display: inline; }
       div.layerselection2 .layer.selected div.layer-info div.layer-title h4 {
         font: 14pt Arial, sans-serif;

@@ -24,13 +24,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
         this.drawPlugin = drawPlugin;
 
         /**
-         * @property intersectionPoints
-         *
-         *
-         */
-        this.intersectionPoints = [];
-
-        /**
          * @property markerSize
          *
          *
@@ -1369,50 +1362,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                     }
                 }
             }
-
-
-
-            /*
-        for (k=0; k<2; k++) {
-            var id = p0[p0Ind].references[k];
-            var refPoints = null;
-            var markerInd = -1;
-            if (id === remPolygon.id) {
-                markerInd = mInd;
-            } else {
-                markerInd = cornerInd;
-            }
-            refPoints = features[k].geometry.components[0].components;
-            marker.reference.segments.p[k][0][0] = refPoints[markerInd];
-            if (refPoints[markerInd+1].boundaryPoint) {
-                marker.reference.segments.p[k][0][1] = refPoints[markerInd+1];
-                var newInd1;
-                if (markerInd === refPoints.length-2) {
-                    newInd1 = 1;
-                } else if (markerInd === refPoints.length-1) {
-                    newInd1 = 2;
-                } else {
-                  newInd1 = markerInd+2;
-                }
-                marker.reference.segments.p[k][1][0] = refPoints[newInd1];
-                marker.reference.segments.p[k][1][1] = refPoints[markerInd+1];
-
-                var newInd2 = (markerInd === 0) ? refPoints.length-2 : markerInd-1;
-                marker.reference.segments.p[k][2][0] = refPoints[newInd2];
-                marker.reference.segments.p[k][2][1] = refPoints[markerInd];
-            } else {
-                var newInd3 = (markerInd === 0) ? refPoints.length-2 : markerInd-1;
-                marker.reference.segments.p[k][0][1] = refPoints[newInd3];
-
-                var newInd4 = (newInd3 === 0 ) ? refPoints.length-2 : newInd3-1;
-                marker.reference.segments.p[k][1][0] = refPoints[newInd4];
-                marker.reference.segments.p[k][1][1] = refPoints[newInd3];
-
-                marker.reference.segments.p[k][2][0] = refPoints[markerInd+1];
-                marker.reference.segments.p[k][2][1] = refPoints[markerInd];
-            }
-        }
-*/
-
         }
     });

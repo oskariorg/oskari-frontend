@@ -68,11 +68,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
         _setSearchLocation: function (field, event, ui) {
             var me = this,
                 fieldName = field.attr('name'),
-                a = jQuery('<a>');
-            me.state[fieldName] = ui.item;
-            // We have to unescape the text somehow... ;)
-            a.html(ui.item.name + ', ' + ui.item.village);
-            field.val(a.text());
+                a = jQuery('<a>'),
+                item = {
+                    name: a.html(ui.item.name).text(),
+                    village: a.html(ui.item.village).text()
+                };
+            me.state[fieldName] = item;
+            field.val(item.name + ', ' + item.village);
             me._updateRoutingLinks();
         },
 
@@ -216,14 +218,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     '#1A88CC',
                     function (fromLoc, toLoc) {
                         var url = 'http://www.matka.fi/fi/?keya=';
-                        url += encodeURIComponent(fromLoc.name);
+                        url += fromLoc.name;
                         if (fromLoc.village) {
-                            url += '%2C+' + encodeURIComponent(fromLoc.village);
+                            url += '%2C+' + fromLoc.village;
                         }
-                        url += '&keyb=' + encodeURIComponent(toLoc.name);
+                        url += '&keyb=' + toLoc.name;
                         if (toLoc.village) {
-                            url += '%2C+' + encodeURIComponent(toLoc.village);
+                            url += '%2C+' + toLoc.village;
                         }
+                        /* Ugly ISO-8859-1 encode,
+                         * replace with a lib if need be.
+                         */
+                        url = url.replace('Å', '%C5')
+                            .replace('å', '%E5')
+                            .replace('Ä', '%C4')
+                            .replace('ä', '%E4')
+                            .replace('Ö', '%D6')
+                            .replace('ö', '%F6')
+                            .replace('é', '%E9')
+                            .replace('É', '%C9')
+                            .replace('ü', '%FC')
+                            .replace('Ü', '%DC')
+                            .replace('\'', '%27')
+                            .replace(',', '%2C');
+
                         return url;
                     }
                 )
@@ -256,23 +274,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     '#124191',
                     function (fromLoc, toLoc) {
                         var url = 'http://here.com/directions/drive/';
-                        url += encodeURIComponent(
-                            fromLoc.name.replace(' ', '_')
-                        );
+                        url += fromLoc.name.replace(' ', '_');
                         if (fromLoc.village) {
-                            url += ',_' +
-                                encodeURIComponent(
-                                    fromLoc.village.replace(' ', '_')
-                            );
+                            url += ',_' + fromLoc.village.replace(' ', '_');
                         }
                         url += ',_Finland';
-                        url += '/' + encodeURIComponent(
-                            toLoc.name.replace(' ', '_')
-                        );
+                        url += '/' + toLoc.name.replace(' ', '_');
                         if (toLoc.village) {
-                            url += ',_' + encodeURIComponent(
-                                toLoc.village.replace(' ', '_')
-                            );
+                            url += ',_' + toLoc.village.replace(' ', '_');
                         }
                         url += ',_Finland';
                         return url;

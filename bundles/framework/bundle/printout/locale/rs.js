@@ -62,6 +62,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Prihvati podešavanja štampe",
                 "ok": "Potvrdi",
+                "back" : "NOT TRANSLATED",
                 "cancel": "Odustani"
             },
             "location": {

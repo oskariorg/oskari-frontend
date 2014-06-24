@@ -62,6 +62,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Vytlačte to",
                 "ok": "OK",
+                "back" : "NOT TRANSLATED",
                 "cancel": "Zrušiť"
             },
             "location": {

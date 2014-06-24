@@ -1,11 +1,10 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "sq",
     "key": "Search",
     "value": {
         "title": "Kërko lokacionin",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Kërko sipas emrit të vendit, adresës apo identifikuesit të njësisë së pronës së paluajtshme",
         "searchButton": "Kërko",
         "searchResultCount": "Kërkimi është kthyer",
@@ -29,5 +28,4 @@ Oskari.registerLocalization(
             "title": "Rezultatet e kërkimit"
         }
     }
-}
-);
+});

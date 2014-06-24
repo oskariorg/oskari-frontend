@@ -1,11 +1,10 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "lv",
     "key": "Search",
     "value": {
         "title": "Atrašanās vietas meklēšana",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Meklēt pēc vietas nosaukuma, adreses vai nekustamā īpašuma vienības identifikatora",
         "searchButton": "Meklēšana",
         "searchResultCount": "Atrastie ieraksti",
@@ -29,5 +28,4 @@ Oskari.registerLocalization(
             "title": "Meklēšanas rezultāti"
         }
     }
-}
-);
+});

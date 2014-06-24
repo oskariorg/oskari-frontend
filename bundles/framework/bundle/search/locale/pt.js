@@ -1,11 +1,10 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "pt",
     "key": "Search",
     "value": {
         "title": "Pesquisar lugar",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Pesquisar lugar por nome, endereço ou identificação predial",
         "searchButton": "Pesquisar",
         "searchResultCount": "Resultado da pesquisa",
@@ -29,5 +28,4 @@ Oskari.registerLocalization(
             "title": "Resultados da pesquisa"
         }
     }
-}
-);
+});

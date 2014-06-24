@@ -1,12 +1,11 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "en",
     "key": "Search",
     "value": {
         "title": "Search",
         "desc": "",
         "tabTitle": "Location Search",
-        "contentErrorMsg": "Search term contains illegal characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces, question marks (?), stars (*) and hyphens (-).",
+        "invalid_characters": "Search term contains illegal characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces, question marks (?), stars (*) and hyphens (-).",
         "searchDescription": "Search location by place name, address or real estate unit identifier.",
         "searchButton": "Search",
         "searchAssistance": "Write the search term.",
@@ -31,5 +30,4 @@ Oskari.registerLocalization(
             "title": "Search Results"
         }
     }
-}
-);
+});

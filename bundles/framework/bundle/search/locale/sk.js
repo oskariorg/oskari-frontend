@@ -1,11 +1,10 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "sk",
     "key": "Search",
     "value": {
         "title": "Vyhľadať umiestnenie",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Vyhľadať podľa názvu miesta, adresy alebo identifikátora jednotiek nehnuteľností",
         "searchButton": "Vyhľadať",
         "searchResultCount": "Vyhľadávanie vrátilo",
@@ -29,5 +28,4 @@ Oskari.registerLocalization(
             "title": "Vyhľadať Výsledky"
         }
     }
-}
-);
+});

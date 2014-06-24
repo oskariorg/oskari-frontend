@@ -1,11 +1,10 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "uk",
     "key": "Search",
     "value": {
         "title": "Пошук місцеположення",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Пошук за власною назвою, адресою чи ідентифікатором об'єкта нерухомості.",
         "searchButton": "Пошук",
         "searchResultCount": "Отримано",
@@ -29,5 +28,4 @@ Oskari.registerLocalization(
             "title": "Результати пошуку"
         }
     }
-}
-);
+});
