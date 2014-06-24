@@ -47,10 +47,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
         /**
          * @method hasUI
          * @return {Boolean} true
-         * This plugin doesn't have a UI so always returns false
+         * This plugin doesn't have a UI, BUT it is controllable in publisher so it is added to map
+         * when publisher starts -> always return true to NOT get second navControl on map when publisher starts
          */
         hasUI: function () {
-            return false;
+            return true;
         },
         /**
          * @method getMapModule

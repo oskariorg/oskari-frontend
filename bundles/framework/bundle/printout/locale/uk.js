@@ -62,6 +62,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Друк",
                 "ok": "ОК",
+                "back" : "NOT TRANSLATED",
                 "cancel": "Скасувати"
             },
             "location": {

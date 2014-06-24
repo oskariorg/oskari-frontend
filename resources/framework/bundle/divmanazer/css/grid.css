@@ -21,7 +21,7 @@ div.column-selector-placeholder {
 
 div.column-selector-title {
   margin-top: 10px;
-  margin-left: 3px;
+  margin-left: 2px;
   background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png');
   background-repeat: no-repeat;
   background-position: 120px 3px;
@@ -46,7 +46,7 @@ div.column-selector {
   visibility: hidden;
   background-color: white;
   margin-top: 5px;
-  margin-left: 2px;
+  margin-left: 3px;
   margin-right: 5px;
   padding: 0;
   border: 1px solid;
@@ -89,6 +89,8 @@ table.oskari-grid td, table.oskari-grid th {
   text-overflow: ellipsis;
   padding-left: 10px;
   padding-right: 10px; }
+  table.oskari-grid td._hidden, table.oskari-grid th._hidden {
+    display: none; }
 table.oskari-grid th {
   background-color: #F3F3F3;
   font-weight: bold; }
@@ -96,6 +98,14 @@ table.oskari-grid th {
     color: #3C3C3C;
     line-height: 28px;
     padding: 5px; }
+  table.oskari-grid th._closedSubTable {
+    background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/icon-arrow-right.png');
+    background-repeat: no-repeat;
+    background-position: right center; }
+  table.oskari-grid th._openSubTable {
+    background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/icon-arrow-left.png');
+    background-repeat: no-repeat;
+    background-position: right center; }
 table.oskari-grid > tr > th, table.oskari-grid > tbody > tr > th {
   text-align: left; }
 table.oskari-grid tr:last-child td {
