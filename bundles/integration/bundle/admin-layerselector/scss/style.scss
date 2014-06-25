@@ -249,10 +249,8 @@ div.admin-layerselector {
 
     .admin-add-layer-btn,
     .admin-edit-layer-btn,
-    .admin-add-class-btn,
-    .admin-edit-class-btn,
-    .admin-add-org-btn,
-    .admin-edit-org-btn {
+    .admin-add-grouping-btn,
+    .admin-edit-grouping-btn {
         float: right;
         margin: 5px 10px;
     }
@@ -377,7 +375,7 @@ div.admin-layerselector {
             width: 297px;
         }
 
-        .admin-add-class-cancel,
+        .admin-add-grouping-cancel,
         .admin-add-layer-cancel {
             float: right;
             margin-right: 10px;

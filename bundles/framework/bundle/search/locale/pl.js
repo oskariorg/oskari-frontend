@@ -4,7 +4,7 @@ Oskari.registerLocalization({
     "value": {
         "title": "Wyszukaj Lokalizację",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Wyszukaj przez nazwę, adres, identyfikator nieruchomości.",
         "searchButton": "Wyszukaj",
         "searchResultCount": "Rezultat wyszukiwania ",

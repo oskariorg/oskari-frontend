@@ -109,8 +109,13 @@
              */
             save: function (item, callback) {
                 var me = this;
+                var method = "POST";
+                if(!item.id) {
+                    // insert if no id
+                    method = "PUT";
+                }
                 jQuery.ajax({
-                    type: "POST",
+                    type: method,
                     dataType: 'json',
                     data : item,
                     url: me.baseURL + me.actions.save + "&iefix=" + (new Date()).getTime(),
@@ -225,7 +230,7 @@
                     if (item.name.hasOwnProperty(lang)) {
                         if(!hasChanges) {
                             // flag changed if not flagged before and name has changed
-                            hasChanges = loadedGroup.names[lang] === item.name[lang];
+                            hasChanges = (loadedGroup.names[lang] !== item.name[lang]);
                         }
                         loadedGroup.names[lang] = item.name[lang];
                     }
@@ -316,12 +321,9 @@
                 }
 
                 jQuery.ajax({
-                    type: "POST",
+                    type: "DELETE",
                     dataType: 'json',
-                    data : {
-                        id : id
-                    },
-                    url: me.baseURL + me.actions.remove + "&iefix=" + (new Date()).getTime(),
+                    url: me.baseURL + me.actions.remove + "&id=" + id + "&iefix=" + (new Date()).getTime(),
                     success: function (pResp) {
                         me._removeClass(id);
                         if(callback) {

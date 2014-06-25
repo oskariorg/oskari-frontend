@@ -1,11 +1,10 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "am",
     "key": "Search",
     "value": {
         "title": "Տեղանքի որոնում",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Որոնում տեղանքի անվամբ, հասցեով կամ անշարժ գույքի միավորի նույնականացման տվյալներով",
         "searchButton": "Որոնում",
         "searchResultCount": "Որոնման արդյունքներ",
@@ -29,5 +28,4 @@ Oskari.registerLocalization(
             "title": "Որոնման արդյունքներ"
         }
     }
-}
-);
+});

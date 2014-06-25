@@ -1,11 +1,10 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "da",
     "key": "Search",
     "value": {
         "title": "Søg efter placering",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Søg efter navn, adresse eller matrikelnummer",
         "searchButton": "Søg",
         "searchResultCount": "Søgningen gav følgende",
@@ -29,5 +28,4 @@ Oskari.registerLocalization(
             "title": "Søgeresultater"
         }
     }
-}
-);
+});

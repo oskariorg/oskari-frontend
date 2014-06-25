@@ -1,11 +1,10 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "ro",
     "key": "Search",
     "value": {
         "title": "Căutare locaţie",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Căutare după nume, adresă sau identificator al imobilului",
         "searchButton": "Căutare",
         "searchResultCount": "Căutarea a returnat",
@@ -29,5 +28,4 @@ Oskari.registerLocalization(
             "title": "Căutare Rezultate"
         }
     }
-}
-);
+});

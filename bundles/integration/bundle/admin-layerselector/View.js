@@ -93,11 +93,6 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
      * Updates layers listing after layers has been changed/MapLayerEvent has been received.
      */
     _layerUpdateHandler: function (blnForceCreate) {
-        //console.log("admin-layerselector/View.js:_layerUpdateHandler");
-        // TODO! currently update, add and initial additions execute
-        // the same code. This needs to be updated when mapLayerService
-        // can handle updates better. 
-        // (updates everything instead of layer.name)
         var sandbox = this.getSandbox(),
             // populate layer list
             mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');

@@ -152,7 +152,7 @@ div.admin-layerselector {
     width: 335px;
     white-space: nowrap;
     overflow: hidden; }
-  div.admin-layerselector .admin-add-layer-btn, div.admin-layerselector .admin-edit-layer-btn, div.admin-layerselector .admin-add-class-btn, div.admin-layerselector .admin-edit-class-btn, div.admin-layerselector .admin-add-org-btn, div.admin-layerselector .admin-edit-org-btn {
+  div.admin-layerselector .admin-add-layer-btn, div.admin-layerselector .admin-edit-layer-btn, div.admin-layerselector .admin-add-grouping-btn, div.admin-layerselector .admin-edit-grouping-btn {
     float: right;
     margin: 5px 10px; }
   div.admin-layerselector button.admin-arrange-layers {

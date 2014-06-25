@@ -1,11 +1,10 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "es",
     "key": "Search",
     "value": {
         "title": "Localizar",
         "desc": "",
-        "contentErrorMsg": "Search term contains illegal characters.",
+        "invalid_characters": "Search term contains illegal characters.",
         "searchDescription": "Búsqueda de un lugar, dirección o identificador de un inmueble",
         "searchButton": "Búsqueda",
         "searchResultCount": "La búsqueda devolvió",
@@ -29,5 +28,4 @@ Oskari.registerLocalization(
             "title": "Resultados de la búsqueda"
         }
     }
-}
-);
+});
