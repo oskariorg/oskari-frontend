@@ -159,12 +159,12 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
 
         /* hook */
         startPlugin: function () {
-            console.log("BASECLASS startPlugin called ", this);
+//            console.log("BASECLASS startPlugin called ", this);
         },
 
         /* hook */
         stopPlugin: function () {
-            console.log("BASECLASS stopPlugin called ", this);
+//            console.log("BASECLASS stopPlugin called ", this);
         },
 
         /**
