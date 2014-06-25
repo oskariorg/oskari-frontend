@@ -8,6 +8,8 @@ It is now possible to add/edit/delete inspire themes.
 
 Known issue on delete: layers under deleted theme are removed from browser but NOT from the database. This will be changed so that themes with layers linked to them cannot be removed.
 
+Uses PUT/DELETE HTTP methods for insert/delete with fallback to POST and 'X-HTTP-Method-Override' header if server responds with 'Method not allowed'.
+
 ### divmanazer/Grid
 
 Implemented expandable/collapsible subtables. Improved export permission handling.
