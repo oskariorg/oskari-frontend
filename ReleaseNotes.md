@@ -2,6 +2,10 @@
 
 ## 1.23
 
+### core / MapLayerService
+
+Now has a function hasSupportForLayerType(type) which can be used to check if given layer type is supported by the plugins loaded in particular setup.
+
 ### admin-layerselector bundle
 
 It is now possible to add/edit/delete inspire themes. 

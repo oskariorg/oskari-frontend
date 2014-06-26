@@ -185,45 +185,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         },
 
         /**
-         * @method removeSubLayer
-         * Removes the layer from parent layer's sublayers and
-         * sends out a MapLayerEvent if it was found & removed
-         * @param {String} parentLayerId
-         * @param {String} layerId
-         *            id for the layer to be removed
-         * @param {Boolean} suppressEvent (optional)
-         *            true to not send event (should only be used on test cases to avoid unnecessary events)
-         */
-        /*
-        removeSubLayer: function (parentLayerId, layerId, suppressEvent) {
-            // this should be removed and only use removeLayer()!
-            alert('deprecated!');
-            var parentLayer = this.findMapLayer(parentLayerId),
-                subLayers,
-                subLayer,
-                len,
-                i;
-
-            if (parentLayer && (parentLayer.isBaseLayer() || parentLayer.isGroupLayer())) {
-                subLayers = parentLayer.getSubLayers();
-
-                for (i = 0, len = subLayers.length; i < len; ++i) {
-                    if (subLayers[i].getId() === layerId) {
-                        subLayer = subLayers[i];
-                        subLayers.splice(i, 1);
-                        break;
-                    }
-                }
-
-                if (subLayer && suppressEvent !== true) {
-                    // notify components of added layer if not suppressed
-                    var event = this._sandbox.getEventBuilder('MapLayerEvent')(subLayer.getId(), 'remove');
-                    this._sandbox.notifyAll(event);
-                }
-            }
-        },
-*/
-        /**
          * @method updateLayer
          * Updates layer in internal layerlist and
          * sends out a MapLayerEvent if it was found & modified
@@ -553,6 +514,17 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         unregisterLayerModelBuilder: function (type) {
             this.modelBuilderMapping[type] = undefined;
             delete this.modelBuilderMapping[type];
+        },
+        /**
+         * Return true if layer type is supported (model class registered)
+         * @param  {String}  type layer type like 'wmslayer'
+         * @return {Boolean}  true if supported
+         */
+        hasSupportForLayerType : function(type) {
+            if(this.typeMapping[type]) {
+                return true;
+            }
+            return (type === 'base' || type === 'groupMap');
         },
         /**
          * @method createMapLayer
