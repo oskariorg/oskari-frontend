@@ -14,6 +14,11 @@ Uses PUT/DELETE HTTP methods for insert/delete with fallback to POST and 'X-HTTP
 
 Implemented expandable/collapsible subtables. Improved export permission handling.
 
+### divmanazer/Popup
+
+Implemented popup.onClose(callback) which can be used to register listeners that will be called when the popup closes. Note that listeners aren't removed on close 
+and need to be manually cleared using popup.clearListeners() if reusing the component reference in another context.
+
 ### mapmodule/ControlsPlugin - touch controls
 
 Major changes in mouse/touch controls handling. PorttiMouse has been removed and OskariNavigation is now used in it's place. 
