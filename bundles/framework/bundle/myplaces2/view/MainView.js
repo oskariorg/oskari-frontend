@@ -160,7 +160,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             var loc = this.instance.getLocalization();
             this.form = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.myplaces2.view.PlaceForm', this.instance, this.options);
-            var categories = this.instance.getService().getAllCategories();
+            var categories = this.instance.getService().getAllCategories(),
+                layerId;
             if (place) {
                 var param = {
                     place: {
@@ -174,6 +175,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                     }
                 };
                 this.form.setValues(param);
+                layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryID());
             }
 
             var drawing = this.drawPlugin.getDrawing();
@@ -189,9 +191,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                 html: me.form.getForm(categories),
                 useButtons: true,
                 primaryButton: loc.buttons.save,
-                actions: {},
-                layerId: me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryID())
+                actions: {}
             }];
+
+            if (layerId) {
+                content[0].layerId = layerId;
+            }
             // cancel button
             content[0].actions[loc.buttons.cancel] = function () {
                 me.cleanupPopup();

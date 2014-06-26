@@ -1,3 +1,4 @@
+// FIXME move this to lib...
 // Define outerHtml method for jQuery since we need to give openlayers plain html
 // http://stackoverflow.com/questions/2419749/get-selected-elements-outer-html
 // Elements outerHtml property only works on IE and chrome
@@ -50,7 +51,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
      * @method create called automatically on construction
      * @static
      */
-
     function () {
         this.mapModule = null;
         this.pluginName = null;
@@ -155,13 +155,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
             this._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh);
         },
+        /**
+         * @method _renderPopup
+         */
         _renderPopup: function (id, contentData, title, lonlat, colourScheme, font, refresh) {
-            var contentDiv = this._renderContentData(contentData),
-                popupContent = this._renderPopupContent(title, contentDiv),
+            var me = this,
+                contentDiv = me._renderContentData(contentData),
+                popupContent = me._renderPopupContent(title, contentDiv),
                 popup;
 
             if (refresh) {
-                popup = this._popups[id].popup;
+                popup = me._popups[id].popup;
                 popup.setContentHTML(popupContent);
             } else {
                 popup = new OpenLayers.Popup(
@@ -171,7 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                     popupContent,
                     false
                 );
-                this._popups[id] = {
+                me._popups[id] = {
                     title: title,
                     contentData: contentData,
                     lonlat: lonlat,
@@ -181,23 +185,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 };
 
                 popup.moveTo = function (px) {
-                    if ((px !== null && px !== undefined) && (this.div !== null && this.div !== undefined)) {
-                        this.div.style.left = px.x + "px";
+                    if ((px !== null && px !== undefined) && (me.div !== null && me.div !== undefined)) {
+                        me.div.style.left = px.x + "px";
                         var topy = px.y - 20;
-                        this.div.style.top = topy + "px";
+                        me.div.style.top = topy + "px";
                     }
                 };
 
-                this.getMapModule().getMap().addPopup(popup);
-
+                me.getMapModule().getMap().addPopup(popup);
             }
 
-            if (this.adaptable) {
-                this._adaptPopupSize(id, refresh);
+            if (me.adaptable) {
+                me._adaptPopupSize(id, refresh);
             }
 
-            this._panMapToShowPopup(lonlat);
-            this._setClickEvent(id, popup, contentData);
+            me._panMapToShowPopup(lonlat);
+            me._setClickEvent(id, popup, contentData);
 
             popup.setBackgroundColor('transparent');
             jQuery(popup.div).css('overflow', 'visible');
@@ -206,11 +209,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             var popupDOM = jQuery('#' + id);
             // Set the colour scheme if one provided
             if (colourScheme) {
-                this._changeColourScheme(colourScheme, popupDOM, id);
+                me._changeColourScheme(colourScheme, popupDOM, id);
             }
             // Set the font if one provided
             if (font) {
-                this._changeFont(font, popupDOM, id);
+                me._changeFont(font, popupDOM, id);
             }
             // Fix the HTML5 placeholder for < IE10
             var inputs = popupDOM.find('.contentWrapper input, .contentWrapper textarea');
