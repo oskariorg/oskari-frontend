@@ -19,7 +19,7 @@ function(inMode) {
      */
     getName : function() {
         return this.__name;
-    }
+    },
     /**
      * @method getName
      * @return {String} the name for the event 
