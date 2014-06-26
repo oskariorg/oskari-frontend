@@ -2,8 +2,6 @@ define([
         'text!_bundle/templates/filterLayersTemplate.html',
         'text!_bundle/templates/addGroupingBtnTemplate.html',
         'text!_bundle/templates/addGroupingTemplate.html',
-//        'text!_bundle/templates/adminAddInspireTemplate.html',
-//        'text!_bundle/templates/adminAddOrgTemplate.html',
         'text!_bundle/templates/adminAddLayerBtnTemplate.html',
         'text!_bundle/templates/tabPanelTemplate.html',
         'text!_bundle/templates/accordionPanelTemplate.html',
@@ -14,8 +12,6 @@ define([
     function (FilterLayersTemplate,
         AddGroupingButtonTemplate,
         AddGroupingTemplate,
-//        AdminAddInspireTemplate,
-//        AdminAddOrganizationTemplate,
         AdminAddLayerBtnTemplate,
         TabPanelTemplate,
         AccordionPanelTemplate,
@@ -43,14 +39,11 @@ define([
 
                 "click .admin-edit-grouping-btn": "toggleGroupingSettings",
                 "click .admin-add-grouping-cancel": "toggleGroupingSettings",
-//                "click .admin-add-org-cancel": "toggleGroupingSettings",
 
                 "click .admin-add-grouping-btn": "toggleAddLayerGrouping",
 
-                "click .admin-add-grouping-ok": "saveOrganization",
-                "click .admin-remove-grouping": "removeOrganization",
-//                "click .admin-add-theme-ok": "saveTheme",
-//                "click .admin-remove-theme": "removeTheme",
+                "click .admin-add-grouping-ok": "saveLayerGrouping",
+                "click .admin-remove-grouping": "removeLayerGrouping",
                 "click .show-add-class": "catchClicks"
             },
 
@@ -63,6 +56,9 @@ define([
             initialize: function () {
                 this.layerGroupingModel = this.options.layerGroupingModel;
                 this.instance = this.options.instance;
+                this.allowDeleteWhenNotEmpty = (this.options.tabId === 'inspire');
+                // reference to possible error dialog
+                this.__dialog = null;
                 // If model triggers change event we need to re-render this view
                 // listenTo will remove dead listeners, use it instead of on()
                 this.listenTo(this.layerGroupingModel, 'change:layerGroups', this.render);
@@ -363,12 +359,11 @@ define([
             },
 
             /**
-             * Save organizations
+             * Save  LayerGrouping (Organization/inspire theme)
              *
-             * @method saveOrganization
+             * @method saveLayerGrouping
              */
-            saveOrganization: function (e) {
-                //console.log("saveOrganisation");
+            saveLayerGrouping: function (e) {
                 var me = this,
                     element = jQuery(e.currentTarget),
                     addClass = element.parents('.admin-add-class');
@@ -392,32 +387,38 @@ define([
                 });
             },
             /**
-             * Save class
+             * Remove LayerGrouping (Organization/inspire theme)
              *
-             * @method saveClass
+             * @method removeLayerGrouping
              */
-            saveTheme: function (e) {
-                this.saveOrganization(e);
-            },
-            /**
-             * Remove organizations
-             *
-             * @method removeOrganization
-             */
-            removeOrganization: function (e) {
+            removeLayerGrouping: function (e) {
                 var me = this,
-                    element = jQuery(e.currentTarget);
+                    element = jQuery(e.currentTarget),
+                    groupId = element.attr('data-id'),
+                    group = this.layerGroupingModel.getGroup(groupId),
+                    layers = group.getLayers(),
+                    loc = me.instance.getLocalization();
 
-                var confirmMsg = me.instance.getLocalization('admin').confirmDeleteLayerGroup;
+                if (this.allowDeleteWhenNotEmpty && layers.length > 0) {
+                    this.__showDialog(loc.errors.title, loc.errors['not_empty'], element);
+                    return;
+                }
+                var confirmMsg = loc.admin.confirmDeleteLayerGroup;
                 if(!confirm(confirmMsg)) {
-                    // existing layer/cancel!!
+                    // user canceled
                     return;
                 }
 
-                var groupId = element.attr('data-id');
-                var group = this.layerGroupingModel.getGroup(groupId);
-                var layers = group.getLayers();
-                this.layerGroupingModel.remove(groupId, function(err) {
+                this.layerGroupingModel.remove(groupId, function(err, info) {
+                    if(info && info.responseText) {
+                        try {
+                            var obj = JSON.parse(info.responseText);
+                            if(obj.info && obj.info.code && loc.errors[obj.info.code]) {
+                                me.__showDialog(loc.errors.title, loc.errors[obj.info.code], element);
+                            }
+                            return;
+                        } catch(ignored) {}
+                    }
                     if(err) {
                         // TODO: handle error
                         alert("Error!! " + err);
@@ -425,15 +426,24 @@ define([
                     }
                 });
             },
-            /**
-             * Remove class
-             *
-             * @method removeClass
-             */
-            removeTheme: function (e) {
-                this.removeOrganization(e);
+            __showDialog : function(title, content, elRef, alignment) {
+                var me = this;
+                if(this.__dialog) {
+                    // close previous one if any
+                    this.__dialog.close(true);
+                    // TODO: or maybe reuse?
+                    this.__dialog = null;
+                }
+                this.__dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                this.__dialog.show(title, content);
+                if(elRef) {
+                    this.__dialog.moveTo(elRef, alignment);
+                }
+                // clear reference this.__dialog on close
+                this.__dialog.onClose(function() {
+                    me.__dialog = null;
+                });
             },
-
             /**
              * Stops propagation of click events
              *

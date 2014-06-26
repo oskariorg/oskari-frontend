@@ -126,7 +126,7 @@
                     },
                     error: function (jqXHR, textStatus) {
                         if(callback /* && jqXHR.status !== 0 */) {
-                            callback("Error while saving group " + textStatus);
+                            callback("Error while saving group:" + textStatus);
                         }
                     }
                 });
@@ -156,7 +156,7 @@
                         me.__tryRestMethods('POST', config);
                     }
                     else if(config.__oskariError) {
-                        config.__oskariError(arguments);
+                        config.__oskariError(jqXHR, textStatus);
                     }
                 }
                 if(!config.__oskariError) {
@@ -363,7 +363,7 @@
                     },
                     error: function (jqXHR, textStatus) {
                         if(callback /* && jqXHR.status !== 0 */) {
-                            callback("Error while removing group " + textStatus);
+                            callback("Error while removing group: " + textStatus, jqXHR);
                         }
                     }
                 });
