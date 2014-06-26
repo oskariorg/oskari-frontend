@@ -11,202 +11,58 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
      */
 
     function (config, locale) {
-        this._conf = config;
         this._locale = locale;
-        this.mapModule = null;
-        this.pluginName = null;
-        this._sandbox = null;
-        this._map = null;
-        this._elements = {};
-        this.__templates = {};
-
+        this._element = null;
+        this._clazz = 'Oskari.mapframework.bundle.coordinatedisplay.plugin.CoordinatesPlugin';
+        this._defaultLocation = 'top right';
+        this._index = 4;
+        this._name = 'CoordinatesPlugin';
     }, {
-        /** @static @property __name plugin name */
-        __name: 'CoordinatesPlugin',
-
         /**
-         * @method getName
-         * @return {String} plugin name
-         */
-        getName: function () {
-            return this.pluginName;
-        },
-        /**
-         * @method getMapModule
-         * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        getMapModule: function () {
-            return this.mapModule;
-        },
-        /**
-         * @method setMapModule
-         * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        setMapModule: function (mapModule) {
-            this.mapModule = mapModule;
-            if (mapModule) {
-                this.pluginName = mapModule.getName() + this.__name;
-            }
-        },
-        /**
-         * @method hasUI
-         * @return {Boolean} true
-         * This plugin has an UI so always returns true
-         */
-        hasUI: function () {
-            return true;
-        },
-        /**
-         * @method init
-         *
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        init: function (sandbox) {
-
-            this.__templates.latlondiv =
-                jQuery('<div class="mapplugin coordinates">' +
-                    ' <div class="cbSpansWrapper">' +
-                    ' <div class="cbRow">' +
-                    '  <div class="cbCrsLabel"></div>' +
-                    ' </div>' +
-                    ' <div class="cbRow">' +
-                    '  <div class="cbLabel cbLabelN" axis="lat"></div>' +
-                    '  <div class="cbValue" axis="lat"></div>' +
-                    ' </div>' +
-                    '  <br clear="both">' +
-                    ' <div class="cbRow">' +
-                    '  <div class="cbLabel cbLabelE" axis="lon"></div>' +
-                    '  <div class="cbValue" axis="lon"></div>' +
-                    ' </div>' +
-                    ' </div>' +
-                    '</div>');
-        },
-        /**
-         * @method register
-         * Interface method for the plugin protocol
-         */
-        register: function () {
-
-        },
-        /**
-         * @method unregister
-         * Interface method for the plugin protocol
-         */
-        unregister: function () {
-
-        },
-        /**
-         * @method startPlugin
-         * Interface method for the plugin protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        startPlugin: function (sandbox) {
-            var p;
-            this._sandbox = sandbox;
-            this._map = this.getMapModule().getMap();
-
-            sandbox.register(this);
-            this._createUI();
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(this, p);
-                }
-            }
-        },
-        /**
-         * @method stopPlugin
-         *
-         * Interface method for the plugin protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stopPlugin: function (sandbox) {
-            var p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
-                }
-            }
-
-            if (this._elements.display) {
-                this._elements.display.remove();
-                delete this._elements.display;
-            }
-
-            sandbox.unregister(this);
-            this._map = null;
-            this._sandbox = null;
-        },
-        /**
-         * @method start
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        start: function (sandbox) {},
-        /**
-         * @method stop
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stop: function (sandbox) {},
-        /**
-         * @method _createUI
+         * @method _createControlElement
          * @private
          * Creates UI for coordinate display and places it on the maps
          * div where this plugin registered.
          */
-        _createUI: function () {
+        _createControlElement: function () {
             var me = this,
                 sandbox = me._sandbox,
-                parentContainer = jQuery(me._map.div), // get div where the map is rendered from openlayers
-                el = me._elements.display,
-                containerClasses = 'top right',
-                position = 4;
-            if (!me._elements.display) {
-                el = me._elements.display = me.__templates.latlondiv.clone();
-            }
+                crsText = me._locale.crs[me.getMapModule().getProjection()],
+                el = jQuery('<div class="mapplugin coordinates">' +
+                    ' <div class="cbSpansWrapper">' +
+                    ' <div class="cbRow">' +
+                    '  <div class="cbCrsLabel">' + crsText + '</div>' +
+                    ' </div>' +
+                    ' <div class="cbRow">' +
+                    '  <div class="cbLabel cbLabelN" axis="lat">' + me._locale.compass.N + '</div>' +
+                    '  <div class="cbValue" axis="lat"></div>' +
+                    ' </div>' +
+                    '  <br clear="both">' +
+                    ' <div class="cbRow">' +
+                    '  <div class="cbLabel cbLabelE" axis="lon">' + me._locale.compass.E + '</div>' +
+                    '  <div class="cbValue" axis="lon"></div>' +
+                    ' </div>' +
+                    ' </div>' +
+                    '</div>');
 
-            var crs = me.getMapModule().getProjection(),
-                crsText = me._locale.crs[crs];
-
-            el.find('.cbCrsLabel').html(crsText);
-            el.find('.cbLabelN').html(me._locale.compass.N);
-            el.find('.cbLabelE').html(me._locale.compass.E);
             el.mousedown(function (event) {
                 event.stopPropagation();
             });
-
-            if (me.conf && me.conf.location) {
-                containerClasses = me.conf.location.classes || containerClasses;
-                position = me.conf.location.position || position;
-            }
-
-            me.getMapModule().setMapControlPlugin(el, containerClasses, position);
-            //parentContainer.append(el);
-            me.update();
-            el.show();
+            // Store coordinate value elements so we can update them fast
+            me._spanLat = el.find('.cbValue[axis="lat"]')[0];
+            me._spanLon = el.find('.cbValue[axis="lon"]')[0];
+            return el;
         },
         /**
-         * @method update
+         * @method _refresh
          * @param {Object} data contains lat/lon information to show on UI
          * Updates the given coordinates to the UI
          */
-        update: function (data) {
+        refresh: function (data) {
+            var me = this;
             if (!data || !data.latlon) {
                 // update with map coordinates if coordinates not given
-                var map = this._sandbox.getMap();
+                var map = me._sandbox.getMap();
                 data = {
                     'latlon': {
                         'lat': Math.floor(map.getY()),
@@ -214,58 +70,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
                     }
                 };
             }
-            var me = this,
-                latlon = data.latlon,
-                el = me._elements.display,
-                spanLat = el.find('.cbValue[axis="lat"]'),
-                spanLon = el.find('.cbValue[axis="lon"]');
-            if (spanLat && spanLon) {
-                spanLat.text(Math.floor(latlon.lat));
-                spanLon.text(Math.floor(latlon.lon));
+            if (me._spanLat && me._spanLon) {
+                me._spanLat.innerHTML = Math.floor(data.latlon.lat);
+                me._spanLon.innerHTML = Math.floor(data.latlon.lon);
             }
         },
 
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-
-        eventHandlers: {
-            /**
-             * @method MouseHoverEvent
-             * See PorttiMouse.notifyHover
-             */
-            'MouseHoverEvent': function (event) {
-                this.update({
-                    'latlon': {
-                        'lat': Math.floor(event.getLat()),
-                        'lon': Math.floor(event.getLon())
-                    }
-                });
-            },
-            /**
-             * @method AfterMapMoveEvent
-             * Shows map center coordinates after map move
-             */
-            'AfterMapMoveEvent': function (event) {
-                this.update();
-            }
-
-        },
-
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded
-         * if not.
-         */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (handler) {
-                return handler.apply(this, [event]);
-            }
+        _createEventHandlers: function () {
+            return {
+                /**
+                 * @method MouseHoverEvent
+                 * See PorttiMouse.notifyHover
+                 */
+                'MouseHoverEvent': function (event) {
+                    this.refresh({
+                        'latlon': {
+                            'lat': Math.floor(event.getLat()),
+                            'lon': Math.floor(event.getLon())
+                        }
+                    });
+                },
+                /**
+                 * @method AfterMapMoveEvent
+                 * Shows map center coordinates after map move
+                 */
+                'AfterMapMoveEvent': function (event) {
+                    this.refresh();
+                }
+            };
         }
     }, {
+        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static

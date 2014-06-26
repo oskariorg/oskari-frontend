@@ -245,9 +245,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
                 // http://dev.openlayers.org/docs/files/OpenLayers/Format/WKT-js.html
                 // parse to OpenLayers.Geometry.Geometry[] array ->
                 // layer.setGeometry();
-                var wkt = new OpenLayers.Format.WKT();
-
-                var features = wkt.read(layerWKTGeom);
+                var wkt = new OpenLayers.Format.WKT(),
+                    features = wkt.read(layerWKTGeom);
                 if (features) {
                     if (features.constructor != Array) {
                         features = [features];
@@ -342,8 +341,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
          *            layer layer to check against
          */
         notifyLayerVisibilityChanged: function (layer) {
-            var scaleOk = layer.isVisible();
-            var geometryMatch = layer.isVisible();         // if layer is visible check actual values
+            var scaleOk = layer.isVisible(),
+                geometryMatch = layer.isVisible();         // if layer is visible check actual values
 
             if (layer.isVisible()) {
                 scaleOk = this._isInScale(layer);
@@ -353,10 +352,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
                      // change in UI also)
                      // this is for optimization purposes
 
-            var map = this.getMap();
-
-            var mapLayers = this.getMapModule().getOLMapLayers(layer.getId());
-            var mapLayer = mapLayers.length ? mapLayers[0] : null;
+            var map = this.getMap(),
+                mapLayers = this.getMapModule().getOLMapLayers(layer.getId()),
+                mapLayer = mapLayers.length ? mapLayers[0] : null;
             if (scaleOk && geometryMatch && layer.isVisible()) {             // show non-baselayer if in scale, in geometry and layer visible
 
                 if (mapLayer && !mapLayer.getVisibility()) {
@@ -385,12 +383,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
          *            event
          */
         _afterRearrangeSelectedMapLayerEvent: function (event) {
-            var layers = this._sandbox.findAllSelectedMapLayers();
-            var layerIndex = 0;
-
-            var opLayersLength = this._map.layers.length;
-
-            var changeLayer = this._map.getLayersByName('Markers');
+            var layers = this._sandbox.findAllSelectedMapLayers(),
+                layerIndex = 0,
+                opLayersLength = this._map.layers.length,
+                changeLayer = this._map.getLayersByName('Markers');
             if (changeLayer.length > 0) {
                 this._map.setLayerIndex(changeLayer[0], opLayersLength);
                 opLayersLength--;

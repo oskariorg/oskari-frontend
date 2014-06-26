@@ -46,6 +46,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         getMapModule: function () {
             return this.mapModule;
         },
+
+        getElement: function () {
+            return this.element;
+        },
+        
         /**
          * @method hasUI
          * This plugin has an UI so always returns true

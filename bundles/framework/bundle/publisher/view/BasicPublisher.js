@@ -67,15 +67,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 "groupedSiblings": false
             },
 
+            "Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin": {
+                // Disabled for now, need to fix config reading first "allowedLocations": ['top left', 'top right', 'bottom left', 'bottom right'],
+                "allowedLocations": ['top right'],
+                "allowedSiblings": ["Oskari.mapframework.bundle.mapmodule.plugin.PanButtons", "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"],
+                "groupedSiblings": true
+            },
+
             "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons": {
                 "allowedLocations": ['top left', 'top right', 'bottom left', 'bottom right'],
-                "allowedSiblings": ["Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"],
+                "allowedSiblings": ["Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin", "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"],
                 "groupedSiblings": true
             },
 
             "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar": {
                 "allowedLocations": ['top left', 'top right', 'bottom left', 'bottom right'],
-                "allowedSiblings": ["Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"],
+                "allowedSiblings": ["Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin", "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"],
                 "groupedSiblings": true
             },
 
@@ -639,6 +646,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 sandbox = Oskari.getSandbox('sandbox');
             me.toolLayoutEditMode = true;
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmodeoff);
+            jQuery('.mapplugins').show();
             jQuery('.mapplugin').addClass('toollayoutedit');
             // TODO create droppables on _showDroppable, destroy them on _hideDroppable
             var draggables = me._makeDraggable(jQuery('.mapplugin')),
@@ -654,7 +662,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                             plugin.setLocation(jQuery(this).parents('.mapplugins').attr('data-location'));
                             // Reset draggable's inline css... couldn't find a cleaner way to do this.
                             // Can't be removed as that breaks draggable, has to be zeroed because we're changing containers
-                            plugin.element.css({
+                            plugin.getElement().css({
                                 "top": "0px",
                                 "left": "0px"
                             });
@@ -711,6 +719,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 me.toolsPanel.activatePreviewPlugin(controlsPluginTool, me.isMapControlActive);
                 delete me.isMapControlActive;
             }
+
+            // Hide unneeded containers
+            var container;
+            jQuery('.mapplugins').each(function () {
+                container = jQuery(this);
+                if (container.find('.mappluginsContent').children().length === 0) {
+                    container.css('display', 'none');
+                }
+            });
         },
 
         _createDataPanel: function () {
@@ -832,7 +849,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          * Does nothing currently.
          */
         handleMapMoved: function () {
-
             var mapVO = this.instance.sandbox.getMap(),
                 lon = mapVO.getX(),
                 lat = mapVO.getY(),
@@ -1047,6 +1063,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             // adds possible feature data bundle
             if (this.toolsPanel.hasFeatureDataBundle()) {
                 selections.featuredata2 = {
+                    /* TODO enable this when it's actually read somewhere...
+                    location: {
+                        classes: this.toolsPanel.getFeatureDataPlugin().plugin.getLocation()
+                    },*/
                     selectionTools: false
                 };
             }
@@ -1196,7 +1216,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
             me.toolsPanel.activateFeatureDataPlugin(true);
 
-             mapModule.registerPlugin(me.logoPlugin);
+            mapModule.registerPlugin(me.logoPlugin);
             this.logoPlugin.startPlugin(me.instance.sandbox);
         },
         /**
@@ -1654,6 +1674,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     plugin = me.logoPlugin;
                 } else if (pluginClazz === "Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin") {
                     plugin = me.maplayerPanel.plugin;
+                } else if (pluginClazz === "Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin") {
+                    plugin = me.toolsPanel.getFeatureDataPlugin();
+                    if (plugin) {
+                        plugin = plugin.plugin;
+                    }
                 }
             }
             return plugin;
@@ -1739,12 +1764,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          **/
         _moveSiblings: function (pluginClazz, source, target) {
             var me = this,
+                sibling,
                 siblings = this._getDropzonePlugins(target),
                 i;
             for (i = 0; i < siblings.length; i++) {
                 if (jQuery.inArray(siblings[i], me.toolDropRules[pluginClazz].allowedSiblings) < 0) {
                     // Unallowed sibling, move to source
-                    me._getPluginByClazz(siblings[i]).setLocation(source.attr("data-location"));
+                    sibling = me._getPluginByClazz(siblings[i]);
+                    sibling.setLocation(source.attr("data-location"));
                 }
             }
         },

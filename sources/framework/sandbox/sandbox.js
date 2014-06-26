@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
      *
      * @param {Oskari.mapframework.core.Core} core
      */
-
     function (core) {
 
         this._core = core;
@@ -79,20 +78,20 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
         /**
          * @method printDebug
          * Utility method for printing debug messages to browser console
-         * @param {String} text - message to print
          */
-        printDebug: function (text) {
-            this._core.printDebug(text);
+        printDebug: function () {
+            //this._core.printDebug(text);
+            this._core.printDebug.apply(this._core, arguments);
         },
 
         /**
          * @method printWarn
          * Utility method for printing warn messages to browser console
-         * @param {String} text
          */
-        printWarn: function (text) {
+        printWarn: function () {
             /* forward warning to core */
-            this._core.printWarn(text);
+            //this._core.printWarn(text);
+            this._core.printWarn.apply(this._core, arguments);
         },
         /**
          * @method setUser
@@ -236,7 +235,6 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
          * @param {String} eventName
          */
         registerForEventByName: function (module, eventName) {
-
             this._core.printDebug("#*#*#* Sandbox is registering module '" + module.getName() + "' to event '" + eventName + "'");
             var oldListeners = this._listeners[eventName];
             if (oldListeners === null || oldListeners === undefined) {
@@ -361,7 +359,6 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
          * @return {Boolean} Returns true, if request was handled, false otherwise
          */
         requestByName: function (creator, requestName, requestArgs) {
-
             this.printDebug("#!#!#! --------------> requestByName " + requestName);
             var requestBuilder = this.getRequestBuilder(requestName);
             var request = requestBuilder.apply(this, requestArgs || []);
@@ -397,7 +394,6 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
                 return;
             }
             window.setTimeout(function () {
-
                 var request = requestBuilder.apply(me, requestArgs || []),
                     creatorComponent = this.postMasterComponent,
                     rv = null;
@@ -449,7 +445,6 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
         notifyAll: function (event, retainEvent) {
             var eventName;
             if (!retainEvent) {
-
                 eventName = event.getName();
                 this._core.printDebug("Sandbox received notifyall for event '" + eventName + "'");
             }
@@ -515,9 +510,8 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
             if (jQuery.browser.opera && window.innerHeight !== null && window.innerHeight !== undefined) {
                 var height = window.innerHeight;
             }
-            var width = jQuery(window).width();
-
-            var size = {};
+            var width = jQuery(window).width(),
+                size = {};
             size.height = jQuery(window).height();
             size.width = width;
 

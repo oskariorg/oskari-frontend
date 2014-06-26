@@ -12,7 +12,6 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
      * @method create called automatically on construction
      * @static
      */
-
     function () {
 
         // Currently selected layers, array of MapLayer objects
@@ -345,27 +344,23 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
         /**
          * @method printDebug
          * Prints given text to browser console
-         *
-         * @param {String} text message
          */
-        printDebug: function (text) {
+        printDebug: function () {
             if (this._debug && window.console !== null && window.console !== undefined) {
                 if (window.console.debug !== null && window.console.debug !== undefined) {
-                    console.debug(text);
+                    console.debug.apply(console, arguments);
                 } else if (window.console.log !== null && window.console.log !== undefined) {
-                    console.log(text);
+                    console.log.apply(console, arguments);
                 }
             }
         },
 
         /**
          * Prints given warn text to browser console
-         *
-         * @param {String} text
          */
-        printWarn: function (text) {
+        printWarn: function () {
             if (window.console !== null && window.console !== undefined) {
-                console.warn(text);
+                console.warn.apply(console, arguments);
             }
         },
 

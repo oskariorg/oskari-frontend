@@ -16,26 +16,25 @@ Oskari.AbstractFunc = function () {
 
 Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
     /**
- * @method create called automatically on construction
- * @static
- *
- * @param {String} id
- *      Unigue ID for this map
- * @param {String} imageUrl
- *      base url for marker etc images
- * @param {Array} map options, example data:
- *  {
- *      resolutions : [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
- *      maxExtent : {
- *          left : 0,
- *          bottom : 10000000,
- *          right : 10000000,
- *          top : 0
- *      },
- srsName : "EPSG:3067"
- *  }
- */
-
+     * @method create called automatically on construction
+     * @static
+     *
+     * @param {String} id
+     *      Unigue ID for this map
+     * @param {String} imageUrl
+     *      base url for marker etc images
+     * @param {Array} map options, example data:
+     *  {
+     *      resolutions : [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
+     *      maxExtent : {
+     *          left : 0,
+     *          bottom : 10000000,
+     *          right : 10000000,
+     *          top : 0
+     *      },
+     srsName : "EPSG:3067"
+     *  }
+     */
     function (id, imageUrl, options) {
         var me = this;
         me._id = id;
@@ -152,13 +151,17 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          * itself as a layersplugin.
          *
          * @param {String} id plugin id/name
-         * @param {Oskari.mapframework.ui.module.common.mapmodule.Plugin} plug
+         * @param {Oskari.mapframework.ui.module.common.mapmodule.Plugin} plug, set to null if you want to remove the entry
          */
         setLayerPlugin: function (id, plug) {
             if (id === null || id === undefined || !id.length) {
-                this._sandbox.printWarn("Setting layer plugin with a non-existent ID:", id, plug);
+                this._sandbox.printWarn("Setting layer plugin", plug, "with a non-existent ID:", id);
             }
-            this._layerPlugins[id] = plug;
+            if (plug === null || plug === undefined) {
+                delete this._layerPlugins[id];
+            } else {
+                this._layerPlugins[id] = plug;
+            }
         },
         /**
          * @method getLayerPlugin
