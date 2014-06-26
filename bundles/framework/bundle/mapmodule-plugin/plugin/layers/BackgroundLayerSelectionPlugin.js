@@ -60,6 +60,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 this.pluginName = mapModule.getName() + this.__name;
             }
         },
+
+        getElement: function () {
+            return this.element;
+        },
+        
         /**
          * @method hasUI
          * This plugin has an UI so always returns true

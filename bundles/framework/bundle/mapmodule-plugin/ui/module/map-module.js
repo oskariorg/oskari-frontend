@@ -167,13 +167,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @method removeMapControlPlugin
          * Removes a map control plugin instance from the map DOM
          * @param  {Object} element Control container (jQuery)
+         * @param  {Boolean} keepContainerVisible Keep container visible even if there's no children left.
          */
-        removeMapControlPlugin: function (element) {
+        removeMapControlPlugin: function (element, keepContainerVisible) {
             var container = element.parents('.mapplugins'),
                 content = element.parents('.mappluginsContent');
             // TODO take this into use in all UI plugins so we can hide unused containers...
             element.remove();
-            if (content.children().length === 0) {
+            if (!keepContainerVisible && content.children().length === 0) {
                 container.css('display', 'none');
             }
         },
@@ -626,7 +627,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         setZoomLevel: function (newZoomLevel, suppressEvent) {
             var currentZoomLevel = this._getMapZoom();
-            //console.log('zoom to ' + requestedZoomLevel);
             if (newZoomLevel === currentZoomLevel) {
                 // do nothing if requested zoom is same as current
                 return;
@@ -829,9 +829,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 keepLayersOrder = event.getKeepLayersOrder(),
                 isBaseMap = event.isBasemap(),
                 layerPlugins = this.getLayerPlugins(),
-                layerFunctions = [];
+                layerFunctions = [],
+                i;
 
             _.each(layerPlugins, function (plugin) {
+                //FIXME if (plugin && _.isFunction(plugin.addMapLayerToMap)) {
                 if (_.isFunction(plugin.addMapLayerToMap)) {
                     var layerFunction = plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
                     if (_.isFunction(layerFunction)) {
@@ -841,7 +843,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             // Execute each layer function
-            for (var i = 0; i < layerFunctions.length; i++) {
+            for (i = 0; i < layerFunctions.length; i++) {
                 layerFunctions[i].apply();
             }
         },

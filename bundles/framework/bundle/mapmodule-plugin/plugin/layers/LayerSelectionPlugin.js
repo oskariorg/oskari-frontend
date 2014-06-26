@@ -57,6 +57,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 this.pluginName = mapModule.getName() + this.__name;
             }
         },
+
+        getElement: function () {
+            return this.element;
+        },
+        
         /**
          * @method hasUI
          * This plugin has an UI so always returns true

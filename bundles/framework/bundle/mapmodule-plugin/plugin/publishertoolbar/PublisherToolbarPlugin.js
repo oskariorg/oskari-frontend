@@ -71,6 +71,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 this.pluginName = mapModule.getName() + this.__name;
             }
         },
+
+        getElement: function () {
+            return this.element;
+        },
+        
         /**
          * @method hasUI
          * This plugin has an UI so always returns true
@@ -379,8 +384,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
         setToolbarContainer: function () {
             var me = this,
-                sandbox = me._sandbox;
-            var builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
+                sandbox = me._sandbox,
+                builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
 
             if (me.toolbarId && (me.toolbarContent) && builder !== null && builder !== undefined) {
                 // add toolbar when toolbarId and target container is configured

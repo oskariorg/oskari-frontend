@@ -661,6 +661,11 @@ Oskari = (function () {
                     superClazz: null,
                     subClazz: null
                 };
+                if (args[1] === null || args[1] === undefined) {
+                    if (console && console.warn) {
+                        console.warn("No constructor for superClazz", cdef);
+                    }
+                }
                 pdefsp = {
                     _class: cd,
                     _constructor: args[1],
@@ -669,7 +674,6 @@ Oskari = (function () {
                 };
                 this.impl.inheritance[cdef] = compo;
                 pdef[sp] = pdefsp;
-
             }
 
             return pdefsp;
@@ -962,6 +966,9 @@ Oskari = (function () {
             ctors = pdefsp._constructors;
             if (ctors) {
                 for (c = 0; c < ctors.length; c += 1) {
+                    if (ctors[c] === null || ctors[c] === undefined) {
+                        throw "Undefined constructor in clazz " + sp;
+                    }
                     ctors[c].apply(inst, instargs);
                 }
             } else {
