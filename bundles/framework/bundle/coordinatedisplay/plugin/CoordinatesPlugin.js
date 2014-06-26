@@ -9,10 +9,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
      * @param {Object} config
      *      JSON config with params needed to run the plugin
      */
-
     function (config, locale) {
         this._locale = locale;
-        this._element = null;
         this._clazz = 'Oskari.mapframework.bundle.coordinatedisplay.plugin.CoordinatesPlugin';
         this._defaultLocation = 'top right';
         this._index = 4;
@@ -26,31 +24,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
          */
         _createControlElement: function () {
             var me = this,
-                sandbox = me._sandbox,
-                crsText = me._locale.crs[me.getMapModule().getProjection()],
-                el = jQuery('<div class="mapplugin coordinates">' +
-                    ' <div class="cbSpansWrapper">' +
-                    ' <div class="cbRow">' +
-                    '  <div class="cbCrsLabel">' + crsText + '</div>' +
-                    ' </div>' +
-                    ' <div class="cbRow">' +
-                    '  <div class="cbLabel cbLabelN" axis="lat">' + me._locale.compass.N + '</div>' +
-                    '  <div class="cbValue" axis="lat"></div>' +
-                    ' </div>' +
-                    '  <br clear="both">' +
-                    ' <div class="cbRow">' +
-                    '  <div class="cbLabel cbLabelE" axis="lon">' + me._locale.compass.E + '</div>' +
-                    '  <div class="cbValue" axis="lon"></div>' +
-                    ' </div>' +
-                    ' </div>' +
+                loc = me._locale,
+                crsText = loc.crs[me.getMapModule().getProjection()],
+                el = jQuery(
+                    '<div class="mapplugin coordinates">' +
+                    '    <div>' + crsText + '</div>' +
+                    '    <div>' +
+                    '      <div>' + loc.compass.N + '</div>' +
+                    '      <div></div>' +
+                    '    </div>' +
+                    '    <div>' +
+                    '      <div>' + loc.compass.E + '</div>' +
+                    '      <div></div>' +
+                    '    </div>' +
                     '</div>');
 
             el.mousedown(function (event) {
                 event.stopPropagation();
             });
             // Store coordinate value elements so we can update them fast
-            me._spanLat = el.find('.cbValue[axis="lat"]')[0];
-            me._spanLon = el.find('.cbValue[axis="lon"]')[0];
+            me._latEl = el.find('div > div:last-child')[0];
+            me._lonEl = el.find('div > div:last-child')[1];
             return el;
         },
         /**
@@ -70,9 +64,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
                     }
                 };
             }
-            if (me._spanLat && me._spanLon) {
-                me._spanLat.innerHTML = Math.floor(data.latlon.lat);
-                me._spanLon.innerHTML = Math.floor(data.latlon.lon);
+            if (me._latEl && me._lonEl) {
+                me._latEl.innerHTML = Math.floor(data.latlon.lat);
+                me._lonEl.innerHTML = Math.floor(data.latlon.lon);
             }
         },
 
@@ -105,5 +99,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': [
+            "Oskari.mapframework.module.Module",
+            "Oskari.mapframework.ui.module.common.mapmodule.Plugin"
+        ]
     });
