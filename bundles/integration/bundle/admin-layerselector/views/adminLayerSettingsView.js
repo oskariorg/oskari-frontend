@@ -78,18 +78,7 @@ define([
                 this.typeSelectTemplate = _.template(TypeSelectTemplate);
                 this.layerTemplate = _.template(LayerSettingsTemplate);
 
-                this.supportedTypes = [
-                    {id : "wmslayer", localeKey : "wms"},
-                    {id : "wmtslayer", localeKey : "wmts"}
-                ];
-                this.layerTemplateHeader = {
-                    "wmslayer" : _.template(LayerSettingsTemplateWMSHeader),
-                    "wmtslayer" : _.template(LayerSettingsTemplateWMTSHeader)
-                };
-                this.layerTemplateFooter = {
-                    "wmslayer" : _.template(LayerSettingsTemplateWMSFooter),
-                    "wmtslayer" : _.template(LayerSettingsTemplateWMTSFooter)
-                };
+                this.__setupSupportedLayerTypes();
 
                 this.groupTemplate = _.template(GroupSettingsTemplate);
                 this.subLayerTemplate = _.template(SubLayerTemplate);
@@ -105,6 +94,30 @@ define([
 
 
                 this.render();
+            },
+            __setupSupportedLayerTypes : function() {
+
+                // generic list of layertypes supported
+                this.supportedTypes = [
+                    {id : "wmslayer", localeKey : "wms"},
+                    {id : "wmtslayer", localeKey : "wmts"}
+                ];
+                // filter out ones that are not registered in current appsetup
+                var sandbox = this.instance.sandbox,
+                    mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                this.supportedTypes = _.filter(this.supportedTypes, function(type){ 
+                    return mapLayerService.hasSupportForLayerType(type.id) 
+                });
+                // setup templates for allSupported
+                // TODO: maybe require only ones supported?
+                this.layerTemplateHeader = {
+                    "wmslayer" : _.template(LayerSettingsTemplateWMSHeader),
+                    "wmtslayer" : _.template(LayerSettingsTemplateWMTSHeader)
+                };
+                this.layerTemplateFooter = {
+                    "wmslayer" : _.template(LayerSettingsTemplateWMSFooter),
+                    "wmtslayer" : _.template(LayerSettingsTemplateWMTSFooter)
+                };
             },
 
             /**
