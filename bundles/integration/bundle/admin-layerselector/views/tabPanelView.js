@@ -441,7 +441,7 @@ define([
                 }
                 // clear reference this.__dialog on close
                 this.__dialog.onClose(function() {
-                    me.dialog = null;
+                    me.__dialog = null;
                 });
             },
             /**
