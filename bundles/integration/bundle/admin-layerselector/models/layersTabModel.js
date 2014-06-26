@@ -114,8 +114,7 @@
                     // insert if no id
                     method = "PUT";
                 }
-                jQuery.ajax({
-                    type: method,
+                this.__tryRestMethods(method, {
                     dataType: 'json',
                     data : item,
                     url: me.baseURL + me.actions.save + "&iefix=" + (new Date()).getTime(),
@@ -131,6 +130,40 @@
                         }
                     }
                 });
+            },
+            /**
+             * Tries to call backend with given method, if server responds with 
+             * '405 Method Not Allowed' tries the request again with POST method
+             * and additional header 'X-HTTP-Method-Override' with the original method as value.
+             * @param  {String} method 'GET' | 'POST' | 'PUT'  | 'DELETE' 
+             * @param  {Object} config for jQuery.ajax() - method will be overridden with value of method param
+             */
+            __tryRestMethods : function(method, config) {
+                var me = this;
+                config.type = method;
+                var errorHandler = function(jqXHR, textStatus) {
+                    var origType = config.type;
+                    if(textStatus === 'Method Not Allowed' && 
+                        (origType === 'PUT' || origType === 'DELETE')) {
+                        // PUT/DELETE not allowed -> try POST instead
+                        var origBefore = config.beforeSend;
+                        config.beforeSend = function(req) {
+                            req.setRequestHeader('X-HTTP-Method-Override', origType);
+                            if(origBefore) {
+                                origBefore(req);
+                            }
+                        }
+                        me.__tryRestMethods('POST', config);
+                    }
+                    else if(config.__oskariError) {
+                        config.__oskariError(arguments);
+                    }
+                }
+                if(!config.__oskariError) {
+                    config.__oskariError = config.error;
+                    config.error = errorHandler;
+                }
+                jQuery.ajax(config);
             },
             /**
              * Ajax success callback to save a group to backend.
@@ -319,9 +352,7 @@
                     }
                     return;
                 }
-
-                jQuery.ajax({
-                    type: "DELETE",
+                this.__tryRestMethods("DELETE", {
                     dataType: 'json',
                     url: me.baseURL + me.actions.remove + "&id=" + id + "&iefix=" + (new Date()).getTime(),
                     success: function (pResp) {
