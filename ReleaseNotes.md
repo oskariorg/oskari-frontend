@@ -2,6 +2,10 @@
 
 ## 1.23
 
+### arcgis / ArcGisLayer
+
+Layers of type arcgis now respect layer order properly.
+
 ### core / MapLayerService
 
 Now has a function hasSupportForLayerType(type) which can be used to check if given layer type is supported by the plugins loaded in particular setup.
@@ -30,6 +34,10 @@ OskariNavigation extends OpenLayers.Control.Navigation and hooks Oskari events t
 of OpenLayer.Control.PinchZoom (OskariPinchZoom) which hooks Oskari event to pinchDone.
 
 Also changed hasUI to return true so ControlsPlugin works correctly with publisher-bundle.
+
+### mapmyplaces/MyPlacesLayerPlugin
+
+Polished My places labels are enabled in published maps and map printouts. From technical point of view they are now rendered in the backend.
 
 ## 1.22
 
