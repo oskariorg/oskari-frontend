@@ -35,6 +35,10 @@ of OpenLayer.Control.PinchZoom (OskariPinchZoom) which hooks Oskari event to pin
 
 Also changed hasUI to return true so ControlsPlugin works correctly with publisher-bundle.
 
+### mapmyplaces/MyPlacesLayerPlugin
+
+Polished My places labels are enabled in published maps and map printouts. From technical point of view they are now rendered in the backend.
+
 ## 1.22
 
 ### integration/admin-layerselector
