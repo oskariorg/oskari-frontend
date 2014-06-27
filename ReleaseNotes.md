@@ -2,6 +2,10 @@
 
 ## 1.23
 
+### arcgis / ArcGisLayer
+
+Layers of type arcgis now respect layer order properly.
+
 ### core / MapLayerService
 
 Now has a function hasSupportForLayerType(type) which can be used to check if given layer type is supported by the plugins loaded in particular setup.
