@@ -2,15 +2,26 @@
 
 ## 1.23
 
+### core / MapLayerService
+
+Now has a function hasSupportForLayerType(type) which can be used to check if given layer type is supported by the plugins loaded in particular setup.
+
 ### admin-layerselector bundle
 
 It is now possible to add/edit/delete inspire themes. 
 
 Known issue on delete: layers under deleted theme are removed from browser but NOT from the database. This will be changed so that themes with layers linked to them cannot be removed.
 
+Uses PUT/DELETE HTTP methods for insert/delete with fallback to POST and 'X-HTTP-Method-Override' header if server responds with 'Method not allowed'.
+
 ### divmanazer/Grid
 
 Implemented expandable/collapsible subtables. Improved export permission handling.
+
+### divmanazer/Popup
+
+Implemented popup.onClose(callback) which can be used to register listeners that will be called when the popup closes. Note that listeners aren't removed on close 
+and need to be manually cleared using popup.clearListeners() if reusing the component reference in another context.
 
 ### mapmodule/ControlsPlugin - touch controls
 
@@ -19,6 +30,10 @@ OskariNavigation extends OpenLayers.Control.Navigation and hooks Oskari events t
 of OpenLayer.Control.PinchZoom (OskariPinchZoom) which hooks Oskari event to pinchDone.
 
 Also changed hasUI to return true so ControlsPlugin works correctly with publisher-bundle.
+
+### mapmyplaces/MyPlacesLayerPlugin
+
+Polished My places labels are enabled in published maps and map printouts. From technical point of view they are now rendered in the backend.
 
 ## 1.22
 

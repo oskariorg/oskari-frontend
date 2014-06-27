@@ -14,6 +14,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         this.templateButton = jQuery('<div class="button"><a href="JavaScript:void(0);"></a></div>');
         this.dialog = this.template.clone();
         this.overlay = null;
+        this.__listeners = {
+
+        };
     }, {
         /**
          * @method show
@@ -111,12 +114,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             }
             if (noAnimation) {
                 me.dialog.remove();
+                me.__notifyListeners('close');
             } else {
                 me.dialog.animate({
                     opacity: 0
                 }, 500);
                 setTimeout(function () {
                     me.dialog.remove();
+                    me.__notifyListeners('close');
                 }, 500);
             }
         },
@@ -250,6 +255,53 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
         getJqueryContent: function () {
             return this.dialog.find('div.content');
+        },
+
+        /**
+         * Add listener to be called when popup is closed
+         * @param  {Function} callback function to call on close
+         */
+        onClose: function (callback) {
+            this.__getListeners('close').push(callback);
+        },
+        /**
+         * Clears any listeners (registered with onClose(callback)-function).
+         */
+        clearListeners: function () {
+            for(var key in this.__listeners) {
+                this.__listeners[key] = null;
+                delete this.__listeners[key];
+            }
+        },
+        /**
+         * Notifies all listeners of given type. Passes optional event object to callback
+         * @param {String} type of listener ('close' for example)
+         * @param {Object} event (optional)
+         */
+        __notifyListeners : function(type, event) {
+            if(!type) {
+                return;
+            }
+            if(!this.__listeners[type]) {
+                return;
+            }
+            _.each(this.__listeners[type], function(cb){ cb(event); });
+        },
+        /**
+         * Returns an array of listeners for given type. 
+         * @param {String} type of listener ('close' for example)
+         */
+        __getListeners : function(type) {
+            if(!type) {
+                return [];
+            }
+            if(!this.__listeners) {
+                this.__listeners = {};
+            }
+            if(!this.__listeners[type] || !this.__listeners[type].push) {
+                this.__listeners[type] = []
+            }
+            return this.__listeners[type];
         },
 
         /**

@@ -767,9 +767,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
 
             var myPlacesService = this._sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
 
+            /*  GeoServer is used instead.
             if (myPlacesService) {
                 this._addAttentionText(myPlacesService, layer.getId(), attentionLayer);
             }
+            */
 
             attentionLayer.opacity = layer.getOpacity() / 100;
             openLayer.opacity = layer.getOpacity() / 100;

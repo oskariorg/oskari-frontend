@@ -21,7 +21,8 @@ Oskari.registerLocalization({
             "title": "Virhe!",
             "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin.",
             "loadFailed": "Karttatasojen latauksessa tapahtui virhe. Lataa sivu selaimeesi uudelleen ja valitse karttatasot.",
-            "noResults": "Haulla ei löytynyt yhtään tulosta."
+            "noResults": "Haulla ei löytynyt yhtään tulosta.",
+            "not_empty": "Teemaan, jota yrität poistaa, on liitetty karttatasoja. Valitse karttatasoille ensin toinen teema."
         },
         "loading": "Ladataan...",
         "filter": {

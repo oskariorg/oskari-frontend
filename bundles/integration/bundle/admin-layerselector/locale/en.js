@@ -21,7 +21,8 @@ Oskari.registerLocalization({
             "title": "Error!",
             "generic": "There was an error in the system. Try again later.",
             "loadFailed": "Error loading map layers. Reload the page and choose admin map layers.",
-            "noResults": "The search found no results.."
+            "noResults": "The search found no results..",
+            "not_empty": "There are map layers associated to the theme you're trying to remove. Please select another theme for the map layers and try again."
         },
         "loading": "Loading...",
         "filter": {

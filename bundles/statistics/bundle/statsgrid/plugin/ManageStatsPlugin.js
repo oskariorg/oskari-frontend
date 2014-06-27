@@ -852,7 +852,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     );
                     me.addIndicatorMeta(indicator);
                 }, function () {
-                    console.log('FAIL!', console.log(arguments));
+//                    console.log('FAIL!', console.log(arguments));
                 });
         },
         createIndicatorForm: function (container) {

@@ -226,11 +226,13 @@
     <div class="add-layer-send">
         <div class="add-layer-button-area">
             <div class="input-controls">
-                <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-ok' : 'admin-add-layer-ok' %>"
-                    title="<%= instance.getLocalization('admin').addNewLayer %>" ><%= instance.getLocalization('add') %></button>
-                <% if(model.getId()) { %>
-                <button class="add-layer-btn <%= isSubLayer ? 'admin-remove-sublayer' : 'admin-remove-layer' %>"
-                    title="<%= instance.getLocalization('delete') %>"><%= instance.getLocalization('delete') %></button>
+                <% if(!model.getId()) { %>
+                    <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-ok' : 'admin-add-layer-ok' %>"
+                        title="<%= instance.getLocalization('admin').addNewLayer %>" ><%= instance.getLocalization('add') %></button>
+                <% } else { %>
+                    <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-ok' : 'admin-add-layer-ok' %>"><%= instance.getLocalization('save') %></button>
+                    <button class="add-layer-btn <%= isSubLayer ? 'admin-remove-sublayer' : 'admin-remove-layer' %>"
+                        title="<%= instance.getLocalization('delete') %>"><%= instance.getLocalization('delete') %></button>
                 <% } %>
                 <button class="add-layer-btn <%= isSubLayer ? 'admin-add-sublayer-cancel' : 'admin-add-layer-cancel' %>"
                     title="<%= instance.getLocalization('cancel') %>"><%= instance.getLocalization('cancel') %></button>

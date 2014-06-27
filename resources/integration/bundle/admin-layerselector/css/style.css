@@ -244,7 +244,7 @@ div.admin-layerselector {
     margin-right: 5px; }
     div.admin-layerselector .input-controls input.add-class-input.mid {
       width: 297px; }
-    div.admin-layerselector .input-controls .admin-add-class-cancel, div.admin-layerselector .input-controls .admin-add-layer-cancel {
+    div.admin-layerselector .input-controls .admin-add-grouping-cancel, div.admin-layerselector .input-controls .admin-add-layer-cancel {
       float: right;
       margin-right: 10px; }
   div.admin-layerselector .adjacent .input-controls {

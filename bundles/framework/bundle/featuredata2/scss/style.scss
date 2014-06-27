@@ -1,55 +1,57 @@
-/* Selected row hightlighting */
-.featuredata tbody tr.selected {
-    background-color: #FEF2BA;
-}
-/* Override common table settings */
-.featuredata th, .featuredata td  {
-    text-align: left;
-    padding-left : 2px;
-    padding-right: 15px;
-}
-/* Override sort img position */
-.featuredata th.asc {
-    background-position:right center;
-}
-/* Override sort img position */
-.featuredata th.desc {
-    background-position:right center;
-}
+.featuredata {
 
-.featuredata div.tab-content {
-    max-height: 535px;
-    overflow: auto;
-}
-div.featuredataplugin.mapplugin {
-    position: absolute;
-    top : 450px;
-    right : 30px;
-    display : block;
-    color : #3C3C3C;
-    background : white;    
-    font-size : 12px;
-    font-weight : bold;
-    border: 1px solid;
-    padding: 5px;
-    z-index: 15000;
+    div.tab-content {
+        max-height: 535px;
+        overflow: auto;
+    }
+
+    .link  {
+        padding: 20px 0px 0px 0px;
+        color: rgb(0, 102, 255);
+        font-size: 13px;
+        text-decoration: underline;
+        display: block;
+    }
+
+    /* Selected row hightlighting */
+    tbody tr.selected {
+        background-color: #FEF2BA;
+    }
+
+    /* Override common table settings */
+    th, td  {
+        text-align: left;
+        padding-left: 2px;
+        padding-right: 15px;
+    }
+
+    /* Override sort img position */
+    th {
+
+        &.asc {
+            background-position: right center;
+        }
+
+        &.desc {
+            background-position: right center;
+        }
+
+    }
+
 }
 
 div.flyout-resizer {
-    height: 16px;
-    width: 16px;
-    margin: 0;
-    padding: 0;
     float: right;
-    right: 0;
-    bottom: 16px;
     cursor: nw-resize;
 }
 
-.link  {
-    padding: 20px 0px 0px 0px;
-    color: rgb(0, 102, 255);
-    font-size: 13px;
-    text-decoration: underline;
+div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.featuredataplugin {
     display: block;
+    color: #3C3C3C;
+    background: #FFF;    
+    font-size: 12px;
+    font-weight: bold;
+    border: 1px solid;
+    margin: 10px;
+    padding: 5px;
 }
