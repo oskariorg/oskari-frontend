@@ -18,6 +18,10 @@ It is now possible to add/edit/delete inspire themes.
 
 Uses PUT/DELETE HTTP methods for insert/delete with fallback to POST and 'X-HTTP-Method-Override' header if server responds with 'Method not allowed'.
 
+Refactored layertype support validation. 
+
+Added initial support for ArcGIS layertype.
+
 ### divmanazer/Grid
 
 Implemented expandable/collapsible subtables. Improved export permission handling.

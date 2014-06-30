@@ -22,6 +22,7 @@ Oskari.registerLocalization({
             "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin.",
             "loadFailed": "Karttatasojen latauksessa tapahtui virhe. Lataa sivu selaimeesi uudelleen ja valitse karttatasot.",
             "noResults": "Haulla ei löytynyt yhtään tulosta.",
+            "layerTypeNotSupported": "Tason tyyppiä ei vielä tueta: ",
             "not_empty": "Teemaan, jota yrität poistaa, on liitetty karttatasoja. Valitse karttatasoille ensin toinen teema."
         },
         "loading": "Ladataan...",
@@ -66,7 +67,8 @@ Oskari.registerLocalization({
             "layertypes" : {
                 "wms": "WMS Taso",
                 "wfs": "WFS Taso",
-                "wmts": "WMTS Taso"
+                "wmts": "WMTS Taso",
+                "arcgis" : "ArcGIS Taso"
             },
             "selectLayer": "Valitse ylätaso",
             "selectSubLayer": "Valitse alataso",
