@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.domain.ArcGisLayer',
 
     function () {
         /* Layer Type */
-        this._layerType = "arcgislayer";
+        this._layerType = "arcgis";
     }, {
 
     }, {

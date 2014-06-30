@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         __name: 'ArcGisLayerPlugin',
 
         /** @static @property _layerType type of layers this plugin handles */
-        _layerType: 'arcgislayer',
+        _layerType: 'arcgis',
 
         /**
          * @method getName
