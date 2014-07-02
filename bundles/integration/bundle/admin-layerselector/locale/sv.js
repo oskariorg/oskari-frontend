@@ -21,7 +21,9 @@ Oskari.registerLocalization({
             "title": "Fel!",
             "generic": "Systemfel. Försök på nytt senare.",
             "loadFailed": "Fel i laddningen av kartlager. Ladda ned sidan på nytt i din läsare och välj kartlagren.",
-            "noResults": "ökningen gav inga resultat."
+            "noResults": "ökningen gav inga resultat.",
+            "layerTypeNotSupported": "Typ av kartlager är inte ännu understött: ",
+            "not_empty": "Teman, som du försöker att ta bort, innehåller kartlager. Välj en annan tema för de här temorna."
         },
         "loading": "Laddar...",
         "filter": {
@@ -65,7 +67,8 @@ Oskari.registerLocalization({
             "layertypes" : {
                 "wms": "WMS Lager",
                 "wfs": "WFS Lager",
-                "wmts": "WMTS Lager"
+                "wmts": "WMTS Lager",
+                "arcgis" : "ArcGIS Lager"
             },
             "selectLayer": "Välj nivå",
             "selectSubLayer": "Välj undernivå",

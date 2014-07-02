@@ -2,6 +2,12 @@
 
 ## 1.23
 
+### arcgis / ArcGisLayer
+
+Layers of type arcgis now respect layer order properly. 
+
+NOTE! The layertype in JSON/domain has changed from 'arcgislayer' to 'arcgis'
+
 ### core / MapLayerService
 
 Now has a function hasSupportForLayerType(type) which can be used to check if given layer type is supported by the plugins loaded in particular setup.
@@ -10,9 +16,11 @@ Now has a function hasSupportForLayerType(type) which can be used to check if gi
 
 It is now possible to add/edit/delete inspire themes. 
 
-Known issue on delete: layers under deleted theme are removed from browser but NOT from the database. This will be changed so that themes with layers linked to them cannot be removed.
-
 Uses PUT/DELETE HTTP methods for insert/delete with fallback to POST and 'X-HTTP-Method-Override' header if server responds with 'Method not allowed'.
+
+Refactored layertype support validation. 
+
+Added initial support for ArcGIS layertype.
 
 ### divmanazer/Grid
 

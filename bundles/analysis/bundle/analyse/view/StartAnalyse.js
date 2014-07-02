@@ -935,13 +935,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 });
                 toolContainer.find('input').change(closureMagic(option));
 
-                // Hide last one, no no data
+                // Disable last one, if no no data
                 if (i === this.aggreOptions.length - 1) {
                     if (this._getNoDataValue()) {
+                        toolContainer.find('input').prop('disabled', false);
                         toolContainer.find('input').attr('checked', 'checked');
                     } else {
                         toolContainer.find('input').removeAttr('checked');
-                        toolContainer.hide();
+                        toolContainer.find('input').prop('disabled', true);
                     }
                 }
             }
@@ -2045,7 +2046,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 i;
             for (i = 0; i < layers.length; i++) {
                 if (layers[i].hasFeatureData()) {
-                    if (jQuery.isEmptyObject(layers[i].getPropertyTypes())) {
+                    if (jQuery.isEmptyObject(layers[i].getWpsLayerParams())) {
                         me.instance.analyseService.loadWFSLayerPropertiesAndTypes(layers[i].getId());
                     }
                 }

@@ -62,12 +62,12 @@ div.basic_analyse {
         margin-left: 6px;
 
         a {
-            font-size: 150%;
             color: #37B7FF;
             text-decoration: none;
         }
 
         ul {
+             /* FIXME no custom fonts! portal.css sets ul font size and line height, get rid of those first*/
             font-size: 100%;
             line-height: 100%;
             padding: 0;
@@ -215,7 +215,6 @@ div.basic_analyse {
     div.analyse_settings_cont {
 
         label {
-            font-weight: bold;
             margin: 5px 0;
 
             span {
@@ -247,8 +246,9 @@ div.basic_analyse {
 
 }
 
-/* FIXME change these to actual labels... */
+/* FIXME change these to actual labels? */
 .analyse_params_label, .analyse_title_label, .output_color_label, .columns_title_label, .settings_buffer_label, .extra_title_label, .settings_name_label {
+    /* FIXME remove this, I don't think these should be bold */
     font-weight: bold;
     margin: 5px 0;
 }
@@ -285,9 +285,6 @@ label.params_checklabel {
 //    width: 18px !important;
 //} 
 table.layer-icons {
-    font-family: Arial,sans-serif;
-    font-size: 12px;
-    line-height: 18px;
     margin: 0 0 2px;
     width: 30%;
     display: inline-table;

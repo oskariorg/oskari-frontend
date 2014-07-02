@@ -43,9 +43,9 @@ define([
                 this.listenTo(this.model, 'change', this.render);
                 this.listenTo(this.model, 'remove', this.render);
                 //this.model.on('change', this.render, this);
+                this.supportedTypes = this.options.supportedTypes;
                 me.render();
             },
-
             /**
              * Renders layerRowTemplate and calls _renderLayertools
              *
@@ -136,6 +136,7 @@ define([
                     // create AdminLayerSettingsView
                     var settings = new AdminLayerSettingsView({
                         model: me.model,
+                        supportedTypes : me.supportedTypes,
                         instance: me.options.instance,
                         classes: me.classNames,
                         layerTabModel: me.options.layerTabModel
@@ -170,6 +171,7 @@ define([
                 // create AdminLayerSettingsView
                 var settings = new AdminLayerSettingsView({
                     model: subLayer,
+                    supportedTypes : me.supportedTypes,
                     instance: this.options.instance,
                     layerTabModel: this.options.layerTabModel,
                     baseLayerId: parentId,

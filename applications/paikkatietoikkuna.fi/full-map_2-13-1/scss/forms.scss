@@ -1,4 +1,3 @@
-@import '../applicationVariables';
 /* this stylesheet is a copy of liferay related styles - to make paikkatietoikkuna more independent */
 fieldset {
 	border: 1px solid #BFBFBF;
@@ -158,8 +157,9 @@ input.aui-form-validator-error, textarea.aui-form-validator-error, select.aui-fo
 }
 
 input.primary {
+	background-color: #217ad4;
 	background-image: url(../images/blue_button_liuku.png);
-	border-color: unquote("#0000BF #0000DE #0000DE #0000BF");
+	border-color: #0000BF #0000DE #0000DE #0000BF;
 	color: #FFFFFF;
 	text-shadow: 1px 1px #AAF;
 }
@@ -175,6 +175,6 @@ input.focus, textarea.focus, .ie6 input.focus, .ie6 textarea.focus {
 }
 
 .ie .aui-button-disabled input {
-	-ms-filter: unquote("alpha(opacity=50)");
-	filter: unquote("alpha(opacity=50)");
+	-ms-filter: alpha(opacity=50);
+	filter: alpha(opacity=50);
 }
