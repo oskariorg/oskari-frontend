@@ -41,7 +41,9 @@ Also changed hasUI to return true so ControlsPlugin works correctly with publish
 
 ### mapmyplaces/MyPlacesLayerPlugin
 
-Polished My places labels are enabled in published maps and map printouts. From technical point of view they are now rendered in the backend.
+Labels and clustering of My places points are now produced by GeoServer instead of frontend JavaScript. In addition to
+increased stability and efficiency, they are now available also in printouts and published maps. MyPlacesLayerPlugin is
+currently deprecated.
 
 ## 1.22
 
