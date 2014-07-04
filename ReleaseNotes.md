@@ -2,6 +2,10 @@
 
 ## 1.23
 
+### divmanazer/DefaultExtension
+
+An injected empty conf no longer overwrites the basic functionality (default tile/flyout setting).
+
 ### arcgis / ArcGisLayer
 
 Layers of type arcgis now respect layer order properly. 
