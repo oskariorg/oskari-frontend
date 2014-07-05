@@ -77,10 +77,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * BundleInstance protocol method
          */
         start: function () {
-            // extend the default config with injected conf and use the product as actual conf
-            // this way an empty injected conf won't break the expected functionality
-            var conf = jQuery.extend(true, {}, this.defaultConf, this.conf);
-            this.conf = conf;
+            var conf = this.getConfiguration();
                 
             var me = this,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
@@ -227,6 +224,16 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * @method getConfiguration
          */
         getConfiguration: function () {
+            // extend the default config with injected conf and use the product as actual conf
+            // this way an empty injected conf won't break the expected functionality
+            // NOTE! seems loader sets conf for each inheritance step so we need to do this 
+            // each time name conf is undefined or name is changed
+            if(!this.conf || 
+                this.__confMerged === undefined || 
+                this.__confMerged !== this.conf.name) {
+                this.conf = jQuery.extend(true, {}, this.defaultConf, this.conf);
+                this.__confMerged = this.conf.name;
+            }
             return this.conf;
         },
 

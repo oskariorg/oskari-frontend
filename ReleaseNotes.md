@@ -4,7 +4,7 @@
 
 ### divmanazer/DefaultExtension
 
-An injected empty conf no longer overwrites the basic functionality (default tile/flyout setting).
+An injected empty conf no longer overwrites the basic functionality (default tile/flyout setting). getConfiguration() function should be preferred over referencing conf-property directly to ensure there's no issues with the config.
 
 ### arcgis / ArcGisLayer
 
