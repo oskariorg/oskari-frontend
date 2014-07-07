@@ -218,7 +218,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
          * Module protocol method
          */
         getName: function () {
-            return this.conf.name;
+            return this.getConfiguration().name;
         },
         /**
          * @method getConfiguration
