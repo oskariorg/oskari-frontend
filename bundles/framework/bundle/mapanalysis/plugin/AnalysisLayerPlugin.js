@@ -289,7 +289,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
             var me = this;
 
             var openLayerId = 'layer_' + layer.getId();
-            var imgUrl = layer.getWpsUrl() + 'wpsLayerId=' + layer.getWpsLayerId();
+            var imgUrl = layer.getWpsUrl() + layer.getWpsLayerId();
             var layerScales = this.getMapModule()
                 .calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
 
