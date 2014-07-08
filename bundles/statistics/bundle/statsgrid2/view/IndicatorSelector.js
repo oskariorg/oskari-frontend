@@ -291,8 +291,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             // used when populating later on 
             this.__indicatorSelect = select;
             // this gives indicators more space to show title on dropdown
-            jQuery('.chzn-drop').css('width', '298px');
-            jQuery('.chzn-search input').css('width', '263px');
+            indicatorSelector.find('.chzn-drop').css('width', '298px');
+            indicatorSelector.find('.chzn-search input').css('width', '263px');
             return indicatorSelector;
         },
         /**
