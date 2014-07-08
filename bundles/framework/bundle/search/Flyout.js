@@ -318,8 +318,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 resultList.append(al + ':' + nf);
                 return;
             } else {
-                info.append(this.instance.getLocalization('searchResultCount') +
-                    result.totalCount + this.instance.getLocalization('searchResultCount2'));
+                info.append(this.instance.getLocalization('searchResultCount') + ' ' +
+                    result.totalCount + ' ' + this.instance.getLocalization('searchResultCount2'));
                 info.append('<br/>');
 
                 if (result.hasMore) {
@@ -382,8 +382,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
 
             this._populateResultTable(tableBody);
             resultList.append('<div><h3>' +
-                this.instance.getLocalization('searchResults') + result.totalCount +
-                this.instance.getLocalization('searchResultsDescription') + searchKey + '</h3></div>');
+                this.instance.getLocalization('searchResults') + ' ' + result.totalCount + ' ' + 
+                this.instance.getLocalization('searchResultsDescription') + ' ' + searchKey + '</h3></div>');
             resultList.append(table);
         },
 
