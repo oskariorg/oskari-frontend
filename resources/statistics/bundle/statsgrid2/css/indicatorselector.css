@@ -1,0 +1,10 @@
+.statsgrid .indicatorselector #statsgrid-data-source-select {
+	width : 200px;
+}
+/* Chosen overrides these :/ */
+.statsgrid .indicatorselector .indicator-cont .chzn-drop {
+	width : 298px;
+}
+.statsgrid .indicatorselector .indicator-cont .chzn-search input {
+	width : 263px;
+}

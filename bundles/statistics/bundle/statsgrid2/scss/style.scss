@@ -1,0 +1,379 @@
+#contentMap.statsgrid-contentMap {
+  position: relative;
+}
+
+.oskariui-mode-content {
+  height: 100%;
+  background-color: white;
+
+  &.statsgrid-mode {
+    overflow: hidden;
+    height: auto;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+  }
+
+}
+
+.oskariui-left {
+  float: left;
+}
+
+.oskariui-center {
+  float: left;
+}
+
+.statsgrid_100 {
+  height: 100%;
+}
+
+.statsgrid {
+  min-width: 100%;
+  min-height: 100%;
+  height: 100%;
+
+  .statsgrid-table {
+    min-height: 80%;
+    height: 80%;
+    font: 12px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+  }
+
+  .idContainer {
+    margin: 4px;
+    border: 1pt solid #40B0C0;
+    border-radius: 5px;
+    padding: 4px;
+    background-color: #80F0A0;
+    cursor: pointer;
+  }
+
+  .indicator-cont {
+    .icon-info {
+      display: inline-block;
+      margin: 0 0 5px 5px;
+    }
+
+  }
+
+  .municipal-grid {
+    width: 100%;
+    height: 80%;
+  }
+
+  .data-source-select {
+    margin-top: 5px;
+  }
+
+  .parameters-cont {
+    min-height: 115px;
+
+    button {
+      margin: 8px 0 10px 8px;
+    }
+
+    button:disabled, input:disabled, select:disabled {
+      opacity: 0.25;
+    }
+
+    .cannot-display-indicator {
+      margin-left: 10px;
+    }
+  }
+
+  .selector-cont {
+    clear: both;
+
+    label {
+      display: inline-block;
+      width: 80px;
+      padding: 10px;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    select {
+      &.indi {
+        width: 200px;
+      }
+
+      &.parameter {
+        width: 100px;
+      }
+
+    }
+
+  }
+
+  .selectors-container {
+    position: relative;
+    height: 20%;
+    min-height: 157px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ie-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box; 
+    min-width: 470px;
+
+    .indisel {
+      display: inline-block;
+    }
+
+    .new-indicator-cont {
+      float: left;
+      margin-top: 8px;
+      padding-left: 10px;
+
+      input {
+        float: right;
+        margin: 0px;
+      }
+    }
+
+  }
+
+}
+
+.statsgrid-csv-button {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+}
+
+.statsgrid-variable {
+  float: left;
+  clear: both;
+}
+
+.statsgrid-totals-label {
+  font-weight: bold;
+}
+
+.statsgrid-show-total-selects label,
+.statsgrid-show-row-selects label {
+  margin-left: 5px;
+}
+
+.statsgrid-show-row-selects {
+  border-top: solid 1px black;
+  padding-top: 5px;
+}
+/**
+ * Style the drop-down menu here since the plugin stylesheet mostly contains structural CSS.
+ */
+
+.slick-header-menu {
+  border: 1px solid #999;
+  background: #fcfcfc;
+  padding: 2px;
+  -moz-box-shadow: 2px 2px 2px silver;
+  -webkit-box-shadow: 2px 2px 2px silver;
+  -o-box-shadow: 2px 2px 2px silver;
+  -ms-box-shadow: 2px 2px 2px silver;
+  box-shadow: 2px 2px 2px silver;
+  min-width: 100px;
+  z-index: 20;
+
+  .slick-header-menuitem {
+    padding: 2px 4px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+
+    &:hover {
+      border-color: silver;
+      background: white;
+    }
+
+  }
+
+}
+
+.slick-header-menuitem-disabled {
+  border-color: transparent !important;
+  background: inherit !important;
+}
+
+.icon-help {
+  background-image: url(/Oskari/libraries/slickgrid/images/help.png);
+}
+
+.statsgrid-highlight-row {
+  background-color: yellow;
+}
+
+/* Filter popup */
+.divmanazerpopup {
+
+  .filter-row {
+    clear: both;
+    padding-top: 10px;
+  }
+
+  .filter-label {
+    float: left;
+    width: 100px;
+    font-weight: bold;
+  }
+
+  .filter-value {
+    float: left;
+    margin-left: 10px;
+  }
+
+  .filter-container:after {
+      content:"";
+      display:table;
+      clear:both;
+  }
+
+  .filter-select {
+    width: 195px;
+  }
+
+  .filter-input {
+    width: 70px;
+    float: left;
+    margin-top: 10px;
+  }
+
+  .filter-between {
+    display: none;
+    float: left;
+    margin: 20px 10px;
+    width: 10px;
+    text-align: center;
+  }
+ 
+}
+
+div.filter-region-select {
+
+  select {
+    width: 350px;
+  }
+
+  ul {
+    margin: 0 !important;
+  }
+
+}
+
+.statsgrid-remove-indicator {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 16px !important;
+  height: 16px !important;
+}
+.statsgrid-no-indicator-data {
+  position: absolute;
+  top: inherit;
+  right: 30px;
+  width: 20px !important;
+  height: 20px !important;
+}
+.statsgrid-hide-header {
+  visibility: hidden;
+}
+
+form.add-indicator {
+
+  h2 {
+    margin-left: 10px;
+  }
+
+  fieldset {
+    border: 0;
+    margin: 0;
+    padding: 10px;
+
+    legend {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    label {
+        clear: left;
+        float: left;
+        display: block;
+        font-size: 14px;
+        line-height: 16px;
+        width: 150px;
+    }
+
+    input, select {
+        clear: right;
+        display: block;
+        float: left;
+        margin-left: 0;
+    }
+
+    button {
+        float: right;
+        margin-left: 15px;
+    }
+
+    textarea {
+      display: block;
+      height: 100px;
+      width: 100%;
+      margin-bottom: 5px;
+      clear: both;
+    }
+
+  }
+
+  hr {
+    border: solid 1px black;
+    margin: 0 0 10px;
+  }
+
+  .municipalities {
+    position: absolute;
+    bottom: 40px;
+    top: 510px;
+    left: -10px;
+    width: 100%;
+    overflow: auto;
+    margin: 0;
+
+    .municipality-row {
+
+      label {
+        display: inline-block;
+        padding-left: 10px;
+        width: 150px;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+    }
+
+  }
+
+  .form-submit {
+    height: 40px;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+    padding: 0;
+
+    button {
+        float: right;
+        margin: 5px;
+
+        &.cancel-form-button {
+            float: left;
+        }
+
+    }
+  }
+}
+
+.indicator-name-link {
+  color: #0085d1;
+  cursor: pointer;
+}
