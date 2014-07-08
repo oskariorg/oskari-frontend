@@ -1,12 +1,6 @@
 define([
         'text!_bundle/templates/adminTypeSelectTemplate.html',
         'text!_bundle/templates/adminLayerSettingsTemplate.html',
-
-        'text!_bundle/templates/wmsLayerSettingsTemplateHeader.html',
-        'text!_bundle/templates/wmsLayerSettingsTemplateFooter.html',
-        'text!_bundle/templates/wmtsLayerSettingsTemplateHeader.html',
-        'text!_bundle/templates/wmtsLayerSettingsTemplateFooter.html',
-
         'text!_bundle/templates/adminGroupSettingsTemplate.html',
         'text!_bundle/templates/group/subLayerTemplate.html',
         'text!_bundle/templates/capabilitiesTemplate.html',
@@ -16,12 +10,6 @@ define([
     function (
         TypeSelectTemplate,
         LayerSettingsTemplate,
-
-        LayerSettingsTemplateWMSHeader,
-        LayerSettingsTemplateWMSFooter,
-        LayerSettingsTemplateWMTSHeader,
-        LayerSettingsTemplateWMTSFooter,
-
         GroupSettingsTemplate,
         SubLayerTemplate,
         CapabilitiesTemplate,
@@ -78,8 +66,6 @@ define([
                 this.typeSelectTemplate = _.template(TypeSelectTemplate);
                 this.layerTemplate = _.template(LayerSettingsTemplate);
 
-                this.__setupSupportedLayerTypes();
-
                 this.groupTemplate = _.template(GroupSettingsTemplate);
                 this.subLayerTemplate = _.template(SubLayerTemplate);
                 this.capabilitiesTemplate = _.template(CapabilitiesTemplate);
@@ -91,33 +77,10 @@ define([
                     this.listenTo(this.model, 'change', this.render);
                     //this.model.on('change', this.render, this);
                 }
+                var me = this;
 
-
+                this.supportedTypes = this.options.supportedTypes;
                 this.render();
-            },
-            __setupSupportedLayerTypes : function() {
-
-                // generic list of layertypes supported
-                this.supportedTypes = [
-                    {id : "wmslayer", localeKey : "wms"},
-                    {id : "wmtslayer", localeKey : "wmts"}
-                ];
-                // filter out ones that are not registered in current appsetup
-                var sandbox = this.instance.sandbox,
-                    mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                this.supportedTypes = _.filter(this.supportedTypes, function(type){ 
-                    return mapLayerService.hasSupportForLayerType(type.id) 
-                });
-                // setup templates for allSupported
-                // TODO: maybe require only ones supported?
-                this.layerTemplateHeader = {
-                    "wmslayer" : _.template(LayerSettingsTemplateWMSHeader),
-                    "wmtslayer" : _.template(LayerSettingsTemplateWMTSHeader)
-                };
-                this.layerTemplateFooter = {
-                    "wmslayer" : _.template(LayerSettingsTemplateWMSFooter),
-                    "wmtslayer" : _.template(LayerSettingsTemplateWMTSFooter)
-                };
             },
 
             /**
@@ -145,10 +108,7 @@ define([
                         me.createGroupForm('baseName');
                     } else if (me.model.isGroupLayer()) {
                         me.createGroupForm('groupName');
-                    } else if (me.model.isLayerOfType('WMS')) {
-                        me.$el.empty();
-                        me.createLayerForm();
-                    } else if (me.model.isLayerOfType('WMTS')) {
+                    } else {
                         me.$el.empty();
                         me.createLayerForm();
                     }
@@ -185,17 +145,26 @@ define([
                 jQuery('.layer-type-wrapper').remove();
 
                 var layerType = e.currentTarget.value;
-                // Create a normal layer
-                if (layerType === 'wmslayer') {
-                    this.createLayerForm(layerType);
-                } else if (layerType === 'wmtslayer') {
-                    this.createLayerForm(layerType);
-                } else if (layerType === 'base' || layerType === 'groupMap') {
+                if (layerType === 'base' || layerType === 'groupMap') {
                     // Create a base or a group layer
                     var groupTitle = (layerType === 'base' ? 'baseName' : 'groupName');
-
                     this.createGroupForm(groupTitle, e);
                 }
+                else {
+                    // Create a normal layer
+                    this.createLayerForm(layerType);
+                }
+            },
+            __isSupportedLayerType : function(layerType) {
+                var types = _.map(this.supportedTypes, function(type){ 
+                    return type.id 
+                });
+                return _.contains(types, layerType);
+            },
+            __getLayerTypeData : function(layerType) {
+                return _.find(this.supportedTypes, function(type) {
+                    return type.id === layerType;
+                }) ;
             },
 
             createLayerForm: function (layerType) {
@@ -209,13 +178,18 @@ define([
                 }
                 // make sure we have correct layer type (from model)
                 layerType = me.model.getLayerType() + 'layer';
+                if(!this.__isSupportedLayerType(layerType)) {
+                    me.$el.append(me.instance.getLocalization('errors').layerTypeNotSupported + me.model.getLayerType());
+                    return;
+                }
 
                 // This propably isn't the best way to get reference to inspire themes
-                var inspireGroups = this.instance.models.inspire.getGroupTitles();
+                var inspireGroups = this.instance.models.inspire.getGroupTitles(),
+                   layerTypeData = me.__getLayerTypeData(layerType);
                 me.$el.append(me.layerTemplate({
                     model: me.model,
-                    header : me.layerTemplateHeader[layerType],
-                    footer : me.layerTemplateFooter[layerType],
+                    header : layerTypeData.headerTemplate,
+                    footer : layerTypeData.footererTemplate,
                     instance: me.options.instance,
                     inspireThemes: inspireGroups,
                     isSubLayer: me.options.baseLayerId,

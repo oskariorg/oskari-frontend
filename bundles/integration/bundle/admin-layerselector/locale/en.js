@@ -22,6 +22,7 @@ Oskari.registerLocalization({
             "generic": "There was an error in the system. Try again later.",
             "loadFailed": "Error loading map layers. Reload the page and choose admin map layers.",
             "noResults": "The search found no results..",
+            "layerTypeNotSupported": "Layer type is not yet supported: ",
             "not_empty": "There are map layers associated to the theme you're trying to remove. Please select another theme for the map layers and try again."
         },
         "loading": "Loading...",
@@ -66,7 +67,8 @@ Oskari.registerLocalization({
             "layertypes" : {
                 "wms": "WMS layer",
                 "wfs": "WFS layer",
-                "wmts": "WMTS layer"
+                "wmts": "WMTS layer",
+                "arcgis" : "ArcGIS layer"
             },
             "selectLayer": "Select layer",
             "selectSubLayer": "Select sublayer",

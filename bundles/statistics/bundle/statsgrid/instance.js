@@ -11,7 +11,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
      */
 
     function () {
-        this.conf = {
+        // these will be used for this.conf if nothing else is specified (handled by DefaultExtension)
+        this.defaultConf = {
             "name": "StatsGrid",
             "sandbox": "sandbox",
             "stateful": true,
@@ -23,22 +24,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             layerId: null
         };
     }, {
-        "start": function () {
-            var me = this,
-                conf = this.conf,
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName);
-
-            me.sandbox = sandbox;
-            sandbox.register(this);
-
-            /* stateful */
-            if (conf && conf.stateful === true) {
-                sandbox.registerAsStateful(this.mediator.bundleId, this);
-            }
-
-            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
-            sandbox.request(this, request);
+        "afterStart": function (sandbox) {
+            var me = this;
 
             var tooltipRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.TooltipContentRequestHandler', this);
             sandbox.addRequestHandler('StatsGrid.TooltipContentRequest', tooltipRequestHandler);

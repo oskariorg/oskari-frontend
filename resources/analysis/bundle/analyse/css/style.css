@@ -31,10 +31,10 @@ div.basic_analyse div.analyse-select-featurelist {
   display: inline;
   margin-left: 6px; }
   div.basic_analyse div.analyse-select-featurelist a {
-    font-size: 150%;
     color: #37B7FF;
     text-decoration: none; }
   div.basic_analyse div.analyse-select-featurelist ul {
+    /* FIXME no custom fonts! portal.css sets ul font size and line height, get rid of those first*/
     font-size: 100%;
     line-height: 100%;
     padding: 0;
@@ -104,7 +104,6 @@ div.basic_analyse div.form div.field input, div.basic_analyse div.form div.field
 div.basic_analyse div.tool input, div.basic_analyse div.drawFilter input, div.basic_analyse div.analyse_settings_cont input, div.basic_analyse div.analyse_areas_and_sectors_cont input {
   margin-right: 10px; }
 div.basic_analyse div.analyse_settings_cont label {
-  font-weight: bold;
   margin: 5px 0; }
   div.basic_analyse div.analyse_settings_cont label span {
     clear: both;
@@ -123,8 +122,9 @@ div.basic_analyse div.analyse_settings_cont label {
   .analyse_radiolabel:hover, .analyse_checklabel:hover {
     background-color: #eee; }
 
-/* FIXME change these to actual labels... */
+/* FIXME change these to actual labels? */
 .analyse_params_label, .analyse_title_label, .output_color_label, .columns_title_label, .settings_buffer_label, .extra_title_label, .settings_name_label {
+  /* FIXME remove this, I don't think these should be bold */
   font-weight: bold;
   margin: 5px 0; }
 
@@ -148,9 +148,6 @@ label.params_checklabel {
   overflow: hidden; }
 
 table.layer-icons {
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-  line-height: 18px;
   margin: 0 0 2px;
   width: 30%;
   display: inline-table; }

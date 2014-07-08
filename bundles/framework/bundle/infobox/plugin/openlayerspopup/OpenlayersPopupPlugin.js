@@ -185,10 +185,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 };
 
                 popup.moveTo = function (px) {
-                    if ((px !== null && px !== undefined) && (me.div !== null && me.div !== undefined)) {
-                        me.div.style.left = px.x + "px";
+                    if ((px !== null && px !== undefined) && (this.div !== null && this.div !== undefined)) {
+                        this.div.style.left = px.x + "px";
                         var topy = px.y - 20;
-                        me.div.style.top = topy + "px";
+                        this.div.style.top = topy + "px";
                     }
                 };
 

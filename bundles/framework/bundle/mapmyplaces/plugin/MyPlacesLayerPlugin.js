@@ -647,7 +647,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                             var featureFilter = "";
 
                             for (i = 0; i < clusteredFeatures.length; i++) {
-                                featureFilter = featureFilter + "+AND+id<>'" + clusteredFeatures[i] + "'";
+//                                featureFilter = featureFilter + "+AND+id<>'" + clusteredFeatures[i] + "'";
                             }
 
                             /*
@@ -666,7 +666,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                                 openLayer.mergeNewParams({
                                     'myFeatureNames': featureFilter
                                 });
-                                openLayer.redraw();
+//                                openLayer.redraw();
                             }
                         }
                     }
@@ -797,9 +797,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                 this._map.setLayerIndex(openLayer, 0);
             }
 
-            if (myPlacesService) {
+            /* if (myPlacesService) {
                 this._addPointClusters(myPlacesService, layer.getId(), clusterLayer);
-            }
+            } */
 
         },
         /**
