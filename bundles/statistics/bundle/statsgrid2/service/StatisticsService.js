@@ -35,6 +35,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
         getName: function () {
             return this.__name;
         },
+        getSandbox: function () {
+            return this.sandbox;
+        },
 
         /**
          * @method init
