@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.IndicatorSelectedE
          * @return {String} unique key for the indicator selection
          */
         getKey : function() {
-            var separator =  + '||';
+            var separator = '||';
             var key = this.getDatasourceId() + separator + this.getIndicatorId();
             var opts = this.getOptions();
             if(opts) {

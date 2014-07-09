@@ -57,8 +57,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             container.append(el);
 
             var btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SearchButton');
+            var sb = me.service.getSandbox();
             btn.setHandler(function() {
-            	alert(JSON.stringify(me.getSelections()));
+                var opts = me.getSelections();
+                // Notify other components of indicator selection
+                var eventBuilder = sb.getEventBuilder('StatsGrid.IndicatorSelectedEvent');
+                if (eventBuilder) {
+                    var evt = eventBuilder(opts.datasource, opts.indicator, opts.options);
+                    sb.notifyAll(evt);
+                }
             });
             btn.insertTo(el);
             this.__indicatorButton = btn;
