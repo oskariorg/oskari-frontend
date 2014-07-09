@@ -17,6 +17,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
     	},
 	    render : function(container, instance) {
 	    	this.indicatorSelector.render(container);
+            this.grid.render(container);
 	    }
 
     }

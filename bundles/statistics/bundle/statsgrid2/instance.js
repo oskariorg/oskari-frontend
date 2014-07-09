@@ -35,22 +35,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                     "fi" : "Kunta"
                 }
             }   
-            ],
-            "dataSources" : [
-            {
-                "id" : 1,
-                "locale" : {
-                    "fi" : "SotkaNet"
-                },
-                "indicatorURL" : Oskari.getSandbox().getAjaxUrl() + "action_route=GetSotkaData&action=indicators&version=1.1",
-                "indicatorMetadataURL" : Oskari.getSandbox().getAjaxUrl() + "action_route=GetSotkaData&action=indicator_metadata&version=1.1&indicator=",
-                "indicatorParams" : 
-                [{
-                    "name" : "year"
-                },{
-                    "name" : "sex"
-                }]
-            }
             ]
         };
         this.state = {
@@ -66,8 +50,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
 
         },
         "getService" : function() {
+            // previously known as this.statsService
             if(!this.__service) {
-                this.__service = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService', this.getSandbox(), this.conf.dataSources);
+                this.__service = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService', this.getSandbox());
             }
             return this.__service;
 
@@ -83,12 +68,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             var locale = me.getLocalization(),
                 mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             this.mapModule = mapModule;
-
-            // create the StatisticsService for handling ajax calls
-            // and common functionality.
-            var statsService = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService', me);
-            sandbox.registerService(statsService);
-            this.statsService = statsService;
 
             // Handles user indicators
             var userIndicatorsService = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.UserIndicatorsService', me);

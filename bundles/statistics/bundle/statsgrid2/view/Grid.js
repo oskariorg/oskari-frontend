@@ -13,7 +13,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
     {
     	"__templates" : {
     		
-    	}
+    	},
+        render : function(container) {
 
+        }
     }
 );

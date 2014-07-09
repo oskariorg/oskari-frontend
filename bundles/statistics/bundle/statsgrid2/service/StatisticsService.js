@@ -12,16 +12,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
      *
      */
 
-    function (sandbox, dataSources) {
+    function (sandbox) {
         this.sandbox = sandbox;
         this.cache = {};
 
         this.__dataSources = [];
-        var me = this;
-        // loop possible param dataSources
-        _.each(dataSources || [], function(item) {
-            me.addDataSource(item);
-        });
         this.__indicators = {};
         this.cacheSize = 0;
     }, {
@@ -55,8 +50,28 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 this.sandbox.printWarn('Provide callback for StatisticsService.getDataSources()');
                 return;
             }
-            // TODO: maybe ajax?
-            callback(this.__dataSources);
+            var me = this,
+                url = Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalDatasources";
+
+            jQuery.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: url,
+                success: function (pResp) {
+                    if(!pResp || pResp.error) {
+                        callback();
+                        return;
+                    }
+
+                    _.each(pResp.dataSources || [], function(item) {
+                        me.addDataSource(item);
+                    });
+                    callback(me.__dataSources);
+                },
+                error: function (jqXHR, textStatus) {
+                    callback();
+                }
+            });
         },
         getDataSource : function(id) {
             if(!id) {

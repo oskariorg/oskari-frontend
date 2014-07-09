@@ -76,7 +76,7 @@ function(data) {
     },
     /**
      * @method getIndicatorMetadataUrl
-     * Returns url to get indicators for this datasource
+     * Returns url to get metadata for given indicator in this datasource
      * @return {String} 
      */
     getIndicatorMetadataUrl : function(id) {
@@ -84,6 +84,17 @@ function(data) {
     		return Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalIndicatorMetadata&datasource=" + this.getId() + "&id=" + id;
     	}
     	return this.data.indicatorMetadataURL + id;
+    },
+    /**
+     * @method getIndicatorValuesUrl
+     * Returns url to get values for given indicator in this datasource
+     * @return {String} 
+     */
+    getIndicatorValuesUrl : function(id) {
+        if(!this.data.indicatorValuesURL) {
+            return Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalIndicatorValues&datasource=" + this.getId() + "&id=" + id;
+        }
+        return this.data.indicatorValuesURL + id;
     }
 
 });
