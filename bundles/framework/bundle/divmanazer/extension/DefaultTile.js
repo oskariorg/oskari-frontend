@@ -62,6 +62,9 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          * called by host when the tile is to be removed
          */
         stopPlugin: function () {
+            if (this.container && this.container.empty) {
+                this.container.empty();
+            }
         },
 
         /**
@@ -102,6 +105,25 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          */
         getState: function (state) {
             return this.state;
+        },
+        /**
+         * Enables or disables the tile
+         * @param {Boolean} blnEnabled true to enable.
+         */
+        setEnabled: function (blnEnabled) {
+            if(!!blnEnabled) {
+                this.container.removeClass('disabled');
+            }
+            else {
+                this.container.addClass('disabled');
+            }
+        },
+        /**
+         * Returns true if tile is enabled
+         * @return {Boolean} true if enabled
+         */
+        isEnabled: function () {
+            return !this.container.hasClass('disabled');
         }
 
     }, {
