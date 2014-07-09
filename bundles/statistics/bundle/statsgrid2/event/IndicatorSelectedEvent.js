@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.IndicatorSelectedE
      * @static
      */
 
-    function (indicatorId, datasourceId, options) {
+    function (datasourceId, indicatorId, options) {
         this.indicatorId = indicatorId;
         this.datasourceId = datasourceId;
         this.options = options;
