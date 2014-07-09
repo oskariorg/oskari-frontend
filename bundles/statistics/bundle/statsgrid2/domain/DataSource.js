@@ -70,7 +70,7 @@ function(data) {
      */
     getIndicatorListUrl : function() {
     	if(!this.data.indicatorURL) {
-    		return Oskari.getSandbox().getAjaxUrl() + "action_route=Indicators&datasource=" + this.getId();
+    		return Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalIndicators&datasource=" + this.getId();
     	}
     	return this.data.indicatorURL;
     },
@@ -81,7 +81,7 @@ function(data) {
      */
     getIndicatorMetadataUrl : function(id) {
     	if(!this.data.indicatorMetadataURL) {
-    		return Oskari.getSandbox().getAjaxUrl() + "action_route=IndicatorMetadata&datasource=" + this.getId() + "&id=" + id;
+    		return Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalIndicatorMetadata&datasource=" + this.getId() + "&id=" + id;
     	}
     	return this.data.indicatorMetadataURL + id;
     }
