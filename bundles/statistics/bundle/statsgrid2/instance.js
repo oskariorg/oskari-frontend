@@ -74,7 +74,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
         },
         "afterStart": function (sandbox) {
             var me = this;
-
             var tooltipRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.TooltipContentRequestHandler', this);
             sandbox.addRequestHandler('StatsGrid.TooltipContentRequest', tooltipRequestHandler);
 
@@ -153,9 +152,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             }
 
             this.setState(this.state);
-            this._enableTile();
+            this._enableTile(true);
         },
         "eventHandlers": {
+            'StatsGrid.IndicatorSelectedEvent': function (event) {
+                alert('Indicator selected ' + event.getKey());
+            },
             /**
              * @method userinterface.ExtensionUpdatedEvent
              */
@@ -196,14 +198,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
              */
             'MapLayerEvent': function (event) {
                 // Enable tile when stats layer is available
-                this._enableTile();
+                // FIXME: check for statslayer instead of assuming that its there when the event is received
+                this._enableTile(true);
             }
         },
-        _enableTile: function () {
+        _enableTile: function (blnEnable) {
             var layerPresent = this._isLayerPresent(),
                 tile = this.plugins['Oskari.userinterface.Tile'];
             if (layerPresent && tile) {
-                tile.enable();
+                tile.setEnabled(blnEnable);
             }
         },
         isLayerVisible: function () {

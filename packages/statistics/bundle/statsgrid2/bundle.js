@@ -50,13 +50,13 @@ Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/bundle/statsgrid2/event/IndicatorSelectedEvent.js"
             }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/statistics/bundle/statsgrid2/Tile.js"
+            }, {
                 "type": "text/css",
                 "src": "../../../../resources/statistics/bundle/statsgrid2/css/indicatorselector.css"
 
                 // /MODIFIED IN STATSGRID2!!!!!
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/statistics/bundle/statsgrid2/Tile.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/statistics/bundle/statsgrid2/StatsView.js"

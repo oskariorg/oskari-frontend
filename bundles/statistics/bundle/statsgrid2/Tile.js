@@ -11,11 +11,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.Tile',
      *          instance reference to component that created the tile
      */
 
-    function (instance) {
-        this.instance = instance;
-        this.container = null;
-        this.template = null;
-    }, {
+    function () { }, {
         /**
          * @method getName
          * @return {String} the name for the component
@@ -36,49 +32,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.Tile',
          */
         setEl: function (el, width, height) {
             this.container = jQuery(el);
-            // disable until we get defaultlayer
-            this.disable();
-        },
-        /**
-         * @method startPlugin
-         * Interface method implementation
-         */
-        startPlugin: function () {},
-        /**
-         * @method stopPlugin
-         * Interface method implementation, clears the container
-         */
-        stopPlugin: function () {
-            if (this.container && this.container.empty) {
-                this.container.empty();
-            }
-        },
-        /**
-         * @method getTitle
-         * @return {String} localized text for the title of the tile
-         */
-        getTitle: function () {
-            return this.instance.getLocalization().tile.title;
-        },
-        /**
-         * @method refresh
-         * Creates the UI for a fresh start
-         */
-        refresh: function () {
-        },
-        disable: function () {
-            this.container.addClass('disabled');
-        },
-        enable: function () {
-            this.container.removeClass('disabled');
-        },
-        isEnabled: function () {
-            return !this.container.hasClass('disabled');
+            // disable on start
+            this.setEnabled(false);
         }
     }, {
         /**
-         * @property {String[]} protocol
+         * @property {String[]} extend
          * @static
          */
-        'protocol': ['Oskari.userinterface.Tile']
+        "extend": ["Oskari.userinterface.extension.DefaultTile"]
     });
