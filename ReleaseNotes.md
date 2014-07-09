@@ -6,6 +6,8 @@
 
 An injected empty conf no longer overwrites the basic functionality (default tile/flyout setting). getConfiguration() function should be preferred over referencing conf-property directly to ensure there's no issues with the config.
 
+DefaultTile now has methods setEnabled(bln) and isEnabled() for disabling/enabling the tile.
+
 ### arcgis / ArcGisLayer
 
 Layers of type arcgis now respect layer order properly. 
