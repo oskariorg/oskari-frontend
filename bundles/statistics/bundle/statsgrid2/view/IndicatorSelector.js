@@ -40,7 +40,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
 									'<label for="statsgrid-indicator-select"></label>' + 
 									'<select id="statsgrid-indicator-select" name="indi" class="indi"><option value="" selected="selected"></option></select>' + 
 								'</div>',
-			indicatorOptionSelector : '<div class="selector-cont"><label></label><select></select></div>'
+			indicatorOptionSelector : '<div class="selector-cont"><label></label><select></select></div>',
+            metadataPopup : '<div><h4 class="indicator-msg-popup-title"></h4><p class="indicator-msg-popup-title"></p><br/><h4 class="indicator-msg-popup-source"></h4><p class="indicator-msg-popup-source"></p></div>'
     	},
 
     	render : function(container) {
@@ -88,7 +89,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             this.setIndicators([]);
         	var ds = this.service.getDataSource(id);
             if (!ds)  {
-            	alert("Couldn't find Datasource for id " + id);
+            	//alert("Couldn't find Datasource for id " + id);
             	return;
             }
             var me = this;
@@ -204,12 +205,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 meta = indicator.getMetadata();
             // append this indicator
             indicatorCont.append(infoIcon);
+
             // show meta data
             infoIcon.click(function (e) {
                 var lang = Oskari.getLang(),
-                    desc = '<h4 class="indicator-msg-popup">' + me._locale.stats.descriptionTitle + 
-                    	'</h4><p>' + meta.description[lang] + '</p><br/><h4 class="indicator-msg-popup">' + me._locale.stats.sourceTitle + 
-                    	'</h4><p>' + meta.organization.title[lang] + '</p>';
+                    desc = jQuery(me.__templates.metadataPopup);
+
+                desc.find('h4.indicator-msg-popup-title').append(me._locale.stats.descriptionTitle);
+                desc.find('p.indicator-msg-popup-title').append(meta.description[lang]);
+                desc.find('h4.indicator-msg-popup-source').append(me._locale.stats.sourceTitle);
+                desc.find('p.indicator-msg-popup-source').append(meta.organization.title[lang]);
                 me.showMessage(meta.title[lang], desc);
             });
         },
