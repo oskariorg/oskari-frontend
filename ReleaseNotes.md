@@ -8,6 +8,30 @@ An injected empty conf no longer overwrites the basic functionality (default til
 
 DefaultTile now has methods setEnabled(bln) and isEnabled() for disabling/enabling the tile.
 
+Added DefaultModule to get boilerplate methods through inheritance. Based on DefaultExtension but removed flyout/tile/view methods. Usage example:
+
+```javascript
+Oskari.clazz.define('Oskari.mynamespace.bundle.mybundle.MyClass',
+    function () {
+        this.start();
+    },
+    {
+        "name" : "mybundle.MyClass",
+        afterStart : function(sandbox) {
+
+        },
+        "eventHandlers": {
+            "AfterMapMoveEvent" : function(e) {
+                console.log(e);
+            }
+        }
+    },
+    {
+        "extend" : ['Oskari.userinterface.extension.DefaultModule']
+    }
+);
+```
+
 ### arcgis / ArcGisLayer
 
 Layers of type arcgis now respect layer order properly. 

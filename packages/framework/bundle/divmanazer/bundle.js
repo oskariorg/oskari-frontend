@@ -161,6 +161,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/bundle/divmanazer/extension/DefaultExtension.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/extension/DefaultModule.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/divmanazer/extension/DefaultView.js"
             }, {
                 "type": "text/javascript",
