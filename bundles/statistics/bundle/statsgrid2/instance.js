@@ -11,13 +11,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
      */
 
     function () {
-        this.defaultConf = {
-            "name": "StatsGrid",
-            "sandbox": "sandbox",
-            "stateful": true,
-            "tileClazz": "Oskari.statistics.bundle.statsgrid.Tile",
-            "viewClazz": "Oskari.statistics.bundle.statsgrid.StatsView",
-
+        /*
             "regionCategories" : [
             {
                 "id" : 1,
@@ -36,7 +30,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 }
             }   
             ]
-        };
+        */
         this.state = {
             indicators: [],
             layerId: null
