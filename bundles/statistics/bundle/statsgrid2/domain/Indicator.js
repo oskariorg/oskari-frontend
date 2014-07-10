@@ -109,17 +109,4 @@ function(data) {
     getMetadata : function() {
         return this.metadata;
     }
-    /*
-    ,
-     * @method getIndicatorUrl
-     * Returns url to get indicators for this datasource
-     * @return {String} 
-    getDataUrl : function() {
-    	if(!this.data.indicatorURL) {
-    		return Oskari.getSandbox().getAjaxUrl() + "action_route=IndicatorData";
-    	}
-    	return this.data.indicatorURL;
-    }
-
-     */
 });

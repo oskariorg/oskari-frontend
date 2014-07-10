@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
 	        var optionsContainer = this.getIndicatorParamsContainer(),
 	         	ds = this.getActiveDatasource();
 
-	        this.service.getIndicator(ds.getId(), id, function(indicator) {
+	        this.service.getIndicatorMetadata(ds.getId(), id, function(indicator) {
 	        	if(!indicator) {
 	        		// something went wrong
 	        	}

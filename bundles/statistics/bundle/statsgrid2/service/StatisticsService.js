@@ -17,6 +17,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
         this.cache = {};
 
         this.__dataSources = [];
+        this.__regionCategories = [];
         this.__indicators = {};
         this.cacheSize = 0;
     }, {
@@ -88,18 +89,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
             }
             return ds;
         },
-        getIndicator : function(datasource, id, callback) {
+        getIndicatorMetadata : function(datasource, id, callback) {
             if(!datasource || !id) {
-                this.sandbox.printWarn('StatisticsService.getIndicator() with no datasource or id, returning null');
-                return null;
+                this.sandbox.printWarn('StatisticsService.getIndicatorMetadata() with no datasource or id, returning null');
+                callback();
+                return;
             }
-            var indicator =  _.find(this.__indicators[datasource], function(item) {
-                // normalize to strings
-                return '' + item.getId() === '' + id;
-            });
-            if(!indicator) {
-                this.sandbox.printWarn('Indicator with id ' + id + ' not found');
-            }
+            var indicator =  this._findIndicator(datasource, id);
             if(indicator.getMetadata()) {
                 callback(indicator);
                 return;
@@ -116,6 +112,30 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                     }
                     indicator.setMetadata(pResp);
                     callback(indicator);
+                },
+                error: function (jqXHR, textStatus) {
+                    callback();
+                }
+            });
+        },
+        getIndicatorValue : function(datasource, id, options, callback) {
+            if(!datasource || !id) {
+                this.sandbox.printWarn('StatisticsService.getIndicatorValue() with no datasource or id, returning null');
+                callback();
+                return;
+            }
+            var indicator =  this._findIndicator(datasource, id);
+            var url = this.getDataSource(datasource).getIndicatorValuesUrl(id);
+            jQuery.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: url,
+                success: function (pResp) {
+                    if(!pResp || pResp.error) {
+                        callback();
+                        return;
+                    }
+                    callback(pResp);
                 },
                 error: function (jqXHR, textStatus) {
                     callback();
@@ -162,6 +182,95 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
             });
             this.__indicators[datasourceId] = parsed;
             callback(parsed);
+        },
+        getRegionCategories : function(callback) {
+            if(!callback) {
+                this.sandbox.printWarn('Provide callback for StatisticsService.getRegionCategories()');
+                return;
+            }
+            // return cached if available
+            if(this.__regionCategories.length > 0) {
+                callback(this.__regionCategories);
+                return;
+            }
+            var me = this,
+                url = Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalIndicatorRegionCategories";
+
+            jQuery.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: url,
+                success: function (pResp) {
+                    if(!pResp || pResp.error) {
+                        callback();
+                        return;
+                    }
+                    me.__handleRegionCategoriesResponse(pResp);
+                    callback(me.__regionCategories);
+                },
+                error: function (jqXHR, textStatus) {
+                    callback();
+                }
+            });
+        },
+        __handleRegionCategoriesResponse : function(response) {
+            var parsed = [];
+            _.each(response, function(data) {
+                var category = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.domain.RegionCategory', data);
+                parsed.push(category);
+            });
+            this.__regionCategories = parsed;
+        },
+        getRegions : function(categoryId, callback) {
+            if(!categoryId) {
+                this.sandbox.printWarn('StatisticsService.getIndicatorMetadata() with no categoryId, returning null');
+                callback();
+                return;
+            }
+            var category = _.find(this.__regionCategories, function(item) {
+                // normalize to strings
+                return '' + item.getId() === '' + categoryId;
+            });
+            if(category.getRegions().length > 0) {
+                callback(category);
+                return;
+            }
+            var me = this,
+                url = Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalIndicatorRegions&id=" + categoryId;
+            jQuery.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: url,
+                success: function (pResp) {
+                    if(!pResp || pResp.error) {
+                        callback();
+                        return;
+                    }
+                    category.setRegions(pResp);
+                    callback(category);
+                },
+                error: function (jqXHR, textStatus) {
+                    callback();
+                }
+            });
+        },
+        /**
+         * Find indicator, expects indicators to be loaded into this.__indicators[datasource]
+         * @param  {[type]} datasource [description]
+         * @param  {[type]} id         [description]
+         * @return {[type]}            [description]
+         */
+        _findIndicator : function(datasource, id) {
+
+            var indicator = _.find(this.__indicators[datasource], function(item) {
+                // normalize to strings
+                return '' + item.getId() === '' + id;
+            });
+
+            if(!indicator) {
+                this.sandbox.printWarn('Indicator with id ' + id + ' not found');
+            }
+            return indicator;
         },
 
         /**
