@@ -11,26 +11,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
      */
 
     function () {
-        /*
-            "regionCategories" : [
-            {
-                "id" : 1,
-                "layerId" : 123, // 'oskari:seutukunta'
-                "filterProperty" : 'seutukuntanro',
-                "locale" : {
-                    "fi" : "Seutukunta"
-                }
-            },
-            {
-                "id" : 2,
-                "layerId" : 1234, // 'oskari:kunnat2013'
-                "filterProperty" : 'kuntakoodi',
-                "locale" : {
-                    "fi" : "Kunta"
-                }
-            }   
-            ]
-        */
         this.state = {
             indicators: [],
             layerId: null
@@ -98,10 +78,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                     "visible": true
                 }]
             };
+            /*
             var gridPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin', gridConf, locale);
             mapModule.registerPlugin(gridPlugin);
             mapModule.startPlugin(gridPlugin);
             this.gridPlugin = gridPlugin;
+            */
 
             // Register classification plugin for map.
             var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', {
@@ -128,9 +110,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             this._enableTile(true);
         },
         "eventHandlers": {
-            'StatsGrid.IndicatorSelectedEvent': function (event) {
-                alert('Indicator selected ' + event.getKey());
-            },
             /**
              * @method userinterface.ExtensionUpdatedEvent
              */
@@ -228,6 +207,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             if (view.isVisible) {
                 // AH-1110 ugly hack, we have to wait until ManageStatsPlugin has initialized
                 // If we set the state as below and then prepareMode(true), slickgrid breaks with no visible error
+                /*
                 window.setTimeout(
                     function () {
                         me.gridPlugin.changeGridRegion(indicator.category);
@@ -237,6 +217,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                         me.gridPlugin.addIndicatorMeta(indicator);
                     }, 1000
                 );
+*/
             } else {
                 // show the view.
                 state.layerId = indicator.layerId || state.layerId;
@@ -260,7 +241,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
 
             // We need to notify the grid of the current state
             // so it can load the right indicators.
-            this.gridPlugin.setState(this.state);
+            //this.gridPlugin.setState(this.state);
             this.classifyPlugin.setState(this.state);
             // Reset the classify plugin
             this.classifyPlugin.resetUI(this.state);

@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 ) {
                     me._layer = layer;
                     // Notify the grid plugin of the changed layer.
-                    me.instance.gridPlugin.setLayer(me._layer);
+                    //me.instance.gridPlugin.setLayer(me._layer);
                     // Save the changed layer to the state.
                     me.instance.state.layerId = me._layer.getId();
                     me._layer.setOpacity(100);
@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                     }
                     if (me._layer) {
                         // Notify the grid plugin of the changed layer.
-                        me.instance.gridPlugin.setLayer(me._layer);
+                        //me.instance.gridPlugin.setLayer(me._layer);
                         // Save the changed layer to the state.
                         me.instance.state.layerId = me._layer.getId();
                         me._layer.setOpacity(100);
@@ -183,7 +183,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                     handles: "e",
                     resize: function (event, ui) {
                         elCenter.width(jQuery('.row-fluid').width() - elLeft.width());
-                        me.instance.gridPlugin.grid.resizeCanvas();
+                        me.instance.getMainPanel().handleSizeChanged();
                     },
                     stop: function (event, ui) {
                         var difference = ui.size.width - ui.originalSize.width,
@@ -191,7 +191,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                         slickHeader.width(slickHeader.width() + difference);
 
                         map.updateSize();
-                        me.instance.gridPlugin.autosizeColumns();
+                        me.instance.getMainPanel().resetColumnSizes();
                     }
                 });
 
