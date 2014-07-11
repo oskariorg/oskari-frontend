@@ -51,6 +51,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 this.sandbox.printWarn('Provide callback for StatisticsService.getDataSources()');
                 return;
             }
+            if(this.__dataSources.length > 0) {
+                callback(this.__dataSources);
+                return;
+            }
             var me = this,
                 url = Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalDatasources";
 
