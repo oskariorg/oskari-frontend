@@ -122,6 +122,9 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
         getConfiguration: function () {
             return this.conf || {};
         },
+        getState : function() {
+            return this.state || {};
+        },
 
         /**
          * @property eventHandlers
