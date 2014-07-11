@@ -38,6 +38,7 @@ function(data) {
      * @return {String} The event name.
      */
     getName : function(lang) {
+    	lang = lang || Oskari.getLang();
     	if(!this.data.locale) {
     		return;
     	}
