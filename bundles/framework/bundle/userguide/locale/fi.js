@@ -5,10 +5,11 @@ Oskari.registerLocalization({
     "title": "Ohje",
     "desc": "",
     "flyout": {
-      "title": "Kartan ohje"
+      "title": "Käyttöohje",
+      "loadingtxt": "<p>ladataan sisältöä</p>"
     },
     "tile": {
-      "title": "Kartan ohje"
+      "title": "Käyttöohje"
     },
     "error": {
       "title": "Virhe!",
@@ -17,6 +18,6 @@ Oskari.registerLocalization({
     "help": {
       "tags": "karttaikkuna,pikaohje",
       "contentPart": "body"
-    }
-  }
+    },
+  },
 });
