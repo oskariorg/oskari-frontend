@@ -64,6 +64,12 @@ Labels and clustering of My places points are now produced by GeoServer instead 
 increased stability and efficiency, they are now available also in printouts and published maps. MyPlacesLayerPlugin is
 currently deprecated.
 
+### userguide
+
+The code is cleaned so that all the unnecessary parts have been removed.
+
+NOTE! UserGuideService.js no longer exists
+
 ## 1.22
 
 ### integration/admin-layerselector
