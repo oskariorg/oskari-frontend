@@ -20,10 +20,12 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapMoveEvent',
      *            this should be removed, always sent as false
      * @param {Number} scale
      *            map scale
+     * @param {String} creator
+     *            class identifier of an object that sends an event
      */
 
-    function (centerX, centerY, zoom, marker, scale) {
-        this._creator = null;
+    function (centerX, centerY, zoom, marker, scale, creator) {
+        this._creator = creator || null;
 
         this._centerX = centerX;
         this._centerY = centerY;
