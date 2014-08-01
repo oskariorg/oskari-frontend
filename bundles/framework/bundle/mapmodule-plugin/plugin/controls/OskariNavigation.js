@@ -151,5 +151,6 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
 		var lonlat = this.map.getLonLatFromViewPortPx(evt.xy),
 			event = this._mapClickedBuilder(lonlat, evt.xy.x, evt.xy.y);
 		this.sandbox.notifyAll(event);
+        console.log('click', lonlat);
 	}
 });

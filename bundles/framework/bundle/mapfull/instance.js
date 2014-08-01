@@ -204,7 +204,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
             if (initialLayers) {
                 for (i = 0; i < initialLayers.length; i++) {
                     mapLayer = mapLayerService.createMapLayer(initialLayers[i]);
-                    mapLayerService.addLayer(mapLayer, true);
+                    if (mapLayer) {
+                        mapLayerService.addLayer(mapLayer, true);
+                    }
                 }
             }
 
