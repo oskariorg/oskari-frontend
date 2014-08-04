@@ -15,11 +15,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
 
     function (config) {
         var me = this;
-        me.mapModule = null;
+        me.mapModule = this.mapmodule;
         me.pluginName = null;
         me._sandbox = null;
         me._map = null;
-        me.conf = config;
+        me.conf = config || {};
         me.element = null;
         me._indexMap = null;
         me._indexMapUrl = '/framework/bundle/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
@@ -95,9 +95,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
          */
         setLocation: function (location) {
             var me = this;
-            if (!me.conf) {
-                me.conf = {};
-            }
             if(!me.conf.location){
                 me.conf.location = {};
             }
@@ -121,8 +118,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
                     new OpenLayers.Bounds(26783, 6608595, 852783, 7787250), new OpenLayers.Size(120, 173)),
                 containerClasses = 'bottom right',
                 position = 5;
-
-            me.element = me.templates.main.clone();
+            if (me.conf.containerId) {
+                me.element = jQuery("#" + me.conf.containerId);
+            } else { 
+                me.element = me.templates.main.clone();
+            }
 
             /*
              * create an overview map control with non-default
@@ -148,14 +148,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
                 position = me.conf.location.position || position;
             }
 
+
             // add container to map
-            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
+            if (!me.conf.containerId) {
+                me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
+            }
             // initialize control, pass container
             me._indexMap = new OpenLayers.Control.OverviewMap(controlOptions);
+            // Set indexmap stable in container
+            me._indexMap.isSuitableOverview = function() {
+               return true;
+            };
 
             // in case we are already in edit mode when plugin is drawn
             this.isInLayerToolsEditMode = me.getMapModule().isInLayerToolsEditMode();
 
+            // Extends overviewmap to send AfterMapMove event
+            OpenLayers.Util.extend(me._indexMap, {
+                updateMapToRect: function() {
+                    var lonLatBounds = this.getMapBoundsFromRectBounds(this.rectPxBounds);
+                    if (this.ovmap.getProjection() != this.map.getProjection()) {
+                        lonLatBounds = lonLatBounds.transform(
+                            this.ovmap.getProjectionObject(),
+                            this.map.getProjectionObject() );
+                    }
+                    this.map.panTo(lonLatBounds.getCenterLonLat());
+                    me.getMapModule().notifyMoveEnd(me.getClazz());
+                }
+            });
         },
         /**
          * @method register
@@ -199,6 +219,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
 
             // button has to be added separately so the element order is correct...
             me.element.append(toggleButton);
+
+
+            
+
         },
 
         _bindIcon: function (icon) {
@@ -257,9 +281,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
          * @property {Object} eventHandlers
          * @static
          */
+
         eventHandlers: {
             'AfterMapMoveEvent': function (event) {
-                if (this._indexMap) {
+                if (this._indexMap && (event.getCreator() !== this.getClazz())) {
                     this._indexMap.update();
                 }
             },
