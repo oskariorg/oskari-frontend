@@ -1,4 +1,6 @@
 .mapplugin.coordinates {
+    font-size: 12px;
+    line-height: 14.8px;
     background: #FAFAFA;
     border: 1px solid #E6E6E6;
     border-radius: 2px;
@@ -8,7 +10,7 @@
 
     > div > div {
         display: inline-block;
-        padding-bottom: 5px;
+        padding-bottom: 2px;
 
         &:last-child {
             float: right;
