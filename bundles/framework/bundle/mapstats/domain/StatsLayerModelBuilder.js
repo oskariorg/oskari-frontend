@@ -45,7 +45,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
                 'NUTS1',
                 'SAIRAANHOITOPIIRI',
                 //'SUURALUE',
-                'SEUTUKUNTA'
+                'SEUTUKUNTA',
+                'ERVA',
+                'ELY-KESKUS'
             ],
             'wmsNames': {
                 'KUNTA': 'oskari:kunnat2013',
@@ -54,7 +56,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
                 'NUTS1': 'oskari:nuts1',
                 'SAIRAANHOITOPIIRI': 'oskari:sairaanhoitopiiri',
                 //'SUURALUE': 'oskari:',
-                'SEUTUKUNTA': 'oskari:seutukunta'
+                'SEUTUKUNTA': 'oskari:seutukunta',
+                'ERVA': 'oskari:erva-alueet',
+                'ELY-KESKUS': 'oskari:ely'
             },
             'filterProperties': {
                 'KUNTA': 'kuntakoodi',
@@ -63,7 +67,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
                 'NUTS1': 'nuts1',
                 'SAIRAANHOITOPIIRI': 'sairaanhoitopiirinro',
                 //'SUURALUE': '',
-                'SEUTUKUNTA': 'seutukuntanro'
+                'SEUTUKUNTA': 'seutukuntanro',
+                'ERVA': 'erva_numero',
+                'ELY-KESKUS': 'ely_nro',
+
             }
         });
 
