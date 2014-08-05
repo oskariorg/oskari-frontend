@@ -2,52 +2,29 @@ jQuery(document).ready(function () {
     Oskari.setLang('fi');
     Oskari.setLoaderMode('dev');
     Oskari.setPreloaded(true);
-    var appSetup,
-        appConfig,
-        downloadConfig = function (notifyCallback) {
+    var downloadAppSetupConfig = function (notifyCallback) {
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
-                url: 'full_config.json',
-                beforeSend: function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
-                success: function (config) {
-                    appConfig = config;
-                    notifyCallback();
-                }
-            });
-        },
-        downloadAppSetup = function (notifyCallback) {
-            jQuery.ajax({
-                type: 'GET',
-                dataType: 'json',
-                url: 'full_appsetup.json',
-                beforeSend: function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
+                url: 'appsetupconfig.json',
                 success: function (setup) {
-                    appSetup = setup;
-                    notifyCallback();
+                    notifyCallback(setup);
+                },
+                error: function (xhr, status, error) {
+                    alert('Unable to load appsetupconfig!');
+                    throw error;
                 }
             });
         },
-        startApplication = function () {
+        startApplication = function (setup) {
             // check that both setup and config are loaded 
             // before actually starting the application
-            if (appSetup && appConfig) {
-                var app = Oskari.app;
-                app.setApplicationSetup(appSetup);
-                app.setConfiguration(appConfig);
-                app.startApplication(function (startupInfos) {
-                    // all bundles have been loaded
-                });
-            }
+            var app = Oskari.app;
+            app.setApplicationSetup(setup);
+            app.setConfiguration(setup.configuration);
+            app.startApplication(function (startupInfos) {
+                // all bundles have been loaded
+            });
         };
-    downloadAppSetup(startApplication);
-    downloadConfig(startApplication);
+    downloadAppSetupConfig(startApplication);
 });
