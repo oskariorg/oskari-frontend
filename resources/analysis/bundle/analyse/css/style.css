@@ -1,3 +1,4 @@
+/* Mixins */
 div.notLoggedIn {
   padding: 10px; }
 
@@ -31,12 +32,8 @@ div.basic_analyse div.analyse-select-featurelist {
   display: inline;
   margin-left: 6px; }
   div.basic_analyse div.analyse-select-featurelist a {
-    color: #37B7FF;
     text-decoration: none; }
   div.basic_analyse div.analyse-select-featurelist ul {
-    /* FIXME no custom fonts! portal.css sets ul font size and line height, get rid of those first*/
-    font-size: 100%;
-    line-height: 100%;
     padding: 0;
     padding-top: 10px; }
     div.basic_analyse div.analyse-select-featurelist ul li {
@@ -118,13 +115,16 @@ div.basic_analyse div.analyse_settings_cont label {
   -moz-border-radius: 2px;
   -o-border-radius: 2px;
   -ms-border-radius: 2px;
-  border-radius: 2px; }
+  border-radius: 2px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box; }
   .analyse_radiolabel:hover, .analyse_checklabel:hover {
     background-color: #eee; }
 
 /* FIXME change these to actual labels? */
 .analyse_params_label, .analyse_title_label, .output_color_label, .columns_title_label, .settings_buffer_label, .extra_title_label, .settings_name_label {
-  /* FIXME remove this, I don't think these should be bold */
+  /* FIXME change these to fieldset + legend? */
   font-weight: bold;
   margin: 5px 0; }
 
@@ -186,12 +186,17 @@ div.analyse-filter-popup-content {
 div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px; }
   div.analyse-filter-popup-content div.filter-option div.manage-filter-option {
-    display: inline-block; }
+    display: inline-block;
+    vertical-align: middle; }
     div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.add-filter-option, div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.remove-filter-option {
+      cursor: pointer;
       display: inline-block;
-      font-size: 200%;
+      /* These are icons, so it's OK to have a custom font here. */
+      font-size: 48px;
       font-weight: bold;
-      cursor: pointer; }
+      margin-left: 5px;
+      min-width: 16px;
+      text-align: center; }
   div.analyse-filter-popup-content div.filter-option input[name="attribute-value"] {
     width: 120px; }
   div.analyse-filter-popup-content div.filter-option input[name="case-sensitive"] {

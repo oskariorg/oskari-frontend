@@ -1,3 +1,6 @@
+/* Mixins */
+#contentMap div.basic_printout {
+  height: 100% !important; }
 #contentMap div.parcelprintform1 {
   background: white;
   position: absolute;
@@ -6,7 +9,6 @@
   left: 0;
   z-index: 1500;
   width: 255px; }
-
 #contentMap div.parcelprintform2 {
   overflow: auto;
   background: white;
@@ -20,52 +22,49 @@
 div.oskari-flyoutcontent parcelprint, div.oskari-alert {
   color: #1F1F1F; }
 
-div.parcelprintform1 > div.header, div.parcelprintform2 > div.header {
-  background-color: #72B5CC !important; }
-
-div.parcelprintform1 div.help, div.parcelprintform2 div.help {
-  float: right; }
-
-div.parcelprintform1 div.icon-close, div.parcelprintform2 div.icon-close {
-  float: right; }
-
-/* Wide fields for place inputs  */
-div.parcelprintform1 div.field, div.parcelprintform2 div.field {
-  padding-bottom: 10px;
-  margin-left: 10px;
-  margin-right: 10px; }
-
-div.parcelprintform1 input, div.parcelprintform2 input {
-  width: 80%; }
-
-div.parcelprintform1 textarea, div.parcelprintform1 select, div.parcelprintform2 textarea, div.parcelprintform2 select {
-  width: 80%; }
-
-/* Buttons */
-div.parcelprintform1 div.buttons, div.parcelprintform2 div.buttons {
-  margin-left: 10px;
-  margin-right: 10px;
-  display: inline-flex; }
-
-div.parcelprintform1 div.buttons input, div.parcelprintform2 div.buttons input {
-  margin-left: 5px;
-  margin-right: 5px; }
+div.parcelprintform1, div.parcelprintform2 {
+  /* Wide fields for place inputs  */
+  /* Buttons */ }
+  div.parcelprintform1 > div.header, div.parcelprintform2 > div.header {
+    background-color: #72B5CC !important; }
+  div.parcelprintform1 div.help, div.parcelprintform2 div.help {
+    float: right; }
+  div.parcelprintform1 div.icon-close, div.parcelprintform2 div.icon-close {
+    float: right; }
+  div.parcelprintform1 div.field, div.parcelprintform2 div.field {
+    padding-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px; }
+  div.parcelprintform1 input, div.parcelprintform2 input {
+    width: 80%; }
+  div.parcelprintform1 textarea, div.parcelprintform1 select, div.parcelprintform2 textarea, div.parcelprintform2 select {
+    width: 80%; }
+  div.parcelprintform1 div.buttons, div.parcelprintform2 div.buttons {
+    margin-left: 10px;
+    margin-right: 10px;
+    display: inline-flex; }
+    div.parcelprintform1 div.buttons input, div.parcelprintform2 div.buttons input {
+      margin-left: 5px;
+      margin-right: 5px; }
 
 div.parcel div.buttons div.button {
   margin: 10px;
   padding: 10px;
   border: 1px solid;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
   border-radius: 5px;
-  box-shadow: 5px 5px 5px #888; }
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box;
+  -webkit-box-shadow: 5px 5px 5px #888888;
+  -moz-box-shadow: 5px 5px 5px #888888;
+  box-shadow: 5px 5px 5px #888888; }
 
 .divmanazerpopup.parcel {
   max-width: 260px; }
 
 circle.parceleditor {
   cursor: move; }
-
-/* #contentMap div.basic_printout {
-  left: auto ! important;
-} */
-#contentMap div.basic_printout {
-  height: 100% !important; }

@@ -3,6 +3,7 @@
   bottom: 0;
   left: 0;
   display: block;
+  /* TODO get rid of color and size*/
   color: #3C3C3C;
   background: white;
   font-size: 12px;

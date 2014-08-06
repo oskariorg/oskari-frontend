@@ -24,16 +24,17 @@ div.tool.disabled {
   width: 100%;
   height: 36px;
   position: relative;
-  background-color: #333;
+  background-color: #3C3C3C;
   height: 40px; }
   .oskariui-menutoolbar .oskariui-menutoolbar-modetitle {
     display: inline-block;
     width: 300px; }
     .oskariui-menutoolbar .oskariui-menutoolbar-modetitle .oskariui-menutoolbar-title {
       position: absolute;
-      top: 6px; }
+      top: 6px;
+      /* Inverted text... leave it for now as it doesn't even seem to be in use */ }
       .oskariui-menutoolbar .oskariui-menutoolbar-modetitle .oskariui-menutoolbar-title p {
-        color: white;
+        color: #fff;
         font-size: 16px;
         line-height: 19px; }
   .oskariui-menutoolbar .oskariui-menutoolbar-container {

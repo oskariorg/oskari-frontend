@@ -83,19 +83,16 @@ table.oskari-grid td, table.oskari-grid th {
   min-height: 28px;
   max-width: 110px;
   overflow: hidden;
-  font-size: 12px;
   border: 1px solid #E6E6E6;
-  color: #3C3C3C;
   text-overflow: ellipsis;
   padding-left: 10px;
   padding-right: 10px; }
   table.oskari-grid td.hidden, table.oskari-grid th.hidden {
     display: none; }
 table.oskari-grid th {
-  background-color: #F3F3F3;
-  font-weight: bold; }
+  background-color: #F3F3F3; }
   table.oskari-grid th a {
-    color: #3C3C3C;
+    color: inherit;
     line-height: 28px;
     padding: 5px; }
   table.oskari-grid th.closedSubTable {

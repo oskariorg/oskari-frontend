@@ -13,6 +13,7 @@ div.accordion div.accordion_panel {
   div.accordion div.accordion_panel div.content {
     padding: 5px; }
   div.accordion div.accordion_panel div.header {
+    /* Accordion header style, defined in styleguide */
     font-size: 16px;
     line-height: 19px; }
     div.accordion div.accordion_panel div.header div.headerIcon {
