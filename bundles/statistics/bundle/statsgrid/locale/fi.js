@@ -155,7 +155,9 @@ Oskari.registerLocalization({
             "NUTS1": "Manner-Suomi ja Ahvenanmaa",
             "SAIRAANHOITOPIIRI": "Sairaanhoitopiiri",
             "SEUTUKUNTA": "Seutukunta",
-            "SUURALUE": "Suuralue"
+            "SUURALUE": "Suuralue",
+            "ERVA": "ERVA-alueet",
+            "ELY-KESKUS": "ELY-alueet",
         },
         "baseInfoTitle": "Tunnistetiedot",
         "dataTitle": "Aineisto",

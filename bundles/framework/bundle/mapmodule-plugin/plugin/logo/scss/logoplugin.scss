@@ -5,6 +5,8 @@
 	background-color: #FFF;
 	background-repeat: no-repeat;
 	display: block;
+    font-size: 12px;
+    line-height: 14.8px;
 	height: 25px;
 	z-index: 100000000 !important;
 	filter: unquote("alpha(opacity=")$logoOpacity * 100 unquote(")"); /* unquote for libsass bug */
@@ -15,7 +17,7 @@
 	}
   
 	.icon {
-		background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/logo/images/logo_pieni.png');
+		background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/logo/images/logo_pieni.png');
 		display: inline-block;
 		height: 25px;
 		width: 25px;
@@ -36,12 +38,16 @@
 	}
 
 }
+
 .data-sources-dialog {
 	max-width: 400px;
+
 	.layers h4, .indicators h4 {
 		padding-bottom: 5px;
 	}
+
 	.indicators {
 		margin-top: 10px;
 	}
+
 }
