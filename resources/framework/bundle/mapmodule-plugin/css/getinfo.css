@@ -1,9 +1,7 @@
 .getinforesult_table tr {
   padding: 5px; }
-
-.getinforesult_table tr.odd {
-  background-color: #EEEEEE; }
-
+  .getinforesult_table tr.odd {
+    background-color: #EEEEEE; }
 .getinforesult_table td {
   padding: 2px; }
 
@@ -13,14 +11,26 @@
   margin-top: 14px;
   margin-bottom: 10px;
   height: 15px; }
-
-.getinforesult_header .icon-bubble-left {
-  height: 15px;
-  display: inline;
-  float: left; }
+  .getinforesult_header .icon-bubble-left {
+    height: 15px;
+    display: inline;
+    float: left; }
 
 .getinforesult_header_title {
-  color: white;
+  color: #FFF;
   float: left;
   display: inline;
-  margin-left: 8px; }
+  margin-left: 8px;
+  max-width: 85%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  /* Default line height is higher than the parent element... */
+  line-height: 14px; }
+
+div.myplaces_wrapper {
+  padding-bottom: 18px; }
+  div.myplaces_wrapper div.myplaces_place img.myplaces_img {
+    padding-bottom: 15px;
+    max-height: 350px;
+    max-width: 350px; }

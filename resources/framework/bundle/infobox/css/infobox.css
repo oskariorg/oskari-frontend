@@ -1,3 +1,4 @@
+/* Mixins */
 div.popupHeader {
   background-color: #424343;
   color: #FFFFFF;
@@ -5,21 +6,27 @@ div.popupHeader {
   left: 0px;
   padding: 0px;
   margin: 0px;
+  -webkit-border-radius: 6px 6px 0px 0px;
+  -moz-border-radius: 6px 6px 0px 0px;
+  -o-border-radius: 6px 6px 0px 0px;
+  -ms-border-radius: 6px 6px 0px 0px;
   border-radius: 6px 6px 0px 0px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box;
   display: inline-block;
   width: 390px;
   float: left;
   height: 40px; }
-
-div.popupHeader div {
-  vertical-align: top;
-  margin-left: 20px;
-  margin-right: 20px;
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 0;
-  position: absolute;
-  top: 12px; }
+  div.popupHeader div {
+    vertical-align: top;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    position: absolute;
+    top: 12px; }
 
 div.popupHeaderArrow {
   width: 0;
@@ -39,11 +46,25 @@ div.popupContent {
   left: 0px;
   top: 0px;
   height: 250px;
+  -webkit-border-radius: 0px 0px 6px 6px;
+  -moz-border-radius: 0px 0px 6px 6px;
+  -o-border-radius: 0px 0px 6px 6px;
+  -ms-border-radius: 0px 0px 6px 6px;
   border-radius: 0px 0px 6px 6px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box;
   border: 1px solid;
   border-color: #424343;
   overflow: auto;
   padding: 20px 20px 20px 25px; }
+  div.popupContent hr.infoboxLine {
+    border: 1px solid;
+    width: 90%;
+    margin-top: 10px; }
+  div.popupContent span.infoboxActionLinks {
+    padding-right: 15px;
+    padding-left: 15px; }
 
 /*Pop-up width reduced for places search */
 div#searchResultPopup_contentDiv div.popupContent {
@@ -65,15 +86,6 @@ div.olPopupContent {
   margin: 0px;
   left: 0px;
   top: 0px; }
-
-div.popupContent hr.infoboxLine {
-  border: 1px solid;
-  width: 90%;
-  margin-top: 10px; }
-
-div.popupContent span.infoboxActionLinks {
-  padding-right: 15px;
-  padding-left: 15px; }
 
 .olPopupCloseBox {
   cursor: pointer;

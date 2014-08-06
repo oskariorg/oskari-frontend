@@ -1,8 +1,4 @@
 @import "slick-default-theme.css";
-.statsgrid  {
-    font-family: arial;
-    font-size: 8pt;
-}
 .statsgrid ul {
     cursor: default;
     margin-left: 0;

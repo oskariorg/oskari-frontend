@@ -25,107 +25,75 @@ div.divmanazerpopup {
   /* Firefox 4, Safari 5, Opera 10, IE 9 */
   border: 5px solid rgba(0, 0, 0, 0.2);
   border-radius: 7px;
-  /*
-    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.80);
-    -moz-box-shadow: 0px 3px 3px black;
-    -webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);
-    */
   z-index: 10000; }
-
-div.divmanazerpopup h3.popupHeader {
-  background-color: #FDF8D9;
-  border-radius: 5px 5px 0 0;
-  font-size: 18px;
-  line-height: 28px;
-  padding: 5px 10px; }
-
-div.divmanazerpopup div.content {
-  margin: 10px; }
-
-div.divmanazerpopup div.content textarea {
-  resize: none; }
-
-div.divmanazerpopup div.content ul {
-  margin: 10px; }
-
-div.divmanazerpopup.no_resize div.content textarea {
-  resize: none; }
-
-div.divmanazerpopup div.actions {
-  margin: 10px;
-  text-align: center; }
-
-div.divmanazerpopup div.actions input {
-  margin: 10px; }
-
-.divmanazerpopup.arrow:after, .divmanazerpopup.arrow:before {
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  /*pointer-events: none; */ }
-
-/* Bottom alignment */
-.divmanazerpopup.bottom:after, .divmanazerpopup.bottom:before {
-  bottom: 100%; }
-
-.divmanazerpopup.bottom:after {
-  border-bottom-color: #FDF8D9;
-  border-width: 5px;
-  margin-left: -5px;
-  left: 50%; }
-
-.divmanazerpopup.bottom:before {
-  border-bottom-color: #000000;
-  border-width: 6px;
-  margin-left: -6px;
-  left: 50%; }
-
-/* top alignment */
-.divmanazerpopup.top:after, .divmanazerpopup.top:before {
-  top: 100%; }
-
-.divmanazerpopup.top:after {
-  border-top-color: #FFFFFF;
-  border-width: 5px;
-  margin-left: -5px;
-  left: 50%; }
-
-.divmanazerpopup.top:before {
-  border-top-color: #000000;
-  border-width: 6px;
-  margin-left: -6px;
-  left: 50%; }
-
-/* left alignment */
-.divmanazerpopup.left:after, .divmanazerpopup.left:before {
-  left: 100%; }
-
-.divmanazerpopup.left:after {
-  border-left-color: #FDF8D9;
-  border-width: 5px;
-  margin-top: -5px;
-  top: 50%; }
-
-.divmanazerpopup.left:before {
-  border-left-color: #000000;
-  border-width: 6px;
-  margin-top: -6px;
-  top: 50%; }
-
-/* right alignment */
-.divmanazerpopup.right:after, .divmanazerpopup.right:before {
-  right: 100%; }
-
-.divmanazerpopup.right:after {
-  border-right-color: #FDF8D9;
-  border-width: 5px;
-  margin-top: -5px;
-  top: 50%; }
-
-.divmanazerpopup.right:before {
-  border-right-color: #000000;
-  border-width: 6px;
-  margin-top: -6px;
-  top: 50%; }
+  div.divmanazerpopup.no_resize div.content textarea {
+    resize: none; }
+  div.divmanazerpopup.arrow:before, div.divmanazerpopup.arrow:after {
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute; }
+  div.divmanazerpopup.top:before, div.divmanazerpopup.top:after {
+    top: 100%; }
+  div.divmanazerpopup.top:before {
+    border-top-color: #000000;
+    border-width: 6px;
+    margin-left: -6px;
+    left: 50%; }
+  div.divmanazerpopup.top:after {
+    border-top-color: #FFFFFF;
+    border-width: 5px;
+    margin-left: -5px;
+    left: 50%; }
+  div.divmanazerpopup.right:before, div.divmanazerpopup.right:after {
+    right: 100%; }
+  div.divmanazerpopup.right:before {
+    border-right-color: #000000;
+    border-width: 6px;
+    margin-top: -6px;
+    top: 50%; }
+  div.divmanazerpopup.right:after {
+    border-right-color: #FDF8D9;
+    border-width: 5px;
+    margin-top: -5px;
+    top: 50%; }
+  div.divmanazerpopup.bottom:before, div.divmanazerpopup.bottom:after {
+    bottom: 100%; }
+  div.divmanazerpopup.bottom:before {
+    border-bottom-color: #000000;
+    border-width: 6px;
+    margin-left: -6px;
+    left: 50%; }
+  div.divmanazerpopup.bottom:after {
+    border-bottom-color: #FDF8D9;
+    border-width: 5px;
+    margin-left: -5px;
+    left: 50%; }
+  div.divmanazerpopup.left:before, div.divmanazerpopup.left:after {
+    left: 100%; }
+  div.divmanazerpopup.left:before {
+    border-left-color: #000000;
+    border-width: 6px;
+    margin-top: -6px;
+    top: 50%; }
+  div.divmanazerpopup.left:after {
+    border-left-color: #FDF8D9;
+    border-width: 5px;
+    margin-top: -5px;
+    top: 50%; }
+  div.divmanazerpopup div.content {
+    margin: 10px; }
+    div.divmanazerpopup div.content textarea {
+      resize: none; }
+    div.divmanazerpopup div.content ul {
+      margin: 10px; }
+  div.divmanazerpopup div.actions {
+    margin: 10px;
+    text-align: center; }
+    div.divmanazerpopup div.actions input {
+      margin: 10px; }
+  div.divmanazerpopup h3.popupHeader {
+    background-color: #FDF8D9;
+    border-radius: 5px 5px 0 0;
+    padding: 8px 10px; }

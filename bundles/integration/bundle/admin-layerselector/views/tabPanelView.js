@@ -336,8 +336,9 @@ define([
             toggleAddLayer: function (e) {
                 //add layer
                 e.stopPropagation();
-                var element = jQuery(e.currentTarget);
-                var layer = element.parent();
+                var element = jQuery(e.currentTarget),
+                    layer = element.parent(),
+                    me = this;
 
                 if (!layer.find('.admin-add-layer').hasClass('show-add-layer')) {
                     // create layer settings view for adding or editing layer

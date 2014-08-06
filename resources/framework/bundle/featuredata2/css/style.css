@@ -7,31 +7,24 @@
     overflow: auto; }
   .featuredata .link {
     padding: 20px 0px 0px 0px;
-    color: #0066ff;
-    font-size: 13px;
+    color: #0091FF;
     text-decoration: underline;
     display: block; }
   .featuredata tbody tr.selected {
-    background-color: #FEF2BA; }
+    background-color: #FDF8D9; }
   .featuredata th, .featuredata td {
     text-align: left;
     padding-left: 2px;
     padding-right: 15px; }
-  .featuredata th.asc {
-    background-position: right center; }
-  .featuredata th.desc {
+  .featuredata th.asc, .featuredata th.desc {
     background-position: right center; }
 
 div.flyout-resizer {
   float: right;
   cursor: nw-resize; }
 
-div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.featuredataplugin {
+div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin {
   display: block;
-  color: #3C3C3C;
   background: #FFF;
-  font-size: 12px;
-  font-weight: bold;
   border: 1px solid;
-  margin: 10px;
-  padding: 5px; }
+  margin: 10px; }

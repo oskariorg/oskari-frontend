@@ -1,81 +1,88 @@
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
+@mixin background-gradient($from, $to) {
+    background: -webkit-gradient(linear, left top, left bottom, from($from), to($to));
+    background: -moz-linear-gradient(top,  $from,  $to);
+    background: -ms-linear-gradient(top,  $from,  $to);
+    /* For some reason sass didn't like this in one line... */
+    filter: unquote("progid:DXImageTransform.Microsoft.gradient(startColorstr='")
+    + $from
+    + unquote("', endColorstr='")
+    + $to
+    + unquote("')"); 
+    background: linear-gradient(top,  $from,  $to);
+}
+
 /* Override popup styles */
 
-.divmanazerpopup.guidedtour {
-    font-family: Arial, sans-serif;
-}
+div.divmanazerpopup.guidedtour {
 
-.divmanazerpopup.guidedtour h3 {
-    margin: 0;
-    font-weight: normal;
-}
+    &.arrow:after, &.arrow:before {
+        display: none;
+    }
 
-div.divmanazerpopup.guidedtour.bluetitle h3 {
-    color: #fff;
-    background-color: #1995fd;
-    border-radius: 3px 3px 0 0;
-}
+    &.bluetitle h3 {
+        /* Same as h3.inverted? */
+        color: #fff;
+        font-weight: normal;
+        background-color: #1995fd;
+        @include border-radius(3px 3px 0 0);
 
-div.divmanazerpopup.guidedtour.bluetitle h3 span {
-    float: right;
-    font-size: 13px;
-    padding-top: 3px;
-}
+        span {
+            float: right;
+            padding-top: 3px;
+        }
 
-.divmanazerpopup.guidedtour .content {
-    font-size: 13px;
-    line-height: 18px;
-}
+    }
 
-.divmanazerpopup.guidedtour .content a {
-    color: #0090ff;
-    text-decoration: underline;
-}
+    &.draggable {
+        cursor: move;
+    }
 
-.divmanazerpopup.guidedtour .actions input {
-    display: inline-block;
-    zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
-    *display: inline;
-    vertical-align: baseline;
-    margin: 0 2px;
-    outline: none;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    font: 12px/100% Arial, sans-serif;
-    font-weight: bold;
-    padding: 4px 10px;
-    -webkit-border-radius: 4px; 
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    color: #fff;
-    border: solid 1px #2670b5;
-    text-shadow: 1px 1px 0 rgba(0,0,0,.35);
-    background: #3996ed;
-    background: -webkit-gradient(linear, left top, left bottom, from(#3a97ee), to(#217ad4));
-    background: -moz-linear-gradient(top,  #3a97ee,  #217ad4);
-    filter: unquote("progid:DXImageTransform.Microsoft.gradient(startColorstr='#3a97ee', endColorstr='#217ad4')"); /* unquote for libsass bug */
-}
-.divmanazerpopup.guidedtour .actions input:hover {
-    text-decoration: none;
-    color: #fff;
-    background: -webkit-gradient(linear, left top, left bottom, from(#3a97ee), to(#217ad4));
-    background: -moz-linear-gradient(top,  #59abf8,  #2b8df0);
-    filter: unquote("progid:DXImageTransform.Microsoft.gradient(startColorstr='#3a97ee', endColorstr='#217ad4')"); /* unquote for libsass bug */
-}
-.divmanazerpopup.guidedtour .actions input:active {
-    position: relative;
-    top: 1px;
-    color: #19456d;
-    text-shadow: none;
-    background: -webkit-gradient(linear, left top, left bottom, from(#217ad4), to(#3a97ee));
-    background: -moz-linear-gradient(top,  #217ad4,  #3a97ee);
-    filter: unquote("progid:DXImageTransform.Microsoft.gradient(startColorstr='#217ad4', endColorstr='#3a97ee')"); /* unquote for libsass bug */
-}
+    .actions {
 
-.divmanazerpopup.guidedtour.arrow:after, .divmanazerpopup.guidedtour.arrow:before {
-    display: none;
-}
+        input {
+            display: inline-block;
+            vertical-align: baseline;
+            margin: 0 2px;
+            outline: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            padding: 4px 10px;
+            @include border-radius(4px);
+            color: #fff;
+            border: solid 1px #2670b5;
+            text-shadow: 1px 1px 0 rgba(0,0,0,.35);
+            background: #3996ed;
+            @include background-gradient(#3a97ee, #217ad4);
 
-.divmanazerpopup.guidedtour.draggable {
-    cursor: move;
+            &:hover {
+                text-decoration: none;
+                color: #fff;
+                @include background-gradient(#3a97ee, #217ad4);
+            }
+
+            &:active {
+                position: relative;
+                top: 1px;
+                color: #19456d;
+                text-shadow: none;
+                @include background-gradient(#3a97ee, #217ad4);
+            }
+
+        }
+
+    }
+
 }

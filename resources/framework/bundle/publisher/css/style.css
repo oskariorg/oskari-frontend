@@ -1,41 +1,11 @@
-div.notLoggedIn {
-  padding: 10px; }
-
-
 #contentMap.mapPublishMode > #mapdiv {
   position: relative;
   left: 212px; }
-
 #contentMap.mapPublishMode > div.row-fluid {
   position: relative;
   left: 212px; }
-
-div.publisher div.startview div.icon-info, div.basic_publisher div.icon-info {
-  float: right; }
-
-div.publisher div.startview div.content {
-  margin-top: 5px; }
-
-div.publisher div.startview div.tou {
-  margin: 15px 0; }
-
-div.publisher div.startview div.layerlist {
-  border: 1px solid;
-  padding: 10px; }
-  div.publisher div.startview div.layerlist h4 {
-    font-size: 14px;
-    line-height: 15px;
-    padding-bottom: 5px; }
-
-div.publisher div.startview ul {
-  list-style: disc inside none;
-  padding: 5px; }
-
-div.publisher div.startview div.error ul li {
-  color: red; }
-
 #contentMap div.basic_publisher {
-  background: white;
+  background: #FFF;
   position: absolute;
   height: 100%;
   top: 0;
@@ -43,92 +13,48 @@ div.publisher div.startview div.error ul li {
   /* sidebar has 3, we want to open it on top of this */
   z-index: 2;
   width: 365px; }
+  #contentMap div.basic_publisher div.content {
+    padding: 10px; }
 
-#contentMap div.basic_publisher div.content {
+div.notLoggedIn {
   padding: 10px; }
 
-div.basic_publisher > div.header {
-  background-color: #FDF8D9;
-  padding: 5px 10px; }
-
-div.basic_publisher > div.header div.icon-close {
-  float: right; }
-
-div.basic_publisher div.customsize input {
-  width: 40px; }
-
-div.basic_publisher div.customsize input.error {
-  border: 1px solid red; }
-
-div.basic_publisher div.form div.field input, div.field select {
-  width: 100%;
-  width: 80%0/;
-  /* unquote for libsass bug */
-  background-color: white0/;
-  /* unquote for libsass */
-  filter: Alpha(opacity=100)0/ !important;
-  font-weight: bolder; }
-
-div.basic_publisher > div.content {
-  overflow: auto;
-  height: 89%; }
-
-div.basic_publisher div.tool {
-  margin: 5px; }
-
-div.basic_publisher div.tool-options {
-  padding-left: 23px; }
-  div.basic_publisher div.tool-options .tool-option-settings {
-    padding-left: 27px;
-    padding-top: 5px; }
-
-div.basic_publisher div.tool label, div.basic_publisher div.data label {
-  margin-right: 10px; }
-
-div.basic_publisher div.tool input, div.basic_publisher div.data input {
-  margin-right: 10px; }
-
-div.basic_publisher div.tool input[type="button"], div.basic_publisher div.data input[type="button"] {
-  margin-top: 5px;
-  margin-bottom: 5px; }
-
-/* Buttons */
-div.basic_publisher div.buttons, div.publisher div.startview div.buttons {
-  text-align: center;
-  margin-top: 10px; }
-
-div.basic_publisher div.buttons input, div.publisher div.startview div.buttons input {
-  margin: 5px 2px; }
-
-/* Layout */
+div.basic_publisher .disabled-button {
+  opacity: 0.8; }
 div.basic_publisher div#publisher-layout-colours input[name=publisher-colour] {
   width: 125px; }
 div.basic_publisher p#publisher-selected-colour {
   display: inline; }
 div.basic_publisher button#publisher-colours {
   float: right; }
-
-div#publisher-colour-inputs {
-  margin-bottom: 15px; }
-
-div#publisher-custom-colours {
-  padding: 10px 20px; }
-  div#publisher-custom-colours div#publisher-custom-colours-bg, div#publisher-custom-colours div#publisher-custom-colours-title, div#publisher-custom-colours div#publisher-custom-colours-header, div#publisher-custom-colours div#publisher-custom-colours-iconcls {
-    margin-bottom: 12px; }
-  div#publisher-custom-colours div.rgbInput {
-    padding: 5px;
-    border: 1px solid black; }
-    div#publisher-custom-colours div.rgbInput input[type="text"] {
-      margin: 0 8px;
-      width: 30px; }
-
-.maincontainer ul.selectedLayersList {
-  margin-left: 0px; }
-  .maincontainer ul.selectedLayersList li {
-    list-style: none; }
-
-div.basic_publisher .disabled-button {
-  opacity: 0.8; }
+div.basic_publisher div.customsize input {
+  width: 40px; }
+  div.basic_publisher div.customsize input.error {
+    border: 1px solid red; }
+div.basic_publisher div.icon-info {
+  float: right; }
+div.basic_publisher div.tool {
+  margin: 5px; }
+div.basic_publisher div.tool-options {
+  padding-left: 23px; }
+  div.basic_publisher div.tool-options .tool-option-settings {
+    padding-left: 27px;
+    padding-top: 5px; }
+div.basic_publisher div.tool label, div.basic_publisher div.data label {
+  margin-right: 10px; }
+div.basic_publisher div.tool input, div.basic_publisher div.data input {
+  margin-right: 10px; }
+  div.basic_publisher div.tool input[type="button"], div.basic_publisher div.data input[type="button"] {
+    margin-top: 5px;
+    margin-bottom: 5px; }
+div.basic_publisher > div.content {
+  overflow: auto;
+  height: 89%; }
+div.basic_publisher > div.header {
+  background-color: #FDF8D9;
+  padding: 5px 10px; }
+  div.basic_publisher > div.header div.icon-close {
+    float: right; }
 div.basic_publisher .layer.selected {
   border: 1pt solid #c0d0e0;
   margin: 0 5px 5px 0;
@@ -142,7 +68,6 @@ div.basic_publisher .layer.selected {
     div.basic_publisher .layer.selected div.layer-info div.layer-title {
       display: inline; }
       div.basic_publisher .layer.selected div.layer-info div.layer-title h4 {
-        font: 14pt Arial, sans-serif;
         padding: 0; }
     div.basic_publisher .layer.selected div.layer-info div.layer-tool-remove {
       float: right; }
@@ -183,6 +108,57 @@ div.basic_publisher ul.selectedLayersList {
   div.basic_publisher ul.selectedLayersList span {
     position: absolute;
     margin-left: -1.3em; }
+
+div.publisher div.startview div.content {
+  margin-top: 5px; }
+div.publisher div.startview div.error ul li {
+  color: red; }
+div.publisher div.startview div.icon-info {
+  float: right; }
+div.publisher div.startview div.layerlist {
+  border: 1px solid;
+  padding: 10px; }
+  div.publisher div.startview div.layerlist h4 {
+    line-height: 15px;
+    padding-bottom: 5px; }
+div.publisher div.startview div.tou {
+  margin: 15px 0; }
+div.publisher div.startview ul {
+  list-style: disc inside none;
+  padding: 5px; }
+
+div.basic_publisher div.form div.field input, div.field select {
+  width: 100%;
+  width: 80%0/;
+  /* unquote for libsass bug */
+  background-color: #FFF;
+  font-weight: bolder; }
+
+/* Buttons */
+div.basic_publisher div.buttons, div.publisher div.startview div.buttons {
+  text-align: center;
+  margin-top: 10px; }
+  div.basic_publisher div.buttons input, div.publisher div.startview div.buttons input {
+    margin: 5px 2px; }
+
+div#publisher-colour-inputs {
+  margin-bottom: 15px; }
+
+div#publisher-custom-colours {
+  padding: 10px 20px; }
+  div#publisher-custom-colours div#publisher-custom-colours-bg, div#publisher-custom-colours div#publisher-custom-colours-title, div#publisher-custom-colours div#publisher-custom-colours-header, div#publisher-custom-colours div#publisher-custom-colours-iconcls {
+    margin-bottom: 12px; }
+  div#publisher-custom-colours div.rgbInput {
+    padding: 5px;
+    border: 1px solid black; }
+    div#publisher-custom-colours div.rgbInput input[type="text"] {
+      margin: 0 8px;
+      width: 30px; }
+
+.maincontainer ul.selectedLayersList {
+  margin-left: 0px; }
+  .maincontainer ul.selectedLayersList li {
+    list-style: none; }
 
 .maincontainer .block {
   display: block; }
