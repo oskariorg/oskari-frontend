@@ -335,6 +335,7 @@ define([
              */
             toggleAddLayer: function (e) {
                 //add layer
+                var me = this;
                 e.stopPropagation();
                 var element = jQuery(e.currentTarget),
                     layer = element.parent(),
