@@ -161,7 +161,7 @@ div.admin-layerselector {
     margin-top: 12px; }
   div.admin-layerselector div.accordion div.accordion_panel div.header div.headerText {
     text-overflow: ellipsis;
-    width: 335px;
+    width: 325px;
     white-space: nowrap;
     overflow: hidden; }
   div.admin-layerselector .admin-add-layer-btn, div.admin-layerselector .admin-edit-layer-btn, div.admin-layerselector .admin-add-grouping-btn, div.admin-layerselector .admin-edit-grouping-btn {
