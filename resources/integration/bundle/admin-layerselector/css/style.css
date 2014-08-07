@@ -1,23 +1,23 @@
+/* Mixins */
 /* layer group container */
 div.admin-layerselector {
   /* For long lists, make capabilities list scrollable */
   /* layer container */ }
   div.admin-layerselector div.layerGroup {
-    background-color: #f3f3f3;
-    border: 1pt solid #c0d0d0;
+    background-color: #F3F3F3;
+    border: 1pt solid #C0D0D0;
     margin: 0;
     padding: 0; }
     div.admin-layerselector div.layerGroup.open {
-      background-color: #FFFFFF; }
+      background-color: #FFF; }
     div.admin-layerselector div.layerGroup div.groupIcon {
       display: inline-block;
       margin-left: 12px;
       vertical-align: middle; }
     div.admin-layerselector div.layerGroup div.groupHeader {
+      /* FIXME if this text should be bigger, make it an H3 or something */
       display: inline-block;
-      font-weight: bold;
-      padding: 8px 10px 8px 12px;
-      font: 14pt Arial, sans-serif; }
+      padding: 8px 10px 8px 12px; }
   div.admin-layerselector .add-layer-record.capabilities .add-layer-input-area {
     max-height: 250px;
     overflow: auto; }
@@ -26,7 +26,6 @@ div.admin-layerselector {
     /* emphasize group nodes */ }
     div.admin-layerselector .capabilities ul {
       /* reset for parent level style */
-      font-weight: normal;
       margin: 0px 20px 5px 20px; }
     div.admin-layerselector .capabilities .inline-icon {
       display: inline-block; }
@@ -59,7 +58,14 @@ div.admin-layerselector {
       /*width: 309px;*/
       overflow-y: auto;
       border: solid 1px #b7b7b7;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      -o-border-radius: 4px;
+      -ms-border-radius: 4px;
       border-radius: 4px;
+      -webkit-background-clip: padding-box;
+      -moz-background-clip: padding-box;
+      background-clip: padding-box;
       -webkit-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.3);
       -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.3);
       box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.3); }
@@ -127,17 +133,23 @@ div.admin-layerselector {
       padding: 10px;
       width: 157px;
       height: 72px;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      -o-border-radius: 4px;
+      -ms-border-radius: 4px;
       border-radius: 4px;
+      -webkit-background-clip: padding-box;
+      -moz-background-clip: padding-box;
+      background-clip: padding-box;
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
-      -ms-box-sizing: border-box;
       box-sizing: border-box; }
       div.admin-layerselector div.layer textarea.add-layer-input.long, div.admin-layerselector div.create-layer textarea.add-layer-input.long {
         width: 309px; }
   div.admin-layerselector div.create-layer {
     min-height: 35px; }
   div.admin-layerselector div.layer:nth-child(even) {
-    background-color: #f3f3f3; }
+    background-color: #F3F3F3; }
   div.admin-layerselector div.tab-content {
     padding: 0; }
     div.admin-layerselector div.tab-content div.oskarifield {
@@ -149,7 +161,7 @@ div.admin-layerselector {
     margin-top: 12px; }
   div.admin-layerselector div.accordion div.accordion_panel div.header div.headerText {
     text-overflow: ellipsis;
-    width: 335px;
+    width: 325px;
     white-space: nowrap;
     overflow: hidden; }
   div.admin-layerselector .admin-add-layer-btn, div.admin-layerselector .admin-edit-layer-btn, div.admin-layerselector .admin-add-grouping-btn, div.admin-layerselector .admin-edit-grouping-btn {
@@ -164,9 +176,15 @@ div.admin-layerselector {
     margin-left: -30px;
     width: 20px;
     height: 20px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -o-border-radius: 2px;
+    -ms-border-radius: 2px;
     border-radius: 2px;
-    opacity: 0;
-    -ms-filter: "progid:DXImageTransform.Microsoft. Alpha(Opacity=0)"; }
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+    opacity: 0; }
   div.admin-layerselector .layer {
     min-height: 20px; }
   div.admin-layerselector .add-layer-record, div.admin-layerselector .add-layer-send, div.admin-layerselector .add-class-record, div.admin-layerselector .add-class-send, div.admin-layerselector .add-group-record {
@@ -240,7 +258,6 @@ div.admin-layerselector {
     width: 100%; }
   div.admin-layerselector .input-controls {
     position: relative;
-    /*float: left;*/
     margin-right: 5px; }
     div.admin-layerselector .input-controls input.add-class-input.mid {
       width: 297px; }
@@ -252,7 +269,6 @@ div.admin-layerselector {
   div.admin-layerselector .icon-close {
     display: inline-block;
     opacity: 0;
-    -ms-filter: "progid:DXImageTransform.Microsoft. Alpha(Opacity=0)";
     position: absolute;
     top: 9px;
     right: 10px;
@@ -261,21 +277,19 @@ div.admin-layerselector {
     div.admin-layerselector .icon-close.mid {
       right: 90px; }
   div.admin-layerselector .input-controls:hover .icon-close, div.admin-layerselector .layer:hover button.admin-arrange-layers {
-    -webkit-transition-property: opacity;
     -webkit-transition-duration: 300ms;
-    -moz-transition-property: opacity;
+    -webkit-transition-property: opacity;
     -moz-transition-duration: 300ms;
-    -o-transition-property: opacity;
+    -moz-transition-property: opacity;
     -o-transition-duration: 300ms;
-    -ms-transition-property: opacity;
+    -o-transition-property: opacity;
     -ms-transition-duration: 300ms;
-    transition-property: opacity;
+    -ms-transition-property: opacity;
     transition-duration: 300ms;
-    -ms-filter: "progid:DXImageTransform.Microsoft. Alpha(Opacity=100)";
+    transition-property: opacity;
     opacity: 1; }
   div.admin-layerselector div.add-layer-text {
-    height: 30px;
-    font-size: 14px; }
+    height: 30px; }
   div.admin-layerselector .left-tools .layer-opacity {
     display: inline-block;
     background-image: url('/Oskari/resources/framework/bundle/layerselection2/images/opacity_slider.png');

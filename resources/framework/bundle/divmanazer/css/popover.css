@@ -7,6 +7,8 @@
  *
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
+/* TODO none of this stuff seems to be in use? */
+/* Mixins */
 .oskari-tooltip {
   position: absolute;
   z-index: 1200;
@@ -14,26 +16,17 @@
   visibility: visible;
   padding: 5px;
   font-size: 11px;
-  opacity: 0;
-  filter: alpha(opacity=0);
-  /* unquote for libsass bug */ }
-
-.oskari-tooltip.in {
-  opacity: 0.8;
-  filter: alpha(opacity=80);
-  /* unquote for libsass bug */ }
-
-.oskari-tooltip.top {
-  margin-top: -2px; }
-
-.oskari-tooltip.right {
-  margin-left: 2px; }
-
-.oskari-tooltip.bottom {
-  margin-top: 2px; }
-
-.oskari-tooltip.left {
-  margin-left: -2px; }
+  opacity: 0; }
+  .oskari-tooltip.in {
+    opacity: 0.8; }
+  .oskari-tooltip.top {
+    margin-top: -2px; }
+  .oskari-tooltip.right {
+    margin-left: 2px; }
+  .oskari-tooltip.bottom {
+    margin-top: 2px; }
+  .oskari-tooltip.left {
+    margin-left: -2px; }
 
 .oskari-tooltip.top .oskari-tooltip-arrow {
   bottom: 0;
@@ -76,7 +69,12 @@
   background-color: #000000;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
-  border-radius: 4px; }
+  -o-border-radius: 4px;
+  -ms-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box; }
 
 .oskari-tooltip-arrow {
   position: absolute;
@@ -90,65 +88,60 @@
   z-index: 1210;
   display: none;
   padding: 5px; }
-
-.oskari-popover.top {
-  margin-top: -5px; }
-
-.oskari-popover.right {
-  margin-left: 5px; }
-
-.oskari-popover.bottom {
-  margin-top: 5px; }
-
-.oskari-popover.left {
-  margin-left: -5px; }
-
-.oskari-popover.top .oskari-arrow {
-  bottom: 0;
-  left: 50%;
-  margin-left: -5px;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid #000000; }
-
-.oskari-popover.right .oskari-arrow {
-  top: 50%;
-  left: 0;
-  margin-top: -5px;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-right: 5px solid #000000; }
-
-.oskari-popover.bottom .oskari-arrow {
-  top: 0;
-  left: 50%;
-  margin-left: -5px;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid #000000; }
-
-.oskari-popover.left .oskari-arrow {
-  top: 50%;
-  right: 0;
-  margin-top: -5px;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-left: 5px solid #000000; }
-
-.oskari-popover .oskari-arrow {
-  position: absolute;
-  width: 0;
-  height: 0; }
+  .oskari-popover.top {
+    margin-top: -5px; }
+    .oskari-popover.top .oskari-arrow {
+      bottom: 0;
+      left: 50%;
+      margin-left: -5px;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid #000000; }
+  .oskari-popover.right {
+    margin-left: 5px; }
+    .oskari-popover.right .oskari-arrow {
+      top: 50%;
+      left: 0;
+      margin-top: -5px;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-right: 5px solid #000000; }
+  .oskari-popover.bottom {
+    margin-top: 5px; }
+    .oskari-popover.bottom .oskari-arrow {
+      top: 0;
+      left: 50%;
+      margin-left: -5px;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 5px solid #000000; }
+  .oskari-popover.left {
+    margin-left: -5px; }
+    .oskari-popover.left .oskari-arrow {
+      top: 50%;
+      right: 0;
+      margin-top: -5px;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 5px solid #000000; }
+  .oskari-popover .oskari-arrow {
+    position: absolute;
+    width: 0;
+    height: 0; }
 
 .oskari-popover-inner {
   padding: 3px;
-  /*width: 280px;*/
   overflow: hidden;
   background: #000000;
   background: rgba(0, 0, 0, 0.8);
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
+  -o-border-radius: 6px;
+  -ms-border-radius: 6px;
   border-radius: 6px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box;
   -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3); }
@@ -160,17 +153,23 @@
   border-bottom: 1px solid #eee;
   -webkit-border-radius: 3px 3px 0 0;
   -moz-border-radius: 3px 3px 0 0;
-  border-radius: 3px 3px 0 0; }
+  -o-border-radius: 3px 3px 0 0;
+  -ms-border-radius: 3px 3px 0 0;
+  border-radius: 3px 3px 0 0;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box; }
 
 .oskari-popover-content {
   padding: 14px;
   background-color: #ffffff;
   -webkit-border-radius: 0 0 3px 3px;
   -moz-border-radius: 0 0 3px 3px;
+  -o-border-radius: 0 0 3px 3px;
+  -ms-border-radius: 0 0 3px 3px;
   border-radius: 0 0 3px 3px;
   -webkit-background-clip: padding-box;
   -moz-background-clip: padding-box;
   background-clip: padding-box; }
-
-.oskari-popover-content p, .oskari-popover-content ul, .oskari-popover-content ol {
-  margin-bottom: 0; }
+  .oskari-popover-content p, .oskari-popover-content ul, .oskari-popover-content ol {
+    margin-bottom: 0; }

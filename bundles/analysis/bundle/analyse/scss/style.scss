@@ -1,3 +1,15 @@
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
 div.notLoggedIn {
     padding: 10px;
 }
@@ -62,14 +74,10 @@ div.basic_analyse {
         margin-left: 6px;
 
         a {
-            color: #37B7FF;
             text-decoration: none;
         }
 
         ul {
-             /* FIXME no custom fonts! portal.css sets ul font size and line height, get rid of those first*/
-            font-size: 100%;
-            line-height: 100%;
             padding: 0;
             padding-top: 10px;
 
@@ -102,7 +110,6 @@ div.basic_analyse {
         margin-left: 8px;
         margin-right: 8px;
         margin-bottom: 2px;
-        
     }
 
     div.tool {
@@ -234,11 +241,7 @@ div.basic_analyse {
 
 .analyse_radiolabel, .analyse_checklabel {
     padding: 3px 6px;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    -o-border-radius: 2px;
-    -ms-border-radius: 2px;
-    border-radius: 2px;
+    @include border-radius(2px);
 
     &:hover {
         background-color: #eee;
@@ -248,7 +251,7 @@ div.basic_analyse {
 
 /* FIXME change these to actual labels? */
 .analyse_params_label, .analyse_title_label, .output_color_label, .columns_title_label, .settings_buffer_label, .extra_title_label, .settings_name_label {
-    /* FIXME remove this, I don't think these should be bold */
+    /* FIXME change these to fieldset + legend? */
     font-weight: bold;
     margin: 5px 0;
 }
@@ -357,12 +360,17 @@ div.analyse-filter-popup-content div.filter-option {
 
     div.manage-filter-option {
         display: inline-block;
+        vertical-align: middle;
 
         div.add-filter-option, div.remove-filter-option {
-            display: inline-block;
-            font-size: 200%;
-            font-weight: bold;
             cursor: pointer;
+            display: inline-block;
+            /* These are icons, so it's OK to have a custom font here. */
+            font-size: 48px;
+            font-weight: bold;
+            margin-left: 5px;
+            min-width: 16px;
+            text-align: center;
         }
         
     }

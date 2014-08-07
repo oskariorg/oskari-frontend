@@ -488,7 +488,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
 
             this.currentFeatureType = featureType;
             // Zoom to the loaded feature.
-            this._map.zoomToExtent(this.drawLayer.getDataExtent());
+            this.mapModule.zoomToExtent(this.drawLayer.getDataExtent());
 
             this.buttons.setEnabled(true);
         },

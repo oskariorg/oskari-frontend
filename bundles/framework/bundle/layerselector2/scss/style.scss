@@ -17,7 +17,9 @@ div.layerselector2 {
         padding: 6px 10px 6px 40px;
         background-color : #ffffff;
         clear: both;
-        min-height: 13px;
+        /* Default line height is too high, make it so the text just fits */
+        min-height: 14px;
+        line-height: 14px;
 
         &:nth-child(even) {
             background-color : #f3f3f3;
@@ -34,8 +36,8 @@ div.layerselector2 {
         }
 
         div.layer-title {
+            /* Let's just imagine this is tabular data... */
             font-size : 12px;
-            color: #3C3C3C;
         }
 
         div.layer-tools {
@@ -108,9 +110,7 @@ div.layerselector2 {
 
         div.groupHeader {
             display : inline-block;
-            font-weight : bold;
             padding: 8px 10px 8px 12px;
-            font: 14pt Arial,sans-serif;
         }
 
     }
@@ -150,7 +150,7 @@ div.layerselector2 {
                     box-sizing: border-box;
                     height: 30px;
                     line-height: 30px;
-                    color: black;
+                    color: #000;
                     font-weight: bold;
                     float: left;
                 }

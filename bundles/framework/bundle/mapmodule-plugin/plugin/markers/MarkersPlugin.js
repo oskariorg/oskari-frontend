@@ -21,6 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         this._map = null;
         this._svg = false;
         this._defaultIconUrl = "/Oskari/resources/framework/bundle/mapmodule-plugin/images/marker.png";
+        this._defaultIconUrlSize = 32;
         this._prevIconUrl = "";
         this._preSVGIconUrl = "data:image/svg+xml;base64,";
         this._font = {
@@ -31,8 +32,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             x: 0,
             y: 0,
             color: "ffde00",
+            msg : '',
             shape: 2,
-            size: 3
+            size: 1
         };
         this._strokeStyle = {
             "stroke-width": 1,
@@ -398,44 +400,51 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             var me = this,
                 size,
                 i;
+
+            // Combine default values with given values
+            var data = jQuery.extend(true, me._defaultData, markerData);
+
             // Coordinates are needed
             if ((typeof markerData.x === "undefined") || (typeof markerData.y === "undefined")) {
-                me._sandbox.printWarn("Undefined coordinate in", markerData);
+                me._sandbox.printWarn("Undefined coordinate in", markerData, " combined data is", data);
                 return;
             }
 
             // Image data already available
             var iconSrc = null;
             if (me._svg) {
-                if ((typeof markerData.iconUrl !== "undefined") && (markerData.iconUrl !== null)) {
-                    iconSrc = markerData.iconUrl;
+                if ((typeof data.iconUrl !== "undefined") && (data.iconUrl !== null)) {
+                    iconSrc = data.iconUrl;
+                    if (jQuery.isNumeric(markerData.size)) {
+                        size = data.size;
+                    } else {
+                        size = me._defaultIconUrlSize;
+                    }
                 } else {
                     // Construct image
-                    iconSrc = this.constructImage(markerData);
+                    iconSrc = this.constructImage(data);
+                    size = this._getSizeInPixels(data.size);
                 }
             } else {
                 iconSrc = me._defaultIconUrl;
+                size = this._getSizeInPixels(data.size);
             }
 
-            // Size validity already checked in the constructImage function
-            size = this._getSizeInPixels(markerData.size);
-
             var markerLayers = this._map.getLayersByName("Markers"),
-                point = new OpenLayers.Geometry.Point(markerData.x, markerData.y),
+                point = new OpenLayers.Geometry.Point(data.x, data.y),
                 newMarker = new OpenLayers.Feature.Vector(point, null, {
                     externalGraphic: iconSrc,
-
                     graphicWidth: size,
                     graphicHeight: size,
                     fillOpacity: 1,
-                    label: decodeURIComponent(markerData.msg),
+                    label: decodeURIComponent(data.msg),
                     fontColor: "$000000",
                     fontSize: "16px",
                     fontFamily: "Arial",
                     fontWeight: "bold",
 
                     labelAlign: "lm",
-                    labelXOffset: 8 + 2 * markerData.size,
+                    labelXOffset: 8 + 2 * data.size,
                     labelYOffset: 8,
                     labelOutlineColor: "white",
                     labelOutlineWidth: 1
@@ -449,7 +458,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 }
             }
 
-            this._markers.push(markerData);
+            this._markers.push(data);
             markerLayers[0].addFeatures([newMarker]);
             this.raiseMarkerLayer(markerLayers[0]);
 
