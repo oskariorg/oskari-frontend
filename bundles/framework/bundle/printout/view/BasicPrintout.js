@@ -604,7 +604,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             var maplinkArgs = selections.maplinkArgs;
             var pageSizeArgs = "&pageSize=" + selections.pageSize;
-            var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
+            var pageTitleArgs = "&pageTitle=" + encodeURIComponent(selections.pageTitle);
             var saveFileArgs = "";
             if(selections.saveFile) saveFileArgs = "&saveFile=" + selections.saveFile;
             var layoutArgs = me._getLayoutParams(selections.pageSize);
@@ -621,7 +621,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var contentOptionArgs = contentOptions.join('');
             var formatArgs = "&format=" + selections.format;
 
-            var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs + saveFileArgs + layoutArgs;
+            var parameters = maplinkArgs + '&action_route=GetPreview' + pageTitleArgs + contentOptionArgs + formatArgs + saveFileArgs + layoutArgs;
             url = url + parameters;
 
             // We need to use the POST method if there's GeoJSON or tile data.
@@ -886,7 +886,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             var maplinkArgs = selections.maplinkArgs;
             var pageSizeArgs = "&pageSize=" + selections.pageSize;
-            var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
+            var pageTitleArgs = "&pageTitle=" + encodeURIComponent(selections.pageTitle);
             var contentOptions = [],
                 p;
             for (p in this.contentOptionsMap) {
