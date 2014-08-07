@@ -13,13 +13,16 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * Adds a button to the toolbar. Triggered usually by sending
      * Oskari.mapframework.bundle.toolbar.request.AddToolButtonRequest.
      */
+
     addToolButton: function (pId, pGroup, pConfig) {
+        var me = this;
+           
         if (!pId || !pGroup || !pConfig || !pConfig.callback) {
             // no config -> do nothing
+            me.sandbox.printDebug("All parameters must be defined in AddToolButtonRequest");
             return;
         }
-        var me = this,
-            toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
+        var toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
             group = null,
             prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup;
         if (!me.buttons[prefixedGroup]) {
