@@ -274,7 +274,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 return false;
             }
             // invalid characters (or a star in the wrong place...)
-            if (!/^[a-zåäöA-ZÅÄÖ \.,\?\!0-9]+\**$/.test(key)) {
+            if (!/^[a-zåäöA-ZÅÄÖ \-\.,\?\!0-9]+\**$/.test(key)) {
                 me._showError(me.instance.getLocalization('invalid_characters'));
                 return false;
             }
