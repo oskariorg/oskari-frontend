@@ -621,7 +621,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var contentOptionArgs = contentOptions.join('');
             var formatArgs = "&format=" + selections.format;
 
-            var parameters = maplinkArgs + '&action_route=GetPreview' + pageTitleArgs + contentOptionArgs + formatArgs + saveFileArgs + layoutArgs;
+            var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs + saveFileArgs + layoutArgs;
             url = url + parameters;
 
             // We need to use the POST method if there's GeoJSON or tile data.
