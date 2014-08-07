@@ -391,6 +391,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
             var me = this,
                 requestBuilder = me.getRequestBuilder(requestName);
             if (!requestBuilder) {
+                me.printDebug("requestName is undefined")
                 return;
             }
             window.setTimeout(function () {
