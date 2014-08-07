@@ -1,19 +1,15 @@
 .logoplugin {
-
-	$logoOpacity: 0.8;
-
 	background-color: #FFF;
 	background-repeat: no-repeat;
 	display: block;
-    font-size: 12px;
-    line-height: 14.8px;
+	/* Force line to fit container */
+    line-height: 15px;
 	height: 25px;
 	z-index: 100000000 !important;
-	filter: unquote("alpha(opacity=")$logoOpacity * 100 unquote(")"); /* unquote for libsass bug */
-	opacity: $logoOpacity !important;
+	opacity: 0.8 !important;
 	
 	a, a:hover, a:active, a:visited {
-		color: #333333 !important;
+		color: inherit;
 	}
   
 	.icon {

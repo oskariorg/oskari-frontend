@@ -1,3 +1,4 @@
 div.mapplugin.scalebar {
-  font-size: 9px;
+  /* 14px would be too big... */
+  font-size: 12px;
   line-height: 13px; }

@@ -11,10 +11,14 @@ $lightTextColor: #FFF;
 
 /* Mixins */
 @mixin border-radius($radius) {
-  -moz-border-radius: $radius;
-  -webkit-border-radius: $radius;
-  border-radius: $radius;
-  background-clip: padding-box;
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
 }
 
 @mixin box-shadow($shadow...) {
@@ -518,8 +522,6 @@ ul#lang {
 	color: #3c3c3c;
 
 	p, ul, ol {
-		font-size: 15px;
-		line-height: 22px;
 		padding-bottom: 15px;
 	}
 

@@ -24,7 +24,9 @@
   max-width: 85%;
   overflow: hidden;
   white-space: nowrap;
-  text-overflow: ellipsis; }
+  text-overflow: ellipsis;
+  /* Default line height is higher than the parent element... */
+  line-height: 14px; }
 
 div.myplaces_wrapper {
   padding-bottom: 18px; }

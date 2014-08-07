@@ -1,49 +1,59 @@
+/* Mixins */
 div.myplacesform div.help {
   float: right; }
-
-/* Wide fields for place inputs  */
-div.myplacesform div.field, div.myplacescategoryform div.field {
-  padding-bottom: 10px; }
-
 div.myplacesform input[type="text"] {
   width: 83%; }
-
-div.myplacesform input[type="checkbox"], div.myplacescategoryform input[type="checkbox"] {
-  margin: 0.5em; }
-
 div.myplacesform textarea {
   width: 80%; }
-
 div.myplacesform select {
   width: 80%; }
-
 div.myplacesform .imagePreview {
   cursor: pointer; }
 
-div.myplacesform div.renderButton, div.myplacescategoryform div.renderButton {
-  margin: 5px; }
-
-div.simpleColorChooser {
-  background-color: #ffffff; }
-
-/* Smaller fields for category inputs in table */
 div.myplacescategoryform table input {
   width: 50px; }
-
 div.myplacescategoryform input.oskaricolor {
   height: 20px;
   width: 50px;
   border: 1px solid;
   padding: 3px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
   border-radius: 5px;
-  font-size: 0; }
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box;
+  font-size: 0;
+  /* Hackhack, not an actual used font */ }
 
+div.myplacesform div.field, div.myplacescategoryform div.field {
+  padding-bottom: 10px; }
+div.myplacesform div.renderButton, div.myplacescategoryform div.renderButton {
+  margin: 5px; }
+div.myplacesform input[type="checkbox"], div.myplacescategoryform input[type="checkbox"] {
+  margin: 0.5em; }
+
+div.simpleColorChooser {
+  background-color: #ffffff; }
+
+/* Smaller fields for category inputs in table */
 div.myplaces2 div.buttons div.button {
   margin: 10px;
   padding: 10px;
   border: 1px solid;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
   border-radius: 5px;
-  box-shadow: 5px 5px 5px #888; }
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box;
+  -webkit-box-shadow: 5px 5px 5px #888888;
+  -moz-box-shadow: 5px 5px 5px #888888;
+  box-shadow: 5px 5px 5px #888888; }
 
 .divmanazerpopup.myplaces2 {
   max-width: 260px; }

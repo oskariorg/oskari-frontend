@@ -8,67 +8,76 @@
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
 
-
-.oskari-badge {
-  font-size: 10.998px;
-  font-weight: bold;
-  line-height: 14px;
-  color: #ffffff;
-  vertical-align: baseline;
-  white-space: nowrap;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  background-color: #999999;
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
 }
 
 .oskari-badge {
-  padding: 1px 9px 2px;
-  -webkit-border-radius: 9px;
-  -moz-border-radius: 9px;
-  border-radius: 9px;
+    font-weight: bold;
+    color: #ffffff;
+    vertical-align: baseline;
+    white-space: nowrap;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: #999999;
+    padding: 1px 9px 2px;
+    @include border-radius(9px);
 }
 
 a.oskari-badge:hover {
-  color: #ffffff;
-  text-decoration: none;
-  cursor: pointer;
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .oskari-badge-important {
-  background-color: #b94a48;
-}
+    background-color: #b94a48;
 
-.oskari-badge-important[href] {
-  background-color: #953b39;
+    &[href] {
+        background-color: #953b39;
+    }
+
 }
 
 .oskari-badge-warning {
-  background-color: #f89406;
-}
+    background-color: #f89406;
 
-.oskari-badge-warning[href] {
-  background-color: #c67605;
+    &[href] {
+        background-color: #c67605;
+    }
+
 }
 
 .oskari-badge-success {
-  background-color: #468847;
-}
+    background-color: #468847;
 
-.oskari-badge-success[href] {
-  background-color: #356635;
+    &[href] {
+        background-color: #356635;
+    }
+
 }
 
 .oskari-badge-info {
-  background-color: #3a87ad;
-}
+    background-color: #3a87ad;
 
-.oskari-badge-info[href] {
-  background-color: #2d6987;
+    &[href] {
+        background-color: #2d6987;
+    }
+
 }
 
 .oskari-badge-inverse {
-  background-color: #333333;
-}
+    background-color: #333333;
 
-.oskari-badge-inverse[href] {
-  background-color: #1a1a1a;
+    &[href] {
+        background-color: #1a1a1a;
+    }
+
 }

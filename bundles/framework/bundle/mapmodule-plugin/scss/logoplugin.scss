@@ -1,9 +1,9 @@
 .logoplugin {
-    background-color: white;
+    background-color: #FFF;
     background-repeat: no-repeat;
     display: block;
-    font-size: 12px;
-    line-height: 14.8px;
+    /* Force line to fit container */
+    line-height: 15px;
     position: absolute;
     bottom: 0px;
     left: 0px;
@@ -11,7 +11,7 @@
     opacity: 0.8 !important;
 
     a, a:hover, a:active, a:visited {
-        color: #333333 !important;
+        color: inherit;
     }
 
     .icon {
