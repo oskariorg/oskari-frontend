@@ -1,7 +1,7 @@
 /**
  * Used to notify StatsLayerPlugin to remove hilight effect.
  * 
- * @class Oskari.statistics.bundle.statsgrid.event.ClearHilightsEvent
+ * @class Oskari.statistics.bundle.statsgrid.event.SelectHilightsModeEvent
  */
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.SelectHilightsModeEvent',
 /**
