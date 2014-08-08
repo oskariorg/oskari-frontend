@@ -238,11 +238,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
             },
             'AfterChangeMapLayerOpacityEvent': function (event) {
                 this._afterChangeMapLayerOpacityEvent(event);
-            },
-            'MapMyPlaces.MyPlacesVisualizationChangeEvent': function (event) {
-                this._MyPlacesVisualizationChangeEvent(event);
             }
-
         },
 
         /**
@@ -972,41 +968,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                 mapLayer.setOpacity(opacity);
             });
             //openLayer[0].setOpacity(opacity);
-        },
-        /**
-         * Handle MyPlaces Visualization Changed (attribute modifications, deletions, insertions) for extra layers
-         *
-         * @method _MyPlacesVisualizationChangeEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent}
-         *            event
-         */
-        _MyPlacesVisualizationChangeEvent: function (event) {
-            var layerId = event.getLayerId();
-            var forced = event.isForced();
-            layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
-
-            if(!layer) return null;
-            if (!layer.isLayerOfType(this._layerType)) {
-                return null;
-            }
-
-            var mapLayers = this.getOLMapLayers(layer);
-            var olWmsLayer = null;
-
-            _.forEach(mapLayers, function (mapLayer) {
-                if(mapLayer.CLASS_NAME !== "OpenLayers.Layer.WMS")
-                {
-                    mapLayer.destroy();
-                }
-                else
-                {
-                    mapLayer.redraw(true);
-                    olWmsLayer = mapLayer;
-                }
-            });
-            // Add my places extra layers to Map, not wms layer
-            if(olWmsLayer) this._addMapLayersToMap(layer, olWmsLayer, true, false);
         }
     }, {
         /**

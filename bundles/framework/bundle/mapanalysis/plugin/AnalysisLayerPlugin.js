@@ -234,9 +234,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
             'AfterChangeMapLayerOpacityEvent': function (event) {
                 this._afterChangeMapLayerOpacityEvent(event);
                 //this.wfsLayerPlugin.afterChangeMapLayerOpacityEvent(event);
-            },
-            'MapAnalysis.AnalysisVisualizationChangeEvent': function (event) {
-                this._afterAnalysisVisualizationChangeEvent(event);
             }
         },
 

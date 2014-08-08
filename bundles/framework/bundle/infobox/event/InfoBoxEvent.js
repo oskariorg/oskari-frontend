@@ -1,5 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.infobox.event.InfoBoxEvent
+ * 
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.infobox.event.InfoBoxEvent', 
 /**
