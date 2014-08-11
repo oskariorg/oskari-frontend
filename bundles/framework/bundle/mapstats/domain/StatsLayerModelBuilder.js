@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
                 'KUNTA': 'kuntakoodi',
                 'ALUEHALLINTOVIRASTO': 'avi_nro',
                 'MAAKUNTA': 'maakuntanro',
-                'NUTS1': 'nuts1',
+                'NUTS1': 'code',
                 'SAIRAANHOITOPIIRI': 'sairaanhoitopiirinro',
                 //'SUURALUE': '',
                 'SEUTUKUNTA': 'seutukuntanro',

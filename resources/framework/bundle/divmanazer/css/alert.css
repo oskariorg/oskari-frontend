@@ -25,7 +25,7 @@
   background-clip: padding-box;
   color: #c09853;
   position: relative;
-  height: 24px; }
+  /*height: 24px;*/ }
 
 .oskari-alert-heading {
   /* Why do we need to have this here? */

@@ -18,6 +18,8 @@
     -ie-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box;
+    /* Table font */
+    font-size: 12px;
 }
 .slick-header {
     -moz-border-bottom-colors: none;
@@ -27,7 +29,7 @@
     background-color: #fafafa;
     border-color: -moz-use-text-color gray;
     border-image: none;
-    color: black;
+    color: #000;
     line-height: 24px;
     font-weight: bold;
 }
