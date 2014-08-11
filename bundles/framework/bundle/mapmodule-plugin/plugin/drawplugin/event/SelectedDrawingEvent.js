@@ -1,3 +1,7 @@
+/**
+ * @class Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.SelectedDrawingEvent
+ * Used for example to notify components to reset any saved "selected place" data.
+ */
 Oskari.clazz.define(
         'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.SelectedDrawingEvent',
         function(pPlace, dblClick, creatorId) {
