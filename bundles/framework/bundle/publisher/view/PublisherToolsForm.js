@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
         /**
          * @property tools
          */
-        this.tools = [{
+        this.tools = this.instance.conf.tools || [{
             "id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin",
             "selected": false,
             "lefthanded": "bottom left",
@@ -168,8 +168,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
         // set enabled plugins if available
         if (enabledPlugins) {
             var i,
+                len,
                 tool;
-            for (i = 0; i < this.tools.length; i++) {
+            for (i = 0, len = this.tools.length; i < len; i++) {
                 tool = this.tools[i];
                 tool.selected = !! enabledPlugins[tool.id];
             }
