@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.request.SetStateReq
      * @param {Oskari.mapframework.bundle.statehandler.StateHandlerBundleInstance} statehandler
      *          reference to statehandler
      */
-
     function (sandbox, statehandler) {
         this.sandbox = sandbox;
         this.statehandler = statehandler;
