@@ -128,8 +128,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             "featureListSelect": '<div class="analyse-select-featurelist"><a href="#">...</a></div>',
             "featureList": '<div class="analyse-featurelist"><ul></ul></div>',
             "featureListElement": '<li><input type="checkbox"/><label></label></li>',
-            'areasAndSectorsExtra': '<div class="analyse_areas_and_sectors_cont analyse_settings_cont"><label><span></span><input class="settings_area_size_field" type="text" pattern="[0-9]+"></label><select class="settings_area_size_units"></select><label><span></span><input class="settings_area_count_field" type="text" pattern="[0-9]+"></label><label><span></span><input class="settings_sector_count_field" type="text" pattern="^0*[1-9]$|^0*1[0-2]$"></label></div>',
-
+            'areasAndSectorsExtra': '<div class="analyse_areas_and_sectors_cont analyse_settings_cont"><label><span></span><input class="settings_area_size_field" type="text" pattern="[0-9]+"></label><select class="settings_area_size_units"></select><label><span></span><input class="settings_area_count_field" type="text" pattern="[0-9]+"></label><label><span></span><input class="settings_sector_count_field" type="text" pattern="^0*[1-9]$|^0*1[0-2]$"></label></div>'
         },
         /**
          * @method render
@@ -153,7 +152,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             this.accordion = accordion;
 
             var contentPanel = Oskari.clazz.create(
-                'Oskari.analysis.bundle.analyse.view.ContentPanel', this);
+                'Oskari.analysis.bundle.analyse.view.ContentPanel',
+                this
+            );
             this.contentPanel = contentPanel;
 
             var methodPanel = this._createMethodPanel(),
@@ -216,11 +217,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // content
             var closureMagic = function (tool) {
                 return function () {
-                    var size = contentPanel.find('input[name=method]:checked').val(),
-                        i;
+                    var j;
                     // reset previous setting
-                    for (i = 0; i < me.methodOptions.length; ++i) {
-                        me.methodOptions[i].selected = false;
+                    for (j = 0; j < me.methodOptions.length; ++j) {
+                        me.methodOptions[j].selected = false;
                     }
                     tool.selected = true;
 
@@ -329,10 +329,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var closureMagic = function (tool) {
                 return function () {
                     var featureList = columnsContainer.find('.analyse-featurelist'),
-                        i;
+                        j;
                     // reset previous setting
-                    for (i = 0; i < me.paramsOptions.length; ++i) {
-                        me.paramsOptions[i].selected = false;
+                    for (j = 0; j < me.paramsOptions.length; ++j) {
+                        me.paramsOptions[j].selected = false;
                     }
                     tool.selected = true;
 
@@ -408,7 +408,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 selectedLayer = this._getSelectedMapLayer();
 
-            if (!selectedLayer) return;
+            if (!selectedLayer) {
+                return;
+            }
 
             var fields = ((selectedLayer.getFields && selectedLayer.getFields()) ? selectedLayer.getFields().slice() : []),
                 locales = ((selectedLayer.getLocales && selectedLayer.getLocales()) ? selectedLayer.getLocales().slice() : []),
@@ -544,17 +546,17 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 layer;
             if (me.contentOptionDivs) {
                 for (p in me.contentOptionsMap) {
-                    if (me.contentOptionDivs[p] !== undefined) {
-                        if (me.contentOptionDivs[p].find('input').prop('checked')) {
-                            layer = {
-                                id: me.contentOptionsMap[p].id,
-                                name: me.contentOptionsMap[p].label,
-                                temp: me.contentOptionsMap[p].temp
-                            };
-                            layers.push(layer);
+                    if (me.contentOptionsMap.hasOwnProperty(p)) {
+                        if (me.contentOptionDivs[p] !== undefined) {
+                            if (me.contentOptionDivs[p].find('input').prop('checked')) {
+                                layer = {
+                                    id: me.contentOptionsMap[p].id,
+                                    name: me.contentOptionsMap[p].label,
+                                    temp: me.contentOptionsMap[p].temp
+                                };
+                                layers.push(layer);
+                            }
                         }
-
-
                     }
                 }
             }
@@ -835,18 +837,21 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 extra = contentPanel.find('.extra_params');
             if (method === this.id_prefix + "buffer") {
                 var bufferTitle = me.template.title.clone(),
-                    bufferUnitSelect = bufferTitle.find('select.settings_buffer_units');
+                    bufferUnitSelect = bufferTitle.find('select.settings_buffer_units'),
+                    unit;
                 bufferTitle.find('.settings_buffer_label').html(me.loc.buffer_size.label);
                 bufferTitle.find('.settings_buffer_field').attr({
                     'value': '',
                     'placeholder': me.loc.buffer_size.tooltip
                 });
-                for (var unit in me.bufferUnits) {
-                    bufferUnitSelect.append(
-                        '<option value="' + unit + '">' +
-                        me.loc.buffer_units[unit] +
-                        '</option>'
-                    );
+                for (unit in me.bufferUnits) {
+                    if (me.bufferUnits.hasOwnProperty(unit)) {
+                        bufferUnitSelect.append(
+                            '<option value="' + unit + '">' +
+                                me.loc.buffer_units[unit] +
+                                '</option>'
+                        );
+                    }
                 }
 
                 extra.append(bufferTitle);
@@ -903,11 +908,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // sum, count, min, max, med
             var closureMagic = function (tool) {
                 return function () {
-                    var size = contentPanel.find('input[name=aggre]:checked').val(),
-                        i;
+                    var j;
                     // reset previous setting
-                    for (i = 0; i < me.aggreOptions.length; ++i) {
-                        me.aggreOptions[i].selected = false;
+                    for (j = 0; j < me.aggreOptions.length; ++j) {
+                        me.aggreOptions[j].selected = false;
                     }
                     tool.selected = true;
 
@@ -925,7 +929,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'for': option.id,
                     'class': 'params_radiolabel'
                 });
-                if (i !== this.aggreOptions.length - 1) toolContainer.find('input').attr('checked', 'checked');
+                if (i !== this.aggreOptions.length - 1) {
+                    toolContainer.find('input').attr('checked', 'checked');
+                }
 
                 contentPanel.append(toolContainer);
                 toolContainer.find('input').attr({
@@ -969,11 +975,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // sum, count, min, max, med
             var closureMagic = function (tool) {
                 return function () {
-                    var size = contentPanel.find('input[name=aggre]:checked').val(),
-                        i;
+                    var j;
                     // reset previous setting
-                    for (i = 0; i < text_parm_len; ++i) {
-                        me.aggreOptions[i].selected = false;
+                    for (j = 0; j < text_parm_len; ++j) {
+                        me.aggreOptions[j].selected = false;
                     }
                     tool.selected = true;
 
@@ -1028,13 +1033,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Checked data layers
             if (me.contentOptionDivs) {
                 for (p in me.contentOptionsMap) {
-                    if (me.contentOptionDivs[p] !== undefined) {
-                        option = {
-                            id: me.contentOptionsMap[p].id,
-                            label: me.contentOptionsMap[p].label,
-                            data: me.contentOptionDivs[p].find('input').prop('checked')
-                        };
-                        options.push(option);
+                    if (me.contentOptionsMap.hasOwnProperty(p)) {
+                        if (me.contentOptionDivs[p] !== undefined) {
+                            option = {
+                                id: me.contentOptionsMap[p].id,
+                                label: me.contentOptionsMap[p].label,
+                                data: me.contentOptionDivs[p].find('input').prop('checked')
+                            };
+                            options.push(option);
+                        }
                     }
                 }
             }
@@ -1054,8 +1061,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 toolContainer,
                 label;
 
-            optopt = options;
-
             targetTitle.find('.extra_title_label').html(me.loc.intersect.target);
             targetLayerElem.html((targetLayer ? targetLayer.label : ''));
             contentPanel.append(targetTitle);
@@ -1066,11 +1071,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             var closureMagic = function (tool) {
                 return function () {
-                    var size = contentPanel.find('input[name=aggre]:checked').val(),
-                        i;
+                    var j;
                     // reset previous setting
-                    for (i = 0; i < me.intersectOptions.length; ++i) {
-                        me.intersectOptions[i].selected = false;
+                    for (j = 0; j < me.intersectOptions.length; ++j) {
+                        me.intersectOptions[j].selected = false;
                     }
                     tool.selected = true;
 
@@ -1113,10 +1117,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 var selectSpatial = function (tool) {
                     return function () {
-                        var size = contentPanel.find('input[name=spatial]:checked').val(),
-                            i;
+                        var j;
                         // reset previous setting
-                        for (i = 0; i < me.spatialOptions.length; ++i) {
+                        for (j = 0; j < me.spatialOptions.length; ++j) {
                             me.spatialOptions[i].selected = false;
                         }
                         tool.selected = true;
@@ -1169,13 +1172,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Checked data layers
             if (me.contentOptionDivs) {
                 for (p in me.contentOptionsMap) {
-                    if (me.contentOptionDivs[p] !== undefined) {
-                        // true or false var test = me.contentOptionDivs[p].find('input').prop('checked');
-                        option = {
-                            id: me.contentOptionsMap[p].id,
-                            label: me.contentOptionsMap[p].label
-                        };
-                        options.push(option);
+                    if (me.contentOptionsMap.hasOwnProperty(p)) {
+                        if (me.contentOptionDivs[p] !== undefined) {
+                            // true or false var test = me.contentOptionDivs[p].find('input').prop('checked');
+                            option = {
+                                id: me.contentOptionsMap[p].id,
+                                label: me.contentOptionsMap[p].label
+                            };
+                            options.push(option);
+                        }
                     }
                 }
             }
@@ -1193,11 +1198,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             var selectUnion = function (tool) {
                 return function () {
-                    var size = contentPanel.find('input[name=aggre]:checked').val(),
-                        i;
+                    var j;
                     // reset previous setting
-                    for (i = 0; i < me.unionOptions.length; ++i) {
-                        me.unionOptions[i].selected = false;
+                    for (j = 0; j < me.unionOptions.length; ++j) {
+                        me.unionOptions[j].selected = false;
                     }
                     tool.selected = true;
 
@@ -1234,11 +1238,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             var closureMagic = function (tool) {
                 return function () {
-                    var size = contentPanel.find('input[name=spatial]:checked').val(),
-                        i;
+                    var j;
                     // reset previous setting
-                    for (i = 0; i < me.spatialOptions.length; ++i) {
-                        me.spatialOptions[i].selected = false;
+                    for (j = 0; j < me.spatialOptions.length; ++j) {
+                        me.spatialOptions[j].selected = false;
                     }
                     tool.selected = true;
 
@@ -1351,11 +1354,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 keys = ['area_size', 'area_count', 'sector_count'];
 
             for (unit in me.bufferUnits) {
-                unitsSelect.append(
-                    '<option value="' + unit + '">' +
-                    me.loc.buffer_units[unit] +
-                    '</option>'
-                );
+                if (me.bufferUnits.hasOwnProperty(unit)) {
+                    unitsSelect.append(
+                        '<option value="' + unit + '">' +
+                            me.loc.buffer_units[unit] +
+                            '</option>'
+                    );
+                }
             }
 
             labels.each(function (i) {
@@ -1584,8 +1589,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @return {Object}
          */
         _gatherSelections: function () {
-            var container = this.mainPanel,
-                sandbox = this.instance.getSandbox();
+            var container = this.mainPanel;
 
             // Get the name of the method
             var selectedMethod = container.find('input[name=method]:checked').val(),
@@ -1593,11 +1597,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 layer = this._getSelectedMapLayer();
 
             // No layers
-            if (!layer) return;
+            if (!layer) {
+                return;
+            }
 
             // Get the feature fields
-            var selectedColumnmode = container.find('input[name=params]:checked').val();
-            var fields = selectedColumnmode && selectedColumnmode.replace(this.id_prefix, '');
+            var selectedColumnmode = container.find('input[name=params]:checked').val(),
+                fields = selectedColumnmode && selectedColumnmode.replace(this.id_prefix, '');
             // All fields
             if (fields === 'all') {
                 fields = ((layer && layer.getFields && layer.getFields()) ? layer.getFields().slice() : [0]);
@@ -1690,7 +1696,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 sectorCount = container.find('input.settings_sector_count_field').val();
 
             areaSize *= areaUnitMultiplier;
-            if(areaCount > 12) areaCount = me.max_areaCount;
+            if (areaCount > 12) {
+                areaCount = me.max_areaCount;
+            }
 
             var methodSelections = {
                 'buffer': {
@@ -1778,7 +1786,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         _analyseMap: function () {
             var me = this,
                 sandbox = this.instance.getSandbox(),
-                url = sandbox.getAjaxUrl(),
                 selections = me._gatherSelections(),
                 i,
                 showError = function (error) {
@@ -1801,7 +1808,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 if (selections.methodParams.functions &&
-                    selections.methodParams.functions.length) {
+                        selections.methodParams.functions.length) {
 
                     selections.methodParams.locales = [];
                     for (i = 0; i < selections.methodParams.functions.length; i++) {
@@ -1855,8 +1862,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         if (response) {
                             if (response.error) {
                                 showError(response.error);
-                            } else
+                            } else {
                                 me._handleAnalyseMapResponse(response);
+                            }
                         }
                     },
                     // Error callback
@@ -1886,7 +1894,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 request;
 
 
-            mapLayerService = this.instance.mapLayerService;
+            mapLayerService = me.instance.mapLayerService;
             // Create the layer model
             mapLayer = mapLayerService.createMapLayer(analyseJson);
             // Add the layer to the map layer service
@@ -1894,10 +1902,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // Request the layer to be added to the map.
             // instance.js handles things from here on.
-            requestBuilder = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest');
+            requestBuilder = me.instance.sandbox.getRequestBuilder('AddMapLayerRequest');
             if (requestBuilder) {
                 request = requestBuilder(mapLayer.getId());
-                this.instance.sandbox.request(this.instance, request);
+                me.instance.sandbox.request(this.instance, request);
             }
             // Remove old layers if any
             if (analyseJson.mergeLayers) {
@@ -1905,13 +1913,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 if (mlays.length > 0) {
                     // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
                     // also we need to do it before service.remove() to avoid problems on other components
-                    var removeMLrequestBuilder = this.instance.sandbox.getRequestBuilder('RemoveMapLayerRequest'),
+                    var removeMLrequestBuilder = me.instance.sandbox.getRequestBuilder('RemoveMapLayerRequest'),
                         i;
 
                     for (i in mlays) {
                         if (mlays.hasOwnProperty(i)) {
                             request = removeMLrequestBuilder(mlays[i]);
-                            this.instance.sandbox.request(this.instance, request);
+                            me.instance.sandbox.request(me.instance, request);
                             mapLayerService.removeLayer(mlays[i]);
                         }
                     }
@@ -1926,10 +1934,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @param {Object} selections analyse params as returned by _gatherSelections()
          */
         _saveAnalyse: function (selections, features) {
-            var me = this,
-                sandbox = this.instance.getSandbox(),
+            /*var sandbox = this.instance.getSandbox(),
                 url = sandbox.getAjaxUrl();
-
+            */
             alert('TODO: save analyse data operations');
         },
         /**
@@ -1968,7 +1975,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 me.instance.getSandbox().postRequestByName(
-                    rn, [{
+                    rn,
+                    [
+                        {
                             uuid: uuid
                         },
                         additionalUuids
@@ -2015,12 +2024,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (selectedLayer.temp) {
                 layerId = selectedLayer.id;
                 return this.contentPanel.findFeatureById(layerId);
-            } else {
-                layerId = selectedLayer.id.replace((this.id_prefix + 'layer_'), '');
-                return (this.instance
-                    .getSandbox()
-                    .findMapLayerFromSelectedMapLayers(layerId));
             }
+            layerId = selectedLayer.id.replace((this.id_prefix + 'layer_'), '');
+            return (this.instance
+                .getSandbox()
+                .findMapLayerFromSelectedMapLayers(layerId));
         },
 
         /**
@@ -2082,8 +2090,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 no_data,
                 selectedLayer = me._getSelectedMapLayer();
-            if ( !selectedLayer) return no_data;
-            if ( selectedLayer.getLayerType() !== 'wfs') return no_data;
+            if (!selectedLayer) {
+                return no_data;
+            }
+            if (selectedLayer.getLayerType() !== 'wfs') {
+                return no_data;
+            }
             var params = selectedLayer.getWpsLayerParams();
             if (params) {
                 jQuery.each(params, function (key, value) {
@@ -2124,12 +2136,16 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 tooManyFieldsMsg;
 
             // No layer selected - nothing to do here
-            if (!selectedLayer) return;
+            if (!selectedLayer) {
+                return;
+            }
 
             isAnalyseLayer = selectedLayer.getId().toString()
                 .indexOf(me.layer_prefix) > -1;
             // No checks for analysis layers
-            if (isAnalyseLayer) return;
+            if (isAnalyseLayer) {
+                return;
+            }
 
             exceedsFieldsCount = (selectedLayer.getFields &&
                 selectedLayer.getFields().length > me.max_analyse_layer_fields);
