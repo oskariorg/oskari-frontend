@@ -45,7 +45,12 @@ jQuery(document).ready(function() {
         language = 'en';
     }
     Oskari.setLang(language);
-    
+
+    if (langauge === "fi") {
+        Oskari.getLocalization('MapModule').plugin.LogoPlugin.layersHeader = "&copy; ELF ja seuraavat tiedontuottajat:";
+    } else if (language === "sv") {
+        Oskari.getLocalization('MapModule').plugin.LogoPlugin.layersHeader = "&copy; ELF och följande dataproducenter:";
+    } else if (language === "en") {
     /* ELF specific localization adjustments */
     Oskari.registerLocalization(
     		{
@@ -71,7 +76,7 @@ jQuery(document).ready(function() {
     		        "plugin": {
     		            "LogoPlugin": {
     		                "terms": "Terms of Use",
-    		                "dataSources": "Copyright",
+    		                "dataSources": "&copy; ELF and the following service providers:",
     		                "layersHeader": "Map Layers",
     		                "indicatorsHeader": "Indicators"
     		            },
@@ -238,7 +243,7 @@ jQuery(document).ready(function() {
     		    }
     		}
     		);
-    
+    }
     
     /* Startup */
     
