@@ -179,8 +179,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
             field.setPlaceholder(me.instance.getLocalization("searchAssistance"));
 
-            var regex = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*\*?$/;
-            field.setContentCheck(true, me.instance.getLocalization('invalid_characters'), regex);
+            if (me.instance.safeChars) {
+                var regex = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*\*?$/;
+                field.setContentCheck(true, me.instance.getLocalization('invalid_characters'), regex);
+            }
 
             field.bindChange(function (event) {
                 if (me.state === null) {
@@ -218,7 +220,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
 
                 // TODO: make some gif go round and round so user knows
                 // something is happening
-                var searchKey = field.getValue(true);
+                var searchKey = field.getValue(me.instance.safeChars);
 
                 if (!me._validateSearchKey(field.getValue(false))) {
                     field.setEnabled(true);
@@ -273,10 +275,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 me._showError(me.instance.getLocalization('too_short'));
                 return false;
             }
+
             // invalid characters (or a star in the wrong place...)
-            if (!/^[a-zåäöA-ZÅÄÖ \.,\?\!0-9]+\**$/.test(key)) {
-                me._showError(me.instance.getLocalization('invalid_characters'));
-                return false;
+            if (me.instance.safeChars) {
+                if (!/^[a-zåäöA-ZÅÄÖ \.,\?\!0-9]+\**$/.test(key)) {
+                    me._showError(me.instance.getLocalization('invalid_characters'));
+                    return false;
+                }
+            } else {
+                // remove unwanted characters
+
             }
             return true;
         },

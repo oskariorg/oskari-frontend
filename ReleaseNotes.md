@@ -64,6 +64,10 @@ Labels and clustering of My places points are now produced by GeoServer instead 
 increased stability and efficiency, they are now available also in printouts and published maps. MyPlacesLayerPlugin is
 currently deprecated.
 
+### search
+
+More special characters are allowed by default. Strict filter can be enabled through config.
+
 ### userguide
 
 The code is cleaned so that all the unnecessary parts have been removed.
