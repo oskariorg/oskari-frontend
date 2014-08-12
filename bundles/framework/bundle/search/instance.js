@@ -23,6 +23,7 @@ Oskari.clazz
             this.service = null;
             this.tabPriority = 1.0;
             this.disableDefault = false;
+            this.safeChars = false;
         }, {
             /**
              * @static
@@ -112,6 +113,11 @@ Oskari.clazz
                 // Create default UI or not?
                 if (this.conf && this.conf.disableDefault === true) {
                     this.disableDefault = true;
+                }
+
+                // Filter special characters?
+                if (this.conf && this.conf.safeChars === true) {
+                    this.safeChars = true;
                 }
 
                 var servName =
