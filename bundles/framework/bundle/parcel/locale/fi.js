@@ -97,7 +97,7 @@ Oskari.registerLocalization({
         "notification": {
             "placeLoading": {
                 "title": "Kohdetta ladataan",
-                "message": ""
+                "message": "Suurten kohteiden lataaminen saattaa olla hidasta."
             },
             "calculating": {
                 "title": "Lasketaan jakoa",
