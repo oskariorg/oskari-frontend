@@ -24,8 +24,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
         var toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
 
         // Statistics
-        var tool1 = toolBuilder();
-        var locTool = me.localization.tools.table_icon;
+        var tool1 = toolBuilder(),
+            locTool = me.localization.tools.table_icon;
         tool1.setName("table_icon");
         tool1.setTitle(locTool.title);
         tool1.setTooltip(locTool.tooltip);
@@ -69,30 +69,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
                 //'SUURALUE': '',
                 'SEUTUKUNTA': 'seutukuntanro',
                 'ERVA': 'erva_numero',
-                'ELY-KESKUS': 'ely_nro',
-
+                'ELY-KESKUS': 'ely_nro'
             }
         });
 
         // Info
         if (layer.getMetadataIdentifier()) {
             var tool2 = toolBuilder();
-            tool2.setName("info_icon");
-            tool2.setIconCls("icon-info");
+            tool2.setName('info_icon');
+            tool2.setIconCls('icon-info');
             tool2.setCallback(function () {
                 // TODO make this work with statslayer...
-                var rn = 'catalogue.ShowMetadataRequest';
-                var uuid = layer.getMetadataIdentifier();
-                var additionalUuids = [];
-                var additionalUuidsCheck = {};
+                var rn = 'catalogue.ShowMetadataRequest',
+                    uuid = layer.getMetadataIdentifier(),
+                    additionalUuids = [],
+                    additionalUuidsCheck = {};
                 additionalUuidsCheck[uuid] = true;
                 var subLayers = layer.getSubLayers(),
                     s,
                     subUuid;
                 if (subLayers && subLayers.length > 0) {
-                    for (s = 0; s < subLayers.length; s++) {
+                    for (s = 0; s < subLayers.length; s += 1) {
                         subUuid = subLayers[s].getMetadataIdentifier();
-                        if (subUuid && subUuid !== "" && !additionalUuidsCheck[subUuid]) {
+                        if (subUuid && subUuid !== '' && !additionalUuidsCheck[subUuid]) {
                             additionalUuidsCheck[subUuid] = true;
                             additionalUuids.push({
                                 uuid: subUuid
@@ -103,11 +102,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
 
                 }
 
-                me.sandbox.postRequestByName(rn, [{
-                    uuid: uuid
-                },
-                    additionalUuids
-                    ]);
+                me.sandbox.postRequestByName(
+                    rn,
+                    [
+                        {
+                            uuid: uuid
+                        },
+                        additionalUuids
+                    ]
+                );
             });
             layer.addTool(tool2);
         }

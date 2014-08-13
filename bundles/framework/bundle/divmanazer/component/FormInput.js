@@ -136,6 +136,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             if (blnFilteredValue) {
                 value = value.match(this._regExp);
             }
+            // Basic check before AH-1708
+            value = value.replace("<","");
+            value = value.replace("&","");
+            value = value.replace("\\","");            
             return String(value);
         },
         /**

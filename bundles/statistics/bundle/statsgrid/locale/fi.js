@@ -157,7 +157,7 @@ Oskari.registerLocalization({
             "SEUTUKUNTA": "Seutukunta",
             "SUURALUE": "Suuralue",
             "ERVA": "ERVA-alueet",
-            "ELY-KESKUS": "ELY-alueet",
+            "ELY-KESKUS": "ELY-alueet"
         },
         "baseInfoTitle": "Tunnistetiedot",
         "dataTitle": "Aineisto",

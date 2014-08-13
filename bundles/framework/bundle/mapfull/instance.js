@@ -99,7 +99,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 // - something causes a horizontal scrollbar to appear during page load
                 // - it disappears _after_ this function is run so the map's size would be wrong
                 // - so we delay this a tad to wait it out
-                var resizeDelayed = window.setTimeout(adjustMapSize, 1000);
+                //var resizeDelayed = window.setTimeout(adjustMapSize, 1000);
             }
 
 
@@ -148,8 +148,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 Proj4js.defs = me.conf.projectionDefs;
             }
 
-            var userInterfaceLanguage = Oskari.getLang(),
-                core = Oskari.clazz.create('Oskari.mapframework.core.Core');
+            var core = Oskari.clazz.create('Oskari.mapframework.core.Core');
             me.core = core;
             var sandbox = core.getSandbox();
             me.sandbox = sandbox;
@@ -391,20 +390,39 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 }
             }
 
-            if (state.plugins) {
-                var plugins = mapmodule.getPluginInstances(),
-                    plugin,
-                    pluginName;
-                for (pluginName in state.plugins) {
+            /* Change to this once plugins can handle it...
+            var plugins = mapmodule.getPluginInstances(),
+                plugin,
+                pluginName;
+
+            for (pluginName in plugins) {
+                plugin = plugins[pluginName];
+                if (plugin && plugin.setState) {
+                    plugin.setState(state.plugins[pluginName]);
+                }
+            }*/
+
+            // Hackhack
+            if (!state.plugins) {
+                state.plugins = {};
+            }
+
+            if (!state.plugins.MainMapModuleMarkersPlugin) {
+                state.plugins.MainMapModuleMarkersPlugin = {};
+            }
+
+            var plugins = mapmodule.getPluginInstances(),
+                plugin,
+                pluginName;
+            for (pluginName in state.plugins) {
+                if (state.plugins.hasOwnProperty(pluginName)) {
                     // Not finding the plugin is not that uncommon, just move on
                     plugin = plugins[pluginName];
                     if (plugin && plugin.setState) {
                         plugin.setState(state.plugins[pluginName]);
                     }
                 }
-
             }
-
         },
         /**
          * @method getState
@@ -417,19 +435,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
             var map = this.sandbox.getMap(),
                 selectedLayers = this.sandbox.findAllSelectedMapLayers(),
                 mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
-                zoom = map.getZoom(),
-                lat = map.getX(),
-                lon = map.getY(),
                 i,
                 layer,
                 layerJson,
                 state = jQuery.extend({
-                    north: lon,
-                    east: lat,
+                    north: map.getY(),
+                    east: map.getX(),
                     zoom: map.getZoom(),
                     srs: map.getSrsName(),
                     selectedLayers: []
                 }, mapmodule.getState());
+
 
             for (i = 0; i < selectedLayers.length; i++) {
                 layer = selectedLayers[i];
@@ -442,13 +458,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 }
                 // check if we have a style selected and doesn't have THE magic string
                 if (layer.getCurrentStyle &&
-                    layer.getCurrentStyle() &&
-                    layer.getCurrentStyle().getName() &&
-                    layer.getCurrentStyle().getName() !== "!default!") {
+                        layer.getCurrentStyle() &&
+                        layer.getCurrentStyle().getName() &&
+                        layer.getCurrentStyle().getName() !== "!default!") {
                     layerJson.style = layer.getCurrentStyle().getName();
                 }
                 state.selectedLayers.push(layerJson);
             }
+
             return state;
         },
         /**
@@ -466,11 +483,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 layers = '',
                 layer = null,
                 i = 0,
-                ilen = 0;
+                ilen = 0,
+                key;
             if (this.conf && this.conf.link) {
                 // add additional link params (version etc)
-                for (var key in this.conf.link) {
-                    link = key + '=' + this.conf.link[key] + '&' + link;
+                for (key in this.conf.link) {
+                    if (this.conf.link.hasOwnProperty(key)) {
+                        link = key + '=' + this.conf.link[key] + '&' + link;
+                    }
                 }
             }
             for (i = 0, ilen = selectedLayers.length; i < ilen; i++) {
@@ -506,7 +526,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
         getMapEl: function () {
             var mapDiv = jQuery('#' + this.mapDivId);
             if (!mapDiv.length) {
-                me.sandbox.printWarn('mapDiv not found with id ' + this._mapDivId);
+                this.sandbox.printWarn('mapDiv not found with id ' + this._mapDivId);
             }
             return mapDiv;
         },
