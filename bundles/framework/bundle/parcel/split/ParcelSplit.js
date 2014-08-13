@@ -383,6 +383,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                 var newFeatures = this.splitLine(baseMultiPolygon, this.drawPlugin.operatingFeature);
                 this.drawPlugin.drawLayer.removeAllFeatures();
                 this.drawPlugin.selectedFeature = 0;
+                var selectedNeighbor = false;
                 for (i = 0; i < newFeatures[0].geometry.components.length; i++) {
                     this.drawPlugin.drawLayer.addFeatures(new OpenLayers.Feature.Vector(newFeatures[0].geometry.components[i]));
                     this.drawPlugin.drawLayer.features[i].style = this.drawPlugin.basicStyle;
@@ -390,8 +391,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                         name: attributes.tekstiKartalla,
                         quality: attributes.lahdeaineisto
                     };
-                    if ((this.drawPlugin.markerLayer.markers.length > 0)&&(this.drawPlugin.drawLayer.features[i].geometry.id === this.drawPlugin.markerLayer.markers[0].reference.point.references[0])) {
-                        this.drawPlugin.selectedFeature = i;
+                    // Select parcel
+                    for (var k = 0; k < this.drawPlugin.markerLayer.markers.length; k++) {
+                        var markerReferences = this.drawPlugin.markerLayer.markers[k].reference.point.references;
+                        var iNeighbor = false;
+                        for (var j = 0; j < markerReferences.length; j++) {
+                            selectedNeighbor = ((selectedNeighbor) || (this.drawPlugin.drawLayer.features[this.drawPlugin.selectedFeature].geometry.id === markerReferences[j]));
+                            iNeighbor = ((iNeighbor) || (this.drawPlugin.drawLayer.features[i].geometry.id === markerReferences[j]));
+                        }
+                        if (((!selectedNeighbor)&&(iNeighbor))||((selectedNeighbor)&&(iNeighbor)&&(this.drawPlugin.drawLayer.features[i].geometry.getArea() < this.drawPlugin.drawLayer.features[this.drawPlugin.selectedFeature].geometry.getArea()))) {
+                            this.drawPlugin.selectedFeature = i;
+                        }
                     }
                 }
                 this.drawPlugin.editLayer.addFeatures(newFeatures[1]);
@@ -404,6 +414,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
             parcelLayer.redraw();
             editLayer.redraw();
             return editLayer.features[0];
+        },
+
+        setSelectedOpacity: function(opacity) {
+            this.drawPlugin.drawLayer.features[this.drawPlugin.selectedFeature].style.fillOpacity = opacity;
+            this.drawPlugin.drawLayer.redraw();
         },
 
         /*

@@ -30,7 +30,7 @@ function(instance) {
     this.pl_template = jQuery(
         '<div class="field">' +
             '<label></label>' +
-            '<textarea name="pointx" placeholder="' + this.loc.point.placeholder + '">' +
+            '<textarea name="pointx" class="with_placeholder" placeholder="' + this.loc.point.placeholder + '">' +
             '</textarea>' +
             '</div>');
     this.pl_template2 = jQuery(
@@ -99,6 +99,16 @@ function(instance) {
                 me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
             });
 
+            //IE 10 fix
+            jQuery('textarea.with_placeholder').focus(function() {
+                if (me.loc.point.placeholder === this.value) {
+                    this.value = '';
+                }
+            }).blur(function(){
+                if (this.value === '') {
+                    this.attr("placeholder",me.loc.point.placeholder);
+                }
+            });
         },
         /**
          *
