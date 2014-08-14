@@ -118,10 +118,10 @@ table {
     }
     
 	div.oskari-flyout.oskari-attached {
-		max-width: 500px;
+		max-width: 600px;
 	}
 	div.oskari-flyout.oskari-detached {
-		max-width: 500px;
+		max-width: 600px;
 	}
 
 	div.layerselection2 .layer.selected div.layer-tools {
@@ -152,5 +152,9 @@ table {
 	.search .resultList div h3 {
 		font-size: 14px;	
 	}
+
+    #login a {
+        color: inherit;
+    }
 }
 

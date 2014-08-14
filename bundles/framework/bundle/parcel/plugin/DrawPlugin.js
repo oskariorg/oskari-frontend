@@ -40,6 +40,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
         this.templateLanguageLink = null;
         this.drawFilterPlugin = null;
         this.drawFilterPluginId = null;
+        this.fadeCount = null;
+        this.maxFadeCount = 2;
     }, {
         /**
          * @method getName
@@ -146,6 +148,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                     i;
 
                 if (editFeature.geometry.CLASS_NAME !== "OpenLayers.Geometry.MultiLineString") {
+                    return;
+                }
+
+                if (typeof editFeature.geometry.components[0] === "undefined") {
                     return;
                 }
 
@@ -265,7 +271,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
 
             this.selectStyle = OpenLayers.Util.applyDefaults(this.selectStyle, OpenLayers.Feature.Vector.style['default']);
             // this.selectStyle.fillColor = "#ffff00";
-            // this.selectStyle.fillOpacity = 0.4;
+            this.selectStyle.fillOpacity = 0.4;
 
             // This layer will contain markers which show the points where the operation line
             // crosses with the border of the original layer. Those points may be moved to adjust
@@ -773,6 +779,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @method splitFeature
          */
         splitFeature: function (trivial) {
+            var me = this;
             var trivialSplit = (typeof trivial === "undefined" ? false : trivial);
             var editFeature = this.splitter.split(trivialSplit);
             if (editFeature !== undefined) {
@@ -802,6 +809,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                 }
             }
             this.editLayer.updateLine();
+            this.fadeCount = 0;
+            this.fadeOut(false);
+        },
+
+        fadeOut: function (faded) {
+            var me = this;
+            me.drawLayer.features[me.selectedFeature].style.fillOpacity = me.drawLayer.features[me.selectedFeature].style.fillOpacity-0.01;
+            me.drawLayer.redraw();
+            setTimeout(function(){
+                if (me.drawLayer.features[me.selectedFeature].style.fillOpacity > 0.0) {
+                    me.fadeOut(faded);
+                } else {
+                    me.fadeIn(faded);
+                }
+          },20);
+        },
+
+        fadeIn: function (faded) {
+            var me = this;
+            me.drawLayer.features[me.selectedFeature].style.fillOpacity = me.drawLayer.features[me.selectedFeature].style.fillOpacity+0.01;
+            me.drawLayer.redraw();
+            setTimeout(function(){
+                if (me.drawLayer.features[me.selectedFeature].style.fillOpacity < 0.4) {
+                    me.fadeIn(faded);
+                } else {
+                    me.fadeCount = me.fadeCount+1;
+                    if (me.fadeCount < me.maxFadeCount) {
+                        me.fadeOut(faded);
+                    }
+                }
+          },20);
         },
 
         initControls: function (editingFeature) {
@@ -836,12 +874,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @private
          */
         _updateLayerOrder: function() {
-            if (this.markerLayer === null) {
-                return;
+            var zIndex;
+            if (this.editLayer !== null) {
+                zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.editLayer.getZIndex())+1;
+                this.editLayer.setZIndex(zIndex);
+                this.editLayer.redraw();
             }
-            var zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.markerLayer.getZIndex())+1;
-            this.markerLayer.setZIndex(zIndex);
-            this.markerLayer.redraw();
+            if (this.markerLayer !== null) {
+                zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.markerLayer.getZIndex())+1;
+                this.markerLayer.setZIndex(zIndex);
+                this.markerLayer.redraw();
+            }
         },
 
         createEditor: function (features, data, preparcel) {
