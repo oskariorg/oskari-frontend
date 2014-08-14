@@ -192,6 +192,36 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
+         * Validates selections for analysis method difference
+         *
+         * @method _validate_method_difference
+         * @private
+         * @param {Object} selections Selections for output JSON
+         * @param {String} errorTitle Error title to display to the user
+         * @return {Boolean} returns true if no validation errors, false otherwise
+         */
+        _validate_method_difference: function (selections, errorTitle) {
+            var noErrors = true;
+            if (!selections.methodParams.layerId) {
+                this._notifyValidationError('Second layer is not selected', errorTitle);
+                noErrors = false;
+            }
+            if (!selections.methodParams.fieldA1) {
+                this._notifyValidationError('First layer\'s field is not selected', errorTitle);
+                noErrors = false;
+            }
+            if (!selections.methodParams.fieldB1) {
+                this._notifyValidationError('Second layer\'s field is not selected', errorTitle);
+                noErrors = false;
+            }
+            if (!selections.methodParams.keyA1 || !selections.methodParams.keyB1) {
+                this._notifyValidationError('Key field is not selected', errorTitle);
+                noErrors = false;
+            }
+            return noErrors;
+        },
+
+        /**
          * Notifies the user of a validation error.
          *
          * @method _notifyValidationError

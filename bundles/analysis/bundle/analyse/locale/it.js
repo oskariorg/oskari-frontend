@@ -64,6 +64,11 @@ Oskari.registerLocalization({
                     "label": "Areas and sectors",
                     "classForPreview": "areas_and_sectors",
                     "tooltip": "NOT TRANSLATED"
+                }, {
+                    "id": "oskari_analyse_difference",
+                    "label": "Difference computation",
+                    "classForPreview": "difference",
+                    "tooltip": ""
                 }]
             },
             "aggregate": {
@@ -90,7 +95,7 @@ Oskari.registerLocalization({
                 }, {
                     "id": "oskari_analyse_Median",
                     "label": "NOT TRANSLATED"
-                },{
+                }, {
                     "id": "oskari_analyse_NoDataCnt",
                     "label": "Unauthorized features"
                 }],
