@@ -4,38 +4,37 @@
  * Renders help text.
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstance',
 
     /**
      * @method create called automatically on construction
      * @static
      */
-
     function () {
         this._requestHandlers = {};
         this.attachedToDefault = false;
         this.helper = null;
         this.isContentLoaded = false;
         this.defaultConf = {
-            name : 'userinterface.UserGuide',
-            "tileClazz": 'Oskari.userinterface.extension.DefaultTile',
-            flyoutClazz : 'Oskari.mapframework.bundle.userguide.Flyout'
+            name: 'userinterface.UserGuide',
+            'tileClazz': 'Oskari.userinterface.extension.DefaultTile',
+            flyoutClazz: 'Oskari.mapframework.bundle.userguide.Flyout'
         };
     }, {
         /**
          * @method afterstart
          * implements BundleInstance protocol start methdod
          */
-        "afterStart": function (sandbox) {
-            var title = this.getLocalization('title');            
-            
+        afterStart: function (sandbox) {
+            var title = this.getLocalization('title');
+
             // request
             this._requestHandlers['userguide.ShowUserGuideRequest'] = Oskari.clazz.create('Oskari.mapframework.bundle.userguide.request.ShowUserGuideRequestHandler', sandbox, this);
             sandbox.addRequestHandler('userguide.ShowUserGuideRequest', this._requestHandlers['userguide.ShowUserGuideRequest']);
 
             // draw ui
             this.plugins['Oskari.userinterface.Flyout'].createUi();
-            
+
             // get help content
             var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', sandbox);
             this.helper = helper;
@@ -59,7 +58,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
                     return;
                 }
 
-                var isOpen = event.getViewState() !== "close";
+                var isOpen = event.getViewState() !== 'close';
 
                 me.displayContent(isOpen);
 
@@ -70,8 +69,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
          * @method displayContent
          */
 
-        "displayContent": function (isOpen) {
+        displayContent: function (isOpen) {
             var me = this,
+                newtab,
                 i;
             if (!isOpen) {
                 return;
@@ -82,29 +82,29 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
 
             var helpContentPart = 'help.contentPart';
             if (me.getLocalization('help') &&
-                    me.getLocalization('help').contentPart) {
+                me.getLocalization('help').contentPart) {
                 helpContentPart = me.getLocalization('help').contentPart;
             }
 
             var userGuideTabs = me.plugins['Oskari.userinterface.Flyout'].getUserGuideTabs();
 
-            function closureMagic(tagsTxt) {
+            function closureMagic (tagsTxt) {
                 return function (isSuccess, pContent) {
-                        var content = pContent;
-                        var errorTxt = 'error.generic';
-                        if (me.getLocalization('error') &&
-                                me.getLocalization('error').generic) {
-                            errorTxt = me.getLocalization('error').generic;
-                        }
-                        if (!isSuccess) {
-                            content = errorTxt;
-                        } else if (content[helpContentPart]) {
-                            content = content[helpContentPart];
-                        }
-
-                        me.plugins['Oskari.userinterface.Flyout'].setContent(content, tagsTxt);
-                        me.isContentLoaded = true;
+                    var content = pContent,
+                        errorTxt = 'error.generic';
+                    if (me.getLocalization('error') &&
+                        me.getLocalization('error').generic) {
+                        errorTxt = me.getLocalization('error').generic;
                     }
+                    if (!isSuccess) {
+                        content = errorTxt;
+                    } else if (content[helpContentPart]) {
+                        content = content[helpContentPart];
+                    }
+
+                    me.plugins['Oskari.userinterface.Flyout'].setContent(content, tagsTxt);
+                    me.isContentLoaded = true;
+                };
             }
             if (this.conf.tabs) {
                 for (i = 0; i < userGuideTabs.length; i += 1) {
@@ -112,17 +112,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
                     this.helper.getHelpArticle(
                         newtab.tags,
                         closureMagic(newtab.tags)
-                    )
-                    ;
+                    );
                 }
-            }
-            else {
+            } else {
                 me.tagsTxt = me.getLocalization('help').tags;
                 me.helper.getHelpArticle(
                     me.tagsTxt,
                     closureMagic(me.tagsTxt)
-                )
-                ;
+                );
             }
         },
 
@@ -131,7 +128,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function () {
+        'stop': function() {
             var sandbox = this.sandbox(),
                 p;
             for (p in this.eventHandlers) {
@@ -156,5 +153,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
          * @property {String[]} protocol
          * @static
          */
-        "extend": ["Oskari.userinterface.extension.DefaultExtension"]
+        'extend': ['Oskari.userinterface.extension.DefaultExtension']
     });

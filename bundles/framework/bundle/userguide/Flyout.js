@@ -11,9 +11,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
      * @param {Oskari.mapframework.bundle.userguide.UserGuideBundleInstance}
      *        instance reference to component that created the tile
      */
-
     function (instance) {
-        this.userGuideTabs = []
+        this.userGuideTabs = [];
     }, {
 
         /**
@@ -32,8 +31,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
         createUi: function () {
             var me = this,
                 i,
+                newtab,
                 tab;
-            me.cel = jQuery(me.container)
+            me.cel = jQuery(me.container);
             me.cel.empty();
             this.userGuideTabs = this.instance.conf.tabs || [];
             if (this.instance.conf.tabs) {
@@ -69,10 +69,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
         setContent: function (content, tagsTxt) {
             var me = this;
             if (this.instance.conf.tabs) {
-                var me = this,
-                    tabs = me.tabContainer.panels,
-                    tab,
-                    tagsTxt;
+                var tabs = me.tabContainer.panels,
+                    i,
+                    newtab,
+                    tab;
                 for (i = 0; i < tabs.length; i += 1) {
                     newtab = tabs[i];
                     if (tagsTxt === newtab.tagsTxt) {

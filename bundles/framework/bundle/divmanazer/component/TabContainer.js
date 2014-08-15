@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                 headerContainer.prepend(header);
                 this.select(panel);
             } else {
-                headerContainer.children().eq(index-1).after(header)
+                headerContainer.children().eq(index-1).after(header);
             }
 
             panel.insertAt(this.ui.find('div.tabsContentItem'),index);

@@ -142,7 +142,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
 
             me.templates.item = jQuery(
                 '<li class="accordion">' +
-                    '<div class="header accordion-header">' +
+                    '<div class="header accordion-header clearfix">' +
                     '   <h3></h3>' +
                     '</div>' +
                     '</li>'
