@@ -141,7 +141,9 @@ div.basic_analyse select.settings_buffer_units, div.basic_analyse select.setting
 
 /* Buttons */
 div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
-  margin: 5px; }
+  margin: 5px;
+  margin-bottom: 40px;
+  /* This is here so the buttons can be scrolled into the viewport in small resolutions... */ }
   div.basic_analyse div.buttons input, div.analyse div.startview div.buttons input {
     margin-right: 1px; }
 

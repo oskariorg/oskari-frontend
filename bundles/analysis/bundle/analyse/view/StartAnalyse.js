@@ -1860,6 +1860,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 differenceFieldB1 = container.find('input[name=analyse-layer2-field-property]:checked').val(),
                 keyField = container.find('input[name=analyse-key-field-property]:checked').val();
 
+                differenceLayerId = differenceLayerId && differenceLayerId.replace((this.id_prefix + 'layer_'), '');
+
             var methodSelections = {
                 'buffer': {
                     methodParams: {
