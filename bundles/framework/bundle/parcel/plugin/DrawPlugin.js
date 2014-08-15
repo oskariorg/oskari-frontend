@@ -891,12 +891,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @private
          */
         _updateLayerOrder: function() {
-            var zIndex;
-            if (this.editLayer !== null) {
-                zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.editLayer.getZIndex())+1;
-                this.editLayer.setZIndex(zIndex);
-                this.editLayer.redraw();
-            }
+            this.drawPlugin.editLayer.redraw();
             if (this.markerLayer !== null) {
                 zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.markerLayer.getZIndex())+1;
                 this.markerLayer.setZIndex(zIndex);
