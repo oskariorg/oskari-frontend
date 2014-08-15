@@ -112,8 +112,8 @@ div.admin-layerselector {
 
     }
 
-
     .oskariTabs {
+        margin-right: 1px; /* Avoid horizontal scrollbar, nfi why this fixes  it though... */
         min-width: 480px;
 
         div.tabsHeader ul li.admin-modify-wms {
@@ -130,8 +130,9 @@ div.admin-layerselector {
 
     div.layer,
     div.create-layer {
-        padding: 6px 10px 6px 40px;
+        padding: 6px 10px 6px 20px;
         background-color : #ffffff;
+        clear: both;
 
         #add-layer-inspire-theme {
             /*width: 309px;*/
@@ -280,7 +281,7 @@ div.admin-layerselector {
 
                 div.headerText {
                     text-overflow: ellipsis;
-                    width: 325px;
+                    width: 315px;
                     white-space: nowrap;
                     overflow: hidden;
                 }
