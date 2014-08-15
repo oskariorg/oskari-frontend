@@ -274,6 +274,7 @@ div.basic_analyse {
 /* Buttons */
 div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
     margin: 5px;
+    margin-bottom: 40px; /* This is here so the buttons can be scrolled into the viewport in small resolutions... */
 
     input {
         margin-right: 1px;
