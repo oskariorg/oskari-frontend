@@ -9,28 +9,23 @@ div.mapplugin.layerSelectionPlugin {
 
 .layerSelectionPlugin div.header {
   background-color: #333333 !important;
-  color: white !important;
+  color: #FFF !important;
   padding: 8px; }
+  .layerSelectionPlugin div.header div.header-icon {
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle; }
 
 .layerSelectionPlugin div.content {
   background-color: white; }
-
-.layerSelectionPlugin div.header div.header-icon {
-  display: inline-block;
-  margin-right: 10px;
-  vertical-align: middle; }
-
-.layerSelectionPlugin div.content div.layers, .layerSelectionPlugin div.content div.baselayers {
-  padding: 10px; }
-
-.layerSelectionPlugin div.content div.layer {
-  margin: 5px 0;
-  text-align: left; }
-
-.layerSelectionPlugin div.content div.layer input {
-  margin-right: 10px;
-  float: left; }
-
-.layerSelectionPlugin div.content div.baseLayerHeader {
-  background-color: #DDDDDD;
-  padding: 10px; }
+  .layerSelectionPlugin div.content div.baseLayerHeader {
+    background-color: #DDDDDD;
+    padding: 10px; }
+  .layerSelectionPlugin div.content div.layers, .layerSelectionPlugin div.content div.baselayers {
+    padding: 10px; }
+  .layerSelectionPlugin div.content div.layer {
+    margin: 5px 0;
+    text-align: left; }
+    .layerSelectionPlugin div.content div.layer input {
+      margin-right: 10px;
+      float: left; }

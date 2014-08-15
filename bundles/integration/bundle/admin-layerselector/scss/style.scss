@@ -1,13 +1,51 @@
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
+@mixin box-shadow($shadow...) {
+   -webkit-box-shadow: $shadow;
+   -moz-box-shadow: $shadow;
+   box-shadow: $shadow;
+}
+
+@mixin box-sizing($sizing) {
+   -webkit-box-sizing: $sizing;
+   -moz-box-sizing: $sizing;
+   box-sizing: $sizing;
+}
+
+@mixin transition-duration-and-property($duration, $property) {
+    -webkit-transition-duration: $duration;
+    -webkit-transition-property: $property;
+    -moz-transition-duration: $duration;
+    -moz-transition-property: $property;
+    -o-transition-duration: $duration;
+    -o-transition-property: $property;
+    -ms-transition-duration: $duration;
+    -ms-transition-property: $property;
+    transition-duration: $duration;
+    transition-property: $property;
+}
+
 /* layer group container */
 div.admin-layerselector {
+
     div.layerGroup {
-        background-color : #f3f3f3;
-        border: 1pt solid #c0d0d0;
+        background-color : #F3F3F3;
+        border: 1pt solid #C0D0D0;
         margin : 0;
         padding : 0;
 
         &.open {
-            background-color : #FFFFFF;
+            background-color : #FFF;
         }
 
         div.groupIcon {
@@ -15,25 +53,25 @@ div.admin-layerselector {
             margin-left: 12px;
             vertical-align: middle;
         }
+
         div.groupHeader {
+            /* FIXME if this text should be bigger, make it an H3 or something */
             display : inline-block;
-            font-weight : bold;
             padding: 8px 10px 8px 12px;
-            font: 14pt Arial,sans-serif;
         }
 
     }
 
     /* For long lists, make capabilities list scrollable */
     .add-layer-record.capabilities .add-layer-input-area {
-      max-height: 250px;
-      overflow: auto;
+        max-height: 250px;
+        overflow: auto;
     }
 
     .capabilities {
+
         ul {
             /* reset for parent level style */
-            font-weight: normal;
             margin: 0px 20px 5px 20px;
         }
 
@@ -63,15 +101,19 @@ div.admin-layerselector {
             list-style: none;
             margin: 5px -10px;
         }
+
         li.groupTitle.closed {
+
             ul {
                 display : none;
             }
+
         }
+
     }
 
-
     .oskariTabs {
+        margin-right: 1px; /* Avoid horizontal scrollbar, nfi why this fixes  it though... */
         min-width: 480px;
 
         div.tabsHeader ul li.admin-modify-wms {
@@ -85,19 +127,19 @@ div.admin-layerselector {
         padding: 10px;
         min-height: 35px;
     }
+
     div.layer,
     div.create-layer {
-        padding: 6px 10px 6px 40px;
+        padding: 6px 10px 6px 20px;
         background-color : #ffffff;
+        clear: both;
 
         #add-layer-inspire-theme {
             /*width: 309px;*/
             overflow-y: auto;
             border: solid 1px #b7b7b7;
-            border-radius: 4px;
-            -webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,.3);
-            -moz-box-shadow: inset 1px 1px 2px rgba(0,0,0,.3);
-            box-shadow: inset 1px 1px 2px rgba(0,0,0,.3);
+            @include border-radius(4px);
+            @include box-shadow(inset 1px 1px 2px rgba(0,0,0,.3));
         }
 
         .add-layer-input {
@@ -115,6 +157,7 @@ div.admin-layerselector {
             &.long {
                 width: 297px;
             }
+
         }
 
         .layer-title {
@@ -185,9 +228,7 @@ div.admin-layerselector {
         select {
             width: 309px;
             padding: 8px 10px 8px 10px;
-            -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
-            -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
-            box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+            @include box-shadow(inset 0 1px 2px rgba(0,0,0,.1));
             display: block;
         }
 
@@ -195,23 +236,23 @@ div.admin-layerselector {
             padding: 10px;
             width: 157px;
             height: 72px;
-            border-radius: 4px;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -ms-box-sizing: border-box;
-            box-sizing: border-box;
+            @include border-radius(4px);
+            @include box-sizing(border-box);
 
             &.long {
                 width: 309px;
             }
+
         }
+
     }
+
     div.create-layer {
         min-height: 35px;
     }
 
     div.layer:nth-child(even) {
-        background-color : #f3f3f3;
+        background-color : #F3F3F3;
     }
 
     div.tab-content {
@@ -220,7 +261,9 @@ div.admin-layerselector {
         div.oskarifield {
             padding: 10px;
         }
+
     }
+
     div.accordion {
 
         div.accordion_panel {
@@ -238,13 +281,15 @@ div.admin-layerselector {
 
                 div.headerText {
                     text-overflow: ellipsis;
-                    width: 335px;
+                    width: 315px;
                     white-space: nowrap;
                     overflow: hidden;
                 }
 
             }
+
         }
+
     }
 
     .admin-add-layer-btn,
@@ -254,6 +299,7 @@ div.admin-layerselector {
         float: right;
         margin: 5px 10px;
     }
+
     button.admin-arrange-layers {
         background-color: #eee;
         background-image: url('arrange-icon.png');
@@ -263,9 +309,8 @@ div.admin-layerselector {
         margin-left: -30px;
         width: 20px;
         height: 20px;
-        border-radius: 2px;
+        @include border-radius(2px);
         opacity: 0;
-        -ms-filter: "progid:DXImageTransform.Microsoft. Alpha(Opacity=0)";
     }
 
     .layer {
@@ -282,27 +327,22 @@ div.admin-layerselector {
         overflow: hidden;
         position: relative;
     }
+
     .add-layer-separation {
         margin-top: 15px;
     }
+
     .admin-add-layer-btn {
         float: right;
     }
+
     .admin-add-layer {
         padding: 10px 0px;
         overflow: hidden;
         height: auto;
-        -webkit-transition-duration: 300ms;
-        -webkit-transition-property: height;
-        -moz-transition-duration: 300ms;
-        -moz-transition-property: height;
-        -o-transition-duration: 300ms;
-        -o-transition-property: height;
-        -ms-transition-duration: 300ms;
-        -ms-transition-property: height;
-        transition-duration: 300ms;
-        transition-property: height;
+        @include transition-duration-and-property(300ms, height);
     }
+
     .show-add-layer,
     .show-edit-layer  {
         padding: 10px 0px;
@@ -311,64 +351,67 @@ div.admin-layerselector {
         overflow: hidden;
         clear: right;
     }
+
     .admin-add-class {
         padding: 0px 10px;
         overflow: hidden;
         height: 0px;
-        -webkit-transition-duration: 300ms;
-        -webkit-transition-property: height;
-        -moz-transition-duration: 300ms;
-        -moz-transition-property: height;
-        -o-transition-duration: 300ms;
-        -o-transition-property: height;
-        -ms-transition-duration: 300ms;
-        -ms-transition-property: height;
-        transition-duration: 300ms;
-        transition-property: height;
+        @include transition-duration-and-property(300ms, height);
     }
+
     .show-add-class {
         padding: 10px 10px;
         height: 200px;
         width: 100%;
     }
 
-    .add-layer-wrapper, .add-class-wrapper {
+    .add-layer-wrapper,
+    .add-class-wrapper {
         display: block;
 
     }
+
     .add-layer-btn {
         float: left;
     }
 
-    .add-layer-grouping, .add-class-grouping {
+    .add-layer-grouping,
+    .add-class-grouping {
         font-weight: bold;
         font-size: 130%;
         margin-top: 20px;
         margin-bottom: 10px;
     }
-    .add-layer-label-area, .add-class-label-area {
+
+    .add-layer-label-area,
+    .add-class-label-area {
         display: table;
         float: left;
     }
-    .add-layer-label, .add-class-label {
+
+    .add-layer-label,
+    .add-class-label {
         font-weight: bold;
         width: 75px;
         display: table-cell;
         vertical-align: middle;
     }
 
-    .add-layer-input-area, .add-layer-button-area, .add-class-input-area, .add-class-button-area {
+    .add-layer-input-area,
+    .add-layer-button-area,
+    .add-class-input-area,
+    .add-class-button-area {
         margin-left: 9em;
         min-width: 220px;
-
     }
+
     .add-layer-button-area .input-controls,
     .add-class-button-area .input-controls {
         width: 100%;
     }
+
     .input-controls {
         position: relative;
-        /*float: left;*/
         margin-right: 5px;
 
         input.add-class-input.mid {
@@ -380,6 +423,7 @@ div.admin-layerselector {
             float: right;
             margin-right: 10px;
         }
+
     }
 
     .adjacent .input-controls {
@@ -389,7 +433,6 @@ div.admin-layerselector {
     .icon-close {
         display: inline-block;
         opacity: 0;
-        -ms-filter: "progid:DXImageTransform.Microsoft. Alpha(Opacity=0)";
         position: absolute;
         top: 9px;
         right: 10px;
@@ -399,26 +442,17 @@ div.admin-layerselector {
         &.mid {
             right: 90px;
         }
+
     }
+
     .input-controls:hover .icon-close,
     .layer:hover button.admin-arrange-layers {
-        -webkit-transition-property: opacity;
-        -webkit-transition-duration: 300ms;
-        -moz-transition-property: opacity;
-        -moz-transition-duration: 300ms;
-        -o-transition-property: opacity;
-        -o-transition-duration: 300ms;
-        -ms-transition-property: opacity;
-        -ms-transition-duration: 300ms;
-        transition-property: opacity;
-        transition-duration: 300ms;
-        -ms-filter: "progid:DXImageTransform.Microsoft. Alpha(Opacity=100)";
+        @include transition-duration-and-property(300ms, opacity);
         opacity: 1;
     }
 
     div.add-layer-text {
         height: 30px;
-        font-size: 14px;
     }
 
     .left-tools .layer-opacity {
@@ -427,28 +461,35 @@ div.admin-layerselector {
         background-repeat: no-repeat;
         background-position-y: 3px;
     }
+
     .opacity-slider-tool {
         width: 215px;
     }
+
     .admin-opacity-slider {
         width: 155px;
     }
+
     .opacity-slider {
         float: right;
         line-height: 25px;
     }
+
     .layout-slider {
         width: 140px;
         float: left;
         margin-top: 6px;
     }
+
     #admin-select-capability {
         margin-bottom: 15px;
     }
+
     .fetch-wms-button {
         margin-top: 2px;
         margin-bottom: 5px;
     }
+
 }
 
 div.divmanazerpopup div.content div.admin-layerselector {

@@ -207,6 +207,7 @@ module.exports = function (grunt) {
           'printout': '../packages/framework/bundle/printout',
           'promote': '../packages/framework/bundle/promote',
           'publisher': '../packages/framework/bundle/publisher',
+          'routesearch': '../packages/framework/bundle/routesearch',
           'search': '../packages/framework/bundle/search',
           'statehandler': '../packages/framework/bundle/statehandler',
           'toolbar': '../packages/framework/bundle/toolbar',

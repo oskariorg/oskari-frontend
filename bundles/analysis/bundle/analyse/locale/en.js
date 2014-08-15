@@ -11,72 +11,72 @@ Oskari.registerLocalization({
             "title": "Analysis",
             "content": {
                 "label": "Data",
-                "drawToolsLabel": "Feature tools",
-                "tooltip": "Add analyse data - push [Add data] button",
-                "drawToolsTooltip": "You can add a new feature for analysis.\nYou can divide a feature into two features by clipping it and after that make analysis for one of them",
+                "drawToolsLabel": "Feature Tools",
+                "tooltip": "Select one map layer for analysis. You can search more map layers by clicking \"Add map layer\" and selecting a map layer from the list. You can focus your map view to the place you  want by dragging the map with a mouse or by clicking \"Search places\" and searching the place you want.",
+                "drawToolsTooltip": "By feature tools you can add new temporary features for analysis or cut an existing feature by cropping a part of it. You can add and cut point, line and area features.",
                 "features": {
-                    "title": "Add a feature",
+                    "title": "Adding Features",
                     "buttons": {
                         "cancel": "Cancel",
                         "finish": "Done"
                     },
                     "tooltips": {
-                        "point": "Add point",
-                        "line": "Add line",
-                        "area": "Add area"
+                        "point": "Add a temporary point feature.",
+                        "line": "Add a temporary line feature.",
+                        "area": "Add a temporary area feature."
                     },
                     "modes": {
-                        "area": "Area",
-                        "line": "Line",
-                        "point": "Point"
+                        "area": "Temporary area",
+                        "line": "Temporary line",
+                        "point": "Temporary point"
                     }
                 },
                 "drawDialog": {
                     "point": {
-                        "title": "Adding point",
-                        "add": "Add point by clicking the map."
+                        "title": "Adding a point",
+                        "add": "Add one or more points by clicking the map and click \"Done\" button after that. By clicking \"Cancel\" button you can delete the points you have drawn without saving them. After clicking \"Done\" button new features will be shown at the data list with the name \"Temporary point X\" where X is the order number of the point."
                     },
                     "line": {
-                        "title": "Adding line",
-                        "add": "Add a break point on the line by clicking the map. Stop drawing by double clicking."
+                        "title": "Adding a line",
+                        "add": "Add a line by clicking its breaking points (incl. starting and ending points). Finish the drawing by double clicking. You can draw one or more lines. When the lines are ready, click \"Done\" button. By clicking \"Cancel\" button you can delete the lines you have drawn without saving them. After clicking \"Done\" button new features will be shown at the data list with the name \"Temporary line X\" where X is the order number of the line."
                     },
                     "area": {
-                        "title": "Adding area",
-                        "add": "Add break points to your area polygon by clicking the map. Stop drawing by double clicking. To create holes in polygons, hold down the Alt key."
+                        "title": "Adding an area",
+                        "add": "Add an area by clicking its breaking points (incl. starting point). Finish the drawing by double clicking. You can draw one or more areas. When the areas are ready, click \"Done\" button. By clicking \"Cancel\" button you can delete the areas you have drawn without saving them. After clicking \"Done\" button new features will be shown at the data list with the name \"Temporary area X\" where X is the order number of the area."
                     }
                 },
                 "drawFilter": {
-                    "title": "Clip a feature",
+                    "title": "Clipping Features",
                     "buttons": {
                         "cancel": "Cancel",
-                        "finish": "Finish"
+                        "finish": "Done"
                     },
                     "tooltip": {
-                        "point": "Clip a line",
-                        "line": "Clip an area with a line",
-                        "edit": "Clip an area",
-                        "remove": "Remove clip"
+                        "point": "Define the clipping points and clip the line based on the clipping points.",
+                        "line": "Define the clipping line and clip the area based on the clipping line.",
+                        "edit": "Define the clipping area and clip the area based on the clipping area.",
+                        "remove": "Remove the clipping."
                     },
                     "dialog": {
                         "modes": {
                             "point": {
-                                "title": "Clip a line",
-                                "message": "Define the clip line by moving the markers."
+                                "title": "Clipping the line based on points",
+                                "message": "There are two marker points on the selected line at the starting and ending points. If the starting and ending point are at the same point, the markers are on top of one another. The marker points out the cutting points for the line. By moving the markers you can select only one part of the line. The selected part will be shown as red. When you have made a cutting ready click the \"Done\" button. Now you can use a cut line for analysis."
                             },
                             "line": {
-                                "title": "Clip an area with a line", 
-                                "message": "Clip an area with a line. Finish drawing with a double click. After this you can edit the clip line and move the clipping points alonog the perimeter."
+                                "title": "Clipping the area with a line",
+                                "message": "Draw a line through the area to be clipped by clicking its breaking points (incl. starting and ending points). Finish the drawing by double clicking. You can move breakpoints by dragging them with mouse. The cut area is shown as blue. You can change the cut area by clicking another area. When the cutting is ready, click the \"Done\" button. Now you can use a cut area for analysis."
                             },
                             "edit": {
-                                "title": "Clip an area",
-                                "message": "Clip an area with another area."
+                                "title": "Clipping the area with another area",
+                                "message": "Draw an area on the area to be clipped by clicking its breaking points (incl. starting point). Finish the drawing by double clicking. You can move breakpoints by dragging them with mouse. The cut area is shown as blue. You can change the cut area by clicking another area. When the cutting is ready, click the \"Done\" button. Now you can use a cut area for analysis."
                             }
                         }
                     }
                 },
                 "search": {
-                    "title": "Search places",
-                    "resultLink": "Add to analyse"
+                    "title": "Search the places",
+                    "resultLink": "Import to the analysis"
                 }
             },
             "method": {
@@ -90,7 +90,7 @@ Oskari.registerLocalization({
                     "tooltip": ""
                 }, {
                     "id": "oskari_analyse_aggregate",
-                    "label": "Aggregate",
+                    "label": "Key ratios computation",
                     "classForPreview": "aggregate",
                     "tooltip": ""
                 }, {
@@ -99,29 +99,29 @@ Oskari.registerLocalization({
                     "classForPreview": "union",
                     "tooltip": ""
                 }, {
-                    "id": "oskari_analyse_clip",
-                    "label": "Clip",
+                    "id": "oskari_analyse_intersect",
+                    "label": "Clipping",
                     "classForPreview": "clip",
                     "tooltip": ""
                 }, {
-                    "id": "oskari_analyse_intersect",
-                    "label": "Intersect",
+                    "id": "oskari_analyse_layer_union",
+                    "label": "Union of the intersecting features",
                     "classForPreview": "intersect",
                     "tooltip": ""
                 }, {
-                    "id": "oskari_analyse_layer_union",
-                    "label": "Union of analyse layers",
-                    "classForPreview": "layer_union",
-                    "tooltip": "Unifies analyse layers with the same feature fields"
-                }, {
                     "id": "oskari_analyse_areas_and_sectors",
-                    "label": "Areas and sectors",
+                    "label": "Multiple buffers",
                     "classForPreview": "areas_and_sectors",
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "By the method \"Multiple buffers\" you can add multiple buffers around the selected features. You can define the buffer size and the number of buffers."
+                }, {
+                    "id": "oskari_analyse_difference",
+                    "label": "Difference computation",
+                    "classForPreview": "difference",
+                    "tooltip": ""
                 }]
             },
             "aggregate": {
-                "label": "Aggregate function",
+                "label": "Key ratio",
                 "options": [{
                     "id": "oskari_analyse_Count",
                     "label": "Count",
@@ -141,47 +141,47 @@ Oskari.registerLocalization({
                 }, {
                     "id": "oskari_analyse_StdDev",
                     "label": "Standard deviation"
-                },{
+                }, {
                     "id": "oskari_analyse_Median",
                     "label": "Median"
-                },{
+                }, {
                     "id": "oskari_analyse_NoDataCnt",
-                    "label": "Unauthorized features"
+                    "label": "The number of authorised features"
                 }],
-                "attribute": "Choose an attribute"
+                "attribute": "Select the attribute"
             },
             "buffer_size": {
                 "label": "Buffer size",
-                "tooltip": "Enter buffer size"
+                "tooltip": "Give the buffer size."
             },
             "buffer_units": {
-                "m": "Meters",
-                "km": "Kilometers"
+                "m": "meters",
+                "km": "kilometers"
             },
             "analyse_name": {
-                "label": "Name of analysis",
-                "tooltip": "Enter analysis name"
+                "label": "Analysis name",
+                "tooltip": "Give the analysis a name."
             },
             "settings": {
                 "label": "Parameters",
-                "tooltip": "Enter parameters for analysis"
+                "tooltip": "Give parameters for the analysis. The parameters depend on the selected filter and method."
             },
             "intersect": {
-                "target": "Base layer",
-                "label": "Intersecting layer"
+                "target": "The layer to be intersected",
+                "label": "Intersecting layers"
             },
             "union": {
-                "label": "Second layer for union input"
+                "label": "The layer to be combined"
             },
             "layer_union": {
-                "label": "Chosen layers for union input",
-                "notAnalyseLayer": "Choose an analysis layer",
-                "noLayersAvailable": "No layers found with the same feature fields"
+                "label": "The layers to be combined",
+                "notAnalyseLayer": "Select one analysis layer.",
+                "noLayersAvailable": "The layers with similar attributes could not be found. You can search the layers by clicking \"Add map layer\"."
             },
             "areas_and_sectors": {
-                "area_count": "Area count",
-                "area_size": "Area size",
-                "sector_count": "Sector count"
+                "area_count": "The number of the buffers",
+                "area_size": "The buffer size",
+                "sector_count": "The number of the sectors"
             },
             "spatial": {
                 "label": "Spatial operator",
@@ -195,8 +195,8 @@ Oskari.registerLocalization({
                 }]
             },
             "params": {
-                "label": "Selected columns",
-                "aggreLabel": "Aggregate attributes",
+                "label": "The attributes to be included in the result",
+                "aggreLabel": "The attributes for key ratios",
                 "tooltip": "",
                 "options": [{
                     "id": "oskari_analyse_all",
@@ -207,38 +207,38 @@ Oskari.registerLocalization({
                     "label": "None"
                 }, {
                     "id": "oskari_analyse_select",
-                    "label": "Choose.."
+                    "label": "Select from the list"
                 }]
             },
             "output": {
                 "label": "Layout",
-                "color_label": "Select colors:",
-                "colorset_tooltip": "Modify colors",
-                "tooltip": "Setup colors for analysis layout",
-                "random_color_label": "Random colors"
+                "color_label": "The feature style",
+                "colorset_tooltip": "Select styles for the features with diferent geometry.",
+                "tooltip": "Select the suitable style for features at the analysis to be done.",
+                "random_color_label": "Random colours"
             },
             "buttons": {
-                "save": "Save",
-                "analyse": "Analyse",
-                "data": "Select map layers",
+                "save": "Save and finish",
+                "analyse": "Analyse and continue",
+                "data": "Add the map layers",
                 "cancel": "Cancel",
                 "ok": "OK"
             },
             "filter": {
                 "title": "Filtering",
-                "description": "Filter for layer ",
-                "clearButton": "Clear filter",
-                "refreshButton": "Refresh filter",
-                "addFilter": "Add a new filter",
-                "removeFilter": "Remove filter",
+                "description": "Filter the features at the layer",
+                "clearButton": "Clear the filter",
+                "refreshButton": "Refresh the filter",
+                "addFilter": "Add a new filter.",
+                "removeFilter": "Remove the filter.",
                 "bbox": {
                     "title": "Map window filter",
-                    "on": "In use",
-                    "off": "Not in use"
+                    "on": "Only the features visible on the map window",
+                    "off": "All features"
                 },
                 "clickedFeatures": {
-                    "title": "Feature filter",
-                    "label": "Include only selected features"
+                    "title": "Feature selection filter",
+                    "label": "Only the features selected on the map"
                 },
                 "values": {
                     "title": "Filter",
@@ -253,65 +253,65 @@ Oskari.registerLocalization({
                     "like": "is like",
                     "notEquals": "does not equal",
                     "notLike": "is not like",
-                    "greaterThan": "isgreater than",
-                    "lessThan": "isless than",
+                    "greaterThan": "is greater than",
+                    "lessThan": "is less than",
                     "greaterThanOrEqualTo": "is greater than or equal to",
                     "lessThanOrEqualTo": "is less than or equal to"
                 },
                 "validation": {
-                    "title": "Following errors prevented refreshing the filter:",
-                    "attribute_missing": "Attribute missing",
-                    "operator_missing": "Operator missing",
-                    "value_missing": "Value missing",
-                    "boolean_operator_missing": "Logical operator missing"
+                    "title": "The following errors prevented the filter refreshing:",
+                    "attribute_missing": "The attribute is missing.",
+                    "operator_missing": "The operator is missing.",
+                    "value_missing": "The value is missing.",
+                    "boolean_operator_missing": "The logical operator is missing."
                 }
             },
             "help": "Help",
             "success": {
                 "layerAdded": {
-                    "title": "Analysis OK",
-                    "message": "New analyse layer {layer} added"
+                    "title": "Analysis succeeded.",
+                    "message": "The new analysis layer {layer} has been added."
                 }
             },
             "error": {
                 "title": "Error",
-                "invalidSetup": "Invalid parameters",
-                "noParameters": "No input data, no parameters set",
-                "noLayer": "No layer / features selected",
-                "noAnalyseUnionLayer": "Choose at least another analyse layer",
-                "invalidMethod": "Unknown method: ",
-                "bufferSize": "Error in buffer size",
-                "illegalCharacters": "No alfabets - use digits",
-                "nohelp": "No guide found",
-                "saveFailed": "Storing analysis failed. Try again a little later.",
-                "loadLayersFailed": "Analysis layer load failed",
-                "loadLayerTypesFailed": "Analysis or WFS layer field types request failed",
-                "Analyse_parameter_missing": "Analyse parameter missing",
-                "Unable_to_parse_analysis": "Unable to parse analysis",
-                "Unable_to_get_WPS_features": "Unable to get WPS features",
-                "WPS_execute_returns_Exception": "WPS execute returns Exception",
-                "WPS_execute_returns_no_features": "WPS execute returns no features",
-                "Unable_to_process_aggregate_union": "Unable to process aggregate union",
-                "Unable_to_get_features_for_union": "Unable to get features for union",
-                "Unable_to_store_analysis_data": "Unable to store analysis data",
-                "Unable_to_get_analysisLayer_data": "Unable to get analysisLayer data",
-                "timeout": "Analysis request timed out",
-                "error": "Analysis failed for an unknown reason",
-                "parsererror": "Server returned invalid analysis data"
+                "invalidSetup": "The parameters contain errors.",
+                "noParameters": "The analysis layer or parameters are not defined.",
+                "noLayer": "The analysis layer is not selected.",
+                "noAnalyseUnionLayer": "You need at least two analysis levels for this method. Select at least another analysis level.",
+                "invalidMethod": "The unknown method:",
+                "bufferSize": "The buffer size is invalid.",
+                "illegalCharacters": "Give the buffer size as numbers.",
+                "nohelp": "No guide was not found.",
+                "saveFailed": "Saving the analysis failed. Please try again later.",
+                "loadLayersFailed": "Loading the analysis failed. Please try again later.",
+                "loadLayerTypesFailed": "Searching the field types of the analysis layer failed. Please try again later.",
+                "Analyse_parameter_missing": "The parameters for the analysis are missing. Please give the parameters.",
+                "Unable_to_parse_analysis": "The parameters for the analysis are invalid. Please give the parameters again.",
+                "Unable_to_get_WPS_features": "The features could not be retrieved. Please try again later.",
+                "WPS_execute_returns_Exception": "The analysis could not be processed. Please try again later.",
+                "WPS_execute_returns_no_features": "The analysis result has no features.",
+                "Unable_to_process_aggregate_union": "The key ratios for the union could not be computed. Please try again later.",
+                "Unable_to_get_features_for_union": "The features fot the key ratios computation could not be retrieved. Please try again later.",
+                "Unable_to_store_analysis_data": "Saving the analysis failed. Please try again later.",
+                "Unable_to_get_analysisLayer_data": "Getting the data for analysis failed. Please try again later.",
+                "timeout": "Analysis request timed out. Please try again later.",
+                "error": "Analysis failed because of a unknown reason. Please try again later.",
+                "parsererror": "The server returned invalid data for analysis. Please try again later."
             },
             "infos": {
                 "title": "Info",
-                "layer": "Layer ",
-                "over10": " has over 10 property fields - select max 10 from a list for analyse"
+                "layer": "The layer",
+                "over10": "has over 10 attributes. Select at most 10 attributes for the analysis. The list of attributes is at Parameters menu after you have chosen the analyse method."
             }
         },
         "StartView": {
-            "text": "Select analysis layers and analyse data. Save the results after analysis",
+            "text": "You can make statistical analysis for geographical data products including feature data. After saving analyse results you can use them later.",
             "infoseen": {
-                "label": "Don't show this again"
+                "label": "Do not show this message again."
             },
             "buttons": {
-                "continue": "Start analyse",
+                "continue": "Start analysis",
                 "cancel": "Cancel"
             }
         },
@@ -321,7 +321,7 @@ Oskari.registerLocalization({
                 "placeholder": "Give the map layer a name"
             },
             "drawing": {
-                "label": "  ",
+                "label": "NOT TRANSLATED",
                 "point": {
                     "label": "Point",
                     "color": "Colour",
@@ -351,19 +351,19 @@ Oskari.registerLocalization({
                 "delete": "Delete"
             },
             "title": "Analysis",
-            "confirmDeleteMsg": "Do you want to delete:",
+            "confirmDeleteMsg": "Do you want to delete the analysis layer:",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Cancel",
                 "delete": "Delete"
             },
             "notification": {
-                "deletedTitle": "Delete map layer",
-                "deletedMsg": "Map layer deleted"
+                "deletedTitle": "Delete analysis layer",
+                "deletedMsg": "Analysis layer has been deleted."
             },
             "error": {
                 "title": "Error!",
-                "generic": "System error. Please try again later."
+                "generic": "System error occurred. Please try again later."
             }
         }
     }

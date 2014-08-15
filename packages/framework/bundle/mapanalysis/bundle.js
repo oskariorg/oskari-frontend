@@ -33,9 +33,6 @@ Oskari.clazz.define(
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/mapanalysis/domain/AnalysisLayerModelBuilder.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapanalysis/event/AnalysisVisualizationChangeEvent.js"
             }],
             "locales": [{
                 "lang": "fi",

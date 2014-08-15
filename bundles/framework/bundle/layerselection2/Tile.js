@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Tile',
  * @param
  * {Oskari.mapframework.bundle.layerselection2.LayerSelectionBundleInstance}
  * instance
- * 		reference to component that created the tile
+ *      reference to component that created the tile
  */
 function(instance) {
     this.instance = instance;
@@ -29,11 +29,11 @@ function(instance) {
     /**
      * @method setEl
      * @param {Object} el
-     * 		reference to the container in browser
+     *      reference to the container in browser
      * @param {Number} width
-     * 		container size(?) - not used
+     *      container size(?) - not used
      * @param {Number} height
-     * 		container size(?) - not used
+     *      container size(?) - not used
      *
      * Interface method implementation
      */
@@ -78,7 +78,7 @@ function(instance) {
     /**
      * @method setState
      * @param {Object} state
-     * 		state that this component should use
+     *      state that this component should use
      * Interface method implementation, does nothing atm
      */
     setState : function(state) {

@@ -288,6 +288,22 @@
             },
             "Require-Bundle-Instance" : [  ]
         }
+        }, {
+            "instanceProps": {},
+            "title": "Omat tiedot",
+            "bundleinstancename": "personaldata",
+            "fi": "personaldata",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "personaldata",
+            "metadata": {
+                "Import-Bundle": {
+                    "personaldata": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
       }, {
             "bundleinstancename": "publisher",
             "bundlename": "publisher",

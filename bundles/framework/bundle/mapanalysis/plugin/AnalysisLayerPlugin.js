@@ -234,9 +234,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
             'AfterChangeMapLayerOpacityEvent': function (event) {
                 this._afterChangeMapLayerOpacityEvent(event);
                 //this.wfsLayerPlugin.afterChangeMapLayerOpacityEvent(event);
-            },
-            'MapAnalysis.AnalysisVisualizationChangeEvent': function (event) {
-                this._afterAnalysisVisualizationChangeEvent(event);
             }
         },
 
@@ -473,13 +470,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
             }
         },
 
-        _afterAnalysisVisualizationChangeEvent: function (event) {
-            var layer = event.getLayer();
-            var params = event.getParams();
-            var mapLayer = this.getOLMapLayers(layer);
-            // TODO: add handling
-
-        },
         /**
          * @method _mapLayerVisibilityChangedEvent
          * Handle MapLayerVisibilityChangedEvent

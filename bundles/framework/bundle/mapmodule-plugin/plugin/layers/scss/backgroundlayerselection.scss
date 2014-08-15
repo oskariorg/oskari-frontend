@@ -1,3 +1,21 @@
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
+@mixin box-shadow($shadow...) {
+   -webkit-box-shadow: $shadow;
+   -moz-box-shadow: $shadow;
+   box-shadow: $shadow;
+}
+
 div.mapplugin.backgroundLayerSelectionPlugin {
     $buttonHeight: 28px;
     $buttonWidthWithoutPadding: 120px;
@@ -8,7 +26,6 @@ div.mapplugin.backgroundLayerSelectionPlugin {
     $buttonSelectedBackgroundColor: #FAFAFA;
     $buttonBorderColor: #E6E6E6;
     $buttonBorderRadius: 2px;
-    $buttonFontSize: 14px;
     $contentVerticalMargin: 8px;
     $backgroundColor: #000;
     $backgroundOpacity: 0.3;
@@ -22,7 +39,6 @@ div.mapplugin.backgroundLayerSelectionPlugin {
     div.bg {
         background-color: $backgroundColor;
         opacity: $backgroundOpacity;
-        filter: unquote("alpha(opacity=")$backgroundOpacity * 100 unquote(")");
         width: 100%;
         height: $buttonHeight + $contentVerticalMargin + $contentVerticalMargin;
         position: absolute;
@@ -43,7 +59,6 @@ div.mapplugin.backgroundLayerSelectionPlugin {
             margin: 0 auto;
             height: $buttonHeight;
             line-height: $buttonHeight;
-            font-size: $buttonFontSize;
             width: $buttonWidthWithoutPadding;
             padding: 0 $buttonHorizontalPadding;
             background-color: $buttonBackgroundColor;
@@ -52,10 +67,8 @@ div.mapplugin.backgroundLayerSelectionPlugin {
             white-space: nowrap;
             text-align: center;
             text-overflow: ellipsis;
-            -webkit-border-radius: $buttonBorderRadius;
-            -moz-border-radius: $buttonBorderRadius;
-            border-radius: $buttonBorderRadius;
-            box-shadow: 1px 1px 1px rgba(0,0,0,$backgroundOpacity);
+            @include border-radius($buttonBorderRadius);
+            @include box-shadow(1px 1px 1px rgba(0,0,0,$backgroundOpacity));
 
             &::selection, &::-moz-selection {
                 background: transparent;
@@ -79,11 +92,10 @@ div.mapplugin.backgroundLayerSelectionPlugin {
                 margin: 0 1px 0 0;
                 padding: 0 $buttonHorizontalPadding;
                 line-height: $buttonHeight;
-                font-size: $buttonFontSize;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
-                box-shadow: 1px 1px 1px rgba(0,0,0,$backgroundOpacity);
+                @include box-shadow(1px 1px 1px rgba(0,0,0,$backgroundOpacity));
 
                 &::selection, &::-moz-selection {
                     background: transparent;
@@ -149,6 +161,8 @@ div.mapplugin.backgroundLayerSelectionPlugin {
                     border-bottom: 1px solid $buttonBorderColor;
                     -webkit-border-radius: 0;
                     -moz-border-radius: 0;
+                    -o-border-radius: 0;
+                    -ms-border-radius: 0;
                     border-radius: 0;
 
                     &.selected {
@@ -185,7 +199,6 @@ div.mapplugin.backgroundLayerSelectionPlugin {
         display: inline-block;
         height: $buttonHeight;
         line-height: $buttonHeight;
-        font-size: $buttonFontSize;
         margin: $contentVerticalMargin 0;
         padding: 0 $buttonHorizontalPadding;
         background-color: #911;

@@ -1,15 +1,18 @@
 .getinforesult_table {
+
 	tr {
 		padding: 5px;
 		
 		&.odd {
 			background-color: #EEEEEE;
 		}
+
 	}
 	
 	td {
 		padding: 2px;
 	}
+
 }
 
 .getinforesult_header {
@@ -24,6 +27,7 @@
 		display: inline;
 		float: left;
 	}
+
 }
 
 .getinforesult_header_title {
@@ -35,16 +39,21 @@
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	/* Default line height is higher than the parent element... */
+	line-height: 14px;
 }
 
 div.myplaces_wrapper {
 	padding-bottom: 18px;
 
 	div.myplaces_place {
+
 		img.myplaces_img {
 			padding-bottom: 15px;
 			max-height: 350px;
 			max-width: 350px;
 		}
+
 	}
+	
 }

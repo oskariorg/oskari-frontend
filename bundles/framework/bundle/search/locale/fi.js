@@ -5,7 +5,7 @@ Oskari.registerLocalization({
         "title": "Haku",
         "desc": "",
         "tabTitle": "Paikkahaku",
-        "invalid_characters": "Hakusanassa on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (A-Ö, a-ö), numerot (0-9), piste (.), pilkku (,) ja huutomerkki (!). Lisäksi sallittuja ovat kysymysmerkki (?), jolla voi korvata sanasta yhden merkin, ja jokerimerkki (*), jolla voi korvata sanan loppuosan. Jokerimerkki voi olla ainoastaan sanan lopussa.",
+        "invalid_characters": "Hakusanassa on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (A-Ö, a-ö), numerot (0-9), piste (.), pilkku (,), yhdysviiva (-) ja huutomerkki (!). Lisäksi sallittuja ovat kysymysmerkki (?), jolla voi korvata sanasta yhden merkin, ja jokerimerkki (*), jolla voi korvata sanan loppuosan. Jokerimerkki voi olla ainoastaan sanan lopussa.",
         "searchDescription": "Hae paikannimeä, osoitetta tai kiinteistötunnusta.",
         "searchButton": "Hae",
         "searchAssistance": "Kirjoita hakusana tähän.",

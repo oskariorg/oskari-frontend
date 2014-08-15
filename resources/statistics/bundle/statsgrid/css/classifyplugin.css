@@ -2,10 +2,10 @@
   z-index: 1000000 !important;
   max-width: 240px;
   background-color: white !important;
-  color: black !important;
+  color: #000 !important;
   padding: 0px;
   text-align: left;
-  font: 12px/100% Arial, sans-serif;
+  font-size: 12px;
   position: absolute;
   bottom: 5px;
   right: 5px; }
@@ -29,12 +29,12 @@
     font-size: 90%; }
   .manageClassificationPlugin div.classCount {
     float: left;
-    background-color: white !important;
+    background-color: #FFF !important;
     padding: 0px;
     margin: 2px; }
   .manageClassificationPlugin div.classheader {
-    color: white;
-    background-color: black !important;
+    color: #FFF;
+    background-color: #000 !important;
     padding: 4px; }
   .manageClassificationPlugin div.classifications {
     margin: 4px;

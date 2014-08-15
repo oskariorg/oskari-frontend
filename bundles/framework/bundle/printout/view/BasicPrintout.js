@@ -604,7 +604,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             var maplinkArgs = selections.maplinkArgs;
             var pageSizeArgs = "&pageSize=" + selections.pageSize;
-            var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
+            var pageTitleArgs = "&pageTitle=" + encodeURIComponent(selections.pageTitle);
             var saveFileArgs = "";
             if(selections.saveFile) saveFileArgs = "&saveFile=" + selections.saveFile;
             var layoutArgs = me._getLayoutParams(selections.pageSize);
@@ -886,7 +886,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             var maplinkArgs = selections.maplinkArgs;
             var pageSizeArgs = "&pageSize=" + selections.pageSize;
-            var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
+            var pageTitleArgs = "&pageTitle=" + encodeURIComponent(selections.pageTitle);
             var contentOptions = [],
                 p;
             for (p in this.contentOptionsMap) {

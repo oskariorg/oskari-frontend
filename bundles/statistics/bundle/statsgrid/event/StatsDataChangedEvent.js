@@ -1,7 +1,7 @@
 /**
  * @class Oskari.statistics.bundle.statsgrid.event.StatsDataChangedEvent
  * 
- * 
+ * Creates classification of stats column data and shows it on geostats legend html.
  */
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.StatsDataChangedEvent',
 /**

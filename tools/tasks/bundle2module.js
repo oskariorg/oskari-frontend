@@ -53,6 +53,7 @@ module.exports = function(grunt) {
                 relativePath = relativePath.replace(/[\.\/]*bundles/, 'bundles');
                 relativePath = relativePath.replace(/[\.\/]*libraries/, 'libraries');
                 relativePath = relativePath.replace(/[\.\/]*sources/, 'sources');
+                relativePath = relativePath.replace(/[\.\/]*src/, 'src');
             }
 
             // dots mess around with RequireJS file extension detection.
