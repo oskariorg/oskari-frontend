@@ -54,12 +54,12 @@ Oskari.clazz.define('Oskari.mapframework.event.Event',
      */
 
     function () {
-        throw "mapframework.event.Event should not be used";
         /** @property{String} _name event name */
         this._name = null;
         /** @property{String} _creator name for the functionality/bundle/module triggering the
          * event */
         this._creator = null;
+        throw 'mapframework.event.Event should not be used';
     }, {
         /**
          * @method getName
@@ -68,7 +68,7 @@ Oskari.clazz.define('Oskari.mapframework.event.Event',
          * @throws always override this
          */
         getName: function () {
-            throw "Running default implementation of Event.getName(). implement your own!";
+            throw 'Running default implementation of Event.getName(). implement your own!';
         },
         /**
          * @method setCreator

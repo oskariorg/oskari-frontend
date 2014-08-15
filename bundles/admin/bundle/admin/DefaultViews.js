@@ -12,7 +12,9 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.DefaultViews", function(locale, p
 }, {
     templates: {
         'main': _.template('<div>${ msg }<div class="grid-placeholder"></div></div>'),
-        'link': _.template('<a href="javascript:void(0);" onClick="return false;">${ msg }</a>')
+        'link': _.template('<a href="javascript:void(0);" onClick="return false;">${ msg }</a>'),
+        'errorGuest' : _.template('<div>${listTitle}<ul>${list}</ul></div>'),
+        'listItem': _.template('<li>${ msg }</li>')
     },
     /**
      * Create the UI for this tab panel
@@ -96,8 +98,10 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.DefaultViews", function(locale, p
         // setup layers
         var layers = sb.findAllSelectedMapLayers();
         _.each(layers, function(layer) {
-            selectedLayers.push({ id : layer.getId() });
+            // backend assumes id is in string format
+            selectedLayers.push({ id : '' + layer.getId() });
         });
+        // backend assumes selectedLayers is stringified JSON
         data.selectedLayers = JSON.stringify(selectedLayers);
 
 
@@ -109,12 +113,75 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.DefaultViews", function(locale, p
             success: function(response) {
                 me.__viewSaved(id, response);
             },
-            error : function() {
-                me.instance.showMessage(
-                    me.locale.notifications.errorTitle, 
-                    _.template(me.locale.notifications.errorUpdating)({id : id}));
+            error : function(xhr) {
+                me.__parseError(xhr, id);
             }
         });
+    },
+    __parseError: function(xhr, id) {
+        var sb = this.instance.getSandbox();
+        if(!xhr || !xhr.responseText) {
+            this.__showGenericErrorSave(id);
+            return;
+        }
+        try {
+            var resp = JSON.parse(xhr.responseText);
+            if(resp.error) {
+                sb.printWarn(resp.error);
+            }
+            if(resp.info) {
+                var code = resp.info.code;
+                var handler = this.errorHandlers[code];
+                if(handler) {
+                    handler.apply(this, [resp.info, id]);
+                    return;
+                }
+            }
+
+        } catch(err) { }
+        this.__showGenericErrorSave(id);
+    },
+    errorHandlers : {
+        "guest_not_available" : function(data, id) {
+            var me = this;
+            var sb = this.instance.getSandbox();
+            var problemLayers = data.selectedLayers;
+            if(problemLayers && problemLayers.length > 0) {
+                // construct a list of problematic layers to show
+                var list = [];
+                _.each(problemLayers, function(layerId) {
+                    var layer = sb.findMapLayerFromAllAvailable(layerId);
+                    var msg = 'Layer ID ' + layerId;
+                    if(layer) {
+                        msg = layer.getName(); 
+                    }
+                    list.push(me.templates.listItem({ msg : msg }));
+                });
+
+                var msg = this.templates.errorGuest( {
+                    listTitle : this.locale.notifications.listTitle,
+                    list : list.join(' ')
+                });
+                // buttons
+                var okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+                okButton.setPrimary(true);
+                okButton.setHandler(function() {
+                    me.instance.closeDialog();
+                });
+                var forceButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                forceButton.setTitle(this.locale.forceButton);
+                forceButton.setHandler(function() {
+                    me.__modifyView(id, true);
+                    me.instance.closeDialog();
+                });
+                this.instance.showMessage(this.locale.notifications.warningTitle, msg, [okButton, forceButton]);
+            }
+        }
+    },
+    __showGenericErrorSave: function(id) {
+        this.instance.showMessage(
+            this.locale.notifications.errorTitle, 
+            _.template(this.locale.notifications.errorUpdating)({id : id}));
     },
     __viewSaved: function(id, data) {
         this.instance.showMessage(
@@ -131,9 +198,10 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.DefaultViews", function(locale, p
         var model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
         model.addData({
             id: data.viewId,
-            name: '*Global*',
+            name: me.locale.globalViewTitle,
             action: me.locale.setButton
         });
+        
         _.each(data.roles, function(role) {
             if (!role.viewId) {
                 return;

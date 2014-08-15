@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 this.overlay.close();
             }
             if(this.hasKeydownListener) {
-                jQuery(this.dialog).off("keydown", this._stopKeydownPropagation);
+                jQuery(this.dialog).off('keydown', this._stopKeydownPropagation);
             }
             if (noAnimation) {
                 me.dialog.remove();
@@ -194,8 +194,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             me.dialog.addClass(alignment);
             //move dialog to correct location
             me.dialog.css({
-                'left': left + "px",
-                'top': top + "px",
+                'left': left + 'px',
+                'top': top + 'px',
                 'margin-left': 0,
                 'margin-top': 0
             });
@@ -306,7 +306,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 this.__listeners = {};
             }
             if(!this.__listeners[type] || !this.__listeners[type].push) {
-                this.__listeners[type] = []
+                this.__listeners[type] = [];
             }
             return this.__listeners[type];
         },
@@ -317,7 +317,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          */
         makeDraggable: function () {
             var me = this;
-            me.dialog.css("position", "absolute");
+            me.dialog.css('position', 'absolute');
             me.dialog.draggable({
                 scroll: false
             });
