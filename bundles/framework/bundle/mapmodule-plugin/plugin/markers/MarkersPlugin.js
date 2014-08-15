@@ -170,7 +170,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                             me.stopMarkerAdd();
                             me.enableGfi(true);
                         });
-                        cancelBtn.addClass('primary');
+                        cancelBtn.setPrimary(true);
                         controlButtons.push(cancelBtn);
 
                         me.dialog.show(diaLoc.title, diaLoc.message, controlButtons);
