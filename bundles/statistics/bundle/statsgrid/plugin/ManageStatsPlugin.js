@@ -808,7 +808,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             });
 
             var selectorsContainer = container.find('.selectors-container');
-            selectorsContainer.append(indi).append('<div class="parameters-cont"></div>');
+            selectorsContainer.append(indi).append('<div class="parameters-cont clearfix"></div>');
 
             var paramCont = selectorsContainer.find('.parameters-cont');
             me._addOwnIndicatorButton(paramCont, container);

@@ -53,6 +53,7 @@
     margin-top: 5px; }
   .statsgrid .parameters-cont {
     min-height: 115px;
+    margin-bottom: 20px;
     /* FIXME move this to forms.scss */ }
     .statsgrid .parameters-cont button {
       margin: 8px 0 10px 8px; }
