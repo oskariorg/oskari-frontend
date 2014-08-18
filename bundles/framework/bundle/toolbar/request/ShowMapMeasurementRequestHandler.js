@@ -12,12 +12,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasureme
      * @param {Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance} toolbar
      *          reference to toolbarInstance that handles the buttons
      */
-
     function (toolbar) {
         var me = this;
         me._toolbar = toolbar;
 
-        var loc = this._toolbar.getLocalization('measure'),
+        var loc = me._toolbar.getLocalization('measure'),
             title = loc.title;
         me._title = title;
         me._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -52,8 +51,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasureme
          * @method _showMeasurementResults
          */
         _showMeasurementResults: function (value) {
-            var me = this;
-            var dialog = me._dialog;
+            var me = this,
+                dialog = me._dialog;
 
             // show measurements in toolbar's content container
             if(me._toolbar.conf.hasContentContainer) {
@@ -61,7 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasureme
             } else {
                 // if there is no content container, show the data in dialog
                 if (!me._dialogShown) {
-                    dialog.show(me._title, "", me._buttons);
+                    dialog.show(me._title, '', me._buttons);
                     var cancelBtn = me._buttons[0];
                     cancelBtn.setHandler(function () {
                         me._dialogShown = false;
@@ -73,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasureme
                     });
 
                     dialog.moveTo('#toolbar div.toolrow[tbgroup=default-basictools]', 'top');
-                    me._content = jQuery("<div></div>");
+                    me._content = jQuery('<div></div>');
                     dialog.setContent(me._content);
                     me._dialogShown = true;
                 }
@@ -89,9 +88,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasureme
      * implements Module protocol update method
      */
     _showResultsInPlugin : function(value) {
-        var me = this;
-
-        var toolContainerRequest;
+        var me = this,
+            toolContainerRequest;
         if (!me.toolContentDivData) {
             var cancelBtn = me._buttons[0];
             cancelBtn.setHandler(function() {
@@ -103,16 +101,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasureme
         
             // store data for later reuse 
             me.toolContentDivData = {
-                "className": 'measureline',
-                "title": me._title,
-                "content": jQuery("<div></div>"),
-                "buttons": me._buttons
-            }
+                className: 'measureline',
+                title: me._title,
+                content: jQuery('<div></div>'),
+                buttons: me._buttons
+            };
 
             toolContainerRequest = me._toolbar.getSandbox().getRequestBuilder('Toolbar.ToolContainerRequest')('set', me.toolContentDivData);
             me._toolbar.getSandbox().request(me._toolbar, toolContainerRequest);
         }
-        me.toolContentDivData.content.html(value)
+        me.toolContentDivData.content.html(value);
     },
     /**
      * @method sendStopDrawRequest
@@ -121,8 +119,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasureme
      * @param {Boolean} isCancel boolean param for StopDrawingRequest, true == canceled, false = finish drawing (dblclick)
      */
     _hideResultsInPlugin : function(isCancel) {
-        var me = this;
-        var toolContainerRequest = me._toolbar.getSandbox().getRequestBuilder('Toolbar.ToolContainerRequest')('reset', me.toolContentDivData);
+        var me = this,
+            toolContainerRequest = me._toolbar.getSandbox().getRequestBuilder('Toolbar.ToolContainerRequest')('reset', me.toolContentDivData);
         me._toolbar.getSandbox().request(me._toolbar, toolContainerRequest);
         me.toolContentDivData = null;
     }
