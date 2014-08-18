@@ -86,6 +86,9 @@ function(data) {
     	if(!this.data.title) {
     		return;
     	}
+        if(!lang) {
+            lang = Oskari.getLang();
+        }
     	if(this.data.title[lang]) {
     		return this.data.title[lang];
     	}
