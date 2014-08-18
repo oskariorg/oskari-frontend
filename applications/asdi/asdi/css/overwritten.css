@@ -1,0 +1,155 @@
+input[type="text"] {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+table td {
+	text-align: left;
+	vertical-align: top;
+}
+
+table {
+	border-top-width: 0px;
+}
+@media screen {
+    div.search input[type=button] {
+         width: 128px !important ;
+    }
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+    #mapdiv {
+        width: 100%;
+        height: 100%;
+    }
+  
+    #maptools {
+
+        height: 100%;
+        position: absolute;
+        top: 0;
+        width: 153px;
+        z-index: 2;
+        
+        margin-top: 0px;
+    }
+    #contentMap {
+        height: 100%;
+    }
+
+    img.panbuttonDivImg {
+        border: 0;
+    }
+
+   .oskari-tile {
+		height: auto !important;
+		min-height: 31px !important;
+        line-height: 15px !important;	
+    }
+    .oskari-tile-closed {
+        background-color: white !important;
+        border-bottom: 1px solid #0099CB !important;
+        border-top: 1px solid white !important;
+    }
+    
+    .oskari-tile-attached {
+        background-color: #2d2d2d !important;
+        border-bottom: 1px solid white !important;
+        border-top: 1px solid #0099CB !important;
+    }
+    
+    .oskari-tile-attached .oskari-tile-title {
+		color: white !important;
+	}
+	
+	.oskari-tile-closed .oskari-tile-title {
+		color: black !important;
+	}
+    
+    
+    
+   
+    .oskari-flyout-title {
+        color: black !important;
+    }
+    
+    .oskari-flyouttoolbar {    
+    	background-color: white !important; 
+		background-image: url('ASDI_web_header.jpg');
+		background-position: -150px -24px !important;
+    }
+    
+    .oskari-flyoutheading {
+		background-color: white !important;
+		border-top: 0px !important;
+		border-bottom: 0px !important;
+		height: 14px !important;
+		width: 100% !important;
+	}
+	
+	.oskari-flyoutcontent {
+		background-color: white !important;
+	}
+  
+    #logobar {
+        height: 153px;
+        width: 153px;
+        overflow: hidden;
+        background-color: white;
+        background-image: url('ASDI_web_header.jpg');
+		background-repeat: no-repeat;
+		background-origin: content-box;
+		background-position: 0px 8px;
+    }
+
+
+    #toolbar div.toolrow {
+    	background-color: rgb(147, 187, 218) !important;
+    }
+   
+    div.oskari-flyout {
+        min-height: 220px !important;
+    }
+    .oskariui-center {
+        margin: 0px !important;
+    }
+    
+	div.oskari-flyout.oskari-attached {
+		max-width: 500px;
+	}
+	div.oskari-flyout.oskari-detached {
+		max-width: 500px;
+	}
+
+	div.layerselection2 .layer.selected div.layer-tools {
+		background-color: white !important;
+		padding: 7px !important;
+	}
+	
+	div.layerselection2 .layer.selected {
+		border: 1pt solid #c0d0e0;
+		margin: 0 5px 5px 0;
+		padding: 5px !important;
+		border-radius: 5px !important;
+		background-color: white !important;
+	}
+	
+	div.layer-info div.layer-title h4 {
+		font-size: 15px !important;
+		line-height: 22px !important;
+	}
+	
+	    body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font: 14px/16px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif
+    }
+
+	.search .resultList div h3 {
+		font-size: 14px;	
+	}
+}
+
