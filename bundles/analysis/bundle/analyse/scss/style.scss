@@ -89,6 +89,22 @@ div.basic_analyse {
 
     }
 
+    div.analyse_difference_cont {
+
+        ul {
+            margin: 0;
+            padding: 0;
+            padding-bottom: 10px;
+
+            li {
+                list-style-type: none;
+                margin: 5px;
+            }
+
+        }
+
+    }
+
     div.icon-info {
         float: right;
         cursor: pointer;
@@ -177,22 +193,6 @@ div.basic_analyse {
 
     }
 
-    div.header-icon-info {
-        margin: 10px;
-    }
-
-    select {
-
-        &.settings_buffer_units, &.settings_area_size_units {
-            width: 80px;
-        }
-
-    }
-
-}
-
-div.basic_analyse {
-
     div.form {
 
         div.field {
@@ -207,9 +207,9 @@ div.basic_analyse {
 
     }
 
-}
-
-div.basic_analyse {
+    div.header-icon-info {
+        margin: 10px;
+    }
 
     div.tool, div.drawFilter, div.analyse_settings_cont, div.analyse_areas_and_sectors_cont {
 
@@ -235,6 +235,14 @@ div.basic_analyse {
             }
 
         }
+    }
+
+    select {
+
+        &.settings_buffer_units, &.settings_area_size_units {
+            width: 80px;
+        }
+
     }
 
 }
@@ -266,6 +274,7 @@ div.basic_analyse {
 /* Buttons */
 div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
     margin: 5px;
+    margin-bottom: 40px; /* This is here so the buttons can be scrolled into the viewport in small resolutions... */
 
     input {
         margin-right: 1px;

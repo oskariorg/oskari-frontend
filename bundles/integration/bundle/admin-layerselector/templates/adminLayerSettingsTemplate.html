@@ -18,7 +18,36 @@
         inspireThemes: inspireThemes, 
         isSubLayer: isSubLayer }) %>
     <% } %>
-    <% 
+
+    <!--div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-username" class="add-layer-label"
+                   title="<%= instance.getLocalization('admin').username %>"><%=instance.getLocalization('admin').username %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <input type="text" id="add-layer-username" class="add-layer-input long"
+                       placeholder="<%= instance.getLocalization('admin').username %>"
+                       value="<%= model.getMetadataIdentifier() %>" />
+                <div class="icon-close"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-password" class="add-layer-label" title="<%= instance.getLocalization('admin').password %>"><%= instance.getLocalization('admin').password %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <input type="text" id="add-layer-password" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').password %>"
+                       value="<%= model.getMetadataIdentifier() %>" />
+                <div class="icon-close"></div>
+            </div>
+        </div>
+    </div-->
+
+    <%
         // Names are not necessary for sublayers, BUT we need to show something as the name for admins (!isSubLayer &&)
         if ( model.getNameLanguages) { %>
         <div class="add-layer-grouping" title="<%= instance.getLocalization('admin').layerNameAndDesc %>"><%= instance.getLocalization('admin').layerNameAndDesc %></div>

@@ -13,7 +13,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
      *
      * Always extend this class, never use as is.
      */
-
     function (instance, locale) {
 
         /* @property extension instance */
@@ -120,17 +119,17 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
 
         issue: function () {
             var requestName = arguments[0],
-            	args = this.slicer.apply(arguments, [1]),
-            	builder = this.getSandbox().getRequestBuilder(requestName),
-            	request = builder.apply(builder, args);
+                args = this.slicer.apply(arguments, [1]),
+                builder = this.getSandbox().getRequestBuilder(requestName),
+                request = builder.apply(builder, args);
             return this.getSandbox().request(this.getExtension(), request);
         },
 
         notify: function () {
             var eventName = arguments[0],
-            	args = this.slicer.apply(arguments, [1]),
-            	builder = this.getSandbox().getEventBuilder(eventName),
-            	evt = builder.apply(builder, args);
+                args = this.slicer.apply(arguments, [1]),
+                builder = this.getSandbox().getEventBuilder(eventName),
+                evt = builder.apply(builder, args);
             return this.getSandbox().notifyAll(evt);
         }
 

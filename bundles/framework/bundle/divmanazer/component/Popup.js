@@ -31,7 +31,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 actionDiv = this.dialog.find('div.actions'),
                 i,
                 contentHeight,
-                reasonableHeight;
+                reasonableHeight,
+                focusedButton = -1;
 
             this.setTitle(title);
             this.setContent(message);
@@ -41,6 +42,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if (buttons && buttons.length > 0) {
                 for (i = 0; i < buttons.length; i += 1) {
                     buttons[i].insertTo(actionDiv);
+                    if (buttons[i].focus) {
+                        focusedButton = i;
+                    }
                 }
             } else {
                 // if no actions, the user can click on popup to close it
@@ -49,6 +53,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 });
             }
             jQuery('body').append(this.dialog);
+            if (focusedButton >= 0) {
+                buttons[focusedButton].getButton().focus();
+            }
 
             contentHeight = contentDiv.height();
             reasonableHeight = jQuery(document).height() * 0.6;
@@ -110,7 +117,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 this.overlay.close();
             }
             if(this.hasKeydownListener) {
-                jQuery(this.dialog).off("keydown", this._stopKeydownPropagation);
+                jQuery(this.dialog).off('keydown', this._stopKeydownPropagation);
             }
             if (noAnimation) {
                 me.dialog.remove();
@@ -187,8 +194,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             me.dialog.addClass(alignment);
             //move dialog to correct location
             me.dialog.css({
-                'left': left + "px",
-                'top': top + "px",
+                'left': left + 'px',
+                'top': top + 'px',
                 'margin-left': 0,
                 'margin-top': 0
             });
@@ -299,7 +306,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 this.__listeners = {};
             }
             if(!this.__listeners[type] || !this.__listeners[type].push) {
-                this.__listeners[type] = []
+                this.__listeners[type] = [];
             }
             return this.__listeners[type];
         },
@@ -310,7 +317,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          */
         makeDraggable: function () {
             var me = this;
-            me.dialog.css("position", "absolute");
+            me.dialog.css('position', 'absolute');
             me.dialog.draggable({
                 scroll: false
             });

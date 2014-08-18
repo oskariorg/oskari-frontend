@@ -381,6 +381,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
             this._map.events.register("removelayer",this,function() {
                 this._updateLayerOrder();
             });
+            this._map.events.register("AfterRearrangeSelectedMapLayerEvent",this,function() {
+                this._updateLayerOrder();
+            });
+            this._map.events.register("AfterMapLayerRemoveEvent",this,function() {
+                this._updateLayerOrder();
+            });
+            this._map.events.register("AfterMapLayerAddEvent",this,function() {
+                this._updateLayerOrder();
+            });
+            this._map.events.register("MapLayerEvent",this,function() {
+                this._updateLayerOrder();
+            });
 
             // Todo: styles from file
             /* OpenLayers.Request.GET({
@@ -809,29 +821,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                 }
             }
             this.editLayer.updateLine();
-            this.fadeCount = 0;
-            this.fadeOut(false);
+            if (!trivialSplit) {
+                this.fadeCount = 0;
+                this.fadeOut(false);
+            }
         },
 
         fadeOut: function (faded) {
             var me = this;
-            me.drawLayer.features[me.selectedFeature].style.fillOpacity = me.drawLayer.features[me.selectedFeature].style.fillOpacity-0.01;
+            if (typeof me.drawLayer.features[me.selectedFeature] === "undefined") {
+                return;
+            }
+            me.drawLayer.features[me.selectedFeature].style.fillOpacity = me.drawLayer.features[me.selectedFeature].style.fillOpacity+0.01;
             me.drawLayer.redraw();
             setTimeout(function(){
-                if (me.drawLayer.features[me.selectedFeature].style.fillOpacity > 0.0) {
+                if (me.drawLayer.features[me.selectedFeature].style.fillOpacity < 1.0) {
                     me.fadeOut(faded);
                 } else {
                     me.fadeIn(faded);
                 }
-          },20);
+          },5);
         },
 
         fadeIn: function (faded) {
             var me = this;
-            me.drawLayer.features[me.selectedFeature].style.fillOpacity = me.drawLayer.features[me.selectedFeature].style.fillOpacity+0.01;
+            me.drawLayer.features[me.selectedFeature].style.fillOpacity = me.drawLayer.features[me.selectedFeature].style.fillOpacity-0.01;
             me.drawLayer.redraw();
             setTimeout(function(){
-                if (me.drawLayer.features[me.selectedFeature].style.fillOpacity < 0.4) {
+                if (me.drawLayer.features[me.selectedFeature].style.fillOpacity > 0.4) {
                     me.fadeIn(faded);
                 } else {
                     me.fadeCount = me.fadeCount+1;
@@ -839,7 +856,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
                         me.fadeOut(faded);
                     }
                 }
-          },20);
+          },5);
         },
 
         initControls: function (editingFeature) {
@@ -874,16 +891,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin',
          * @private
          */
         _updateLayerOrder: function() {
-            var zIndex;
-            if (this.editLayer !== null) {
-                zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.editLayer.getZIndex())+1;
-                this.editLayer.setZIndex(zIndex);
-                this.editLayer.redraw();
-            }
             if (this.markerLayer !== null) {
                 zIndex = Math.max(this._map.Z_INDEX_BASE.Feature,this.markerLayer.getZIndex())+1;
-                this.markerLayer.setZIndex(zIndex);
+                this.markerLayer.setZIndex(zIndex+1);
                 this.markerLayer.redraw();
+                this.editLayer.setZIndex(zIndex);
             }
         },
 

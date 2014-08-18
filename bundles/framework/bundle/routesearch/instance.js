@@ -6,14 +6,14 @@
  * See Oskari.mapframework.bundle.routesearch.RouteSearchBundle for bundle definition.
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.RouteSearchBundleInstance',
     function () {},
     {
         /**
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        getName: function () {
             return 'RouteSearch';
         },
 
@@ -31,7 +31,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleIns
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 var me = this,
-                    doOpen = event.getViewState() !== "close";
+                    doOpen = event.getViewState() !== 'close';
                 if (event.getExtension().getName() !== me.getName()) {
                     // not me -> do nothing
                     return;
@@ -54,7 +54,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleIns
                 this.plugins['Oskari.userinterface.Flyout'].onMapClick(
                     event.getLonLat()
                 );
-            }
+            };
             this.sandbox.registerForEventByName(this, 'MapClickedEvent');
         },
 
@@ -72,5 +72,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routesearch.RouteSearchBundleIns
          * @property {String[]} extend
          * @static
          */
-        "extend": ['Oskari.userinterface.extension.DefaultExtension']
+        'extend': ['Oskari.userinterface.extension.DefaultExtension']
     });

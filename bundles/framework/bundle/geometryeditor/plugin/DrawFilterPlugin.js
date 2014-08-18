@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     this.endIndex = null;
     this.editMode = false;
     this.currentDrawMode = null;
-    this.prefix = "DrawFilterPlugin.";
+    this.prefix = 'DrawFilterPlugin.';
     this.creatorId = undefined;
     // Source layer listeners
     this.sourceListeners = {
@@ -38,78 +38,78 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     // Todo: defaults from configuration
     this.sourceStyleMaps = {
         point: new OpenLayers.StyleMap({
-            "default": new OpenLayers.Style({
-                strokeColor: "#0000ff",
+            'default': new OpenLayers.Style({
+                strokeColor: '#0000ff',
                 strokeWidth: 2
             }),
-            "select": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["select"]),
-            "temporary": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["temporary"]),
-            "delete": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["delete"])
+            'select': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style.select),
+            'temporary': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style.temporary),
+            'delete': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style['delete'])
         }),
         line: new OpenLayers.StyleMap({
-            "default": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["default"]),
-            "select": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["select"]),
-            "temporary": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["temporary"]),
-            "delete": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["delete"])
+            'default': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style['default']),
+            'select': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style.select),
+            'temporary': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style.temporary),
+            'delete': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style['delete'])
         }),
         edit: new OpenLayers.StyleMap({
-            "default": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["default"]),
-            "select": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["select"]),
-            "temporary": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["temporary"]),
-            "delete": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["delete"])
+            'default': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style['default']),
+            'select': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style.select),
+            'temporary': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style.temporary),
+            'delete': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style['delete'])
         })
     };
     // Target layer style
     this.targetStyleMaps = {
         point: new OpenLayers.StyleMap({
-            "default": new OpenLayers.Style({
-                strokeColor: "#ff0000",
+            'default': new OpenLayers.Style({
+                strokeColor: '#ff0000',
                 strokeWidth: 3
             }),
-            "select": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["select"]),
-            "temporary": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["temporary"]),
-            "delete": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["delete"])
+            'select': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style.select),
+            'temporary': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style.temporary),
+            'delete': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style['delete'])
         }),
         line: new OpenLayers.StyleMap({
-            "default": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["default"]),
-            "select": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["select"]),
-            "temporary": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["temporary"]),
-            "delete": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["delete"])
+            'default': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style['default']),
+            'select': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style.select),
+            'temporary': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style.temporary),
+            'delete': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style['delete'])
         }),
         edit: new OpenLayers.StyleMap({
-            "default": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["default"]),
-            "select": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["select"]),
-            "temporary": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["temporary"]),
-            "delete": new OpenLayers.Style(
-                OpenLayers.Feature.Vector.style["delete"])
+            'default': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style['default']),
+            'select': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style.select),
+            'temporary': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style.temporary),
+            'delete': new OpenLayers.Style(
+                OpenLayers.Feature.Vector.style['delete'])
         })
     };
 
     if (config && config.id) {
         // Note that the events and requests need to match the configured
         // prefix based on the id!
-        this.prefix = config.id + ".";
+        this.prefix = config.id + '.';
         this.creatorId = config.id;
     }
 }, {
@@ -137,19 +137,19 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 var control = this;
                 function collectComponentVertices(geometry) {
                     var i, vertex, component, len;
-                    if(geometry.CLASS_NAME == "OpenLayers.Geometry.Point") {
+                    if(geometry.CLASS_NAME === 'OpenLayers.Geometry.Point') {
                         vertex = new OpenLayers.Feature.Vector(geometry);
                         vertex._sketch = true;
                         vertex.renderIntent = control.vertexRenderIntent;
                         control.vertices.push(vertex);
                     } else {
                         var numVert = geometry.components.length;
-                        if(geometry.CLASS_NAME == "OpenLayers.Geometry.LinearRing") {
+                        if(geometry.CLASS_NAME === 'OpenLayers.Geometry.LinearRing') {
                             numVert -= 1;
                         }
                         for(i=0; i<numVert; ++i) {
                             component = geometry.components[i];
-                            if(component.CLASS_NAME == "OpenLayers.Geometry.Point") {
+                            if(component.CLASS_NAME === 'OpenLayers.Geometry.Point') {
                                 // Only common vertices can be edited
                                 if(me.isSharedEdge(component)) {
                                     vertex = new OpenLayers.Feature.Vector(component);
@@ -166,7 +166,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                         }
 
                         // add virtual vertices in the middle of each edge
-                        if (control.createVertices && geometry.CLASS_NAME != "OpenLayers.Geometry.MultiPoint") {
+                        if (control.createVertices && geometry.CLASS_NAME !== 'OpenLayers.Geometry.MultiPoint') {
                             for(i=0, len=geometry.components.length; i<len-1; ++i) {
                                 var prevVertex = geometry.components[i];
                                 var j = i + 1;
@@ -178,15 +178,15 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                                     }
                                 }
                                 var nextVertex = geometry.components[j];
-                                if(prevVertex.CLASS_NAME == "OpenLayers.Geometry.Point" &&
-                                   nextVertex.CLASS_NAME == "OpenLayers.Geometry.Point") {
+                                if(prevVertex.CLASS_NAME === 'OpenLayers.Geometry.Point' &&
+                                   nextVertex.CLASS_NAME === 'OpenLayers.Geometry.Point') {
                                     if(((me.isSharedEdge(prevVertex))||(me.isSharedEdge(nextVertex)))||(me.isShortLine([prevVertex,nextVertex]))) {
-                                        var x = (prevVertex.x + nextVertex.x) / 2;
-                                        var y = (prevVertex.y + nextVertex.y) / 2;
-                                        var point = new OpenLayers.Feature.Vector(
-                                            new OpenLayers.Geometry.Point(x, y),
-                                            null, control.virtualStyle
-                                        );
+                                        var x = (prevVertex.x + nextVertex.x) / 2,
+                                            y = (prevVertex.y + nextVertex.y) / 2,
+                                            point = new OpenLayers.Feature.Vector(
+                                                new OpenLayers.Geometry.Point(x, y),
+                                                null, control.virtualStyle
+                                            );
                                         // set the virtual parent and intended index
                                         point.geometry.parent = geometry;
                                         point._index = i + 1;
@@ -204,20 +204,20 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             }
         });
 
-        this.targetListeners["line"] = function(layer) {
+        this.targetListeners.line = function(layer) {
             // send an event that the line drawing has been completed
             me.finishedLineDrawing();
         };
 
-        this.targetListeners["edit"] = function(layer) {
+        this.targetListeners.edit = function(layer) {
             // send an event that the polygon drawing has been completed
             me.finishedEditDrawing();
         };
 
-        this.sourceLayer = new OpenLayers.Layer.Vector(this.prefix + "sourceLayer");
-        this.targetLayer = new OpenLayers.Layer.Vector(this.prefix + "targetLayer",{
+        this.sourceLayer = new OpenLayers.Layer.Vector(this.prefix + 'sourceLayer');
+        this.targetLayer = new OpenLayers.Layer.Vector(this.prefix + 'targetLayer',{
             eventListeners:  {
-                "featuremodified": function(event) {
+                featuremodified: function(event) {
                     // Update features
                     me.sourceLayer.redraw();
                     this.redraw();
@@ -248,7 +248,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
 
         // Marker layer
-        this.markerLayer = new OpenLayers.Layer.Markers(this.prefix + "MarkerLayer", {});
+        this.markerLayer = new OpenLayers.Layer.Markers(this.prefix + 'MarkerLayer', {});
         this._map.addLayers([me.markerLayer]);
 
         this._updateLayerOrder();
@@ -306,16 +306,16 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this._updateLayerOrder();
 
         switch (params.drawMode) {
-            case "point":
+            case 'point':
                 this._pointSplit(params);
                 break;
-            case "line":
+            case 'line':
                 this._lineSplit(params);
                 break;
-            case "edit":
+            case 'edit':
                 this._editSplit(params);
                 break;
-            case "remove":
+            case 'remove':
                 // Nothing to do
                 break;
             default:
@@ -374,7 +374,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
         var marker1 = new OpenLayers.Marker(lonlat,this.markerIcon.clone());
         marker1.index = index;
-        marker1.events.register("mousedown", me, me._selectActiveBaseMarker);
+        marker1.events.register('mousedown', me, me._selectActiveBaseMarker);
         marker1.markerMouseOffset = new OpenLayers.LonLat(0, 0);
 
         // Search visible location for the second marker
@@ -402,7 +402,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
         var marker2 = new OpenLayers.Marker(lonlat,this.markerIcon.clone());
         marker2.index = index;
-        marker2.events.register("mousedown", me, me._selectActiveBaseMarker);
+        marker2.events.register('mousedown', me, me._selectActiveBaseMarker);
         marker2.markerMouseOffset = new OpenLayers.LonLat(0, 0);
 
         this.markers.push(marker1);
@@ -427,7 +427,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     _lineSplit: function(params) {
         var me = this;
         var multiPolygon = params.sourceGeometry;
-        this.targetLayer.events.register("featuresadded", this, this.targetListeners[params.drawMode]);
+        this.targetLayer.events.register('featuresadded', this, this.targetListeners[params.drawMode]);
         this.sourceLayer.addFeatures([multiPolygon]);
         this.toggleControl(params.drawMode);
     },
@@ -441,7 +441,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     _editSplit: function(params) {
         var me = this;
         var multiPolygon = params.sourceGeometry;
-        this.targetLayer.events.register("featuresadded", this, this.targetListeners[params.drawMode]);
+        this.targetLayer.events.register('featuresadded', this, this.targetListeners[params.drawMode]);
         this.sourceLayer.addFeatures([multiPolygon]);
         this.toggleControl(params.drawMode);
     },
@@ -461,8 +461,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         me.activeMarker = evt.object;
         me.activeMarker.markerMouseOffset.lon = xyLonLat.lon-me.activeMarker.lonlat.lon;
         me.activeMarker.markerMouseOffset.lat = xyLonLat.lat-me.activeMarker.lonlat.lat;
-        me._map.events.register("mouseup", me, me.freezeActiveMarker);
-        me._map.events.register("mousemove", me, me.moveActiveMarker);
+        me._map.events.register('mouseup', me, me.freezeActiveMarker);
+        me._map.events.register('mousemove', me, me.moveActiveMarker);
     },
 
     /**
@@ -502,8 +502,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * @param evt Event
      */
     freezeActiveMarker: function(evt) {
-        this._map.events.unregister("mousemove", this, this.moveActiveMarker);
-        this._map.events.unregister("mouseup", this, this.freezeActiveMarker);
+        this._map.events.unregister('mousemove', this, this.moveActiveMarker);
+        this._map.events.unregister('mouseup', this, this.freezeActiveMarker);
         this.updateActiveMarker(evt);
     },
 
@@ -519,7 +519,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         lonlat.lat -= this.activeMarker.markerMouseOffset.lat;
         var projection = null;
         // Is marker provided with reference information
-        if (typeof this.activeMarker.reference !== "undefined") {
+        if (typeof this.activeMarker.reference !== 'undefined') {
             projection = this.activeMarkerReferenceProjection(lonlat);
             this.activeMarker.lonlat = projection.lonlat;
             this.activeMarker.reference.point.x = this.activeMarker.lonlat.lon;
@@ -741,21 +741,24 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             x: refLonlat.lon,
             y: refLonlat.lat
         };
-        var projPoints = [];
-        var distances = [];
-        var segments = this.activeMarker.reference.segments;
-        var minDistInd = 0;
-        for (var i = 0; i < segments.polygons.length; i++) {
-            for (var j = 0; j < segments.p[i].length; j++) {
-                var sp = [segments.p[i][j][0], segments.p[i][j][1]];
+        var projPoints = [],
+            distances = [],
+            segments = this.activeMarker.reference.segments,
+            minDistInd = 0,
+            i,
+            j,
+            sp;
+        for (i = 0; i < segments.polygons.length; i++) {
+            for (j = 0; j < segments.p[i].length; j++) {
+                sp = [segments.p[i][j][0], segments.p[i][j][1]];
                 // Eliminate trivial cases
                 if (!((sp[0].boundaryPoint) && (sp[1].boundaryPoint))) {
                     continue;
                 }
-                if ((typeof sp[0].shortLink !== "undefined") && (sp[0].shortLink.id === sp[1].id)) {
+                if ((typeof sp[0].shortLink !== 'undefined') && (sp[0].shortLink.id === sp[1].id)) {
                     continue;
                 }
-                if ((typeof sp[1].shortLink !== "undefined") && (sp[1].shortLink.id === sp[0].id)) {
+                if ((typeof sp[1].shortLink !== 'undefined') && (sp[1].shortLink.id === sp[0].id)) {
                     continue;
                 }
 
@@ -1038,7 +1041,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         var me = this;
         this.toggleControl();
         // No manual feature additions anymore
-        this.targetLayer.events.remove("featuresadded");
+        this.targetLayer.events.remove('featuresadded');
         var multiPolygon = this.sourceLayer.features[0].clone();
         var line = this.targetLayer.features[0].clone();
         this.sourceLayer.destroyFeatures();
@@ -1061,15 +1064,20 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         }
 
         // Point added on the border line between two polygons
-        this.targetLayer.events.register("vertexmodified", me, function(event) {
+        this.targetLayer.events.register('vertexmodified', me, function(event) {
             var vertex = event.vertex;
-            if (typeof vertex.references !== "undefined") {
+            if (typeof vertex.references !== 'undefined') {
                 return;
             }
             // Update adjacent polygon if extra points added
-            var i, j, ngbs = [], refs = [];
-            var eventGeometry = event.feature.geometry;
-            var linearRing = eventGeometry.components[0];
+            var i,
+                j,
+                ngbs = [],
+                refs = [],
+                points,
+                eventGeometry = event.feature.geometry,
+                linearRing = eventGeometry.components[0];
+
             for (i=1; i<linearRing.components.length-1; i++) {
                 if (vertex.id === linearRing.components[i].id) {
                     ngbs = [linearRing.components[i-1].id,linearRing.components[i+1].id];
@@ -1080,14 +1088,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             var features = me.targetLayer.features;
             updatePolygon: for (i=1; i<features.length-1; i++) {
                 var geometry = features[i].geometry;
-                if (geometry.CLASS_NAME !== "OpenLayers.Geometry.Polygon") {
+                if (geometry.CLASS_NAME !== 'OpenLayers.Geometry.Polygon') {
                     continue;
                 }
                 // Handle only relevant polygon
                 if ((geometry.id === eventGeometry.id)||(refs.indexOf(geometry.id) < 0)) {
                     continue;
                 }
-                var points = geometry.components[0].components;
+                points = geometry.components[0].components;
                 for (j=0; j<points.length-1; j++) {
                     if ((ngbs.indexOf(points[j].id)>=0)&&(ngbs.indexOf(points[j+1].id)>=0)) {
                         vertex.references = [eventGeometry.id,geometry.id];
@@ -1122,20 +1130,20 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     finishedEditDrawing: function() {
         this.toggleControl();
         // No manual feature additions anymore
-        this.targetLayer.events.remove("featuresadded");
+        this.targetLayer.events.remove('featuresadded');
 
         if (this.targetLayer.features.length === 0) {
             this.finishDrawFiltering();
             return;
         }
 
-        var inPolygon = this.targetLayer.features[0].clone();
-        var outMultiPolygon = this.sourceLayer.features[0].clone();
-        var polyComponents = outMultiPolygon.geometry.components;
+        var inPolygon = this.targetLayer.features[0].clone(),
+            outMultiPolygon = this.sourceLayer.features[0].clone(),
+            polyComponents = outMultiPolygon.geometry.components;
 
         this.targetLayer.destroyFeatures();
         for (var i = 0; i < polyComponents.length; i++) {
-            if (typeof inPolygon.geometry.components[0].components === "undefined") {
+            if (typeof inPolygon.geometry.components[0].components === 'undefined') {
                 break;
             }
             var outPolygon = polyComponents[i];
@@ -1282,8 +1290,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         var i, j, k, l, m;
         jstsLine = null;
         for (i = olOldFeatures.length - 1; i >= 0; i--) {
-            if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
-                var multi = (olOldFeatures[i].id.indexOf("Multi") !== -1);
+            if (olOldFeatures[i].id.indexOf('Polygon') !== -1) {
+                var multi = (olOldFeatures[i].id.indexOf('Multi') !== -1);
                 if (!multi) {
                     jstsOldPolygon = jstsParser.read(olOldFeatures[i]);
                     if (!jstsOldPolygon.isValid()) {
@@ -1338,7 +1346,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                         finished = true;
                     }
                 }
-            } else if (olOldFeatures[i].id.indexOf("LineString") !== -1) {
+            } else if (olOldFeatures[i].id.indexOf('LineString') !== -1) {
                 jstsLine = jstsParser.read(olOldFeatures[i]);
             }
         }
@@ -1378,11 +1386,21 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * @returns {{olPoints: *, lastIndex: *, olPoint: *, sharedEdge: *, found: *}} Output data
      */
     createBoundaryMarkers: function (olSolutionLineStrings, olEndPoints, marker, olSolutionPolygons, olPolygon, olPoints, lastIndex, olPoint, sharedEdge, found) {
-        var me = this, i, j, k, l, m, n, o, p;
+        var me = this,
+            i,
+            j,
+            k,
+            l,
+            m,
+            n,
+            o,
+            p;
         for (k = 0; k < olSolutionLineStrings.length; k++) {
             // Markers
             intersections: for (l = 0; l < 2; l++) {
-                if (olEndPoints[k][l].references.length !== 2) continue;
+                if (olEndPoints[k][l].references.length !== 2) {
+                    continue;
+                }
                 // Check for duplicates
                 for (m = 0; m < this.markerLayer.markers.length; m++) {
                     if (this.markerLayer.markers[m].reference.point.id === olEndPoints[k][l].id) {
@@ -1422,7 +1440,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                                     for (p = 0; p < olPoint.references.length; p++) {
                                         if (olPoint.references[p] !== olSolutionPolygons[n].id) {
                                             found = false;
-                                            endPoints: for (i = 0; i < olEndPoints.length; i++) {
+                                            endPoints1: for (i = 0; i < olEndPoints.length; i++) {
                                                 for (j = 0; j < 2; j++) {
                                                     if (olEndPoints[i][j].id === olPoint.id) {
                                                         if (olEndPoints[i][j].references.length !== 2) {
@@ -1432,7 +1450,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                                                             continue;
                                                         }
                                                         found = true;
-                                                        break endPoints;
+                                                        break endPoints1;
                                                     }
                                                 }
                                             }
@@ -1452,7 +1470,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                                         olPoint = olPoints[lastIndex];
                                         for (p = 0; p < olPoint.references.length; p++) {
                                             if (olPoint.references[p] !== olSolutionPolygons[n].id) {
-                                                endPoints:
+                                                endPoints2:
                                                     for (i = 0; i < olEndPoints.length; i++) {
                                                         for (j = 0; j < 2; j++) {
                                                             if (olEndPoints[i][j].id === olPoint.id) {
@@ -1463,7 +1481,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                                                                     continue;
                                                                 }
                                                                 found = true;
-                                                                break endPoints;
+                                                                break endPoints2;
                                                             }
                                                         }
                                                     }
@@ -1493,7 +1511,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                         }
                     }
                 }
-                marker.events.register("mousedown", me, me.selectActiveMarker);
+                marker.events.register('mousedown', me, me.selectActiveMarker);
                 this.markerLayer.addMarker(marker);
             }
         }
@@ -1571,7 +1589,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             for (j = 1; j < olPoints.length - 1; j++) {
                 if (!this.equalArrays(olPoints[j].references, olPoints[j - 1].references)) {
                     if (sharedEdge) {
-                        if (olPoints[j].references.length > 2) olLineStringPoints.push(olPoints[j]);
+                        if (olPoints[j].references.length > 2) {
+                            olLineStringPoints.push(olPoints[j]);
+                        }
                         olNewLineStringsTmp.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
                         olLineStringPoints = [];
                     }
@@ -1587,7 +1607,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                         olNewLineStringsTmp[0].components.splice(0, 0, olLineStringPoints[j]);
                     }
                 } else {
-                    if (olPoints[0].references.length > 2) olLineStringPoints.push(olPoints[0]);
+                    if (olPoints[0].references.length > 2) {
+                        olLineStringPoints.push(olPoints[0]);
+                    }
                     olNewLineStringsTmp.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
                 }
             }
@@ -1721,7 +1743,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 sharedEdge = false;
                 for (k = 0; k < clipSolutionPolygons.length; k++) {
                     // Jsts occasionally returns "empty" polygons
-                    if (Math.abs(cpr.Area(clipSolutionPolygons[k])) < epsilon) continue;
+                    if (Math.abs(cpr.Area(clipSolutionPolygons[k])) < epsilon) {
+                        continue;
+                    }
 
                     clipValidationTarget.push(clipSolutionPolygons[k]);
                     if (cpr.Area(clipSolutionPolygons[k]) > 0) {
@@ -1950,9 +1974,9 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                     from += len;
                 }
                 for (; from < len; from++) {
-                    if (from in this &&
-                        this[from] === elt)
+                    if (from in this && this[from] === elt) {
                         return from;
+                    }
                 }
                 return -1;
             };
@@ -1967,7 +1991,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 var T, k;
 
                 if (this === null) {
-                    throw new TypeError("this is null or not defined");
+                    throw new TypeError('this is null or not defined');
                 }
 
                 var kValue,
@@ -1980,8 +2004,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
                 // 4. If IsCallable(callback) is false, throw a TypeError exception.
                 // See: http://es5.github.com/#x9.11
-                if ({}.toString.call(callback) !== "[object Function]") {
-                    throw new TypeError(callback + " is not a function");
+                if ({}.toString.call(callback) !== '[object Function]') {
+                    throw new TypeError(callback + ' is not a function');
                 }
 
                 // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
@@ -2056,7 +2080,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             return false;
         }
         for (i = 0; i < array1.length; i++) {
-            key = (typeof array1[i]) + "~" + array1[i];
+            key = (typeof array1[i]) + '~' + array1[i];
             if (temp[key]) {
                 temp[key]++;
             } else {
@@ -2064,7 +2088,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             }
         }
         for (i = 0; i < array2.length; i++) {
-            key = (typeof array2[i]) + "~" + array2[i];
+            key = (typeof array2[i]) + '~' + array2[i];
             if (temp[key]) {
                 if (temp[key] === 0) {
                     return false;
@@ -2189,10 +2213,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         if (point.references === null){
             return false;
         }
-        if (typeof point.references === "undefined"){
+        if (typeof point.references === 'undefined'){
             return false;
         }
-        if ((typeof point.markerPoint !== "undefined")&&(point.markerPoint >= 0)) {
+        if ((typeof point.markerPoint !== 'undefined')&&(point.markerPoint >= 0)) {
             return false;
         }
         return point.references.length >= 2;
@@ -2207,7 +2231,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     isShortLine: function(points) {
         var lineRefs = [];
         for (var i=0; i<2; i++) {
-            if (typeof points[i].markerPoint === "undefined") {
+            if (typeof points[i].markerPoint === 'undefined') {
                 return false;
             }
             if (points[i].markerPoint < 0) {
@@ -2339,5 +2363,5 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return this.eventHandlers[event.getName()].apply(this, [event]);
     }
 }, {
-    'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.GeometryEditor.Plugin"]
+    'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.GeometryEditor.Plugin']
 });
