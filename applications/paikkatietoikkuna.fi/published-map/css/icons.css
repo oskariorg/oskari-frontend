@@ -301,3 +301,180 @@
     background-repeat: no-repeat !important;
     background-position: -647px 0px !important;
 }
+
+.menu-3d-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -679px 0px !important;
+}
+
+.menu-3d-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -714px 0px !important;
+}
+
+.menu-rounded-dark {
+    width: 36px;
+    height: 36px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -749px 0px !important;
+}
+
+.menu-rounded-light {
+    width: 36px;
+    height: 36px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -785px 0px !important;
+}
+
+.menu-sharp-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -821px 0px !important;
+}
+
+.menu-sharp-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -856px 0px !important;
+}
+
+.myplaces-draw-area-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -891px 0px !important;
+}
+
+.myplaces-draw-area-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -923px 0px !important;
+}
+
+.myplaces-draw-line-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -955px 0px !important;
+}
+
+.myplaces-draw-line-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -987px 0px !important;
+}
+
+.myplaces-draw-point-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1019px 0px !important;
+}
+
+.myplaces-draw-point-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1051px 0px !important;
+}
+
+.tool-history-back-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1083px 0px !important;
+}
+
+.tool-history-back-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1115px 0px !important;
+}
+
+.tool-history-forward-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1147px 0px !important;
+}
+
+.tool-history-forward-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1179px 0px !important;
+}
+
+.tool-measure-area-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1211px 0px !important;
+}
+
+.tool-measure-area-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1243px 0px !important;
+}
+
+.tool-measure-line-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1275px 0px !important;
+}
+
+.tool-measure-line-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1307px 0px !important;
+}
+
+.tool-zoombox-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1339px 0px !important;
+}
+
+.tool-zoombox-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1371px 0px !important;
+}
+

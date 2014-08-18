@@ -3,7 +3,6 @@
   z-index: 100000000 !important;
   text-align: left; }
   .tools .icon {
-    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/menu-rounded-dark.png');
     display: inline-block;
     height: 35px;
     width: 35px;
@@ -104,32 +103,3 @@
     .mapplugins.right .tools .publishedToolbarContainer .tools-top-arrow {
       float: right;
       margin-right: 7.5px; }
-
-.tool-history-back-dark, .tool-history-back-light, .tool-history-forward-dark, .tool-history-forward-light, .tool-measure-line-dark, .tool-measure-line-light, .tool-measure-area-dark, .tool-measure-area-light {
-  width: 32px;
-  height: 32px;
-  background-repeat: no-repeat !important; }
-
-.tool-history-back-dark {
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-history-back-dark.png') !important; }
-
-.tool-history-back-light {
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-history-back-light.png') !important; }
-
-.tool-history-forward-dark {
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-history-forward-dark.png') !important; }
-
-.tool-history-forward-light {
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-history-forward-light.png') !important; }
-
-.tool-measure-line-dark {
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-measure-line-dark.png') !important; }
-
-.tool-measure-line-light {
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-measure-line-light.png') !important; }
-
-.tool-measure-area-dark {
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-measure-area-dark.png') !important; }
-
-.tool-measure-area-light {
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-measure-area-light.png') !important; }
