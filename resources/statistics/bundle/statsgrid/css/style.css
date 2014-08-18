@@ -53,12 +53,9 @@
     margin-top: 5px; }
   .statsgrid .parameters-cont {
     min-height: 115px;
-    margin-bottom: 20px;
-    /* FIXME move this to forms.scss */ }
+    margin-bottom: 20px; }
     .statsgrid .parameters-cont button {
       margin: 8px 0 10px 8px; }
-    .statsgrid .parameters-cont button:disabled, .statsgrid .parameters-cont input:disabled, .statsgrid .parameters-cont select:disabled {
-      opacity: 0.25; }
     .statsgrid .parameters-cont .cannot-display-indicator {
       margin-left: 10px; }
   .statsgrid .selector-cont {

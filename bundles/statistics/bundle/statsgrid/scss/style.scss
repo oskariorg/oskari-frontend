@@ -98,13 +98,6 @@
             margin: 8px 0 10px 8px;
         }
 
-        /* FIXME move this to forms.scss */
-        button:disabled,
-        input:disabled,
-        select:disabled {
-            opacity: 0.25;
-        }
-
         .cannot-display-indicator {
             margin-left: 10px;
         }

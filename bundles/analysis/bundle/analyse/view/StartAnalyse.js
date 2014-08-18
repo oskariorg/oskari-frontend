@@ -1859,7 +1859,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 areaCount = me.max_areaCount;
             }
 
-            var differenceLayerId = container.find('input[name=differenceLayer]').val(),
+            var differenceLayerId = container.find('input[name=differenceLayer]:checked').val(),
                 differenceFieldA1 = container.find('input[name=analyse-layer1-field-property]:checked').val(),
                 differenceFieldB1 = container.find('input[name=analyse-layer2-field-property]:checked').val(),
                 keyField = container.find('input[name=analyse-key-field-property]:checked').val();
