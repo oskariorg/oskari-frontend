@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         templates: {
             main: jQuery(
                 '<div class="mapplugin tools" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin">' +
-                    "<div class='icon'></div>" +
+                    "<div class='icon menu-rounded-dark'></div>" +
                     "<div class='publishedToolbarContainer'>" +
                     "<div class='tools-top-arrow'></div>" +
                     "</div>" +
@@ -425,6 +425,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 return;
             }
 
+            // 
             var resourcesPath = me.getMapModule().getImageUrl(),
                 imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/',
                 styledImg = imgPath + 'menu-' + style + '.png',
@@ -433,14 +434,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 toolsPopupContent = div.find('.' + me.toolbarPopupContent),
                 blackOrWhite = style ? style.split("-")[1] : 'dark';
 
+            var styledImgClass = 'menu-' + style;
+
             if (style === null) {
                 icon.removeAttr('style');
                 toolsContent.removeClass('light', 'dark');
                 toolsPopupContent.removeClass('light', 'dark');
             } else {
-                icon.css({
-                    'background-image': 'url("' + styledImg + '")'
-                });
+                icon.removeClass();
+                icon.addClass('icon menu-' + style);
 
                 if (blackOrWhite === "dark") {
                     toolsContent.removeClass('light').addClass('dark');

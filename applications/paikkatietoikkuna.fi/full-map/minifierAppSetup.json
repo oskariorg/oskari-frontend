@@ -511,6 +511,16 @@
 		            }
 		        }
 		    }
+		}, {
+		    "bundlename" : "admin",
+		    "bundleinstancename" : "admin",
+		    "metadata" : {
+		        "Import-Bundle" : {
+		            "admin" : {
+		                "bundlePath" : "../../../packages/admin/bundle/"
+		            }
+		        }
+		    }
 		}
 	]
 }

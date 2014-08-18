@@ -974,3 +974,179 @@
     background-position: -2828px 0px !important;
 }
 
+.menu-3d-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2860px 0px !important;
+}
+
+.menu-3d-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2895px 0px !important;
+}
+
+.menu-rounded-dark {
+    width: 36px;
+    height: 36px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2930px 0px !important;
+}
+
+.menu-rounded-light {
+    width: 36px;
+    height: 36px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -2966px 0px !important;
+}
+
+.menu-sharp-dark {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3002px 0px !important;
+}
+
+.menu-sharp-light {
+    width: 35px;
+    height: 35px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3037px 0px !important;
+}
+
+.myplaces-draw-area-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3072px 0px !important;
+}
+
+.myplaces-draw-area-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3104px 0px !important;
+}
+
+.myplaces-draw-line-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3136px 0px !important;
+}
+
+.myplaces-draw-line-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3168px 0px !important;
+}
+
+.myplaces-draw-point-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3200px 0px !important;
+}
+
+.myplaces-draw-point-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3232px 0px !important;
+}
+
+.tool-history-back-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3264px 0px !important;
+}
+
+.tool-history-back-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3296px 0px !important;
+}
+
+.tool-history-forward-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3328px 0px !important;
+}
+
+.tool-history-forward-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3360px 0px !important;
+}
+
+.tool-measure-area-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3392px 0px !important;
+}
+
+.tool-measure-area-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3424px 0px !important;
+}
+
+.tool-measure-line-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3456px 0px !important;
+}
+
+.tool-measure-line-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3488px 0px !important;
+}
+
+.tool-zoombox-dark {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3520px 0px !important;
+}
+
+.tool-zoombox-light {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -3552px 0px !important;
+}
+

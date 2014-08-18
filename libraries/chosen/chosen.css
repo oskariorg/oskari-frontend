@@ -1,6 +1,6 @@
 /* group Base */
 .chzn-container {
-  font-size: 13px;
+  /* font-size: 13px; We'll set the font size ourselves thankyouverymuch */
   position: relative;
   display: inline-block;
   zoom: 1;

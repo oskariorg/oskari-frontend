@@ -45,6 +45,8 @@ div.admin-layerselector {
     div.admin-layerselector .capabilities li.groupTitle.closed ul {
       display: none; }
   div.admin-layerselector .oskariTabs {
+    margin-right: 1px;
+    /* Avoid horizontal scrollbar, nfi why this fixes  it though... */
     min-width: 480px; }
     div.admin-layerselector .oskariTabs div.tabsHeader ul li.admin-modify-wms {
       float: right; }
@@ -52,8 +54,9 @@ div.admin-layerselector {
     padding: 10px;
     min-height: 35px; }
   div.admin-layerselector div.layer, div.admin-layerselector div.create-layer {
-    padding: 6px 10px 6px 40px;
-    background-color: #ffffff; }
+    padding: 6px 10px 6px 20px;
+    background-color: #ffffff;
+    clear: both; }
     div.admin-layerselector div.layer #add-layer-inspire-theme, div.admin-layerselector div.create-layer #add-layer-inspire-theme {
       /*width: 309px;*/
       overflow-y: auto;
@@ -132,7 +135,7 @@ div.admin-layerselector {
     div.admin-layerselector div.layer textarea.add-layer-input, div.admin-layerselector div.create-layer textarea.add-layer-input {
       padding: 10px;
       width: 157px;
-      height: 72px;
+      height: 82px;
       -webkit-border-radius: 4px;
       -moz-border-radius: 4px;
       -o-border-radius: 4px;
@@ -161,7 +164,7 @@ div.admin-layerselector {
     margin-top: 12px; }
   div.admin-layerselector div.accordion div.accordion_panel div.header div.headerText {
     text-overflow: ellipsis;
-    width: 325px;
+    width: 315px;
     white-space: nowrap;
     overflow: hidden; }
   div.admin-layerselector .admin-add-layer-btn, div.admin-layerselector .admin-edit-layer-btn, div.admin-layerselector .admin-add-grouping-btn, div.admin-layerselector .admin-edit-grouping-btn {

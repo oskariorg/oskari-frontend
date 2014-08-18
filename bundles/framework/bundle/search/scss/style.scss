@@ -23,10 +23,16 @@ div.search {
         padding: 0;
         margin : 5px;
         border: 1px solid #DDDDDD;
+
+        h3 {
+            margin: 0 6px;
+            padding-bottom: 0;
+        }
+
     }
 
     table.search_result {
-        border-top : 0px;
+        margin-bottom: 0;
 
         th { 
             text-align: left; 

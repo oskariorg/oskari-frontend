@@ -146,12 +146,11 @@ function() {
      * implements BundleInstance protocol start methdod
      */
     start : function() {
-        
         // Should this not come as a param?
-        var me = this;
-        var conf = me.conf ;
-        var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
-        var sandbox = Oskari.getSandbox(sandboxName);
+        var me = this,
+            conf = me.conf,
+            sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox',
+            sandbox = Oskari.getSandbox(sandboxName);
         this.sandbox = sandbox;
 
         this.featureNS = conf ? conf.featureNS : null;
@@ -176,8 +175,8 @@ function() {
         this.categoryHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.CategoryHandler', this);
         this.categoryHandler.start();        
 
-        var defaults = this._getCategoryDefaults();
-        var actionUrl = this.conf.queryUrl;
+        var defaults = this._getCategoryDefaults(),
+            actionUrl = this.conf.queryUrl;
         // Set max features to configured.
         var maxFeatures = (conf ? conf.maxFeatures : undefined);
         //'/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&myplaces=WFS';
@@ -215,14 +214,12 @@ function() {
             this.tab.bindEvents();
         }
 
-        var title =  this.tab.getTitle();
-        var content = this.tab.getContent();
-   
-        var first = true;
-        var reqName = 'PersonalData.AddTabRequest';
-        var reqBuilder = sandbox.getRequestBuilder(reqName);
-  
-        var req = reqBuilder(title, content, first);
+        var title =  this.tab.getTitle(),
+            content = this.tab.getContent(),
+            first = true,
+            reqName = 'PersonalData.AddTabRequest',
+            reqBuilder = sandbox.getRequestBuilder(reqName),
+            req = reqBuilder(title, content, first);
         sandbox.request(this, req);
     },
     /**

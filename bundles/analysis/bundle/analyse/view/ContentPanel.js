@@ -120,7 +120,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          */
         onEvent: function(event) {
             var handler = this.eventHandlers[event.getName()];
-            if (handler) return handler.apply(this, [event]);
+            if (handler) {
+                return handler.apply(this, [event]);
+            }
         },
         /**
          * @static
@@ -158,14 +160,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 if (clickedGeometries.length > 0) {
                     var clickedGeometry = clickedGeometries[0];
                     // var id = clickedGeometry[0];
-                    var data = clickedGeometry[1];
-                    var wkt = new OpenLayers.Format.WKT();
-                    var feature = wkt.read(data);
-                    if (feature.geometry.CLASS_NAME == "OpenLayers.Geometry.LineString") {
+                    var data = clickedGeometry[1],
+                        wkt = new OpenLayers.Format.WKT(),
+                        feature = wkt.read(data);
+                    if (feature.geometry.CLASS_NAME === 'OpenLayers.Geometry.LineString') {
                         this.selectedGeometry = new OpenLayers.Feature.Vector(feature.geometry);
-                    } else if (feature.geometry.CLASS_NAME == "OpenLayers.Geometry.MultiPolygon") {
+                    } else if (feature.geometry.CLASS_NAME === 'OpenLayers.Geometry.MultiPolygon') {
                         this.selectedGeometry = new OpenLayers.Feature.Vector(feature.geometry);
-                    } else if (feature.geometry.CLASS_NAME == "OpenLayers.Geometry.Polygon") {
+                    } else if (feature.geometry.CLASS_NAME === 'OpenLayers.Geometry.Polygon') {
                         this.selectedGeometry = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon([feature.geometry]));
                     }
                     this._operateDrawFilters();
@@ -230,7 +232,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 request;
 
             // Already started so nothing to do here
-            if (this.isStarted) return;    
+            if (this.isStarted) {
+                return;
+            }
 
             this._toggleDrawPlugins(false);
             this._toggleDrawFilterPlugins(false);
@@ -266,7 +270,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             this.stop();
             this._destroyFeatureLayer();
 
-            this.view              = undefined;
+            this.view               = undefined;
             this.instance           = undefined;
             this.sandbox            = undefined;
             this.loc                = undefined;
@@ -296,7 +300,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 request;
 
             // Already stopped so nothing to do here
-            if (!this.isStarted) return;
+            if (!this.isStarted) {
+                return;
+            }
 
             this.mapModule.stopPlugin(this.drawPlugin);
             this.mapModule.unregisterPlugin(this.drawPlugin);
@@ -346,7 +352,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 style.fillOpacity = 0.7;
                 style.graphicOpacity = 1;
                 style.strokeWidth = 2;
-                style.strokeColor = "#000000";
+                style.strokeColor = '#000000';
                 style.strokeOpacity = 1;
                 feature = new OpenLayers.Feature.Vector(geometry,null,style);
                 this.getFeatures().push(
@@ -551,8 +557,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             drawFilterContainer.find('h4').html(loc.content.drawFilter.title);
 
             return _.foldl(drawFilters, function(container, drawFilter) {
-                var drawFilterDiv = drawFilterTemplate.clone();
-                var groupName = 'analysis-selection-';
+                var drawFilterDiv = drawFilterTemplate.clone(),
+                    groupName = 'analysis-selection-';
                 drawFilterDiv.addClass(groupName + drawFilter);
                 drawFilterDiv.addClass('disabled');
                 drawFilterDiv.attr('title',me.loc.content.drawFilter.tooltip[drawFilter]);
@@ -689,7 +695,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 dialogText;
 
             // Enable and disable correct buttons
-            if (config.mode === "remove") {
+            if (config.mode === 'remove') {
                 this._cancelDrawFilter();
             } else {
                 // Enable only the remove button
@@ -704,7 +710,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 dialogTitle = diaLoc.modes[config.mode].title;
                 dialogText = diaLoc.modes[config.mode].message;
                 controlButtons = this._createDrawFilterControls();
-                this.helpDialog.addClass("drawfilterdialog");
+                this.helpDialog.addClass('drawfilterdialog');
                 this.helpDialog.show(dialogTitle, dialogText, controlButtons);
                 this.helpDialog.
                     moveTo('div.drawFilter.analysis-selection-'+config.mode, 'bottom');
@@ -820,17 +826,17 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
          */
         _createFakeLayer: function(id, mode, name) {
             var loc = this.loc.content.features.modes,
-                name = name || (loc[mode] + ' ' + (++this.featCounts[mode])),
+                nonNullName = name || (loc[mode] + ' ' + (++this.featCounts[mode])),
                 layerType = this.getLayerType(),
                 featureLayer = this.featureLayer,
-                formatter = new OpenLayers.Format.GeoJSON;
+                formatter = new OpenLayers.Format.GeoJSON();
 
             return {
                 getId: function() {
                     return id;
                 },
                 getName: function() {
-                    return name;
+                    return nonNullName;
                 },
                 isLayerOfType: function(type) {
                     return type === layerType;
@@ -977,13 +983,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
         },
 
         _operateDrawFilters: function() {
-            var preSelector = 'div.drawFilter.analysis-selection-';
-            var pointButton = jQuery(preSelector+'point');
-            var lineButton = jQuery(preSelector+'line');
-            var editButton = jQuery(preSelector+'edit');
-            var removeButton = jQuery(preSelector+'remove');
+            var preSelector = 'div.drawFilter.analysis-selection-',
+                pointButton = jQuery(preSelector+'point'),
+                lineButton = jQuery(preSelector+'line'),
+                editButton = jQuery(preSelector+'edit'),
+                removeButton = jQuery(preSelector+'remove');
 
-            if ((typeof this.selectedGeometry === "undefined")||(this.selectedGeometry === null)) {
+            if ((typeof this.selectedGeometry === 'undefined')||(this.selectedGeometry === null)) {
                 // Disable all buttons
                 this._disableAllDrawFilterButtons();
                 return;
@@ -1035,7 +1041,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                     'WfsLayerPlugin.ActivateHighlightRequest');
 
             // notify components to reset any saved "selected place" data
-            if (evtB) sandbox.notifyAll(evtB());
+            if (evtB) {
+                sandbox.notifyAll(evtB());
+            }
 
             // enable or disable gfi requests
             if (gfiReqBuilder) {

@@ -23,6 +23,7 @@ module.exports = function (grunt) {
         var logMessages = [];
         var ignoredFiles = [
             'chosen.jquery.js',
+            'clipper.js',
             'comp.js',
             'geostats.min.js',
             'jenks.util.js',
@@ -33,6 +34,7 @@ module.exports = function (grunt) {
             'jquery-ui-1.9.1.custom.min.js',
             'jquery-ui-1.9.2.custom.min.js',
             'jscolor.js',
+            'jsts.js',
             'lodash.js',
             'OpenLayers.2_13_1-full-map.js',
             'Popover.js',

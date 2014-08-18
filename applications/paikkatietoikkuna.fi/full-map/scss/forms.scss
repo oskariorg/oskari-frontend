@@ -75,6 +75,8 @@ input[type="text"], input[type="password"], input[type="file"], input[type="subm
 	border: 1px solid;
 	border-color: #BFBFBF #DEDEDE #DEDEDE #BFBFBF;
 	padding: 5px 1px;
+    font-family: inherit;
+    font-size: inherit;
 }
 
 /* label element preceded by an input[type="radio"] element */
@@ -164,4 +166,12 @@ input.focus, textarea.focus {
 .ie .aui-button-disabled input {
 	-ms-filter: alpha(opacity=50);
 	filter: alpha(opacity=50);
+}
+
+textarea {
+    padding: 5px 5px;
+}
+
+button, input[type=button], input[type=submit], input[type=reset] {
+  line-height: inherit;
 }

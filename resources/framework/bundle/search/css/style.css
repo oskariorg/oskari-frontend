@@ -13,7 +13,10 @@ div.search div.resultList {
   padding: 0;
   margin: 5px;
   border: 1px solid #DDDDDD; }
+  div.search div.resultList h3 {
+    margin: 0 6px;
+    padding-bottom: 0; }
 div.search table.search_result {
-  border-top: 0px; }
+  margin-bottom: 0; }
   div.search table.search_result th {
     text-align: left; }

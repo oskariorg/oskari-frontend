@@ -209,11 +209,11 @@ body {
 @media screen {
   .oskari-attached {
     min-width: 520px;
-    max-width: 830px; }
+    max-width: 840px; }
 
   .oskari-detached {
     min-width: 520px;
-    max-width: 830px; }
+    max-width: 840px; }
 
   .oskari-flyoutcontentcontainer {
     width: 100%;

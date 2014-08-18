@@ -1,12 +1,20 @@
+/* Mixins */
 .mapplugin.coordinates {
-  font-size: 12px;
-  line-height: 14.8px;
-  background: #FAFAFA;
-  border: 1px solid #E6E6E6;
+  background: #fafafa;
+  border: 1px solid #e6e6e6;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -o-border-radius: 2px;
+  -ms-border-radius: 2px;
   border-radius: 2px;
-  text-align: left;
-  width: 100px;
-  padding: 5px 10px 0 10px; }
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box;
+  box-sizing: border-box;
+  font-size: 11px;
+  line-height: 15px;
+  padding: 2px 5px 0;
+  text-align: left; }
   .mapplugin.coordinates > div > div {
     display: inline-block;
     padding-bottom: 2px; }
