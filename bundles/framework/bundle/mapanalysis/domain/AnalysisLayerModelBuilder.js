@@ -38,6 +38,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
 		if (mapLayerJson.wpsLayerId) {
 			layer.setWpsLayerId(mapLayerJson.wpsLayerId);
 		}
+        if (mapLayerJson.override_sld) {
+            layer.setOverrideSld(mapLayerJson.override_sld);
+        }
 		if (loclayer.organization) {
 		layer.setOrganizationName(loclayer.organization);
 		}

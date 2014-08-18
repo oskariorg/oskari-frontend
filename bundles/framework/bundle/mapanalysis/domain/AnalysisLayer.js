@@ -66,6 +66,20 @@ function() {
      */
     getWpsLayerId : function() {
         return this._wpsLayerId;
+    },
+    /**
+     * @method setOverrideSld
+     * @param {String} override_sld override sld style name in geoserver
+     */
+    setOverrideSld: function (override_sld) {
+        this._override_sld = override_sld;
+    },
+    /**
+     * @method  getOverrideSld override sld style name in geoserver
+     * @return {String}
+     */
+    getOverrideSld: function () {
+        return this._override_sld;
     }
 
 }, {

@@ -20,13 +20,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
     function (instance, localization) {
         var me = this;
         me.instance = instance;
-        me.template = jQuery("<div class='startview'>" + "<div class='content'></div>" +
-            "<div class='tou'><a href='JavaScript:void(0;)'></a></div>" +
-            "<div class='buttons'></div>" + "</div>");
-        me.templateLayerList = jQuery("<div class='layerlist'>" + "<h4></h4>" + "<ul></ul>" + "</div>");
-        me.templateListItem = jQuery("<li></li>");
+        me.template = jQuery('<div class="startview">' + '<div class="content"></div>' +
+            '<div class="tou"><a href="JavaScript:void(0;)""></a></div>' +
+            '<div class="buttons"></div>' + '</div>');
+        me.templateLayerList = jQuery('<div class="layerlist">' + '<h4></h4>' + '<ul></ul>' + '</div>');
+        me.templateListItem = jQuery('<li></li>');
         me.templateError = jQuery('<div class="error"><ul></ul></div>');
-        me.templateInfo = jQuery("<div class='icon-info'></div>");
+        me.templateInfo = jQuery('<div class="icon-info"></div>');
         me.loc = localization;
         me.content = undefined;
         me.buttons = {};
@@ -170,7 +170,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
                 layer = list[i];
                 item = this.templateListItem.clone();
                 if (layer.getId().toString().indexOf('myplaces_') > -1) {
-                    item.append(layer.getName() + " (" + this.loc.myPlacesDisclaimer + ")");
+                    item.append(layer.getName() + ' (' + this.loc.myPlacesDisclaimer + ')');
                 } else {
                     item.append(layer.getName());
                 }
@@ -220,7 +220,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
             closeBtn.setHandler(function() {
                 dlg.close(true);
                 me.dialog = null;
-            })
+            });
             dlg.show(me.termsOfUse.title, me.termsOfUse.body, [closeBtn]);
             me.dialog = dlg;
         },
@@ -244,7 +244,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
                 },
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 success: function (resp) {
@@ -284,7 +284,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
                 },
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 success: function (resp) {

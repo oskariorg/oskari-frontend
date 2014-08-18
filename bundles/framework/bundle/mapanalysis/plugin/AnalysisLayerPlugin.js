@@ -293,6 +293,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
             var openLayer = new OpenLayers.Layer.WMS(openLayerId, imgUrl, {
                 layers: layer.getWpsName(),
                 transparent: true,
+                styles: layer.getOverrideSld(),
                 format: "image/png"
             }, {
                 scales: layerScales,
