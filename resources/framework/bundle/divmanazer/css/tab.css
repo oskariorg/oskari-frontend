@@ -30,7 +30,10 @@ div.oskariTabs {
         div.oskariTabs div.tabsHeader ul li.active a {
           background: none repeat scroll 0 0 #FAFAFA;
           font-weight: bold;
-          padding-bottom: 11px; }
+          padding-bottom: 11px;
+          -webkit-box-shadow: none;
+          -moz-box-shadow: none;
+          box-shadow: none; }
         div.oskariTabs div.tabsHeader ul li.fill a {
           width: 100%; }
         div.oskariTabs div.tabsHeader ul li a {
@@ -40,7 +43,10 @@ div.oskariTabs {
           font-weight: normal;
           padding: 10px 15px;
           position: relative;
-          text-decoration: none; }
+          text-decoration: none;
+          -webkit-box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.1) inset;
+          -moz-box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.1) inset;
+          box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.1) inset; }
         div.oskariTabs div.tabsHeader ul li select {
           margin-right: 10px; }
   div.oskariTabs div.tabsContent {

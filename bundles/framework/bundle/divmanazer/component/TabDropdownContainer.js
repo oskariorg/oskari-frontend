@@ -11,9 +11,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
      * @static
      * @param {String} pEmptyMsg message that will be displayed if there is no tabs added
      */
-
     function (pEmptyMsg, button) {
-
         this.button = button;
         this.panels = [];
         this.tabChangeListeners = [];
@@ -25,7 +23,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
         this.template = jQuery('<div class="oskariTabs">' + this.emptyMsg + '</div>');
         this.templateTabOption = jQuery('<option></option>');
 
-        this.templateTabs = jQuery('<div class="tabsHeader"><ul><li><select name="tabs"></select></li></ul></div><br clear="all"/>' +
+        this.templateTabs = jQuery('<div class="tabsHeader"><ul><li><select name="tabs"></select></li></ul></div>' +
             '<div class="tabsContent"></div>');
 
         this.ui = this.template.clone();
@@ -42,7 +40,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
                 var content = this.templateTabs.clone();
                 me.ui.html(content);
                 if (me.button && me.button.insertTo) {
-                    me.button.insertTo(me.ui.find("li"));
+                    me.button.insertTo(me.ui.find('li'));
                 }
             }
             var headerContainer = this.ui.find('ul li select'),
@@ -57,7 +55,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
             if (this.panels.length === 1) {
                 // select first by default
                 this.select(panel);
-                headerContainer.bind("change", function () {
+                headerContainer.bind('change', function () {
                     me.select(me.panels[this.selectedIndex]);
                 });
             }

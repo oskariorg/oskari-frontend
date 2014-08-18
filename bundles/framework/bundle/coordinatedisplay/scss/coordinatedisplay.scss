@@ -1,12 +1,24 @@
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
 .mapplugin.coordinates {
-    font-size: 12px;
-    line-height: 14.8px;
-    background: #FAFAFA;
-    border: 1px solid #E6E6E6;
-    border-radius: 2px;
+    background: #fafafa;
+    border: 1px solid #e6e6e6;
+    @include border-radius(2px);
+    box-sizing: border-box;
+    font-size: 11px;
+    line-height: 15px;
+    padding: 2px 5px 0;
     text-align: left;
-    width: 100px;
-    padding: 5px 10px 0 10px;
 
     > div > div {
         display: inline-block;

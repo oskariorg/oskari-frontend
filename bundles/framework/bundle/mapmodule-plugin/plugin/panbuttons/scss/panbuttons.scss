@@ -4,6 +4,7 @@
     z-index: 15000;
     height: 90px;
     width: 90px;
+    padding: 0 4px; /* Slight hack, this stops the plugin from jumping when coordinatesplugin is shown */
 }
 
 .panbuttonDivImg {

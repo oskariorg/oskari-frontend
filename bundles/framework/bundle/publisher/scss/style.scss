@@ -55,7 +55,7 @@ div.basic_publisher {
     }
 
     div.customsize input {
-        width: 40px;
+        width: 55px;
 
         &.error {
             border: 1px solid red;
@@ -253,7 +253,6 @@ div.field select {
     width : 100%;
     width: unquote("80%\0/"); /* unquote for libsass bug */
     background-color: #FFF;
-    font-weight: bolder;
 }
 
 /* Buttons */
@@ -306,4 +305,8 @@ div#publisher-custom-colours {
 
 .maincontainer .block {
     display: block;
+}
+
+#editModeBtn {
+    margin: 0;
 }

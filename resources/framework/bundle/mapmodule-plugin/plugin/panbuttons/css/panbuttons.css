@@ -3,7 +3,9 @@
   background: transparent;
   z-index: 15000;
   height: 90px;
-  width: 90px; }
+  width: 90px;
+  padding: 0 4px;
+  /* Slight hack, this stops the plugin from jumping when coordinatesplugin is shown */ }
 
 .panbuttonDivImg {
   background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/sprite.png'); }
