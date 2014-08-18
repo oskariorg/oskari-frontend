@@ -133,6 +133,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
+                data : {
+                    options : JSON.stringify(options)
+                },
                 url: url,
                 success: function (pResp) {
                     if(!pResp || pResp.error) {
