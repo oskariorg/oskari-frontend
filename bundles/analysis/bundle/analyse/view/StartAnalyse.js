@@ -1797,6 +1797,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             selections.style = this.getStyleValues();
             // Bbox
             selections.bbox = this.instance.getSandbox().getMap().getBbox();
+            // Override style - :TODO make UI for this and get override from there
+            if (defaults.method === 'difference') {
+                selections.override_sld = "sld_muutos_n1";
+            }
 
             return selections;
         },
@@ -1913,7 +1917,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         fieldA1: differenceFieldA1,
                         fieldB1: differenceFieldB1,
                         keyA1: keyField,
-                        keyB1: keyField
+                        keyB1: keyField,
+                        no_data: me._getNoDataValue()
                     }
                 }
             };
