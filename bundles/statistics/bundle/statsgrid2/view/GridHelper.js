@@ -3,9 +3,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.GridHelper',
     /**
      * @static constructor function
      */
-    function (service, gridCtrl, locale) {
+    function (gridCtrl, locale) {
         this.conf = jQuery.extend(true, {}, this.__defaults);
-	    this.service = service;
 	    this.controller = gridCtrl;
 	    this._locale = locale;
     },
@@ -506,7 +505,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.GridHelper',
          * @method createStatisticsGrid
          * @param {Object} container element where grid component should be added
          */
-        createStatisticsGrid: function (container, category) {
+        createStatisticsGrid: function (container, category, regionCategories) {
             var me = this,
                 lang = Oskari.getLang(),
                 //selectedRegionCategory = this.getActiveRegionCategory(),
@@ -618,8 +617,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.GridHelper',
                     item = data.getItem(args.row);
 
                 //update item values (groupingkey is created from these)
-                item[me.__groupingProperty] = jQuery(e.target).is(':checked') ? me.__groupEnabled : me.__groupDisabled;
+                var isSelected = jQuery(e.target).is(':checked');
+                item[me.__groupingProperty] = isSelected ? me.__groupEnabled : me.__groupDisabled;
                 data.updateItem(item.id, item);
+                me.controller.filterRegion(item.id, !isSelected);
                 //me.__handleColumnDataChanged();
             });
 
@@ -627,9 +628,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.GridHelper',
             checkboxSelector.onSelectHeaderRowClicked.subscribe(function (e, args) {
                 // disable/enable all rows - this is handled by Slick.CheckboxSelectColumn2
                 //me.__handleColumnDataChanged();
+                var isSelected = jQuery(e.target).is(':checked');
+                var regions = null;
+                if(!isSelected) {
+                	// move all enabled regions to filter list (they become disabled only after this)
+	                regions = me.getEnabledRegions();
+                }
+                me.controller.filterRegion(regions, !isSelected);
             });
 
-            grid.registerPlugin(me.__createHeaderPlugin(columns, grid));
+            grid.registerPlugin(me.__createHeaderPlugin(columns, grid, regionCategories));
 
             // register header buttons plugin
             var headerButtonsPlugin = new Slick.Plugins.HeaderButtons();
@@ -681,11 +689,22 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.GridHelper',
             });
             return dataView;
         },
+        getEnabledRegions : function() {
+            // Get values of selected column
+            var data = this.getGrid().getData().getItems();
+            var regions = _.reduce(data, function(regions, item) {
+                if (item[this.__groupingProperty] === this.__groupEnabled) {
+                    regions.push(item.id);
+                }
+            	return regions;
+            }, []);
+            return regions;
+        },
         /**
          * A method to initialize header plugin
          * @private _initHeaderPlugin
          */
-        __createHeaderPlugin: function (columns, grid) {
+        __createHeaderPlugin: function (columns, grid, regionCategories) {
             var me = this,
                 i;
             // lets create an empty container for menu items
@@ -702,9 +721,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.GridHelper',
 
             // new header menu plugin
             var headerMenuPlugin = new Slick.Plugins.HeaderMenu2({});
-            this.service.getRegionCategories(function(availableCategories) {
-                me.__addRegionColumnMenu(headerMenuPlugin, availableCategories);
-            });
+            me.__addRegionColumnMenu(headerMenuPlugin, regionCategories);
             // when command is given shos statistical variable as a new "row" in subheader
             headerMenuPlugin.onCommand.subscribe(function (e, args) {
                 var i;

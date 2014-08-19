@@ -8,16 +8,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
     /**
      * @static constructor function
      */
-    function (localization, service) {
-        this.helper = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.GridHelper', service, this, localization);
+    function (localization, statisticsService, userSelections) {
+        this.helper = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.GridHelper', this, localization);
         this._locale = localization;
-        this.service = service;
+        this.service = statisticsService;
+        this.userSelections = userSelections;
         // start to register eventhandlers etc
         this.start();
     },
     {
         "name" : "statsgrid.view.Grid",
-        "__defaultRegionCategory" : 1, //'KUNTA',
         render : function(container) {
             var me = this;
             this.container = container;
@@ -32,13 +32,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                     me.getSandbox().printWarn('Default region category not found!');
                     return;
                 }
-                me.__grid = me.helper.createStatisticsGrid(container, category);
+                me.__grid = me.helper.createStatisticsGrid(container, category, categories);
                 me.selectRegionCategory(me.getActiveRegionCategory());
 
                 // initially sort by region column
                 me.__grid.setSortColumn(me.helper.__columnIdRegion, true);
             });
 
+        },
+        filterRegion : function(region, blnFilter) {
+            if(blnFilter) {
+                this.userSelections.addFilteredRegion(region);
+            }
+            else {
+                this.userSelections.removeRegionFilter(region);
+            }
         },
         selectRegionCategory : function(categoryId) {
             var me = this,
@@ -49,9 +57,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 // setup regions
                 // notify dataview that we are starting to update data
                 dataView.beginUpdate();
-            // empty the data view
-            //dataView.setItems([]);
-            //grid.invalidateAllRows();
+                // empty the data view
+                //dataView.setItems([]);
+                //grid.invalidateAllRows();
                 // set municipality data
                 dataView.setItems(me.helper.transformRegionsToColumnData(category));
                 //-------------------------------------------
@@ -68,14 +76,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 //this._setLayerToCategory(this._selectedRegionCategory);
             });
 
-            // setup state - TODO: maybe use constant for "activeCategory"?
-            this.getState().regionCategory = categoryId;
+            this.userSelections.setActiveRegionCategory(categoryId);
         },
         getGrid : function() {
             return this.__grid;
         },
         getActiveRegionCategory : function() {
-            return this.getState().regionCategory || this.__defaultRegionCategory;
+            return this.userSelections.getActiveRegionCategory();
         },
         selectIndicator : function(indicatorKey) {
             // Don't do anything in case the clicked column is the one in the state.

@@ -31,6 +31,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             return this.__service;
 
         },
+        getUserSelections : function() {
+            if(!this.__userSelections) {
+                var sb = this.getSandbox();
+                this.__userSelections = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.UserSelectionsService', sb);
+                // register to sandbox so other bundles can see it too
+                sb.registerService(this.__userSelections);
+            }
+            return this.__userSelections;
+        },
         "afterStart": function (sandbox) {
             var me = this;
             var tooltipRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.TooltipContentRequestHandler', this);
