@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
         this.__regionCategories = [];
         this.__indicators = {};
         this.cacheSize = 0;
-        this.callbackQueue = {};
+        this.callbackQueue = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.CallbackQueue');
     }, {
         __name: "StatsGrid.StatisticsService",
         __qname: "Oskari.statistics.bundle.statsgrid.StatisticsService",
@@ -34,43 +34,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
         },
         getSandbox: function () {
             return this.sandbox;
-        },
-        getCallbackQueue : function(name) {
-            if(!this.callbackQueue[name]) {
-                this.callbackQueue[name] = [];
-            }
-            return this.callbackQueue[name];
-        },
-        /**
-         * [addCallbackQueue description]
-         * @param {[type]}   name     [description]
-         * @param {Function} callback [description]
-         * @return true if was the first
-         */
-        addCallbackToQueue : function(name, callback) {
-
-            var queue = this.getCallbackQueue(name);
-            queue.push(callback);
-            return (queue.length === 1);
-        },
-        notifyCallbacks : function(name, args) {
-            var queue = this.getCallbackQueue(name);
-            while(queue.length > 0) {
-                var cb = queue.shift();
-                cb.apply(cb, args || []);
-            }
-        },
-        getQueueName : function(baseName, args) {
-            var separator = '___';
-            var name = baseName;
-            _.each(args, function(item) {
-                if(_.isFunction(item)) {
-                    return;
-                }
-                // TODO: handle objects etc
-                name = name + separator + item;
-            });
-            return name;
         },
         /**
          * @method init
@@ -93,7 +56,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 return;
             }
             var queueName = 'getDataSources';
-            if(!this.addCallbackToQueue(queueName, callback)) {
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
                 // already handling the request, all callbacks will be called when done
                 return;
             }
@@ -112,10 +75,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                     _.each(pResp.dataSources || [], function(item) {
                         me.addDataSource(item);
                     });
-                    me.notifyCallbacks(queueName, [me.__dataSources]);
+                    me.callbackQueue.notifyCallbacks(queueName, [me.__dataSources]);
                 },
                 error: function (jqXHR, textStatus) {
-                    me.notifyCallbacks(queueName);
+                    me.callbackQueue.notifyCallbacks(queueName);
                 }
             });
         },
@@ -145,8 +108,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 callback(indicator);
                 return;
             }
-            var queueName = this.getQueueName('getIndicatorMetadata', arguments);
-            if(!this.addCallbackToQueue(queueName, callback)) {
+            var queueName = this.callbackQueue.getQueueName('getIndicatorMetadata', arguments);
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
                 // already handling the request, all callbacks will be called when done
                 return;
             }
@@ -162,10 +125,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                         return;
                     }
                     indicator.setMetadata(pResp);
-                    me.notifyCallbacks(queueName, [indicator]);
+                    me.callbackQueue.notifyCallbacks(queueName, [indicator]);
                 },
                 error: function (jqXHR, textStatus) {
-                    me.notifyCallbacks(queueName);
+                    me.callbackQueue.notifyCallbacks(queueName);
                 }
             });
         },
@@ -179,8 +142,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
             var me = this,
                 url = this.getDataSource(datasource).getIndicatorValuesUrl(id);
 
-            var queueName = this.getQueueName('getIndicatorValue', arguments);
-            if(!this.addCallbackToQueue(queueName, callback)) {
+            var queueName = this.callbackQueue.getQueueName('getIndicatorValue', arguments);
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
                 // already handling the request, all callbacks will be called when done
                 return;
             }
@@ -196,10 +159,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                         callback();
                         return;
                     }
-                    me.notifyCallbacks(queueName, [pResp]);
+                    me.callbackQueue.notifyCallbacks(queueName, [pResp]);
                 },
                 error: function (jqXHR, textStatus) {
-                    me.notifyCallbacks(queueName);
+                    me.callbackQueue.notifyCallbacks(queueName);
                 }
             });
         },
@@ -222,8 +185,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
             var me = this,
                 url = ds.getIndicatorListUrl();
 
-            var queueName = this.getQueueName('getIndicators', arguments);
-            if(!this.addCallbackToQueue(queueName, callback)) {
+            var queueName = this.callbackQueue.getQueueName('getIndicators', arguments);
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
                 // already handling the request, all callbacks will be called when done
                 return;
             }
@@ -233,11 +196,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 url: url,
                 success: function (pResp) {
                     me.__handleIndicatorsResponse(pResp, datasourceId, function() {
-                        me.notifyCallbacks(queueName, arguments);
+                        me.callbackQueue.notifyCallbacks(queueName, arguments);
                     });
                 },
                 error: function (jqXHR, textStatus) {
-                    me.notifyCallbacks(queueName);
+                    me.callbackQueue.notifyCallbacks(queueName);
                 }
             });
         },
@@ -264,8 +227,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
             var me = this,
                 url = Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalIndicatorRegionCategories";
 
-            var queueName = this.getQueueName('getRegionCategories');
-            if(!this.addCallbackToQueue(queueName, callback)) {
+            var queueName = this.callbackQueue.getQueueName('getRegionCategories');
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
                 // already handling the request, all callbacks will be called when done
                 return;
             }
@@ -279,10 +242,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                         return;
                     }
                     me.__handleRegionCategoriesResponse(pResp);
-                    me.notifyCallbacks(queueName, [me.__regionCategories]);
+                    me.callbackQueue.notifyCallbacks(queueName, [me.__regionCategories]);
                 },
                 error: function (jqXHR, textStatus) {
-                    me.notifyCallbacks(queueName);
+                    me.callbackQueue.notifyCallbacks(queueName);
                 }
             });
         },
@@ -308,8 +271,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 callback(category);
                 return;
             }
-            var queueName = this.getQueueName('getRegions', arguments);
-            if(!this.addCallbackToQueue(queueName, callback)) {
+            var queueName = this.callbackQueue.getQueueName('getRegions', arguments);
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
                 // already handling the request, all callbacks will be called when done
                 return;
             }
@@ -325,10 +288,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                         return;
                     }
                     category.setRegions(pResp);
-                    me.notifyCallbacks(queueName, [category]);
+                    me.callbackQueue.notifyCallbacks(queueName, [category]);
                 },
                 error: function (jqXHR, textStatus) {
-                    me.notifyCallbacks(queueName);
+                    me.callbackQueue.notifyCallbacks(queueName);
                 }
             });
         },

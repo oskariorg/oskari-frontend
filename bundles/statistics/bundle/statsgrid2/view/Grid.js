@@ -38,7 +38,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.Grid',
                 // initially sort by region column
                 me.__grid.setSortColumn(me.helper.__columnIdRegion, true);
             });
-
         },
         filterRegion : function(region, blnFilter) {
             if(blnFilter) {
