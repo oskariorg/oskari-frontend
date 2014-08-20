@@ -13,15 +13,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
         me._locale = localization;
         me.statisticsService = statisticsService;
         me.userSelectionService = userSelectionService;
-        // DEBUG
-        me.userSelectionService = {
-            isActive: function (selections) {
-                // Return true for mielenterveyspotilaat...
-                if (selections.indicator === 4) {
-                    return true;
-                }
-            }
-        };
         me.el = null;
         me.__selectedDataSource = null;
         me.__selectedIndicator = null;
@@ -354,7 +345,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 // disable button
                 me._disableAddRemoveButton();
             } else {
-                if (me.userSelectionService.isActive(selections)) {
+                if (me.userSelectionService.isIndicatorSelected(selections)) {
                     // selection is already active
                     // set button to remove
                     buttonTitle = loc.removeColumn;
