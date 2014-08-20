@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.IndicatorSelectedE
          * @return {String} The event name.
          */
         getName: function () {
-            return "StatsGrid.IndicatorSelectedEvent";
+            return 'StatsGrid.IndicatorSelectedEvent';
         },
         /**
          * @method getIndicatorId
@@ -53,10 +53,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.IndicatorSelectedE
          * @method getKey
          * @return {String} unique key for the indicator selection
          */
-        getKey : function() {
-            var separator = '||';
-            var key = this.getDatasourceId() + separator + this.getIndicatorId();
-            var opts = this.getOptions();
+        getKey: function() {
+            var separator = '||',
+                key = this.getDatasourceId() + separator + this.getIndicatorId(),
+                opts = this.getOptions();
             if(opts) {
                 key = key + separator + JSON.stringify(opts);
             }

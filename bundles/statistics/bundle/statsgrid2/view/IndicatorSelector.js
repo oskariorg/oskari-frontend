@@ -30,34 +30,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                   '</form>',
             selector: '<label><span></span><select></select></label>',
             option: '<option></option>',
+            infoIcon: '<div class="icon-info"></div>',
             metadataPopup: '<div>' +
                                '<h4 class="indicator-msg-popup-title"></h4>' +
                                '<p class="indicator-msg-popup-title"></p>' +
                                '<h4 class="indicator-msg-popup-source"></h4>' +
                                '<p class="indicator-msg-popup-source"></p>' +
                            '</div>'
-        },
-        __templates: {
-            main: '<div class="indicatorselector">' +
-                '<div class="data-source-select"></div>' +
-                '<div class="selectors-container">' +
-                '<div class="indicator-cont"></div>' +
-                '<div class="parameters-cont"></div>' +
-                '</div>' +
-                '</div>',
-            option: '<option></option>',
-            infoIcon: '<div class="icon-info"></div>',
-            datasourceSelector: '<div class="selector-cont">' +
-                '<label for="statsgrid-data-source-select"></label>' +
-                '<select id="statsgrid-data-source-select" class="indi">' +
-                '</select>' +
-                '</div>',
-            indicatorSelector: '<div class="indisel selector-cont">' +
-                '<label for="statsgrid-indicator-select"></label>' +
-                '<select id="statsgrid-indicator-select" name="indi" class="indi"><option value="" selected="selected"></option></select>' +
-                '</div>',
-            indicatorOptionSelector: '<div class="selector-cont"><label></label><select></select></div>',
-            metadataPopup: '<div><h4 class="indicator-msg-popup-title"></h4><p class="indicator-msg-popup-title"></p><br/><h4 class="indicator-msg-popup-source"></h4><p class="indicator-msg-popup-source"></p></div>'
         },
 
         /**
@@ -67,7 +46,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
         render: function (container) {
             var me = this,
                 btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SearchButton'),
-                el = jQuery(this._templates.main),
+                el = jQuery(me._templates.main),
                 sandbox = me.statisticsService.getSandbox();
 
             me.el = el;
@@ -229,7 +208,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             me._disableAddRemoveButton();
             if (!id) {
                 // clear previous indicator options
-                this._createDynamicIndicatorOptions();
+                me._createDynamicIndicatorOptions();
                 return;
             }
             // setup values for options
@@ -338,7 +317,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 primary = true,
                 selections = me.getSelections();
 
-            if (!selections.indicator) {
+            if (!selections.indicator || !me._indicatorRegionSupported(selections)) {
                 // no indicator selected
                 // set button to add
                 buttonTitle = loc.addColumn;
@@ -378,8 +357,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 return;
             }
             var me = this,
-                infoIcon = jQuery(this.__templates.infoIcon),
-                indicatorCont = this.el.find('.indicator-cont > label:last-of-type > span'),
+                infoIcon = jQuery(me._templates.infoIcon),
+                indicatorCont = me.el.find('.indicator-cont > label:last-of-type > span'),
                 meta = indicator.getMetadata();
             // append this indicator
             indicatorCont.append(infoIcon);
@@ -404,6 +383,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
          */
         __removeIndicatorInfoButton: function () {
             this.el.find('.indicator-cont .icon-info').remove();
+        },
+
+        /**
+         * @method _indicatorRegionSupported
+         * @param {Object} selections
+         * @private
+         * @return {Boolean} Whether the region is supported or not
+         *
+         * Checks if the indicator can be shown in the selected region division,
+         * shows a popup if not.
+         */
+        _indicatorRegionSupported: function (selections) {
+            // TODO implement
+            return true;
         },
 
         /**
@@ -530,7 +523,19 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 select.append(option);
             }
             return option;
-        }
+        },
 
+        eventHandlers: {
+            'StatsGrid.IndicatorSelectedEvent' : function(e) {
+                // TODO check if options match
+                if (e && e.getDatasourceId() === this.getSelectedDatasource() &&
+                        e.getIndicatorId() === this.getSelectedIndicator()) {
+                    this._updateAddRemoveButtonState();
+                }
+            }
+        }
+    },
+    {
+        'extend' : ['Oskari.userinterface.extension.DefaultModule']
     }
 );
