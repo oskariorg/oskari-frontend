@@ -1,3 +1,4 @@
+/* Mixins */
 #contentMap.statsgrid-contentMap {
   position: relative; }
 
@@ -27,62 +28,24 @@
   height: 100%; }
   .statsgrid .statsgrid-table {
     min-height: 80%;
-    height: 80%;
-    font: 12px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif; }
+    height: 80%; }
   .statsgrid .idContainer {
     margin: 4px;
     border: 1pt solid #40B0C0;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -o-border-radius: 5px;
+    -ms-border-radius: 5px;
     border-radius: 5px;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
     padding: 4px;
     background-color: #80F0A0;
     cursor: pointer; }
-  .statsgrid .indicator-cont .icon-info {
-    display: inline-block;
-    margin: 0 0 5px 5px; }
   .statsgrid .municipal-grid {
     width: 100%;
     height: 80%; }
-  .statsgrid .data-source-select {
-    margin-top: 5px; }
-  .statsgrid .parameters-cont {
-    min-height: 115px; }
-    .statsgrid .parameters-cont button {
-      margin: 8px 0 10px 8px; }
-    .statsgrid .parameters-cont button:disabled, .statsgrid .parameters-cont input:disabled, .statsgrid .parameters-cont select:disabled {
-      opacity: 0.25; }
-    .statsgrid .parameters-cont .cannot-display-indicator {
-      margin-left: 10px; }
-  .statsgrid .selector-cont {
-    clear: both; }
-    .statsgrid .selector-cont label {
-      display: inline-block;
-      width: 80px;
-      padding: 10px;
-      font-weight: bold;
-      font-size: 1.2em; }
-    .statsgrid .selector-cont select.indi {
-      width: 200px; }
-    .statsgrid .selector-cont select.parameter {
-      width: 100px; }
-  .statsgrid .selectors-container {
-    position: relative;
-    height: 20%;
-    min-height: 157px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ie-box-sizing: border-box;
-    -o-box-sizing: border-box;
-    box-sizing: border-box;
-    min-width: 470px; }
-    .statsgrid .selectors-container .indisel {
-      display: inline-block; }
-    .statsgrid .selectors-container .new-indicator-cont {
-      float: left;
-      margin-top: 8px;
-      padding-left: 10px; }
-      .statsgrid .selectors-container .new-indicator-cont input {
-        float: right;
-        margin: 0px; }
 
 .statsgrid-csv-button {
   position: absolute;
@@ -110,17 +73,22 @@
   border: 1px solid #999;
   background: #fcfcfc;
   padding: 2px;
-  -moz-box-shadow: 2px 2px 2px silver;
-  -webkit-box-shadow: 2px 2px 2px silver;
-  -o-box-shadow: 2px 2px 2px silver;
-  -ms-box-shadow: 2px 2px 2px silver;
-  box-shadow: 2px 2px 2px silver;
+  -webkit-box-shadow: 2px 2px 2px #c0c0c0;
+  -moz-box-shadow: 2px 2px 2px #c0c0c0;
+  box-shadow: 2px 2px 2px #c0c0c0;
   min-width: 100px;
   z-index: 20; }
   .slick-header-menu .slick-header-menuitem {
     padding: 2px 4px;
     border: 1px solid transparent;
-    border-radius: 3px; }
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box; }
     .slick-header-menu .slick-header-menuitem:hover {
       border-color: silver;
       background: white; }
@@ -142,6 +110,7 @@
 .divmanazerpopup .filter-label {
   float: left;
   width: 100px;
+  /* FIXME use an h3 here or something... */
   font-weight: bold; }
 .divmanazerpopup .filter-value {
   float: left;
@@ -192,14 +161,11 @@ form.add-indicator fieldset {
   margin: 0;
   padding: 10px; }
   form.add-indicator fieldset legend {
-    font-size: 16px;
     font-weight: bold; }
   form.add-indicator fieldset label {
     clear: left;
     float: left;
     display: block;
-    font-size: 14px;
-    line-height: 16px;
     width: 150px; }
   form.add-indicator fieldset input, form.add-indicator fieldset select {
     clear: right;
@@ -229,9 +195,7 @@ form.add-indicator .municipalities {
   form.add-indicator .municipalities .municipality-row label {
     display: inline-block;
     padding-left: 10px;
-    width: 150px;
-    font-weight: bold;
-    font-size: 14px; }
+    width: 150px; }
 form.add-indicator .form-submit {
   height: 40px;
   position: absolute;
@@ -248,3 +212,24 @@ form.add-indicator .form-submit {
 .indicator-name-link {
   color: #0085d1;
   cursor: pointer; }
+
+/* New styles */
+form.statsgrid2_indicator_selector {
+  /* FIXME this should be in the container */
+  padding: 20px; }
+  form.statsgrid2_indicator_selector .indicator-cont, form.statsgrid2_indicator_selector .parameters-cont {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 12px;
+    /* Remove these once the generic form css is in use */ }
+    form.statsgrid2_indicator_selector .indicator-cont label, form.statsgrid2_indicator_selector .parameters-cont label {
+      /* FIXME move this to a chozen override css file */ }
+      form.statsgrid2_indicator_selector .indicator-cont label span .icon-info, form.statsgrid2_indicator_selector .parameters-cont label span .icon-info {
+        float: right; }
+      form.statsgrid2_indicator_selector .indicator-cont label select, form.statsgrid2_indicator_selector .indicator-cont label .chzn-container, form.statsgrid2_indicator_selector .parameters-cont label select, form.statsgrid2_indicator_selector .parameters-cont label .chzn-container {
+        display: block;
+        margin-top: 6px;
+        margin-bottom: 12px; }
+      form.statsgrid2_indicator_selector .indicator-cont label .chzn-container .chzn-single, form.statsgrid2_indicator_selector .parameters-cont label .chzn-container .chzn-single {
+        height: 28px;
+        line-height: 29px; }

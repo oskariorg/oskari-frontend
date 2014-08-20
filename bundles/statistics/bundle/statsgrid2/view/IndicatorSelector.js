@@ -8,200 +8,387 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
     /**
      * @static constructor function
      */
-    function (localization, service) {
-    	this._locale = localization;
-    	this.service = service;
-    	var me = this;
-    	this.el = null;
-    	this.__activeDataSource = null;
-    	this.__activeIndicator = null;
-    	this.__dataSourceSelect = null;
-    	this.__indicatorSelect = null;
-    	this.__indicatorButton = null;
-        this.dialog = null;
-    },
-    {
-    	__templates : {
-    		main : '<div class="indicatorselector">' + 
-    					'<div class="data-source-select"></div>' + 
-    					'<div class="selectors-container">' + 
-    						'<div class="indicator-cont"></div>' + 
-    						'<div class="parameters-cont"></div>' + 
-    					'</div>' + 
-    				'</div>',
-    		option : '<option></option>',
-    		infoIcon : '<div class="icon-info"></div>',
-    		datasourceSelector : '<div class="selector-cont">' +
-		                            '<label for="statsgrid-data-source-select"></label>' +
-		                            '<select id="statsgrid-data-source-select" class="indi">' +
-		                            '</select>' +
-		                        '</div>',
-			indicatorSelector : '<div class="indisel selector-cont">' + 
-									'<label for="statsgrid-indicator-select"></label>' + 
-									'<select id="statsgrid-indicator-select" name="indi" class="indi"><option value="" selected="selected"></option></select>' + 
-								'</div>',
-			indicatorOptionSelector : '<div class="selector-cont"><label></label><select></select></div>',
-            metadataPopup : '<div><h4 class="indicator-msg-popup-title"></h4><p class="indicator-msg-popup-title"></p><br/><h4 class="indicator-msg-popup-source"></h4><p class="indicator-msg-popup-source"></p></div>'
-    	},
-
-    	render : function(container) {
-            var me = this,
-                el = jQuery(this.__templates.main);
-            this.el = el;
-            el.find("div.data-source-select").append(this._createDataSourceSelect());
-            var selectorsContainer = el.find('.selectors-container');
-			selectorsContainer.find('.indicator-cont').append();
-
-        	var indicatorContainer = selectorsContainer.find('.indicator-cont');
-            indicatorContainer.append(me._createIndicatorsSelect());
-
-            container.append(el);
-
-            var btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SearchButton');
-            var sb = me.service.getSandbox();
-            btn.setHandler(function() {
-                var opts = me.getSelections();
-                // Notify other components of indicator selection
-                var eventBuilder = sb.getEventBuilder('StatsGrid.IndicatorSelectedEvent');
-                if (eventBuilder) {
-                    var evt = eventBuilder(opts.datasource, opts.indicator, opts.options);
-                    sb.notifyAll(evt);
+    function (localization, statisticsService, userSelectionService) {
+        var me = this;
+        me._locale = localization;
+        me.statisticsService = statisticsService;
+        me.userSelectionService = userSelectionService;
+        // DEBUG
+        me.userSelectionService = {
+            isActive: function (selections) {
+                // Return true for mielenterveyspotilaat...
+                if (selections.indicator === 4) {
+                    return true;
                 }
-            });
-            btn.insertTo(el);
-            this.__indicatorButton = btn;
-            btn.setEnabled(false);
-
-    		this.service.getDataSources(function(dsList) {
-	    		me.setDataSources(dsList, true);
-    		});
-    	},
-
-        setDataSources : function(items) {
-        	this.__setSelectOptions(this.__dataSourceSelect, items, true);
-			this.setIndicators([]);
-        },
-        setIndicators : function(indicators) {
-        	this.__setSelectOptions(this.__indicatorSelect, indicators, false);
-        	this.changeIndicator();
-        },
-        changeDataSource : function(id) {
-            this.setIndicators([]);
-        	var ds = this.service.getDataSource(id);
-            if (!ds)  {
-            	//alert("Couldn't find Datasource for id " + id);
-            	return;
             }
-            var me = this;
-            this.__activeDataSource = ds;
-
-            //clear the selectors containers
-        	this.service.getIndicators(id, function(indicators){
-        		if(!indicators) {
-        			// something went wrong
-        			return;
-        		}
-            	me.setIndicators(indicators)
-        	});
-        	var indicatorParamsContainer = this.getIndicatorParamsContainer();
-
-
-            //this.createDemographicsSelects(container, null);
+        };
+        me.el = null;
+        me.__selectedDataSource = null;
+        me.__selectedIndicator = null;
+        me.__dataSourceSelect = null;
+        me.__indicatorSelect = null;
+        me.__addRemoveButton = null;
+        me.dialog = null;
+    }, {
+        _templates: {
+            main: '<form class="statsgrid2_indicator_selector">' +
+                      '<div class="indicator-cont">' +
+                          '<label><span></span><select name="datasource"></select></label>' +
+                          '<label><span></span><select name="indicator"></select></label>' +
+                      '</div><div class="parameters-cont"></div><div class="buttons-cont"></div>' +
+                  '</form>',
+            selector: '<label><span></span><select></select></label>',
+            option: '<option></option>',
+            metadataPopup: '<div>' +
+                               '<h4 class="indicator-msg-popup-title"></h4>' +
+                               '<p class="indicator-msg-popup-title"></p>' +
+                               '<h4 class="indicator-msg-popup-source"></h4>' +
+                               '<p class="indicator-msg-popup-source"></p>' +
+                           '</div>'
         },
-        changeIndicator : function(id) {
-			var me = this;
-            if(!id) {
-				// clear previous indicator options
-				this._createIndicatorOptions();
-            	return;
-            }
-            // setup values for options
-	        var optionsContainer = this.getIndicatorParamsContainer(),
-	         	ds = this.getActiveDatasource();
-
-	        this.service.getIndicatorMetadata(ds.getId(), id, function(indicator) {
-	        	if(!indicator) {
-	        		// something went wrong
-	        	}
-    			me.__activeIndicator = indicator;
-	        	_.each(ds.getIndicatorParams(), function(item) {
-	        		var select = optionsContainer.find('select[name=' + item.name + ']');
-	        		var options = [];
-	        		if(indicator) {
-	        			options = indicator.getParamValues(item.name);
-	        		}
-	        		// clear previous values
-	        		select.empty();
-	        		if(options.length === 0) {
-	        			// no options for this select in selected indicator
-	                	select.attr('disabled', 'disabled');
-	                	return;
-	        		}
-	                select.removeAttr('disabled');
-	        		_.each(options, function(opt) {
-	        			me._addOption(opt, opt, select);
-	        		});
-	        	});
-	        	me.__createIndicatorInfoButton(indicator);
-	        	me.__indicatorButton.setEnabled(!!indicator)
-	        });
-            	
-
-                //me.deleteIndicatorInfoButton(container);
-                //me.getStatsIndicatorMeta(container, indicatorId);
+        __templates: {
+            main: '<div class="indicatorselector">' +
+                '<div class="data-source-select"></div>' +
+                '<div class="selectors-container">' +
+                '<div class="indicator-cont"></div>' +
+                '<div class="parameters-cont"></div>' +
+                '</div>' +
+                '</div>',
+            option: '<option></option>',
+            infoIcon: '<div class="icon-info"></div>',
+            datasourceSelector: '<div class="selector-cont">' +
+                '<label for="statsgrid-data-source-select"></label>' +
+                '<select id="statsgrid-data-source-select" class="indi">' +
+                '</select>' +
+                '</div>',
+            indicatorSelector: '<div class="indisel selector-cont">' +
+                '<label for="statsgrid-indicator-select"></label>' +
+                '<select id="statsgrid-indicator-select" name="indi" class="indi"><option value="" selected="selected"></option></select>' +
+                '</div>',
+            indicatorOptionSelector: '<div class="selector-cont"><label></label><select></select></div>',
+            metadataPopup: '<div><h4 class="indicator-msg-popup-title"></h4><p class="indicator-msg-popup-title"></p><br/><h4 class="indicator-msg-popup-source"></h4><p class="indicator-msg-popup-source"></p></div>'
         },
-        getIndicatorParamsContainer : function() {
-			return this.el.find('.parameters-cont');
-        },
-        getActiveDatasource : function() {
-			return this.__activeDataSource;
-        },
-        getActiveIndicator : function() {
-			return this.__activeIndicator;
-        },
-        getSelections : function() {
-        	var result = {
-        		datasource : null,
-        		indicator : null,
-        		options : {}
-        	}
-        	if(this.getActiveDatasource()) {
-        		result.datasource = this.getActiveDatasource().getId();
-        	}
-        	if(this.getActiveIndicator()) {
-        		result.indicator = this.getActiveIndicator().getId();
-	        	var optionsContainer = this.getIndicatorParamsContainer(),
-	        		select = optionsContainer.find('select');
-
-        		_.each(select, function(opt) {
-        			var dom = jQuery(opt),
-        				value = dom.val();
-        			if(value !== null && value !== undefined) {
-        				result.options[dom.attr('name')] = value;
-        			}
-        		});
-        	}
-        	return result;
-        },
-
-
 
         /**
-         * Create indicator meta info button
-         *
-         * @method createIndicatorInfoButton
-         * @param container parent element
-         * @param indicator meta data
+         * @method render
+         * @param {DOMElement} container
          */
-        __createIndicatorInfoButton: function (indicator) {
+        render: function (container) {
+            var me = this,
+                btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SearchButton'),
+                el = jQuery(this._templates.main),
+                sandbox = me.statisticsService.getSandbox();
+
+            me.el = el;
+            me._createDataSourceSelect(el.find('select[name=datasource]').parent());
+            me._createIndicatorSelect(el.find('select[name=indicator]').parent());
+            container.append(el);
+            btn.setTitle(me._locale.addColumn);
+            btn.setHandler(function (event) {
+                event.preventDefault();
+                // Notify other components of indicator selection
+                var opts,
+                    eventBuilder = sandbox.getEventBuilder('StatsGrid.IndicatorSelectedEvent'),
+                    evt;
+                if (eventBuilder) {
+                    opts = me.getSelections();
+                    evt = eventBuilder(opts.datasource, opts.indicator, opts.options);
+                    sandbox.notifyAll(evt);
+                }
+                return false;
+            });
+            btn.insertTo(el.find('.buttons-cont'));
+            me.__addRemoveButton = btn;
+            btn.setEnabled(false);
+
+            me.statisticsService.getDataSources(function (dsList) {
+                me.setDataSources(dsList, true);
+            });
+        },
+
+        /**
+         * Create datasource drop down select
+         * @private
+         * @method _createDataSourceSelect
+         * @param {DOMElement} container
+         */
+        _createDataSourceSelect: function (container) {
+            var me = this,
+                label = container.find('span'),
+                select = container.find('select');
+
+            label.text(me._locale.tab.grid.organization);
+
+            select.on('change', function (e) {
+                me.changeDataSource(e.target.value);
+            });
+
+            select.attr('data-placeholder', me._locale.selectDataSource);
+            select.attr('data-no_results', me._locale.noDataSource);
+            me._initSelectChosen(select);
+
+            me.__dataSourceSelect = select;
+        },
+
+        /**
+         * Create indicators drop down select
+         * @private
+         * @method _createIndicatorSelect
+         * @param {DOMElement} container
+         */
+        _createIndicatorSelect: function (container) {
+            var me = this,
+                label = container.find('span'),
+                select = container.find('select');
+            label.append(me._locale.indicators);
+
+            // if the value changes, fetch indicator meta data
+            select.change(function (e) {
+                var option = select.find('option:selected'),
+                    isOwn = option.attr('data-isOwnIndicator');
+                me.changeIndicator(option.val(), (isOwn === 'true'));
+            });
+
+            select.attr('data-placeholder', me._locale.selectIndicator);
+            select.attr('data-no_results', me._locale.noMatch);
+
+            // we use chosen to create autocomplete version of indicator select element.
+            me._initSelectChosen(select);
+            // used when populating later on 
+            me.__indicatorSelect = select;
+            // this gives indicators more space to show title on dropdown
+            //container.find('.chzn-drop').css('width', '298px');
+            //container.find('.chzn-search input').css('width', '263px');
+        },
+
+        /**
+         * @method _initSelectChosen
+         * @param {DOMElement} select
+         * @private
+         * Initialise chosen on the given select DOM element.
+         */
+        _initSelectChosen: function (select) {
+            var chosenOptions = {},
+                noResultsKey = select.attr('data-no_results');
+            
+            if (noResultsKey) {
+                chosenOptions.no_results_text = this._locale[noResultsKey];
+            }
+            select.chosen(chosenOptions);
+        },
+
+        /**
+         * @method setDataSources
+         * @param {Array} items
+         * Sets the given values as data source options
+         */
+        setDataSources: function (items) {
+            this.__setSelectOptions(this.__dataSourceSelect, items, true);
+            this.setIndicators([]);
+        },
+
+        /**
+         * @method setIndicators
+         * @param {Array} indicators
+         * Sets the given values as indicator options
+         */
+        setIndicators: function (indicators) {
+            this.__setSelectOptions(this.__indicatorSelect, indicators, false);
+            this.changeIndicator();
+        },
+
+        /**
+         * @method changeDataSource
+         * @param {String} id Data source ID
+         * Sets the given value as data source
+         */
+        changeDataSource: function (id) {
+            var me = this;
+            me.setIndicators([]);
+            var ds = me.statisticsService.getDataSource(id);
+            if (!ds) {
+                //alert("Couldn't find Datasource for id " + id);
+                return;
+            }
+            me.__selectedDataSource = ds;
+
+            //clear the selectors containers
+            me.statisticsService.getIndicators(
+                id,
+                function (indicators) {
+                    if (!indicators) {
+                        // something went wrong
+                        return;
+                    }
+                    me.setIndicators(indicators);
+                }
+            );
+            var indicatorParamsContainer = me.getIndicatorParamsContainer();
+            //me.createDemographicsSelects(container, null);
+        },
+
+        /**
+         * @method changeIndicator
+         * @param {String} id
+         * Sets the given value as indicator
+         */
+        changeIndicator: function (id) {
+            var me = this;
+            // Disable button until we get indicator metadata
+            me._disableAddRemoveButton();
+            if (!id) {
+                // clear previous indicator options
+                this._createDynamicIndicatorOptions();
+                return;
+            }
+            // setup values for options
+            var optionsContainer = me.getIndicatorParamsContainer(),
+                select,
+                options,
+                value,
+                ds = me.getSelectedDatasource();
+
+            me.statisticsService.getIndicatorMetadata(ds.getId(), id, function (indicator) {
+                if (!indicator) {
+                    // something went wrong
+                }
+                me.__selectedIndicator = indicator;
+                _.each(ds.getIndicatorParams(), function (item) {
+                    select = optionsContainer.find('select[name=' + item.name + ']');
+                    options = [];
+                    if (indicator) {
+                        // FIXME getParamValues should return:
+                        // - [{id: 1}] when there's no separate label
+                        // - [{id: 1, value: 'label'}] when label is not localized
+                        // - [{id: 1, value: {'fi', 'label'}}] when label is localized
+                        options = indicator.getParamValues(item.name);
+                    }
+                    // clear previous values
+                    select.empty();
+                    if (options.length === 0) {
+                        // no options for this select in selected indicator
+                        select.attr('disabled', 'disabled');
+                        return;
+                    }
+                    select.removeAttr('disabled');
+                    _.each(options, function (opt) {
+                        me._addOption(opt, opt, select);
+                    });
+                });
+                // Indicator selection decides the add/remove button status
+                me._updateAddRemoveButtonState();
+                me.__showIndicatorInfoButton(indicator);
+                me.__addRemoveButton.setEnabled(!!indicator);
+            });
+            //me.deleteIndicatorInfoButton(container);
+            //me.getStatsIndicatorMeta(container, indicatorId);
+        },
+
+        getIndicatorParamsContainer: function () {
+            return this.el.find('.parameters-cont');
+        },
+
+        getSelectedDatasource: function () {
+            return this.__selectedDataSource;
+        },
+
+        getSelectedIndicator: function () {
+            return this.__selectedIndicator;
+        },
+
+        /**
+         * @method getSelections
+         * @return {Object} User indicator selection
+         * Get user indicator selections
+         */
+        getSelections: function () {
+            var result = {
+                datasource: null,
+                indicator: null,
+                options: {}
+            };
+            if (this.getSelectedDatasource()) {
+                result.datasource = this.getSelectedDatasource().getId();
+            }
+            if (this.getSelectedIndicator()) {
+                result.indicator = this.getSelectedIndicator().getId();
+                var optionsContainer = this.getIndicatorParamsContainer(),
+                    select = optionsContainer.find('select');
+
+                _.each(select, function (opt) {
+                    var dom = jQuery(opt),
+                        value = dom.val();
+                    if (value !== null && value !== undefined) {
+                        result.options[dom.attr('name')] = value;
+                    }
+                });
+            }
+            return result;
+        },
+
+        /**
+         * @method _disableAddRemoveButton
+         * @private
+         * Disable add/remove button
+         */
+        _disableAddRemoveButton: function () {
+            this.__addRemoveButton.setEnabled(false);
+        },
+
+        /**
+         * @method _updateAddRemoveButtonState
+         * @private
+         * Update add/remove button state based on user selections
+         */
+        _updateAddRemoveButtonState: function () {
+            var me = this,
+                buttonTitle,
+                loc = me._locale,
+                primary = true,
+                selections = me.getSelections();
+
+            if (!selections.indicator) {
+                // no indicator selected
+                // set button to add
+                buttonTitle = loc.addColumn;
+                // disable button
+                me._disableAddRemoveButton();
+            } else {
+                if (me.userSelectionService.isActive(selections)) {
+                    // selection is already active
+                    // set button to remove
+                    buttonTitle = loc.removeColumn;
+                    // destructive operations shouldn't be primary
+                    primary = false;
+                } else {
+                    // selection is not active
+                    // set button to add
+                    buttonTitle = loc.addColumn;                    
+                }
+                // set button label
+                me.__addRemoveButton.setTitle(buttonTitle);
+                // set button primary state
+                me.__addRemoveButton.setPrimary(primary);
+                // enable button
+                me.__addRemoveButton.setEnabled(true);
+            }
+        },
+
+        /**
+         * @method __showIndicatorInfoButton
+         * @private
+         * @param indicator meta data
+         * Create indicator meta info button
+         */
+        __showIndicatorInfoButton: function (indicator) {
             // clear previous indicator
             this.__removeIndicatorInfoButton();
-        	if(!indicator) {
-        		return;
-        	}
+            if (!indicator) {
+                return;
+            }
             var me = this,
                 infoIcon = jQuery(this.__templates.infoIcon),
-                indicatorCont = this.el.find('.indicator-cont'),
+                indicatorCont = this.el.find('.indicator-cont > label:last-of-type > span'),
                 meta = indicator.getMetadata();
             // append this indicator
             indicatorCont.append(infoIcon);
@@ -209,7 +396,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             // show meta data
             infoIcon.click(function (e) {
                 var lang = Oskari.getLang(),
-                    desc = jQuery(me.__templates.metadataPopup);
+                    desc = jQuery(me._templates.metadataPopup);
 
                 desc.find('h4.indicator-msg-popup-title').append(me._locale.stats.descriptionTitle);
                 desc.find('p.indicator-msg-popup-title').append(meta.description[lang]);
@@ -218,27 +405,34 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
                 me.showMessage(meta.title[lang], desc);
             });
         },
-        __removeIndicatorInfoButton : function() {
-            this.el.find('.indicator-cont').find('.icon-info').remove();
+
+        /**
+         * @method __removeIndicatorInfoButton
+         * @private
+         * Removes button linkin to indicator metadata
+         */
+        __removeIndicatorInfoButton: function () {
+            this.el.find('.indicator-cont .icon-info').remove();
         },
 
         /**
          * @method showMessage
-         * Shows user a message with ok button
          * @param {String} title popup title
          * @param {String} message popup message
+         * Shows user a message with ok button
          */
         showMessage: function (title, message, buttons) {
+            var me = this,
+                loc = me._locale,
+                dialog;
             // Oskari components aren't available in a published map.
-            if (this.dialog) {
-                this.dialog.close(true);
-                this.dialog = null;
+            if (me.dialog) {
+                me.dialog.close(true);
+                me.dialog = null;
                 return;
             }
 
-            var me = this,
-                loc = this._locale,
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             if (buttons) {
                 dialog.show(title, message, buttons);
             } else {
@@ -252,134 +446,97 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector',
             }
         },
 
-		/**
-         * Create datasource drop down select
- 		 * @return {DOMElement} [description]
- 		 * @private
- 		 */
-        _createDataSourceSelect: function () {
+        /**
+         * @method _createDynamicIndicatorOptions
+         * @private
+         * Creates dynamic indicator options panel (usually year and gender)
+         */
+        _createDynamicIndicatorOptions: function () {
             var me = this,
-                dsElement = jQuery(this.__templates.datasourceSelector),
-                sel = dsElement.find('select');
-
-            dsElement.find('label').text(this._locale.tab.grid.organization);
-
-            sel.on('change', function (e) {
-                me.changeDataSource(e.target.value);
-            });
-            sel.chosen({
-                no_results_text: this._locale.noDataSource,
-                placeholder_text: this._locale.selectDataSource
-            });
-
-            me.__dataSourceSelect = sel;
-            return dsElement;
-        },
-        /**
-         * Create indicators drop down select
-         *
-         * @method createIndicatorsSelect
- 		 * @return {DOMElement} [description]
-         */
-        _createIndicatorsSelect: function () {
-            var me = this;
-            // Indicators' select container etc.
-            var indicatorSelector = jQuery(this.__templates.indicatorSelector),
-            	select = indicatorSelector.find('select');
-            indicatorSelector.find('label').append(this._locale.indicators);
-
-            // if the value changes, fetch indicator meta data
-            select.change(function (e) {
-                var option = select.find('option:selected'),
-                    isOwn = option.attr('data-isOwnIndicator');
-                me.changeIndicator(option.val(), (isOwn === 'true'));
-            });
-
-            // we use chosen to create autocomplete version of indicator select element.
-            select.chosen({
-                no_results_text: this._locale.noMatch,
-                placeholder_text: this._locale.selectIndicator
-            });
-            // used when populating later on 
-            this.__indicatorSelect = select;
-            // this gives indicators more space to show title on dropdown
-            indicatorSelector.find('.chzn-drop').css('width', '298px');
-            indicatorSelector.find('.chzn-search input').css('width', '263px');
-            return indicatorSelector;
-        },
-        /**
-         * Creates indicator options panel
-         * @return {[type]}      [description]
-         */
-        _createIndicatorOptions: function () {
-        	var optionsContainer = this.getIndicatorParamsContainer();
+                optionsContainer = me.getIndicatorParamsContainer(),
+                ds = me.getSelectedDatasource();
             optionsContainer.empty(); // == me.deleteDemographicsSelect(container);
-            this.__removeIndicatorInfoButton();
-        	var ds = this.getActiveDatasource();
-        	if(!ds) {
-        		// no datasource selection, only clear
-        		return;
-        	}
-            var me = this;
+            me.__removeIndicatorInfoButton();
+            if (!ds) {
+                // no datasource selection, only clear
+                return;
+            }
             // Indicators' select container etc.
-        	_.each(ds.getIndicatorParams(), function(item) {
-	            var indicatorSelector = jQuery(me.__templates.indicatorOptionSelector),
-	            	label = indicatorSelector.find('label'),
-	            	select = indicatorSelector.find('select'),
-	            	labelText = item.name;
-	            // TODO: setup options locales in own structure like ~me.locale.optionLabels[key] 
-   	            if(me._locale[item.name]) {
-   	            	labelText = me._locale[item.name];
-	            }
-            	label.append(labelText);
-	            select.attr('name', item.name);
-	            select.attr('disabled', 'disabled');
-	            optionsContainer.append(indicatorSelector);
-        	});
-        	/*
-	        	var optionsContainer = this.getIndicatorParamsContainer();
-	        	_.each(ds.getIndicatorParams(), function(item) {
-	                optionsContainer.find('select.' + item.getName()).attr('disabled', 'disabled');
-	        	});
-*/
-//            me._addOwnIndicatorButton(optionsContainer);
-        },
-        /**
-         * Setup options to a select element based on given items
-         * @param  {DOMElement} select    [description]
-         * @param  {Object[]} items     [description]
-         * @param  {Boolean} preselect [description]
-         */
-        __setSelectOptions : function(select, items, preselect) {
-
-        	var me = this,
-                lang = Oskari.getLang();
-        	select.empty();
-            _.each(items, function(item) {
-                if (!item.getId()) {
-                	return;
+            _.each(ds.getIndicatorParams(), function (item) {
+                var indicatorSelector = jQuery(me._templates.selector),
+                    label = indicatorSelector.find('> span'),
+                    select = indicatorSelector.find('select'),
+                    labelText = item.name;
+                // TODO: setup options locales in own structure like ~me.locale.optionLabels[key] 
+                if (me._locale[item.name]) {
+                    labelText = me._locale[item.name];
                 }
-                var opt = me._addOption(item.getId(), item.getName(lang), select);
+                label.append(labelText);
+                select.attr('name', item.name);
+                select.attr('disabled', 'disabled');
+                optionsContainer.append(indicatorSelector);
+            });
+            /*
+            var optionsContainer = this.getIndicatorParamsContainer();
+            _.each(ds.getIndicatorParams(), function (item) {
+                optionsContainer.find('select.' + item.getName()).attr('disabled', 'disabled');
+            });
+            */
+            //me._addOwnIndicatorButton(optionsContainer);
+        },
+
+        /**
+         * @method __setSelectOptions
+         * @param  {DOMElement} select    Select DOM element
+         * @param  {Object[]}   items     Select options
+         * @param  {Boolean}    preselect [description]
+         * @private
+         * Setup options to a select element based on given items
+         */
+        __setSelectOptions: function (select, items, preselect) {
+            var me = this,
+                lang = Oskari.getLang(),
+                opt;
+            select.empty();
+            _.each(items, function (item) {
+                if (!item.getId()) {
+                    return;
+                }
+                opt = me._addOption(item.getId(), item.getName(lang), select);
                 opt.attr('data-isOwnIndicator', !!item.ownIndicator);
             });
-            // don't really know why 'liszt' instead of chosen but the linked chosen version seems to use it
-            select.trigger('liszt:updated');
-            if(preselect && items.length > 0) {
-            	select.trigger('change', { target : { value : items[0].getId() }});
+
+            // Reset chosen just so we get back to no selection...
+            select.chosen('destroy');
+            if (preselect && items.length > 0) {
+                select.trigger('change', {
+                    target: {
+                        value: items[0].getId()
+                    }
+                });
+            } else {
+                // Make sure there's no selection
+                select.prop('selectedIndex', -1);
             }
+            me._initSelectChosen(select);
+            // Update chosen options. Don't really know why 'liszt' instead of chosen but the linked chosen version seems to use it.
+            // Apparently newer chosen versions use 'chosen', so keep that in mind if you update the library.
+            select.trigger('liszt:updated');
         },
+
         /**
-         * Create an option for select and add it to given select element if given
-         * @param {String} id     [description]
-         * @param {String} value  [description]
-         * @param {DOMElement} select (optional))
+         * @method _addOption
+         * @param {String}     value  Option value
+         * @param {String}     label  Option label
+         * @param {DOMElement} select (optional) Select element where the option will be appended
          * @private
+         * Create an option for select and add it to given select element if given
          */
-        _addOption: function (id, value, select) {
-            var option = jQuery(this.__templates.option);
-            option.val(id).text(value);
-            if(select) {
-            	select.append(option);
+        _addOption: function (value, label, select) {
+            var option = jQuery(this._templates.option);
+            option.val(value).text(label);
+            if (select) {
+                select.append(option);
             }
             return option;
         }
