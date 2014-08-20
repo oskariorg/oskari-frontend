@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
      */
     function (instance) {
 		this.indicatorSelector = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.IndicatorSelector', instance.getLocalization(), instance.getService());
-		this.grid = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.Grid', instance.getLocalization(), instance.getService());
+		this.grid = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.view.Grid', instance.getLocalization(), instance.getService(), instance.getUserSelections());
     },
     {
     	"__templates" : {
@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.view.MainPanel',
          */
         __fixGridHeight: function (container) {
             // FIXME: maybe get references for sub-containers instead of find() 
-            var container = getContainer,
+            var container = this.getContainer(),
                 gridDiv = container.find('#municipalGrid'),
                 selectorsCont = container.find('.selectors-container'),
                 selectorsHeight = 0;

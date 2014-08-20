@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 fieldName = field.element[0].name;
 
             me.state[fieldName] = {
-                "name": request.term
+                'name': request.term
             };
 
             me._updateRoutingLinks();
@@ -94,7 +94,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
         disableMapClick: function () {
             var me = this;
             delete me.state.field;
-            me.mapEl.removeClass("cursor-crosshair");
+            me.mapEl.removeClass('cursor-crosshair');
             me.instance.unregisterMapClickHandler();
         },
 
@@ -124,7 +124,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             } else {
                 me.state.field = field;
                 me.instance.registerMapClickHandler();
-                me.mapEl.addClass("cursor-crosshair");
+                me.mapEl.addClass('cursor-crosshair');
             }
         },
 
@@ -165,7 +165,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 );
                 tmp.addClearButton();
                 tmp.setLabel(me.locale[field]);
-                /* jshint ignore:start */
+
                 tmp.getField().find('input[type=text]').autocomplete({
                     delay: 300,
                     minLength: 0,
@@ -176,25 +176,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     source: function (request, response) {
                         me._getSearchSuggestions(this, request, response);
                     }
-                }).data("autocomplete")._renderItem = function (ul, item) {
-                    var li = jQuery("<li>"),
+                }).data('autocomplete')._renderItem = function (ul, item) {
+                    var li = jQuery('<li>'),
                         a = jQuery('<a href="#">');
-                    a.html(item.name + ", " + item.village);
+                    a.html(item.name + ', ' + item.village);
                     li.append(a);
                     ul.append(li);
                     return li;
                 };
-                /* jshint ignore:end */
+
                 contents.eq(0).append(tmp.getField());
                 tmp = Oskari.clazz.create(
                     'Oskari.userinterface.component.Button'
                 );
                 tmp.setTitle(me.locale.fromMap);
-                /* jshint ignore:start */
+
                 tmp.setHandler(function (event) {
                     me._fromMapButtonHandler(field, event);
                 });
-                /* jshint ignore:end */
                 /* FIXME ucomment when reverse geocode works
                 tmp.insertTo(contents.eq(0).find('.oskarifield:eq(' + i + ')'));
                 */

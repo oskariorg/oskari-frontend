@@ -3,7 +3,7 @@
  * Handles modules implementing Stateful protocol to get application state
  * and uses the registered plugin to handle saving the state.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleInstance',
     /**
      * @method create called automatically on construction
      * @static
@@ -11,9 +11,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
      *      JSON config with params needed to run the bundle
      *
      */
-
     function () {
-
         this._localization = null;
         this._pluginInstances = {};
         this._startupState = null;
@@ -27,7 +25,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
         // TODO: default view from conf?
         this._defaultViewId = 1;
 
-        if (typeof window.viewId !== "undefined") {
+        if (typeof window.viewId !== 'undefined') {
             this._currentViewId = window.viewId;
         } else {
             this._currentViewId = this._defaultViewId;
@@ -137,7 +135,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
          * implements Module protocol init method
          */
         "init": function () {
-            var me = this;
             var sandbox = this.sandbox;
             this.requestHandlers = {
                 setStateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.statehandler.request.SetStateRequestHandler', sandbox, this),
@@ -183,33 +180,31 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
 
         },
 
-
-
         /**
          * @property {Object} eventHandlers
          * @static
          */
         eventHandlers: {
             'AfterMapMoveEvent': function (event) {
-                var me = this;
-                me._pushState();
+                this._pushState();
             },
             'AfterMapLayerAddEvent': function (event) {
-                var me = this;
-                me._pushState();
+                this._pushState();
             },
             'AfterMapLayerRemoveEvent': function (event) {
-                var me = this;
-                me._pushState();
+                this._pushState();
             },
             'AfterChangeMapLayerStyleEvent': function (event) {
-                var me = this;
-                me._pushState();
+                this._pushState();
             },
             'MapLayerVisibilityChangedEvent': function (event) {
-                var me = this;
-                me._pushState();
-
+                this._pushState();
+            },
+            'AfterAddMarkerEvent': function (event) {
+                this._pushState();
+            },
+            'AfterRemoveMarkersEvent': function (event) {
+                this._pushState();
             }
         },
 
@@ -286,63 +281,119 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
 
         /* state pop / push ie undo redo begins here */
 
-        _stateComparators: [{
-            rule: 'nohistory',
-            cmp: function (prevState, nextState) {
-                if (!prevState) {
-                    return true;
+        _stateComparators: [
+            {
+                rule: 'nohistory',
+                cmp: function (prevState, nextState) {
+                    if (!prevState) {
+                        return true;
+                    }
+                }
+            },
+            {
+                rule: 'location',
+                cmp: function (prevState, nextState) {
+                    if (prevState.east !== nextState.east ||
+                            prevState.north !== nextState.north) {
+                        return true;
+                    }
+
+                    if (prevState.zoom !== nextState.zoom) {
+                        return true;
+                    }
+                }
+            },
+            {
+                rule: 'layers',
+                cmp: function (prevState, nextState) {
+                    var me = this,
+                        prevLayers = prevState.selectedLayers,
+                        nextLayers = nextState.selectedLayers,
+                        ln,
+                        prevLayer,
+                        nextLayer;
+                    if (prevLayers.length !== nextLayers.length) {
+                        return true;
+                    }
+                    for (ln = 0; ln < nextLayers.length; ln += 1) {
+                        prevLayer = prevLayers[ln];
+                        nextLayer = nextLayers[ln];
+
+                        me.sandbox.printDebug('[StateHandler] comparing layer state ' + prevLayer.id + ' vs ' + nextLayer.id);
+
+
+                        if (prevLayer.id !== nextLayer.id) {
+                            return true;
+                        }
+                        if (prevLayer.opacity !== nextLayer.opacity) {
+                            return true;
+                        }
+                        if (prevLayer.hidden !== nextLayer.hidden) {
+                            return true;
+                        }
+                        if (prevLayer.style !== nextLayer.style) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+            },
+            {
+                rule: 'plugins',
+                cmp: function (prevState, nextState) {
+                    var prevPlugin = prevState.plugins.MainMapModuleMarkersPlugin,
+                        nextPlugin = nextState.plugins.MainMapModuleMarkersPlugin,
+                        prevMarkers = prevPlugin ? prevPlugin.markers : [],
+                        nextMarkers = nextPlugin ? nextPlugin.markers : [];
+
+                    if ((prevPlugin && !nextPlugin) || (!prevPlugin && nextPlugin)) {
+                        return true;
+                    }
+
+                    if (prevMarkers.length !== nextMarkers.length) {
+                        return true;
+                    }
+
+                    return JSON.stringify(prevMarkers) !== JSON.stringify(nextMarkers);
                 }
             }
-        }, {
-            rule: 'location',
-            cmp: function (prevState, nextState) {
-                // FIXME use ===
-                if (prevState.east != nextState.east ||
-                        prevState.north != nextState.north
-                        ) {
-                    return true;
-                }
-                // FIXME use ===
-                if (prevState.zoom != nextState.zoom) {
-                    return true;
-                }
-            }
-        }, {
-            rule: 'layers',
-            cmp: function (prevState, nextState) {
-                var me = this,
-                    prevLayers = prevState.selectedLayers,
-                    nextLayers = nextState.selectedLayers,
-                    ln,
-                    prevLayer,
-                    nextLayer;
-                if (prevLayers.length !== nextLayers.length) {
-                    return true;
-                }
-                for (ln = 0; ln < nextLayers.length; ln += 1) {
-                    prevLayer = prevLayers[ln];
-                    nextLayer = nextLayers[ln];
+            /*{
+                rule: 'plugins',
+                cmp: function (prevState, nextState) {
+                    var me = this,
+                        prevPlugins = prevState.plugins,
+                        nextPlugins = nextState.plugins,
+                        pluginKey,
+                        prevKeys = [],
+                        nextKeys = [],
+                        prevPluginState,
+                        nextPluginState;
 
-                    me.sandbox.printDebug("[StateHandler] comparing layer state " + prevLayer.id + " vs " + nextLayer.id);
-
-
-                    if (prevLayer.id !== nextLayer.id) {
+                    // Only one or other has plugins, return true
+                    if ( (prevPlugins && !nextPlugins) || (!prevPlugins && nextPlugins) ) {
                         return true;
                     }
-                    if (prevLayer.opacity !== nextLayer.opacity) {
-                        return true;
-                    }
-                    if (prevLayer.hidden !== nextLayer.hidden) {
-                        return true;
-                    }
-                    if (prevLayer.style !== nextLayer.style) {
-                        return true;
-                    }
-                }
 
-                return false;
-            }
-        }],
+                    for (pluginKey in prevPlugins) {
+                        prevKeys.push(pluginKey);
+                        prevPluginState = prevPlugins[pluginKey];
+                        nextPluginState = nextPlugins[pluginKey];
+
+                        // See if the plugins have the same state
+                        if (JSON.stringify(prevPluginState) !== JSON.stringify(nextPluginState)) {
+                            return true;
+                        }
+                    }
+
+                    for (pluginKey in nextPlugins) {
+                        nextKeys.push(pluginKey);
+                    }
+
+                    // See if plugin count matches (prevPlugins loop already checks if the plugins themselves match)
+                    return prevKeys.length === nextKeys.length;
+                }*/
+        ],
 
         _compareState: function (prevState, nextState, returnFirst) {
             var cmpResult = {
@@ -356,9 +407,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                 cmp;
             for (sc = 0; sc < me._stateComparators.length; sc += 1) {
                 cmp = me._stateComparators[sc];
-                me.sandbox.printDebug("[StateHandler] comparing state " + cmp.rule);
+                me.sandbox.printDebug('[StateHandler] comparing state ' + cmp.rule);
                 if (cmp.cmp.apply(this, [prevState, nextState])) {
-                    me.sandbox.printDebug("[StateHandler] comparing state MATCH " + cmp.rule);
+                    me.sandbox.printDebug('[StateHandler] comparing state MATCH ' + cmp.rule);
                     cmpResult.result = true;
                     cmpResult.rule = cmp.rule;
                     cmpResult.rulesMatched[cmp.rule] = cmp.rule;
@@ -389,11 +440,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
             var me = this;
             if (me._historyEnabled) {
                 var history = me._historyPrevious,
-                    state = this._getMapState(),
+                    state = me._getMapState(),
                     prevState = history.length === 0 ? null : history[history.length - 1],
                     cmpResult = me._compareState(prevState, state, true);
                 if (cmpResult.result) {
-                    me.sandbox.printDebug("[StateHandler] PUSHING state");
+                    me.sandbox.printDebug('[StateHandler] PUSHING state');
                     state.rule = cmpResult.rule;
                     me._historyPrevious.push(state);
                     me._historyNext = [];
@@ -437,9 +488,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                 /* pops current state */
                 var cstate = this._historyPrevious.pop(); /* currentstate */
                 this._historyNext.push(cstate);
-                var state = this._historyPrevious[this._historyPrevious.length - 1];
-                var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-                var currentState = this._getMapState();
+                var state = this._historyPrevious[this._historyPrevious.length - 1],
+                    mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule'),
+                    currentState = this._getMapState();
                 this._historyEnabled = false;
                 this._setMapState(mapmodule, state, currentState);
                 this._historyEnabled = true;
@@ -454,84 +505,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
          */
         _getMapState: function () {
             // get applications current state
-            var sandbox = this.getSandbox(),
-                map = sandbox.getMap(),
-                selectedLayers = sandbox.findAllSelectedMapLayers(),
-                zoom = map.getZoom(),
-                lat = map.getX(),
-                lon = map.getY(),
-                state = {
-                    north: lon,
-                    east: lat,
-                    zoom: map.getZoom(),
-                    selectedLayers: []
-                },
-                i,
-                layer,
-                layerJson;
-
-            for (i = 0; i < selectedLayers.length; i += 1) {
-                layer = selectedLayers[i];
-                layerJson = {
-                    id: layer.getId(),
-                    opacity: layer.getOpacity()
-                };
-                if (!layer.isVisible()) {
-                    layerJson.hidden = true;
-                }
-                // check if we have a style selected and doesn't have THE magic string
-                if (layer.getCurrentStyle &&
-                        layer.getCurrentStyle() &&
-                        layer.getCurrentStyle().getName() &&
-                        layer.getCurrentStyle().getName() !== "!default!") {
-                    layerJson.style = layer.getCurrentStyle().getName();
-                }
-                state.selectedLayers.push(layerJson);
-            }
-
-            return state;
+            return this.getSandbox().getStatefulComponents().mapfull.getState();
         },
 
         _setMapState: function (mapmodule, state, currentState) {
             var sandbox = this.getSandbox(),
                 cmpResult = this._compareState(currentState, state, false);
 
-            // setting state
-            if (state.selectedLayers && cmpResult.rulesMatched.layers) {
-                sandbox.printDebug("[StateHandler] restoring LAYER state");
-                this._teardownState(mapmodule);
-
-                var rbAdd = sandbox.getRequestBuilder('AddMapLayerRequest'),
-                    rbOpacity = sandbox.getRequestBuilder('ChangeMapLayerOpacityRequest'),
-                    visibilityRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest'),
-                    styleReqBuilder = sandbox.getRequestBuilder('ChangeMapLayerStyleRequest'),
-                    len = state.selectedLayers.length,
-                    i,
-                    layer;
-                for (i = 0; i < len; i += 1) {
-                    layer = state.selectedLayers[i];
-                    sandbox.request(mapmodule.getName(), rbAdd(layer.id, true));
-                    if (layer.hidden) {
-                        sandbox.request(mapmodule.getName(), visibilityRequestBuilder(layer.id, false));
-                    } else {
-                        sandbox.request(mapmodule.getName(), visibilityRequestBuilder(layer.id, true));
-                    }
-                    if (layer.style) {
-                        sandbox.request(mapmodule.getName(), styleReqBuilder(layer.id, layer.style));
-                    }
-                    if (layer.opacity) {
-                        sandbox.request(mapmodule.getName(), rbOpacity(layer.id, layer.opacity));
-                    }
-                }
-            }
-
-            if (state.east) {
-                sandbox.printDebug("[StateHandler] restoring LOCATION state");
-                this.getSandbox().getMap().moveTo(
-                    state.east,
-                    state.north,
-                    state.zoom
-                );
+            if (cmpResult.result) {
+                this.getSandbox().getStatefulComponents().mapfull.setState(state);
             }
 
             // FIXME: this is what start-map-with -enhancements should be doing, they are just doing it in wrong place

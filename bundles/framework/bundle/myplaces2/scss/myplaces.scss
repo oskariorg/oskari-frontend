@@ -1,69 +1,104 @@
-div.myplacesform div.help {
-  float: right; }
-
-/* Wide fields for place inputs  */
-div.myplacesform div.field,
-div.myplacescategoryform div.field {
-  padding-bottom: 10px; }
-
-div.myplacesform input[type="text"] {
-  width: 83%; }
-
-div.myplacesform input[type="checkbox"],
-div.myplacescategoryform input[type="checkbox"] {
-  margin: 0.5em;
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
 }
 
-div.myplacesform textarea {
-  width: 80%; }
+@mixin box-shadow($shadow...) {
+   -webkit-box-shadow: $shadow;
+   -moz-box-shadow: $shadow;
+   box-shadow: $shadow;
+}
 
-div.myplacesform select {
-  width: 80%; }
+div.myplacesform {
 
-div.myplacesform .imagePreview {
-  cursor: pointer; }
+    div.help {
+        float: right;
+    }
 
-div.myplacesform div.renderButton,
-div.myplacescategoryform div.renderButton {
-    margin: 5px;
+    input[type="text"] {
+        width: 83%;
+    }
+
+    textarea {
+        width: 80%;
+    }
+
+    select {
+        width: 80%;
+    }
+
+    .imagePreview {
+        cursor: pointer;
+    }
+
+}
+
+div.myplacescategoryform {
+
+    input.oskaricolor {
+        height: 20px;
+        width: 50px;
+        border: 1px solid;
+        padding: 3px;
+        @include border-radius(5px);
+        font-size: 0; /* Hackhack, not an actual used font */
+    }
+
+    table {
+
+        input {
+            width: 50px;
+        }
+
+    }
+
+}
+
+div.myplacesform, div.myplacescategoryform {
+
+    div.field {
+        padding-bottom: 10px;
+    }
+
+    div.renderButton {
+        margin: 5px;
+    }
+
+    input[type="checkbox"] {
+        margin: 0.5em;
+    }
+
 }
 
 div.simpleColorChooser {
-  background-color: #ffffff;
+    background-color: #FFF;
+    z-index: 10;
 }
-
-/* Smaller fields for category inputs in table */
-div.myplacescategoryform table input {
-  width: 50px; }
-
-div.myplacescategoryform input.oskaricolor {
-  height: 20px;
-  width: 50px;
-  border: 1px solid;
-  padding: 3px;
-  border-radius: 5px;
-  font-size: 0; }
-
-div.myplaces2 div.buttons div.button {
-  margin: 10px;
-  padding: 10px;
-  border: 1px solid;
-  border-radius: 5px;
-  box-shadow: 5px 5px 5px #888; }
 
 .divmanazerpopup.myplaces2 {
-  max-width: 280px; }
+    max-width: 280px;
+}
 
-div.simpleColorChooser {
-  background-color: #ffffff;
-  z-index: 10;
+div.myplaces2 div.buttons div.button {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid;
+    @include border-radius(5px);
+    @include box-shadow(5px 5px 5px #888);
 }
 
 div.imagePreview img {
-  max-height: 350px;
-  max-width: 350px;
+    max-height: 350px;
+    max-width: 350px;
 }
 
 div.drawHelper div.measurementResult {
-  margin-top: 5px;
+    margin-top: 5px;
 }

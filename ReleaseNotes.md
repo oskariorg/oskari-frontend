@@ -2,7 +2,20 @@
 
 ## 1.23
 
-### divmanazer/DefaultExtension
+### statistics / StatsGrid
+
+Statsgrid is refactored to use stats instead of sotka. All filenames and classes named sotka are now renamed as stats.
+
+NOTE! StatsGrid.SotkadataChangedEvent has changed to StatsGrid.StatsDataChangedEvent.
+getSotkaIndicators has been renamed as getStatsIndicators.
+getSotkaRegionData has been renamed as getStatsRegionData.
+getSotkaIndicators has been renamed as getStatsIndicators.
+getSotkaIndicatorMeta has been renamed as getStatsIndicatorMeta.
+getSotkaIndicatorData has been renamed as getStatsIndicatorData.
+getSotkaIndicatorsMeta has been renamed as getStatsIndicatorsMeta.
+getSotkaIndicatorsData has been renamed as getStatsIndicatorsData.
+
+### divmanazer / DefaultExtension
 
 An injected empty conf no longer overwrites the basic functionality (default tile/flyout setting). getConfiguration() function should be preferred over referencing conf-property directly to ensure there's no issues with the config.
 
@@ -74,6 +87,16 @@ Also changed hasUI to return true so ControlsPlugin works correctly with publish
 Labels and clustering of My places points are now produced by GeoServer instead of frontend JavaScript. In addition to
 increased stability and efficiency, they are now available also in printouts and published maps. MyPlacesLayerPlugin is
 currently deprecated.
+
+### search
+
+More special characters are allowed by default. Strict filter can be enabled through config.
+
+### userguide
+
+The code is cleaned so that all the unnecessary parts have been removed.
+
+NOTE! UserGuideService.js no longer exists
 
 ## 1.22
 

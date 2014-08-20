@@ -7,15 +7,14 @@
 
     .link  {
         padding: 20px 0px 0px 0px;
-        color: rgb(0, 102, 255);
-        font-size: 13px;
+        color: #0091FF;
         text-decoration: underline;
         display: block;
     }
 
     /* Selected row hightlighting */
     tbody tr.selected {
-        background-color: #FEF2BA;
+        background-color: #FDF8D9;
     }
 
     /* Override common table settings */
@@ -28,11 +27,7 @@
     /* Override sort img position */
     th {
 
-        &.asc {
-            background-position: right center;
-        }
-
-        &.desc {
+        &.asc, &.desc {
             background-position: right center;
         }
 
@@ -45,13 +40,9 @@ div.flyout-resizer {
     cursor: nw-resize;
 }
 
-div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.featuredataplugin {
+div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin {
     display: block;
-    color: #3C3C3C;
-    background: #FFF;    
-    font-size: 12px;
-    font-weight: bold;
+    background: #FFF;
     border: 1px solid;
     margin: 10px;
-    padding: 5px;
 }

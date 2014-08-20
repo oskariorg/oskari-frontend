@@ -1,135 +1,178 @@
-@font-face {
-  font-family: "Liberation Sans";
-  src: url("/Oskari/resources/framework/bundle/printout/fonts/LiberationSans-Regular.ttf");
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
 }
+
+@mixin box-shadow($shadow...) {
+   -webkit-box-shadow: $shadow;
+   -moz-box-shadow: $shadow;
+   box-shadow: $shadow;
+}
+
 @font-face {
-  font-family: "Liberation Sans";
-  src: url("/Oskari/resources/framework/bundle/printout/fonts/LiberationSans-Bold.ttf");
-  font-weight: bold;
+    font-family: "Liberation Sans";
+    src: url("/Oskari/resources/framework/bundle/printout/fonts/LiberationSans-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Liberation Sans";
+    src: url("/Oskari/resources/framework/bundle/printout/fonts/LiberationSans-Bold.ttf");
+    font-weight: bold;
 }
 
 div.notLoggedIn {
     padding: 10px;
 }
+
 div.printout {
 
-}
-#contentMap.mapPrintoutMode {
-    margin-left: 252px;
+    div.startview div.error ul li {
+        color: red;
+    }
+
 }
 
-#contentMap div.basic_printout {
-    background: white;
-    position: absolute;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1500;
-    width: 255px;
+#contentMap {
+
+    &.mapPrintoutMode {
+        margin-left: 252px;
+    }
+
+    div.basic_printout {
+        background: white;
+        position: absolute;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1500;
+        width: 255px;
+    }
+
+    div.basic_publisher div.content {
+        padding: 10px;
+    }
+
 }
-#contentMap div.basic_publisher div.content {
-    padding: 10px;
-}
-div.printout div.startview div.icon-info, div.basic_printout div.icon-info {
+
+div.printout div.startview div.icon-info,
+div.basic_printout div.icon-info {
     float: right;
 }
-div.printout div.startview div.error ul li {
-    color: red;
-}
-div.basic_printout > div.header {
-    background-color: #FDF8D9;
-    padding: 5px 10px;
-}
-div.basic_printout > div.header div.icon-close {
-    float: right;
-}
-div.basic_printout div.form div.field input, div.field select {
+
+div.basic_printout div.form div.field input,
+div.field select {
     width: 80%;
     background-color: white;
-    filter:unquote("Alpha(opacity=100)") !important; /* unquote for libsass bug */
-}
-div.basic_printout > div.content {
-    overflow: auto;
-    height: 89%;
-}
-div.basic_printout div.tool {
-    margin: 5px;
-}
-div.basic_printout div.tool input, div.basic_printout div.printout_settings_cont input {
-    margin-right: 10px;
 }
 
-.printout_radiolabel, .printout_checklabel {
+.printout_radiolabel,
+.printout_checklabel {
     padding: 3px 6px;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    -o-border-radius: 2px;
-    -ms-border-radius: 2px;
-    border-radius: 2px;
-}
-.printout_radiolabel:hover, .printout_checklabel:hover {
-    background-color: #eee;
+    @include border-radius(2px);
+
+    &:hover {
+        background-color: #eee;
+    }
+
 }
 
-.printout_format_label, .printout_title_label, .printout_legend_label {
+.printout_format_label,
+.printout_title_label,
+.printout_legend_label {
     font-weight: bold;
     margin: 5px 0;
 }
+
 .printout_settings_cont {
     margin: 10px 5px;
 }
 
-
-
 /* Buttons */
-div.basic_printout div.buttons, div.printout div.startview div.buttons {
+div.basic_printout div.buttons,
+div.printout div.startview div.buttons {
     margin: 10px;
     text-align: center;
-}
-div.basic_printout div.buttons input, div.printout div.startview div.buttons input {
-    margin-left: 10px;
-    margin-right: 10px;
+
+    input {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
 }
 
-div.basic_printout div.preview-portrait {
-    margin: 8px;
-    padding: 5px; 
-    width: 200px;
-    height: 290px;
-    background-color: white;
-    border-bottom-color: #C0D0E0;
-    border-bottom-style: solid;
-    border-bottom-width: 1pt;       
-    border-top-color: #C0D0E0;
-    border-top-style: solid;
-    border-top-width: 1pt;
-    box-shadow: 0 0 8px #D0D0D0;
-    cursor: pointer;
-}
+div.basic_printout {
 
-div.basic_printout div.preview-landscape {
-    margin: 8px;
-    padding: 5px;
-    width: 200px;
-    height: 140px;
-    background-color: white;
-    border-bottom-color: #C0D0E0;
-    border-bottom-style: solid;
-    border-bottom-width: 1pt;       
-    border-top-color: #C0D0E0;
-    border-top-style: solid;
-    border-top-width: 1pt;
-    box-shadow: 0 0 8px #D0D0D0;
-    cursor: pointer;
-}
+    > div.header {
+        background-color: #FDF8D9;
+        padding: 5px 10px;
 
-div.basic_printout div.location {
-    height: 30px;
-}
+        div.icon-close {
+            float: right;
+        }
 
-div.basic_printout div.previewNotes {
-	margin-left: 8px;
-	margin-right: 8px;
-	margin-bottom: 2px;
-	
-} 
+    }
+
+    > div.content {
+        overflow: auto;
+        height: 89%;
+    }
+
+    div.tool {
+        margin: 5px;
+    }
+
+    div.tool input,
+    div.printout_settings_cont input {
+        margin-right: 10px;
+    }
+
+    div.preview-portrait {
+        margin: 8px;
+        padding: 5px;
+        width: 200px;
+        height: 290px;
+        background-color: white;
+        border-bottom-color: #C0D0E0;
+        border-bottom-style: solid;
+        border-bottom-width: 1pt;
+        border-top-color: #C0D0E0;
+        border-top-style: solid;
+        border-top-width: 1pt;
+        @include box-shadow(0 0 8px #D0D0D0);
+        cursor: pointer;
+    }
+
+    div.preview-landscape {
+        margin: 8px;
+        padding: 5px;
+        width: 200px;
+        height: 140px;
+        background-color: white;
+        border-bottom-color: #C0D0E0;
+        border-bottom-style: solid;
+        border-bottom-width: 1pt;
+        border-top-color: #C0D0E0;
+        border-top-style: solid;
+        border-top-width: 1pt;
+        @include box-shadow(0 0 8px #D0D0D0);
+        cursor: pointer;
+    }
+
+    div.location {
+        height: 30px;
+    }
+
+    div.previewNotes {
+        margin-left: 8px;
+        margin-right: 8px;
+        margin-bottom: 2px;
+    }
+
+}

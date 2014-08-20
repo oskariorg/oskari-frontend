@@ -547,6 +547,7 @@
                     // If an error occurs below,
                     // the constructor is missing.
                     // Ensure the file has been loaded before use
+                    // Note! check extends classes as well, these might also be missing.
                     ctors[c].apply(inst, instargs);
                 }
             } else {

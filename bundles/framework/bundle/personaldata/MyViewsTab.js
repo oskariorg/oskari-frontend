@@ -21,8 +21,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             '<textarea id="view_description" name="description" placeholder="' + this.loc.popup.description_placeholder + '"></textarea></div>');
         this.container = null;
 
-        var sandbox = instance.sandbox;
-        var me = this;
+        var sandbox = instance.sandbox,
+            me = this;
         // add save view button to toolbar if we get the statehandler request
         var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest'),
             reqBuilder;
@@ -166,7 +166,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
         _promptForView: function (successCallback, viewName, viewDescription) {
             var me = this;
 
-            if (me.dialog) return;
+            if (me.dialog) {
+                return;
+            }
 
             var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
             var nameInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'name');
@@ -184,7 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             template.append(me.templateDesc.clone());
 
             if (viewDescription) {
-                template.find("textarea").val(viewDescription);
+                template.find('textarea').val(viewDescription);
             }
 
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -196,7 +198,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             okBtn.setHandler(function () {
                 var errors = form.validate();
                 if (errors.length === 0) {
-                    successCallback(nameInput.getValue(), template.find("textarea").val());
+                    successCallback(nameInput.getValue(), template.find('textarea').val());
                     dialog.close();
                     me.dialog = null;
                 } else {
@@ -207,13 +209,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             cancelBtn.setHandler(function() {
                 dialog.close(true);
                 me.dialog = null;
-            })
+            });
             dialog.show(title, template, [cancelBtn, okBtn]);
             // we dont want key events to bubble up...
-            dialog.dialog.on("keyup", function (e) {
+            dialog.dialog.on('keyup', function (e) {
                 e.stopPropagation();
             });
-            dialog.dialog.on("keydown", function (e) {
+            dialog.dialog.on('keydown', function (e) {
                 e.stopPropagation();
             });
 
@@ -378,8 +380,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var i;
             for (i = 0; i < this.viewData.length; ++i) {
                 // found what we were looking for
-                // FIXME find out if these are always the same type and use ===
-                if (this.viewData[i].id == id) {
+                // FIXME find out if these are always the same type and remove + ''
+                if (this.viewData[i].id + '' === id + '') {
                     return this.viewData[i];
                 }
             }
@@ -394,9 +396,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          * @private
          */
         _confirmDelete: function (view) {
-            var me = this;
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var me = this,
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             okBtn.setTitle(this.loc['delete']);
             okBtn.addClass('primary');
 
@@ -418,8 +420,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          * @private
          */
         _deleteView: function (view) {
-            var me = this;
-            var service = me.instance.getViewService();
+            var me = this,
+                service = me.instance.getViewService();
             service.deleteView(view, function (isSuccess) {
                 if (isSuccess) {
                     me._refreshViewsList();
@@ -448,8 +450,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          * @method bindEvents
          */
         bindEvents: function () {
-            var instance = this.instance;
-            var sandbox = instance.getSandbox(),
+            var instance = this.instance,
+                sandbox = instance.getSandbox(),
                 p;
             // faking to be module with getName/onEvent methods
             for (p in this.eventHandlers) {
@@ -463,8 +465,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          * @method unbindEvents
          */
         unbindEvents: function () {
-            var instance = this.instance;
-            var sandbox = instance.getSandbox(),
+            var instance = this.instance,
+                sandbox = instance.getSandbox(),
                 p;
             // faking to be module with getName/onEvent methods
             for (p in this.eventHandlers) {
@@ -502,7 +504,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          * if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;

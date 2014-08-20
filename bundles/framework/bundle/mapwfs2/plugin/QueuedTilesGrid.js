@@ -251,7 +251,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
                 tileoffsety += this.tileSize.h;
             } while ((tileoffsetlat >= bounds.bottom - tilelat * this.buffer) || rowidx < minRows);
             // FIXME colidx is out of scope
-            //shave off exceess rows and colums
+            //shave off excess rows and colums
             this.removeExcessTiles(rowidx, colidx);
 
         },
@@ -323,12 +323,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
                 deltaY = (prepend) ? -this.tileSize.h : this.tileSize.h,
                 deltaLat = resolution * -deltaY,
                 row = (prepend) ? grid.pop() : grid.shift(),
-                i;
+                i,
+                len,
+                modelTile,
+                bounds,
+                position;
 
             for (i = 0, len = modelRow.length; i < len; i++) {
-                var modelTile = modelRow[i];
-                var bounds = modelTile.bounds.clone();
-                var position = modelTile.position.clone();
+                modelTile = modelRow[i];
+                bounds = modelTile.bounds.clone();
+                position = modelTile.position.clone();
                 bounds.bottom = bounds.bottom + deltaLat;
                 bounds.top = bounds.top + deltaLat;
                 position.y = position.y + deltaY;
@@ -387,6 +391,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid",
          */
         removeExcessTiles: function (rows, columns) {
             var i,
+                l,
                 row,
                 tile;
             // remove extra rows

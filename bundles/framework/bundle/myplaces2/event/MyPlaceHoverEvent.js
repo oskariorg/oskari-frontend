@@ -1,3 +1,9 @@
+/**
+ * @class Oskari.mapframework.myplaces.event.MyPlaceHoverEvent
+ * 
+ * Sent when hovering on MyPlaces feature on the map.
+ */
+
 Oskari.clazz.define(
         'Oskari.mapframework.myplaces.event.MyPlaceHoverEvent',
         function(pLonlat, pEvent, zoomLevel) {

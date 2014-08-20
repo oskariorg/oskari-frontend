@@ -7,16 +7,16 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
     'filter-methods', {
 
         __filterTemplates: {
-            "filterContent": '<div class="analyse-filter-popup-content">' +
+            filterContent: '<div class="analyse-filter-popup-content">' +
             //'<div class="analyse-filter filter-title"></div>' +
             '</div>',
-            "filterContentBBOX": '<div class="analyse-filter analyse-filter-popup-bbox">' + '<div class="bbox-title"></div>' + '<div class="bbox-radio">' + '<div class="bbox-on">' + '<input id="analyse-filter-bbox-on" type="radio" name="filter-bbox" value="true" />' + '<label for="analyse-filter-bbox-on"></label>' + '</div>' + '<div class="bbox-off">' + '<input id="analyse-filter-bbox-off" type="radio" name="filter-bbox" value="false" checked="checked" />' + '<label for="analyse-filter-bbox-off"></label>' + '</div>' + '</div>' + '</div>',
-            "filterClickedFeatures": '<div class="analyse-filter analyse-filter-clicked-features">' + '<div class="clicked-features-title"></div>' + '<input type="checkbox" name="analyse-clicked-features" id="analyse-clicked-features" />' + '<label for="analyse-clicked-features"></label>' + '</div>',
-            "filterContentValues": '<div class="analyse-filter analyse-filter-popup-values">' + '<div class="values-title"></div>' + '</div>',
-            "filterContentOption": '<div class="filter-option">' + '<input name="case-sensitive" type="checkbox"></input>' + '<select class="attribute"></select>' + '<select class="operator"></select>' + '<input name="attribute-value" type="text"></input>' + '</div>',
-            "manageFilterOption": '<div class="manage-filter-option">' + '<div class="add-filter-option">+</div>' + '<div class="remove-filter-option">-</div>' + '</div>',
-            "filterBooleanOption": '<select class="boolean"></select>',
-            "option": '<option></option>'
+            filterContentBBOX: '<div class="analyse-filter analyse-filter-popup-bbox">' + '<div class="bbox-title"></div>' + '<div class="bbox-radio">' + '<div class="bbox-on">' + '<input id="analyse-filter-bbox-on" type="radio" name="filter-bbox" value="true" />' + '<label for="analyse-filter-bbox-on"></label>' + '</div>' + '<div class="bbox-off">' + '<input id="analyse-filter-bbox-off" type="radio" name="filter-bbox" value="false" checked="checked" />' + '<label for="analyse-filter-bbox-off"></label>' + '</div>' + '</div>' + '</div>',
+            filterClickedFeatures: '<div class="analyse-filter analyse-filter-clicked-features">' + '<div class="clicked-features-title"></div>' + '<input type="checkbox" name="analyse-clicked-features" id="analyse-clicked-features" />' + '<label for="analyse-clicked-features"></label>' + '</div>',
+            filterContentValues: '<div class="analyse-filter analyse-filter-popup-values">' + '<div class="values-title"></div>' + '</div>',
+            filterContentOption: '<div class="filter-option">' + '<input name="case-sensitive" type="checkbox"></input>' + '<select class="attribute"></select>' + '<select class="operator"></select>' + '<input name="attribute-value" type="text"></input>' + '</div>',
+            manageFilterOption: '<div class="manage-filter-option">' + '<div class="add-filter-option">+</div>' + '<div class="remove-filter-option">-</div>' + '</div>',
+            filterBooleanOption: '<select class="boolean"></select>',
+            option: '<option></option>'
         },
 
         /**
@@ -257,7 +257,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                             boolSelect = this._createBooleanSelect();
 
                         jQuery(boolSelect.find('option')).filter(function () {
-                            return (jQuery(this).val() == filter.boolean);
+                            return (jQuery(this).val() === filter.boolean);
                         }).prop('selected', 'selected');
 
                         lastFilter.find('div.manage-filter-option').replaceWith(boolSelect);
@@ -282,12 +282,12 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         _fillFilterOptionsDiv: function (div, analyseFilter) {
             // Set the right attribute as selected
             jQuery(div.find('select.attribute option')).filter(function () {
-                return (jQuery(this).val() == analyseFilter.attribute);
+                return (jQuery(this).val() === analyseFilter.attribute);
             }).prop('selected', 'selected');
 
             // Set the right operator as selected
             jQuery(div.find('select.operator option')).filter(function () {
-                return (jQuery(this).val() == analyseFilter.operator);
+                return (jQuery(this).val() === analyseFilter.operator);
             }).prop('selected', 'selected');
 
             // Set the case-sensitive checkbox
@@ -321,28 +321,28 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             this._appendOptionValues(opSelect, null, [
                 {
                     id: '=',
-                    name: this.loc.filter.values['equals']
+                    name: this.loc.filter.values.equals
                 }, {
                     id: '~=',
-                    name: this.loc.filter.values['like']
+                    name: this.loc.filter.values.like
                 }, {
                     id: '≠',
-                    name: this.loc.filter.values['notEquals']
+                    name: this.loc.filter.values.notEquals
                 }, {
                     id: '~≠',
-                    name: this.loc.filter.values['notLike']
+                    name: this.loc.filter.values.notLike
                 }, {
                     id: '>',
-                    name: this.loc.filter.values['greaterThan']
+                    name: this.loc.filter.values.greaterThan
                 }, {
                     id: '<',
-                    name: this.loc.filter.values['lessThan']
+                    name: this.loc.filter.values.lessThan
                 }, {
                     id: '≥',
-                    name: this.loc.filter.values['greaterThanOrEqualTo']
+                    name: this.loc.filter.values.greaterThanOrEqualTo
                 }, {
                     id: '≤',
-                    name: this.loc.filter.values['lessThanOrEqualTo']
+                    name: this.loc.filter.values.lessThanOrEqualTo
                 }
             ]);
 
@@ -539,7 +539,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // Get the map window bbox if chosen.
             bboxValue = jQuery(popupContent).find('input[name=filter-bbox]:checked').val();
-            if ("true" === bboxValue) {
+            if ('true' === bboxValue) {
                 filterValues.bbox = this.instance.getSandbox().getMap().getBbox();
             }
 

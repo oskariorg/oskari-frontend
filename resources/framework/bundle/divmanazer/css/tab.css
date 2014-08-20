@@ -3,14 +3,10 @@ div.oskariTabs {
   /* "tab" content */ }
   div.oskariTabs div.tabsHeader {
     clear: both;
-    font-size: 14px;
-    line-height: 21px;
-    color: #3C3C3C;
     font-weight: bold;
     margin-right: 21px;
     margin-bottom: -1px;
-    padding: 0;
-    /*width: 100%;*/ }
+    padding: 0; }
     div.oskariTabs div.tabsHeader ul {
       display: block;
       margin: 0;
@@ -39,20 +35,18 @@ div.oskariTabs {
           width: 100%; }
         div.oskariTabs div.tabsHeader ul li a {
           background: none repeat scroll 0 0 #F3F3F3;
-          color: #000;
+          color: inherit;
           display: block;
           font-weight: normal;
           padding: 10px 15px;
           position: relative;
           text-decoration: none; }
-        div.oskariTabs div.tabsHeader ul li input[type="button"] {
-          font-size: 0.75em; }
         div.oskariTabs div.tabsHeader ul li select {
           margin-right: 10px; }
   div.oskariTabs div.tabsContent {
     border: 1px solid #999;
-    color: #3C3C3C;
     height: 90%; }
   div.oskariTabs div.tab-content {
     padding: 10px;
-    overflow: auto; }
+    overflow: auto;
+    clear: both; }

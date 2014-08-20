@@ -20,6 +20,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
         this.__regionCategories = [];
         this.__indicators = {};
         this.cacheSize = 0;
+        this.callbackQueue = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.CallbackQueue');
     }, {
         __name: "StatsGrid.StatisticsService",
         __qname: "Oskari.statistics.bundle.statsgrid.StatisticsService",
@@ -34,7 +35,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
         getSandbox: function () {
             return this.sandbox;
         },
-
         /**
          * @method init
          * Initializes the service
@@ -55,9 +55,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 callback(this.__dataSources);
                 return;
             }
+            var queueName = 'getDataSources';
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
+                // already handling the request, all callbacks will be called when done
+                return;
+            }
             var me = this,
                 url = Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalDatasources";
-
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
@@ -71,10 +75,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                     _.each(pResp.dataSources || [], function(item) {
                         me.addDataSource(item);
                     });
-                    callback(me.__dataSources);
+                    me.callbackQueue.notifyCallbacks(queueName, [me.__dataSources]);
                 },
                 error: function (jqXHR, textStatus) {
-                    callback();
+                    me.callbackQueue.notifyCallbacks(queueName);
                 }
             });
         },
@@ -104,7 +108,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 callback(indicator);
                 return;
             }
-            var url = this.getDataSource(datasource).getIndicatorMetadataUrl(id);
+            var queueName = this.callbackQueue.getQueueName('getIndicatorMetadata', arguments);
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
+                // already handling the request, all callbacks will be called when done
+                return;
+            }
+            var me = this,
+                url = this.getDataSource(datasource).getIndicatorMetadataUrl(id);
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
@@ -115,10 +125,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                         return;
                     }
                     indicator.setMetadata(pResp);
-                    callback(indicator);
+                    me.callbackQueue.notifyCallbacks(queueName, [indicator]);
                 },
                 error: function (jqXHR, textStatus) {
-                    callback();
+                    me.callbackQueue.notifyCallbacks(queueName);
                 }
             });
         },
@@ -129,20 +139,30 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 return;
             }
             var indicator =  this._findIndicator(datasource, id);
-            var url = this.getDataSource(datasource).getIndicatorValuesUrl(id);
+            var me = this,
+                url = this.getDataSource(datasource).getIndicatorValuesUrl(id);
+
+            var queueName = this.callbackQueue.getQueueName('getIndicatorValue', arguments);
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
+                // already handling the request, all callbacks will be called when done
+                return;
+            }
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
+                data : {
+                    options : JSON.stringify(options)
+                },
                 url: url,
                 success: function (pResp) {
                     if(!pResp || pResp.error) {
                         callback();
                         return;
                     }
-                    callback(pResp);
+                    me.callbackQueue.notifyCallbacks(queueName, [pResp]);
                 },
                 error: function (jqXHR, textStatus) {
-                    callback();
+                    me.callbackQueue.notifyCallbacks(queueName);
                 }
             });
         },
@@ -165,15 +185,22 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
             var me = this,
                 url = ds.getIndicatorListUrl();
 
+            var queueName = this.callbackQueue.getQueueName('getIndicators', arguments);
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
+                // already handling the request, all callbacks will be called when done
+                return;
+            }
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
                 url: url,
                 success: function (pResp) {
-                    me.__handleIndicatorsResponse(pResp, datasourceId, callback);
+                    me.__handleIndicatorsResponse(pResp, datasourceId, function() {
+                        me.callbackQueue.notifyCallbacks(queueName, arguments);
+                    });
                 },
                 error: function (jqXHR, textStatus) {
-                    callback();
+                    me.callbackQueue.notifyCallbacks(queueName);
                 }
             });
         },
@@ -200,6 +227,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
             var me = this,
                 url = Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalIndicatorRegionCategories";
 
+            var queueName = this.callbackQueue.getQueueName('getRegionCategories');
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
+                // already handling the request, all callbacks will be called when done
+                return;
+            }
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
@@ -210,10 +242,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                         return;
                     }
                     me.__handleRegionCategoriesResponse(pResp);
-                    callback(me.__regionCategories);
+                    me.callbackQueue.notifyCallbacks(queueName, [me.__regionCategories]);
                 },
                 error: function (jqXHR, textStatus) {
-                    callback();
+                    me.callbackQueue.notifyCallbacks(queueName);
                 }
             });
         },
@@ -239,6 +271,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                 callback(category);
                 return;
             }
+            var queueName = this.callbackQueue.getQueueName('getRegions', arguments);
+            if(!this.callbackQueue.addCallbackToQueue(queueName, callback)) {
+                // already handling the request, all callbacks will be called when done
+                return;
+            }
             var me = this,
                 url = Oskari.getSandbox().getAjaxUrl() + "action_route=StatisticalIndicatorRegions&id=" + categoryId;
             jQuery.ajax({
@@ -251,10 +288,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
                         return;
                     }
                     category.setRegions(pResp);
-                    callback(category);
+                    me.callbackQueue.notifyCallbacks(queueName, [category]);
                 },
                 error: function (jqXHR, textStatus) {
-                    callback();
+                    me.callbackQueue.notifyCallbacks(queueName);
                 }
             });
         },
@@ -402,11 +439,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService',
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
-                beforeSend: function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
                 url: url,
                 success: function (pResp) {
                     me._cacheStatsData(url, pResp);

@@ -1,97 +1,104 @@
-div.popupHeader {
-	background-color:#424343;
-	color:#FFFFFF;
-	position:relative;
-	left: 0px;
-	padding: 0px;
-	margin: 0px;
-	border-radius: 6px 6px 0px 0px;
-	display:inline-block;
-	width: 390px;  	
-	float: left;
-	height: 40px;	
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
 }
 
-div.popupHeader div {
-    
-	vertical-align: top;	
-    margin-left: 20px;
-    margin-right: 20px;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    position: absolute;
-    top: 12px;
+div.popupHeader {
+    background-color: #424343;
+    color: #FFFFFF;
+    position: relative;
+    left: 0px;
+    padding: 0px;
+    margin: 0px;
+    @include border-radius(6px 6px 0px 0px);
+    display: inline-block;
+    width: 390px;   
+    float: left;
+    height: 40px;
 
+    div {
+        vertical-align: top;    
+        margin-left: 20px;
+        margin-right: 20px;
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+        position: absolute;
+        top: 12px;
+    }
+    
 }
 
 div.popupHeaderArrow {
-	width: 0;
-	height: 0;
-	
-	border-top: 10px solid transparent;
-	border-bottom: 10px solid transparent; 
-
-	border-right:10px solid #424343;
-	
-	display: inline-block;
-	float: left;
-	margin-top:10px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent; 
+    border-right: 10px solid #424343;
+    display: inline-block;
+    float: left;
+    margin-top: 10px;
 }
 
 div.popupContent {
-	clear: both;
-	margin-left: 10px;
-	background-color:#FFFFFF;
-	position:relative;
-	left: 0px;
-	top: 0px;
-	height: 250px;
-	border-radius: 0px 0px 6px 6px;
-	border: 1px solid;
-	border-color:#424343;
-	overflow: auto;
+    clear: both;
+    margin-left: 10px;
+    background-color: #FFFFFF;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    height: 250px;
+    @include border-radius(0px 0px 6px 6px);
+    border: 1px solid;
+    border-color: #424343;
+    overflow: auto;
+    padding: 20px 20px 20px 25px;
 
-	padding: 20px 20px 20px 25px;
+    hr.infoboxLine {
+        border: 1px solid;
+        width: 90%;
+        margin-top: 10px;
+    }
+
+    span.infoboxActionLinks {
+        padding-right: 15px;
+        padding-left: 15px;
+    } 
+
 }
 
 /*Pop-up width reduced for places search */
 div#searchResultPopup_contentDiv div.popupContent {
-	height: 150px;
+    height: 150px;
 }
 
 div.olPopup {
-	margin: 0;
-	padding: 0;
-	background-color: #ffffff;
-	overflow: auto/*\0/ !important*/;	
-	height: 400px/*\0/ !important*/;
-	z-index: 16000;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    overflow: auto/*\0/ !important*/;   
+    height: 400px/*\0/ !important*/;
+    z-index: 16000;
 }
 
 div.olPopupContent {
     overflow: visible;
     padding: 0px;
     margin: 0px;
-    left:0px;
-    top:0px;    
+    left: 0px;
+    top: 0px;    
 }
-
-div.popupContent hr.infoboxLine {
-	border: 1px solid;
-	width: 90%;
-	margin-top: 10px;
-}
-
-div.popupContent span.infoboxActionLinks {
-	padding-right: 15px;
-	padding-left: 15px;
-} 
 
 .olPopupCloseBox {
-	cursor: pointer;
+    cursor: pointer;
     background-attachment: scroll;
-    //background-clip: border-box;
     background-color: transparent;
     background-origin: padding-box;
     background-repeat: no-repeat;
@@ -109,5 +116,6 @@ div.myplaces_place {
         max-height: 350px;
         max-width: 350px;
     }
+
 }
 

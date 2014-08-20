@@ -6,77 +6,77 @@ Oskari.registerLocalization({
         "flyouttitle": "Analys <font color=red>(BETA)</font>",
         "desc": "",
         "btnTooltip": "Analys",
-        "notLoggedIn": "Endast loggad andvändare can göra analys . <a href='/web/sv/login'>Logga in</a>.",
+        "notLoggedIn": "Endast inloggad användare kan göra analys. <a href='/web/sv/login'>Logga in</a>.",
         "AnalyseView": {
             "title": "Analys",
             "content": {
-                "label": "Material",
-                "drawToolsLabel": "NOT TRANSLATED",
-                "tooltip": "Tillsätta material - trycka  [tillsätta material] knappen",
-                "drawToolsTooltip": "Du kan tilllägga en objekt för att göra analys.\nDu kan dela objekten i två delar och efter det göra analys till en av dem",
+                "label": "Data",
+                "drawToolsLabel": "Objekt verktyg",
+                "tooltip": "Välj ett kartlager för en grund av analys. Du kan söka mera kartlager för sin analys eller plats för att visa sin utvald plats.",
+                "drawToolsTooltip": "Man kan tilllägga tillfälliga objekt för sin analys aller klippa en befintlig objekt till flera objekt.",
                 "features": {
                     "title": "Tillägg en objekt",
                     "buttons": {
                         "cancel": "Avbryt",
-                        "finish": "OK"
+                        "finish": "Färdig"
                     },
                     "tooltips": {
-                        "point": "Tillägg punkt",
-                        "line": "Tillägg linje",
-                        "area": "Tillägg område"
+                        "point": "Tillägg en tillfällig punkt",
+                        "line": "Tillägg en tillfällig linje",
+                        "area": "Tillägg ett tillfälligt område"
                     },
                     "modes": {
-                        "area": "Område",
-                        "line": "Linje",
-                        "point": "Punkt"
+                        "area": "Tillfälligt område",
+                        "line": "Tillfällig linje",
+                        "point": "Tillfällig punkt"
                     }
                 },
                 "drawDialog": {
                     "point": {
-                        "title": "Tillägg punkt",
-                        "add": "Tillägg punkt genom att klicka på kartan."
+                        "title": "Tillägg en punkt",
+                        "add": "Tilllägg en punkt (eller flera punkter) genom att klicka kartan. Sluta ritning genom att klicka \"Färdig\". Nu kan du se en ny punkt på datalistan med text \"Tillfällig punkt X\" där X är ett ordningstal av punkten."
                     },
                     "line": {
                         "title": "Tillägg linje",
-                        "add": "Tillägg en brytningspunkt på linjen genom att klicka på kartan. Sluta rita genom att dubbelklicka."
+                        "add": "Tilllägg en linje (eller flera linjer) genom att klicka sina brytpunkter (bl.a. startpunkt) på kartan. Sluta ritning genom att klicka \"Färdig\". Nu kan du se en ny linje på datalistan med text \"Tillfällig linje X\" där X är ett ordningstal av linjen."
                     },
                     "area": {
                         "title": "Tillägg område",
-                        "add": "Tillägg områdets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka. Håll ned Alt-tangenten för att skapa hål i polygonerna."
+                        "add": "Tilllägg ett område (eller flera område) genom att klicka sina hörnpunkter (bl.a. startpunkt) på kartan. Du kan också göra ett hål till området genom att hålla nere ALT-tangenten. Sluta ritning genom att klicka \"Färdig\". Nu kan du se en ny linje på datalistan med text \"Tillfällig linje X\" där X är ett ordningstal av linjen."
                     }
                 },
                 "drawFilter": {
-                    "title": "NOT TRANSLATED",
+                    "title": "Objekt klippning",
                     "buttons": {
-                        "cancel": "NOT TRANSLATED",
-                        "finish": "NOT TRANSLATED"
+                        "cancel": "Avbryt",
+                        "finish": "Färdig"
                     },
                     "tooltip": {
-                        "point": "NOT TRANSLATED",
-                        "line": "NOT TRANSLATED",
-                        "edit": "NOT TRANSLATED",
-                        "remove": "NOT TRANSLATED"
+                        "point": "Klippa en linje",
+                        "line": "Klippa en region med en linje",
+                        "edit": "Klippa en region",
+                        "remove": "Ta bort klippning"
                     },
                     "dialog": {
                         "modes": {
                             "point": {
-                                "title": "NOT TRANSLATED",
+                                "title": "Klippa en linje med punkter",
                                 "message": "NOT TRANSLATED"
                             },
                             "line": {
-                                "title": "NOT TRANSLATED",
+                                "title": "Klippa en region med en linje.",
                                 "message": "NOT TRANSLATED"
                             },
                             "edit": {
-                                "title": "NOT TRANSLATED",
+                                "title": "Klippa en region med en annan region.",
                                 "message": "NOT TRANSLATED"
                             }
                         }
                     }
                 },
                 "search": {
-                    "title": "Hae paikkahaulla",
-                    "resultLink": "Tuo analyysiin"
+                    "title": "Sök en plats",
+                    "resultLink": "Importera till en analys"
                 }
             },
             "method": {
@@ -84,13 +84,13 @@ Oskari.registerLocalization({
                 "tooltip": "Väljä först material och efter det metods är till hands",
                 "options": [{
                     "id": "oskari_analyse_buffer",
-                    "label": "zon",
+                    "label": "Zon",
                     "classForMethod": "buffer",
                     "selected": true,
                     "tooltip": ""
                 }, {
                     "id": "oskari_analyse_aggregate",
-                    "label": "Sammandrag",
+                    "label": "Statistiska mått",
                     "classForPreview": "aggregate",
                     "tooltip": ""
                 }, {
@@ -99,29 +99,34 @@ Oskari.registerLocalization({
                     "classForPreview": "union",
                     "tooltip": ""
                 }, {
-                    "id": "oskari_analyse_clip",
-                    "label": "Skär",
-                    "classForPreview": "clip",
-                    "tooltip": ""
-                }, {
                     "id": "oskari_analyse_intersect",
-                    "label": "Sektion",
+                    "label": "Klippning",
                     "classForPreview": "intersect",
                     "tooltip": ""
                 }, {
                     "id": "oskari_analyse_layer_union",
-                    "label": "Analyysitasojen yhdiste",
+                    "label": "Klippande objekt filtrering",
                     "classForPreview": "layer_union",
-                    "tooltip": "Yhdistää analyysitasoja, joilla on samat ominaisuustietokentät"
+                    "tooltip": ""
                 }, {
                     "id": "oskari_analyse_areas_and_sectors",
-                    "label": "NOT TRANSLATED",
+                    "label": "Union av analyslager",
                     "classForPreview": "areas_and_sectors",
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Man kan kombinera analyslager som har samma attribut data."
+                }, {
+                    "id": "oskari_analyse_areas_and_sectors",
+                    "label": "Flera zoner",
+                    "classForPreview": "areas_and_sectors",
+                    "tooltip": "Man kan skapa flera zoner omkring utvalda objekt. Man kan välja sig själv zoners storlek och antal."
+                }, {
+                    "id": "oskari_analyse_difference",
+                    "label": "NOT TRANSLATED",
+                    "classForPreview": "difference",
+                    "tooltip": ""
                 }]
             },
             "aggregate": {
-                "label": "Aggregate funktion",
+                "label": "Statistiska mått",
                 "options": [{
                     "id": "oskari_analyse_Count",
                     "label": "Antal",
@@ -144,15 +149,15 @@ Oskari.registerLocalization({
                 }, {
                     "id": "oskari_analyse_Median",
                     "label": "Median"
-                },{
+                }, {
                     "id": "oskari_analyse_NoDataCnt",
-                    "label": "Skyddad objekter"
+                    "label": "Skyddad objekt"
                 }],
-                "attribute": "Välj ett attribut"
+                "attribute": "Välj en attribut"
             },
             "buffer_size": {
                 "label": "Zon storlek",
-                "tooltip": "Passa zon storlek"
+                "tooltip": "Ge zon storlek."
             },
             "buffer_units": {
                 "m": "Meter",
@@ -164,165 +169,164 @@ Oskari.registerLocalization({
             },
             "settings": {
                 "label": "Parameter",
-                "tooltip": "Passa parameterna för analys"
+                "tooltip": "Ge analys parameter. Parameter beror på utvald filter och metod."
             },
             "intersect": {
-                "target": "Baslager",
-                "label": "Intersect lag"
+                "target": "Klippandes analyslager",
+                "label": "Klippande analyslager"
             },
             "union": {
-                "label": "Andra lag för union input"
+                "label": "Kombinerande analyslager"
             },
             "layer_union": {
-                "label": "Andra lager för union input",
-                "notAnalyseLayer": "Välj ett analys lag",
-                "noLayersAvailable": "Tasoja, joilla on samat ominaisuustietokentät ei löytynyt"
+                "label": "Kombinerande analyslager",
+                "notAnalyseLayer": "Välj ett av analyslager",
+                "noLayersAvailable": "Analyslager som har samma attribut hittades inte. Du kan hitta mera analyslager genom att klicka \"Mera kartlager\"."
             },
             "areas_and_sectors": {
-                "area_count": "NOT TRANSLATED",
-                "area_size": "NOT TRANSLATED",
-                "sector_count": "NOT TRANSLATED"
+                "area_count": "Antal av zoner",
+                "area_size": "Storlek av zoner",
+                "sector_count": "Antal av sektorer"
             },
             "spatial": {
-                "label": "Spatial operator",
+                "label": "Objekt för analys resultat",
                 "options": [{
                     "id": "oskari_analyse_intersect",
-                    "label": "Klip",
+                    "label": "Klippande objekt",
                     "selected": true
                 }, {
                     "id": "oskari_analyse_contains",
-                    "label": "Inkludera"
+                    "label": "Ingående objekt"
                 }]
             },
             "params": {
-                "label": "Väljad attribut data",
-                "aggreLabel": "Aggregate attribut",
+                "label": "Attribut data för analys resultat",
+                "aggreLabel": "Attribut data för statistiska mått",
                 "tooltip": "",
                 "options": [{
                     "id": "oskari_analyse_all",
                     "selected": true,
-                    "label": "alla"
+                    "label": "Alla attribut"
                 }, {
                     "id": "oskari_analyse_none",
-                    "label": "Ingenting"
+                    "label": "Inga attribut"
                 }, {
                     "id": "oskari_analyse_select",
-                    "label": "Använda list"
+                    "label": "Välj attribut från listan"
                 }]
             },
             "output": {
-                "label": "Layout",
-                "color_label": "Väljä färg:",
-                "colorset_tooltip": "Ändra färg inställning",
-                "tooltip": "Passa färg för analys layout",
-                "random_color_label": "Satunnaiset värit"
+                "label": "Utseende",
+                "color_label": "Välj stil:",
+                "colorset_tooltip": "Välj stil för punkter, linjer och område.",
+                "tooltip": "Välj en passande stil dör punkter, linjer och område.",
+                "random_color_label": "Slumpmässiga färg"
             },
             "buttons": {
                 "save": "Lagra",
                 "analyse": "Fortsätta analys",
-                "data": "Välj kartlager",
-                "cancel": "Avbryta",
+                "data": "Mera kartlager",
+                "cancel": "Avbryt",
                 "ok": "OK"
             },
             "filter": {
-                "title": "Suodatus",
-                "description": "Suodatin tasolle ",
-                "clearButton": "Tyhjennä suodatin",
-                "refreshButton": "Päivitä suodatin",
-                "addFilter": "Lisää uusi suodatin",
-                "removeFilter": "Poista suodatin",
+                "title": "Filtrering",
+                "description": "Välj objekt från analyslager:",
+                "clearButton": "Töm filter",
+                "refreshButton": "Uppdatera filter",
+                "addFilter": "Tilllägg en ny filter.",
+                "removeFilter": "Ta bort en ny filter.",
                 "bbox": {
-                    "title": "Ikkunarajaus",
-                    "on": "Käytössä",
-                    "off": "Pois käytöstä"
+                    "title": "Filter på grund av kartvyn",
+                    "on": "Ta med endast objekt som syns på kartvyn.",
+                    "off": "Ta med alla objekt."
                 },
                 "clickedFeatures": {
-                    "title": "Kohderajaus",
-                    "label": "Sisällytä vain kartalta valitut kohteet"
+                    "title": "Filter på grund av objekt",
+                    "label": "Ta med endast objekt utvalda på kartan."
                 },
                 "values": {
-                    "title": "Suodatin",
+                    "title": "Filtrera objekt på grund av attribut data",
                     "placeholders": {
-                        "case-sensitive": "Case sensitive",
-                        "attribute": "Attribuutti",
-                        "boolean": "Looginen operaattori",
-                        "operator": "Operaattori",
-                        "attribute-value": "Arvo"
+                        "case-sensitive": "",
+                        "attribute": "Attribut",
+                        "boolean": "Logisk operator",
+                        "operator": "Operator",
+                        "attribute-value": "Värde"
                     },
-                    "equals": "=",
-                    "like": "~=",
-                    "notEquals": "≠",
-                    "notLike": "~≠",
-                    "greaterThan": ">",
-                    "lessThan": "<",
-                    "greaterThanOrEqualTo": "≥",
-                    "lessThanOrEqualTo": "≤"
+                    "equals": "är lika med",
+                    "like": "är ungefär lika med",
+                    "notEquals": "är inte lika med",
+                    "notLike": "är inte ungefär lika med",
+                    "greaterThan": "är större än",
+                    "lessThan": "är mindre än",
+                    "greaterThanOrEqualTo": "är större än eller lika med",
+                    "lessThanOrEqualTo": "är mindre än eller lika med"
                 },
                 "validation": {
-                    "title": "Seuraavat virheet estivät suodattimen päivityksen:",
-                    "attribute_missing": "Attribuutti puuttuu",
-                    "operator_missing": "Operaattori puuttuu",
-                    "value_missing": "Arvo puuttuu",
-                    "boolean_operator_missing": "Looginen operaattori puuttuu"
+                    "title": "Filter kunde inte uppdateras beroende på följande fel:",
+                    "attribute_missing": "Attribut saknas.",
+                    "operator_missing": "Operator saknas.",
+                    "value_missing": "Värde saknas.",
+                    "boolean_operator_missing": "Logisk operator saknas."
                 }
             },
             "help": "Anvisning",
             "success": {
                 "layerAdded": {
-                    "title": "Analys OK",
-                    "message": "Ny lagring {layer}"
+                    "title": "Analys lyckades.",
+                    "message": "Ny analyslager {layer} tilllagt."
                 }
             },
             "error": {
                 "title": "Fel",
-                "bufferSize": "Fel i zon storlek",
-                "nohelp": "ingen anvisning",
-                "saveFailed": "Fel i analys lagring. Försök senare igen.",
-                "illegalCharacters": "ingen bokstaver - använda sifror",
-                "loadLayersFailed": "Fel i analys ladda ner",
-                "loadLayerTypesFailed": "Analys eller WFS data typ request fel",
-                "invalidSetup": "Virheellisiä parametrejä",
-                "noParameters": "Ingen data för analys",
-                "noLayer": "Ei valittua tasoa",
-                "noAnalyseUnionLayer": "Valitse ainakin toinen analyysitaso",
-                "invalidMethod": "Tuntematon menetelmä: ",
-                "Analyse_parameter_missing": "Analys parameter fel",
-                "Unable_to_parse_analysis": "Analys parameter fel",
-                "Unable_to_get_WPS_features": "Unable to get WPS features",
-                "WPS_execute_returns_Exception": "WPS execute returns Exception",
-                "WPS_execute_returns_no_features": "WPS execute returns no features",
-                "Unable_to_process_aggregate_union": "Unable to process aggregate union",
-                "Unable_to_get_features_for_union": "Unable to get features for union",
-                "Unable_to_store_analysis_data": "Unable to store analysis data",
-                "Unable_to_get_analysisLayer_data": "Unable to get analysisLayer data",
-                "timeout": "Analysis request timed out",
-                "error": "Analysis failed for an unknown reason",
-                "parsererror": "Server returned invalid analysis data"
+                "invalidSetup": "Parameter är felaktiga. Rätta parameter.",
+                "noParameters": "Analyslager och parameter för analys saknas. Välj analyslager och ge analys parameter.",
+                "noLayer": "Analyslager saknas. Välj analyslager.",
+                "noAnalyseUnionLayer": "Det behövs åtminstone två kartlager för analys. Välj ett annat analyslager.",
+                "invalidMethod": "Analysmetod fanns inte. Välj en annan metod.",
+                "bufferSize": "Zon storlek är felaktig. Rätta storlek.",
+                "illegalCharacters": "Använd endast nummer, inte bokstäver.",
+                "nohelp": "Anvisning fanns inte.",
+                "saveFailed": "Analys lagring misslyckades. Försök igen senare.",
+                "loadLayersFailed": "Analyslager laddning misslyckades. Försök igen senare.",
+                "loadLayerTypesFailed": "Datatyp sökning misslyckades. Försök igen senare.",
+                "Analyse_parameter_missing": "Parameter saknas. Ge analys parameter.",
+                "Unable_to_parse_analysis": "Parameter är felaktiga. Rätta parameter.",
+                "Unable_to_get_WPS_features": "Objekt data för analys kunde inte hämtas. Försök igen senare.",
+                "WPS_execute_returns_Exception": "Analys utförning misslyckades. Försök igen senare.",
+                "WPS_execute_returns_no_features": "Resultaten har inga objekt.",
+                "Unable_to_process_aggregate_union": "Statistiska mått för unionen kunde inte beräknas. Försök igen senare.",
+                "Unable_to_get_features_for_union": "Objekt data för statiska mått kunde inte hämtas. Försök igen senare.",
+                "Unable_to_store_analysis_data": "Analys lagring misslyckades. Försök igen senare.",
+                "Unable_to_get_analysisLayer_data": "Analys data läsning misslyckades. Försök igen senare.",
+                "timeout": "Analys misslyckades beronde på tidsutlösning. Försök igen senare.",
+                "error": "Analys misslyckades. Försök igen senare.",
+                "parsererror": "Det finns fel i resultaten."
             },
             "infos": {
                 "title": "Info",
-                "layer": "Lagring ",
-                "over10": " har över 10 attribut - väljä max 10 från list för analys"
+                "layer": "Analyslager",
+                "over10": "har över 10 attribut. Välj högst 10 attribut för analys. Du hittar en lista av attribut i menu \"Parameter\" när du har valt en analysmetod."
             }
-
         },
         "StartView": {
-            "text": "Analys data och lagra analysen",
+            "text": "Man kan göra statistiska analys till kartlager som innehåller objekt data. Genom att lagra analys du kan använda resultat också senare.",
             "infoseen": {
-                "label": "Inte see denna dialog i fortsätting "
+                "label": "Visa inte det här meddelande igen."
             },
             "buttons": {
-                "continue": "Starta analys",
-                "cancel": "Avbryta"
+                "continue": "Börja analys",
+                "cancel": "Avbryt"
             }
         },
         "categoryform": {
             "name": {
                 "label": "Namn",
-                "placeholder": "Namnge kartlagret"
+                "placeholder": "Ge analyslager namn"
             },
             "drawing": {
-                "label": "  ",
+                "label": "NOT TRANSLATED",
                 "point": {
                     "label": "Punkt",
                     "color": "Färg",
@@ -352,19 +356,19 @@ Oskari.registerLocalization({
                 "delete": "Ta bort"
             },
             "title": "Analyser",
-            "confirmDeleteMsg": "Vill du ta bort:",
+            "confirmDeleteMsg": "Vill du ta bort analyslager:",
             "buttons": {
                 "ok": "OK",
-                "cancel": "Avbryta",
+                "cancel": "Avbryt",
                 "delete": "Ta bort"
             },
             "notification": {
-                "deletedTitle": "Ta bort kartlager",
-                "deletedMsg": "Kartlagret borttaget"
+                "deletedTitle": "Ta bort analyslager",
+                "deletedMsg": "Analyslager har tagit bort."
             },
             "error": {
                 "title": "Fel!",
-                "generic": "Systemfel. Försök på nytt senare."
+                "generic": "System fel skedde. Fösök igen senare."
             }
         }
     }

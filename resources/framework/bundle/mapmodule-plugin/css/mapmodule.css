@@ -133,6 +133,7 @@ div.mapplugins {
     div.mapplugins.right .mapplugin.indexmap .indexmapToggle {
       float: right; }
 
+/* Publisher fonts, not part of style guide */
 .oskari-publisher-font-arial {
   font-family: Arial, sans-serif !important; }
 

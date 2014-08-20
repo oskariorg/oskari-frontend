@@ -1,74 +1,113 @@
-#contentMap div.parcelprintform1 {
-  background: white;
-  position: absolute;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 1500;
-  width: 255px;
-}
-#contentMap div.parcelprintform2 {
-  overflow: auto;
-  background: white;
-  position: absolute;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 1501;
-  width: 255px;
-}
-div.oskari-flyoutcontent parcelprint, div.oskari-alert {
-  color: #1F1F1F;
-}
-div.parcelprintform1 > div.header, div.parcelprintform2 > div.header {
-  background-color: #72B5CC !important;
-}
-div.parcelprintform1 div.help, div.parcelprintform2 div.help {
-  float:right;
-}
-div.parcelprintform1 div.icon-close, div.parcelprintform2 div.icon-close {
-  float:right;
-}
-/* Wide fields for place inputs  */
-div.parcelprintform1 div.field, div.parcelprintform2 div.field {
-  padding-bottom:10px;
-  margin-left: 10px;
-  margin-right: 10px;
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
 }
 
-div.parcelprintform1 input, div.parcelprintform2 input {
-  width:80%;
+@mixin box-shadow($shadow...) {
+   -webkit-box-shadow: $shadow;
+   -moz-box-shadow: $shadow;
+   box-shadow: $shadow;
 }
-div.parcelprintform1 textarea, div.parcelprintform1 select, div.parcelprintform2 textarea, div.parcelprintform2 select {
-  width:80%;
+
+#contentMap {
+
+    div.basic_printout {
+        height: 100% !important;
+    }
+
+    div.parcelprintform1 {
+        background: white;
+        position: absolute;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1500;
+        width: 255px;
+    }
+
+    div.parcelprintform2 {
+        overflow: auto;
+        background: white;
+        position: absolute;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1501;
+        width: 255px;
+    }
+
 }
-/* Buttons */
-div.parcelprintform1 div.buttons, div.parcelprintform2 div.buttons {
-  margin-left: 10px;
-  margin-right: 10px;
-  display: inline-flex;
+
+div.oskari-flyoutcontent parcelprint,
+div.oskari-alert {
+    color: #1F1F1F;
 }
-div.parcelprintform1 div.buttons input, div.parcelprintform2 div.buttons input {
-  margin-left: 5px;
-  margin-right: 5px;
+
+div.parcelprintform1,
+div.parcelprintform2 {
+
+    > div.header {
+        background-color: #72B5CC !important;
+    }
+
+    div.help {
+        float: right;
+    }
+
+    div.icon-close {
+        float: right;
+    }
+
+    /* Wide fields for place inputs  */
+    div.field {
+        padding-bottom: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    input {
+        width: 80%;
+    }
+
+    textarea,
+    select {
+        width: 80%;
+    }
+
+    /* Buttons */
+    div.buttons {
+        margin-left: 10px;
+        margin-right: 10px;
+        display: inline-flex;
+
+        input {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+    }
+
 }
 
 div.parcel div.buttons div.button {
-	margin:10px;
-	padding: 10px;
-	border:1px solid;
-	border-radius:5px;
-	box-shadow:5px 5px 5px #888;
-}
-.divmanazerpopup.parcel {
-	max-width:260px;
-}    
-circle.parceleditor {
-  cursor:move;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid;
+    @include border-radius(5px);
+    @include box-shadow(5px 5px 5px #888);
 }
 
-/* #contentMap div.basic_printout {
-  left: auto ! important;
-} */
-#contentMap div.basic_printout {
-  height: 100% !important; }
+.divmanazerpopup.parcel {
+    max-width: 260px;
+}
+
+circle.parceleditor {
+    cursor: move;
+}

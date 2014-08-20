@@ -26,7 +26,7 @@
  instanceProps : {}
  }
  */
-Oskari.clazz.define("Oskari.integration.bundle.bb.AdapterBundleInstance",
+Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
 
 /**
  * @method create called automatically on construction
@@ -138,12 +138,12 @@ function(name,viewClazz) {
      * Extension protocol method
      */
     startExtension : function() {
-        var me = this;
-        var sandbox = me.sandbox; 
-        var locFlyout = me.getLocalization('flyout');
-        
-        var viewCls = this._viewClazz ;        
-        var view = Oskari.clazz.create(viewCls,this.getLocalization('view'),this,this.getConfiguration());
+        var me = this,
+            sandbox = me.sandbox,
+            locFlyout = me.getLocalization('flyout'),
+            viewCls = this._viewClazz,
+            view = Oskari.clazz.create(viewCls,this.getLocalization('view'),this,this.getConfiguration()),
+            p;
         this.view = view;
         
         for(p in view.eventHandlers) {
@@ -153,7 +153,7 @@ function(name,viewClazz) {
         me.plugins['Oskari.userinterface.Flyout'] = 
             Oskari.clazz.create('Oskari.integration.bundle.bb.Flyout', me, locFlyout, view);
 
-        if(view.init != null) {
+        if(view.init !== null && view.init !== undefined) {
             this.view.init();
         }
 
@@ -167,13 +167,15 @@ function(name,viewClazz) {
      * Extension protocol method
      */
     stopExtension : function() {
-        var me = this;
-        var sandbox = me.sandbox;
-        var view = me.view;
-        for(p in view.eventHandlers) {
+        var me = this,
+            pluginType,
+            sandbox = me.sandbox,
+            view = me.view,
+            p;
+        for (p in view.eventHandlers) {
             sandbox.unregisterFromEventByName(view, p);
         }
-        for(var pluginType in me.plugins) {
+        for (pluginType in me.plugins) {
             if(pluginType) {
                 me.plugins[pluginType] = null;
             }
@@ -187,7 +189,7 @@ function(name,viewClazz) {
         return this.plugins;
     },
 
-    "init" : function() {
+    'init' : function() {
         return null;
     },
     /**
