@@ -31,8 +31,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 'toolbarId': 'PublisherToolbar',
                 'layer': null,
                 'myplaces' : {
-                    'point': false, 
-                    'line': false, 
+                    'point': false,
+                    'line': false,
                     'area': false
                 }
             }
@@ -63,106 +63,106 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
         // config to plugin tool mapping
         this.configPlugin = {
-            'toolbarConfig': "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin"
+            toolbarConfig: 'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin'
         };
 
         /**
          * @property tools
          */
         this.tools = this.instance.conf.tools || [{
-            "id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin",
-            "selected": false,
-            "lefthanded": "bottom left",
-            "righthanded": "bottom right",
-            "config": {
-                "location": {
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "classes": "bottom left"
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
+            selected: false,
+            lefthanded: 'bottom left',
+            righthanded: 'bottom right',
+            config: {
+                location: {
+                    top: '',
+                    right: '',
+                    bottom: '',
+                    left: '',
+                    classes: 'bottom left'
                 }
             }
         }, {
-            "id": "Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin",
-            "selected": false,
-            "lefthanded": "bottom right",
-            "righthanded": "bottom left",
-            "config": {
-                "location": {
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "classes": "bottom right"
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
+            selected: false,
+            lefthanded: 'bottom right',
+            righthanded: 'bottom left',
+            config: {
+                location: {
+                    top: '',
+                    right: '',
+                    bottom: '',
+                    left: '',
+                    classes: 'bottom right'
                 }
             }
         }, {
-            "id": "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons",
-            "selected": false,
-            "lefthanded": "top left",
-            "righthanded": "top right",
-            "config": {
-                "location": {
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "classes": "top left"
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
+            selected: false,
+            lefthanded: 'top left',
+            righthanded: 'top right',
+            config: {
+                location: {
+                    top: '',
+                    right: '',
+                    bottom: '',
+                    left: '',
+                    classes: 'top left'
                 }
             }
         }, {
-            "id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar",
-            "selected": true,
-            "lefthanded": "top left",
-            "righthanded": "top right",
-            "config": {
-                "location": {
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "classes": "top left"
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
+            selected: true,
+            lefthanded: 'top left',
+            righthanded: 'top right',
+            config: {
+                location: {
+                    top: '',
+                    right: '',
+                    bottom: '',
+                    left: '',
+                    classes: 'top left'
                 }
             }
         }, {
-            "id": "Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin",
-            "selected": false,
-            "lefthanded": "top right",
-            "righthanded": "top left",
-            "config": {
-                "location": {
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "classes": "top right"
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
+            selected: false,
+            lefthanded: 'top right',
+            righthanded: 'top left',
+            config: {
+                location: {
+                    top: '',
+                    right: '',
+                    bottom: '',
+                    left: '',
+                    classes: 'top right'
                 }
             }
         }, {
-            "id": "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin",
-            "selected": false,
-            "lefthanded": "top right",
-            "righthanded": "top left",
-            "config": {
-                "location": {
-                    "top": "",
-                    "right": "",
-                    "bottom": "",
-                    "left": "",
-                    "classes": "top right"
+            id: 'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
+            selected: false,
+            lefthanded: 'top right',
+            righthanded: 'top left',
+            config: {
+                location: {
+                    top: '',
+                    right: '',
+                    bottom: '',
+                    left: '',
+                    classes: 'top right'
                 },
-                "toolbarId": "PublisherToolbar"
+                toolbarId: 'PublisherToolbar'
             }
         }, {
-            "id": "Oskari.mapframework.mapmodule.ControlsPlugin",
-            "selected": true
+            id: 'Oskari.mapframework.mapmodule.ControlsPlugin',
+            selected: true
         }, {
-            "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
-            "selected": true,
-            "config": {
-                "ignoredLayerTypes": ["WFS"],
-                "infoBox": false
+            id: 'Oskari.mapframework.mapmodule.GetInfoPlugin',
+            selected: true,
+            config: {
+                ignoredLayerTypes: ['WFS'],
+                infoBox: false
             }
         }];
         // set enabled plugins if available
@@ -268,12 +268,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             var me = this,
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             panel.setTitle(this.loc.tools.label);
-            var contentPanel = panel.getContainer();
-            // tooltip
-            var tooltipCont = jQuery(me.templates.help).clone(),
+            var contentPanel = panel.getContainer(),
+                tooltipCont = jQuery(me.templates.help).clone(),
                 i,
                 toolContainer,
                 pluginKey,
+                tool,
                 toolname,
                 classes;
 
@@ -297,7 +297,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
             for (i = 0; i < this.tools.length; i += 1) {
                 toolContainer = jQuery(this.templates.tool).clone();
-                var tool = this.tools[i];
+                tool = this.tools[i];
                 pluginKey = tool.id;
                 me._toolIndices[pluginKey] = i;
                 pluginKey = pluginKey.substring(pluginKey.lastIndexOf('.') + 1);
@@ -330,17 +330,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 }
             }
             if (wfs) {
-                var featureData = this._sandbox.findRegisteredModuleInstance("FeatureData2");
-                if (typeof featureData !== "undefined") {
+                var featureData = this._sandbox.findRegisteredModuleInstance('FeatureData2');
+                if (typeof featureData !== 'undefined') {
                     var featureDataSelected = false;
                     if (me._storedData && me._storedData.state && me._storedData.state.featuredata2) {
                         featureDataSelected = true;
                     }
                     var featuredataBundle =  {
-                        "id": "Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin",
-                        "selected": featureDataSelected,
-                        "config": {
-                            "instance": featureData
+                        id: 'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
+                        selected: featureDataSelected,
+                        config: {
+                            instance: featureData
                         }
                     };
                     this.featuredataBundle = featuredataBundle;
@@ -392,7 +392,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
         addValues: function(selections) {
             var me = this,
                 toolbarConfig = me.toolbarConfig,
-                selectedLayers = me._sandbox.findAllSelectedMapLayers(),
                 i,
                 j,
                 tmpTool;
@@ -423,7 +422,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                             if (tmpTool.config.location.classes) {
                                 var classes = tmpTool.config.location.classes;
                                 tmpTool.config.location = {
-                                    "classes": classes
+                                    classes: classes
                                 };
                             } else {
                                 tmpTool.config.location = {};
@@ -555,7 +554,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                         isChecked = checkbox.is(':checked'),
                         reqBuilder;
 
-                    if (tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
+                    if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
                         // toolbarplugin is selected when active tools or has selected draw tools
                         if (me._hasActiveTools() || me._hasSelectedDrawTool()) {
                             tool.selected = true;
@@ -598,9 +597,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 i,
                 ilen,
                 j,
-                jlen,
                 configName,
-                groupName,
                 buttonGroup,
                 toolName,
                 toolButton,
@@ -615,7 +612,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 tool._isPluginStarted = true;
 
                 // toolbar (bundle) needs to be notified
-                if (tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
+                if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
 
                     if (_.isEmpty(me.toolbarConfig)) {
                         me._presetDataConfig('toolbarConfig');
@@ -629,8 +626,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                             buttonGroup,
                             toolName,
                             toolButton,
-                            toolElement,
-                            reqBuilder;
+                            toolElement;
 
                         // retrieve groupName button configs
                         for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
@@ -682,7 +678,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
                         isChecked = me._hasSelectedDrawTool();
 
-                        var selectTool = jQuery(me.templates.toolOption).clone();
+                        var selectTool = jQuery(me.templates.toolOption).clone(),
+                            toolElement;
                         selectTool.find('label').attr('for', 'tool-opt-drawing').append(this.loc.toolbarToolNames.drawTools);
                         //toggle toolbar tool. i.e. send requests
                         toolElement = selectTool.find('input')
@@ -708,13 +705,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 }
             } else {
                 // toolbar (bundle) needs to be notified
-                if (tool.id.indexOf("PublisherToolbarPlugin") >= 0) {
+                if (tool.id.indexOf('PublisherToolbarPlugin') >= 0) {
                     me.toolbarConfig = {};
                     // remove buttons, handlers and toolbar toolbar tools
                     for (i = 0, ilen = me.buttonGroups.length; i < ilen; i++) {
                         buttonGroup = me.buttonGroups[i];
                         for (toolName in buttonGroup.buttons) {
-                            configName = (buttonGroup.name === "myplaces" ? 'publishedmyplaces2Config' : 'toolbarConfig');
+                            configName = (buttonGroup.name === 'myplaces' ? 'publishedmyplaces2Config' : 'toolbarConfig');
                             if (me[configName] && me[configName][buttonGroup.name] && me[configName][buttonGroup.name][toolName] === true) {
                                 // toolbar tool exists and needs to be removed
                                 toolButton = buttonGroup.buttons[toolName];
@@ -728,7 +725,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                     //remove eventlisteners
                     var _removeOptions = function (className, handler) {
                         var optionContainer = tool.publisherPluginContainer.find(className),
-                            toolOptionCheckboxes = optionContainer.find('input').off("change", handler);
+                            toolOptionCheckboxes = optionContainer.find('input').off('change', handler);
                         //remove dom elements
                         toolOptionCheckboxes.remove();
                         optionContainer.remove();
@@ -744,11 +741,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
 
         _toggleDrawTools: function(element, toolName, groupName, toolOption, toggleToolHandler) {
             var me = this,
-                button,
                 buttonGroup,
+                toolButton,
                 i,
                 ilen,
-                options,
                 toolElement,
                 addLayerButton,
                 addSelectLayerButton,
@@ -758,7 +754,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
                 checkbox = jQuery(element),
                 isChecked = checkbox.is(':checked'),
                 isToolChecked,
-                reqBuilder,
                 request;
 
             // retrieve myplaces button configs
@@ -843,11 +838,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
         handleDrawLayerSelectionChanged: function (addedDrawLayerId) {
             this.publishedmyplaces2Config.layer = addedDrawLayerId;
             var layerSelect = this._updateDrawLayerSelection();
-            jQuery(".publisher-select-layer").replaceWith(layerSelect);
+            jQuery('.publisher-select-layer').replaceWith(layerSelect);
         },
 
         _updateDrawLayerSelection: function () {
             var me = this,
+                i,
                 layerSelect = jQuery(me.templates.layerSelect).clone(),
                 layerSelectOption,
                 mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService'),
@@ -869,8 +865,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherToolsFor
             }
             layerSelect.change(function(e) {
                 var target = jQuery(e.target),
-                    value = target.val(),
-                    i;
+                    value = target.val();
+
                 me.publishedmyplaces2Config.layer = value;
             });
             return layerSelect;

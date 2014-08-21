@@ -141,6 +141,7 @@ Oskari.registerLocalization(
                 "small": "Majhen",
                 "medium": "Srednji",
                 "large": "Velik",
+                "fill": "NOT TRANSLATED",
                 "custom": "Velikost po meri",
                 "width": "širina",
                 "height": "višina"

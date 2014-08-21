@@ -142,6 +142,7 @@ Oskari.registerLocalization(
                 "small": "Փոքր",
                 "medium": "Միջին",
                 "large": "Մեծ",
+                "fill": "NOT TRANSLATED",
                 "custom": "Փոխել չափը",
                 "width": "Լայնություն",
                 "height": "Բարձրություն"

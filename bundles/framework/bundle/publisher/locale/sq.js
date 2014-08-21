@@ -141,6 +141,7 @@ Oskari.registerLocalization(
                 "small": "E vogël",
                 "medium": "E mesme",
                 "large": "E madhe",
+                "fill": "NOT TRANSLATED",
                 "custom": "Madhësia e zakonshme",
                 "width": "gjerësia",
                 "height": "gjetësia"

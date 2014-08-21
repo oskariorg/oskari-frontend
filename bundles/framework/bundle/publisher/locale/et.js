@@ -140,6 +140,7 @@ Oskari.registerLocalization({
                 "small": "Väike",
                 "medium": "Keskmine",
                 "large": "Suur",
+                "fill": "NOT TRANSLATED",
                 "custom": "Oma suurus",
                 "width": "laius",
                 "height": "kõrgus"

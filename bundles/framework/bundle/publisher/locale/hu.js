@@ -142,6 +142,7 @@ Oskari.registerLocalization(
                 "small": "Kis",
                 "medium": "Közepes",
                 "large": "Nagy",
+                "fill": "NOT TRANSLATED",
                 "custom": "Megadott méret",
                 "width": "szélesség",
                 "height": "magasság"

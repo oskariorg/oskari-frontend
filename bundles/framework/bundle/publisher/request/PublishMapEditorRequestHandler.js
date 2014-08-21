@@ -9,7 +9,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
      * @param {Oskari.mapframework.bundle.publisher.PublisherBundleInstance} instance
      *          reference to publisher instance
      */
-
     function (instance) {
         this.instance = instance;
     }, {

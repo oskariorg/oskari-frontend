@@ -15,7 +15,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
      * @param {Oskari.mapframework.bundle.publisher.PublisherBundleInstance} instance
      *      reference to component that created this view
      */
-
     function (localization, instance, pluginConfig, publisher) {
         var me = this;
         me.loc = localization;
@@ -210,10 +209,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
          */
         _getLayersList: function () {
-            var layers = [],
-                selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
-            return selectedLayers;
+            return this.instance.sandbox.findAllSelectedMapLayers();
         },
+
         /**
          * Populates the map layers panel in publisher
          *
@@ -221,7 +219,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          * @private
          */
         _populateMapLayerPanel: function () {
-
             var me = this,
                 sandbox = this.instance.getSandbox(),
                 contentPanel = this.panel.getContainer();
@@ -432,7 +429,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 movedId = item.attr('data-id'),
                 newIndex = -1;
             allNodes.each(function (index, el) {
-                if ($(this).attr('data-id') === movedId) {
+                if (jQuery(this).attr('data-id') === movedId) {
                     newIndex = index;
                     return false;
                 }
@@ -534,12 +531,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
          */
         handleLayerVisibilityChanged: function (layer, isInScale, isGeometryMatch) {
             var me = this,
-                sandbox = me.instance.getSandbox(),
                 lyrSel = 'li.layer.selected[data-id=' + layer.getId() + ']',
                 layerDiv = jQuery(this.container).find(lyrSel),
-                loc = this.instance.getLocalization('layer'),
                 footer = layerDiv.find('div.layer-tools'), // teardown previous footer & layer state classes
                 isChecked = footer.find('.baselayer').is(':checked');
+
             footer.empty();
 
             layerDiv.removeClass('hidden-layer');
@@ -562,7 +558,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 tools = this.templateLayerFooterTools.clone(), // layer footer
-                loc = this.instance.getLocalization('layer'),
                 visReqName = 'MapModulePlugin.MapLayerVisibilityRequest',
                 visibilityRequestBuilder = sandbox.getRequestBuilder(visReqName);
 
@@ -614,7 +609,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 msg = this.templateLayerFooterHidden.clone(),
                 reqName = 'MapModulePlugin.MapLayerVisibilityRequest',
                 visibilityRequestBuilder = sandbox.getRequestBuilder(reqName);
-            msg.addClass("layer-msg-for-hidden");
+            msg.addClass('layer-msg-for-hidden');
             msg.find('a').bind('click', function () {
                 // send request to show map layer
                 var request = visibilityRequestBuilder(layer.getId(), true);
@@ -642,10 +637,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
 
             if (!layer.isVisible()) {
                 toolsDiv.addClass('hidden-layer');
-                footer.find('.layer-visibility').css("display", "none");
+                footer.find('.layer-visibility').css('display', 'none');
                 jQuery(jQuery(footer).get(0)).prepend(this._createLayerFooterHidden(layer));
             } else {
-                footer.css("display", "");
+                footer.css('display', '');
             }
             // isInScale & isGeometryMatch etc. are found in layerselection
             // but there is no need to add those yet - hopefully never
@@ -703,7 +698,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
         _openExtension: function (name) {
             var extension = this._getFakeExtension(name),
                 rn = 'userinterface.UpdateExtensionRequest';
-            this.instance.getSandbox().postRequestByName(rn, [extension, 'attach', rn, "10", "405"]);
+            this.instance.getSandbox().postRequestByName(rn, [extension, 'attach', rn, '10', '405']);
         }
 
     });

@@ -29,6 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
         getName: function () {
             return 'PersonalData.PublishedMapsTab';
         },
+
         /**
          * Returns tab title
          *
@@ -38,6 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
         getTitle: function () {
             return this.loc.title;
         },
+
         /**
          * Writes the tab content to the given container
          *
@@ -52,6 +54,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             container.append(content);
             me._refreshViewsList();
         },
+
         /**
          * Renders given views list. Removes previous listing.
          *
@@ -101,17 +104,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          * @private
          */
         _getViewById: function (id) {
-            var i;
-            for (i = 0; i < this.viewData.length; ++i) {
-                // found what we were looking for
-                // FIXME make sure these are of the same type and use ===
-                if (this.viewData[i].id == id) {
-                    return this.viewData[i];
+            var me = this,
+                i;
+            for (i = 0; i < me.viewData.length; ++i) {
+                if (me.viewData[i].id === id) {
+                    // found what we were looking for
+                    return me.viewData[i];
                 }
             }
             // couldn't find view -> show an error
-            this._showErrorMessage(this.loc.error.generic);
+            me._showErrorMessage(me.loc.error.generic);
         },
+
         /**
          * Shows a confirmation dialog for opening a problematic view
          *
@@ -122,10 +126,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          * @private
          */
         _confirmSetState: function (cb, blnMissing) {
-            var me = this;
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            okBtn.setTitle(this.loc.button.ok);
+            var me = this,
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            okBtn.setTitle(me.loc.button.ok);
             okBtn.addClass('primary');
 
             okBtn.setHandler(function () {
@@ -134,7 +138,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                     cb();
                 }
             });
-            var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
+            var cancelBtn = dialog.createCloseButton(me.loc.button.cancel);
             if (blnMissing) {
                 dialog.show(me.loc.popup.showErrorTitle, me.loc.popup.showConfirmMissing, [cancelBtn, okBtn]);
             } else {
@@ -151,21 +155,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          * @private
          */
         _confirmDelete: function (view) {
-            var me = this;
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            okBtn.setTitle(this.loc['delete']);
+            var me = this,
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                sandbox = me.instance.sandbox;
+            okBtn.setTitle(me.loc['delete']);
             okBtn.addClass('primary');
-
-            var sandbox = this.instance.sandbox;
             okBtn.setHandler(function () {
                 me._deleteView(view);
                 dialog.close();
             });
-            var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
+            var cancelBtn = dialog.createCloseButton(me.loc.button.cancel);
             dialog.show(me.loc.popup.deletetitle, me.loc.popup.deletemsg, [cancelBtn, okBtn]);
             dialog.makeModal();
         },
+
         /**
          * Calls backend to delete the given view. Reloads the view listing on success and
          * shows an error message on fail
@@ -175,8 +179,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          * @private
          */
         _deleteView: function (view) {
-            var me = this;
-            var service = me.instance.getViewService();
+            var me = this,
+                service = me.instance.getViewService();
             service.deleteView(view, function (isSuccess) {
                 if (isSuccess) {
                     me._refreshViewsList();
@@ -185,6 +189,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 }
             });
         },
+
         /**
          * Shows an error dialog to the user with given message
          *
@@ -209,7 +214,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          * @private
          */
         _getGridModel: function (views) {
-
             var gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
                 i,
                 view,
@@ -236,6 +240,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             }
             return gridModel;
         },
+
         /**
          * Creates Oskari.userinterface.component.Grid and populates it with given model
          *
@@ -245,11 +250,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          * @private
          */
         _getGrid: function (model) {
-            var me = this;
-            var instance = this.instance;
-            var sandbox = instance.getSandbox();
-            var visibleFields = ['name', 'domain', 'publish', 'show', 'html', 'edit', 'delete'];
-            var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+            var me = this,
+                instance = this.instance,
+                sandbox = instance.getSandbox(),
+                visibleFields = ['name', 'domain', 'publish', 'show', 'html', 'edit', 'delete'],
+                grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
             grid.setDataModel(model);
             grid.setVisibleFields(visibleFields);
 
@@ -260,7 +265,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 link.bind('click', function () {
                     var publishedMapUrl = sandbox.getLocalizedProperty(me.instance.conf.publishedMapUrl);
                     window.open(publishedMapUrl + data.id,
-                        "Published", "location=1,status=1,scrollbars=yes,width=850,height=800");
+                        'Published', 'location=1,status=1,scrollbars=yes,width=850,height=800');
                     return false;
                 });
                 return link;
@@ -410,7 +415,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 grid.setColumnUIName(key, coluiname);
             }
 
-
             return grid;
         },
 
@@ -420,8 +424,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          * @method bindEvents
          */
         bindEvents: function () {
-            var instance = this.instance;
-            var sandbox = instance.getSandbox(),
+            var instance = this.instance,
+                sandbox = instance.getSandbox(),
                 p;
             // faking to be module with getName/onEvent methods
             for (p in this.eventHandlers) {
@@ -430,13 +434,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 }
             }
         },
+
         /**
          * Unregister tab as eventlistener
          * @method unbindEvents
          */
         unbindEvents: function () {
-            var instance = this.instance;
-            var sandbox = instance.getSandbox(),
+            var instance = this.instance,
+                sandbox = instance.getSandbox(),
                 p;
             // faking to be module with getName/onEvent methods
             for (p in this.eventHandlers) {
@@ -445,6 +450,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 }
             }
         },
+
         /**
          * @property {Object} eventHandlers
          * @static
@@ -464,7 +470,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          * if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
@@ -473,6 +478,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             return handler.apply(this, [event]);
 
         },
+
+        /**
+         * @method _showIframeCodePopup
+         * @private
+         * @param {String} url
+         * @param size
+         * @param {String} name
+         * Shows a popup with the given url in a textarea
+         */
         _showIframeCodePopup: function (url, size, name) {
             var loc = this.loc,
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
@@ -482,10 +496,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 content;
             okBtn.addClass('primary');
 
-            iframeCode = '<iframe src="' + url + '" width="' + size.width +
+            iframeCode = '<iframe src="' + url + '" style="border: none;" width="' + size.width +
                 '" height="' + size.height + '"></iframe>';
             textarea =
-                '<textarea rows="3" cols="80">' +
+                '<textarea rows="3" cols="77">' +
                 iframeCode +
                 '</textarea>';
             content = loc.published.desc + '<br/>' + textarea;
