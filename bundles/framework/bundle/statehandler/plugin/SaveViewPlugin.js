@@ -161,10 +161,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
             this._sandbox = sandbox;
             var me = this;
             jQuery(document).ready(function () {
-                window.onbeforeunload = function () {
-                    // save state to session when leaving map window
+                jQuery(window).on('beforeunload', function(){
                     me.saveState();
-                };
+                });
             });
         },
         /**
