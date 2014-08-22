@@ -17,7 +17,7 @@ Oskari.registerLocalization(
             },
             "page1": {
                 "title": "Tervetuloa Määräalatulosteen piirtotyökaluun",
-                "message" : "Määräalaluonnos on kertaluonteinen ja suuntaa antava. Sen lopputulos on ladattavissa pdf-tulosteena. Määräalan lopullinen paikka ja rajat määräytyvät kiinteistötoimituksessa. Kiinteistörajojen ja -tunnusten päivitysväli on noin yksi viikko. Verkkosovelluksen suorituskyvyssä on selainkohtaisia eroja. Suosittelemme käytettäväksi Chrome-selainta, jonka versionumero on vähintään 34. Tuettavat selaimet ovat Internet Explorer 10, Firefox 29, Chrome 34 sekä näiden uudemmat versiot."
+                "message" : "Määräalaluonnos on kertaluonteinen ja suuntaa antava. Sen lopputulos on ladattavissa pdf-tulosteena. Määräalan lopullinen paikka ja rajat määräytyvät kiinteistötoimituksessa. Kiinteistörajojen ja -tunnusten päivitysväli on noin yksi viikko.<br><br>Verkkosovelluksen suorituskyvyssä on selainkohtaisia eroja. Suosittelemme käytettäväksi Chrome-selainta, jonka versionumero on vähintään 34. Tuettavat selaimet ovat Internet Explorer 10, Firefox 29, Chrome 34 sekä näiden uudemmat versiot."
             }
       }
     }

@@ -17,5 +17,6 @@ Oskari.registerLocalization({
         "page1": {
             "title": "Welcome to the Paikkatietoikkuna map window",
             "message": "If this is your first visit to the Paikkatietoikkuna map service, our quick start guide will help you to get started."
-        }    }
+        }
+    }
 });
