@@ -141,8 +141,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
          * implements BundleInstance protocol start methdod
          */
         start : function() {
-            var loc = this.getLocalization('language');
-            this.templateLanguageLink = jQuery('<a href="JavaScript:void(0);">' + loc.change + '</a>');
+            var loc = this.getLocalization('links');
+            this.templateLinks = jQuery('<a href="JavaScript:void(0);" class="language">' + loc.language +
+                '</a>&nbsp;&nbsp;&nbsp;<a href="JavaScript:void(0);" class="guide">' + loc.guide + '</a>');
             // Should this not come as a param?
             var sandbox = Oskari.$('sandbox'),
                 mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
@@ -205,12 +206,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
             // Language control
             var loginBar = jQuery("#loginbar");
             loginBar.empty();
-            var languageLink = this.templateLanguageLink.clone();
-            languageLink.click(function(event){
+            var userLinks = this.templateLinks.clone();
+
+            userLinks.filter(".language").click(function(event){
                 me._changeLanguage();
             });
+            // Guide link
+            // Todo: construct localization specific url
+            userLinks.filter(".guide").attr("href", me.conf.guideUrl+"?locale="+loc.guideLang);
 
-            loginBar.append(languageLink);
+            loginBar.append(userLinks);
             sandbox.register(me);
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
