@@ -17,55 +17,8 @@ Oskari.registerLocalization(
             },
             "page1": {
                 "title": "Tervetuloa Määräalatulosteen piirtotyökaluun",
-                "message" : "Määräalaluonnos on kertaluonteinen ja lopputulos on ladattavissa pdf-tulosteena. Määräalan pinta-ala on suuntaa antava, ja määräalan lopullinen paikka sekä rajat määräytyvät kiinteistötoimituksessa. Työkalun suorituskyvyssä on selainkohtaisia eroja. Työkalun käytössä suositellaan käytettävän Chrome-selainta versio 34 tai uudempi. Tuettavat selaimet ovat Internet Explorer 10 tai uudempi, Firefox 29 tai uudempi, Chrome 34 tai uudempi."
-            },
-            "page2": {
-                "title": "Haku",
-                "message" : "Haun avulla voit siirtyä suoraan etsimääsi paikkaan.",
-                "openLink" : "Näytä haku",
-                "closeLink" : "Piilota haku",
-                "tileText" : "Haku"
-            },
-            "page3": {
-                "title": "Karttatasot",
-                "message" : "Karttasoista valitset näkyviin eri tiedontuottajien aineistoja. Klikkaa kategoria auki ja valitse joku karttataso.",
-                "openLink" : "Näytä karttatasot",
-                "closeLink" : "Piilota karttatasot",
-                "tileText" : "Karttatasot"
-            },
-            "page4": {
-                "title": "Valitut karttatasot",
-                "message" : "Raahaa karttatasoja uuteen järjestykseen ja säädä niiden läpinäkyvyyttä. Näet muutokset karttaikkunassa.",
-                "openLink" : "Näytä valitut karttatasot",
-                "closeLink" : "Piilota valitut karttatasot",
-                "tileText" : "Valitut karttatasot"
-            },
-            "page5": {
-                "title": "Omat tiedot",
-                "message" : "Kaikki lisäämäsi kohteet, tallentamasi näkymät ja julkaisemasi kartat löytyvät täältä kun olet kirjautuneena sisään. Pääset myös muokkaamaan omia tietojasi täältä.",
-                "openLink" : "Näytä omat tiedot",
-                "closeLink" : "Piilota omat tiedot",
-                "tileText" : "Omat tiedot"
-            },
-            "page6": {
-                "title": "Julkaise kartta",
-                "message" : "Kokoamasi kartan voit julkaista helposti internet-sivustollasi. Määrittelet vain ensin kartan koon ja käyttöliitymän, ja kopioit lopuksi rivin HTML-koodia sivustollesi.",
-                "openLink" : "Näytä kartan julkaisu",
-                "closeLink" : "Piilota kartan julkaisu",
-                "tileText" : "Julkaise kartta"
-            },
-            "page7": {
-                "title": "Työkalut",
-                "message" : "Työkalujen avulla mm. lisäät kohteita, tallennat näkymän, lähetät linkin näkymään tai perut muutoksen kartalla. Työkalujen selitteet näet kun pidät hetken hiiren kursoria niiden päällä."
-            },
-            "page8": {
-                "title": "Liikkuminen kartalla",
-                "message" : "Voit siirtää karttaa raahaamalla tai panorointinuolia käyttäen. Palauta kartta oletustilaan nuolten keskellä olevasta painikkeesta. Vinkki: Myös näppäimistön nuolinäppäimet panoroivat karttaa."
-            },
-            "page9": {
-                "title": "Lähentäminen ja loitontaminen",
-                "message" : "Lähennä ja loitonna karttaa mittakaavasäätimestä tai plus- ja miinusmerkeistä säätimen yhteydessä. Vinkki: Voit lähentää ja loitontaa näppäimistön plus- ja miinusnäppäimillä tai lähentää kaksoisosoittamalla karttaa. Voit myös lähentää ja loitontaa hiiren rullaa vierittämällä."
+                "message" : "Määräalaluonnos on kertaluonteinen ja suuntaa antava. Sen lopputulos on ladattavissa pdf-tulosteena. Määräalan lopullinen paikka ja rajat määräytyvät kiinteistötoimituksessa. Kiinteistörajojen ja -tunnusten päivitysväli on noin yksi viikko. Verkkosovelluksen suorituskyvyssä on selainkohtaisia eroja. Suosittelemme käytettäväksi Chrome-selainta, jonka versionumero on vähintään 34. Tuettavat selaimet ovat Internet Explorer 10, Firefox 29, Chrome 34 sekä näiden uudemmat versiot."
             }
-        }
+      }
     }
 );
