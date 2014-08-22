@@ -137,7 +137,8 @@ Oskari.registerLocalization({
         },
         "links": {
             "language": "Ruotsiksi",
-            "guide": "Ohjeet"
+            "guide": "Ohjeet",
+            "guideLang": "fi"
         },
         "StartPrintView": {
             "text": "Tämän tulostus-toiminnon yhteydessä annettavat tiedot tallentuvat vain pdf-tulosteelle",
