@@ -317,10 +317,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 content = this.element,
                 containerClasses = 'top left',
                 position = 1;
-            console.log('Sandbox:', sandbox);
             // to text box
             me._inputField.focus(function () {
-                console.log('Sandbox:', sandbox, sandbox.getRequestBuilder);
                 reqBuilder = sandbox.getRequestBuilder('DisableMapKeyboardMovementRequest');
                 if (reqBuilder) {
                     sandbox.request(me.getName(), reqBuilder());
@@ -328,7 +326,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 //me._checkForKeywordClear();
             });
             me._inputField.blur(function () {
-                console.log('Sandbox:', sandbox, sandbox.getRequestBuilder);
                 reqBuilder = sandbox.getRequestBuilder('EnableMapKeyboardMovementRequest');
                 if (reqBuilder) {
                     sandbox.request(me.getName(), reqBuilder());
@@ -437,23 +434,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         },
 
 
-        _openGFI: function (result) {
+        _setMarker: function (result) {
             var me = this,
-                popupId = 'searchResultPopup',
-                sandbox = me._sandbox;
-            // good to go
-            var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest');
-            sandbox.request(me.getName(), moveReqBuilder(result.lon, result.lat, result.zoomLevel, false));
+                reqBuilder,
+                sandbox = me._sandbox,
+                lat = typeof result.lat !== 'number' ? parseFloat(result.lat) : result.lat,
+                lon = typeof result.lon !== 'number' ? parseFloat(result.lon) : result.lon;
 
-            var contentItem = {
-                html: '<h3>' + result.name + '</h3>' + '<p>' + result.village + '<br/>' + result.type + '</p>'
-            };
-            var content = [contentItem];
-
-            var rN = 'InfoBox.ShowInfoBoxRequest',
-                rB = sandbox.getRequestBuilder(rN),
-                request = rB(popupId, me.loc.title, content, new OpenLayers.LonLat(result.lon, result.lat), true);
-            sandbox.request(me.getName(), request);
+            // Remove old markers
+            reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+            if (reqBuilder) {
+                sandbox.request(me.getName(), reqBuilder());
+            }
+            // Add new marker
+            reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+            if (reqBuilder) {
+                me._sandbox.request(
+                    me.getName(),
+                    reqBuilder({
+                        color: 'ffde00',
+                        msg: result.name,
+                        shape: 2,
+                        size: 3,
+                        x: lon,
+                        y: lat
+                    })
+                );
+            }
         },
 
         /**
@@ -499,7 +506,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 zoom = msg.locations[0].zoomLevel;
 
                 me._sandbox.request(me.getName(), me._sandbox.getRequestBuilder('MapMoveRequest')(lon, lat, zoom, false));
-                me._openGFI(msg.locations[0]);
+                me._setMarker(msg.locations[0]);
             } else {
 
                 // many results, show all
@@ -568,9 +575,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * @param {Object} result
          */
         _resultClicked: function (result) {
-            console.log(result);
             this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('MapMoveRequest')(result.lon, result.lat, result.zoomLevel, false));
-            this._openGFI(result);
+            this._setMarker(result);
         },
 
         /**
@@ -591,6 +597,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         _hideSearch: function () {
             this.element.find('div.results').hide();
             // Send hide marker request
+            // This is done just so the user can get rid of the marker somehow...
             this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('HideMapMarkerRequest')());
         },
 
