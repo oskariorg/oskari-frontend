@@ -186,10 +186,11 @@ define([
                 // This propably isn't the best way to get reference to inspire themes
                 var inspireGroups = this.instance.models.inspire.getGroupTitles(),
                    layerTypeData = me.__getLayerTypeData(layerType);
+
                 me.$el.append(me.layerTemplate({
                     model: me.model,
                     header : layerTypeData.headerTemplate,
-                    footer : layerTypeData.footererTemplate,
+                    footer : layerTypeData.footerTemplate,
                     instance: me.options.instance,
                     inspireThemes: inspireGroups,
                     isSubLayer: me.options.baseLayerId,
