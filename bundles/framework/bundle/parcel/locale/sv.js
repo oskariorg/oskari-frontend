@@ -27,8 +27,9 @@ Oskari.registerLocalization({
             "save": {
                 "tooltip": "..."
             },
-            "language": {
-                "tooltip": "..."
+            "links": {
+                "language": "...",
+                "guide": "..."
             },
             "debug": {
                 "tooltip": "..."
