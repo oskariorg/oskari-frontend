@@ -213,7 +213,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
             });
             // Guide link
             // Todo: construct localization specific url
-            userLinks.filter(".guide").attr("href", "me.conf.guideUrl");
+            userLinks.filter(".guide").attr("href", me.conf.guideUrl);
 
             loginBar.append(userLinks);
             sandbox.register(me);
