@@ -21,7 +21,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.ShowInfoBoxReque
          *      request to handle
          */
         handleRequest: function (core, request) {
-            console.log(request.getPosition());
             if (request.getHidePrevious()) {
                 this.popupPlugin.close(undefined, request.getPosition());
             }

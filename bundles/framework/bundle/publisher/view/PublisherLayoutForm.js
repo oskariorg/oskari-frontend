@@ -814,7 +814,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
                     '<h3 class="myplaces_header"></h3>' +
                     '<p class="myplaces_desc"></p>' +
                     '<img class="myplaces_img"></img>' +
-                    '<a class="myplaces_link"></a>' +
+                    '<a class="myplaces_link" target="_blank"></a>' +
                     '</div></div>');
 
             header.append(title);
