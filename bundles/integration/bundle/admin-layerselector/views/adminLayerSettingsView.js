@@ -427,6 +427,9 @@ define([
                 data.realtime = form.find('#add-layer-realtime').is(':checked');
                 data.refreshRate = form.find('#add-layer-refreshrate').val();
 
+                data.username = form.find('#add-layer-username').val();
+                data.password = form.find('#add-layer-password').val();
+
                 if (!data.gfiType) {
                     // if there isn't a selection, don't send anything so backend will keep the existing value
                     delete data.gfiType;

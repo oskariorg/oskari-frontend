@@ -185,6 +185,43 @@ if (!Function.prototype.bind) {
                 }
                 return null;
             },
+
+            /**
+             * Returns user name if defined or null if not
+             * @return {String} username
+             */
+            getUsername: function () {
+                var adminBlock = this.get('admin');
+                if (adminBlock) {
+                    return adminBlock.username;
+                }
+                return null;
+            },
+
+            /**
+             * Returns password if defined or null if not
+             * @return {String} password
+             */
+            getPassword: function () {
+                var adminBlock = this.get('admin');
+                if (adminBlock) {
+                    return adminBlock.password;
+                }
+                return null;
+            },
+
+            /**
+             * Returns interface url
+             * @return {String} url
+             */
+            getInterfaceUrl: function () {
+                var adminBlock = this.get('admin');
+                if (adminBlock) {
+                    return adminBlock.url;
+                }
+                return null;
+            },
+
             /**
              * Returns organization or inspire id based on type
              * @param  {String} type ['organization' | 'inspire']
