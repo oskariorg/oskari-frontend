@@ -39,6 +39,7 @@ Oskari.registerLocalization({
       "SearchPlugin": {
         "placeholder": "Finde Orte",
         "search": "Finde",
+        "title": "Suchergebnisse",
         "close": "Liste der Suchergebnisse schließen",
         "noresults": "Keine Ergebnisse gefunden",
         "toomanyresults": "Über 100 Ergebnisse gefunden. Bitte verfeinern Sie Ihre Suche.",

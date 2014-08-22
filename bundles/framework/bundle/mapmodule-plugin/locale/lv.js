@@ -43,6 +43,7 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "placeholder": "Atrast vietas",
                 "search": "Atrast",
+                "title": "Meklēšanas rezultāti",
                 "close": "Aizvērt meklēšanas rezultātus",
                 "noresults": "Rezultāti nav atrasti",
                 "toomanyresults": "Atrasti vairāk kā 100 rezultāti. Lūdzu precizējiet meklēšanas kritērijus",

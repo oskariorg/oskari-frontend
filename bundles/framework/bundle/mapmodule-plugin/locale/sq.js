@@ -43,6 +43,7 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "placeholder": "Gjej vende",
                 "search": "Gjej",
+                "title": "Rezultatet e kërkimit",
                 "close": "Mbyll rezultatet e kërkimit",
                 "noresults": "Asnjë rezultat i gjetur",
                 "toomanyresults": "Mbi 100 rezultate të gjetura. Ju lutem përmirësojeni kërkimin tuaj",
