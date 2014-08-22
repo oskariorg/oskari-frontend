@@ -43,6 +43,7 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "placeholder": "ადგილის ძებნა",
                 "search": "ძებნა",
+                "title": "NOT TRANSLATED",
                 "close": "ძებნის შედეგების დახურვა",
                 "noresults": "შედეგები არ მოიძებნა",
                 "toomanyresults": "მოძებნილია 100–ზე მეტი ობიექტი. გთხოვთ, დააზუსტეთ ძებნა",

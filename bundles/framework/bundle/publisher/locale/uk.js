@@ -141,6 +141,7 @@ Oskari.registerLocalization(
                 "small": "Малий",
                 "medium": "Середній",
                 "large": "Великий",
+                "fill": "NOT TRANSLATED",
                 "custom": "Особливий",
                 "width": "ширина",
                 "height": "висота"

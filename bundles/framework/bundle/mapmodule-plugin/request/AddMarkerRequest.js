@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
     this._events = events;
     this._iconUrl = iconUrl;
 }, {
-    __name: "MapModulePlugin.AddMarkerRequest",
+    __name: 'MapModulePlugin.AddMarkerRequest',
     getName: function () {
         return this.__name;
     },
@@ -30,5 +30,3 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
 }, {
     'protocol': ['Oskari.mapframework.request.Request']
 });
-
-/* Inheritance */

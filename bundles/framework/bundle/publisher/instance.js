@@ -9,13 +9,12 @@
  * See Oskari.mapframework.bundle.publisher.PublisherBundle for bundle definition.
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstance',
 
     /**
      * @method create called automatically on construction
      * @static
      */
-
     function () {
         this.sandbox = null;
         this.started = false;
@@ -207,10 +206,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     content;
                 okBtn.addClass('primary');
                 url = this.sandbox.getLocalizedProperty(this.conf.publishedMapUrl) + event.getId();
-                iframeCode = '<iframe src="' + url + '" width="' + event.getWidth() +
+                iframeCode = '<iframe src="' + url + '" style="border: none;" width="'  + event.getWidth() +
                     '" height="' + event.getHeight() + '"></iframe>';
+
                 textarea =
-                    '<textarea rows="3" cols="80">' +
+                    '<textarea rows="3" cols="77">' +
                     iframeCode +
                     '</textarea>';
                 content = loc.published.desc + '<br/>' + textarea;
@@ -358,7 +358,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
             statsLayer = null;
             for (i = 0; i < selectedLayers.length; i += 1) {
                 layer = selectedLayers[i];
-                if (layer.getLayerType() === "stats") {
+                if (layer.getLayerType() === 'stats') {
                     request = me.sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, layer);
                     me.sandbox.request(me.getName(), request);
                     statsLayer = layer;
@@ -499,7 +499,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
             for (i = 0; i < selectedLayers.length; i += 1) {
                 layer = selectedLayers[i];
                 if (!this.hasPublishRight(layer) &&
-                    layer.getId().toString().indexOf('myplaces_') < 0) {
+                        layer.getId().toString().indexOf('myplaces_') < 0) {
                     deniedLayers.push(layer);
                 }
             }
@@ -510,5 +510,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
     });

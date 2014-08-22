@@ -142,6 +142,7 @@ Oskari.registerLocalization(
                 "small": "Mic",
                 "medium": "Mediu",
                 "large": "Mare",
+                "fill": "NOT TRANSLATED",
                 "custom": "Dimensiune personalizată",
                 "width": "lăţime",
                 "height": "înălţime"

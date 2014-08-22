@@ -141,6 +141,7 @@ Oskari.registerLocalization(
                 "small": "Mazs",
                 "medium": "Vidējs",
                 "large": "Liels",
+                "fill": "NOT TRANSLATED",
                 "custom": "Pielāgots izmērs",
                 "width": "Platums",
                 "height": "Augstums"

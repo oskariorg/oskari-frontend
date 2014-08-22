@@ -10,12 +10,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.event.FontChangedEvent
      * @static
      * @param {String} style the id of new font
      */
-
     function (font) {
         this._font = font;
     }, {
         /** @static @property __name event name */
-        __name: "Publisher.FontChangedEvent",
+        __name: 'Publisher.FontChangedEvent',
         /**
          * @method getName
          * Returns event name

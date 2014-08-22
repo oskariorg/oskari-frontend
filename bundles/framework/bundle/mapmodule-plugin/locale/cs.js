@@ -39,6 +39,7 @@ Oskari.registerLocalization({
       "SearchPlugin": {
         "placeholder": "Vyhledat místa",
         "search": "Vyhledat",
+        "title": "Výsledky vyhledávání",
         "close": "Zavřít výsledky hledání",
         "noresults": "Žádné výsledky nenalezeny",
         "toomanyresults": "Nalezeno více než 100 výsledků. Specifikujte dotaz podrobněji.",

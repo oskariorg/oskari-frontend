@@ -43,6 +43,7 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "placeholder": "Căutare locaţii",
                 "search": "Căutare",
+                "title": "Căutare Rezultate",
                 "close": "Închide rezultatele căutării",
                 "noresults": "Nu au fost găsite rezultate",
                 "toomanyresults": "Peste 100 de rezultate găsite. Vă rugăm revizuiţi căutarea",

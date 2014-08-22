@@ -43,6 +43,7 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "placeholder": "Encontrar sitios",
                 "search": "Encontrar",
+                "title": "Resultados de la búsqueda",
                 "close": "Cerrar resultados de búsqueda",
                 "noresults": "No se encontraron resultados",
                 "toomanyresults": "Más de 100 resultados encontrados. Por favor, refine la búsqueda",

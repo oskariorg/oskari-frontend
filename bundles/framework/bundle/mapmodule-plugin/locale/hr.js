@@ -42,6 +42,7 @@ Oskari.registerLocalization({
       "SearchPlugin": {
         "placeholder": "Nađi mjesta",
         "search": "Nađi  ",
+        "title": "Rezultati pretraživanja",
         "close": "Zatvori rezultate pretraživanja",
         "noresults": "Nisu pronađeni rezultati",
         "toomanyresults": "Pronađeno je preko 100 rezultata. Precizirajte pretraživanje.",

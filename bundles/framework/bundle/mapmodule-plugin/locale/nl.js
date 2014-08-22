@@ -42,6 +42,7 @@ Oskari.registerLocalization({
             "SearchPlugin": {
                 "placeholder": "Vind plaatsen",
                 "search": "Vinden",
+                "title": "Zoekresultaten",
                 "close": "Sluit zoekresultaten",
                 "noresults": "Geen resultaten gevonden",
                 "toomanyresults": "Meer dan 100 resultaten gevonden. Verfijn uw zoekopdracht.",

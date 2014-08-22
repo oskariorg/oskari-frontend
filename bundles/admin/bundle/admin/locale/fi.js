@@ -2,16 +2,16 @@ Oskari.registerLocalization({
     "lang": "fi",
     "key": "GenericAdmin",
     "value": {
-        "title": "Admin",
+        "title": "Ylläpito",
         "desc": "",
         "tile": {
-            "title": "Admin"
+            "title": "Ylläpito"
         },
         "flyout": {
-            "title": "Admin",
+            "title": "Ylläpito",
             "defaultviews" : {
                 "title" : "Oletusnäkymät",
-                "desc" : "Siirrä kartta kohdilleen ja valitse haluamasi tasot, tallenna oletusnäkymään muutokset klikkaamalla 'Aseta'",
+                "desc" : "Valitse haluamasi karttatasot, kartan sijainti ja mittakaavataso. Tallenna oletusnäkymä klikkaamalla 'Aseta'",
                 "headerName" : "Oletusnäkymä",
                 "globalViewTitle" : '*Järjestelmän oletusnäkymä*',
                 "setButton" : "Aseta",

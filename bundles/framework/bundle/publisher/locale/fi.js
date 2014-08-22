@@ -143,6 +143,7 @@ Oskari.registerLocalization(
                 "small": "Pieni",
                 "medium": "Keskikokoinen",
                 "large": "Suuri",
+                "fill": "Tilan täyttävä",
                 "custom": "Määritä oma koko",
                 "width": "leveys",
                 "height": "korkeus"
