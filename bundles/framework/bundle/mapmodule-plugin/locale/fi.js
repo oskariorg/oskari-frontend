@@ -43,6 +43,7 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "placeholder": "Hae kohteita paikannimen tai osoitteen perusteella.",
                 "search": "Hae",
+                "title": "Paikkahaun tulokset",
                 "close": "Sulje hakutulokset",
                 "noresults": "Antamallasi hakusanalla ei löytynyt yhtään kohdetta.",
                 "toomanyresults": "Hakusi tuotti yli 100 hakutulosta. Anna tarkempi hakusana.",
