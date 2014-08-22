@@ -14,12 +14,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.NotLoggedIn',
      * @param {Object} localization
      *     localization data in JSON format
      */
-
     function (instance, localization) {
         this.instance = instance;
-        this.template = jQuery("<div class='notLoggedIn'></div>");
-        this.loginTemplate = jQuery("<div class='notLoggedIn'><a></a></div>");
-        this.registerTemplate = jQuery("<div class='notLoggedIn'><a></a></div>");
+        this.template = jQuery('<div class="notLoggedIn"></div>');
+        this.loginTemplate = jQuery('<div class="notLoggedIn"><a></a></div>');
+        this.registerTemplate = jQuery('<div class="notLoggedIn"><a></a></div>');
         this.loc = localization;
     }, {
         /**
@@ -36,8 +35,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.NotLoggedIn',
                 loginUrl = null,
                 register = me.registerTemplate.clone(),
                 registerUrl = null,
-                loginTmp = login.find("a"),
-                registerTmp = register.find("a");
+                loginTmp = login.find('a'),
+                registerTmp = register.find('a');
 
             if (conf) {
                 loginUrl = sandbox.getLocalizedProperty(conf.loginUrl);
@@ -47,13 +46,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.NotLoggedIn',
             container.append(content);
 
             if (loginUrl) {
-                loginTmp.attr("href", loginUrl);
+                loginTmp.attr('href', loginUrl);
                 loginTmp.append(me.loc.signup);
                 container.append(login);
             }
 
             if (registerUrl) {
-                registerTmp.attr("href", registerUrl);
+                registerTmp.attr('href', registerUrl);
                 registerTmp.append(me.loc.register);
                 container.append(register);
             }

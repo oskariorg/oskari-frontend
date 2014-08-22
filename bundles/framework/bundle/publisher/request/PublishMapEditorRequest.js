@@ -13,12 +13,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
      * @param {Object} viewData
      *            View Data object which will be used to prepopulate map data in publish mode
      */
-
     function (viewData) {
         this._viewData = viewData;
     }, {
         /** @static @property __name request name */
-        __name: "Publisher.PublishMapEditorRequest",
+        __name: 'Publisher.PublishMapEditorRequest',
         /**
          * @method getName
          * @return {String} request name

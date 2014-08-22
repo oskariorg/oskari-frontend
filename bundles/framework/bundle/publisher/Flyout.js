@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.Flyout',
      * @param {Oskari.mapframework.bundle.publisher.PublisherBundleInstance} instance
      *      reference to component that created the flyout
      */
-
     function (instance) {
         this.instance = instance;
         this.container = null;

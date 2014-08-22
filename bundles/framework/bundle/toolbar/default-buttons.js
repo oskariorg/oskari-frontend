@@ -154,7 +154,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                                         me.getSandbox().postRequestByName(rn);
                                     });
 
-                                    linkContent = '<textarea rows="3" cols="80">' + mapUrlPrefix + linkParams + '</textarea>';
+                                    linkContent = '<textarea rows="3" cols="77">' + mapUrlPrefix + linkParams + '</textarea>';
                                     rn = 'DisableMapKeyboardMovementRequest';
                                     me.getSandbox().postRequestByName(rn);
                                     dialog.show(loc.link.title, linkContent, [okBtn]);

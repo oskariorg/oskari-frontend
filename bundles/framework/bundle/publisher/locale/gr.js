@@ -140,6 +140,7 @@ Oskari.registerLocalization({
                 "small": "Μικρό",
                 "medium": "Μεσσαίο",
                 "large": "Μεγάλο",
+                "fill": "NOT TRANSLATED",
                 "custom": "Προσαρμοσμένο μέγεθος",
                 "width": "Πλάτος",
                 "height": "Ύψος"

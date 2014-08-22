@@ -141,6 +141,7 @@ Oskari.registerLocalization(
                 "small": "Malé",
                 "medium": "Stredné",
                 "large": "Veľké",
+                "fill": "NOT TRANSLATED",
                 "custom": "Veľkosť zadaná užívateľom",
                 "width": "šírka",
                 "height": "výška"

@@ -42,6 +42,7 @@ Oskari.registerLocalization({
             "SearchPlugin": {
                 "placeholder": "Αναζήτηση τοποθεσιών",
                 "search": "Αναζήτηση",
+                "title": "NOT TRANSLATED",
                 "close": "Κλείσιμο αποτελεσμάτων αναζήτησης",
                 "noresults": "Δεν βρέθηκαν αποτελέσματα",
                 "toomanyresults": "Βρέθηκαν πάνω από 100 αποτελέσματα. Παρακαλούμε ξανακαθορίστε την αναζήτησή σας λεπτομερέστερα.",
