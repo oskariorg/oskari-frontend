@@ -120,6 +120,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         setColumnValueRenderer: function (fieldName, renderer) {
             this.valueRenderer[fieldName] = renderer;
         },
+        getVisibleFields: function () {
+            return this.fieldNames;
+        },
         /**
          * @method setVisibleFields
          * If not given renders all data fields
@@ -159,8 +162,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             cell = this.templateCell.clone();
             baseKey = key;
             index = columnIndex;
-            subKeys = this.table.find("th");
-            hidden = jQuery(this.table.find("th")[index]).hasClass("closedSubTable");
+            subKeys = this.table.find('th');
+            hidden = jQuery(this.table.find('th')[index]).hasClass('closedSubTable');
             cell.addClass('base');
             cell.addClass(baseKey);
             row.append(cell);
@@ -173,7 +176,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 // Let's not assume field order
                 for (field in value) {
                     if (value.hasOwnProperty(field)) {
-                        if ((jQuery(subKeys[index]).data("key") === baseKey) && (jQuery(subKeys[index]).data("value") === field)) {
+                        if ((jQuery(subKeys[index]).data('key') === baseKey) && (jQuery(subKeys[index]).data('value') === field)) {
                             cell = this.templateCell.clone();
                             cell.addClass(baseKey);
                             cell.append(value[field]);
@@ -420,7 +423,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     // FIXME create function outside the loop
                     link.bind('click', function () {
                         var parentItem = jQuery(this).parent(),
-                            thisKey = parentItem.data("key");
+                            thisKey = parentItem.data('key');
                         if (parentItem.hasClass('closedSubTable')) {
                             table.find('th.hidden.' + thisKey).removeClass('hidden');
                             // jQuery(this).parent().addClass('hidden');
@@ -442,8 +445,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 }
 
                 header.addClass(fullFieldNames[i].baseKey);
-                header.data("key", fullFieldNames[i].baseKey);
-                header.data("value", fullFieldNames[i].subKey);
+                header.data('key', fullFieldNames[i].baseKey);
+                header.data('value', fullFieldNames[i].subKey);
                 headerContainer.append(header);
             }
         },
@@ -631,7 +634,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 pressed = true;
                 startX = e.pageX;
                 startWidth = jQuery(this).width();
-                jQuery(start).addClass("resizing");
+                jQuery(start).addClass('resizing');
                 // Disable mouse selecting
                 jQuery(document).attr('unselectable', 'on')
                     .css('user-select', 'none')
@@ -648,7 +651,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             // Stop resizing
             jQuery(document).mouseup(function () {
                 if (pressed) {
-                    jQuery(start).removeClass("resizing");
+                    jQuery(start).removeClass('resizing');
                     pressed = false;
                 }
             });
@@ -671,7 +674,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             // Tool row
             if ((this.showColumnSelector) || (this.showExcelExporter)) {
                 toolRow = this.templateTabTools.clone();
-                container.parent().children(".tab-tools").remove();
+                container.parent().children('.tab-tools').remove();
                 container.parent().prepend(toolRow);
             }
 
@@ -693,7 +696,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
             if (this.showColumnSelector) {
                 this._renderColumnSelector(table, fieldNames);
-                container.parent().find(".tab-tools").append(this.visibleColumnSelector);
+                container.parent().find('.tab-tools').append(this.visibleColumnSelector);
                 if (state !== null && state !== undefined && state.columnSelector === 'open') {
                     this.visibleColumnSelector.find('.column-selector').css('visibility', 'visible');
                 }
@@ -708,39 +711,39 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 // CSV
                 me.csvButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 me.csvButton.setTitle(me._loc.export.csv);
-                me.csvButton.addClass("csvExportButton");
+                me.csvButton.addClass('csvExportButton');
                 me.csvButton.setHandler(function () {
-                    var str = "",
+                    var str = '',
                         i,
                         j,
-                        header = me.table.find("thead th").not(".hidden").find("a"),
-                        rows = me.table.find("tbody tr"),
+                        header = me.table.find('thead th').not('.hidden').find('a'),
+                        rows = me.table.find('tbody tr'),
                         items;
                     for (i = 0; i < header.length; i += 1) {
                         if (i > 0) {
-                            str = str + ",";
+                            str = str + ',';
                         }
-                        str = str + "\"" + jQuery(header[i]).html() + "\"";
+                        str = str + '\"' + jQuery(header[i]).html() + '\"';
                     }
-                    str = str + "\n";
+                    str = str + '\n';
 
                     // Body
                     for (i = 0; i < rows.length; i += 1) {
-                        items = jQuery(rows[i]).find("td").not(".hidden");
+                        items = jQuery(rows[i]).find('td').not('.hidden');
                         for (j = 0; j < items.length; j += 1) {
                             if (j > 0) {
-                                str = str + ",";
+                                str = str + ',';
                             }
-                            str = str + "\"" + jQuery(items[j]).html() + "\"";
+                            str = str + '\"' + jQuery(items[j]).html() + '\"';
                         }
-                        str = str + "\n";
+                        str = str + '\n';
                     }
 
                     // Output
                     if (navigator.appName !== 'Microsoft Internet Explorer') {
                         window.location = 'data:text/csv;charset=utf8,' + encodeURIComponent(str);
                     } else {
-                        str = str.split("\n").join("<br />");
+                        str = str.split('\n').join('<br />');
                         var generator = window.open('', 'csv', 'height=400,width=600');
                         generator.document.write('<html><head><title>CSV</title>');
                         generator.document.write('</head><body >');
@@ -754,7 +757,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 // Excel
                 me.excelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 me.excelButton.setTitle(me._loc.export.excel);
-                me.excelButton.addClass("excelExportButton");
+                me.excelButton.addClass('excelExportButton');
 
                 me.excelButton.setHandler(function () {
 //                    if (navigator.appName !== 'Microsoft Internet Explorer') {
@@ -772,8 +775,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         ctx;
 
                     // Do not export hidden fields
-                    tmpTable.find("th.hidden").remove();
-                    tmpTable.find("td.hidden").remove();
+                    tmpTable.find('th.hidden').remove();
+                    tmpTable.find('td.hidden').remove();
                     ctx = {
                         worksheet: 'Worksheet',
                         table: tmpTable.html()
@@ -793,7 +796,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 if (navigator.appName !== 'Microsoft Internet Explorer') {
                     exporter.append(me.excelButton.getButton());
                 }
-                container.parent().find(".tab-tools").append(exporter);
+                container.parent().find('.tab-tools').append(exporter);
             }
 
             container.append(table);
@@ -908,9 +911,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             // to string so number will work also
             var nameA = a[pAttribute],
                 numericValue,
-                split = pAttribute.split("."); // if not found, try subtable
+                split = pAttribute.split('.'); // if not found, try subtable
 
-            if (typeof nameA === "undefined") {
+            if (typeof nameA === 'undefined') {
                 nameA = a[split[0]][split[1]];
             }
             if (!nameA) {
