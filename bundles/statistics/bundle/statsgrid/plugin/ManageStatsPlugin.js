@@ -317,7 +317,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
         createDataSourceSelect: function (container) {
             var me = this,
-                dsElement = jQuery('<div class="data-source-select">' +
+                dsElement = jQuery('<div class="data-source-select clearfix">' +
                         '<div class="selector-cont">' +
                             '<label for="statsgrid-data-source-select"></label>' +
                             '<select id="statsgrid-data-source-select" class="indi">' +
@@ -336,7 +336,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 me.changeDataSource(e.target.value, container);
             });
             sel.css({
-                'width': '200px'
+                'width': '191px'
             });
             sel.chosen({
                 no_results_text: this._locale.noDataSource,
@@ -807,11 +807,16 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 }
             });
 
+            sel.css({
+                'width': '205px'
+            });
+
             var selectorsContainer = container.find('.selectors-container');
             selectorsContainer.append(indi).append('<div class="parameters-cont clearfix"></div>');
 
             var paramCont = selectorsContainer.find('.parameters-cont');
-            me._addOwnIndicatorButton(paramCont, container);
+            // Place add new indicator button to the side of the data source select for now...
+            me._addOwnIndicatorButton(container.find('.data-source-select'), container);
 
             // we use chosen to create autocomplete version of indicator select element.
             sel.chosen({
@@ -824,7 +829,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         },
 
         /**
-         *
+         * Adds the add own indicator button in paramCont
          */
         _addOwnIndicatorButton: function (paramCont, container) {
             var me = this,
@@ -1042,7 +1047,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 selectors = container.find('.selectors-container');
             // year & gender are in a different container than indicator select
             var parameters = selectors.find('.parameters-cont'),
-                newIndicator = parameters.find('.new-indicator-cont'),
                 year = null,
                 gender = null,
                 columnId,
@@ -1084,18 +1088,17 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 }
             } else {
                 // No indicator, create disabled mock selects
-                newIndicator.before(me.getYearSelectorHTML(0, -1));
-                newIndicator.before(me.getGenderSelectorHTML([]));
+                includedInGrid = false;
+                fetchButton = jQuery('<button class="fetch-data' + (includedInGrid ? ' hidden' : '') + ' selector-button primary">' + this._locale.addColumn + '</button>');
+                removeButton = jQuery('<button class="remove-data' + (includedInGrid ? '' : ' hidden') + ' selector-button">' + this._locale.removeColumn + '</button>');
+                parameters.prepend(removeButton);
+                parameters.prepend(fetchButton);
+                parameters.prepend(me.getGenderSelectorHTML([]));
+                parameters.prepend(me.getYearSelectorHTML(0, -1));
                 parameters.find('select.year').prop('disabled', 'disabled');
                 parameters.find('select.gender').prop('disabled', 'disabled');
-                includedInGrid = false;
-                fetchButton = jQuery('<button class="fetch-data' + (includedInGrid ? ' hidden' : '') + ' selector-button">' + this._locale.addColumn + '</button>');
-                removeButton = jQuery('<button class="remove-data' + (includedInGrid ? '' : ' hidden') + ' selector-button">' + this._locale.removeColumn + '</button>');
-                newIndicator.before(fetchButton);
-                newIndicator.before(removeButton);
                 selectors.find('.indicator-cont').after(parameters);
             }
-
 
             if (indicator) {
                 // click listener
