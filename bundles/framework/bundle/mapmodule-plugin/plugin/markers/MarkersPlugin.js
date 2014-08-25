@@ -302,7 +302,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * Removes all markers from the layer
          */
         removeMarkers: function (noEvent) {
-            console.log("removeMarkers");
             var me = this,
                 sandbox = me.getSandbox(),
                 markerLayers = me._map.getLayersByName('Markers');
