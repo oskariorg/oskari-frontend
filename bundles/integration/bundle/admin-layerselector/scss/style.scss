@@ -361,7 +361,7 @@ div.admin-layerselector {
 
     .show-add-class {
         padding: 10px 10px;
-        height: 200px;
+        height: 230px;
         width: 100%;
     }
 
@@ -506,6 +506,7 @@ div.divmanazerpopup div.content div.admin-layerselector {
             div.add-layer-record {
                 margin-right: 20px;
             }
+
             /* Buttons are created in the popup, we don't need the form buttons */
             div.add-layer-send {
                 display: none;
