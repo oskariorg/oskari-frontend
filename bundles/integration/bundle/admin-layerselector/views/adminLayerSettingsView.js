@@ -393,7 +393,7 @@ define([
 
                 data.layerName = form.find('#add-layer-layerName').val();
                 data.layerUrl = form.find('#add-layer-url').val();
-                if (data.layerUrl != me.model.getLayerUrls().join() ||
+                if (data.layerUrl != me.model.getInterfaceUrl() ||
                     data.layerName != me.model.getLayerName()) {
                     var confirmMsg = me.instance.getLocalization('admin').confirmResourceKeyChange;
                     if (me.model.getId() && !confirm(confirmMsg)) {
@@ -427,6 +427,9 @@ define([
 
                 data.realtime = form.find('#add-layer-realtime').is(':checked');
                 data.refreshRate = form.find('#add-layer-refreshrate').val();
+
+                data.username = form.find('#add-layer-username').val();
+                data.password = form.find('#add-layer-password').val();
 
                 if (!data.gfiType) {
                     // if there isn't a selection, don't send anything so backend will keep the existing value

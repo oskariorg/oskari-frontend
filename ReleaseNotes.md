@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.24
+
+### integration/admin-layerselector
+
+Added username and password support to the layer admin flyout.
+
 ## 1.23
 
 ### statistics / StatsGrid

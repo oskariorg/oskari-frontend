@@ -244,6 +244,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setRefreshRate(newLayerConf.refreshRate);
             }
 
+            if (newLayerConf.admin) {
+                layer.setAdmin(newLayerConf.admin);
+            }
+
             // wms specific
             // TODO: we need to figure this out some other way
             // we could remove the old layer and create a new one in admin bundle
@@ -251,15 +255,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (newLayerConf.type === 'wmslayer') {
                 // TODO: remove styles and wmsurls??
                 this._populateWmsMapLayerAdditionalData(layer, newLayerConf);
-            }
-
-
-            for (var i in newLayerConf.admin) {
-                if (newLayerConf.admin.hasOwnProperty(i)) {
-                    if (newLayerConf.admin[i]) {
-                        layer.admin[i] = newLayerConf.admin[i];
-                    }
-                }
             }
 
             // notify components of layer update
@@ -743,6 +738,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             layer.setRealtime(mapLayerJson.realtime);
             layer.setRefreshRate(mapLayerJson.refreshRate);
+            layer.setAdmin(mapLayerJson.admin);
 
             // metadata 
             layer.setDataUrl(mapLayerJson.dataUrl);
