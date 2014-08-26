@@ -30,6 +30,7 @@ div.renderdialog .ui-slider {
     position: absolute;
     width: 1.2em;
     z-index: 2;
+    margin-top: 2px;
     border: 0 !important; }
 div.renderdialog .ui-slider-horizontal {
   height: 0.8em; }
