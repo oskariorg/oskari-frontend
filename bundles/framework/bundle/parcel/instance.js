@@ -150,7 +150,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
                 me = this,
                 i,
                 layerId,
-                //template,
                 p;
             this.sandbox = sandbox;
             if (me.conf && me.conf.proxyUrl) {
@@ -212,8 +211,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
                 me._changeLanguage();
             });
             // Guide link
-            // Todo: construct localization specific url
-            userLinks.filter(".guide").attr("href", me.conf.guideUrl+"?locale="+loc.guideLang);
+            var guideLink = userLinks.filter(".guide");
+            guideLink.attr("href", me.conf.guideUrl+"?locale="+loc.guideLang);
+            guideLink.click(function (event) {
+                event.preventDefault();
+                window.open(jQuery(this).attr("href"), "popupWindow", "width=800,height=600,scrollbars=yes");
+            });
 
             loginBar.append(userLinks);
             sandbox.register(me);
