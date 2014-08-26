@@ -179,7 +179,7 @@ if (!Function.prototype.bind) {
              * @return {String} xslt
              */
             getGfiXslt: function () {
-                var adminBlock = this.get('admin');
+                var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.xslt;
                 }
@@ -187,11 +187,11 @@ if (!Function.prototype.bind) {
             },
 
             /**
-             * Returns user name if defined or null if not
+             * Returns username if defined or null if not
              * @return {String} username
              */
             getUsername: function () {
-                var adminBlock = this.get('admin');
+                var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.username;
                 }
@@ -203,7 +203,7 @@ if (!Function.prototype.bind) {
              * @return {String} password
              */
             getPassword: function () {
-                var adminBlock = this.get('admin');
+                var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.password;
                 }
@@ -215,11 +215,11 @@ if (!Function.prototype.bind) {
              * @return {String} url
              */
             getInterfaceUrl: function () {
-                var adminBlock = this.get('admin');
+                var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.url;
                 }
-                return null;
+                return this.getLayerUrls().join();
             },
 
             /**
@@ -228,7 +228,7 @@ if (!Function.prototype.bind) {
              * @return {Number} group id
              */
             getGroupId: function (type) {
-                var adminBlock = this.get('admin');
+                var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     // inspireId or organizationId
                     return adminBlock[type + 'Id'];

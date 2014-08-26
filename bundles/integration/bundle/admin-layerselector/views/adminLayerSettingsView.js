@@ -392,7 +392,7 @@ define([
 
                 data.layerName = form.find('#add-layer-layerName').val();
                 data.layerUrl = form.find('#add-layer-url').val();
-                if (data.layerUrl != me.model.getLayerUrls().join() ||
+                if (data.layerUrl != me.model.getInterfaceUrl() ||
                     data.layerName != me.model.getLayerName()) {
                     var confirmMsg = me.instance.getLocalization('admin').confirmResourceKeyChange;
                     if (me.model.getId() && !confirm(confirmMsg)) {

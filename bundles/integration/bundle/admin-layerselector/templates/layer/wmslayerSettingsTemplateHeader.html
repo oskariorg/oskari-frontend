@@ -9,7 +9,7 @@
             <div class="input-controls">
                 <input type="text" id="add-layer-interface" class="add-layer-input mid"
                     placeholder="<%= instance.getLocalization('admin').interfaceAddress %>" 
-                    <% if(model.getLayerUrls) { %>value="<%= model.getLayerUrls().join() %>"<% } %> />
+                    value="<%= model.getInterfaceUrl() %>" />
                 <div class="icon-close mid"></div>
             </div>
                     <button id="add-layer-wms-button" class="fetch-wms-button"><%= instance.getLocalization('admin').getInfo %></button>
