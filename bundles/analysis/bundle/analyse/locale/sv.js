@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sv",
     "key": "Analyse",
     "value": {
@@ -82,77 +83,89 @@ Oskari.registerLocalization({
             "method": {
                 "label": "Metod",
                 "tooltip": "Väljä först material och efter det metods är till hands",
-                "options": [{
-                    "id": "oskari_analyse_buffer",
-                    "label": "Zon",
-                    "classForMethod": "buffer",
-                    "selected": true,
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_aggregate",
-                    "label": "Statistiska mått",
-                    "classForPreview": "aggregate",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_union",
-                    "label": "Union",
-                    "classForPreview": "union",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_intersect",
-                    "label": "Klippning",
-                    "classForPreview": "intersect",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_layer_union",
-                    "label": "Klippande objekt filtrering",
-                    "classForPreview": "layer_union",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_areas_and_sectors",
-                    "label": "Union av analyslager",
-                    "classForPreview": "areas_and_sectors",
-                    "tooltip": "Man kan kombinera analyslager som har samma attribut data."
-                }, {
-                    "id": "oskari_analyse_areas_and_sectors",
-                    "label": "Flera zoner",
-                    "classForPreview": "areas_and_sectors",
-                    "tooltip": "Man kan skapa flera zoner omkring utvalda objekt. Man kan välja sig själv zoners storlek och antal."
-                }, {
-                    "id": "oskari_analyse_difference",
-                    "label": "NOT TRANSLATED",
-                    "classForPreview": "difference",
-                    "tooltip": ""
-                }]
+                "options": [
+                    {
+                        "id": "oskari_analyse_buffer",
+                        "label": "Zon",
+                        "classForMethod": "buffer",
+                        "selected": true,
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_aggregate",
+                        "label": "Statistiska mått",
+                        "classForPreview": "aggregate",
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_union",
+                        "label": "Union",
+                        "classForPreview": "union",
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_intersect",
+                        "label": "Klippning",
+                        "classForPreview": "intersect",
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_layer_union",
+                        "label": "Klippande objekt filtrering",
+                        "classForPreview": "layer_union",
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_areas_and_sectors",
+                        "label": "Union av analyslager",
+                        "classForPreview": "areas_and_sectors",
+                        "tooltip": "Man kan kombinera analyslager som har samma attribut data."
+                    },
+                    {
+                        "id": "oskari_analyse_areas_and_sectors",
+                        "label": "Flera zoner",
+                        "classForPreview": "areas_and_sectors",
+                        "tooltip": ""
+                    }
+                ]
             },
             "aggregate": {
                 "label": "Statistiska mått",
-                "options": [{
-                    "id": "oskari_analyse_Count",
-                    "label": "Antal",
-                    "selected": true
-                }, {
-                    "id": "oskari_analyse_Sum",
-                    "label": "Summa"
-                }, {
-                    "id": "oskari_analyse_Min",
-                    "label": "Minsta värde"
-                }, {
-                    "id": "oskari_analyse_Max",
-                    "label": "Största värde"
-                }, {
-                    "id": "oskari_analyse_Average",
-                    "label": "Medelvärde"
-                }, {
-                    "id": "oskari_analyse_StdDev",
-                    "label": "Standardavvikelse"
-                }, {
-                    "id": "oskari_analyse_Median",
-                    "label": "Median"
-                }, {
-                    "id": "oskari_analyse_NoDataCnt",
-                    "label": "Skyddad objekt"
-                }],
+                "options": [
+                    {
+                        "id": "oskari_analyse_Count",
+                        "label": "Antal",
+                        "selected": true
+                    },
+                    {
+                        "id": "oskari_analyse_Sum",
+                        "label": "Summa"
+                    },
+                    {
+                        "id": "oskari_analyse_Min",
+                        "label": "Minsta värde"
+                    },
+                    {
+                        "id": "oskari_analyse_Max",
+                        "label": "Största värde"
+                    },
+                    {
+                        "id": "oskari_analyse_Average",
+                        "label": "Medelvärde"
+                    },
+                    {
+                        "id": "oskari_analyse_StdDev",
+                        "label": "Standardavvikelse"
+                    },
+                    {
+                        "id": "oskari_analyse_Median",
+                        "label": "Median"
+                    },
+                    {
+                        "id": "oskari_analyse_NoDataCnt",
+                        "label": "Skyddad objekt"
+                    }
+                ],
                 "attribute": "Välj en attribut"
             },
             "buffer_size": {
@@ -186,34 +199,44 @@ Oskari.registerLocalization({
             "areas_and_sectors": {
                 "area_count": "Antal av zoner",
                 "area_size": "Storlek av zoner",
-                "sector_count": "Antal av sektorer"
+                "sector_count": "Antal av sektorer",
+                "area_count_tooltip": "Ge zoner antal.",
+                "area_size_tooltip": "Ge zoner storlek.",
+                "sector_count_tooltip": "Ge sektorer antal."
             },
             "spatial": {
                 "label": "Objekt för analys resultat",
-                "options": [{
-                    "id": "oskari_analyse_intersect",
-                    "label": "Klippande objekt",
-                    "selected": true
-                }, {
-                    "id": "oskari_analyse_contains",
-                    "label": "Ingående objekt"
-                }]
+                "options": [
+                    {
+                        "id": "oskari_analyse_intersect",
+                        "label": "Klippande objekt",
+                        "selected": true
+                    },
+                    {
+                        "id": "oskari_analyse_contains",
+                        "label": "Ingående objekt"
+                    }
+                ]
             },
             "params": {
                 "label": "Attribut data för analys resultat",
                 "aggreLabel": "Attribut data för statistiska mått",
                 "tooltip": "",
-                "options": [{
-                    "id": "oskari_analyse_all",
-                    "selected": true,
-                    "label": "Alla attribut"
-                }, {
-                    "id": "oskari_analyse_none",
-                    "label": "Inga attribut"
-                }, {
-                    "id": "oskari_analyse_select",
-                    "label": "Välj attribut från listan"
-                }]
+                "options": [
+                    {
+                        "id": "oskari_analyse_all",
+                        "selected": true,
+                        "label": "Alla attribut"
+                    },
+                    {
+                        "id": "oskari_analyse_none",
+                        "label": "Inga attribut"
+                    },
+                    {
+                        "id": "oskari_analyse_select",
+                        "label": "Välj attribut från listan"
+                    }
+                ]
             },
             "output": {
                 "label": "Utseende",
@@ -372,4 +395,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

@@ -1,14 +1,16 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "userinterface.UserGuide",
     "value": {
         "title": "Help",
         "desc": "",
         "flyout": {
-            "title": "Paikkatietoikkuna user guide"
+            "title": "User Guide",
+            "loadingtxt": "<p>Loading the guide...</p>"
         },
         "tile": {
-            "title": "Map user guide"
+            "title": "User Guide"
         },
         "error": {
             "title": "Error!",
@@ -19,4 +21,5 @@ Oskari.registerLocalization({
             "contentPart": "body"
         }
     }
-});
+}
+);

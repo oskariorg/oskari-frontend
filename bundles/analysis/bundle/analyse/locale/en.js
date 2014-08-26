@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "Analyse",
     "value": {
@@ -82,72 +83,89 @@ Oskari.registerLocalization({
             "method": {
                 "label": "Method",
                 "tooltip": "Select first data and after that the method",
-                "options": [{
-                    "id": "oskari_analyse_buffer",
-                    "label": "Buffer",
-                    "classForMethod": "buffer",
-                    "selected": true,
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_aggregate",
-                    "label": "Key ratios computation",
-                    "classForPreview": "aggregate",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_union",
-                    "label": "Union",
-                    "classForPreview": "union",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_intersect",
-                    "label": "Clipping",
-                    "classForPreview": "clip",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_layer_union",
-                    "label": "Union of the intersecting features",
-                    "classForPreview": "intersect",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_areas_and_sectors",
-                    "label": "Multiple buffers",
-                    "classForPreview": "areas_and_sectors",
-                    "tooltip": "By the method \"Multiple buffers\" you can add multiple buffers around the selected features. You can define the buffer size and the number of buffers."
-                }, {
-                    "id": "oskari_analyse_difference",
-                    "label": "Difference computation",
-                    "classForPreview": "difference",
-                    "tooltip": ""
-                }]
+                "options": [
+                    {
+                        "id": "oskari_analyse_buffer",
+                        "label": "Buffer",
+                        "classForMethod": "buffer",
+                        "selected": true,
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_aggregate",
+                        "label": "Key ratios computation",
+                        "classForPreview": "aggregate",
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_union",
+                        "label": "Union",
+                        "classForPreview": "union",
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_intersect",
+                        "label": "Clipping",
+                        "classForPreview": "clip",
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_layer_union",
+                        "label": "Union of the intersecting features",
+                        "classForPreview": "intersect",
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_areas_and_sectors",
+                        "label": "Union of the analyse layers",
+                        "classForPreview": "layer_union",
+                        "tooltip": "By the method \"Union of the analyse layers\" you can combine the analyse layers. The layers to be combined must have same attributes."
+                    },
+                    {
+                        "id": "oskari_analyse_areas_and_sectors",
+                        "label": "Multiple buffers",
+                        "classForPreview": "areas_and_sectors",
+                        "tooltip": ""
+                    }
+                ]
             },
             "aggregate": {
                 "label": "Key ratio",
-                "options": [{
-                    "id": "oskari_analyse_Count",
-                    "label": "Count",
-                    "selected": true
-                }, {
-                    "id": "oskari_analyse_Sum",
-                    "label": "Sum"
-                }, {
-                    "id": "oskari_analyse_Min",
-                    "label": "Minimum"
-                }, {
-                    "id": "oskari_analyse_Max",
-                    "label": "Maximum"
-                }, {
-                    "id": "oskari_analyse_Average",
-                    "label": "Average"
-                }, {
-                    "id": "oskari_analyse_StdDev",
-                    "label": "Standard deviation"
-                }, {
-                    "id": "oskari_analyse_Median",
-                    "label": "Median"
-                }, {
-                    "id": "oskari_analyse_NoDataCnt",
-                    "label": "The number of authorised features"
-                }],
+                "options": [
+                    {
+                        "id": "oskari_analyse_Count",
+                        "label": "Count",
+                        "selected": true
+                    },
+                    {
+                        "id": "oskari_analyse_Sum",
+                        "label": "Sum"
+                    },
+                    {
+                        "id": "oskari_analyse_Min",
+                        "label": "Minimum"
+                    },
+                    {
+                        "id": "oskari_analyse_Max",
+                        "label": "Maximum"
+                    },
+                    {
+                        "id": "oskari_analyse_Average",
+                        "label": "Average"
+                    },
+                    {
+                        "id": "oskari_analyse_StdDev",
+                        "label": "Standard deviation"
+                    },
+                    {
+                        "id": "oskari_analyse_Median",
+                        "label": "Median"
+                    },
+                    {
+                        "id": "oskari_analyse_NoDataCnt",
+                        "label": "The number of authorised features"
+                    }
+                ],
                 "attribute": "Select the attribute"
             },
             "buffer_size": {
@@ -181,34 +199,44 @@ Oskari.registerLocalization({
             "areas_and_sectors": {
                 "area_count": "The number of the buffers",
                 "area_size": "The buffer size",
-                "sector_count": "The number of the sectors"
+                "sector_count": "The number of the sectors",
+                "area_count_tooltip": "Give the number of the buffers.",
+                "area_size_tooltip": "Give the buffer size.",
+                "sector_count_tooltip": "Give the number of the sectors."
             },
             "spatial": {
                 "label": "Spatial operator",
-                "options": [{
-                    "id": "oskari_analyse_intersect",
-                    "label": "Intersect",
-                    "selected": true
-                }, {
-                    "id": "oskari_analyse_contains",
-                    "label": "Contains"
-                }]
+                "options": [
+                    {
+                        "id": "oskari_analyse_intersect",
+                        "label": "Intersect",
+                        "selected": true
+                    },
+                    {
+                        "id": "oskari_analyse_contains",
+                        "label": "Contains"
+                    }
+                ]
             },
             "params": {
                 "label": "The attributes to be included in the result",
                 "aggreLabel": "The attributes for key ratios",
                 "tooltip": "",
-                "options": [{
-                    "id": "oskari_analyse_all",
-                    "selected": true,
-                    "label": "All"
-                }, {
-                    "id": "oskari_analyse_none",
-                    "label": "None"
-                }, {
-                    "id": "oskari_analyse_select",
-                    "label": "Select from the list"
-                }]
+                "options": [
+                    {
+                        "id": "oskari_analyse_all",
+                        "selected": true,
+                        "label": "All"
+                    },
+                    {
+                        "id": "oskari_analyse_none",
+                        "label": "None"
+                    },
+                    {
+                        "id": "oskari_analyse_select",
+                        "label": "Select from the list"
+                    }
+                ]
             },
             "output": {
                 "label": "Layout",
@@ -367,4 +395,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

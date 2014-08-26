@@ -1,12 +1,12 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "rs",
     "key": "userinterface.UserGuide",
     "value": {
         "title": "Pomoć",
         "desc": "",
         "flyout": {
-            "title": "OSKARI uputstvo za korisnike"
+            "title": "OSKARI uputstvo za korisnike",
+            "loadingtxt": "NOT TRANSLATED"
         },
         "tile": {
             "title": "Uputstvo za korisnike"
@@ -20,5 +20,4 @@ Oskari.registerLocalization(
             "contentPart": "NOT TRANSLATED"
         }
     }
-}
-);
+});
