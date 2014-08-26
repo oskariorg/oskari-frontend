@@ -1,12 +1,12 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "ro",
     "key": "userinterface.UserGuide",
     "value": {
         "title": "Ajutor",
         "desc": "",
         "flyout": {
-            "title": "Ghid utilizator Oskari"
+            "title": "Ghid utilizator Oskari",
+            "loadingtxt": "NOT TRANSLATED"
         },
         "tile": {
             "title": "Ghid utilizator Hartă"
@@ -20,5 +20,4 @@ Oskari.registerLocalization(
             "contentPart": "NOT TRANSLATED"
         }
     }
-}
-);
+});

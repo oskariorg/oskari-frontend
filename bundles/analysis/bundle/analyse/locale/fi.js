@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "fi",
     "key": "Analyse",
     "value": {
@@ -82,77 +83,89 @@ Oskari.registerLocalization({
             "method": {
                 "label": "Menetelmä",
                 "tooltip": "Vyöhyke-menetelmä: Lisää valittujen kohteiden ympärille vyöhykkeet ja käyttää näitä vyöhyke-geometrioita (buffer) analyysissä -+- Koostetyökalu: Laskee kohteen ominaisuuksille aggregointiominaisuuksia esim. summat -+- Unioni: kohteiden yhdistäminen taulukosta valitsemalla tai yhteisten ominaisuustietoarvojen perusteella -+- Leikkaus: Valitaan uudet kohteet leikkaamalla leikkaavan tason kohteilla leikattavaa tasoa",
-                "options": [{
-                    "id": "oskari_analyse_buffer",
-                    "label": "Vyöhyke",
-                    "classForMethod": "buffer",
-                    "selected": true,
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_aggregate",
-                    "label": "Tunnuslukujen laskenta",
-                    "classForPreview": "aggregate",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_union",
-                    "label": "Yhdiste",
-                    "classForPreview": "union",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_clip",
-                    "label": "Leikkaus",
-                    "classForPreview": "clip",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_intersect",
-                    "label": "Leikkaavien kohteiden suodatus",
-                    "classForPreview": "intersect",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_layer_union",
-                    "label": "Analyysitasojen yhdiste",
-                    "classForPreview": "layer_union",
-                    "tooltip": "Analyysitasojen yhdiste -menetelmän avulla käyttäjä voi yhdistää analyysitasoja, joilla on samat ominaisuustiedot."
-                }, {
-                    "id": "oskari_analyse_areas_and_sectors",
-                    "label": "Monivyöhyke",
-                    "classForPreview": "areas_and_sectors",
-                    "tooltip": "Monivyöhyke-menetelmän avulla käyttäjä voi muodostaa valitsemiensa kohteiden ympärille useita eri vyöhykkeitä. Käyttäjä voi itse määrittää vyöhykkeiden koon ja lukumäärän."
-                }, {
-                    "id": "oskari_analyse_difference",
-                    "label": "Muutoksen laskenta",
-                    "classForPreview": "difference",
-                    "tooltip": ""
-                }]
+                "options": [
+                    {
+                        "id": "oskari_analyse_buffer",
+                        "label": "Vyöhyke",
+                        "classForMethod": "buffer",
+                        "selected": true,
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_aggregate",
+                        "label": "Tunnuslukujen laskenta",
+                        "classForPreview": "aggregate",
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_union",
+                        "label": "Yhdiste",
+                        "classForPreview": "union",
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_clip",
+                        "label": "Leikkaus",
+                        "classForPreview": "clip",
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_intersect",
+                        "label": "Leikkaavien kohteiden suodatus",
+                        "classForPreview": "intersect",
+                        "tooltip": ""
+                    },
+                    {
+                        "id": "oskari_analyse_layer_union",
+                        "label": "Analyysitasojen yhdiste",
+                        "classForPreview": "layer_union",
+                        "tooltip": "Analyysitasojen yhdiste -menetelmän avulla käyttäjä voi yhdistää analyysitasoja, joilla on samat ominaisuustiedot."
+                    },
+                    {
+                        "id": "oskari_analyse_areas_and_sectors",
+                        "label": "Monivyöhyke",
+                        "classForPreview": "areas_and_sectors",
+                        "tooltip": ""
+                    }
+                ]
             },
             "aggregate": {
                 "label": "Tunnusluku",
-                "options": [{
-                    "id": "oskari_analyse_Count",
-                    "label": "Lukumäärä",
-                    "selected": true
-                }, {
-                    "id": "oskari_analyse_Sum",
-                    "label": "Summa"
-                }, {
-                    "id": "oskari_analyse_Min",
-                    "label": "Pienin arvo"
-                }, {
-                    "id": "oskari_analyse_Max",
-                    "label": "Suurin arvo"
-                }, {
-                    "id": "oskari_analyse_Average",
-                    "label": "Keskiarvo"
-                }, {
-                    "id": "oskari_analyse_StdDev",
-                    "label": "Keskihajonta"
-                }, {
-                    "id": "oskari_analyse_Median",
-                    "label": "Mediaani"
-                }, {
-                    "id": "oskari_analyse_NoDataCnt",
-                    "label": "Tietosuojattujen kohteiden lukumäärä"
-                }],
+                "options": [
+                    {
+                        "id": "oskari_analyse_Count",
+                        "label": "Lukumäärä",
+                        "selected": true
+                    },
+                    {
+                        "id": "oskari_analyse_Sum",
+                        "label": "Summa"
+                    },
+                    {
+                        "id": "oskari_analyse_Min",
+                        "label": "Pienin arvo"
+                    },
+                    {
+                        "id": "oskari_analyse_Max",
+                        "label": "Suurin arvo"
+                    },
+                    {
+                        "id": "oskari_analyse_Average",
+                        "label": "Keskiarvo"
+                    },
+                    {
+                        "id": "oskari_analyse_StdDev",
+                        "label": "Keskihajonta"
+                    },
+                    {
+                        "id": "oskari_analyse_Median",
+                        "label": "Mediaani"
+                    },
+                    {
+                        "id": "oskari_analyse_NoDataCnt",
+                        "label": "Tietosuojattujen kohteiden lukumäärä"
+                    }
+                ],
                 "attribute": "Valitse ominaisuustieto"
             },
             "buffer_size": {
@@ -185,41 +198,45 @@ Oskari.registerLocalization({
             },
             "areas_and_sectors": {
                 "area_count": "Vyöhykkeiden lukumäärä",
+                "area_count_tooltip": "Anna vyöhykkeiden lukumäärä.",
                 "area_size": "Vyöhykkeiden koko",
-                "sector_count": "Sektoreiden lukumäärä"
-            },
-            "difference": {
-                "firstLayer": "Ensimmäinen taso",
-                "secondLayer": "Toinen taso",
-                "field": "Valitse ominaisuustieto",
-                "keyField": "Yhdistävä ominaisuustieto"
+                "area_size_tooltip": "Anna vyöhykkeiden koko.",
+                "sector_count": "Sektoreiden lukumäärä",
+                "sector_count_tooltip": "Anna sektoreiden lukumäärä."
             },
             "spatial": {
                 "label": "Lopputuloksen mukaan otettavat kohteet",
-                "options": [{
-                    "id": "oskari_analyse_intersect",
-                    "label": "Leikkaavat kohteet",
-                    "selected": true
-                }, {
-                    "id": "oskari_analyse_contains",
-                    "label": "Sisältyvät kohteet"
-                }]
+                "options": [
+                    {
+                        "id": "oskari_analyse_intersect",
+                        "label": "Leikkaavat kohteet",
+                        "selected": true
+                    },
+                    {
+                        "id": "oskari_analyse_contains",
+                        "label": "Sisältyvät kohteet"
+                    }
+                ]
             },
             "params": {
                 "label": "Lopputulokseen mukaan otettavat ominaisuustiedot",
                 "aggreLabel": "Ominaisuustiedot joille tunnusluvut lasketaan",
                 "tooltip": "",
-                "options": [{
-                    "id": "oskari_analyse_all",
-                    "selected": true,
-                    "label": "Kaikki"
-                }, {
-                    "id": "oskari_analyse_none",
-                    "label": "Ei mitään"
-                }, {
-                    "id": "oskari_analyse_select",
-                    "label": "Valitse listalta"
-                }]
+                "options": [
+                    {
+                        "id": "oskari_analyse_all",
+                        "selected": true,
+                        "label": "Kaikki"
+                    },
+                    {
+                        "id": "oskari_analyse_none",
+                        "label": "Ei mitään"
+                    },
+                    {
+                        "id": "oskari_analyse_select",
+                        "label": "Valitse listalta"
+                    }
+                ]
             },
             "output": {
                 "label": "Ulkoasu",
@@ -378,4 +395,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

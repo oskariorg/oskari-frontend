@@ -5,7 +5,8 @@ Oskari.registerLocalization({
         "title": "Abi",
         "desc": "",
         "flyout": {
-            "title": "Oskari kasutusjuhend"
+            "title": "Oskari kasutusjuhend",
+            "loadingtxt": "NOT TRANSLATED"
         },
         "tile": {
             "title": "Kaardi kasutusjuhend"

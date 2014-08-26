@@ -1,8 +1,10 @@
-Oskari.registerLocalization({
-  "lang": "en",
-  "key": "Promote",
-  "value": {
-    "title": "Signed-in users",
-    "desc": "Signed-in users have access to more functionality."
-  }
-});
+Oskari.registerLocalization(
+{
+    "lang": "en",
+    "key": "Promote",
+    "value": {
+        "title": "Logged-in users",
+        "desc": "If you log in, you get more functionalities."
+    }
+}
+);

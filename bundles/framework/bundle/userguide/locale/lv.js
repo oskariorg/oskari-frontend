@@ -1,12 +1,12 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "lv",
     "key": "userinterface.UserGuide",
     "value": {
         "title": "Palīdzība",
         "desc": "",
         "flyout": {
-            "title": "\"Oskari\" lietotāja rokasgrāmata"
+            "title": "\"Oskari\" lietotāja rokasgrāmata",
+            "loadingtxt": "NOT TRANSLATED"
         },
         "tile": {
             "title": "Kartes lietotāja rokasgrāmata"
@@ -20,5 +20,4 @@ Oskari.registerLocalization(
             "contentPart": "NOT TRANSLATED"
         }
     }
-}
-);
+});
