@@ -356,6 +356,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                         mapElement.height(option.height);
                         me.adjustDataContainer();
                     }
+
+                    // Hackhack to get the map to do a horizontal fill...
+                    if (option.id === 'fill') {
+                        me._mapHorizontalFill();
+                    } else {
+                        jQuery('.oskariui-center').width('');
+                    }
+
                     break;
                 }
             }
@@ -802,6 +810,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         },
 
         /**
+         * @method _mapHorizontalFill
+         * Used to make the map element fill all available horizontal space
+         */
+        _mapHorizontalFill: function () {
+            // FIXME this shouldn't be needed once we get the mode handling in place
+            var content = jQuery('#contentMap'),
+                contentWidth = content.width() + parseInt(content.css('margin-left').split('px')[0], 10),
+                publisherWidth = jQuery('div.basic_publisher').width();
+
+            jQuery('.oskariui-center').width(contentWidth - publisherWidth + 'px');
+        },
+
+        /**
          * @method adjustDataContainer
          */
         adjustDataContainer: function () {
@@ -849,7 +870,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 'width': mapWidth,
                 'float': 'left'
             }).addClass('published-grid-center');
-            me.statsContainer.height(mapHeight);
+
+            if (!me.statsContainer) {
+                me.statsContainer.height(mapHeight);
+            }
 
             if (me.gridPlugin) {
                 me.gridPlugin.setGridHeight();
@@ -1363,6 +1387,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             me.logoPlugin.stopPlugin(this.instance.sandbox);
             me.logoPlugin.startPlugin(this.instance.sandbox);
         },
+
         /**
          * @method _resetLayerSelectionPlugin
          * Changes system language with Oskari.setLang and stops/starts plugins to make

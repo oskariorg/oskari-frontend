@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
 
         /**
          * @method _refresh
-         * Updates the plugins interface (hides if no WFS layer selected)
+         * Updates the plugins interface (hides if no featuredata layer selected)
          */
         refresh: function () {
             var me = this,
@@ -59,7 +59,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 i;
             // see if there's any wfs layers, show element if so
             for (i = 0; i < layers.length; i++) {
-                if (layers[i].isLayerOfType('WFS')) {
+                if (layers[i].hasFeatureData()) {
                     me.setVisible(true);
                     return;
                 }

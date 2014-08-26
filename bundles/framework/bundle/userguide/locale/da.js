@@ -1,12 +1,12 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "da",
     "key": "userinterface.UserGuide",
     "value": {
         "title": "Hjælp",
         "desc": "",
         "flyout": {
-            "title": "Oskari brugervejledning"
+            "title": "Oskari brugervejledning",
+            "loadingtxt": "NOT TRANSLATED"
         },
         "tile": {
             "title": "Kortbrugervejledning"
@@ -20,5 +20,4 @@ Oskari.registerLocalization(
             "contentPart": "NOT TRANSLATED"
         }
     }
-}
-);
+});

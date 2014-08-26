@@ -1,12 +1,12 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "sq",
     "key": "userinterface.UserGuide",
     "value": {
         "title": "Ndihmë",
         "desc": "",
         "flyout": {
-            "title": "Udhëzues i përdoruesit Oskari"
+            "title": "Udhëzues i përdoruesit Oskari",
+            "loadingtxt": "NOT TRANSLATED"
         },
         "tile": {
             "title": "Harta udhëzuese të përdoruesit"
@@ -20,5 +20,4 @@ Oskari.registerLocalization(
             "contentPart": "NOT TRANSLATED"
         }
     }
-}
-);
+});

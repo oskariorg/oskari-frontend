@@ -1,12 +1,12 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "uk",
     "key": "userinterface.UserGuide",
     "value": {
         "title": "Довідка",
         "desc": "",
         "flyout": {
-            "title": "Інструкція користувача Oskari"
+            "title": "Інструкція користувача Oskari",
+            "loadingtxt": "NOT TRANSLATED"
         },
         "tile": {
             "title": "Інструкція користувача карти"
@@ -20,5 +20,4 @@ Oskari.registerLocalization(
             "contentPart": "NOT TRANSLATED"
         }
     }
-}
-);
+});

@@ -1,12 +1,12 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "hu",
     "key": "userinterface.UserGuide",
     "value": {
         "title": "Segítség",
         "desc": "",
         "flyout": {
-            "title": "Oskari használati útmutató"
+            "title": "Oskari használati útmutató",
+            "loadingtxt": "NOT TRANSLATED"
         },
         "tile": {
             "title": "Térképkezelési útmutató"
@@ -20,5 +20,4 @@ Oskari.registerLocalization(
             "contentPart": "NOT TRANSLATED"
         }
     }
-}
-);
+});

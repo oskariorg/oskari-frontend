@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "GuidedTour",
     "value": {
@@ -20,35 +21,35 @@ Oskari.registerLocalization({
         },
         "page2": {
             "title": "Search",
-            "message": "Use the search function to move the map view directly to the place you are looking for.",
-            "openLink": "Show search",
-            "closeLink": "Hide search",
+            "message": "The Search -menu has divided in two search functions: \"Location Search\" and \"Metadata Search\". By Location Search you can search locations by placenames, addresses and real estate unit identifiers and focus your map to that location. By Metadata Search you can search spatial data sets by many different search options. The search results include also the data sets that are not available in Paikkatietoikkuna.",
+            "openLink": "Show Search",
+            "closeLink": "Hide Search",
             "tileText": "Search"
         },
         "page3": {
             "title": "Map layers",
-            "message": "You can select the data products to be shown on the map by selecting map layers. Click a category to open it and select a layer or write a few letters that are included in the name of the data product you are looking for in the search field.",
+            "message": "From the Map Layers -menu you can select the map layer to show on the map. You can list map layers by theme or by data provider. You can also search map layers by a map layer name, a data provider name or a keyword. The selected map layers you can check in the Selected Layers -menu.",
             "openLink": "Show map layers",
             "closeLink": "Hide map layers",
             "tileText": "Map layers"
         },
         "page4": {
             "title": "Selected map layers",
-            "message": "You can change the order in which map layers are displayed by clicking and draging, as well as change their transparency. Changes are shown in the map window.",
-            "openLink": "Show selected map layers",
-            "closeLink": "Hide selected map layers",
-            "tileText": "Selected map layers"
+            "message": "In the \"Selected map layers\" -menu you can define how the selected map layers are displayed. You can sort map layer by dragging them. You can also define opacity and for some of map layers you can also select the pre-defined style. For data products it is possible to show feature data in a tabular form. The map layer can be shown or hidden.",
+            "openLink": "Show Selected map layers",
+            "closeLink": "Hide Selected map layers",
+            "tileText": "Selected Map Layers"
         },
         "page5": {
-            "title": "My data",
-            "message": "All of the places which you have marked on the map, your saved map views and embedded maps are displayed here when you are logged in to the service.",
-            "openLink": "Show my data",
-            "closeLink": "Hide my data",
-            "tileText": "My data"
+            "title": "My Data",
+            "message": "\"My data\" -menu contains all your saved places, map views, embedded maps, indicators, analysis and datasets. There you can also check your account information. My data are shown only for logged-in users.",
+            "openLink": "Show My data",
+            "closeLink": "Hide My data",
+            "tileText": "My Data"
         },
         "page6": {
             "title": "Create map",
-            "message": "You can easily embed a map you have created on your webite. Simply definte the size and user interface of your map and copy and paste a line of HTML-code on your webpage",
+            "message": "In the \"Create Map\" -menu you can create your own map and publish it on your website. You just need to select the map layer, give some data about the map for publishing, define the map size, select appropriate map tools and design the layout. After all these selections you get one line html-code. Put it to your code and now you have a map on your website. Remember to check that all the selected map layers are publishable.",
             "openLink": "Show create map",
             "closeLink": "Hide create map",
             "tileText": "Create map"
@@ -63,7 +64,8 @@ Oskari.registerLocalization({
         },
         "page9": {
             "title": "Zoom in and zoom out",
-            "message": "You can zoom in and out on the map using the scale scrollbar or the plus and minus buttons next to the scrollbar. Tip: You can also zoom using the plus and minus keys on your keyboard or zoom in by double-clicking the map. It is also possible to zoom with the scroll wheel of your mouse."
+            "message": "You can zoom in and out on the map using the scale scrollbar or the plus and minus buttons next to the scrollbar. You can also zoom using the plus and minus keys on your keyboard or with the scroll wheel of your mouse. You can also zoom in by double clicking the map."
         }
     }
-});
+}
+);

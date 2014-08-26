@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sv",
     "key": "StatsGrid",
     "value": {
@@ -64,7 +65,6 @@ Oskari.registerLocalization({
             "indicatorDataXHRError": "Fel vid laddning av indikator data",
             "descriptionTitle": "Beskrivning",
             "sourceTitle": "Upphov"
-
         },
         "classify": {
             "classify": "Klassificera",
@@ -95,7 +95,6 @@ Oskari.registerLocalization({
             "divergent": "Divergent",
             "info2": "Vända färger - använd muspekaren för att välja en färg från sekvensen färgskalan",
             "cancel": "Avsluta"
-
         },
         "statistic": {
             "title": "NOT TRANSLATED",
@@ -116,6 +115,8 @@ Oskari.registerLocalization({
                 "sum": "NOT TRANSLATED"
             }
         },
+        "baseInfoTitle": "NOT TRANSLATED",
+        "dataTitle": "NOT TRANSLATED",
         "noIndicatorData": "NOT TRANSLATED",
         "values": "värden",
         "included": "Värden",
@@ -142,7 +143,6 @@ Oskari.registerLocalization({
         "filter": "Filter",
         "filterByValue": "Med värde",
         "filterByRegion": "Med region",
-
         "selectRegionCategory": "NOT TRANSLATED",
         "regionCatPlaceholder": "NOT TRANSLATED",
         "selectRegion": "NOT TRANSLATED",
@@ -150,6 +150,8 @@ Oskari.registerLocalization({
         "noRegionFound": "NOT TRANSLATED",
         "regionCategories": {
             "title": "NOT TRANSLATED",
+            "ERVA": "NOT TRANSLATED",
+            "ELY-KESKUS": "NOT TRANSLATED",
             "KUNTA": "NOT TRANSLATED",
             "ALUEHALLINTOVIRASTO": "NOT TRANSLATED",
             "MAAKUNTA": "NOT TRANSLATED",
@@ -189,4 +191,5 @@ Oskari.registerLocalization({
         "parsedDataUnrecognized": "NOT TRANSLATED",
         "loginToSaveIndicator": "NOT TRANSLATED"
     }
-});
+}
+);

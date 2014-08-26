@@ -1,12 +1,12 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "sk",
     "key": "userinterface.UserGuide",
     "value": {
         "title": "Pomocník",
         "desc": "",
         "flyout": {
-            "title": "Návod na obsluhu pre Oskari"
+            "title": "Návod na obsluhu pre Oskari",
+            "loadingtxt": "NOT TRANSLATED"
         },
         "tile": {
             "title": "Návod na obsluhu pre mapu"
@@ -20,5 +20,4 @@ Oskari.registerLocalization(
             "contentPart": "NOT TRANSLATED"
         }
     }
-}
-);
+});

@@ -1,23 +1,26 @@
-Oskari.registerLocalization({
-    "lang" : "fi",
-    "key" : "admin-layerrights",
-    "value" : {
-        "title" : "Tasojen Oikeudet",
-        "desc" : "NOT TRANSLATED",
-        "tile" : {
-            "title" : "Tasojen Oikeudet"
+Oskari.registerLocalization(
+{
+    "lang": "fi",
+    "key": "admin-layerrights",
+    "value": {
+        "title": "Tasojen oikeudet",
+        "desc": "kuv",
+        "tile": {
+            "title": "Tasojen oikeudet"
         },
-        "flyout" : {
-            "title" : "Tasojen Oikeuksien Hallinta"
+        "flyout": {
+            "title": "Karttatasojen oikeuksien hallinta",
+            "message": "NOT TRANSLATED"
         },
-        "rights" : {
-            "name"              : "Nimi",
-            "rightToPublish"    : "Julkaisuoikeus",
-            "rightToView"       : "Katseluoikeus",
-            "rightToDownload"   : "Latausoikeus",
-            "rightToPublishView": "Katseluoikeus julkaistussa kartassa"
+        "rights": {
+            "name": "Karttataso",
+            "rightToPublish": "Julkaisuoikeus",
+            "rightToView": "Katseluoikeus",
+            "rightToDownload": "Latausoikeus",
+            "rightToPublishView": "Katseluoikeus upotetussa kartassa"
         },
-        "save" : "Tallenna",
-        "selectRole" : "Rooli"
+        "save": "Tallenna",
+        "selectRole": "Rooli"
     }
-});
+}
+);

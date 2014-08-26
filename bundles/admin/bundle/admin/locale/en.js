@@ -2,18 +2,18 @@ Oskari.registerLocalization({
     "lang": "en",
     "key": "GenericAdmin",
     "value": {
-        "title": "Admin",
+        "title": "Administration",
         "desc": "",
         "tile": {
-            "title": "Admin"
+            "title": "Administration"
         },
         "flyout": {
-            "title": "Admin",
+            "title": "Administration",
             "defaultviews" : {
-                "title" : "Default views",
-                "desc" : "Move map to desired location and select layers to show. Save the settings for default view by clicking 'Set'",
+                "title" : "Default Views",
+                "desc" : "Select default layers and zoom level and move the map to a preferred location. Save the settings as a default view by clicking 'Set'",
                 "headerName" : "Default view",
-                "globalViewTitle" : '*Global default view*',
+                "globalViewTitle" : '*Global Default View*',
                 "setButton" : "Set",
                 "forceButton" : "Update anyway",
                 "notifications" : {
@@ -22,7 +22,7 @@ Oskari.registerLocalization({
                     "successTitle" : "Saved",
                     "errorLoadingFailed" : "Error loading default views",
                     "errorUpdating" : "Error updating view with id ${id}",
-                    "listTitle" : "Guest-user can't see these layers:",
+                    "listTitle" : "Guest users won't be able to see these layers:",
                     "viewUpdated" : "View (id=${id}) updated"
                 }
             }
