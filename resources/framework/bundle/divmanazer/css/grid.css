@@ -1,11 +1,11 @@
 th.asc {
   background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/asc_arrow.png');
   background-repeat: no-repeat;
-  background-position: center center; }
+  background-position: right center; }
 th.desc {
   background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png');
   background-repeat: no-repeat;
-  background-position: center center; }
+  background-position: right center; }
 
 div.column-selector-placeholder {
   border-style: none;
@@ -20,8 +20,8 @@ div.column-selector-placeholder {
   max-height: 35px; }
 
 div.column-selector-title {
-  margin-top: 9px;
-  margin-left: 3px;
+  margin-top: 10px;
+  margin-left: 2px;
   background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png');
   background-repeat: no-repeat;
   background-position: 120px 3px;
@@ -39,12 +39,15 @@ div.icon-menu {
   max-height: 7px; }
 
 div.column-selector {
+  max-height: 350px;
+  width: 270px;
+  overflow: auto;
   position: absolute;
   visibility: hidden;
   background-color: white;
   margin-top: 5px;
-  margin-left: 5px;
-  margin-right: 50px;
+  margin-left: 3px;
+  margin-right: 5px;
   padding: 0;
   border: 1px solid;
   z-index: 10001; }
@@ -68,8 +71,11 @@ div.exporter {
   float: right;
   text-align: left; }
 
-input.exportButton {
-  margin: 2px 10px; }
+input.csvExportButton {
+  margin: 3px 5px 2px 10px; }
+
+input.excelExportButton {
+  margin: 3px 10px 2px 5px; }
 
 table.oskari-grid td {
   padding: 5px; }
@@ -77,19 +83,26 @@ table.oskari-grid td, table.oskari-grid th {
   min-height: 28px;
   max-width: 110px;
   overflow: hidden;
-  font-size: 12px;
   border: 1px solid #E6E6E6;
-  color: #3C3C3C;
   text-overflow: ellipsis;
   padding-left: 10px;
   padding-right: 10px; }
+  table.oskari-grid td.hidden, table.oskari-grid th.hidden {
+    display: none; }
 table.oskari-grid th {
-  background-color: #F3F3F3;
-  font-weight: bold; }
+  background-color: #F3F3F3; }
   table.oskari-grid th a {
-    color: #3C3C3C;
+    color: inherit;
     line-height: 28px;
     padding: 5px; }
+  table.oskari-grid th.closedSubTable {
+    background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/icon-arrow-right.png');
+    background-repeat: no-repeat;
+    background-position: right center; }
+  table.oskari-grid th.openSubTable {
+    background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/icon-arrow-left.png');
+    background-repeat: no-repeat;
+    background-position: right center; }
 table.oskari-grid > tr > th, table.oskari-grid > tbody > tr > th {
   text-align: left; }
 table.oskari-grid tr:last-child td {

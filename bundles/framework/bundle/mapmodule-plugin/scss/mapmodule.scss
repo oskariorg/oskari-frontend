@@ -12,9 +12,11 @@ div.mapplugins {
     position: absolute;
     text-align: center;
     z-index: 15000;
+
     .mappluginsContainer {
         margin: 0;
         padding: 0;
+        
         .mappluginsContent {
 
             &.ui-droppable {
@@ -61,23 +63,29 @@ div.mapplugins {
                 &.zoombar {
                     margin-top: $pluginMargin;
                     margin-bottom: $pluginMargin;
-                }                
+                }
+
             }
+
         }
+
     }
 
     &.top {
         top: 0;
+
         .mappluginsContainer .mappluginsContent {
             margin-top: $pluginMargin;
         }
 
         &.center {
             width: 100%;
+
             .mappluginsContainer .mappluginsContent {
                 margin-right: auto;
                 margin-left: auto;
                 display: inline-block;
+
                 .mapplugin {
                     display: inline-block;
                     vertical-align: top;
@@ -92,11 +100,14 @@ div.mapplugins {
                     }
 
                 }
+
             }
+
         }
 
         &.right {
             min-width: 100px;
+
             .mapplugin {
                 
                 &.layerselection {
@@ -114,10 +125,12 @@ div.mapplugins {
                 }
                 
             }
+
         }
 
         &.left {
             min-width: 100px;
+
             .mapplugin {
                 
                 &.layerselection {
@@ -135,24 +148,26 @@ div.mapplugins {
                 }
                 
             }
+
         }
 
     }
 
-
-
     &.bottom {
         bottom: 0;
+
         .mappluginsContainer .mappluginsContent {
             margin-bottom: $pluginMargin;
         }
 
         &.center {
             width: 100%;
+
             .mappluginsContainer .mappluginsContent {
                 margin-right: auto;
                 margin-left: auto;
                 display: inline-block;
+
                 .mapplugin {
                     display: inline-block;
                     vertical-align: top;
@@ -161,11 +176,15 @@ div.mapplugins {
                     &.layerselection, &.search {
                         float: right;
                     }
+
                 }
+
             }
+
         }
 
         &.right {
+
             .mapplugin {
             
                 &.indexmap {
@@ -184,9 +203,11 @@ div.mapplugins {
                 }
                 
             }
+
         }
 
         &.left {
+
             .mapplugin {
             
                 &.indexmap {
@@ -212,6 +233,7 @@ div.mapplugins {
 
     &.left {
         left: 0;
+
         .mappluginsContainer .mappluginsContent {
             margin-left: $pluginMargin;
         }
@@ -219,15 +241,19 @@ div.mapplugins {
         &.center {
             height: 100%;
             display: table;
+
             .mappluginsContainer {
                 display: table-cell;
                 vertical-align: middle;
             }
-        }        
+
+        }
+
     }
 
     &.right {
         right: 0;
+
         .mappluginsContainer .mappluginsContent {
             margin-right: $pluginMargin;
         }
@@ -235,18 +261,23 @@ div.mapplugins {
         &.center {
             height: 100%;
             display: table;
+
             .mappluginsContainer {
                 display: table-cell;
                 vertical-align: middle;
             }
+
         }
 
         .mapplugin.indexmap .indexmapToggle {
             float: right;
         }
+
     }
+
 }
 
+/* Publisher fonts, not part of style guide */
 .oskari-publisher-font-arial {
   font-family: Arial, sans-serif !important;
 }

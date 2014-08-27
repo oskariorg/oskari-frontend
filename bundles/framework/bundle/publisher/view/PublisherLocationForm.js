@@ -14,22 +14,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLocation
      * @param {Oskari.mapframework.bundle.publisher.view.BasicPublisher} publisher
      *       publisher reference for language change
      */
-
     function (localization, publisher) {
         this.loc = localization;
         this._publisher = publisher;
         this.fields = {
-            'domain': {
-                "label": localization.domain.label,
-                "placeholder": localization.domain.placeholder,
-                "helptags": 'portti,help,publisher,domain',
-                "tooltip": localization.domain.tooltip
+            domain: {
+                label: localization.domain.label,
+                placeholder: localization.domain.placeholder,
+                helptags: 'portti,help,publisher,domain',
+                tooltip: localization.domain.tooltip
             },
-            'name': {
-                "label": localization.name.label,
-                "placeholder": localization.name.placeholder,
-                "helptags": 'portti,help,publisher,name',
-                "tooltip": localization.name.tooltip
+            name: {
+                label: localization.name.label,
+                placeholder: localization.name.placeholder,
+                helptags: 'portti,help,publisher,name',
+                tooltip: localization.name.tooltip
             }
         };
         this.langField = {
@@ -74,8 +73,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLocation
                     errors = [];
                 if (value.indexOf('http') === 0 || value.indexOf('www') === 0) {
                     errors.push({
-                        "field": name,
-                        "error": me.loc.error.domainStart
+                        field: name,
+                        error: me.loc.error.domainStart
                     });
                     return errors;
                 }

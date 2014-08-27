@@ -62,6 +62,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Merr shtypjen (printout)",
                 "ok": "OK (prano)",
+                "back" : "NOT TRANSLATED",
                 "cancel": "Anulo"
             },
             "location": {

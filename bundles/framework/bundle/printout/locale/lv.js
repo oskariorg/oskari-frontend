@@ -62,6 +62,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Saņemt izdruku",
                 "ok": "Labi",
+                "back" : "NOT TRANSLATED",
                 "cancel": "Atcelt"
             },
             "location": {

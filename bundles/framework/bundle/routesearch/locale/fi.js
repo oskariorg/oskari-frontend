@@ -12,7 +12,7 @@ Oskari.registerLocalization({
             "fromMap": "Valitse paikka kartalta",
             "routingService": "Reitityspalvelu",
             "fetchRoute": "Hae reitti",
-            "selectLocations": "Valitse moldemmat paikat"
+            "selectLocations": "Valitse molemmat paikat"
         },
         "tile": {
             "title": "Reittihaku",

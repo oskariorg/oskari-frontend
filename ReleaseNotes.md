@@ -1,5 +1,83 @@
 # Release Notes
 
+## 1.23
+
+### mapmodule/LogoPlugin
+
+The default logo image has been changed
+
+### statistics / StatsGrid
+
+Statsgrid is refactored to use stats instead of sotka. All filenames and classes named sotka are now renamed as stats.
+
+NOTE! StatsGrid.SotkadataChangedEvent has changed to StatsGrid.StatsDataChangedEvent.
+getSotkaIndicators has been renamed as getStatsIndicators.
+getSotkaRegionData has been renamed as getStatsRegionData.
+getSotkaIndicators has been renamed as getStatsIndicators.
+getSotkaIndicatorMeta has been renamed as getStatsIndicatorMeta.
+getSotkaIndicatorData has been renamed as getStatsIndicatorData.
+getSotkaIndicatorsMeta has been renamed as getStatsIndicatorsMeta.
+getSotkaIndicatorsData has been renamed as getStatsIndicatorsData.
+
+### divmanazer / DefaultExtension
+
+An injected empty conf no longer overwrites the basic functionality (default tile/flyout setting). getConfiguration() function should be preferred over referencing conf-property directly to ensure there's no issues with the config.
+
+DefaultTile now has methods setEnabled(bln) and isEnabled() for disabling/enabling the tile.
+
+### arcgis / ArcGisLayer
+
+Layers of type arcgis now respect layer order properly. 
+
+NOTE! The layertype in JSON/domain has changed from 'arcgislayer' to 'arcgis'
+
+### core / MapLayerService
+
+Now has a function hasSupportForLayerType(type) which can be used to check if given layer type is supported by the plugins loaded in particular setup.
+
+### admin-layerselector bundle
+
+It is now possible to add/edit/delete inspire themes. 
+
+Uses PUT/DELETE HTTP methods for insert/delete with fallback to POST and 'X-HTTP-Method-Override' header if server responds with 'Method not allowed'.
+
+Refactored layertype support validation. 
+
+Added initial support for ArcGIS layertype.
+
+### divmanazer/Grid
+
+Implemented expandable/collapsible subtables. Improved export permission handling.
+
+### divmanazer/Popup
+
+Implemented popup.onClose(callback) which can be used to register listeners that will be called when the popup closes. Note that listeners aren't removed on close 
+and need to be manually cleared using popup.clearListeners() if reusing the component reference in another context.
+
+### mapmodule/ControlsPlugin - touch controls
+
+Major changes in mouse/touch controls handling. PorttiMouse has been removed and OskariNavigation is now used in it's place. 
+OskariNavigation extends OpenLayers.Control.Navigation and hooks Oskari events to appropriate places. It also uses an extended version
+of OpenLayer.Control.PinchZoom (OskariPinchZoom) which hooks Oskari event to pinchDone.
+
+Also changed hasUI to return true so ControlsPlugin works correctly with publisher-bundle.
+
+### mapmyplaces/MyPlacesLayerPlugin
+
+Labels and clustering of My places points are now produced by GeoServer instead of frontend JavaScript. In addition to
+increased stability and efficiency, they are now available also in printouts and published maps. MyPlacesLayerPlugin is
+currently deprecated.
+
+### search
+
+More special characters are allowed by default. Strict filter can be enabled through config.
+
+### userguide
+
+The code is cleaned so that all the unnecessary parts have been removed.
+
+NOTE! UserGuideService.js no longer exists
+
 ## 1.22
 
 ### integration/admin-layerselector

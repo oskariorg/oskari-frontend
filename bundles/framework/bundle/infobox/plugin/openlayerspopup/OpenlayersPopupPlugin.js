@@ -1,3 +1,4 @@
+// FIXME move this to lib...
 // Define outerHtml method for jQuery since we need to give openlayers plain html
 // http://stackoverflow.com/questions/2419749/get-selected-elements-outer-html
 // Elements outerHtml property only works on IE and chrome
@@ -23,8 +24,9 @@ jQuery.fn.outerHTML = function (arg) {
         }
 
         if (jQuery.isFunction(arg)) {
-            if ((fnRet = arg.call(pass, i, el[inOrOut])) !== false)
+            if ((fnRet = arg.call(pass, i, el[inOrOut])) !== false) {
                 el[inOrOut] = fnRet;
+            }
         } else {
             el[inOrOut] = arg;
         }
@@ -49,7 +51,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
      * @method create called automatically on construction
      * @static
      */
-
     function () {
         this.mapModule = null;
         this.pluginName = null;
@@ -136,7 +137,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          * }]
          */
         popup: function (id, title, contentData, lonlat, colourScheme, font) {
-            if (_.isEmpty(contentData)) return;
+            if (_.isEmpty(contentData)) {
+                return;
+            }
 
             var me = this,
                 currPopup = this._popups[id],
@@ -152,13 +155,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
             this._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh);
         },
+        /**
+         * @method _renderPopup
+         */
         _renderPopup: function (id, contentData, title, lonlat, colourScheme, font, refresh) {
-            var contentDiv = this._renderContentData(contentData),
-                popupContent = this._renderPopupContent(title, contentDiv),
+            var me = this,
+                contentDiv = me._renderContentData(contentData),
+                popupContent = me._renderPopupContent(title, contentDiv),
                 popup;
 
             if (refresh) {
-                popup = this._popups[id].popup;
+                popup = me._popups[id].popup;
                 popup.setContentHTML(popupContent);
             } else {
                 popup = new OpenLayers.Popup(
@@ -168,7 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                     popupContent,
                     false
                 );
-                this._popups[id] = {
+                me._popups[id] = {
                     title: title,
                     contentData: contentData,
                     lonlat: lonlat,
@@ -185,16 +192,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                     }
                 };
 
-                this.getMapModule().getMap().addPopup(popup);
-
+                me.getMapModule().getMap().addPopup(popup);
             }
 
-            if (this.adaptable) {
-                this._adaptPopupSize(id, refresh);
+            if (me.adaptable) {
+                me._adaptPopupSize(id, refresh);
             }
 
-            this._panMapToShowPopup(lonlat);
-            this._setClickEvent(id, popup, contentData);
+            me._panMapToShowPopup(lonlat);
+            me._setClickEvent(id, popup, contentData);
 
             popup.setBackgroundColor('transparent');
             jQuery(popup.div).css('overflow', 'visible');
@@ -203,11 +209,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             var popupDOM = jQuery('#' + id);
             // Set the colour scheme if one provided
             if (colourScheme) {
-                this._changeColourScheme(colourScheme, popupDOM, id);
+                me._changeColourScheme(colourScheme, popupDOM, id);
             }
             // Set the font if one provided
             if (font) {
-                this._changeFont(font, popupDOM, id);
+                me._changeFont(font, popupDOM, id);
             }
             // Fix the HTML5 placeholder for < IE10
             var inputs = popupDOM.find('.contentWrapper input, .contentWrapper textarea');
@@ -255,13 +261,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             return _.foldl(contentData, function (contentDiv, datum, index) {
                 var useButtons = (datum.useButtons === true),
                     primaryButton = datum.primaryButton,
-                    contentWrapper = me._contentWrapper.clone();
+                    contentWrapper = me._contentWrapper.clone(),
+                    key,
+                    actionLink,
+                    btn,
+                    link;
 
                 contentWrapper.append(datum.html);
 
-                for (var key in datum.actions) {
-                    var actionLink, btn, link;
-
+                for (key in datum.actions) {
                     if (useButtons) {
                         actionLink = me._actionButton.clone();
                         btn = actionLink.find('input');
@@ -298,8 +306,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                     if (link.hasClass('olPopupCloseBox')) { // Close button
                         me.close(id);
                     } else { // Action links
-                        var i = link.attr('contentdata');
-                        var text = link.attr('value');
+                        var i = link.attr('contentdata'),
+                            text = link.attr('value');
                         if (!text) {
                             text = link.html();
                         }
@@ -323,10 +331,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          * @return {Object[]}
          */
         _getChangedContentData: function (oldData, newData) {
-            var retData;
+            var retData,
+                i,
+                j;
 
-            for (var i = 0, oLen = oldData.length; i < oLen; ++i) {
-                for (var j = 0, nLen = newData.length; j < nLen; ++j) {
+            for (i = 0, oLen = oldData.length; i < oLen; ++i) {
+                for (j = 0, nLen = newData.length; j < nLen; ++j) {
                     if (newData[j].layerId &&
                         newData[j].layerId === oldData[i].layerId) {
                         oldData[i] = newData[j];
@@ -498,7 +508,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         _changeColourScheme: function (colourScheme, div, id) {
             div = div || jQuery('div#' + id);
 
-            if (!colourScheme || !div) return;
+            if (!colourScheme || !div) {
+                return;
+            }
 
             var gfiHeaderArrow = div.find('div.popupHeaderArrow'),
                 gfiHeader = div.find('div.popupHeader'),
@@ -553,20 +565,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             if (!div || !fontId) return;
 
             // The elements where the font style should be applied to.
-            var elements = [];
+            var elements = [],
+                k,
+                el;
+
             elements.push(div);
             elements.push(div.find('table.getinforesult_table'));
 
             // Remove possible old font classes.
-            for (var j = 0; j < elements.length; j++) {
-                var el = elements[j];
+            for (j = 0; j < elements.length; j++) {
+                el = elements[j];
                 // FIXME create function outside the loop
                 el.removeClass(function () {
                     var removeThese = '',
-                        classNames = this.className.split(' ');
+                        classNames = this.className.split(' '),
+                        i;
 
                     // Check if there are any old font classes.
-                    for (var i = 0; i < classNames.length; ++i) {
+                    for (i = 0; i < classNames.length; ++i) {
                         if (/oskari-publisher-font-/.test(classNames[i])) {
                             removeThese += classNames[i] + ' ';
                         }
@@ -589,8 +605,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             // destroys all if id not given
             // deletes reference to the same id will work next time also
             if (!id) {
-                for (var pid in this._popups) {
-                    var popup = this._popups[pid];
+                var pid,
+                    popup;
+                for (pid in this._popups) {
+                    popup = this._popups[pid];
                     if (!position ||
                         position.lon !== popup.lonlat.lon ||
                         position.lat !== popup.lonlat.lat) {

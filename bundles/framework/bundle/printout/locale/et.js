@@ -58,6 +58,7 @@ Oskari.registerLocalization({
             "buttons": {
                 "save": "Tee väljatrükk",
                 "ok": "OK",
+                "back" : "NOT TRANSLATED",
                 "cancel": "Tühista"
             },
             "location": {

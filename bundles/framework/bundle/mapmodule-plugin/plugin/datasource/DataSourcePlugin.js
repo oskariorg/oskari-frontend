@@ -49,6 +49,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
             }
         },
 
+        getElement: function () {
+            return this.element;
+        },
+
         /**
          * @method hasUI
          * @return {Boolean} true
@@ -180,8 +184,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} b comparable layer 2
          */
         _layerListComparator: function (a, b) {
-            var nameA = a.getOrganizationName().toLowerCase();
-            var nameB = b.getOrganizationName().toLowerCase(),
+            var nameA = a.getOrganizationName().toLowerCase(),
+                nameB = b.getOrganizationName().toLowerCase(),
                 ret = 0;
             if (nameA === nameB) {
                 nameA = a.getName().toLowerCase();
@@ -202,8 +206,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
          * Creates logo and terms of use links on top of map
          */
         _createUI: function () {
-            var me = this;
-            var sandbox = me._sandbox;
+            var me = this,
+                sandbox = me._sandbox;
             // get div where the map is rendered from openlayers
             var parentContainer = jQuery(this._map.div);
             if (!this.element) {
@@ -230,19 +234,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
          * renders pop-up
          */
         _openDialog: function () {
-            var me = this;
-            var sandbox = me._sandbox;
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var okBtn = dialog.createCloseButton(this.localization.button.close);
-
-            var infoIcon = this.templateinfoIcon.clone();
-            var groupTemplate = this.templategroupTemplate.clone();
-
-            var selectedLayers = this._getLayers();
-
-            var group = null;
-            var content = this.templatecontent.clone();
-            var currentGroup = null,
+            var me = this,
+                sandbox = me._sandbox,
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = dialog.createCloseButton(this.localization.button.close),
+                infoIcon = this.templateinfoIcon.clone(),
+                groupTemplate = this.templategroupTemplate.clone(),
+                selectedLayers = this._getLayers(),
+                group = null,
+                content = this.templatecontent.clone(),
+                currentGroup = null,
                 i,
                 layer,
                 heading,
@@ -284,8 +285,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
          * @return selected layers in the pop-up
          */
         _getLayers: function () {
-            var me = this;
-            var selectedLayers = this._sandbox.findAllSelectedMapLayers();
+            var me = this,
+                selectedLayers = me._sandbox.findAllSelectedMapLayers();
             //sort the layers
             selectedLayers.sort(function (a, b) {
                 return me._layerListComparator(a, b);
@@ -299,9 +300,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
          * appends to metadata link if avaiable wiht layers
          */
         _getLayerContainer: function (layer) {
-            var me = this;
-            var infoIcon = this.templateinfoIcon.clone();
-            var layerName = layer.getName();
+            var me = this,
+                infoIcon = this.templateinfoIcon.clone(),
+                layerName = layer.getName();
             if (layerName) {
                 var layerItem = jQuery('<li>' + layerName + '</li>');
                 //metadata link
@@ -319,11 +320,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
         },
 
         _getMetadataInfoCallback: function (layer) {
-            var me = this;
-            var sandbox = me._sandbox;
-            var uuid = layer.getMetadataIdentifier();
-            var additionalUuids = [];
-            var additionalUuidsCheck = {};
+            var me = this,
+                sandbox = me._sandbox,
+                uuid = layer.getMetadataIdentifier(),
+                additionalUuids = [],
+                additionalUuidsCheck = {};
             additionalUuidsCheck[uuid] = true;
             var subLayers = layer.getSubLayers(),
                 s,

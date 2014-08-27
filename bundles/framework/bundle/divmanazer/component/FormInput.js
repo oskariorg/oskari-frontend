@@ -133,10 +133,17 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          */
         getValue: function (blnFilteredValue) {
             var value = this._field.find('input').val();
-            if (blnFilteredValue) {
-                value = value.match(this._regExp);
+            if (value === null || value === undefined) {
+                value = '';
             }
-            return String(value);
+            if (blnFilteredValue) {
+                value = value.match(this._regExp).join('');
+            }
+            // Basic check before AH-1708
+            value = value.replace("<","");
+            value = value.replace("&","");
+            value = value.replace("\\","");            
+            return value;
         },
         /**
          * @method setValue

@@ -51,6 +51,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         getMapModule: function () {
             return this.mapModule;
         },
+
+        getElement: function () {
+            return this.element;
+        },
+
         /**
          * @method hasUI
          * This plugin has an UI so always returns true
@@ -78,7 +83,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         init: function () {
             var me = this;
             // templates
-            this.templates.main = jQuery('<div class="oskariui mapplugin pzbDiv zoombar">' +
+            this.templates.main = jQuery('<div class="oskariui mapplugin pzbDiv zoombar" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar">' +
                 '<div class="pzbDiv-plus"></div>' +
                 '<input type=\'hidden\' />' +
                 '<div class="slider"></div>' +
@@ -104,17 +109,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * Sets sandbox and registers self to sandbox
          */
         startPlugin: function (sandbox) {
-            var p;
-            this._sandbox = sandbox || this.getMapModule().getSandbox();
-            this._sandbox.register(this);
+            var me = this,
+                p;
+            me._sandbox = sandbox || me.getMapModule().getSandbox();
+            me._sandbox.register(me);
 
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    this._sandbox.registerForEventByName(this, p);
+            for (p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me._sandbox.registerForEventByName(me, p);
                 }
             }
-            this._draw();
-            this._setZoombarValue(this._map.getZoom());
+            me._draw();
+            me._setZoombarValue(me._map.getZoom());
         },
         /**
          * @method stopPlugin

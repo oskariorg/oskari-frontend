@@ -1,4 +1,6 @@
 /**
+ * @class Oskari.digiroad.myplaces.event.MyPlacesChangedEvent
+ *
  * Tell components to reload data
  */
 Oskari.clazz.define(

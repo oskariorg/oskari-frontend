@@ -162,7 +162,7 @@ function() {
         if (index === 0) {
             container.prepend(this.html[0]);
         } else {
-            container.children().eq(index-1).after(this.html[0])
+            container.children().eq(index-1).after(this.html[0]);
         }
     }
 });

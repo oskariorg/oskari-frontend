@@ -62,6 +62,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Foretag udskrift",
                 "ok": "OK",
+                "back" : "NOT TRANSLATED",
                 "cancel": "Annullér"
             },
             "location": {

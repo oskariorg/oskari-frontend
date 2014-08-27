@@ -4,7 +4,7 @@ Oskari.registerLocalization({
     "value": {
         "title": "Locatie zoeken",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Zoek op plaatsnaam, adres of vastgoedobject ID",
         "searchButton": "Zoek",
         "searchResultCount": "De zoekopdracht is klaar ",

@@ -1,36 +1,22 @@
+/* Mixins */
 .mapplugin.coordinates {
-  display: block;
-  color: #3C3C3C;
-  background: white;
-  font-size: 12px;
-  z-index: 15000;
-  /*64738;*/
-  border: 1px solid #c4c4c4;
-  width: 120px;
-  height: 53px;
+  background: #fafafa;
+  border: 1px solid #e6e6e6;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -o-border-radius: 2px;
+  -ms-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box;
+  box-sizing: border-box;
+  font-size: 11px;
+  line-height: 15px;
+  padding: 2px 5px 0;
   text-align: left; }
-  .mapplugin.coordinates .cbSelection {
-    color: white;
-    background: #3C3C3C;
-    padding: 10px; }
-  .mapplugin.coordinates .cbSpansWrapper {
-    width: 100%;
-    padding: 5px 10px 5px 10px; }
-  .mapplugin.coordinates .cbArrowDown {
-    float: right;
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-top: 8px solid #707070;
-    margin-top: 4px; }
-  .mapplugin.coordinates .cbLabel {
-    /*    width: 20%; */
-    text-align: left;
-    float: left; }
-  .mapplugin.coordinates .cbValue {
-    /*    width: 80%; */
-    text-align: right;
-    float: right;
-    padding-right: 20px;
-    padding-bottom: 5px; }
+  .mapplugin.coordinates > div > div {
+    display: inline-block;
+    padding-bottom: 2px; }
+    .mapplugin.coordinates > div > div:last-child {
+      float: right; }

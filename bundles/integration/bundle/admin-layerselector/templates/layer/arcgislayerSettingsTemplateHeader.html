@@ -1,0 +1,11 @@
+
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-url" class="add-layer-label" title="<%= instance.getLocalization('admin').wmsInterfaceAddressDesc %>"><%= instance.getLocalization('admin').wmsInterfaceAddress %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <textarea rows="3" cols="40" id="add-layer-url" class="add-layer-input long" required><%= model.getLayerUrls().join() %></textarea>
+    </div>
+</div>
+
+<input type="hidden" id="add-layer-interface-version" value="1.0.0" />

@@ -109,8 +109,12 @@
              */
             save: function (item, callback) {
                 var me = this;
-                jQuery.ajax({
-                    type: "POST",
+                var method = "POST";
+                if(!item.id) {
+                    // insert if no id
+                    method = "PUT";
+                }
+                this.__tryRestMethods(method, {
                     dataType: 'json',
                     data : item,
                     url: me.baseURL + me.actions.save + "&iefix=" + (new Date()).getTime(),
@@ -122,10 +126,44 @@
                     },
                     error: function (jqXHR, textStatus) {
                         if(callback /* && jqXHR.status !== 0 */) {
-                            callback("Error while saving group " + textStatus);
+                            callback("Error while saving group:" + textStatus);
                         }
                     }
                 });
+            },
+            /**
+             * Tries to call backend with given method, if server responds with 
+             * '405 Method Not Allowed' tries the request again with POST method
+             * and additional header 'X-HTTP-Method-Override' with the original method as value.
+             * @param  {String} method 'GET' | 'POST' | 'PUT'  | 'DELETE' 
+             * @param  {Object} config for jQuery.ajax() - method will be overridden with value of method param
+             */
+            __tryRestMethods : function(method, config) {
+                var me = this;
+                config.type = method;
+                var errorHandler = function(jqXHR, textStatus) {
+                    var origType = config.type;
+                    if(textStatus === 'Method Not Allowed' && 
+                        (origType === 'PUT' || origType === 'DELETE')) {
+                        // PUT/DELETE not allowed -> try POST instead
+                        var origBefore = config.beforeSend;
+                        config.beforeSend = function(req) {
+                            req.setRequestHeader('X-HTTP-Method-Override', origType);
+                            if(origBefore) {
+                                origBefore(req);
+                            }
+                        }
+                        me.__tryRestMethods('POST', config);
+                    }
+                    else if(config.__oskariError) {
+                        config.__oskariError(jqXHR, textStatus);
+                    }
+                }
+                if(!config.__oskariError) {
+                    config.__oskariError = config.error;
+                    config.error = errorHandler;
+                }
+                jQuery.ajax(config);
             },
             /**
              * Ajax success callback to save a group to backend.
@@ -225,7 +263,7 @@
                     if (item.name.hasOwnProperty(lang)) {
                         if(!hasChanges) {
                             // flag changed if not flagged before and name has changed
-                            hasChanges = loadedGroup.names[lang] === item.name[lang];
+                            hasChanges = (loadedGroup.names[lang] !== item.name[lang]);
                         }
                         loadedGroup.names[lang] = item.name[lang];
                     }
@@ -314,14 +352,9 @@
                     }
                     return;
                 }
-
-                jQuery.ajax({
-                    type: "POST",
+                this.__tryRestMethods("DELETE", {
                     dataType: 'json',
-                    data : {
-                        id : id
-                    },
-                    url: me.baseURL + me.actions.remove + "&iefix=" + (new Date()).getTime(),
+                    url: me.baseURL + me.actions.remove + "&id=" + id + "&iefix=" + (new Date()).getTime(),
                     success: function (pResp) {
                         me._removeClass(id);
                         if(callback) {
@@ -330,7 +363,7 @@
                     },
                     error: function (jqXHR, textStatus) {
                         if(callback /* && jqXHR.status !== 0 */) {
-                            callback("Error while removing group " + textStatus);
+                            callback("Error while removing group: " + textStatus, jqXHR);
                         }
                     }
                 });
@@ -419,147 +452,7 @@
                     }
                 }
                 return null;
-            },
-            // TODO move encode and decode to model prototype so they're accessible to all models
-
-            /**
-             * Helper function. Encodes data to base64 format
-             *
-             * @method encode64
-             * @param {Object} data
-             * @return {String} encoded data
-             */
-            encode64: function (data) {
-                //http://phpjs.org/functions/base64_encode/
-                // http://kevin.vanzonneveld.net
-                // +   original by: Tyler Akins (http://rumkin.com)
-                // +   improved by: Bayron Guevara
-                // +   improved by: Thunder.m
-                // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-                // +   bugfixed by: Pellentesque Malesuada
-                // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-                // +   improved by: Rafał Kukawski (http://kukawski.pl)
-                // *     example 1: base64_encode('Kevin van Zonneveld');
-                // *     returns 1: 'S2V2aW4gdmFuIFpvbm5ldmVsZA=='
-                // mozilla has this native
-                // - but breaks in 2.0.0.12!
-                //if (typeof this.window['btoa'] == 'function') {
-                //    return btoa(data);
-                //}
-                var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
-                    o1,
-                    o2,
-                    o3,
-                    h1,
-                    h2,
-                    h3,
-                    h4,
-                    bits,
-                    i = 0,
-                    ac = 0,
-                    enc = "",
-                    tmp_arr = [],
-                    r;
-
-                if (!data) {
-                    return data;
-                }
-
-                do { // pack three octets into four hexets
-                    o1 = data.charCodeAt(i += 1);
-                    o2 = data.charCodeAt(i += 1);
-                    o3 = data.charCodeAt(i += 1);
-
-                    bits = o1 << 16 | o2 << 8 | o3;
-
-                    h1 = bits >> 18 & 0x3f;
-                    h2 = bits >> 12 & 0x3f;
-                    h3 = bits >> 6 & 0x3f;
-                    h4 = bits & 0x3f;
-
-                    // use hexets to index into b64, and append result to encoded string
-                    tmp_arr[ac += 1] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
-                } while (i < data.length);
-
-                enc = tmp_arr.join('');
-
-                r = data.length % 3;
-
-                return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
-
-            },
-
-            /**
-             * Helper function. Decodes data from base64 format
-             *
-             * @method decode64
-             * @param {Object} data (in base64 format)
-             * @return {String} decoded data
-             */
-            decode64: function (data) {
-                //http://phpjs.org/functions/base64_encode/
-                // http://kevin.vanzonneveld.net
-                // +   original by: Tyler Akins (http://rumkin.com)
-                // +   improved by: Thunder.m
-                // +      input by: Aman Gupta
-                // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-                // +   bugfixed by: Onno Marsman
-                // +   bugfixed by: Pellentesque Malesuada
-                // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-                // +      input by: Brett Zamir (http://brett-zamir.me)
-                // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-                // *     example 1: base64_decode('S2V2aW4gdmFuIFpvbm5ldmVsZA==');
-                // *     returns 1: 'Kevin van Zonneveld'
-                // mozilla has this native
-                // - but breaks in 2.0.0.12!
-                //if (typeof this.window['atob'] == 'function') {
-                //    return atob(data);
-                //}
-                var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
-                    o1,
-                    o2,
-                    o3,
-                    h1,
-                    h2,
-                    h3,
-                    h4,
-                    bits,
-                    i = 0,
-                    ac = 0,
-                    dec = "",
-                    tmp_arr = [];
-
-                if (!data) {
-                    return data;
-                }
-
-                data += '';
-
-                do { // unpack four hexets into three octets using index points in b64
-                    h1 = b64.indexOf(data.charAt(i += 1));
-                    h2 = b64.indexOf(data.charAt(i += 1));
-                    h3 = b64.indexOf(data.charAt(i += 1));
-                    h4 = b64.indexOf(data.charAt(i += 1));
-
-                    bits = h1 << 18 | h2 << 12 | h3 << 6 | h4;
-
-                    o1 = bits >> 16 & 0xff;
-                    o2 = bits >> 8 & 0xff;
-                    o3 = bits & 0xff;
-
-                    if (h3 === 64) {
-                        tmp_arr[ac += 1] = String.fromCharCode(o1);
-                    } else if (h4 === 64) {
-                        tmp_arr[ac += 1] = String.fromCharCode(o1, o2);
-                    } else {
-                        tmp_arr[ac += 1] = String.fromCharCode(o1, o2, o3);
-                    }
-                } while (i < data.length) {
-                    dec = tmp_arr.join('');
-                    return dec;
-                }
             }
-
         });
     });
 }).call(this);

@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.Tile',
      * @param {Oskari.mapframework.bundle.publisher.PublisherBundleInstance} instance
      *      reference to component that created the tile
      */
-
     function (instance) {
         this.instance = instance;
         this.container = null;

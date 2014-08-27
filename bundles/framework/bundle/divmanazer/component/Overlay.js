@@ -40,15 +40,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             _.forEach(me._overlays, function (overlay) {
                 overlay.overlay.bind('click', function (event) {
                     event.preventDefault();
-                })
+                });
             });
         },
         _setupSizeAndLocation: function () {
             var me = this;
             _.forEach(me._overlays, function (overlay) {
                 overlay.overlay.css({
-                    'left': "0px",
-                    'top': "0px",
+                    'left': '0px',
+                    'top': '0px',
                     'width': overlay.target.width() + 'px',
                     'height': overlay.target.height() + 'px'
                 });

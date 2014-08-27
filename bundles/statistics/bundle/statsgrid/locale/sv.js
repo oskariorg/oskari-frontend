@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sv",
     "key": "StatsGrid",
     "value": {
@@ -50,21 +51,20 @@ Oskari.registerLocalization({
             "cancel": "Avbryta",
             "filter": "Filter"
         },
-        "sotka": {
+        "stats": {
             "municipality": "Kommun",
             "code": "Kod",
             "errorTitle": "Fel",
-            "regionDataError": "Fel att få Sotka regionen data.",
-            "regionDataXHRError": "Fel vid laddning av Sotka regionen data",
-            "indicatorsDataError": "Fel att få Sotka indikatorer.",
-            "indicatorsDataXHRError": "Fel vid laddning av Sotka indikatorer.",
-            "indicatorMetaError": "Fel att få Sotka indikator metadata",
-            "indicatorMetaXHRError": "Fel vid laddning av Sotka indikator metadata",
-            "indicatorDataError": "Fel att få Sotka indikator data",
-            "indicatorDataXHRError": "Fel vid laddning av Sotka indikator data",
+            "regionDataError": "Fel att få  regionen data.",
+            "regionDataXHRError": "Fel vid laddning av regionen data",
+            "indicatorsDataError": "Fel att få indikatorer.",
+            "indicatorsDataXHRError": "Fel vid laddning av indikatorer.",
+            "indicatorMetaError": "Fel att få indikator metadata",
+            "indicatorMetaXHRError": "Fel vid laddning av indikator metadata",
+            "indicatorDataError": "Fel att få indikator data",
+            "indicatorDataXHRError": "Fel vid laddning av indikator data",
             "descriptionTitle": "Beskrivning",
             "sourceTitle": "Upphov"
-
         },
         "classify": {
             "classify": "Klassificera",
@@ -95,7 +95,6 @@ Oskari.registerLocalization({
             "divergent": "Divergent",
             "info2": "Vända färger - använd muspekaren för att välja en färg från sekvensen färgskalan",
             "cancel": "Avsluta"
-
         },
         "statistic": {
             "title": "NOT TRANSLATED",
@@ -142,7 +141,6 @@ Oskari.registerLocalization({
         "filter": "Filter",
         "filterByValue": "Med värde",
         "filterByRegion": "Med region",
-
         "selectRegionCategory": "NOT TRANSLATED",
         "regionCatPlaceholder": "NOT TRANSLATED",
         "selectRegion": "NOT TRANSLATED",
@@ -150,6 +148,8 @@ Oskari.registerLocalization({
         "noRegionFound": "NOT TRANSLATED",
         "regionCategories": {
             "title": "NOT TRANSLATED",
+            "ELY-KESKUS": "NOT TRANSLATED",
+            "ERVA": "NOT TRANSLATED",
             "KUNTA": "NOT TRANSLATED",
             "ALUEHALLINTOVIRASTO": "NOT TRANSLATED",
             "MAAKUNTA": "NOT TRANSLATED",
@@ -158,6 +158,8 @@ Oskari.registerLocalization({
             "SEUTUKUNTA": "NOT TRANSLATED",
             "SUURALUE": "NOT TRANSLATED"
         },
+        "baseInfoTitle": "NOT TRANSLATED",
+        "dataTitle": "NOT TRANSLATED",
         "addDataButton": "NOT TRANSLATED",
         "addDataTitle": "NOT TRANSLATED",
         "openImportDialogTip": "NOT TRANSLATED",
@@ -189,4 +191,5 @@ Oskari.registerLocalization({
         "parsedDataUnrecognized": "NOT TRANSLATED",
         "loginToSaveIndicator": "NOT TRANSLATED"
     }
-});
+}
+);

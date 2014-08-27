@@ -1,10 +1,9 @@
+/* Mixins */
 div.notLoggedIn {
   padding: 10px; }
 
-
 #contentMap.mapAnalyseMode {
   margin-left: 384px; }
-
 #contentMap div.basic_analyse {
   background: white;
   position: absolute;
@@ -13,7 +12,6 @@ div.notLoggedIn {
   left: 0;
   z-index: 1500;
   width: 384px; }
-
 #contentMap div.basic_publisher div.content {
   padding: 10px; }
 
@@ -34,18 +32,23 @@ div.basic_analyse div.analyse-select-featurelist {
   display: inline;
   margin-left: 6px; }
   div.basic_analyse div.analyse-select-featurelist a {
-    font-size: 150%;
-    color: #37B7FF;
     text-decoration: none; }
   div.basic_analyse div.analyse-select-featurelist ul {
-    font-size: 100%;
-    line-height: 100%;
     padding: 0;
     padding-top: 10px; }
     div.basic_analyse div.analyse-select-featurelist ul li {
       list-style-type: none; }
+div.basic_analyse div.analyse_difference_cont ul {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 10px; }
+  div.basic_analyse div.analyse_difference_cont ul li {
+    list-style-type: none;
+    margin: 5px; }
 div.basic_analyse div.icon-info {
   float: right;
+  cursor: pointer; }
+div.basic_analyse div.icon-funnel, div.basic_analyse div.icon-funnel-active {
   cursor: pointer; }
 div.basic_analyse div.icon-menu {
   margin: -5px 100px; }
@@ -81,29 +84,35 @@ div.basic_analyse div.drawFilterContainer {
   div.basic_analyse div.drawFilterContainer div.drawFilter {
     display: inline-block;
     cursor: pointer; }
-  div.basic_analyse div.drawFilterContainer div.drawFilter.disabled {
-    opacity: 0.4;
-    cursor: default !important; }
-  div.basic_analyse div.drawFilterContainer div.drawFilter.selected {
-    opacity: 1.0;
-    background-color: #333438;
-    cursor: default !important; }
+    div.basic_analyse div.drawFilterContainer div.drawFilter.disabled {
+      opacity: 0.4;
+      cursor: default !important; }
+    div.basic_analyse div.drawFilterContainer div.drawFilter.selected {
+      opacity: 1.0;
+      background-color: #333438;
+      cursor: default !important; }
   div.basic_analyse div.drawFilterContainer div.buttons {
     display: inline-block;
     float: right; }
-div.basic_analyse div.header-icon-info {
-  margin: 10px; }
-div.basic_analyse select.settings_buffer_units {
-  width: 80px; }
-
-div.basic_analyse div.form div.field input, div.field select {
+div.basic_analyse div.form div.field input, div.basic_analyse div.form div.field select {
   width: 80%;
   background-color: white;
   filter: Alpha(opacity=100) !important;
   /* unquote for libsass bug */ }
-
-div.basic_analyse div.tool input, div.basic_analyse div.drawFilter input, div.basic_analyse div.analyse_settings_cont input {
+div.basic_analyse div.header-icon-info {
+  margin: 10px; }
+div.basic_analyse div.tool input, div.basic_analyse div.drawFilter input, div.basic_analyse div.analyse_settings_cont input, div.basic_analyse div.analyse_areas_and_sectors_cont input {
   margin-right: 10px; }
+div.basic_analyse div.analyse_settings_cont label {
+  margin: 5px 0; }
+  div.basic_analyse div.analyse_settings_cont label span {
+    clear: both;
+    display: block; }
+  div.basic_analyse div.analyse_settings_cont label input, div.basic_analyse div.analyse_settings_cont label select {
+    margin-top: 7px;
+    margin-bottom: 10px; }
+div.basic_analyse select.settings_buffer_units, div.basic_analyse select.settings_area_size_units {
+  width: 80px; }
 
 .analyse_radiolabel, .analyse_checklabel {
   padding: 3px 6px;
@@ -111,11 +120,16 @@ div.basic_analyse div.tool input, div.basic_analyse div.drawFilter input, div.ba
   -moz-border-radius: 2px;
   -o-border-radius: 2px;
   -ms-border-radius: 2px;
-  border-radius: 2px; }
+  border-radius: 2px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box; }
   .analyse_radiolabel:hover, .analyse_checklabel:hover {
     background-color: #eee; }
 
+/* FIXME change these to actual labels? */
 .analyse_params_label, .analyse_title_label, .output_color_label, .columns_title_label, .settings_buffer_label, .extra_title_label, .settings_name_label {
+  /* FIXME change these to fieldset + legend? */
   font-weight: bold;
   margin: 5px 0; }
 
@@ -127,7 +141,9 @@ div.basic_analyse div.tool input, div.basic_analyse div.drawFilter input, div.ba
 
 /* Buttons */
 div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
-  margin: 5px; }
+  margin: 5px;
+  margin-bottom: 40px;
+  /* This is here so the buttons can be scrolled into the viewport in small resolutions... */ }
   div.basic_analyse div.buttons input, div.analyse div.startview div.buttons input {
     margin-right: 1px; }
 
@@ -139,9 +155,6 @@ label.params_checklabel {
   overflow: hidden; }
 
 table.layer-icons {
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-  line-height: 18px;
   margin: 0 0 2px;
   width: 30%;
   display: inline-table; }
@@ -180,23 +193,30 @@ div.analyse-filter-popup-content {
 div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px; }
   div.analyse-filter-popup-content div.filter-option div.manage-filter-option {
-    display: inline-block; }
+    display: inline-block;
+    vertical-align: middle; }
     div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.add-filter-option, div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.remove-filter-option {
+      cursor: pointer;
       display: inline-block;
-      font-size: 200%;
+      /* These are icons, so it's OK to have a custom font here. */
+      font-size: 48px;
       font-weight: bold;
-      cursor: pointer; }
+      margin-left: 5px;
+      min-width: 16px;
+      text-align: center; }
   div.analyse-filter-popup-content div.filter-option input[name="attribute-value"] {
     width: 120px; }
   div.analyse-filter-popup-content div.filter-option input[name="case-sensitive"] {
     margin-right: 5px; }
   div.analyse-filter-popup-content div.filter-option select.attribute {
     width: 150px; }
-  div.analyse-filter-popup-content div.filter-option select.operator, div.analyse-filter-popup-content div.filter-option select.boolean {
+  div.analyse-filter-popup-content div.filter-option select.boolean {
+    margin-top: 10px;
     width: 60px; }
+  div.analyse-filter-popup-content div.filter-option select.operator {
+    width: 210px; }
 
 div.divmanazerpopup.drawfilterdialog {
   max-width: 400px; }
-
 div.divmanazerpopup.analyse-draw-dialog {
   max-width: 280px; }

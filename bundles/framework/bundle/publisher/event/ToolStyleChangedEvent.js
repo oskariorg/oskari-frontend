@@ -10,12 +10,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.event.ToolStyleChanged
      * @static
      * @param {String} style the id of new style
      */
-
     function (style) {
         this._style = style;
     }, {
         /** @static @property __name event name */
-        __name: "Publisher.ToolStyleChangedEvent",
+        __name: 'Publisher.ToolStyleChangedEvent',
         /**
          * @method getName
          * Returns event name

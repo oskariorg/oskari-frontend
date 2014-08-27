@@ -12,7 +12,6 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
      * @method create called automatically on construction
      * @static
      */
-
     function () {
 
         // Currently selected layers, array of MapLayer objects
@@ -28,8 +27,8 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
         this._sandbox = Oskari.clazz.create('Oskari.mapframework.sandbox.Sandbox', this);
 
         // bw comp support - this should be removed 
-        if (!Oskari.$("sandbox")) {
-            Oskari.$("sandbox", this._sandbox);
+        if (!Oskari.$('sandbox')) {
+            Oskari.$('sandbox', this._sandbox);
         }
 
         // array of services available
@@ -69,7 +68,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          *            array of enhancements that should be executed before starting map
          */
         init: function (services, enhancements) {
-            this.printDebug("Initializing core...");
+            this.printDebug('Initializing core...');
 
             var sandbox = this._sandbox,
                 s;
@@ -84,14 +83,14 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             }
 
             // build up domain
-            this.printDebug("Sandbox ready, building up domain...");
+            this.printDebug('Sandbox ready, building up domain...');
             this._map = Oskari.clazz.create('Oskari.mapframework.domain.Map');
 
             // run all enhancements
             this.enhancements = enhancements;
             this._doEnhancements(this.enhancements);
 
-            this.printDebug("Modules started. Core ready.");
+            this.printDebug('Modules started. Core ready.');
         },
 
         /**
@@ -178,9 +177,9 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             if (handlerFunc) {
                 return handlerFunc(this, request);
             } else {
-                this.printWarn("!!!");
-                this.printWarn("  There is no handler for");
-                this.printWarn("  '" + request.getName() + "'");
+                this.printWarn('!!!');
+                this.printWarn('  There is no handler for');
+                this.printWarn('  \'' + request.getName() + '\'');
                 return false;
             }
         },
@@ -206,7 +205,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
                 if (handlerClsInstance && handlerClsInstance.handleRequest) {
                     return function(core, request) {
                         handlerClsInstance.handleRequest.apply(handlerClsInstance, [core, request]);
-                    }
+                    };
                 }
             }
             return undefined;
@@ -248,7 +247,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             var qname = this._availableRequestsByName[name],
                 p;
             if (!qname) {
-                this.printDebug("#!#!# ! Updating request metadata...");
+                this.printDebug('#!#!# ! Updating request metadata...');
                 var allRequests = Oskari.clazz.protocol('Oskari.mapframework.request.Request');
                 for (p in allRequests) {
                     if (allRequests.hasOwnProperty(p)) {
@@ -257,7 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
                         this._availableRequestsByName[reqname] = p;
                     }
                 }
-                this.printDebug("#!#!# ! Finished Updating request metadata...");
+                this.printDebug('#!#!# ! Finished Updating request metadata...');
                 qname = this._availableRequestsByName[name];
             }
 
@@ -277,7 +276,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             }
             var handlerFunc = this.__getRequestHandlerFunction(requestName);
             if(!handlerFunc) {
-                this.printDebug("#!#!# ! Request defined, but handler not registered. Perhaps timing issue?");
+                this.printDebug('#!#!# ! Request defined, but handler not registered. Perhaps timing issue?');
                 return undefined;
             }
             return Oskari.clazz.builder(qname);
@@ -293,7 +292,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
         _getQNameForEvent: function (name) {
             var qname = this._availableEventsByName[name];
             if (!qname) {
-                this.printDebug("#!#!# ! Updating event metadata...");
+                this.printDebug('#!#!# ! Updating event metadata...');
 
                 var allRequests = Oskari.clazz.protocol('Oskari.mapframework.event.Event'),
                     p;
@@ -305,7 +304,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
                         this._availableEventsByName[reqname] = p;
                     }
                 }
-                this.printDebug("#!#!# ! Finished Updating event metadata...");
+                this.printDebug('#!#!# ! Finished Updating event metadata...');
                 qname = this._availableEventsByName[name];
             }
 
@@ -345,27 +344,23 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
         /**
          * @method printDebug
          * Prints given text to browser console
-         *
-         * @param {String} text message
          */
-        printDebug: function (text) {
+        printDebug: function () {
             if (this._debug && window.console !== null && window.console !== undefined) {
                 if (window.console.debug !== null && window.console.debug !== undefined) {
-                    console.debug(text);
+                    console.debug.apply(console, arguments);
                 } else if (window.console.log !== null && window.console.log !== undefined) {
-                    console.log(text);
+                    console.log.apply(console, arguments);
                 }
             }
         },
 
         /**
          * Prints given warn text to browser console
-         *
-         * @param {String} text
          */
-        printWarn: function (text) {
+        printWarn: function () {
             if (window.console !== null && window.console !== undefined) {
-                console.warn(text);
+                console.warn.apply(console, arguments);
             }
         },
 

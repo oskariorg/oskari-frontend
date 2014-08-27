@@ -3,8 +3,6 @@ div.layerselection2 .layer.selected {
   margin: 0 5px 5px 0;
   height: 70px9;
   /*IE9 */ }
-  div.layerselection2 .layer.selected.out-of-scale, div.layerselection2 .layer.selected.out-of-content, div.layerselection2 .layer.selected.hidden {
-    color: #909090; }
   div.layerselection2 .layer.selected div.layer-info {
     background-color: #FFF;
     padding: 5px; }
@@ -17,6 +15,7 @@ div.layerselection2 .layer.selected {
       width: 16px;
       background-repeat: no-repeat; }
     div.layerselection2 .layer.selected div.layer-info div.layer-title {
+      cursor: move;
       display: inline; }
       div.layerselection2 .layer.selected div.layer-info div.layer-title h4 {
         font: 14pt Arial, sans-serif;

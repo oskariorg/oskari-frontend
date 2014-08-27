@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         }
 
         // Layout params, pdf template
-        this.layoutParams = "";
+        this.layoutParams = {};
 
         /* page sizes listed in localisations */
         this.sizeOptions = this.loc.size.options;
@@ -72,6 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         this.accordion = null;
         this.mainPanel = null;
         this.sizePanel = null;
+        this.backBtn = null;
 
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
@@ -475,8 +476,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             cancelBtn.setTitle(this.loc.buttons.cancel);
             cancelBtn.setHandler(function () {
                 me.instance.setPublishMode(false);
+                // Send print canceled event
+                me.instance.sendCanceledEvent('cancel');
             });
             cancelBtn.insertTo(buttonCont);
+
+            me.backBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            me.backBtn.setTitle(this.loc.buttons.back);
+            me.backBtn.setHandler(function () {
+                me.instance.setPublishMode(false);
+                // Send print canceled event previous
+                me.instance.sendCanceledEvent('previous');
+            });
+            me.backBtn.insertTo(buttonCont);
+            me.backBtn.hide();
 
             var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             saveBtn.setTitle(this.loc.buttons.save);
@@ -591,10 +604,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             var maplinkArgs = selections.maplinkArgs;
             var pageSizeArgs = "&pageSize=" + selections.pageSize;
-            var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
+            var pageTitleArgs = "&pageTitle=" + encodeURIComponent(selections.pageTitle);
             var saveFileArgs = "";
             if(selections.saveFile) saveFileArgs = "&saveFile=" + selections.saveFile;
-            var layoutArgs = me._getLayoutParams();
+            var layoutArgs = me._getLayoutParams(selections.pageSize);
 
             var contentOptions = [],
                 p;
@@ -642,6 +655,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             if(me.sizePanel) me.sizePanel.close();
             container.find('div.accordion_panel').first().next().hide();
 
+            //Add back step button
+            me.backBtn.show();
+
         },
         /**
          * @method setLayoutParams
@@ -650,20 +666,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          */
         setLayoutParams: function (printParams) {
             var me = this;
-            var params = "";
-            if(printParams.pageTemplate) params = "&pageTemplate="+printParams.pageTemplate;
-            if(printParams.pageMapRect) params = params + "&pageMapRect="+printParams.pageMapRect;
-            if(printParams.tableTemplate) params = params + "&tableTemplate="+printParams.tableTemplate;
-            me.layoutParams = params;
+            me.layoutParams = printParams;
 
         },
         /**
          * @method getLayoutParams
          * Get params for backend print layout.
+         * pdf template based on page Size
          */
-        _getLayoutParams: function () {
+        _getLayoutParams: function (pageSize) {
+            var params = "",
+                ind = this._getPageMapRectInd(pageSize);
+            if (this.layoutParams.pageTemplate) params = "&pageTemplate="+ this.layoutParams.pageTemplate + "_" + pageSize + ".pdf";
+            if (this.layoutParams.pageMapRect) {
+                if (ind < this.layoutParams.pageMapRect.length)  params = params + "&pageMapRect=" + this.layoutParams.pageMapRect[ind];
+            }
+            if (this.layoutParams.tableTemplate) params = params + "&tableTemplate=" + this.layoutParams.tableTemplate + "_" + pageSize;
 
-          return this.layoutParams;
+            return params;
 
         },
         /**
@@ -835,6 +855,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
         },
         /**
+         * get index of pagesize for mapRectangle bbox
+         * @param pageSize
+         * @private
+         */
+        _getPageMapRectInd : function (pageSize) {
+            var ind=0;
+            if(pageSize === "A4_Landscape")ind=1;
+            if(pageSize === "A3")ind=2;
+            if(pageSize === "A3_Landscape")ind=3;
+            return ind;
+
+        },
+
+        /**
          * @method _printMapInfo
          *  Get print info data
          * @param {String} url  print url string
@@ -852,7 +886,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             var maplinkArgs = selections.maplinkArgs;
             var pageSizeArgs = "&pageSize=" + selections.pageSize;
-            var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
+            var pageTitleArgs = "&pageTitle=" + encodeURIComponent(selections.pageTitle);
             var contentOptions = [],
                 p;
             for (p in this.contentOptionsMap) {

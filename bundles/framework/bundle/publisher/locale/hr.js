@@ -140,6 +140,7 @@ Oskari.registerLocalization({
                 "small": "Malo",
                 "medium": "Srednje",
                 "large": "Veliko",
+                "fill": "NOT TRANSLATED",
                 "custom": "Prilagođena veličina",
                 "width": "širina",
                 "height": "visina"
@@ -211,6 +212,7 @@ Oskari.registerLocalization({
             "show": "Prikaži",
             "hide": "Sakrij",
             "hidden": "Karta je privremeno sakrivena.",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Dopušteno objavljivanje",

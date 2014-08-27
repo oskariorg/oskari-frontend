@@ -143,6 +143,7 @@ Oskari.registerLocalization(
                 "small": "Pieni",
                 "medium": "Keskikokoinen",
                 "large": "Suuri",
+                "fill": "Tilan täyttävä",
                 "custom": "Määritä oma koko",
                 "width": "leveys",
                 "height": "korkeus"
@@ -214,6 +215,7 @@ Oskari.registerLocalization(
             "show": "Näytä",
             "hide": "Piilota",
             "hidden": "Karttataso on tilapäisesti piilotettu.",
+            "selectAsBaselayer": "Taustakarttataso",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Julkaistavissa",

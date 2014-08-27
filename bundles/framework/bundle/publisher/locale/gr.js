@@ -140,6 +140,7 @@ Oskari.registerLocalization({
                 "small": "Μικρό",
                 "medium": "Μεσσαίο",
                 "large": "Μεγάλο",
+                "fill": "NOT TRANSLATED",
                 "custom": "Προσαρμοσμένο μέγεθος",
                 "width": "Πλάτος",
                 "height": "Ύψος"
@@ -211,6 +212,7 @@ Oskari.registerLocalization({
             "show": "Εμφάνιση",
             "hide": "Απόκρυψη",
             "hidden": "Ο χάρτης είναι προσωρινά κρυμμένος.",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Επιτρέπεται η δημοσίευση",

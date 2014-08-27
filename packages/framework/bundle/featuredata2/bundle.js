@@ -21,7 +21,25 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundle",
     "protocol": ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source": {
 
-        "scripts": [{
+        "scripts": [
+        /*
+         * Abstract base
+         */
+
+        {
+            "type": "text/javascript",
+            "src": "../../../../src/mapping/mapmodule/plugin/AbstractMapModulePlugin.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../src/mapping/mapmodule/plugin/BasicMapModulePlugin.js"
+        },
+
+        /*
+         * featuredata2
+         */
+
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/featuredata2/instance.js"
         }, {

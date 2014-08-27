@@ -13,13 +13,16 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * Adds a button to the toolbar. Triggered usually by sending
      * Oskari.mapframework.bundle.toolbar.request.AddToolButtonRequest.
      */
+
     addToolButton: function (pId, pGroup, pConfig) {
+        var me = this;
+
         if (!pId || !pGroup || !pConfig || !pConfig.callback) {
             // no config -> do nothing
+            me.sandbox.printDebug("All parameters must be defined in AddToolButtonRequest");
             return;
         }
-        var me = this,
-            toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
+        var toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
             group = null,
             prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup;
         if (!me.buttons[prefixedGroup]) {
@@ -43,10 +46,10 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         var button = me.templateTool.clone();
         button.attr('tool', pId);
         button.attr('title', pConfig.tooltip);
-        if(me.conf.classes && me.conf.classes[pGroup] && me.conf.classes[pGroup][pId]) {
+        if (me.conf.classes && me.conf.classes[pGroup] && me.conf.classes[pGroup][pId]) {
             button.addClass(me.conf.classes[pGroup][pId].iconCls);
         } else {
-            button.addClass(pConfig.iconCls);    
+            button.addClass(pConfig.iconCls);
         }
 
 
@@ -100,13 +103,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * @private
      */
     _clickButton: function (pId, pGroup) {
+        var e;
         if (!pId) {
             if(this.defaultButton) {
                 // use default button if ID param not given
                 pId = this.defaultButton.id;
                 pGroup = this.defaultButton.group;
             } else {
-                var e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
+                e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
                 this.sandbox.notifyAll(e);
                 this.container.find('.tool.selected').removeClass('selected');
                 return;
@@ -124,7 +128,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         // FIXME use ===
         if (btn.sticky == true) {
             // notify components that tool has changed
-            var e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
+            e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
             this.sandbox.notifyAll(e);
             // button stays on (==sticky) -> remove previous "sticky"
             this._removeToolSelections(pGroup);
@@ -153,7 +157,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 button.addClass('selected');
             }
         }
-
 
         btn.callback();
     },

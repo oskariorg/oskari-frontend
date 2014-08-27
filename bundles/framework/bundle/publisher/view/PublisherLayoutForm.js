@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
      * @param {Oskari.mapframework.bundle.publisher.view.BasicPublisher} publisher
      *       publisher reference
      */
-
     function (localization, publisher) {
         this.loc = localization;
         this._publisher = publisher;
@@ -219,15 +218,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
         this.minColourValue = 0;
     }, {
         __templates: {
-            "colours": '<div id="publisher-layout-colours">' + '<label for="publisher-colours"></label>' + '<div id="publisher-layout-coloursSelector">' + '<input type="text" name="publisher-colour" disabled />' + '<button id="publisher-colours"></button>' + '</div>' + '</div>',
-            "fonts": '<div id="publisher-layout-fonts">' + '<label for="publisher-fonts"></label>' + '<select name="publisher-fonts"></select>' + '</div>',
-            "toolStyles": '<div id="publisher-layout-toolStyles">' + '<label for="publisher-toolStyles"></label>' + '<select name="publisher-toolStyles"></select>' + '</div>',
-            "option": '<option></option>',
-            "inputRadio": '<div><input type="radio" /><label></label></div>',
-            "coloursPopup": '<div id="publisher-colour-popup">' + '<div id="publisher-colour-inputs"></div>' + '<div id="publisher-colour-preview"></div>' + '</div>',
-            "customClrs": '<div id="publisher-custom-colours">' + '<div id="publisher-custom-colours-bg"></div>' + '<div id="publisher-custom-colours-title"></div>' + '<div id="publisher-custom-colours-header"></div>' + '<div id="publisher-custom-colours-iconcls"></div>' + '</div>',
-            "rgbInput": '<div class="rgbInput">' + '<label for="red">R</label><input type="text" name="red" maxlength="3" />' + '<label for="green">G</label><input type="text" name="green" maxlength="3" />' + '<label for="blue">B</label><input type="text" name="blue" maxlength="3" />' + '</div>',
-            "iconClsInput": '<div class="iconClsInput">' + '<input type="radio" name="custom-icon-class" value="icon-close" /><label for="icon-close"></label>' + '<input type="radio" name="custom-icon-class" value="icon-close-white" /><label for="icon-close-white"></label>' + '</div>'
+            colours: '<div id="publisher-layout-colours">' + '<label for="publisher-colours"></label>' + '<div id="publisher-layout-coloursSelector">' + '<input type="text" name="publisher-colour" disabled />' + '<button id="publisher-colours"></button>' + '</div>' + '</div>',
+            fonts: '<div id="publisher-layout-fonts">' + '<label for="publisher-fonts"></label>' + '<select name="publisher-fonts"></select>' + '</div>',
+            toolStyles: '<div id="publisher-layout-toolStyles">' + '<label for="publisher-toolStyles"></label>' + '<select name="publisher-toolStyles"></select>' + '</div>',
+            option: '<option></option>',
+            inputRadio: '<div><input type="radio" /><label></label></div>',
+            coloursPopup: '<div id="publisher-colour-popup">' + '<div id="publisher-colour-inputs"></div>' + '<div id="publisher-colour-preview"></div>' + '</div>',
+            customClrs: '<div id="publisher-custom-colours">' + '<div id="publisher-custom-colours-bg"></div>' + '<div id="publisher-custom-colours-title"></div>' + '<div id="publisher-custom-colours-header"></div>' + '<div id="publisher-custom-colours-iconcls"></div>' + '</div>',
+            rgbInput: '<div class="rgbInput">' + '<label for="red">R</label><input type="text" name="red" maxlength="3" />' + '<label for="green">G</label><input type="text" name="green" maxlength="3" />' + '<label for="blue">B</label><input type="text" name="blue" maxlength="3" />' + '</div>',
+            iconClsInput: '<div class="iconClsInput">' + '<input type="radio" name="custom-icon-class" value="icon-close" /><label for="icon-close"></label>' + '<input type="radio" name="custom-icon-class" value="icon-close-white" /><label for="icon-close-white"></label>' + '</div>'
         },
 
         /**
@@ -288,8 +287,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
                 contentPanel = panel.getContainer(),
                 f,
-                field,
-                template;
+                field;
 
             panel.setTitle(this.loc.layout.label);
 
@@ -775,8 +773,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
                 }
                 else {
                     // assume rgb(x,y,z) as in custom schemes
-                    var start = rgbString.indexOf("("),
-                        end = rgbString.indexOf(")")
+                    var start = rgbString.indexOf('('),
+                        end = rgbString.indexOf(')');
                     if (start > -1 && end > -1 && end > start) {
                         var parsed = rgbString.substring(start + 1, end).split(/\s*,\s*/);
                         if (rgb.length === 3) {
@@ -786,9 +784,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
                 }
             }
             return {
-                "red" : rgb[0],
-                "green" : rgb[1],
-                "blue" : rgb[2]
+                'red' : rgb[0],
+                'green' : rgb[1],
+                'blue' : rgb[2]
             };
         },
 
@@ -812,14 +810,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
                 headerCloseButton = jQuery('<div class="olPopupCloseBox icon-close-white" style="position: absolute; top: 12px;"></div>'),
                 contentDiv = jQuery('<div class="popupContent"></div>'),
                 contentWrapper = jQuery('<div class="contentWrapper"></div>'),
-                actionLink = jQuery('<span class="infoboxActionLinks"><a href="#"></a></span>'),
-                actionButton = jQuery('<span class="infoboxActionLinks"><input type="button" /></span>'),
-                contentSeparator = jQuery('<div class="infoboxLine">separator</div>'),
                 popupDataContent = jQuery('<div class="myplaces_wrapper"><div class="myplaces_place">' +
                     '<h3 class="myplaces_header"></h3>' +
                     '<p class="myplaces_desc"></p>' +
                     '<img class="myplaces_img"></img>' +
-                    '<a class="myplaces_link"></a>' +
+                    '<a class="myplaces_link" target="_blank"></a>' +
                     '</div></div>');
 
             header.append(title);

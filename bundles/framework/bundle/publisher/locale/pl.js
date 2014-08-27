@@ -140,6 +140,7 @@ Oskari.registerLocalization({
                 "small": "Mały",
                 "medium": "Średni",
                 "large": "Duży",
+                "fill": "NOT TRANSLATED",
                 "custom": "Rozmiar niestandardowy",
                 "width": "szerokość",
                 "height": "wysokość"
@@ -211,6 +212,7 @@ Oskari.registerLocalization({
             "show": "Pokaż",
             "hide": "Ukryj",
             "hidden": "Mapa została czasowo uktyra.",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Publikacja dozwolona",

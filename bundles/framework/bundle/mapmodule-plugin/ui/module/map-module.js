@@ -117,6 +117,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @param  {String} containerClasses List of container classes separated by space, e.g. 'top left'
          * @param  {Number} slot             Preferred slot/position for the plugin element. Inverted for bottom corners (at least).
          */
+
         setMapControlPlugin: function (element, containerClasses, position) {
             // Get the container
             var container = this._getMapControlPluginContainer(containerClasses),
@@ -167,13 +168,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * @method removeMapControlPlugin
          * Removes a map control plugin instance from the map DOM
          * @param  {Object} element Control container (jQuery)
+         * @param  {Boolean} keepContainerVisible Keep container visible even if there's no children left.
          */
-        removeMapControlPlugin: function (element) {
+        removeMapControlPlugin: function (element, keepContainerVisible) {
             var container = element.parents('.mapplugins'),
                 content = element.parents('.mappluginsContent');
             // TODO take this into use in all UI plugins so we can hide unused containers...
             element.remove();
-            if (content.children().length === 0) {
+            if (!keepContainerVisible && content.children().length === 0) {
                 container.css('display', 'none');
             }
         },
@@ -626,7 +628,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         setZoomLevel: function (newZoomLevel, suppressEvent) {
             var currentZoomLevel = this._getMapZoom();
-            //console.log('zoom to ' + requestedZoomLevel);
             if (newZoomLevel === currentZoomLevel) {
                 // do nothing if requested zoom is same as current
                 return;
@@ -702,8 +703,10 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          * Ignores the call if map is in stealth mode. Plugins should use this to notify other components
          * if they move the map through OpenLayers reference. All map movement methods implemented in mapmodule
          * (this class) calls this automatically if not stated otherwise in API documentation.
+         * @param {String} creator
+         *        class identifier of object that sends event
          */
-        notifyMoveEnd: function () {
+        notifyMoveEnd: function (creator) {
             if (this.getStealth()) {
                 // ignore if in "stealth mode"
                 return;
@@ -713,7 +716,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
 
             var lonlat = this._getMapCenter();
             this._updateDomainImpl();
-            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this._getMapZoom(), false, this._getMapScale());
+            var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this._getMapZoom(), false, this._getMapScale(), creator);
             sandbox.notifyAll(evt);
         },
 
@@ -829,9 +832,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
                 keepLayersOrder = event.getKeepLayersOrder(),
                 isBaseMap = event.isBasemap(),
                 layerPlugins = this.getLayerPlugins(),
-                layerFunctions = [];
+                layerFunctions = [],
+                i;
 
             _.each(layerPlugins, function (plugin) {
+                //FIXME if (plugin && _.isFunction(plugin.addMapLayerToMap)) {
                 if (_.isFunction(plugin.addMapLayerToMap)) {
                     var layerFunction = plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
                     if (_.isFunction(layerFunction)) {
@@ -841,7 +846,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             });
 
             // Execute each layer function
-            for (var i = 0; i < layerFunctions.length; i++) {
+            for (i = 0; i < layerFunctions.length; i++) {
                 layerFunctions[i].apply();
             }
         },

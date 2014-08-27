@@ -1,4 +1,5 @@
 /* setup document body so flyouts will not make scrollbars to browser window */
+/* FIXME move this somewhere else... */
 body {
   position: fixed;
   width: 100%;
@@ -25,12 +26,11 @@ body {
   margin-top: 12px;
   height: 20px;
   display: inline-block; }
-
-.oskari-flyout-title p {
-  margin: 0;
-  padding: 0;
-  font-size: 16px;
-  line-height: 20px; }
+  .oskari-flyout-title p {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    line-height: 20px; }
 
 /** flyout toolbar tools and tool states  */
 .oskari-flyouttools {
@@ -118,8 +118,7 @@ body {
 .oskari-flyoutcontent {
   margin: 0;
   padding: 20px 20px 20px 25px;
-  border: 0;
-  /*overflow: auto;*/ }
+  border: 0; }
 
 /** tile */
 /* tile states */
@@ -153,11 +152,10 @@ body {
   width: 153px;
   border-top: 1px solid #484846;
   border-bottom: 1px solid #212121;
+  /* Used to set the tile height, doesn't conflict with the styleguide */
   line-height: 24px; }
   .oskari-tile.disabled {
     opacity: 0.25;
-    filter: alpha(opacity=25);
-    /* For IE8 and earlier, unquote for libsass bug */
     cursor: default; }
 
 .oskari-tile-title {
@@ -169,12 +167,11 @@ body {
   float: left;
   height: 28px;
   width: 112px;
-  font-family: Arial, Helvetica;
+  /* This is not in the styleguide, but it's a must-have... */
   font-weight: bold;
   font-size: 11px;
   text-align: left;
-  text-transform: uppercase;
-  /*color: white;*/ }
+  text-transform: uppercase; }
 
 .oskari-tile-attached .oskari-tile-title {
   color: #333438; }
@@ -192,6 +189,7 @@ body {
   float: right;
   text-align: center;
   display: inline-block;
+  /* This is not in the styleguide, but it's a must-have... */
   font-size: 11px;
   font-weight: bold;
   height: 19px !important;
@@ -211,11 +209,11 @@ body {
 @media screen {
   .oskari-attached {
     min-width: 520px;
-    max-width: 830px; }
+    max-width: 840px; }
 
   .oskari-detached {
     min-width: 520px;
-    max-width: 830px; }
+    max-width: 840px; }
 
   .oskari-flyoutcontentcontainer {
     width: 100%;
@@ -223,8 +221,7 @@ body {
     padding: 0;
     border: 0;
     overflow: auto;
-    max-height: 500px;
-    /* overflow: auto; */ } }
+    max-height: 500px; } }
 @media only screen and (min-width: 400px) and (max-width: 599px) {
   .oskari-attached {
     min-width: 520px;

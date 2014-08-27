@@ -234,9 +234,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
             'AfterChangeMapLayerOpacityEvent': function (event) {
                 this._afterChangeMapLayerOpacityEvent(event);
                 //this.wfsLayerPlugin.afterChangeMapLayerOpacityEvent(event);
-            },
-            'MapAnalysis.AnalysisVisualizationChangeEvent': function (event) {
-                this._afterAnalysisVisualizationChangeEvent(event);
             }
         },
 
@@ -289,13 +286,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
             var me = this;
 
             var openLayerId = 'layer_' + layer.getId();
-            var imgUrl = layer.getWpsUrl() + 'wpsLayerId=' + layer.getWpsLayerId();
+            var imgUrl = layer.getWpsUrl() + layer.getWpsLayerId();
             var layerScales = this.getMapModule()
                 .calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
 
             var openLayer = new OpenLayers.Layer.WMS(openLayerId, imgUrl, {
                 layers: layer.getWpsName(),
                 transparent: true,
+                styles: layer.getOverrideSld(),
                 format: "image/png"
             }, {
                 scales: layerScales,
@@ -473,13 +471,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
             }
         },
 
-        _afterAnalysisVisualizationChangeEvent: function (event) {
-            var layer = event.getLayer();
-            var params = event.getParams();
-            var mapLayer = this.getOLMapLayers(layer);
-            // TODO: add handling
-
-        },
         /**
          * @method _mapLayerVisibilityChangedEvent
          * Handle MapLayerVisibilityChangedEvent

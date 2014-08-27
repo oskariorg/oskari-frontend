@@ -1,14 +1,17 @@
+@mixin box-shadow($shadow...) {
+   -webkit-box-shadow: $shadow;
+   -moz-box-shadow: $shadow;
+   box-shadow: $shadow;
+}
+
 div.oskariTabs {
     /* tab headers */
      div.tabsHeader {
         clear: both;
-        font-size : 14px;
-        color: #3C3C3C;
         font-weight: bold;
         margin-right: 21px;
         margin-bottom: -1px;
         padding: 0;
-        /*width: 100%;*/
 
         ul {
             display: block;
@@ -42,6 +45,7 @@ div.oskariTabs {
                         background: none repeat scroll 0 0 #FAFAFA;
                         font-weight: bold;
                         padding-bottom: 11px;
+                        @include box-shadow(none);
                     }
 
                 }
@@ -52,16 +56,13 @@ div.oskariTabs {
 
                 a {
                     background: none repeat scroll 0 0 #F3F3F3;
-                    color: #000;
+                    color: inherit;
                     display: block;
                     font-weight: normal;
                     padding: 10px 15px;
                     position: relative;
                     text-decoration: none;
-                }
-
-                input[type="button"] {
-                    font-size: 0.75em;
+                    @include box-shadow(0 -3px 3px rgba(0, 0, 0, 0.1) inset);
                 }
 
                 select {
@@ -77,13 +78,13 @@ div.oskariTabs {
     /* "tab" content */
     div.tabsContent {
         border: 1px solid #999;
-        color: #3C3C3C;
         height: 90%;
     }
 
     div.tab-content {
         padding : 10px;
         overflow: auto;
+        clear: both;
     }
 
 }

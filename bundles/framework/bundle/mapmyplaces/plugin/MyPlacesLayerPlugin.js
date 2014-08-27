@@ -238,11 +238,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
             },
             'AfterChangeMapLayerOpacityEvent': function (event) {
                 this._afterChangeMapLayerOpacityEvent(event);
-            },
-            'MapMyPlaces.MyPlacesVisualizationChangeEvent': function (event) {
-                this._MyPlacesVisualizationChangeEvent(event);
             }
-
         },
 
         /**
@@ -647,7 +643,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                             var featureFilter = "";
 
                             for (i = 0; i < clusteredFeatures.length; i++) {
-                                featureFilter = featureFilter + "+AND+id<>'" + clusteredFeatures[i] + "'";
+//                                featureFilter = featureFilter + "+AND+id<>'" + clusteredFeatures[i] + "'";
                             }
 
                             /*
@@ -666,7 +662,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                                 openLayer.mergeNewParams({
                                     'myFeatureNames': featureFilter
                                 });
-                                openLayer.redraw();
+//                                openLayer.redraw();
                             }
                         }
                     }
@@ -767,9 +763,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
 
             var myPlacesService = this._sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
 
+            /*  GeoServer is used instead.
             if (myPlacesService) {
                 this._addAttentionText(myPlacesService, layer.getId(), attentionLayer);
             }
+            */
 
             attentionLayer.opacity = layer.getOpacity() / 100;
             openLayer.opacity = layer.getOpacity() / 100;
@@ -795,9 +793,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                 this._map.setLayerIndex(openLayer, 0);
             }
 
-            if (myPlacesService) {
+            /* if (myPlacesService) {
                 this._addPointClusters(myPlacesService, layer.getId(), clusterLayer);
-            }
+            } */
 
         },
         /**
@@ -970,41 +968,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayer
                 mapLayer.setOpacity(opacity);
             });
             //openLayer[0].setOpacity(opacity);
-        },
-        /**
-         * Handle MyPlaces Visualization Changed (attribute modifications, deletions, insertions) for extra layers
-         *
-         * @method _MyPlacesVisualizationChangeEvent
-         * @private
-         * @param {Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent}
-         *            event
-         */
-        _MyPlacesVisualizationChangeEvent: function (event) {
-            var layerId = event.getLayerId();
-            var forced = event.isForced();
-            layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
-
-            if(!layer) return null;
-            if (!layer.isLayerOfType(this._layerType)) {
-                return null;
-            }
-
-            var mapLayers = this.getOLMapLayers(layer);
-            var olWmsLayer = null;
-
-            _.forEach(mapLayers, function (mapLayer) {
-                if(mapLayer.CLASS_NAME !== "OpenLayers.Layer.WMS")
-                {
-                    mapLayer.destroy();
-                }
-                else
-                {
-                    mapLayer.redraw(true);
-                    olWmsLayer = mapLayer;
-                }
-            });
-            // Add my places extra layers to Map, not wms layer
-            if(olWmsLayer) this._addMapLayersToMap(layer, olWmsLayer, true, false);
         }
     }, {
         /**

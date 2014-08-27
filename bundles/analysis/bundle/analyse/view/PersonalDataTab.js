@@ -12,7 +12,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
      * instance
      *      reference to component that created the tile
      */
-
     function (instance, localization) {
         var me = this,
             p;
@@ -30,8 +29,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
         }
     }, {
         __templates: {
-            "main": '<div class="oskari-analysis-listing-tab"></div>',
-            "link": '<a href="JavaScript:void(0);"></a>'
+            main: '<div class="oskari-analysis-listing-tab"></div>',
+            link: '<a href="JavaScript:void(0);"></a>'
         },
         /**
          * Returns reference to a container that should be shown in personal data
@@ -43,18 +42,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
                 return this.container;
             }
             // construct it
-            var me = this;
-            var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+            var me = this,
+                grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
             this.grid = grid;
-            var sandbox = me.instance.sandbox;
-
-            var addMLrequestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
-            var visibleFields = ['name', 'delete'];
+            var sandbox = me.instance.sandbox,
+                addMLrequestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest'),
+                visibleFields = ['name', 'delete'];
             grid.setVisibleFields(visibleFields);
             // set up the link from name field
             var nameRenderer = function (name, data) {
-                var link = me.template.link.clone();
-                var layer = data.layer;
+                var link = me.template.link.clone(),
+                    layer = data.layer;
 
                 link.append(name);
                 link.bind('click', function () {
@@ -98,7 +96,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
          */
         update: function () {
             var service = this.instance.sandbox.getService('Oskari.mapframework.service.MapLayerService'),
-                layers = service.getAllLayersByMetaType("ANALYSIS"),
+                layers = service.getAllLayersByMetaType('ANALYSIS'),
                 gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
                 i;
             gridModel.setIdField('id');
@@ -134,8 +132,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
                 me._deleteAnalysis(data.layer);
                 dialog.close();
             });
-            var cancelBtn = dialog.createCloseButton(this.loc.buttons.cancel);
-            var confirmMsg = this.loc.confirmDeleteMsg + '"' + data.name + '"' + '?';
+            var cancelBtn = dialog.createCloseButton(this.loc.buttons.cancel),
+                confirmMsg = this.loc.confirmDeleteMsg + '"' + data.name + '"' + '?';
             dialog.show(this.loc.title, confirmMsg, [cancelBtn, okBtn]);
             dialog.makeModal();
         },
@@ -147,13 +145,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
          * @private
          */
         _deleteAnalysis: function (layer) {
-
-            var me = this;
-            var sandbox = this.instance.sandbox;
+            var me = this,
+                sandbox = this.instance.sandbox;
 
             // parse actual id from layer id
-            var tokenIndex = layer.getId().lastIndexOf("_") + 1;
-            var idParam = layer.getId().substring(tokenIndex);
+            var tokenIndex = layer.getId().lastIndexOf('_') + 1,
+                idParam = layer.getId().substring(tokenIndex);
 
             jQuery.ajax({
                 url: sandbox.getAjaxUrl(),
@@ -182,12 +179,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
          * @private
          */
         _deleteSuccess: function (layer) {
-            var sandbox = this.instance.sandbox;
-            var service = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            var sandbox = this.instance.sandbox,
+                service = sandbox.getService('Oskari.mapframework.service.MapLayerService');
             // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
             // also we need to do it before service.remove() to avoid problems on other components
-            var removeMLrequestBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest');
-            var request = removeMLrequestBuilder(layer.getId());
+            var removeMLrequestBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest'),
+                request = removeMLrequestBuilder(layer.getId());
             sandbox.request(this.instance, request);
             service.removeLayer(layer.getId());
             // show msg to user about successful removal
@@ -201,8 +198,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
          * @private
          */
         _deleteFailure: function () {
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var okBtn = dialog.createCloseButton(this.loc.buttons.ok);
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = dialog.createCloseButton(this.loc.buttons.ok);
             dialog.show(this.loc.error.title, this.loc.error.generic, [okBtn]);
         }
     });

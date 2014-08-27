@@ -1,11 +1,10 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "bg",
     "key": "Search",
     "value": {
         "title": "Търсене по местоположение",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Търсене по име на място, адрес или идентификатор на недвижим имот.",
         "searchButton": "Търсене",
         "searchResultCount": "Връщане на търсенето",
@@ -29,5 +28,4 @@ Oskari.registerLocalization(
             "title": "Резултати от търсенето"
         }
     }
-}
-);
+});

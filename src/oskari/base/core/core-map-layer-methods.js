@@ -271,6 +271,7 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
     _handleChangeMapLayerOpacityRequest : function(request) {
         var layer = this.findMapLayerFromSelectedMapLayers(request.getMapLayerId());
         if (!layer) {
+            this.sandbox.printDebug("DeveloperError: You must specify mapLayerId!");
             return;
         }
         layer.setOpacity(request.getOpacity());

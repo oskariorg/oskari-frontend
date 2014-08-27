@@ -142,6 +142,7 @@ Oskari.registerLocalization(
                 "small": "Malo",
                 "medium": "Srednje",
                 "large": "Veliko",
+                "fill": "NOT TRANSLATED",
                 "custom": "Izabrana veličina",
                 "width": "širina",
                 "height": "visina"
@@ -213,6 +214,7 @@ Oskari.registerLocalization(
             "show": "NOT TRANSLATED",
             "hide": "NOT TRANSLATED",
             "hidden": "NOT TRANSLATED",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "NOT TRANSLATED",

@@ -72,8 +72,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * @method setPrimary
          * Sets primary status of the button
          */
-        setPrimary: function (primary) {
+        setPrimary: function (primary,focus) {
             this.ui.toggleClass('primary', primary);
+            if (focus) {
+                this.setFocus(focus);
+            }
         },
         /**
          * @method destroy
@@ -81,6 +84,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          */
         destroy: function () {
             this.ui.remove();
+        },
+        /**
+         * @method hide
+         * Hide the button/hide  it in the document
+         */
+        hide: function () {
+            this.ui.hide();
+        },
+        /**
+         * @method show
+         * Show the button/show it in the document
+         */
+        show: function () {
+            this.ui.show();
         },
 
         /**
@@ -90,6 +107,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          */
         insertTo: function (container) {
             container.append(this.ui);
+        },
+        /**
+         * @method setFocus
+         * Adds this button to given container.
+         * @param {jQuery} container reference to DOM element
+         */
+        setFocus: function(focus) {
+            this.focus = focus;
+            if (focus) {
+                this.ui.focus();
+            }
         },
         /**
          * @method getButton

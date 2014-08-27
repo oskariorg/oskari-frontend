@@ -35,8 +35,19 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'abstraction-method
      *      callback on action completed (optional)
      */
     ajax: function (url, success, failure, data, complete) {
+        var userIsLoggedIn = this.getUser().isLoggedIn();
         // default to jQuery
         if (jQuery && jQuery.ajax) {
+            var failureWrapper = function (jqXHR, textStatus, err) {
+                if (jqXHR.status === 403 && userIsLoggedIn) {
+                    // user was logged in but still unauthorized ->
+                    // session might have been expired.
+                    // FIXME: use more sophisticated, localized message instead.
+                    alert('Session expired. Please log in again.');
+                } else {
+                    failure(jqXHR, textStatus, err);
+                }
+            };
             // if data != null -> type = POST
             var type = "GET";
             if (data) {
@@ -53,7 +64,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'abstraction-method
                 },
                 data: data,
                 success: success,
-                error: failure
+                error: failureWrapper
             });
 
         } else {

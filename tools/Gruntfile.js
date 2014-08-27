@@ -66,7 +66,8 @@ module.exports = function (grunt) {
         },
         release: {
             options: {
-                configs: "../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/full-map_guest/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map/minifierAppSetup.json,../applications/parcel/minifierAppSetup.json"
+                configs: "../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/full-map_guest/minifierAppSetup.json,../applications/paikkatietoikkuna.fi/published-map/minifierAppSetup.json,../applications/parcel/minifierAppSetup.json",
+                defaultIconDirectoryPath: "../applications/default/icons/"
             }
         },
         karma: {
@@ -207,6 +208,7 @@ module.exports = function (grunt) {
           'printout': '../packages/framework/bundle/printout',
           'promote': '../packages/framework/bundle/promote',
           'publisher': '../packages/framework/bundle/publisher',
+          'routesearch': '../packages/framework/bundle/routesearch',
           'search': '../packages/framework/bundle/search',
           'statehandler': '../packages/framework/bundle/statehandler',
           'toolbar': '../packages/framework/bundle/toolbar',
@@ -497,22 +499,29 @@ module.exports = function (grunt) {
         done();
     });
 
-    grunt.registerTask('release', 'Release build', function (version, configs) {
+    grunt.registerTask('release', 'Release build', function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications) {
         var i,
             ilen,
             config,
             last,
             cwd,
             appName,
+            APPSFOLDERNAME = "applications",
             dest,
             options = this.options(),
             files,
             copyFiles,
             appNameSeparatorIndex,
             parentAppName;
+
+        // use grunt default options
         if (options.configs && !configs) {
             configs = options.configs;
         }
+        if (options.defaultIconDirectoryPath && !defaultIconDirectoryPath) {
+            defaultIconDirectoryPath = options.defaultIconDirectoryPath;
+        }
+
         if (!version || !configs) {
             grunt.fail.fatal('Missing parameter\nUsage: grunt release:1.7:"../path/to/minifierAppSetup.json"', 1);
         }
@@ -532,7 +541,8 @@ module.exports = function (grunt) {
                 iconDirectoryPath: config.substring(0, last) + "/icons",
                 resultImageName: "../dist/<%= version %>" + appName + "/icons/icons.png",
                 resultCSSName: "../dist/<%= version %>" + appName + "/css/icons.css",
-                spritePathInCSS: "../icons"
+                spritePathInCSS: "../icons",
+                defaultIconDirectoryPath: defaultIconDirectoryPath
             };
             files = [];
             copyFiles = {
@@ -561,22 +571,6 @@ module.exports = function (grunt) {
             // add files to be copied
             files.push(copyFiles);
 
-            // add mddocs to dist
-            files.push({
-                "expand": true,
-                "cwd": "../docs/",
-                "src": ["images/**", "layout/**"],
-                "dest": grunt.config.get("mddocs.options.outdir")
-            });
-
-            // add resources to dist
-            files.push({
-                "expand": true,
-                "cwd": "../",
-                "src": ["resources/**", "libraries/**", "bundles/**", "packages/**", "src/**", "applications/**", "sources/**"],
-                "dest": "../dist/"
-            });
-
             // setting task configs
             grunt.config.set("copy." + appName + ".files", files);
             grunt.config.set("validate." + appName + ".options", {
@@ -596,13 +590,61 @@ module.exports = function (grunt) {
             if (appName === 'full-map') grunt.config.set('compress.options.fullMap', appName);
         }
 
+
+        // add mddocs to dist
+        // add resources to dist
+        grunt.config.set("copy.common.files", [{
+                "expand": true,
+                "cwd": "../docs/",
+                "src": ["images/**", "layout/**"],
+                "dest": grunt.config.get("mddocs.options.outdir")
+            }, {
+                "expand": true,
+                "cwd": "../",
+                "src": ["resources/**", "libraries/**", "bundles/**", "packages/**", "src/**", "applications/**", "sources/**"],
+                "dest": "../dist/"
+            }]);
+
+
         grunt.task.run('validate');
-        grunt.task.run('copy');
+
+        // configure copy-task to copy back the results from dist/css and dist/icons to applications/appname/(css || icons)
+        if (copyResourcesToApplications) {
+            var copyApps = Object.keys(grunt.config.get('copy')),
+                finalFiles = [];
+
+            for(i = 0, ilen = copyApps.length; i < ilen; i++) {
+                appName = copyApps[i];
+
+                // skip common copy task, the rest should be real apps that are copied
+                if ("common" !== appName) {
+                    copyFiles = grunt.config.get('copy.' + copyApps[i] + '.files')[0];
+                    finalFiles.push({
+                        "expand": true,
+                        "cwd": copyFiles.dest,
+                        "src": ["css/**", "icons/**"],
+                        "dest": copyFiles.cwd
+                    });                    
+                }
+                // only run the given copy tasks
+                grunt.task.run('copy:' + copyApps[i]);
+            }
+
+            // add final copy settings to be run after compilation
+            grunt.config.set("copy.final.files", finalFiles);
+        } else {
+            grunt.task.run('copy');
+        }
+
         grunt.task.run('compile');
         grunt.task.run('compileAppCSS');
         grunt.task.run('sprite');
         grunt.task.run('oskaridoc');
+
         if (grunt.config.get('compress.options.fullMap')) grunt.task.run('compress');
+        if (copyResourcesToApplications) {
+            grunt.task.run('copy:final');
+        }
     });
 
     grunt.registerTask('packageopenlayer', 'Package openlayers according to packages', function (packages) {

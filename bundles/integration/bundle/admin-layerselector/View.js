@@ -24,18 +24,18 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
      * These will be registered/unregistered automagically
      *
      */
-    "eventHandlers": {
-        "MapLayerVisibilityChangedEvent": function (event) {
+    'eventHandlers': {
+        MapLayerVisibilityChangedEvent: function (event) {
 
         },
-        "AfterMapMoveEvent": function (event) {
+        AfterMapMoveEvent: function (event) {
 
         },
-        'MapLayerEvent': function (event) {
+        MapLayerEvent: function (event) {
             if(event.getOperation() === 'update' || 
                 event.getOperation() === 'add') {
                 // schedule to be updated
-                this._scheduleUpdateForLayer(event.getLayerId())
+                this._scheduleUpdateForLayer(event.getLayerId());
                 this._triggerLayerUpdateCountdown();
             }
             else if(event.getOperation() === 'remove') {
@@ -45,8 +45,8 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                 }
             }
 
-            jQuery("body").css({
-                cursor: "auto"
+            jQuery('body').css({
+                cursor: 'auto'
             });
         }
     },
@@ -93,11 +93,6 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
      * Updates layers listing after layers has been changed/MapLayerEvent has been received.
      */
     _layerUpdateHandler: function (blnForceCreate) {
-        //console.log("admin-layerselector/View.js:_layerUpdateHandler");
-        // TODO! currently update, add and initial additions execute
-        // the same code. This needs to be updated when mapLayerService
-        // can handle updates better. 
-        // (updates everything instead of layer.name)
         var sandbox = this.getSandbox(),
             // populate layer list
             mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
@@ -124,9 +119,9 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
      * requirejs requirements config to fix paths
      *
      */
-    "requirementsConfig": {
-        "waitSeconds": 15,
-        "paths": {
+    'requirementsConfig': {
+        waitSeconds: 15,
+        paths: {
             '_bundle': '../../../Oskari/bundles/integration/bundle/admin-layerselector'
         }
     },
@@ -147,14 +142,14 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
      * Called with requirements from above as arguments to method in
      * defined order.
      */
-    "render": function () {
+    render: function () {
         var me = this,
             container = me.getEl();
         // admin-layerselector is rendered under this container
-        container.addClass("admin-layerselector");
+        container.addClass('admin-layerselector');
         // backbone will fire adminAction events if they need to be 
         // passed to other bundles
-        container.on("adminAction", {
+        container.on('adminAction', {
             me: me
         }, me.handleAction);
 
@@ -165,7 +160,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                 confRequirementsConfig || this.requirementsConfig;
 
         require.config(requirementsConfig);
-        require(["_bundle/views/layerSelectorView"], function (LayerSelectorView) {
+        require(['_bundle/views/layerSelectorView'], function (LayerSelectorView) {
 
             // Finally, we kick things off by creating the **App**.
             // We need to pass container element for the view and
@@ -200,10 +195,10 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
          * NORMAL LAYERS *
          *****************
          */
-        if (e.command === "removeLayer") {
+        if (e.command === 'removeLayer') {
             // remove layer from mapLayerService
             mapLayerService.removeLayer(e.modelId);
-        } else if (e.command === "addLayer") {
+        } else if (e.command === 'addLayer') {
             // add layer into mapLayerService
             var mapLayer = mapLayerService.createMapLayer(e.layerData);
 
@@ -220,11 +215,11 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                     // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData); 
                 }
             }
-        } else if (e.command === "editLayer") {
+        } else if (e.command === 'editLayer') {
             // update layer info
             mapLayerService.updateLayer(e.layerData.id, e.layerData);
         }
     }
 }, {
-    "extend": ["Oskari.integration.bundle.bb.View"]
+    'extend': ['Oskari.integration.bundle.bb.View']
 });

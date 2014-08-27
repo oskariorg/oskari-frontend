@@ -17,7 +17,9 @@ div.accordion div.accordion_panel {
     margin-left: 12px;
     vertical-align: middle; }
   div.accordion div.accordion_panel div.header div.headerText {
-    display: inline-block;
+    /* Accordion header style, defined in styleguide */
     font-size: 16px;
+    line-height: 19px;
+    display: inline-block;
     font-weight: bold;
-    padding: 12px 10px 12px 12px; }
+    padding: 8px 10px 8px 12px; }

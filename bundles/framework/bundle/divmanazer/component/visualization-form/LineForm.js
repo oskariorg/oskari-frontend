@@ -3,7 +3,7 @@
  *
  * Shows a form for line rendering options
  */
-Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm",
+Oskari.clazz.define('Oskari.userinterface.component.visualization-form.LineForm',
 
     /**
      * @method create called automatically on construction
@@ -23,19 +23,19 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             color: this.defaultValues.color
         };
 
-        this.styleButtonNames = ["icon-line-basic", "icon-line-dashed", "icon-double-line"];
-        this.capButtonNames = ["icon-line-flat_cap", "icon-line-round_cap"];
-        this.cornerButtonNames = ["icon-corner-sharp", "icon-corner-round"];
+        this.styleButtonNames = ['icon-line-basic', 'icon-line-dashed', 'icon-double-line'];
+        this.capButtonNames = ['icon-line-flat_cap', 'icon-line-round_cap'];
+        this.cornerButtonNames = ['icon-corner-sharp', 'icon-corner-round'];
 
-        this.basicColors = ["#ffffff", "#666666", "#ffde00", "#f8931f", "#ff3334", "#bf2652",
-            "#000000", "#cccccc", "#652d90", "#3233ff", "#26bf4b", "#00ff01"
+        this.basicColors = ['#ffffff', '#666666', '#ffde00', '#f8931f', '#ff3334', '#bf2652',
+            '#000000', '#cccccc', '#652d90', '#3233ff', '#26bf4b', '#00ff01'
             ];
         this.paper = null;
         this.activeColorCell = -1;
         // Default color
         var i;
         for (i = 0; i < this.basicColors.length; i++) {
-            if (this.basicColors[i] === "#" + this.values.color) {
+            if (this.basicColors[i] === '#' + this.values.color) {
                 this.activeColorCell = i;
                 break;
             }
@@ -90,7 +90,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
         this.maxWidth = 10;
         this.templateWidthValue = jQuery('<input type="number" name="width" class="linewidth" min="' + this.minWidth + '" max="' + this.maxWidth + '" step=1 value="' + this.values.width + '">');
         this.previewSize = 50;
-        this.selectColor = "#dddddd";
+        this.selectColor = '#dddddd';
     }, {
         /**
          * Returns the values.
@@ -181,14 +181,14 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             for (i = 0; i < me.styleButtonNames.length; i++) {
                 styleBtnContainer = me.templateButton.clone();
                 styleBtnContainer.addClass(me.styleButtonNames[i]);
-                styleBtnContainer.attr('id', i + "linestyle");
+                styleBtnContainer.attr('id', i + 'linestyle');
                 if (i === me.values.style) {
                     this._styleSelectedButton(styleBtnContainer);
                 }
                 // FIXME create function outside loop
                 styleBtnContainer.click(function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0),10);
-                    me._selectButton("style", newValue);
+                    me._selectButton('style', newValue);
                     me.values.style = newValue;
                     me._updatePreview(dialogContent);
                 });
@@ -200,14 +200,14 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             for (i = 0; i < me.capButtonNames.length; i++) {
                 capBtnContainer = me.templateButton.clone();
                 capBtnContainer.addClass(me.capButtonNames[i]);
-                capBtnContainer.attr('id', i + "linecap");
+                capBtnContainer.attr('id', i + 'linecap');
                 if (i === me.values.cap) {
                     this._styleSelectedButton(capBtnContainer);
                 }
                 // FIXME create function outside loop
                 capBtnContainer.click(function () {
-                    newValue = parseInt(jQuery(this).attr('id').charAt(0));
-                    me._selectButton("cap", newValue);
+                    newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
+                    me._selectButton('cap', newValue);
                     me.values.cap = newValue;
                     me._updatePreview(dialogContent);
                 });
@@ -219,14 +219,14 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             for (i = 0; i < me.cornerButtonNames.length; i++) {
                 cornerBtnContainer = me.templateButton.clone();
                 cornerBtnContainer.addClass(me.cornerButtonNames[i]);
-                cornerBtnContainer.attr('id', i + "linecorner");
+                cornerBtnContainer.attr('id', i + 'linecorner');
                 if (i === me.values.corner) {
                     this._styleSelectedButton(cornerBtnContainer);
                 }
                 // FIXME create function outside loop
                 cornerBtnContainer.click(function () {
-                    newValue = parseInt(jQuery(this).attr('id').charAt(0));
-                    me._selectButton("corner", newValue);
+                    newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
+                    me._selectButton('corner', newValue);
                     me.values.corner = newValue;
                     me._updatePreview(dialogContent);
                 });
@@ -257,12 +257,12 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             for (i = 0; i < me.basicColors.length; i++) {
                 colorCell = me.templateColorCell.clone();
                 colorCell.css('background-color', me.basicColors[i]);
-                idExt = "ColorCell";
+                idExt = 'ColorCell';
                 id = i + idExt;
                 if (id.length === idExt.length + 1) {
-                    id = "0" + id;
+                    id = '0' + id;
                 }
-                colorCell.attr("id", id);
+                colorCell.attr('id', id);
                 colorCell.click(function () {
                     if (jQuery('.color-source').prop('checked')) {
                         return;
@@ -274,14 +274,14 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
                     if (me.activeColorCell > -1) {
                         activeCell = me.activeColorCell.toString();
                         if (me.activeColorCell < 10) {
-                            activeCell = "0" + activeCell;
+                            activeCell = '0' + activeCell;
                         }
                         jQuery('#' + activeCell + 'ColorCell').css('border', '1px solid #000000');
                     }
                     me.values.color = me.creator.rgbToHex(this.style.backgroundColor);
                     me.activeColorCell = cellIndex;
                     if (cellIndex < 10) {
-                        cellIndex = "0" + cellIndex.toString();
+                        cellIndex = '0' + cellIndex.toString();
                     }
                     jQuery('#' + cellIndex + 'ColorCell').css('border', '3px solid #ffffff');
                     me._updatePreview(dialogContent);
@@ -301,20 +301,20 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             var colorCheckbox = me.templateColorSource.clone();
             // If the default value is not included in the color cells
             if (me.activeColorCell === -1) {
-                colorCheckbox.attr("checked", true);
+                colorCheckbox.attr('checked', true);
             }
             colorCheckbox.change(function () {
-                jQuery("input.custom-color").prop('disabled', !this.checked);
+                jQuery('input.custom-color').prop('disabled', !this.checked);
                 var cell = me.activeColorCell.toString();
                 if (me.activeColorCell < 10) {
-                    cell = "0" + cell;
+                    cell = '0' + cell;
                 }
-                var activeCell = jQuery("#" + cell + "ColorCell");
+                var activeCell = jQuery('#' + cell + 'ColorCell');
                 if (this.checked) {
                     activeCell.css('border', '1px solid #000000');
-                    jQuery(".custom-red-value").val(parseInt(me.values.color.substring(0, 2), 16));
-                    jQuery(".custom-green-value").val(parseInt(me.values.color.substring(2, 4), 16));
-                    jQuery(".custom-blue-value").val(parseInt(me.values.color.substring(4), 16));
+                    jQuery('.custom-red-value').val(parseInt(me.values.color.substring(0, 2), 16));
+                    jQuery('.custom-green-value').val(parseInt(me.values.color.substring(2, 4), 16));
+                    jQuery('.custom-blue-value').val(parseInt(me.values.color.substring(4), 16));
                     me.activeColorCell = -1;
                 } else {
                     // activeCell.css('border','3px solid #ffffff');
@@ -327,7 +327,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             // select user colors checkbox
             if (!statedChosenColor) {
                 colorCheckbox.checked = true;
-                content.find("input.color-source").prop('disabled', false).attr('checked', 'checked');
+                content.find('input.color-source').prop('disabled', false).attr('checked', 'checked');
             }
 
             content = dialogContent.find('.custom-colors');
@@ -335,28 +335,28 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             content.append(customColorEditor);
 
             var redValue = me.templateColorValue.clone();
-            redValue.addClass("custom-red-value");
+            redValue.addClass('custom-red-value');
             if (me.activeColorCell === -1) {
                 redValue.val(parseInt(me.values.color.substring(0, 2), 16));
-                redValue.prop("disabled", false);
+                redValue.prop('disabled', false);
             }
             dialogContent.find('.colorcolumn1').append(redValue);
             dialogContent.find('label.custom-red-value').text('R');
 
             var greenValue = me.templateColorValue.clone();
-            greenValue.addClass("custom-green-value");
+            greenValue.addClass('custom-green-value');
             if (me.activeColorCell === -1) {
                 greenValue.val(parseInt(me.values.color.substring(2, 4), 16));
-                greenValue.prop("disabled", false);
+                greenValue.prop('disabled', false);
             }
             dialogContent.find('.colorcolumn21').append(greenValue);
             dialogContent.find('label.custom-green-value').text('G');
 
             var blueValue = me.templateColorValue.clone();
-            blueValue.addClass("custom-blue-value");
+            blueValue.addClass('custom-blue-value');
             if (me.activeColorCell === -1) {
                 blueValue.val(parseInt(me.values.color.substring(4), 16));
-                blueValue.prop("disabled", false);
+                blueValue.prop('disabled', false);
             }
             dialogContent.find('.colorcolumn22').append(blueValue);
             dialogContent.find('label.custom-blue-value').text('B');
@@ -415,6 +415,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             renderDialog.moveTo(renderButton, 'top');
 
             me._updatePreview();
+            saveBtn.setFocus(true);
             return renderDialog;
         },
 
@@ -426,15 +427,15 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
          * @private
          */
         _selectButton: function (property, selectedButton) {
-            this._styleUnselectedButton(jQuery("div#" + this.values[property] + "line" + property + ".icon-button"));
-            this._styleSelectedButton(jQuery("div#" + selectedButton + "line" + property + ".icon-button"));
+            this._styleUnselectedButton(jQuery('div#' + this.values[property] + 'line' + property + '.icon-button'));
+            this._styleSelectedButton(jQuery('div#' + selectedButton + 'line' + property + '.icon-button'));
         },
 
         _updatePreview: function (dialog) {
-            var me = this;
-            var view = dialog === undefined || dialog === null ? jQuery(".lineform") : dialog;
-            var content = view.find('.preview');
-            var preview;
+            var me = this,
+                view = dialog === undefined || dialog === null ? jQuery('.lineform') : dialog,
+                content = view.find('.preview'),
+                preview;
             if (content.length > 0) {
                 preview = content.get(0);
                 if (preview.children.length === 0) {
@@ -445,14 +446,14 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             }
 
             var attributes = {
-                "stroke": "#" + me.values.color,
-                "fill": "none",
-                "stroke-width": me.values.width,
-                "stroke-linejoin": me.values.corner === 0 ? "miter" : "round",
-                "stroke-linecap": me.values.cap === 0 ? "butt" : "round",
+                'stroke': '#' + me.values.color,
+                'fill': 'none',
+                'stroke-width': me.values.width,
+                'stroke-linejoin': me.values.corner === 0 ? 'miter' : 'round',
+                'stroke-linecap': me.values.cap === 0 ? 'butt' : 'round',
                 //"stroke-dasharray": me.values.style === 1 ? "3 "+ (2 + 0.25 * me.values.width) : ""
                 // Raphael.js without patch:
-                "stroke-dasharray": me.values.style === 1 ? "- " : ""
+                'stroke-dasharray': me.values.style === 1 ? '- ' : ''
             };
 
             var p1 = [10, 15];
@@ -460,7 +461,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
             var p3 = [40, 25];
             this.paper.clear();
             if (me.values.style !== 2) {
-                this.paper.path("M"+p1[0]+","+p1[1]+"L"+p2+","+p3).attr(attributes);
+                this.paper.path('M' + p1[0] + ',' + p1[1] + 'L' + p2 + ',' + p3).attr(attributes);
             } else {
                 // double line
                 var d = 1.5 + 0.5 * me.values.width;
@@ -477,7 +478,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
 
                 var p3a = [p3[0] - d / Math.sqrt(5), p3[1] - 2 * d / Math.sqrt(5)];
                 var p3b = [p3[0] + d / Math.sqrt(5), p3[1] + 2 * d / Math.sqrt(5)];
-                this.paper.path("M"+p1a[0]+","+p1a[1]+"L"+p2a+","+p3a+"M"+p1b[0]+","+p1b[1]+"L"+p2b+","+p3b).attr(attributes);
+                this.paper.path('M' + p1a[0] + ',' + p1a[1] + 'L' + p2a + ',' + p3a + 'M' + p1b[0] + ',' + p1b[1] + 'L' + p2b + ',' + p3b).attr(attributes);
                 this.paper.circle(0,0,0); // IE8 refresh work-around
             }
         },
@@ -497,8 +498,8 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
          * @param {Object} selectedButton Selected button
          */
         _styleSelectedButton: function (selectedButton) {
-            selectedButton.css("border", "2px solid");
-            selectedButton.css("background-color", this.selectColor);
+            selectedButton.css('border', '2px solid');
+            selectedButton.css('background-color', this.selectColor);
         },
 
         /**
@@ -507,7 +508,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.LineForm"
          * @param {Object} unselectedButton Unselected button
          */
         _styleUnselectedButton: function (unselectedButton) {
-            unselectedButton.css("border", "1px solid");
-            unselectedButton.css("background-color", "transparent");
+            unselectedButton.css('border', '1px solid');
+            unselectedButton.css('background-color', 'transparent');
         }
     });

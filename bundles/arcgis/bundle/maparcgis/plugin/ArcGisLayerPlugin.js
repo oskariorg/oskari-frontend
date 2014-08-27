@@ -14,14 +14,13 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         this.pluginName = null;
         this._sandbox = null;
         this._map = null;
-        this._supportedFormats = {};
         this._layer = {};
     }, {
         /** @static @property __name plugin name */
         __name: 'ArcGisLayerPlugin',
 
         /** @static @property _layerType type of layers this plugin handles */
-        _layerType: 'arcgislayer',
+        _layerType: 'arcgis',
 
         /**
          * @method getName
@@ -235,7 +234,10 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 //TODO: this fixing 3 errors
                 layerInfo.spatialReference.wkid = me._map.projection.substr(me._map.projection.indexOf(':') + 1);
                 var openLayer = new OpenLayers.Layer.ArcGISCache("arcgislayer_" + layer.getId(), layer.getLayerUrls()[0], {
-                    layerInfo: layerInfo
+                    layerInfo: layerInfo,
+                    // OpenLayers.Layer.ArcGISCache defaults to baselayer
+                    // if left as is -> Oskari layer ordering doesn't work correctly
+                    isBaseLayer: false
                 });
 
                 me._layer[layer.getId()] = openLayer;

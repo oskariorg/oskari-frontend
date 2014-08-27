@@ -4,10 +4,6 @@ div.layerselection2 {
 		margin: 0 5px 5px 0;
 		height: unquote("70px\9"); /*IE9 */ 
 
-		&.out-of-scale, &.out-of-content, &.hidden {
-			color: #909090;
-		}
-
 		div.layer-info {
 			background-color: #FFF;
 			padding: 5px;
@@ -23,6 +19,7 @@ div.layerselection2 {
 			}
 			
 			div.layer-title {
+				cursor: move;
 				display: inline;
 
 				h4 {
@@ -103,5 +100,7 @@ div.layerselection2 {
 			position: absolute;
 			margin-left: -1.3em;
 		}
+
 	}
+
 }

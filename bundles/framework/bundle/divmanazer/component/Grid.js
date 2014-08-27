@@ -38,6 +38,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             );
         this.templateColumnSelectorClose = jQuery('<div class="icon-close close-selector-button"></div>');
         this.csvButton = null;
+        this.excelButton = null;
         this.table = null;
         this.fieldNames = [];
         this.selectionListeners = [];
@@ -119,6 +120,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         setColumnValueRenderer: function (fieldName, renderer) {
             this.valueRenderer[fieldName] = renderer;
         },
+        getVisibleFields: function () {
+            return this.fieldNames;
+        },
         /**
          * @method setVisibleFields
          * If not given renders all data fields
@@ -137,6 +141,59 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         addSelectionListener: function (pCallback) {
             this.selectionListeners.push(pCallback);
         },
+
+        /**
+         * @method _createSubTable
+         * Creates columns from a subtable object.
+         * @param {jQuery} row current row
+         * @param {Number} columnIndex current column index
+         * @param {String} key object key
+         * @param {Object} value object value
+         * @private
+         */
+        _createSubTable: function (row, columnIndex, key, value) {
+            var baseKey,
+                subKeys,
+                hidden,
+                found,
+                field,
+                cell,
+                index;
+            cell = this.templateCell.clone();
+            baseKey = key;
+            index = columnIndex;
+            subKeys = this.table.find('th');
+            hidden = jQuery(this.table.find('th')[index]).hasClass('closedSubTable');
+            cell.addClass('base');
+            cell.addClass(baseKey);
+            row.append(cell);
+            index = index + 1;
+            do {
+                if (index === subKeys.length) {
+                    break;
+                }
+                found = false;
+                // Let's not assume field order
+                for (field in value) {
+                    if (value.hasOwnProperty(field)) {
+                        if ((jQuery(subKeys[index]).data('key') === baseKey) && (jQuery(subKeys[index]).data('value') === field)) {
+                            cell = this.templateCell.clone();
+                            cell.addClass(baseKey);
+                            cell.append(value[field]);
+                            if (hidden) {
+                                cell.addClass('hidden');
+                            }
+                            row.append(cell);
+                            index = index + 1;
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+            } while (found);
+            return index;
+        },
+
         /**
          * @method setAdditionalDataHandler
          * If grid data has internal table structures, it can be hidden behind a link
@@ -195,6 +252,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 row,
                 fieldCell,
                 valueCell,
+                valueDiv,
                 type,
                 innerTable,
                 i,
@@ -213,8 +271,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
             // format array
             if (jQuery.isArray(data)) {
-                var valueDiv = this.templateDiv.clone();
-                for (i = 0; i < data.length; ++i) {
+                valueDiv = this.templateDiv.clone();
+                for (i = 0; i < data.length; i += 1) {
                     innerTable = this._renderAdditionalData(data[i]);
                     valueDiv.append(innerTable);
                 }
@@ -267,8 +325,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 i,
                 header,
                 link,
+                dataArray,
+                data,
+                fullFieldNames,
                 fieldName,
+                baseKey,
                 uiName,
+                key,
+                value,
+                field,
                 headerClosureMagic;
 
             // header reference needs some closure magic to work here
@@ -288,7 +353,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     if (me.lastSort && me.lastSort.attr === scopedValue) {
                         descending = !me.lastSort.descending;
                     }
-
                     // sort the results
                     me._sortBy(scopedValue, descending);
                     // populate table content
@@ -309,13 +373,38 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     return false;
                 };
             };
+            // Expand the table
+            dataArray = this.model.getData();
+            if (dataArray.length === 0) {
+                return;
+            }
+            fullFieldNames = [];
+            data = dataArray[0];
             for (i = 0; i < fieldNames.length; i += 1) {
+                key = fieldNames[i];
+                value = data[key];
+                if (typeof value === 'object') {
+                    fullFieldNames.push({key: key, baseKey: key, subKey: key, type: 'object', visibility: 'shown'});
+                    for (field in value) {
+                        if (value.hasOwnProperty(field)) {
+                            fullFieldNames.push({key: key + '.' + field, baseKey: key, subKey: field, type: 'default', visibility: 'hidden'});
+                        }
+                    }
+                } else {
+                    fullFieldNames.push({key: key, baseKey: key, subKey: field, type: 'default', visibility: 'shown'});
+                }
+            }
+
+            for (i = 0; i < fullFieldNames.length; i += 1) {
                 header = this.templateTableHeader.clone();
                 link = header.find('a');
-                fieldName = fieldNames[i];
-                uiName = this.uiNames[fieldName];
+                fieldName = fullFieldNames[i].key;
+                baseKey = fullFieldNames[i].baseKey;
+                uiName = this.uiNames[baseKey];
                 if (!uiName) {
                     uiName = fieldName;
+                } else if (fieldName !== fullFieldNames[i][key]) {
+                    uiName = fieldName.replace(baseKey, uiName);
                 }
                 link.append(uiName);
                 if (me.lastSort && fieldName === me.lastSort.attr) {
@@ -325,10 +414,43 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         header.addClass('asc');
                     }
                 }
-                link.bind('click', headerClosureMagic(fieldNames[i]));
+                if (fullFieldNames[i].type === 'default') {
+                    link.bind('click', headerClosureMagic(fullFieldNames[i].key));
+                } else if (fullFieldNames[i].type === 'object') {
+                    header.addClass('closedSubTable');
+                    header.addClass('base');
+                    // Expand or close subtable
+                    // FIXME create function outside the loop
+                    link.bind('click', function () {
+                        var parentItem = jQuery(this).parent(),
+                            thisKey = parentItem.data('key');
+                        if (parentItem.hasClass('closedSubTable')) {
+                            table.find('th.hidden.' + thisKey).removeClass('hidden');
+                            // jQuery(this).parent().addClass('hidden');
+                            table.find('td.hidden.' + thisKey).removeClass('hidden');
+                            // table.find('td.base.'+thisKey).addClass('hidden');
+                            parentItem.removeClass('closedSubTable');
+                            parentItem.addClass('openSubTable');
+                        } else {
+                            table.find('th.' + thisKey).not('.base').addClass('hidden');
+                            table.find('td.' + thisKey).not('.base').addClass('hidden');
+                            parentItem.removeClass('openSubTable');
+                            parentItem.addClass('closedSubTable');
+                        }
+                    });
+                }
+
+                if (fullFieldNames[i].visibility === 'hidden') {
+                    header.addClass('hidden');
+                }
+
+                header.addClass(fullFieldNames[i].baseKey);
+                header.data('key', fullFieldNames[i].baseKey);
+                header.data('value', fullFieldNames[i].subKey);
                 headerContainer.append(header);
             }
         },
+
         /**
          * @method _renderBody
          * Renders the data in #getDataModel() to the given table.
@@ -348,6 +470,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 key,
                 value,
                 cell,
+                columnIndex,
                 renderer,
                 rows,
                 rowClicked;
@@ -356,25 +479,27 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 data = dataArray[i];
 
                 row.attr('data-id', data[this.model.getIdField()]);
+                columnIndex = 0;
                 for (f = 0; f < fieldNames.length; f += 1) {
                     key = fieldNames[f];
                     value = data[key];
-
-                    cell = this.templateCell.clone();
+                    // Handle subtables
                     if (typeof value === 'object') {
-                        cell.append(this._createAdditionalDataField(value));
+                        columnIndex = this._createSubTable(row, columnIndex, key, value);
+                        // cell.append(this._createAdditionalDataField(value)); // old version
                     } else {
+                        cell = this.templateCell.clone();
                         renderer = this.valueRenderer[key];
                         if (renderer) {
                             value = renderer(value, data);
                         }
                         cell.append(value);
+                        row.append(cell);
+                        columnIndex = columnIndex + 1;
                     }
-                    row.append(cell);
                 }
                 body.append(row);
             }
-            // innertable might mix this up
             rows = table.find('tbody tr');
             rowClicked = function () {
                 me._dataSelected(jQuery(this).attr('data-id'));
@@ -509,7 +634,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 pressed = true;
                 startX = e.pageX;
                 startWidth = jQuery(this).width();
-                jQuery(start).addClass("resizing");
+                jQuery(start).addClass('resizing');
                 // Disable mouse selecting
                 jQuery(document).attr('unselectable', 'on')
                     .css('user-select', 'none')
@@ -526,7 +651,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             // Stop resizing
             jQuery(document).mouseup(function () {
                 if (pressed) {
-                    jQuery(start).removeClass("resizing");
+                    jQuery(start).removeClass('resizing');
                     pressed = false;
                 }
             });
@@ -540,18 +665,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * (e.g. columnSelector: open tells that we want to show columnselector)
          */
         renderTo: function (container, state) {
-            var me = this;
+            var me = this,
+                toolRow,
+                fieldNames,
+                table;
             container.empty();
 
             // Tool row
-            if ((this.showColumnSelector)||(this.showExcelExporter)) {
-                var toolRow = this.templateTabTools.clone();
-                container.parent().children(".tab-tools").remove();
+            if ((this.showColumnSelector) || (this.showExcelExporter)) {
+                toolRow = this.templateTabTools.clone();
+                container.parent().children('.tab-tools').remove();
                 container.parent().prepend(toolRow);
             }
 
-            var fieldNames = this.fieldNames,
-                table = this.template.clone();
+            fieldNames = this.fieldNames;
+            table = this.template.clone();
             // if visible fields not given, show all
             if (fieldNames.length === 0) {
                 fieldNames = this.model.getFields();
@@ -568,53 +696,54 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
             if (this.showColumnSelector) {
                 this._renderColumnSelector(table, fieldNames);
-                container.parent().find(".tab-tools").append(this.visibleColumnSelector);
+                container.parent().find('.tab-tools').append(this.visibleColumnSelector);
                 if (state !== null && state !== undefined && state.columnSelector === 'open') {
                     this.visibleColumnSelector.find('.column-selector').css('visibility', 'visible');
                 }
             }
 
             // Exporter
-            // if (this.showExcelExporter) { // Todo: configure this
-            if (this.showColumnSelector) {
-                var exporter = me.templateExporter.clone();
-                var label = me._loc.export.title;
+            if (this.showExcelExporter) { // Todo: configure this
+                var exporter = me.templateExporter.clone(),
+                    label = me._loc.export.title;
                 exporter.append(label);
+
+                // CSV
                 me.csvButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 me.csvButton.setTitle(me._loc.export.csv);
-                me.csvButton.addClass("exportButton");
-
-                me.csvButton.setHandler(function() {
-                    var str = "";
-                    var i,j;
-                    // Header
-                    var header = me.table.find("thead th a");
-                    for (i=0; i<header.length; i++) {
+                me.csvButton.addClass('csvExportButton');
+                me.csvButton.setHandler(function () {
+                    var str = '',
+                        i,
+                        j,
+                        header = me.table.find('thead th').not('.hidden').find('a'),
+                        rows = me.table.find('tbody tr'),
+                        items;
+                    for (i = 0; i < header.length; i += 1) {
                         if (i > 0) {
-                            str = str+",";
+                            str = str + ',';
                         }
-                        str = str+"\""+jQuery(header[i]).html()+"\"";
+                        str = str + '\"' + jQuery(header[i]).html() + '\"';
                     }
-                    str = str+"\n";
+                    str = str + '\n';
 
                     // Body
-                    var rows = me.table.find("tbody tr");
-                    for (i=0; i<rows.length; i++) {
-                        var items = jQuery(rows[i]).find("td");
-                        for (j=0; j<items.length; j++) {
+                    for (i = 0; i < rows.length; i += 1) {
+                        items = jQuery(rows[i]).find('td').not('.hidden');
+                        for (j = 0; j < items.length; j += 1) {
                             if (j > 0) {
-                                str = str+",";
+                                str = str + ',';
                             }
-                            str = str+"\""+jQuery(items[j]).html()+"\"";
+                            str = str + '\"' + jQuery(items[j]).html() + '\"';
                         }
-                        str = str+"\n";
+                        str = str + '\n';
                     }
 
                     // Output
                     if (navigator.appName !== 'Microsoft Internet Explorer') {
                         window.location = 'data:text/csv;charset=utf8,' + encodeURIComponent(str);
                     } else {
-                        str = str.split("\n").join("<br />");
+                        str = str.split('\n').join('<br />');
                         var generator = window.open('', 'csv', 'height=400,width=600');
                         generator.document.write('<html><head><title>CSV</title>');
                         generator.document.write('</head><body >');
@@ -624,7 +753,50 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     }
                 });
                 exporter.append(me.csvButton.getButton());
-                container.parent().find(".tab-tools").append(exporter);
+
+                // Excel
+                me.excelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                me.excelButton.setTitle(me._loc.export.excel);
+                me.excelButton.addClass('excelExportButton');
+
+                me.excelButton.setHandler(function () {
+//                    if (navigator.appName !== 'Microsoft Internet Explorer') {
+                    var tmpTable = me.table.clone(),
+                        uri = 'data:application/vnd.ms-excel;base64,',
+                        template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
+                        format = function (s, c) {
+                            return s.replace(
+                                /{(\w+)}/g,
+                                function (m, p) {
+                                    return c[p];
+                                }
+                            );
+                        },
+                        ctx;
+
+                    // Do not export hidden fields
+                    tmpTable.find('th.hidden').remove();
+                    tmpTable.find('td.hidden').remove();
+                    ctx = {
+                        worksheet: 'Worksheet',
+                        table: tmpTable.html()
+                    };
+                    window.location.href = uri + jQuery.base64.encode(format(template, ctx));
+/*                    } else {
+                         var ExcelApp = new ActiveXObject("Excel.Application");
+                         var ExcelSheet = new ActiveXObject("Excel.Sheet");
+                         ExcelSheet.Application.Visible = true;
+
+                         me.table.find('th, td').each(function(i){
+                         ExcelSheet.ActiveSheet.Cells(i+1,i+1).Value = this.innerHTML;
+                         });
+                    }
+*/
+                });
+                if (navigator.appName !== 'Microsoft Internet Explorer') {
+                    exporter.append(me.excelButton.getButton());
+                }
+                container.parent().find('.tab-tools').append(exporter);
             }
 
             container.append(table);
@@ -735,6 +907,28 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
         },
 
+        _getAttributeValue: function (a, pAttribute) {
+            // to string so number will work also
+            var nameA = a[pAttribute],
+                numericValue,
+                split = pAttribute.split('.'); // if not found, try subtable
+
+            if (typeof nameA === 'undefined') {
+                nameA = a[split[0]][split[1]];
+            }
+            if (!nameA) {
+                nameA = '';
+            } else if (nameA.toLowerCase) {
+                nameA = nameA.toLowerCase();
+            }
+            numericValue = parseFloat(nameA);
+            if (!isNaN(numericValue)) {
+                nameA = numericValue;
+            }
+
+            return nameA;
+        },
+
         /**
          * @method _sortComparator
          * Compares the given attribute on given objects for sorting search result objects.
@@ -747,27 +941,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         _sortComparator: function (a, b, pAttribute, pDescending) {
             var nameA,
                 nameB,
-                value;
+                value = 0;
+
             if (typeof a[pAttribute] === 'object' ||
                     typeof b[pAttribute] === 'object') {
                 // not sorting objects
                 return 0;
             }
-            // to string so number will work also
-            nameA = a[pAttribute];
-            if (!nameA) {
-                nameA = '';
-            } else if (nameA.toLowerCase) {
-                nameA = nameA.toLowerCase();
-            }
-            nameB = b[pAttribute];
-            if (!nameB) {
-                nameB = '';
-            } else if (nameB.toLowerCase) {
-                nameB = nameB.toLowerCase();
-            }
 
-            value = 0;
+            nameA = this._getAttributeValue(a, pAttribute);
+            nameB = this._getAttributeValue(b, pAttribute);
 
             if (nameA < nameB) {
                 value = -1;

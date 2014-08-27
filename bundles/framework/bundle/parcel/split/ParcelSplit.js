@@ -24,13 +24,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
         this.drawPlugin = drawPlugin;
 
         /**
-         * @property intersectionPoints
-         *
-         *
-         */
-        this.intersectionPoints = [];
-
-        /**
          * @property markerSize
          *
          *
@@ -382,11 +375,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                         quality: attributes.lahdeaineisto
                     };
                 }
+                this.drawPlugin.selectedFeature = this.drawPlugin.drawLayer.features.length-1;
                 break;
             case "OpenLayers.Geometry.MultiPolygon":
+                break;
             case "OpenLayers.Geometry.LineString":
                 var newFeatures = this.splitLine(baseMultiPolygon, this.drawPlugin.operatingFeature);
                 this.drawPlugin.drawLayer.removeAllFeatures();
+                this.drawPlugin.selectedFeature = 0;
+                var selectedNeighbor = false;
                 for (i = 0; i < newFeatures[0].geometry.components.length; i++) {
                     this.drawPlugin.drawLayer.addFeatures(new OpenLayers.Feature.Vector(newFeatures[0].geometry.components[i]));
                     this.drawPlugin.drawLayer.features[i].style = this.drawPlugin.basicStyle;
@@ -394,18 +391,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                         name: attributes.tekstiKartalla,
                         quality: attributes.lahdeaineisto
                     };
+                    // Select parcel
+                    for (var k = 0; k < this.drawPlugin.markerLayer.markers.length; k++) {
+                        var markerReferences = this.drawPlugin.markerLayer.markers[k].reference.point.references;
+                        var iNeighbor = false;
+                        for (var j = 0; j < markerReferences.length; j++) {
+                            selectedNeighbor = ((selectedNeighbor) || (this.drawPlugin.drawLayer.features[this.drawPlugin.selectedFeature].geometry.id === markerReferences[j]));
+                            iNeighbor = ((iNeighbor) || (this.drawPlugin.drawLayer.features[i].geometry.id === markerReferences[j]));
+                        }
+                        if (((!selectedNeighbor)&&(iNeighbor))||((selectedNeighbor)&&(iNeighbor)&&(this.drawPlugin.drawLayer.features[i].geometry.getArea() < this.drawPlugin.drawLayer.features[this.drawPlugin.selectedFeature].geometry.getArea()))) {
+                            this.drawPlugin.selectedFeature = i;
+                        }
+                    }
                 }
                 this.drawPlugin.editLayer.addFeatures(newFeatures[1]);
                 break;
             default:
             }
             OpenLayers.Feature.Vector.style['default'].strokeWidth = '2';
-            this.drawPlugin.selectedFeature = this.drawPlugin.drawLayer.features.length-1;
             this.drawPlugin.drawLayer.features[this.drawPlugin.selectedFeature].style = this.drawPlugin.selectStyle;
             this.map.editLayer = editLayer;
             parcelLayer.redraw();
             editLayer.redraw();
             return editLayer.features[0];
+        },
+
+        setSelectedOpacity: function(opacity) {
+            this.drawPlugin.drawLayer.features[this.drawPlugin.selectedFeature].style.fillOpacity = opacity;
+            this.drawPlugin.drawLayer.redraw();
         },
 
         /*
@@ -1364,50 +1377,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
                     }
                 }
             }
-
-
-
-            /*
-        for (k=0; k<2; k++) {
-            var id = p0[p0Ind].references[k];
-            var refPoints = null;
-            var markerInd = -1;
-            if (id === remPolygon.id) {
-                markerInd = mInd;
-            } else {
-                markerInd = cornerInd;
-            }
-            refPoints = features[k].geometry.components[0].components;
-            marker.reference.segments.p[k][0][0] = refPoints[markerInd];
-            if (refPoints[markerInd+1].boundaryPoint) {
-                marker.reference.segments.p[k][0][1] = refPoints[markerInd+1];
-                var newInd1;
-                if (markerInd === refPoints.length-2) {
-                    newInd1 = 1;
-                } else if (markerInd === refPoints.length-1) {
-                    newInd1 = 2;
-                } else {
-                  newInd1 = markerInd+2;
-                }
-                marker.reference.segments.p[k][1][0] = refPoints[newInd1];
-                marker.reference.segments.p[k][1][1] = refPoints[markerInd+1];
-
-                var newInd2 = (markerInd === 0) ? refPoints.length-2 : markerInd-1;
-                marker.reference.segments.p[k][2][0] = refPoints[newInd2];
-                marker.reference.segments.p[k][2][1] = refPoints[markerInd];
-            } else {
-                var newInd3 = (markerInd === 0) ? refPoints.length-2 : markerInd-1;
-                marker.reference.segments.p[k][0][1] = refPoints[newInd3];
-
-                var newInd4 = (newInd3 === 0 ) ? refPoints.length-2 : newInd3-1;
-                marker.reference.segments.p[k][1][0] = refPoints[newInd4];
-                marker.reference.segments.p[k][1][1] = refPoints[newInd3];
-
-                marker.reference.segments.p[k][2][0] = refPoints[markerInd+1];
-                marker.reference.segments.p[k][2][1] = refPoints[markerInd];
-            }
-        }
-*/
-
         }
     });

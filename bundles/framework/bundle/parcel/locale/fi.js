@@ -97,7 +97,7 @@ Oskari.registerLocalization({
         "notification": {
             "placeLoading": {
                 "title": "Kohdetta ladataan",
-                "message": ""
+                "message": "Suurten kohteiden lataaminen saattaa olla hidasta."
             },
             "calculating": {
                 "title": "Lasketaan jakoa",
@@ -135,8 +135,10 @@ Oskari.registerLocalization({
             "parcel_user": "Laatija:",
             "footnote": "Määräalan lopullinen paikka ja rajat määräytyvät kiinteistötoimituksessa"
         },
-        "language": {
-            "change": "Ruotsiksi"
+        "links": {
+            "language": "Ruotsiksi",
+            "guide": "Ohjeet",
+            "guideLang": "fi"
         },
         "StartPrintView": {
             "text": "Tämän tulostus-toiminnon yhteydessä annettavat tiedot tallentuvat vain pdf-tulosteelle",

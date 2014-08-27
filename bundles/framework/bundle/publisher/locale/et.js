@@ -140,6 +140,7 @@ Oskari.registerLocalization({
                 "small": "Väike",
                 "medium": "Keskmine",
                 "large": "Suur",
+                "fill": "NOT TRANSLATED",
                 "custom": "Oma suurus",
                 "width": "laius",
                 "height": "kõrgus"
@@ -211,6 +212,7 @@ Oskari.registerLocalization({
             "show": "Näita",
             "hide": "Peida",
             "hidden": "Kaart on ajutiselt peidetud.",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Avaldamine lubatud",

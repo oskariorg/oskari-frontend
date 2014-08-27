@@ -9,213 +9,85 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
      * @param {Object} config
      *      JSON config with params needed to run the plugin
      */
-
     function (config) {
-        this.mapModule = null;
-        this.pluginName = null;
-        this._sandbox = null;
-        this._map = null;
-        this._conf = config;
-        this.__elements = {};
-        this.instance = config.instance;
-
-        /* templates */
-        this.template = {};
-        var p;
-        for (p in this.__templates) {
-            if (this.__templates.hasOwnProperty(p)) {
-                this.template[p] = jQuery(this.__templates[p]);
-            }
-        }
+        this._clazz = 'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin';
+        this._defaultLocation = 'top right';
+        this._instance = config.instance;
+        this._index = 6;
+        this._name = 'FeaturedataPlugin';
     }, {
-        /** @static @property __name plugin name */
-        __name: 'FeaturedataPlugin',
-
-        __templates: {
-            "main": '<div class="mapplugin featuredataplugin"><a href="javascript:void(0);"></a></div>'
-        },
-
-        getClazz: function () {
-            return "Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin";
-        },
         /**
-         * @method getName
-         * @return {String} plugin name
-         */
-        getName: function () {
-            return this.pluginName;
-        },
-
-        /**
-         * @method getMapModule
-         * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        getMapModule: function () {
-            return this.mapModule;
-        },
-
-        /**
-         * @method setMapModule
-         * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        setMapModule: function (mapModule) {
-            this.mapModule = mapModule;
-            if (mapModule) {
-                this.pluginName = mapModule.getName() + this.__name;
-            }
-        },
-
-        /**
-         * @method hasUI
-         * @return {Boolean} true
-         * This plugin has an UI so always returns true
-         */
-        hasUI: function () {
-            return true;
-        },
-
-        /**
-         * @method init
-         *
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        init: function (sandbox) {},
-
-        /**
-         * @method register
-         * Interface method for the plugin protocol
-         */
-        register: function () {
-
-        },
-
-        /**
-         * @method unregister
-         * Interface method for the plugin protocol
-         */
-        unregister: function () {
-
-        },
-
-        /**
-         * @method startPlugin
-         * Interface method for the plugin protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        startPlugin: function (sandbox) {
-            this._sandbox = sandbox;
-            this._map = this.getMapModule().getMap();
-
-            sandbox.register(this);
-            this._createUI();
-        },
-
-        /**
-         * @method stopPlugin
-         *
-         * Interface method for the plugin protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stopPlugin: function (sandbox) {
-            if (this.__elements.main) {
-                this.__elements.main.remove();
-                delete this.__elements.main;
-            }
-            sandbox.unregister(this);
-        },
-
-        /**
-         * @method start
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        start: function (sandbox) {},
-
-        /**
-         * @method stop
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stop: function (sandbox) {},
-
-        /**
-         * @method _createUI
+         * @method _createControlElement
          * @private
          * Creates UI for coordinate display and places it on the maps
          * div where this plugin registered.
          */
-        _createUI: function () {
-            var sandbox = this._sandbox,
-                me = this;
+        _createControlElement: function () {
+            var me = this,
+                sandbox = me._sandbox,
+                el = jQuery('<div class="mapplugin featuredataplugin">' +
+                    '<a href="JavaScript: void(0);"></a>' +
+                    '</div>');
 
-            // get div where the map is rendered from openlayers
-            var parentContainer = jQuery(this._map.div);
-
-            if (!me.__elements.main) {
-                me.__elements.main = me.template.main.clone();
-            }
-            var link = me.__elements.main.find('a');
-            link.html(this.instance.getLocalization('title'));
-            link.bind('click', function () {
-                me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'detach']);
-                return false;
-            });
-            me.__elements.main.mousedown(function (event) {
+            var link = el.find('a');
+            link.html(me._instance.getLocalization('title'));
+            me._bindLinkClick(link);
+            el.mousedown(function (event) {
                 event.stopPropagation();
             });
-            parentContainer.append(me.__elements.main);
-            this.update();
+            return el;
+        },
+
+        _bindLinkClick: function (link) {
+            var me = this,
+                linkElement = link || me.getElement().find('a'),
+                sandbox = me._sandbox;
+            linkElement.bind('click', function () {
+                sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
+                return false;
+            });
         },
 
         /**
-         * @method update
-         * Updates the plugins interface (hides if no WFS layer selected)
+         * @method _refresh
+         * Updates the plugins interface (hides if no featuredata layer selected)
          */
-        update: function () {
-            // the mapModule is only defined when started, update can also be called after it has been started once and stopped
-            // therefore we need to check if we have a reference to a map module as the reference is available when started
-            if (this.mapModule) {
-                var sandbox = this.mapModule.getSandbox(),
-                    layers = sandbox.findAllSelectedMapLayers(),
-                    layerCount = 0,
-                    i;
-                // count amount of wfs layers == number of tabs
-                for (i = 0; i < layers.length; i++) {
-                    var layer = layers[i];
-                    if (layer.hasFeatureData()) {
-                        layerCount++;
-                    }
+        refresh: function () {
+            var me = this,
+                sandbox = me.getMapModule().getSandbox(),
+                layers = sandbox.findAllSelectedMapLayers(),
+                i;
+            // see if there's any wfs layers, show element if so
+            for (i = 0; i < layers.length; i++) {
+                if (layers[i].hasFeatureData()) {
+                    me.setVisible(true);
+                    return;
                 }
-                var me = this;
-                if (layerCount > 0) {
-                    me.__elements.main.show();
-                } else {
-                    me.__elements.main.hide();
-                }
+            }
+            me.setVisible(false);
+        },
+
+        _setLayerToolsEditModeImpl: function () {
+            if (!this.inLayerToolsEditMode()) {
+                this._bindLinkClick();
+            } else {
+                this.getElement().find('a').unbind('click');
             }
         },
 
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded
-         * if not.
-         */
-        onEvent: function (event) {}
+        _createEventHandlers: function () {
+            return {
+                /**
+                 * @method AfterMapMoveEvent
+                 * Shows map center coordinates after map move
+                 */
+                'AfterMapMoveEvent': function (event) {
+                    this.refresh();
+                }
+            };
+        }
     }, {
+        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static

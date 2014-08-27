@@ -4,7 +4,7 @@ Oskari.registerLocalization({
     "value": {
         "title": "Asukoha otsing",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Otsi kohanime, aadressi või kinnistu tunnuse järgi.",
         "searchButton": "Otsi",
         "searchResultCount": "Otsing andis ",

@@ -142,6 +142,7 @@ Oskari.registerLocalization(
                 "small": "Kis",
                 "medium": "Közepes",
                 "large": "Nagy",
+                "fill": "NOT TRANSLATED",
                 "custom": "Megadott méret",
                 "width": "szélesség",
                 "height": "magasság"
@@ -213,6 +214,7 @@ Oskari.registerLocalization(
             "show": "NOT TRANSLATED",
             "hide": "NOT TRANSLATED",
             "hidden": "NOT TRANSLATED",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "NOT TRANSLATED",

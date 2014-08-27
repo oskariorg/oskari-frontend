@@ -14,6 +14,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         this.templateButton = jQuery('<div class="button"><a href="JavaScript:void(0);"></a></div>');
         this.dialog = this.template.clone();
         this.overlay = null;
+        this.__listeners = {
+
+        };
     }, {
         /**
          * @method show
@@ -25,19 +28,23 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         show: function (title, message, buttons) {
             var me = this,
                 contentDiv = this.dialog.find('div.content'),
-                actionDiv,
+                actionDiv = this.dialog.find('div.actions'),
                 i,
                 contentHeight,
-                reasonableHeight;
-            this.dialog.find('h3').html(title);
-            contentDiv.html(message);
+                reasonableHeight,
+                focusedButton = -1;
 
+            this.setTitle(title);
+            this.setContent(message);
+
+            // Remove previous buttons
+            actionDiv.empty();
             if (buttons && buttons.length > 0) {
-                actionDiv = this.dialog.find('div.actions');
-                // TODO: save button references and clean up previous buttons
-                actionDiv.empty();
                 for (i = 0; i < buttons.length; i += 1) {
                     buttons[i].insertTo(actionDiv);
+                    if (buttons[i].focus) {
+                        focusedButton = i;
+                    }
                 }
             } else {
                 // if no actions, the user can click on popup to close it
@@ -46,6 +53,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 });
             }
             jQuery('body').append(this.dialog);
+            if (focusedButton >= 0) {
+                buttons[focusedButton].getButton().focus();
+            }
 
             contentHeight = contentDiv.height();
             reasonableHeight = jQuery(document).height() * 0.6;
@@ -107,16 +117,18 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 this.overlay.close();
             }
             if(this.hasKeydownListener) {
-                jQuery(this.dialog).off("keydown", this._stopKeydownPropagation);
+                jQuery(this.dialog).off('keydown', this._stopKeydownPropagation);
             }
             if (noAnimation) {
                 me.dialog.remove();
+                me.__notifyListeners('close');
             } else {
                 me.dialog.animate({
                     opacity: 0
                 }, 500);
                 setTimeout(function () {
                     me.dialog.remove();
+                    me.__notifyListeners('close');
                 }, 500);
             }
         },
@@ -182,8 +194,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             me.dialog.addClass(alignment);
             //move dialog to correct location
             me.dialog.css({
-                'left': left + "px",
-                'top': top + "px",
+                'left': left + 'px',
+                'top': top + 'px',
                 'margin-left': 0,
                 'margin-top': 0
             });
@@ -222,7 +234,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         _stopKeydownPropagation : function(e) {
             e.stopPropagation();
         },
-
+        setTitle: function (title) {
+            this.dialog.find('h3').html(title);
+        },
+        getTitle: function () {
+            return this.dialog.find('h3')[0].textContent;
+        },
         /** 
          * @method setContent
          * Sets dialog content element
@@ -248,12 +265,59 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         },
 
         /**
+         * Add listener to be called when popup is closed
+         * @param  {Function} callback function to call on close
+         */
+        onClose: function (callback) {
+            this.__getListeners('close').push(callback);
+        },
+        /**
+         * Clears any listeners (registered with onClose(callback)-function).
+         */
+        clearListeners: function () {
+            for(var key in this.__listeners) {
+                this.__listeners[key] = null;
+                delete this.__listeners[key];
+            }
+        },
+        /**
+         * Notifies all listeners of given type. Passes optional event object to callback
+         * @param {String} type of listener ('close' for example)
+         * @param {Object} event (optional)
+         */
+        __notifyListeners : function(type, event) {
+            if(!type) {
+                return;
+            }
+            if(!this.__listeners[type]) {
+                return;
+            }
+            _.each(this.__listeners[type], function(cb){ cb(event); });
+        },
+        /**
+         * Returns an array of listeners for given type. 
+         * @param {String} type of listener ('close' for example)
+         */
+        __getListeners : function(type) {
+            if(!type) {
+                return [];
+            }
+            if(!this.__listeners) {
+                this.__listeners = {};
+            }
+            if(!this.__listeners[type] || !this.__listeners[type].push) {
+                this.__listeners[type] = [];
+            }
+            return this.__listeners[type];
+        },
+
+        /**
          * @method makeDraggable
          * Makes dialog draggable with jQuery Event Drag plugin
          */
         makeDraggable: function () {
             var me = this;
-            me.dialog.css("position", "absolute");
+            me.dialog.css('position', 'absolute');
             me.dialog.draggable({
                 scroll: false
             });

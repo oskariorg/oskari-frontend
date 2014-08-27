@@ -111,9 +111,9 @@ define([
                     type: 'inspire',
                     baseUrl : this.instance.getSandbox().getAjaxUrl() + '&action_route=',
                     actions : {
-                        load : "GetInspireThemes",
-                        save : "Not implemented",
-                        remove : "Not implemented"
+                        load : "InspireThemes",
+                        save : "InspireThemes",
+                        remove : "InspireThemes"
                     },
                     title: this.instance.getLocalization('filter').inspire
                 });

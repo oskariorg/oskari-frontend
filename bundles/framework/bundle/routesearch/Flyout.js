@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 fieldName = field.element[0].name;
 
             me.state[fieldName] = {
-                "name": request.term
+                'name': request.term
             };
 
             me._updateRoutingLinks();
@@ -68,11 +68,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
         _setSearchLocation: function (field, event, ui) {
             var me = this,
                 fieldName = field.attr('name'),
-                a = jQuery('<a>');
-            me.state[fieldName] = ui.item;
-            // We have to unescape the text somehow... ;)
-            a.html(ui.item.name + ', ' + ui.item.village);
-            field.val(a.text());
+                a = jQuery('<a>'),
+                item = {
+                    name: a.html(ui.item.name).text(),
+                    village: a.html(ui.item.village).text()
+                };
+            me.state[fieldName] = item;
+            field.val(item.name + ', ' + item.village);
             me._updateRoutingLinks();
         },
 
@@ -92,7 +94,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
         disableMapClick: function () {
             var me = this;
             delete me.state.field;
-            me.mapEl.removeClass("cursor-crosshair");
+            me.mapEl.removeClass('cursor-crosshair');
             me.instance.unregisterMapClickHandler();
         },
 
@@ -122,7 +124,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
             } else {
                 me.state.field = field;
                 me.instance.registerMapClickHandler();
-                me.mapEl.addClass("cursor-crosshair");
+                me.mapEl.addClass('cursor-crosshair');
             }
         },
 
@@ -163,7 +165,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                 );
                 tmp.addClearButton();
                 tmp.setLabel(me.locale[field]);
-                /* jshint ignore:start */
+
                 tmp.getField().find('input[type=text]').autocomplete({
                     delay: 300,
                     minLength: 0,
@@ -174,25 +176,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     source: function (request, response) {
                         me._getSearchSuggestions(this, request, response);
                     }
-                }).data("autocomplete")._renderItem = function (ul, item) {
-                    var li = jQuery("<li>"),
+                }).data('autocomplete')._renderItem = function (ul, item) {
+                    var li = jQuery('<li>'),
                         a = jQuery('<a href="#">');
-                    a.html(item.name + ", " + item.village);
+                    a.html(item.name + ', ' + item.village);
                     li.append(a);
                     ul.append(li);
                     return li;
                 };
-                /* jshint ignore:end */
+
                 contents.eq(0).append(tmp.getField());
                 tmp = Oskari.clazz.create(
                     'Oskari.userinterface.component.Button'
                 );
                 tmp.setTitle(me.locale.fromMap);
-                /* jshint ignore:start */
+
                 tmp.setHandler(function (event) {
                     me._fromMapButtonHandler(field, event);
                 });
-                /* jshint ignore:end */
                 /* FIXME ucomment when reverse geocode works
                 tmp.insertTo(contents.eq(0).find('.oskarifield:eq(' + i + ')'));
                 */
@@ -216,14 +217,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     '#1A88CC',
                     function (fromLoc, toLoc) {
                         var url = 'http://www.matka.fi/fi/?keya=';
-                        url += encodeURIComponent(fromLoc.name);
+                        url += fromLoc.name;
                         if (fromLoc.village) {
-                            url += '%2C+' + encodeURIComponent(fromLoc.village);
+                            url += '%2C+' + fromLoc.village;
                         }
-                        url += '&keyb=' + encodeURIComponent(toLoc.name);
+                        url += '&keyb=' + toLoc.name;
                         if (toLoc.village) {
-                            url += '%2C+' + encodeURIComponent(toLoc.village);
+                            url += '%2C+' + toLoc.village;
                         }
+                        /* Ugly ISO-8859-1 encode,
+                         * replace with a lib if need be.
+                         */
+                        url = url.replace('Å', '%C5')
+                            .replace('å', '%E5')
+                            .replace('Ä', '%C4')
+                            .replace('ä', '%E4')
+                            .replace('Ö', '%D6')
+                            .replace('ö', '%F6')
+                            .replace('é', '%E9')
+                            .replace('É', '%C9')
+                            .replace('ü', '%FC')
+                            .replace('Ü', '%DC')
+                            .replace('\'', '%27')
+                            .replace(',', '%2C');
+
                         return url;
                     }
                 )
@@ -256,23 +273,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
                     '#124191',
                     function (fromLoc, toLoc) {
                         var url = 'http://here.com/directions/drive/';
-                        url += encodeURIComponent(
-                            fromLoc.name.replace(' ', '_')
-                        );
+                        url += fromLoc.name.replace(' ', '_');
                         if (fromLoc.village) {
-                            url += ',_' +
-                                encodeURIComponent(
-                                    fromLoc.village.replace(' ', '_')
-                            );
+                            url += ',_' + fromLoc.village.replace(' ', '_');
                         }
                         url += ',_Finland';
-                        url += '/' + encodeURIComponent(
-                            toLoc.name.replace(' ', '_')
-                        );
+                        url += '/' + toLoc.name.replace(' ', '_');
                         if (toLoc.village) {
-                            url += ',_' + encodeURIComponent(
-                                toLoc.village.replace(' ', '_')
-                            );
+                            url += ',_' + toLoc.village.replace(' ', '_');
                         }
                         url += ',_Finland';
                         return url;

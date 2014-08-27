@@ -17,14 +17,17 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
             // dont do anything if we dont have a saved state
             return [];
         }
-        var components = this.sandbox.getStatefulComponents(),
+
+        var newState = jQuery.extend(true, {}, state),
+            components = this.sandbox.getStatefulComponents(),
             loopedComponents = [],
             id;
-        for (id in state) {
-            if (state.hasOwnProperty(id)) {
+
+        for (id in newState) {
+            if (newState.hasOwnProperty(id)) {
                 if (components[id] && components[id].setState) {
                     // safety check that we have the component in current config
-                    components[id].setState(state[id].state);
+                    components[id].setState(newState[id].state);
                 }
                 loopedComponents.push(id);
             }
@@ -44,14 +47,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
      */
     resetState: function () {
         var me = this,
-            pluginName;
+            pluginName,
+            startupState;
         me._historyEnabled = false;
         me._historyPrevious = [];
         me._historyNext = [];
 
 
-        for (pluginName in this._pluginInstances) {
-            if (this._pluginInstances.hasOwnProperty(pluginName)) {
+        for (pluginName in me._pluginInstances) {
+            if (me._pluginInstances.hasOwnProperty(pluginName)) {
                 me.sandbox.printDebug('[' + me.getName() + ']' + ' resetting state on ' + pluginName);
                 me._pluginInstances[pluginName].resetState();
             }
@@ -59,9 +63,10 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
         // reinit with startup params
 
         // get initial state from server
-        me._currentViewId = this._defaultViewId;
-        if (me._startupState) {
-            me._resetComponentsWithNoStateData(me.useState(this._startupState));
+        me._currentViewId = me._defaultViewId;
+        startupState = me._getStartupState();
+        if (startupState) {
+            me._resetComponentsWithNoStateData(me.useState(startupState));
         } else {
             jQuery.ajax({
                 dataType: "json",
@@ -70,8 +75,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
                 url: me.sandbox.getAjaxUrl() + 'action_route=GetAppSetup&noSavedState=true',
                 success: function (data) {
                     if (data && data.configuration) {
-                        me._startupState = data.configuration;
-                        me._resetComponentsWithNoStateData(me.useState(data.configuration));
+                        me._setStartupState(data.configuration);
+                        me._resetComponentsWithNoStateData(me.useState(me._getStartupState()));
                         me._historyEnabled = true;
                     } else {
                         alert('error in getting configuration');
@@ -89,6 +94,33 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
 
         me._historyEnabled = true;
     },
+
+    /**
+     * @method _getStartupState
+     * Getter for the application's original state.
+     * @return A copy of the application's original state.
+     */
+    _getStartupState: function () {
+        var ret;
+        if (this._startupState) {
+            ret =  jQuery.extend(true, {}, this._startupState);
+        } else {
+            ret = this._startupState;
+        }
+        return ret;
+    },
+
+    /**
+     * @method _setStartupState
+     * Used to set the application's original state.
+     * Stores a _copy_ of the given state.
+     * This only stores the state, use useState to put it in use.
+     * @param {Object} state Application's original state
+     */
+    _setStartupState: function (state) {
+        this._startupState = jQuery.extend(true, {}, state);
+    },
+
     /**
      * @method _resetComponentsWithNoStateData
      * Used to return the application to its original state.
@@ -109,8 +141,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
             if (components.hasOwnProperty(cid)) {
                 found = false;
                 for (i = 0; i < loopedComponents.length; i += 1) {
-                    // FIXME use ===
-                    if (cid == loopedComponents[i]) {
+                    if (cid === loopedComponents[i]) {
                         found = true;
                         break;
                     }
@@ -126,7 +157,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
      * @method saveState
      * @param {Object} view
      * @param {String} pluginName (optional)
-     *  Calls the saveState method of the given plugin or if not given, calls it
+     * Calls the saveState method of the given plugin or if not given, calls it
      * for each plugin
      *
      * Used to store the application state though the module/bundle does nothing
@@ -169,6 +200,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
         }
         return state;
     },
+
     /**
      * @method getSavedState
      * @param {String} pluginName

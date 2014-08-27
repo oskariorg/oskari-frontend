@@ -1,23 +1,39 @@
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
 div.notLoggedIn {
     padding: 10px;
 }
-div.analyse {
 
-}
-#contentMap.mapAnalyseMode {
-    margin-left: 384px;
-}
-#contentMap div.basic_analyse {
-    background: white;
-    position: absolute;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1500;
-    width: 384px;
-}
-#contentMap div.basic_publisher div.content {
-    padding: 10px;
+#contentMap {
+    
+    &.mapAnalyseMode {
+        margin-left: 384px;
+    }
+
+    div.basic_analyse {
+        background: white;
+        position: absolute;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1500;
+        width: 384px;
+    }
+
+    div.basic_publisher div.content {
+        padding: 10px;
+    }
+
 }
 
 div.analyse {
@@ -58,14 +74,10 @@ div.basic_analyse {
         margin-left: 6px;
 
         a {
-            font-size: 150%;
-            color: #37B7FF;
             text-decoration: none;
         }
 
         ul {
-            font-size: 100%;
-            line-height: 100%;
             padding: 0;
             padding-top: 10px;
 
@@ -77,8 +89,28 @@ div.basic_analyse {
 
     }
 
+    div.analyse_difference_cont {
+
+        ul {
+            margin: 0;
+            padding: 0;
+            padding-bottom: 10px;
+
+            li {
+                list-style-type: none;
+                margin: 5px;
+            }
+
+        }
+
+    }
+
     div.icon-info {
         float: right;
+        cursor: pointer;
+    }
+
+    div.icon-funnel, div.icon-funnel-active {
         cursor: pointer;
     }
 
@@ -94,7 +126,6 @@ div.basic_analyse {
         margin-left: 8px;
         margin-right: 8px;
         margin-bottom: 2px;
-        
     }
 
     div.tool {
@@ -113,72 +144,112 @@ div.basic_analyse {
     div.toolContainer {
         margin: 5px 15px 5px 5px;
         display: inline-block;
+
         h4 {
             padding: 0;
         }
+
         div.tool {
             display: inline-block;
             cursor: pointer;
         }
+
         div.buttons {
             display: inline-block;
             float: right;
         }
+
     }
 
     div.drawFilterContainer {
         margin: 5px;
         display: inline-block;
+
         h4 {
             padding: 0;
         }
+
         div.drawFilter {
             display: inline-block;
             cursor: pointer;
+
+            &.disabled {
+                opacity: 0.4;
+                cursor: default !important;
+            }
+
+            &.selected {
+                opacity: 1.0;
+                background-color: #333438;
+                cursor: default !important;
+            }
+
         }
-        div.drawFilter.disabled {
-          opacity: 0.4;
-          cursor: default !important;
-        }
-        div.drawFilter.selected {
-          opacity: 1.0;
-          background-color: #333438;
-          cursor: default !important;
-        }
+
         div.buttons {
             display: inline-block;
             float: right;
         }
+
+    }
+
+    div.form {
+
+        div.field {
+
+            input, select {
+                width: 80%;
+                background-color: white;
+                filter:unquote("Alpha(opacity=100)") !important; /* unquote for libsass bug */
+            }
+
+        }
+
     }
 
     div.header-icon-info {
         margin: 10px;
     }
 
-    select.settings_buffer_units {
-        width: 80px;
+    div.tool, div.drawFilter, div.analyse_settings_cont, div.analyse_areas_and_sectors_cont {
+
+        input {
+            margin-right: 10px;
+        }
+
+    }
+
+    div.analyse_settings_cont {
+
+        label {
+            margin: 5px 0;
+
+            span {
+                clear: both;
+                display: block;
+            }
+
+            input, select {
+                margin-top: 7px;
+                margin-bottom: 10px;
+            }
+
+        }
+    }
+
+    select {
+
+        &.settings_buffer_units, &.settings_area_size_units {
+            width: 80px;
+        }
+
     }
 
 }
 
-div.basic_analyse div.form div.field input, div.field select {
-    width: 80%;
-    background-color: white;
-    filter:unquote("Alpha(opacity=100)") !important; /* unquote for libsass bug */
-}
-
-
-div.basic_analyse div.tool input, div.basic_analyse div.drawFilter input, div.basic_analyse div.analyse_settings_cont input {
-    margin-right: 10px;
-}
-
 .analyse_radiolabel, .analyse_checklabel {
     padding: 3px 6px;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    -o-border-radius: 2px;
-    -ms-border-radius: 2px;
-    border-radius: 2px;
+    @include border-radius(2px);
 
     &:hover {
         background-color: #eee;
@@ -186,7 +257,9 @@ div.basic_analyse div.tool input, div.basic_analyse div.drawFilter input, div.ba
 
 }
 
+/* FIXME change these to actual labels? */
 .analyse_params_label, .analyse_title_label, .output_color_label, .columns_title_label, .settings_buffer_label, .extra_title_label, .settings_name_label {
+    /* FIXME change these to fieldset + legend? */
     font-weight: bold;
     margin: 5px 0;
 }
@@ -201,6 +274,7 @@ div.basic_analyse div.tool input, div.basic_analyse div.drawFilter input, div.ba
 /* Buttons */
 div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
     margin: 5px;
+    margin-bottom: 40px; /* This is here so the buttons can be scrolled into the viewport in small resolutions... */
 
     input {
         margin-right: 1px;
@@ -223,9 +297,6 @@ label.params_checklabel {
 //    width: 18px !important;
 //} 
 table.layer-icons {
-    font-family: Arial,sans-serif;
-    font-size: 12px;
-    line-height: 18px;
     margin: 0 0 2px;
     width: 30%;
     display: inline-table;
@@ -233,9 +304,11 @@ table.layer-icons {
     div.icon-info {
         float: none;
     }
+
     div.icon-close {
         cursor: pointer;
     }
+
 }
 
 /* Analyse filter CSS */
@@ -260,6 +333,7 @@ div.analyse-filter-popup-content {
     }
 
     div.analyse-filter-clicked-features {
+
         div.clicked-features-title {
             display: inline-block;
             margin-right: 25px;
@@ -268,6 +342,7 @@ div.analyse-filter-popup-content {
         label {
             margin-left: 8px;
         }
+
     }
 
     div.bbox-title, div.bbox-radio {
@@ -294,12 +369,17 @@ div.analyse-filter-popup-content div.filter-option {
 
     div.manage-filter-option {
         display: inline-block;
+        vertical-align: middle;
 
         div.add-filter-option, div.remove-filter-option {
-            display: inline-block;
-            font-size: 200%;
-            font-weight: bold;
             cursor: pointer;
+            display: inline-block;
+            /* These are icons, so it's OK to have a custom font here. */
+            font-size: 48px;
+            font-weight: bold;
+            margin-left: 5px;
+            min-width: 16px;
+            text-align: center;
         }
         
     }
@@ -312,20 +392,33 @@ div.analyse-filter-popup-content div.filter-option {
         margin-right: 5px;
     }
 
-    select.attribute {
-        width: 150px;
-    }
+    select {
 
-    select.operator, select.boolean {
-        width: 60px;
+        &.attribute {
+            width: 150px;
+        }
+
+        &.boolean {
+            margin-top: 10px;
+            width: 60px;
+        }
+
+        &.operator {
+            width: 210px;
+        }
+
     }
 
 }
 
-div.divmanazerpopup.drawfilterdialog {
-    max-width: 400px;
-}
+div.divmanazerpopup {
 
-div.divmanazerpopup.analyse-draw-dialog {
-    max-width: 280px;
+    &.drawfilterdialog {
+        max-width: 400px;
+    }
+
+    &.analyse-draw-dialog {
+        max-width: 280px;
+    }
+
 }

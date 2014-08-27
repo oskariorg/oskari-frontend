@@ -140,6 +140,7 @@ Oskari.registerLocalization({
                 "small": "Klein",
                 "medium": "Middel",
                 "large": "Groot",
+                "fill": "NOT TRANSLATED",
                 "custom": "Aangepast formaat",
                 "width": "Breedte",
                 "height": "Hoogte"
@@ -211,6 +212,7 @@ Oskari.registerLocalization({
             "show": "Toon",
             "hide": "Verberg",
             "hidden": "De kaart is tijdelijk verborgen.",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Publicatie toegestaan",

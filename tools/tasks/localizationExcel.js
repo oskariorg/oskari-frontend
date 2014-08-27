@@ -370,11 +370,9 @@ module.exports = function (grunt) {
 
     );
 
-    /* Imports a single localization excel */
-    /*
+    /* Imports a single localization excel
      * oskari-import-l10n-excel
      */
-
     grunt.registerMultiTask(
         'import-l10n-excel',
         'Import localization excel files',
@@ -391,8 +389,10 @@ module.exports = function (grunt) {
             var AdmZip = require('adm-zip'),
                 parseString = require('xml2js').parseString,
                 sst = [],
+                si,
                 i,
                 j,
+                k,
                 row,
                 cell,
                 localeDir,
@@ -409,11 +409,22 @@ module.exports = function (grunt) {
                 templateLocale = this.data[0].templateLocale,
                 textNode;
 
+            grunt.log.writeln('Parsing', file);
             // xl/sharedStrings.xml, Shared strings <si><t>val, 0-based index
+            // (partially?) styled strings <si><r><t><_>val, <si><r><t>val
             parseString(new AdmZip(file).readAsText('xl/sharedStrings.xml'), function (err, result) {
                 if (result && result.sst && result.sst.si) {
-                    for (i = 0; i < result.sst.si.length; i++) {
-                        textNode = result.sst.si[i].t[0];
+                    si = result.sst.si;
+                    for (i = 0; i < si.length; i++) {
+                        if (si[i].t) {
+                            textNode = si[i].t[0];
+                        } else {
+                            // (partially?) styled text is chopped into pieces
+                            textNode = "";
+                            for (j = 0, k = si[i].r.length; j < k; j++) {
+                                textNode += si[i].r[j].t[0]["_"] || si[i].r[j].t;
+                            }
+                        }
                         if (typeof textNode == 'string' || textNode instanceof String) {
                             sst.push(textNode.trim());
                         } else if (textNode.hasOwnProperty('_')) {
@@ -445,6 +456,7 @@ module.exports = function (grunt) {
                 }
                 return currNode || '';
             };
+
             // Sets a new translation value
             var setNewValue = function (pathStack, val) {
                 var currNode = sourceLocale,
@@ -454,9 +466,14 @@ module.exports = function (grunt) {
                     if (i + 1 === pathStack.length) {
                         if (pathStack.join('.') !== 'key') {
                             if (currNode.hasOwnProperty(pathStack[i])) {
-                                if (currNode[pathStack[i]]) {
+                                if (currNode[pathStack[i]] && currNode[pathStack[i]].length) {
                                     // We have an old value, replace it with something (why would anyone translate an empty string?)
                                     currNode[pathStack[i]] = newValue;
+                                } else {
+                                    // No previous value, set a new value only if we have one.
+                                    if (val && val.length) {
+                                        currNode[pathStack[i]] = newValue;
+                                    }
                                 }
                             } else {
                                 grunt.log.warn('Unknown localization key: ', pathStack.join('.'));
@@ -534,6 +551,7 @@ module.exports = function (grunt) {
                 }
             };
             // xl/worksheets/sheet1.xml Table <sheetData><row><c>[<v>sharedstringid|<is><t>val]
+            grunt.log.writeln('Reading sheet from', file);
             var sheet = new AdmZip(file).readAsText('xl/worksheets/sheet1.xml');
             parseString(sheet, function (err, result) {
                 if (result && result.worksheet && result.worksheet.sheetData && result.worksheet.sheetData[0].row) {

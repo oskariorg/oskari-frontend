@@ -196,7 +196,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
 
             var map = this.instance.sandbox.getMap(),
                 panel = this.layers['' + layer.getId()],
-                selection = null;
+                selection = null,
+                i;
             if (panel.grid) {
                 selection = panel.grid.getSelection();
             }
@@ -210,23 +211,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
             // in scale, proceed
             this._prepareData(layer);
 
-            if (selection && selection.length > 0 && typeof selection[0].featureId != "undefined") {
-                for (var i = 0; i < selection.length; ++i) {
+            if (selection && selection.length > 0 && typeof selection[0].featureId != 'undefined') {
+                for (i = 0; i < selection.length; ++i) {
                     panel.grid.select(selection[i].featureId, true);
                 }
             }
 
             // mapClick
             if (panel.grid && layer.getClickedFeatureIds().length > 0) {
-                for (var j = 0; j < layer.getClickedFeatureIds().length; ++j) {
-                    panel.grid.select(layer.getClickedFeatureIds()[j], true);
+                for (i = 0; i < layer.getClickedFeatureIds().length; ++i) {
+                    panel.grid.select(layer.getClickedFeatureIds()[i], true);
                 }
             }
 
             // filter
             if (panel.grid && layer.getSelectedFeatures().length > 0) {
-                for (var k = 0; k < layer.getSelectedFeatures().length; ++k) {
-                    panel.grid.select(layer.getSelectedFeatures()[k][0], true);
+                for (i = 0; i < layer.getSelectedFeatures().length; ++i) {
+                    panel.grid.select(layer.getSelectedFeatures()[i][0], true);
                 }
             }
         },
@@ -328,7 +329,68 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
 
             // Modify layout for the resizer image
             flyout.find('div.oskari-flyoutcontent').css('padding-bottom', '5px');
-            if (jQuery('div.flyout-resizer').length === 0) flyout.append(resizer);
+            if (jQuery('div.flyout-resizer').length === 0) {
+                flyout.append(resizer);
+            }
+        },
+
+        /**
+         * @method _addNumericColumnRenderers
+         * @private
+         * @param {Grid} Grid instance
+         * Adds column renderers for numeric columns, each renderer rendering 
+         * the numbers with the highest decimal count found in the column.
+         */
+        _addNumericColumnRenderers: function (grid) {
+            var dataArray = grid.getDataModel().data,
+                visibleFields = grid.getVisibleFields(),
+                notNumeric = {},
+                decimals = {},
+                i,
+                j,
+                row,
+                key,
+                value;
+
+            for (i = 0; i < dataArray.length; i += 1) {
+                row = dataArray[i];
+                for (j = 0; j < visibleFields.length; j += 1) {
+                    key = visibleFields[j];
+                    value = row[key];
+                    if (!notNumeric[key] && value !== null && value !== undefined) {
+                        if (isNaN(value)) {
+                            value = parseFloat(value);
+                        }
+                        if (isNaN(value) && (typeof row[key] === 'string' && row[key].length)) {
+                            notNumeric[key] = true;
+                        } else {
+                            value = value + '';
+                            value = value.split('.');
+                            decimals[key] = Math.max(decimals[key] || 0, value.length === 2 ? value[1].length : 0);
+                        }
+                    }
+                }
+            }
+
+            var closureMagic = function (decimalCount) {
+                return function (value) {
+                    var parsed = parseFloat(value);
+                    if (!isNaN(parsed)) {
+                        return parsed.toFixed(decimalCount);
+                    } else {
+                        return value;
+                    }
+                };
+            };
+
+            for (i = 0; i < visibleFields.length; i += 1) {
+                if (!notNumeric[visibleFields[i]] && decimals[visibleFields[i]]) {
+                    grid.setColumnValueRenderer(
+                        visibleFields[i],
+                        closureMagic(decimals[visibleFields[i]])
+                    );
+                }
+            }
         },
 
         /**
@@ -348,13 +410,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
 
                 // create model
                 var model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
-                model.setIdField("__fid");
+                model.setIdField('__fid');
 
                 // hidden fields (hide all - remove if not empty)
                 var hiddenFields = layer.getFields().slice(0);
 
+                // FIXME why are we creating a global here? It's actually used in _addFeatureValues
                 // helper for removing item (indexOf is not in IE8)
-                remove_item = function (a, val) {
+               remove_item = function (a, val) {
                     var key;
                     for (key in a) {
                         if (a[key] == val) {
@@ -377,10 +440,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 this._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
 
                 fields = model.getFields();
-                hiddenFields.push("__fid");
-                hiddenFields.push("__centerX");
-                hiddenFields.push("__centerY");
-                hiddenFields.push("geometry");
+                hiddenFields.push('__fid');
+                hiddenFields.push('__centerX');
+                hiddenFields.push('__centerY');
+                hiddenFields.push('geometry');
 
                 // check if properties (fields or locales) have changed
                 if (!panel.fields || !panel.locales || !this._isArrayEqual(fields, panel.fields) || !this._isArrayEqual(locales, panel.locales)) {
@@ -392,11 +455,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 if (!panel.grid || panel.propertiesChanged) {
                     panel.propertiesChanged = false;
 
-                    var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid', this.instance.getLocalization('columnSelectorTooltip'));
+                    var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid', this.instance.getLocalization('columnSelectorTooltip')),
+                        k;
 
                     // localizations
                     if (locales) {
-                        for (var k = 0; k < locales.length; k++) {
+                        for (k = 0; k < locales.length; k++) {
                             grid.setColumnUIName(fields[k], locales[k]);
                         }
                     }
@@ -413,7 +477,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                             dialog.show(showMore, content);
                             dialog.moveTo(link, 'bottom');
-                            if (me.dialog) me.dialog.close(true);
+                            if (me.dialog) {
+                                me.dialog.close(true);
+                            }
                             me.dialog = dialog;
                         });
 
@@ -428,8 +494,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                     };
 
                     // filter out certain fields
-                    var visibleFields = [];
-                    for (var i = 0; i < fields.length; ++i) {
+                    var visibleFields = [],
+                        i;
+                    for (i = 0; i < fields.length; ++i) {
                         if (!contains(hiddenFields, fields[i])) {
                             visibleFields.push(fields[i]);
                         }
@@ -438,10 +505,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                     grid.setVisibleFields(visibleFields);
                     grid.setColumnSelector(true);
                     grid.setResizableColumns(true);
+                    grid.setExcelExporter(layer.getPermission('publish') === 'publication_permission_ok');
 
                     panel.grid = grid;
                 }
                 panel.grid.setDataModel(model);
+                me._addNumericColumnRenderers(panel.grid);
                 panel.grid.renderTo(panel.getContainer());
                 // define flyout size to adjust correctly to arbitrary tables
                 var mapdiv = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule').getMapEl(),
@@ -472,7 +541,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
         _addFeatureValues: function (model, fields, hiddenFields, features, selectedFeatures) {
             var i,
                 j,
-                k;
+                k,
+                featureData,
+                values;
             for (i = 0; i < features.length; i++) {
                 featureData = {};
                 values = features[i];
@@ -487,8 +558,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 }
 
                 for (j = 0; j < fields.length; j++) {
-                    if (values[j] === null || values[j] === undefined || values[j] === "") {
-                        featureData[fields[j]] = "";
+                    if (values[j] === null || values[j] === undefined || values[j] === '') {
+                        featureData[fields[j]] = '';
                     } else {
                         featureData[fields[j]] = values[j];
                         // remove from empty fields

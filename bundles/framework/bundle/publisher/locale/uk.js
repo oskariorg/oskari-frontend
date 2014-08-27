@@ -141,6 +141,7 @@ Oskari.registerLocalization(
                 "small": "Малий",
                 "medium": "Середній",
                 "large": "Великий",
+                "fill": "NOT TRANSLATED",
                 "custom": "Особливий",
                 "width": "ширина",
                 "height": "висота"
@@ -212,6 +213,7 @@ Oskari.registerLocalization(
             "show": "NOT TRANSLATED",
             "hide": "NOT TRANSLATED",
             "hidden": "NOT TRANSLATED",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "NOT TRANSLATED",

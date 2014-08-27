@@ -58,6 +58,7 @@ Oskari.registerLocalization({
             "buttons": {
                 "save": "Krijg afdruk",
                 "ok": "OK",
+                "back" : "NOT TRANSLATED",
                 "cancel": "Annuleren"
             },
             "location": {

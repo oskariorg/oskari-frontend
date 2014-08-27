@@ -21,7 +21,9 @@ Oskari.registerLocalization({
             "title": "Fel!",
             "generic": "Systemfel. Försök på nytt senare.",
             "loadFailed": "Fel i laddningen av kartlager. Ladda ned sidan på nytt i din läsare och välj kartlagren.",
-            "noResults": "ökningen gav inga resultat."
+            "noResults": "ökningen gav inga resultat.",
+            "layerTypeNotSupported": "Typ av kartlager är inte ännu understött: ",
+            "not_empty": "Teman, som du försöker att ta bort, innehåller kartlager. Välj en annan tema för de här temorna."
         },
         "loading": "Laddar...",
         "filter": {
@@ -65,7 +67,8 @@ Oskari.registerLocalization({
             "layertypes" : {
                 "wms": "WMS Lager",
                 "wfs": "WFS Lager",
-                "wmts": "WMTS Lager"
+                "wmts": "WMTS Lager",
+                "arcgis" : "ArcGIS Lager"
             },
             "selectLayer": "Välj nivå",
             "selectSubLayer": "Välj undernivå",
@@ -110,6 +113,9 @@ Oskari.registerLocalization({
             "wmsName": "Unik namn för kartlager",
             "wmsNameDesc": "Unik eller teknisk namn för kartlager",
 
+            "username": "NOT TRANSLATED",
+            "password": "NOT TRANSLATED",
+
             "addInspireName": "Ämnets namn",
             "addInspireNameTitle": "Ämnets namn",
             "addOrganizationName": "Data&shy;producentens namn",
@@ -119,8 +125,8 @@ Oskari.registerLocalization({
             "addNewGroupLayer": "Tillägg nytt gruppnivå",
             "addNewBaseLayer": "Tillägg nytt bakgrundsnivå",
             "addNewOrganization": "Tillägg ny dataproducent",
-            "addInspireThemes": "Tillägg ämne",
-            "addInspireThemesDesc": "Tillägg ämnen enligt InspireTheme",
+            "addInspireTheme": "Tillägg ämne",
+            "addInspireThemeDesc": "Tillägg ämnen enligt InspireTheme",
             "opacity": "Opacitet",
             "opacityDesc": "Lagrets opacitet (0% gör lagret genomskinligt)",
             "style": "Förvald utseende",
@@ -186,6 +192,7 @@ Oskari.registerLocalization({
         },
         "cancel": "Tillbaka",
         "add": "Tillägg",
+        "save": "Lagra",
         "delete": "Ta bort"
     }
 });

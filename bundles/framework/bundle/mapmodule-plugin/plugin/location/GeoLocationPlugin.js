@@ -178,8 +178,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.GeoLocationPlug
                 // if users just ignores/closes the browser dialog 
                 // -> error handler won't be called in most browsers
                 navigator.geolocation.getCurrentPosition(function (position) {
-                    var lat = position.coords.latitude;
-                    var lon = position.coords.longitude;
+                    var lat = position.coords.latitude,
+                        lon = position.coords.longitude;
                     callback(lon, lat);
                 }, function (errors) {
                     //ignored
@@ -192,8 +192,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.GeoLocationPlug
             } else if (typeof window.geoip_latitude === 'function' &&
                     typeof window.geoip_longitude === 'function') {
                 // if available, use http://dev.maxmind.com/geoip/javascript
-                var lat = geoip_latitude();
-                var lon = geoip_longitude();
+                var lat = geoip_latitude(),
+                    lon = geoip_longitude();
                 callback(lon, lat);
             }
         }

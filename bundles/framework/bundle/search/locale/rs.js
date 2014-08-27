@@ -1,11 +1,10 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "rs",
     "key": "Search",
     "value": {
         "title": "Pretraga po lokaciji",
         "desc": "",
-        "contentErrorMsg": "NOT TRANSLATED",
+        "invalid_characters": "NOT TRANSLATED",
         "searchDescription": "Pretraga po imenu mesta, adresi ili jedinstvenom identifikatoru nepokretnosti",
         "searchButton": "Pretraži",
         "searchResultCount": "Rezultat pretrage",
@@ -29,5 +28,4 @@ Oskari.registerLocalization(
             "title": "Rezultati pretrage"
         }
     }
-}
-);
+});

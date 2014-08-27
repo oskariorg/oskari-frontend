@@ -34,6 +34,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             reqBuilder = this.getSandbox().getRequestBuilder('ToolSelectionRequest'),
             gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest',
             gfiReqBuilder = this.getSandbox().getRequestBuilder(gfiRn),
+            group,
             rb,
             rn,
             req,
@@ -137,13 +138,13 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                                     linkParams = me.getSandbox().generateMapLinkParameters({});
                                     // This is kinda ugly...
                                     // Only show marker if there's no markers.
-                                    if (linkParams.indexOf("&markers=") === -1) {
-                                        linkParams += "&showMarker=true";
+                                    if (linkParams.indexOf('&markers=') === -1) {
+                                        linkParams += '&showMarker=true';
                                     } 
                                     pcn = 'Oskari.userinterface.component.Popup';
                                     okcn = 'Oskari.userinterface.component.Button';
                                     dialog = Oskari.clazz.create(pcn);
-                                    dialog.addClass("no_resize");
+                                    dialog.addClass('no_resize');
                                     okBtn = Oskari.clazz.create(okcn);
                                     okBtn.setTitle(loc.link.ok);
                                     okBtn.addClass('primary');
@@ -153,7 +154,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                                         me.getSandbox().postRequestByName(rn);
                                     });
 
-                                    linkContent = '<textarea rows="3" cols="80">' + mapUrlPrefix + linkParams + '</textarea>';
+                                    linkContent = '<textarea rows="3" cols="77">' + mapUrlPrefix + linkParams + '</textarea>';
                                     rn = 'DisableMapKeyboardMovementRequest';
                                     me.getSandbox().postRequestByName(rn);
                                     dialog.show(loc.link.title, linkContent, [okBtn]);
@@ -164,11 +165,11 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                                 tooltip: loc.print.tooltip,
                                 sticky: false,
                                 callback: function () {
-                                    wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
+                                    wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=850,' + 'height=1200';
                                     link = window.location.pathname + '?' + me.getSandbox().generateMapLinkParameters() +
                                         '&p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive' +
                                         '&showMarker=false&forceCache=true&mapmode=print&viewId=2';
-                                    window.open(link, "Print", wopParm);
+                                    window.open(link, 'Print', wopParm);
                                 }
                             }
                         }
@@ -176,7 +177,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 ];
 
         for (group in buttonGroups) {
-            var buttonGroup = buttonGroups[group];
+            var buttonGroup = buttonGroups[group],
+                tool;
             for (tool in buttonGroup.buttons) {
                 if (tool === 'link' && !mapUrlPrefix) {
                     // skip link tool when no mapUrlPrefix is configured

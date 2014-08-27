@@ -62,6 +62,7 @@ Oskari.registerLocalization(
             "buttons": {
                 "save": "Natisni",
                 "ok": "V redu",
+                "back" : "NOT TRANSLATED",
                 "cancel": "Prekini"
             },
             "location": {

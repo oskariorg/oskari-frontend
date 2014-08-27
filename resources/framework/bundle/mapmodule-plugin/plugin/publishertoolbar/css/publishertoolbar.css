@@ -3,7 +3,6 @@
   z-index: 100000000 !important;
   text-align: left; }
   .tools .icon {
-    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/menu-rounded-dark.png');
     display: inline-block;
     height: 35px;
     width: 35px;
@@ -24,7 +23,7 @@
       margin-left: 7.5px; }
     .tools .publishedToolbarContainer .publishedToolbarContent {
       background-color: #424343;
-      color: #FFFFFF;
+      color: white;
       border-radius: 6px;
       padding-top: 3px;
       padding-bottom: 3px;
@@ -47,21 +46,21 @@
       .tools .publishedToolbarContainer .publishedToolbarContent.dark div.toolrow div.tool.selected, .tools .publishedToolbarContainer .publishedToolbarContent.dark div.toolrow div.tool:hover:not(.disabled), .tools .publishedToolbarContainer .publishedToolbarContent.dark div.toolrow div.tool:active:not(.disabled) {
         background-color: #212121; }
     .tools .publishedToolbarContainer .publishedToolbarContent.light {
-      background-color: #ffffff;
-      border: 1px solid #888; }
+      background-color: white;
+      border: 1px solid #888888; }
       .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool.selected, .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool:hover:not(.disabled), .tools .publishedToolbarContainer .publishedToolbarContent.light div.toolrow div.tool:active:not(.disabled) {
         background-color: #eeeeee; }
     .tools .publishedToolbarContainer .publishedToolbarPopupContent.dark .publishedToolPopupContent {
       background-color: #424343;
-      color: #FFFFFF;
+      color: white;
       border: none; }
     .tools .publishedToolbarContainer .publishedToolbarPopupContent.light .publishedToolPopupContent {
-      background-color: #FFFFFF;
+      background-color: white;
       color: #424343;
-      border: 1px solid #888; }
+      border: 1px solid #888888; }
     .tools .publishedToolbarContainer .publishedToolPopupContent {
       background-color: #424343;
-      color: #FFFFFF;
+      color: white;
       border-radius: 6px;
       padding: 0 10px 3px 10px;
       display: block;
@@ -80,8 +79,8 @@
       background-color: #424343;
       border: none; }
     .tools .publishedToolbarContainer .publishedToolPopupContent.light {
-      background-color: #ffffff;
-      border: 1px solid #888; }
+      background-color: white;
+      border: 1px solid #888888; }
     .tools .publishedToolbarContainer .tool-group-title {
       font-weight: bold; }
 
@@ -104,51 +103,3 @@
     .mapplugins.right .tools .publishedToolbarContainer .tools-top-arrow {
       float: right;
       margin-right: 7.5px; }
-
-.tool-history-back-dark {
-  width: 32px;
-  height: 32px;
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-history-back-dark.png') !important;
-  background-repeat: no-repeat !important; }
-
-.tool-history-back-light {
-  width: 32px;
-  height: 32px;
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-history-back-light.png') !important;
-  background-repeat: no-repeat !important; }
-
-.tool-history-forward-dark {
-  width: 32px;
-  height: 32px;
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-history-forward-dark.png') !important;
-  background-repeat: no-repeat !important; }
-
-.tool-history-forward-light {
-  width: 32px;
-  height: 32px;
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-history-forward-light.png') !important;
-  background-repeat: no-repeat !important; }
-
-.tool-measure-line-dark {
-  width: 32px;
-  height: 32px;
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-measure-line-dark.png') !important;
-  background-repeat: no-repeat !important; }
-
-.tool-measure-line-light {
-  width: 32px;
-  height: 32px;
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-measure-line-light.png') !important;
-  background-repeat: no-repeat !important; }
-
-.tool-measure-area-dark {
-  width: 32px;
-  height: 32px;
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-measure-area-dark.png') !important;
-  background-repeat: no-repeat !important; }
-
-.tool-measure-area-light {
-  width: 32px;
-  height: 32px;
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/publishertoolbar/images/tool-measure-area-light.png') !important;
-  background-repeat: no-repeat !important; }

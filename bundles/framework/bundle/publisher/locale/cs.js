@@ -82,6 +82,7 @@ Oskari.registerLocalization({
                 "small": "Malá",
                 "medium": "Střední",
                 "large": "Velká",
+                "fill": "NOT TRANSLATED",
                 "custom": "Vlastní velikost",
                 "width": "šířka",
                 "height": "výška"
@@ -152,6 +153,7 @@ Oskari.registerLocalization({
             "show": "Zobrazit",
             "hide": "Skrýt",
             "hidden": "Mapa byla dočasně skryta.",
+            "selectAsBaselayer": "NOT TRANSLATED",
             "rights": {
                 "can_be_published_map_user": {
                     "label": "Publikace povolena",

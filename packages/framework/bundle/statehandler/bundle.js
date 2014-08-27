@@ -30,6 +30,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundle"
             "src" : "../../../../bundles/framework/bundle/statehandler/state-methods.js"
         },{
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/statehandler/session-methods.js"
+        },{
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/statehandler/plugin/Plugin.js"
         },{
             "type" : "text/javascript",
@@ -49,6 +52,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundle"
         },{
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/statehandler/request/SaveStateRequestHandler.js"
+        }
+        ],
+
+        "locales" : [
+        {
+            "lang": "en",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/statehandler/locale/en.js"
+        }, {
+            "lang": "sv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/statehandler/locale/sv.js"
+        }, {
+            "lang": "fi",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/statehandler/locale/fi.js"
         }
         ]
     },

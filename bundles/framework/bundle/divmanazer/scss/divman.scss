@@ -1,10 +1,11 @@
 /* setup document body so flyouts will not make scrollbars to browser window */
-
+/* FIXME move this somewhere else... */
 body {
 	position: fixed;
 	width: 100%;
 	height: 100%;
 }
+
 /* flyout toolbar */
 
 .oskari-flyoutheading {
@@ -14,6 +15,7 @@ body {
 	height: 14px;
 	width: 100%;
 }
+
 .oskari-flyouttoolbar {
 	height: 57px;
 	width: 100%;
@@ -21,19 +23,23 @@ body {
 	border-top: #fdfdfd;
 	border-bottom: #fef2ba;
 }
+
 .oskari-flyout-title {
 	float: left;
 	margin-left: 20px;
 	margin-top: 12px;
 	height: 20px;
 	display: inline-block;
+
+	p {
+		margin: 0;
+		padding: 0;
+		font-size: 16px;
+		line-height: 20px;
+	}
+
 }
-.oskari-flyout-title p {
-	margin: 0;
-	padding: 0;
-	font-size: 16px;
-	line-height: 20px;
-}
+
 /** flyout toolbar tools and tool states  */
 
 .oskari-flyouttools {
@@ -43,50 +49,64 @@ body {
 	display: inline-block;
 	margin-top: 15px;
 }
+
 .oskari-flyouttool-detach {
 	display: none;
 	/* visualise here if this tool required */
 }
+
 .oskari-detached .oskari-flyouttool-detach {
 	display: none;
 }
-.oskari-minimized  .oskari-flyouttool-detach {
+
+.oskari-minimized .oskari-flyouttool-detach {
 	display: none;
 }
+
 .oskari-flyouttool-attach {
 	/* visualise here if this tool required */
 	display: none;
 }
+
 .oskari-attached .oskari-flyouttool-attach {
 	display: none;
 }
+
 .oskari-flyouttool-minimize {
 	/* visualise here if this tool required */
 	display: none;
 }
+
 .oskari-attached .oskari-flyouttool-minimize {
 	display: none;
 }
+
 .oskari-minimized .oskari-flyouttool-minimize {
 	display: none;
 }
+
 .oskari-flyouttool-restore {
 	/* visualise here if this tool required */
 	display: none;
 }
+
 .oskari-flyouttool-help {
 	/* visualise here if this tool required */
 	display: none;
 }
+
 .oskari-minimized .oskari-flyouttool-restore {
 	display: inline-block;
 }
+
 .oskari-minimized .oskari-flyouttool-attach {
 	display: none;
 }
+
 .oskari-minimized .oskari-flyouttool-detach {
 	display: none;
 }
+
 .oskari-flyouttool-close {
 	display: inline-block;
 	width: 16px;
@@ -94,6 +114,7 @@ body {
 	margin-right: 2px;
 	margin-left: auto;
 }
+
 /* flyout */
 .oskari-flyout {
 	background-color: #fafafa;
@@ -103,6 +124,7 @@ body {
 	padding: 0px;
 	border: 1px solid rgba(0,0,0,0.2);
 }
+
 /* flyout states */
 
 /*.oskari-minimized {
@@ -116,15 +138,15 @@ body {
 .oskari-closed {
 	display: none;
 }
+
 .oskari-minimized {
 	display: none;
 }
+
 .oskari-flyoutcontent {
 	margin: 0;
 	padding: 20px 20px 20px 25px;
 	border: 0;
-	/*overflow: auto;*/
-
 }
 
 /** tile */
@@ -134,26 +156,30 @@ body {
 	border-bottom: 1px solid white;
 	background-color: white;
 }
+
 .oskari-tile-detached {
 	border-top: 1px solid #484846;
 	border-bottom: 1px solid #212121;
 	background-color: white;
 }
+
 .oskari-tile-minimized {
 	border-top: 1px solid #484846;
 	border-bottom: 1px solid #212121;
 	background-color: #2d2d2d;
 }
+
 .oskari-tile-closed {
 	border-top: 1px solid #484846;
 	border-bottom: 1px solid #212121;
 	background-color: #2d2d2d;
 }
+
 .oskari-tile-container {
 	margin: 0;
 }
-.oskari-tile {
 
+.oskari-tile {
 	margin: 0;
 	padding: 0;
 	cursor: pointer;
@@ -161,11 +187,11 @@ body {
 	width: 153px;
 	border-top: 1px solid #484846;
 	border-bottom: 1px solid #212121;
+	/* Used to set the tile height, doesn't conflict with the styleguide */
 	line-height: 24px;
 
 	&.disabled {
 		opacity: 0.25;
-		filter:unquote("alpha(opacity=25)"); /* For IE8 and earlier, unquote for libsass bug */
 		cursor: default;
 	}
 
@@ -179,12 +205,11 @@ body {
 	float: left;
 	height: 28px;
 	width: 112px;
-	font-family: Arial, Helvetica;
+	/* This is not in the styleguide, but it's a must-have... */
 	font-weight: bold;
 	font-size: 11px;
 	text-align: left;
 	text-transform: uppercase;
-	/*color: white;*/
 
 }
 .oskari-tile-attached .oskari-tile-title {
@@ -203,6 +228,7 @@ body {
 	float: right;
 	text-align: center;
 	display: inline-block;
+	/* This is not in the styleguide, but it's a must-have... */
 	font-size: 11px;
 	font-weight: bold;
 	height: 19px !important;
@@ -224,11 +250,11 @@ body {
 @media screen {
 	.oskari-attached {
 		min-width: 520px;
-		max-width: 830px;
+		max-width: 840px;
 	}
 	.oskari-detached {
 		min-width: 520px;
-		max-width: 830px;
+		max-width: 840px;
 	}
 	.oskari-flyoutcontentcontainer {
 		width: 100%;
@@ -237,7 +263,6 @@ body {
 		border: 0;
 		overflow: auto;
 		max-height: 500px; 
-		/* overflow: auto; */
 	}
 }
 

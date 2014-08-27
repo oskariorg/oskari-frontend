@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         __name: 'PanButtons',
 
         getClazz: function () {
-            return "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons";
+            return 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons';
         },
 
         /**
@@ -38,6 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         getName: function () {
             return this.pluginName;
         },
+
         /**
          * @method getMapModule
          * @return {Oskari.mapframework.ui.module.common.MapModule} reference
@@ -46,6 +47,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         getMapModule: function () {
             return this.mapModule;
         },
+
+        getElement: function () {
+            return this.element;
+        },
+
         /**
          * @method hasUI
          * This plugin has an UI so always returns true
@@ -55,6 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             return true;
 
         },
+
         /**
          * @method setMapModule
          * @param {Oskari.mapframework.ui.module.common.MapModule} reference
@@ -67,14 +74,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 this.pluginName = mapModule.getName() + this.__name;
             }
         },
+
         /**
          * @method init
          * implements Module protocol init method - declares pan
          * buttons templates
          */
         init: function () {
-            var me = this,
-                ppid = (new Date()).getTime().toString();
+            var ppid = (new Date()).getTime().toString();
             // templates
             this.templates.main = jQuery('<div class="mapplugin panbuttonDiv panbuttons" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.PanButtons">' +
                 '<div>' +
@@ -100,6 +107,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         register: function () {
 
         },
+
         /**
          * @method unregister
          * mapmodule.Plugin protocol method - does nothing atm
@@ -162,13 +170,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             }
             me.conf.location.classes = location;
 
-            // reset plugin if active
             if (me.element) {
-                //me.stopPlugin();
-                //me.startPlugin();
                 me.getMapModule().setMapControlPlugin(me.element, location, 0);
             }
         },
+
         /**
          * @method _draw
          * @private
@@ -198,7 +204,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             var pbimg = this.getMapModule().getImageUrl() + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/',
                 panbuttonDivImg = pb.find('.panbuttonDivImg');
             // update path from config
-            panbuttonDivImg.attr('src', pbimg + "empty.png");
+            panbuttonDivImg.attr('src', pbimg + 'empty.png');
 
             if (me.conf && me.conf.toolStyle) {
                 me.changeToolStyle(me.conf.toolStyle, pb);
@@ -207,11 +213,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             var center = pb.find('.panbuttons_center');
 
             center.bind('mouseover', function (event) {
-                //panbuttonDivImg.attr('src', pbimg + 'root.png');
                 panbuttonDivImg.addClass("root");
             });
             center.bind('mouseout', function (event) {
-                //panbuttonDivImg.attr('src', pbimg + 'default.png');
                 panbuttonDivImg.removeClass("root");
             });
             center.bind('click', function (event) {
@@ -230,12 +234,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
 
             var left = pb.find('.panbuttons_left');
             left.bind('mouseover', function (event) {
-                //panbuttonDivImg.attr('src', pbimg + 'left.png');
-                panbuttonDivImg.addClass("left");
+                panbuttonDivImg.addClass('left');
             });
             left.bind('mouseout', function (event) {
-                //panbuttonDivImg.attr('src', pbimg + 'default.png');
-                panbuttonDivImg.removeClass("left");
+                panbuttonDivImg.removeClass('left');
             });
             left.bind('click', function (event) {
                 if (!me.isInLayerToolsEditMode) {
@@ -245,12 +247,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
 
             var right = pb.find('.panbuttons_right');
             right.bind('mouseover', function (event) {
-                //panbuttonDivImg.attr('src', pbimg + 'right.png');
-                panbuttonDivImg.addClass("right");
+                panbuttonDivImg.addClass('right');
             });
             right.bind('mouseout', function (event) {
-                //panbuttonDivImg.attr('src', pbimg + 'default.png');
-                panbuttonDivImg.removeClass("right");
+                panbuttonDivImg.removeClass('right');
             });
             right.bind('click', function (event) {
                 if (!me.isInLayerToolsEditMode) {
@@ -260,12 +260,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
 
             var top = pb.find('.panbuttons_up');
             top.bind('mouseover', function (event) {
-                //panbuttonDivImg.attr('src', pbimg + 'up.png');
-                panbuttonDivImg.addClass("up");
+                panbuttonDivImg.addClass('up');
             });
             top.bind('mouseout', function (event) {
-                //panbuttonDivImg.attr('src', pbimg + 'default.png');
-                panbuttonDivImg.removeClass("up");
+                panbuttonDivImg.removeClass('up');
             });
             top.bind('click', function (event) {
                 if (!me.isInLayerToolsEditMode) {
@@ -275,12 +273,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
 
             var bottom = pb.find('.panbuttons_down');
             bottom.bind('mouseover', function (event) {
-                //panbuttonDivImg.attr('src', pbimg + 'down.png');
-                panbuttonDivImg.addClass("down");
+                panbuttonDivImg.addClass('down');
             });
             bottom.bind('mouseout', function (event) {
-                //panbuttonDivImg.attr('src', pbimg + 'default.png');
-                panbuttonDivImg.removeClass("down");
+                panbuttonDivImg.removeClass('down');
             });
             bottom.bind('click', function (event) {
                 if (!me.isInLayerToolsEditMode) {
@@ -311,6 +307,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 this.isInLayerToolsEditMode = event.isInMode();
             }
         },
+
         /**
          * @method onEvent
          * Event is handled forwarded to correct #eventHandlers if found or
@@ -320,12 +317,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         onEvent: function (event) {
             return this.eventHandlers[event.getName()].apply(this, [event]);
         },
+
         /**
          * @method start
          * Module protocol method - does nothing atm
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          */
         start: function (sandbox) {},
+
         /**
          * @method stop
          * Module protocol method - does nothing atm
@@ -366,5 +365,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': ['Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin']
     });

@@ -31,6 +31,7 @@ require.config({
       "statehandler": "src/framework/statehandler/module",
       "infobox": "src/framework/infobox/module",
       "search": "src/framework/search/module",
+      "routesearch": "src/framework/routesearch/module",
       "layerselector2": "src/framework/layerselector2/module",
       "layerselection2": "src/framework/layerselection2/module",
       "personaldata": "src/framework/personaldata/module",
