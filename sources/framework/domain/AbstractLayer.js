@@ -657,7 +657,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
                 var style = me.getStyles()[i];
                 if (style.getName() === styleName) {
                     me._currentStyle = style;
-                    if (style.getLegend() !== '') {
+                    if (style.getLegend()) {
                         me._legendImage = style.getLegend();
                     }
                     return;
