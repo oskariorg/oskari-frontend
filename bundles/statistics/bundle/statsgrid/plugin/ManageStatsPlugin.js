@@ -829,11 +829,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         },
 
         /**
-         * Adds the add own indicator button in paramCont
+         * Adds the add own indicator button in paramCont, removes old one if present.
          */
         _addOwnIndicatorButton: function (paramCont, container) {
             var me = this,
                 button = jQuery(me.templates.addOwnIndicator);
+
+            container.find('.new-indicator-cont').remove();
 
             button.find('input').val(me._locale.addDataButton);
             paramCont.append(button);
