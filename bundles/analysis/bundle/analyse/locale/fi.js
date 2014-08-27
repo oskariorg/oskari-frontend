@@ -89,31 +89,31 @@ Oskari.registerLocalization(
                         "label": "Vyöhyke",
                         "classForMethod": "buffer",
                         "selected": true,
-                        "tooltip": ""
+                        "tooltip": "Vyöhyke-menetelmän avulla käyttäjä voi lisätä valittujen kohteiden ympärille haluamansa kokoiset vyöhykkeet ja käyttää niitä myöhemmin muiden analyysien pohjana."
                     },
                     {
                         "id": "oskari_analyse_aggregate",
                         "label": "Tunnuslukujen laskenta",
                         "classForPreview": "aggregate",
-                        "tooltip": ""
+                        "tooltip": "Tunnuslukujen laskenta -menetelmän avulla käyttäjä voi laskea valitsemistaan kohteista tunnuslukuja, kuten keskiarvon ja lukumäärän."
                     },
                     {
                         "id": "oskari_analyse_union",
                         "label": "Yhdiste",
                         "classForPreview": "union",
-                        "tooltip": ""
+                        "tooltip": "Yhdiste-menetelmän avulla käyttäjä voi yhdistää valitsemansa kohteet yhdeksi kohteeksi."
                     },
                     {
                         "id": "oskari_analyse_clip",
                         "label": "Leikkaus",
                         "classForPreview": "clip",
-                        "tooltip": ""
+                        "tooltip": "Leikkaus-menetelmän avulla käyttäjä voi leikata kohteita toisen karttatason kohteilla. Analyysin lopputulokseen otetaan mukaan ne leikattavan tason kohteet, jotka sisältyvät leikkaavan tason kohteiden alueisiin."
                     },
                     {
                         "id": "oskari_analyse_intersect",
                         "label": "Leikkaavien kohteiden suodatus",
                         "classForPreview": "intersect",
-                        "tooltip": ""
+                        "tooltip": "Leikkaavien kohteiden suodatus -menetelmän avulla käyttäjä voi valita leikattavalta tasolta ne kohteet, jotka sisältyvät tai leikkaavat (sisältyvät osittain) leikkaavan tason kohteiden alueita. Käyttäjä voi itse valita, otetaanko mukaan ainoastaan sisältyvät vai myös leikkaavat kohteet."
                     },
                     {
                         "id": "oskari_analyse_layer_union",
@@ -125,7 +125,7 @@ Oskari.registerLocalization(
                         "id": "oskari_analyse_areas_and_sectors",
                         "label": "Monivyöhyke",
                         "classForPreview": "areas_and_sectors",
-                        "tooltip": ""
+                        "tooltip": "Monivyöhyke-menetelmän avulla käyttäjä voi muodostaa valitsemiensa kohteiden ympärille useita eri vyöhykkeitä. Käyttäjä voi itse määrittää vyöhykkeiden koon ja lukumäärän."
                     }
                 ]
             },
@@ -271,7 +271,7 @@ Oskari.registerLocalization(
                 "values": {
                     "title": "Suodata kohteet ominaisuustietojen perusteella",
                     "placeholders": {
-                        "case-sensitive": "",
+                        "case-sensitive": "Kirjainkoko vaikuttaa valintoihin.",
                         "attribute": "Ominaisuustieto",
                         "boolean": "Looginen operaattori",
                         "operator": "Operaattori",
