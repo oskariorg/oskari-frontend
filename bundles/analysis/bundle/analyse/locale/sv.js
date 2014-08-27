@@ -89,31 +89,31 @@ Oskari.registerLocalization(
                         "label": "Zon",
                         "classForMethod": "buffer",
                         "selected": true,
-                        "tooltip": ""
+                        "tooltip": "Man kan skapa en zon omkring sina utvalda objekt. Man kan välja sig zonens storlek. Zonen kan användas senare i andra analys."
                     },
                     {
                         "id": "oskari_analyse_aggregate",
                         "label": "Statistiska mått",
                         "classForPreview": "aggregate",
-                        "tooltip": ""
+                        "tooltip": "Man kan beräkna lägesmått och spridningsmåt för sina utvalda objekt."
                     },
                     {
                         "id": "oskari_analyse_union",
                         "label": "Union",
                         "classForPreview": "union",
-                        "tooltip": ""
+                        "tooltip": "Man kan kombinera sin utvalda objekt till en ny objekt."
                     },
                     {
                         "id": "oskari_analyse_intersect",
                         "label": "Klippning",
                         "classForPreview": "intersect",
-                        "tooltip": ""
+                        "tooltip": "Man kan klippa objekt med objekt av ett annat kartlager. Resultaten innehåller bara objekt som ingår helt i område av objekt på klippande kartlagret."
                     },
                     {
                         "id": "oskari_analyse_layer_union",
                         "label": "Klippande objekt filtrering",
                         "classForPreview": "layer_union",
-                        "tooltip": ""
+                        "tooltip": "Man kan välja sig objekt från ett  analyslager genom att klippa dem med ett annat analyslager."
                     },
                     {
                         "id": "oskari_analyse_areas_and_sectors",
@@ -125,7 +125,7 @@ Oskari.registerLocalization(
                         "id": "oskari_analyse_areas_and_sectors",
                         "label": "Flera zoner",
                         "classForPreview": "areas_and_sectors",
-                        "tooltip": ""
+                        "tooltip": "Man kan skapa flera zoner omkring utvalda objekt. Man kan välja sig själv zoners storlek och antal."
                     }
                 ]
             },
@@ -200,8 +200,9 @@ Oskari.registerLocalization(
                 "area_count": "Antal av zoner",
                 "area_count_tooltip": "Ge zoner antal.",
                 "area_size": "Storlek av zoner",
-                "area_size_tooltip": "Ge zoner storlek.",
                 "sector_count": "Antal av sektorer",
+                "area_count_tooltip": "Ge zoner antal.",
+                "area_size_tooltip": "Ge zoner storlek.",
                 "sector_count_tooltip": "Ge sektorer antal."
             },
             "spatial": {
@@ -271,7 +272,7 @@ Oskari.registerLocalization(
                 "values": {
                     "title": "Filtrera objekt på grund av attribut data",
                     "placeholders": {
-                        "case-sensitive": "",
+                        "case-sensitive": "Bokstavsstorlek verkar på val.",
                         "attribute": "Attribut",
                         "boolean": "Logisk operator",
                         "operator": "Operator",

@@ -2,38 +2,38 @@
 div.accordion {
 
     div.accordionmsg {
-        padding : 10px;
+        padding: 10px;
     }
 
     div.accordion_panel {
-        background-color : #F3F3F3;
+        background-color: #F3F3F3;
         border: 1px solid #C0D0D0;
         clear: both;
         overflow: hidden;
-        margin : 0;
-        padding : 0;
+        margin: 0;
+        padding: 0;
 
         &.open {
-            background-color : #FAFAFA;
+            background-color: #FAFAFA;
         }
 
         div.content {
-            padding : 5px;
+            padding: 5px;
         }
 
         div.header {
-            /* Accordion header style, defined in styleguide */
-            font-size : 16px;
-            line-height: 19px;
 
             div.headerIcon {
-                display : inline-block;
+                display: inline-block;
                 margin-left: 12px;
                 vertical-align: middle;
             }
 
             div.headerText {
-                display : inline-block;
+                /* Accordion header style, defined in styleguide */
+                font-size: 16px;
+                line-height: 19px;
+                display: inline-block;
                 font-weight: bold;
                 padding: 8px 10px 8px 12px;
             }

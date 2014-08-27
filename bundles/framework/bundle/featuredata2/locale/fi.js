@@ -1,5 +1,4 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "fi",
     "key": "FeatureData2",
     "value": {
@@ -14,7 +13,7 @@ Oskari.registerLocalization(
         "columnSelectorTooltip": "Näytä sarakkeet",
         "popup": {
             "title": "Valitse kohteita kartalta",
-            "instructions": "NOT TRANSLATED",
+            "instructions": " ",
             "link": {
                 "title": "Lisää valinta"
             },
@@ -47,5 +46,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

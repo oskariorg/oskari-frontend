@@ -52,6 +52,7 @@ div.renderdialog {
             position: absolute;
             width: 1.2em;
             z-index: 2;
+            margin-top: 2px;
             border: 0 !important;
         }
 
@@ -93,6 +94,7 @@ div.renderdialog {
         position: relative;
         margin-left: 5px;
         margin-top: 5px;
+        margin-bottom: 11px;
         width: 110px;
         height: 10px;
     }
@@ -166,7 +168,6 @@ div.renderdialog {
 
         &.custom-color {
             width: 25px;
-            height: 10px;
             margin-top: 5px;
 
             &:disabled {
@@ -239,7 +240,7 @@ div.areaform {
 
     div.column2 {
         float: right;
-        width: 485px;
+        width: 565px;
     }
 
     div.custom-fill {
@@ -270,7 +271,7 @@ div.areaform, div.lineform {
     div.column1 {
         float: left;
         width: 130px;
-        height: 225px;
+        height: 270px;
         padding-left: 5px;
         padding-right: 5px;
     }
@@ -281,13 +282,13 @@ div.pointform div.column2,
 div.lineform div.column2,
 div.areaform div.column22 {
     float: right;
-    width: 320px;
+    width: 350px;
 }
 
 div.renderdialog div.column21,
 div.areaform div.column221 {
     float: left;
-    width: 155px;
+    width: 175px;
     height: 200px;
     padding-left: 5px;
     padding-right: 5px;
@@ -297,20 +298,20 @@ div.pointform div.column22,
 div.lineform div.column22,
 div.areaform div.column222 {
     float: right;
-    width: 145px;
+    width: 155px;
     height: 100px;
     padding-left: 5px;
     padding-right: 5px;
 }
 
 div.pointvisualization {
-    width: 510px;
+    width: 540px;
 }
 
 div.linevisualization {
-    width: 500px;
+    width: 530px;
 }
 
 div.areavisualization {
-    width: 650px;
+    width: 730px;
 }

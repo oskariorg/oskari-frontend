@@ -12,15 +12,14 @@ div.accordion div.accordion_panel {
     background-color: #FAFAFA; }
   div.accordion div.accordion_panel div.content {
     padding: 5px; }
-  div.accordion div.accordion_panel div.header {
+  div.accordion div.accordion_panel div.header div.headerIcon {
+    display: inline-block;
+    margin-left: 12px;
+    vertical-align: middle; }
+  div.accordion div.accordion_panel div.header div.headerText {
     /* Accordion header style, defined in styleguide */
     font-size: 16px;
-    line-height: 19px; }
-    div.accordion div.accordion_panel div.header div.headerIcon {
-      display: inline-block;
-      margin-left: 12px;
-      vertical-align: middle; }
-    div.accordion div.accordion_panel div.header div.headerText {
-      display: inline-block;
-      font-weight: bold;
-      padding: 8px 10px 8px 12px; }
+    line-height: 19px;
+    display: inline-block;
+    font-weight: bold;
+    padding: 8px 10px 8px 12px; }

@@ -8,6 +8,10 @@ Added username and password support to the layer admin flyout.
 
 ## 1.23
 
+### mapmodule/LogoPlugin
+
+The default logo image has been changed
+
 ### statistics / StatsGrid
 
 Statsgrid is refactored to use stats instead of sotka. All filenames and classes named sotka are now renamed as stats.

@@ -226,8 +226,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             this.dialog = dialog;
             var buttons = [],
-                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            cancelBtn.setTitle(locBtns.cancel);
+                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+            //cancelBtn.setTitle(locBtns.cancel);
             cancelBtn.setHandler(function () {
                 // ask toolbar to select default tool
                 var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
@@ -248,12 +248,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
             buttons.push(finishBtn);
 
             // for logged-in-user: add line & area buttons
-            if (me.instance.sandbox.getUser().isLoggedIn()) {
+            /*if (me.instance.sandbox.getUser().isLoggedIn()) {
                 if (drawMode === 'line' || drawMode === 'area') {
                     cancelBtn.setTitle(locBtns.close);
                     finishBtn.setTitle(locBtns.saveAsMyPlace);
                 }
-            }
+            }*/
 
 
             var content = this.templateHelper.clone();

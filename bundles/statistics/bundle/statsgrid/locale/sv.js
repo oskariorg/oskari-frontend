@@ -150,8 +150,8 @@ Oskari.registerLocalization(
         "noRegionFound": "NOT TRANSLATED",
         "regionCategories": {
             "title": "NOT TRANSLATED",
-            "ERVA": "NOT TRANSLATED",
             "ELY-KESKUS": "NOT TRANSLATED",
+            "ERVA": "NOT TRANSLATED",
             "KUNTA": "NOT TRANSLATED",
             "ALUEHALLINTOVIRASTO": "NOT TRANSLATED",
             "MAAKUNTA": "NOT TRANSLATED",
@@ -160,6 +160,8 @@ Oskari.registerLocalization(
             "SEUTUKUNTA": "NOT TRANSLATED",
             "SUURALUE": "NOT TRANSLATED"
         },
+        "baseInfoTitle": "NOT TRANSLATED",
+        "dataTitle": "NOT TRANSLATED",
         "addDataButton": "NOT TRANSLATED",
         "addDataTitle": "NOT TRANSLATED",
         "openImportDialogTip": "NOT TRANSLATED",

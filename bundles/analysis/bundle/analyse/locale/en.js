@@ -88,32 +88,32 @@ Oskari.registerLocalization(
                         "id": "oskari_analyse_buffer",
                         "label": "Buffer",
                         "classForMethod": "buffer",
-                        "selected": true,
-                        "tooltip": ""
+                        "tooltip": "By the method \"Buffer\" you can add the buffers around the selected objects. You can define the buffer size by yourself. After making buffers you can use them as a base for other analysis."
                     },
                     {
                         "id": "oskari_analyse_aggregate",
                         "label": "Key ratios computation",
                         "classForPreview": "aggregate",
-                        "tooltip": ""
+                        "tooltip": "By the method \"Key ratios computation\" you can count different key ratios (e.g. average and sum) based on the selected features."
                     },
                     {
                         "id": "oskari_analyse_union",
                         "label": "Union",
                         "classForPreview": "union",
-                        "tooltip": ""
+                        "tooltip": "By the method \"Union\" you can join the selected features to one new feature."
                     },
                     {
                         "id": "oskari_analyse_intersect",
                         "label": "Clipping",
                         "classForPreview": "clip",
                         "tooltip": ""
+                        "tooltip": "By the method \"Clipping\" you can clip the selected features by the features of another analyse layer. The result includes only those of selected features whose area is inside of the features of the clipping map layer."
                     },
                     {
                         "id": "oskari_analyse_layer_union",
                         "label": "Union of the intersecting features",
                         "classForPreview": "intersect",
-                        "tooltip": ""
+                        "tooltip": "By the method \"Union of the intersecting features\" you can intersect the selected features by the features of the intersecting level. You can select if the result includes only the features inside or partly inside the features of the intersecting level."
                     },
                     {
                         "id": "oskari_analyse_areas_and_sectors",
@@ -125,7 +125,7 @@ Oskari.registerLocalization(
                         "id": "oskari_analyse_areas_and_sectors",
                         "label": "Multiple buffers",
                         "classForPreview": "areas_and_sectors",
-                        "tooltip": ""
+                        "tooltip": "By the method \"Multiple buffers\" you can add multiple buffers around the selected features. You can define the buffer size and the number of buffers."
                     }
                 ]
             },
@@ -200,8 +200,9 @@ Oskari.registerLocalization(
                 "area_count": "The number of the buffers",
                 "area_count_tooltip": "Give the number of the buffers.",
                 "area_size": "The buffer size",
-                "area_size_tooltip": "Give the buffer size.",
                 "sector_count": "The number of the sectors",
+                "area_count_tooltip": "Give the number of the buffers.",
+                "area_size_tooltip": "Give the buffer size.",
                 "sector_count_tooltip": "Give the number of the sectors."
             },
             "spatial": {
@@ -271,7 +272,7 @@ Oskari.registerLocalization(
                 "values": {
                     "title": "Filter",
                     "placeholders": {
-                        "case-sensitive": "",
+                        "case-sensitive": "Case sensitive",
                         "attribute": "Attribute",
                         "boolean": "Logical operator",
                         "operator": "Operator",

@@ -235,7 +235,7 @@ div.admin-layerselector {
     transition-property: height; }
   div.admin-layerselector .show-add-class {
     padding: 10px 10px;
-    height: 200px;
+    height: 230px;
     width: 100%; }
   div.admin-layerselector .add-layer-wrapper, div.admin-layerselector .add-class-wrapper {
     display: block; }
