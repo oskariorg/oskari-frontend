@@ -6,6 +6,10 @@
 
 Added username and password support to the layer admin flyout.
 
+###  featuredata2/MapSelectionPlugin
+
+Disabled rotation of rectangular selection.
+
 ## 1.23
 
 ### mapmodule/LogoPlugin
