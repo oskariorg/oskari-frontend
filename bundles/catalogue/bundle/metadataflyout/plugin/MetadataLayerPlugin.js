@@ -26,7 +26,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
         setMapModule: function (mapModule) {
             this.mapModule = mapModule;
             this.pluginName = mapModule.getName() + this.__name;
-
         },
         register: function () {
             this.getMapModule().setLayerPlugin('metadatalayer', this);
@@ -73,13 +72,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
          */
         stop: function (sandbox) {},
         eventHandlers: {
-            'AfterMapLayerRemoveEvent': function (event) {
+            AfterMapLayerRemoveEvent: function (event) {
                 this.afterMapLayerRemoveEvent(event);
             },
-            'FeaturesAvailableEvent': function (event) {
+            FeaturesAvailableEvent: function (event) {
                 this.handleFeaturesAvailableEvent(event);
             },
-            'AfterChangeMapLayerOpacityEvent': function (event) {
+            AfterChangeMapLayerOpacityEvent: function (event) {
                 this.afterChangeMapLayerOpacityEvent(event);
             }
         },
@@ -91,18 +90,17 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
          *
          */
         preselectLayers: function (layers) {
-            var ownedLayer = this.getMapLayer();
-
-            var sandbox = this._sandbox,
+            var ownedLayer = this.getMapLayer(),
+                sandbox = this._sandbox,
                 i,
                 layer,
                 layerId;
-            for (i = 0; i < layers.length; i++) {
+            for (i = 0; i < layers.length; i += 1) {
                 layer = layers[i];
                 layerId = layer.getId() + '';
 
                 if (layer.isLayerOfType('VECTOR') && ownedLayer.getId() + '' === layerId) {
-                    sandbox.printDebug("preselecting " + layerId);
+                    sandbox.printDebug('preselecting ' + layerId);
                     this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
             }
@@ -124,8 +122,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
          * registers default vector formats
          */
         registerVectorFormats: function () {
-            this.registerVectorFormat("application/json", new OpenLayers.Format.GeoJSON({}));
-            this.registerVectorFormat("application/nlsfi-x-openlayers-feature", {
+            this.registerVectorFormat('application/json', new OpenLayers.Format.GeoJSON({}));
+            this.registerVectorFormat('application/nlsfi-x-openlayers-feature', {
                 read: function (data) {
                     return data;
                 }
@@ -133,13 +131,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
         },
         afterMapLayerRemoveEvent: function (event) {
             var layer = event.getMapLayer();
-
             this.removeMapLayerFromMap(layer);
         },
 
         afterChangeMapLayerOpacityEvent: function (event) {
-            var layer = event.getMapLayer();
-            var ownedLayer = this.getMapLayer();
+            var layer = event.getMapLayer(),
+                ownedLayer = this.getMapLayer();
 
             if (!layer.isLayerOfType('VECTOR')) {
                 return;
@@ -150,7 +147,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
             }
 
 
-            this._sandbox.printDebug("Setting Layer Opacity for " + layer.getId() + " to " + layer.getOpacity());
+            this._sandbox.printDebug('Setting Layer Opacity for ' + layer.getId() + ' to ' + layer.getOpacity());
             var mapLayer = this._map.getLayersByName('layer_' + layer.getId());
             if (mapLayer[0] !== null || mapLayer[0] !== undefined) {
                 mapLayer[0].setOpacity(layer.getOpacity() / 100);
@@ -171,24 +168,22 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
                 return;
             }
 
-            var styleMap = new OpenLayers.StyleMap();
-            var layerOpts = {
-                styleMap: styleMap
-            };
-            var sldSpec = layer.getStyledLayerDescriptor();
+            var styleMap = new OpenLayers.StyleMap(),
+                layerOpts = {
+                    styleMap: styleMap
+                },
+                sldSpec = layer.getStyledLayerDescriptor();
 
             if (sldSpec) {
                 this._sandbox.printDebug(sldSpec);
-                var styleInfo = this._sldFormat.read(sldSpec);
-
-                var styles = styleInfo.namedLayers[0].userStyles;
-
-                var style = styles[0];
+                var styleInfo = this._sldFormat.read(sldSpec),
+                    styles = styleInfo.namedLayers[0].userStyles,
+                    style = styles[0];
                 // if( style.isDefault) {
-                styleMap.styles["default"] = style;
+                styleMap.styles['default'] = style;
                 // }
             } else {
-                this._sandbox.printDebug("NO SLD FOUND");
+                this._sandbox.printDebug('NO SLD FOUND');
             }
 
             var openLayer = new OpenLayers.Layer.Vector('layer_' + layer.getId(), layerOpts);
@@ -202,7 +197,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
             }
 
 
-            this._sandbox.printDebug("#!#! CREATED VECTOR / OPENLAYER.LAYER.VECTOR for " + layer.getId());
+            this._sandbox.printDebug('#!#! CREATED VECTOR / OPENLAYER.LAYER.VECTOR for ' + layer.getId());
 
             if (keepLayerOnTop) {
                 this._map.setLayerIndex(openLayer, this._map.layers.length);
@@ -211,7 +206,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
             }
         },
         removeMapLayerFromMap: function (layer) {
-
             var ownedLayer = this.getMapLayer();
 
             if (!layer.isLayerOfType('VECTOR')) {
@@ -254,12 +248,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
                 return;
             }
 
-            var mimeType = event.getMimeType();
-            var features = event.getFeatures();
-
-            var op = event.getOp();
-
-            var format = this._supportedFormats[mimeType];
+            var mimeType = event.getMimeType(),
+                features = event.getFeatures(),
+                op = event.getOp(),
+                format = this._supportedFormats[mimeType];
 
             if (!format) {
                 return;
@@ -282,5 +274,5 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin',
             mapLayer.addFeatures(fc);
         }
     }, {
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        protocol: ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
     });

@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
          * this 'schedules' asyncronous loading
          */
         scheduleShowMetadata: function (allMetadata) {
-
+            // allMetadata may have two entries so we need the accordion...
             var accordion = this.accordion,
                 p,
                 pageInfo,
@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                 }
             }
 
-            for (n = 0; n < allMetadata.length; n++) {
+            for (n = 0; n < allMetadata.length; n += 1) {
                 data = allMetadata[n];
                 page = Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage', this.instance, this.locale);
                 page.init();
@@ -107,7 +107,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                 if (n === 0) {
                     panel.open();
                 }
-                this.pages[data.uuid || (data.RS_Identifier_CodeSpace + ":" + data.RS_Identifier_Code)] = {
+                this.pages[data.uuid || (data.RS_Identifier_CodeSpace + ':' + data.RS_Identifier_Code)] = {
                     page: page,
                     panel: panel,
                     data: data

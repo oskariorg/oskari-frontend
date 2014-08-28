@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
      * @static
      * @param {String} pEmptyMsg message that will be displayed if there is no tabs added
      */
-
     function (pEmptyMsg) {
         this.panels = [];
         this.tabChangeListeners = [];
@@ -22,7 +21,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
         }
         this.template = jQuery('<div class="oskariTabs">' + this.emptyMsg + '</div>');
 
-        this.templateTabs = jQuery('<div class="tabsHeader"><ul class="tabsItem"></ul></div>' +
+        this.templateTabs = jQuery('<nav class="tabsHeader"><ul class="tabsItem"></ul></nav>' +
             '<div class="tabsContent tabsContentItem"></div>');
 
         this.ui = this.template.clone();
@@ -88,6 +87,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                 return false;
             });
         },
+
         /**
          * @method addTabChangeListener
          * Adds a listener function that should be called when tab selection changes
@@ -146,7 +146,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
             return panel.getHeader().hasClass('active');
         },
         /**
-         * @method addPanel
+         * @method removePanl
          * Removes the given panel from the set of tabs shown.
          * The first tab is selected as active if currently selected tab is removed.
          * If the tab was the last one, tabchangelisteners will receive the second parameter as undefined.

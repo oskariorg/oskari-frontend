@@ -9,9 +9,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Tile',
      *
      * Always extend this class, never use as is.
      */
-
     function (instance, locale) {
-
         this.instance = instance;
         this.locale = locale;
         this.container = null;
@@ -20,31 +18,39 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Tile',
         getName: function () {
             return 'Oskari.catalogue.bundle.metadataflyout.Tile';
         },
+
         setEl: function (el, width, height) {
             this.container = $(el);
         },
+
         startPlugin: function () {
             this.refresh();
         },
+
         stopPlugin: function () {
             this.container.empty();
         },
+
         getTitle: function () {
             return this.locale.title;
         },
+
         getDescription: function () {},
+
         getOptions: function () {
 
         },
+
         setState: function (state) {
             this.state = state;
         },
+
         refresh: function () {
-            var me = this;
-            var instance = me.instance;
-            var cel = this.container;
-            var tpl = this.template;
-            var sandbox = instance.getSandbox();
+            var me = this,
+                instance = me.instance,
+                cel = this.container,
+                tpl = this.template,
+                sandbox = instance.getSandbox();
 
             /*var status = cel.children('.oskari-tile-status');*/
             /*status.empty();*/

@@ -6,7 +6,7 @@
 
 div.oskariTabs {
     /* tab headers */
-     div.tabsHeader {
+    .tabsHeader {
         clear: both;
         font-weight: bold;
         margin-right: 21px;
@@ -20,12 +20,19 @@ div.oskariTabs {
             white-space: nowrap;
 
             li {
+                background: none repeat scroll 0 0 #F3F3F3;
                 display: inline-block;
                 border-style: solid;
                 border-color: #999;
                 border-width: 1px 1px 0 1px;
                 margin: 10px 0 0;
                 padding: 0;
+
+                &:first-of-type, &:last-of-type {
+                    -webkit-background-clip: padding-box;
+                    -moz-background-clip: padding-box;
+                    background-clip: padding-box;
+                }
 
                 &:first-of-type {
                     -webkit-border-top-left-radius: 2px;
@@ -40,9 +47,9 @@ div.oskariTabs {
                 }
 
                 &.active {
+                    background: none repeat scroll 0 0 #FAFAFA;
 
                     a {
-                        background: none repeat scroll 0 0 #FAFAFA;
                         font-weight: bold;
                         padding-bottom: 11px;
                         @include box-shadow(none);
@@ -55,7 +62,6 @@ div.oskariTabs {
                 }
 
                 a {
-                    background: none repeat scroll 0 0 #F3F3F3;
                     color: inherit;
                     display: block;
                     font-weight: normal;

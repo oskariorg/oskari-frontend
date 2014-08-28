@@ -18,7 +18,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
      *
      * Always extend this class, never use as is.
      */
-
     function (instance, locale) {
 
         /* @property instance bundle instance */
@@ -83,35 +82,32 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * @static
          */
         templates: {
-            content: "<div class='metadataflyout_content'></div>",
-            browseGraphic: "<div class='metadataflyout_content_browseGraphic'></div>",
-            viewTabs: "<div class='metadataflyout_content_tabs'></div>",
-            viewTab: "<div class='metadataflyout_content_tab'></div>",
+            content: '<div class="metadataflyout_content"></div>',
+            browseGraphic: '<div class="metadataflyout_content_browseGraphic"></div>',
+            viewTabs: '<div class="metadataflyout_content_tabs"></div>',
+            viewTab: '<div class="metadataflyout_content_tab"></div>',
             titles: {
-                "abstract": "<div class='metadataflyout_content_abstract_title'></div>",
-                "jhs": "<div class='metadataflyout_content_jhs_title'></div>",
-                "inspire": "<div class='metadataflyout_content_inspire_title'></div>"
-
+                abstract: '<div class="metadataflyout_content_abstract_title"></div>',
+                jhs: '<div class="metadataflyout_content_jhs_title"></div>',
+                inspire: '<div class="metadataflyout_content_inspire_title"></div>'
             },
             views: {
-                "abstract": "<div class='metadataflyout_content_abstract'></div>",
-                "jhs": "<div class='metadataflyout_content_jhs'></div>",
-                "inspire": "<div class='metadataflyout_content_inspire'></div>"
+                abstract: '<div class="metadataflyout_content_abstract"></div>',
+                jhs: '<div class="metadataflyout_content_jhs"></div>',
+                inspire: '<div class="metadataflyout_content_inspire"></div>'
             }
         },
 
         init: function () {
-            this.container = jQuery('<div />');
-
-            var locale = this.locale;
-            var content = jQuery(this.templates.content);
-
-            var me = this;
+            var me = this,
+                locale = me.locale,
+                content = jQuery(me.templates.content);
+            me.container = jQuery('<div />');
 
             /* let's create view selector tabs - and hide them all */
 
-            var viewTabs = jQuery(this.templates.viewTabs);
-            var viewTab = jQuery(this.templates.viewTab),
+            var viewTabs = jQuery(this.templates.viewTabs),
+                viewTab = jQuery(this.templates.viewTab),
                 v,
                 tabs,
                 tabTexts,
@@ -121,46 +117,50 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 target;
 
             for (v in this.templates.views) {
-                tabs = viewTabs.clone();
-                tabTexts = locale.tabs[v];
+                if (this.templates.views.hasOwnProperty(v)) {
+                    tabs = viewTabs.clone();
+                    tabTexts = locale.tabs[v];
 
-                for (t in tabTexts) {
-                    tab = viewTab.clone();
+                    for (t in tabTexts) {
+                        if (tabTexts.hasOwnProperty(t)) {
+                            tab = viewTab.clone();
 
-                    if (typeof tabTexts[t] === "string") {
+                            if (typeof tabTexts[t] === 'string') {
 
-                        tab.append(tabTexts[t]);
-                        tabs.append(tab);
-                        if (t !== v) {
+                                tab.append(tabTexts[t]);
+                                tabs.append(tab);
+                                if (t !== v) {
 
-                            tab.click({
-                                viewId: t
-                            }, function (arg) {
-                                var data = arg.data;
-                                me.showMetadataView(data.viewId);
-                            });
+                                    tab.click({
+                                        viewId: t
+                                    }, function (arg) {
+                                        var data = arg.data;
+                                        me.showMetadataView(data.viewId);
+                                    });
+                                }
+                            } else {
+                                text = tabTexts[t].text;
+                                target = tabTexts[t].target;
+
+                                tab.append(text);
+                                tabs.append(tab);
+
+                                tab.click({
+                                    viewId: t,
+                                    target: target
+                                }, function (arg) {
+                                    var data = arg.data;
+                                    me.openMetadataView(data.viewId, data.target);
+                                });
+                            }
                         }
-                    } else {
-                        text = tabTexts[t].text;
-                        target = tabTexts[t].target;
-
-                        tab.append(text);
-                        tabs.append(tab);
-
-                        tab.click({
-                            viewId: t,
-                            target: target
-                        }, function (arg) {
-                            var data = arg.data;
-                            me.openMetadataView(data.viewId, data.target);
-                        });
                     }
+
+                    tabs.hide();
+
+                    this.tabs[v] = tabs;
+                    content.append(tabs);
                 }
-
-                tabs.hide();
-
-                this.tabs[v] = tabs;
-                content.append(tabs);
             }
 
             /*placeholder for browseGrpahics */
@@ -172,21 +172,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
              * let's create views - and hide them also
              */
             for (v in this.templates.views) {
-
-                /*
-                 * view tabs
-                 */
-
-                /*
-                 * views
-                 */
-                this.titles[v] = jQuery(this.templates.titles[v]);
-                this.titles[v].append(this.locale[v]);
-                this.views[v] = jQuery(this.templates.views[v]);
-
-                content.append(this.titles[v]);
-                content.append(this.views[v]);
-
+                if (this.templates.views.hasOwnProperty(v)) {
+                    this.titles[v] = jQuery(this.templates.titles[v]);
+                    this.titles[v].append(this.locale[v]);
+                    this.views[v] = jQuery(this.templates.views[v]);
+                    content.append(this.titles[v]);
+                    content.append(this.views[v]);
+                }
             }
 
             /* special handling */
@@ -243,7 +235,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * shows metadata subset view. this changes state.
          */
         showMetadataView: function (viewId, target) {
-            this.instance.getSandbox().printDebug("ShowMetadataView " + viewId);
+            this.instance.getSandbox().printDebug('ShowMetadataView ' + viewId);
             var tabs = this.tabs,
                 views = this.views,
                 titles = this.titles,
@@ -314,11 +306,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                     var newContainerPart = jQuery('<td class="metadataContent"/>');
 
                     /* hack to fix ultraloooong URLs */
-                    if (part.hasClass("MD_DigitalTransferOptions")) {
-                        newContainerPart.addClass("MD_DigitalTransferOptions");
+                    if (part.hasClass('MD_DigitalTransferOptions')) {
+                        newContainerPart.addClass('MD_DigitalTransferOptions');
                     }
 
-                    var partSplice = part.text().split("\.\n");
+                    var partSplice = part.text().split('.\n');
                     jQuery.each(partSplice, function (nn, txtPart) {
 
                         var trimmed = jQuery.trim(txtPart);
@@ -328,7 +320,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
                         var newPart = jQuery('<div class="metadataflyout_content_section"/>');
                         if (partSplice.length > 1) {
-                            newPart.text(trimmed + ".");
+                            newPart.text(trimmed + '.');
                         } else {
                             newPart.text(trimmed);
                         }
@@ -341,8 +333,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 /* Let's fix HREFs to click events */
                 /* We cannot modify the source */
 
-                var links = newContent.find("a[href]"),
-                    isMetaLink = new RegExp("^\\?.*");
+                var links = newContent.find('a[href]'),
+                    isMetaLink = new RegExp('^\\?.*');
 
                 jQuery.each(links, function (index, ahref) {
                     var el = jQuery(ahref),
@@ -355,10 +347,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                         return;
                     }
 
-                    var splits = href.split("&"),
+                    var splits = href.split('&'),
                         argMap = {};
                     jQuery.each(splits, function (index, part) {
-                        var keyVal = part.split("=");
+                        var keyVal = part.split('=');
                         argMap[keyVal[0]] = keyVal[1];
                     });
 
@@ -375,7 +367,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 /* HACK END */
 
                 views[viewId].append(newContent);
-                views[viewId].css("display", "");
+                views[viewId].css('display', '');
 
                 me._updatePanel();
             }
@@ -477,7 +469,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             this.contentState.metadata.uuid = uuid;
             this.contentState.metadata.RS_Identifier_Code = RS_Identifier_Code;
             this.contentState.metadata.RS_Identifier_CodeSpace = RS_Identifier_CodeSpace;
-            this.instance.getSandbox().printDebug("showMetadata { uuid=" + uuid + ", view=" + this.contentState.view + "}");
+            this.instance.getSandbox().printDebug('showMetadata { uuid=' + uuid + ', view=' + this.contentState.view + '}');
             this.loadMetadataJSONForState();
             this.showMetadataView(this.contentState.view);
         },
