@@ -167,7 +167,6 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
         eventHandlers: {
             'RoleChangedEvent': function (event) {
                 this.plugins['Oskari.userinterface.Flyout'].handleRoleChange(event.getRole(), event.getOperation());
-                alert("layerrights handle rolechange");
             }
         },
 
