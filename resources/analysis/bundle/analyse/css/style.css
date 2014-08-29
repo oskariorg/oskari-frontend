@@ -1,4 +1,5 @@
 /* Mixins */
+/* SASS removes whitespace that calc requires, so unquote() whatever calculation you pass to this */
 div.notLoggedIn {
   padding: 10px; }
 
@@ -22,10 +23,15 @@ div.analyse div.startview div.icon-info {
 
 div.basic_analyse > div.content {
   overflow: auto;
-  height: 89%; }
+  height: 89%;
+  height: -moz-calc(100% - 88px);
+  height: -webkit-calc(100% - 88px);
+  height: -o-calc(100% - 88px);
+  height: calc(100% - 88px); }
 div.basic_analyse > div.header {
   background-color: #FDF8D9;
-  padding: 5px 10px; }
+  padding: 5px 10px;
+  height: 37px; }
   div.basic_analyse > div.header div.icon-close {
     float: right; }
 div.basic_analyse div.analyse-select-featurelist {
