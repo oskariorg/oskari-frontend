@@ -28,6 +28,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
         afterStart: function (sandbox) {
             var title = this.getLocalization('title');
 
+            var conf = this.conf,
+                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
+                sandbox = Oskari.getSandbox(sandboxName);
+
             // request
             this._requestHandlers['userguide.ShowUserGuideRequest'] = Oskari.clazz.create('Oskari.mapframework.bundle.userguide.request.ShowUserGuideRequestHandler', sandbox, this);
             sandbox.addRequestHandler('userguide.ShowUserGuideRequest', this._requestHandlers['userguide.ShowUserGuideRequest']);
@@ -106,6 +110,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
                     me.isContentLoaded = true;
                 };
             }
+
             if (this.conf.tabs) {
                 for (i = 0; i < userGuideTabs.length; i += 1) {
                     newtab = userGuideTabs[i];
@@ -113,6 +118,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
                         newtab.tags,
                         closureMagic(newtab.tags)
                     );
+                    debugger;
                 }
             } else {
                 me.tagsTxt = me.getLocalization('help').tags;

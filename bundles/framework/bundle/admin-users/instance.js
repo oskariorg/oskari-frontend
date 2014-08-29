@@ -94,13 +94,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                 }
             }
 
-            //Let's extend UI
-            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
-            sandbox.request(this, request);
+            me.getRoles(function () {
+                //Let's extend UI after we have the role data
+                var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
+                sandbox.request(me, request);
+            });
 
             //sandbox.registerAsStateful(this.mediator.bundleId, this);
-            // draw ui
-            me.createUi();
         },
         /**
          * @method init
@@ -122,12 +122,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
+            this.plugins['Oskari.userinterface.Flyout'].onEvent(event);
+
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
-            return handler.apply(this, [event]);
+            handler.apply(this, [event]);
 
         },
         /**
@@ -147,8 +149,30 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                     return;
                 }
                 if (doOpen) {
-                    this.plugins['Oskari.userinterface.Flyout'].fetchUsers(this.plugins['Oskari.userinterface.Flyout']);
+                    this.plugins['Oskari.userinterface.Flyout'].createUI();
+                    // flyouts eventHandlers are registered
+                    for (var p in this.plugins['Oskari.userinterface.Flyout'].getEventHandlers()) {
+                        if(!this.eventHandlers[p]) {
+                            this.sandbox.registerForEventByName(this, p);
+                        }
+                    }
+
                 }
+            },
+
+            'RoleChangedEvent' : function (event) {
+                if (event.getOperation() === "add") {
+                    this.storedRoles.push(event.getRole());
+                }
+                if (event.getOperation() === "remove") {
+                    for (var i = 0; i < this.storedRoles.length; i++) {
+                        if ((this.storedRoles[i].id + '') === (event.getRole().id + '')) {
+                            this.storedRoles.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+                console.log("lista muokattu");
             }
         },
 
@@ -183,6 +207,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          */
         startExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.admin-users.Flyout', this);
+
             this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.admin-users.Tile', this);
         },
         /**
@@ -217,13 +242,28 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
             return this.getLocalization('desc');
         },
         /**
-         * @method createUi
-         * (re)creates the UI for "selected layers" functionality
+         * @method getRoles
+         * Role list
          */
-        createUi: function () {
-            this.plugins['Oskari.userinterface.Flyout'].createUi();
-            this.plugins['Oskari.userinterface.Tile'].refresh();
-        }
+        getRoles: function (callback) {
+            var me = this;
+            jQuery.ajax({
+                type: 'GET',
+                url: ajaxUrl + 'action_route=ManageRoles',
+                lang: Oskari.getLang(),
+                timestamp: new Date().getTime(),
+                //lisää alempaan funktioon virheilmoitus, jos rooleja ei saatu ladattua
+                error: function () {
+                        //laita tähän error message
+                        callback();
+                    },
+                success: function (result) {
+                        me.storedRoles = result.rolelist || [];
+                        callback();
+                    }
+            });
+        },
+
     }, {
         /**
          * @property {String[]} protocol

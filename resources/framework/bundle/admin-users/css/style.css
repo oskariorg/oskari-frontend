@@ -28,6 +28,8 @@
   .admin-users .accordion .accordion-header input {
     float: right;
     margin: 5px 5px 5px 0; }
+.admin-users div.add-role {
+  padding: 25px 0px 0px 0px; }
 .admin-users form {
   margin-bottom: 2em; }
   .admin-users form fieldset {

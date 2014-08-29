@@ -25,7 +25,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
         _createControlElement: function () {
             var me = this,
                 loc = me._locale,
-                crsText = loc.crs[me.getMapModule().getProjection()],
+                crs = me.getMapModule().getProjection(),
+                crsText = loc.crs[crs] || crs,
                 el = jQuery(
                     '<div class="mapplugin coordinates">' +
                     '    <div>' + crsText + '</div>' +
