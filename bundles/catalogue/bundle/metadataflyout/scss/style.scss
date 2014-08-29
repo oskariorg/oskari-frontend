@@ -27,22 +27,20 @@
 						text-align: left;
 						display: block;
 						margin-top: 4px;
-						margin-left: 24px;
+						margin-left: 4px;
 						margin-bottom: 8px;
 						vertical-align: top;	
 						border: 0;
 
 						&.MD_DigitalTransferOptions a {
-							color: navy;
 							text-decoration: underline;
 							cursor: pointer;
-							max-width: 320px;
+							max-width: 700px;
 							display: block;
 							word-wrap: break-word;
 						}
 
 						a {
-							color: navy;
 							text-decoration: underline;
 							cursor: pointer;
 						}

@@ -171,9 +171,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             var viewId = me._contentState.view,
                 metadata = me._contentState.metadata;
 
-            // FIXME add error handling
             function handler(request) {
-                console.log(request);
                 /* We'll have to process the text to enhance readability */
                 /* We cannot modify the source */
                 var newContent;
