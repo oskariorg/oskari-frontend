@@ -200,13 +200,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
         },
 
         _getFormattedContent: function (content) {
-            var newContent = jQuery('<div />');
+            var me = this,
+                newContent = jQuery('<div />');
             newContent.html(content);
 
             /* Let's split at .\n to DIVs */
 
             jQuery.each(newContent.find('td.metadataContent'), function (n, p) {
-
                 var part = jQuery(p),
                     parent = part.parent();
                 /*parent.remove(part);*/
@@ -220,7 +220,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
                 var partSplice = part.text().split('.\n');
                 jQuery.each(partSplice, function (nn, txtPart) {
-
                     var trimmed = jQuery.trim(txtPart);
                     if (trimmed.length === 0) {
                         return;
