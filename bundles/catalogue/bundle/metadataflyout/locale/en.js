@@ -1,5 +1,4 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "en",
     "key": "catalogue.bundle.metadataflyout",
     "value": {
@@ -31,52 +30,11 @@ Oskari.registerLocalization(
             "select_metadata_prompt": "Select metadata by clicking the icons.",
             "metadata_printout_title": "METADATA PRINTOUT",
             "linkto": "Link to this metadata",
-            "tabs": {
-                "abstract": {
-                    "abstract": "",
-                    "jhs": "Show ISO 19115 metadata",
-                    "inspire": "Show INSPIRE metadata",
-                    "xml": {
-                        "text": "Open ISO 19139 XML file",
-                        "target": "_blank"
-                    },
-                    "pdf": {
-                        "text": "Open PDF printout",
-                        "target": "_blank"
-                    }
-                },
-                "jhs": {
-                    "abstract": "Show basic information",
-                    "jhs": "",
-                    "inspire": "Show INSPIRE metadata",
-                    "xml": {
-                        "text": "Open ISO 19139 XML file",
-                        "target": "_blank"
-                    },
-                    "pdf": {
-                        "text": "Open metadata in PDF printout",
-                        "target": "_blank"
-                    }
-                },
-                "inspire": {
-                    "abstract": "Show basic information",
-                    "jhs": "Show ISO 19115 metadata",
-                    "inspire": "",
-                    "xml": {
-                        "text": "Open ISO 19139 XML file",
-                        "target": "_blank"
-                    },
-                    "pdf": {
-                        "text": "Open metadata in PDF printout",
-                        "target": "_blank"
-                    }
-                }
-            }
+            "notFound": "Metadata was not found"
         },
         "tile": {
             "title": "Metadata",
             "tooltip": "The terms of use and the availability of the dataset are documented in the metadata description."
         }
     }
-}
-);
+});

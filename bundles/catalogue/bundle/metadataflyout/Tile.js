@@ -6,8 +6,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Tile',
     /**
      * @method create called automatically on construction
      * @static
-     *
-     * Always extend this class, never use as is.
      */
     function (instance, locale) {
         this.instance = instance;
@@ -37,27 +35,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Tile',
 
         getDescription: function () {},
 
-        getOptions: function () {
-
-        },
+        getOptions: function () {},
 
         setState: function (state) {
             this.state = state;
         },
 
-        refresh: function () {
-            var me = this,
-                instance = me.instance,
-                cel = this.container,
-                tpl = this.template,
-                sandbox = instance.getSandbox();
-
-            /*var status = cel.children('.oskari-tile-status');*/
-            /*status.empty();*/
-
-            /*status.append('(' + layers.length + ')');*/
-
-        }
+        refresh: function () {}
     }, {
         'protocol': ['Oskari.userinterface.Tile']
     });

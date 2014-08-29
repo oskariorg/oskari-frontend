@@ -4,11 +4,10 @@ div.oskariTabs {
   div.oskariTabs .tabsHeader {
     clear: both;
     font-weight: bold;
-    margin-right: 21px;
     margin-bottom: -1px;
     padding: 0; }
     div.oskariTabs .tabsHeader ul {
-      display: block;
+      display: inline-block;
       margin: 0;
       padding: 0;
       white-space: nowrap; }
@@ -18,7 +17,7 @@ div.oskariTabs {
         border-style: solid;
         border-color: #999;
         border-width: 1px 1px 0 1px;
-        margin: 10px 0 0;
+        margin: 0;
         padding: 0; }
         div.oskariTabs .tabsHeader ul li:first-of-type, div.oskariTabs .tabsHeader ul li:last-of-type {
           -webkit-background-clip: padding-box;
@@ -54,9 +53,13 @@ div.oskariTabs {
           box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.1) inset; }
         div.oskariTabs .tabsHeader ul li select {
           margin-right: 10px; }
+    div.oskariTabs .tabsHeader .extraContent {
+      float: right; }
+      div.oskariTabs .tabsHeader .extraContent a {
+        padding: 0 3px; }
   div.oskariTabs div.tabsContent {
     border: 1px solid #999;
-    height: 90%; }
+    /*height: 90%;*/ }
   div.oskariTabs div.tab-content {
     padding: 10px;
     overflow: auto;

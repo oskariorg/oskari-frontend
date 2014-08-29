@@ -9,12 +9,11 @@ div.oskariTabs {
     .tabsHeader {
         clear: both;
         font-weight: bold;
-        margin-right: 21px;
         margin-bottom: -1px;
         padding: 0;
 
         ul {
-            display: block;
+            display: inline-block;
             margin: 0;
             padding: 0;
             white-space: nowrap;
@@ -25,7 +24,7 @@ div.oskariTabs {
                 border-style: solid;
                 border-color: #999;
                 border-width: 1px 1px 0 1px;
-                margin: 10px 0 0;
+                margin: 0;
                 padding: 0;
 
                 &:first-of-type, &:last-of-type {
@@ -79,12 +78,21 @@ div.oskariTabs {
 
         }
 
+        .extraContent {
+            float: right;
+
+            a {
+                padding: 0 3px;
+            }
+
+        }
+
     }
 
     /* "tab" content */
     div.tabsContent {
         border: 1px solid #999;
-        height: 90%;
+        /*height: 90%;*/
     }
 
     div.tab-content {

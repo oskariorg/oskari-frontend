@@ -24,18 +24,22 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
     getName: function () {
         return this.__name;
     },
+
     /**
      * @method getSandbox
      */
     getSandbox: function () {
         return this.sandbox;
     },
+
     getLocale: function () {
         return this._locale;
     },
+
     getLoader: function () {
         return this.loader;
     },
+
     /**
      * @property defaults
      *
@@ -157,14 +161,14 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
     init: function () {
         return null;
     },
+
     /**
      * @method update
      *
      * implements bundle instance update method
      */
-    update: function () {
+    update: function () {},
 
-    },
     /**
      * @method onEvent
      */
@@ -178,29 +182,29 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
         return handler.apply(this, [event]);
 
     },
+
     /**
      * @property eventHandlers
      * @static
      *
      */
     eventHandlers: {
-        'AfterMapLayerAddEvent': function (event) {
+        AfterMapLayerAddEvent: function (event) {
             /* this might react when layer added */
             /* this.scheduleShowMetadata(event.getMapLayer().getMetadataResourceUUID(); */
         },
         /**
          * @method AfterMapLayerRemoveEvent
          */
-        'AfterMapLayerRemoveEvent': function (event) {
+        AfterMapLayerRemoveEvent: function (event) {
             /* this might react when layer removed */
             /* this.scheduleShowMetadata(event.getMapLayer().getMetadataResourceUUID(); */
         },
         /**
          * @method AfterMapLayerRemoveEvent
          */
-        'AfterMapMoveEvent': function (event) {
+        AfterMapMoveEvent: function (event) {
             /* this might react when map moved */
-
         }
     },
 
@@ -228,13 +232,15 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 
         sandbox.request(this, request);
 
-        this.sandbox.unregisterStateful(this.mediator.bundleId);
-        this.sandbox.unregister(this);
+        sandbox.unregisterStateful(this.mediator.bundleId);
+        sandbox.unregister(this);
         this.started = false;
     },
+
     setSandbox: function (sandbox) {
         this.sandbox = null;
     },
+
     startExtension: function () {
 
         this.plugins['Oskari.userinterface.Flyout'] =
@@ -242,30 +248,35 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 
         //this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.Tile', this, this.getLocale()['tile']);
     },
+
     stopExtension: function () {
         this.plugins['Oskari.userinterface.Flyout'] = null;
         //this.plugins['Oskari.userinterface.Tile'] = null;
     },
+
     getTitle: function () {
         return this.getLocale().title;
     },
+
     getDescription: function () {
         return 'Sample';
     },
+
     getPlugins: function () {
         return this.plugins;
     },
+
     /**
      * @method scheduleShowMetadata
      * schedules a refresh of the UI to load metadata asynchronously
      */
     scheduleShowMetadata: function (allMetadata) {
-
         /** update flyout content */
         this.plugins['Oskari.userinterface.Flyout'].scheduleShowMetadata(allMetadata);
 
         this.getSandbox().requestByName(this, 'userinterface.UpdateExtensionRequest', [this, 'detach']);
     },
+
     /**
      *  @method showExtentOnMap
      */
@@ -285,15 +296,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
         for (n = 0; n < env.length; n += 1) {
             vals = env[n];
             e = new OpenLayers.Bounds(vals.westBoundLongitude, vals.southBoundLatitude, vals.eastBoundLongitude, vals.northBoundLatitude);
-
             ep = e.toGeometry();
-
             ef = new OpenLayers.Feature.Vector(ep);
             ef.attributes = atts || ef.attributes;
             feats.push(ef);
         }
-
-        //console.log("metadataflyout.showExtentOnMap", Oskari.getSandbox().getMap().getSrsName(), "should match", "EPSG:3067");
 
         var event = me.getSandbox().getEventBuilder('FeaturesAvailableEvent')(
             this.layer,
@@ -306,6 +313,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 
         me.sandbox.notifyAll(event);
     },
+
     /**
      * @method setState
      * @param {Object} state bundle state as JSON
@@ -313,19 +321,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
     setState: function (state) {
         this.plugins['Oskari.userinterface.Flyout'].setContentState(state);
     },
+
     /**
      * @method getState
      * @return {Object} bundle state as JSON
      */
     getState: function () {
         return this.plugins['Oskari.userinterface.Flyout'].getContentState();
-        /*
-         var state = {
-
-         };
-
-         return state;
-         */
     }
 }, {
     protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']

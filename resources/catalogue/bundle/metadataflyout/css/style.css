@@ -1,50 +1,18 @@
-.metadataflyout_content {
-  margin: 0;
-  padding: 0;
-  margin-left: 8px; }
-
-.metadataflyout_content_tabs {
-  margin: 0;
-  padding: 0; }
-
-.metadataflyout_content_tab {
-  margin: 0;
-  padding: 0;
-  display: inline-block;
-  margin-left: 4px;
-  color: navy;
-  text-decoration: underline;
-  cursor: pointer; }
-
-/* browseGraphic */
-.metadataflyout_content_browseGraphic {
-  margin-left: 8px; }
-  .metadataflyout_content_browseGraphic img {
-    margin-bottom: 8px;
-    margin-top: 8px;
-    border: 0; }
-
-/* Titles */
-.metadataflyout_content_abstract_title, .metadataflyout_content_inspire_title, .metadataflyout_content_jhs_title {
-  text-align: left;
-  display: none;
-  margin-bottom: 8px; }
-
-/* Content */
-.metadataflyout_content_abstract, .metadataflyout_content_inspire, .metadataflyout_content_jhs {
-  margin: 0;
-  padding: 0; }
-  .metadataflyout_content_abstract div h1, .metadataflyout_content_inspire div h1, .metadataflyout_content_jhs div h1 {
+.metadataflyout {
+  /* Content */ }
+  .metadataflyout .tab-content div.browseGraphic {
+    margin-left: 2px; }
+  .metadataflyout .tab-content div h1 {
     text-align: left;
     text-transform: uppercase;
     margin-bottom: 8px; }
-  .metadataflyout_content_abstract div table, .metadataflyout_content_inspire div table, .metadataflyout_content_jhs div table {
+  .metadataflyout .tab-content div table {
     margin-right: 0px;
     margin-left: 0px;
     /* We have to force font size back to normal as this isn't actual table content */
     font-size: 14px;
     line-height: 21px; }
-    .metadataflyout_content_abstract div table tr td, .metadataflyout_content_inspire div table tr td, .metadataflyout_content_jhs div table tr td {
+    .metadataflyout .tab-content div table tr td {
       text-align: left;
       display: block;
       margin-top: 4px;
@@ -52,18 +20,18 @@
       margin-bottom: 8px;
       vertical-align: top;
       border: 0; }
-      .metadataflyout_content_abstract div table tr td.MD_DigitalTransferOptions a, .metadataflyout_content_inspire div table tr td.MD_DigitalTransferOptions a, .metadataflyout_content_jhs div table tr td.MD_DigitalTransferOptions a {
+      .metadataflyout .tab-content div table tr td.MD_DigitalTransferOptions a {
         color: navy;
         text-decoration: underline;
         cursor: pointer;
         max-width: 320px;
         display: block;
         word-wrap: break-word; }
-      .metadataflyout_content_abstract div table tr td a, .metadataflyout_content_inspire div table tr td a, .metadataflyout_content_jhs div table tr td a {
+      .metadataflyout .tab-content div table tr td a {
         color: navy;
         text-decoration: underline;
         cursor: pointer; }
-    .metadataflyout_content_abstract div table tr th, .metadataflyout_content_inspire div table tr th, .metadataflyout_content_jhs div table tr th {
+    .metadataflyout .tab-content div table tr th {
       text-align: left;
       display: block;
       text-transform: uppercase;

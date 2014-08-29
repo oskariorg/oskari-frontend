@@ -27,28 +27,29 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
         /* @property container the DIV element */
         this.container = null;
 
-        this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
-
         /* @property accordion */
         this.accordion = null;
         this.pages = {};
 
     }, {
+
         getName: function () {
             return 'Oskari.catalogue.bundle.metadataflyout.Flyout';
         },
+
         setEl: function (el, width, height) {
             this.container = jQuery(el);
+            this.container.addClass('metadataflyout');
         },
+
         startPlugin: function () {
             var me = this,
                 locale = me.locale,
                 accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
             me.accordion = accordion;
-
             accordion.insertTo(me.container);
-
         },
+
         stopPlugin: function () {
             var p;
             for (p in this.pages) {
@@ -59,15 +60,19 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
             }
             this.container.empty();
         },
+
         getTitle: function () {
             return this.locale.title;
         },
+
         getDescription: function () {
 
         },
+
         getOptions: function () {
 
         },
+
         setState: function (state) {
             this.state = state;
 
@@ -84,8 +89,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                 pageInfo,
                 n,
                 data,
-                page,
-                panel;
+                page;
 
             for (p in this.pages) {
                 if (this.pages.hasOwnProperty(p)) {
@@ -102,14 +106,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                 data = allMetadata[n];
                 page = Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage', this.instance, this.locale);
                 page.init();
-                panel = page.getPanel();
-                accordion.addPanel(panel);
+                accordion.addPanel(page);
                 if (n === 0) {
-                    panel.open();
+                    page.open();
                 }
                 this.pages[data.uuid || (data.RS_Identifier_CodeSpace + ':' + data.RS_Identifier_Code)] = {
                     page: page,
-                    panel: panel,
+                    panel: page,
                     data: data
                 };
             }
@@ -125,6 +128,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                 }
             }
         },
+
         /**
          * @method setContentState
          
@@ -132,8 +136,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
          */
         setContentState: function (contentState) {
             this.contentState = contentState;
-
         },
+
         /**
          * @method getContentState
          *
@@ -142,6 +146,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
         getContentState: function () {
             return this.contentState;
         },
+
         resetContentState: function () {
             this.contentState = {};
         }

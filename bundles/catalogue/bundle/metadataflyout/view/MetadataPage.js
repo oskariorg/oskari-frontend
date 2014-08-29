@@ -26,30 +26,17 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
         /* @property locale locale for this */
         this.locale = locale;
 
-        /* @property container the DIV element */
-        this.container = null;
-
         /* element references */
-        this.views = {};
-        this.titles = {};
-        this.tabs = {};
-        this.browseGraphic = null;
-
-        /* lert for some notifications */
-        this.compileTemplates();
-        this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
+        this._tabs = {};
+        this._browseGraphicUrl = null;
 
         /**
          * @property state
          */
         this.state = null;
 
-        /**
-         * @property contentState
-         * what is shown and how
-         */
-        this.contentState = {
-            title: '...',
+        this._initialContentState = {
+            title: '…',
             metadata: {
                 uuid: null,
                 RS_Identifier_Code: null,
@@ -57,178 +44,107 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             },
             view: 'abstract',
             metadataJson: null
-
         };
 
         /**
-         * @property panel {Oskari.userinterface.component.AccordionPanel}
+         * @property contentState
+         * what is shown and how
          */
-        this.panel = null;
+         this._contentState = jQuery.extend({}, this._initialContentState);
+
+        /**
+         * @property _tabContainer {Oskari.userinterface.component.TabContainer}
+         */
+        this._tabContainer = null;
 
     }, {
-        /**
-         * @method getPanel
-         * Returns the UI panel and populates it with the data that we want to show the user.
-         * @return {Oskari.userinterface.component.AccordionPanel}
-         */
-        getPanel: function () {
-            return this.panel;
-        },
-        compileTemplates: function () {
-
-        },
         /**
          * @property template HTML templates for the User Interface
          * @static
          */
         templates: {
-            content: '<div class="metadataflyout_content"></div>',
-            browseGraphic: '<div class="metadataflyout_content_browseGraphic"></div>',
-            viewTabs: '<div class="metadataflyout_content_tabs"></div>',
-            viewTab: '<div class="metadataflyout_content_tab"></div>',
-            titles: {
-                abstract: '<div class="metadataflyout_content_abstract_title"></div>',
-                jhs: '<div class="metadataflyout_content_jhs_title"></div>',
-                inspire: '<div class="metadataflyout_content_inspire_title"></div>'
-            },
-            views: {
-                abstract: '<div class="metadataflyout_content_abstract"></div>',
-                jhs: '<div class="metadataflyout_content_jhs"></div>',
-                inspire: '<div class="metadataflyout_content_inspire"></div>'
-            }
+            browseGraphic: '<div class="browseGraphic"></div>'
         },
+
+        _views: ['abstract', 'jhs', 'inspire'],
+        _links: ['xml', 'pdf'],
 
         init: function () {
             var me = this,
+                links,
                 locale = me.locale,
-                content = jQuery(me.templates.content);
-            me.container = jQuery('<div />');
+                entry,
+                tabContainerHeader;
 
-            /* let's create view selector tabs - and hide them all */
-
-            var viewTabs = jQuery(this.templates.viewTabs),
-                viewTab = jQuery(this.templates.viewTab),
-                v,
-                tabs,
-                tabTexts,
-                t,
-                tab,
-                text,
-                target;
-
-            for (v in this.templates.views) {
-                if (this.templates.views.hasOwnProperty(v)) {
-                    tabs = viewTabs.clone();
-                    tabTexts = locale.tabs[v];
-
-                    for (t in tabTexts) {
-                        if (tabTexts.hasOwnProperty(t)) {
-                            tab = viewTab.clone();
-
-                            if (typeof tabTexts[t] === 'string') {
-
-                                tab.append(tabTexts[t]);
-                                tabs.append(tab);
-                                if (t !== v) {
-
-                                    tab.click({
-                                        viewId: t
-                                    }, function (arg) {
-                                        var data = arg.data;
-                                        me.showMetadataView(data.viewId);
-                                    });
-                                }
-                            } else {
-                                text = tabTexts[t].text;
-                                target = tabTexts[t].target;
-
-                                tab.append(text);
-                                tabs.append(tab);
-
-                                tab.click({
-                                    viewId: t,
-                                    target: target
-                                }, function (arg) {
-                                    var data = arg.data;
-                                    me.openMetadataView(data.viewId, data.target);
-                                });
-                            }
-                        }
-                    }
-
-                    tabs.hide();
-
-                    this.tabs[v] = tabs;
-                    content.append(tabs);
+            /* Tab container */
+            me._tabContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
+            me._tabContainer.insertTo(me.getContainer());
+            me._tabContainer.addTabChangeListener(
+                function (previousTab, newTab) {
+                    me.showMetadataView(newTab.viewId);
                 }
-            }
+            );
 
-            /*placeholder for browseGrpahics */
-            var browseGraphic = jQuery(this.templates.browseGraphic);
-            this.browseGraphic = browseGraphic;
-            content.append(browseGraphic);
+            /* let's create view selector tabs */
+            me._views.forEach(function (view) {
+                entry = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+                entry.setTitle(locale[view]);
+                entry.viewId = view;
+                me._tabContainer.addPanel(entry);
+                me._tabs[view] = entry;
+            });
 
-            /*
-             * let's create views - and hide them also
-             */
-            for (v in this.templates.views) {
-                if (this.templates.views.hasOwnProperty(v)) {
-                    this.titles[v] = jQuery(this.templates.titles[v]);
-                    this.titles[v].append(this.locale[v]);
-                    this.views[v] = jQuery(this.templates.views[v]);
-                    content.append(this.titles[v]);
-                    content.append(this.views[v]);
+            // FIXME just use a href...
+            var linkClick = function () {
+                me.openMetadataView(jQuery(this).attr('data-type'));
+            };
+
+            me._links.forEach(function (link) {
+                entry = jQuery('<a />');
+                entry.html(locale[link]);
+                entry.attr('data-type', link);
+                entry.attr('href', '#');
+                entry.click(linkClick);
+                if (links) {
+                    links = links.add(entry);
+                } else {
+                    links = entry;
                 }
-            }
+            });
 
-            /* special handling */
-            /* let's add placeholder for browseGraphics */
-            content.append(viewTabs);
+            me._tabContainer.setExtra(links);
 
-            this.alert.insertTo(this.container);
-
-            this.container.append(content);
-
-            /* Accordion support */
-            var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-            panel.setTitle(this.contentState.title);
-
-            var contentPanel = panel.getContainer();
-
-            contentPanel.append(this.container);
-            this.panel = panel;
-
+            me.setTitle(this._contentState.title);
         },
-        destroy: function () {
-            this.container.empty();
-        },
-        getTitle: function () {
-            return this.locale.title;
-        },
-        getDescription: function () {
 
-        },
-        getOptions: function () {
-
-        },
         setState: function (state) {
             this.state = state;
-
         },
+
         /**
          * @method openMetadataView
          *
          * opens a view in new window. this will not change state.
          */
         openMetadataView: function (viewId, target) {
-            var me = this;
-            if (!this.contentState) {
+            var me = this,
+                metadata;
+            if (!me._contentState) {
                 return;
             }
-            var metadata = this.contentState.metadata;
+            metadata = me._contentState.metadata;
 
-            this.instance.getLoader().openMetadata(viewId, metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace, function (data) {}, null, target);
+            this.instance.getLoader().openMetadata(
+                viewId,
+                metadata.uuid,
+                metadata.RS_Identifier_Code,
+                metadata.RS_Identifier_CodeSpace,
+                function () {},
+                null,
+                target
+            );
         },
+
         /**
          * @method showMetadataView
          *
@@ -236,177 +152,154 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          */
         showMetadataView: function (viewId, target) {
             this.instance.getSandbox().printDebug('ShowMetadataView ' + viewId);
-            var tabs = this.tabs,
-                views = this.views,
-                titles = this.titles,
-                v;
-
-            for (v in views) {
-                if (v !== viewId) {
-                    tabs[v].hide();
-                    titles[v].hide();
-                    views[v].hide();
-                } else {
-                    tabs[v].show();
-                    titles[v].show();
-                    views[v].hide();
-                }
-
-            }
-
-            this.contentState.view = viewId;
-
-            this.loadMetadataForState();
-
+            this._contentState.view = viewId;
+            this._loadMetadataForState();
         },
-        resetBrowseGraphic: function (img) {
-            var bgEl = jQuery(this.browseGraphic);
-            bgEl.empty();
 
-            if (img) {
-                /*var img = img || jQuery('<img />');*/
-                bgEl.append(img);
-            }
-
-        },
         /**
-         * @method loadMetadataForState
+         * @method _loadMetadataForState
+         * @private
          */
-        loadMetadataForState: function () {
-            var me = this,
-                views = this.views;
+        _loadMetadataForState: function () {
+            var me = this;
 
-            if (!this.contentState || !this.contentState.metadata || !this.contentState.metadata.uuid) {
+            if (!me._contentState || !me._contentState.metadata ||
+                    !me._contentState.metadata.uuid) {
                 return false;
             }
 
-            var viewId = this.contentState.view,
-                metadata = this.contentState.metadata;
+            var viewId = me._contentState.view,
+                metadata = me._contentState.metadata;
 
-            views[viewId].empty();
-
+            // FIXME add error handling
             function handler(request) {
-
+                console.log(request);
                 /* We'll have to process the text to enhance readability */
                 /* We cannot modify the source */
+                var newContent;
+                if (request.status === 200) {
+                    newContent = me._getFormattedContent(request.responseText);
+                } else {
+                    newContent = me._getErrorContent();
+                }
 
-                var newContent = jQuery('<div />');
-                newContent.html(request.responseText);
+                me._tabs[viewId].setContent(jQuery(me.templates.browseGraphic));
+                me._tabs[viewId].getContainer().append(newContent);
+                me._resetBrowseGraphic(me._browseGraphicUrl);
+                me._updatePanelTitle();
+            }
 
-                /* HACK BEGIN */
+            me.instance.getLoader().loadGeonetworkAjaxHTML(
+                handler,
+                viewId,
+                metadata.uuid,
+                metadata.RS_Identifier_Code,
+                metadata.RS_Identifier_CodeSpace
+            );
 
-                /* Let's split at .\n to DIVs */
+        },
 
-                jQuery.each(newContent.find('td.metadataContent'), function (n, p) {
+        _getFormattedContent: function (content) {
+            var newContent = jQuery('<div />');
+            newContent.html(content);
 
-                    var part = jQuery(p),
-                        parent = part.parent();
-                    /*parent.remove(part);*/
+            /* Let's split at .\n to DIVs */
 
-                    var newContainerPart = jQuery('<td class="metadataContent"/>');
+            jQuery.each(newContent.find('td.metadataContent'), function (n, p) {
 
-                    /* hack to fix ultraloooong URLs */
-                    if (part.hasClass('MD_DigitalTransferOptions')) {
-                        newContainerPart.addClass('MD_DigitalTransferOptions');
-                    }
+                var part = jQuery(p),
+                    parent = part.parent();
+                /*parent.remove(part);*/
 
-                    var partSplice = part.text().split('.\n');
-                    jQuery.each(partSplice, function (nn, txtPart) {
+                var newContainerPart = jQuery('<td class="metadataContent"/>');
 
-                        var trimmed = jQuery.trim(txtPart);
-                        if (trimmed.length === 0) {
-                            return;
-                        }
+                /* hack to fix ultraloooong URLs */
+                if (part.hasClass('MD_DigitalTransferOptions')) {
+                    newContainerPart.addClass('MD_DigitalTransferOptions');
+                }
 
-                        var newPart = jQuery('<div class="metadataflyout_content_section"/>');
-                        if (partSplice.length > 1) {
-                            newPart.text(trimmed + '.');
-                        } else {
-                            newPart.text(trimmed);
-                        }
-                        newContainerPart.append(newPart);
-                    });
-                    part.remove();
-                    parent.append(newContainerPart);
-                    me._linkify(newContainerPart);
-                });
-                /* Let's fix HREFs to click events */
-                /* We cannot modify the source */
+                var partSplice = part.text().split('.\n');
+                jQuery.each(partSplice, function (nn, txtPart) {
 
-                var links = newContent.find('a[href]'),
-                    isMetaLink = new RegExp('^\\?.*');
-
-                jQuery.each(links, function (index, ahref) {
-                    var el = jQuery(ahref),
-                        href = el.attr('href');
-
-                    if (!href) {
-                        return;
-                    }
-                    if (!isMetaLink.test(href)) {
+                    var trimmed = jQuery.trim(txtPart);
+                    if (trimmed.length === 0) {
                         return;
                     }
 
-                    var splits = href.split('&'),
-                        argMap = {};
-                    jQuery.each(splits, function (index, part) {
-                        var keyVal = part.split('=');
-                        argMap[keyVal[0]] = keyVal[1];
-                    });
-
-                    el.attr('href', null);
-                    el.click({
-                        viewId: viewId,
-                        uuid: argMap.uuid
-                    }, function (arg) {
-                        var data = arg.data,
-                            uuid = data.uuid;
-                        me.showMetadata(uuid);
-                    });
+                    var newPart = jQuery('<div class="metadataflyout_content_section"/>');
+                    if (partSplice.length > 1) {
+                        newPart.text(trimmed + '.');
+                    } else {
+                        newPart.text(trimmed);
+                    }
+                    newContainerPart.append(newPart);
                 });
-                /* HACK END */
+                part.remove();
+                parent.append(newContainerPart);
+                me._linkify(newContainerPart);
+            });
+            /* Let's fix HREFs to click events */
+            /* We cannot modify the source */
 
-                views[viewId].append(newContent);
-                views[viewId].css('display', '');
+            var links = newContent.find('a[href]'),
+                isMetaLink = new RegExp('^\\?.*');
 
-                me._updatePanel();
-            }
+            jQuery.each(links, function (index, ahref) {
+                var el = jQuery(ahref),
+                    href = el.attr('href');
 
-
-            me.instance.getLoader().loadGeonetworkAjaxHTML(handler, viewId, metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace);
-
-        },
-        _updatePanel: function () {
-            var me = this,
-                metadataJson = me.contentState.metadataJson;
-            if (!metadataJson) {
-                return;
-            }
-            var title = metadataJson.title;
-            if (title) {
-                this.panel.setTitle(title);
-            }
-        },
-        /**
-         * @method loadMetadataJSONForState
-         */
-        loadMetadataJSONForState: function () {
-
-            var me = this;
-            if (!this.contentState || !this.contentState.metadata || !this.contentState.metadata.uuid) {
-                return false;
-            }
-            var metadata = this.contentState.metadata;
-
-            this.instance.getLoader().loadMetadata('json', metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace, function (data) {
-                if (!data || !data.mdcs || !data.mdcs.length || data.mdcs.length === 0) {
+                if (!href) {
                     return;
                 }
-                var metadataJson = data.mdcs[0];
-                me.processJSON(metadataJson);
-            }, 'json');
-            return true;
+                if (!isMetaLink.test(href)) {
+                    return;
+                }
+
+                var splits = href.split('&'),
+                    argMap = {};
+                jQuery.each(splits, function (index, part) {
+                    var keyVal = part.split('=');
+                    argMap[keyVal[0]] = keyVal[1];
+                });
+
+                el.attr('href', null);
+                el.click({
+                    viewId: viewId,
+                    uuid: argMap.uuid
+                }, function (arg) {
+                    var data = arg.data,
+                        uuid = data.uuid;
+                    me.showMetadata(uuid);
+                });
+            });
+            return newContent;
         },
+
+        _getErrorContent: function (error) {
+            var newContent = jQuery('<div />');
+            newContent.html(this.locale.notFound);
+            return newContent;
+        },
+
+        _resetBrowseGraphic: function (url) {
+            var bgEl,
+                imgEl = jQuery('<img />');
+
+            if (!url) {
+                this._browseGraphicUrl = null;
+            }
+
+            imgEl.attr('src', url);
+
+            this.getContainer().find('.browseGraphic').each(function () {
+                bgEl = jQuery(this);
+                bgEl.empty();
+                if (url) {
+                    bgEl.append(imgEl.clone());
+                }
+            });
+        },
+
         /**
          * @method processJSON
          */
@@ -414,46 +307,91 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             var me = this,
                 browseGraphicUrl = metadataJson.browseGraphic,
                 extentEnvelope = metadataJson.env;
-            /*
-             * Let's display the browse graphic image
-             */
-            this.resetBrowseGraphic();
+            
+            // Remove old images
+            me._resetBrowseGraphic();
 
             if (browseGraphicUrl) {
-
-                var img = jQuery('<img />'),
+                var imgObj = new Image(),
                     url = null;
-                if (this.instance.getLoader().dev) {
+                // TODO remove dev code
+                if (me.instance.getLoader().dev) {
                     url = 'espoo_johtokartta_s.png';
                 } else {
                     url = browseGraphicUrl;
                 }
 
-                var imgObj = new Image();
+                /* DEBUG CODE */
+                url = '/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/logo/images/pti_icon.png';
+                /* DEBUG CODE */
+
+                // Add new image once it has loaded (apparently this is done so we don't show broken images)
                 imgObj.onload = function () {
-                    img.attr('src', url);
+                    me._browseGraphicUrl = url;
+                    me._resetBrowseGraphic(url);
                     imgObj.onload = null;
                 };
                 imgObj.src = url;
-
-                this.resetBrowseGraphic(img);
             }
 
             /*
              * Let's post Envelope to some layer
              */
             if (extentEnvelope) {
-                this.instance.showExtentOnMap(this.contentState.metadata.uuid, extentEnvelope, metadataJson);
+                me.instance.showExtentOnMap(
+                    me._contentState.metadata.uuid,
+                    extentEnvelope,
+                    metadataJson
+                );
             }
 
-            me.contentState.metadataJson = metadataJson;
-
-            me._updatePanel();
-
+            me._contentState.metadataJson = metadataJson;
+            me._updatePanelTitle();
         },
-        resetContentState: function () {
 
+        _updatePanelTitle: function () {
+            var me = this,
+                metadataJson = me._contentState.metadataJson,
+                title;
+            if (!metadataJson) {
+                return;
+            }
+            title = metadataJson.title;
+            if (title) {
+                me.setTitle(title);
+            }
         },
+
+        /**
+         * @method loadMetadataJSONForState
+         */
+        loadMetadataJSONForState: function () {
+            var me = this,
+                metadata;
+            if (!me._contentState || !me._contentState.metadata ||
+                    !me._contentState.metadata.uuid) {
+                return false;
+            }
+            metadata = me._contentState.metadata;
+
+            me.instance.getLoader().loadMetadata(
+                'json',
+                metadata.uuid,
+                metadata.RS_Identifier_Code,
+                metadata.RS_Identifier_CodeSpace,
+                function (data) {
+                    if (!data || !data.mdcs || !data.mdcs.length ||
+                            data.mdcs.length === 0) {
+                        return;
+                    }
+                    var metadataJson = data.mdcs[0];
+                    me.processJSON(metadataJson);
+                },
+                'json'
+            );
+            return true;
+        },
+
         /**
          * @method showMetadata
          *
@@ -464,15 +402,16 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * styled with bundled CSS.
          */
         showMetadata: function (uuid, RS_Identifier_Code, RS_Identifier_CodeSpace) {
-            this.resetContentState();
-
-            this.contentState.metadata.uuid = uuid;
-            this.contentState.metadata.RS_Identifier_Code = RS_Identifier_Code;
-            this.contentState.metadata.RS_Identifier_CodeSpace = RS_Identifier_CodeSpace;
-            this.instance.getSandbox().printDebug('showMetadata { uuid=' + uuid + ', view=' + this.contentState.view + '}');
+            // Reset _contentState
+            this._contentState = jQuery.extend({}, this._initialContentState);
+            this._contentState.metadata.uuid = uuid;
+            this._contentState.metadata.RS_Identifier_Code = RS_Identifier_Code;
+            this._contentState.metadata.RS_Identifier_CodeSpace = RS_Identifier_CodeSpace;
+            this.instance.getSandbox().printDebug('showMetadata { uuid=' + uuid + ', view=' + this._contentState.view + '}');
             this.loadMetadataJSONForState();
-            this.showMetadataView(this.contentState.view);
+            this.showMetadataView(this._contentState.view);
         },
+
         /**
          * @method scheduleShowMetadata
          *
@@ -484,6 +423,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
         scheduleShowMetadata: function (uuid, RS_Identifier_Code, RS_Identifier_CodeSpace) {
             this.showMetadata(uuid, RS_Identifier_Code, RS_Identifier_CodeSpace);
         },
+
         /**
          * _linkify:
          *
@@ -502,11 +442,20 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
 
             //Change email addresses to mailto:: links
-            /*var replacePattern3 = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
-         replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');*/
+            //var replacePattern3 = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
+            //replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
 
             el.html(replacedText);
+        },
+
+        /**
+         * @method destroy
+         * Destroys the panel/removes it from document
+         */
+        destroy: function () {
+            this._tabContainer.destroy();
+            this.html.remove();
         }
     }, {
-
+        extend: ['Oskari.userinterface.component.AccordionPanel']
     });

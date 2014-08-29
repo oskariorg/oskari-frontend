@@ -44,7 +44,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.service.MetadataLoad
      */
     loadMetadata: function (subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace, cb, dataType) {
         var uri = this.getURLForView(subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace);
-
         this.sandbox.printDebug('loadMetadata ' + uri);
 
         if (uri === null || uri === undefined) {
@@ -64,15 +63,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.service.MetadataLoad
                 }
             },
             success: function (data, textStatus) {
-
                 cb(data, true);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 cb(null, false);
-
             }
         });
-
     },
 
     /**
