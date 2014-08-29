@@ -88,7 +88,7 @@ img::-moz-selection {
 }
 #logo p {
   /* FIXME change p to h3 to get rid of font-size and color */
-  font-size: 142%;
+  font-size: 17px;
   color: #3c3c3c;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   padding: 10px 0 0 10px;
@@ -96,6 +96,8 @@ img::-moz-selection {
 
 /* Sidebar is only in the portal version afaik so this could be moved there? */
 #sidebar {
+  font-family: Arial,​ sans-serif;
+  line-height: 12.6px;
   width: 200px;
 }
 
@@ -1080,7 +1082,7 @@ select {
 
 /* Portal menu 'toggle' (i.e. the yellow bar on the left of the oskari menu) */
 .sidebar-toggle {
-  background-color: #ffd400;
+  background-color: #FFDE00;
   height: 100%;
   left: -160px;
   position: absolute;

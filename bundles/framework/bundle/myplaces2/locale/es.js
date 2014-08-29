@@ -1,5 +1,4 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "es",
     "key": "MyPlaces2",
     "value": {
@@ -323,5 +322,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Color de relleno incorrecto"
         }
     }
-}
-);
+});

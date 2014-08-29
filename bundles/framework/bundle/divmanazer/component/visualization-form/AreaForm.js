@@ -463,6 +463,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.AreaForm"
             });
             renderDialog.show(title, dialogContent, [saveBtn, cancelBtn]);
             renderDialog.moveTo(renderButton, 'top');
+            saveBtn.setFocus(true);
             return renderDialog;
         },
 

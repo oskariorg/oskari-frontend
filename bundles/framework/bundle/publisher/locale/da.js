@@ -141,6 +141,7 @@ Oskari.registerLocalization(
                 "small": "Small",
                 "medium": "Medium",
                 "large": "Large",
+                "fill": "NOT TRANSLATED",
                 "custom": "Brugerdefineret størrelse",
                 "width": "Bredde",
                 "height": "Højde"

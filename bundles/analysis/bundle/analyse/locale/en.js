@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "en",
     "key": "Analyse",
     "value": {
@@ -82,72 +83,88 @@ Oskari.registerLocalization({
             "method": {
                 "label": "Method",
                 "tooltip": "Select first data and after that the method",
-                "options": [{
-                    "id": "oskari_analyse_buffer",
-                    "label": "Buffer",
-                    "classForMethod": "buffer",
-                    "selected": true,
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_aggregate",
-                    "label": "Key ratios computation",
-                    "classForPreview": "aggregate",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_union",
-                    "label": "Union",
-                    "classForPreview": "union",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_intersect",
-                    "label": "Clipping",
-                    "classForPreview": "clip",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_layer_union",
-                    "label": "Union of the intersecting features",
-                    "classForPreview": "intersect",
-                    "tooltip": ""
-                }, {
-                    "id": "oskari_analyse_areas_and_sectors",
-                    "label": "Multiple buffers",
-                    "classForPreview": "areas_and_sectors",
-                    "tooltip": "By the method \"Multiple buffers\" you can add multiple buffers around the selected features. You can define the buffer size and the number of buffers."
-                }, {
-                    "id": "oskari_analyse_difference",
-                    "label": "Difference computation",
-                    "classForPreview": "difference",
-                    "tooltip": ""
-                }]
+                "options": [
+                    {
+                        "id": "oskari_analyse_buffer",
+                        "label": "Buffer",
+                        "classForMethod": "buffer",
+                        "tooltip": "By the method \"Buffer\" you can add the buffers around the selected objects. You can define the buffer size by yourself. After making buffers you can use them as a base for other analysis."
+                    },
+                    {
+                        "id": "oskari_analyse_aggregate",
+                        "label": "Key ratios computation",
+                        "classForPreview": "aggregate",
+                        "tooltip": "By the method \"Key ratios computation\" you can count different key ratios (e.g. average and sum) based on the selected features."
+                    },
+                    {
+                        "id": "oskari_analyse_union",
+                        "label": "Union",
+                        "classForPreview": "union",
+                        "tooltip": "By the method \"Union\" you can join the selected features to one new feature."
+                    },
+                    {
+                        "id": "oskari_analyse_intersect",
+                        "label": "Clipping",
+                        "classForPreview": "clip",
+                        "tooltip": "By the method \"Clipping\" you can clip the selected features by the features of another analyse layer. The result includes only those of selected features whose area is inside of the features of the clipping map layer."
+                    },
+                    {
+                        "id": "oskari_analyse_layer_union",
+                        "label": "Union of the intersecting features",
+                        "classForPreview": "intersect",
+                        "tooltip": "By the method \"Union of the intersecting features\" you can intersect the selected features by the features of the intersecting level. You can select if the result includes only the features inside or partly inside the features of the intersecting level."
+                    },
+                    {
+                        "id": "oskari_analyse_areas_and_sectors",
+                        "label": "Union of the analyse layers",
+                        "classForPreview": "layer_union",
+                        "tooltip": "By the method \"Union of the analyse layers\" you can combine the analyse layers. The layers to be combined must have same attributes."
+                    },
+                    {
+                        "id": "oskari_analyse_areas_and_sectors",
+                        "label": "Multiple buffers",
+                        "classForPreview": "areas_and_sectors",
+                        "tooltip": "By the method \"Multiple buffers\" you can add multiple buffers around the selected features. You can define the buffer size and the number of buffers."
+                    }
+                ]
             },
             "aggregate": {
                 "label": "Key ratio",
-                "options": [{
-                    "id": "oskari_analyse_Count",
-                    "label": "Count",
-                    "selected": true
-                }, {
-                    "id": "oskari_analyse_Sum",
-                    "label": "Sum"
-                }, {
-                    "id": "oskari_analyse_Min",
-                    "label": "Minimum"
-                }, {
-                    "id": "oskari_analyse_Max",
-                    "label": "Maximum"
-                }, {
-                    "id": "oskari_analyse_Average",
-                    "label": "Average"
-                }, {
-                    "id": "oskari_analyse_StdDev",
-                    "label": "Standard deviation"
-                }, {
-                    "id": "oskari_analyse_Median",
-                    "label": "Median"
-                }, {
-                    "id": "oskari_analyse_NoDataCnt",
-                    "label": "The number of authorised features"
-                }],
+                "options": [
+                    {
+                        "id": "oskari_analyse_Count",
+                        "label": "Count",
+                        "selected": true
+                    },
+                    {
+                        "id": "oskari_analyse_Sum",
+                        "label": "Sum"
+                    },
+                    {
+                        "id": "oskari_analyse_Min",
+                        "label": "Minimum"
+                    },
+                    {
+                        "id": "oskari_analyse_Max",
+                        "label": "Maximum"
+                    },
+                    {
+                        "id": "oskari_analyse_Average",
+                        "label": "Average"
+                    },
+                    {
+                        "id": "oskari_analyse_StdDev",
+                        "label": "Standard deviation"
+                    },
+                    {
+                        "id": "oskari_analyse_Median",
+                        "label": "Median"
+                    },
+                    {
+                        "id": "oskari_analyse_NoDataCnt",
+                        "label": "The number of authorised features"
+                    }
+                ],
                 "attribute": "Select the attribute"
             },
             "buffer_size": {
@@ -181,34 +198,44 @@ Oskari.registerLocalization({
             "areas_and_sectors": {
                 "area_count": "The number of the buffers",
                 "area_size": "The buffer size",
-                "sector_count": "The number of the sectors"
+                "sector_count": "The number of the sectors",
+                "area_count_tooltip": "Give the number of the buffers.",
+                "area_size_tooltip": "Give the buffer size.",
+                "sector_count_tooltip": "Give the number of the sectors."
             },
             "spatial": {
                 "label": "Spatial operator",
-                "options": [{
-                    "id": "oskari_analyse_intersect",
-                    "label": "Intersect",
-                    "selected": true
-                }, {
-                    "id": "oskari_analyse_contains",
-                    "label": "Contains"
-                }]
+                "options": [
+                    {
+                        "id": "oskari_analyse_intersect",
+                        "label": "Intersect",
+                        "selected": true
+                    },
+                    {
+                        "id": "oskari_analyse_contains",
+                        "label": "Contains"
+                    }
+                ]
             },
             "params": {
                 "label": "The attributes to be included in the result",
                 "aggreLabel": "The attributes for key ratios",
                 "tooltip": "",
-                "options": [{
-                    "id": "oskari_analyse_all",
-                    "selected": true,
-                    "label": "All"
-                }, {
-                    "id": "oskari_analyse_none",
-                    "label": "None"
-                }, {
-                    "id": "oskari_analyse_select",
-                    "label": "Select from the list"
-                }]
+                "options": [
+                    {
+                        "id": "oskari_analyse_all",
+                        "selected": true,
+                        "label": "All"
+                    },
+                    {
+                        "id": "oskari_analyse_none",
+                        "label": "None"
+                    },
+                    {
+                        "id": "oskari_analyse_select",
+                        "label": "Select from the list"
+                    }
+                ]
             },
             "output": {
                 "label": "Layout",
@@ -243,7 +270,7 @@ Oskari.registerLocalization({
                 "values": {
                     "title": "Filter",
                     "placeholders": {
-                        "case-sensitive": "",
+                        "case-sensitive": "Case sensitive",
                         "attribute": "Attribute",
                         "boolean": "Logical operator",
                         "operator": "Operator",
@@ -367,4 +394,5 @@ Oskari.registerLocalization({
             }
         }
     }
-});
+}
+);

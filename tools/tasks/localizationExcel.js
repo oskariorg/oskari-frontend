@@ -456,6 +456,7 @@ module.exports = function (grunt) {
                 }
                 return currNode || '';
             };
+
             // Sets a new translation value
             var setNewValue = function (pathStack, val) {
                 var currNode = sourceLocale,
@@ -465,9 +466,14 @@ module.exports = function (grunt) {
                     if (i + 1 === pathStack.length) {
                         if (pathStack.join('.') !== 'key') {
                             if (currNode.hasOwnProperty(pathStack[i])) {
-                                if (currNode[pathStack[i]]) {
+                                if (currNode[pathStack[i]] && currNode[pathStack[i]].length) {
                                     // We have an old value, replace it with something (why would anyone translate an empty string?)
                                     currNode[pathStack[i]] = newValue;
+                                } else {
+                                    // No previous value, set a new value only if we have one.
+                                    if (val && val.length) {
+                                        currNode[pathStack[i]] = newValue;
+                                    }
                                 }
                             } else {
                                 grunt.log.warn('Unknown localization key: ', pathStack.join('.'));

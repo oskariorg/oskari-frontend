@@ -43,6 +43,7 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "placeholder": "Helyek keresése",
                 "search": "Keresés",
+                "title": "Keresési eredmények",
                 "close": "Keresési eredmények bezárása.",
                 "noresults": "Nincs találat.",
                 "toomanyresults": "Több mint 100 találat. Kérem pontosítsa a keresést.",

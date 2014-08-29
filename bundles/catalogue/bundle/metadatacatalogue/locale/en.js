@@ -1,5 +1,4 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "en",
     "key": "catalogue.bundle.metadatacatalogue",
     "value": {
@@ -45,5 +44,4 @@ Oskari.registerLocalization(
             "name": "Name"
         }
     }
-}
-);
+});

@@ -28,49 +28,9 @@ Oskari.registerLocalization({
             "map": "Omfattning",
             "pdf": "Utskrift",
             "select_metadata_prompt": "Välj metadata genom att klicka på ikonerna",
-            "metadata_printout_title": "METATIETOTULOSTE",
+            "metadata_printout_title": "METADATA UTSKRIFT",
             "linkto": "Metadatalänk",
-            "tabs": {
-                "abstract": {
-                    "abstract": "",
-                    "jhs": "Visa ISO 19115",
-                    "inspire": "Visa INSPIRE",
-                    "xml": {
-                        "text": "Öppna ISO 19139 XML",
-                        "target": "_blank"
-                    },
-                    "pdf": {
-                        "text": "Öppna PDF-utskrift",
-                        "target": "_blank"
-                    }
-                },
-                "jhs": {
-                    "abstract": "Visa basuppgifter",
-                    "jhs": "",
-                    "inspire": "Visa INSPIRE",
-                    "xml": {
-                        "text": "Öppna ISO 19139 XML",
-                        "target": "_blank"
-                    },
-                    "pdf": {
-                        "text": "Öppna PDF-utskrift",
-                        "target": "_blank"
-                    }
-                },
-                "inspire": {
-                    "abstract": "Visa basuppgifter",
-                    "jhs": "Visa ISO 19115",
-                    "inspire": "",
-                    "xml": {
-                        "text": "Öppna ISO 19139 XML",
-                        "target": "_blank"
-                    },
-                    "pdf": {
-                        "text": "Öppna PDF-utskrift",
-                        "target": "_blank"
-                    }
-                }
-            }
+            "notFound": "Metadata hittades inte"
         },
         "tile": {
             "title": "Metadata",

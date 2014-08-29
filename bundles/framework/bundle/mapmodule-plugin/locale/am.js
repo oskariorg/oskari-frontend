@@ -43,6 +43,7 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "placeholder": "Որոնել տեղանք",
                 "search": "Որոնում",
+                "title": "Որոնման արդյունքներ",
                 "close": "Փակել որոնման արդյունքները",
                 "noresults": "Ոչ մի արդյուք չի գտնվել",
                 "toomanyresults": "Գտնվել է 100-ից ավել արդյունք: խնդրում ենք մանրամասնել Ձեր որոնումը",

@@ -11,8 +11,8 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
      * @static
      * @param {String} pEmptyMsg message that will be displayed if there is no tabs added
      */
-
     function (pEmptyMsg) {
+        this.extraContent = null;
         this.panels = [];
         this.tabChangeListeners = [];
         if (pEmptyMsg) {
@@ -22,8 +22,10 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
         }
         this.template = jQuery('<div class="oskariTabs">' + this.emptyMsg + '</div>');
 
-        this.templateTabs = jQuery('<div class="tabsHeader"><ul class="tabsItem"></ul></div>' +
+        this.templateTabs = jQuery('<nav class="tabsHeader"><ul class="tabsItem"></ul></nav>' +
             '<div class="tabsContent tabsContentItem"></div>');
+
+        this.templateExtra = jQuery('<div class="extraContent"></div>');
 
         this.ui = this.template.clone();
     }, {
@@ -88,6 +90,19 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                 return false;
             });
         },
+
+        setExtra: function (extra) {
+            this.extraContent = this.templateExtra.clone();
+            this.extraContent.append(extra);
+            this.ui.find('.tabsHeader').append(this.extraContent);
+        },
+
+        removeExtra: function () {
+            if (this.extraContent) {
+                this.extraContent.remove();
+            }
+        },
+
         /**
          * @method addTabChangeListener
          * Adds a listener function that should be called when tab selection changes
@@ -145,8 +160,9 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
         isSelected: function (panel) {
             return panel.getHeader().hasClass('active');
         },
+
         /**
-         * @method addPanel
+         * @method removePanl
          * Removes the given panel from the set of tabs shown.
          * The first tab is selected as active if currently selected tab is removed.
          * If the tab was the last one, tabchangelisteners will receive the second parameter as undefined.
@@ -180,6 +196,11 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
             }
             return false;
         },
+
+        getElement: function () {
+            return this.ui;
+        },
+
         /**
          * @method insertTo
          * Adds this set of tabs to given container.
@@ -187,5 +208,14 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          */
         insertTo: function (container) {
             container.append(this.ui);
+        },
+
+        destroy: function () {
+            var i;
+            for (i = this.panels.length; i >= 0; i -= 1) {
+                this.panels[i].destroy();
+            }
+            this.panels = [];
+            this.ui.remove();
         }
     });

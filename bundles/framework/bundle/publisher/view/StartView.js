@@ -16,7 +16,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
      * @param {Object} localization
      *      localization data in JSON format
      */
-
     function (instance, localization) {
         var me = this;
         me.instance = instance;
@@ -92,7 +91,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
             // empty any current lists
             var me = this,
                 container = me.content.find('div.content'),
-                layers = [], // resolve layers
+                layers = [],
                 deniedLayers = [],
                 selectedLayers = me.instance.sandbox.findAllSelectedMapLayers(),
                 i,
@@ -137,7 +136,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
                     container.append(deniedLayersList);
                 }
             } else {
-                // write a message that
                 var errorsList = me.templateError.clone(),
                     error = me.templateListItem.clone();
                 error.append(me.loc.layerlist_empty);
@@ -149,6 +147,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
             }
 
         },
+
         /**
          * Renders an UI listing for given set of layers.
          *
@@ -178,6 +177,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
             }
             return layerList;
         },
+
         /**
          * Clears previous layer listing and renders a new one to the view.
          *
@@ -186,6 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
         handleLayerSelectionChanged: function () {
             this._renderLayerLists();
         },
+
         /**
          * Show Terms of Use to the user
          *
@@ -217,13 +218,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
             var dlg = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 closeBtn = dlg.createCloseButton(me.loc.buttons.close);
 
-            closeBtn.setHandler(function() {
+            closeBtn.setHandler(function () {
                 dlg.close(true);
                 me.dialog = null;
             });
             dlg.show(me.termsOfUse.title, me.termsOfUse.body, [closeBtn]);
             me.dialog = dlg;
         },
+
         /**
          * Checks if the user has accepted terms of use and sets hasAcceptedTou property
          *
@@ -253,6 +255,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
                 }
             });
         },
+
         /**
          * Updates the text on continue button depending if user has
          * accepted the Terms of Use or not
@@ -263,6 +266,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.StartView',
         _updateContinueButton: function () {
             this.buttons['continue'].setTitle(this.hasAcceptedTou ? this.loc.buttons['continue'] : this.loc.buttons.continueAndAccept);
         },
+
         /**
          * Requests that the backend mark the current logged in user as having
          * accepted the Terms of Use

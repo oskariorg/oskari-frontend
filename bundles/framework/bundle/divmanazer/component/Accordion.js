@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Accordion',
         removeMessage: function () {
             if (this.hasMessage) {
                 this.hasMessage = false;
-                var msgContainer = this.ui.find("div.accordionmsg");
+                var msgContainer = this.ui.find('div.accordionmsg');
                 if (msgContainer.length > 0) {
                     msgContainer.remove();
                 }

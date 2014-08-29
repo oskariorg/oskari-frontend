@@ -16,6 +16,7 @@ Oskari.registerLocalization(
         "tab": {
             "title": "Places",
             "nocategories": "You do not have any saved places yet.",
+            "maxFeaturesExceeded": "You have exceeded the maximum amount of the own places. All the places have not been loaded.",
             "publishCategory": {
                 "privateTooltip": "This map layer is private. Click here to publish it.",
                 "publicTooltip": "This map layer is public. Click here to unpublish it."
@@ -31,8 +32,8 @@ Oskari.registerLocalization(
                 "createDate": "Created",
                 "updateDate": "Updated",
                 "measurement": "Size",
-                "edit": "NOT TRANSLATED",
-                "delete": "NOT TRANSLATED"
+                "edit": "Edit",
+                "delete": "Delete"
             },
             "notification": {
                 "delete": {

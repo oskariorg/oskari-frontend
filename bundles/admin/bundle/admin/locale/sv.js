@@ -2,30 +2,30 @@ Oskari.registerLocalization({
     "lang": "sv",
     "key": "GenericAdmin",
     "value": {
-        "title": "NOT TRANSLATED",
+        "title": "Upprätthållande",
         "desc": "",
         "tile": {
-            "title": "NOT TRANSLATED"
+            "title": "Upprätthållande"
         },
         "flyout": {
-            "title": "Admin",
+            "title": "Upprätthållande",
             "defaultviews" : {
-                "title" : "NOT TRANSLATED",
-                "desc" : "NOT TRANSLATED",
-                "headerName" : "NOT TRANSLATED",
-                "globalViewTitle" : 'NOT TRANSLATED',
-                "setButton" : "NOT TRANSLATED",
-                "forceButton" : "NOT TRANSLATED",
+                "title" : "Antaglig vy",
+                "desc" : "Välj kartlager, läge och skalanivå. Lagra antagliga vyn genom att klicka 'Lagra'.",
+                "headerName" : "Antaglig vy",
+                "globalViewTitle" : '*Systemens antagliga vy*',
+                "setButton" : "Lagra",
+                "forceButton" : "Uppdatera ändå",
                 "notifications" : {
-                    "errorTitle" : "NOT TRANSLATED",
-                    "warningTitle" : "NOT TRANSLATED",
-                    "successTitle" : "NOT TRANSLATED",
-                    "errorLoadingFailed" : "NOT TRANSLATED",
-                    "errorUpdating" : "NOT TRANSLATED",
-                    "listTitle" : "NOT TRANSLATED",
-                    "viewUpdated" : "NOT TRANSLATED"
+                    "errorTitle" : "Fel",
+                    "warningTitle" : "Varning",
+                    "successTitle" : "Lagrat",
+                    "errorLoadingFailed" : "Antagliga vyn kunde inte laddas.",
+                    "errorUpdating" : "Vyn (id=${id}) kunde inte uppdateras.",
+                    "listTitle" : "Guest-anvandare har inte rätt till de här kartlagren:",
+                    "viewUpdated" : "Antaglig vy (id=${id}) uppdaterat."
                 }
             }
         }
     }
-});
+}); 

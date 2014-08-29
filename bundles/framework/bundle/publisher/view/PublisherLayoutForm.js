@@ -287,8 +287,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
                 contentPanel = panel.getContainer(),
                 f,
-                field,
-                template;
+                field;
 
             panel.setTitle(this.loc.layout.label);
 
@@ -811,14 +810,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
                 headerCloseButton = jQuery('<div class="olPopupCloseBox icon-close-white" style="position: absolute; top: 12px;"></div>'),
                 contentDiv = jQuery('<div class="popupContent"></div>'),
                 contentWrapper = jQuery('<div class="contentWrapper"></div>'),
-                actionLink = jQuery('<span class="infoboxActionLinks"><a href="#"></a></span>'),
-                actionButton = jQuery('<span class="infoboxActionLinks"><input type="button" /></span>'),
-                contentSeparator = jQuery('<div class="infoboxLine">separator</div>'),
                 popupDataContent = jQuery('<div class="myplaces_wrapper"><div class="myplaces_place">' +
                     '<h3 class="myplaces_header"></h3>' +
                     '<p class="myplaces_desc"></p>' +
                     '<img class="myplaces_img"></img>' +
-                    '<a class="myplaces_link"></a>' +
+                    '<a class="myplaces_link" target="_blank"></a>' +
                     '</div></div>');
 
             header.append(title);

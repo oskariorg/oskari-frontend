@@ -1,12 +1,12 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "am",
     "key": "userinterface.UserGuide",
     "value": {
         "title": "Օգնել",
         "desc": "",
         "flyout": {
-            "title": "Oskari օգտագործողի ուղեցույց"
+            "title": "Oskari օգտագործողի ուղեցույց",
+            "loadingtxt": "NOT TRANSLATED"
         },
         "tile": {
             "title": "Քարտեզի օգտագործողի ուղեցույց"
@@ -20,5 +20,4 @@ Oskari.registerLocalization(
             "contentPart": "NOT TRANSLATED"
         }
     }
-}
-);
+});

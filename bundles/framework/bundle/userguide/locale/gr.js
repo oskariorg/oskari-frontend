@@ -5,7 +5,8 @@ Oskari.registerLocalization({
         "title": "Βοήθεια",
         "desc": "",
         "flyout": {
-            "title": "Οδηγός χρήστη OSKARI"
+            "title": "Οδηγός χρήστη OSKARI",
+            "loadingtxt": "NOT TRANSLATED"
         },
         "tile": {
             "title": "Οδηγός χρήστη χάρτη"

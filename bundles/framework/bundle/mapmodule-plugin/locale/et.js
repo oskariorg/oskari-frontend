@@ -42,6 +42,7 @@ Oskari.registerLocalization({
             "SearchPlugin": {
                 "placeholder": "Leia kohad",
                 "search": "Leia",
+                "title": "Otsingutulemused",
                 "close": "Sulge otsingutulemused",
                 "noresults": "Otsingutulemusi ei leitud",
                 "toomanyresults": "Leiti üle 100 otsingutulemuse. Palun täpsusta otsingut.",

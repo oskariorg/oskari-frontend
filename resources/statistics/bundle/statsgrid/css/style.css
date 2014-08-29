@@ -51,26 +51,44 @@
     height: 80%; }
   .statsgrid .data-source-select {
     margin-top: 5px; }
+    .statsgrid .data-source-select .new-indicator-cont input {
+      margin-left: 10px; }
+    .statsgrid .data-source-select .selector-cont {
+      clear: left;
+      float: left; }
   .statsgrid .parameters-cont {
     min-height: 115px;
-    margin-bottom: 20px;
-    /* FIXME move this to forms.scss */ }
+    margin-bottom: 20px; }
     .statsgrid .parameters-cont button {
       margin: 8px 0 10px 8px; }
-    .statsgrid .parameters-cont button:disabled, .statsgrid .parameters-cont input:disabled, .statsgrid .parameters-cont select:disabled {
-      opacity: 0.25; }
     .statsgrid .parameters-cont .cannot-display-indicator {
       margin-left: 10px; }
   .statsgrid .selector-cont {
-    clear: both; }
+    clear: both;
+    /* Make chosen fit in a bit better */
+    /* TODO move this to either chosen override css or forms.css */ }
     .statsgrid .selector-cont label {
       display: inline-block;
       width: 80px;
-      padding: 10px; }
+      padding: 10px;
+      vertical-align: top; }
     .statsgrid .selector-cont select.indi {
       width: 200px; }
     .statsgrid .selector-cont select.parameter {
       width: 100px; }
+    .statsgrid .selector-cont .chzn-container-single .chzn-single {
+      height: 34px;
+      line-height: 35px; }
+      .statsgrid .selector-cont .chzn-container-single .chzn-single div b {
+        background-position: 0px 8px; }
+    .statsgrid .selector-cont .chzn-container-single .chzn-single-with-drop div b {
+      background-position: -16px 8px; }
+    .statsgrid .selector-cont .chzn-container-single .chzn-single, .statsgrid .selector-cont .chzn-container-single .chzn-single-with-drop {
+      background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#e3e3e3));
+      background: -moz-linear-gradient(top, #fefefe, #e3e3e3);
+      background: -ms-linear-gradient(top, #fefefe, #e3e3e3);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fefefe', endColorstr='#e3e3e3',GradientType=0);
+      background: linear-gradient(top, #fefefe, #e3e3e3); }
   .statsgrid .selectors-container {
     position: relative;
     height: 20%;
@@ -229,7 +247,7 @@ form.add-indicator hr {
 form.add-indicator .municipalities {
   position: absolute;
   bottom: 40px;
-  top: 510px;
+  top: 545px;
   left: -10px;
   width: 100%;
   overflow: auto;

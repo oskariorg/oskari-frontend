@@ -22,6 +22,18 @@
    box-sizing: $sizing;
 }
 
+@mixin background-gradient($from, $to) {
+    background: -webkit-gradient(linear, left top, left bottom, from($from), to($to));
+    background: -moz-linear-gradient(top,  $from,  $to);
+    background: -ms-linear-gradient(top,  $from,  $to);
+    filter: unquote("progid:DXImageTransform.Microsoft.gradient(startColorstr='")
+    + $from
+    + unquote("', endColorstr='")
+    + $to
+    + unquote("',GradientType=0)");
+    background: linear-gradient(top,  $from,  $to);
+}
+
 #contentMap.statsgrid-contentMap {
     position: relative;
 }
@@ -88,6 +100,20 @@
 
     .data-source-select {
         margin-top: 5px;
+
+        .new-indicator-cont {
+
+            input {
+                margin-left: 10px;
+            }
+            
+        }
+
+        .selector-cont {
+            clear: left;
+            float: left;
+        }
+
     }
 
     .parameters-cont {
@@ -96,13 +122,6 @@
 
         button {
             margin: 8px 0 10px 8px;
-        }
-
-        /* FIXME move this to forms.scss */
-        button:disabled,
-        input:disabled,
-        select:disabled {
-            opacity: 0.25;
         }
 
         .cannot-display-indicator {
@@ -117,6 +136,7 @@
             display: inline-block;
             width: 80px;
             padding: 10px;
+            vertical-align: top;
         }
 
         select {
@@ -127,6 +147,33 @@
 
             &.parameter {
                 width: 100px;
+            }
+
+        }
+
+        /* Make chosen fit in a bit better */
+        /* TODO move this to either chosen override css or forms.css */
+        .chzn-container-single {
+            .chzn-single {
+                height: 34px;
+                line-height: 35px;
+
+                div b {
+                    background-position: 0px 8px;
+                }
+
+            }
+
+            .chzn-single-with-drop {
+
+                div b {
+                    background-position: -16px 8px;
+                }
+
+            }
+
+            .chzn-single, .chzn-single-with-drop {
+                @include background-gradient(#fefefe, #e3e3e3);
             }
 
         }
@@ -356,7 +403,7 @@ form.add-indicator {
     .municipalities {
         position: absolute;
         bottom: 40px;
-        top: 510px;
+        top: 545px;
         left: -10px;
         width: 100%;
         overflow: auto;

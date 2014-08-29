@@ -1,12 +1,12 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "sl",
     "key": "userinterface.UserGuide",
     "value": {
         "title": "Pomoč",
         "desc": "",
         "flyout": {
-            "title": "Oskari uporabniški priročnik"
+            "title": "Oskari uporabniški priročnik",
+            "loadingtxt": "NOT TRANSLATED"
         },
         "tile": {
             "title": "Uporabniški priročnik za karto"
@@ -20,5 +20,4 @@ Oskari.registerLocalization(
             "contentPart": "NOT TRANSLATED"
         }
     }
-}
-);
+});

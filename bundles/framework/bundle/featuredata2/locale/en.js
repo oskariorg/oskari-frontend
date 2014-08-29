@@ -1,5 +1,4 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "en",
     "key": "FeatureData2",
     "value": {
@@ -14,7 +13,7 @@ Oskari.registerLocalization(
         "columnSelectorTooltip": "Select visible columns.",
         "popup": {
             "title": "Select features on the map.",
-            "instructions": "NOT TRANSLATED",
+            "instructions": " ",
             "link": {
                 "title": "Select more features"
             },
@@ -47,5 +46,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

@@ -1112,6 +1112,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'for': 'intersect_' + option.id,
                     'class': 'params_radiolabel'
                 });
+                // Preselect option if there's only 2 in total (one of them will be hidden below)
+                if (me.intersectOptions.length === 2) {
+                    option.selected = true;
+                }
                 // Do not show option if it is selected as analysis data
                 if (option.data) {
                     toolContainer.hide();
@@ -1799,7 +1803,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             selections.bbox = this.instance.getSandbox().getMap().getBbox();
             // Override style - :TODO make UI for this and get override from there
             if (defaults.method === 'difference') {
-                selections.override_sld = "sld_muutos_n1";
+                selections.override_sld = 'sld_muutos_n1';
             }
 
             return selections;
@@ -1859,7 +1863,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 areaCount = me.max_areaCount;
             }
 
-            var differenceLayerId = container.find('input[name=differenceLayer]').val(),
+            var differenceLayerId = container.find('input[name=differenceLayer]:checked').val(),
                 differenceFieldA1 = container.find('input[name=analyse-layer1-field-property]:checked').val(),
                 differenceFieldB1 = container.find('input[name=analyse-layer2-field-property]:checked').val(),
                 keyField = container.find('input[name=analyse-key-field-property]:checked').val();

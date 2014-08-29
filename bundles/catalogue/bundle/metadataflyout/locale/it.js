@@ -1,31 +1,40 @@
 Oskari.registerLocalization({
     "lang": "it",
-    "key": "catalogue.bundle.metadatacatalogue",
+    "key": "catalogue.bundle.metadataflyout",
     "value": {
-        "title": "Ricerca luoghi",
+        "title": "Metadata",
         "desc": "",
-        "contentErrorMsg": "Il testo di ricerca contiene caratteri non validi.",
-        "searchDescription": "Rierca per nome, indirizzo o id catastale.",
-        "searchButton": "Cerca",
-        "searchResultCount": "Trovati ",
-        "searchResultCount2": " risultati.",
-        "searchResultDescriptionMoreResults": "Raffina la ricerca per ridurre il numeri di risultati.",
-        "searchResultDescriptionOrdering": "E' possibile ordinare i risultati cliccando sull'intestazione di colonna.",
-        "searchResults": "Risultati: ",
-        "searchResultsDescription": " risultati ",
-        "searchservice_search_alert_title": "Errore: ",
-        "searchservice_search_not_found_anything_text": "Nessun risultato.",
-        "too_short": "Il testo di ricerca e' troppo corto.",
-        "cannot_be_empty": "Il testo da cercare non deve essere vuoto",
-        "too_many_stars": "Troppi asterischi (*)",
-        "grid": {
-            "name": "Nome",
-            "village": "Comune",
-            "type": "Tipo"
+        "loader": {
+            "json": "/catalogue/portti-metadata-printout-service/MetadataServlet?",
+            "abstract": "/geonetwork/srv/it/metadata.show.portti.abstract?",
+            "inspire": "/geonetwork/srv/it/metadata.show.portti?",
+            "jhs": "/geonetwork/srv/it/metadata.show.portti.jhs158?",
+            "pdf": "/catalogue/portti-metadata-printout-service/MetadataPrintoutServlet?lang=sv&title=METADATAPRINTOUT&metadataresource",
+            "xml": "/geonetwork/srv/it/iso19139.xml?",
+            "schemas": "/geonetwork/srv/it/metadata.show.portti.skeemat?"
         },
-        "resultBox": {
-            "close": "Chiudi",
-            "title": "Risultati della ricerca"
+        "layer": {
+            "name": "Metadata",
+            "description": "",
+            "orgName": "Metadata catalogue",
+            "inspire": "Metadata"
+        },
+        "flyout": {
+            "title": "Metadata",
+            "abstract": "Basic information",
+            "inspire": "Inspire metadata",
+            "jhs": "ISO 19115 metadata",
+            "xml": "ISO 19139 XML file",
+            "map": "Geographic extent",
+            "pdf": "Printout",
+            "select_metadata_prompt": "Select metadata by clicking the icons.",
+            "metadata_printout_title": "METADATA PRINTOUT",
+            "linkto": "Link to this metadata",
+            "notFound": "Metadata was not found"
+        },
+        "tile": {
+            "title": "Metadata",
+            "tooltip": "The terms of use and the availability of the dataset are documented in the metadata description."
         }
     }
 });

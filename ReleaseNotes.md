@@ -1,6 +1,20 @@
 # Release Notes
 
+## 1.24
+
+### integration/admin-layerselector
+
+Added username and password support to the layer admin flyout.
+
+###  featuredata2/MapSelectionPlugin
+
+Disabled rotation of rectangular selection.
+
 ## 1.23
+
+### mapmodule/LogoPlugin
+
+The default logo image has been changed
 
 ### statistics / StatsGrid
 

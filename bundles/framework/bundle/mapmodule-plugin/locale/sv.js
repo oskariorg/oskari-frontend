@@ -43,6 +43,7 @@ Oskari.registerLocalization(
             "SearchPlugin": {
                 "placeholder": "Sök plats/adress",
                 "search": "Sök",
+                "title": "Sökresultat",
                 "close": "Stäng sökresultat",
                 "noresults": "Inga träffar",
                 "toomanyresults": "Över 100 träffar, avgränsa sökningen.",

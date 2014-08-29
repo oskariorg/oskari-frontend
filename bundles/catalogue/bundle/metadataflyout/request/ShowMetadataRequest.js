@@ -10,48 +10,51 @@
 Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.request.ShowMetadataRequest',
 
     /* constructor */
-
     function (config, additionalMetadata) {
         this._creator = null;
-
         this._uuid = config.uuid;
         this._RS_Identifier_Code = config.RS_Identifier_Code;
         this._RS_Identifier_CodeSpace = config.RS_Identifier_CodeSpace;
         this._additionalMetadata = additionalMetadata;
-
         this._allMetadata = [];
-        if (!(config.uuid == null && config.RS_Identifier_Code == null && console.RS_Identifier_CodeSpace ==null) ){
+
+        if (!(config.uuid === undefined && config.RS_Identifier_Code === undefined && config.RS_Identifier_CodeSpace === undefined)) {
             this._allMetadata.push(config);
         }
+
         if (additionalMetadata) {
             this._additionalMetadata = additionalMetadata;
             var n;
-            for (n = 0; n < additionalMetadata.length; n++) {
+            for (n = 0; n < additionalMetadata.length; n += 1) {
                 this._allMetadata.push(additionalMetadata[n]);
             }
         }
     }, {
-        __name: "catalogue.ShowMetadataRequest",
+        __name: 'catalogue.ShowMetadataRequest',
+
         getName: function () {
             return this.__name;
         },
+
         getUuid: function () {
             return this._uuid;
         },
+
         getRS_Identifier_Code: function () {
             return this._RS_Identifier_Code;
         },
+
         getRS_Identifier_CodeSpace: function () {
             return this._RS_Identifier_CodeSpace;
         },
+
         getAdditionalMetadata: function () {
             return this._additionalMetadata;
         },
+
         getAllMetadata: function () {
             return this._allMetadata;
         }
     }, {
-        'protocol': ['Oskari.mapframework.request.Request']
+        protocol: ['Oskari.mapframework.request.Request']
     });
-
-/* Inheritance */

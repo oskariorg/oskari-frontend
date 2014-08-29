@@ -114,6 +114,9 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
         me._realtime = false;
         me._refreshRate = null;
         
+        // Admin params, applicable only for admin users
+        me._admin = null;
+
         this._gfiContent = null;
 
     }, {
@@ -657,7 +660,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
                 var style = me.getStyles()[i];
                 if (style.getName() === styleName) {
                     me._currentStyle = style;
-                    if (style.getLegend() !== '') {
+                    if (style.getLegend()) {
                         me._legendImage = style.getLegend();
                     }
                     return;
@@ -1035,5 +1038,22 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         getGfiContent: function () {
             return this._gfiContent;
+        },
+
+        /**
+         * Sets an admin block
+         * @param {Object} admin
+         */
+        setAdmin: function (admin) {
+            this._admin = admin;
+        },
+
+        /**
+         * Returns an admin block
+         * @return {Object} admin
+         */
+        getAdmin: function () {
+            return this._admin;
         }
+
     });

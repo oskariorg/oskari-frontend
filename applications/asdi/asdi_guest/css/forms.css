@@ -97,7 +97,7 @@ input[type="submit"], input[type="button"], input[type="reset"], button {
   padding: 5px;
   width: auto;
 }
-input[type="submit"]:hover, input[type="submit"]:focus, input[type="button"]:hover, input[type="button"]:focus, input[type="reset"]:hover, input[type="reset"]:focus, button:hover, button:focus {
+input[type="submit"]:hover:enabled, input[type="submit"]:focus, input[type="button"]:hover:enabled, input[type="button"]:focus, input[type="reset"]:hover:enabled, input[type="reset"]:focus, button:hover:enabled, button:focus {
   background: #DFF4FF;
   border: 1px solid #A7CEDF;
   /* Hover color doesn't really matter... */
@@ -123,7 +123,7 @@ input[type="submit"], input[type="button"], input[type="reset"], button, .lfr-ac
 }
 
 /* This is used in buttons */
-input[type="submit"]:hover, input[type="button"]:hover, input[type="reset"]:hover, button:hover, .lfr-actions:hover, .lfr-actions:hover ul {
+input[type="submit"]:hover:enabled, input[type="button"]:hover:enabled, input[type="reset"]:hover:enabled, button:hover:enabled, .lfr-actions:hover, .lfr-actions:hover ul {
   background: #b9ced9 url(../images/application/state_hover_bg.png) repeat-x 0 0;
   border-color: #627782;
   /* Hover color doesn't really matter... */
@@ -141,7 +141,7 @@ input.aui-form-validator-error, textarea.aui-form-validator-error, select.aui-fo
 }
 
 /* This is used in all primary buttons */
-input.primary {
+button.primary, input.primary {
   background-color: #217ad4;
   background-image: url(../images/blue_button_liuku.png);
   border-color: #0000BF #0000DE #0000DE #0000BF;
@@ -166,4 +166,9 @@ textarea {
 
 button, input[type=button], input[type=submit], input[type=reset] {
   line-height: inherit;
+}
+
+button:disabled, input:disabled, select:disabled, textarea:disabled {
+    cursor: default;
+    opacity: 0.25;
 }

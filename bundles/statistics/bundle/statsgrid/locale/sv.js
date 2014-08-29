@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "sv",
     "key": "StatsGrid",
     "value": {
@@ -28,9 +29,9 @@ Oskari.registerLocalization({
             "newIndicator": "Ny indikator",
             "error": {
                 "title": "Fel",
-                "indicatorsError": "NOT TRANSLATED",
-                "indicatorError": "NOT TRANSLATED",
-                "indicatorDeleteError": "NOT TRANSLATED"
+                "indicatorsError": "Laddning av indikatorer misslyckades. Försök igen senare.",
+                "indicatorError": "Laddning av indikatoren misslyckades. Försök igen senare.",
+                "indicatorDeleteError": "Radering av indikatoren misslyckades. Försök igen senare."
             }
         },
         "gender": "Kön",
@@ -39,11 +40,11 @@ Oskari.registerLocalization({
             "female": "kvinnor",
             "total": "totalt"
         },
-        "addColumn": "NOT TRANSLATED",
+        "addColumn": "Sök indikator",
         "removeColumn": "Radera",
         "indicators": "Indikator",
-        "cannotDisplayIndicator": "NOT TRANSLATED",
-        "availableRegions": "NOT TRANSLATED",
+        "cannotDisplayIndicator": "Indikatorn har inga värde på din utval regional indelning. Så det kan inte visas på tabellen.",
+        "availableRegions": "Värde finns till följande regionala indelningar:",
         "year": "År",
         "buttons": {
             "ok": "OK",
@@ -64,7 +65,6 @@ Oskari.registerLocalization({
             "indicatorDataXHRError": "Fel vid laddning av indikator data",
             "descriptionTitle": "Beskrivning",
             "sourceTitle": "Upphov"
-
         },
         "classify": {
             "classify": "Klassificera",
@@ -95,11 +95,10 @@ Oskari.registerLocalization({
             "divergent": "Divergent",
             "info2": "Vända färger - använd muspekaren för att välja en färg från sekvensen färgskalan",
             "cancel": "Avsluta"
-
         },
         "statistic": {
-            "title": "NOT TRANSLATED",
-            "avg": "genomsnitt",
+            "title": "Nyckeltal",
+            "avg": "Medelvärde",
             "max": "Maximivärde",
             "mde": "Modus",
             "mdn": "Median",
@@ -107,16 +106,18 @@ Oskari.registerLocalization({
             "std": "Standardavvikelse",
             "sum": "Summa",
             "tooltip": {
-                "avg": "NOT TRANSLATED",
-                "max": "NOT TRANSLATED",
-                "mde": "NOT TRANSLATED",
-                "mdn": "NOT TRANSLATED",
-                "min": "NOT TRANSLATED",
-                "std": "NOT TRANSLATED",
-                "sum": "NOT TRANSLATED"
+                "avg": "Medelvärde",
+                "max": "Det största av indikatorens värde.",
+                "mde": "Det mest allmänna av indikatorens värde.",
+                "mdn": "Det mellersta av indikatorens ordnade värde.",
+                "min": "Det minsta av indikatorens värde.",
+                "std": "En genomsnittlig avvikelse av indikatorens medelvärde.",
+                "sum": "Totalt summa av indikatorens värde."
             }
         },
-        "noIndicatorData": "NOT TRANSLATED",
+        "baseInfoTitle": "Identifierare information",
+        "dataTitle": "Datamängd",
+        "noIndicatorData": "Indikatoren kan inte visas på den här regionindelningen.",
         "values": "värden",
         "included": "Värden",
         "municipality": "Kommuner",
@@ -141,52 +142,54 @@ Oskari.registerLocalization({
         "filterBetween": "Värdeintervallet (exklusivt)",
         "filter": "Filter",
         "filterByValue": "Med värde",
-        "filterByRegion": "Med region",
-
-        "selectRegionCategory": "NOT TRANSLATED",
-        "regionCatPlaceholder": "NOT TRANSLATED",
-        "selectRegion": "NOT TRANSLATED",
-        "chosenRegionText": "NOT TRANSLATED",
-        "noRegionFound": "NOT TRANSLATED",
+        "filterByRegion": "Med regioner",
+        "selectRegionCategory": "Regional indelning:",
+        "regionCatPlaceholder": "Välj en regional indelning",
+        "selectRegion": "Region:",
+        "chosenRegionText": "Välj regioner",
+        "noRegionFound": "Regionen hittades inte.",
         "regionCategories": {
-            "title": "NOT TRANSLATED",
-            "KUNTA": "NOT TRANSLATED",
-            "ALUEHALLINTOVIRASTO": "NOT TRANSLATED",
-            "MAAKUNTA": "NOT TRANSLATED",
-            "NUTS1": "NOT TRANSLATED",
-            "SAIRAANHOITOPIIRI": "NOT TRANSLATED",
-            "SEUTUKUNTA": "NOT TRANSLATED",
-            "SUURALUE": "NOT TRANSLATED"
+            "title": "Regionindelningar",
+            "ERVA": "Specialupptagningsområde",
+            "ELY-KESKUS": "NTM-regioner",
+            "KUNTA": "Kommuner",
+            "ALUEHALLINTOVIRASTO": "Regionförvaltningsverken",
+            "MAAKUNTA": "Landskap",
+            "NUTS1": "Fasta Finland och Åland",
+            "SAIRAANHOITOPIIRI": "Sjukvårdsdistrikter",
+            "SEUTUKUNTA": "Samkommuner",
+            "SUURALUE": "Storområden"
         },
-        "addDataButton": "NOT TRANSLATED",
-        "addDataTitle": "NOT TRANSLATED",
-        "openImportDialogTip": "NOT TRANSLATED",
-        "openImportDataButton": "NOT TRANSLATED",
-        "addDataMetaTitle": "NOT TRANSLATED",
-        "addDataMetaTitlePH": "NOT TRANSLATED",
-        "addDataMetaSources": "NOT TRANSLATED",
-        "addDataMetaSourcesPH": "NOT TRANSLATED",
-        "addDataMetaDescription": "NOT TRANSLATED",
-        "addDataMetaDescriptionPH": "NOT TRANSLATED",
-        "addDataMetaReferenceLayer": "NOT TRANSLATED",
-        "addDataMetaYear": "NOT TRANSLATED",
-        "addDataMetaYearPH": "NOT TRANSLATED",
-        "addDataMetaPublicity": "NOT TRANSLATED",
-        "municipalityHeader": "NOT TRANSLATED",
-        "dataRows": "NOT TRANSLATED",
-        "municipalityPlaceHolder": "NOT TRANSLATED",
-        "formEmpty": "NOT TRANSLATED",
-        "formCancel": "NOT TRANSLATED",
-        "formSubmit": "NOT TRANSLATED",
-        "cancelButton": "NOT TRANSLATED",
-        "clearImportDataButton": "NOT TRANSLATED",
-        "importDataButton": "NOT TRANSLATED",
-        "popupTitle": "NOT TRANSLATED",
-        "importDataDescription": "NOT TRANSLATED",
-        "failedSubmit": "NOT TRANSLATED",
-        "connectionProblem": "NOT TRANSLATED",
-        "parsedDataInfo": "NOT TRANSLATED",
-        "parsedDataUnrecognized": "NOT TRANSLATED",
-        "loginToSaveIndicator": "NOT TRANSLATED"
+        "addDataButton": "Ladda egen",
+        "addDataTitle": "Ladda egen indikator",
+        "openImportDialogTip": "Ladda värde från urklippet",
+        "openImportDataButton": "Ladda värde",
+        "addDataMetaTitle": "Titel",
+        "addDataMetaTitlePH": "Titeln av indikator",
+        "addDataMetaSources": "Källa",
+        "addDataMetaSourcesPH": "Datakälla",
+        "addDataMetaDescription": "Beskrivning",
+        "addDataMetaDescriptionPH": "Beskrivning",
+        "addDataMetaReferenceLayer": "Regional indelning:",
+        "addDataMetaYear": "År",
+        "addDataMetaYearPH": "Information är från år",
+        "addDataMetaPublicity": "Publicerande",
+        "municipalityHeader": "Kommuner",
+        "dataRows": "Indikators värde på regioner",
+        "municipalityPlaceHolder": "Ge ett värde",
+        "formEmpty": "Töm",
+        "formCancel": "Avbryta",
+        "formSubmit": "Lagra",
+        "cancelButton": "Avbryta",
+        "clearImportDataButton": "Töm datarader",
+        "importDataButton": "Tilllägg",
+        "popupTitle": "Ladda värde",
+        "importDataDescription": "Kopiera regioner (namn eller id) och motsvarande värde till nedanstående textfältet. Skilja kommun och värde med tabulator, kolon eller prick. Skriv varje kommun på sin egen rad.  \r\nExempel 1: Alajärvi, 1234 \r\nExempel 2: 009   2100",
+        "failedSubmit": "Tilllägg metadata för indikatoren:",
+        "connectionProblem": "Data kunde inte lagras för nättförbindelseproblemens skull.",
+        "parsedDataInfo": "Laddade regioner finns totalt",
+        "parsedDataUnrecognized": "Obekanta regioner",
+        "loginToSaveIndicator": "Att lagra din egen indikator måste du logga in."
     }
-});
+}
+);

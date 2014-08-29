@@ -415,6 +415,7 @@ Oskari.clazz.define('Oskari.userinterface.component.visualization-form.LineForm'
             renderDialog.moveTo(renderButton, 'top');
 
             me._updatePreview();
+            saveBtn.setFocus(true);
             return renderDialog;
         },
 
