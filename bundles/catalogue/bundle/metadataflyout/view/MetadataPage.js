@@ -318,10 +318,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                     url = browseGraphicUrl;
                 }
 
-                /* DEBUG CODE */
-                url = '/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/logo/images/pti_icon.png';
-                /* DEBUG CODE */
-
                 // Add new image once it has loaded (apparently this is done so we don't show broken images)
                 imgObj.onload = function () {
                     me._browseGraphicUrl = url;
