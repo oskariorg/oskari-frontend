@@ -50,3 +50,7 @@ div.personaldata td div.icon {
 textarea#view_description {
   resize: none;
   width: 100%; }
+
+/* Temporary hack for too-long tabHeader */
+.personaldata .tabsHeader {
+  margin-right: 21px; }

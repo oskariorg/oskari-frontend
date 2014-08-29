@@ -106,7 +106,6 @@ Oskari.registerLocalization(
                         "id": "oskari_analyse_intersect",
                         "label": "Clipping",
                         "classForPreview": "clip",
-                        "tooltip": ""
                         "tooltip": "By the method \"Clipping\" you can clip the selected features by the features of another analyse layer. The result includes only those of selected features whose area is inside of the features of the clipping map layer."
                     },
                     {
@@ -198,7 +197,6 @@ Oskari.registerLocalization(
             },
             "areas_and_sectors": {
                 "area_count": "The number of the buffers",
-                "area_count_tooltip": "Give the number of the buffers.",
                 "area_size": "The buffer size",
                 "sector_count": "The number of the sectors",
                 "area_count_tooltip": "Give the number of the buffers.",

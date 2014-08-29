@@ -160,8 +160,6 @@ Oskari.registerLocalization(
             "SEUTUKUNTA": "Subregion",
             "SUURALUE": "Major region"
         },
-        "baseInfoTitle": "Identification data",
-        "dataTitle": "Indicator",
         "addDataButton": "Add indicator",
         "addDataTitle": "Add a new indicator.",
         "openImportDialogTip": "Import data from the clipboard.",
