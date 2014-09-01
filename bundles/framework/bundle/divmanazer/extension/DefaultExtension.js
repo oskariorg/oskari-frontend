@@ -312,10 +312,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
         /* o2 helpers for notifications and requetss */
         slicer: Array.prototype.slice,
 
-        notify: function (evt, retainEvent) {
-            return this.getSandbox().notifyAll(evt, retainEvent);
-        },
-
         request: function (request) {
             return this.getSandbox().request(this, request);
         },
