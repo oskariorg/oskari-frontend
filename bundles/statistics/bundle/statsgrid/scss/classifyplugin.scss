@@ -7,8 +7,9 @@
 	text-align: left;
 	font-size: 12px;
 	position: absolute;
-	bottom: 5px;
-	right: 5px;
+	bottom: 8px;
+	right: 10px;
+	cursor: pointer;
 	
 	.content select {
 		padding: 0px;
@@ -38,6 +39,12 @@
 		color: #FFF;
 		background-color: #000 !important;
 		padding: 4px;
+
+		.header-icon {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
 	}
 	
 	div.classifications {
@@ -91,6 +98,10 @@
 			margin-top: 6px;
 		}
 		
+	}
+
+	.classification-guide {
+	 	padding-left: 5px;
 	}
 	
 	.ui-corner-all,
@@ -207,7 +218,4 @@ table.colo_table1 {
 		height: 15px;
 		width: 5px;
 	}
-}
-.manageClassificationPlugin .classification-guide {
- 	padding-left: 5px;
 }

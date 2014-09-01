@@ -10,6 +10,14 @@
     background-clip: padding-box;
 }
 
+/* SASS removes whitespace that calc requires, so unquote() whatever calculation you pass to this */
+@mixin calcProperty($property, $calculation) { 
+    #{$property}: -moz-calc($calculation);
+    #{$property}: -webkit-calc($calculation);
+    #{$property}: -o-calc($calculation);
+    #{$property}: calc($calculation);
+}
+
 div.notLoggedIn {
     padding: 10px;
 }
@@ -57,11 +65,13 @@ div.basic_analyse {
     > div.content {
         overflow: auto;
         height: 89%;
+        @include calcProperty(height, unquote("100% - 88px"));
     }
 
     > div.header {
         background-color: #FDF8D9;
         padding: 5px 10px;
+        height: 37px;
 
         div.icon-close {
             float: right;
