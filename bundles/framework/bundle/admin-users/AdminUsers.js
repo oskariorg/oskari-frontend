@@ -18,11 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsers', functio
         _initTemplates: function () {
             var me = this,
                 btn,
-                i,
-                role,
-                roles,
-                ilen;
-            // FIXME make this a form as well
+                i;
             me.templates.main = jQuery('<div class="admin-users"></div>');
             me.templates.search = jQuery(
                 '<div><input type="search"></input><div class="icon-close"></div></div>'
@@ -150,7 +146,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsers', functio
                 i,
                 ilen,
                 roleData,
-                key,
                 value,
                 name,
                 opt,
@@ -482,8 +477,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsers', functio
                 selecttemplate = jQuery(me.templates.form).find('select.roles'),
                 optiontemplate = selecttemplate.find('option[value=' + role.id +']');
                 
-            if (operation == 'remove') { 
-                option.remove(); 
+            if (operation == 'remove') {
+                option.remove();
                 optiontemplate.remove();
             } 
             if (operation == 'update') { 
@@ -493,7 +488,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsers', functio
             if (operation == 'add') {
                 select.append("<option value=" + role.id +">" + role.name + "</option>");
                 selecttemplate.append("<option value=" + role.id +">" + role.name + "</option>");
-            } 
+            }
         },
         eventHandlers : {
             'RoleChangedEvent' : function(event) {

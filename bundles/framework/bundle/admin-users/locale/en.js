@@ -32,7 +32,8 @@ Oskari.registerLocalization({
                 "title" : "A: Roles",
                 "newrole" : "Add role:",
                 "confirm_delete": "Are you sure you wish to delete role {role}?",
-                "delete_failed": "Delete failed"
+                "delete_failed": "Delete failed",
+                "doSave_failed": "Error by saving new role"
             }
         },
         "save": "save"

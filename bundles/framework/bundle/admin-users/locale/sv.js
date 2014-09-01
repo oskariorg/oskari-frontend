@@ -32,7 +32,8 @@ Oskari.registerLocalization({
                 "title" : "A: Roles",
                 "newrole" : "NOT TRANSLATED:",
                 "confirm_delete": "NOT TRANSLATED",
-                "delete_failed": "NOT TRANSLATED"
+                "delete_failed": "NOT TRANSLATED",
+                "doSave_failed": "NOT TRANSLATED"
             }
         },
         "save": "NOT TRANSLATED"

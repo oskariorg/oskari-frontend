@@ -172,7 +172,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                         }
                     }
                 }
-                console.log("lista muokattu");
             }
         },
 
@@ -262,7 +261,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                         callback();
                     }
             });
-        },
+        }
 
     }, {
         /**

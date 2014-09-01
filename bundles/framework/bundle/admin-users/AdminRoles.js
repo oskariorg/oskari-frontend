@@ -93,6 +93,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminRoles', functio
         },
 
         /**
+         * @method _openPopup
+         * opens a modal popup, no buttons or anything.
+         */
+        _openPopup: function (title, content) {
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
+            okBtn.setPrimary(true);
+            okBtn.setHandler(function () {
+                dialog.close(true);
+            });
+            dialog.show(title, content, [okBtn]);
+            dialog.makeModal();
+        },
+        /**
          * @method doSave
          * Method is called by createUi to save the new role when button is clicked
 		 */
@@ -111,8 +125,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminRoles', functio
 					var	evt = me.sandbox.getEventBuilder('RoleChangedEvent')(role, "add");
             		me.sandbox.notifyAll(evt);
                 },
-                error: function() {
-                    alert("Error by saving new role");
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var error = me._getErrorText(jqXHR, textStatus, errorThrown);
+                    me._openPopup(
+                        me._getLocalization('doSave_failed'),
+                        error
+                    );
                 }
             });
         },
@@ -271,7 +289,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminRoles', functio
 
             }
             return error;
-        },
+        }
 
     }, {
         "extend": ["Oskari.userinterface.component.TabPanel"]

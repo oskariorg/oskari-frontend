@@ -32,7 +32,8 @@ Oskari.registerLocalization({
                 "title" : "A: Roles",
                 "newrole" : "Lisää rooli:",
                 "confirm_delete": "Haluatko varmasti poistaa roolin {role}?",
-                "delete_failed": "Poistaminen epäonnistui"
+                "delete_failed": "Poistaminen epäonnistui",
+                "doSave_failed": "Virhe roolin tallentamisessa!"
             }
         },
         "save": "tallenna"

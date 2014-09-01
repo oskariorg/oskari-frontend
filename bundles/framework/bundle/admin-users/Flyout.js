@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
             }, {
             'id' : 'adminroles',
             'clazz' : 'Oskari.mapframework.bundle.admin-users.AdminRoles'
-            },
+            }
         ],
         /**
          * @method getName
