@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
      * TODO: close/open methods?
      * @static
      */
-
     function () {
         this.template = jQuery('<div class="accordion_panel">' +
             '<div class="header">' +
@@ -28,6 +27,7 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
 
         var me = this,
             header = me.html.find('div.header');
+
         header.click(function () {
             if (me.isOpen()) {
                 me.close();
@@ -35,6 +35,7 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
                 me.open();
             }
         });
+
         this.html.find('div.content').hide();
     }, {
         /**
@@ -57,7 +58,7 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
          */
         isVisible: function () {
             // checking since we dont assume param is boolean
-            return this.html.is(":visible");
+            return this.html.is(':visible');
         },
         /**
          * @method isOpen

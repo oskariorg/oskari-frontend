@@ -20,6 +20,13 @@ div.toolrow {
 
 }
 
+div.linkcontent {
+    word-wrap: break-word;
+    border-style: dashed;
+    border-width: 1px;
+    padding: 5px
+}
+
 div.tool.disabled {
     cursor: default;
     opacity: 0.25;

@@ -3,10 +3,9 @@
  * @param  {Object} locale [description]
  * @param  {Oskari.admin.bundle.admin.GenericAdminBundleInstance} parent reference to instance to get sandbox etc
  */
-Oskari.clazz.define("Oskari.admin.bundle.admin.DefaultViews", function(locale, parent) {
+Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function(locale, parent) {
     this.instance = parent;
     this.locale = locale;
-
     this.setTitle(locale.title);
     this.setContent(this.createUI());
 }, {
@@ -21,8 +20,8 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.DefaultViews", function(locale, p
      * @return {jQuery} returns the created DOM
      */
     createUI: function() {
-        var me = this;
-        var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+        var me = this,
+            grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
         grid.setVisibleFields(['name', 'action']);
         grid.setColumnUIName('name', me.locale.headerName);
         grid.setColumnUIName('action', ' ');
@@ -54,8 +53,8 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.DefaultViews", function(locale, p
      * @param  {Function} callback [description]
      */
     getDefaultViews: function(callback) {
-        var me = this;
-        var sb = this.instance.getSandbox();
+        var me = this,
+            sb = me.instance.getSandbox();
 
         jQuery.ajax({
             type: 'GET',
@@ -81,8 +80,8 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.DefaultViews", function(locale, p
      * @param  {Boolean} force  true to update even if server warns about layers
      */
     __modifyView: function(id, force) {
-        var sb = this.instance.getSandbox();
-        var me = this;
+        var me = this,
+            sb = me.instance.getSandbox();
         // setup route and location
         var selectedLayers = [];
         var data = {
@@ -142,16 +141,16 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.DefaultViews", function(locale, p
         this.__showGenericErrorSave(id);
     },
     errorHandlers : {
-        "guest_not_available" : function(data, id) {
-            var me = this;
-            var sb = this.instance.getSandbox();
-            var problemLayers = data.selectedLayers;
+        'guest_not_available' : function(data, id) {
+            var me = this,
+                sb = me.instance.getSandbox(),
+                problemLayers = data.selectedLayers;
             if(problemLayers && problemLayers.length > 0) {
                 // construct a list of problematic layers to show
                 var list = [];
                 _.each(problemLayers, function(layerId) {
-                    var layer = sb.findMapLayerFromAllAvailable(layerId);
-                    var msg = 'Layer ID ' + layerId;
+                    var layer = sb.findMapLayerFromAllAvailable(layerId),
+                        msg = 'Layer ID ' + layerId;
                     if(layer) {
                         msg = layer.getName(); 
                     }
@@ -178,24 +177,27 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.DefaultViews", function(locale, p
             }
         }
     },
+
     __showGenericErrorSave: function(id) {
         this.instance.showMessage(
             this.locale.notifications.errorTitle, 
             _.template(this.locale.notifications.errorUpdating)({id : id}));
     },
+
     __viewSaved: function(id, data) {
         this.instance.showMessage(
             this.locale.notifications.successTitle, 
             _.template(this.locale.notifications.viewUpdated)({id : id}));
     },
+
     /**
      * Wraps the default views listing json in a GridModel
      * @param  {Object} data json
      * @return {Oskari.userinterface.component.GridModel}      model
      */
     __getGridModel: function(data) {
-        var me = this;
-        var model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
+        var me = this,
+            model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
         model.addData({
             id: data.viewId,
             name: me.locale.globalViewTitle,
@@ -217,5 +219,5 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.DefaultViews", function(locale, p
     }
 
 }, {
-    "extend": ["Oskari.userinterface.component.TabPanel"]
+    extend: ['Oskari.userinterface.component.TabPanel']
 });
