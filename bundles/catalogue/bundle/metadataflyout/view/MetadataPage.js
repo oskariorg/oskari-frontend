@@ -361,6 +361,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
         loadMetadataJSONForState: function () {
             var me = this,
                 metadata;
+
             if (!me._contentState || !me._contentState.metadata ||
                     !me._contentState.metadata.uuid) {
                 return false;
@@ -419,7 +420,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
         /**
          * _linkify:
-         *
+         * FIXME use the original linkify if possible
          * slightly modified  http://code.google.com/p/jquery-linkify/
          *
          */
