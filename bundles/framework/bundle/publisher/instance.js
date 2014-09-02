@@ -207,7 +207,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 okBtn.addClass('primary');
                 url = this.sandbox.getLocalizedProperty(this.conf.publishedMapUrl) + event.getId();
                 iframeCode = '<div class="codesnippet"><code>&lt;iframe src="' + url + '" style="border: none;" width="'  + event.getWidth() +
-                    '" height="' + event.getHeight() + '"&gt;&lt;/iframe&gt;</code></div>';
+                '" height="' + event.getHeight() + '"&gt;&lt;/iframe&gt;</code></div>';
 
                 content = loc.published.desc + '<br/><br/>' + iframeCode;
 

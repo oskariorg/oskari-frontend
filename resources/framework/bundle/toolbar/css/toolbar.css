@@ -17,7 +17,9 @@ div.linkcontent {
   word-wrap: break-word;
   border-style: dashed;
   border-width: 1px;
-  padding: 5px; }
+  padding: 5px;
+  max-height: 200px;
+  overflow-y: auto; }
 
 div.tool.disabled {
   cursor: default;
