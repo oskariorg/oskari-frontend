@@ -202,6 +202,12 @@ Oskari.registerLocalization(
                 "area_size_tooltip": "Give the buffer size.",
                 "sector_count_tooltip": "Give the number of the sectors."
             },
+            "difference": {
+                "firstLayer": "First layer",
+                "secondLayer": "Second layer",
+                "field": "",
+                "keyField": ""
+            },
             "spatial": {
                 "label": "Spatial operator",
                 "options": [
