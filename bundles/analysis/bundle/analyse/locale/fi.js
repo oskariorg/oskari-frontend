@@ -126,8 +126,12 @@ Oskari.registerLocalization(
                         "label": "Monivyöhyke",
                         "classForPreview": "areas_and_sectors",
                         "tooltip": "Monivyöhyke-menetelmän avulla käyttäjä voi muodostaa valitsemiensa kohteiden ympärille useita eri vyöhykkeitä. Käyttäjä voi itse määrittää vyöhykkeiden koon ja lukumäärän."
-                    }
-                ]
+                    }, {
+                        "id": "oskari_analyse_difference",
+                        "label": "Muutoksen laskenta",
+                        "classForPreview": "difference",
+                        "tooltip": ""
+                    }]
             },
             "aggregate": {
                 "label": "Tunnusluku",
@@ -201,9 +205,14 @@ Oskari.registerLocalization(
                 "area_count_tooltip": "Anna vyöhykkeiden lukumäärä.",
                 "area_size": "Vyöhykkeiden koko",
                 "sector_count": "Sektoreiden lukumäärä",
-                "area_count_tooltip": "Anna vyöhykkeiden lukumäärä.",
                 "area_size_tooltip": "Anna vyöhykkeiden koko.",
                 "sector_count_tooltip": "Anna sektoreiden lukumäärä."
+            },
+            "difference": {
+                "firstLayer": "Ensimmäinen taso",
+                "secondLayer": "Toinen taso",
+                "field": "Valitse ominaisuustieto",
+                "keyField": "Yhdistävä ominaisuustieto"
             },
             "spatial": {
                 "label": "Lopputuloksen mukaan otettavat kohteet",
