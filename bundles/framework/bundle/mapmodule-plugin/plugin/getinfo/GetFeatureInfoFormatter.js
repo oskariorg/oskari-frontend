@@ -348,13 +348,13 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             desc.remove();
         }
 
-        if (place.image_url) {
+        if (place.image_url && typeof place.image_url === 'string') {
             img.attr({
                 'href': place.image_url
             }).find('img.myplaces_img').attr({
                 'src': place.image_url
             });
-        } else if (place.imageUrl) {
+        } else if (place.imageUrl && typeof place.imageUrl === 'string') {
             img.attr({
                 'href': place.imageUrl
             }).find('img.myplaces_img').attr({
