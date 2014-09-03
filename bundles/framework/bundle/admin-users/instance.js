@@ -6,13 +6,12 @@
  * See Oskari.mapframework.bundle.admin-users.AdminUsersBundle for bundle definition.
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInstance',
 
     /**
      * @method create called automatically on construction
      * @static
      */
-
     function () {
         this.sandbox = null;
         this.started = false;
@@ -28,7 +27,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -69,20 +68,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          * @method start
          * implements BundleInstance protocol start methdod
          */
-        "start": function () {
-            var me = this;
-
-            if (me.started) {
+        start: function () {
+            if (this.started) {
                 return;
             }
 
-            me.started = true;
-
-            var conf = this.conf,
+            var me = this,
+                conf = me.conf,
                 sandboxName = conf ? conf.sandbox : 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
                 p;
 
+            me.started = true;
             me.sandbox = sandbox;
 
             this._localization = Oskari.getLocalization(this.getName());
@@ -106,14 +103,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        "init": function () {
+        init: function () {
             return null;
         },
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        "update": function () {
+        update: function () {
 
         },
         /**
@@ -143,7 +140,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 var me = this,
-                    doOpen = event.getViewState() !== "close";
+                    doOpen = event.getViewState() !== 'close',
+                    p;
                 if (event.getExtension().getName() !== me.getName()) {
                     // not me -> do nothing
                     return;
@@ -151,8 +149,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                 if (doOpen) {
                     this.plugins['Oskari.userinterface.Flyout'].createUI();
                     // flyouts eventHandlers are registered
-                    for (var p in this.plugins['Oskari.userinterface.Flyout'].getEventHandlers()) {
-                        if(!this.eventHandlers[p]) {
+                    for (p in this.plugins['Oskari.userinterface.Flyout'].getEventHandlers()) {
+                        if (!this.eventHandlers[p]) {
                             this.sandbox.registerForEventByName(this, p);
                         }
                     }
@@ -160,12 +158,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                 }
             },
 
-            'RoleChangedEvent' : function (event) {
-                if (event.getOperation() === "add") {
+            RoleChangedEvent: function (event) {
+                var i;
+                if (event.getOperation() === 'add') {
                     this.storedRoles.push(event.getRole());
                 }
-                if (event.getOperation() === "remove") {
-                    for (var i = 0; i < this.storedRoles.length; i++) {
+                if (event.getOperation() === 'remove') {
+                    for (i = 0; i < this.storedRoles.length; i += 1) {
                         if ((this.storedRoles[i].id + '') === (event.getRole().id + '')) {
                             this.storedRoles.splice(i, 1);
                             break;
@@ -179,7 +178,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function () {
+        stop: function () {
             var sandbox = this.sandbox,
                 p,
                 request;
@@ -246,6 +245,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          */
         getRoles: function (callback) {
             var me = this;
+            // FIXME don't use global variables (use getAjaxUrl or smthn)
             jQuery.ajax({
                 type: 'GET',
                 url: ajaxUrl + 'action_route=ManageRoles',
@@ -253,13 +253,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                 timestamp: new Date().getTime(),
                 //lisää alempaan funktioon virheilmoitus, jos rooleja ei saatu ladattua
                 error: function () {
-                        //laita tähän error message
-                        callback();
-                    },
+                    //laita tähän error message
+                    callback();
+                },
                 success: function (result) {
-                        me.storedRoles = result.rolelist || [];
-                        callback();
-                    }
+                    me.storedRoles = result.rolelist || [];
+                    callback();
+                }
             });
         }
 
@@ -268,5 +268,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
     });

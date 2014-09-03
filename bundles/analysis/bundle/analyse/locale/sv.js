@@ -201,7 +201,6 @@ Oskari.registerLocalization(
                 "area_count_tooltip": "Ge zoner antal.",
                 "area_size": "Storlek av zoner",
                 "sector_count": "Antal av sektorer",
-                "area_count_tooltip": "Ge zoner antal.",
                 "area_size_tooltip": "Ge zoner storlek.",
                 "sector_count_tooltip": "Ge sektorer antal."
             },

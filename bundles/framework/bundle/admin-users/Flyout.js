@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
      * instance
      *      reference to component that created the tile
      */
-
     function (instance) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
@@ -23,14 +22,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
         this.tabsContainer = null;
         this._localization = this.instance.getLocalization('flyout');
     }, {
-        tabs : [{
-            'id' : 'adminusers',
-            'clazz' : 'Oskari.mapframework.bundle.admin-users.AdminUsers'
-            }, {
-            'id' : 'adminroles',
-            'clazz' : 'Oskari.mapframework.bundle.admin-users.AdminRoles'
-            }
-        ],
+        tabs: [{
+            'id': 'adminusers',
+            'clazz': 'Oskari.mapframework.bundle.admin-users.AdminUsers'
+        }, {
+            'id': 'adminroles',
+            'clazz': 'Oskari.mapframework.bundle.admin-users.AdminRoles'
+        }],
         /**
          * @method getName
          * @return {String} the name for the component
@@ -70,15 +68,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
 
 
         /* App specific methods */
-        createUI : function () {
-            if(this.tabsContainer) {
+        createUI: function () {
+            if (this.tabsContainer) {
                 return;
             }
-            var me = this;
-            var tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
+            var me = this,
+                tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
             this.tabsContainer = tabsContainer;
 
-            _.each(this.tabs, function(tabDef) {
+            _.each(this.tabs, function (tabDef) {
                 var tab = Oskari.clazz.create(tabDef.clazz, me._getLocalization(tabDef.id), me.instance);
                 tab.setId(tabDef.id);
                 tabsContainer.addPanel(tab);
@@ -86,20 +84,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
             });
             tabsContainer.insertTo(this.container);
         },
-        getEventHandlers : function() {
+        getEventHandlers: function () {
             var list = {};
-            _.each(this.tabs, function(tabDef) {
-                if(tabDef.instance.eventHandlers) {
-                    for (var p in tabDef.instance.eventHandlers) {
-                        list[p] = true;
+            _.each(this.tabs, function (tabDef) {
+                var p;
+                if (tabDef.instance.eventHandlers) {
+                    for (p in tabDef.instance.eventHandlers) {
+                        if (tabDef.instance.eventHandlers.hasOwnProperty(p)) {
+                            list[p] = true;
+                        }
                     }
                 }
             });
             return list;
         },
-        onEvent : function(event) {
-            _.each(this.tabs, function(tabDef) {
-                if(tabDef.instance.eventHandlers) {
+        onEvent: function (event) {
+            _.each(this.tabs, function (tabDef) {
+                if (tabDef.instance.eventHandlers) {
                     var handler = tabDef.instance.eventHandlers[event.getName()];
                     if (!handler) {
                         return;
@@ -114,7 +115,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
          * @method _getLocalization
          */
         _getLocalization: function (key) {
-            return this._localization[key];     
+            return this._localization[key];
         },
 
         /**
