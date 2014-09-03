@@ -137,11 +137,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             id: 'large',
             width: 1240,
             height: 700
-        }, {
+        }, /*{
             id: 'fill',
             width: '100%',
             height: '100%'
-        },
+        },*/
         {
             id: 'custom',
             minWidth: 30,
@@ -361,7 +361,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     if (option.id === 'fill') {
                         me._mapHorizontalFill();
                     } else {
-                        jQuery('.oskariui-center').width('');
+                        //jQuery('.oskariui-center').width('');
                     }
 
                     break;

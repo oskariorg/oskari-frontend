@@ -332,6 +332,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
      * @return {jQuery} formatted html
      */
     _formatMyPlacesGfi: function (place) {
+        debugger;
         var me = this,
             content = me.template.myPlacesWrapper.clone(),
             desc = content.find('p.myplaces_desc'),
