@@ -118,7 +118,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
                         newtab.tags,
                         closureMagic(newtab.tags)
                     );
-                    debugger;
                 }
             } else {
                 me.tagsTxt = me.getLocalization('help').tags;

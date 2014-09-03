@@ -112,21 +112,20 @@ Oskari.registerLocalization(
                         "id": "oskari_analyse_layer_union",
                         "label": "Union of the intersecting features",
                         "classForPreview": "intersect",
-                        "tooltip": "By the method \"Union of the intersecting features\" you can intersect the selected features by the features of the intersecting level. You can select if the result includes only the features inside or partly inside the features of the intersecting level."
-                    },
-                    {
-                        "id": "oskari_analyse_areas_and_sectors",
-                        "label": "Union of the analyse layers",
-                        "classForPreview": "layer_union",
-                        "tooltip": "By the method \"Union of the analyse layers\" you can combine the analyse layers. The layers to be combined must have same attributes."
+                        "tooltip": ""
                     },
                     {
                         "id": "oskari_analyse_areas_and_sectors",
                         "label": "Multiple buffers",
                         "classForPreview": "areas_and_sectors",
                         "tooltip": "By the method \"Multiple buffers\" you can add multiple buffers around the selected features. You can define the buffer size and the number of buffers."
-                    }
-                ]
+                    },
+                    {
+                        "id": "oskari_analyse_difference",
+                        "label": "Difference computation",
+                        "classForPreview": "difference",
+                        "tooltip": ""
+                    }]
             },
             "aggregate": {
                 "label": "Key ratio",
@@ -202,6 +201,12 @@ Oskari.registerLocalization(
                 "area_count_tooltip": "Give the number of the buffers.",
                 "area_size_tooltip": "Give the buffer size.",
                 "sector_count_tooltip": "Give the number of the sectors."
+            },
+            "difference": {
+                "firstLayer": "First layer",
+                "secondLayer": "Second layer",
+                "field": "",
+                "keyField": ""
             },
             "spatial": {
                 "label": "Spatial operator",
