@@ -608,6 +608,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var saveFileArgs = "";
             if(selections.saveFile) saveFileArgs = "&saveFile=" + selections.saveFile;
             var layoutArgs = me._getLayoutParams(selections.pageSize);
+            alert(selections.pageSize);
+            alert(layoutArgs);
 
             var contentOptions = [],
                 p;
