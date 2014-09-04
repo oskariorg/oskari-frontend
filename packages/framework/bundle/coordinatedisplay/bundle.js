@@ -20,7 +20,24 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
     "protocol": ["Oskari.bundle.Bundle"],
     "source": {
 
-        "scripts": [{
+        "scripts": [
+        /*
+         * Abstract base
+         */
+
+        {
+            "type": "text/javascript",
+            "src": "../../../../src/mapping/mapmodule/plugin/AbstractMapModulePlugin.js"
+        },
+        {
+            "type": "text/javascript",
+            "src": "../../../../src/mapping/mapmodule/plugin/BasicMapModulePlugin.js"
+        },
+
+        /*
+         * coordinatedisplay
+         */
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/coordinatedisplay/instance.js"
         }, {

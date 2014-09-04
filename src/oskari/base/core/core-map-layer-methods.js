@@ -101,7 +101,6 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
      * @private
      */
     _handleAddMapLayerRequest : function(request) {
-
         var id = request.getMapLayerId();
         var keepLayersOrder = request.getKeepLayersOrder();
         var isBaseMap = request.isBasemap();

@@ -704,7 +704,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
             return this.layerDefs;
         },
 
-        addLayer: function (layerImpl, layer, name) {
+        addLayer: function (layerImpl, layer, name, index) {
             var ldef = {
                 name: name,
                 id: layer.getId(),
@@ -715,7 +715,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
 
             this.layerDefsById[layer.getId()] = ldef;
 
-            this._addLayerImpl(layerImpl);
+            this._addLayerImpl(layerImpl, index);
         },
 
         removeLayer: function (layerImpl, layer, name) {
@@ -1019,7 +1019,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.AbstractMapModule',
          */
         _updateDomainImpl: Oskari.AbstractFunc("_updateDomainImpl"),
 
-        _addLayerImpl: Oskari.AbstractFunc("_addLayerImpl(layerImpl)"),
+        _addLayerImpl: Oskari.AbstractFunc("_addLayerImpl(layerImpl, index)"),
 
         _setLayerImplIndex: Oskari.AbstractFunc("_setLayerImplIndex(layerImpl,n)"),
 
