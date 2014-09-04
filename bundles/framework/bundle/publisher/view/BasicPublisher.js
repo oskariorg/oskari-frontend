@@ -871,7 +871,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 'float': 'left'
             }).addClass('published-grid-center');
 
-            if (!me.statsContainer) {
+            if (me.statsContainer) {
                 me.statsContainer.height(mapHeight);
             }
 
