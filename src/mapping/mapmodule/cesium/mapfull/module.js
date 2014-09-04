@@ -2,6 +2,7 @@ define([
 	"oskari",
 	"jquery",
 	"oskariui",
+	"libraries/Proj4js/proj4js-2.2.1/proj4-src",
 	"../mapmodule-plugin/module",
 	"./instance",
 	"bundles/framework/bundle/mapfull/enhancement/start-map-with-link-enhancement",

@@ -44,7 +44,7 @@ require(["mainConfig"], function() {
                     }
                 }
 
-                config = "json!" + window.ajaxUrl + "action_route=GetAppSetup" + getAppSetupParams;
+                //config = "json!" + window.ajaxUrl + "action_route=GetAppSetup" + getAppSetupParams;
             }
 
             /* loading configuration */
