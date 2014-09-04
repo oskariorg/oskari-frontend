@@ -5,7 +5,7 @@ Oskari.registerLocalization({
         "title" : "",
         "desc" : "",
         "display" : {
-            "header" : "Valitun paikan tiedot:",
+            "header" : "Valitun paikan tiedot",
             "info" : {
                 "name" : "Tunnus: ",
                 "area" : "Pinta-ala: ",
