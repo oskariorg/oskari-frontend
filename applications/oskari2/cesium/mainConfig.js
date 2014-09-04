@@ -29,7 +29,7 @@ require.config({
       "divmanazer": "src/framework/divmanazer/module",
       "toolbar": "src/framework/toolbar/module",
       "statehandler": "src/framework/statehandler/module",
-      "infobox": "src/framework/infobox/module",
+      "infobox": "src/mapping/mapmodule/cesium/infobox/module",
       "search": "src/framework/search/module",
       "routesearch": "src/framework/routesearch/module",
       "layerselector2": "src/framework/layerselector2/module",

@@ -312,20 +312,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             return this._map;
         },
 
-        createPopup: function (id, lonlat, contentSize, popupContent, closeBox) {
-            return new OpenLayers.Popup(
-                id,
-                lonlat,
-                new OpenLayers.Size(contentSize[0], contentSize[1]),
-                popupContent,
-                closeBox
-            );
-        },
-
-        addPopup: function (popup) {
-            me.getMap().addPopup(popup);
-        },
-
         _ensureExists: function (obj) {
             return obj !== null && obj !== undefined;
         },

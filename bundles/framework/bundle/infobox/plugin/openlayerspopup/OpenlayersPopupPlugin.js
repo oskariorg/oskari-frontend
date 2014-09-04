@@ -168,54 +168,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 popup = me._popups[id].popup;
                 popup.setContentHTML(popupContent);
             } else {
-                if (!OpenLayers.Popup && Cesium) {
-                    console.log('No Openlayers.Popup defined and we have Cesium, let\'s use that for now...');
-
-                    // The 2D canvas can draw much more than circles.  See:
-                    // https://developer.mozilla.org/en/Canvas_tutorial
-                    var canvas = document.createElement('canvas');
-                    canvas.width = 16;
-                    canvas.height = 16;
-                    var context2D = canvas.getContext('2d');
-                    context2D.beginPath();
-                    context2D.arc(8, 8, 8, 0, Cesium.Math.TWO_PI, true);
-                    context2D.closePath();
-                    context2D.fillStyle = 'rgb(255, 255, 255)';
-                    context2D.fill();
-
-                    var billboards = new Cesium.BillboardCollection();
-                    billboards.textureAtlas = new Cesium.TextureAtlas({
-                        scene : me.getMapModule().getMap().scene,
-                        image : canvas
-                    });
-
-                    var point = Proj4js.transform(me.getMapModule()._projection, me.getMapModule()._cesium_internal_projection_wgs84, [lonlat.lon, lonlat.lat]);
-
-                    billboards.add({
-                        position : Cesium.Cartesian3.fromDegrees(point.x, point.y),
-                        color : new Cesium.Color(1.0, 0.0, 0.0, 0.75),
-                        scale : 0.5,
-                        imageIndex : 0
-                    });
-
-
-                    // Add Label next to dot
-                    var labels = new Cesium.LabelCollection();
-                    labels.add({
-                        "position" : Cesium.Cartesian3.fromDegrees(point.x, point.y),
-                        "text" : title,
-                        "font" : font
-                    });
-
-                    var primitives = me.getMapModule().getMap().scene.primitives;
-
-                    primitives.removeAll();
-
-                    primitives.add(billboards);
-                    primitives.add(labels);
-
-                    return;
-                }
                 popup = new OpenLayers.Popup(
                     id,
                     lonlat,
