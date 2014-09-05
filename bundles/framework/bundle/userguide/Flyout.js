@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
          * called by host to start flyout operations
          */
         startPlugin: function () {
-            this.userGuideTabs = this.instance.conf.tabs || [];
+            this.userGuideTabs = this.instance.getLocalization('tabs') || [];
         },
 
         /**
@@ -35,8 +35,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
                 tab;
             me.cel = jQuery(me.container);
             me.cel.empty();
-            this.userGuideTabs = this.instance.conf.tabs || [];
-            if (this.instance.conf.tabs) {
+            this.userGuideTabs = this.instance.getLocalization('tabs') || [];
+            if (this.instance.getLocalization('tabs')) {
                 me.tabContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
                 
                 for (i = 0; i < me.userGuideTabs.length; i += 1) {
@@ -68,7 +68,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
 
         setContent: function (content, tagsTxt) {
             var me = this;
-            if (this.instance.conf.tabs) {
+            if (this.instance.getLocalization('tabs')) {
                 var tabs = me.tabContainer.panels,
                     i,
                     newtab,

@@ -111,7 +111,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
                 };
             }
 
-            if (this.conf.tabs) {
+            if (me.getLocalization('tabs')) {
                 for (i = 0; i < userGuideTabs.length; i += 1) {
                     newtab = userGuideTabs[i];
                     this.helper.getHelpArticle(
