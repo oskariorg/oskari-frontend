@@ -178,12 +178,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
                 me.pageMapRect = me.conf.pageMapRect
                 }
 
-            // Testing
-            me.pageMapRect = ["1.0,1.5,19.0,15.0",
-                              "1.0,1.5,18.5,18.0",
-                              "1,1.5,27.7,28",
-                              "1,1.5,31,26.5"];
-
             // back end communication
             me.parcelService = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelService', me);
             me.sandbox.registerService(me.parcelService);
