@@ -119,6 +119,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
      * @return {jQuery} formatted HMTL
      */
     _formatGfiDatum: function (datum) {
+        // FIXME this function is too complicated, chop it to pieces
         if (!datum.presentationType) {
             return null;
         }
@@ -157,7 +158,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 dataArray.push(rawJsonData);
             }
 
-            for (i = 0; i < dataArray.length; ++i) {
+            for (i = 0; i < dataArray.length; i += 1) {
                 jsonData = dataArray[i];
                 table = me.template.getinfoResultTable.clone();
                 for (attr in jsonData) {
@@ -233,7 +234,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 pluginLoc,
                 myLoc,
                 localizedAttr;
-            for (i = 0; i < pValue.length; ++i) {
+            for (i = 0; i < pValue.length; i += 1) {
                 obj = pValue[i];
                 for (objAttr in obj) {
                     if (obj.hasOwnProperty(objAttr)) {
@@ -383,6 +384,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
      * @return {String} formatted HMTL
      */
     _json2html: function (node) {
+        // FIXME this function is too complicated, chop it to pieces
         if (node === null || node === undefined) {
             return '';
         }
@@ -435,7 +437,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     // format array
                     if (jQuery.isArray(value)) {
                         valueDiv = this.template.wrapper.clone();
-                        for (i = 0; i < value.length; ++i) {
+                        for (i = 0; i < value.length; i += 1) {
                             innerTable = this._json2html(value[i]);
                             valueDiv.append(innerTable);
                         }
