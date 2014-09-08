@@ -37,6 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
             me.cel.empty();
             this.userGuideTabs = this.instance.getLocalization('tabs') || [];
             if (this.instance.getLocalization('tabs')) {
+                debugger;
                 me.tabContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
                 
                 for (i = 0; i < me.userGuideTabs.length; i += 1) {
