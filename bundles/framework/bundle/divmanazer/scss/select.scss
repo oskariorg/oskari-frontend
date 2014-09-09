@@ -1,0 +1,19 @@
+$fieldWidth: 300px;
+$unitMargin: 6px;
+
+.oskari-select {
+    display: block;
+    clear: both;
+    line-height: 16px;
+    margin-bottom: $unitMargin * 2;
+    width: $fieldWidth;
+
+    select {
+        display: block;
+        /* 6px between label text and input field */
+        /* Only 3 here as line-height takes care of the rest */
+        margin: $unitMargin - 3px 0 0 0;
+        width: 100%;
+    }
+
+}

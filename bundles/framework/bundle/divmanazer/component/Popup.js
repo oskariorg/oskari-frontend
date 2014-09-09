@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             }
             jQuery('body').append(this.dialog);
             if (focusedButton >= 0) {
-                buttons[focusedButton].getButton().focus();
+                buttons[focusedButton].setFocus(true);
             }
 
             contentHeight = contentDiv.height();

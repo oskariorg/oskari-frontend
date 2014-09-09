@@ -22,11 +22,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          */
         setTitle: function (pTitle) {
             this.title = pTitle;
-            if (this.ui) {
-                this.ui.attr('value', pTitle);
-            } else {
-                console.err("No UI");
-            }
+            this.ui.attr('value', pTitle);
         },
         /**
          * @method addClass
@@ -111,7 +107,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
         /**
          * @method setFocus
          * Adds this button to given container.
-         * @param {jQuery} container reference to DOM element
+         * @param {Boolean} focus
          */
         setFocus: function(focus) {
             this.focus = focus;
@@ -119,12 +115,23 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
                 this.ui.focus();
             }
         },
+
+        /**
+         * @method getElement
+         * Returns the button's DOM element
+         * @return {jQuery} reference to DOM element
+         */
+        getElement: function () {
+            return this.ui;
+        },
         /**
          * @method getButton
+         * @deprecated
          * Returns this buttons DOM element.
          * @return {jQuery} reference to DOM element
          */
         getButton: function () {
-            return this.ui;
+            Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button: getButton is deprecated, please use getElement instead.');
+            return this.getElement();
         }
     });

@@ -116,6 +116,15 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/bundle/divmanazer/component/ProgressSpinner.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/FormComponent.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/Select.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/MultiLevelSelect.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/divmanazer/component/VisualizationForm.js"
             }, {
                 "type": "text/javascript",
@@ -204,6 +213,12 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/css",
                 "src": "../../../../resources/framework/bundle/divmanazer/css/popover.css"
+            }, {
+                "type": "text/css",
+                "src": "../../../../resources/framework/bundle/divmanazer/css/select.css"
+            }, {
+                "type": "text/css",
+                "src": "../../../../resources/framework/bundle/divmanazer/css/multilevelselect.css"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../libraries/jquery/plugins/jquery-placeholder/jquery.placeholder.js"
