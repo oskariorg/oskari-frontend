@@ -8,7 +8,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
      * @method create called automatically on construction
      * @static
      */
-
     function (conf) {
         this.conf = conf;
         this.mapModule = null;
@@ -20,17 +19,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
 
         templates: {
             main: jQuery(
-                "<div class='mapplugin logoplugin' data-clazz='Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin'>" +
-                "<div class='icon'></div>" +
-                "<div class='terms'><a href='JavaScript:void(0);'></a></div>" +
-                "<div class='data-sources'></div>" +
-                "</div>"
+                '<div class="mapplugin logoplugin" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin">' +
+                    '<div class="icon"></div>' +
+                    '<div class="terms">' +
+                    '<a href="JavaScript:void(0);"></a>' +
+                    '</div>' +
+                    '<div class="data-sources"></div>' +
+                    '</div>'
             ),
             dataSourcesDialog: jQuery(
-                "<div class='data-sources-dialog'>" +
-                "<div class='layers'><h4></h4></div>" +
-                "<div class='indicators'><h4></h4></div>" +
-                "</div>"
+                '<div class="data-sources-dialog">' +
+                    '<div class="layers"><h4></h4></div>' +
+                    '<div class="indicators"><h4></h4></div>' +
+                    '</div>'
             )
         },
 
@@ -38,7 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         __name: 'LogoPlugin',
 
         getClazz: function () {
-            return "Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin";
+            return 'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin';
         },
 
         /**
@@ -50,14 +51,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         },
         /**
          * @method getMapModule
-         * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map module
+         * @return {Oskari.mapframework.ui.module.common.MapModule}
+         *     reference to map module
          */
         getMapModule: function () {
             return this.mapModule;
         },
         /**
          * @method setMapModule
-         * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map module
+         * @param {Oskari.mapframework.ui.module.common.MapModule}
+         *     reference to map module
          */
         setMapModule: function (mapModule) {
             this.mapModule = mapModule;
@@ -173,15 +176,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 this._addIndicatorsToDataSourcesDialog(event.getIndicators());
             },
 
-            'LayerToolsEditModeEvent': function (event) {
-                // FIXME make sure event.isInMode() returns a boolean and remove !!
-                this.isInLayerToolsEditMode = !! event.isInMode();
+            LayerToolsEditModeEvent: function (event) {
+                // FIXME make sure event.isInMode() returns a bool and remove !!
+                this.isInLayerToolsEditMode = !!event.isInMode();
                 if (!this.isInLayerToolsEditMode) {
-                    this.setLocation(this.element.parents('.mapplugins').attr('data-location'));
+                    this.setLocation(
+                        this.element.parents('.mapplugins').attr(
+                            'data-location'
+                        )
+                    );
                 }
             },
 
-            'MapSizeChangedEvent': function (event) {
+            MapSizeChangedEvent: function (event) {
                 if (this.dataSourcesDialog) {
                     var target = jQuery('div.logoplugin div.data-sources');
                     if (target) {
@@ -195,7 +202,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         /** 
          * @method onEvent
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         * Event is handled forwarded to correct #eventHandlers if found or
+         * discarded if not.
          */
         onEvent: function (event) {
             var handler = this.eventHandlers[event.getName()];
@@ -235,13 +243,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 sandbox = me._sandbox,
                 pluginLoc = me.getMapModule().getLocalization('plugin', true),
                 myLoc = pluginLoc[me.__name],
-                link,
-                linkParams,
                 mapUrl,
                 termsUrl,
                 containerClasses = 'bottom left',
-                position = 1,
-                dataSources;
+                position = 1;
 
             if (me.conf) {
                 mapUrl = sandbox.getLocalizedProperty(me.conf.mapUrlPrefix);
@@ -254,30 +259,52 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
 
             if (me.conf) {
                 if (me.conf.location) {
-                    containerClasses = me.conf.location.classes || containerClasses;
+                    containerClasses =
+                        me.conf.location.classes || containerClasses;
                     position = me.conf.location.position || position;
                 }
                 if (me.conf.font) {
                     this.changeFont(me.conf.font);
                 }
             }
-            //parentContainer.append(me.element);
-            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
-            link = me.element.find('div.icon');
+
+            me.getMapModule().setMapControlPlugin(
+                me.element,
+                containerClasses,
+                position
+            );
+
+            me._createServiceLink(mapUrl);
+            me._createTermsLink(myLoc, termsUrl);
+            me._createDataSourcesLink(myLoc);
+
+            // in case we are already in edit mode when plugin is drawn
+            this.isInLayerToolsEditMode =
+                me.getMapModule().isInLayerToolsEditMode();
+
+        },
+
+        _createServiceLink: function (mapUrl) {
+            var me = this,
+                link = me.element.find('div.icon'),
+                linkParams;
             if (mapUrl) {
                 link.bind('click', function () {
                     if (!me.isInLayerToolsEditMode) {
-                        linkParams = sandbox.generateMapLinkParameters();
-                        mapUrl += linkParams;
-                        window.open(mapUrl, '_blank');
+                        linkParams = me._sandbox.generateMapLinkParameters();
+                        window.open(mapUrl + linkParams, '_blank');
                         return false;
                     }
                 });
             }
+        },
 
-            link = me.element.find('a');
+        _createTermsLink: function (loc, termsUrl) {
+            var me = this,
+                link = me.element.find('a');
+
             if (termsUrl) {
-                link.append(myLoc.terms);
+                link.append(loc.terms);
                 link.bind('click', function () {
                     if (!me.isInLayerToolsEditMode) {
                         window.open(termsUrl, '_blank');
@@ -287,29 +314,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             } else {
                 link.hide();
             }
+        },
 
-            dataSources = me.element.find('div.data-sources');
+        _createDataSourcesLink: function (loc) {
+            var me = this,
+                dataSources = me.element.find('div.data-sources');
+
             if (me.conf && me.conf.hideDataSourceLink) {
                 dataSources.remove();
             } else {
-                dataSources.html(myLoc.dataSources);
+                dataSources.html(loc.dataSources);
                 dataSources.click(function (e) {
-                    if (!me.isInLayerToolsEditMode && me.dataSourcesDialog == null) {
+                    if (!me.isInLayerToolsEditMode && !me.dataSourcesDialog) {
                         me._openDataSourcesDialog(e.target);
                         me._requestDataSources();
-                    } else if (me.dataSourcesDialog != null) {
+                    } else if (me.dataSourcesDialog) {
                         me.dataSourcesDialog.close(true);
                         me.dataSourcesDialog = null;
                     }
                 });
             }
-            // in case we are already in edit mode when plugin is drawn
-            this.isInLayerToolsEditMode = me.getMapModule().isInLayerToolsEditMode();
-
         },
 
         /**
-         * Changes the font used by plugin by adding a CSS class to its DOM elements.
+         * Changes the font plugin's font by adding a class to its DOM elements.
          *
          * @method changeFont
          * @param {String} fontId
@@ -331,16 +359,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         },
 
         /**
-         * Sends a request to get indicators. If the statsgrid bundle is not available
-         * (and consequently there aren't any indicators) it opens the data sources dialog
-         * and just shows the data sources of the layers.
+         * Sends a request for indicators. If the statsgrid bundle is not
+         * available (and consequently there aren't any indicators) it opens the
+         * data sources dialog and just shows the data sources of the layers.
          *
          * @method _requestDataSources
          * @return {undefined}
          */
         _requestDataSources: function () {
             var me = this,
-                reqBuilder = me._sandbox.getRequestBuilder('StatsGrid.IndicatorsRequest'),
+                reqBuilder = me._sandbox.getRequestBuilder(
+                    'StatsGrid.IndicatorsRequest'
+                ),
                 request;
 
             if (reqBuilder) {
@@ -354,16 +384,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
          * and statistics indicators.
          *
          * @method _openDataSourcesDialog
-         * @param  {jQuery} target the target element where the popup is attached to
+         * @param  {jQuery} target arget element where the popup is attached to
          * @param  {Array[Object]} indicators the open indicators
          * @return {undefined}
          */
         _openDataSourcesDialog: function (target) {
             var me = this,
-                pluginLoc = me.getMapModule().getLocalization('plugin', true)[me.__name],
+                pluginLoc = me.getMapModule().getLocalization(
+                    'plugin',
+                    true
+                )[me.__name],
                 popupTitle = pluginLoc.dataSources,
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                dialog = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup'
+                ),
+                closeButton = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Button'
+                ),
                 content = me.templates.dataSourcesDialog.clone(),
                 layersCont = content.find('div.layers'),
                 layersHeaderLoc = pluginLoc.layersHeader,
@@ -384,17 +421,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             } else {
                 layersCont.find('h4').html(layersHeaderLoc);
 
-                for (i = 0; i < layersLen; ++i) {
+                for (i = 0; i < layersLen; i += 1) {
                     layer = layers[i];
                     layersCont.append(
                         '<div>' +
-                        layer.getName() + ' - ' + layer.getOrganizationName() +
-                        '</div>'
+                            layer.getName() + ' - ' +
+                            layer.getOrganizationName() +
+                            '</div>'
                     );
                 }
             }
 
-            this.dataSourcesDialog = dialog;
+            me.dataSourcesDialog = dialog;
 
             dialog.show(popupTitle, content, [closeButton]);
 
@@ -409,12 +447,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
          * @param {Object} indicators
          */
         _addIndicatorsToDataSourcesDialog: function (indicators) {
-            var dialog = this.dataSourcesDialog;
-            if (!dialog) {
+            if (!this.dataSourcesDialog) {
                 return;
             }
-
-            var pluginLoc = this.getMapModule().getLocalization('plugin', true)[this.__name],
+            var dialog = this.dataSourcesDialog,
+                pluginLoc = this.getMapModule().getLocalization(
+                    'plugin',
+                    true
+                )[this.__name],
                 content = dialog.getJqueryContent(),
                 indicatorsCont = content.find('div.indicators'),
                 indicatorsHeaderLoc = pluginLoc.indicatorsHeader,
@@ -435,8 +475,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                         indicator = indicators[i];
                         indicatorsCont.append(
                             '<div>' +
-                            indicator.title + ' - ' + indicator.organization +
-                            '</div>'
+                                indicator.title + ' - ' +
+                                indicator.organization +
+                                '</div>'
                         );
                     }
                 }
@@ -450,5 +491,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        protocol: [
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
+        ]
     });
