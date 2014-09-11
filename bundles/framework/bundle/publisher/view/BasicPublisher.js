@@ -1367,6 +1367,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          * @param {String} lang language code
          */
         setPluginLanguage: function (lang) {
+            if (lang === null || lang === undefined) {
+                throw new TypeError(
+                    'Oskari.mapframework.bundle.publisher.view.BasicPublisher' +
+                        '.setPluginLanguage: language is null or undefined'
+                );
+            }
             Oskari.setLang(lang);
             var me = this,
                 i,

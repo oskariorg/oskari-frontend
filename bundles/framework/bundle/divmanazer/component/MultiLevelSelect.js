@@ -9,6 +9,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
      * @method create called automatically on construction
      */
     function () {
+        'use strict';
         var me = this;
         me._clazz = 'Oskari.userinterface.component.MultiLevelSelect';
         me._element = document.createElement('fieldset');
@@ -24,12 +25,14 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * Focuses the component
          */
         focus: function () {
+            'use strict';
             if (this._selects) {
                 this._selects[0].focus();
             }
         },
 
         isEnabled: function () {
+            'use strict';
             return !this.getElement().disabled;
         },
 
@@ -60,6 +63,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          *     Top level title is optional, it's used as a label for the select.
          */
         setOptions: function (optionsArray) {
+            'use strict';
             if (!Array.isArray(optionsArray)) {
                 throw new TypeError(
                     this.getClazz() +
@@ -109,6 +113,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @return {Element}            Select element
          */
         _createSelect: function (options, value) {
+            'use strict';
             var me = this,
                 select = Oskari.clazz.create(
                     'Oskari.userinterface.component.Select'
@@ -128,6 +133,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @param {String}     value
          */
         _setSelectOptions: function (select, options, value) {
+            'use strict';
             if (options.title) {
                 select.setTitle(options.title);
             }
@@ -144,6 +150,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * Called when selection is changed in any of the selects
          */
         _selectionChanged: function () {
+            'use strict';
             // Get changed select from event
             var me = this;
 
@@ -161,6 +168,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @private
          */
         _setEnabledImpl: function (enabled) {
+            'use strict';
             /* We can just disable the fieldset as disable is inherited from
                parent form element.... */
             this.getElement().disabled = !enabled;
@@ -171,6 +179,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @private
          */
         _setNameImpl: function () {
+            'use strict';
             var me = this,
                 i;
 
@@ -187,6 +196,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @param {Number}     index
          */
         _setSelectName: function (select, index) {
+            'use strict';
             if (this.getName()) {
                 select.setName(this.getName() + '[' + index + ']');
             } else {
@@ -199,6 +209,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @private
          */
         _setTitleImpl: function () {
+            'use strict';
             var title = this.getTitle();
             this._titleEl.textContent = '';
             if (title !== null && title !== undefined) {
@@ -214,6 +225,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @private
          */
         _setTooltipImpl: function () {
+            'use strict';
             this.getElement().title = this.getTooltip();
         },
 
@@ -222,6 +234,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @private
          */
         _setValueImpl: function () {
+            'use strict';
             // Make sure set value is an array
             if (this._value === null || this._value === undefined) {
                 this._value = [];
@@ -237,6 +250,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @method _setVisibleImpl
          */
         _setVisibleImpl: function () {
+            'use strict';
             this._element.style.display = this._visible ? '' : 'none';
         }
     }, {

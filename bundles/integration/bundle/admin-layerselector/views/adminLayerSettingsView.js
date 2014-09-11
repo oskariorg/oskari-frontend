@@ -30,19 +30,19 @@ define([
              * @type {Object}
              */
             events: {
-                "click .admin-add-layer-ok": "addLayer",
-                "click .admin-add-sublayer-ok": "addLayer",
-                "click .admin-add-layer-cancel": "hideLayerSettings",
-                "click .admin-remove-layer": "removeLayer",
-                "click .admin-remove-sublayer": "removeLayer",
-                "click .show-edit-layer": "clickLayerSettings",
-                "click .fetch-wms-button": "fetchCapabilities",
-                "click .icon-close": "clearInput",
-                "change .admin-layer-type": "createLayerSelect",
-                "click .admin-add-group-ok": "saveCollectionLayer",
-                "click .admin-add-group-cancel": "hideLayerSettings",
-                "click .admin-remove-group": "removeLayerCollection",
-                "click .add-layer-record.capabilities li": "handleCapabilitiesSelection"
+                'click .admin-add-layer-ok': 'addLayer',
+                'click .admin-add-sublayer-ok': 'addLayer',
+                'click .admin-add-layer-cancel': 'hideLayerSettings',
+                'click .admin-remove-layer': 'removeLayer',
+                'click .admin-remove-sublayer': 'removeLayer',
+                'click .show-edit-layer': 'clickLayerSettings',
+                'click .fetch-wms-button': 'fetchCapabilities',
+                'click .icon-close': 'clearInput',
+                'change .admin-layer-type': 'createLayerSelect',
+                'click .admin-add-group-ok': 'saveCollectionLayer',
+                'click .admin-add-group-cancel': 'hideLayerSettings',
+                'click .admin-remove-group': 'removeLayerCollection',
+                'click .add-layer-record.capabilities li': 'handleCapabilitiesSelection'
             },
 
             /**
@@ -157,7 +157,7 @@ define([
             },
             __isSupportedLayerType : function(layerType) {
                 var types = _.map(this.supportedTypes, function(type){ 
-                    return type.id 
+                    return type.id;
                 });
                 return _.contains(types, layerType);
             },
@@ -209,11 +209,11 @@ define([
                         max: 100,
                         value: me.model.getOpacity(),
                         slide: function (event, ui) {
-                            var input = jQuery(ui.handle).parents('.left-tools').find("input.opacity-slider.opacity");
+                            var input = jQuery(ui.handle).parents('.left-tools').find('input.opacity-slider.opacity');
                             input.val(ui.value);
                         }
                     });
-                    me.$el.find("input.opacity-slider.opacity").on('change paste keyup', function () {
+                    me.$el.find('input.opacity-slider.opacity').on('change paste keyup', function () {
                         var sldr = me.$el.find('.layout-slider');
                         sldr.slider('value', jQuery(this).val());
                     });
@@ -304,12 +304,12 @@ define([
 
                 var sandbox = me.options.instance.getSandbox();
                 jQuery.ajax({
-                    type: "GET",
+                    type: 'GET',
                     dataType: 'json',
                     data: {
                         layer_id: me.model.getId()
                     },
-                    url: sandbox.getAjaxUrl() + "action_route=DeleteLayer",
+                    url: sandbox.getAjaxUrl() + 'action_route=DeleteLayer',
                     success: function (resp) {
                         if (!resp) {
                             // TODO this isn't fired on sublayer delete...
@@ -320,7 +320,7 @@ define([
                                 // bubble this action to the View
                                 // = outside of backbone implementation
                                 element.trigger({
-                                    type: "adminAction",
+                                    type: 'adminAction',
                                     command: 'removeLayer',
                                     modelId: me.model.getId(),
                                     baseLayerId: me.options.baseLayerId
@@ -374,7 +374,7 @@ define([
                 }
 
                 // add layer type and version
-                data.version = (wmsVersion !== "") ? wmsVersion : form.find('#add-layer-interface-version > option').first().val();
+                data.version = (wmsVersion !== '') ? wmsVersion : form.find('#add-layer-interface-version > option').first().val();
 
                 // base and group are always of type wmslayer
                 data.layerType = me.model.getLayerType() + 'layer';
@@ -383,18 +383,18 @@ define([
                 }
 
                 form.find('[id$=-name]').filter('[id^=add-layer-]').each(function (index) {
-                    var lang = this.id.substring(10, this.id.indexOf("-name"));
+                    var lang = this.id.substring(10, this.id.indexOf('-name'));
                     data['name_' + lang] = this.value;
                 });
                 form.find('[id$=-title]').filter('[id^=add-layer-]').each(function (index) {
-                    var lang = this.id.substring(10, this.id.indexOf("-title"));
+                    var lang = this.id.substring(10, this.id.indexOf('-title'));
                     data['title_' + lang] = this.value;
                 });
 
                 data.layerName = form.find('#add-layer-layerName').val();
                 data.layerUrl = form.find('#add-layer-url').val();
-                if (data.layerUrl != me.model.getInterfaceUrl() ||
-                    data.layerName != me.model.getLayerName()) {
+                if (data.layerUrl !== me.model.getInterfaceUrl() ||
+                    data.layerName !== me.model.getLayerName()) {
                     var confirmMsg = me.instance.getLocalization('admin').confirmResourceKeyChange;
                     if (me.model.getId() && !confirm(confirmMsg)) {
                         // existing layer/cancel!!
@@ -448,10 +448,10 @@ define([
                 data.groupId = lcId;
                 var sandbox = me.instance.getSandbox();
                 jQuery.ajax({
-                    type: "POST",
+                    type: 'POST',
                     data: data,
                     dataType: 'json',
-                    url: sandbox.getAjaxUrl() + "action_route=SaveLayer",
+                    url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
                     success: function (resp) {
                         // response should be a complete JSON for the new layer
                         if (!resp) {
@@ -476,8 +476,8 @@ define([
                             // FIXME this doesn't seem to do anything? remove's trigger re-renders the layer view, this doesn't
                             //trigger event to View.js so that it can act accordingly
                             accordion.trigger({
-                                type: "adminAction",
-                                command: me.model.getId() !== null && me.model.getId() !== undefined ? "editLayer" : "addLayer",
+                                type: 'adminAction',
+                                command: me.model.getId() !== null && me.model.getId() !== undefined ? 'editLayer' : 'addLayer',
                                 layerData: resp,
                                 baseLayerId: me.options.baseLayerId
                             });
@@ -553,15 +553,15 @@ define([
                 }
 
                 groupElement.find('[id$=-name]').filter('[id^=add-group-]').each(function (index) {
-                    var lang = this.id.substring(10, this.id.indexOf("-name"));
+                    var lang = this.id.substring(10, this.id.indexOf('-name'));
                     data['name_' + lang] = this.value;
                 });
 
                 // permissions
                 if (!me.model.getId()) {
                     var checkedPermissions = [];
-                    groupElement.find(".layer-view-role").filter(":checked").each(function (index) {
-                        checkedPermissions.push(jQuery(this).data("role-id"));
+                    groupElement.find('.layer-view-role').filter(':checked').each(function (index) {
+                        checkedPermissions.push(jQuery(this).data('role-id'));
                     });
 
                     data.viewPermissions = checkedPermissions.join();
@@ -569,35 +569,35 @@ define([
 
                 // make AJAX call
                 jQuery.ajax({
-                    type: "POST",
+                    type: 'POST',
                     dataType: 'json',
                     data: data,
                     beforeSend: function (x) {
-                        jQuery("body").css({
-                            cursor: "wait"
+                        jQuery('body').css({
+                            cursor: 'wait'
                         });
                     },
-                    url: sandbox.getAjaxUrl() + "action_route=SaveLayer",
+                    url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
                     success: function (resp) {
-                        jQuery("body").css("cursor", "");
+                        jQuery('body').css('cursor', '');
                         if (!me.model.getId()) {
                             //trigger event to View.js so that it can act accordingly
                             accordion.trigger({
-                                type: "adminAction",
+                                type: 'adminAction',
                                 command: 'addLayer',
                                 layerData: resp
                             });
                         } else {
                             //trigger event to View.js so that it can act accordingly
                             accordion.trigger({
-                                type: "adminAction",
+                                type: 'adminAction',
                                 command: 'editLayer',
                                 layerData: resp
                             });
                         }
                     },
                     error: function (jqXHR, textStatus) {
-                        jQuery("body").css("cursor", "");
+                        jQuery('body').css('cursor', '');
                         alert('Failed to save grouplayer');
                     }
                 });
@@ -611,15 +611,15 @@ define([
                 var sandbox = me.options.instance.getSandbox();
                 // make AJAX call
                 jQuery.ajax({
-                    type: "GET",
+                    type: 'GET',
                     dataType: 'json',
                     data: {
                         layer_id: me.model.getId()
                     },
-                    url: sandbox.getAjaxUrl() + "action_route=DeleteLayer",
+                    url: sandbox.getAjaxUrl() + 'action_route=DeleteLayer',
                     success: function (resp) {
                         accordion.trigger({
-                            type: "adminAction",
+                            type: 'adminAction',
                             command: 'removeLayer',
                             modelId: me.model.getId()
                         });
@@ -642,22 +642,22 @@ define([
 
                 e.stopPropagation();
 
-                var serviceURL = form.find('#add-layer-interface').val();
-                var layerType = form.find('#add-layer-layertype').val();
+                var serviceURL = form.find('#add-layer-interface').val(),
+                    layerType = form.find('#add-layer-layertype').val();
 
                 me.model.set({
-                    "_layerUrls": [serviceURL]
+                    '_layerUrls': [serviceURL]
                 }, {
                     silent: true
                 });
 
                 jQuery.ajax({
-                    type: "POST",
+                    type: 'POST',
                     data: {
                         url: serviceURL,
                         type : layerType
                     },
-                    url: baseUrl + "action_route=GetWSCapabilities",
+                    url: baseUrl + 'action_route=GetWSCapabilities',
                     success: function (resp) {
                         me.__capabilitiesResponseHandler(layerType, resp);
                     },
@@ -679,8 +679,8 @@ define([
                     me.model.setCapabilitiesResponse(response);
                 }
                 else if(layerType === 'wmtslayer') {
-                    var format = new OpenLayers.Format.WMTSCapabilities();
-                    var caps = format.read(response.xml);
+                    var format = new OpenLayers.Format.WMTSCapabilities(),
+                        caps = format.read(response.xml);
                     me.model.setOriginalMatrixSetData(caps);
                     me.model.setCapabilitiesResponse(response);
                     //me.model.change();
@@ -691,8 +691,8 @@ define([
                     current = jQuery(e.currentTarget);
                 // stop propagation so handler on outer tags won't be triggered as well
                 e.stopPropagation();
-                var layerName = current.attr('data-layername');
-                var additionalId = current.attr('data-additionalId');
+                var layerName = current.attr('data-layername'),
+                    additionalId = current.attr('data-additionalId');
                 if (layerName) {
                     // actual layer node -> populate model
                     me.model.setupCapabilities(layerName, null, additionalId);
