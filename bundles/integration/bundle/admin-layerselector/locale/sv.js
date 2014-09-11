@@ -6,7 +6,7 @@ Oskari.registerLocalization({
         "desc": "",
         "flyout": {
             "title": "admin: Kartlager",
-            "fetchingLayers" : "Laddar lager."
+            "fetchingLayers": "Laddar lager."
         },
         "tile": {
             "title": "A: Kartlager",
@@ -60,15 +60,15 @@ Oskari.registerLocalization({
             }
         },
         "admin": {
-            "capabilitiesLabel" : "Capabilities",
-            "confirmResourceKeyChange" : "Du har ändrat gränssnittjänstens unik namn- eller URL-address. För säkerhets skull, nuvarande rättigheter till kartlager ska raderas. Fortsätt?",
-            "confirmDeleteLayerGroup" : "Kartlagergrupp blir raderad. Fortsätt?",
-            "confirmDeleteLayer" : "Kartlager blir raderad. Fortsätt?",
-            "layertypes" : {
+            "capabilitiesLabel": "Capabilities",
+            "confirmResourceKeyChange": "Du har ändrat gränssnittjänstens unik namn- eller URL-address. För säkerhets skull, nuvarande rättigheter till kartlager ska raderas. Fortsätt?",
+            "confirmDeleteLayerGroup": "Kartlagergrupp blir raderad. Fortsätt?",
+            "confirmDeleteLayer": "Kartlager blir raderad. Fortsätt?",
+            "layertypes": {
                 "wms": "WMS Lager",
                 "wfs": "WFS Lager",
                 "wmts": "WMTS Lager",
-                "arcgis" : "ArcGIS Lager"
+                "arcgis": "ArcGIS Lager"
             },
             "selectLayer": "Välj nivå",
             "selectSubLayer": "Välj undernivå",
@@ -150,11 +150,11 @@ Oskari.registerLocalization({
             "gfiStyle": "GFI stil",
             "gfiStyleDesc": "GFI stil (XSLT)",
 
-            "matrixSetId" : "WMTS MatrixSetId",
-            "matrixSetIdDesc" : "WMTS-tjänstens MatrixSetId",
-            "matrixSet" : "Teknisk beskrivning av WMTS-tjänsten",
-            "matrixSetDesc" : "Teknisk beskrivning av WMTS-tjänsten i JSON-format",
-            
+            "matrixSetId": "WMTS MatrixSetId",
+            "matrixSetIdDesc": "WMTS-tjänstens MatrixSetId",
+            "matrixSet": "Teknisk beskrivning av WMTS-tjänsten",
+            "matrixSetDesc": "Teknisk beskrivning av WMTS-tjänsten i JSON-format",
+
             "realtime": "Reaaliaikataso",
             "refreshRate": "Virkistystaajuus (sekunneissa)",
 
@@ -163,19 +163,16 @@ Oskari.registerLocalization({
                 "descplaceholder": "Description in {0}"
             },
             "en": {
-                "lang": "In English:",
                 "title": "En",
                 "placeholder": "Name in English",
                 "descplaceholder": "Description in English"
             },
             "fi": {
-                "lang": "Suomeksi:",
                 "title": "Fi",
                 "placeholder": "Nimi suomeksi",
                 "descplaceholder": "Kuvaus suomeksi"
             },
             "sv": {
-                "lang": "På svenska:",
                 "title": "Sv",
                 "placeholder": "Namn på svenska",
                 "descplaceholder": "Beskrivning på svenska"
