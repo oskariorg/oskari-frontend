@@ -180,7 +180,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
         /**
          * @method commitCategories
          *
-         * handles insert & update (NO delete here see next moethd)
+         * handles insert & update (NO delete here see next method)
          */
         commitCategories: function (list, callback) {
             var uuid = this.uuid;
