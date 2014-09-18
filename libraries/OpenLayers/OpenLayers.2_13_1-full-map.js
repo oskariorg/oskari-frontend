@@ -21352,10 +21352,10 @@ OpenLayers.Handler.Drag = OpenLayers.Class(OpenLayers.Handler, {
             OpenLayers.Event.preventDefault(evt);
 
             if(!this.oldOnselectstart) {
-                this.oldOnselectstart = document.onselectstart ?
-                    document.onselectstart : OpenLayers.Function.True;
+                this.oldOnselectstart = this.map.viewPortDiv.onselectstart ?
+                    this.map.viewPortDiv.onselectstart : OpenLayers.Function.True;
             }
-            document.onselectstart = OpenLayers.Function.False;
+            this.map.viewPortDiv.onselectstart = OpenLayers.Function.False;
 
             propagate = !this.stopDown;
         } else {
@@ -21400,8 +21400,8 @@ OpenLayers.Handler.Drag = OpenLayers.Class(OpenLayers.Handler, {
             this.move(evt);
             this.callback("move", [evt.xy]);
             if(!this.oldOnselectstart) {
-                this.oldOnselectstart = document.onselectstart;
-                document.onselectstart = OpenLayers.Function.False;
+                this.oldOnselectstart = this.map.viewPortDiv.onselectstart;
+                this.map.viewPortDiv.onselectstart = OpenLayers.Function.False;
             }
             this.last = evt.xy;
         }
@@ -21435,7 +21435,7 @@ OpenLayers.Handler.Drag = OpenLayers.Class(OpenLayers.Handler, {
             if(dragged) {
                 this.callback("done", [evt.xy]);
             }
-            document.onselectstart = this.oldOnselectstart;
+            this.map.viewPortDiv.onselectstart = this.oldOnselectstart;
         }
         return true;
     },
@@ -21624,8 +21624,8 @@ OpenLayers.Handler.Drag = OpenLayers.Class(OpenLayers.Handler, {
                 if(dragged) {
                     this.callback("done", [evt.xy]);
                 }
-                if(document.onselectstart) {
-                    document.onselectstart = this.oldOnselectstart;
+                if(this.map.viewPortDiv.onselectstart) {
+                    this.map.viewPortDiv.onselectstart = this.oldOnselectstart;
                 }
             }
         }
