@@ -37,6 +37,19 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
             this.ui.addClass(pClass);
         },
         /**
+         * @method setId
+         * Set an Id to the button
+         * @param {String} pId id to be set
+         */
+        setId: function (pId) {
+            this.id = pId;
+            if (this.ui) {
+                this.ui.attr('id', pId);
+            } else {
+                console.err("No UI");
+            }
+        },        
+        /**
          * @method setEnabled
          * Enables/Disables the button
          * @param {Boolean} blnEnabled true to enable, false to disable

@@ -48,6 +48,20 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             label.html(pLabel);
         },
         /**
+         * @method setIds
+         * Sets ids to forminput field and input
+         * @param {String} fieldId
+         * @param {String} inputId
+         */
+        setIds: function (fieldId, inputId) {
+        	if (fieldId) {
+            	this._field.attr('id', fieldId);
+            }
+            if (inputId) {
+            	this._field.find('input').attr('id', inputId);
+            }
+        },
+        /**
          * @method setTooltip
          * Sets the fields tooltip and possible help tags
          * @param {String} pTooltip tooltip text
@@ -373,10 +387,13 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         /**
          * @method addClearButton
          * Adds a clear button to the field
+         * @param {String} id
          */
-        addClearButton: function () {
+        addClearButton: function (id) {
             var clearButton = this.templateClearButton.clone(),
                 input = this._field.find('input');
+
+            clearButton.attr('id', id);
             clearButton.bind('click', function () {
                 input.val('');
                 input.trigger('change');

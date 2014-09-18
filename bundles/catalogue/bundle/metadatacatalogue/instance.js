@@ -182,7 +182,6 @@ Oskari.clazz
 
                 // draw ui
                 me.createUi();
-
             },
             /**
              * @method init
@@ -283,6 +282,7 @@ Oskari.clazz
 
                 var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
                 field.setPlaceholder(me.getLocalization('assistance'));
+                field.setIds('oskari_metadatacatalogue_forminput', 'oskari_metadatacatalogue_forminput_searchassistance');
 
                 // var regex = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*\*?$/;
                 // field.setContentCheck(true, me.getLocalization('contentErrorMsg'), regex);
@@ -299,10 +299,11 @@ Oskari.clazz
                         resultList.empty();
                     }
                 });
-                field.addClearButton();
+                field.addClearButton('oskari_metadatacatalogue_forminput_clearbutton');
 
                 var button = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 button.setTitle(me.getLocalization('metadataCatalogueButton'));
+                button.setId('oskari_metadatacatalogue_button_search');
 
                 var doMetadataCatalogue = function () {
                     metadataCatalogueContainer.find('.metadataOptions').hide();
@@ -368,9 +369,10 @@ Oskari.clazz
                 var title = me.getLocalization('tabTitle');
                 var content = metadataCatalogueContainer;
                 var priority = this.tabPriority;
+                var id = 'oskari_metadatacatalogue_tabpanel_header';
                 var reqName = 'Search.AddTabRequest';
                 var reqBuilder = me.sandbox.getRequestBuilder(reqName);
-                var req = reqBuilder(title, content, priority);
+                var req = reqBuilder(title, content, priority, id);
                 me.sandbox.request(me, req);
 
                 // Link to advanced search

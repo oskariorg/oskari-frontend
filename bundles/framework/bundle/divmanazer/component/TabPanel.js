@@ -26,10 +26,10 @@ function() {
     /**
      * @method setId
      * Sets the panel id
-     * @param {String} pId id for the panel
+     * @param {String} id id for the panel
      */
-    setId : function(pId) {
-        this.id = pId;
+    setId : function(id) {
+    	this.id = id;
     },
     /**
      * @method getId
@@ -60,14 +60,17 @@ function() {
     /**
      * @method setTitle
      * Sets the panel title
-     * @param {String} pTitle title for the panel
+     * @param {String} title title for the panel
      */
-    setTitle: function (pTitle) {
+    setTitle: function (title, headerElementId) {
         var header,
             link;
-        this.title = pTitle;
+        this.title = title;
         header = this.templateTabHeader.clone();
         this.header = header;
+        if (headerElementId) {
+        	header.attr('id', headerElementId);
+        }
         link = header.find('a');
         link.html(this.getTitle());
     },

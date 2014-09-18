@@ -62,7 +62,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * that will be used to create the UI
          */
         startPlugin: function () {
-            var loc = this.instance.getLocalization('layer');
+            var loc = this.instance.getLocalization('layer'),
+            	elParent,
+            	elId;
             // sortable class/data-sortable are configs for rightJS
             // sortable component
             this.template = jQuery('<ul class="selectedLayersList sortable" ' + 'data-sortable=\'{' + 'itemCss: "li.layer.selected", ' + 'handleCss: "div.layer-title" ' + '}\'></ul>');
@@ -77,6 +79,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             this.templateLayerFooterOutOfScale = jQuery('<p class="layer-msg">' + loc["out-of-scale"] + ' <a href="JavaScript:void(0);">' + loc["move-to-scale"] + '</a></p>');
 
             this.templateLayerFooterOutOfContentArea = jQuery('<p class="layer-msg">' + loc["out-of-content-area"] + ' <a href="JavaScript:void(0);">' + loc["move-to-content-area"] + '</a></p>');
+
+            //set id to flyouttool-close
+            elParent = this.container.parentElement.parentElement;
+        	elId = jQuery(elParent).find('.oskari-flyouttoolbar').find('.oskari-flyouttools').find('.oskari-flyouttool-close');
+        	elId.attr("id", 'oskari_layerselection2_flyout_oskari_flyouttool_close');
         },
         /**
          * @method stopPlugin
@@ -366,6 +373,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             // remove layer from selected tool
             if (!layer.isSticky()) {
                 layerDiv.find('div.layer-tool-remove').addClass('icon-close');
+                layerDiv.find('.layer-tool-remove').attr("id", 'oskari_layerselection_layercontainer_icon_close_layerId' + layerId);
 
                 layerDiv.find('div.layer-tool-remove').bind('click', function () {
                     var reqName = 'RemoveMapLayerRequest',

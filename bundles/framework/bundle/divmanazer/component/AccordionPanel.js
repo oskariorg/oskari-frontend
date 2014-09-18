@@ -109,6 +109,15 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
             return this.title;
         },
         /**
+         * @method setId
+         * Sets the panel header id
+         * @param {String} id id for the panel
+         */
+        setId: function (id) {
+            var header = this.html.find('div.header');
+            header.attr('id', id);
+        },
+        /**
          * @method setContent
          * Sets the panel content.
          * This can be also done with #getContainer()
