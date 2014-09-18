@@ -3,7 +3,7 @@
  *
  * Handles map selection popup functionality.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.PopupHandler", 
+Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.PopupHandler', 
 
 /**
  * @method create called automatically on construction
@@ -18,14 +18,16 @@ function(instance) {
 	this.templateEditDialogContent = jQuery('<div></div>');
 
 	this.templateEditButtons = jQuery('<div></div>');
-	this.templateToolsButton = jQuery('<div style= "display: inline-block; border: 1px solid;"></div>');
+	this.templateToolsButton = jQuery('<div style="display: inline-block; border: 1px solid;"></div>');
 
-	this.templateInstructions = jQuery("<div class='instructions' style= 'padding: 20px 0px 0px 0px;'></div>");
-	this.templateLink = jQuery("<div class='link'><a href='JavaScript:void(0);'></a></div>" + "</div>");
+	this.templateInstructions = jQuery('<div class="instructions" style="padding: 20px 0px 0px 0px;"></div>');
 
-	var me = this;
-        var selectionPlugin = me.instance.getSelectionPlugin();
-	this.buttons = {
+	this.templateLink = jQuery('<div class="link"><a href="JavaScript:void(0);"></a></div>' + '</div>');
+
+	var me = this,
+        selectionPlugin = me.instance.getSelectionPlugin();
+
+	me.buttons = {
         'point' : {
             iconCls : 'selection-point',
             tooltip : me.localization.tools.point.tooltip,
@@ -72,7 +74,7 @@ function(instance) {
 	 * @method showSelectionTools
 	 * Handles tool button click -> opens selection tool dialog
 	 */
-	"showSelectionTools" : function() {
+	showSelectionTools : function() {
         var me = this;
 
         // close popup so we can update the selection geometry
@@ -88,20 +90,25 @@ function(instance) {
                 me._selectionStarted();
         		
         	};
-        }
+        };
 
         //Main dialog
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        var popupLoc = this.localization.title;
-        var content = this.templateContent.clone();
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            popupLoc = this.localization.title,
+            content = this.templateContent.clone(),
+            buttonName,
+            btnContainer,
+            button;
 
-        for(var buttonName in this.buttons) {
-        	var btnContainer = this.templateToolsButton.clone();
-        	var button = this.buttons[buttonName];
-        	btnContainer.attr("title", button.tooltip);
-        	btnContainer.addClass(button.iconCls);
-        	btnContainer.bind('click', closureMagic(buttonName));
-        	content.append(btnContainer);
+        for(buttonName in this.buttons) {
+            if (this.buttons.hasOwnProperty(buttonName)) {
+            	btnContainer = this.templateToolsButton.clone();
+            	button = this.buttons[buttonName];
+            	btnContainer.attr('title', button.tooltip);
+            	btnContainer.addClass(button.iconCls);
+            	btnContainer.bind('click', closureMagic(buttonName));
+            	content.append(btnContainer);
+            }
         }
 
         var instructions = this.templateInstructions.clone();
@@ -122,16 +129,13 @@ function(instance) {
     * @private
     **/
 	_selectionStarted : function() {
-        var me = this;
-        var sandbox = me._sandbox;
-
-		var editDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        var title = me.localization.title;
-
-        var dialogContent = me.templateEditDialogContent.clone();
-    
-        var templateButtons = me.templateEditButtons.clone();
-        var editButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        var me = this,
+            sandbox = me._sandbox,
+            editDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            title = me.localization.title,
+            dialogContent = me.templateEditDialogContent.clone(),
+            templateButtons = me.templateEditButtons.clone(),
+            editButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
         editButton.setTitle(me.localization.button.edit);
         editButton.setHandler(function() {
@@ -140,10 +144,10 @@ function(instance) {
             me.instance.getSelectionPlugin().startDrawing({drawMode : 'modify'});
         });
 
-        templateButtons.append(editButton.getButton());
+        templateButtons.append(editButton.getElement());
 
         var closeButton = editDialog.createCloseButton(me.localization.button.close);
-        templateButtons.append(closeButton.getButton());
+        templateButtons.append(closeButton.getElement());
         closeButton.setHandler(function() {
             editDialog.close();
             me.instance.getSelectionPlugin().stopDrawing();

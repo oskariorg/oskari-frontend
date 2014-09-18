@@ -254,7 +254,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
 
             var controls = searchContainer.find('div.controls');
             controls.append(field.getField());
-            controls.append(button.getButton());
+            controls.append(button.getElement());
 
             flyout.append(searchContainer);
 

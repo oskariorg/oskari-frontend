@@ -191,7 +191,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             // Not sure if we want save on enter
             //field.bindEnterKey(doSave);
 
-            controls.append(button.getButton());
+            controls.append(button.getElement());
 
             roleSelectLabel.html(this.instance.getLocalization('selectRole'));
             container.append(content);

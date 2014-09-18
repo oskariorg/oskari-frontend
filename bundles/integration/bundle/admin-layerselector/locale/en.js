@@ -1,5 +1,4 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "en",
     "key": "admin-layerselector",
     "value": {
@@ -153,19 +152,16 @@ Oskari.registerLocalization(
                 "descplaceholder": "Description in {0}"
             },
             "en": {
-                "lang": "English:",
                 "title": "En",
                 "placeholder": "Name in English",
                 "descplaceholder": "Description in English"
             },
             "fi": {
-                "lang": "Finnish:",
                 "title": "Fi",
                 "placeholder": "Name in Finnish",
                 "descplaceholder": "Description in Finnish"
             },
             "sv": {
-                "lang": "Swedish:",
                 "title": "Sv",
                 "placeholder": "Name in Swedish",
                 "descplaceholder": "Description in Swedish"
@@ -184,5 +180,4 @@ Oskari.registerLocalization(
         "save": "Save",
         "delete": "Remove"
     }
-}
-);
+});

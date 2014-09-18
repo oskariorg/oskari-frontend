@@ -1,0 +1,12 @@
+.oskari-select {
+  display: block;
+  clear: both;
+  line-height: 16px;
+  margin-bottom: 12px;
+  width: 300px; }
+  .oskari-select select {
+    display: block;
+    /* 6px between label text and input field */
+    /* Only 3 here as line-height takes care of the rest */
+    margin: 3px 0 0 0;
+    width: 100%; }

@@ -615,7 +615,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     // FIXME create function outside loop
                     editBtn.setHandler(function () {
                         // user is in edit mode
-                        if (jQuery(editBtn.getButton()).val() === me.loc.toollayout.usereditmodeoff) {
+                        if (jQuery(editBtn.getElement()).val() === me.loc.toollayout.usereditmodeoff) {
                             // remove edit mode
                             me._editToolLayoutOff();
                         } else {
@@ -623,7 +623,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                         }
                     });
                     editBtn.setEnabled(me.activeToolLayout === 'userlayout');
-                    editBtn.getButton().attr('id', 'editModeBtn');
+                    editBtn.getElement().attr('id', 'editModeBtn');
                     editBtn.insertTo(layoutContainer);
                 }
             }
@@ -1367,6 +1367,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          * @param {String} lang language code
          */
         setPluginLanguage: function (lang) {
+            if (lang === null || lang === undefined) {
+                throw new TypeError(
+                    'Oskari.mapframework.bundle.publisher.view.BasicPublisher' +
+                        '.setPluginLanguage: language is null or undefined'
+                );
+            }
             Oskari.setLang(lang);
             var me = this,
                 i,

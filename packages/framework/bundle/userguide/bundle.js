@@ -50,9 +50,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundle", func
             "src": "../../../../resources/framework/bundle/userguide/css/style.css"
         }],
         "locales": [{
-            "lang": "am",
+            "lang": "hy",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/userguide/locale/am.js"
+            "src": "../../../../bundles/framework/bundle/userguide/locale/hy.js"
         }, {
             "lang": "cs",
             "type": "text/javascript",
@@ -82,9 +82,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundle", func
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/userguide/locale/fi.js"
         }, {
-            "lang": "gr",
+            "lang": "el",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/bundle/userguide/locale/gr.js"
+            "src": "../../../../bundles/framework/bundle/userguide/locale/el.js"
         }, {
             "lang": "hr",
             "type": "text/javascript",
@@ -110,6 +110,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundle", func
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/userguide/locale/pt.js"
         }, {
+            "lang": "ro",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/userguide/locale/ro.js"
+        }, {
             "lang": "sl",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/userguide/locale/sl.js"
@@ -121,6 +125,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundle", func
             "lang": "sq",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/userguide/locale/sq.js"
+        }, {
+            "lang": "sr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/userguide/locale/sr.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
