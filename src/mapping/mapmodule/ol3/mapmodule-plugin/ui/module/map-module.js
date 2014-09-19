@@ -50,24 +50,10 @@ define(["bundles/framework/bundle/mapmodule-plugin/ui/module/map-module"], funct
             var maxExtent = this._maxExtent;
             var extent = this._extent;
 
-            var projection = ol.proj.configureProj4jsProjection({
-                code: this._projectionCode,
-                extent: extent
-            });
-            ol.proj.addProjection(projection);
-            var bprojection = ol.proj.configureProj4jsProjection({
-                code: 'urn:ogc:def:crs:EPSG:6.3:3067',
-                extent: extent
-            });
-            ol.proj.addProjection(bprojection);
-
-            if (!ol.proj.get(this._projectionCode))
-                throw "NO CRS? " + this._projectionCode;
-            /*       	if( !ol.proj.get('urn:ogc:def:crs:EPSG:6.3:3067') )
-         throw "NO CRS? + urn EPSG 3067";*/
+            var projection = ol.proj.get(this._projectionCode);
+            projection.setExtent(extent);
 
             var projectionExtent = projection.getExtent();
-
             this._projection = projection;
 
             var map = new ol.Map({
@@ -78,8 +64,6 @@ define(["bundles/framework/bundle/mapmodule-plugin/ui/module/map-module"], funct
              })*/
                 ]),
                 layers: [],
-                //renderers : ol.RendererHints.createFromQueryData(),
-                renderer: ol.RendererHint.CANVAS,
                 target: 'mapdiv'
 
             });
@@ -88,7 +72,7 @@ define(["bundles/framework/bundle/mapmodule-plugin/ui/module/map-module"], funct
                 map: map
             });
 
-            map.setView(new ol.View2D({
+            map.setView(new ol.View({
                 projection: projection,
                 center: [383341, 6673843],
                 zoom: 5,
@@ -320,7 +304,7 @@ define(["bundles/framework/bundle/mapmodule-plugin/ui/module/map-module"], funct
          */
         adjustZoomLevel: function(amount, suppressEvent) {
             var delta = amount;
-            var view = this._map.getView().getView2D();
+            var view = this._map.getView();
             var currZoom = view.getZoom();
             view.setZoom(currZoom + delta);
 

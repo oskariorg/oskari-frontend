@@ -137,16 +137,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
          */
         "start": function () {
 
-            Proj4js.defs = {
-                "EPSG:3067": "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
-                "EPSG:4326": "+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
-            };
             var me = this,
                 conf = me.conf;
 
-            if (me.conf.projectionDefs) {
-                Proj4js.defs = me.conf.projectionDefs;
-            }
+            me._handleProjectionDefs(me.conf.projectionDefs);
 
             var core = Oskari.clazz.create('Oskari.mapframework.core.Core');
             me.core = core;
@@ -283,6 +277,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance",
                 });
             }
         },
+
+        _handleProjectionDefs: function (defs) {
+            // ensure static projections are defined
+            Proj4js.defs = {
+                "EPSG:3067": "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
+                "EPSG:4326": "+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
+            };
+
+            // use given defs instead
+            if (defs) {
+                Proj4js.defs = defs;
+            }
+        },
+
         /**
          * @method _teardownState
          * Tears down previous state so we can set a new one.
