@@ -153,7 +153,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLocation
                     values[fkey] = data.field.getValue();
                 }
             }
-            values.language = this.langField.getValue();
+            values.language = this.langField.field.getValue();
             return values;
         },
 
