@@ -47719,7 +47719,8 @@ OpenLayers.Format.WFST.v1 = OpenLayers.Class(OpenLayers.Format.XML, {
         wfs: "http://www.opengis.net/wfs",
         gml: "http://www.opengis.net/gml",
         ogc: "http://www.opengis.net/ogc",
-        ows: "http://www.opengis.net/ows"
+        ows: "http://www.opengis.net/ows",
+        xmlns: "http://www.w3.org/2000/xmlns/"
     },
     
     /**
@@ -48010,7 +48011,10 @@ OpenLayers.Format.WFST.v1 = OpenLayers.Class(OpenLayers.Format.XML, {
                     }
                 });
                 if(this.featureNS) {
-                    node.setAttribute("xmlns:" + this.featurePrefix, this.featureNS);
+                    this.setAttributeNS(
+                        node, this.namespaces.xmlns,
+                        "xmlns:" + this.featurePrefix, this.featureNS
+                    );
                 }
                 
                 // add in geometry
@@ -48073,7 +48077,10 @@ OpenLayers.Format.WFST.v1 = OpenLayers.Class(OpenLayers.Format.XML, {
                     }
                 });
                 if(this.featureNS) {
-                    node.setAttribute("xmlns:" + this.featurePrefix, this.featureNS);
+                    this.setAttributeNS(
+                        node, this.namespaces.xmlns,
+                        "xmlns:" + this.featurePrefix, this.featureNS
+                    );
                 }
                 this.writeNode("ogc:Filter", new OpenLayers.Filter.FeatureId({
                     fids: [feature.fid]
@@ -48284,7 +48291,10 @@ OpenLayers.Format.WFST.v1_0_0 = OpenLayers.Class(
                     node.setAttribute("srsName", options.srsName);
                 }
                 if(options.featureNS) {
-                    node.setAttribute("xmlns:" + prefix, options.featureNS);
+                    this.setAttributeNS(
+                        node, this.namespaces.xmlns,
+                        "xmlns:" + prefix, options.featureNS
+                    );
                 }
                 if(options.propertyNames) {
                     for(var i=0,len = options.propertyNames.length; i<len; i++) {
@@ -48469,7 +48479,8 @@ OpenLayers.Format.WFST.v1_1_0 = OpenLayers.Class(
                     }
                 });
                 if(options.featureNS) {
-                    node.setAttribute("xmlns:" + prefix, options.featureNS);
+                    this.setAttributeNS(node, this.namespaces.xmlns,
+                        "xmlns:" + prefix, options.featureNS);
                 }
                 if(options.propertyNames) {
                     for(var i=0,len = options.propertyNames.length; i<len; i++) {
