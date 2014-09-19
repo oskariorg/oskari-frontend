@@ -58,7 +58,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
         addTabContent: function (container) {
             var me = this;
             me.initTabContent();
-            me.tabsContainer.ui.addClass('peikko');
             container.append(me.tabsContainer.ui);
         },
         /**

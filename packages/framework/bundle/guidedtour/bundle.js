@@ -70,13 +70,13 @@ Oskari.clazz.define(
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/guidedtour/locale/fi.js"
             }, {
-                "lang": "ge",
+                "lang": "ka",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/ge.js"
+                "src": "../../../../bundles/framework/bundle/guidedtour/locale/ka.js"
             }, {
-                "lang": "gr",
+                "lang": "el",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/gr.js"
+                "src": "../../../../bundles/framework/bundle/guidedtour/locale/el.js"
             }, {
                 "lang": "hr",
                 "type": "text/javascript",
@@ -106,9 +106,9 @@ Oskari.clazz.define(
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/guidedtour/locale/ro.js"
             }, {
-                "lang": "rs",
+                "lang": "sr",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/guidedtour/locale/rs.js"
+                "src": "../../../../bundles/framework/bundle/guidedtour/locale/sr.js"
             }, {
                 "lang": "sl",
                 "type": "text/javascript",

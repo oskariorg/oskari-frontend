@@ -10,10 +10,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
      * @static
      */
 
-    function (instance, title) {
+    function (instance, title, id) {
         //"use strict";
         this.instance = instance;
         this.title = title;
+        this.id = id;
         // TODO: maybe pass as param instead of digging through instance.conf?
         this.showSearchSuggestions = (instance.conf && instance.conf.showSearchSuggestions === true);
         this.layerGroups = [];
@@ -27,7 +28,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             'keywordContainer': '<a href="#"class="keyword-cont"><span class="keyword"></span></a>',
             'keywordType': '<div class="type"></div>'
         };
-        this._createUI();
+        this._createUI(id);
     }, {
 
         getTitle: function () {
@@ -107,7 +108,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             });
         },
 
-        _createUI: function () {
+        _createUI: function (oskarifieldId) {
             //"use strict";
             var me = this,
                 oskarifield;
@@ -115,7 +116,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             me._locale = me.instance._localization;
             me.tabPanel = Oskari.clazz.create(
                 'Oskari.userinterface.component.TabPanel');
-            me.tabPanel.setTitle(me.title);
+            me.tabPanel.setTitle(me.title, me.id);
 
             oskarifield = me.getFilterField().getField();
 
@@ -139,6 +140,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
 
             me.tabPanel.getContainer().append(oskarifield);
             oskarifield.find('.spinner-text').hide();
+            // add id to search input
+            oskarifield.find('input').attr("id", 'oskari_layerselector2_search_input_tab_' + oskarifieldId);
+
 
             me.accordion = Oskari.clazz.create(
                 'Oskari.userinterface.component.Accordion');
@@ -228,6 +232,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                     'Oskari.userinterface.component.AccordionPanel');
                 groupPanel.setTitle(group.getTitle() + ' (' + layersLength +
                     ')');
+                groupPanel.setId('oskari_layerselector2_accordionPanel_' + group.getTitle().replace(/[^a-z0-9\-_:\.]/gi, "-"));
                 group.layerListPanel = groupPanel;
 
                 groupContainer = groupPanel.getContainer();
@@ -319,6 +324,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                 // empty result
                 loc = me.instance.getLocalization('errors');
                 me.accordion.showMessage(loc.noResults);
+                jQuery(me.accordion.ui).find('.accordionmsg').attr("id", 'oskari_layerselector2_inspiretab_search_no-result');
             } else {
                 me.accordion.removeMessage();
             }

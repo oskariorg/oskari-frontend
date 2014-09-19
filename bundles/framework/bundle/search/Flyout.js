@@ -178,6 +178,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
 
             var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
             field.setPlaceholder(me.instance.getLocalization("searchAssistance"));
+            field.setIds('oskari_search_forminput', 'oskari_search_forminput_searchassistance');
 
             if (me.instance.safeChars) {
                 var regex = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*\*?$/;
@@ -204,10 +205,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                     }
                 }
             });
-            field.addClearButton();
+            field.addClearButton('oskari_search_forminput_clearbutton');
 
             var button = Oskari.clazz.create('Oskari.userinterface.component.Button');
             button.setTitle(this.instance.getLocalization('searchButton'));
+            button.setId('oskari_search_button_search');
 
             var doSearch = function () {
                 field.setEnabled(false);
@@ -252,7 +254,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
 
             var controls = searchContainer.find('div.controls');
             controls.append(field.getField());
-            controls.append(button.getButton());
+            controls.append(button.getElement());
 
             flyout.append(searchContainer);
 
@@ -289,6 +291,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
         _showError: function (error) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okButton = dialog.createCloseButton('OK');
+            dialog.setId('oskari_search_error_popup');
 
             dialog.show(
                     this.instance.getLocalization('searchservice_search_alert_title'),
@@ -531,7 +534,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 if (me.instance.disableDefault !== true) {
                     var defaultPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel'),
                         searchContainer = jQuery("div.searchContainer");
-                    defaultPanel.setTitle(me.getTabTitle());
+                    defaultPanel.setTitle(me.getTabTitle(), 'oskari_search_tabpanel_header');
                     defaultPanel.setContent(searchContainer);
                     defaultPanel.setPriority(me.instance.tabPriority);
                     me.tabsContainer.addPanel(defaultPanel);
@@ -539,7 +542,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             }
 
             var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
-            panel.setTitle(item.title);
+            panel.setTitle(item.title, item.id);
             panel.setContent(item.content);
             panel.setPriority(item.priority);
             me.tabsContainer.addPanel(panel);

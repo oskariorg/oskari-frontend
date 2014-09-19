@@ -43,7 +43,6 @@ function(instance, localization) {
     addTabContent : function(container) {
         var me = this;
         this.initTabContent();
-        this.tabsContainer.ui.addClass('peikko');   
         container.append(this.tabsContainer.ui);
     },
     /**

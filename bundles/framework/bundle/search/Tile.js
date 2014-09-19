@@ -91,9 +91,9 @@ Oskari.clazz
                 var cel = this.container;
                 var tpl = this.template;
                 var sandbox = instance.getSandbox();
-
-                var status = cel.children('.oskari-tile-status');
-
+                // var status = cel.children('.oskari-tile-status');
+                var idEl = cel.children('.oskari-tile-title');
+                idEl.attr("id", 'oskari_search_tile_title');
                 //        status.empty();
                 //        status.append('(' + layers.length + ')');
 

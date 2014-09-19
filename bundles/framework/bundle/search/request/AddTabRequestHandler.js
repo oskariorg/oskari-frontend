@@ -22,7 +22,7 @@ function(sandbox, search) {
      *      request to handle
      */
     handleRequest : function(core, request) {
-        this.search.addTab({"title": request.getTitle(), "content": request.getContent(), "priority": request.getPriority()});
+        this.search.addTab({"title": request.getTitle(), "content": request.getContent(), "priority": request.getPriority(), "id": request.getId()});
    }
 }, {
     /**

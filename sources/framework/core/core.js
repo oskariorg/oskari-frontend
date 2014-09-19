@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             this._services = services;
             // Register services
             if (services) {
-                for (s = 0; s < services.length; s++) {
+                for (s = 0; s < services.length; s += 1) {
                     this.registerService(services[s]);
                 }
             }
@@ -270,8 +270,10 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * @return {Function} builder method for given request name or undefined if not found
          */
         getRequestBuilder: function (requestName) {
-            var qname = this._getQNameForRequest(requestName);
+            var qname = this._getQNameForRequest(requestName),
+                ret;
             if (!qname) {
+                this.printWarn('No qname found for', requestName);
                 return undefined;
             }
             var handlerFunc = this.__getRequestHandlerFunction(requestName);
@@ -279,7 +281,11 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
                 this.printDebug('#!#!# ! Request defined, but handler not registered. Perhaps timing issue?');
                 return undefined;
             }
-            return Oskari.clazz.builder(qname);
+            ret = Oskari.clazz.builder(qname);
+            if (!ret) {
+                this.printWarn('No request builder found for', requestName);
+            }
+            return ret;
         },
 
         /**
@@ -318,11 +324,17 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * @return {Function} builder method for given event name or undefined if not found
          */
         getEventBuilder: function (eventName) {
-            var qname = this._getQNameForEvent(eventName);
+            var qname = this._getQNameForEvent(eventName),
+                ret;
             if (!qname) {
+                this.printWarn('No qname found for', eventName);
                 return undefined;
             }
-            return Oskari.clazz.builder(qname);
+            ret = Oskari.clazz.builder(qname);
+            if (!ret) {
+                this.printWarn('No event builder found for', eventName);
+            }
+            return ret;
         },
 
         /**
@@ -416,8 +428,8 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * @return {String} value for the parameter or null if not found
          */
         getRequestParameter: function (name) {
-            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-            var regexS = "[\\?&]" + name + "=([^&#]*)",
+            name = name.replace(/[\[]/, '\\\[').replace(/[\]]/, '\\\]');
+            var regexS = '[\\?&]' + name + '=([^&#]*)',
                 regex = new RegExp(regexS),
                 results = regex.exec(window.location.href),
                 ret;

@@ -185,14 +185,14 @@ Oskari.registerLocalization(
             }
         },
         "NotLoggedView": {
-            "text": "\"Julkaise kartta\" -toiminnon avulla voit julkaista upotetun kartan omalla verkkosivullasi. Upotetussa kartassa näkyy valitsemasi karttanäkymä ja työkalut. Kartan julkaisu vaatii kirjautumisen palveluun.",
+            "text": "\"Julkaise kartta\" -toiminnon avulla voit julkaista upotetun kartan omalla verkkosivulla. Upotetussa kartassa näkyy valitsemasi karttanäkymä ja työkalut. Kartan julkaisu vaatii kirjautumisen palveluun.",
             "signup": "Kirjaudu sisään",
             "signupUrl": "/web/fi/login",
             "register": "Rekisteröidy",
             "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
         },
         "StartView": {
-            "text": "Julkaise kartta -toiminnon avulla voit julkaista upotettavan kartan omilla tai vaikka organisaatiosi verkkosivulla. Toiminnon avulla voit määritellä kartalla näytettävän karttanäkymän ja kartalla käytössä olevat työkalut sekä niiden ulkoasun. Kun määrittely on valmis, voit julkaista kartan liittämällä saamasi html-koodin verkkosivuillesi.",
+            "text": "Julkaise kartta -toiminnon avulla voit julkaista upotettavan kartan omslla verkkosivulla. Toiminnon avulla voit määritellä kartalla näytettävän karttanäkymän ja kartalla käytössä olevat työkalut sekä niiden ulkoasun. Kun määrittely on valmis, voit julkaista kartan liittämällä saamasi html-koodin verkkosivuillesi.",
             "touLink": "Näytä karttajulkaisun käyttöehdot",
             "layerlist_title": "Julkaistavissa olevat karttatasot",
             "layerlist_empty": "Valitsemiasi karttatasoja ei voida julkaista. Karttatasojen julkaisuoikeudet voi tarkistaa \"Valitut karttatasot\"-valikosta.",

@@ -25,6 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         this.loc = localization;
         this.backendConfiguration = backendConfiguration;
         this.legendInProcess = false;
+        this.isParcelMode = false;
 
         /* templates */
         this.template = {};
@@ -576,7 +577,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             if (tableData) {
                 me.mainPanel.find('input[name=tabledata]').val(tableData);
             }
-            window.open('about:blank', 'map_popup_111', wopParm);
+            if(!me.isParcelMode) window.open('about:blank', 'map_popup_111', wopParm);
             me.mainPanel.find('#oskari_print_formID').submit();
         },
         /**
@@ -646,6 +647,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         modifyUIConfig4Parcel: function (printParams) {
             var me = this;
             var container = me.mainPanel;
+
+            me.isParcelMode = true;
             container.find('div.header h3').empty();
             container.find('div.header h3').append(me.loc.title+ " (3/3)");
 

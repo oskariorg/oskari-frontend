@@ -46,6 +46,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         var button = me.templateTool.clone();
         button.attr('tool', pId);
         button.attr('title', pConfig.tooltip);
+        button.attr('id', 'oskari_toolbar_' + pGroup + '_' + pId);
         if (me.conf.classes && me.conf.classes[pGroup] && me.conf.classes[pGroup][pId]) {
             button.addClass(me.conf.classes[pGroup][pId].iconCls);
         } else {

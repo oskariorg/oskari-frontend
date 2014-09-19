@@ -697,7 +697,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          */
         setGridHeight: function () {
             var gridDiv = jQuery('#municipalGrid'),
-                parent = gridDiv.parent(),
+                parent = gridDiv.parent(), // .publishedgrid
                 selectorsCont = parent.find('.selectors-container'),
                 selectorsHeight = 0;
             if (selectorsCont.length > 0) {

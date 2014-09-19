@@ -132,7 +132,10 @@ function(instance) {
 
         var status = this.container.children('.oskari-tile-status');
         status.addClass('icon-bubble-right');
+        status.attr("id", 'oskari_layerselection2_tile_countselectedlayers');
         status.html(layerCount);
+        var idEl = cel.children('.oskari-tile-title');
+        idEl.attr("id", 'oskari_layerselection2_tile_title');
         this.notifyUser();
     }
 }, {

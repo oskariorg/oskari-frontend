@@ -569,7 +569,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelPlot',
                     pageMapRect: this.instance.pageMapRect,  // Map area on A4 paper
                     tableTemplate: "LayoutTemplatePointTable"  // .json file name for plot layout (backend)
                 };
-                
             return selections;
 
         },

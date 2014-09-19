@@ -182,10 +182,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
                 });
             });
 
-            templateButtons.append(editButton.getButton());
+            templateButtons.append(editButton.getElement());
 
             var closeButton = editDialog.createCloseButton(me.localization.button.close);
-            templateButtons.append(closeButton.getButton());
+            templateButtons.append(closeButton.getElement());
             closeButton.setHandler(function () {
                 editDialog.close();
                 me.instance.getSelectionPlugin().stopDrawing();

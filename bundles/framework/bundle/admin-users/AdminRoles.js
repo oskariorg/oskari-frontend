@@ -209,7 +209,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminRoles', functio
         // Not sure if we want save on enter
         //field.bindEnterKey(doSave);
 
-        controls.append(button.getButton());
+        controls.append(button.getElement());
         return me.container;
     },
 

@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             }
             jQuery('body').append(this.dialog);
             if (focusedButton >= 0) {
-                buttons[focusedButton].getButton().focus();
+                buttons[focusedButton].setFocus(true);
             }
 
             contentHeight = contentDiv.height();
@@ -239,6 +239,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         },
         getTitle: function () {
             return this.dialog.find('h3')[0].textContent;
+        },
+        setId: function (pId) {
+        	this.id = pId;
+        	if (this.dialog) {
+                this.dialog.attr('id', pId);
+            } else {
+                console.err("No UI");
+            }
         },
         /** 
          * @method setContent

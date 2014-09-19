@@ -386,9 +386,9 @@ Oskari.clazz.define(
             ],
             "locales": [{
                 // when lang is undefined, loader loads each language file, publisher needs localization for each
-                //"lang" : "am",
+                //"lang" : "hy",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/am.js"
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/hy.js"
             }, {
                 //"lang" : "bg",
                 "type": "text/javascript",
@@ -422,13 +422,13 @@ Oskari.clazz.define(
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/fi.js"
             }, {
-                //"lang" : "ge",
+                //"lang" : "ka",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/ge.js"
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/ka.js"
             }, {
-                //"lang" : "gr",
+                //"lang" : "el",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/gr.js"
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/el.js"
             }, {
                 //"lang" : "hr",
                 "type": "text/javascript",
@@ -458,9 +458,9 @@ Oskari.clazz.define(
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/ro.js"
             }, {
-                //"lang" : "rs",
+                //"lang" : "sr",
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/rs.js"
+                "src": "../../../../bundles/framework/bundle/mapmodule-plugin/locale/sr.js"
             }, {
                 //"lang" : "sl",
                 "type": "text/javascript",

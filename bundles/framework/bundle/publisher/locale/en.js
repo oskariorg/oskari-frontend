@@ -192,7 +192,7 @@ Oskari.registerLocalization(
             "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
         },
         "StartView": {
-            "text": "You can create the map and embed it to your own or your organisation's website.",
+            "text": "You can create the map and embed it to your own website.",
             "touLink": "Show Terms of use for Embedded maps",
             "layerlist_title": "Embeddable map layers",
             "layerlist_empty": "Selected map layers cannot be published in a embedded map. Check the rights to publish in the menu \"Selected Map Layers\" before you start creating the map.",

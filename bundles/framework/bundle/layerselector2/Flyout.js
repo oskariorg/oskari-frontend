@@ -57,9 +57,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         startPlugin: function () {
             //"use strict";
             var me = this,
-                inspireTab = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.view.LayersTab", me.instance, me.instance.getLocalization('filter').inspire),
-                orgTab = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.view.LayersTab", me.instance, me.instance.getLocalization('filter').organization),
-                publishedTab;
+                inspireTab = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.view.LayersTab", me.instance, me.instance.getLocalization('filter').inspire, 'oskari_layerselector2_tabpanel_inspiretab'),
+                orgTab = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.view.LayersTab", me.instance, me.instance.getLocalization('filter').organization, 'oskari_layerselector2_tabpanel_orgtab'),
+                publishedTab,
+                elParent,
+                elId;
+
 
             me.template = jQuery('<div class="allLayersTabContent"></div>');
             inspireTab.groupingMethod = 'getInspireName';
@@ -73,6 +76,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 publishedTab = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.view.PublishedLayersTab", me.instance, me.instance.getLocalization('filter').published);
                 this.layerTabs.push(publishedTab);
             }
+
+            elParent = this.container.parentElement.parentElement;
+        	elId = jQuery(elParent).find('.oskari-flyouttoolbar').find('.oskari-flyouttools').find('.oskari-flyouttool-close');
+        	elId.attr("id", 'oskari_layerselector2_flyout_oskari_flyouttool_close');
         },
 
         /**

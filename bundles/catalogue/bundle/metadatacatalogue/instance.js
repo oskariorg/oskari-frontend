@@ -137,40 +137,40 @@ Oskari.clazz
 
                 me.started = true;
 
-                var conf = this.conf;
-                var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
-                var sandbox = Oskari.getSandbox(sandboxName);
+                var conf = me.conf,
+                    sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
+                    sandbox = Oskari.getSandbox(sandboxName);
 
                 me.sandbox = sandbox;
 
-                this.localization = Oskari.getLocalization(this.getName());
+                me.localization = Oskari.getLocalization(me.getName());
 
                 var optionAjaxUrl = null;
-                if (this.conf && this.conf.optionUrl) {
-                    optionAjaxUrl = this.conf.optionUrl;
+                if (me.conf && me.conf.optionUrl) {
+                    optionAjaxUrl = me.conf.optionUrl;
                 } else {
                     optionAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetMetadataSearchOptions';
                 }
 
                 var searchAjaxUrl = null;
-                if (this.conf && this.conf.searchUrl) {
-                    searchAjaxUrl = this.conf.searchUrl;
+                if (me.conf && me.conf.searchUrl) {
+                    searchAjaxUrl = me.conf.searchUrl;
                 } else {
                     searchAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetMetadataSearch';
                 }
 
                 // Default tab priority
-                if (this.conf && typeof this.conf.priority === 'number') {
-                    this.tabPriority = this.conf.priority;
+                if (me.conf && typeof me.conf.priority === 'number') {
+                    me.tabPriority = me.conf.priority;
                 }
 
                 var optionServName =
                     'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataOptionService';
-                this.optionService = Oskari.clazz.create(optionServName, optionAjaxUrl);
+                me.optionService = Oskari.clazz.create(optionServName, optionAjaxUrl);
 
                 var searchServName =
                     'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataSearchService';
-                this.searchService = Oskari.clazz.create(searchServName, searchAjaxUrl);
+                me.searchService = Oskari.clazz.create(searchServName, searchAjaxUrl);
 
                 sandbox.register(me);
                 var p;
@@ -182,7 +182,6 @@ Oskari.clazz
 
                 // draw ui
                 me.createUi();
-
             },
             /**
              * @method init
@@ -265,12 +264,11 @@ Oskari.clazz
              * (re)creates the UI for "metadata catalogue" functionality
              */
             createUi: function () {
-                var me = this;
-
-                var metadataCatalogueContainer = this.templates.metadataTab.clone();
-                var optionPanel = this.templates.optionPanel.clone();
-                var searchPanel = this.templates.searchPanel.clone();
-                var resultPanel = this.templates.resultPanel.clone();
+                var me = this,
+                    metadataCatalogueContainer = me.templates.metadataTab.clone(),
+                    optionPanel = me.templates.optionPanel.clone(),
+                    searchPanel = me.templates.searchPanel.clone(),
+                    resultPanel = me.templates.resultPanel.clone();
                 metadataCatalogueContainer.append(optionPanel);
                 metadataCatalogueContainer.append(searchPanel);
                 metadataCatalogueContainer.append(resultPanel);
@@ -283,6 +281,7 @@ Oskari.clazz
 
                 var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
                 field.setPlaceholder(me.getLocalization('assistance'));
+                field.setIds('oskari_metadatacatalogue_forminput', 'oskari_metadatacatalogue_forminput_searchassistance');
 
                 // var regex = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*\*?$/;
                 // field.setContentCheck(true, me.getLocalization('contentErrorMsg'), regex);
@@ -299,10 +298,11 @@ Oskari.clazz
                         resultList.empty();
                     }
                 });
-                field.addClearButton();
+                field.addClearButton('oskari_metadatacatalogue_forminput_clearbutton');
 
                 var button = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 button.setTitle(me.getLocalization('metadataCatalogueButton'));
+                button.setId('oskari_metadatacatalogue_button_search');
 
                 var doMetadataCatalogue = function () {
                     metadataCatalogueContainer.find('.metadataOptions').hide();
@@ -322,13 +322,13 @@ Oskari.clazz
                             dropdownDef,
                             dropdownRows,
                             dropdownRow;
-                        for (i = 0; i < checkboxRows.length; i++) {
+                        for (i = 0; i < checkboxRows.length; i += 1) {
                             checkboxDefs = jQuery(checkboxRows[i]).find('.metadataMultiDef');
                             if (checkboxDefs.length === 0) {
                                 continue;
                             }
                             values = [];
-                            for (j = 0; j < checkboxDefs.length; j++) {
+                            for (j = 0; j < checkboxDefs.length; j += 1) {
                                 checkboxDef = jQuery(checkboxDefs[j]);
                                 if (checkboxDef.is(':checked')) {
                                     values.push(checkboxDef.val());
@@ -338,7 +338,7 @@ Oskari.clazz
                         }
                         // Dropdown lists
                         dropdownRows = metadataCatalogueContainer.find('.dropdownRow');
-                        for (i = 0; i < dropdownRows.length; i++) {
+                        for (i = 0; i < dropdownRows.length; i += 1) {
                             dropdownDef = jQuery(dropdownRows[i]).find('.metadataDef');
                             search[dropdownDef.attr('name')] = dropdownDef.find(':selected').val();
                         }
@@ -349,10 +349,10 @@ Oskari.clazz
                     }, function (data) {
                         searchPanel.hide();
                         optionPanel.show();
-                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        var okBtn = dialog.createCloseButton('OK');
-                        var title = me.getLocalization('metadatasearchservice_alert_title');
-                        var msg = me.getLocalization('metadatasearchservice_not_found_anything_text');
+                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                            okBtn = dialog.createCloseButton('OK'),
+                            title = me.getLocalization('metadatasearchservice_alert_title'),
+                            msg = me.getLocalization('metadatasearchservice_not_found_anything_text');
                         dialog.show(title, msg, [okBtn]);
                     });
                 };
@@ -362,15 +362,18 @@ Oskari.clazz
 
                 var controls = metadataCatalogueContainer.find('div.controls');
                 controls.append(field.getField());
-                controls.append(button.getButton());
+                controls.append(button.getElement());
 
                 // Metadata catalogue tab
-                var title = me.getLocalization('tabTitle');
-                var content = metadataCatalogueContainer;
-                var priority = this.tabPriority;
-                var reqName = 'Search.AddTabRequest';
-                var reqBuilder = me.sandbox.getRequestBuilder(reqName);
-                var req = reqBuilder(title, content, priority);
+
+                var title = me.getLocalization('tabTitle'),
+                    content = metadataCatalogueContainer,
+                    priority = this.tabPriority,
+                    id = 'oskari_metadatacatalogue_tabpanel_header',
+                    reqName = 'Search.AddTabRequest',
+                    reqBuilder = me.sandbox.getRequestBuilder(reqName),
+                    req = reqBuilder(title, content, priority, id);
+
                 me.sandbox.request(me, req);
 
                 // Link to advanced search
@@ -422,7 +425,7 @@ Oskari.clazz
                         me._updateOptions(advancedContainer);
                     };
 
-                for (i = 0; i < dataFields.length; i++) {
+                for (i = 0; i < dataFields.length; i += 1) {
                     dataField = dataFields[i];
                     if (dataField.values.length === 0) {
                         // no options to show -> skip
@@ -438,7 +441,7 @@ Oskari.clazz
                     if (dataField.multi) {
                         newRow = me.templates.checkboxRow.clone();
                         newRow.find('div.rowLabel').text(newLabel);
-                        for (j = 0; j < dataField.values.length; j++) {
+                        for (j = 0; j < dataField.values.length; j += 1) {
                             value = dataField.values[j];
                             text = me._getOptionLocalization(value);
                             newCheckbox = me.templates.metadataCheckbox.clone();
@@ -460,7 +463,7 @@ Oskari.clazz
                         emptyOption.attr('value', '');
                         emptyOption.text(me.getLocalization('emptyOption'));
                         dropdownDef.append(emptyOption);
-                        for (j = 0; j < dataField.values.length; j++) {
+                        for (j = 0; j < dataField.values.length; j += 1) {
                             value = dataField.values[j];
                             text = me._getOptionLocalization(value);
                             newOption = me.templates.dropdownOption.clone();
@@ -519,25 +522,27 @@ Oskari.clazz
                     value,
                     refRow,
                     selectedOption;
-                for (i = 0; i < me.conditions.length; i++) {
+                for (i = 0; i < me.conditions.length; i += 1) {
                     condition = me.conditions[i];
                     row = container.find('.' + condition.field);
-                    for (j = 0; j < condition.shownIf.length; j++) {
+                    for (j = 0; j < condition.shownIf.length; j += 1) {
                         ref = condition.shownIf[j];
                         for (refItem in ref) {
-                            value = condition.shownIf[j][refItem];
-                            refRow = container.find('.metadataRow.' + refItem);
-                            if (refRow.hasClass('checkboxRow')) {
-                                // Check box
-                                if (!refRow.find('input:checkbox[value=' + value + ']').is(':checked')) {
-                                    row.hide();
-                                    return;
-                                }
-                            } else if (refRow.hasClass('dropdownRow')) {
-                                selectedOption = refRow.find('.metadataDef option:selected').val();
-                                if (value !== selectedOption) {
-                                    row.hide();
-                                    return;
+                            if (ref.hasOwnProperty(refItem)) {
+                                value = condition.shownIf[j][refItem];
+                                refRow = container.find('.metadataRow.' + refItem);
+                                if (refRow.hasClass('checkboxRow')) {
+                                    // Check box
+                                    if (!refRow.find('input:checkbox[value=' + value + ']').is(':checked')) {
+                                        row.hide();
+                                        return;
+                                    }
+                                } else if (refRow.hasClass('dropdownRow')) {
+                                    selectedOption = refRow.find('.metadataDef option:selected').val();
+                                    if (value !== selectedOption) {
+                                        row.hide();
+                                        return;
+                                    }
                                 }
                             }
                         }
@@ -589,7 +594,7 @@ Oskari.clazz
                         var hiddenRows = tableBody.find('tr.resultRow:hidden'),
                             hiddenResults = [],
                             i;
-                        for (i = 0; i < hiddenRows.length; i++) {
+                        for (i = 0; i < hiddenRows.length; i += 1) {
                             hiddenResults.push(jQuery(hiddenRows[i]).data('resultId'));
                         }
 
@@ -611,9 +616,9 @@ Oskari.clazz
                         var newRows = tableBody.find('tr'),
                             resultId,
                             j;
-                        for (i = 0; i < newRows.length; i++) {
+                        for (i = 0; i < newRows.length; i += 1) {
                             resultId = jQuery(newRows[i]).data('resultId');
-                            for (j = 0; j < hiddenResults.length; j++) {
+                            for (j = 0; j < hiddenResults.length; j += 1) {
                                 if (resultId === hiddenResults[j]) {
                                     jQuery(newRows[i]).hide();
                                 }
@@ -635,7 +640,7 @@ Oskari.clazz
                 var i,
                     header,
                     link;
-                for (i = 0; i < me.resultHeaders.length; ++i) {
+                for (i = 0; i < me.resultHeaders.length;  i += 1) {
                     header = me.templates.resultTableHeader.clone();
                     header.addClass(me.resultHeaders[i].prop);
                     link = header.find('a');
@@ -666,7 +671,7 @@ Oskari.clazz
                 };
                 var selectedLayers = me.sandbox.findAllSelectedMapLayers(),
                     i;
-                for (i = 0; i < results.length; ++i) {
+                for (i = 0; i < results.length; i += 1) {
                     if ((!results[i].name) || (results[i].name.length === 0)) {
                         continue;
                     }
@@ -700,12 +705,12 @@ Oskari.clazz
 
                             // Optional complementary layers
                             if ((row.uuid) && (row.uuid.length > 0)) {
-                                row_loop: for (j = 0; j < row.uuid.length; ++j) {
+                                row_loop: for (j = 0; j < row.uuid.length; j += 1) {
                                     // Check for duplicates
                                     if (row.uuid[j] === row.id) {
                                         continue;
                                     }
-                                    for (k = 0; k < j; ++k) {
+                                    for (k = 0; k < j; k += 1) {
                                         if (row.uuid[k] === row.uuid[j]) {
                                             continue row_loop;
                                         }
@@ -719,7 +724,7 @@ Oskari.clazz
                             // Check for duplicates
                             j = 0;
                             layer_loop: while (j < layers.length) {
-                                for (k = 0; k < j; ++k) {
+                                for (k = 0; k < j; k += 1) {
                                     if (layers[k].getId() === layers[j].getId()) {
                                         layers.splice(j, 1);
                                         continue layer_loop;
@@ -730,7 +735,7 @@ Oskari.clazz
 
                             // Add layer links
                             layerList = me.templates.layerList.clone();
-                            for (j = 0; j < layers.length; ++j) {
+                            for (j = 0; j < layers.length; j += 1) {
                                 me._addLayerLinks(layers[j], layerList);
                             }
 
@@ -770,7 +775,7 @@ Oskari.clazz
                     layerLink;
                 layerSelected = false;
                 selectedLayers = me.sandbox.findAllSelectedMapLayers();
-                for (var k = 0; k < selectedLayers.length; ++k) {
+                for (var k = 0; k < selectedLayers.length; k += 1) {
                     selectedLayer = selectedLayers[k];
                     if (layer.getId() === selectedLayer.getId()) {
                         layerSelected = true;
@@ -861,10 +866,9 @@ Oskari.clazz
              * @param {Boolean} pDescending true if sort direction is descending
              */
             _searchResultComparator: function (a, b, pAttribute, pDescending) {
-                var nameA = a[pAttribute].toLowerCase();
-                var nameB = b[pAttribute].toLowerCase();
-
-                var value = 0;
+                var nameA = a[pAttribute].toLowerCase(),
+                    nameB = b[pAttribute].toLowerCase(),
+                    value = 0;
                 if (nameA === nameB) {
                     nameA = a.id;
                     nameB = b.id;

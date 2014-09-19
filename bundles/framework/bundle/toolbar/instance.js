@@ -142,6 +142,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 toolbarRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolbarRequestHandler', me),
                 showMapMeasurementRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasurementRequestHandler', me)
             };
+
         },
         /**
          * @method createMenuToolbarContainer
@@ -363,10 +364,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
          */
         _removeToolbar: function (tbid) {
             var tb = this.toolbars[tbid];
-            // WTF!!!!
-            // this.toolbars[tbid] = undefined;
-            // tb.remove();
-            // delete this.toolbars[tbid];
             if (tb) {
                 tb.remove();
             }

@@ -193,6 +193,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
 
             // setup id
             layerDiv.attr('layer_id', layer.getId());
+            layerDiv.find('input').attr('id', 'oskari_layerselector2_layerlist_checkbox_layerid_' + layer.getId());
             layerDiv.find('.layer-title').append(layer.getName());
             layerDiv.find('input').change(function () {
                 checkbox = jQuery(this);

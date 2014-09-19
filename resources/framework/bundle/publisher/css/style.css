@@ -24,6 +24,10 @@ div.codesnippet {
   max-height: 200px;
   over-flow: auto; }
 
+.textarea {
+  width: 300px;
+  padding: 5px; }
+
 div.notLoggedIn {
   padding: 10px; }
 
