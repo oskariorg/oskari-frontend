@@ -1,6 +1,6 @@
 define([
 	"oskari",
-	"jquery",
+	"jquery-ui",
     "src/oskari/base/module",
 	"../../AbstractMapModule",
 	"../../plugin/AbstractMapModulePlugin",
