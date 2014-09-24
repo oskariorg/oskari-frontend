@@ -10,6 +10,10 @@ Added username and password support to the layer admin flyout.
 
 Disabled rotation of rectangular selection.
 
+### myplacesimport
+
+Implemented GPX and MIF/MID format import.
+
 ## 1.23
 
 ### mapmodule/LogoPlugin
