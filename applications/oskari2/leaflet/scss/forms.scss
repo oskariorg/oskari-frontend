@@ -69,22 +69,11 @@ input {
 	background: #FAFAFA;
 }
 
-input[type="text"], input[type="password"], input[type="file"], input[type="submit"], input[type="button"], input[type="reset"], select, textarea, .textarea, button {
-	background-image: url(../images/forms/input_shadow.png);
-	background-repeat: no-repeat;
+input[type=button], input[type=email], input[type=number], input[type=file], input[type=password], input[type=reset], input[type=search], input[type=submit], input[type=tel], input[type=text], input[type=url], select, textarea, .textarea, button {
 	border: 1px solid;
 	border-color: #BFBFBF #DEDEDE #DEDEDE #BFBFBF;
-	padding: 5px 1px;
+	padding: 8px 5px;
     font-family: inherit;
-    font-size: inherit;
-}
-
-/* label element preceded by an input[type="radio"] element */
-input[type="radio"] ~ label {
-}
-
-select {
-	padding: 1px;
 }
 
 input[type="image"] {
@@ -93,11 +82,16 @@ input[type="image"] {
 	padding: 0;
 }
 
+button::-moz-focus-inner, input[type="button"]::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
+	padding: 0 !important;
+	border: 0 none !important;
+}
+
 /* This is used in buttons */
 input[type="submit"], input[type="button"], input[type="reset"], button {
 	cursor: pointer;
 	overflow: visible;
-	padding: 5px;
+	padding: 8px 5px;
 	width: auto;
 
 	&:hover:enabled, &:focus {

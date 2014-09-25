@@ -1,0 +1,6 @@
+label.oskari-passwordinput, label.oskari-searchinput, label.oskari-textinput {
+  display: block;
+  clear: both;
+  line-height: 16px;
+  margin-bottom: 12px;
+  width: 300px; }
