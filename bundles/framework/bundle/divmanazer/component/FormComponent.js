@@ -9,33 +9,38 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
      * @method create called automatically on construction
      */
     function () {
+        'use strict';
         this._clazz = 'Oskari.userinterface.component.FormComponent';
-        this._element = null;
         this._enabled = true;
         this._handler = null;
         this._name = null;
         this._required = false;
         this._title = null;
         this._tooltip = null;
-        this._value = null;
         this._visible = true;
     }, {
 
         /**
          * @method destroy
          * Called whenever someone wants to get rid of the component
+         * @param {Boolean} cleanup True if destroy is called just for cleanup
          */
-        destroy: function () {
-            this._destroyImpl();
-            this._element.parent.removeChild(this._element);
-        },
-
-        /**
-         * @method _destroyImpl
-         * Called before component element is removed. Useful for cleanup.
-         */
-        _destroyImpl: function () {
-            return undefined;
+        destroy: function (cleanup) {
+            'use strict';
+            this._destroyImpl(cleanup);
+            if (!cleanup) {
+                console.log('Real destroy');
+                if (this.getHandler()) {
+                    this.getHandler()(undefined);
+                }
+                if (this._element) {
+                    console.log('Has element');
+                    if (this._element.parentNode) {
+                        console.log('Has element parent, removing element');
+                        this._element.parentNode.removeChild(this._element);
+                    }
+                }
+            }
         },
 
         /**
@@ -43,43 +48,14 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * Focuses the component. Implement if component can be focused.
          */
         focus: function () {
+            'use strict';
             return undefined;
         },
 
-        /**
-         * @method insertTo
-         * @param {Element} container 
-         */
-        insertTo: function (container) {
-            if (!container) {
-                throw new TypeError(
-                    this.getClazz() +
-                        '.insertTo: container is required.'
-                );
-            }
-            if (!container.appendChild) {
-                throw new TypeError(
-                    this.getClazz() +
-                        '.insertTo: container is not a DOMElement.'
-                );
-            }
-            container.appendChild(this._element);
-        },
-
-        /**
-         * @method getClazz
-         * @return {String} clazz 
-         */
-        getClazz: function () {
-            return this._clazz;
-        },
-
-        /**
-         * @method getElement
-         * @return {Element} element 
-         */
-        getElement: function () {
-            return this._element;
+        // TODO
+        validate: function () {
+            'use strict';
+            return true;
         },
 
         /**
@@ -88,6 +64,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @return {Boolean} enabled 
          */
         isEnabled: function () {
+            'use strict';
             return true;
         },
 
@@ -96,6 +73,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @param {Boolean} enabled
          */
         setEnabled: function (enabled) {
+            'use strict';
             if (typeof enabled !== 'boolean') {
                 throw new TypeError(
                     this.getClazz() +
@@ -107,9 +85,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
 
         /**
          * @method _setEnabledImpl
+         * @param {Boolean} enabled
          *     Implement if the component can actually be disabled.
          */
-        _setEnabledImpl: function () {
+        _setEnabledImpl: function (enabled) {
+            'use strict';
             return undefined;
         },
 
@@ -118,6 +98,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @return {Function} handler
          */
         getHandler: function () {
+            'use strict';
             return this._handler;
         },
 
@@ -126,6 +107,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @param {Function} handler 
          */
         setHandler: function (handler) {
+            'use strict';
             if (handler && typeof handler !== 'function') {
                 throw new TypeError(
                     this.getClazz() +
@@ -141,6 +123,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @method _setHandlerImpl
          */
         _setHandlerImpl: function () {
+            'use strict';
             return undefined;
         },
 
@@ -149,7 +132,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @return {String} name 
          */
         getName: function () {
-            return this._name;
+            'use strict';
+            throw new Error(
+                this.getClazz() + '.getName is unimplemented subclass'
+            );
         },
 
         /**
@@ -157,15 +143,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @param {String} name 
          */
         setName: function (name) {
-            this._name = name;
-            this._setNameImpl();
-        },
-
-        /**
-         * @method _setNameImpl
-         */
-        _setNameImpl: function () {
-            return undefined;
+            'use strict';
+            throw new Error(
+                this.getClazz() + '.setName is unimplemented subclass'
+            );
         },
 
         /**
@@ -173,7 +154,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @return {Boolean} required 
          */
         isRequired: function () {
-            return this._required;
+            'use strict';
+            return false;
         },
 
         /**
@@ -181,20 +163,21 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @param {Boolean} required 
          */
         setRequired: function (required) {
+            'use strict';
             if (typeof required !== 'boolean') {
                 throw new TypeError(
                     this.getClazz() +
                         '.setRequired: required is not a boolean'
                 );
             }
-            this._required = required;
-            this._setRequiredImpl();
+            this._setRequiredImpl(required);
         },
 
         /**
          * @method _setRequiredImpl
          */
         _setRequiredImpl: function () {
+            'use strict';
             return undefined;
         },
 
@@ -203,7 +186,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @return {String} title 
          */
         getTitle: function () {
-            return this._title;
+            'use strict';
+            throw new Error(
+                this.getClazz() + '.getTitle is unimplemented subclass'
+            );
         },
 
         /**
@@ -211,15 +197,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @param {String} title 
          */
         setTitle: function (title) {
-            this._title = title;
-            this._setTitleImpl();
-        },
-
-        /**
-         * @method _setTitleImpl
-         */
-        _setTitleImpl: function () {
-            return undefined;
+            'use strict';
+            debugger;
+            throw new Error(
+                this.getClazz() + '.setTitle is unimplemented subclass'
+            );
         },
 
         /**
@@ -227,7 +209,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @return {String} 
          */
         getTooltip: function () {
-            return this._tooltip;
+            'use strict';
+            throw new Error(
+                this.getClazz() + '.getTooltip is unimplemented subclass'
+            );
         },
 
         /**
@@ -235,15 +220,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @param {String} tooltip
          */
         setTooltip: function (tooltip) {
-            this._tooltip = tooltip;
-            this._setTooltipImpl();
-        },
-
-        /**
-         * @method _setTooltipImpl
-         */
-        _setTooltipImpl: function () {
-            return undefined;
+            'use strict';
+            throw new Error(
+                this.getClazz() + '.setTooltip is unimplemented in subclass'
+            );
         },
 
         /**
@@ -251,54 +231,24 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @return {} 
          */
         getValue: function () {
-            return this._value;
+            'use strict';
+            throw new Error(
+                this.getClazz() + '.getValue is unimplemented subclass'
+            );
         },
 
         /**
          * @method setValue
-         * @param {} 
+         * Sets the component's value.
+         * @param {} value
          */
         setValue: function (value) {
-            this._value = value;
-            this._setValueImpl();
-        },
-
-        /**
-         * @method _setValueImpl
-         */
-        _setValueImpl: function () {
-            return undefined;
-        },
-
-        /**
-         * @method isVisible
-         * @return {Boolean} 
-         */
-        isVisible: function () {
-            return this._visible;
-        },
-
-        /**
-         * @method setVisible
-         * @param {Boolean} 
-         */
-        setVisible: function (visible) {
-            if (typeof visible !== 'boolean') {
-                throw new TypeError(
-                    this.getClazz() +
-                        '.setVisible: visible is not a boolean'
-                );
-            }
-            this._visible = visible;
-            // Implementing component might have to hide more than this._element
-            this._setVisibleImpl();
-        },
-
-        /**
-         * @method _setVisibleImpl
-         */
-        _setVisibleImpl: function () {
-            return undefined;
+            'use strict';
+            throw new Error(
+                this.getClazz() + '.setValue is unimplemented subclass'
+            );
         }
+    }, {
+        extend: ['Oskari.userinterface.component.Component']
     }
     );

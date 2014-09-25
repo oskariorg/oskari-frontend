@@ -8,6 +8,8 @@ $headerBackgroundColor: #F3F3F3;
 $borderColor: #E6E6E6;
 $baseTextColor: #3C3C3C;
 $lightTextColor: #FFF;
+$normalFontSize: 14px;
+$normalFontLineHeightMultiplier: 1.5;
 
 /* Mixins */
 @mixin border-radius($radius) {
@@ -42,7 +44,7 @@ $lightTextColor: #FFF;
    
 @mixin normal-font($size) {
     font-size: $size;
-    line-height: $size * 1.5;
+    line-height: $size * $normalFontLineHeightMultiplier;
 }
 
 /* Resets */
@@ -77,10 +79,13 @@ html {
 }
 	
 body {
-	@include normal-font(14px);
 	color: $baseTextColor;
     font-family: 'Open Sans', Arial, sans-serif;
 	background: $backgroundColor;
+}
+
+body, button, input, select, textarea {
+	@include normal-font($normalFontLineHeightMultiplier);
 }
 
 em {
@@ -1124,17 +1129,10 @@ footer {
 
 }
 
-input[type="text"], input[type="password"], input[type="search"] {
-	padding: 8px 35px 8px 10px;
+input[type=email], input[type=number], input[type=number] input[type=tel], input[type=text], input[type=password], input[type=search], input[type=url], textarea {
 	@include border-radius(4px);
 	border: solid 1px #b7b7b7;
-	@include box-shadow(inset 0 1px 2px rgba(0,0,0,.1));
-}
-
-textarea {
-	@include border-radius(4px);
-	border: solid 1px #b7b7b7;
-	@include box-shadow(inset 0 1px 2px rgba(0,0,0,.1));
+	@include box-shadow(inset 3px 2px 4px rgba(0,0,0,.15));
 }
 
 .clearbutton {
@@ -1146,7 +1144,6 @@ textarea {
 }
 
 select {
-	padding: 6px;
 	width: 206px;
 	color: $baseTextColor;
 	@include border-radius(4px);
