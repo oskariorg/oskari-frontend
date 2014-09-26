@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Omien aineistojen tuonti",
-            "description": "Voit tuoda omia aineistoja Paikkatietoikkunaan ja luoda niistä oman karttatason. Tuotavat aineistot voivat olla joko shp (shapefile) -, gpx-, mif/mid-, zip- tai kml/kmz (Google) -tiedostomuodossa.",
+            "description": "Voit tuoda omia aineistoja Paikkatietoikkunaan karttatasoksi. Tuotavien aineistojen tulee olla shp-, gpx- tai mif/mid-tiedostomuotoa zip-paketissa tai kmz-tiedostomuotoa (pakattu kml).",
             "actions": {
                 "cancel": "Peruuta",
                 "next": "Seuraava"

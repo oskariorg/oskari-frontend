@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Dataset Import",
-            "description": "You can import your own datasets to Paikkatietoikkuna and create your own map layer. Imported datasets can be in the shp (shapefile), zip or kml/kmz file format.",
+            "description": "You can import your own dataset to Paikkatietoikkuna as a map layer. Datasets can be in shp-, gpx- or mif/mid-format in a zip file or kmz format (zipped kml).",
             "actions": {
                 "cancel": "Cancel",
                 "next": "Next"
