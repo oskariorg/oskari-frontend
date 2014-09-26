@@ -623,7 +623,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                         }
                     });
                     editBtn.setEnabled(me.activeToolLayout === 'userlayout');
-                    editBtn.getElement().attr('id', 'editModeBtn');
+                    jQuery(editBtn.getElement()).attr('id', 'editModeBtn');
                     editBtn.insertTo(layoutContainer);
                 }
             }

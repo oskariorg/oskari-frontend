@@ -13,12 +13,23 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
         var me = this;
         me._clazz = 'Oskari.userinterface.component.MultiLevelSelect';
         me._element = document.createElement('fieldset');
+        me._name = null;
         me._selects = [];
         me._titleEl = document.createElement('legend');
         me._element.className = 'oskari-formcomponent oskari-multilevelselect';
         me._element.appendChild(me._titleEl);
-        me._value = [];
+        me._handlerInvactive = false;
     }, {
+
+        _destroyImpl: function (cleanup) {
+            // Call destroy on selects
+            var i;
+            if (!cleanup) {
+                for (i = this._selects.length -1; i >= 0; i -= 1) {
+                    this._selects.pop().destroy(true);
+                }
+            }
+        },
 
         /**
          * @method focus
@@ -70,27 +81,43 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
                         '.setOptions: optionsArray is not an array'
                 );
             }
+            if (optionsArray.some(function (options) {
+                return !options || !Array.isArray(options.options);
+            })) {
+                throw new TypeError(
+                    this.getClazz() +
+                        '.setOptions: invalid options in optionsArray'
+                );
+            }
             // TODO add a startIndex to this so we can only update selects
             // 'below' the changed value
             var me = this,
+                handler = me.getHandler(),
                 i,
                 j,
                 select,
-                currentCount = me._selects.length;
+                currentCount = me._selects.length,
+                oldValue,
+                dirty = false;
+
+            // Disable handler so it doesn't fire on each select
+            me._handlerInvactive = true;
 
             // Update selects
             for (i = 0, j = optionsArray.length; i < j; i += 1) {
                 if (i < currentCount) {
                     // Select element already exists, reuse it
+                    oldValue = me._selects[i].getValue();
                     me._setSelectOptions(
                         me._selects[i],
                         optionsArray[i],
-                        me._value[i]
+                        oldValue
                     );
+                    dirty = dirty || me._selects[i].getValue() !== oldValue;
                 } else {
                     // No select element, create a new one
-                    select = me._createSelect(optionsArray[i], me._value[i]);
-                    me._setSelectName(select, i);
+                    dirty = true;
+                    select = me._createSelect(optionsArray[i]);
                     select.insertTo(me.getElement());
                     me._selects.push(select);
                 }
@@ -98,11 +125,13 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
 
             // Remove extraneous selects
             for (currentCount -= 1; currentCount >= i; currentCount -= 1) {
-                me._selects.pop().destroy();
+                dirty = true;
+                me._selects.pop().destroy(false);
             }
-
-            // Re-enable selects
-            me.setEnabled(me.isEnabled());
+            me._handlerInvactive = false;
+            if (dirty) {
+                me._valueChanged();
+            }
         },
 
         /**
@@ -114,14 +143,21 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          */
         _createSelect: function (options, value) {
             'use strict';
+            if (!Array.isArray(options.options)) {
+                throw new TypeError(
+                    this.getClazz() +
+                        '._createSelect: options.options is not an array'
+                );
+            }
             var me = this,
                 select = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Select'
+                    'Oskari.userinterface.component.Select',
+                    me._name
                 );
             this._setSelectOptions(select, options, value);
             // Add changelistener that calls the user set listener...
             select.setHandler(function () {
-                me._selectionChanged();
+                me._valueChanged();
             });
             return select;
         },
@@ -140,26 +176,22 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
             if (options.multiple) {
                 select.setMultiple(true);
             }
-            select.setValue(value);
             select.setOptions(options.options);
+            if (value !== undefined) {
+                select.setValue(value);
+            }
         },
 
         /**
-         * @method _selectionChanged
+         * @method _valueChanged
          * @private
          * Called when selection is changed in any of the selects
          */
-        _selectionChanged: function () {
+        _valueChanged: function () {
             'use strict';
-            // Get changed select from event
-            var me = this;
-
-            me.setValue(me._selects.map(function (select) {
-                return select.getValue();
-            }));
             // Call user set handler if available
-            if (me.getHandler()) {
-                me.getHandler()(me.getValue());
+            if (!this._handlerInvactive && this.getHandler()) {
+                this.getHandler()(this.getValue());
             }
         },
 
@@ -175,42 +207,40 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
         },
 
         /**
-         * @method _setNameImpl
-         * @private
+         * @method getName
          */
-        _setNameImpl: function () {
+        getName: function () {
+            return this._name;
+        },
+
+        /**
+         * @method setName
+         * @param {String} name
+         */
+        setName: function (name) {
             'use strict';
             var me = this,
                 i;
 
-            me.getElement().name = me.getName();
-            for (i = me._selects.length - 1; i >= 0; i -= 1) {
-                me._setSelectName(me._selects[i], i);
-            }
+            me._name = name;
+            me._selects.forEach(function (select) {
+                select.name = name;
+            });
         },
 
         /**
-         * @method _setSelectName
-         * @private
-         * @param {Element} select
-         * @param {Number}     index
+         * @method getTitle
          */
-        _setSelectName: function (select, index) {
+        getTitle: function () {
             'use strict';
-            if (this.getName()) {
-                select.setName(this.getName() + '[' + index + ']');
-            } else {
-                select.setName();
-            }
+            return this._titleEl.textContent;
         },
 
         /**
-         * @method _setTitleImpl
-         * @private
+         * @method setTitle
          */
-        _setTitleImpl: function () {
+        setTitle: function (title) {
             'use strict';
-            var title = this.getTitle();
             this._titleEl.textContent = '';
             if (title !== null && title !== undefined) {
                 this._titleEl.style.display = '';
@@ -221,35 +251,75 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
         },
 
         /**
-         * @method _setTooltipImpl
-         * @private
+         * @method getTooltip
          */
-        _setTooltipImpl: function () {
+        getTooltip: function () {
             'use strict';
-            this.getElement().title = this.getTooltip();
+            return this.getElement().title;
         },
 
         /**
-         * @method _setValueImpl
-         * @private
+         * @method setTooltip
          */
-        _setValueImpl: function () {
+        setTooltip: function (tooltip) {
             'use strict';
+            this.getElement().title = tooltip;
+        },
+
+        /**
+         * @method getValue
+         */
+        getValue: function () {
+            'use strict';
+            return this._selects.map(function (select) {
+                return select.getValue();
+            });
+        },
+
+        /**
+         * @method setValue
+         */
+        setValue: function (value) {
+            'use strict';
+            var i,
+                select,
+                me = this,
+                oldValue,
+                dirty = false,
+                val = value;
             // Make sure set value is an array
-            if (this._value === null || this._value === undefined) {
-                this._value = [];
-            } else if (!Array.isArray(this._value)) {
+            if (val === null || val === undefined) {
+                val = [];
+            } else if (!Array.isArray(val)) {
                 throw new TypeError(
                     this.getClazz() +
                         '.setValue: value is not an array.'
                 );
             }
+            if (value.length > me._selects.length) {
+                throw new TypeError(
+                    this.getClazz() +
+                        '.setValue: more values than selects.'
+                );
+            }
+            me._handlerInvactive = true;
+            for (i = 0; i < value.length; i += 1) {
+                select = me._selects[i];
+                oldValue = select.getValue();
+                select.setValue(value[i]);
+                dirty = dirty || select.getValue() !== oldValue;
+            }
+            me._handlerInvactive = false;
+            if (dirty) {
+                me._valueChanged();
+            }
         },
 
         /**
          * @method _setVisibleImpl
+         * @param {Boolean} visible
          */
-        _setVisibleImpl: function () {
+        _setVisibleImpl: function (visible) {
             'use strict';
             this._element.style.display = this._visible ? '' : 'none';
         }
