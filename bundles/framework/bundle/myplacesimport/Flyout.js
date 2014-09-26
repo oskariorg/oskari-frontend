@@ -269,7 +269,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 this.instance.addUserLayer(json);
             } else {
                 title = null;
-                msg = locale.finish.failure.message;
+                msg = locale.finish.failure.title;
             }
 
             this.__showMessage(title, msg);
