@@ -75,10 +75,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          */
         setId: function (pId) {
             this.id = pId;
-            if (this.ui) {
-                this.ui.attr('id', pId);
+            if (this._element) {
+                this._element.id = pId;
             } else {
-                console.err("No UI");
+                console.warn("No UI");
             }
         },        
         /**
