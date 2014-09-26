@@ -52,9 +52,12 @@
         <div class="add-group-send">
             <div class="add-class-button-area">
                 <div class="input-controls">
+                    <% if(!model.getId()) { %>
                     <button class="add-class-btn admin-add-group-ok" title="<%= groupTitle === 'baseName' ? instance.getLocalization('admin').addNewBaseLayer : instance.getLocalization('admin').addNewGroupLayer %>"><%= instance.getLocalization('add') %></button>
-                     <% if(model.getId()) { %>
-                    <button class="add-class-btn admin-remove-group" data-id="<%= model.getId() %>" title="<%= instance.getLocalization('delete') %>"><%= instance.getLocalization('delete') %></button><% } %>
+                    <% } else { %>
+                    <button class="add-class-btn admin-add-group-ok" title="<%= groupTitle === 'baseName' ? instance.getLocalization('admin').addNewBaseLayer : instance.getLocalization('admin').addNewGroupLayer %>"><%= instance.getLocalization('save') %></button>
+                    <button class="add-class-btn admin-remove-group" data-id="<%= model.getId() %>" title="<%= instance.getLocalization('delete') %>"><%= instance.getLocalization('delete') %></button
+                    ><% } %>
                     <button class="add-class-btn admin-add-group-cancel" title="<%= instance.getLocalization('cancel') %>"><%= instance.getLocalization('cancel') %></button>
                 </div>
             </div>

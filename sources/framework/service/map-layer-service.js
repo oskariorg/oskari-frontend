@@ -598,6 +598,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             baseLayer.setRealtime(baseMapJson.realtime);
             baseLayer.setRefreshRate(baseMapJson.refreshRate);
+            
+            baseLayer.setAdmin(baseMapJson.admin);
 
             baseLayer.setDataUrl(baseMapJson.dataUrl);
             baseLayer.setMetadataIdentifier(baseMapJson.dataUrl_uuid);
