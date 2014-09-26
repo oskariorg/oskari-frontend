@@ -213,11 +213,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                         'source': layer.getSource(),
                         'isBase': layer.isBaseLayer()
                     });
+                    return;
                 }
                 var idDouble = false;
                 for (i=0; i < gridModel.data.length; i++) {
                     if (layer.getId() === gridModel.data[i].id) {
                         idDouble = true;
+                        console.log('foundTwice');
                         break;
                     }
                 }
