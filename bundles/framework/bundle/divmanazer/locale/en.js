@@ -231,11 +231,11 @@ Oskari.registerLocalization({
         },
         "Grid": {
             "columnSelector": {
-                "title": "NOT TRANSLATED",
+                "title": "Properties",
                 "tooltip": "NOT TRANSLATED"
             },
             "export": {
-                "title": "NOT TRANSLATED",
+                "title": "Export data",
                 "csv": "CSV",
                 "excel": "Excel"
             }
