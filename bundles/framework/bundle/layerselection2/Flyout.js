@@ -693,8 +693,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 //                        });
 //                        filterDialog.setClearButtonHandler(function(){
 //                        });
-                        filterDialog.setUpdateButtonHandler(function(){
-
+                        filterDialog.setUpdateButtonHandler(function(filters){
+                            // throw event to new wfs
+                            var event = me.instance.sandbox.getEventBuilder("WFSSetPropertyFilter")(filters, layer.getId());
+                            me.instance.sandbox.notifyAll(event);
                         });
 
 //                        icon.removeClass();

@@ -99,8 +99,9 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             updateButton.addClass('primary');
             updateButton.addClass('analyse-update-filter');
             updateButton.setHandler(function () {
+                var filtersJson = me.getFilterValues();   // Get the filter values from the dialog
                 // Validate the values for errors
-                filterErrors = me._validateFilterValues(filterJson);
+                filterErrors = me._validateFilterValues(filtersJson);
                 if (filterErrors) {
                     // If there were validation errors, notify the user of them
                     // and prevent refreshing the filter values.
@@ -109,7 +110,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                     // Else close the dialog
                     me.popup.close(true);
                     if (me._updateButtonHandler) {
-                        me._updateButtonHandler.apply();
+                        me._updateButtonHandler.call(me, filtersJson);
                     }
                 }
             });
@@ -541,7 +542,6 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 (!emptyFilter.attribute && !emptyFilter.value)) {
                 delete filterValues.filters;
             }
-debugger;
             return filterValues;
         },
 
