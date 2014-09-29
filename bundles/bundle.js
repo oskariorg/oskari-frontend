@@ -9,6 +9,16 @@
  * @to-do - class instance checks against class metadata - protocol
  *        implementation validation
  *
+ * 2014-09-25 additions
+ * - added documentation
+ * - backported cleaned up version from O2
+ * - dead code elimination
+ * - linted
+ * - marked private functions
+ * - reordered
+ * - sensible/descriptive naming
+ * - added type checks to arguments
+ *
  * 2012-11-30 additions
  * - dropped compatibility for pre 2010-04 classes
  * - removed fixed root package requirement 'Oskari.' - implementing namespaces
@@ -21,7 +31,6 @@
  *
  */
 Oskari = (function () {
-
     var isDebug = false,
         isConsole = window.console && window.console.debug,
         logMsg = function (msg) {
@@ -34,1384 +43,1005 @@ Oskari = (function () {
             }
             window.console.debug(msg);
 
-        },
-        /**
-         * @class Oskari.bundle_locale
-         */
-        bundle_locale = function () {
-            this.lang = null;
-            this.localizations = {};
-            this.supportedLocales = null;
         };
 
-    bundle_locale.prototype = {
+    /**
+     * @class Oskari.Bundle_locale
+     * A localisation registry
+     */
+    var Bundle_locale = function () {
+        this.lang = null;
+        this.localizations = {};
+        this.supportedLocales = null;
+    };
+
+    Bundle_locale.prototype = {
+
+        /**
+         * @public @method setLocalization
+         *
+         * @param {string}  lang  Language
+         * @param {string}  key   Key
+         * @param {string=} value Value
+         *
+         */
         setLocalization: function (lang, key, value) {
+            if (lang === null || lang === undefined) {
+                throw new TypeError(
+                    'setLocalization(): Missing lang'
+                );
+            }
+            if (key === null || key === undefined) {
+                throw new TypeError(
+                    'setLocalization(): Missing key'
+                );
+            }
             if (!this.localizations[lang]) {
                 this.localizations[lang] = {};
             }
             this.localizations[lang][key] = value;
         },
+
+        /**
+         * @public @method setLang
+         *
+         * @param {string} lang Language
+         *
+         */
         setLang: function (lang) {
+            if (lang === null || lang === undefined) {
+                throw new TypeError(
+                    'setLang(): Missing lang'
+                );
+            }
             this.lang = lang;
         },
+
+        /**
+         * @public @method setSupportedLocales
+         *
+         * @param {string[]} locales Locales array
+         *
+         */
         setSupportedLocales: function (locales) {
+            if (locales === null || locales === undefined) {
+                throw new TypeError(
+                    'setSupportedLocales(): Missing locales'
+                );
+            }
+            if (!Array.isArray(locales)) {
+                throw new TypeError(
+                    'setSupportedLocales(): locales is not an array'
+                );
+            }
             this.supportedLocales = locales;
         },
+
+        /**
+         * @public @method getLang
+         *
+         *
+         * @return {string} Language
+         */
         getLang: function () {
             return this.lang;
         },
+
+        /**
+         * @public @method getLocalization
+         *
+         * @param  {string} key Key
+         *
+         * @return {string}     Localized value for key 
+         */
         getLocalization: function (key) {
+            if (key === null || key === undefined) {
+                throw new TypeError(
+                    'getLocalization(): Missing key'
+                );
+            }
             return this.localizations[this.lang][key];
         },
+
+        /**
+         * @public @method getSupportedLocales
+         *
+         *
+         * @return {string[]} Supported locales 
+         */
         getSupportedLocales: function () {
             if (this.supportedLocales) {
                 return this.supportedLocales;
             }
             return [];
         },
+
+        /**
+         * @public @method getDefaultLanguage
+         *
+         *
+         * @return {string} Default language 
+         */
         getDefaultLanguage: function () {
             var locale = this.supportedLocales[0];
-            return locale.substring(0, locale.indexOf("_"));
+            // FIXME what do if indexOf === -1?
+            return locale.substring(0, locale.indexOf('_'));
         },
+
+        /**
+         * @public @method getSupportedLanguages
+         *
+         *
+         * @return {string[]} Supported languages 
+         */
         getSupportedLanguages: function () {
             var langs = [],
                 locale,
                 i;
+
             for (i = 0; i < this.supportedLocales.length; i += 1) {
                 locale = this.supportedLocales[i];
-                langs.push(locale.substring(0, locale.indexOf("_")));
+                // FIXME what do if indexOf === -1?
+                langs.push(locale.substring(0, locale.indexOf('_')));
             }
             return langs;
         }
     };
 
     /**
-     * let's create locale support
+     * singleton localisation registry instance
      */
-    var blocale = new bundle_locale(),
-        localesURL = null;
+    var blocale = new Bundle_locale();
 
-    /*
+    /**
      * 'dev' adds ?ts=<instTs> parameter to js loads 'default' does not add
      * 'static' assumes srcs are already loaded <any-other> is assumed as a
-     * request to load built js packs using this path pattern .../<bundles-path>/<bundle-name>/build/<any-ohther>.js
+     * request to load built js packs using this path pattern
+     * .../<bundles-path>/<bundle-name>/build/<any-ohther>.js
      */
     var supportBundleAsync = false,
-        mode = "dev",
+        mode = 'dev',
         // 'static' / 'dynamic'
         instTs = new Date().getTime(),
         basePathForBundles = null,
         pathBuilders = {
-            "default": function (fn, bpath) {
+
+            /**
+             * @public @method default
+             *
+             * @param  {string}  fileName File name
+             * @param  {string=} basePath Base path (unused)
+             *
+             * @return {string} 
+             */
+            'default': function (fileName, basePath) {
                 if (basePathForBundles) {
-                    return basePathForBundles + fn;
+                    return basePathForBundles + fileName;
                 }
-                return fn;
+                return fileName;
             },
-            "dev": function (fn, bpath) {
+
+            /**
+             * @public @method dev
+             *
+             * @param  {string}  fileName File name
+             * @param  {string=} basePath Base path (unused)
+             *
+             * @return {string} 
+             */
+            dev: function (fileName, basePath) {
                 if (basePathForBundles) {
-                    return basePathForBundles + fn + "?ts=" + instTs;
+                    return basePathForBundles + fileName + '?ts=' + instTs;
                 }
-                return fn + "?ts=" + instTs;
+                return fileName + '?ts=' + instTs;
             }
         };
 
-    function buildPathForLoaderMode(fn, bpath) {
+
+    /**
+     * @private @method _buildPathForLoaderMode
+     *
+     * @param  {string}  fileName File name
+     * @param  {string=} basePath Base path
+     *
+     * @return {string} 
+     */
+    function _buildPathForLoaderMode(fileName, basePath) {
         var pathBuilder = pathBuilders[mode];
         if (!pathBuilder) {
             if (basePathForBundles) {
-                return basePathForBundles + fn;
+                return basePathForBundles + fileName;
             }
-            return fn;
+            return fileName;
         }
 
-        return pathBuilder(fn, bpath);
+        return pathBuilder(fileName, basePath);
     }
 
-    var isNotPackMode = {
-        "dev": true,
-        "default": true,
-        "static": true
-    };
+    /**
+     * @private @property _isNotPackMode
+     */
+    var _isNotPackMode = {
+            dev: true,
+            'default': true,
+            'static': true
+        };
 
-    function isPackedMode() {
-        return !isNotPackMode[mode];
-    }
-
+    /**
+     * @private @property _preloaded
+     */
     var _preloaded = false;
 
-    function preloaded() {
+    /**
+     * @private @method _isPackedMode
+     *
+     *
+     * @return {boolean} 
+     */
+    function _isPackedMode() {
+        return !_isNotPackMode[mode];
+    }
+
+    /**
+     * @private @method _isPreloaded
+     *
+     *
+     * @return {boolean} 
+     */
+    function _isPreloaded() {
         return _preloaded;
     }
 
-    function buildPathForPackedMode(bpath) {
-        return bpath + "/build/" + mode + ".js";
-    }
-
-    function buildBundlePathForPackedMode(bpath) {
-        return bpath + "/build/bundle-" + mode + ".js";
-    }
-
-    function buildLocalePathForPackedMode(bpath) {
-        return bpath + "/build/" + mode + "-locale-" + blocale.getLang() + ".js";
+    /**
+     * @private @method _buildPathForPackedMode
+     *
+     * @param  {string} basePath Base path
+     *
+     * @return {string}          Build path for packed mode
+     */
+    function _buildPathForPackedMode(basePath) {
+        return basePath + '/build/' + mode + '.js';
     }
 
     /**
-     * @clazz Oskari.clazzadapter
+     * @private @method _buildBundlePathForPackedMode
      *
-     * This is an adapter class template that should not be used directly
+     * @param  {string} basePath Base path
+     *
+     * @return {string}          Bundle path for packed mode
      */
-    var clazzadapter = function (i, md) {
-        var p;
-        this.impl = i;
-
-        /* set overridden methods intentionally to instance */
-        for (p in md) {
-            if (md.hasOwnProperty(p)) {
-                this[p] = md[p];
-            }
-        }
-    };
-    clazzadapter.prototype = {
-        /**
-         * @method define
-         */
-        "define": function () {
-            throw "define not supported for this adapter " + this.impl;
-        },
-        /**
-         * @method category
-         *
-         * Adds a set of methods to classs prototype
-         *
-         * If no class definition exists this shall create a basic class
-         * definition as a placeholder for the actual class definition. This is
-         * required to support asynchronous javascript loading.
-         *
-         */
-        "category": function () {
-            throw "category not supported for this adapter " + this.impl;
-        },
-        /**
-         * @method create
-         *
-         * Creates an class instance initialized with constructors varargs
-         */
-        "create": function () {
-            throw "create not supported for this adapter " + this.impl;
-
-        },
-        /**
-         * @method construct
-         *
-         * Constructs an object initialised with a property object
-         */
-        "construct": function () {
-            throw "construct not supported for this adapter " + this.impl;
-
-        },
-        /**
-         * @method global
-         *
-         * Accesses or sets a global (in this context) variable value
-         */
-        "global": function () {
-            throw "global not supported for this adapter " + this.impl;
-
-        },
-        /**
-         * @method metadata
-         *
-         * Provides access to class metadata
-         *
-         */
-        "metadata": function () {
-            throw "metadata not supported for this adapter " + this.impl;
-
-        },
-        /**
-         * @method protocol
-         *
-         * Provides access to all classes that implement queried protocol
-         */
-        "protocol": function () {
-            throw "protocol not supported for this adapter " + this.impl;
-
-        },
-        "purge": function () {
-            throw "purge not supported for this adapter " + this.impl;
-        }
-    };
+    function _buildBundlePathForPackedMode(basePath) {
+        return basePath + '/build/bundle-' + mode + '.js';
+    }
 
     /**
-     * @class Oskari.clazzdef
+     * @private @method _buildLocalePathForPackedMode
      *
-     * A Container for any Oskari class definitions
+     * @param  {string} basePath Base path
+     *
+     * @return {string}          Locale path for packed mode
      */
-    var clazzdef = function () {
+    function _buildLocalePathForPackedMode(basePath) {
+        return basePath + '/build/' + mode + '-locale-' + blocale.getLang() +
+            '.js';
+    }
 
+    /**
+     * 
+     */
+    var O2ClassSystem = function () {
         this.packages = {};
         this.protocols = {};
         this.inheritance = {};
         this.aspects = {};
-        this.clazzcache = {};
-
+        this.classcache = {};
+        this.globals = {};
     };
-    /**
-     * @class Oskari.nativeadapter
-     *
-     * An Adapter to support Oskari class system
-     *
-     */
-    var nativeadapter = new clazzadapter(new clazzdef(), {
 
-        "purge": function () {
+    O2ClassSystem.prototype = {
 
-        },
         /**
-         * @method protocol
+         * @public @method purge
+         */
+        purge: function () {
+            // TODO implement & document?
+            return undefined;
+        },
+
+        /**
+         * @public @method protocol
          *
-         * Returns a property object with classes implementing queried protocol
+         * @param  {string} protocolName Protocol name
          *
-         * @param protocol
-         *            the name of the protocol as string
+         * @return {Object}              Protocol 
+         */
+        protocol: function (protocolName) {
+            if (protocolName === null || protocolName === undefined) {
+                throw new TypeError('protocol(): Missing protocolName');
+            }
+            return this.protocols[protocolName];
+        },
+
+        /**
+         * @private @method _getPackageDefinition
+         *
+         * @param  {string} packageName Package name
+         *
+         * @return {Object}             Package definition 
+         */
+        _getPackageDefinition: function (packageName) {
+            var packageDefinition = this.packages[packageName];
+
+            if (!packageDefinition) {
+                packageDefinition = {};
+                this.packages[packageName] = packageDefinition;
+            }
+            return packageDefinition;
+        },
+
+        /**
+         * @private @method _getClassQName
+         *
+         * @param  {string} className Class name
+         *
+         * @return {Object}           ClassQName
+         */
+        _getClassQName: function (className) {
+            var parts = className.split('.');
+
+            return {
+                basePkg: parts[0],
+                pkg: parts[1],
+                sp: parts.slice(2).join('.')
+            };
+        },
+
+        /**
+         * @private @method _getClassInfo
+         *
+         * @param  {string} className Class name
+         *
+         * @return {Object}           ClassInfo
+         */
+        _getClassInfo: function (className) {
+            var classInfo = this.classcache[className],
+                classQName = this._getClassQName(className),
+                packageDefinition;
+
+            if (!classInfo) {
+                packageDefinition = this._getPackageDefinition(classQName.pkg);
+                classInfo = packageDefinition[classQName.sp];
+                this.classcache[className] = classInfo;
+            }
+            return classInfo;
+        },
+
+        /**
+         * @private @method _cloneProperties
+         *
+         * @param {Object}          from
+         * @param {Object|Object[]} to
          *
          */
-        "protocol": function () {
-            var args = arguments;
-            if (args.length === 0) {
-                throw "missing arguments";
+        _cloneProperties: function (from, to) {
+            var i,
+                propertyName,
+                propertyValue,
+                toArray = Array.isArray(to) ? to : [to];
+
+            for (propertyName in from) {
+                if (from.hasOwnProperty(propertyName)) {
+                    propertyValue = from[propertyName];
+                    for (i = toArray.length - 1; i >= 0; i -= 1) {
+                        toArray[i][propertyName] = propertyValue;
+                    }
+                }
             }
-
-            // var cdef = args[0];
-
-            return this.impl.protocols[args[0]];
-
         },
+
         /**
-         * @method metadata
+         * @private @method _createEmptyClassDefinition
          *
+         *
+         * @return {function()} Empty function with an empty prototype
+         */
+        _createEmptyClassDefinition: function () {
+            var ret = function () {
+                return undefined;
+            };
+            ret.prototype = {};
+            return ret;
+        },
+
+        /**
+         * @public @method getMetadata
          * Returns metadata for the class
          *
-         * @param classname
-         *            the name of the class as string
-         */
-        "metadata": function () {
-            var args = arguments,
-                cdef,
-                pdefsp,
-                bp = null,
-                pp = null,
-                sp = null,
-                parts,
-                pdef;
-            if (args.length === 0) {
-                throw "missing arguments";
-            }
-
-            cdef = args[0];
-
-            pdefsp = this.impl.clazzcache[cdef];
-
-            if (!pdefsp) {
-                parts = cdef.split('.');
-                bp = parts[0];
-                pp = parts[1];
-                sp = parts.slice(2).join('.');
-
-                pdef = this.impl.packages[pp];
-                if (!pdef) {
-                    pdef = {};
-                    this.impl.packages[pp] = pdef;
-                }
-                pdefsp = pdef[sp];
-                this.impl.clazzcache[cdef] = pdefsp;
-
-            }
-
-            if (!pdefsp) {
-                throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
-            }
-
-            return pdefsp._metadata;
-
-        },
-        /**
-         * @method updateMetadata
-         * @private
+         * @param  {string} className Class name
          *
-         * Updates and binds class metadata
+         * @return {Object}           Class metadata 
          */
-        "updateMetadata": function (bp, pp, sp, pdefsp, classMeta) {
+        getMetadata: function (className) {
+            var classInfo;
+            if (className === null || className === undefined) {
+                throw new TypeError('metadata(): Missing className');
+            }
+            classInfo = this._getClassInfo(className);
+            if (!classInfo) {
+                throw 'Class ' + className + ' does not exist';
+            }
+            return classInfo._metadata;
+        },
+
+        /**
+         * @private @method _updateMetadata
+         * Updates and binds class metadata
+         *
+         * @param {string} basePkg   Base package
+         * @param {string} pkg       Package
+         * @param {string} sp        
+         * @param {Object} classInfo ClassInfo
+         * @param {Object} classMeta Class metadata
+         *
+         */
+        _updateMetadata: function (basePkg, pkg, sp, classInfo, classMeta) {
             var protocols,
                 p,
                 pt,
-                cn;
-            if (!pdefsp._metadata) {
-                pdefsp._metadata = {};
+                className;
+
+            if (!classInfo._metadata) {
+                classInfo._metadata = {};
             }
-
-            pdefsp._metadata.meta = classMeta;
-
+            classInfo._metadata.meta = classMeta;
+            className = [basePkg, pkg, sp].join('.');
             protocols = classMeta.protocol;
             if (protocols) {
                 for (p = 0; p < protocols.length; p += 1) {
                     pt = protocols[p];
-
-                    if (!this.impl.protocols[pt]) {
-                        this.impl.protocols[pt] = {};
+                    if (!this.protocols[pt]) {
+                        this.protocols[pt] = {};
                     }
-
-                    cn = bp + "." + pp + "." + sp;
-
-                    this.impl.protocols[pt][cn] = pdefsp;
+                    this.protocols[pt][className] = classInfo;
                 }
             }
-
         },
-        _super: function () {
-            var supCat = arguments[0],
-                supMet = arguments[1],
-                me = this;
+
+        /**
+         * @private @method _super
+         *
+         * @param  {string} supCat
+         * @param  {string} supMet
+         *
+         * @return
+         */
+        _super: function (supCat, supMet) {
+            var me = this;
+
             return function () {
                 return me._._superCategory[supCat][supMet].apply(me, arguments);
             };
         },
+
         /**
-         * @method define
+         * @public @method define Creates a class definition.
          *
-         * Creates a class definition
-         * @param {String}
-         *            classname the name of the class to be defined
-         * @param {Function}
-         *            constructor constructor function for the class
-         * @param {Object}
-         *            prototype a property object containing methods and
-         *            definitions for the class prototype
-         * @param {Object}
-         *            metadata optional metadata for the class
+         * @param  {string}   className        Class name
+         * @param  {function} classConstructor Class constructor function
+         * @param  {Object}   prototype        A property object containing
+         *                                     methods and definitions for the
+         *                                     class prototype
+         * @param  {Object}   metadata         Optional metadata for the class
+         *
+         * @return {Object}                    ClassInfo 
          */
-        define: function () {
-            var args = arguments,
-                cdef,
-                parts,
-                bp,
-                pp,
-                sp,
-                pdef,
-                pdefsp,
-                catFuncs,
-                prot,
-                pi,
-                catName,
-                extnds,
+        define: function (className, classConstructor, prototype, metadata) {
+            var classDefinition,
+                classQName,
+                composition,
+                packageDefinition,
+                classInfo,
                 e,
-                p,
-                superClazz,
-                cd,
-                compo;
-            if (args.length === 0) {
-                throw "missing arguments";
+                extnds,
+                superClass;
+
+            if (className === null || className === undefined) {
+                throw new TypeError('define(): Missing className');
             }
 
-            cdef = args[0];
-            parts = cdef.split('.');
-
-            /*
-             * bp base part pp package part sp rest
-             */
-            bp = parts[0];
-
-            pp = parts[1];
-
-            sp = parts.slice(2).join('.');
-
-            pdef = this.impl.packages[pp];
-            if (!pdef) {
-                pdef = {};
-                this.impl.packages[pp] = pdef;
+            if (typeof classConstructor !== 'function') {
+                throw new TypeError(
+                    'define(): classConstructor is not a function'
+                );
             }
 
-            pdefsp = pdef[sp];
-
-            if (pdefsp) {
-                // update constrcutor
-                pdefsp._constructor = args[1];
-
-                // update prototype
-                catFuncs = args[2];
-                prot = pdefsp._class.prototype;
-
-                for (p in catFuncs) {
-                    if (catFuncs.hasOwnProperty(p)) {
-                        pi = catFuncs[p];
-                        prot[p] = pi;
-                    }
-                }
-                catName = cdef;
-                pdefsp._category[catName] = catFuncs;
-                if (args.length > 3) {
-
-                    extnds = args[3].extend;
-                    for (e = 0; extnds && e < extnds.length; e += 1) {
-                        superClazz = this.lookup(extnds[e]);
-                        if (!superClazz._composition.subClazz) {
-                            superClazz._composition.subClazz = {};
-                        }
-                        superClazz._composition.subClazz[extnds[e]] = pdefsp;
-                        pdefsp._composition.superClazz = superClazz;
-                    }
-
-                    this.updateMetadata(bp, pp, sp, pdefsp, args[3]);
-                }
-
-                this.pullDown(pdefsp);
-                this.pushDown(pdefsp);
-
-                return pdefsp;
+            // Prototype is undefined for Oskari._.1
+            if (prototype && typeof prototype !== 'object') {
+                throw new TypeError('define(): Prototype is not an object');
             }
 
-            cd = function () {};
-            compo = {
-                clazzName: cdef,
-                superClazz: null,
-                subClazz: null
-            };
-            cd.prototype = {};
-            //args[2];
-            pdefsp = {
-                _class: cd,
-                _constructor: args[1],
-                _category: {},
-                _composition: compo
-            };
-            cd.prototype._ = pdefsp;
-            cd.prototype._super = this._super;
+            classQName = this._getClassQName(className);
+            packageDefinition = this._getPackageDefinition(classQName.pkg);
+            classInfo = packageDefinition[classQName.sp];
 
+            if (!classInfo) {
+                classDefinition = this._createEmptyClassDefinition();
+                composition = {
+                    className: className,
+                    superClass: null,
+                    subClass: null
+                };
+
+                classInfo = {
+                    _class: classDefinition,
+                    _constructor: classConstructor,
+                    _category: {},
+                    _composition: composition
+                };
+                classDefinition.prototype._ = classInfo;
+                classDefinition.prototype._super = this._super;
+                this.inheritance[className] = composition;
+                packageDefinition[classQName.sp] = classInfo;
+            }
+            // update constrcutor
+            if (classConstructor) {
+                classInfo._constructor = classConstructor;
+            }
             // update prototype
-            catFuncs = args[2];
-            prot = cd.prototype;
-
-            for (p in catFuncs) {
-                if (catFuncs.hasOwnProperty(p)) {
-                    pi = catFuncs[p];
-                    prot[p] = pi;
-                }
+            if (prototype) {
+                this._cloneProperties(prototype, classInfo._class.prototype);
+                classInfo._category[className] = prototype;
             }
-            catName = cdef;
-            pdefsp._category[catName] = catFuncs;
-
-            this.impl.inheritance[cdef] = compo;
-            pdef[sp] = pdefsp;
-
-            catName = cdef;
-            pdefsp._category[catName] = args[2];
-
-            if (args.length > 3) {
-
-                extnds = args[3].extend;
+            // update metadata
+            if (metadata) {
+                extnds = metadata.extend;
                 for (e = 0; extnds && e < extnds.length; e += 1) {
-                    superClazz = this.lookup(extnds[e]);
-                    if (!superClazz._composition.subClazz) {
-                        superClazz._composition.subClazz = {};
+                    superClass = this.lookup(extnds[e]);
+                    if (!superClass._composition.subClass) {
+                        superClass._composition.subClass = {};
                     }
-                    superClazz._composition.subClazz[cdef] = pdefsp;
-                    pdefsp._composition.superClazz = superClazz;
+                    superClass._composition.subClass[className] = classInfo;
+                    classInfo._composition.superClass = superClass;
                 }
-
-                this.updateMetadata(bp, pp, sp, pdefsp, args[3]);
+                this._updateMetadata(
+                    classQName.basePkg,
+                    classQName.pkg,
+                    classQName.sp,
+                    classInfo,
+                    metadata
+                );
             }
-            this.pullDown(pdefsp);
-            this.pushDown(pdefsp);
-
-            return pdefsp;
+            this._pullDown(classInfo);
+            this._pushDown(classInfo);
+            return classInfo;
         },
+
         /**
-         * @method category
+         * @public @method category
+         * Adds some logical group of methods to class prototype
+         * Oskari.clazz.category(
+         * 'Oskari.mapframework.request.common.' +
+         * 'ActivateOpenlayersMapControlRequest',
+         * 'map-layer-funcs',{ "xxx": function () {} }
+         * );
          *
-         * adds some logical group of methods to class prototype
+         * @param  {string} className    Class name
+         * @param  {string} categoryName Category name
+         * @param  {Object} prototype    Prototype
          *
-         * Oskari.clazz.category('Oskari.mapframework.request.common.ActivateOpenlayersMapControlRequest',
-         * 'map-layer-funcs',{ "xxx": function() {} });
+         * @return {Object}              ClassInfo
          */
-        category: function () {
-            var args = arguments,
-                cdef,
-                parts,
-                bp,
-                pp,
-                sp,
-                pdef,
-                pdefsp,
-                cd,
-                compo,
-                catName,
-                catFuncs,
-                prot,
-                pi,
-                p;
-            if (args.length === 0) {
-                throw "missing arguments";
+        category: function (className, categoryName, prototype) {
+            var classDefinition,
+                classInfo,
+                classQName,
+                composition,
+                packageDefinition,
+                prot;
+
+            if (className === null || className === undefined) {
+                throw new TypeError('category(): Missing className');
             }
 
-            cdef = args[0];
-            parts = cdef.split('.');
-            /*
-             * bp base part pp package part sp rest
-             */
-            bp = parts[0];
+            classQName = this._getClassQName(className);
+            packageDefinition = this._getPackageDefinition(classQName.pkg);
+            classInfo = packageDefinition[classQName.sp];
 
-            pp = parts[1];
-
-            sp = parts.slice(2).join('.');
-
-            pdef = this.impl.packages[pp];
-            if (!pdef) {
-                pdef = {};
-                this.impl.packages[pp] = pdef;
-            }
-            pdefsp = pdef[sp];
-
-            if (!pdefsp) {
-                cd = function () {};
-                compo = {
-                    clazzName: cdef,
-                    superClazz: null,
-                    subClazz: null
+            if (!classInfo) {
+                classDefinition = this._createEmptyClassDefinition();
+                composition = {
+                    className: className,
+                    superClass: null,
+                    subClass: null
                 };
-                cd.prototype = {};
-                pdefsp = {
-                    _class: cd,
-                    _constructor: args[1],
+                // TODO why do we set categoryName as constructor?
+                classInfo = {
+                    _class: classDefinition,
+                    _constructor: categoryName,
                     _category: {},
-                    _composition: compo
+                    _composition: composition
                 };
-                cd.prototype._ = pdefsp;
-                cd.prototype._super = this._super;
-                this.impl.inheritance[cdef] = compo;
-                pdef[sp] = pdefsp;
-
+                classDefinition.prototype._ = classInfo;
+                classDefinition.prototype._super = this._super;
+                this.inheritance[className] = composition;
+                packageDefinition[classQName.sp] = classInfo;
             }
-
-            catName = args[1];
-            catFuncs = args[2];
-            prot = pdefsp._class.prototype;
-
-            for (p in catFuncs) {
-                if (catFuncs.hasOwnProperty(p)) {
-                    pi = catFuncs[p];
-                    prot[p] = pi;
-                }
+            prot = classInfo._class.prototype;
+            this._cloneProperties(prototype, prot);
+            if (prototype) {
+                classInfo._category[categoryName] = prototype;
             }
-
-            pdefsp._category[catName] = catFuncs;
-
-            this.pullDown(pdefsp);
-            this.pushDown(pdefsp);
-
-            return pdefsp;
+            this._pullDown(classInfo);
+            this._pushDown(classInfo);
+            return classInfo;
         },
+
         /**
-         * @method inherit
+         * @public @method lookup
          *
-         * adds impl from super class to class prototype
+         * @param  {string} className   Class name
+         * @param           constructor Constructor
          *
-         * THIS is done as follows
-         * -
-         *
+         * @return {Object}             ClassInfo 
          */
-        lookup: function () {
-            var args = arguments,
-                cdef,
-                parts,
-                bp,
-                pp,
-                sp,
-                pdef,
-                pdefsp,
-                cd,
-                compo;
-            if (args.length === 0) {
-                throw "missing arguments";
+        lookup: function (className, constructor) {
+            var classDefinition,
+                classQName,
+                composition,
+                packageDefinition,
+                classInfo;
+
+            if (className === null || className === undefined) {
+                throw new TypeError('lookup(): Missing className');
             }
+            // TODO constructor seems to be undefined all the time?
 
-            cdef = args[0];
-            parts = cdef.split('.');
-            /*
-             * bp base part pp package part sp rest
-             */
-            bp = parts[0];
+            classQName = this._getClassQName(className);
+            packageDefinition = this._getPackageDefinition(classQName.pkg);
+            classInfo = packageDefinition[classQName.sp];
 
-            pp = parts[1];
-
-            sp = parts.slice(2).join('.');
-
-            pdef = this.impl.packages[pp];
-            if (!pdef) {
-                pdef = {};
-                this.impl.packages[pp] = pdef;
-            }
-            pdefsp = pdef[sp];
-
-            if (!pdefsp) {
-                cd = function () {};
-                cd.prototype = {};
-                compo = {
-                    clazzName: cdef,
-                    superClazz: null,
-                    subClazz: null
+            if (!classInfo) {
+                classDefinition = this._createEmptyClassDefinition();
+                composition = {
+                    className: className,
+                    superClass: null,
+                    subClass: null
                 };
-                if (args[1] === null || args[1] === undefined) {
-                    if (console && console.warn) {
-                        console.warn("No constructor for superClazz", cdef);
-                    }
-                }
-                pdefsp = {
-                    _class: cd,
-                    _constructor: args[1],
+                classInfo = {
+                    _class: classDefinition,
+                    _constructor: constructor,
                     _category: {},
-                    _composition: compo
+                    _composition: composition
                 };
-                this.impl.inheritance[cdef] = compo;
-                pdef[sp] = pdefsp;
+                this.inheritance[className] = composition;
+                packageDefinition[classQName.sp] = classInfo;
             }
-
-            return pdefsp;
+            return classInfo;
         },
-        extend: function () {
-            var args = arguments,
-                superClazz = this.lookup(args[1]),
-                subClazz = this.lookup(args[0]);
-            if (!superClazz._composition.subClazz) {
-                superClazz._composition.subClazz = {};
-            }
-            superClazz._composition.subClazz[args[0]] = subClazz;
-            subClazz._composition.superClazz = superClazz;
-            this.pullDown(subClazz);
-            return subClazz;
-        },
-        composition: function () {
-            var cdef = arguments[0],
-                pdefsp = this.impl.clazzcache[cdef],
-                bp = null,
-                pp = null,
-                sp = null,
-                parts,
-                pdef;
-            if (!pdefsp) {
-                parts = cdef.split('.');
-                bp = parts[0];
-                pp = parts[1];
-                sp = parts.slice(2).join('.');
 
-                pdef = this.impl.packages[pp];
-                if (!pdef) {
-                    pdef = {};
-                    this.impl.packages[pp] = pdef;
-                }
-                pdefsp = pdef[sp];
-                this.impl.clazzcache[cdef] = pdefsp;
-
-            }
-
-            return pdefsp;
-        },
         /**
-         * @method pushDown
+         * @public @method extend
          *
-         * force each derived class to pullDown
-         * some overhead here if complex hierarchies are
-         * implemented
+         * @param  {string} subClassName   SubClass name
+         * @param  {string} superClassName SuperClass name
          *
+         * @return {Object}                SubClass
          */
-        pushDown: function (pdefsp) {
-            var sub,
+        extend: function (subClassName, superClassName) {
+            var superClass,
+                subClass;
+
+            if (subClassName === null || subClassName === undefined) {
+                throw new TypeError('extend(): Missing subClassName');
+            }
+
+            if (superClassName === null || superClassName === undefined) {
+                throw new TypeError('extend(): Missing superClassName');
+            }
+
+            superClass = this.lookup(superClassName);
+            subClass = this.lookup(subClassName);
+
+            if (!superClass._composition.subClass) {
+                superClass._composition.subClass = {};
+            }
+            superClass._composition.subClass[subClassName] = subClass;
+            subClass._composition.superClass = superClass;
+            this._pullDown(subClass);
+            return subClass;
+        },
+
+        /**
+         * @private @method _pushDown
+         * Force each derived class to pullDown.
+         * Some overhead here if complex hierarchies are implemented.
+         *
+         * @param  {Object} classInfo ClassInfo
+         *
+         * @return {Object}           ClassInfo
+         */
+        _pushDown: function (classInfo) {
+            var subName,
                 pdefsub;
+
+            if (classInfo === null || classInfo === undefined) {
+                throw new TypeError('_pushDown(): Missing classInfo');
+            }
+
             /* !self */
-            if (!pdefsp._composition.subClazz) {
+            if (!classInfo._composition.subClass) {
                 return;
             }
-            for (sub in pdefsp._composition.subClazz) {
-                if (pdefsp._composition.subClazz.hasOwnProperty(sub)) {
-                    pdefsub = pdefsp._composition.subClazz[sub];
-                    this.pullDown(pdefsub);
-                    this.pushDown(pdefsub);
+            for (subName in classInfo._composition.subClass) {
+                if (classInfo._composition.subClass.hasOwnProperty(subName)) {
+                    pdefsub = classInfo._composition.subClass[subName];
+                    this._pullDown(pdefsub);
+                    this._pushDown(pdefsub);
                 }
             }
+            return classInfo;
         },
+
         /**
-         * @method pullDown
-         *
+         * @private @method _pullDown
          * EACH class is responsible for it's entire hierarchy
          * no intermediate results are being consolidated
          *
-         */
-        pullDown: function (pdefsp) {
-            var clazzHierarchy = [],
-                funcs = {},
-                spr,
-                prot,
-                constructors = [],
-                superClazzMethodCats = {},
-                s,
-                cn,
-                ctor,
-                superClazzMetCat,
-                c,
-                catName,
-                catFuncs,
-                p,
-                pi;
-            if (!pdefsp._composition.superClazz) {
-                return;
-            }
-            clazzHierarchy.push(pdefsp);
-            spr = pdefsp;
-            while (true) {
-                spr = spr._composition.superClazz;
-                if (!spr) {
-                    break;
-                }
-                clazzHierarchy.push(spr);
-            }
-
-            prot = pdefsp._class.prototype;
-            for (s = clazzHierarchy.length - 1; s >= 0; s -= 1) {
-                cn = clazzHierarchy[s]._composition.clazzName;
-
-                ctor = clazzHierarchy[s]._constructor;
-                constructors.push(ctor);
-
-                superClazzMetCat = {};
-                for (c in clazzHierarchy[s]._category) {
-                    if (clazzHierarchy[s]._category.hasOwnProperty(c)) {
-                        catName = cn + "#" + c;
-                        catFuncs = clazzHierarchy[s]._category[c];
-                        for (p in catFuncs) {
-                            if (catFuncs.hasOwnProperty(p)) {
-                                pi = catFuncs[p];
-                                prot[p] = pi;
-                                superClazzMetCat[p] = pi;
-                            }
-                        }
-                    }
-                }
-                superClazzMethodCats[cn] = superClazzMetCat;
-            }
-            pdefsp._constructors = constructors;
-            pdefsp._superCategory = superClazzMethodCats;
-            // FIXME clazz is undefined
-            return clazz;
-        },
-        /**
-         * @method printAncestry
-         * prints class inheritance to console
-         */
-        printAncestry: function () {
-            var pdefsp = this.lookup.apply(this, arguments),
-                clazzHierarchy = [],
-                spr,
-                s;
-            if (!pdefsp._composition.superClazz) {
-                return;
-            }
-
-            clazzHierarchy.push(pdefsp);
-
-            spr = pdefsp;
-            while (true) {
-                spr = spr._composition.superClazz;
-                if (!spr) {
-                    break;
-                }
-                clazzHierarchy.push(spr);
-            }
-            for (s = clazzHierarchy.length - 1; s >= 0; s -= 1) {
-                if (console && console.log) {
-                    console.log("                 ".substring(0, clazzHierarchy.length - s) + "|_ " + clazzHierarchy[s]._composition.clazzName);
-                }
-            }
-        },
-        /**
-         * @method printHierarchy
-         * print subclasses to console
-         */
-        printHierarchy: function () {
-            var pdefsp = this.lookup.apply(this, arguments),
-                clazzHierarchy = [],
-                taskList = [],
-                task,
-                pdefc,
-                pdefsub,
-                p,
-                s;
-            if (!pdefsp._composition.subClazz) {
-                return;
-            }
-
-
-            taskList.push({
-                c: null,
-                sub: pdefsp,
-                level: 0
-            });
-
-            while (true) {
-                task = taskList.shift();
-                if (!task) {
-                    break;
-                }
-                /*clazzHierarchy.push({ level: task.level, sub: task.sub });*/
-                clazzHierarchy.push("                 ".substring(0, task.level) + "|_ " + task.sub._composition.clazzName);
-
-                pdefc = task.c;
-                pdefsub = task.sub;
-                if (!pdefsub._composition.subClazz) {
-                    continue;
-                }
-
-                for (p in pdefsub._composition.subClazz) {
-                    if (pdefsub._composition.subClazz.hasOwnProperty(p)) {
-                        taskList.push({
-                            c: pdefc,
-                            sub: pdefsub._composition.subClazz[p],
-                            level: task.level + 1
-                        });
-                    }
-                }
-            }
-
-            for (s = 0; s < clazzHierarchy.length; s += 1) {
-                if (console && console.log) {
-                    console.log(clazzHierarchy[s]);
-                }
-            }
-
-        },
-        /**
-         * @method apropos
-         */
-        apropos: function () {
-            var pdefsp = this.lookup.apply(this, arguments),
-                p;
-
-            for (p in pdefsp._category[arguments[0]]) {
-                if (pdefsp._category[arguments[0]].hasOwnProperty(p)) {
-                    if (console && console.log) {
-                        console.log(p);
-                    }
-                }
-            }
-        },
-        slicer: Array.prototype.slice,
-
-        /*
-         * @method create
+         * @param  {Object} classInfo ClassInfo
          *
-         * creates a class instance THIS is for compatibility mode only
-         * construct should be used for new classes
-         *
-         * var x =
-         * Oskari.clazz.create('Oskari.mapframework.request.common.ActivateOpenlayersMapControlRequest','12313');
+         * @return {Object}           ClassInfo 
          */
-        create: function () {
-            var args = arguments,
-                instargs,
-                cdef,
-                pdef,
-                pdefsp,
-                bp,
-                pp,
-                sp,
-                parts,
-                inst,
-                ctors,
-                c;
-            if (args.length === 0) {
-                throw "missing arguments";
+        _pullDown: function (classInfo) {
+            var i,
+                category,
+                clazz,
+                classHierarchy,
+                className,
+                classConstructor,
+                classMethods,
+                classPrototype,
+                prototype,
+                superClassInfo;
+
+            if (classInfo === null || classInfo === undefined) {
+                throw new TypeError('_pullDown(): Missing classInfo');
             }
-            instargs = this.slicer.apply(arguments, [1]);
-            /*[];
-             for(var n = 1; n < args.length; n++)
-             instargs.push(args[n]);*/
 
-            cdef = args[0];
-
-            pdefsp = this.impl.clazzcache[cdef];
-
-            bp = null;
-            pp = null;
-            sp = null;
-            if (!pdefsp) {
-                parts = cdef.split('.');
-                bp = parts[0];
-                pp = parts[1];
-                sp = parts.slice(2).join('.');
-
-                pdef = this.impl.packages[pp];
-                if (!pdef) {
-                    pdef = {};
-                    this.impl.packages[pp] = pdef;
+            if (!classInfo._composition.superClass) {
+                // Class doesn't extend
+                return;
+            }
+            // Class hierarchy from bottom (i.e. given class) up
+            classHierarchy = [];
+            classHierarchy.push(classInfo);
+            superClassInfo = classInfo;
+            while (true) {
+                superClassInfo = superClassInfo._composition.superClass;
+                if (!superClassInfo) {
+                    break;
                 }
-                pdefsp = pdef[sp];
-                this.impl.clazzcache[cdef] = pdefsp;
-
+                classHierarchy.push(superClassInfo);
             }
 
-            if (!pdefsp) {
-                throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
-            }
-
-            inst = new pdefsp._class();
-            ctors = pdefsp._constructors;
-            if (ctors) {
-                for (c = 0; c < ctors.length; c += 1) {
-                    if (ctors[c] === null || ctors[c] === undefined) {
-                        throw "Undefined constructor in clazz " + sp;
+            classInfo._constructors = [];
+            classInfo._superCategory = {};
+            classPrototype = classInfo._class.prototype;
+            // Traverse class hierarchy from topmost super to given class,
+            // add found methods to class info
+            for (i = classHierarchy.length - 1; i >= 0; i -= 1) {
+                clazz = classHierarchy[i];
+                className = clazz._composition.className;
+                classConstructor = clazz._constructor;
+                classInfo._constructors.push(classConstructor);
+                classMethods = {};
+                // TODO explain categories?
+                for (category in clazz._category) {
+                    if (clazz._category.hasOwnProperty(category)) {
+                        prototype = clazz._category[category];
+                        this._cloneProperties(
+                            prototype,
+                            [classPrototype, classMethods]
+                        );
                     }
-                    ctors[c].apply(inst, instargs);
+                }
+                classInfo._superCategory[className] = classMethods;
+            }
+            return classInfo;
+        },
+
+        /**
+         * @private @method _slicer
+         */
+        _slicer: Array.prototype.slice,
+
+        /**
+         * @public @method create
+         * Creates a class instance
+         *
+         * @param  {string} className Class name
+         *
+         * @return {Object}           Class instance
+         */
+        create: function (className) {
+            var classInfo,
+                classInstance,
+                constructors,
+                i,
+                instanceArguments;
+
+            if (className === null || className === undefined) {
+                throw new TypeError('create(): Missing className');
+            }
+
+            instanceArguments = this._slicer.apply(arguments, [1]);
+            classInfo = this._getClassInfo(className);
+            if (!classInfo) {
+                // If this error is thrown,
+                // the class definition is missing.
+                // Ensure the file has been loaded before use
+                throw 'Class ' + className + ' does not exist';
+            }
+            classInstance = new classInfo._class();
+            constructors = classInfo._constructors;
+
+            if (constructors) {
+                // Class is extended, call super constructors first?
+                for (i = 0; i < constructors.length; i += 1) {
+                    // If an error occurs below, the constructor is missing.
+                    // Ensure the file has been loaded before use.
+                    // Note! check extends classes as well, those might also be
+                    // missing.
+                    constructors[i].apply(classInstance, instanceArguments);
                 }
             } else {
-                pdefsp._constructor.apply(inst, instargs);
+                classInfo._constructor.apply(classInstance, instanceArguments);
             }
-            return inst;
+            return classInstance;
         },
-        createWithPdefsp: function () {
-            var args = arguments,
-                instargs,
-                pdefsp,
-                inst,
-                ctors,
-                c;
-            if (args.length === 0) {
-                throw "missing arguments";
-            }
-            instargs = arguments[1];
-            pdefsp = args[0];
-            if (!pdefsp) {
-                throw "clazz does not exist ";
-            }
 
-            inst = new pdefsp._class();
-            ctors = pdefsp._constructors;
-            if (ctors) {
-                for (c = 0; c < ctors.length; c += 1) {
-                    ctors[c].apply(inst, instargs);
+        /**
+         * @public @method createWithClassInfo
+         *
+         * @param  {Object} classInfo         ClassInfo
+         * @param  {[]}     instanceArguments Instance arguments
+         *
+         * @return {Object}                   Class instance
+         */
+        createWithClassInfo: function (classInfo, instanceArguments) {
+            var classInstance,
+                constructors,
+                i;
+
+            if (classInfo === null || classInfo === undefined) {
+                throw new TypeError('createWithClassInfo(): Missing classInfo');
+            }
+            // TODO check instanceArguments?
+            classInstance = new classInfo._class();
+            constructors = classInfo._constructors;
+            if (constructors) {
+                for (i = 0; i < constructors.length; i += 1) {
+                    if (constructors[i] === null ||
+                            constructors[i] === undefined) {
+                        throw new Error(
+                            'createWithClassInfo(): Undefined constructor in ' +
+                                'class ' + classInfo._composition.className
+                        );
+                    }
+                    constructors[i].apply(classInstance, instanceArguments);
                 }
             } else {
-                pdefsp._constructor.apply(inst, instargs);
+                classInfo._constructor.apply(classInstance, instanceArguments);
             }
-            return inst;
+            return classInstance;
         },
+
         /**
-         * @method construct
-         *
-         * constructs class instance assuming props as single argument to
-         * constructor
-         *
-         *
-         */
-        construct: function () {
-            var args = arguments,
-                cdef,
-                instprops,
-                pdefsp,
-                bp = null,
-                pp = null,
-                sp = null,
-                parts,
-                pdef,
-                inst;
-            if (args.length !== 2) {
-                throw "missing arguments";
-            }
-
-            cdef = args[0];
-            instprops = args[1];
-
-            pdefsp = this.impl.clazzcache[cdef];
-
-            if (!pdefsp) {
-                parts = cdef.split('.');
-                bp = parts[0];
-                pp = parts[1];
-                sp = parts.slice(2).join('.');
-
-                pdef = this.impl.packages[pp];
-                if (!pdef) {
-                    pdef = {};
-                    this.impl.packages[pp] = pdef;
-                }
-                pdefsp = pdef[sp];
-                this.impl.clazzcache[cdef] = pdefsp;
-
-            }
-
-            if (!pdefsp) {
-                throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
-            }
-
-            inst = new pdefsp._class();
-            pdefsp._constructor.apply(inst, [instprops]);
-            return inst;
-        },
-        /**
-         * @builder
-         *
+         * @public @method builder
          * Implements Oskari frameworks support for cached class instance
-         * builders
-         * @param classname
-         */
-        builder: function () {
-            var args = arguments,
-                cdef,
-                pdefsp,
-                bp = null,
-                pp = null,
-                sp = null,
-                parts,
-                pdef,
-                instargs,
-                inst,
-                ctors,
-                c;
-            if (args.length === 0) {
-                throw "missing arguments";
-            }
-
-            cdef = args[0];
-            pdefsp = this.impl.clazzcache[cdef];
-
-            if (!pdefsp) {
-                parts = cdef.split('.');
-                bp = parts[0];
-                pp = parts[1];
-                sp = parts.slice(2).join('.');
-
-                pdef = this.impl.packages[pp];
-                if (!pdef) {
-                    pdef = {};
-                    this.impl.packages[pp] = pdef;
-                }
-                pdefsp = pdef[sp];
-                this.impl.clazzcache[cdef] = pdefsp;
-
-            }
-
-            if (!pdefsp) {
-                throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
-            }
-
-            if (pdefsp._builder) {
-                return pdefsp._builder;
-            }
-
-            pdefsp._builder = function () {
-                instargs = arguments;
-                inst = new pdefsp._class();
-                ctors = pdefsp._constructors;
-                if (ctors) {
-                    for (c = 0; c < ctors.length; c += 1) {
-                        ctors[c].apply(inst, instargs);
-                    }
-                }
-                pdefsp._constructor.apply(inst, instargs);
-                return inst;
-            };
-            return pdefsp._builder;
-
-        },
-        /**
-         * @builder
+         * builders.
          *
-         * Implements Oskari frameworks support for cached class instance
-         * builders
-         * @param classname
+         * @param  {string}   className Class name
+         *
+         * @return {function}           Class builder
          */
-        builderFromPdefsp: function () {
-            var args = arguments,
-                pdefsp,
-                instargs,
-                inst,
-                ctors,
-                c;
-            if (args.length === 0) {
-                throw "missing arguments";
+        builder: function (className) {
+            var classInfo;
+
+            if (className === null || className === undefined) {
+                throw new TypeError('builder(): Missing className');
             }
 
-            pdefsp = args[0];
+            classInfo = this._getClassInfo(className);
+            if (!classInfo) {
+                throw 'Class ' + className + ' does not exist';
+            }
+            return this.getBuilderFromClassInfo(classInfo);
+        },
 
-            if (!pdefsp) {
-                throw "pdefsp not defined.";
+        /**
+         * @public @method getBuilderFromClassInfo
+         * Implements Oskari frameworks support for cached class instance
+         * builders.
+         *
+         * @param  {Object}   classInfo ClassInfo
+         *
+         * @return {function}           Class builder
+         */
+        getBuilderFromClassInfo: function (classInfo) {
+            if (classInfo === null || classInfo === undefined) {
+                throw new TypeError(
+                    'getBuilderFromClassInfo(): Missing classInfo'
+                );
             }
 
-            if (pdefsp._builder) {
-                return pdefsp._builder;
+            if (classInfo._builder) {
+                return classInfo._builder;
             }
+            classInfo._builder = function () {
+                var classInstance = new classInfo._class(),
+                    constructors = classInfo._constructors,
+                    i,
+                    instanceArguments = arguments;
 
-            pdefsp._builder = function () {
-                instargs = arguments;
-                inst = new pdefsp._class();
-                ctors = pdefsp._constructors;
-                if (ctors) {
-                    for (c = 0; c < ctors.length; c += 1) {
-                        ctors[c].apply(inst, instargs);
+                if (constructors) {
+                    for (i = 0; i < constructors.length; i += 1) {
+                        constructors[i].apply(classInstance, instanceArguments);
                     }
                 } else {
-                    pdefsp._constructor.apply(inst, instargs);
+                    classInfo._constructor.apply(
+                        classInstance,
+                        instanceArguments
+                    );
                 }
-                return inst;
+                return classInstance;
             };
-            return pdefsp._builder;
-
-        }
-
-    });
-
-    /**
-     * @class Oskari.clazz
-     * @singleton
-     *
-     * Container for Oskari's class definitions Supports multiple adapters for
-     * different class libraries
-     *
-     */
-    var clazz = function (regExp, adapter) {
-        this.defRex = new RegExp(regExp);
-        this.def = adapter;
-        this.hasOtherNs = false;
-        this.ns = {};
-        this.alias = {};
-
-        this.globals = {};
-    };
-
-    clazz.prototype = {
-
-        get: function () {
-            var args = arguments,
-                parts,
-                bp,
-                ai;
-            if (!this.hasOtherNs || this.defRex.test(args[0])) {
-                return this.def;
-            }
-
-            parts = args[0].split('.');
-            bp = parts[0];
-            ai = this.ns[bp];
-            if (!ai) {
-                throw "clazz: ns NOT bound " + bp;
-            }
-            return ai;
+            return classInfo._builder;
         },
-        /*
-         * @method self @param adapter identifier
-         *
-         * returns class adapter for the given class libray
-         *
-         */
-        self: function (bp) {
-            var ai = this.ns[bp];
-            if (!ai) {
-                throw "clazz: ns NOT bound " + bp;
-            }
 
-            return ai.self;
-        },
         /**
-         * @method adapt
+         * @private @method _global
          *
-         * registers an adapter to the class system
-         */
-        adapt: function (base, adapter) {
-            this.ns[base] = adapter;
-            this.hasOtherNs = true;
-        },
-        /**
-         * @method define
-         * @param class
-         *            name
+         * @param {string} key   Key
+         * @param          value Value       
          *
-         * defines a class using the first part as class system identifier
-         *
-         * Parameters differ for different class adapters
+         * @return 
          */
-        define: function () {
-            var ai = this.get.apply(this, arguments);
-
-            return ai.define.apply(ai, arguments);
-
-        },
-        /**
-         * @method category
-         *
-         * registers a set of methods to a class
-         * @param classname
-         *            Parameters differ for different class adapters
-         */
-        category: function () {
-            var ai = this.get.apply(this, arguments);
-
-            return ai.category.apply(ai, arguments);
-
-        },
-        composition: function () {
-            var ai = this.get.apply(this, arguments);
-
-            return ai.composition.apply(ai, arguments);
-
-        },
-        extend: function () {
-            var ai = this.get.apply(this, arguments);
-
-            return ai.extend.apply(ai, arguments);
-
-        },
-        /**
-         * @method create Creates a class instance
-         * @param classname
-         *            Parameters differ for different class adapters
-         *
-         */
-        create: function () {
-            var ai = this.get.apply(this, arguments);
-
-            return ai.create.apply(ai, arguments);
-
-        },
-        createWithPdefsp: function () {
-            var ai = this.get.apply(this, arguments);
-            return ai.createWithPdefsp.apply(ai, arguments);
-        },
-        /**
-         * @method construct
-         * @param classname
-         *            Parameters differ for different class adapters
-         *
-         * Constructs an instance with a property object
-         */
-        construct: function () {
-            var ai = this.get.apply(this, arguments);
-
-            return ai.construct.apply(ai, arguments);
-
-        },
-        /**
-         * @method createArrArgs
-         * @param array
-         *            of arguments for the constructor with class name as first
-         *            element in array
-         *
-         */
-        createArrArgs: function (args) {
-            var ai = this.get.apply(this, arguments);
-            return ai.create.apply(ai, args);
-
-        },
-        /**
-         * @method builder
-         * @param classname
-         *            returns a class instance builder that can be reused
-         */
-        builder: function () {
-            var ai = this.get.apply(this, arguments);
-
-            return ai.builder.apply(ai, arguments);
-        },
-        builderFromPdefsp: function () {
-            var ai = this.get.apply(this, arguments);
-
-            return ai.builderFromPdefsp.apply(ai, arguments);
-        },
-        /**
-         * @method global
-         * @param variable
-         *            name
-         * @param optional
-         *            value gets or sets a global variable for Oskari context
-         */
-        global: function () {
-            var name;
-            if (arguments.length === 0) {
+        _global: function (key, value) {
+            if (key === undefined) {
                 return this.globals;
             }
-            name = arguments[0];
-            if (arguments.length === 2) {
-                this.globals[name] = arguments[1];
+            if (value !== undefined) {
+                this.globals[key] = value;
             }
-            return this.globals[name];
-
-        },
-        /**
-         * @method metadata
-         *
-         * returns class metadata if available
-         * @param classname
-         */
-        "metadata": function () {
-            var ai = this.get.apply(this, arguments);
-
-            return ai.metadata.apply(ai, arguments);
-        },
-        /**
-         * @method protocol
-         *
-         * appends or overrides a set of methods to class prototype If no class
-         * definition is present, creates a template class definition
-         *
-         */
-        "protocol": function () {
-            var ai = this.get.apply(this, arguments);
-
-            return ai.protocol.apply(ai, arguments);
-        },
-        "purge": function () {
-            var ai = this.get.apply(this, arguments);
-
-            return ai.purge.apply(ai, arguments);
-
-        },
-        "printAncestry": function () {
-            var ai = this.get.apply(this, arguments);
-            return ai.printAncestry.apply(ai, arguments);
-
-        },
-        "printHierarchy": function () {
-            var ai = this.get.apply(this, arguments);
-            return ai.printHierarchy.apply(ai, arguments);
-
-        },
-        "apropos": function () {
-            var ai = this.get.apply(this, arguments);
-            return ai.apropos.apply(ai, arguments);
-
-        },
-        "lookup": function () {
-            var ai = this.get.apply(this, arguments);
-            return ai.lookup.apply(ai, arguments);
+            return this.globals[key];
         }
     };
 
-    clazz.prototype.singleton = new clazz('^Oskari(.*)', nativeadapter);
-
-    /*
-     * registers the default native class adapter for Oskari
+    /**
+     * singleton instance of the class system
+     *
      */
-    /*clazz.prototype.singleton.adapt('Oskari', nativeadapter);*/
+    var class_singleton = new O2ClassSystem(),
+        cs = class_singleton;
+
+    /* Legacy loader */
 
     var bundle_loader_id = 0;
+
     /**
      * @class Oskari.bundle_loader
-     *
      * Bundle loader class that may be used with Oskari framework Inspired by
      * various javascript loaders (Ext, ...)
      *
+     * @param {Bundle_manager} manager  Bundle manager
+     * @param {function()}     callback Callback function
+     *
      */
-    var bundle_loader = function (manager, cb) {
-        this.loader_identifier = ++bundle_loader_id;
+    var Bundle_loader = function (manager, callback) {
+        bundle_loader_id += 1;
+        this.loader_identifier = bundle_loader_id;
         this.manager = manager;
-        this.callback = cb;
+        this.callback = callback;
 
         this.filesRequested = 0;
         this.filesLoaded = 0;
@@ -1420,29 +1050,43 @@ Oskari = (function () {
         this.metadata = {};
     };
 
-    bundle_loader.prototype = {
+    Bundle_loader.prototype = {
+
         /**
-         * @method adds a script loading request
+         * @public @method add
+         * Adds a script loading request
+         *
+         * @param {string}  fn   File name
+         * @param {Object=} pdef
+         *
          */
-        "add": function (fn, pdef) {
+        add: function (fn, pdef) {
             var me = this,
                 def;
+
             if (!me.files[fn]) {
                 def = {
                     src: fn,
-                    type: (pdef ? pdef.type : null) || "text/javascript",
+                    type: pdef && pdef.type ? pdef.type : 'text/javascript',
                     id: pdef ? pdef.id : null,
                     state: false
 
                 };
                 me.files[fn] = def;
 
-                if ("text/javascript" === def.type) {
+                if ('text/javascript' === def.type) {
                     me.filesRequested += 1;
                 }
                 me.fileList.push(def);
             }
         },
+
+        /**
+         * @public @method getState
+         *
+         *
+         * @return {number} Files loaded / Files requested 
+         */
         getState: function () {
             if (this.filesRequested === 0) {
                 return 1;
@@ -1450,12 +1094,12 @@ Oskari = (function () {
 
             return (this.filesLoaded / this.filesRequested);
         },
+
         /**
-         * @method commit
-         *
-         * commits any script loading requests
+         * @public @method commit
+         * Commits any script loading requests
          */
-        "commit": function () {
+        commit: function () {
             var fragment = document.createDocumentFragment(),
                 me = this,
                 numFiles = me.filesRequested,
@@ -1465,18 +1109,23 @@ Oskari = (function () {
                 def,
                 fn,
                 st;
+
             if (me.head === undefined) {
-                me.head = document.getElementsByTagName("head")[0];
+                me.head = document.head;
             }
-            if (numFiles === 0 || preloaded()) {
+            if (numFiles === 0 || _isPreloaded()) {
                 me.callback();
                 me.manager.notifyLoaderStateChanged(me, true);
                 return;
             }
 
+            /**
+             * @private @method onFileLoaded
+             */
             onFileLoaded = function () {
                 me.filesLoaded += 1;
-                me.manager.log("Files loaded " + me.filesLoaded + "/" + me.filesRequested);
+                me.manager.log('Files loaded ' + me.filesLoaded + '/' +
+                    me.filesRequested);
 
                 if (numFiles === me.filesLoaded) {
                     me.callback();
@@ -1489,10 +1138,10 @@ Oskari = (function () {
             for (n = 0; n < me.fileList.length; n += 1) {
                 def = me.fileList[n];
                 fn = def.src;
-                st = me.buildScriptTag(fn, onFileLoaded, def.type, def.id);
+                st = me._buildScriptTag(fn, onFileLoaded, def.type, def.id);
                 if (st) {
                     // If this breaks something, revert to using method 1
-                    if (preloaded()) {
+                    if (_isPreloaded()) {
                         onFileLoaded();
                     } else {
                         fragment.appendChild(st);
@@ -1504,22 +1153,28 @@ Oskari = (function () {
                 me.head.appendChild(fragment);
             }
         },
+
         /**
-         * @method buildScriptTag
-         * @private
+         * @private @method _buildScriptTag
+         * Builds a script tag to be applied to document head assumes UTF-8
          *
-         * builds a script tag to be applied to document head assumes UTF-8
+         * @param  {string}     filename    File name
+         * @param  {function()} callback    Callback function
+         * @param  {string}     elementType Element type
+         * @param  {Object=}    elementId   Element ID
+         *
+         * @return {Element} 
          */
-        "buildScriptTag": function (filename, callback, elementtype, elementId) {
-            var me = this,
-                script = document.createElement('script');
+        _buildScriptTag: function (filename, callback, elementType, elementId) {
+            var script = document.createElement('script');
+
             if (elementId) {
                 script.id = elementId;
             }
-            script.type = elementtype; //||'text/javascript';
+            script.type = elementType; //||'text/javascript';
             script.charset = 'utf-8';
 
-            if (preloaded()) {
+            if (_isPreloaded()) {
                 // This should be redundant, see "If this..." in commit() above
                 script.src = '/Oskari/empty.js';
             } else {
@@ -1532,7 +1187,8 @@ Oskari = (function () {
              */
             if (script.readyState) {
                 script.onreadystatechange = function () {
-                    if (script.readyState === "loaded" || script.readyState === "complete") {
+                    if (script.readyState === 'loaded' ||
+                            script.readyState === 'complete') {
                         script.onreadystatechange = null;
                         callback();
                     }
@@ -1546,372 +1202,440 @@ Oskari = (function () {
     };
 
     /**
-     * @class Oskari.bundle_mediator
-     *
+     * @class Oskari.Bundle_mediator
      * A mediator class to support bundle to/from bundle manager communication
      * and initialisation as well as bundle state management
      *
+     * @param {Object} options Options
+     *
      */
-    var bundle_mediator = function (opts) {
+    var Bundle_mediator = function (options) {
         var p;
         this.manager = null;
 
-        for (p in opts) {
-            if (opts.hasOwnProperty(p)) {
-                this[p] = opts[p];
+        for (p in options) {
+            if (options.hasOwnProperty(p)) {
+                this[p] = options[p];
             }
         }
     };
-    bundle_mediator.prototype = {
+
+    Bundle_mediator.prototype = {
+
         /**
-         * @method setState
-         * @param state
-         * @returns
+         * @public @method setState
+         *
+         * @param  {string} state State
+         *
+         * @return {string}       State
          */
-        "setState": function (state) {
+        setState: function (state) {
             this.state = state;
             this.manager.postChange(this.bundle, this.instance, this.state);
             return this.state;
         },
-        /**
-         * @method getState
-         * @returns
-         */
-        "getState": function () {
 
+        /**
+         * @public @method getState
+         *
+         *
+         * @return {string} State
+         */
+        getState: function () {
             return this.state;
         }
     };
 
     /**
-     * @class Oskari.bundle_trigger
+     * @class Oskari.Bundle_trigger
+     *
+     * @param {Object}                   config   Config
+     * @param {function(Bundle_manager)} callback Callback function
+     * @param {string}                   info     Info
+     *
      */
-    var bundle_trigger = function (btc, cb, info) {
-        this.config = btc;
-        this.callback = cb;
+    var Bundle_trigger = function (config, callback, info) {
+        this.config = config;
+        this.callback = callback;
         this.fired = false;
         this.info = info;
     };
-    bundle_trigger.prototype = {
+
+    Bundle_trigger.prototype = {
+
         /**
-         * @method execute
+         * @public @method execute
+         * Executes a trigger callback based on bundle state
          *
-         * executes a trigger callback based on bundle state
+         * @param {Bundle_manager} manager        Bundle manager
+         * @param {Object}         bundle         Bundle
+         * @param {Object}         bundleInstance Bundle instance
+         * @param {string}         info           Info
+         *
          */
-        "execute": function (manager, b, bi, info) {
+        execute: function (manager, bundle, bundleInstance, info) {
             var me = this,
                 p,
                 srcState,
-                cb;
+                callback;
+
             if (me.fired) {
-                //manager.log("trigger already fired " + info || this.info);
                 return;
             }
 
-            for (p in me.config["Import-Bundle"]) {
-                if (me.config["Import-Bundle"].hasOwnProperty(p)) {
-                    srcState = manager.stateForBundleSources[p];
+            for (p in me.config['Import-Bundle']) {
+                if (me.config['Import-Bundle'].hasOwnProperty(p)) {
+                    srcState = manager.bundleSourceStates[p];
                     if (!srcState || srcState.state !== 1) {
-                        manager.log("trigger not fired due " + p + " for " + info || this.info);
+                        manager.log(
+                            'Trigger not fired due ' + p + ' for ' +
+                                info || this.info
+                        );
                         return;
                     }
                 }
             }
             me.fired = true;
-            manager.log("posting trigger");
-            cb = this.callback;
+            manager.log('Posting trigger');
+            callback = this.callback;
 
             window.setTimeout(function () {
-                cb(manager);
+                callback(manager);
             }, 0);
         }
     };
 
+    /* legacy Bundle_manager */
+
     /**
-     * @class Oskari.bundle_manager
-     * @singleton
+     * @singleton @class Oskari.Bundle_manager
      */
-    var bundle_manager = function () {
-        this.serial = 0;
-        this.impls = {};
-        this.sources = {};
-        this.instances = {};
-        this.bundles = {};
+    var Bundle_manager = function () {
+        var me = this;
+        me.serial = 0;
+        me.bundleDefinitions = {};
+        me.sources = {};
+        me.bundleInstances = {};
+        me.bundles = {};
 
         /*
          * CACHE for lookups state management
          */
-        this.stateForBundleDefinitions = {
+        me.bundleDefinitionStates = {};
 
-        };
-        this.stateForBundleSources = {
-
-        };
+        me.bundleSourceStates = {};
 
         /* CACHE for statuses */
-        this.stateForBundles = {
+        me.bundleStates = {};
 
-        };
-        this.stateForBundleInstances = {
+        me.triggers = [];
 
-        };
-
-        /* CACHE for binding packages/request/events */
-
-        this.stateForPackages = {
-            sources: {},
-            sinks: {}
-        };
-
-        this.triggers = [];
-
-        this.loaderStateListeners = [];
+        me.loaderStateListeners = [];
     };
 
-    bundle_manager.prototype = {
-        purge: function () {
+    Bundle_manager.prototype = {
+
+        /**
+         * @private @method _getSerial
+         *
+         *
+         * @return {number} 
+         */
+        _getSerial: function () {
+            this.serial += 1;
+            return this.serial;
+        },
+
+        /**
+         * @private @method _purge
+         */
+        _purge: function () {
             var p,
                 me = this;
+
             for (p in me.sources) {
                 if (me.sources.hasOwnProperty(p)) {
                     delete me.sources[p];
                 }
             }
-            for (p in me.stateForBundleDefinitions) {
-                if (me.stateForBundleDefinitions.hasOwnProperty(p)) {
-                    delete me.stateForBundleDefinitions[p].loader;
+            for (p in me.bundleDefinitionStates) {
+                if (me.bundleDefinitionStates.hasOwnProperty(p)) {
+                    delete me.bundleDefinitionStates[p].loader;
                 }
             }
-            for (p in me.stateForBundleSources) {
-                if (me.stateForBundleSources.hasOwnProperty(p)) {
-                    delete me.stateForBundleSources[p].loader;
+            for (p in me.bundleSourceStates) {
+                if (me.bundleSourceStates.hasOwnProperty(p)) {
+                    delete me.bundleSourceStates[p].loader;
                 }
             }
         },
+
         /**
-         * @
+         * @public @method notifyLoaderStateChanged
+         *
+         * @param {Bundle_loader} bundleLoader Bundle loader
+         * @param {boolean}       finished     Finished
+         *
          */
-        notifyLoaderStateChanged: function (bl, finished) {
-            var l,
-                cb;
+        notifyLoaderStateChanged: function (bundleLoader, finished) {
+            var i,
+                callback;
+
             if (this.loaderStateListeners.length === 0) {
                 return;
             }
-            for (l = 0; l < this.loaderStateListeners.length; l += 1) {
-                cb = this.loaderStateListeners[l];
-                cb(bl, finished);
+            for (i = 0; i < this.loaderStateListeners.length; i += 1) {
+                callback = this.loaderStateListeners[i];
+                callback(bundleLoader, finished);
             }
         },
-        registerLoaderStateListener: function (cb) {
-            this.loaderStateListeners.push(cb);
-        },
+
         /**
-         * @method alert
-         * @param what
+         * @public @method registerLoaderStateListener
          *
-         * a loggin and debugging function
-         */
-        "alert": function (what) {
-            // log(what);
-            /*
-             * var d = document.createElement('div');
-             * d.appendChild(document.createTextNode(what)); var del =
-             * document.getElementById("debug"); if (!del) return;
-             * del.appendChild(d);
-             */
-            logMsg(what);
-        },
-        /**
-         * @method log a loggin and debuggin function
+         * @param {function(Bundle_loader, boolean)} callback Callback function
          *
          */
-        "log": function (what) {
-            logMsg(what);
+        registerLoaderStateListener: function (callback) {
+            this.loaderStateListeners.push(callback);
+        },
+
+        /**
+         * @public @method alert
+         * A logging and debugging function
+         *
+         * @param {string} message Message
+         *
+         */
+        alert: function (message) {
+            logMsg(message);
+        },
+
+        /**
+         * @public @method log
+         * A logging and debugging function
+         *
+         * @param {string} message Message
+         *
+         */
+        log: function (message) {
+            logMsg(message);
 
         },
+
         /**
-         * @method loadCss
-         * @param sScriptSrc contains css style url
-         * @param oCallback not implemented
+         * @private @method _loadCss
+         *
+         * @param {string}   scriptSrc Contains css style url
+         * @param {function} callback  Not implemented
+         *
          */
-        "loadCss": function (sScriptSrc, oCallback) {
-            this.log("loading CSS " + sScriptSrc);
-            var cssParentElement = document.getElementsByTagName("head").length ? document.getElementsByTagName("head")[0] : document.body,
+        _loadCss: function (scriptSrc, callback) {
+            this.log('Loading CSS ' + scriptSrc);
+            var cssParentElement = document.head || document.body,
                 styles,
-                linkElement;
-            if (!preloaded()) {
-                // FIXME jQuery.browser is deprecated
-                if (jQuery.browser.msie) {
-                    // IE has a limitation of 31 stylesheets.
-                    // It can be increased to 31*31 by using import in the stylesheets,
-                    // but import should be avoided due to performance issues.
-                    // Instead we retrieve the css files with xhr and
-                    // concatenates the styles into a single inline style declaration.
-                    jQuery.ajax({
-                        url: sScriptSrc,
-                        dataType: "text"
-                    }).done(function (css) {
-                        styles = document.getElementById("concatenated");
-                        if (styles) {
-                            // styles found, append
-                            styles.styleSheet.cssText += css;
-                        } else {
-                            // styles was not found, create new style element
-                            styles = document.createElement('style');
-                            cssParentElement.appendChild(styles);
-                            styles.setAttribute('type', 'text/css');
-                            styles.styleSheet.cssText = css;
-                            styles.id = "concatenated";
+                linkElement,
+                xhr;
+
+            if (!_isPreloaded()) {
+                /* See if browser <= IE9, IE10 can handle a whole bunch of
+                 * stylesheets and rules.
+                 * IE has document.all, but versions up to 9 lack window.atob */
+                if (document.all && !window.atob) {
+                    /* IE has a limitation of 31 stylesheets.
+                     * It can be increased to 31*31 by using import in the
+                     * stylesheets, but import should be avoided due to
+                     * performance issues.
+                     * Instead we retrieve the css files with xhr and
+                     * concatenate the styles into a single inline style
+                     * declaration. */
+                    xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        // TODO check xhr.status?
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status !== 200) {
+                                throw new Error(xhr.statusText);
+                            }
+                            styles = document.getElementById('concatenated');
+                            if (!styles) {
+                                // styles was not found, create new element
+                                styles = document.createElement('style');
+                                styles.setAttribute('type', 'text/css');
+                                styles.id = 'concatenated';
+                                cssParentElement.appendChild(styles);
+                            }
+                            styles.styleSheet.cssText += xhr.response;
                         }
-                        return css;
-                    });
+                    };
+                    xhr.open('GET', scriptSrc, true);
+                    xhr.responseType = 'text';
+                    xhr.send();
                 } else {
-                    linkElement = document.createElement("link");
-                    linkElement.type = "text/css";
-                    linkElement.rel = "stylesheet";
-                    linkElement.href = sScriptSrc;
+                    linkElement = document.createElement('link');
+                    linkElement.type = 'text/css';
+                    linkElement.rel = 'stylesheet';
+                    linkElement.href = scriptSrc;
                     cssParentElement.appendChild(linkElement);
                 }
             }
         },
+
         /**
-         * @method self
-         * @returns {bundle_manager}
+         * @private @method _self
+         *
+         *
+         * @return {Bundle_manager}
          */
-        "self": function () {
+        _self: function () {
             return this;
         },
+
         /**
-         * @method install
-         * @param implid
-         *            bundle implementation identifier
-         * @param bp
-         *            bundle registration function
-         * @param srcs
-         *            source files
+         * @private @method _install
+         * installs bundle
+         * DOES not INSTANTIATE only register bundleDefinition as function
+         * declares any additional sources required
          *
+         * @param {string}   biid             Bundle implementation id
+         * @param {function} bundleDefinition Bundle registration function
+         * @param {Object}   srcFiles         Source files
+         * @param {Object}   bundleMetadata   Bundle metadata
          *
          */
-        "install": function (implid, bp, srcs, metadata) {
-            // installs bundle
-            // DOES not INSTANTIATE only register bp as function
-            // declares any additional sources required
-
+        _install: function (biid, bundleDefinition, srcFiles, bundleMetadata) {
             var me = this,
-                bundleImpl = implid,
-                defState = me.stateForBundleDefinitions[bundleImpl],
+                defState = me.bundleDefinitionStates[biid],
                 srcState;
+
             if (defState) {
                 defState.state = 1;
-                me.log("SETTING STATE FOR BUNDLEDEF " + bundleImpl + " existing state to " + defState.state);
+                me.log('SETTING STATE FOR BUNDLEDEF ' + biid +
+                    ' existing state to ' + defState.state);
             } else {
                 defState = {
                     state: 1
                 };
 
-                me.stateForBundleDefinitions[bundleImpl] = defState;
-                me.log("SETTING STATE FOR BUNDLEDEF " + bundleImpl + " NEW state to " + defState.state);
+                me.bundleDefinitionStates[biid] = defState;
+                me.log('SETTING STATE FOR BUNDLEDEF ' + biid +
+                    ' NEW state to ' + defState.state);
             }
-            defState.metadata = metadata;
+            defState.metadata = bundleMetadata;
 
-            me.impls[bundleImpl] = bp;
-            me.sources[bundleImpl] = srcs;
+            me.bundleDefinitions[biid] = bundleDefinition;
+            me.sources[biid] = srcFiles;
 
-            srcState = me.stateForBundleSources[bundleImpl];
+            srcState = me.bundleSourceStates[biid];
             if (srcState) {
                 if (srcState.state === -1) {
-                    me.log("triggering loadBundleSources for " + bundleImpl + " at loadBundleDefinition");
+                    me.log('Triggering loadBundleSources for ' +
+                        biid + ' at loadBundleDefinition');
                     window.setTimeout(function () {
-                        me.loadBundleSources(bundleImpl);
+                        me.loadBundleSources(biid);
                     }, 0);
                 } else {
-                    me.log("source state for " + bundleImpl + " at loadBundleDefinition is " + srcState.state);
+                    me.log('Source state for ' + biid +
+                        ' at loadBundleDefinition is ' + srcState.state);
                 }
             }
-            me.postChange(null, null, "bundle_definition_loaded");
+            me.postChange(null, null, 'bundle_definition_loaded');
         },
+
         /**
-         * @method installBundleClass
-         * @param implid
-         * @param bp
-         * @param srcs
+         * @public @method installBundleClass
+         * Installs a bundle defined as Oskari native Class.
          *
-         * Installs a bundle defined as Oskari native Class
+         * @param {string} biid      Bundle implementation ID
+         * @param {string} className Class name
+         *
          */
-        "installBundleClass": function (implid, clazzName) {
-            var cs = clazz.prototype.singleton,
-                classmeta = cs.metadata(clazzName),
-                bp = cs.builder(clazzName),
-                srcs = classmeta.meta.source,
+        installBundleClass: function (biid, className) {
+            var classmeta = cs.getMetadata(className),
+                bundleDefinition = cs.builder(className),
+                sourceFiles = classmeta.meta.source,
                 bundleMetadata = classmeta.meta.bundle;
 
-            this.install(implid, bp, srcs, bundleMetadata);
-
+            this._install(
+                biid,
+                bundleDefinition,
+                sourceFiles,
+                bundleMetadata
+            );
         },
+
         /**
-         * @method installBundlePdefs
-         * @param implid
-         * @param bp
-         * @param srcs
-         *
+         * @public @method installBundleClassInfo
          * Installs a bundle defined as Oskari native Class
-         */
-        installBundlePdefsp: function (implid, pdefsp) {
-            var cs = clazz.prototype.singleton,
-                bp = cs.builderFromPdefsp(pdefsp),
-                bundleMetadata = pdefsp._metadata,
-                srcs = {};
-
-            this.install(implid, bp, srcs, bundleMetadata);
-
-        },
-        /**
-         * @method impl
-         * @param implid
-         * @returns bundle implemenation
+         *
+         * @param {string} biid      Bundle implementation I
+D         * @param {Object} classInfo ClassInfo
          *
          */
-        "impl": function (implid) {
-            return this.impls[implid];
-        },
-        /**
-         * @method loadBundleDefinition
-         * @param implid
-         * @param bundleSrc
-         * @param c
-         *
-         * Loads Bundle Definition from JavaScript file JavaScript shall contain
-         * install or installBundleClass call.
-         */
-        "loadBundleDefinition": function (implid, bundleSrc, pbundlePath) {
-            var me = this,
-                bundleImpl = implid,
-                defState = me.stateForBundleDefinitions[bundleImpl],
-                bundlePath,
-                bl;
-            me.log("loadBundleDefinition called with " + bundleImpl);
-            if (defState) {
-                if (defState.state === 1) {
-                    me.log("bundle definition already loaded for " + bundleImpl);
-                    me.postChange(null, null, "bundle_definition_loaded");
-                    return;
-                }
-                me.log("bundle definition already loaded OR WHAT?" + bundleImpl + " " + defState.state);
-                return;
-            } else {
-                defState = {
-                    state: -1
-                };
-                me.stateForBundleDefinitions[bundleImpl] = defState;
-                me.log("set NEW state for DEFINITION " + bundleImpl + " to " + defState.state);
+        installBundleClassInfo: function (biid, classInfo) {
+            var bundleDefinition = cs.getBuilderFromClassInfo(classInfo),
+                bundleMetadata = classInfo._metadata,
+                sourceFiles = {};
+
+            if (biid === null || biid === undefined) {
+                throw new TypeError('installBundleClassInfo(): Missing biid');
             }
 
+            if (classInfo === null || classInfo === undefined) {
+                throw new TypeError(
+                    'installBundleClassInfo(): Missing classInfo'
+                );
+            }
+
+            this._install(
+                biid,
+                bundleDefinition,
+                sourceFiles,
+                bundleMetadata
+            );
+        },
+
+        /**
+         * @public @method loadBundleDefinition
+         * Loads Bundle Definition from JavaScript file JavaScript shall contain
+         * install or installBundleClass call.
+         *
+         * @param {string} biid        Bundle implementation ID
+         * @param {string} bundleSrc   Bundle source path
+         * @param {string} pbundlePath Bundle path
+         *
+         */
+        loadBundleDefinition: function (biid, bundleSrc, pbundlePath) {
+            var me = this,
+                defState = me.bundleDefinitionStates[biid],
+                bundlePath,
+                bl;
+
+            me.log('loadBundleDefinition called with ' + biid);
+            if (defState) {
+                if (defState.state === 1) {
+                    me.log('Bundle definition already loaded for ' + biid);
+                    me.postChange(null, null, 'bundle_definition_loaded');
+                    return;
+                }
+                me.log('Bundle definition already loaded OR WHAT?' + biid +
+                    ' ' + defState.state);
+                return;
+            }
+            defState = {
+                state: -1
+            };
+            me.bundleDefinitionStates[biid] = defState;
+            me.log('Set NEW state for DEFINITION ' + biid + ' to ' +
+                defState.state);
+
             defState.bundleSrcPath = bundleSrc;
-            bundlePath = pbundlePath || (bundleSrc.substring(0, bundleSrc.lastIndexOf('/')));
+            bundlePath =
+                pbundlePath ||
+                    (bundleSrc.substring(0, bundleSrc.lastIndexOf('/')));
             defState.bundlePath = bundlePath;
 
-            bl = new bundle_loader(this, function () {
-                me.log("bundle_def_loaded_callback");
+            bl = new Bundle_loader(this, function () {
+                me.log('bundle_def_loaded_callback');
             });
             bl.metadata.context = 'bundleDefinition';
 
@@ -1920,183 +1644,65 @@ Oskari = (function () {
             bl.add(bundleSrc);
             bl.commit();
         },
+
         /**
-         * @method loadBundleSources
-         * @param implid
-         * @param c
+         * @private @method _handleSourceFiles
          *
-         * Registers and commits JavaScript load request from bundle manifesst A
-         * trigger is fired after all JavaScript files have been loaded.
+         * @param {Object}   srcFiles          Bundle source files object
+         * @param {string}   bundlePath        Bundle path
+         * @param {Object}   sourceDefinitions Bundle source definitions object
+         *
          */
-        "loadBundleSources": function (implid) {
-            // load any JavaScripts for bundle
-            // MUST be done before createBundle
-            var me = this,
-                bundleImpl = implid,
-                defState = me.stateForBundleDefinitions[bundleImpl],
-                srcFiles,
-                srcState,
-                callback,
-                bundlePath,
-                srcs,
-                p,
-                def,
-                defs,
-                defSrc,
-                src,
-                n,
+        _handleSourceFiles: function (srcFiles, bundlePath, sourceDefinitions) {
+            var def,
                 fn,
                 fnWithPath,
-                requiredLocale;
-            me.log("loadBundleSources called with " + bundleImpl);
-            // log(defState);
+                n,
+                p;
 
-            if (!defState) {
-                throw "INVALID_STATE: bundle definition load not requested for " + bundleImpl;
-            }
-            if (defState) {
-                me.log("- definition STATE for " + bundleImpl + " at load sources " + defState.state);
-            }
-
-            if (mode === 'static') {
-                me.postChange(null, null, "bundle_definition_loaded");
-                return;
-            }
-
-            srcState = me.stateForBundleSources[bundleImpl];
-
-            if (srcState) {
-                if (srcState.state === 1) {
-                    me.log("already loaded sources for : " + bundleImpl);
-                    return;
-                } else if (srcState.state === -1) {
-                    me.log("loading previously pending sources for " + bundleImpl + " " + srcState.state + " or what?");
-                } else {
-                    throw "INVALID_STATE: at " + bundleImpl;
-                }
-            } else {
-                srcState = {
-                    state: -1
-                };
-                me.stateForBundleSources[bundleImpl] = srcState;
-                me.log("setting STATE for sources " + bundleImpl + " to " + srcState.state);
-            }
-
-            if (defState.state !== 1) {
-                me.log("pending DEFINITION at sources for " + bundleImpl + " to " + defState.state + " -> postponed");
-
-                return;
-            }
-
-            me.log("STARTING load for sources " + bundleImpl);
-
-            srcFiles = {
-                count: 0,
-                loaded: 0,
-                files: {},
-                css: {}
-            };
-            callback = function () {
-                me.log("finished loading " + srcFiles.count + " files for " + bundleImpl + ".");
-                me.stateForBundleSources[bundleImpl].state = 1;
-                me.log("set NEW state post source load for " + bundleImpl + " to " + me.stateForBundleSources[bundleImpl].state);
-
-                me.postChange(null, null, "bundle_sources_loaded");
-            };
-            bundlePath = defState.bundlePath;
-
-            srcs = me.sources[bundleImpl];
-
-            if (srcs) {
-
-                me.log("got sources for " + bundleImpl);
-
-                for (p in srcs) {
-                    if (p === 'scripts') {
-
-                        defs = srcs[p];
-
-                        for (n = 0; n < defs.length; n += 1) {
-                            def = defs[n];
-                            if (def.type === "text/css") {
-
-                                fn = def.src;
-                                fnWithPath = null;
-                                if (fn.indexOf('http') !== -1) {
-                                    fnWithPath = fn;
-                                } else {
-                                    fnWithPath = bundlePath + '/' + fn;
-                                }
-
-                                srcFiles.css[fnWithPath] = def;
-
-                            } else if (def.type) {
-                                srcFiles.count += 1;
-                                /* var fn = def.src + "?ts=" + instTs; */
-                                fn = buildPathForLoaderMode(def.src, bundlePath);
-
-                                fnWithPath = null;
-                                if (fn.indexOf('http') !== -1) {
-                                    fnWithPath = fn;
-                                } else {
-                                    fnWithPath = bundlePath + '/' + fn;
-                                }
-
-                                srcFiles.files[fnWithPath] = def;
+            sourceDefinitions = sourceDefinitions || {};
+            // linter doesn't recognize the filter expression
+            /*jshint forin: false*/
+            for (p in sourceDefinitions) {
+                if (sourceDefinitions.hasOwnProperty(p) &&
+                        (p === 'scripts' || p === 'locales')) {
+                    for (n = 0; n < sourceDefinitions[p].length; n += 1) {
+                        def = sourceDefinitions[p][n];
+                        if (def.type === 'text/css') {
+                            fn = def.src;
+                            fnWithPath = fn;
+                            if (fn.indexOf('http') === -1) {
+                                fnWithPath = bundlePath + '/' + fn;
                             }
-
-                        }
-                    } else if (p === 'locales') {
-                        requiredLocale = blocale.getLang();
-                        defs = srcs[p];
-
-                        /*console.log("locales",defs);*/
-                        for (n = 0; n < defs.length; n += 1) {
-                            def = defs[n];
-
-                            /*console.log("locale",def,requiredLocale);*/
-                            /*
-                            if (requiredLocale && def.lang && def.lang !== requiredLocale) {
-                                //console.log("locale",def,def.lang,requiredLocale, "NO MATCH?");
-                                continue;
-                            }*/
-
-                            if (def.type === "text/css") {
-
-                                fn = def.src;
-                                fnWithPath = null;
-                                if (fn.indexOf('http') !== -1) {
-                                    fnWithPath = fn;
-                                } else {
-                                    fnWithPath = bundlePath + '/' + fn;
-                                }
-
-                                srcFiles.css[fnWithPath] = def;
-
-                            } else if (def.type) {
-                                srcFiles.count += 1;
-                                /* var fn = def.src + "?ts=" + instTs; */
-                                fn = buildPathForLoaderMode(def.src, bundlePath);
-
-                                fnWithPath = null;
-                                if (fn.indexOf('http') !== -1) {
-                                    fnWithPath = fn;
-                                } else {
-                                    fnWithPath = bundlePath + '/' + fn;
-                                }
-
-                                srcFiles.files[fnWithPath] = def;
+                            srcFiles.css[fnWithPath] = def;
+                        } else if (def.type) {
+                            srcFiles.count += 1;
+                            fn =
+                                _buildPathForLoaderMode(def.src, bundlePath);
+                            fnWithPath = fn;
+                            if (fn.indexOf('http') === -1) {
+                                fnWithPath = bundlePath + '/' + fn;
                             }
-
+                            srcFiles.files[fnWithPath] = def;
                         }
-
                     }
                 }
-            } else {
-                me.log("NO sources for " + bundleImpl);
-
             }
+        },
 
+        /**
+         * @private @method _feedCSSLoader
+         *
+         * @param {function} callback   Callback function
+         * @param {string}   biid       Bundle implementation ID
+         * @param {string}   bundlePath Bundle path
+         * @param {Object}   srcFiles   Bundle source files object
+         *
+         */
+        _feedCSSLoader: function (callback, biid, bundlePath, srcFiles) {
+            var fn,
+                defSrc,
+                src;
             /**
              * def.src is requested / src is adjusted path
              */
@@ -2104,43 +1710,56 @@ Oskari = (function () {
                 if (srcFiles.css.hasOwnProperty(src)) {
                     // var def = srcFiles.css[src];
                     defSrc = src;
-                    fn = buildPathForLoaderMode(defSrc, bundlePath);
-                    me.loadCss(fn, callback);
-                    me.log("- added css source " + fn + " for " + bundleImpl);
+                    fn = _buildPathForLoaderMode(defSrc, bundlePath);
+                    this._loadCss(fn, callback);
+                    this.log('- added css source ' + fn + ' for ' + biid);
                 }
             }
+        },
 
-            /*
-             * for (js in srcFiles.files) { var def = srcFiles.files[js];
-             * me.log("triggering load for " + bundleImpl + " " + def.src);
-             * me.loadSrc(def.src, callback); }
-             */
-            var bl = new bundle_loader(this, callback),
-                js;
+        /**
+         * @private @method _feedBundleLoader
+         *
+         * @param {function()} cb         Callback function
+         * @param {string}     biid       Bundle implementation ID
+         * @param {string}     bundlePath Bundle path
+         * @param {Object}     srcFiles   Bundle source files object
+         * @param {Object}     srcState   Source state object
+         *
+         */
+        _feedBundleLoader: function (cb, biid, bundlePath, srcFiles, srcState) {
+            var me = this,
+                bl,
+                fileCount,
+                js,
+                srcsFn,
+                localesFn;
+
+            bl = new Bundle_loader(me, cb);
             bl.metadata.context = 'bundleSources';
-            bl.metadata.bundleImpl = bundleImpl;
+            bl.metadata.bundleImpl = biid;
             srcState.loader = bl;
 
             /**
              * if using compiled javascript
              */
-            if (isPackedMode()) {
-
-                var fileCount = 0;
+            if (_isPackedMode()) {
+                fileCount = 0;
                 for (js in srcFiles.files) {
                     if (srcFiles.files.hasOwnProperty(js)) {
                         fileCount += 1;
                     }
                 }
                 if (fileCount > 0) {
+                    srcsFn = _buildPathForPackedMode(bundlePath);
+                    bl.add(srcsFn, 'text/javascript');
+                    me.log('- added PACKED javascript source ' + srcsFn +
+                        ' for ' + biid);
 
-                    var srcsFn = buildPathForPackedMode(bundlePath);
-                    bl.add(srcsFn, "text/javascript");
-                    me.log("- added PACKED javascript source " + srcsFn + " for " + bundleImpl);
-
-                    var localesFn = buildLocalePathForPackedMode(bundlePath);
-                    bl.add(localesFn, "text/javascript");
-                    me.log("- added PACKED locale javascript source " + localesFn + " for " + bundleImpl);
+                    localesFn = _buildLocalePathForPackedMode(bundlePath);
+                    bl.add(localesFn, 'text/javascript');
+                    me.log('- added PACKED locale javascript source ' +
+                        localesFn + ' for ' + biid);
                 }
 
                 /**
@@ -2150,292 +1769,367 @@ Oskari = (function () {
                 for (js in srcFiles.files) {
                     if (srcFiles.files.hasOwnProperty(js)) {
                         bl.add(js, srcFiles.files[js]);
-                        me.log("- added script source " + js + " for " + bundleImpl);
+                        me.log('- added script source ' + js + ' for ' + biid);
                     }
                 }
             }
 
             bl.commit();
-
         },
+
         /**
-         * @method postChange
-         * @private
-         * @param b
-         * @param bi
-         * @param info
+         * @public @method loadBundleSources
+         * Registers and commits JavaScript load request from bundle manifest.
+         * A trigger is fired after all JavaScript files have been loaded.
          *
-         * posts a notification to bundles and bundle instances
+         * @param {string} biid Bundle implementation ID
          *
          */
-        "postChange": function (b, bi, info) {
-            // self
+        loadBundleSources: function (biid) {
+            // load any JavaScripts for bundle
+            // MUST be done before createBundle
             var me = this,
-                bid,
-                o,
-                i;
-            me.update(b, bi, info);
+                bundleDefinitionState,
+                srcFiles,
+                srcState,
+                callback,
+                bundlePath,
+                srcs;
 
+            me.log('loadBundleSources called with ' + biid);
+
+            if (biid === null || biid === undefined) {
+                throw new TypeError('loadBundleSources(): Missing biid');
+            }
+
+            bundleDefinitionState = me.bundleDefinitionStates[biid];
+
+            if (!bundleDefinitionState) {
+                throw new Error('loadBundleSources(): INVALID_STATE: bundle ' +
+                    'definition load not requested for ' + biid
+                    );
+            }
+
+            me.log('- definition STATE for ' + biid + ' at load sources ' +
+                bundleDefinitionState.state
+                );
+
+            if (mode === 'static') {
+                me.postChange(null, null, 'bundle_definition_loaded');
+                return;
+            }
+
+            srcState = me.bundleSourceStates[biid];
+
+            if (srcState) {
+                if (srcState.state === 1) {
+                    me.log('Already loaded sources for : ' + biid);
+                    return;
+                }
+                if (srcState.state === -1) {
+                    me.log('Loading previously pending sources for ' + biid +
+                        ' ' + srcState.state + ' or what?'
+                        );
+                } else {
+                    throw new Error('loadBundleSources(): INVALID_STATE: at ' +
+                        biid
+                        );
+                }
+            } else {
+                srcState = {
+                    state: -1
+                };
+                me.bundleSourceStates[biid] = srcState;
+                me.log('Setting STATE for sources ' + biid + ' to ' +
+                    srcState.state
+                    );
+            }
+
+            if (bundleDefinitionState.state !== 1) {
+                me.log('Pending DEFINITION at sources for ' + biid + ' to ' +
+                    bundleDefinitionState.state + ' -> postponed'
+                    );
+                return;
+            }
+
+            me.log('STARTING load for sources ' + biid);
+
+            srcFiles = {
+                count: 0,
+                loaded: 0,
+                files: {},
+                css: {}
+            };
+
+            callback = function () {
+                me.log('Finished loading ' + srcFiles.count + ' files for ' +
+                    biid + '.');
+                me.bundleSourceStates[biid].state = 1;
+                me.log('Set NEW state post source load for ' + biid + ' to ' +
+                    me.bundleSourceStates[biid].state
+                    );
+
+                me.postChange(null, null, 'bundle_sources_loaded');
+            };
+            bundlePath = bundleDefinitionState.bundlePath;
+
+            srcs = me.sources[biid];
+
+            me._handleSourceFiles(srcFiles, bundlePath, srcs);
+
+            me._feedCSSLoader(
+                callback,
+                biid,
+                bundlePath,
+                srcFiles
+            );
+            me._feedBundleLoader(
+                callback,
+                biid,
+                bundlePath,
+                srcFiles,
+                srcState
+            );
+        },
+
+        /**
+         * @public @method postChange
+         * Posts a notification to bundles and bundle instances.
+         *
+         * @param {Object=} bundle         Bundle
+         * @param {Object=} bundleInstance Bundle instance
+         * @param {string}  info           Info
+         *
+         */
+        postChange: function (bundle, bundleInstance, info) {
+            var me = this,
+                i,
+                instance,
+                bndl;
+
+            if (info === null || info === undefined) {
+                throw new TypeError('postChange(): Missing info');
+            }
+
+            me._update(bundle, bundleInstance, info);
             // bundles
-            for (bid in me.bundles) {
-                if (me.bundles.hasOwnProperty(bid)) {
-                    o = me.bundles[bid];
-                    /* if (o != b) { */
-                    o.update(me, b, bi, info);
-                    // }
+            for (i in me.bundles) {
+                if (me.bundles.hasOwnProperty(i)) {
+                    bndl = me.bundles[i];
+                    bndl.update(me, bundle, bundleInstance, info);
                 }
             }
             // and instances
-            for (i in me.instances) {
-                if (me.instances.hasOwnProperty(i)) {
-                    o = me.instances[i];
-                    if (!o) {
-                        continue;
+            for (i in me.bundleInstances) {
+                if (me.bundleInstances.hasOwnProperty(i)) {
+                    instance = me.bundleInstances[i];
+                    if (instance) {
+                        instance.update(me, bundle, bundleInstance, info);
                     }
-                    // stopped are null here
-                    // if (!bi || o != bi) {
-                    o.update(me, b, bi, info);
-                    // }
                 }
             }
-
         },
+
         /**
-         * @method createBundle
-         * @param implid
-         * @param bundleid
-         * @param env
-         * @returns
+         * @public @method createBundle
+         * Creates a Bundle (NOTE NOT an instance of bundle)
+         * implid, bundleid most likely same value
          *
-         * Creates a Bundle
+         * @param  {string} biid Bundle implementation ID
+         * @param  {string} bid  Bundle ID
+         *
+         * @return {Object}      Bundle 
          */
-        "createBundle": function (implid, bundleid) {
-            // sets up bundle runs the registered func to instantiate bundle
-            // this enables 'late binding'
-            var bundlImpl = implid,
+        createBundle: function (biid, bid) {
+            var bundle,
+                bundleDefinition,
                 me = this,
-                defState = me.stateForBundleDefinitions[bundlImpl],
-                bp,
-                b;
-            if (!defState) {
-                throw "INVALID_STATE: for createBundle / " + "definition not loaded " + implid + "/" + bundleid;
+                bundleDefinitionState;
+
+            if (biid === null || biid === undefined) {
+                throw new TypeError('createBundle(): Missing biid');
             }
 
-            bp = this.impls[implid];
-            if (!bp) {
-                alert("this.impls[" + implid + "] is null!");
+            if (bid === null || bid === undefined) {
+                throw new TypeError('createBundle(): Missing bid');
+            }
+
+            bundleDefinitionState =
+                me.bundleDefinitionStates[biid];
+
+            if (!bundleDefinitionState) {
+                throw new Error(
+                    'createBundle(): Couldn\'t find a definition for' +
+                        ' bundle ' + biid + '/' + bid +
+                        ', check spelling and that the bundle has been' +
+                        ' installed.'
+                );
+            }
+            bundleDefinition = this.bundleDefinitions[biid];
+            // FIXME no alerts please. Throw something or log something.
+            if (!bundleDefinition) {
+                alert('this.bundleDefinitions[' + biid + '] is null!');
                 return;
             }
-            b = bp(defState);
-
-            this.bundles[bundleid] = b;
-            this.stateForBundles[bundleid] = {
+            bundle = bundleDefinition(bundleDefinitionState);
+            this.bundles[bid] = bundle;
+            this.bundleStates[bid] = {
                 state: true,
-                bundlImpl: bundlImpl
+                bundlImpl: biid
             };
+            this.postChange(bundle, null, 'bundle_created');
+            return bundle;
+        },
 
-            this.postChange(b, null, "bundle_created");
-
-            return b;
-        },
         /**
-         * @method bindImportedPackages
+         * @private @method _update
+         * Fires any pending bundle or bundle instance triggers
          *
-         * NYI. Shall bind any imported packages to bundle mediator
-         *
-         */
-        "bindImportedPackages": function () {
-            // TBD
-        },
-        /**
-         * @method bindImportedNamespaces
-         *
-         * NYI. Shall bind any imported namespaces to bundle mediator
-         */
-        "bindImportedNamespaces": function () {
-            // TBD
-        },
-        /**
-         * @method bindImportedEvents
-         * @deprecated
-         *
-         * not needed. registrations will be based on actual event handlers.
-         */
-        "bindImportedEvents": function () {
-
-        },
-        /**
-         * @method bindExportedPackages
-         *
-         * NYI. Shall support publishing a package from bundle
-         */
-        "bindExportedPackages": function () {
-            // TBD
-        },
-        /**
-         * @method bindExportedNamespaces NYI. Shall support publishing namespaces
-         *         from bundle
-         */
-        "bindExportedNamespaces": function () {
-            // TBD
-        },
-        /**
-         * @methdod bindExportedRequests
-         * @deprecated
-         */
-        "bindExportedRequests": function () {
-
-        },
-        /**
-         * @method update
-         * @param bundleid
-         * @returns
-         *
-         * fires any pending bundle or bundle instance triggers
+         * @param {Object} bundle         Bundle
+         * @param {Object} bundleInstance Bundle instance
+         * @param {string} info           Info
          *
          */
-        "update": function (b, bi, info) {
+        _update: function (bundle, bundleInstance, info) {
             // resolves any bundle dependencies
             // this must be done before any starts
             // TO-DO
             // - bind package exports and imports
-            // - bidn event imports and exports
+            // - bind event imports and exports
             // - bind request exports ( and imports)
             // - bind any Namespaces (== Globals imported )
             // - fire any pending triggers
-
             var me = this,
                 n,
                 t;
-            me.log("update called with info " + info);
+
+            me.log('Update called with info ' + info);
 
             for (n = 0; n < me.triggers.length; n += 1) {
                 t = me.triggers[n];
                 t.execute(me);
             }
         },
+
         /**
-         * @method bundle
-         * @param bundleid
-         * @returns bundle
-         */
-        "bundle": function (bundleid) {
-            return this.bundles[bundleid];
-        },
-        /**
-         * @method destroyBundle
-         * @param bundleid
+         * @public @method createInstance
+         * Creates a bundle instance for previously installed and created bundle
          *
-         * NYI. Shall DESTROY bundle definition
-         */
-        "destroyBundle": function (bundleid) {
-            // var bi = this.impls[bundleid];
-        },
-        /**
-         * @method uninsttall
-         * @param implid
-         * @returns
+         * @param  {string} bid Bundle ID
          *
-         * removes bundle definition from manager Does NOT remove bundles or bundle
-         * instances currently.
+         * @return {Object}     Bundle instance
          */
-        "uninstall": function (implid) {
-            var bp = this.impls[implid];
-            return bp;
-        },
-        /**
-         * @method createInstance
-         * @param bundleid
-         * @returns {___bi2}
-         *
-         * creates a bundle instance for previously installed and created bundle
-         */
-        "createInstance": function (bundleid) {
+        createInstance: function (bid) {
             // creates a bundle_instance
             // any configuration and setup IS BUNDLE / BUNDLE INSTANCE specific
             // create / config / start / process / stop / destroy ...
+            var me = this,
+                bundle,
+                bundleInstance,
+                bundleInstanceId;
 
-            var me = this;
-            if (!me.stateForBundles[bundleid] || !me.stateForBundles[bundleid].state) {
-                throw "INVALID_STATE: for createInstance / " + "definition not loaded " + bundleid;
+            if (bid === null || bid === undefined) {
+                throw new TypeError('createInstance(): Missing bid');
             }
 
-            var s = "" + (++this.serial);
+            if (!me.bundleStates[bid] ||
+                    !me.bundleStates[bid].state) {
+                throw new Error(
+                    'createInstance(): Couldn\'t find a definition for' +
+                        ' bundle ' + bid + ', check spelling' +
+                        ' and that the bundle has been installed.'
+                );
+            }
 
-            var b = this.bundles[bundleid];
-            var bi = b.create();
+            bundle = this.bundles[bid];
+            if (bundle === null || bundle === undefined) {
+                // TODO find out how this could happen, offer a solution
+                throw new Error(
+                    'createInstance(): Couldn\'t find bundle with id' + bid
+                );
+            }
 
-            bi.mediator = new bundle_mediator({
-                "bundleId": bundleid,
-                "instanceid": s,
-                "state": "initial",
-                "bundle": b,
-                "instance": bi,
-                "manager": this,
-                "clazz": clazz.prototype.singleton,
-                "requestMediator": {}
+            bundleInstance = bundle.create();
+            if (bundleInstance === null || bundleInstance === undefined) {
+                throw new Error(
+                    'createInstance(): Couldn\'t create bundle ' + bid +
+                        ' instance. Make sure your bundle\'s create function' +
+                        ' returns the instance.'
+                );
+            }
+            bundleInstanceId = me._getSerial().toString();
+            bundleInstance.mediator = new Bundle_mediator({
+                bundleId: bid,
+                instanceid: bundleInstanceId,
+                state: 'initial',
+                bundle: bundle,
+                instance: bundleInstance,
+                manager: this,
+                clazz: class_singleton,
+                requestMediator: {}
             });
 
-            this.instances[s] = bi;
-            this.stateForBundleInstances[s] = {
-                state: true,
-                bundleid: bundleid
-            };
+            this.bundleInstances[bundleInstanceId] = bundleInstance;
 
-            this.postChange(b, bi, "instance_created");
-            return bi;
+            this.postChange(bundle, bundleInstance, 'instance_created');
+            return bundleInstance;
         },
-        /**
-         * @method instance
-         * @param instanceid
-         * @returns bundle instance
-         */
-        "instance": function (instanceid) {
 
-            return this.instances[instanceid];
-        },
         /**
-         * @method destroyInstance
-         * @param instanceid
-         * @returns
+         * @private @method _destroyInstance
+         * Destroys and unregisters bundle instance
          *
-         * destroys and unregisters bundle instance
+         * @param {string} biid Bundle instance ID
+         *
+         * @return
          */
-        "destroyInstance": function (instanceid) {
+        _destroyInstance: function (biid) {
+            var bundleInstance,
+                mediator;
 
-            var bi = this.instances[instanceid],
-                mediator = bi.mediator;
+            if (biid === null || biid === undefined) {
+                throw new TypeError('_destroyInstance(): Missing biid');
+            }
+
+            bundleInstance = this.bundleInstances[biid];
+            mediator = bundleInstance.mediator;
+
             mediator.bundle = null;
             mediator.manager = null;
             mediator.clazz = null;
 
-            bi.mediator = null;
+            bundleInstance.mediator = null;
 
-            this.instances[instanceid] = null;
-            bi = null;
+            this.bundleInstances[biid] = null;
+            bundleInstance = null;
 
-            return bi;
+            return bundleInstance;
         },
+
         /**
-         * @method on
-         * @param config
-         * @param callback
+         * @public @method on
+         * Trigger registration
          *
-         * trigger registration
+         * @param {Object}                   config
+         * @param {function(Bundle_manager)} callback Callback function
+         * @param {string}                   info
+         *
          */
-        "on": function (cfg, cb, info) {
-            this.triggers.push(new bundle_trigger(cfg, cb, info));
+        on: function (config, callback, info) {
+            this.triggers.push(new Bundle_trigger(config, callback, info));
         }
     };
 
-    /*
-     * @class Oskari.bundle_facade
+    /* legacy Bundle_facade */
+    /**
+     * @class Oskari.Bundle_facade
+     * Highlevel interface to bundle management Work in progress
      *
-     * highlevel interface to bundle management Work in progress
+     * @param {} bundleManager
+     *
      */
-    var bundle_facade = function (bm) {
-        this.manager = bm;
-
+    var Bundle_facade = function (bundleManager) {
+        this.manager = bundleManager;
         this.bundles = {};
 
         /**
@@ -2444,7 +2138,7 @@ Oskari = (function () {
          * (physical are used by manager and start from '1' on)
          */
         this.bundleInstances = {};
-        this.bundlePath = "../src/mapframework/bundle/";
+        this.bundlePath = '../src/mapframework/bundle/';
 
         /**
          * @property appSetup
@@ -2460,83 +2154,150 @@ Oskari = (function () {
          */
         this.appConfig = {};
     };
+
     /**
      * FACADE will have only a couple of methods which trigger alotta operations
      */
-    bundle_facade.prototype = {
+    Bundle_facade.prototype = {
 
         /**
-         * @method getBundleInstanceByName
+         * @public @method getBundleInstanceByName
+         * Returns bundle_instance by bundleinstancename defined in player json
          *
-         * returns bundle_instance by bundleinstancename defined in player json
+         * @param  {string} biid Bundle instance ID
+         *
+         * @return {Object}      Bundle instance 
          */
-        getBundleInstanceByName: function (bundleinstancename) {
-            var me = this;
-            return me.bundleInstances[bundleinstancename];
+        getBundleInstanceByName: function (biid) {
+            return this.bundleInstances[biid];
         },
+
         /**
-         * @method getBundleInstanceConfigurationByName
+         * @public @method getBundleInstanceConfigurationByName
+         * Returns configuration for instance by bundleinstancename
          *
-         * returns configuration for instance by bundleinstancename
+         * @param  {string} biid Bundle instance ID
+         *
+         * @return {Object}      Bundle instance configuration
          */
-        getBundleInstanceConfigurationByName: function (bundleinstancename) {
-            var me = this;
-            return me.appConfig[bundleinstancename];
+        getBundleInstanceConfigurationByName: function (biid) {
+            return this.appConfig[biid];
         },
-        /*
-         * @method requireBundle executes callback after bundle sources have
-         * been loaded an d bundle has been created
+
+        /**
+         * @public @method requireBundle
+         * Executes callback after bundle sources have been loaded and bundle
+         * has been created.
+         *
+         * @param {string}                           biid     Bundle
+         *                                                    implementation ID
+         * @param {string}                           bid      Bundle ID
+         * @param {function(Bundle_manager, Object)} callback Callback function
          *
          */
-        requireBundle: function (implid, bundleid, cb) {
+        requireBundle: function (biid, bid, callback) {
             var me = this,
-                b = me.manager.createBundle(implid, bundleid);
+                bundle;
 
-            cb(me.manager, b);
+            if (biid === null || biid === undefined) {
+                throw new TypeError('requireBundle(): Missing biid');
+            }
 
+            if (bid === null || bid === undefined) {
+                throw new TypeError('requireBundle(): Missing bid');
+            }
+
+            if (callback === null || callback === undefined) {
+                throw new TypeError('requireBundle(): Missing callback');
+            }
+
+            bundle = me.manager.createBundle(biid, bid);
+
+            callback(me.manager, bundle);
         },
+
         /**
-         * @method require executes callback after any requirements in bundle
-         *         manifest have been met Work In Progress
+         * @public @method require
+         * Executes callback after any requirements in bundle manifest have been
+         * met. (Work In Progress)
+         *
+         * @param {Object}                   config   Config
+         * @param {function(Bundle_manager)} callback Callback function
+         * @param {string}                   info     Info
          *
          */
-        require: function (config, cb, info) {
+        require: function (config, callback, info) {
+            var me = this,
+                bundleDefFilename,
+                bundlePath,
+                def,
+                p,
+                pp,
+                imports,
+                packedBundleFn;
 
-            var me = this;
-            me.manager.on(config, cb, info);
-            var imports = config['Import-Bundle'],
-                p;
+            if (config === null || config === undefined) {
+                throw new TypeError('require(): Missing config');
+            }
+
+            if (callback === null || callback === undefined) {
+                throw new TypeError('require(): Missing callback');
+            }
+
+            me.manager.on(config, callback, info);
+            imports = config['Import-Bundle'];
+
             for (p in imports) {
                 if (imports.hasOwnProperty(p)) {
-                    var pp = p,
-                        def = imports[p],
-                        bundlePath = def.bundlePath || me.bundlePath;
-                    /*
-                     * var bundleDefFilename = bundlePath + pp + "/bundle.js?ts=" +
-                     * (new Date().getTime());
-                     */
-                    var bundleDefFilename;
-                    if (isPackedMode()) {
-                        var packedBundleFn = buildBundlePathForPackedMode(bundlePath + pp);
-                        bundleDefFilename = buildPathForLoaderMode(packedBundleFn, bundlePath);
+                    pp = p;
+                    def = imports[p];
+                    bundlePath = def.bundlePath || me.bundlePath;
+
+                    if (_isPackedMode()) {
+                        packedBundleFn =
+                            _buildBundlePathForPackedMode(bundlePath + pp);
+                        bundleDefFilename =
+                            _buildPathForLoaderMode(packedBundleFn, bundlePath);
                     } else {
-                        bundleDefFilename = buildPathForLoaderMode(bundlePath + pp + "/bundle.js", bundlePath);
+                        bundleDefFilename = _buildPathForLoaderMode(bundlePath +
+                            pp + '/bundle.js', bundlePath);
                     }
-                    me.manager.log("FACADE requesting load for " + pp + " from " + bundleDefFilename);
-                    me.manager.loadBundleDefinition(pp, bundleDefFilename, bundlePath + pp);
+                    me.manager.log(
+                        'FACADE requesting load for ' + pp + 'from' +
+                            bundleDefFilename
+                    );
+                    me.manager.loadBundleDefinition(
+                        pp,
+                        bundleDefFilename,
+                        bundlePath + pp
+                    );
                     me.manager.loadBundleSources(pp);
                 }
             }
         },
-        setBundlePath: function (p) {
-            this.bundlePath = p;
-        },
-        /*
-         * @method loadBundleDeps
+
+        /**
+         * @public @method setBundlePath
+         *
+         * @param {string} path Bundle path
+         *
          */
-        loadBundleDeps: function (deps, callback, manager, info) {
+        setBundlePath: function (path) {
+            this.bundlePath = path;
+        },
+
+        /**
+         * @private @method _loadBundleDeps
+         *
+         * @param {Object}                   deps     Dependencies
+         * @param {function(Bundle_manager)} callback Callback function
+         * @param {Bundle_manager}           manager  Bundle manager
+         * @param {string}                   info     Info
+         *
+         */
+        _loadBundleDeps: function (deps, callback, manager, info) {
             var me = this,
-                bdep = deps["Import-Bundle"],
+                bdep = deps['Import-Bundle'],
                 depslist = [],
                 hasPhase = false,
                 p,
@@ -2568,30 +2329,32 @@ Oskari = (function () {
                 }
                 return a.phase < b.phase ? -1 : 1;
             });
-            /*
-             * console.log("!#!#! Built LIST OF DEPS"); for( var d = 0 ; d <
-             * depslist.length ; d++ ) console.log(" - - - - -- - >
-             * "+depslist[d].name);
-             */
 
             if (hasPhase || !supportBundleAsync) {
-                me.loadBundleDep(depslist, callback, manager, info);
+                me._loadBundleDep(depslist, callback, manager, info);
             } else {
-                me.loadBundleDepAsync(deps, callback, manager, info);
+                me._loadBundleDepAsync(deps, callback, manager, info);
             }
         },
+
         /**
-         * @method loadBundleDep
+         * @private @method _loadBundleDep
+         * Maintains some a sort of order in loading.
          *
-         * maintains some a sort of order in loading
+         * @param {Object}                   depslist Dependencies
+         * @param {function(Bundle_manager)} callback Callback function
+         * @param {Bundle_manager}           manager  Bundle Manager
+         * @param {string}                   info     Info
+         *
          */
-        loadBundleDep: function (depslist, callback, manager, info) {
+        _loadBundleDep: function (depslist, callback, manager, info) {
             var me = this,
                 bundledef = depslist.pop(),
                 def,
                 bundlename,
                 fcd,
                 bdep;
+
             if (!bundledef) {
                 callback(manager);
                 return;
@@ -2602,148 +2365,199 @@ Oskari = (function () {
 
             fcd = this;
             bdep = {
-                "Import-Bundle": {}
+                'Import-Bundle': {}
             };
-            bdep["Import-Bundle"][bundlename] = def;
+            bdep['Import-Bundle'][bundlename] = def;
             fcd.require(bdep, function (manager) {
-                me.loadBundleDep(depslist, callback, manager, info);
+                me._loadBundleDep(depslist, callback, manager, info);
             }, info);
         },
-        /**
-         * @method loadBundleDep
-         *
-         * load bundles regardless of order
-         */
-        loadBundleDepAsync: function (deps, callback, manager, info) {
-            this.require(deps, callback, info);
-        },
-        /**
-         * @method playBundle
-         *
-         * plays a bundle player JSON object by instantiating any
-         * required bundle instances
-         *
-         */
-        playBundle: function (recData, cb) {
 
-            // alert(bundleRec.get('title'));
-            var metas = recData.metadata,
-                bundlename = recData.bundlename,
-                bundleinstancename = recData.bundleinstancename,
-                isSingleton = metas.Singleton,
+        /**
+         * @private @method _loadBundleDepAsync
+         * Load bundles regardless of order.
+         *
+         * @param {Object}                   depslist Dependencies
+         * @param {function(Bundle_manager)} callback Callback function
+         * @param {Bundle_manager}           manager  Bundle manager
+         * @param {string}                   info     Info
+         *
+         */
+        _loadBundleDepAsync: function (depslist, callback, manager, info) {
+            this.require(depslist, callback, info);
+        },
+
+        /**
+         * @public @method playBundle
+         * Plays a bundle player JSON object by instantiating any required
+         * bundle instances.
+         *
+         * @param {Object}           recData  Bundle player JSON
+         * @param {function(Object)} callback Callback function
+         *
+         */
+        playBundle: function (recData, callback) {
+            var metas,
+                bundlename,
+                bundleinstancename,
+                isSingleton,
                 fcd = this,
                 me = this,
-                instanceRequirements = metas["Require-Bundle-Instance"] || [],
-                instanceProps = recData.instanceProp,
+                instanceRequirements,
+                instanceProps,
                 r,
                 implInfo,
+                implInfoIsObj,
                 implid,
                 bundleid,
-                b,
-                bi,
+                bundle,
+                bundleInstance,
                 configProps,
-                yy;
+                newBundleInstance;
 
-            if (!recData.hasOwnProperty("bundleinstancename")) {
+            if (recData === null || recData === undefined) {
+                throw new TypeError('playBundle(): Missing recData');
+            }
+
+            metas = recData.metadata;
+            bundlename = recData.bundlename;
+            bundleinstancename = recData.bundleinstancename;
+            instanceRequirements = metas['Require-Bundle-Instance'] || [];
+            instanceProps = recData.instanceProp;
+            isSingleton = metas.Singleton;
+
+            if (!recData.hasOwnProperty('bundleinstancename')) {
                 if (console && console.warn) {
-                    console.warn("Bundle is missing bundleinstancename, using bundlename in its place.", recData);
+                    console.warn('Bundle is missing bundleinstancename, ' +
+                            'using bundlename in its place.',
+                        recData
+                        );
                 }
                 bundleinstancename = bundlename;
             }
 
-            me.loadBundleDeps(metas, function (manager) {
+            me._loadBundleDeps(metas, function (manager) {
                 var ip;
+
                 for (r = 0; r < instanceRequirements.length; r += 1) {
                     implInfo = instanceRequirements[r];
+                    implInfoIsObj = typeof implInfo === 'object';
                     /* implname */
-                    implid = (typeof (implInfo) === 'object') ? implInfo.bundlename : implInfo;
+                    implid =
+                        implInfoIsObj ? implInfo.bundlename : implInfo;
                     /* bundlename */
-                    bundleid = (typeof (implInfo) === 'object') ? implInfo.bundleinstancename : implInfo + "Instance";
-                    b = me.bundles[implid];
-                    if (!b) {
-                        b = manager.createBundle(implid, bundleid);
-                        me.bundles[implid] = b;
+                    bundleid =
+                        implInfoIsObj ? implInfo.bundleinstancename :
+                                implInfo + 'Instance';
+                    bundle = me.bundles[implid];
+                    if (!bundle) {
+                        bundle = manager.createBundle(implid, bundleid);
+                        me.bundles[implid] = bundle;
                     }
 
-                    bi = me.bundleInstances[bundleid];
-                    if (!bi || !isSingleton) {
-                        bi = manager.createInstance(bundleid);
-                        me.bundleInstances[bundleid] = bi;
+                    bundleInstance = me.bundleInstances[bundleid];
+                    if (!bundleInstance || !isSingleton) {
+                        bundleInstance = manager.createInstance(bundleid);
+                        me.bundleInstances[bundleid] = bundleInstance;
 
-                        configProps = me.getBundleInstanceConfigurationByName(bundleid);
+                        configProps =
+                            me.getBundleInstanceConfigurationByName(bundleid);
                         if (configProps) {
                             for (ip in configProps) {
                                 if (configProps.hasOwnProperty(ip)) {
-                                    bi[ip] = configProps[ip];
+                                    bundleInstance[ip] = configProps[ip];
                                 }
                             }
                         }
-                        bi.start();
+                        bundleInstance.start();
                     }
                 }
 
                 fcd.requireBundle(bundlename, bundleinstancename, function () {
-                    var ip;
-                    yy = manager.createInstance(bundleinstancename);
+                    var prop;
+                    newBundleInstance =
+                        manager.createInstance(bundleinstancename);
 
-                    for (ip in instanceProps) {
-                        if (instanceProps.hasOwnProperty(ip)) {
-                            yy[ip] = instanceProps[ip];
+                    for (prop in instanceProps) {
+                        if (instanceProps.hasOwnProperty(prop)) {
+                            newBundleInstance[prop] = instanceProps[prop];
                         }
                     }
 
-                    configProps = me.getBundleInstanceConfigurationByName(bundleinstancename);
+                    configProps = me.getBundleInstanceConfigurationByName(
+                        bundleinstancename
+                    );
                     if (configProps) {
-                        for (ip in configProps) {
-                            if (configProps.hasOwnProperty(ip)) {
-                                yy[ip] = configProps[ip];
+                        for (prop in configProps) {
+                            if (configProps.hasOwnProperty(prop)) {
+                                newBundleInstance[prop] = configProps[prop];
                             }
                         }
                     }
 
-                    yy.start();
-                    me.bundleInstances[bundleinstancename] = yy;
+                    newBundleInstance.start();
+                    me.bundleInstances[bundleinstancename] = newBundleInstance;
 
-                    cb(yy);
+                    callback(newBundleInstance);
                 });
             }, fcd.manager, bundlename);
         },
-        /*
-         * @method setApplicationSetup @param setup JSON application setup {
-         * startupSequence: [ <bundledef1>, <bundledef2>, <bundledef3>, ] }
-         *
+
+        /**
+         * @public @method setApplicationSetup
          * Each bundledef is of kind playable by method playBundle. callback:
          * property may be set to receive some feedback - as well as
          * registerLoaderStateListener
+         *
+         * @param {Object} setup JSON application setup {
+         * startupSequence: [ <bundledef1>, <bundledef2>, <bundledef3>, ] }
+         *
          */
         setApplicationSetup: function (setup) {
             this.appSetup = setup;
         },
+
         /**
-         * @method getApplicationSetup
-         * @return JSON application setup
+         * @public @method getApplicationSetup
+         *
+         *
+         * @return {Object} Application setup
          */
         getApplicationSetup: function () {
             return this.appSetup;
         },
+
+        /**
+         * @public @method setConfiguration
+         *
+         * @param {Object} config Config
+         *
+         */
         setConfiguration: function (config) {
             this.appConfig = config;
         },
+
+        /**
+         * @public @method getConfiguration
+         *
+         *
+         * @return {Object} 
+         */
         getConfiguration: function () {
             return this.appConfig;
         },
+
         /**
-         * @method startApplication
-         *
+         * @public @method startApplication
          * Starts JSON setup (set with setApplicationSetup)
          *
+         * @param {function(Object)} callback Callback function
+         *
          */
-        startApplication: function (cb) {
+        startApplication: function (callback) {
             var me = this,
-                appSetup = this.appSetup,
                 appConfig = this.appConfig,
                 seq = this.appSetup.startupSequence.slice(0),
-                seqLen = seq.length,
                 startupInfo = {
                     bundlesInstanceConfigurations: appConfig,
                     bundlesInstanceInfos: {}
@@ -2752,11 +2566,10 @@ Oskari = (function () {
             /**
              * Let's shift and playBundle until all done
              */
-
             var mediator = {
                 facade: me,
-                seq: seq,
-                bndl: null,
+                startupSequence: seq,
+                bundleStartInfo: null,
                 player: null,
                 startupInfo: startupInfo
             };
@@ -2767,175 +2580,589 @@ Oskari = (function () {
 
 
             mediator.player = function () {
-
-                /*console.log("BUNDLEPLAYER","shifting",mediator.seq);*/
-                mediator.bndl = mediator.seq.shift();
-                if (!mediator.bndl) {
-                    /*console.log("BUNDLEPLAYER","finished");*/
-                    if (cb) {
-                        cb(startupInfo);
+                mediator.bundleStartInfo = mediator.startupSequence.shift();
+                if (!mediator.bundleStartInfo) {
+                    if (callback) {
+                        callback(startupInfo);
                     }
                     return;
                 }
 
-                /*console.log("BUNDLEPLAYER","playing",mediator.bndl.title,mediator.bndl);*/
+                mediator.facade.playBundle(
+                    mediator.bundleStartInfo,
+                    function (bundleInstance) {
+                        var bName = mediator.bundleStartInfo.bundlename,
+                            biName =
+                                mediator.bundleStartInfo.bundleinstancename;
 
-                mediator.facade.playBundle(mediator.bndl, function (bi) {
+                        mediator.startupInfo.bundlesInstanceInfos[biName] =
+                            {
+                                bundlename: bName,
+                                bundleinstancename: biName,
+                                bundleInstance: bundleInstance
+                            };
 
-                    var bndlName = mediator.bndl.bundlename,
-                        bndlInstanceName = mediator.bndl.bundleinstancename;
-
-                    mediator.startupInfo.bundlesInstanceInfos[bndlInstanceName] = {
-                        bundlename: bndlName,
-                        bundleinstancename: bndlInstanceName,
-                        bundleInstance: bi
-                    };
-                    if (mediator.bndl.callback) {
-                        if (typeof mediator.bndl.callback === "string") {
-                            // FIXME no eval please
-                            eval(mediator.bndl.callback);
+                        // TODO apparently none of ours has a callback?
+                        if (mediator.bundleStartInfo.callback) {
+                            if (typeof mediator.bundleStartInfo.callback ===
+                                    'string') {
+                                // FIXME no eval please
+                                eval(mediator.bundleStartInfo.callback);
+                            }
+                            mediator.bndl.callback.apply(
+                                this,
+                                [bundleInstance, mediator.bundleStartInfo]
+                            );
                         }
-                        mediator.bndl.callback.apply(this, [bi, mediator.bndl]);
+                        schedule();
                     }
-                    schedule();
-                });
+                );
             };
             schedule();
 
         },
+
         /**
-         * @method stopApplication Might stop application if all stops implemented
+         * @method stopApplication
+         * Might stop app if/when all stops implemented
          */
         stopApplication: function () {
-            throw "NYI";
+            throw 'NYI';
         }
     };
 
     /**
-     *
+     * Singleton instance of Oskari.BundleManager manages lifecycle for bundles
+     * and bundle instances.
      */
-
-    var cs = clazz.prototype.singleton;
-
-    /**
-     * let's create bundle manager singleton
-     */
-    var bm = new bundle_manager();
+    var bm = new Bundle_manager();
     bm.clazz = cs;
 
     /**
-     * let's create bundle facade for bundle manager
+     * @class Oskari.BundleFacade
+     * Pluggable DOM manager. This is the no-op default implementation.
      */
-    var fcd = new bundle_facade(bm),
-        ga = cs.global,
-        bundle_dom_manager = function (dollar) {
-            this.$ = dollar;
-        };
+    var fcd = new Bundle_facade(bm),
+        ga = cs._global;
 
-    bundle_dom_manager.prototype = {
+    cs.define('Oskari.DomManager', function (dollar) {
+        this.$ = dollar;
+    }, {
+
+        /**
+         * @public @method getEl
+         *
+         * @param {string} selector Selector
+         *
+         * @return
+         */
         getEl: function (selector) {
             return this.$(selector);
         },
+
+        /**
+         * @public @method getElForPart
+         *
+         * @param {} part Part
+         *
+         */
         getElForPart: function (part) {
-            throw "N/A";
+            throw 'N/A';
         },
+
+        /**
+         * @public @method setElForPart
+         *
+         * @param part Part
+         * @param el   Element
+         *
+         */
         setElForPart: function (part, el) {
-            throw "N/A";
+            throw 'N/A';
         },
+
+        /**
+         * @public @method setElParts
+         *
+         * @param partsMap Parts map
+         *
+         */
         setElParts: function (partsMap) {
-            throw "N/A";
+            throw 'N/A';
         },
+
+        /**
+         * @public @method getElParts
+         */
         getElParts: function () {
-            throw "N/A";
+            throw 'N/A';
         },
+
+        /**
+         * @public @method pushLayout
+         *
+         * @param s
+         *
+         */
         pushLayout: function (s) {
-            throw "N/A";
+            throw 'N/A';
         },
+
+        /**
+         * @public @method popLayout
+         *
+         * @param s
+         *
+         */
         popLayout: function (s) {
-            throw "N/A";
+            throw 'N/A';
         },
+
+        /**
+         * @public @method getLayout
+         */
         getLayout: function () {
-            throw "N/A";
+            throw 'N/A';
+        }
+    });
+    // FIXME no jQuery in core
+    var domMgr = cs.create('Oskari.DomManager', jQuery);
+
+    fcd.bundle_dom_manager = domMgr;
+
+    // Oskari1API
+
+    /**
+     * @static @property Oskari
+     */
+    var Oskari1LegacyAPI = {
+        bundle_manager: bm,
+        /* */
+        bundle_facade: fcd,
+        bundle_locale: blocale,
+        app: fcd,
+        /* */
+        clazz: cs,
+
+        /**
+         * @public @method Oskari.$
+         *
+         *
+         * @return {} 
+         */
+        '$': function () {
+            return ga.apply(cs, arguments);
+        },
+
+        /**
+         * @public @static @method Oskari.setLoaderMode
+         *
+         * @param {string} m Loader mode
+         *
+         */
+        setLoaderMode: function (m) {
+            if (typeof m !== 'string') {
+                throw new TypeError(
+                    'setLoaderMode(): m is not a string'
+                );
+            }
+            mode = m;
+        },
+
+        /**
+         * @public @method Oskari.getLoaderMode
+         *
+         *
+         * @return {string} Loader mode 
+         */
+        getLoaderMode: function () {
+            return mode;
+        },
+
+        /**
+         * @public @method Oskari.setDebugMode
+         *
+         * @param {boolean} d Debug mode on/off
+         *
+         */
+        setDebugMode: function (d) {
+            if (typeof d !== 'boolean') {
+                throw new TypeError(
+                    'setDebugMode(): d is not a boolean'
+                );
+            }
+            isDebug = d;
+        },
+
+        /**
+         * @public @method Oskari.setSupportBundleAsync
+         *
+         * @param {boolean} sba Support async on/off
+         *
+         */
+        setSupportBundleAsync: function (sba) {
+            if (typeof sba !== 'boolean') {
+                throw new TypeError(
+                    'setSupportBundleAsync(): sba is not a boolean'
+                );
+            }
+            supportBundleAsync = sba;
+        },
+
+        /**
+         * @public @method Oskari.getSupportBundleAsync
+         *
+         *
+         * @return {boolean} Support async on/off
+         */
+        getSupportBundleAsync: function () {
+            return supportBundleAsync;
+        },
+
+        /**
+         * @public @method Oskari.setBundleBasePath
+         *
+         * @param {string} bp Bundle base path
+         *
+         */
+        setBundleBasePath: function (bp) {
+            if (typeof bp !== 'string') {
+                throw new TypeError(
+                    'setBundleBasePath(): bp is not a string'
+                );
+            }
+            basePathForBundles = bp;
+        },
+
+        /**
+         * @public @method Oskari.getBundleBasePath
+         *
+         *
+         * @return {string} Bundle base path
+         */
+        getBundleBasePath: function () {
+            return basePathForBundles;
+        },
+
+        /**
+         * @public @method Oskari.setPreloaded
+         *
+         * @param {boolean} usep Preloaded on/off
+         *
+         */
+        setPreloaded: function (usep) {
+            if (typeof usep !== 'boolean') {
+                throw new TypeError(
+                    'setPreloaded(): usep is not a boolean'
+                );
+            }
+            _preloaded = usep;
+        },
+
+        /**
+         * @public @method Oskari.setInstTs
+         *
+         * @param {} x
+         *
+         */
+        setInstTs: function (x) {
+            instTs = x;
+        },
+
+        /**
+         * @public @static @method Oskari.registerLocalization
+         *
+         * @param  {Object|Object[]} props Properties
+         *
+         */
+        registerLocalization: function (props) {
+            var p,
+                pp;
+
+            if (props === null || props === undefined) {
+                throw new TypeError('registerLocalization(): Missing props');
+            }
+
+            if (props.length) {
+                for (p = 0; p < props.length; p += 1) {
+                    pp = props[p];
+                    blocale.setLocalization(pp.lang, pp.key, pp.value);
+                }
+            } else {
+                return blocale.setLocalization(
+                    props.lang,
+                    props.key,
+                    props.value
+                );
+            }
+        },
+
+        /**
+         * @public @static @method Oskari.getLocalization
+         *
+         * @param  {string} key Key
+         *
+         * @return {string} 
+         */
+        getLocalization: function (key) {
+            return blocale.getLocalization(key);
+        },
+
+        /**
+         * @public @static @method Oskari.getLang
+         *
+         *
+         * @return {string} Language
+         */
+        getLang: function () {
+            return blocale.getLang();
+        },
+
+        /**
+         * @public @static @method Oskari.setLang
+         *
+         * @param  {string} lang Language
+         *
+         */
+        setLang: function (lang) {
+            return blocale.setLang(lang);
+        },
+
+        /**
+         * @public @static @method Oskari.setSupportedLocales
+         *
+         * @param  {string[]} locales Locales array
+         *
+         */
+        setSupportedLocales: function (locales) {
+            return blocale.setSupportedLocales(locales);
+        },
+
+        /**
+         * @public @static @method Oskari.getSupportedLocales
+         *
+         *
+         * @return {string[]} Supported locales
+         */
+        getSupportedLocales: function () {
+            return blocale.getSupportedLocales();
+        },
+
+        /**
+         * @public @static @method Oskari.getDefaultLanguage
+         *
+         *
+         * @return {string} Default language
+         */
+        getDefaultLanguage: function () {
+            return blocale.getDefaultLanguage();
+        },
+
+        /**
+         * @public @static @method Oskari.getSupportedLanguages
+         *
+         *
+         * @return {string[]} Supported languages
+         */
+        getSupportedLanguages: function () {
+            return blocale.getSupportedLanguages();
+        },
+
+        /**
+         * @public @static @method Oskari.purge
+         */
+        purge: function () {
+            bm.purge();
+            cs.purge('Oskari');
+        },
+
+        /**
+         * @public @static @method Oskari.getDomManager
+         *
+         *
+         * @return DOM Manager
+         */
+        getDomManager: function () {
+            return domMgr;
+        },
+
+        /**
+         * @public @static @method Oskari.setDomManager
+         *
+         * @param dm DOM Manager
+         *
+         */
+        setDomManager: function (dm) {
+            domMgr = dm;
+        },
+
+        /**
+         * @public @static @method Oskari.getSandbox
+         *
+         * @param  {string=} sandboxName Sandbox name
+         *
+         * @return {Object}              Sandbox
+         */
+        getSandbox: function (sandboxName) {
+            return ga.apply(cs, [sandboxName || 'sandbox']);
+        },
+
+        /**
+         * @public @static @method Oskari.setSandbox
+         *
+         * @param  {string=} sandboxName Sandbox name
+         * @param  {Object}  sandbox     Sandbox
+         *
+         * @return
+         */
+        setSandbox: function (sandboxName, sandbox) {
+            return ga.apply(cs, [sandboxName || 'sandbox', sandbox]);
         }
     };
 
+    /* Oskari1BuilderAPI */
 
-    var domMgr = new bundle_dom_manager(jQuery);
+    /* Oskari1Builder class module  */
 
+    var oskari1BuilderSerial = (function () {
+        var serials = {};
+        return {
+            get: function (type) {
+                if (!serials[type]) {
+                    serials[type] = 1;
+                } else {
+                    serials[type] += 1;
+                }
+                return serials[type];
+            }
+        };
+    }());
 
-    /* Oskari 2.x backport begin */
-
-    /* o2 clazz module  */
-    var o2anonclass = 0,
-        o2anoncategory = 0,
-        o2anonbundle = 0;
-
-    /* this is Oskari 2 modulespec prototype which provides a leaner API  */
-
-    /* @class Oskari.ModuleSpec 
-     *
-     * helper class instance of which is returned from oskari 2.0 api
+    /* @class Oskari.ModuleSpec
+     * Helper class instance of which is returned from oskari 2.0 api
      * Returned class instance may be used to chain class definition calls.
+     *
+     * @param {Object} classInfo ClassInfo
+     * @param {string} className Class name
+     *
      */
-    cs.define('Oskari.ModuleSpec', function (clazzInfo, clazzName) {
+    cs.define('Oskari.ModuleSpec', function (classInfo, className) {
         this.cs = cs;
-        this.clazzInfo = clazzInfo;
-        this.clazzName = clazzName;
+        this.classInfo = classInfo;
+        this.className = className;
 
     }, {
 
-        slicer: Array.prototype.slice,
+        /**
+         * @private @method _slicer
+         */
+        _slicer: Array.prototype.slice,
 
-        /* @method category 
-         * adds a set of methods to class
+        /**
+         * @method category 
+         * Adds a set of methods to class
+         *
+         * @param  {Object}            prototype    Prototype
+         * @param  {string}            categoryName Category name
+         *
+         * @return {Oskari.ModuleSpec}              this 
          */
-        category: function (protoProps, traitsName) {
-            var clazzInfo = cs.category(this.clazzName, traitsName || (['__', (++o2anoncategory)].join('_')), protoProps);
-            this.clazzInfo = clazzInfo;
-            return this;
-        },
-        /* @method methods
-         * adds a set of methods to class - alias to category
-         */
-        methods: function (protoProps, traitsName) {
-            var clazzInfo = cs.category(this.clazzName, traitsName || (['__', (++o2anoncategory)].join('_')), protoProps);
-            this.clazzInfo = clazzInfo;
+        category: function (prototype, categoryName) {
+            var classInfo = cs.category(
+                this.className,
+                categoryName ||
+                    (['__', oskari1BuilderSerial.get('Category')].join('_')),
+                prototype
+            );
+            this.classInfo = classInfo;
             return this;
         },
 
-        /* @method extend
-         * adds inheritance from  a base class
-         * base class can be declared later but must be defined before instantiation
+        /**
+         * @method methods
+         * Adds a set of methods to class - alias to category
+         *
+         * @param  {}                  prototype    Prototype
+         * @param  {string}            categoryName Category name
+         *
+         * @return {Oskari.ModuleSpec}              this 
          */
-        extend: function (clsss) {
-            var clazzInfo = cs.extend(this.clazzName, clsss.length ? clsss : [clsss]);
-            this.clazzInfo = clazzInfo;
+        methods: function (prototype, categoryName) {
+            var classInfo = cs.category(
+                this.className,
+                categoryName ||
+                    (['__', oskari1BuilderSerial.get('Category')].join('_')),
+                prototype
+            );
+            this.classInfo = classInfo;
             return this;
         },
-        /* @method create
-         * creates an instance of this class
+
+        /**
+         * @method extend
+         * Adds inheritance from a base class.
+         * Base class can be declared later but must be defined before
+         * instantiation.
+         *
+         * @param  {Object|Object[]}   clazz Class or an array of classes
+         *
+         * @return {Oskari.ModuleSpec}       this 
+         */
+        extend: function (clazz) {
+            var classInfo;
+
+            if (clazz === null || clazz === undefined) {
+                throw new TypeError('extend(): Missing clazz');
+            }
+
+            classInfo = cs.extend(
+                this.className,
+                clazz.length ? clazz : [clazz]
+            );
+            this.classInfo = classInfo;
+            return this;
+        },
+
+        /**
+         * @method create
+         * Creates an instance of this clazz
+         *
+         *
+         * @return {Object} Class instance 
          */
         create: function () {
-            return cs.createWithPdefsp(this.clazzInfo, arguments);
+            return cs.createWithClassInfo(this.classInfo, arguments);
         },
 
-        /*
-         * @method returns the class name
+        /**
+         * @method nam
+         * Returns the class name
+         *
+         *
+         * @return {string} Class name 
          */
         name: function () {
-            return this.clazzName;
+            return this.className;
         },
 
-        /*
-         * @method returns class metadata
+        /**
+         * @method metadata
+         * Returns class metadata
+         *
+         *
+         * @return {Object} Class metadata 
          */
         metadata: function () {
-            return cs.metadata(this.clazzName);
+            return cs.getMetadata(this.className);
         },
 
-        /*
+        /**
          * @method events
-         * adds a set of event handlers to class
+         * Adds a set of event handlers to class
+         *
+         * @param  {Object}            events Eventhandlers map
+         *
+         * @return {Oskari.ModuleSpec}        this
          */
         events: function (events) {
             var orgmodspec = this;
@@ -2952,292 +3179,112 @@ Oskari = (function () {
             }, '___events');
             return orgmodspec;
         },
+
+        /**
+         * @method requests
+         *
+         * @param  {Object}            requests Requesthandlers map
+         *
+         * @return {Oskari.ModuleSpec}          this
+         */
         requests: function (requests) {
             var orgmodspec = this;
             orgmodspec.category({
                 requestHandlers: requests,
                 onRequest: function (request) {
                     var handler = this.requestHandlers[request.getName()];
-                    if (!handler) {
-                        return;
-                    }
-
-                    return handler.apply(this, [request]);
+                    return handler ? handler.apply(this, [request]) : undefined;
                 }
             }, '___requests');
             return orgmodspec;
         },
+
+        /**
+         * @method builder
+         *
+         *
+         * @return {function} 
+         */
         builder: function () {
-            return cs.builderFromPdefsp(this.clazzInfo);
+            return cs.getBuilderFromClassInfo(this.classInfo);
         }
 
 
     });
-    /* Oskari 2.x backport end */
 
+    var Oskari1BuilderAPI = Oskari1LegacyAPI;
 
     /**
-     * @static
-     * @property Oskari
+     * @public @method cls
+     * Entry point to new class API.
+     * @see Oskari.ModuleSpec above.
+     *
+     * @param  {string}   className   Class name
+     * @param  {function} constructor Constructor
+     * @param  {Object}   proto       Prototype
+     * @param  {Object}   metas       Metadata
+     *
+     * @return {Object}               Class instance 
      */
-    var bndl = {
-        bundle_manager: bm,
-        /* */
-        bundle_facade: fcd,
-        bundle_locale: blocale,
-        app: fcd,
-        /* */
-        clazz: cs,
+    Oskari1BuilderAPI.cls = function (className, constructor, proto, metas) {
+        var classInfo;
 
-        /**
-         * @method Oskari.$
-         */
-        "$": function () {
-            return ga.apply(cs, arguments);
-        },
-        /** @static
-         *  @property Oskari.clazzadapter
-         *  prototype for a class namespace adapter class
-         */
-        clazzadapter: clazzadapter,
-
-        run: function (func) {
-            func();
-        },
-        /**
-         * @static
-         * @method Oskari.setLoaderMode
-         */
-        setLoaderMode: function (m) {
-            mode = m;
-        },
-        getLoaderMode: function () {
-            return mode;
-        },
-        setDebugMode: function (d) {
-            isDebug = d;
-        },
-        setSupportBundleAsync: function (a) {
-            supportBundleAsync = a;
-        },
-        getSupportBundleAsync: function () {
-            return supportBundleAsync;
-        },
-        setBundleBasePath: function (bp) {
-            basePathForBundles = bp;
-        },
-        getBundleBasePath: function () {
-            return basePathForBundles;
-        },
-        setPreloaded: function (usep) {
-            _preloaded = usep;
-        },
-        setInstTs: function (x) {
-            instTs = x;
-        },
-        /**
-         * @static
-         * @method Oskari.registerLocalization
-         */
-        registerLocalization: function (props) {
-            var p,
-                pp;
-            /*console.log("registerLocalization",props);*/
-            if (props.length) {
-                for (p = 0; p < props.length; p += 1) {
-                    pp = props[p];
-                    blocale.setLocalization(pp.lang, pp.key, pp.value);
-                }
-            } else {
-                return blocale.setLocalization(props.lang, props.key, props.value);
-            }
-        },
-        /**
-         * @static
-         * @method Oskari.getLocalization
-         */
-        getLocalization: function (key) {
-            return blocale.getLocalization(key);
-        },
-        /**
-         * @static
-         * @method Oskari.getLang
-         */
-        getLang: function () {
-            return blocale.getLang();
-        },
-        /**
-         * @static
-         * @method Oskari.setLang
-         */
-        setLang: function (lang) {
-            return blocale.setLang(lang);
-        },
-        /**
-         * @static
-         * @method Oskari.setSupportedLocales
-         */
-        setSupportedLocales: function (locales) {
-            return blocale.setSupportedLocales(locales);
-        },
-        /**
-         * @static
-         * @method Oskari.getSupportedLocales
-         */
-        getSupportedLocales: function () {
-            return blocale.getSupportedLocales();
-        },
-        /**
-         * @static
-         * @method Oskari.getDefaultLanguage
-         */
-        getDefaultLanguage: function () {
-            return blocale.getDefaultLanguage();
-        },
-        /**
-         * @static
-         * @method Oskari.getSupportedLanguages
-         */
-        getSupportedLanguages: function () {
-            return blocale.getSupportedLanguages();
-        },
-        /**
-         * @static
-         * @method Oskari.purge
-         */
-        purge: function () {
-            bm.purge();
-            cs.purge("Oskari");
-        },
-
-        /**
-         * @static
-         * @method Oskari.getDomManager
-         */
-        getDomManager: function () {
-            return domMgr;
-        },
-        /**
-         * @static
-         * @method Oskari.setDomManager
-         */
-        setDomManager: function (dm) {
-            domMgr = dm;
-        },
-
-        /**
-         * @static
-         * @method getSandbox
-         */
-        getSandbox: function (sandboxName) {
-            return ga.apply(cs, [sandboxName || 'sandbox']);
-        },
-        /**
-         * @static
-         * @method setSandbox
-         */
-        setSandbox: function (sandboxName, sandbox) {
-            return ga.apply(cs, [sandboxName || 'sandbox', sandbox]);
-        },
-
-        /* Oskari 2.x backport begin */
-        /* Oskari 2.x backport end */
-
-        /* entry point to new class API see Oskari.ModuleSpec above */
-        cls: function (clazzName, ctor, protoProps, metas) {
-
-            var clazzInfo;
-
-            if (!clazzName) {
-                clazzName = ['Oskari', '_', (++o2anonclass)].join('.');
-            } else {
-                clazzInfo = cs.lookup(clazzName);
-            }
-
-            if (!(clazzInfo && clazzInfo._constructor && !ctor)) {
-                clazzInfo = cs.define(clazzName, ctor ||
-                    function () {}, protoProps, metas || {});
-            }
-
-            return cs.create('Oskari.ModuleSpec', clazzInfo, clazzName);
-
-        },
-
-        /* o2 helper to access sandbox */
-        sandbox: function (sandboxName) {
-            var sandboxref = {
-                sandbox: ga.apply(cs, [sandboxName || 'sandbox'])
-            };
-
-            sandboxref.on = function (instance) {
-                var me = this,
-                    p,
-                    r;
-                if (instance.eventHandlers) {
-                    for (p in instance.eventHandlers) {
-                        if (instance.eventHandlers.hasOwnProperty(p)) {
-                            me.sandbox.registerForEventByName(instance, p);
-                        }
-                    }
-                }
-                if (instance.requestHandlers) {
-                    for (r in instance.requestHandlers) {
-                        if (instance.requestHandlers.hasOwnProperty(r)) {
-                            me.sandbox.addRequestHandler(r, reqHandlers[r]);
-                        }
-                    }
-                }
-            };
-            sandboxref.off = function (instance) {
-                var me = this,
-                    p,
-                    r;
-                if (instance.eventHandlers) {
-                    for (p in instance.eventHandlers) {
-                        if (instance.eventHandlers.hasOwnProperty(p)) {
-                            me.sandbox.unregisterFromEventByName(instance, p);
-                        }
-                    }
-                }
-                if (instance.requestHandlers) {
-                    for (r in instance.requestHandlers) {
-                        if (instance.requestHandlers.hasOwnProperty(r)) {
-                            me.sandbox.removeRequestHandler(r, reqHandlers[r]);
-                        }
-                    }
-                }
-            };
-            sandboxref.slicer = Array.prototype.slice;
-            sandboxref.notify = function (eventName) {
-                var me = this,
-                    sandbox = me.sandbox,
-                    builder = me.sandbox.getEventBuilder(eventName),
-                    args = me.slicer.apply(arguments, [1]),
-                    eventObj = builder.apply(builder, args);
-                return sandbox.notifyAll(eventObj);
-            };
-
-            return sandboxref;
-
-        },
-
-        /* o2 helper to register localisation */
-        loc: function () {
-            return o2main.registerLocalization.apply(o2main, arguments);
+        if (!className) {
+            className = [
+                'Oskari',
+                '_',
+                oskari1BuilderSerial.get('Class')
+            ].join('.');
+        } else {
+            classInfo = cs.lookup(className);
         }
 
+        if (!(classInfo && classInfo._constructor && !constructor)) {
+            classInfo = cs.define(
+                className,
+                constructor || function () {},
+                proto,
+                metas || {}
+            );
+        }
+
+        return cs.create('Oskari.ModuleSpec', classInfo, className);
 
     };
 
-    /* Oskari 2.x backport begin */
-    var o2main = bndl;
-    /* o2 api for event class */
+    /**
+     * @public @method loc
+     * Oskari1Builder helper to register localisation
+     */
+    Oskari1BuilderAPI.loc = function () {
+        return this.registerLocalization.apply(Oskari1BuilderAPI, arguments);
+    };
 
-    o2main.eventCls = function (eventName, constructor, protoProps) {
-        var clazzName = ['Oskari', 'event', 'registry', eventName].join('.'),
-            rv = o2main.cls(clazzName, constructor, protoProps, {
-                protocol: ['Oskari.mapframework.event.Event']
-            });
+    /**
+     * @public @static @method Oskari.eventCls
+     * O2 api for event class
+     *
+     * @param  {string}   eventName   Event name
+     * @param  {function} constructor Constructor
+     * @param  {Object}   proto       Prototype
+     *
+     * @return
+     */
+    Oskari1BuilderAPI.eventCls = function (eventName, constructor, proto) {
+        var className,
+            rv;
+
+        if (eventName === null || eventName === undefined) {
+            throw new TypeError('eventCls(): Missing eventName');
+        }
+
+        className = 'Oskari.event.registry.' + eventName;
+        rv = Oskari1BuilderAPI.cls(
+            className,
+            constructor,
+            proto,
+            {protocol: ['Oskari.mapframework.event.Event']}
+        );
 
         rv.category({
             getName: function () {
@@ -3250,12 +3297,31 @@ Oskari = (function () {
         return rv;
     };
 
-    /* o2 api for request class */
-    o2main.requestCls = function (requestName, constructor, protoProps) {
-        var clazzName = ['Oskari', 'request', 'registry', requestName].join('.'),
-            rv = o2main.cls(clazzName, constructor, protoProps, {
-                protocol: ['Oskari.mapframework.request.Request']
-            });
+    /**
+     * @public @static @method Oskari.requestCls
+     * O2 api for request class
+     *
+     * @param  {string}   className   Class name
+     * @param  {function} constructor Constructor
+     * @param  {Object}   proto       Prototype
+     *
+     * @return {Object} 
+     */
+    Oskari1BuilderAPI.requestCls = function (requestName, constructor, proto) {
+        var className,
+            rv;
+
+        if (requestName === null || requestName === undefined) {
+            throw new TypeError('requestCls(): Missing requestName');
+        }
+
+        className = 'Oskari.request.registry.' + requestName;
+        rv = Oskari1BuilderAPI.cls(
+            className,
+            constructor,
+            proto,
+            {protocol: ['Oskari.mapframework.request.Request']}
+        );
 
         rv.category({
             getName: function () {
@@ -3268,108 +3334,157 @@ Oskari = (function () {
         return rv;
     };
 
-
-    o2main._baseClassFor = {
-        'extension': "Oskari.userinterface.extension.EnhancedExtension",
-        'bundle': "Oskari.mapframework.bundle.extension.ExtensionBundle",
-        'tile': "Oskari.userinterface.extension.EnhancedTile",
-        'flyout': "Oskari.userinterface.extension.EnhancedFlyout",
-        'view': "Oskari.userinterface.extension.EnhancedView"
+    Oskari1BuilderAPI._baseClassFor = {
+        extension: 'Oskari.userinterface.extension.EnhancedExtension',
+        bundle: 'Oskari.mapframework.bundle.extension.ExtensionBundle',
+        tile: 'Oskari.userinterface.extension.EnhancedTile',
+        flyout: 'Oskari.userinterface.extension.EnhancedFlyout',
+        view: 'Oskari.userinterface.extension.EnhancedView'
     };
 
-
-    /* o2 api for bundle classes */
-
-    /* @static @method Oskari.extensionCls
+    /**
+     * @public @static @method Oskari.extensionCls O2 api for extension classes
      *
+     * @param  {string} className Class name
+     *
+     * @return
      */
-    o2main.extensionCls = function (clazzName) {
-        return o2main.cls(clazzName).extend(this._baseClassFor.extension);
-        /* @static @method Oskari.bundleCls 
-         *
-         */
-    };
-    o2main.bundleCls = function (bnldId, clazzName) {
-
-        if (!bnldId) {
-            bnldId = (['__', (++o2anonbundle)].join('_'));
+    Oskari1BuilderAPI.extensionCls = function (className) {
+        if (className === null || className === undefined) {
+            throw new TypeError('extensionCls(): Missing className');
         }
 
-        var rv = o2main.cls(clazzName, function () {}, {
+        return Oskari1BuilderAPI.cls(className).extend(
+            this._baseClassFor.extension
+        );
+    };
+
+    /**
+     * @public @static @method Oskari.bundleCls O2 api for bundle classes
+     *
+     * @param  {string} bundleId  Bundle ID
+     * @param  {string} className Class name
+     *
+     * @return {Object}           Bundle instance 
+     */
+    Oskari1BuilderAPI.bundleCls = function (bundleId, className) {
+        var rv;
+
+        if (className === null || className === undefined) {
+            throw new TypeError('bundleCls(): Missing className');
+        }
+
+        if (!bundleId) {
+            bundleId = (['__', oskari1BuilderSerial.get('Bundle')].join('_'));
+        }
+
+        rv = Oskari1BuilderAPI.cls(className, function () {}, {
             update: function () {}
         }, {
-            "protocol": ["Oskari.bundle.Bundle", this._baseClassFor.bundle],
-            "manifest": {
-                "Bundle-Identifier": bnldId
+            protocol: ['Oskari.bundle.Bundle', this._baseClassFor.bundle],
+            manifest: {
+                'Bundle-Identifier': bundleId
             }
         });
-        bm.installBundlePdefsp(bnldId, rv.clazzInfo);
+        bm.installBundleClassInfo(bundleId, rv.classInfo);
 
-        rv.___bundleIdentifier = bnldId;
-        rv.loc = function (props) {
-            props.key = this.___bundleIdentifier;
-            o2main.registerLocalization(props);
+        rv.___bundleIdentifier = bundleId;
+
+        rv.loc = function (properties) {
+            properties.key = this.___bundleIdentifier;
+            Oskari1BuilderAPI.registerLocalization(properties);
             return rv;
         };
-        rv.start = function (instanceid) {
-            var bundleid = this.___bundleIdentifier;
 
-            if (!fcd.bundles[bundleid]) {
-                var b = bm.createBundle(bundleid, bundleid);
-                fcd.bundles[bundleid] = b;
+        // FIXME instanceId isn't used for anything?
+        rv.start = function (instanceId) {
+            var bid = this.___bundleIdentifier,
+                bundle,
+                bundleInstance,
+                configProps,
+                ip;
+
+            if (!fcd.bundles[bid]) {
+                bundle = bm.createBundle(bid, bid);
+                fcd.bundles[bid] = bundle;
             }
 
-            var bi = bm.createInstance(bundleid);
-            fcd.bundleInstances[bundleid] = bi;
+            bundleInstance = bm.createInstance(bid);
+            fcd.bundleInstances[bid] = bundleInstance;
 
-            var configProps = fcd.getBundleInstanceConfigurationByName(bundleid),
-                ip;
+            configProps = fcd.getBundleInstanceConfigurationByName(bid);
             if (configProps) {
                 for (ip in configProps) {
                     if (configProps.hasOwnProperty(ip)) {
-                        bi[ip] = configProps[ip];
+                        bundleInstance[ip] = configProps[ip];
                     }
                 }
             }
-            bi.start();
-
-            return bi;
+            bundleInstance.start();
+            return bundleInstance;
         };
         rv.stop = function () {
-            var bundleid = this.___bundleIdentifier,
-                bi = fcd.bundleInstances[bundleid];
-            return bi.stop();
+            var bundleInstance = fcd.bundleInstances[this.___bundleIdentifier];
+
+            return bundleInstance.stop();
         };
         return rv;
     };
+
     /**
-     * @static @method flyoutCls
-     */
-    o2main.flyoutCls = function (clazzName) {
-        return o2main.cls(clazzName).extend(this._baseClassFor.flyout);
-    };
-    /* @static @method Oskari.tileCls 
+     * @static @method Oskari.flyoutCls
      *
-     */
-    o2main.tileCls = function (clazzName) {
-        return o2main.cls(clazzName).extend(this._baseClassFor.tile);
-    };
-    /* @static @method Oskari.bundleCls 
+     * @param  {string} className Class name
      *
+     * @return
      */
-    o2main.viewCls = function (clazzName) {
-        return o2main.cls(clazzName).extend(this._baseClassFor.view);
+    Oskari1BuilderAPI.flyoutCls = function (className) {
+        if (className === null || className === undefined) {
+            throw new TypeError('flyoutCls(): Missing className');
+        }
+
+        return Oskari1BuilderAPI.cls(className).extend(
+            this._baseClassFor.flyout
+        );
     };
-    /* Oskari 2.x backport end */
+
+    /**
+     * @static @method Oskari.tileCls 
+     *
+     * @param  {string} className Class name
+     *
+     * @return
+     */
+    Oskari1BuilderAPI.tileCls = function (className) {
+        if (className === null || className === undefined) {
+            throw new TypeError('tileCls(): Missing className');
+        }
+
+        return Oskari1BuilderAPI.cls(className).extend(this._baseClassFor.tile);
+    };
+
+    /**
+     * @static @method Oskari.bundleCls
+     *
+     * @param  {string} className Class name
+     *
+     * @return
+     */
+    Oskari1BuilderAPI.viewCls = function (className) {
+        if (className === null || className === undefined) {
+            throw new TypeError('viewCls(): Missing className');
+        }
+
+        return Oskari1BuilderAPI.cls(className).extend(this._baseClassFor.view);
+    };
 
     /**
      * Let's register Oskari as a Oskari global
      */
-    ga.apply(cs, ['Oskari', bndl]);
+    ga.apply(cs, ['Oskari', Oskari1LegacyAPI]);
 
     /*
-     * window.bundle = bndl; window.Oskari = bndl;
+     * window.bundle = Oskari1LegacyAPI; window.Oskari = Oskari1LegacyAPI;
      */
-
-    return bndl;
-})();
+    return Oskari1LegacyAPI;
+}());

@@ -160,7 +160,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                             e.preventDefault();
                         } else {
                             me.progressSpinner.start();
+                            var executed = 0;
                             me.container.find('iframe').on('load', function() {
+                                if (executed > 0) {
+                                    console.log('called more than once');
+                                    return;
+                                }
+                                executed++; 
                                 me.progressSpinner.stop();
                                 me.__finish(jQuery(this), locale);
                             });
@@ -263,7 +269,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 this.instance.addUserLayer(json);
             } else {
                 title = null;
-                msg = locale.finish.failure.message;
+                msg = locale.finish.failure.title;
             }
 
             this.__showMessage(title, msg);

@@ -17,7 +17,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
         me._select = document.createElement('select');
         me._element.className = 'oskari-formcomponent oskari-select';
         me._titleEl.style.display = 'none';
-        me._select.onchange = function () {me._selectionChanged(); };
+        if (name !== null && name !== undefined) {
+            me.setName(name);
+        }
+        me._select.onchange = function () {
+            me._valueChanged();
+        };
         me._element.appendChild(me._titleEl);
         me._element.appendChild(me._select);
     }, {
@@ -32,7 +37,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
 
         isEnabled: function () {
             'use strict';
-            return !this.getElement().disabled;
+            return !this._element.disabled;
         },
 
         /**
@@ -66,12 +71,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
         setOptions: function (options) {
             'use strict';
             if (!Array.isArray(options)) {
+                debugger;
                 throw new TypeError(
                     this.getClazz() +
                         '.setOptions: options is not an array'
                 );
             }
-            var els = this._select.querySelectorAll('option'),
+            var oldValue = this.getValue(),
+                els = this._select.querySelectorAll('option'),
                 i,
                 j,
                 option;
@@ -93,15 +100,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
             for (j = els.length; i < j; i += 1) {
                 this._select.removeChild(els[i]);
             }
-
-            // Update selection
-            this.setValue(this.getValue());
+            if (this.getValue() !== oldValue) {
+                this._valueChanged();
+            }
         },
 
-        _getValueArray: function () {
+        _getValueArray: function (value) {
             'use strict';
-            var selectedValues = [],
-                value = this.getValue();
+            var selectedValues = [];
 
             // Fill selected values for easy contains check
             if (value !== null && value !== undefined) {
@@ -119,19 +125,22 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
             return selectedValues;
         },
 
-        _selectionChanged: function () {
-            'use strict';
-            var options = this._select.querySelectorAll('option:checked'),
-                value;
-
-            if (this.isMultiple()) {
-                value = options.map(function (o) {
-                    return o.value;
-                });
-            } else {
-                value = options.length ? options[0].value : undefined;
+        _equalValues: function (oldValue, newValue) {
+            var i,
+                equalValues = oldValue.length === newValue.length;
+            if (equalValues) {
+                for (i = 0; i < oldValue.length; i += 1) {
+                    if (oldValue[i] !== newValue[i]) {
+                        equalValues = false;
+                        break;
+                    }
+                }
             }
-            this._value = value;
+            return equalValues;
+        },
+
+        _valueChanged: function () {
+            'use strict';
             if (this.getHandler()) {
                 this.getHandler()(this.getValue());
             }
@@ -146,11 +155,26 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
         },
 
         /**
-         * @method _setNameImpl
+         * @method getTitle
+         * @return {String} name
          */
-        _setNameImpl: function () {
+        getName: function () {
             'use strict';
-            this._select.name = this.getName() || '';
+            return this.select.name;
+        },
+
+        /**
+         * @method setName
+         * @param {String} name
+         */
+        setName: function (name) {
+            'use strict';
+            this._select.name = name || '';
+        },
+
+        isRequired: function () {
+            'use strict';
+            return this._select.required;
         },
 
         /**
@@ -161,12 +185,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
             this._select.required = this.isRequired();
         },
 
+
         /**
-         * @method _setTitleImpl
+         * @method getTitle
          */
-        _setTitleImpl: function () {
+        getTitle: function () {
             'use strict';
-            var title = this.getTitle();
+            return this._titleEl.textContent;
+        },
+
+        /**
+         * @method setTitle
+         * @param {String} title
+         */
+        setTitle: function (title) {
+            'use strict';
             this._titleEl.textContent = '';
             if (title !== null && title !== undefined) {
                 this._titleEl.style.display = '';
@@ -176,45 +209,75 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
             }
         },
 
-        /**
-         * @method _setTooltipImpl
-         */
-        _setTooltipImpl: function () {
+        getTooltip: function () {
             'use strict';
-            this._select.title = this.getTooltip();
+            return this._element.title;
         },
 
         /**
-         * @method _setValueImpl
+         * @method setTooltip
          */
-        _setValueImpl: function () {
+        setTooltip: function (tooltip) {
+            'use strict';
+            this._element.title = tooltip;
+        },
+
+        _getOptionValue: function (o) {
+            // Apparently we should return content if there's no value.
+            // If the value is an empty string, it should be returned...
+            return o.value !== undefined ? o.value : o.textContent;
+        },
+
+        getValue: function () {
             'use strict';
             var i,
-                selectedValues = this._getValueArray(),
+                me = this,
+                opts = me._select.querySelectorAll('option:checked'),
+                value;
+
+            if (me.isMultiple()) {
+                value = [];
+                for (i = 0; i < opts.length; i += 1) {
+                    value.push(me._getOptionValue(opts[i]));
+                }
+            } else {
+                value = opts.length ? me._getOptionValue(opts[0]) : undefined;
+            }
+            return value;
+        },
+
+        /**
+         * @method setValue
+         */
+        setValue: function (value) {
+            'use strict';
+            var i,
+                oldValues = this._getValueArray(this.getValue()),
+                selectedValues = this._getValueArray(value),
+                valueHasChanged,
                 option,
                 options = this._select.querySelectorAll('option'),
-                found = [];
+                found = false;
 
             for (i = options.length - 1; i >= 0; i -= 1) {
                 option = options[i];
                 option.selected = selectedValues.indexOf(option.value) !== -1;
                 if (option.selected) {
-                    found.push(option.value);
+                    found = true;
                 }
             }
 
             // Select first one if there's no found selections
             if (!found && options) {
                 options[0].selected = true;
-                found.push(options[0].value);
             }
 
-            // Force _value to match the actual selection
-            if (this.isMultiple()) {
-                this._value = found;
-            } else {
-                this._value = found ? found[found.length - 1] : undefined;
+            selectedValues = this._getValueArray(this.getValue());
+            valueHasChanged = this._equalValues(oldValues, selectedValues);
+            if (valueHasChanged) {
+                this._valueChanged();
             }
+
         },
 
         /**

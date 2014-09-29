@@ -10,6 +10,10 @@ Added username and password support to the layer admin flyout.
 
 Disabled rotation of rectangular selection.
 
+### myplacesimport
+
+Updated flyout for GPX and MIF/MID format import, which was implemented in the oskari-server backend.
+
 ## 1.23
 
 ### mapmodule/LogoPlugin

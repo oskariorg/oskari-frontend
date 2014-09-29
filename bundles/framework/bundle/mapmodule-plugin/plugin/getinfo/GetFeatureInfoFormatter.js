@@ -166,7 +166,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                         value = me._formatJSONValue(jsonData[attr]);
                         if (value) {
                             row = me.template.tableRow.clone();
-                            table.append(row);
+                            debugger;
                             // FIXME this is unnecessary, we can do this with a css selector.
                             if (!even) {
                                 row.addClass('odd');
@@ -184,6 +184,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                             valueCell = me.template.tableCell.clone();
                             valueCell.append(value);
                             row.append(valueCell);
+                            table.append(row);
                         }
 
                     }
@@ -202,6 +203,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             // Add getinforesult class etc. so the table is styled properly
             parsedHTML.find('table').addClass('getinforesult_table');
             // FIXME this is unnecessary, we can do this with a css selector.
+            parsedHTML.find('tr').removeClass('odd');
             parsedHTML.find('tr:even').addClass('odd');
             response.append(parsedHTML.html());
         } else {
