@@ -25,6 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
         this._wpsLayerParams = {}; // wfs/wps analysis layer params (hashmap, json)    (Analysis populates)
         this._styles = []; /* Array of styles that this layer supports */
         this._customStyle = null;
+        this._filterJson = null;
 
         this.localization = Oskari.getLocalization('MapWfs2');
     }, {
@@ -211,6 +212,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
          */
         getWpsLayerParams: function () {
             return this._wpsLayerParams;
+        },
+
+        /**
+         * @method getFilterJson
+         * @return {Object[]} filterJson
+         */
+        getFilterJson: function () {
+            return this._filterJson;
+        },
+
+        /**
+         * @method setFilterJson
+         * @param {Object} filterJson
+         */
+        setFilterJson: function (filterJson) {
+            this._filterJson = filterJson;
         },
 
         /**

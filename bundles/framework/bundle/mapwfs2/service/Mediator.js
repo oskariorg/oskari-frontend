@@ -70,6 +70,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator',
                 '/wfs/filter': function () {
                     self.getWFSFilter.apply(self, arguments);
                 },
+                '/wfs/propertyfilter': function () {
+                    self.getWFSFilter.apply(self, arguments);
+                },
                 '/wfs/image': function () {
                     self.getWFSImage.apply(self, arguments);
                 },
@@ -507,6 +510,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
     /**
      * @method setFilter
      * @param {Object} geojson
+     * @param {Object} filters;  WFS feature property filter params
      *
      * sends message to /service/wfs/setFilter
      */
@@ -516,6 +520,23 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
         };
         if (this.connection.isConnected()) {
             this.cometd.publish('/service/wfs/setFilter', {
+                "filter": filter
+            });
+        }
+    },
+    /**
+     * @method setPropertyFilter
+     * @param {Object} filters;  WFS feature property filter params
+     *
+     * sends message to /service/wfs/setPropertyFilter
+     */
+    setPropertyFilter: function (filters, id) {
+        filter = {
+            filters: filters,
+            layer_id: id
+        };
+        if (this.connection.isConnected()) {
+            this.cometd.publish('/service/wfs/setPropertyFilter', {
                 "filter": filter
             });
         }

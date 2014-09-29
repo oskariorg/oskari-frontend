@@ -330,6 +330,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
             WFSSetFilter: function (event) {
                 this.setFilterHandler(event);
             },
+            /**
+             * @method WFSSetPropertyFilter
+             * @param {Object} event
+             */
+            WFSSetPropertyFilter: function (event) {
+                this.setPropertyFilterHandler(event);
+            },
 
             /**
              * @method WFSImageEvent
@@ -629,6 +636,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
             }
 
             this.getIO().setFilter(event.getGeoJson());
+        },
+
+        /**
+         * @method setPropertyFilterHandler
+         */
+        setPropertyFilterHandler: function (event) {
+            /// clean selected features lists
+            var layers = this.getSandbox().findAllSelectedMapLayers();
+            for (var i = 0; i < layers.length; ++i) {
+                if (layers[i].hasFeatureData() && layers[i].getId() === event.getLayerId() ) {
+                    layers[i].setSelectedFeatures([]);
+                }
+            }
+
+            this.getIO().setPropertyFilter(event.getFilters(), event.getLayerId());
         },
 
         /**

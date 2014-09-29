@@ -265,6 +265,7 @@ Oskari.registerLocalization(
             "filter": {
                 "title": "Suodatus",
                 "description": "Valitse kohteet tasolta:",
+                "cancelButton": "Poistu",
                 "clearButton": "Tyhjennä valinnat",
                 "refreshButton": "Päivitä suodatin",
                 "addFilter": "Lisää uusi suodatin.",

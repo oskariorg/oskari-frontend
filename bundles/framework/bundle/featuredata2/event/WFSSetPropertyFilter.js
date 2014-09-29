@@ -1,22 +1,23 @@
 /**
- * @class Oskari.mapframework.bundle.featuredata2.event.WFSSetFilter
+ * @class Oskari.mapframework.bundle.featuredata2.event.WFSSetPropertyFilter
  *
  * <GIEV MIEH! COMMENTS>
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.WFSSetFilter',
+Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.WFSSetPropertyFilter',
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Object} geojson
+     * @param {Object} filters    wfs filter params for properties
+     * @param {Object} LayerId   id of wfs layer
      *
      */
 
-    function (geojson, filters) {
-        this._geojson = geojson;
+    function (filters, layerId) {
         this._filters = filters;
+        this._layerId = layerId;
     }, {
         /** @static @property __name event name */
-        __name: "WFSSetFilter",
+        __name: "WFSSetPropertyFilter",
         /**
          * @method getName
          * @return {String} event name
@@ -25,18 +26,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.WFSSetFilter'
             return this.__name;
         },
         /**
+         * WFS layer id for feature property filter
+         * @method getLayerId
+         */
+        getLayerId: function () {
+            return this._layerId;
+        },
+        /**
          * WFS feature property filter params
          * @method getFilters
          */
         getFilters: function () {
             return this._filters;
-        },
-        /**
-         * @method getGeoJson
-         */
-        getGeoJson: function () {
-            return this._geojson;
         }
+
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
