@@ -30,6 +30,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         this.templateLayerOutOfContentArea = null;
         this.sortableBinded = false;
         this._sliders = {};
+        this.WFS_TYPE = "WFS";
+        this.ANALYSIS_TYPE = "ANALYSIS";
     }, {
         /**
          * @method getName
@@ -72,7 +74,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             this.templateLayer = jQuery('<li class="layerselection2 layer selected">' + '<div class="layer-info">' + '<div class="layer-icon"></div>' + '<div class="layer-tool-remove"></div>' + '<div class="layer-title"><h4></h4></div>' + '</div>' + '<div class="stylesel">' + '<label for="style">' + loc.style + '</label>' + '<select name="style"></select></div>' + '<div class="layer-tools volatile">' + '</div>' + '</li>');
 
             // footers are changed based on layer state
-            this.templateLayerFooterTools = jQuery('<div class="right-tools">' + '<div class="layer-rights"></div>' + '<div class="object-data"></div>' + '<div class="layer-description">' + '<div class="icon-info"></div>' + '</div></div>' + '<div class="left-tools">' + '<div class="layer-visibility">' + '<a href="JavaScript:void(0);">' + loc.hide + '</a>' + '&nbsp;' + '<span class="temphidden" ' + 'style="display: none;">' + loc.hidden + '</span>' + '</div>' + '<div class="oskariui layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + '<div class="opacity-slider" style="display:inline-block">' + '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + '</div>' + '</div>');
+            this.templateLayerFooterTools = jQuery('<div class="right-tools">' + '<div class="layer-rights"></div>' + '<div class="object-data"></div>' + '<div class="layer-description">' + '<div class="icon-info"></div></div>' + '<div class="layer-filter"></div>' + '</div>' + '<div class="left-tools">' + '<div class="layer-visibility">' + '<a href="JavaScript:void(0);">' + loc.hide + '</a>' + '&nbsp;' + '<span class="temphidden" ' + 'style="display: none;">' + loc.hidden + '</span>' + '</div>' + '<div class="oskariui layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + '<div class="opacity-slider" style="display:inline-block">' + '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + '</div>' + '</div>');
 
             this.templateLayerFooterHidden = jQuery('<p class="layer-msg">' + '<a href="JavaScript:void(0);">' + loc.show + '</a> ' + loc.hidden + '</p>');
 
@@ -629,10 +631,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             });
 
             // data url link
-            subLmeta = false;
+            var subLmeta = false;
             if (!layer.getMetadataIdentifier()) {
                 //Check if sublayers have metadata info     
-                subLayers = layer.getSubLayers();
+                var subLayers = layer.getSubLayers();
 
                 if (subLayers && subLayers.length > 0) {
                     subLmeta = true;
@@ -679,6 +681,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                         },
                         additionalUuids
                     ]);
+                });
+            }
+
+            // Filter functionality for WFS layers
+            if ((layer.isLayerOfType(me.WFS_TYPE))||(layer.isLayerOfType(me.ANALYSIS_TYPE))) {
+                var fixedOptions = {
+                    bboxSelection : true,
+                    clickedFeaturesSelection : false
+                };
+                var filterDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', loc, fixedOptions);
+                var filterIcon = tools.find('div.layer-filter');
+                filterIcon.addClass('icon-funnel');
+                filterIcon.bind('click', function () {
+                    var icon = jQuery(this);
+                    if (icon.hasClass('icon-funnel')) {
+                        filterDialog.createFilterDialog(layer);
+//                        filterDialog.setCloseButtonHandler(function(){
+//                        });
+//                        filterDialog.setClearButtonHandler(function(){
+//                        });
+                        filterDialog.setUpdateButtonHandler(function(filters){
+                            // throw event to new wfs
+                            var event = me.instance.sandbox.getEventBuilder("WFSSetPropertyFilter")(filters, layer.getId());
+                            me.instance.sandbox.notifyAll(event);
+                        });
+
+//                        icon.removeClass();
+//                        icon.addClass('icon-funnel-active');
+                    } else {
+//                        icon.removeClass();
+//                        icon.addClass('icon-funnel');
+                    }
                 });
             }
 
