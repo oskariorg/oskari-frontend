@@ -74,7 +74,11 @@ define([
                 this._rolesUpdateHandler();
                 if (this.model) {
                     // listenTo will remove dead listeners, use it instead of on()
-                    this.listenTo(this.model, 'change', this.render);
+                    var me = this;
+                    this.listenTo(this.model, 'change', function() {
+//                        console.log('model change', arguments);
+                        me.render();
+                    });
                     //this.model.on('change', this.render, this);
                 }
                 var me = this;
