@@ -15,6 +15,28 @@ A bit of a rewrite, if your code touches bundle.js internals, it might break.
 * reordered functions
 * sensible/descriptive naming
 
+### divmanazer
+
+Added a bunch of form component classes:
+* Component
+* Container
+* EmailInput
+* FormComponent
+* LanguageSelect
+* MultiLevelSelect
+* NumberInput
+* PasswordInput
+* RadioButtonGroup
+* SearchForm
+* SearchInput
+* Select
+* TextAreaInput
+* TextInput
+* UrlInput
+
+Extended some of the old component classes from new 'abstract' classes for code reuse.
+Hopefully this won't break anything, but if something related to Button, Form, FormInput or the likes fails, this is thew likely cause.
+
 ### integration/admin-layerselector
 
 Added username and password support to the layer admin flyout.
