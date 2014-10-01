@@ -499,7 +499,7 @@ module.exports = function (grunt) {
         done();
     });
 
-    grunt.registerTask('release', 'Release build', function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications) {
+    grunt.registerTask('release', 'Release build', function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
         var i,
             ilen,
             config,
@@ -639,7 +639,9 @@ module.exports = function (grunt) {
         grunt.task.run('compile');
         grunt.task.run('compileAppCSS');
         grunt.task.run('sprite');
-        grunt.task.run('oskaridoc');
+        if (!skipDocumentation) {
+            grunt.task.run('oskaridoc');
+        }
 
         if (grunt.config.get('compress.options.fullMap')) grunt.task.run('compress');
         if (copyResourcesToApplications) {
