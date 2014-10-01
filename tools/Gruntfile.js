@@ -573,10 +573,10 @@ module.exports = function (grunt) {
 
             // setting task configs
             grunt.config.set("copy." + appName + ".files", files);
-            grunt.config.set("validate." + appName + ".options", {
+/*            grunt.config.set("validate." + appName + ".options", {
                 "appSetupFile": config,
                 "dest": dest
-            });
+            }); */
             grunt.config.set("compile." + appName + ".options", {
                 "appSetupFile": config,
                 "dest": dest
@@ -606,7 +606,7 @@ module.exports = function (grunt) {
             }]);
 
 
-        grunt.task.run('validate');
+//        grunt.task.run('validate');
 
         // configure copy-task to copy back the results from dist/css and dist/icons to applications/appname/(css || icons)
         if (copyResourcesToApplications) {
