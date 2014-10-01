@@ -2,6 +2,19 @@
 
 ## 1.24
 
+### bundles/bundle.js
+
+A bit of a rewrite, if your code touches bundle.js internals, it might break.
+
+* added documentation
+* added type checks to arguments
+* backported cleaned up version from O2
+* dead code elimination
+* linted
+* marked private functions
+* reordered functions
+* sensible/descriptive naming
+
 ### integration/admin-layerselector
 
 Added username and password support to the layer admin flyout.
