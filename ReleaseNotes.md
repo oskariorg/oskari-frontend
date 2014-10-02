@@ -49,6 +49,10 @@ Disabled rotation of rectangular selection.
 
 Updated flyout for GPX and MIF/MID format import, which was implemented in the oskari-server backend.
 
+### OpenLayers
+
+Patched Oskari's OpenLayers 2 to make My Places work in IE 11. See https://github.com/bartvde/openlayers/commit/821975c1f500e26c6663584356db5d65b57f70d9
+
 ## 1.23
 
 ### mapmodule/LogoPlugin
