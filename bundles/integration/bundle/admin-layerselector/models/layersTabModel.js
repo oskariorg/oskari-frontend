@@ -422,6 +422,9 @@
              * @param  {LayerModel} layermodel backbone layer model
              */
             addLayer : function(layermodel) {
+                if(!layermodel) {
+                    return;
+                }
                 var modelGroupId = layermodel.getGroupId(this.type);
                 var me = this;
                 _.each(this.layerGroups, function(group){
