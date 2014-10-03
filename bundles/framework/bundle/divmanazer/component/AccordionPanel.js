@@ -133,6 +133,9 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
          * Destroys the panel/removes it from document
          */
         destroy: function () {
+            if( !this.html){ 
+              return;
+            }
             this.html.remove();
         },
         /**
