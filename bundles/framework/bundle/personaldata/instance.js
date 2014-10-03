@@ -116,7 +116,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
             };
             sandbox.addRequestHandler('PersonalData.AddTabRequest', this.requestHandlers.addTabRequestHandler);
 
-            // Toolbar available
+            // Personaldata available
             var eventBuilder = sandbox.getEventBuilder('Personaldata.PersonaldataLoadedEvent');
             var event = eventBuilder();
             sandbox.notifyAll(event);
