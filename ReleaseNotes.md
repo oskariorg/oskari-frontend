@@ -41,6 +41,12 @@ Hopefully this won't break anything, but if something related to Button, Form, F
 
 Added username and password support to the layer admin flyout.
 
+Adding/editing/removing sublayers now updates UI correctly.
+
+### mapwfs2/WfsLayerPlugin
+
+Now treats port configuration as number correctly.
+
 ###  featuredata2/MapSelectionPlugin
 
 Disabled rotation of rectangular selection.
@@ -52,8 +58,6 @@ Updated flyout for GPX and MIF/MID format import, which was implemented in the o
 ### OpenLayers
 
 Patched Oskari's OpenLayers 2 to make My Places work in IE 11. See https://github.com/bartvde/openlayers/commit/821975c1f500e26c6663584356db5d65b57f70d9
-
-Openlayers full-map.js changed so that selecting is possible also when the map is moved or zoomed. See https://github.com/nls-oskari/oskari/commit/9bfa97541c67
 
 ## 1.23
 
