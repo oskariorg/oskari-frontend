@@ -120,15 +120,6 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
             if (conf && conf.stateful === true) {
                 sandbox.registerAsStateful(this.mediator.bundleId, this);
             }
-
-            // Request tab to be added to personal data
-            var tab = Oskari.clazz.create('Oskari.mapframework.bundle.analyse.view.PersonalDataTab', this, this.localization.personalDataTab);
-            var reqBuilder = sandbox.getRequestBuilder('PersonalData.AddTabRequest');
-
-            if (reqBuilder) {
-                sandbox.request(this, reqBuilder(this.localization.personalDataTab.title, tab.getContent()));
-            }
-            this.personalDataTab = tab;
         },
         /**
          * @method init
@@ -161,6 +152,16 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
          * @static
          */
         eventHandlers: {
+            'Personaldata.PersonaldataLoadedEvent': function (event) {
+                // Request tab to be added to personal data
+                var tab = Oskari.clazz.create('Oskari.mapframework.bundle.analyse.view.PersonalDataTab', this, this.localization.personalDataTab);
+                var reqBuilder = this.sandbox.getRequestBuilder('PersonalData.AddTabRequest');
+
+                if (reqBuilder) {
+                    this.sandbox.request(this, reqBuilder(this.localization.personalDataTab.title, tab.getContent()));
+                }
+                this.personalDataTab = tab;
+            },
             'MapLayerVisibilityChangedEvent': function (event) {
                 if (this.analyse && this.analyse.isEnabled && this.isMapStateChanged) {
                     this.isMapStateChanged = false;
@@ -411,7 +412,9 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                 }
             }
             // maplayers changed so update the tab content in personaldata
-            this.personalDataTab.update();
+            if (typeof this.personalDataTab !== "undefined") {
+                this.personalDataTab.update();
+            }
         }
     }, {
         /**

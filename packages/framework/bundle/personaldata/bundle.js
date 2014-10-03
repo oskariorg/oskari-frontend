@@ -31,6 +31,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundle"
             "src": "../../../../bundles/framework/bundle/personaldata/Tile.js"
         }, {
             "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/personaldata/events/PersonaldataLoadedEvent.js"
+        },{
+            "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/personaldata/MyViewsTab.js"
         }, {
             "type": "text/javascript",
