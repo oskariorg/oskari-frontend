@@ -201,6 +201,55 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             this.showInfos();
         },
         /**
+         * Sets the filter JSON object for a given layer.
+         *
+         * @method setFilterJson
+         * @param {String} layer_id
+         * @param {JSON} filterJson
+         */
+        setFilterJson: function (layer_id, filterJson) {
+            this._filterJsons[layer_id] = filterJson;
+        },
+
+        /**
+         * Removes the filter JSON object for a given layer.
+         *
+         * @method removeFilterJson
+         * @param {String} layer_id
+         */
+        removeFilterJson: function (layer_id) {
+            this._filterJsons[layer_id] = null;
+            delete this._filterJsons[layer_id];
+        },
+
+        /**
+         * Returns filter JSON object for a given layer.
+         *
+         * @method getFilterJson
+         * @param {String} layer_id
+         * @return {JSON}
+         */
+        getFilterJson: function (layer_id) {
+            var ret = this._filterJsons[layer_id],
+                sandbox = this.instance.getSandbox(),
+                layer = sandbox.findMapLayerFromSelectedMapLayers(layer_id);
+            if (!ret) {
+                // There's no user set values for the filter
+                ret = {};
+                this._getSelectedFeatureIds(layer, ret);
+                // Set selected features only to true if there's a selection
+                ret.featureIds = ret.featureIds && ret.featureIds.length;
+                if (!ret.featureIds) {
+                    // Set bbox if there's no selection
+                    ret.bbox = this.instance.getSandbox().getMap().getBbox();
+                }
+                // 'save' the filter settings so they don't live after the user
+                // has seen them
+                this.setFilterJson(layer_id, ret);
+            }
+            return ret;
+        },
+        /**
          * @method _createMethodPanel
          * @private
          * Creates the method selection panel for analyse
@@ -2162,6 +2211,53 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         additionalUuids
                     ]
                 );
+            });
+        },
+        /**
+         * Open a pop-up to select filter parameters.
+         *
+         * @method _filterRequest
+         * @private
+         * @param {jQuery} tools table div where filter icon is located
+         * @param {String} analyse_layer_id  layer id for to retrieve layer object,
+         *                 prefixed with 'oskari_analyse_layer_'.
+         */
+        _filterRequest: function (tools, analyse_layer_id) {
+            var me = this,
+                popupContent,
+                prevJson,
+                editDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', me.loc),
+                // From 'oskari_analyse_layer_{id}' to '{id}'
+                layerId = analyse_layer_id.replace((this.id_prefix + 'layer_'), ''),
+                layer = this.instance.mapLayerService.findMapLayer(layerId);
+
+            tools.find('div.filter').bind('click', function () {
+                if (!me._filterPopups[layer.getId()]) {
+                    editDialog.createFilterDialog(layer);
+                    me._filterPopups[layer.getId()] = true;
+                    me._userSetFilter[layer.getId()] = true;
+                    // If there's already filter values for current layer, populate the dialog with them.
+                    prevJson = me.getFilterJson(layer.getId());
+                    if (prevJson && !jQuery.isEmptyObject(prevJson)) {
+                        popupContent = editDialog.getFilterDialogContent(layer);
+                        editDialog.fillDialogContent(popupContent, prevJson, layer);
+                        editDialog.setCloseButtonHandler(function(){
+                            me._filterPopups[layerId] = null;
+                        });
+                        editDialog.setClearButtonHandler(function(){
+                            // Removes the filter for the layer
+                            me.removeFilterJson(layer.getId());
+                        });
+                        editDialog.setUpdateButtonHandler(function(){
+                            // Get the filter values from the dialog
+                            var filterJson = editDialog.getFilterValues();
+                            me.setFilterJson(layer.getId(), filterJson);
+                            layer.setFilterJson(filterJson);
+                            // Update filter icon
+                            me.updateFilterIcon(layer.getId());
+                        });
+                    }
+                }
             });
         },
         /**

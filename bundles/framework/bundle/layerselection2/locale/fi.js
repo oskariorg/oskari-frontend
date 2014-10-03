@@ -47,6 +47,49 @@ Oskari.registerLocalization(
                 "type-base": "Taustakartta",
                 "type-wms": "Karttataso",
                 "type-wfs": "Tietotuote"
+            },
+            "filter": {
+                "title": "Suodatus",
+                "description": "Valitse kohteet tasolta:",
+                "cancelButton": "Poistu",
+                "clearButton": "Tyhjennä suodatin",
+                "refreshButton": "Päivitä suodatin",
+                "addFilter": "Lisää uusi suodatin.",
+                "removeFilter": "Poista suodatin.",
+                "bbox": {
+                    "title": "Ikkunarajaus",
+                    "on": "Ota mukaan vain kartalla näkyvät kohteet.",
+                    "off": "Ota mukaan kaikki kohteet."
+                },
+                "clickedFeatures": {
+                    "title": "Kohderajaus",
+                    "label": "Ota mukaan vain kartalta valitut kohteet."
+                },
+                "values": {
+                    "title": "Suodata kohteet ominaisuustietojen perusteella",
+                    "placeholders": {
+                        "case-sensitive": "Kirjainkoko vaikuttaa valintoihin.",
+                        "attribute": "Ominaisuustieto",
+                        "boolean": "Looginen operaattori",
+                        "operator": "Operaattori",
+                        "attribute-value": "Arvo"
+                    },
+                    "equals": "on yhtäsuuri kuin",
+                    "like": "on likimäärin yhtäsuuri kuin",
+                    "notEquals": "on erisuuri kuin",
+                    "notLike": "on likimäärin erisuuri kuin",
+                    "greaterThan": "on suurempi kuin",
+                    "lessThan": "on pienempi kuin",
+                    "greaterThanOrEqualTo": "on suurempi tai yhtä suuri kuin",
+                    "lessThanOrEqualTo": "on pienempi tai yhtä pieni kuin"
+                },
+                "validation": {
+                    "title": "Seuraavat virheet estivät suodattimen päivityksen:",
+                    "attribute_missing": "Ominaisuustieto puuttuu.",
+                    "operator_missing": "Operaattori puuttuu.",
+                    "value_missing": "Arvo puuttuu.",
+                    "boolean_operator_missing": "Looginen operaattori puuttuu."
+                }
             }
         }
     }

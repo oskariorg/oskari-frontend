@@ -123,6 +123,9 @@ function OskariParser() {
             return JSON.parse(arrayJSON);
         } catch(err) {
             var msg = 'Error parsing JSON array "' + arrayName + '" from file:' + pathForLogging + '\nMessage: ' + err;
+            console.log('ERROR ERROR');
+            console.log(msg);
+            console.log('ERROR ERROR');
             throw msg;
         }
     }
