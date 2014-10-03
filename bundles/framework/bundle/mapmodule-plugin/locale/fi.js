@@ -94,7 +94,7 @@ Oskari.registerLocalization(
                         "label": "Esikatselu"
                     },
                     "message": {
-                        "label": "Viesti",
+                        "label": "Teksti kartalla",
                         "hint": "Kirjoita viestiteksti"
                     }
                 },

@@ -5,7 +5,7 @@ Oskari.registerLocalization({
         "title": "Objekt",
         "desc": "",
         "category": {
-            "defaultName": "Mitt kartlager",
+            "defaultName": "Mina kartlager",
             "organization": "Mina objekt",
             "inspire": "Mina objekt"
         },

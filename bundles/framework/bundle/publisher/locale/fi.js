@@ -3,8 +3,8 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "Publisher",
     "value": {
-        "title": "Julkaise kartta",
-        "flyouttitle": "Siirry julkaisemaan",
+        "title": "Karttajulkaisu",
+        "flyouttitle": "Karttajulkaisu",
         "desc": "",
         "published": {
             "title": "Upotettava kartta valmis",
@@ -17,7 +17,7 @@ Oskari.registerLocalization(
             }
         },
         "BasicView": {
-            "title": "Julkaise upotettu kartta",
+            "title": "Julkaise kartta",
             "titleEdit": "Muokkaa upotettua karttaa",
             "domain": {
                 "title": "Julkaisutiedot",
