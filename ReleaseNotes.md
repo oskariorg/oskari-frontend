@@ -59,6 +59,8 @@ Updated flyout for GPX and MIF/MID format import, which was implemented in the o
 
 Patched Oskari's OpenLayers 2 to make My Places work in IE 11. See https://github.com/bartvde/openlayers/commit/821975c1f500e26c6663584356db5d65b57f70d9
 
+Openlayers full-map.js changed so that text selection is possible also when the map is moved or zoomed. See https://github.com/nls-oskari/oskari/commit/9bfa97541c67
+
 ## 1.23
 
 ### mapmodule/LogoPlugin
