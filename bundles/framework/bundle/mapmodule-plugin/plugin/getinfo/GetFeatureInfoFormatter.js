@@ -166,7 +166,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                         value = me._formatJSONValue(jsonData[attr]);
                         if (value) {
                             row = me.template.tableRow.clone();
-                            debugger;
                             // FIXME this is unnecessary, we can do this with a css selector.
                             if (!even) {
                                 row.addClass('odd');
@@ -205,12 +204,16 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             // FIXME this is unnecessary, we can do this with a css selector.
             parsedHTML.find('tr').removeClass('odd');
             parsedHTML.find('tr:even').addClass('odd');
+            console.log(parsedHTML.find("br").length);
             response.append(parsedHTML.html());
         } else {
             response.append(datum.content);
         }
         if (datum.gfiContent) {
-            response.append('\n' + datum.gfiContent);
+            var trimmed = datum.gfiContent.trim();
+            if (trimmed.length) {
+                response.append('\n' + trimmed);
+            }
         }
         return response;
     },
@@ -236,6 +239,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 pluginLoc,
                 myLoc,
                 localizedAttr;
+
             for (i = 0; i < pValue.length; i += 1) {
                 obj = pValue[i];
                 for (objAttr in obj) {
@@ -250,7 +254,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                             value.append(localizedAttr || objAttr);
                             value.append(': ');
                             value.append(innerValue);
-                            value.append('<br/>');
+                            value.append('<br class="innerValueBr" />');
                         }
                     }
                 }
@@ -265,6 +269,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         }
         return value;
     },
+
     /**
      * @method _formatWFSFeaturesForInfoBox
      */
