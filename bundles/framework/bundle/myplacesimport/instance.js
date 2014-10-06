@@ -42,16 +42,22 @@ function () {
             sandbox.registerAsStateful(this.mediator.bundleId, this);
         }
 
-        this.tab = this.addTab(sandbox);
-        this.importService = this.createService(sandbox);
-        this.importService.init();
-        this.importService.getUserLayers(function() {
-            me.getTab().refresh();
-        });
+        if (!sandbox.getUser().isLoggedIn()) {
+            // guest user, only show disabled button
+            this.tool.disabled = true;
+        } else {
+            // logged in user, create UI
+            this.tab = this.addTab(sandbox);
+            this.importService = this.createService(sandbox);
+            this.importService.init();
+            this.importService.getUserLayers(function() {
+                me.getTab().refresh();
+            });
 
-        request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
-        sandbox.request(this, request);
-
+            request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+            sandbox.request(this, request);
+        }
+        
         this.registerTool();
     },
     /**
