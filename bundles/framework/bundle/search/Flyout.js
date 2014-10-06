@@ -246,14 +246,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                                 'searchservice_search_not_found_anything_text');
 
                         if (errorKey) {
-                            console.log("ErrorKey");
-                            if (me.instance.getLocalization(errorKey)) {
+                            if (typeof me.instance.getLocalization(errorKey) === 'string') {
                                 msg = me.instance.getLocalization(errorKey);
-                                console.log("Found errorKey", msg);
                             }
-                        } else {
-                            msg = me.instance.getLocalization('generic_error');
-                            console.log("No errorKey", msg);
                         }
 
                         me._showError(msg);
