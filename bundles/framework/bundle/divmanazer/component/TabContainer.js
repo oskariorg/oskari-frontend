@@ -162,7 +162,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
         },
 
         /**
-         * @method removePanl
+         * @method removePanel
          * Removes the given panel from the set of tabs shown.
          * The first tab is selected as active if currently selected tab is removed.
          * If the tab was the last one, tabchangelisteners will receive the second parameter as undefined.
@@ -213,7 +213,9 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
         destroy: function () {
             var i;
             for (i = this.panels.length; i >= 0; i -= 1) {
-                this.panels[i].destroy();
+                if (this.panels[i] && this.panels[i].destroy) {
+                    this.panels[i].destroy();
+                }
             }
             this.panels = [];
             this.ui.remove();
