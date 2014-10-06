@@ -41,8 +41,9 @@ function () {
         if (conf && conf.stateful === true) {
             sandbox.registerAsStateful(this.mediator.bundleId, this);
         }
+        var isGuest = !sandbox.getUser().isLoggedIn();
 
-        if (!sandbox.getUser().isLoggedIn()) {
+        if (isGuest) {
             // guest user, only show disabled button
             this.tool.disabled = true;
         } else {
@@ -58,23 +59,24 @@ function () {
             sandbox.request(this, request);
         }
         
-        this.registerTool();
+        this.registerTool(isGuest);
     },
     /**
      * Requests the tool to be added to the toolbar.
      * 
      * @method registerTool
      */
-    registerTool: function() {
+    registerTool: function(isGuest) {
         var me = this,
             loc = this.getLocalization(),
             sandbox = this.getSandbox(),
             reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest'),
             request;
-
-        this.tool.callback = function() {
-            me.startTool();
-        };
+        if(!isGuest) {
+            this.tool.callback = function() {
+                me.startTool();
+            };  
+        }
         this.tool.tooltip = loc.tool.tooltip;
 
         if (reqBuilder) {
