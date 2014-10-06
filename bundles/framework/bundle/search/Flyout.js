@@ -245,11 +245,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                             msg = me.instance.getLocalization(
                                 'searchservice_search_not_found_anything_text');
 
+                        console.log("errorKey", errorKey + '');
+                        console.log("msg", msg+ '');
+
                         if (errorKey) {
+                            console.log("Haz errorKey")
                             if (typeof me.instance.getLocalization(errorKey) === 'string') {
                                 msg = me.instance.getLocalization(errorKey);
+                                console.log("errorVal is string", msg + '');
+                            } else {
+                                console.log("errorVal is not string");
                             }
                         }
+                        console.log("Showing error", msg);
 
                         me._showError(msg);
                     });
