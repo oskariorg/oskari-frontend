@@ -20,6 +20,7 @@ Oskari.registerLocalization({
         "too_short": "Sökordet är för kort.",
         "cannot_be_empty": "Sökordet kan inte vara tomt.",
         "too_many_stars": "För många *-tecken.",
+        "generic_error": "Sök misslyckades. Prova på nytt senare.",
         "grid": {
             "name": "Namn",
             "village": "Kommun",

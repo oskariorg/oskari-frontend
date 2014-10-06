@@ -20,6 +20,7 @@ Oskari.registerLocalization({
         "too_short": "Antamasi hakusana on liian lyhyt. Hakusanassa on oltava vähintään yksi merkki. Poikkeus: Jos hakusanassasi on jokerimerkki (*), hakusanassa on oltava vähintään neljä muuta merkkiä.",
         "cannot_be_empty": "Antamasi hakusana on tyhjä. Hakusanassa on oltava vähintään yksi merkki.",
         "too_many_stars": "Antamassasi hakusanassa on liian monta jokerimerkkiä (*). Hakusanassa saa olla enintään yksi jokerimerkki ja sen tulee olla sanan lopussa.",
+        "generic_error": "Haku epäonnistui. Kokeile uudestaan myöhemmin.",
         "grid": {
             "name": "Nimi",
             "village": "Kunta",

@@ -20,6 +20,7 @@ Oskari.registerLocalization({
         "too_short": "The search term is too short.",
         "cannot_be_empty": "The search term must contain at least one character. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
         "too_many_stars": "The search term contains too many stars (*-characters). It may contain at most N *-characters.",
+        "generic_error": "Search failed. Please try again later.",
         "grid": {
             "name": "Place name",
             "village": "Municipality",
