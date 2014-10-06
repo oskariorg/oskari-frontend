@@ -245,19 +245,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                             msg = me.instance.getLocalization(
                                 'searchservice_search_not_found_anything_text');
 
-                        console.log("errorKey", errorKey + '');
-                        console.log("msg", msg+ '');
-
                         if (errorKey) {
-                            console.log("Haz errorKey")
                             if (typeof me.instance.getLocalization(errorKey) === 'string') {
                                 msg = me.instance.getLocalization(errorKey);
-                                console.log("errorVal is string", msg + '');
-                            } else {
-                                console.log("errorVal is not string");
                             }
                         }
-                        console.log("Showing error", msg);
 
                         me._showError(msg);
                     });
@@ -395,7 +387,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             var i,
                 header,
                 link;
-            for (i = 0; i < this.resultHeaders.length; ++i) {
+            for (i = 0; i < this.resultHeaders.length; i += 1) {
                 header = this.templateResultTableHeader.clone();
                 link = header.find('a');
                 link.append(this.resultHeaders[i].title);
@@ -426,7 +418,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 cells,
                 titleCell,
                 title;
-            for (i = 0; i < locations.length; ++i) {
+            for (i = 0; i < locations.length; i += 1) {
                 row = locations[i];
                 resultContainer = this.templateResultTableRow.clone();
                 cells = resultContainer.find('td');
