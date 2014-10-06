@@ -15,7 +15,7 @@ function () {
     this.toolName = 'import';
     this.tool = {
         iconCls: 'upload-material',
-        sticky: true
+        sticky: false
     };
     this.importService = undefined;
     this.tab = undefined;
@@ -72,11 +72,13 @@ function () {
             sandbox = this.getSandbox(),
             reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest'),
             request;
-        if(!isGuest) {
-            this.tool.callback = function() {
+        this.tool.callback = function() {
+            if(!isGuest) {
+                // toolbar requires a callback so we need to check guest flag
+                // inside callback instead of not giving any callback
                 me.startTool();
-            };  
-        }
+            }
+        };
         this.tool.tooltip = loc.tool.tooltip;
 
         if (reqBuilder) {
