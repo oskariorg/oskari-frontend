@@ -204,7 +204,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             // FIXME this is unnecessary, we can do this with a css selector.
             parsedHTML.find('tr').removeClass('odd');
             parsedHTML.find('tr:even').addClass('odd');
-            console.log(parsedHTML.find("br").length);
+            parsedHTML.children("br").remove();
             response.append(parsedHTML.html());
         } else {
             response.append(datum.content);
@@ -212,7 +212,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         if (datum.gfiContent) {
             var trimmed = datum.gfiContent.trim();
             if (trimmed.length) {
-                response.append('\n' + trimmed);
+                response.append(trimmed);
             }
         }
         return response;
