@@ -230,27 +230,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                     return;
                 }
 
-                me.instance.service.doSearch(searchKey, function (data) {
-                    field.setEnabled(true);
-                    button.setEnabled(true);
-                    me._renderResults(data, searchKey);
-                }, function (data) {
-                    field.setEnabled(true);
-                    button.setEnabled(true);
+                me.instance.service.doSearch(
+                    searchKey,
+                    function (data) {
+                        field.setEnabled(true);
+                        button.setEnabled(true);
+                        me._renderResults(data, searchKey);
+                    },
+                    function (data) {
+                        field.setEnabled(true);
+                        button.setEnabled(true);
 
-                    var errorKey = data ? data.responseText : null,
-                        msg = me.instance.getLocalization('searchservice_search_not_found_anything_text');
+                        var errorKey = data ? data.responseText : null,
+                            msg = me.instance.getLocalization(
+                                'searchservice_search_not_found_anything_text');
 
-                    if (errorKey) {
-                        if (me.instance.getLocalization(errorKey)) {
-                            msg = me.instance.getLocalization(errorKey);
+                        if (errorKey) {
+                            console.log("ErrorKey");
+                            if (me.instance.getLocalization(errorKey)) {
+                                msg = me.instance.getLocalization(errorKey);
+                                console.log("Found errorKey", msg);
+                            }
+                        } else {
+                            msg = me.instance.getLocalization('generic_error');
+                            console.log("No errorKey", msg);
                         }
-                    } else {
-                        msg = me.instance.getLocalization('generic_error');
-                    }
 
-                    me._showError(msg);
-                });
+                        me._showError(msg);
+                    });
             };
 
             button.setHandler(doSearch);
@@ -293,9 +300,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
         },
 
         _showError: function (error) {
-            debugger;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okButton = dialog.createCloseButton('OK');
+
             dialog.setId('oskari_search_error_popup');
 
             dialog.show(
