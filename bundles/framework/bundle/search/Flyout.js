@@ -293,6 +293,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
         },
 
         _showError: function (error) {
+            debugger;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okButton = dialog.createCloseButton('OK');
             dialog.setId('oskari_search_error_popup');
