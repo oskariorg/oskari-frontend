@@ -242,7 +242,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
     },
 
     startExtension: function () {
-
         this.plugins['Oskari.userinterface.Flyout'] =
             Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.Flyout', this, this.getLocale().flyout, this.getLoader());
 
@@ -273,7 +272,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
     scheduleShowMetadata: function (allMetadata) {
         /** update flyout content */
         this.plugins['Oskari.userinterface.Flyout'].scheduleShowMetadata(allMetadata);
-
         this.getSandbox().requestByName(this, 'userinterface.UpdateExtensionRequest', [this, 'detach']);
     },
 
@@ -295,7 +293,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 
         for (n = 0; n < env.length; n += 1) {
             vals = env[n];
-            e = new OpenLayers.Bounds(vals.westBoundLongitude, vals.southBoundLatitude, vals.eastBoundLongitude, vals.northBoundLatitude);
+            e = new OpenLayers.Bounds(
+                vals.westBoundLongitude,
+                vals.southBoundLatitude,
+                vals.eastBoundLongitude,
+                vals.northBoundLatitude
+            );
             ep = e.toGeometry();
             ef = new OpenLayers.Feature.Vector(ep);
             ef.attributes = atts || ef.attributes;

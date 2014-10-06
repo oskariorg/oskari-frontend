@@ -41,6 +41,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                 headerContainer,
                 header,
                 link;
+
             if (this.panels.length === 0) {
                 content = this.templateTabs.clone();
                 this.ui.html(content);
@@ -50,10 +51,10 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
             } else {
                 if (first) {
                     // Set as first item
-                    panel.setPriority(this.panels[0].getPriority()-1.0);
+                    panel.setPriority(this.panels[0].getPriority() - 1.0);
                 } else if (typeof panel.getPriority() !== 'number') {
                     // Set as last item
-                    panel.setPriority(this.panels[this.panels.length-1].getPriority()+1.0);
+                    panel.setPriority(this.panels[this.panels.length - 1].getPriority() + 1.0);
                 }
             }
 
@@ -162,7 +163,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
         },
 
         /**
-         * @method removePanl
+         * @method removePanel
          * Removes the given panel from the set of tabs shown.
          * The first tab is selected as active if currently selected tab is removed.
          * If the tab was the last one, tabchangelisteners will receive the second parameter as undefined.
@@ -213,7 +214,9 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
         destroy: function () {
             var i;
             for (i = this.panels.length; i >= 0; i -= 1) {
-                this.panels[i].destroy();
+                if (this.panels[i] && this.panels[i].destroy) {
+                    this.panels[i].destroy();
+                }
             }
             this.panels = [];
             this.ui.remove();

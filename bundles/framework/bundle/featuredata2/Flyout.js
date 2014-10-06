@@ -211,22 +211,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
             // in scale, proceed
             this._prepareData(layer);
 
-            if (selection && selection.length > 0 && typeof selection[0].featureId != 'undefined') {
-                for (i = 0; i < selection.length; ++i) {
+            if (selection && selection.length > 0 && typeof selection[0].featureId !== 'undefined') {
+                for (i = 0; i < selection.length; i += 1) {
                     panel.grid.select(selection[i].featureId, true);
                 }
             }
 
             // mapClick
             if (panel.grid && layer.getClickedFeatureIds().length > 0) {
-                for (i = 0; i < layer.getClickedFeatureIds().length; ++i) {
+                for (i = 0; i < layer.getClickedFeatureIds().length; i += 1) {
                     panel.grid.select(layer.getClickedFeatureIds()[i], true);
                 }
             }
 
             // filter
             if (panel.grid && layer.getSelectedFeatures().length > 0) {
-                for (i = 0; i < layer.getSelectedFeatures().length; ++i) {
+                for (i = 0; i < layer.getSelectedFeatures().length; i += 1) {
                     panel.grid.select(layer.getSelectedFeatures()[i][0], true);
                 }
             }
@@ -393,6 +393,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
             }
         },
 
+        // FIXME why are we creating a global here? It's actually used in _addFeatureValues
+        // 
+        /**
+         * @private @method removeItem
+         * helper for removing item (indexOf is not in IE8)
+         */
+       _removeItem: function (arr, value) {
+            var idx = arr.indexOf(value);
+            while (idx !== -1) {
+                arr.splice(idx, 1);
+                idx = arr.indexOf(value);
+            }
+            return arr;
+        },
+
         /**
          * @method _prepareData
          * @param {Oskari.mapframework.domain.WfsLayer} layer
@@ -405,127 +420,112 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
             var me = this,
                 panel = this.layers['' + layer.getId()],
                 isOk = this.tabsContainer.isSelected(panel);
-            if (isOk) {
-                panel.getContainer().empty();
 
-                // create model
-                var model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
-                model.setIdField('__fid');
+            if (!isOk) {
+                // Wrong tab selected -> ignore (shouldn't happen)
+                return;
+            }
 
-                // hidden fields (hide all - remove if not empty)
-                var hiddenFields = layer.getFields().slice(0);
+            panel.getContainer().empty();
 
-                // FIXME why are we creating a global here? It's actually used in _addFeatureValues
-                // helper for removing item (indexOf is not in IE8)
-               remove_item = function (a, val) {
-                    var key;
-                    for (key in a) {
-                        if (a[key] == val) {
-                            a.splice(key, 1);
-                            break;
-                        }
+            // create model
+            var model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
+            model.setIdField('__fid');
+
+            // hidden fields (hide all - remove if not empty)
+            var hiddenFields = layer.getFields().slice(0);
+
+            // get data
+            var featureData,
+                values,
+                fields = layer.getFields().slice(0),
+                locales = layer.getLocales().slice(0),
+                features = layer.getActiveFeatures().slice(0),
+                selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
+
+            this._addFeatureValues(model, fields, hiddenFields, features, selectedFeatures);
+            this._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
+
+            fields = model.getFields();
+            hiddenFields.push('__fid');
+            hiddenFields.push('__centerX');
+            hiddenFields.push('__centerY');
+            hiddenFields.push('geometry');
+
+            // check if properties (fields or locales) have changed
+            if (!panel.fields || !panel.locales || !this._isArrayEqual(fields, panel.fields) || !this._isArrayEqual(locales, panel.locales)) {
+                panel.fields = fields;
+                panel.locales = locales;
+                panel.propertiesChanged = true;
+            }
+
+            if (!panel.grid || panel.propertiesChanged) {
+                panel.propertiesChanged = false;
+
+                var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid', this.instance.getLocalization('columnSelectorTooltip')),
+                    k;
+
+                // localizations
+                if (locales) {
+                    for (k = 0; k < locales.length; k += 1) {
+                        grid.setColumnUIName(fields[k], locales[k]);
                     }
-                    return a;
-                };
-
-                // get data
-                var featureData,
-                    values,
-                    fields = layer.getFields().slice(0),
-                    locales = layer.getLocales().slice(0),
-                    features = layer.getActiveFeatures().slice(0),
-                    selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
-
-                this._addFeatureValues(model, fields, hiddenFields, features, selectedFeatures);
-                this._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
-
-                fields = model.getFields();
-                hiddenFields.push('__fid');
-                hiddenFields.push('__centerX');
-                hiddenFields.push('__centerY');
-                hiddenFields.push('geometry');
-
-                // check if properties (fields or locales) have changed
-                if (!panel.fields || !panel.locales || !this._isArrayEqual(fields, panel.fields) || !this._isArrayEqual(locales, panel.locales)) {
-                    panel.fields = fields;
-                    panel.locales = locales;
-                    panel.propertiesChanged = true;
                 }
 
-                if (!panel.grid || panel.propertiesChanged) {
-                    panel.propertiesChanged = false;
+                // set selection handler
+                grid.addSelectionListener(function (pGrid, dataId) {
+                    me._handleGridSelect(layer, dataId);
+                });
 
-                    var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid', this.instance.getLocalization('columnSelectorTooltip')),
-                        k;
-
-                    // localizations
-                    if (locales) {
-                        for (k = 0; k < locales.length; k++) {
-                            grid.setColumnUIName(fields[k], locales[k]);
+                // set popup handler for inner data
+                var showMore = this.instance.getLocalization('showmore');
+                grid.setAdditionalDataHandler(showMore,
+                    function (link, content) {
+                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        dialog.show(showMore, content);
+                        dialog.moveTo(link, 'bottom');
+                        if (me.dialog) {
+                            me.dialog.close(true);
                         }
-                    }
-
-                    // set selection handler
-                    grid.addSelectionListener(function (pGrid, dataId) {
-                        me._handleGridSelect(layer, dataId);
+                        me.dialog = dialog;
                     });
 
-                    // set popup handler for inner data
-                    var showMore = this.instance.getLocalization('showmore');
-                    grid.setAdditionalDataHandler(showMore,
-                        function (link, content) {
-                            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            dialog.show(showMore, content);
-                            dialog.moveTo(link, 'bottom');
-                            if (me.dialog) {
-                                me.dialog.close(true);
-                            }
-                            me.dialog = dialog;
-                        });
+                // helper function for visibleFields
+                var contains = function (arr, obj) {
+                    return arr.indexOf(obj) !== -1;
+                };
 
-                    // helper function for visibleFields
-                    var contains = function (a, obj) {
-                        for (var i = 0; i < a.length; i++) {
-                            if (a[i] == obj) {
-                                return true;
-                            }
-                        }
-                        return false;
-                    };
-
-                    // filter out certain fields
-                    var visibleFields = [],
-                        i;
-                    for (i = 0; i < fields.length; ++i) {
-                        if (!contains(hiddenFields, fields[i])) {
-                            visibleFields.push(fields[i]);
-                        }
+                // filter out certain fields
+                var visibleFields = [],
+                    i;
+                for (i = 0; i < fields.length; i += 1) {
+                    if (!contains(hiddenFields, fields[i])) {
+                        visibleFields.push(fields[i]);
                     }
+                }
 
-                    grid.setVisibleFields(visibleFields);
-                    grid.setColumnSelector(true);
-                    grid.setResizableColumns(true);
-                    grid.setExcelExporter(layer.getPermission('publish') === 'publication_permission_ok');
+                grid.setVisibleFields(visibleFields);
+                grid.setColumnSelector(true);
+                grid.setResizableColumns(true);
+                grid.setExcelExporter(layer.getPermission('publish') === 'publication_permission_ok');
 
-                    panel.grid = grid;
-                }
-                panel.grid.setDataModel(model);
-                me._addNumericColumnRenderers(panel.grid);
-                panel.grid.renderTo(panel.getContainer());
-                // define flyout size to adjust correctly to arbitrary tables
-                var mapdiv = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule').getMapEl(),
-                    content = jQuery('div.oskari-flyoutcontent.featuredata'),
-                    flyout = content.parent().parent();
-                if (!me.resized) {
-                    // Define default size for the object data list
-                    flyout.find('div.tab-content').css('max-height', (mapdiv.height() / 4).toString() + 'px');
-                    flyout.css('max-width', mapdiv.width().toString() + 'px');
-                }
-                if (me.resizable) {
-                    this._enableResize();
-                }
-            } else {
-                // Wrong tab selected -> ignore (shouldn't happen)
+                panel.grid = grid;
+            }
+            panel.grid.setDataModel(model);
+            me._addNumericColumnRenderers(panel.grid);
+            panel.grid.renderTo(panel.getContainer());
+            // define flyout size to adjust correctly to arbitrary tables
+            var mapdiv = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule').getMapEl(),
+                content = jQuery('div.oskari-flyoutcontent.featuredata'),
+                flyout = content.parent().parent();
+
+            if (!me.resized) {
+                // Define default size for the object data list
+                flyout.find('div.tab-content').css('max-height', (mapdiv.height() / 4).toString() + 'px');
+                flyout.css('max-width', mapdiv.width().toString() + 'px');
+            }
+            if (me.resizable) {
+                this._enableResize();
             }
         },
 
@@ -544,26 +544,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 k,
                 featureData,
                 values;
-            for (i = 0; i < features.length; i++) {
+            for (i = 0; i < features.length; i += 1) {
                 featureData = {};
                 values = features[i];
 
                 // remove from selected if in feature list
                 if (selectedFeatures !== null && selectedFeatures !== undefined && selectedFeatures.length > 0) {
-                    for (k = 0; k < selectedFeatures.length; k++) {
-                        if (values[0] == selectedFeatures[k][0]) { // fid match
+                    for (k = 0; k < selectedFeatures.length; k += 1) {
+                        if (values[0] === selectedFeatures[k][0]) { // fid match
                             selectedFeatures.splice(k, 1);
                         }
                     }
                 }
 
-                for (j = 0; j < fields.length; j++) {
+                for (j = 0; j < fields.length; j += 1) {
                     if (values[j] === null || values[j] === undefined || values[j] === '') {
                         featureData[fields[j]] = '';
                     } else {
                         featureData[fields[j]] = values[j];
                         // remove from empty fields
-                        remove_item(hiddenFields, fields[j]);
+                        this._removeItem(hiddenFields, fields[j]);
                     }
                 }
                 model.addData(featureData);
@@ -584,8 +584,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 return false;
             }
 
-            for (var i = 0; i < current.length; i++) {
-                if (current[i] != old[i]) {
+            for (var i = 0; i < current.length; i += 1) {
+                if (current[i] !== old[i]) {
                     return false;
                 }
             }
@@ -632,7 +632,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
             if (fids !== null && fids !== undefined && fids.length > 0) {
                 panel.grid.select(fids[0], event.isKeepSelection());
                 if (fids.length > 1) {
-                    for (i = 1; i < fids.length; ++i) {
+                    for (i = 1; i < fids.length; i += 1) {
                         panel.grid.select(fids[i], true);
                     }
                 }
@@ -648,7 +648,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
          * False to disable and stop reacting to any map movements etc
          */
         setEnabled: function (isEnabled) {
-            if (this.active == isEnabled) {
+            if (this.active === isEnabled) {
                 return;
             }
 

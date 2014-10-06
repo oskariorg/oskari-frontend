@@ -46,6 +46,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
             var me = this,
                 locale = me.locale,
                 accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+
             me.accordion = accordion;
             accordion.insertTo(me.container);
         },
@@ -104,7 +105,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
 
             for (n = 0; n < allMetadata.length; n += 1) {
                 data = allMetadata[n];
-                page = Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage', this.instance, this.locale);
+                page =
+                    Oskari.clazz.create(
+                        'Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
+                        this.instance,
+                        this.locale
+                    );
                 page.init();
                 accordion.addPanel(page);
                 if (n === 0) {
