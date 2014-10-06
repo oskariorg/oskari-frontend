@@ -230,27 +230,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                     return;
                 }
 
-                me.instance.service.doSearch(searchKey, function (data) {
-                    field.setEnabled(true);
-                    button.setEnabled(true);
-                    me._renderResults(data, searchKey);
-                }, function (data) {
-                    field.setEnabled(true);
-                    button.setEnabled(true);
+                me.instance.service.doSearch(
+                    searchKey,
+                    function (data) {
+                        field.setEnabled(true);
+                        button.setEnabled(true);
+                        me._renderResults(data, searchKey);
+                    },
+                    function (data) {
+                        field.setEnabled(true);
+                        button.setEnabled(true);
 
-                    var errorKey = data ? data.responseText : null,
-                        msg = me.instance.getLocalization('searchservice_search_not_found_anything_text');
+                        var errorKey = data ? data.responseText : null,
+                            msg = me.instance.getLocalization(
+                                'searchservice_search_not_found_anything_text');
 
-                    if (errorKey) {
-                        if (me.instance.getLocalization(errorKey)) {
-                            msg = me.instance.getLocalization(errorKey);
+                        if (errorKey) {
+                            if (typeof me.instance.getLocalization(errorKey) === 'string') {
+                                msg = me.instance.getLocalization(errorKey);
+                            }
                         }
-                    } else {
-                        msg = me.instance.getLocalization('generic_error');
-                    }
 
-                    me._showError(msg);
-                });
+                        me._showError(msg);
+                    });
             };
 
             button.setHandler(doSearch);
@@ -295,6 +297,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
         _showError: function (error) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okButton = dialog.createCloseButton('OK');
+
             dialog.setId('oskari_search_error_popup');
 
             dialog.show(
@@ -384,7 +387,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             var i,
                 header,
                 link;
-            for (i = 0; i < this.resultHeaders.length; ++i) {
+            for (i = 0; i < this.resultHeaders.length; i += 1) {
                 header = this.templateResultTableHeader.clone();
                 link = header.find('a');
                 link.append(this.resultHeaders[i].title);
@@ -415,7 +418,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
                 cells,
                 titleCell,
                 title;
-            for (i = 0; i < locations.length; ++i) {
+            for (i = 0; i < locations.length; i += 1) {
                 row = locations[i];
                 resultContainer = this.templateResultTableRow.clone();
                 cells = resultContainer.find('td');
