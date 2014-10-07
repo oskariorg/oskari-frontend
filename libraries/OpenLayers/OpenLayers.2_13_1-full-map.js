@@ -21352,10 +21352,10 @@ OpenLayers.Handler.Drag = OpenLayers.Class(OpenLayers.Handler, {
             OpenLayers.Event.preventDefault(evt);
 
             if(!this.oldOnselectstart) {
-                this.oldOnselectstart = document.onselectstart ?
-                    document.onselectstart : OpenLayers.Function.True;
+                this.oldOnselectstart = this.map.viewPortDiv.onselectstart ?
+                    this.map.viewPortDiv.onselectstart : OpenLayers.Function.True;
             }
-            document.onselectstart = OpenLayers.Function.False;
+            this.map.viewPortDiv.onselectstart = OpenLayers.Function.False;
 
             propagate = !this.stopDown;
         } else {
@@ -21400,8 +21400,8 @@ OpenLayers.Handler.Drag = OpenLayers.Class(OpenLayers.Handler, {
             this.move(evt);
             this.callback("move", [evt.xy]);
             if(!this.oldOnselectstart) {
-                this.oldOnselectstart = document.onselectstart;
-                document.onselectstart = OpenLayers.Function.False;
+                this.oldOnselectstart = this.map.viewPortDiv.onselectstart;
+                this.map.viewPortDiv.onselectstart = OpenLayers.Function.False;
             }
             this.last = evt.xy;
         }
@@ -21435,7 +21435,7 @@ OpenLayers.Handler.Drag = OpenLayers.Class(OpenLayers.Handler, {
             if(dragged) {
                 this.callback("done", [evt.xy]);
             }
-            document.onselectstart = this.oldOnselectstart;
+            this.map.viewPortDiv.onselectstart = this.oldOnselectstart;
         }
         return true;
     },
@@ -21624,8 +21624,8 @@ OpenLayers.Handler.Drag = OpenLayers.Class(OpenLayers.Handler, {
                 if(dragged) {
                     this.callback("done", [evt.xy]);
                 }
-                if(document.onselectstart) {
-                    document.onselectstart = this.oldOnselectstart;
+                if(this.map.viewPortDiv.onselectstart) {
+                    this.map.viewPortDiv.onselectstart = this.oldOnselectstart;
                 }
             }
         }
@@ -47719,7 +47719,8 @@ OpenLayers.Format.WFST.v1 = OpenLayers.Class(OpenLayers.Format.XML, {
         wfs: "http://www.opengis.net/wfs",
         gml: "http://www.opengis.net/gml",
         ogc: "http://www.opengis.net/ogc",
-        ows: "http://www.opengis.net/ows"
+        ows: "http://www.opengis.net/ows",
+        xmlns: "http://www.w3.org/2000/xmlns/"
     },
     
     /**
@@ -48010,7 +48011,10 @@ OpenLayers.Format.WFST.v1 = OpenLayers.Class(OpenLayers.Format.XML, {
                     }
                 });
                 if(this.featureNS) {
-                    node.setAttribute("xmlns:" + this.featurePrefix, this.featureNS);
+                    this.setAttributeNS(
+                        node, this.namespaces.xmlns,
+                        "xmlns:" + this.featurePrefix, this.featureNS
+                    );
                 }
                 
                 // add in geometry
@@ -48073,7 +48077,10 @@ OpenLayers.Format.WFST.v1 = OpenLayers.Class(OpenLayers.Format.XML, {
                     }
                 });
                 if(this.featureNS) {
-                    node.setAttribute("xmlns:" + this.featurePrefix, this.featureNS);
+                    this.setAttributeNS(
+                        node, this.namespaces.xmlns,
+                        "xmlns:" + this.featurePrefix, this.featureNS
+                    );
                 }
                 this.writeNode("ogc:Filter", new OpenLayers.Filter.FeatureId({
                     fids: [feature.fid]
@@ -48284,7 +48291,10 @@ OpenLayers.Format.WFST.v1_0_0 = OpenLayers.Class(
                     node.setAttribute("srsName", options.srsName);
                 }
                 if(options.featureNS) {
-                    node.setAttribute("xmlns:" + prefix, options.featureNS);
+                    this.setAttributeNS(
+                        node, this.namespaces.xmlns,
+                        "xmlns:" + prefix, options.featureNS
+                    );
                 }
                 if(options.propertyNames) {
                     for(var i=0,len = options.propertyNames.length; i<len; i++) {
@@ -48469,7 +48479,8 @@ OpenLayers.Format.WFST.v1_1_0 = OpenLayers.Class(
                     }
                 });
                 if(options.featureNS) {
-                    node.setAttribute("xmlns:" + prefix, options.featureNS);
+                    this.setAttributeNS(node, this.namespaces.xmlns,
+                        "xmlns:" + prefix, options.featureNS);
                 }
                 if(options.propertyNames) {
                     for(var i=0,len = options.propertyNames.length; i<len; i++) {

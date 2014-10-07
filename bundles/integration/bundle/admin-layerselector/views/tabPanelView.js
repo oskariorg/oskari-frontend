@@ -61,7 +61,11 @@ define([
                 this.__dialog = null;
                 // If model triggers change event we need to re-render this view
                 // listenTo will remove dead listeners, use it instead of on()
-                this.listenTo(this.layerGroupingModel, 'change:layerGroups', this.render);
+                var me = this;
+                this.listenTo(this.layerGroupingModel, 'change:layerGroups', function() {
+                    //console.log('tabPanelView change groups', arguments);
+                    me.render();
+                });
                 this.listenTo(this.layerGroupingModel, 'adminAction', function(e) {
                     // route adminAction from model to an ui element that View.js listens
                     this.$el.trigger(e);
@@ -162,7 +166,6 @@ define([
                                     model: layer,
                                     supportedTypes : me.supportedTypes,
                                     instance: this.options.instance
-                                    //,layerTabModel: this.layerGroupingModel
                                 });
 
                                 visibleLayerCount++;

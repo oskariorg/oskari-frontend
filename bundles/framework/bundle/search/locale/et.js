@@ -13,7 +13,7 @@ Oskari.registerLocalization({
         "searchResultDescriptionOrdering": "Otsingutulemusi võib tabelis järjestada klikkides veeru päisel.",
         "searchResults": "Tulemused: ",
         "searchResultsDescription": " otsingutulemused ",
-        "searchservice_search_alert_title": "Viga: ",
+        "searchservice_search_alert_title": "Viga",
         "searchservice_search_not_found_anything_text": "Otsing ei andnud tulemusi.",
         "too_short": "Otsingufraas on liiga lühike.",
         "cannot_be_empty": "Otsingufraas ei või olla tühi.",

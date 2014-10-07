@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Datamängd importering",
-            "description": "Du kan importera dina egna datamängder i shape-format, zip-format eller kml/kmz-format.",
+            "description": "Du kan importera dina egna datamängder i shape-, gpx- eller mif/mid-format i zip-paketet eller kmz-format.",
             "actions": {
                 "cancel": "Avbryt",
                 "next": "Nästa"

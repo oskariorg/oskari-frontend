@@ -124,6 +124,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
         me.activeToolLayout = 'lefthanded';
 
+        // FIXME why don't these sizes match with the ones shown in the labels?
         me.sizeOptions = [{
             id: 'small',
             width: 580,
@@ -137,11 +138,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             id: 'large',
             width: 1240,
             height: 700
-        }, {
+        }, /*{
             id: 'fill',
             width: '100%',
             height: '100%'
-        },
+        },*/
         {
             id: 'custom',
             minWidth: 30,
@@ -361,7 +362,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     if (option.id === 'fill') {
                         me._mapHorizontalFill();
                     } else {
-                        jQuery('.oskariui-center').width('');
+                        //jQuery('.oskariui-center').width('');
                     }
 
                     break;
@@ -614,7 +615,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     // FIXME create function outside loop
                     editBtn.setHandler(function () {
                         // user is in edit mode
-                        if (jQuery(editBtn.getButton()).val() === me.loc.toollayout.usereditmodeoff) {
+                        if (jQuery(editBtn.getElement()).val() === me.loc.toollayout.usereditmodeoff) {
                             // remove edit mode
                             me._editToolLayoutOff();
                         } else {
@@ -622,7 +623,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                         }
                     });
                     editBtn.setEnabled(me.activeToolLayout === 'userlayout');
-                    editBtn.getButton().attr('id', 'editModeBtn');
+                    jQuery(editBtn.getElement()).attr('id', 'editModeBtn');
                     editBtn.insertTo(layoutContainer);
                 }
             }
@@ -661,7 +662,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 tool,
                 tools;
 
-            for (i = 0; i < this.tools.length; i++) {
+            for (i = 0; i < this.tools.length; i += 1) {
                 tool = tools[i];
                 if (tool.plugin && tool.plugin.toggleUIControls) {
                     tool.plugin.toggleUIControls(enable);
@@ -871,7 +872,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 'float': 'left'
             }).addClass('published-grid-center');
 
-            if (!me.statsContainer) {
+            if (me.statsContainer) {
                 me.statsContainer.height(mapHeight);
             }
 
@@ -1366,6 +1367,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          * @param {String} lang language code
          */
         setPluginLanguage: function (lang) {
+            if (lang === null || lang === undefined) {
+                throw new TypeError(
+                    'Oskari.mapframework.bundle.publisher.view.BasicPublisher' +
+                        '.setPluginLanguage: language is null or undefined'
+                );
+            }
             Oskari.setLang(lang);
             var me = this,
                 i,
@@ -1693,7 +1700,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 plugin,
                 i;
 
-            for (i = 0; i < plugins.length; i++) {
+            for (i = 0; i < plugins.length; i += 1) {
                 plugin = plugins[i];
                 if (plugin.id === pluginName && plugin.config && plugin.config.location) {
                     return plugin.config.location.classes;
@@ -1858,7 +1865,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             if (!allowedLocations || !dropzone) {
                 return false;
             }
-            for (i = 0; i < allowedLocations.length; i++) {
+            for (i = 0; i < allowedLocations.length; i += 1) {
                 isAllowedLocation = dropzone.is('.' + allowedLocations[i].split(' ').join('.'));
                 if (isAllowedLocation) {
                     return allowedLocations[i];
@@ -1880,7 +1887,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 siblings = this._getDropzonePlugins(target),
                 i;
 
-            for (i = 0; i < siblings.length; i++) {
+            for (i = 0; i < siblings.length; i += 1) {
                 if (jQuery.inArray(siblings[i], me.toolDropRules[pluginClazz].allowedSiblings) < 0) {
                     // Unallowed sibling, move to source
                     sibling = me._getPluginByClazz(siblings[i]);
@@ -1904,7 +1911,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 i,
                 ret = 2;
 
-            for (i = 0; i < siblings.length; i++) {
+            for (i = 0; i < siblings.length; i += 1) {
                 if (!excludedSibling || siblings[i] !== excludedSibling) {
                     // sibling is not ignored, see if it's an allowed sibling
                     if (jQuery.inArray(siblings[i], me.toolDropRules[pluginClazz].allowedSiblings) < 0 && pluginClazz !== siblings[i]) {

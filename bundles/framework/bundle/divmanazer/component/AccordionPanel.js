@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
      * TODO: close/open methods?
      * @static
      */
-
     function () {
         this.template = jQuery('<div class="accordion_panel">' +
             '<div class="header">' +
@@ -28,6 +27,7 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
 
         var me = this,
             header = me.html.find('div.header');
+
         header.click(function () {
             if (me.isOpen()) {
                 me.close();
@@ -35,6 +35,7 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
                 me.open();
             }
         });
+
         this.html.find('div.content').hide();
     }, {
         /**
@@ -57,7 +58,7 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
          */
         isVisible: function () {
             // checking since we dont assume param is boolean
-            return this.html.is(":visible");
+            return this.html.is(':visible');
         },
         /**
          * @method isOpen
@@ -108,6 +109,15 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
             return this.title;
         },
         /**
+         * @method setId
+         * Sets the panel header id
+         * @param {String} id id for the panel
+         */
+        setId: function (id) {
+            var header = this.html.find('div.header');
+            header.attr('id', id);
+        },
+        /**
          * @method setContent
          * Sets the panel content.
          * This can be also done with #getContainer()
@@ -123,6 +133,9 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
          * Destroys the panel/removes it from document
          */
         destroy: function () {
+            if( !this.html){ 
+              return;
+            }
             this.html.remove();
         },
         /**

@@ -41,6 +41,12 @@
 	                "mapanalysis": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },
+	                "maparcgis": {
+	                    "bundlePath": "../../../packages/arcgis/bundle/"
+	                },
+		            "mapuserlayers" : {
+		                "bundlePath" : "../../../packages/framework/bundle/"
+		            },
 	                "service-base": {
 	                    "bundlePath": "../../../packages/framework/bundle/"
 	                },

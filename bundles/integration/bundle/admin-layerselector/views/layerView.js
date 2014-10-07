@@ -39,9 +39,18 @@ define([
                 me.template = _.template(ViewTemplate);
                 me.subLayerTemplate = _.template(SubLayerTemplate);
                 // listenTo will remove dead listeners, use it instead of on()
-                this.listenTo(this.model, 'add', this.render);
-                this.listenTo(this.model, 'change', this.render);
-                this.listenTo(this.model, 'remove', this.render);
+                this.listenTo(this.model, 'add', function() {
+                    //console.log('layerView add', arguments);
+                    me.render();
+                });
+                this.listenTo(this.model, 'change', function() {
+                    //console.log('layerView change', arguments);
+                    me.render();
+                });
+                this.listenTo(this.model, 'remove', function() {
+                    //console.log('layerView remove', arguments);
+                    me.render();
+                });
                 //this.model.on('change', this.render, this);
                 this.supportedTypes = this.options.supportedTypes;
                 me.render();
@@ -192,14 +201,20 @@ define([
                         // call trigger on parent element's dom...
                         // see adminAction
                     };
-                saveButton.setTitle(this.instance.getLocalization('add'));
+                if(subLayer && subLayer.getId && subLayer.getId()) {
+                    saveButton.setTitle(this.instance.getLocalization('save'));
+                }
+                else {
+                    saveButton.setTitle(this.instance.getLocalization('add'));
+                }
                 saveButton.addClass('primary');
                 saveButton.setHandler(function () {
                     var el = {
                         currentTarget: settings.$el.find('.admin-add-sublayer-ok')
                     };
                     settings.addLayer(el, exitPopup);
-                    //exitPopup();
+                    // update the UI on parent level
+                    me.model.trigger('change', me.model);
                 });
                 cancelButton.setHandler(function () {
                     exitPopup();
@@ -213,7 +228,16 @@ define([
                         var el = {
                             currentTarget: settings.$el.find('.admin-remove-sublayer')
                         };
-                        settings.removeLayer(el, exitPopup);
+                        settings.removeLayer(el, function() {
+                            // we need to trigger this manually for sublayers to work...
+                            me.$el.trigger({
+                                type: 'adminAction',
+                                command: 'removeLayer',
+                                modelId: subLayerId,
+                                baseLayerId: parentId
+                            });
+                            exitPopup(); 
+                        });
                         //exitPopup();
                     });
                     buttons.push(deleteButton);

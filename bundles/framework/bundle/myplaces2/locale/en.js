@@ -75,7 +75,7 @@ Oskari.registerLocalization(
             "line": {
                 "title": "Add Line",
                 "tooltip": "Add a line to the \"My places\".",
-                "add": "Draw a line by adding the break points to the map. You can add the break points by clicking the map. Stop drawing by double clicking or by clicking \"Finish drawing\".",
+                "add": "Draw a line by adding the break points to the map. You can add the break points by clicking the map. Stop drawing by double clicking or by clicking \"Save as my place\".",
                 "next": "One place can contain one or more lines.",
                 "edit": "Edit the line by clicking and dragging its break points.",
                 "save": "Save as my place",
@@ -84,7 +84,7 @@ Oskari.registerLocalization(
             "area": {
                 "title": "Add Area",
                 "tooltip": "Add an area to the \"My places\".",
-                "add": "Draw a line by adding the edge line's break points to the map. You can add the break points by clicking the map. Stop drawing by double clicking or by clicking \"Finish drawing\".",
+                "add": "Draw an area by adding the edge line's break points to the map. You can add the break points by clicking the map. Stop drawing by double clicking or by clicking \"Save as my place\".",
                 "next": "One place can contain one or more areas.",
                 "edit": "Edit the area by clicking and dragging the break points on its edge line.",
                 "save": "Save as my place",

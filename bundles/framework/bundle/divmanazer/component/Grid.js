@@ -752,7 +752,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         generator.document.close();
                     }
                 });
-                exporter.append(me.csvButton.getButton());
+                exporter.append(me.csvButton.getElement());
 
                 // Excel
                 me.excelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -794,7 +794,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 */
                 });
                 if (navigator.appName !== 'Microsoft Internet Explorer') {
-                    exporter.append(me.excelButton.getButton());
+                    exporter.append(me.excelButton.getElement());
                 }
                 container.parent().find('.tab-tools').append(exporter);
             }

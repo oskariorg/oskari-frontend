@@ -106,6 +106,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             me._actionLink = jQuery('<span class="infoboxActionLinks"><a href="#"></a></span>');
             me._actionButton = jQuery('<span class="infoboxActionLinks"><input type="button" /></span>');
             me._contentSeparator = jQuery('<div class="infoboxLine">separator</div>');
+
         },
 
         /**
@@ -160,8 +161,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          */
         _renderPopup: function (id, contentData, title, lonlat, colourScheme, font, refresh) {
             var me = this,
-                contentDiv = me._renderContentData(contentData),
-                popupContent = me._renderPopupContent(title, contentDiv),
+                contentDiv = me._renderContentData(id, contentData),
+                popupContent = me._renderPopupContent(id, title, contentDiv),
                 popup;
 
             if (refresh) {
@@ -226,17 +227,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          *
          * @method _renderPopupContent
          * @private
+         * @param  {String} id
          * @param  {String} title
          * @param  {jQuery} contentDiv
          * @return {String}
          */
-        _renderPopupContent: function (title, contentDiv) {
+        _renderPopupContent: function (id, title, contentDiv) {
             var arrow = this._arrow.clone(),
                 header = this._header.clone(),
                 headerWrapper = this._headerWrapper.clone(),
                 closeButton = this._headerCloseButton.clone(),
                 resultHtml;
 
+            closeButton.attr("id", 'oskari_' + id + '_headerCloseButton');
             header.append(title);
             headerWrapper.append(header);
             headerWrapper.append(closeButton);
@@ -255,7 +258,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          * @param  {Object[]} contentData
          * @return {jQuery}
          */
-        _renderContentData: function (contentData) {
+        _renderContentData: function (id, contentData) {
             var me = this;
 
             return _.foldl(contentData, function (contentDiv, datum, index) {
@@ -268,6 +271,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                     link;
 
                 contentWrapper.append(datum.html);
+
+	            contentWrapper.attr("id", 'oskari_' + id + '_contentWrapper');
 
                 for (key in datum.actions) {
                     if (useButtons) {
@@ -282,6 +287,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                         actionLink = me._actionLink.clone();
                         link = actionLink.find('a');
                         link.attr('contentdata', index);
+                        link.attr('id', 'oskari_' + id + '_actionLink');
                         link.append(key);
                     }
                     contentWrapper.append(actionLink);
@@ -660,7 +666,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         startPlugin: function (sandbox) {
             this._sandbox = sandbox;
             sandbox.register(this);
-
         },
         /**
          * @method stopPlugin

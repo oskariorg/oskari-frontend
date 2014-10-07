@@ -32,6 +32,15 @@
 
 }
 
+div.codesnippet {
+    word-wrap: break-word;
+    border-style: dashed;
+    border-width: 1px;
+    padding: 5px;
+    max-height: 200px;
+    over-flow: auto;
+}
+
 div.notLoggedIn {
     padding: 10px;
 }

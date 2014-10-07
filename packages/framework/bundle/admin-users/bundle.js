@@ -33,10 +33,25 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-users.AdminUsersBundle",
                 "src": "../../../../bundles/framework/bundle/admin-users/Flyout.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/admin-users/AdminUsers.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/admin-users/AdminRoles.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/admin-users/event/RoleChangedEvent.js"
+            },{
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/admin-users/Tile.js"
             }, {
                 "type": "text/css",
                 "src": "../../../../resources/framework/bundle/admin-users/css/style.css"
+            }, {
+                "src": "../../../../libraries/chosen/chosen.jquery.js",
+                "type": "text/javascript"
+            }, {
+                "src": "../../../../libraries/chosen/chosen.css",
+                "type": "text/css"
             }],
 
             "locales": [{

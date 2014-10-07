@@ -11,8 +11,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.WFSSetFilter'
      *
      */
 
-    function (geojson) {
+    function (geojson, filters) {
         this._geojson = geojson;
+        this._filters = filters;
     }, {
         /** @static @property __name event name */
         __name: "WFSSetFilter",
@@ -23,7 +24,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.WFSSetFilter'
         getName: function () {
             return this.__name;
         },
-
+        /**
+         * WFS feature property filter params
+         * @method getFilters
+         */
+        getFilters: function () {
+            return this._filters;
+        },
         /**
          * @method getGeoJson
          */

@@ -179,19 +179,56 @@ if (!Function.prototype.bind) {
              * @return {String} xslt
              */
             getGfiXslt: function () {
-                var adminBlock = this.get('admin');
+                var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.xslt;
                 }
                 return null;
             },
+
+            /**
+             * Returns username if defined or null if not
+             * @return {String} username
+             */
+            getUsername: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.username;
+                }
+                return null;
+            },
+
+            /**
+             * Returns password if defined or null if not
+             * @return {String} password
+             */
+            getPassword: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.password;
+                }
+                return null;
+            },
+
+            /**
+             * Returns interface url
+             * @return {String} url
+             */
+            getInterfaceUrl: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.url;
+                }
+                return this.getLayerUrls().join();
+            },
+
             /**
              * Returns organization or inspire id based on type
              * @param  {String} type ['organization' | 'inspire']
              * @return {Number} group id
              */
             getGroupId: function (type) {
-                var adminBlock = this.get('admin');
+                var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     // inspireId or organizationId
                     return adminBlock[type + 'Id'];

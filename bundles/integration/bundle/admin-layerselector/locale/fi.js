@@ -1,5 +1,4 @@
-Oskari.registerLocalization(
-{
+Oskari.registerLocalization({
     "lang": "fi",
     "key": "admin-layerselector",
     "value": {
@@ -153,19 +152,16 @@ Oskari.registerLocalization(
                 "descplaceholder": "Kuvaus kielellä {0}"
             },
             "en": {
-                "lang": "Englanniksi:",
                 "title": "En",
                 "placeholder": "Nimi englanniksi",
                 "descplaceholder": "Kuvaus englanniksi"
             },
             "fi": {
-                "lang": "Suomeksi:",
                 "title": "Fi",
                 "placeholder": "Nimi suomeksi",
                 "descplaceholder": "Kuvaus suomeksi"
             },
             "sv": {
-                "lang": "Ruotsiksi:",
                 "title": "Sv",
                 "placeholder": "Nimi ruotsiksi",
                 "descplaceholder": "Kuvaus ruotsiksi"
@@ -184,5 +180,4 @@ Oskari.registerLocalization(
         "save": "Tallenna",
         "delete": "Poista"
     }
-}
-);
+});

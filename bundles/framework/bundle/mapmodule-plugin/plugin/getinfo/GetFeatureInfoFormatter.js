@@ -119,6 +119,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
      * @return {jQuery} formatted HMTL
      */
     _formatGfiDatum: function (datum) {
+        // FIXME this function is too complicated, chop it to pieces
         if (!datum.presentationType) {
             return null;
         }
@@ -157,7 +158,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 dataArray.push(rawJsonData);
             }
 
-            for (i = 0; i < dataArray.length; ++i) {
+            for (i = 0; i < dataArray.length; i += 1) {
                 jsonData = dataArray[i];
                 table = me.template.getinfoResultTable.clone();
                 for (attr in jsonData) {
@@ -165,7 +166,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                         value = me._formatJSONValue(jsonData[attr]);
                         if (value) {
                             row = me.template.tableRow.clone();
-                            table.append(row);
                             // FIXME this is unnecessary, we can do this with a css selector.
                             if (!even) {
                                 row.addClass('odd');
@@ -183,6 +183,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                             valueCell = me.template.tableCell.clone();
                             valueCell.append(value);
                             row.append(valueCell);
+                            table.append(row);
                         }
 
                     }
@@ -201,13 +202,18 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             // Add getinforesult class etc. so the table is styled properly
             parsedHTML.find('table').addClass('getinforesult_table');
             // FIXME this is unnecessary, we can do this with a css selector.
+            parsedHTML.find('tr').removeClass('odd');
             parsedHTML.find('tr:even').addClass('odd');
+            parsedHTML.children("br").remove();
             response.append(parsedHTML.html());
         } else {
             response.append(datum.content);
         }
         if (datum.gfiContent) {
-            response.append('\n' + datum.gfiContent);
+            var trimmed = datum.gfiContent.trim();
+            if (trimmed.length) {
+                response.append(trimmed);
+            }
         }
         return response;
     },
@@ -233,7 +239,8 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 pluginLoc,
                 myLoc,
                 localizedAttr;
-            for (i = 0; i < pValue.length; ++i) {
+
+            for (i = 0; i < pValue.length; i += 1) {
                 obj = pValue[i];
                 for (objAttr in obj) {
                     if (obj.hasOwnProperty(objAttr)) {
@@ -247,7 +254,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                             value.append(localizedAttr || objAttr);
                             value.append(': ');
                             value.append(innerValue);
-                            value.append('<br/>');
+                            value.append('<br class="innerValueBr" />');
                         }
                     }
                 }
@@ -262,6 +269,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         }
         return value;
     },
+
     /**
      * @method _formatWFSFeaturesForInfoBox
      */
@@ -348,13 +356,13 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             desc.remove();
         }
 
-        if (place.image_url) {
+        if (place.image_url && typeof place.image_url === 'string') {
             img.attr({
                 'href': place.image_url
             }).find('img.myplaces_img').attr({
                 'src': place.image_url
             });
-        } else if (place.imageUrl) {
+        } else if (place.imageUrl && typeof place.imageUrl === 'string') {
             img.attr({
                 'href': place.imageUrl
             }).find('img.myplaces_img').attr({
@@ -383,6 +391,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
      * @return {String} formatted HMTL
      */
     _json2html: function (node) {
+        // FIXME this function is too complicated, chop it to pieces
         if (node === null || node === undefined) {
             return '';
         }
@@ -435,7 +444,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     // format array
                     if (jQuery.isArray(value)) {
                         valueDiv = this.template.wrapper.clone();
-                        for (i = 0; i < value.length; ++i) {
+                        for (i = 0; i < value.length; i += 1) {
                             innerTable = this._json2html(value[i]);
                             valueDiv.append(innerTable);
                         }

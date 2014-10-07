@@ -1,0 +1,81 @@
+button.oskari-formcomponent, input[type=button].oskari-formcomponent, input[type=reset].oskari-formcomponent, input[type=submit].oskari-formcomponent {
+  margin-top: 6px; }
+
+fieldset.oskari-formcomponent {
+  border: 0;
+  margin: 0; }
+  fieldset.oskari-formcomponent > legend {
+    font-weight: normal; }
+
+fieldset.oskari-formcomponent label, label.oskari-formcomponent {
+  display: block;
+  clear: both;
+  margin-bottom: 12px;
+  width: 340px; }
+  fieldset.oskari-formcomponent label input, fieldset.oskari-formcomponent label select, fieldset.oskari-formcomponent label textarea, label.oskari-formcomponent input, label.oskari-formcomponent select, label.oskari-formcomponent textarea {
+    box-sizing: border-box;
+    margin: 3px 0 0 0;
+    clear: left;
+    display: block; }
+  fieldset.oskari-formcomponent label input[type=email], fieldset.oskari-formcomponent label input[type=file], fieldset.oskari-formcomponent label input[type=number], fieldset.oskari-formcomponent label input[type=password], fieldset.oskari-formcomponent label input[type=search], fieldset.oskari-formcomponent label input[type=tel], fieldset.oskari-formcomponent label input[type=text], fieldset.oskari-formcomponent label input[type=url], fieldset.oskari-formcomponent label select, fieldset.oskari-formcomponent label textarea, label.oskari-formcomponent input[type=email], label.oskari-formcomponent input[type=file], label.oskari-formcomponent input[type=number], label.oskari-formcomponent input[type=password], label.oskari-formcomponent input[type=search], label.oskari-formcomponent input[type=tel], label.oskari-formcomponent input[type=text], label.oskari-formcomponent input[type=url], label.oskari-formcomponent select, label.oskari-formcomponent textarea {
+    width: 340px; }
+  fieldset.oskari-formcomponent label input + .icon-close, fieldset.oskari-formcomponent label textarea + .icon-close, label.oskari-formcomponent input + .icon-close, label.oskari-formcomponent textarea + .icon-close {
+    display: none;
+    cursor: pointer;
+    text-align: center;
+    position: absolute;
+    right: 6px; }
+  fieldset.oskari-formcomponent label input + .icon-close, label.oskari-formcomponent input + .icon-close {
+    top: 13px; }
+  fieldset.oskari-formcomponent label textarea + .icon-close, label.oskari-formcomponent textarea + .icon-close {
+    top: 6px; }
+  fieldset.oskari-formcomponent label input, label.oskari-formcomponent input {
+    display: inline-block; }
+    fieldset.oskari-formcomponent label input[type=checkbox], fieldset.oskari-formcomponent label input[type=radio], label.oskari-formcomponent input[type=checkbox], label.oskari-formcomponent input[type=radio] {
+      margin: 0 5px 0 0;
+      vertical-align: middle; }
+  fieldset.oskari-formcomponent label input::-ms-clear, fieldset.oskari-formcomponent label input::-ms-reveal, label.oskari-formcomponent input::-ms-clear, label.oskari-formcomponent input::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0; }
+  fieldset.oskari-formcomponent label input[type="search"]::-webkit-search-decoration, fieldset.oskari-formcomponent label input[type="search"]::-webkit-search-cancel-button, fieldset.oskari-formcomponent label input[type="search"]::-webkit-search-results-button, fieldset.oskari-formcomponent label input[type="search"]::-webkit-search-results-decoration, label.oskari-formcomponent input[type="search"]::-webkit-search-decoration, label.oskari-formcomponent input[type="search"]::-webkit-search-cancel-button, label.oskari-formcomponent input[type="search"]::-webkit-search-results-button, label.oskari-formcomponent input[type="search"]::-webkit-search-results-decoration {
+    display: none; }
+  fieldset.oskari-formcomponent label span, label.oskari-formcomponent span {
+    vertical-align: middle; }
+  fieldset.oskari-formcomponent label .input-controls, label.oskari-formcomponent .input-controls {
+    position: relative; }
+    fieldset.oskari-formcomponent label .input-controls input, label.oskari-formcomponent .input-controls input {
+      margin: 0; }
+    fieldset.oskari-formcomponent label .input-controls:hover .icon-close, label.oskari-formcomponent .input-controls:hover .icon-close {
+      display: block; }
+
+label.oskari-formcomponent.oskari-numberinput .input-controls:hover .icon-close {
+  display: none; }
+
+fieldset.oskari-formcomponent.oskari-radiobuttongroup {
+  margin-bottom: 12px; }
+  fieldset.oskari-formcomponent.oskari-radiobuttongroup label {
+    margin-bottom: 0; }
+
+form.oskari-searchform > label {
+  display: inline-block;
+  width: 260px; }
+  form.oskari-searchform > label .input-controls input {
+    width: 260px;
+    -webkit-border-top-right-radius: 0px;
+    -webkit-border-bottom-right-radius: 0px;
+    -moz-border-radius-topright: 0px;
+    -moz-border-radius-bottomright: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    height: 39px; }
+form.oskari-searchform > input {
+  display: inline-block;
+  width: 80px;
+  -webkit-border-top-right-radius: 4px;
+  -webkit-border-bottom-right-radius: 4px;
+  -moz-border-radius-topright: 4px;
+  -moz-border-radius-bottomright: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  margin: 0; }

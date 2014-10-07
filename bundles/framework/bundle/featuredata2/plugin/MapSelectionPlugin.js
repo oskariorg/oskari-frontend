@@ -193,7 +193,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.MapSelection
             square: new OpenLayers.Control.DrawFeature(me.drawLayer,
                 OpenLayers.Handler.RegularPolygon, {
                     handlerOptions: {
-                        sides: 4
+                        sides: 4,
+                        irregular: true
                     }
                 }),
             circle: new OpenLayers.Control.DrawFeature(me.drawLayer,

@@ -697,7 +697,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
          */
         setGridHeight: function () {
             var gridDiv = jQuery('#municipalGrid'),
-                parent = gridDiv.parent(),
+                parent = gridDiv.parent(), // .publishedgrid
                 selectorsCont = parent.find('.selectors-container'),
                 selectorsHeight = 0;
             if (selectorsCont.length > 0) {
@@ -829,11 +829,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         },
 
         /**
-         * Adds the add own indicator button in paramCont
+         * Adds the add own indicator button in paramCont, removes old one if present.
          */
         _addOwnIndicatorButton: function (paramCont, container) {
             var me = this,
                 button = jQuery(me.templates.addOwnIndicator);
+
+            container.find('.new-indicator-cont').remove();
 
             button.find('input').val(me._locale.addDataButton);
             paramCont.append(button);

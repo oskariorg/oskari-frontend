@@ -19,7 +19,7 @@
         isSubLayer: isSubLayer }) %>
     <% } %>
 
-    <!--div class="add-layer-record">
+    <div class="add-layer-record">
         <div class="add-layer-label-area">
             <label for="add-layer-username" class="add-layer-label"
                    title="<%= instance.getLocalization('admin').username %>"><%=instance.getLocalization('admin').username %></label>
@@ -28,7 +28,7 @@
             <div class="input-controls">
                 <input type="text" id="add-layer-username" class="add-layer-input long"
                        placeholder="<%= instance.getLocalization('admin').username %>"
-                       value="<%= model.getMetadataIdentifier() %>" />
+                       value="<%= model.getUsername() %>" />
                 <div class="icon-close"></div>
             </div>
         </div>
@@ -40,12 +40,13 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-password" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').password %>"
-                       value="<%= model.getMetadataIdentifier() %>" />
+                <input type="password" id="add-layer-password" class="add-layer-input long"
+                       placeholder="<%= instance.getLocalization('admin').password %>"
+                       value="<%= model.getPassword() %>" />
                 <div class="icon-close"></div>
             </div>
         </div>
-    </div-->
+    </div>
 
     <%
         // Names are not necessary for sublayers, BUT we need to show something as the name for admins (!isSubLayer &&)
@@ -54,19 +55,20 @@
 
         <% 
         var names = model.getNameLanguages();
+        var loc = Oskari.getLocalization('DivManazer').LanguageSelect.languages;
         for (var i = 0; i < names.length; i++) {
             var lang = names[i] %>
             <div class="add-layer-record">
                 <div class="add-layer-label-area">
-                    <label for="add-layer-<%= lang %>-name" class="add-layer-label" title="<%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].title : lang %>"><%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].lang : lang + ':' %></label>
+                    <label for="add-layer-<%= lang %>-name" class="add-layer-label" title="<%= (loc[lang] || lang) + ':' %>"><%= (loc[lang] || lang) + ':' %></label>
                 </div>
                 <div class="add-layer-input-area">
                     <div class="input-controls">
-                        <input type="text" id="add-layer-<%= lang %>-name" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].placeholder : instance.getLocalization('admin')['generic'].placeholder.replace('{0}', lang) %>" value="<%= model.getName(lang) %>"  />
+                        <input type="text" id="add-layer-<%= lang %>-name" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].placeholder : instance.getLocalization('admin')['generic'].placeholder.replace('{0}', (loc[lang] || lang)) %>" value="<%= model.getName(lang) %>"  />
                         <div class="icon-close"></div>
                     </div>
                     <div class="input-controls">
-                        <input type="text" id="add-layer-<%= lang %>-title" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].descplaceholder : instance.getLocalization('admin')['generic'].descplaceholder.replace('{0}', lang) %>" value="<%= model.getDescription(lang) %>" />
+                        <input type="text" id="add-layer-<%= lang %>-title" class="add-layer-input long" placeholder="<%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].descplaceholder : instance.getLocalization('admin')['generic'].descplaceholder.replace('{0}', (loc[lang] || lang)) %>" value="<%= model.getDescription(lang) %>" />
                         <div class="icon-close"></div>
                     </div>
                 </div>

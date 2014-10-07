@@ -499,7 +499,7 @@ module.exports = function (grunt) {
         done();
     });
 
-    grunt.registerTask('release', 'Release build', function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications) {
+    grunt.registerTask('release', 'Release build', function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
         var i,
             ilen,
             config,
@@ -573,10 +573,10 @@ module.exports = function (grunt) {
 
             // setting task configs
             grunt.config.set("copy." + appName + ".files", files);
-            grunt.config.set("validate." + appName + ".options", {
+/*            grunt.config.set("validate." + appName + ".options", {
                 "appSetupFile": config,
                 "dest": dest
-            });
+            }); */
             grunt.config.set("compile." + appName + ".options", {
                 "appSetupFile": config,
                 "dest": dest
@@ -606,7 +606,7 @@ module.exports = function (grunt) {
             }]);
 
 
-        grunt.task.run('validate');
+//        grunt.task.run('validate');
 
         // configure copy-task to copy back the results from dist/css and dist/icons to applications/appname/(css || icons)
         if (copyResourcesToApplications) {
@@ -639,7 +639,9 @@ module.exports = function (grunt) {
         grunt.task.run('compile');
         grunt.task.run('compileAppCSS');
         grunt.task.run('sprite');
-        grunt.task.run('oskaridoc');
+        if (!skipDocumentation) {
+            grunt.task.run('oskaridoc');
+        }
 
         if (grunt.config.get('compress.options.fullMap')) grunt.task.run('compress');
         if (copyResourcesToApplications) {

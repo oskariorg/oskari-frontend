@@ -102,7 +102,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
                     // convenience so the port isn't required
                     this.config.port = '' + location.port;
                 }
-                if (this.config.port.length > 0) {
+                // length check won't work if port is given as number
+                var portAsString = '' + this.config.port;
+                if (portAsString.length > 0) {
                     this.config.port = ':' + this.config.port;
                 }
                 if (!this.config.contextPath) {
@@ -329,6 +331,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
              */
             WFSSetFilter: function (event) {
                 this.setFilterHandler(event);
+            },
+            /**
+             * @method WFSSetPropertyFilter
+             * @param {Object} event
+             */
+            WFSSetPropertyFilter: function (event) {
+                this.setPropertyFilterHandler(event);
             },
 
             /**
@@ -629,6 +638,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
             }
 
             this.getIO().setFilter(event.getGeoJson());
+        },
+
+        /**
+         * @method setPropertyFilterHandler
+         */
+        setPropertyFilterHandler: function (event) {
+            /// clean selected features lists
+            var layers = this.getSandbox().findAllSelectedMapLayers();
+            for (var i = 0; i < layers.length; ++i) {
+                if (layers[i].hasFeatureData() && layers[i].getId() === event.getLayerId() ) {
+                    layers[i].setSelectedFeatures([]);
+                }
+            }
+
+            this.getIO().setPropertyFilter(event.getFilters(), event.getLayerId());
         },
 
         /**

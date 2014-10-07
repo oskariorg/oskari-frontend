@@ -87,7 +87,8 @@
       background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#e3e3e3));
       background: -moz-linear-gradient(top, #fefefe, #e3e3e3);
       background: -ms-linear-gradient(top, #fefefe, #e3e3e3);
-      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fefefe', endColorstr='#e3e3e3',GradientType=0);
+      /* For some reason sass didn't like this in one line... */
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fefefe', endColorstr='#e3e3e3');
       background: linear-gradient(top, #fefefe, #e3e3e3); }
   .statsgrid .selectors-container {
     position: relative;
@@ -247,7 +248,7 @@ form.add-indicator hr {
 form.add-indicator .municipalities {
   position: absolute;
   bottom: 40px;
-  top: 545px;
+  top: 585px;
   left: -10px;
   width: 100%;
   overflow: auto;

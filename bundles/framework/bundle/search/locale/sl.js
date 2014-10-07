@@ -13,7 +13,7 @@ Oskari.registerLocalization({
         "searchResultDescriptionOrdering": "Iskalne rezultate lahko tudi razvrstiš s klikom na vrh stolpca",
         "searchResults": "Rezultati:",
         "searchResultsDescription": "rezultati iskanja",
-        "searchservice_search_alert_title": "Napaka:",
+        "searchservice_search_alert_title": "Napaka",
         "searchservice_search_not_found_anything_text": "Iskanje ni vrnilo rezultatov.",
         "too_short": "Iskalni pojem je prekratek.",
         "cannot_be_empty": "Iskalni pojem ne sme biti prazen",

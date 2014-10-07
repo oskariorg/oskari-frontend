@@ -13,7 +13,7 @@ Oskari.registerLocalization({
         "searchResultDescriptionOrdering": "Du kan også bestille resultater i tabellen herunder ved at klikke på kolonneoverskrifterne",
         "searchResults": "Resultater:",
         "searchResultsDescription": "søgeresultater",
-        "searchservice_search_alert_title": "Fejl:",
+        "searchservice_search_alert_title": "Fejl",
         "searchservice_search_not_found_anything_text": "Søgningen gav ingen resultater.",
         "too_short": "Dit søgeord er for kort.",
         "cannot_be_empty": "Søgefeltet må ikke være tomt",

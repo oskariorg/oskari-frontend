@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.userinterface.component.buttons.SearchButton',
      * @static
      */
     function () {
-        this.ui.attr('type', 'submit');
+        this._element.type = 'submit';
         this.setTitle(Oskari.getLocalization('DivManazer').buttons.search);
         this.setPrimary(true);
     },

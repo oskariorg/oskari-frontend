@@ -80,7 +80,16 @@ define([
                 // removing layer from the main collection
                 // layer groups monitor the main collection and update 
                 // their state based on changes to the main collection
-                this.instance.models.layers.removeLayer(layerId);
+                var models = this.instance.models.layers;
+                var layer = models.get(layerId);
+                models.removeLayer(layerId);
+                // trigger change for sublayers parent so changes reflect on UI
+                if(layer.getParentId() !== -1) {
+                    var parent = models.get(layer.getParentId());
+                    if(parent) {
+                        parent.trigger('change', parent);
+                    }
+                }
             },
             addToCollection: function (layerList) {
                 if(!this.instance.models || !this.instance.models.layers) {
@@ -89,6 +98,16 @@ define([
                 var models = this.instance.models.layers;
                 // merge updates existing
                 models.add(layerList, {merge: true});
+                _.each(layerList, function(layer) {
+                    if(layer.getParentId() === -1) {
+                        return;
+                    }
+                    // trigger change for sublayers parent so changes reflect on UI
+                    var parent = models.get(layer.getParentId());
+                    if(parent) {
+                        parent.trigger('change', parent);
+                    }
+                });
                 return true;
             },
             /**

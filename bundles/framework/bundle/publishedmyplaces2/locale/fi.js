@@ -74,7 +74,7 @@ Oskari.registerLocalization({
             "line": {
                 "title": "Lisää viiva",
                 "tooltip": "Lisää viiva",
-                "add": "Piirrä viiva klikkaamalla viivan taitepisteitä kartalla. Lopeta piirtäminen tuplaklikkaamalla tai painamalla \"Lopeta piirto\".",
+                "add": "Piirrä viiva klikkaamalla viivan taitepisteitä kartalla. Lopeta piirtäminen tuplaklikkaamalla tai painamalla \"Tallenna kohde\".",
                 "next": "Voit halutessasi piirtää useampia viivoja samaan kohteeseen piirtämällä kartalle useamman viivan.",
                 "edit": "Muokkaa viivaa liikuttamalla viivan taitepisteitä hiirellä raahaamalla.",
                 "save": "Tallenna kohde",

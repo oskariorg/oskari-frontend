@@ -3,14 +3,14 @@
  *
  *
  */
-Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", function () {
+Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", function() {
 
 }, {
     /**
      * @method create creates an Oskari DIV Manager instance
      * @return {Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance}
      */
-    "create": function () {
+    "create": function() {
 
         return Oskari.clazz.create("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance");
     },
@@ -18,7 +18,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
      * @method update called by the bundle manager to inform on changes in
      * bundlage
      */
-    "update": function (manager, bundle, bi, info) {
+    "update": function(manager, bundle, bi, info) {
 
     }
 }, {
@@ -65,6 +65,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/bundle/divmanazer/event/ExtensionUpdatedEvent.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/Component.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/divmanazer/component/Accordion.js"
             }, {
                 "type": "text/javascript",
@@ -95,7 +98,13 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/bundle/divmanazer/component/Button.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/FilterDialog.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/divmanazer/component/Form.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/SearchForm.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/divmanazer/component/UIHelper.js"
@@ -114,6 +123,48 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/divmanazer/component/ProgressSpinner.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/Container.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/FormComponent.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/Select.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/LanguageSelect.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/MultiLevelSelect.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/RadioButtonGroup.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/CheckboxInput.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/TextInput.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/EmailInput.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/NumberInput.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/PasswordInput.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/SearchInput.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/UrlInput.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/TextAreaInput.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/divmanazer/component/VisualizationForm.js"
@@ -185,6 +236,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../resources/framework/bundle/divmanazer/css/alert.css"
             }, {
                 "type": "text/css",
+                "src": "../../../../resources/framework/bundle/divmanazer/css/formcomponent.css"
+            }, {
+                "type": "text/css",
                 "src": "../../../../resources/framework/bundle/divmanazer/css/forminput.css"
             }, {
                 "type": "text/css",
@@ -214,34 +268,479 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
          }*/
         ],
         "locales": [{
+            "lang": "af",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/af.js"
+        }, {
+            "lang": "ak",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ak.js"
+        }, {
+            "lang": "am",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/am.js"
+        }, {
+            "lang": "ar",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ar.js"
+        }, {
+            "lang": "az",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/az.js"
+        }, {
+            "lang": "be",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/be.js"
+        }, {
+            "lang": "bg",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/bg.js"
+        }, {
+            "lang": "bm",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/bm.js"
+        }, {
+            "lang": "bn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/bn.js"
+        }, {
+            "lang": "bo",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/bo.js"
+        }, {
+            "lang": "br",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/br.js"
+        }, {
+            "lang": "bs",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/bs.js"
+        }, {
+            "lang": "ca",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ca.js"
+        }, {
             "lang": "cs",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/divmanazer/locale/cs.js"
+        }, {
+            "lang": "cy",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/cy.js"
+        }, {
+            "lang": "da",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/da.js"
         }, {
             "lang": "de",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/divmanazer/locale/de.js"
         }, {
+            "lang": "dz",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/dz.js"
+        }, {
+            "lang": "ee",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ee.js"
+        }, {
+            "lang": "el",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/el.js"
+        }, {
             "lang": "en",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/divmanazer/locale/en.js"
+        }, {
+            "lang": "eo",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/eo.js"
         }, {
             "lang": "es",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/divmanazer/locale/es.js"
         }, {
+            "lang": "et",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/et.js"
+        }, {
+            "lang": "eu",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/eu.js"
+        }, {
+            "lang": "fa",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/fa.js"
+        }, {
+            "lang": "ff",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ff.js"
+        }, {
             "lang": "fi",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/divmanazer/locale/fi.js"
+        }, {
+            "lang": "fo",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/fo.js"
+        }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/fr.js"
+        }, {
+            "lang": "fy",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/fy.js"
+        }, {
+            "lang": "ga",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ga.js"
+        }, {
+            "lang": "gd",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/gd.js"
+        }, {
+            "lang": "gl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/gl.js"
+        }, {
+            "lang": "gu",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/gu.js"
+        }, {
+            "lang": "ha",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ha.js"
+        }, {
+            "lang": "he",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/he.js"
+        }, {
+            "lang": "hi",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/hi.js"
+        }, {
+            "lang": "hr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/hr.js"
+        }, {
+            "lang": "hu",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/hu.js"
+        }, {
+            "lang": "hy",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/hy.js"
+        }, {
+            "lang": "ia",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ia.js"
+        }, {
+            "lang": "id",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/id.js"
+        }, {
+            "lang": "ig",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ig.js"
+        }, {
+            "lang": "is",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/is.js"
         }, {
             "lang": "it",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/divmanazer/locale/it.js"
         }, {
+            "lang": "ja",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ja.js"
+        }, {
+            "lang": "ka",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ka.js"
+        }, {
+            "lang": "ki",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ki.js"
+        }, {
+            "lang": "kk",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/kk.js"
+        }, {
+            "lang": "kl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/kl.js"
+        }, {
+            "lang": "km",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/km.js"
+        }, {
+            "lang": "kn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/kn.js"
+        }, {
+            "lang": "ko",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ko.js"
+        }, {
+            "lang": "ks",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ks.js"
+        }, {
+            "lang": "kw",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/kw.js"
+        }, {
+            "lang": "ky",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ky.js"
+        }, {
+            "lang": "lb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/lb.js"
+        }, {
+            "lang": "lg",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/lg.js"
+        }, {
+            "lang": "ln",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ln.js"
+        }, {
+            "lang": "lo",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/lo.js"
+        }, {
+            "lang": "lt",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/lt.js"
+        }, {
+            "lang": "lu",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/lu.js"
+        }, {
+            "lang": "lv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/lv.js"
+        }, {
+            "lang": "mg",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/mg.js"
+        }, {
+            "lang": "mk",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/mk.js"
+        }, {
+            "lang": "ml",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ml.js"
+        }, {
+            "lang": "mn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/mn.js"
+        }, {
+            "lang": "mr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/mr.js"
+        }, {
+            "lang": "ms",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ms.js"
+        }, {
+            "lang": "mt",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/mt.js"
+        }, {
+            "lang": "my",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/my.js"
+        }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/nb.js"
+        }, {
+            "lang": "nd",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/nd.js"
+        }, {
+            "lang": "ne",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ne.js"
+        }, {
+            "lang": "nl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/nl.js"
+        }, {
+            "lang": "nn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/nn.js"
+        }, {
+            "lang": "om",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/om.js"
+        }, {
+            "lang": "or",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/or.js"
+        }, {
+            "lang": "os",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/os.js"
+        }, {
+            "lang": "pa",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/pa.js"
+        }, {
+            "lang": "pl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/pl.js"
+        }, {
+            "lang": "ps",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ps.js"
+        }, {
+            "lang": "pt",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/pt.js"
+        }, {
+            "lang": "qu",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/qu.js"
+        }, {
+            "lang": "rm",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/rm.js"
+        }, {
+            "lang": "rn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/rn.js"
+        }, {
+            "lang": "ro",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ro.js"
+        }, {
+            "lang": "ru",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ru.js"
+        }, {
+            "lang": "rw",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/rw.js"
+        }, {
+            "lang": "se",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/se.js"
+        }, {
+            "lang": "sg",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/sg.js"
+        }, {
+            "lang": "si",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/si.js"
+        }, {
+            "lang": "sk",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/sk.js"
+        }, {
+            "lang": "sl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/sl.js"
+        }, {
+            "lang": "sn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/sn.js"
+        }, {
+            "lang": "so",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/so.js"
+        }, {
+            "lang": "sq",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/sq.js"
+        }, {
+            "lang": "sr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/sr.js"
+        }, {
             "lang": "sv",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/divmanazer/locale/sv.js"
+        }, {
+            "lang": "sw",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/sw.js"
+        }, {
+            "lang": "ta",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ta.js"
+        }, {
+            "lang": "te",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/te.js"
+        }, {
+            "lang": "th",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/th.js"
+        }, {
+            "lang": "ti",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ti.js"
+        }, {
+            "lang": "tn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/tn.js"
+        }, {
+            "lang": "to",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/to.js"
+        }, {
+            "lang": "tr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/tr.js"
+        }, {
+            "lang": "ts",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ts.js"
+        }, {
+            "lang": "ug",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ug.js"
+        }, {
+            "lang": "uk",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/uk.js"
+        }, {
+            "lang": "ur",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/ur.js"
+        }, {
+            "lang": "uz",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/uz.js"
+        }, {
+            "lang": "vi",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/vi.js"
+        }, {
+            "lang": "yi",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/yi.js"
+        }, {
+            "lang": "yo",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/yo.js"
+        }, {
+            "lang": "zh",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/zh.js"
+        }, {
+            "lang": "zu",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/divmanazer/locale/zu.js"
         }]
+
     },
     "bundle": {
         /**

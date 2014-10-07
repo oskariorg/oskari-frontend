@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractMapLayerModel',
  * @static
  */
 
-function(params, options) {
+function (params, options) {
 	/* Internal id for this map layer */
 	this._id = null;
 
@@ -25,7 +25,7 @@ function(params, options) {
 	this._type = null;
 
 	/* either WMS, WMTS, WFS or VECTOR */
-	this._layerType = "";
+	this._layerType = '';
 
 	/* optional params */
 	this._params = params || {};
@@ -102,7 +102,7 @@ function(params, options) {
 	 *          unique identifier for map layer used to reference the layer internally
 	 * (e.g. MapLayerService)
 	 */
-	setId : function(id) {
+	setId: function (id) {
 		this._id = id;
 	},
 	/**
@@ -111,7 +111,7 @@ function(params, options) {
 	 *          unique identifier for map layer used to reference the layer internally
 	 * (e.g. MapLayerService)
 	 */
-	getId : function() {
+	getId: function () {
 		return this._id;
 	},
 	/**
@@ -119,7 +119,7 @@ function(params, options) {
 	 * @param {String} queryFormat
 	 *          f.ex. 'text/html'
 	 */
-	setQueryFormat : function(queryFormat) {
+	setQueryFormat: function (queryFormat) {
 		this._queryFormat = queryFormat;
 	},
 	/**
@@ -127,7 +127,7 @@ function(params, options) {
 	 * f.ex. 'text/html'
 	 * @return {String}
 	 */
-	getQueryFormat : function() {
+	getQueryFormat: function () {
 		return this._queryFormat;
 	},
 	/**
@@ -135,14 +135,14 @@ function(params, options) {
 	 * @param {String} name
 	 *          name for the maplayer that is shown in UI
 	 */
-	setName : function(name) {
+	setName: function (name) {
 		this._name = name;
 	},
 	/**
 	 * @method getName
 	 * @return {String} maplayer UI name
 	 */
-	getName : function() {
+	getName: function () {
 		return this._name;
 	},
 	/**
@@ -153,14 +153,14 @@ function(params, options) {
 	 * Not as type WMS or Vector but base or normal layer.
 	 * See #setAsBaseLayer(), #setAsGroupLayer() and #setAsNormalLayer()
 	 */
-	setType : function(type) {
+	setType: function (type) {
 		this._type = type;
 	},
 	/**
 	 * @method getType
 	 * @return {String} maplayer type (BASE/NORMAL)
 	 */
-	getType : function() {
+	getType: function () {
 		return this._type;
 	},
 	/**
@@ -168,14 +168,14 @@ function(params, options) {
 	 * @param {String} param
 	 *          URL string used to show more info about the layer
 	 */
-	setDataUrl : function(param) {
+	setDataUrl: function (param) {
 		this._dataUrl = param;
 	},
 	/**
 	 * @method getDataUrl
 	 * @return {String} URL string used to show more info about the layer
 	 */
-	getDataUrl : function() {
+	getDataUrl: function () {
 		return this._dataUrl;
 	},
 	/**
@@ -183,14 +183,14 @@ function(params, options) {
 	 * @param {String} param
 	 *          organization name under which the layer is listed in UI
 	 */
-	setOrganizationName : function(param) {
+	setOrganizationName: function (param) {
 		this._organizationName = param;
 	},
 	/**
 	 * @method getOrganizationName
 	 * @return {String} organization name under which the layer is listed in UI
 	 */
-	getOrganizationName : function() {
+	getOrganizationName: function () {
 		return this._organizationName;
 	},
 	/**
@@ -198,28 +198,28 @@ function(params, options) {
 	 * @param {String} param
 	 *          inspire theme name under which the layer is listed in UI
 	 */
-	setInspireName : function(param) {
+	setInspireName: function (param) {
 		this._inspireName = param;
 	},
 	/**
 	 * @method getInspireName
 	 * @return {String} inspire theme name under which the layer is listed in UI
 	 */
-	getInspireName : function() {
+	getInspireName: function () {
 		return this._inspireName;
 	},
 	/**
 	 * @method setFeatureInfoEnabled
 	 * @return {Boolean} featureInfoEnabled true to enable feature info functionality
 	 */
-	setFeatureInfoEnabled : function(featureInfoEnabled) {
+	setFeatureInfoEnabled: function (featureInfoEnabled) {
 		this._featureInfoEnabled = featureInfoEnabled;
 	},
 	/**
 	 * @method isFeatureInfoEnabled
 	 * @return {Boolean} true if feature info functionality should be enabled
 	 */
-	isFeatureInfoEnabled : function() {
+	isFeatureInfoEnabled: function () {
 		if (this._featureInfoEnabled === true) {
 			return true;
 		}
@@ -230,14 +230,14 @@ function(params, options) {
 	 * @param {String} description
 	 *          map layer description text
 	 */
-	setDescription : function(description) {
+	setDescription: function (description) {
 		this._description = description;
 	},
 	/**
 	 * @method getDescription
 	 * @return {String} map layer description text
 	 */
-	getDescription : function() {
+	getDescription: function () {
 		return this._description;
 	},
 	/**
@@ -249,7 +249,7 @@ function(params, options) {
 	 * If layer has sublayers, it is basically a "metalayer" for maplayer ui
 	 * purposes and actual map images to show are done with sublayers
 	 */
-	addSubLayer : function(layer) {
+	addSubLayer: function (layer) {
 		this._subLayers.push(layer);
 	},
 	/**
@@ -259,7 +259,7 @@ function(params, options) {
 	 * If layer has sublayers, it is basically a "metalayer" for maplayer ui
 	 * purposes and actual map images to show are done with sublayers
 	 */
-	getSubLayers : function() {
+	getSubLayers: function () {
 		return this._subLayers;
 	},
 	/**
@@ -268,7 +268,7 @@ function(params, options) {
 	 *          largest scale when the layer is shown (otherwise not shown in map and
 	 * "greyed out"/disabled in ui)
 	 */
-	setMaxScale : function(maxScale) {
+	setMaxScale: function (maxScale) {
 		this._maxScale = maxScale;
 	},
 	/**
@@ -277,7 +277,7 @@ function(params, options) {
 	 *          largest scale when the layer is shown (otherwise not shown in map and
 	 * "greyed out"/disabled in ui)
 	 */
-	getMaxScale : function() {
+	getMaxScale: function () {
 		return this._maxScale;
 	},
 	/**
@@ -286,7 +286,7 @@ function(params, options) {
 	 *          smallest scale when the layer is shown (otherwise not shown in map and
 	 * "greyed out"/disabled in ui)
 	 */
-	setMinScale : function(minScale) {
+	setMinScale: function (minScale) {
 		this._minScale = minScale;
 	},
 	/**
@@ -295,35 +295,35 @@ function(params, options) {
 	 *          smallest scale when the layer is shown (otherwise not shown in map and
 	 * "greyed out"/disabled in ui)
 	 */
-	getMinScale : function() {
+	getMinScale: function () {
 		return this._minScale;
 	},
 	/**
 	 * @method setOrderNumber
 	 * @param {Number} orderNumber
 	 */
-	setOrderNumber : function(orderNumber) {
+	setOrderNumber: function (orderNumber) {
 		this._orderNumber = orderNumber;
 	},
 	/**
 	 * @method getOrderNumber
 	 * @return {Number} orderNumber
 	 */
-	getOrderNumber : function() {
+	getOrderNumber: function () {
 		return this._orderNumber;
 	},
 	/**
 	 * @method isVisible
 	 * @return {Boolean} true if this is should be shown
 	 */
-	isVisible : function() {
+	isVisible: function () {
 		return this._visible === true;
 	},
 	/**
 	 * @method setVisible
 	 * @param {Boolean} visible true if this is should be shown
 	 */
-	setVisible : function(visible) {
+	setVisible: function (visible) {
 		this._visible = visible;
 	},
 	/**
@@ -331,7 +331,7 @@ function(params, options) {
 	 * @param {Number} opacity
 	 *          0-100 in percents
 	 */
-	setOpacity : function(opacity) {
+	setOpacity: function (opacity) {
 		this._opacity = opacity;
 	},
 	/**
@@ -339,7 +339,7 @@ function(params, options) {
 	 * @return {Number} opacity
 	 *          0-100 in percents
 	 */
-	getOpacity : function() {
+	getOpacity: function () {
 		return this._opacity;
 	},
 	/**
@@ -348,7 +348,7 @@ function(params, options) {
 	 * @param {String} value
 	 *          WKT geometry
 	 */
-	setGeometryWKT : function(value) {
+	setGeometryWKT: function (value) {
 		this._geometryWKT = value;
 	},
 	/**
@@ -356,7 +356,7 @@ function(params, options) {
 	 * Get geometry as wellknown text
 	 * @return {String} WKT geometry
 	 */
-	getGeometryWKT : function() {
+	getGeometryWKT: function () {
 		return this._geometryWKT;
 	},
 	/**
@@ -364,7 +364,7 @@ function(params, options) {
 	 * @param {OpenLayers.Geometry.Geometry[]} value
 	 *          array of WKT geometries or actual OpenLayer geometries
 	 */
-	setGeometry : function(value) {
+	setGeometry: function (value) {
 		this._geometry = value;
 	},
 	/**
@@ -372,7 +372,7 @@ function(params, options) {
 	 * @return {OpenLayers.Geometry.Geometry[]}
 	 *          array of WKT geometries or actual OpenLayer geometries
 	 */
-	getGeometry : function() {
+	getGeometry: function () {
 		return this._geometry;
 	},
 	/**
@@ -382,7 +382,7 @@ function(params, options) {
 	 * @param {String} permission
 	 *          actual permission setting for action
 	 */
-	addPermission : function(action, permission) {
+	addPermission: function (action, permission) {
 		this._permissions[action] = permission;
 	},
 	/**
@@ -390,7 +390,7 @@ function(params, options) {
 	 * @param {String} action
 	 *          action key from which permission setting should be removed
 	 */
-	removePermission : function(action) {
+	removePermission: function (action) {
 		this._permissions[action] = null;
 		delete this._permissions[action];
 	},
@@ -400,7 +400,7 @@ function(params, options) {
 	 *          action key for which permission we want
 	 * @return {String} permission setting for given action
 	 */
-	getPermission : function(action) {
+	getPermission: function (action) {
 		return this._permissions[action];
 	},
 	/**
@@ -408,7 +408,7 @@ function(params, options) {
 	 * Gets the identifier (uuid style) for getting layers metadata
 	 * @return {String}
 	 */
-	getMetadataIdentifier : function() {
+	getMetadataIdentifier: function () {
 		return this._metadataIdentifier;
 	},
 	/**
@@ -416,7 +416,7 @@ function(params, options) {
 	 * Sets the identifier (uuid style) for getting layers metadata
 	 * @param {String} metadataid
 	 */
-	setMetadataIdentifier : function(metadataid) {
+	setMetadataIdentifier: function (metadataid) {
 		this._metadataIdentifier = metadataid;
 	},
 	/**
@@ -424,7 +424,7 @@ function(params, options) {
 	 * Status text for layer operatibility (f.ex. 'DOWN')
 	 * @return {String}
 	 */
-	getBackendStatus : function() {
+	getBackendStatus: function () {
 		return this._backendStatus;
 	},
 	/**
@@ -432,7 +432,7 @@ function(params, options) {
 	 * Status text for layer operatibility (f.ex. 'DOWN')
 	 * @param {String} backendStatus
 	 */
-	setBackendStatus : function(backendStatus) {
+	setBackendStatus: function (backendStatus) {
 		this._backendStatus = backendStatus;
 	},
 	/**
@@ -440,7 +440,7 @@ function(params, options) {
 	 * @param {String} type used to group layers by f.ex. functionality.
 	 * Layers can be fetched based on metatype f.ex. 'myplaces'
 	 */
-	setMetaType : function(type) {
+	setMetaType: function (type) {
 		this._metaType = type;
 	},
 	/**
@@ -448,7 +448,7 @@ function(params, options) {
 	 * @return {String} type used to group layers by f.ex. functionality.
 	 * Layers can be fetched based on metatype f.ex. 'myplaces'
 	 */
-	getMetaType : function() {
+	getMetaType: function () {
 		return this._metaType;
 	},
 	/**
@@ -456,7 +456,7 @@ function(params, options) {
 	 * @param {Oskari.mapframework.domain.Style} style
 	 * adds style to layer
 	 */
-	addStyle : function(style) {
+	addStyle: function (style) {
 		this._styles.push(style);
 	},
 	/**
@@ -464,7 +464,7 @@ function(params, options) {
 	 * @return {Oskari.mapframework.domain.Style[]}
 	 * Gets layer styles
 	 */
-	getStyles : function() {
+	getStyles: function () {
 		return this._styles;
 	},
 	/**
@@ -473,17 +473,18 @@ function(params, options) {
 	 * Selects a #Oskari.mapframework.domain.Style with given name as #getCurrentStyle.
 	 * If style is not found, assigns an empty #Oskari.mapframework.domain.Style to #getCurrentStyle
 	 */
-	selectStyle : function(styleName) {
-		var style = null;
+	selectStyle: function (styleName) {
+		var style = null,
+			i;
 		// Layer have styles
 		if (this._styles.length > 0) {
 			// There is default style defined
-			if (styleName !== "") {
-				for (var i = 0; i < this._styles.length; i++) {
+			if (styleName !== '') {
+				for (i = 0; i < this._styles.length; i += 1) {
 					style = this._styles[i];
-					if (style.getName() == styleName) {
+					if (style.getName() === styleName) {
 						this._currentStyle = style;
-						if (style.getLegend() != "") {
+						if (style.getLegend() !== '') {
 							this._legendImage = style.getLegend();
 						}
 						return;
@@ -505,9 +506,9 @@ function(params, options) {
 				// default
 				else {
 					style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-					style.setName("");
-					style.setTitle("");
-					style.setLegend("");
+					style.setName('');
+					style.setTitle('');
+					style.setLegend('');
 					this._currentStyle = style;
 				}
 
@@ -517,9 +518,9 @@ function(params, options) {
 		// Layer have not styles
 		else {
 			style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-			style.setName("");
-			style.setTitle("");
-			style.setLegend("");
+			style.setName('');
+			style.setTitle('');
+			style.setLegend('');
 			this._currentStyle = style;
 			return;
 		}
@@ -528,7 +529,7 @@ function(params, options) {
 	 * @method getCurrentStyle
 	 * @return {Oskari.mapframework.domain.Style} current style
 	 */
-	getCurrentStyle : function() {
+	getCurrentStyle: function () {
 		return this._currentStyle;
 	},
 	/**
@@ -536,7 +537,7 @@ function(params, options) {
 	 * @return {Oskari.mapframework.domain.Tool[]}
 	 * Get layer tools
 	 */
-	getTools : function() {
+	getTools: function () {
 		return this._tools;
 	},
 	/**
@@ -544,7 +545,7 @@ function(params, options) {
 	 * @params {Oskari.mapframework.domain.Tool[]}
 	 * Set layer tools
 	 */
-	setTools : function(tools) {
+	setTools: function (tools) {
 		this._tools = tools;
 	},
 	/**
@@ -552,7 +553,7 @@ function(params, options) {
 	 * @params {Oskari.mapframework.domain.Tool}
 	 * adds layer tool to tools
 	 */
-	addTool : function(tool) {
+	addTool: function (tool) {
 		this._tools.push(tool);
 	},
 	
@@ -561,16 +562,16 @@ function(params, options) {
 	 * @return {Oskari.mapframework.domain.Tool}
 	 * adds layer tool to tools
 	 */
-	getTool : function(toolName) {
-		
-		var tool = null;
+	getTool: function (toolName) {
+		var tool = null,
+			i;
 		// Layer have tools
 		if (this._tools.length > 0 ) {
 			// 
-			if (toolName !== "") {
-				for (var i = 0; i < this._tools.length; i++) {
+			if (toolName !== '') {
+				for (i = 0; i < this._tools.length; i += 1) {
 					tool = this._tools[i];
-					if (tool.getName() == toolName) {
+					if (tool.getName() === toolName) {
 						return tool;
 					}
 				}
@@ -582,26 +583,26 @@ function(params, options) {
 	 * @method setLegendImage
 	 * @return {String} legendImage URL to a legend image
 	 */
-	setLegendImage : function(legendImage) {
+	setLegendImage: function (legendImage) {
 		this._legendImage = legendImage;
 	},
 	/**
 	 * @method getLegendImage
 	 * @return {String} URL to a legend image
 	 */
-	getLegendImage : function() {
+	getLegendImage: function () {
 		return this._legendImage;
 	},
 	/**
 	 * @method getLegendImage
 	 * @return {Boolean} true if layer has a legendimage or its styles have legend images
 	 */
-	hasLegendImage : function() {
-
+	hasLegendImage: function () {
+		var i;
 		if (this._legendImage) {
 			return true;
 		} else {
-			for (var i = 0; i < this._styles.length; ++i) {
+			for (i = 0; i < this._styles.length; i += 1) {
 				if (this._styles[i].getLegend()) {
 					return true;
 				}
@@ -614,14 +615,14 @@ function(params, options) {
 	 * True if layer switch off is disable
 	 * @param {Boolean} isSticky
 	 */
-	setSticky : function(isSticky) {
+	setSticky: function (isSticky) {
 		this._isSticky = isSticky;
 	},
 	/**
 	 * @method isSticky
 	 * True if layer switch off is disable
 	 */
-	isSticky : function() {
+	isSticky: function () {
 		return this._isSticky;
 	},
 	/**
@@ -629,7 +630,7 @@ function(params, options) {
 	 * True if we should call GFI on the layer
 	 * @param {Boolean} queryable
 	 */
-	setQueryable : function(queryable) {
+	setQueryable: function (queryable) {
 		this._queryable = queryable;
 	},
 	/**
@@ -637,50 +638,50 @@ function(params, options) {
 	 * True if we should call GFI on the layer
 	 * @param {Boolean} queryable
 	 */
-	getQueryable : function() {
+	getQueryable: function () {
 		return this._queryable;
 	},
 	/**
 	 * @method setAsBaseLayer
 	 * sets layer type to BASE_LAYER
 	 */
-	setAsBaseLayer : function() {
-		this._type = "BASE_LAYER";
+	setAsBaseLayer: function () {
+		this._type = 'BASE_LAYER';
 	},
 	/**
 	 * @method setAsNormalLayer
 	 * sets layer type to NORMAL_LAYER
 	 */
-	setAsNormalLayer : function() {
-		this._type = "NORMAL_LAYER";
+	setAsNormalLayer: function () {
+		this._type = 'NORMAL_LAYER';
 	},
 	/**
 	 * @method setAsGroupLayer
 	 * Sets layer type to GROUP_LAYER
 	 */
-	setAsGroupLayer : function() {
-		this._type = "GROUP_LAYER";
+	setAsGroupLayer: function () {
+		this._type = 'GROUP_LAYER';
 	},
 	/**
 	 * @method isGroupLayer
 	 * @return {Boolean} true if this is a group layer (=has sublayers)
 	 */
-	isGroupLayer : function() {
-		return this._type === "GROUP_LAYER";
+	isGroupLayer: function () {
+		return this._type === 'GROUP_LAYER';
 	},
 	/**
 	 * @method isBaseLayer
 	 * @return {Boolean} true if this is a base layer (=has sublayers)
 	 */
-	isBaseLayer : function() {
-		return this._type === "BASE_LAYER";
+	isBaseLayer: function () {
+		return this._type === 'BASE_LAYER';
 	},
 	/**
 	 * @method isInScale
 	 * @param {Number} scale scale to compare to
 	 * @return {Boolean} true if given scale is between this layers min/max scales. Always return true for base-layers.
 	 */
-	isInScale : function(scale) {
+	isInScale: function (scale) {
 		var _return = this.isBaseLayer();
 		if (!scale) {
 			var sandbox = Oskari.$().sandbox;
@@ -699,7 +700,7 @@ function(params, options) {
 	 * @method getLayerType
 	 * @return {String} layer type in lower case
 	 */
-	getLayerType : function() {
+	getLayerType: function () {
 		return this._layerType.toLowerCase();
 	},
 	/**
@@ -707,14 +708,14 @@ function(params, options) {
 	 * @param {String} flavour layer type to check against. A bit misleading since setType is base/group/normal, this is used to check if the layer is a WMS layer.
 	 * @return {Boolean} true if flavour is the specified layer type
 	 */
-	isLayerOfType : function(flavour) {
+	isLayerOfType: function (flavour) {
 		return flavour && flavour.toLowerCase() === this.getLayerType();
 	},
 	/**
 	 * @method getIconClassname
 	 * @return {String} layer icon classname used in the CSS style.
 	 */
-	getIconClassname : function() {
+	getIconClassname: function () {
 		if (this.isBaseLayer()) {
 			return 'layer-base';
 		} else if (this.isGroupLayer()) {
@@ -727,14 +728,14 @@ function(params, options) {
 	 * @method getParams
 	 * @return {Object} optional layer parameters for OpenLayers, empty object if no parameters were passed in construction
 	 */
-	getParams : function() {
+	getParams: function () {
 		return this._params;
 	},
 	/**
 	 * @method getOptions
 	 * @return {Object} optional layer options for OpenLayers, empty object if no options were passed in construction
 	 */
-	getOptions : function() {
+	getOptions: function () {
 		return this._options;
 	}
 }); 

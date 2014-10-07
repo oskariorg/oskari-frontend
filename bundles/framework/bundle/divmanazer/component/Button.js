@@ -9,122 +9,169 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
      * @method create called automatically on construction
      * @static
      */
-    function () {
-        this.template = jQuery('<input type="button"/>');
-        this.title = null;
-        this.ui = this.template.clone();
-        this.handler = null;
+    function (name) {
+        'use strict';
+        this._element = document.createElement('input');
+        this._element.className = 'oskari-formcomponent oskari-button';
+        this._element.type = 'button';
+        if (name !== null && name !== undefined) {
+            this.setName(name);
+        }
     }, {
+
+        focus: function () {
+            'use strict';
+            this._element.focus();
+        },
+
+        getName: function () {
+            'use strict';
+            return this._element.name;
+        },
+
+        setName: function (name) {
+            'use strict';
+            this._element.name = name;
+        },
+
+        getTitle: function () {
+            'use strict';
+            return this._element.value;
+        },
+
         /**
          * @method setTitle
          * Sets the button title
-         * @param {String} pTitle title for the button
          */
-        setTitle: function (pTitle) {
-            this.title = pTitle;
-            if (this.ui) {
-                this.ui.attr('value', pTitle);
-            } else {
-                console.err("No UI");
-            }
+        setTitle: function (title) {
+            'use strict';
+            this._element.value = title;
         },
+
+        getTooltip: function () {
+            'use strict';
+            return this._element.title;
+        },
+
+        setTooltip: function (tooltip) {
+            'use strict';
+            this._element.title = tooltip;
+        },
+
+        getValue: function () {
+            'use strict';
+            return this._element.value;
+        },
+
+        setValue: function (value) {
+            'use strict';
+            this._element.value = value;
+        },
+
         /**
-         * @method addClass
-         * Adds a css class to the button
-         * @param {String} pClass class to be added
+         * @method setId
+         * Set an Id to the button
+         * @param {String} pId id to be set
          */
-        addClass: function (pClass) {
-            this.ui.addClass(pClass);
-        },
+        setId: function (pId) {
+            this.id = pId;
+            if (this._element) {
+                this._element.id = pId;
+            } else {
+                console.warn("No UI");
+            }
+        },        
         /**
          * @method setEnabled
          * Enables/Disables the button
-         * @param {Boolean} blnEnabled true to enable, false to disable
+         * @param {Boolean} enabled true to enable, false to disable
          */
-        setEnabled: function (blnEnabled) {
-            if (blnEnabled === true) {
-                this.ui.removeAttr('disabled');
-            } else {
-                this.ui.attr('disabled', 'disabled');
-            }
+        _setEnabledImpl: function (enabled) {
+            'use strict';
+            this._element.disabled = !enabled;
         },
+
         /**
-         * @method getTitle
-         * Returns the panel title
-         * @return {String} title for the panel
-         */
-        getTitle: function () {
-            return this.title;
-        },
-        /**
-         * @method setHandler
+         * @method _setHandlerImpl
          * Sets click handler for button
-         * @param {Function} pHandler click handler
          */
-        setHandler: function (pHandler) {
-            if (this.handler) {
-                this.ui.unbind('click', this.handler);
-            }
-            this.handler = pHandler;
-            this.ui.bind('click', this.handler);
+        _setHandlerImpl: function () {
+            'use strict';
+            this._element.onclick = this._handler;
         },
+
         /**
          * @method setPrimary
          * Sets primary status of the button
          */
-        setPrimary: function (primary,focus) {
-            this.ui.toggleClass('primary', primary);
-            if (focus) {
-                this.setFocus(focus);
+        setPrimary: function (primary, focus) {
+            'use strict';
+            if (typeof primary !== 'boolean') {
+                throw new TypeError(
+                    this.getClazz() +
+                        '.setPrimary: primary is not a boolean'
+                );
             }
-        },
-        /**
-         * @method destroy
-         * Destroys the button/removes it from document
-         */
-        destroy: function () {
-            this.ui.remove();
-        },
-        /**
-         * @method hide
-         * Hide the button/hide  it in the document
-         */
-        hide: function () {
-            this.ui.hide();
-        },
-        /**
-         * @method show
-         * Show the button/show it in the document
-         */
-        show: function () {
-            this.ui.show();
+            if (focus !== undefined && typeof focus !== 'boolean') {
+                throw new TypeError(
+                    this.getClazz() +
+                        '.setPrimary: focus is not a boolean'
+                );
+            }
+            this.toggleClass('primary', primary);
+            if (focus) {
+                this.focus();
+            }
         },
 
         /**
-         * @method insertTo
-         * Adds this button to given container.
-         * @param {jQuery} container reference to DOM element
+         * @method hide
+         * @deprecated
+         * Hide the button/hide  it in the document
          */
-        insertTo: function (container) {
-            container.append(this.ui);
+        hide: function () {
+            'use strict';
+            Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button: hide is deprecated, please use setVisible instead.');
+            this.setVisible(false);
         },
+
+        /**
+         * @method show
+         * @deprecated
+         * Show the button/show it in the document
+         */
+        show: function () {
+            'use strict';
+            Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button: show is deprecated, please use setVisible instead.');
+            this.setVisible(true);
+        },
+
         /**
          * @method setFocus
+         * @deprecated
          * Adds this button to given container.
-         * @param {jQuery} container reference to DOM element
+         * @param {Boolean} focus
          */
         setFocus: function(focus) {
-            this.focus = focus;
+            'use strict';
+            Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button: setFocus is deprecated, please use focus instead.');
             if (focus) {
-                this.ui.focus();
+                this.focus();
             }
         },
+
         /**
          * @method getButton
+         * @deprecated
          * Returns this buttons DOM element.
          * @return {jQuery} reference to DOM element
          */
         getButton: function () {
-            return this.ui;
+            'use strict';
+            Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button: getButton is deprecated, please use getElement instead.');
+            return jQuery(this.getElement());
         }
-    });
+    }, {
+        extend: ['Oskari.userinterface.component.FormComponent']
+    }
+    );

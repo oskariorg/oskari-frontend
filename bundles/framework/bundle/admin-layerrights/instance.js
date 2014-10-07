@@ -153,20 +153,22 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
          * or discarded if not.
          */
         onEvent: function (event) {
-            "use strict";
             var handler = this.eventHandlers[event.getName()];
             if (!handler)
                 return;
 
             return handler.apply(this, [event]);
-
         },
 
         /**
          * @property {Object} eventHandlers
          * @static
          */
-        eventHandlers: {},
+        eventHandlers: {
+            'RoleChangedEvent': function (event) {
+                this.plugins['Oskari.userinterface.Flyout'].handleRoleChange(event.getRole(), event.getOperation());
+            }
+        },
 
         /**
          * @method stop

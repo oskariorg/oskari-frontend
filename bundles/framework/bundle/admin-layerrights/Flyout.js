@@ -146,7 +146,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         doSave : function () {
             "use strict";
             var me = this,
-                saveData = {"resource" : JSON.stringify(me.extractSelections()) };
+                saveData = {"resource" : JSON.stringify(me.extractSelections())};
 
             jQuery.ajax({
                 type: 'POST',
@@ -156,7 +156,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                
                 data: saveData,
                 success: function () {
-                    // TODO use promises
                     me.updatePermissionsTable(me.activeRole, "ROLE");
                 },
                 error: function() {
@@ -192,7 +191,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             // Not sure if we want save on enter
             //field.bindEnterKey(doSave);
 
-            controls.append(button.getButton());
+            controls.append(button.getElement());
 
             roleSelectLabel.html(this.instance.getLocalization('selectRole'));
             container.append(content);
@@ -205,6 +204,22 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             flyout.append(container);
             // We're only supporting ROLE ATM, USER support might be added later
             me.getExternalIdsAjaxRequest("ROLE", 0);
+        },
+
+        handleRoleChange: function (role, operation) {
+            var me = this,
+                select = jQuery(this.container).find('select.admin-layerrights-role'),
+                option = select.find('option[value=' + role.id +']');
+
+            if (operation == 'remove') { 
+                option.remove(); 
+            } 
+            if (operation == 'update') { 
+                option.html(role.name); 
+            }
+            if (operation == 'add') {
+                select.append("<option value=" + role.id +">" + role.name + "</option>");
+            } 
         },
 
         /**

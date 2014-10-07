@@ -6,10 +6,14 @@
 Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
 
     /**
-     * @method create called automatically on construction
-     * @static
-     * @param name {String} bundle name to be used for communication with sandbox
-     * @param tileClazz {String} an optional class name for
+     * @static @method create called automatically on construction
+     *
+     * @param {string} name        Bundle name to be used for communication with
+     *                             sandbox
+     * @param {string} flyoutClazz An optional class name for flyout
+     * @param {string} tileClazz   An optional class name for tile
+     * @param {string} viewClazz   An optional class name for view
+     * @param {string} locale      Locale
      *
      */
     function (name, flyoutClazz, tileClazz, viewClazz, locale) {
@@ -17,49 +21,61 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
         this.plugins = {};
         this._localization = locale;
         this.defaultConf = {
-            'name': name,
-            'tileClazz': tileClazz || 'Oskari.userinterface.extension.DefaultTile',
-            'flyoutClazz': flyoutClazz || 'Oskari.userinterface.extension.DefaultFlyout',
-            'viewClazz': viewClazz
+            name: name,
+            tileClazz:
+                tileClazz || 'Oskari.userinterface.extension.DefaultTile',
+            flyoutClazz:
+                flyoutClazz || 'Oskari.userinterface.extension.DefaultFlyout',
+            viewClazz: viewClazz
         };
     }, {
+
         /**
          * @method getTitle
          * Extension protocol method
-         * @return {String} localized text for the title of the component
+         *
+         * @return {String} Localized text for the title of the component
          */
         getTitle: function () {
             return this.getLocalization('title');
         },
+
         /**
          * @method getDescription
          * Extension protocol method
-         * @return {String} localized text for the description of the component
+         *
+         * @return {String} Localized text for the description of the component
          */
         getDescription: function () {
             return this.getLocalization('desc');
         },
+
         /**
          * @method getSandbox
          * Convenience method to call from Tile and Flyout
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         *
+         * @return {Oskari.mapframework.sandbox.Sandbox} Sandbox
          */
         getSandbox: function () {
             return this.sandbox;
         },
+
         /**
          * @method update
          * BundleInstance protocol method
          */
         update: function () {},
+
         /**
          * @method getLocalization
          * Convenience method to call from Tile and Flyout
-         * Returns JSON presentation of bundles localization data for current language.
+         * Returns JSON presentation of bundles localization data for current
+         * language.
          * If key-parameter is not given, returns the whole localization data.
          *
-         * @param {String} key (optional) if given, returns the value for key
-         * @return {String/Object} returns single localization string or
+         * @param {string=} key (optional) if given, returns the value for key
+         *
+         * @return {string|Object} returns single localization string or
          *      JSON object for complete data depending on localization
          *      structure and if parameter key is given
          */
@@ -72,6 +88,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
             }
             return this._localization;
         },
+
         /**
          * @method start
          * BundleInstance protocol method
@@ -79,7 +96,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
         start: function () {
             var me = this,
                 conf = me.getConfiguration(),
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
+                sandboxName = conf && conf.sandbox ? conf.sandbox : 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
                 request;
 
@@ -91,18 +108,25 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
                 sandbox.registerAsStateful(this.mediator.bundleId, this);
             }
 
-            request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+            request = sandbox.getRequestBuilder(
+                'userinterface.AddExtensionRequest'
+            )(this);
 
             sandbox.request(this, request);
 
             this.afterStart(sandbox);
         },
+
         /**
-         * Hook for bundle specific start functionality. 
-         * Override this in extending bundle to hook in your own startup functionality.
-         * @param  {Oskari.mapframework.sandbox.Sandbox} sandbox 
+         * Hook for bundle specific start functionality.
+         * Override this in extending bundle to hook in your own startup
+         * functionality.
+         *
+         * @param  {Oskari.mapframework.sandbox.Sandbox} sandbox Sandbox
+         *
          */
         afterStart: function (sandbox) {},
+
         /**
          * @method stop
          * BundleInstance protocol method
@@ -110,7 +134,9 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
         stop: function () {
             var sandbox = this.sandbox,
                 /* sandbox cleanup */
-                request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+                request = sandbox.getRequestBuilder(
+                    'userinterface.RemoveExtensionRequest'
+                )(this);
             sandbox.request(this, request);
 
             sandbox.unregisterStateful(this.mediator.bundleId);
@@ -118,6 +144,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
             this.sandbox = null;
             this.started = false;
         },
+
         /**
          * @method startExtension
          * Extension protocol method
@@ -201,6 +228,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
 
             me.stopPlugin();
         },
+
         /**
          * @method getPlugins
          * Extension protocol method
@@ -208,9 +236,11 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
         getPlugins: function () {
             return this.plugins;
         },
-        'init': function () {
+
+        init: function () {
             return null;
         },
+
         /**
          * @method getName
          * Module protocol method
@@ -218,18 +248,28 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
         getName: function () {
             return this.getConfiguration().name;
         },
+
         /**
          * @method getConfiguration
+         *
+         * @return {Ob}
          */
         getConfiguration: function () {
-            // extend the default config with injected conf and use the product as actual conf
-            // this way an empty injected conf won't break the expected functionality
-            // NOTE! seems loader sets conf for each inheritance step so we need to do this 
-            // each time name conf is undefined or name is changed
-            if(!this.conf || 
-                this.__confMerged === undefined || 
-                this.__confMerged !== this.conf.name) {
-                this.conf = jQuery.extend(true, {}, this.defaultConf, this.conf);
+            // Extend the default config with injected conf and use the product
+            // as actual conf.
+            // This way an empty injected conf won't break the expected
+            // functionality.
+            // NOTE! seems loader sets conf for each inheritance step so we need
+            // to do this each time name conf is undefined or name is changed.
+            if (!this.conf ||
+                    this.__confMerged === undefined ||
+                    this.__confMerged !== this.conf.name) {
+                this.conf = jQuery.extend(
+                    true,
+                    {},
+                    this.defaultConf,
+                    this.conf
+                );
                 this.__confMerged = this.conf.name;
             }
             return this.conf;
@@ -239,17 +279,25 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
          * @property eventHandlers
          * may be overridden in derived classes to get some events
          */
-        'eventHandlers': {
+        eventHandlers: {
 
         },
-        'requestHandlers': {
+
+        /**
+         * @property requestHandlers
+         * may be overridden in derived classes to get some requests
+         */
+        requestHandlers: {
 
         },
 
         /**
          * @method onEvent
+         * Event is handled forwarded to correct #eventHandlers if found or
+         * discarded if not.
+         *
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         *
          */
         onEvent: function (event) {
             var me = this,
@@ -276,7 +324,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
             return handler.apply(this, [request]);
         },
 
-
         /**
          * @method getLang
          * helper to get current language from Oskari
@@ -291,20 +338,26 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
         getTile: function () {
             return this.plugins['Oskari.userinterface.Tile'];
         },
+
         setTile: function (t) {
             this.plugins['Oskari.userinterface.Tile'] = t;
         },
+
         setDefaultTile: function (txt) {
-            var tileCls = Oskari.cls().extend('Oskari.userinterface.extension.DefaultTile');
-            var tile = tileCls.create(this, {
-                title: txt || ''
-            });
+            var tileCls = Oskari.cls().extend(
+                    'Oskari.userinterface.extension.DefaultTile'
+                ),
+                tile = tileCls.create(this, {
+                    title: txt || ''
+                });
             this.plugins['Oskari.userinterface.Tile'] = tile;
             return tile;
         },
+
         getFlyout: function () {
             return this.plugins['Oskari.userinterface.Flyout'];
         },
+
         setFlyout: function (f) {
             this.plugins['Oskari.userinterface.Flyout'] = f;
         },
@@ -312,36 +365,38 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
         /* o2 helpers for notifications and requetss */
         slicer: Array.prototype.slice,
 
-        notify: function (evt, retainEvent) {
-            return this.getSandbox().notifyAll(evt, retainEvent);
-        },
-
         request: function (request) {
             return this.getSandbox().request(this, request);
         },
 
         /**
-         * @method issue issues a request to sandbox and returns value from *the* registered requesthandler if any
+         * @method issue
+         * Issues a request to sandbox and returns value from *the* registered
+         *  equesthandler if any.
          *
          */
-        issue: function () {
-            var requestName = arguments[0],
-                args = this.slicer.apply(arguments, [1]),
+        issue: function (requestName) {
+            var args = this.slicer.apply(arguments, [1]),
                 builder = this.getSandbox().getRequestBuilder(requestName),
                 request = builder.apply(builder, args);
+
             return this.getSandbox().request(this.getExtension(), request);
         },
 
         /**
          *@method notify sends notification to any registered listeners
          */
-        notify: function () {
-            var eventName = arguments[0],
-                args = this.slicer.apply(arguments, [1]),
+        notify: function (eventName) {
+            var args = this.slicer.apply(arguments, [1]),
                 builder = this.getSandbox().getEventBuilder(eventName),
                 evt = builder.apply(builder, args);
+
             return this.getSandbox().notifyAll(evt);
         }
     }, {
-        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+        protocol: [
+            'Oskari.bundle.BundleInstance',
+            'Oskari.mapframework.module.Module',
+            'Oskari.userinterface.Extension'
+        ]
     });

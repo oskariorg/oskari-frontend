@@ -115,6 +115,8 @@ Oskari.registerLocalization(
                 "sum": "The total sum of the values in the indicator."
             }
         },
+        "baseInfoTitle": "Identification data",
+        "dataTitle": "Indicator",
         "noIndicatorData": "The indicator cannot be displayed in this regional classification.",
         "values": "values",
         "included": "Values",
@@ -148,8 +150,8 @@ Oskari.registerLocalization(
         "noRegionFound": "The region could not be found.",
         "regionCategories": {
             "title": "Regional classifications",
-            "ELY-KESKUS": "ELY centre (Centre for Economic Development, Transport and the Environment)",
             "ERVA": "ERVA area (Special responsibility area)",
+            "ELY-KESKUS": "ELY centre (Centre for Economic Development, Transport and the Environment)",
             "KUNTA": "Municipality",
             "ALUEHALLINTOVIRASTO": "Regional State Administrative Agency",
             "MAAKUNTA": "Region",
@@ -158,8 +160,6 @@ Oskari.registerLocalization(
             "SEUTUKUNTA": "Subregion",
             "SUURALUE": "Major region"
         },
-        "baseInfoTitle": "Identification data",
-        "dataTitle": "Indicator",
         "addDataButton": "Add indicator",
         "addDataTitle": "Add a new indicator.",
         "openImportDialogTip": "Import data from the clipboard.",

@@ -115,6 +115,8 @@ Oskari.registerLocalization(
                 "sum": "Indikaattorin arvojen yhteenlaskettu summa."
             }
         },
+        "baseInfoTitle": "Tunnistetiedot",
+        "dataTitle": "Aineisto",
         "noIndicatorData": "Indikaattoria ei voi tarkastella tässä aluejaossa.",
         "values": "arvoa",
         "included": "Arvot",
@@ -148,8 +150,8 @@ Oskari.registerLocalization(
         "noRegionFound": "Aluetta ei löytynyt",
         "regionCategories": {
             "title": "Aluejaot",
-            "ELY-KESKUS": "ELY-alueet",
             "ERVA": "ERVA-alueet",
+            "ELY-KESKUS": "ELY-alueet",
             "KUNTA": "Kunta",
             "ALUEHALLINTOVIRASTO": "Aluehallintovirasto",
             "MAAKUNTA": "Maakunta",
@@ -158,8 +160,6 @@ Oskari.registerLocalization(
             "SEUTUKUNTA": "Seutukunta",
             "SUURALUE": "Suuralue"
         },
-        "baseInfoTitle": "Tunnistetiedot",
-        "dataTitle": "Aineisto",
         "addDataButton": "Lisää uusi",
         "addDataTitle": "Lisää uusi indikaattori",
         "openImportDialogTip": "Tuo arvot leikepöydältä.",

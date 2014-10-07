@@ -206,14 +206,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     content;
                 okBtn.addClass('primary');
                 url = this.sandbox.getLocalizedProperty(this.conf.publishedMapUrl) + event.getId();
-                iframeCode = '<iframe src="' + url + '" style="border: none;" width="'  + event.getWidth() +
-                    '" height="' + event.getHeight() + '"></iframe>';
+                iframeCode = '<div class="codesnippet"><code>&lt;iframe src="' + url + '" style="border: none;" width="'  + event.getWidth() +
+                '" height="' + event.getHeight() + '"&gt;&lt;/iframe&gt;</code></div>';
 
-                textarea =
-                    '<textarea rows="3" cols="77">' +
-                    iframeCode +
-                    '</textarea>';
-                content = loc.published.desc + '<br/>' + textarea;
+                content = loc.published.desc + '<br/><br/>' + iframeCode;
 
                 dialog.show(loc.published.title, content, [okBtn]);
                 this.setPublishMode(false);

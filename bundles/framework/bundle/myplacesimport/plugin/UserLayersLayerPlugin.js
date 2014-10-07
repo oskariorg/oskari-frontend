@@ -218,7 +218,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.plugin.UserLayers
             }
             var openLayerId = 'layer_' + layer.getId(),
                 layerId = _.last(layer.getId().split('_')),
-                imgUrl = layer.getLayerUrls()[0] + 'id=' + layerId,
+                imgUrl = (layer.getLayerUrls()[0] + layerId).replace(/&amp;/g, '&'),
                 layerScales = this.getMapModule()
                     .calculateLayerScales(
                         layer.getMaxScale(),

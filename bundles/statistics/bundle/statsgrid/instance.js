@@ -96,18 +96,20 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
                 this.gridPlugin);
             sandbox.addRequestHandler('StatsGrid.AddDataSourceRequest', dataSourceRequestHandler);
 
-            if (sandbox.getUser().isLoggedIn()) {
-                var userIndicatorsTab = Oskari.clazz.create(
-                    'Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
-                    this, locale.tab
-                );
-                this.userIndicatorsTab = userIndicatorsTab;
-            }
-
             this.setState(this.state);
             this._enableTile();
         },
         "eventHandlers": {
+            'Personaldata.PersonaldataLoadedEvent': function (event) {
+                var locale = this.getLocalization();
+                if (this.sandbox.getUser().isLoggedIn()) {
+                    var userIndicatorsTab = Oskari.clazz.create(
+                        'Oskari.statistics.bundle.statsgrid.UserIndicatorsTab',
+                        this, locale.tab
+                    );
+                    this.userIndicatorsTab = userIndicatorsTab;
+                }
+            },
             /**
              * @method userinterface.ExtensionUpdatedEvent
              */

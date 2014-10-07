@@ -205,15 +205,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             gridModel.setIdField('id');
 
             _.each(layers, function (layer) {
-                gridModel.addData({
-                    'id': layer.getId(),
-                    'name': layer.getName(),
-                    'description': layer.getDescription(),
-                    'source': layer.getSource(),
-                    'isBase': layer.isBaseLayer()
-                });
+                if (gridModel.data.length === 0) {
+                    gridModel.addData({
+                        'id': layer.getId(),
+                        'name': layer.getName(),
+                        'description': layer.getDescription(),
+                        'source': layer.getSource(),
+                        'isBase': layer.isBaseLayer()
+                    });
+                    return;
+                }
+                var idDouble = false;
+                for (i=0; i < gridModel.data.length; i++) {
+                    if (layer.getId() === gridModel.data[i].id) {
+                        idDouble = true;
+                        break;
+                    }
+                }
+                if (!idDouble) {
+                    gridModel.addData({
+                        'id': layer.getId(),
+                        'name': layer.getName(),
+                        'description': layer.getDescription(),
+                        'source': layer.getSource(),
+                        'isBase': layer.isBaseLayer()
+                    });
+                }
             });
-
             return gridModel;
         }
     });

@@ -15,7 +15,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
         this._localization = null;
         this._pluginInstances = {};
         this._startupState = null;
-
         this._historyPollingInterval = 1500;
         this._historyTimer = null;
         this._historyPrevious = [];
@@ -40,7 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -62,8 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
          * @method start
          * implements BundleInstance start methdod
          */
-        "start": function () {
-
+        start: function () {
             var me = this;
             if (me.started) {
                 return;
@@ -103,14 +101,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
          *
          * implements bundle instance update method
          */
-        "update": function () {
+        update: function () {
 
         },
         /**
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function () {
+        stop: function () {
             var sandbox = this.sandbox(),
                 p;
             sandbox.removeRequestHandler('StateHandler.SetStateRequest', this.requestHandlers.setStateHandler);
@@ -134,7 +132,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
          * @method init
          * implements Module protocol init method
          */
-        "init": function () {
+        init: function () {
             var sandbox = this.sandbox;
             this.requestHandlers = {
                 setStateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.statehandler.request.SetStateRequestHandler', sandbox, this),
@@ -185,25 +183,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
          * @static
          */
         eventHandlers: {
-            'AfterMapMoveEvent': function (event) {
+            AfterMapMoveEvent: function (event) {
                 this._pushState();
             },
-            'AfterMapLayerAddEvent': function (event) {
+            AfterMapLayerAddEvent: function (event) {
                 this._pushState();
             },
-            'AfterMapLayerRemoveEvent': function (event) {
+            AfterMapLayerRemoveEvent: function (event) {
                 this._pushState();
             },
-            'AfterChangeMapLayerStyleEvent': function (event) {
+            AfterChangeMapLayerStyleEvent: function (event) {
                 this._pushState();
             },
-            'MapLayerVisibilityChangedEvent': function (event) {
+            MapLayerVisibilityChangedEvent: function (event) {
                 this._pushState();
             },
-            'AfterAddMarkerEvent': function (event) {
+            AfterAddMarkerEvent: function (event) {
                 this._pushState();
             },
-            'AfterRemoveMarkersEvent': function (event) {
+            AfterRemoveMarkersEvent: function (event) {
                 this._pushState();
             }
         },
@@ -431,7 +429,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                 logUrlWithLinkParams = me.conf.logUrl + '?' + me.sandbox.generateMapLinkParameters();
 
             jQuery.ajax({
-                type: "GET",
+                type: 'GET',
                 url: logUrlWithLinkParams
             });
         },
@@ -537,5 +535,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
         }
 
     }, {
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
+        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     });

@@ -8,11 +8,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
      * @method create called automatically on construction
      * @static
      */
-
     function (name, psandbox) {
         var sandbox = psandbox || Oskari.getSandbox(),
             label,
             input;
+        sandbox.printWarn('Oskari.userinterface.component.FormInput is deprecated, please use Oskari.userinterface.component.TextInput instead.');
         this.sandbox = sandbox;
         this.template = jQuery('<div class="oskarifield"><label></label><input type="text" autofocus/></div>');
         this.templateErrors = jQuery('<div class="error"></div>');
@@ -38,6 +38,12 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         this._regExp = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*/;
         this._colorRegExp = /^([A-Fa-f0-9]{6})$/;
     }, {
+
+        destroy: function () {
+            if (this._field) {
+                this._field.remove();
+            }
+        },
         /**
          * @method setLabel
          * Sets the fields label
@@ -46,6 +52,20 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         setLabel: function (pLabel) {
             var label = this._field.find('label');
             label.html(pLabel);
+        },
+        /**
+         * @method setIds
+         * Sets ids to forminput field and input
+         * @param {String} fieldId
+         * @param {String} inputId
+         */
+        setIds: function (fieldId, inputId) {
+        	if (fieldId) {
+            	this._field.attr('id', fieldId);
+            }
+            if (inputId) {
+            	this._field.find('input').attr('id', inputId);
+            }
         },
         /**
          * @method setTooltip
@@ -113,10 +133,12 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             }
             this._field.append(errorDiv);
         },
+
         clearErrors: function () {
             var errors = this._field.find('div.error');
             errors.remove();
         },
+
         /**
          * @method getField
          * Returns reference to the field DOM
@@ -125,6 +147,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         getField: function () {
             return this._field;
         },
+
+        getElement: function () {
+            return this._field[0];
+        },
+
         /**
          * @method getValue
          * Returns fields value.
@@ -140,11 +167,12 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 value = value.match(this._regExp).join('');
             }
             // Basic check before AH-1708
-            value = value.replace("<","");
-            value = value.replace("&","");
-            value = value.replace("\\","");            
+            value = value.replace('<','');
+            value = value.replace('&','');
+            value = value.replace('\\','');            
             return value;
         },
+
         /**
          * @method setValue
          * Sets the fields value
@@ -153,6 +181,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         setValue: function (value) {
             this._field.find('input').attr('value', value);
         },
+
         /**
          * @method getName
          * Returns fields name
@@ -161,6 +190,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         getName: function () {
             return this._name;
         },
+
         /**
          * @method setEnabled
          * Enables/Disables the button
@@ -196,6 +226,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         setValidator: function (pValidator) {
             this._validator = pValidator;
         },
+
         /**
          * @method validate
          * Returns errors array or empty array if no errors. Each error object in the array
@@ -216,16 +247,16 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             if (this._required) {
                 if (!this.checkLength(value, 1)) {
                     errors.push({
-                        "field": this.getName(),
-                        "error": this._requiredMsg
+                        'field': this.getName(),
+                        'error': this._requiredMsg
                     });
                 }
             }
             if (this._contentCheck) {
                 if (!this.checkValue()) {
                     errors.push({
-                        "field": this.getName(),
-                        "error": this._contentCheckMsg
+                        'field': this.getName(),
+                        'error': this._contentCheckMsg
                     });
                 }
             }
@@ -253,6 +284,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             }
             return false;
         },
+
         /**
          * @method checkValue
          * Checks the field contents against a regexp pattern and returns true if contents match
@@ -264,6 +296,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             // if values match, everything ok
             return (value === filtered);
         },
+
         /**
          * @method validateNumberRange
          * @param {Object} value number to validate
@@ -283,6 +316,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             }
             return true;
         },
+
         /**
          * @method validateHexColor
          * Validates a color hex-string with out the starting #-character
@@ -306,13 +340,14 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 }
             });
         },
+
         /**
          * @method bindUpKey
          * Binds <up> keypress to trigger given function
          * @param {Function} callback method that is called if up is pressed on the input
          */
         bindUpKey: function (callback) {
-            "use strict";
+            'use strict';
             var me = this,
                 input = this._field.find('input');
 
@@ -323,13 +358,14 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 }
             });
         },
+
         /**
          * @method bindDownKey
          * Binds <down> keypress to trigger given function
          * @param {Function} callback method that is called if down is pressed on the input
          */
         bindDownKey: function (callback) {
-            "use strict";
+            'use strict';
             var me = this,
                 input = this._field.find('input');
 
@@ -340,13 +376,14 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 }
             });
         },
+
         /**
          * @method bindOnBlur
          * Binds <blur> effect to trigger given function
          * @param {Function} callback method that is called if blur has happened for the input
          */
         bindOnBlur: function (callback) {
-            "use strict";
+            'use strict';
             // all set, ready to bind requests
             var input = this._field.find('input');
             input.blur(function () {
@@ -354,6 +391,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             });
 
         },
+
         /**
          * @method bindChange
          * Bind function to fields change event
@@ -373,10 +411,13 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         /**
          * @method addClearButton
          * Adds a clear button to the field
+         * @param {String} id
          */
-        addClearButton: function () {
+        addClearButton: function (id) {
             var clearButton = this.templateClearButton.clone(),
                 input = this._field.find('input');
+
+            clearButton.attr('id', id);
             clearButton.bind('click', function () {
                 input.val('');
                 input.trigger('change');
@@ -384,6 +425,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             });
             input.after(clearButton);
         },
+
         /**
          * @method _bindFocusAndBlur
          * Enables/Disables map movement with keyboard to fields focus/blur
@@ -414,6 +456,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
             });
         },
+
         /**
          * @method _isEnterPress
          * Detects if <enter> key was pressed and calls #_doSearch if it was
@@ -426,6 +469,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             // true if <enter>
             return (keycode === 13);
         },
+
         /**
          * @method _isDownPress
          * Detects if <down> key was pressed and calls #_doSearch if it was
@@ -438,6 +482,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             // true if <up>
             return (keycode === 40);
         },
+
         /**
          * @method _isUpPress
          * Detects if <up> key was pressed and calls #_doSearch if it was
