@@ -38,7 +38,7 @@ Oskari.registerLocalization(
                     "message": "You can find the map layer from the menu \"My Data\"."
                 },
                 "failure": {
-                    "title": "The dataset import did not succeeded. Please try again later."
+                    "title": "The dataset import did not succeed. Please try again later."
                 }
             }
         },

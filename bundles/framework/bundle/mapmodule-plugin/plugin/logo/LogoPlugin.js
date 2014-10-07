@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                     '<div class="terms">' +
                     '<a href="JavaScript:void(0);"></a>' +
                     '</div>' +
-                    '<div class="data-sources"></div>' +
+                    '<div class="data-sources"><a href="JavaScript:void(0);"></a></div>' +
                     '</div>'
             ),
             dataSourcesDialog: jQuery(
@@ -323,7 +323,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             if (me.conf && me.conf.hideDataSourceLink) {
                 dataSources.remove();
             } else {
-                dataSources.html(loc.dataSources);
+                dataSources.find('a').html(loc.dataSources);
                 dataSources.click(function (e) {
                     if (!me.isInLayerToolsEditMode && !me.dataSourcesDialog) {
                         me._openDataSourcesDialog(e.target);

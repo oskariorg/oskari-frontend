@@ -15,7 +15,7 @@ function () {
     this.toolName = 'import';
     this.tool = {
         iconCls: 'upload-material',
-        sticky: true
+        sticky: false
     };
     this.importService = undefined;
     this.tab = undefined;
@@ -41,33 +41,43 @@ function () {
         if (conf && conf.stateful === true) {
             sandbox.registerAsStateful(this.mediator.bundleId, this);
         }
+        var isGuest = !sandbox.getUser().isLoggedIn();
 
-        this.tab = this.addTab(sandbox);
-        this.importService = this.createService(sandbox);
-        this.importService.init();
-        this.importService.getUserLayers(function() {
-            me.getTab().refresh();
-        });
+        if (isGuest) {
+            // guest user, only show disabled button
+            this.tool.disabled = true;
+        } else {
+            // logged in user, create UI
+            this.tab = this.addTab(sandbox);
+            this.importService = this.createService(sandbox);
+            this.importService.init();
+            this.importService.getUserLayers(function() {
+                me.getTab().refresh();
+            });
 
-        request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
-        sandbox.request(this, request);
-
-        this.registerTool();
+            request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+            sandbox.request(this, request);
+        }
+        
+        this.registerTool(isGuest);
     },
     /**
      * Requests the tool to be added to the toolbar.
      * 
      * @method registerTool
      */
-    registerTool: function() {
+    registerTool: function(isGuest) {
         var me = this,
             loc = this.getLocalization(),
             sandbox = this.getSandbox(),
             reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest'),
             request;
-
         this.tool.callback = function() {
-            me.startTool();
+            if(!isGuest) {
+                // toolbar requires a callback so we need to check guest flag
+                // inside callback instead of not giving any callback
+                me.startTool();
+            }
         };
         this.tool.tooltip = loc.tool.tooltip;
 
