@@ -301,7 +301,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
 
         _createTermsLink: function (loc, termsUrl) {
             var me = this,
-                link = me.element.find('a');
+                link = me.element.find('.terms a');
 
             if (termsUrl) {
                 link.append(loc.terms);
