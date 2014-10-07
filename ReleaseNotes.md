@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.24.1
+
+### mapmodule/LogoPlugin
+
+Fixed link binding for terms-of-use. It's now more specific instead of binding to all a-tags in plugin content.
+
 ## 1.24
 
 ### bundles/bundle.js
