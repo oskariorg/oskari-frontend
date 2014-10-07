@@ -323,14 +323,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
             var inst = me.instance;
             // error handling
             if (result.totalCount === -1) {
-                resultList.append(this.instance.getLocalization('searchservice_search_alert_title') + this.instance.getLocalization(result.errorText));
+                resultList.append(this.instance.getLocalization('searchservice_search_alert_title') + ': ' + this.instance.getLocalization(result.errorText));
                 return;
             } else if (result.totalCount === 0) {
                 var alK = 'searchservice_search_alert_title',
                     al = inst.getLocalization(alK),
                     nfK = 'searchservice_search_not_found_anything_text',
                     nf = inst.getLocalization(nfK);
-                resultList.append(al + ':' + nf);
+                resultList.append(al + ': ' + nf);
                 return;
             } else {
                 info.append(this.instance.getLocalization('searchResultCount') + ' ' +

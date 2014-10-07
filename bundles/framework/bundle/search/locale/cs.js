@@ -13,7 +13,7 @@ Oskari.registerLocalization({
         "searchResultDescriptionOrdering": "Kliknutím na hlavičku sloupce můžete výsledky vyhledávání seřadit.",
         "searchResults": "Výsledky: ",
         "searchResultsDescription": " výsledky vyhledávání ",
-        "searchservice_search_alert_title": "Chyba: ",
+        "searchservice_search_alert_title": "Chyba",
         "searchservice_search_not_found_anything_text": "Vyhledávání nevrátilo žádný výsledek.",
         "too_short": "Vámi vyhledávaný řetězec je příliš krátký.",
         "cannot_be_empty": "Vyhledáváný řetězec nesmí být prázdný.",

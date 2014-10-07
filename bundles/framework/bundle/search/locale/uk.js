@@ -13,7 +13,7 @@ Oskari.registerLocalization({
         "searchResultDescriptionOrdering": "Ви можете впорядкувати результати пошуку клацнувши на заголовок колонки",
         "searchResults": "Результати:",
         "searchResultsDescription": "пошук результатів",
-        "searchservice_search_alert_title": "Помилка:",
+        "searchservice_search_alert_title": "Помилка",
         "searchservice_search_not_found_anything_text": "Нічого не знайдено.",
         "too_short": "Пошукове слово дуже коротке",
         "cannot_be_empty": "Пошукове слово не може бути пустим",
