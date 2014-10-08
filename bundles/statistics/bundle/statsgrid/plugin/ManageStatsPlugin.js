@@ -917,6 +917,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             };
             (state.indicators = state.indicators || []).push(userIndicator);
             this.updateDataSource('userIndicators', userIndicator);
+            this.addIndicatorMeta(userIndicator);
 
             if (me._selectedRegionCategory !== data.category) {
                 me.changeGridRegion(data.category);

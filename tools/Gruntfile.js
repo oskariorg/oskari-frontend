@@ -213,7 +213,11 @@ module.exports = function (grunt) {
           'statehandler': '../packages/framework/bundle/statehandler',
           'toolbar': '../packages/framework/bundle/toolbar',
           'usagetracker': '../packages/framework/bundle/usagetracker',
-          'userguide': '../packages/framework/bundle/userguide'
+          'userguide': '../packages/framework/bundle/userguide',
+          'statsgrid': '../packages/statistics/bundle/statsgrid',
+          'analyse': '../packages/analysis/bundle/analyse',
+// Manual modification          'metadataflyout': '../packages/catalogue/bundle/metadataflyout',
+          'metadatacatalogue': '../packages/catalogue/bundle/metadataflyout'
         },
         minifyAll: {
             options: {
@@ -398,11 +402,6 @@ module.exports = function (grunt) {
                 version: "1.13",
                 name: "src/oskari/oskari-with-loader",
                 out: "../libraries/oskari/oskari-<%= requirejs['oskari-with-loader'].options.version %>.min.js"
-            }
-          },
-          'full-map_guest': {
-            options: {
-                mainConfigFile: "../applications/oskari2/full-map_guest/build.js"
             }
           },
           'leaflet': {
@@ -1000,4 +999,10 @@ module.exports = function (grunt) {
         grunt.task.run('requirejs:' + this.target);
     });
 
+    grunt.registerTask("buildsetup", "Build setup with configuration", function (buildsetupconfig) {
+        grunt.log.writeln("Building setup from ", buildsetupconfig);
+        var options = grunt.file.readJSON(buildsetupconfig);
+        grunt.config.set('requirejs.buildsetup.options', options);
+        grunt.task.run('requirejs:buildsetup');
+    });
 };
