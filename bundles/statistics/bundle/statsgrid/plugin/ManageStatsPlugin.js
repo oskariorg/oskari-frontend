@@ -1304,7 +1304,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 },
 
                 formatter: function (row, cell, value, columnDef, dataContext) {
-                    var numValue = Number(value),
+                    var numValue = me._numerizeValue(value),
                         ret;
                     if (isNaN(numValue) || columnDef.decimals === null || columnDef.decimals === undefined) {
                         ret = value;
@@ -3051,7 +3051,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var ret = val;
             if (val !== null && val !== undefined) {
                 if (val.replace) {
-                    ret = val.replace(',', '.');
+                    ret = val.replace(',', '.').replace(/ /g, '');
                 }
                 ret = Number(ret);
             }

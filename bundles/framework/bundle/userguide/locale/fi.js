@@ -10,7 +10,7 @@ Oskari.registerLocalization(
             "loadingtxt": "<p>ladataan sisältöä</p>"
         },
         "tile": {
-            "title": "Käyttöohje"
+            "title": "Käyttöohjeet"
         },
         "error": {
             "title": "Virhe!",

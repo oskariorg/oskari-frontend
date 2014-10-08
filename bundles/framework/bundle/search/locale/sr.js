@@ -13,7 +13,7 @@ Oskari.registerLocalization({
         "searchResultDescriptionOrdering": "Možete sortirati rezultate u tabeli ispod, klikom na naslov kolone",
         "searchResults": "Rezultati:",
         "searchResultsDescription": "rezultati pretrage",
-        "searchservice_search_alert_title": "Greška:",
+        "searchservice_search_alert_title": "Greška",
         "searchservice_search_not_found_anything_text": "Nema rezultata",
         "too_short": "Zahtev za pretragu je nedovoljan",
         "cannot_be_empty": "Zahtev za pretragu ne može biti prazan",

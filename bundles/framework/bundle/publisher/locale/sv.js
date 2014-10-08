@@ -2,7 +2,7 @@ Oskari.registerLocalization({
     "lang": "sv",
     "key": "Publisher",
     "value": {
-        "title": "Definiera karta",
+        "title": "Kartpublicering",
         "flyouttitle": "Definiera karta",
         "desc": "",
         "published": {

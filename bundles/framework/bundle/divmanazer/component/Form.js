@@ -135,13 +135,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
          * @return {Array} errors
          */
         validate: function () {
-            'use strict';
-            var errors = [],
-                i;
+            var errors = [];
 
-            for (i = 0; i < this.fields.length; i += 1) {
-                errors = errors.concat(this.fields[i].validate());
-            }
+            this.getComponents().forEach(function (component) {
+                if (component.validate) {
+                    errors = errors.concat(component.validate());
+                }
+            });
             return errors;
         },
 
@@ -155,7 +155,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
                 this.getClazz() + '.showErrors is deprecated.');
             var errors;
 
-            this._components.forEach(function (component) {
+            this.getComponents().forEach(function (component) {
                 if (component.validate) {
                     errors = component.validate();
                     if (component.showErrors) {
@@ -173,7 +173,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
             'use strict';
             Oskari.getSandbox().printWarn(
                 this.getClazz() + '.clearErrors is deprecated.');
-            this._components.forEach(function (component) {
+            this.getComponents().forEach(function (component) {
                 if (component.clearErrors) {
                     component.clearErrors();
                 }

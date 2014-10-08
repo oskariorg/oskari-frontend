@@ -102,7 +102,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
                     // convenience so the port isn't required
                     this.config.port = '' + location.port;
                 }
-                if (this.config.port.length > 0) {
+                // length check won't work if port is given as number
+                var portAsString = '' + this.config.port;
+                if (portAsString.length > 0) {
                     this.config.port = ':' + this.config.port;
                 }
                 if (!this.config.contextPath) {

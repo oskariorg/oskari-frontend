@@ -3,7 +3,7 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "Publisher",
     "value": {
-        "title": "Create Map",
+        "title": "Map publishing",
         "flyouttitle": "Create Embedded Map",
         "desc": "",
         "published": {

@@ -13,7 +13,7 @@ Oskari.registerLocalization({
         "searchResultDescriptionOrdering": "A táblázat oszlopainak fejlécére kattintva is rendezheti az eredményeket.",
         "searchResults": "Erdmények:",
         "searchResultsDescription": "keresési eredmény",
-        "searchservice_search_alert_title": "Hiba:",
+        "searchservice_search_alert_title": "Hiba",
         "searchservice_search_not_found_anything_text": "A keresés nem járt eredménnyel.",
         "too_short": "A keresési kifejezés túl rövid",
         "cannot_be_empty": "A keresési kifejezés nem lehet üres",

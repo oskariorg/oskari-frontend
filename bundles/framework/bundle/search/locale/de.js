@@ -13,7 +13,7 @@ Oskari.registerLocalization({
         "searchResultDescriptionOrdering": "Sie können die Suchergebnisse in der Tabelle durch Anklicken der Spaltenüberschriften sortieren.",
         "searchResults": "Ergebnisse: ",
         "searchResultsDescription": " Treffer ",
-        "searchservice_search_alert_title": "Fehler: ",
+        "searchservice_search_alert_title": "Fehler",
         "searchservice_search_not_found_anything_text": "Die Suche ergab keine Treffer.",
         "too_short": "Ihr Suchbegriff ist zu kurz.",
         "cannot_be_empty": "Der Suchbegriff darf nicht leer sein",
