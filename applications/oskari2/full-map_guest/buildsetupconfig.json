@@ -1,0 +1,39 @@
+{
+  "baseUrl" : "../",
+  "paths" : {
+    "jquery" : "empty:",
+    "css-builder": "libraries/requirejs/lib/css-builder"
+  },
+  "optimize" : "uglify2",
+  "optimizeAllPluginResources" : true,
+  "findNestedDependencies" : true,
+  "wrapShim": true,
+  "skipDirOptimize": true,
+  "keepBuildDir": true,
+  "name" : "applications/oskari2/full-map_guest/main-dev",
+  "mainConfigFile" : "../applications/oskari2/full-map_guest/main-dev.js",
+  "deps" : [
+    "openlayers-default-theme",
+    "mapfull",
+    "divmanazer",
+    "toolbar",
+    "statehandler",
+    "infobox",
+    "search",
+    "layerselector2",
+    "layerselection2",
+    "maplegend",
+    "guidedtour",
+    "promote",
+    "coordinatedisplay",
+    "statsgrid",
+    "metadataflyout",
+    "routesearch",
+    "userguide",
+    "backendstatus",
+    "printout",
+    "featuredata2",
+    "metadatacatalogue"
+  ],
+  "out" : "../applications/oskari2/full-map_guest/main.js"
+}

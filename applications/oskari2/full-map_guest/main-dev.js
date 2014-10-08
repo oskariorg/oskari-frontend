@@ -1,151 +1,147 @@
-require(["mainConfig"], function() {
+require.config({
+  baseUrl: "/Oskari/", // the base is set to requirejs lib to help requiring 3rd party libs
+  paths: { // some path shortcuts to ease declarations
+    "oskari": "src/oskari/oskari",
+    "oskari-with-app": "src/oskari/oskari-with-app",
+    "oskari-with-loader": "src/oskari/oskari-with-loader",
+    "jquery": "http://code.jquery.com/jquery-1.9.1",
+    "jquery-ui": "libraries/jquery/jquery-ui-1.9.2.custom",
+    "dragevent": "libraries/jquery/jquery.event.drag-2.0.min",
+    "jquery-migrate": "libraries/jquery/jquery-migrate-1.2.1-modified",
+    "css": "libraries/requirejs/lib/css",
+    "json": "libraries/requirejs/lib/json",
+    "domReady": "libraries/requirejs/lib/domReady",
+    "text": "libraries/requirejs/lib/text",
+    "i18n": "libraries/requirejs/lib/i18n",
+    "normalize": "libraries/requirejs/lib/normalize",
+    "lodash": "libraries/lodash/2.3.0/lodash"
+  },
+  map: {
+    // '*' means all modules will get 'jquery-private'
+    // for their 'jquery' dependency.
+    "*": {
+      "oskari": "oskari-with-app",
+      "jquery": "jquery-migrate",
+      // TODO: rename openlayers-default-theme to map or something
+      "openlayers-default-theme": "src/oskari/map-ol2/module",
+      "mapfull": "src/mapping/mapmodule/ol2/mapfull/module",
+      "divmanazer": "src/framework/divmanazer/module",
+      "toolbar": "src/framework/toolbar/module",
+      "statehandler": "src/framework/statehandler/module",
+      "infobox": "src/framework/infobox/module",
+      "search": "src/framework/search/module",
+      "routesearch": "src/framework/routesearch/module",
+      "layerselector2": "src/framework/layerselector2/module",
+      "layerselection2": "src/framework/layerselection2/module",
+      "personaldata": "src/framework/personaldata/module",
+      "featuredata2": "src/framework/featuredata2/module",
+      "maplegend": "src/framework/maplegend/module",
+      "userguide": "src/framework/userguide/module",
+      "backendstatus": "src/framework/backendstatus/module",
+      "postprocessor": "src/framework/postprocessor/module",
+      "publisher": "src/framework/publisher/module",
+      "guidedtour": "src/framework/guidedtour/module",
+      "mapstats": "src/framework/mapstats/module",
+      "mapwfs2": "src/framework/mapwfs2/module",
+      "mapwmts": "src/framework/mapwmts/module",
+      "mapmyplaces": "src/framework/mapmyplaces/module",
+      "mapanalysis": "src/framework/mapanalysis/module",
+      "statsgrid": "src/statistics/statsgrid/module",
+      "metadataflyout": "src/catalogue/metadataflyout/module",
+      "metadatacatalogue": "src/catalogue/metadatacatalogue/module",
+      "printout": "src/framework/printout/module",
+      "coordinatedisplay": "src/framework/coordinatedisplay/module",
+      "analyse": "src/analysis/analyse/module",
+      "myplaces2": "src/framework/myplaces2/module",
+      "promote": "src/framework/promote/module",
+      "oskariui": "src/framework/oskariui/module"
+    },
 
-    /* loading base requirements */
-    require(["jquery", "oskari-with-app", "domReady"],
-    /**
-     * ... now we have jQuery and Oskari
-     */
-    function(jQuery, Oskari) {
+    // 'jquery-private' wants the real jQuery module
+    // though. If this line was not here, there would
+    // be an unresolvable cyclic dependency.
+    "jquery-migrate": {
+      "jquery": "jquery"
+    }
+  },
+  shim: {
+    "jquery-ui": {
+      exports: "$",
+      deps: ['jquery']
+    },
+    "dragevent": {
+      exports: "$",
+      deps: ['jquery']
+    },
+    "oskari": {
+      exports: "Oskari"
+    },
+    "lodash": {
+      exports: "_"
+    }
+  },
+  waitSeconds: 30
+});
 
-        function getURLParameter(name) {
-            var re = name + '=' + '([^&]*)(&|$)';
-            var value = RegExp(re).exec(location.search);
-            if (value && value.length && value.length > 1) {
-                value = value[1];
-            }
-            if (value) {
-                return decodeURI(value);
-            }
-            return null;
-        }
+/* loading base requirements */
+require(["jquery", "oskari-with-app", "domReady"],
+/**
+ * ... now we have jQuery and Oskari
+ */
+function(jQuery, Oskari) {
 
-        function gfiParamHandler(sandbox) {
-            if (getURLParameter('showGetFeatureInfo') != 'true') {
-                return;
-            }
-            var lon = sandbox.getMap().getX();
-            var lat = sandbox.getMap().getY();
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var px = mapModule.getMap().getViewPortPxFromLonLat({
-                lon: lon,
-                lat: lat
-            });
-            sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
-        }
+  function getURLParameter(name) {
+      var re = name + '=' + '([^&]*)(&|$)';
+      var value = RegExp(re).exec(location.search);
+      if (value && value.length && value.length > 1) {
+          value = value[1];
+      }
+      if (value) {
+          return decodeURI(value);
+      }
+      return null;
+  }
 
-        var config = "json!applications/oskari2/full-map_guest/minifierAppSetup.json";
-        if (window.ajaxUrl) {
-            // populate url with possible control parameters
-            var getAppSetupParams = "";
-            if(typeof window.controlParams == 'object') {
-                for(var key in controlParams) {
-                    getAppSetupParams += "&" + key + "=" + controlParams[key];
-                }
-            }
+  function gfiParamHandler(sandbox) {
+      if (getURLParameter('showGetFeatureInfo') != 'true') {
+          return;
+      }
+      var lon = sandbox.getMap().getX();
+      var lat = sandbox.getMap().getY();
+      var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+      var px = mapModule.getMap().getViewPortPxFromLonLat({
+          lon: lon,
+          lat: lat
+      });
+      sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
+  }
 
-            //config = "json!/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&&action_route=GetAppSetup" + getAppSetupParams;
-        }
+  var config = "json!applications/oskari2/full-map_guest/appsetupconfig.json";
+  if (window.ajaxUrl) {
+      // populate url with possible control parameters
+      var getAppSetupParams = "";
+      if(typeof window.controlParams == 'object') {
+          for(var key in controlParams) {
+              getAppSetupParams += "&" + key + "=" + controlParams[key];
+          }
+      }
 
-        /* loading configuration */
-        require([config, 
-            "map"], function(appSetup) {
-            Oskari.setLang(language);
-            var appConfig = appSetup.configuration;
-            appConfig.promote = {
-                    "conf": {
-                        "__name": "Promote",
-                        "title": {
-                            "fi": "Otsikko tileen",
-                            "en": "Title for Tile"
-                        },
-                        "desc": {
-                            "fi": "Voit käyttää julkaisutoimintoa kirjauduttuasi palveluun.",
-                            "en": "You need to log in before using the embedding function."
-                        },
-                        "signup": {
-                            "fi": "Kirjaudu sisään",
-                            "en": "Log in"
-                        },
-                        "signupUrl": {
-                            "fi": "/web/fi/login",
-                            "en": "/web/en/login"
-                        },
-                        "register": {
-                            "fi": "Rekisteröidy",
-                            "en": "Register"
-                        },
-                        "registerUrl": {
-                            "fi": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account",
-                            "en": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
-                        },
-                        "test_toolbarButtons": {
-                            "buttonGrp": {
-                                "buttonId": {
-                                    "iconCls": "tool-reset",
-                                    "tooltip": {
-                                        "fi": "jee",
-                                        "en": "jee en"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                };
+      config = "json!" + window.ajaxUrl + "action_route=GetAppSetup" + getAppSetupParams;
+  }
 
-            Oskari.setConfiguration(appConfig);
+  /* loading configuration */
+  require([config], function(appSetup) {
 
-            /* loading main map and divmanazer */
-            require(["mapfull",
-                "mapmodule-plugin",
-                "divmanazer"], function(mapfull, mapmodule, divmanazer) {
+      Oskari.setLang(language);
 
-                /* starting to show user that something or another is happening */
-                mapfull.start();
-                divmanazer.start();
-
-                var bundles = [];
-
-                for (bundle in appConfig) {
-                    if ((bundle === "mapfull") || (bundle === "divmanazer") || (bundle === "openlayers-default-theme")) {
-                        // already loaded
-                    } else if (bundle === "metadataflyout") {
-                        bundles.push("bundles/catalogue/bundle/" + bundle + "/module");
-                    } else {
-                        bundles.push(bundle);
-                    }
-                }
-
-//                console.log('bundles', bundles);
-
-                require(bundles, function () {
-
-/*                require([
-                    "bundles/framework/bundle/backendstatus/module",
-                    "bundles/framework/bundle/guidedtour/module",
-                    "bundles/framework/bundle/toolbar/module",
-                    "bundles/framework/bundle/layerselection2/module",
-                    "bundles/framework/bundle/userguide/module",
-                    "bundles/framework/bundle/layerselector2/module",
-                    "bundles/framework/bundle/personaldata/module",
-                    "bundles/framework/bundle/publisher/module",
-                    "bundles/framework/bundle/printout/module",
-                    "bundles/framework/bundle/search/module",
-                    "bundles/framework/bundle/maplegend/module",
-                    "bundles/framework/bundle/featuredata/module",
-                    "bundles/framework/bundle/divmanazer/module",
-                    "bundles/framework/bundle/statehandler/module",
-                    "bundles/framework/bundle/infobox/module",
-                    "bundles/framework/bundle/coordinatedisplay/module",
-                    "bundles/framework/bundle/promote/module"], function () {*/
-                        for(var i = 0, ilen = arguments.length; i < ilen; i++) {
-                            arguments[i].start();
-                        }
-                        console.log('Calling GFI Param Handler');
-                        var sb = Oskari.getSandbox();
-                        gfiParamHandler(sb);
-                    }
-                );
-            });
-        });
-    });
+      Oskari.Application
+          .create()
+          .setStartupSequence(appSetup.startupSequence)
+          .setConfiguration(appSetup.configuration)
+          .start()
+          .success(function() {
+              var sb = Oskari.getSandbox();
+              gfiParamHandler(sb);
+          });
+  });
 });
