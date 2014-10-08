@@ -283,7 +283,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                 //var matches = line.match(/(.*) *[\t:,]+ *(.*)/);
                 if (matches && matches.length === 3) {
                     area = matches[1];
-                    value = (matches[2] || '').replace(',', '.');
+                    value = (matches[2] || '').replace(',', '.').replace(/\s/g, '');
                 }
                 // update municipality values
                 if (updateValue(jQuery.trim(area), jQuery.trim(value))) {
