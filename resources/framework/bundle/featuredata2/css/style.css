@@ -5,7 +5,7 @@
   .featuredata div.tab-content {
     max-height: 535px;
     overflow: auto; }
-  .featuredata .link {
+  .featuredata .link td {
     padding: 20px 0px 0px 0px;
     color: #0091FF;
     text-decoration: underline;

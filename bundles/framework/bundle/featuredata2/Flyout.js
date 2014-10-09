@@ -543,6 +543,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 j,
                 k,
                 featureData,
+                urlLink,
                 values;
             for (i = 0; i < features.length; i += 1) {
                 featureData = {};
@@ -561,13 +562,58 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                     if (values[j] === null || values[j] === undefined || values[j] === '') {
                         featureData[fields[j]] = '';
                     } else {
-                        featureData[fields[j]] = values[j];
+                        // Generate email and url links
+                        if (this._isEmailValid(values[j])) {
+                            featureData[fields[j]] = '<a href="mailto:'+values[j].replace("(a)","@").replace("(at)","@")+'">'+values[j]+'</a>';
+                        } else if (this._isUrlValid(values[j])) {
+                            if (values[j].substring(0,4) === "http") {
+                                urlLink = values[j];
+                            } else {
+                                urlLink = "http://"+values[j];
+                            }
+                            featureData[fields[j]] = '<a href="'+urlLink+'" target="_blank">'+values[j]+'</a>';
+                        } else {
+                            featureData[fields[j]] = values[j];
+                        }
                         // remove from empty fields
                         this._removeItem(hiddenFields, fields[j]);
                     }
                 }
                 model.addData(featureData);
             }
+        },
+
+        /**
+         * @method _isUrlValid
+         * @param {String} url
+         * @returns {boolean}
+         * @private
+         *
+         * Checks if a url is valid
+         */
+        _isUrlValid: function(url) {
+            if ((!url)||(typeof url !== "string")){
+                return false;
+            }
+            var re = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-zåÅäÄöÖ0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+            return re.test(url);
+        },
+
+        /**
+         * @method _isEmailValid
+         * @param {String} email
+         * @returns {boolean}
+         * @private
+         *
+         * Checks if an email address is valid
+         */
+        _isEmailValid: function(email) {
+            if ((!email)||(typeof email !== "string")){
+                return false;
+            }
+            var filter=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            var  atEmail = email.replace("(a)","@").replace("(at)","@");
+            return filter.test(atEmail);
         },
 
         /**
