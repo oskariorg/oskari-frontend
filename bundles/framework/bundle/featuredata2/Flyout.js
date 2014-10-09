@@ -442,6 +442,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 locales = layer.getLocales().slice(0),
                 features = layer.getActiveFeatures().slice(0),
                 selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
+console.log(".");
+console.log(layer);
+console.log(model);
+console.log(fields);
+console.log(hiddenFields);
+console.log(features);
+console.log(selectedFeatures);
 
             this._addFeatureValues(model, fields, hiddenFields, features, selectedFeatures);
             this._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
@@ -545,9 +552,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 featureData,
                 urlLink,
                 values;
-debugger;
+console.log(":");
 console.log(features);
-alert(features);
             for (i = 0; i < features.length; i += 1) {
                 featureData = {};
                 values = features[i];
