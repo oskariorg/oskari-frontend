@@ -545,6 +545,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 featureData,
                 urlLink,
                 values;
+debugger;
             for (i = 0; i < features.length; i += 1) {
                 featureData = {};
                 values = features[i];
