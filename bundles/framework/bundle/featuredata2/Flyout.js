@@ -442,13 +442,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 locales = layer.getLocales().slice(0),
                 features = layer.getActiveFeatures().slice(0),
                 selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
-console.log(".");
-console.log(layer);
-console.log(model);
-console.log(fields);
-console.log(hiddenFields);
-console.log(features);
-console.log(selectedFeatures);
 
             this._addFeatureValues(model, fields, hiddenFields, features, selectedFeatures);
             this._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
@@ -552,8 +545,7 @@ console.log(selectedFeatures);
                 featureData,
                 urlLink,
                 values;
-console.log(":");
-console.log(features);
+
             for (i = 0; i < features.length; i += 1) {
                 featureData = {};
                 values = features[i];
@@ -571,10 +563,8 @@ console.log(features);
                     if (values[j] === null || values[j] === undefined || values[j] === '') {
                         featureData[fields[j]] = '';
                     } else {
-                        // Generate email and url links
-                        if (this._isEmailValid(values[j])) {
-                            featureData[fields[j]] = '<a href="mailto:'+values[j].replace("(a)","@").replace("(at)","@")+'">'+values[j]+'</a>';
-                        } else if (this._isUrlValid(values[j])) {
+                        // Generate and url links
+                        if (this._isUrlValid(values[j])) {
                             if (values[j].substring(0,4) === "http") {
                                 urlLink = values[j];
                             } else {
@@ -606,23 +596,6 @@ console.log(features);
             }
             var re = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-zåÅäÄöÖ0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
             return re.test(url);
-        },
-
-        /**
-         * @method _isEmailValid
-         * @param {String} email
-         * @returns {boolean}
-         * @private
-         *
-         * Checks if an email address is valid
-         */
-        _isEmailValid: function(email) {
-            if ((!email)||(typeof email !== "string")){
-                return false;
-            }
-            var filter=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            var  atEmail = email.replace("(a)","@").replace("(at)","@");
-            return filter.test(atEmail);
         },
 
         /**
