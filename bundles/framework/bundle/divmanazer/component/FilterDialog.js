@@ -678,7 +678,6 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             var me = this,
                 fields = propertyJson.propertyTypes;
             var layerAttributes = [];
-//debugger;
             for (var key in fields) {
                 if (fields.hasOwnProperty(key)) {
                     layerAttributes.push({

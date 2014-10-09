@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
 
         isEnabled: function () {
             'use strict';
-            return !this.getElement().disabled;
+            return !this._input.disabled;
         },
 
 
