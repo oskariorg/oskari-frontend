@@ -545,6 +545,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 featureData,
                 urlLink,
                 values;
+
             for (i = 0; i < features.length; i += 1) {
                 featureData = {};
                 values = features[i];
@@ -562,10 +563,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                     if (values[j] === null || values[j] === undefined || values[j] === '') {
                         featureData[fields[j]] = '';
                     } else {
-                        // Generate email and url links
-                        if (this._isEmailValid(values[j])) {
-                            featureData[fields[j]] = '<a href="mailto:'+values[j].replace("(a)","@").replace("(at)","@")+'">'+values[j]+'</a>';
-                        } else if (this._isUrlValid(values[j])) {
+                        // Generate and url links
+                        if (this._isUrlValid(values[j])) {
                             if (values[j].substring(0,4) === "http") {
                                 urlLink = values[j];
                             } else {
@@ -597,23 +596,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
             }
             var re = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-zåÅäÄöÖ0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
             return re.test(url);
-        },
-
-        /**
-         * @method _isEmailValid
-         * @param {String} email
-         * @returns {boolean}
-         * @private
-         *
-         * Checks if an email address is valid
-         */
-        _isEmailValid: function(email) {
-            if ((!email)||(typeof email !== "string")){
-                return false;
-            }
-            var filter=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            var  atEmail = email.replace("(a)","@").replace("(at)","@");
-            return filter.test(atEmail);
         },
 
         /**
