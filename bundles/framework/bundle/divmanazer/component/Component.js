@@ -48,7 +48,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          */
         _getClasses: function () {
             'use strict';
-            return this._element.className.split(/\s+/).sort();
+            if (this._element && this._element.className) {
+                return this._element.className.split(/\s+/).sort();
+            }
+            return [];
         },
 
         /**
@@ -57,6 +60,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          */
         addClass: function (className) {
             'use strict';
+            if(!this._element) {
+                return;
+            }
             var classes = this._getClasses();
             if (classes.indexOf(className) === -1) {
                 classes.push(className);
@@ -70,6 +76,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          */
         removeClass: function (className) {
             'use strict';
+            if(!this._element) {
+                return;
+            }
             var classes = this._getClasses(),
                 idx = classes.indexOf(className);
             if (idx !== -1) {

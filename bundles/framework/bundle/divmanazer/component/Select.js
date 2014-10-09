@@ -71,7 +71,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Select',
         setOptions: function (options) {
             'use strict';
             if (!Array.isArray(options)) {
-                debugger;
                 throw new TypeError(
                     this.getClazz() +
                         '.setOptions: options is not an array'
