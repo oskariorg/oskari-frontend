@@ -546,6 +546,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 urlLink,
                 values;
 
+            eachFeature:
             for (i = 0; i < features.length; i += 1) {
                 featureData = {};
                 values = features[i];
@@ -578,6 +579,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                         this._removeItem(hiddenFields, fields[j]);
                     }
                 }
+
+                // Remove this when better solution to handle duplicates is implemented
+                var tableData = model.getData();
+                for (j = 0; j < tableData.length; j += 1) {
+                    if (tableData[j]["__fid"] === featureData["__fid"]) {
+                        continue eachFeature;
+                    }
+                }
+
                 model.addData(featureData);
             }
         },
