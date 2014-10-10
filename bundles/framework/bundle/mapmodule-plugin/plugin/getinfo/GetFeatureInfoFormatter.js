@@ -7,7 +7,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         span: '<span></span>',
         header: '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
         headerTitle: '<div class="getinforesult_header_title"></div>',
-        myPlacesWrapper: '<div class="myplaces_place">' + '<h3 class="myplaces_header"></h3>' + '<p class="myplaces_desc"></p>' + '<p><a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a></p>' + '<p><a class="myplaces_link" target="_blank"></a></p>' + '</div>',
+        myPlacesWrapper: '<div class="myplaces_place">' + '<h3 class="myplaces_header"></h3>' + '<p class="myplaces_desc"></p>' + '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' + '<br><a class="myplaces_link" target="_blank"></a>' + '</div>',
         linkOutside: '<a target="_blank"></a>'
     },
     /**
