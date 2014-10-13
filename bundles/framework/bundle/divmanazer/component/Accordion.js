@@ -69,22 +69,22 @@ Oskari.clazz.define('Oskari.userinterface.component.Accordion',
         },
 
         showMessage: function (message) {
+            var msgContainer = this.templateMsg.clone();
             this.removeMessage();
             this.hasMessage = true;
-            var msgContainer = this.templateMsg.clone();
             msgContainer.append(message);
             this.ui.append(msgContainer);
         },
 
         showPanels: function () {
-            var i = 0;
+            var i;
             for (i = 0; i < this.panels.length; i += 1) {
                 this.panels[i].setVisible(true);
             }
         },
 
         hidePanels: function () {
-            var i = 0;
+            var i;
             for (i = 0; i < this.panels.length; i += 1) {
                 this.panels[i].setVisible(false);
             }
@@ -101,5 +101,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Accordion',
 
         getContainer: function () {
             return this.ui;
+        },
+
+        destroy: function () {
+            var i;
+            for (i = 0; i < this.panels.length; i += 1) {
+                this.panels[i].destroy();
+            }
+            this.ui.remove();
         }
     });

@@ -16,7 +16,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
      *
      * @static
      */
-
     function (config, locale) {
         this.mapModule = null;
         this.pluginName = null;
@@ -318,11 +317,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         createDataSourceSelect: function (container) {
             var me = this,
                 dsElement = jQuery('<div class="data-source-select clearfix">' +
-                        '<div class="selector-cont">' +
-                            '<label for="statsgrid-data-source-select"></label>' +
-                            '<select id="statsgrid-data-source-select" class="indi">' +
-                            '</select>' +
-                        '</div>' +
+                    '<div class="selector-cont">' +
+                    '<label for="statsgrid-data-source-select"></label>' +
+                    '<select id="statsgrid-data-source-select" class="indi">' +
+                    '</select>' +
+                    '</div>' +
                     '</div>'),
                 sel = dsElement.find('select');
 
@@ -384,7 +383,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         changeDataSource: function (value, container) {
             var data = this._dataSources[value];
 
-            if (data !== undefined && data !== null)  {
+            if (data !== undefined && data !== null) {
                 //clear the selectors container
                 container.find('.selectors-container').empty();
                 this.createIndicatorsSelect(container, data.data);
@@ -561,7 +560,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         value1,
                         value2,
                         l;
-                    for (i = 0, l = cols.length; i < l; i++) {
+                    for (i = 0, l = cols.length; i < l; i += 1) {
                         field = cols[i].sortCol.field;
                         sign = cols[i].sortAsc ? 1 : -1;
                         value1 = me._numerizeValue(dataRow1[field]);
@@ -622,7 +621,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 if (groups.length > 1) {
                     var i,
                         group;
-                    for (i = 0; i < groups.length; i++) {
+                    for (i = 0; i < groups.length; i += 1) {
                         group = groups[i];
                         if (group.groupingKey === 'empty' && group.count < 2 && groupsBeforeUpdate === 1) {
                             data.collapseGroup('empty');
@@ -778,7 +777,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 value,
                 title,
                 opt;
-            for (i = 0; i < data.length; i++) {
+            for (i = 0; i < data.length; i += 1) {
                 indicData = data[i];
 
                 if (indicData.hasOwnProperty('id')) {
@@ -868,7 +867,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     );
                     me.addIndicatorMeta(indicator);
                 }, function () {
-//                    console.log('FAIL!', console.log(arguments));
+                    //                    console.log('FAIL!', console.log(arguments));
                 });
         },
 
@@ -978,7 +977,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 currentCategory = this._selectedRegionCategory.toLowerCase(),
                 i;
 
-            for (i = 0; i < rLen; ++i) {
+            for (i = 0; i < rLen; i += 1) {
                 if (regions[i].toLowerCase() === currentCategory) {
                     return true;
                 }
@@ -1181,7 +1180,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 i,
                 ilen;
 
-            for (i = 0, ilen = columns.length; i < ilen; i++) {
+            for (i = 0, ilen = columns.length; i < ilen; i += 1) {
                 if (columnId === columns[i].id) {
                     return true;
                 }
@@ -1321,10 +1320,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         rows = totals.group.rows,
                         row,
                         i;
-                    for (i = 0; i < rows.length; i++) {
+                    for (i = 0; i < rows.length; i += 1) {
                         row = rows[i];
                         if (row[columnDef.field] !== null && row[columnDef.field] !== undefined) {
-                            valueCount++;
+                            valueCount += 1;
                         }
                     }
                     text = valueCount + ' ' + me._locale.values;
@@ -1382,7 +1381,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     }
                     return ret;
                 };
-            for (i = 0; i < data.length; i++) {
+            for (i = 0; i < data.length; i += 1) {
                 indicData = data[i];
                 regionId = indicData.region;
                 value = indicData['primary value'].replace(',', '.');
@@ -1416,7 +1415,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // create all the aggregators we need
             var aggregators = [];
 
-            for (i = 0; i < columns.length; i++) {
+            for (i = 0; i < columns.length; i += 1) {
                 var id = columns[i].id;
                 aggregators.push(new Slick.Data.Aggregators.Avg(id));
                 aggregators.push(new Slick.Data.Aggregators.Std(id));
@@ -1468,7 +1467,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 });
             } else if (addedAlready) {
                 // Remove if warning is there
-                for (var i = 0, bLen = buttons.length; i < bLen; ++i) {
+                for (var i = 0, bLen = buttons.length; i < bLen; i += 1) {
                     if (buttons[i].id === 'no-data-warning') {
                         buttons.splice(i, 1);
                         break;
@@ -1494,13 +1493,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 ilen = 0,
                 j = 0;
 
-            for (i = 0, ilen = columns.length, j = 0; i < ilen; i++) {
+            for (i = 0, ilen = columns.length, j = 0; i < ilen; i += 1) {
                 if (columnId === columns[i].id) {
                     // Skip the column that is to be deleted
                     found = true;
                 } else {
                     allOtherColumns[j] = columns[i];
-                    j++;
+                    j += 1;
                 }
             }
 
@@ -1520,7 +1519,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             // remove indicator also from to the state!
             if (this._state.indicators) {
-                for (i = 0, ilen = this._state.indicators.length; i < ilen; i++) {
+                for (i = 0, ilen = this._state.indicators.length; i < ilen; i += 1) {
                     var statedIndicator = this._state.indicators[i];
                     if ((indicatorId === statedIndicator.id) &&
                         (year === statedIndicator.year) &&
@@ -1601,7 +1600,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var i,
                 opt;
             sel.empty();
-            for (i = startYear; i <= endYear; i++) {
+            for (i = startYear; i <= endYear; i += 1) {
                 opt = jQuery('<option value="' + i + '">' + i + '</option>');
                 sel.append(opt);
             }
@@ -1639,7 +1638,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var i,
                 opt;
             sel.empty();
-            for (i = 0; i < values.length; i++) {
+            for (i = 0; i < values.length; i += 1) {
                 opt = jQuery('<option value="' + values[i] + '">' + this._locale.genders[values[i]] + '</option>');
                 sel.append(opt);
             }
@@ -1677,7 +1676,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // Get values of selected column
             var data = this.dataView.getItems();
             if (curCol) {
-                for (i = 0; i < data.length; i++) {
+                for (i = 0; i < data.length; i += 1) {
                     var row = data[i];
                     // Exclude null values
                     if (row.sel === 'checked') {
@@ -1738,7 +1737,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 i;
             me.indicators = [];
 
-            for (i = 0; i < indicators.length; i++) {
+            for (i = 0; i < indicators.length; i += 1) {
                 var indicatorData = indicators[i],
                     indicator = indicatorData.id;
                 if (indicator === null || indicator === undefined) {
@@ -1754,12 +1753,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
                     function (data) {
                         //keep track of returned ajax calls
-                        fetchedIndicators++;
+                        fetchedIndicators += 1;
 
                         if (data) {
                             me.addIndicatorMeta(data);
                             var j;
-                            for (j = 0; j < indicators.length; j++) {
+                            for (j = 0; j < indicators.length; j += 1) {
                                 if (indicators[j].id === null || indicators[j].id === undefined) {
                                     indicators[j].id = indicators[j].indicator;
                                 }
@@ -1784,7 +1783,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     function (jqXHR, textStatus) {
                         me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorDataXHRError);
                         //keep track of returned ajax calls
-                        fetchedIndicators++;
+                        fetchedIndicators += 1;
                     }
                 );
             }
@@ -1803,7 +1802,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 indicatorsData = {},
                 i;
 
-            for (i = 0; i < indicators.length; i++) {
+            for (i = 0; i < indicators.length; i += 1) {
                 var indicatorData = indicators[i],
                     indicator = indicatorData.id,
                     year = indicatorData.year,
@@ -1821,13 +1820,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     // FIXME create function outside loop
 
                     function (data) {
-                        fetchedIndicators++;
+                        fetchedIndicators += 1;
                         if (data) {
                             var j,
                                 ind,
                                 indicatorColumnId;
                             //save the data to the right indicator for later use
-                            for (j = 0; j < indicators.length; j++) {
+                            for (j = 0; j < indicators.length; j += 1) {
                                 ind = indicators[j];
                                 if (ind.id === null || ind.id === undefined) {
                                     ind.id = ind.indicator;
@@ -1846,7 +1845,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                             // add them to the grid and fire callback
                             if (fetchedIndicators >= indicators.length) {
                                 //add these to the grid!!
-                                for (j = 0; j < indicators.length; j++) {
+                                for (j = 0; j < indicators.length; j += 1) {
                                     ind = indicators[j];
                                     if (ind.id === null || ind.id === undefined) {
                                         ind.id = ind.indicator;
@@ -1868,7 +1867,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
                     function (jqXHR, textStatus) {
                         me.showMessage(me._locale.stats.errorTitle, me._locale.stats.indicatorDataXHRError);
-                        fetchedIndicators++;
+                        fetchedIndicators += 1;
                     }
                 );
             }
@@ -1886,11 +1885,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 newColumnDef = [],
                 j = 0,
                 i;
-            for (i = 0; i < columns.length; i++) {
+            for (i = 0; i < columns.length; i += 1) {
                 var columnId = columns[i].id;
                 if ((columnId === 'id' || columnId === 'municipality' || columnId === 'code' || columnId === '_checkbox_selector')) {
                     newColumnDef[j] = columns[i];
-                    j++;
+                    j += 1;
                 }
             }
             this.grid.setColumns(newColumnDef);
@@ -2005,7 +2004,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     column,
                     i;
                 // loop through columns
-                for (i = 0; i < columns.length; i++) {
+                for (i = 0; i < columns.length; i += 1) {
                     column = columns[i];
 
                     // group totals (statistical variables) should be calculated only for the checked/selected items
@@ -2027,11 +2026,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         j,
                         statistic;
                     // loop through statistical variables
-                    for (j = 0; j < this.conf.statistics.length; j++) {
+                    for (j = 0; j < this.conf.statistics.length; j += 1) {
                         statistic = this.conf.statistics[j];
                         if (statistic.visible) {
                             sub.append(this._getStatistic(gridTotals, column.id, statistic.id));
-                            variableCount++;
+                            variableCount += 1;
                         }
                     }
 
@@ -2103,7 +2102,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var me = this,
                 i;
             // lets create an empty container for menu items
-            for (i = 0; i < columns.length; i++) {
+            for (i = 0; i < columns.length; i += 1) {
                 var column = columns[i];
                 if (column.id === 'municipality') {
                     column.header = {
@@ -2154,7 +2153,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                         disabled: true
                     });
                     // Statistical variables
-                    for (i = 0; i < me.conf.statistics.length; i++) {
+                    for (i = 0; i < me.conf.statistics.length; i += 1) {
                         var statistic = me.conf.statistics[i],
                             elems = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-total-selects');
 
@@ -2181,7 +2180,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     // we need to do something with current state of MVC which is non-existent
                     var columns = args.grid.getColumns(),
                         selectRowsChecked = false;
-                    for (i = 0; i < columns.length; i++) {
+                    for (i = 0; i < columns.length; i += 1) {
                         var column = columns[i];
                         if (column.field === 'sel') {
                             selectRowsChecked = true;
@@ -2212,7 +2211,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     var columns = args.grid.getColumns(),
                         newColumns = [],
                         shouldAddSel = true;
-                    for (i = 0; i < columns.length; i++) {
+                    for (i = 0; i < columns.length; i += 1) {
                         var column = columns[i];
                         if (column.field !== 'sel') {
                             newColumns.push(column);
@@ -2233,10 +2232,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 } else if (args.command === 'filterByRegion') {
                     me._createFilterByRegionPopup(args.column, this);
                 } else {
-                    for (i = 0; i < me.conf.statistics.length; i++) {
+                    for (i = 0; i < me.conf.statistics.length; i += 1) {
                         var statistic = me.conf.statistics[i];
-                        // FIXME use ===
-                        if (statistic.id == args.command) {
+                        if (statistic.id === args.command) {
                             statistic.visible = !statistic.visible;
                             break;
                         }
@@ -2444,7 +2442,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         _getPopupIndex: function (name) {
             var ret = null,
                 i;
-            for (i = 0; i < this.popups.length; i++) {
+            for (i = 0; i < this.popups.length; i += 1) {
                 if (this.popups[i].name === name) {
                     ret = i;
                     break;
@@ -2553,7 +2551,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             // destroy filter popups created by _createFilterByRegionPopup and _createFilterPopup
             var i,
                 popup;
-            for (i = 0; i < this.popups.length; i++) {
+            for (i = 0; i < this.popups.length; i += 1) {
                 popup = this.popups[i];
                 popup.content.off();
                 popup.popup.close(true);
@@ -2587,7 +2585,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             regionCont.addClass('filter-region-container');
 
-            for (i = 0; i < rLen; ++i) {
+            for (i = 0; i < rLen; i += 1) {
                 region = regions[i];
                 regionOption = jQuery(this.templates.filterOption).clone();
                 regionOption.val(region.id).text(region.title);
@@ -2618,7 +2616,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
 
             inputArray = _.map(inputArray, this._numerizeValue);
 
-            for (i = 0; i < items.length; i++) {
+            for (i = 0; i < items.length; i += 1) {
                 item = items[i];
 
                 if (item.sel === 'checked') {
@@ -2628,36 +2626,36 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                     } else {
 
                         switch (method) {
-                        case '>':
-                            if (itemVal <= inputArray[0]) {
-                                item.sel = 'empty';
-                            }
-                            break;
-                        case '>=':
-                            if (itemVal < inputArray[0]) {
-                                item.sel = 'empty';
-                            }
-                            break;
-                        case '=':
-                            if (itemVal !== inputArray[0]) {
-                                item.sel = 'empty';
-                            }
-                            break;
-                        case '<=':
-                            if (itemVal > inputArray[0]) {
-                                item.sel = 'empty';
-                            }
-                            break;
-                        case '<':
-                            if (itemVal >= inputArray[0]) {
-                                item.sel = 'empty';
-                            }
-                            break;
-                        case '...':
-                            if (inputArray[0] >= itemVal || itemVal >= inputArray[1]) {
-                                item.sel = 'empty';
-                            }
-                            break;
+                            case '>':
+                                if (itemVal <= inputArray[0]) {
+                                    item.sel = 'empty';
+                                }
+                                break;
+                            case '>=':
+                                if (itemVal < inputArray[0]) {
+                                    item.sel = 'empty';
+                                }
+                                break;
+                            case '=':
+                                if (itemVal !== inputArray[0]) {
+                                    item.sel = 'empty';
+                                }
+                                break;
+                            case '<=':
+                                if (itemVal > inputArray[0]) {
+                                    item.sel = 'empty';
+                                }
+                                break;
+                            case '<':
+                                if (itemVal >= inputArray[0]) {
+                                    item.sel = 'empty';
+                                }
+                                break;
+                            case '...':
+                                if (inputArray[0] >= itemVal || itemVal >= inputArray[1]) {
+                                    item.sel = 'empty';
+                                }
+                                break;
                         }
                     }
                     data.updateItem(item.id, item);
@@ -2693,7 +2691,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 item,
                 i;
 
-            for (i = 0; i < items.length; i++) {
+            for (i = 0; i < items.length; i += 1) {
                 item = items[i];
 
                 if (item.sel === 'checked') {
@@ -2728,7 +2726,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
         _itemBelongsToAnyRegions: function (item, regionIds) {
             var i,
                 regionId;
-            for (i = 0; i < regionIds.length; ++i) {
+            for (i = 0; i < regionIds.length; i += 1) {
                 regionId = Number(regionIds[i]);
                 if (item.memberOf.indexOf(regionId) > -1) {
                     return true;
@@ -2749,7 +2747,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 i,
                 index;
 
-            for (i = 0; i < array.length; i++) {
+            for (i = 0; i < array.length; i += 1) {
                 line = '';
 
                 for (index in array[i]) {
@@ -2859,7 +2857,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 itemsByGrouping = [],
                 item,
                 i;
-            for (i = 0; i < items.length; i++) {
+            for (i = 0; i < items.length; i += 1) {
                 item = items[i];
                 if (item.sel === sel) {
                     itemsByGrouping.push(sel);
@@ -2882,10 +2880,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 i,
                 j,
                 id;
-            for (i = 0; i < items.length; i++) {
+            for (i = 0; i < items.length; i += 1) {
                 item = items[i];
                 item.sel = 'empty';
-                for (j = 0; j < idArray.length; j++) {
+                for (j = 0; j < idArray.length; j += 1) {
                     id = idArray[j];
                     if (item.id == id) {
                         item.sel = 'checked';
@@ -2910,7 +2908,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 items = _grid.getData().getItems(),
                 item,
                 i;
-            for (i = 0; i < items.length; i++) {
+            for (i = 0; i < items.length; i += 1) {
                 item = items[i];
                 if (leaveHilighted && this.selectedMunicipalities[item.code]) {
                     item.sel = 'checked';
@@ -2946,7 +2944,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
             var columns = this.grid.getColumns(),
                 column,
                 i;
-            for (i = 0; i < columns.length; i++) {
+            for (i = 0; i < columns.length; i += 1) {
                 column = columns[i];
                 if (column.id === columnId) {
                     return column;
