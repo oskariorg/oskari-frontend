@@ -1,305 +1,18 @@
 {
-    "startupSequence": [{
-        "instanceProps": {},
-        "title": "Selected Map Engine: OpenLayers 3",
-        "bundleinstancename": "openlayers-default-theme",
-        "fi": "ol3",
-        "sv": "ol3",
-        "en": "ol3",
-        "bundlename": "openlayers-default-theme",
-        "metadata": {
-            "Import-Bundle": {
-                "openlayers-default-theme": {
-                    "bundlePath": "/Oskari/packages/ol3/bundle/"
-                },
-                "oskariui": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            }
-        }
-    }, {
-        "instanceProps": {},
-        "title": "Map",
-        "bundleinstancename": "mapfull",
-        "fi": "Kartta",
-        "sv": "Karta",
-        "en": "Map",
-        "bundlename": "mapfull",
-        "metadata": {
-            "Import-Bundle": {
-                "mapwmts": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "mapwfs": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "mapstats": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "service-base": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "event-map-layer": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "request-map-layer": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "mapmodule-plugin": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "event-base": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "mapfull": {
-                    "bundlePath": "/Oskari/packages/ol3/bundle/"
-                },
-                "core-base": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "oskariui": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "request-base": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "domain": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "core-map": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "request-map": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "sandbox-base": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "service-map": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "sandbox-map": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                },
-                "event-map": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        }
-    }, {
-        "instanceProps": {},
-        "title": "Oskari DIV Manazer",
-        "bundleinstancename": "divmanazer",
-        "fi": "Oskari DIV Manazer",
-        "sv": "?",
-        "en": "Oskari DIV Manazer",
-        "bundlename": "divmanazer",
-        "metadata": {
-            "Import-Bundle": {
-                "divmanazer": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        }
-    }, {
-        "instanceProps": {},
-        "title": "Toolbar",
-        "bundleinstancename": "toolbar",
-        "fi": "toolbar",
-        "sv": "?",
-        "en": "?",
-        "bundlename": "toolbar",
-        "metadata": {
-            "Import-Bundle": {
-                "toolbar": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        }
-    }, {
-        "instanceProps": {},
-        "title": "StateHandler",
-        "bundleinstancename": "statehandler",
-        "fi": "jquery",
-        "sv": "?",
-        "en": "?",
-        "bundlename": "statehandler",
-        "metadata": {
-            "Import-Bundle": {
-                "statehandler": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        }
-    }, {
-        "instanceProps": {},
-        "title": "Info Box",
-        "bundleinstancename": "infobox",
-        "fi": "infobox",
-        "sv": "?",
-        "en": "?",
-        "bundlename": "infobox",
-        "metadata": {
-            "Import-Bundle": {
-                "infobox": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        }
-    }, {
-        "instanceProps": {},
-        "title": "Haku",
-        "bundleinstancename": "search",
-        "fi": "search",
-        "sv": "?",
-        "en": "?",
-        "bundlename": "search",
-        "metadata": {
-            "Import-Bundle": {
-                "search": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        }
-    }, {
-        "instanceProps": {},
-        "title": "Karttatasot",
-        "bundleinstancename": "layerselector2",
-        "fi": "layerselector",
-        "sv": "?",
-        "en": "?",
-        "bundlename": "layerselector2",
-        "metadata": {
-            "Import-Bundle": {
-                "layerselector2": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        }
-    }, {
-        "instanceProps": {},
-        "title": "Valitut karttatasot",
-        "bundleinstancename": "layerselection2",
-        "fi": "layerselection",
-        "sv": "?",
-        "en": "?",
-        "bundlename": "layerselection2",
-        "metadata": {
-            "Import-Bundle": {
-                "layerselection2": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        }
-    }, {
-        "instanceProps": {},
-        "title": "Omat tiedot",
-        "bundleinstancename": "personaldata",
-        "fi": "personaldata",
-        "sv": "?",
-        "en": "?",
-        "bundlename": "promote",
-        "metadata": {
-            "Import-Bundle": {
-                "promote": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        }
-    }, {
-        "instanceProps": {},
-        "title": "maplegend",
-        "fi": "maplegend",
-        "bundleinstancename": "maplegend",
-        "sv": "maplegend",
-        "en": "maplegend",
-        "bundlename": "maplegend",
-        "metadata": {
-            "Import-Bundle": {
-                "maplegend": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        }
-    }, {
-        "instanceProps": {},
-        "title": "UserGuide",
-        "bundleinstancename": "userguide",
-        "fi": "userguide",
-        "sv": "?",
-        "en": "?",
-        "bundlename": "userguide",
-        "metadata": {
-            "Import-Bundle": {
-                "userguide": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        }
-    }, {
-        "instanceProps": {},
-        "title": "Guided Tour",
-        "bundleinstancename": "guidedtour",
-        "fi": "guidedtour",
-        "sv": "guidedtour",
-        "en": "guidedtour",
-        "bundlename": "guidedtour",
-        "metadata": {
-            "Import-Bundle": {
-                "guidedtour": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        }
-    }, {
-        "instanceProps": {},
-        "title": "backendstatus",
-        "fi": "backendstatus",
-        "bundleinstancename": "backendstatus",
-        "sv": "backendstatus",
-        "en": "backendstatus",
-        "bundlename": "backendstatus",
-        "metadata": {
-            "Import-Bundle": {
-                "backendstatus": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        }
-    }, {
-        "title": "PostProcessor",
-        "fi": "PostProcessor",
-        "sv": "PostProcessor",
-        "en": "PostProcessor",
-        "bundlename": "postprocessor",
-        "bundleinstancename": "postprocessor",
-        "metadata": {
-            "Import-Bundle": {
-                "postprocessor": {
-                    "bundlePath": "/Oskari/packages/framework/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
-    }],
     "configuration": {
         "backendstatus": {
             "state": {},
             "conf": {}
+        },
+        "guidedtour": {
+            "state": {},
+            "conf": {}
+        },
+        "featuredata2": {
+            "state": {},
+            "conf": {
+                "selectionTools": true
+            }
         },
         "toolbar": {
             "state": {
@@ -311,6 +24,11 @@
             "conf": {
                 "viewtools": {
                     "print": false
+                },
+                "mapUrlPrefix": {
+                    "fi": "http://www.paikkatietoikkuna.fi/web/fi/kartta?",
+                    "sv": "http://www.paikkatietoikkuna.fi/web/sv/kartfonstret?",
+                    "en": "http://www.paikkatietoikkuna.fi/web/en/map-window?"
                 }
             }
         },
@@ -318,17 +36,45 @@
             "state": {},
             "conf": {}
         },
-        "userguide": {
+        "metadatacatalogue": {
             "state": {},
             "conf": {}
         },
-        "statsgrid": {
+        "userguide": {
             "state": {},
+            "conf": {
+                "tabs": [{
+                    "tags": "ohje_karttaikkuna",
+                    "title": "Karttaikkuna"
+                }, {
+                    "tags": "ohje_karttajulkaisu",
+                    "title": "Kartan julkaisu"
+                }, {
+                    "tags": "ohje_teemakartat",
+                    "title": "Teemakartat"
+                }, {
+                    "tags": "ohje_analyysi",
+                    "title": "Analyysi"
+                }]
+            }
+        },
+        "statsgrid": {
+            "state": {
+                "filterMethod": "",
+                "numberOfClasses": 5,
+                "indicators": [],
+                "layerId": null,
+                "methodId": "1",
+                "filterInput": [],
+                "filterRegion": [],
+                "municipalities": []
+            },
             "conf": {
                 "stateful": true,
                 "viewClazz": "Oskari.statistics.bundle.statsgrid.StatsView",
                 "sandbox": "sandbox",
-                "name": "StatsGrid"
+                "name": "StatsGrid",
+                "tileClazz": "Oskari.statistics.bundle.statsgrid.Tile"
             }
         },
         "layerselector2": {
@@ -337,612 +83,13 @@
                 "filter": "",
                 "groups": []
             },
-            "conf": {}
-        },
-        "mapfull": {
-            "state": {
-                "selectedLayers": [
-                    {
-                        "id": "base_35",
-                        "style": "default",
-                        "opacity": 100
-                    }
-                ],
-                "zoom": 5,
-                "srs": "EPSG:3067",
-                "north": 6678683,
-                "east": 381567
-            },
             "conf": {
-                "mapOptions": {
-                    "srsName": "EPSG:3067",
-                    "maxExtent": {
-                        "bottom": 6291456,
-                        "left": -548576,
-                        "right": 1548576,
-                        "top": 8388608
-                    },
-                    "resolutions": [
-                        2048,
-                        1024,
-                        512,
-                        256,
-                        128,
-                        64,
-                        32,
-                        16,
-                        8,
-                        4,
-                        2,
-                        1,
-                        0.5
-                    ]
-                },
-                "globalMapAjaxUrl": "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&",
-                "plugins": [
-                    {
-                        "id": "Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
-                    },
-                    {
-                        "id": "Oskari.mapframework.mapmodule.WmsLayerPlugin"
-                    },
-                    {
-                        "id": "Oskari.mapframework.mapmodule.MarkersPlugin"
-                    },
-                    {
-                        "id": "Oskari.mapframework.mapmodule.ControlsPlugin"
-                    },
-                    {
-                        "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
-                        "config": {
-                            "infoBox": false,
-                            "ignoredLayerTypes": [
-                                "WFS"
-                            ]
-                        }
-                    },
-                    {
-                        "id": "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
-                        "config": {
-                            "maxBackoff": 60000,
-                            "port": "80",
-                            "maxNetworkDelay": 10000,
-                            "hostname": "dev.paikkatietoikkuna.fi",
-                            "contextPath": "/transport-0.0.1",
-                            "lazy": true,
-                            "backoffIncrement": 1000,
-                            "disconnectTime": 30000
-                        }
-                    },
-                    {
-                        "id": "Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin"
-                    },
-                    {
-                        "id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"
-                    },
-                    {
-                        "id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
-                    },
-                    {
-                        "id": "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"
-                    },
-                    {
-                        "id": "Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin"
-                    },
-                    {
-                        "id": "Oskari.mapframework.bundle.mapmodule.plugin.GeoLocationPlugin"
-                    },
-                    {
-                        "id": "Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin"
-                    },
-                    {
-                        "id": "Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayerSelectionPlugin",
-                        "config": {
-                            "baseLayers": [
-                                "base_2",
-                                "24",
-                                "base_35"
-                            ],
-                            "showAsDropdown": false
-                        }
-                    },
-                    {
-                        "id": "Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin",
-                        "config": {
-                            "termsUrl": {
-                                "fi": "http://www.paikkatietoikkuna.fi/web/fi/kayttoehdot",
-                                "sv": "http://www.paikkatietoikkuna.fi/web/sv/anvandningsvillkor",
-                                "en": "http://www.paikkatietoikkuna.fi/web/en/terms-and-conditions"
-                            },
-                            "mapUrlPrefix": {
-                                "fi": "http://www.paikkatietoikkuna.fi/web/fi/kartta?",
-                                "sv": "http://www.paikkatietoikkuna.fi/web/sv/kartfonstret?",
-                                "en": "http://www.paikkatietoikkuna.fi/web/en/map-window?"
-                            }
-                        }
-                    },
-                    {
-                        "id": "Oskari.mapframework.bundle.mapmodule.plugin.RealtimePlugin"
-                    }
-                ],
-                "link": {
-                    "ver": "1.17"
-                },
-                "layers": [
-                    {
-                        "wmsName": "9",
-                        "geom": "POLYGON ((-327719.5575693818 2250048.996811038, 979121.6313409178 2250048.996811038, 979121.6313409178 7795671.301062765, -327719.5575693818 7795671.301062765, -327719.5575693818 2250048.996811038))",
-                        "type": "wmslayer",
-                        "baseLayerId": -1,
-                        "legendImage": "http://kartta.nba.fi/arcgisoutput/wmsapu/mpalue.png",
-                        "refreshRate": 0,
-                        "formats": {
-                            "value": "text/xml",
-                            "available": [
-                                "text/html",
-                                "text/plain",
-                                "application/vnd.ogc.wms_xml",
-                                "text/xml"
-                            ]
-                        },
-                        "version": "1.3.0",
-                        "id": 18,
-                        "style": "",
-                        "updated": "2012-05-17 20:58:04.048",
-                        "name": "Maailmanperintöalueet",
-                        "permissions": {
-                            "publish": "no_publication_permission"
-                        },
-                        "opacity": 80,
-                        "maxScale": 1,
-                        "inspire": "Suojellut alueet",
-                        "options": {},
-                        "dataUrl_uuid": "51b8ed8f-0e63-4bdd-a801-8621a066e509",
-                        "styles": [
-                            {
-                                "title": "Maailmanperintö alueet",
-                                "legend": "http://kartta.nba.fi/arcgisoutput/wmsapu/mpalue.png",
-                                "name": "9"
-                            }
-                        ],
-                        "params": {},
-                        "orgName": "Museovirasto",
-                        "isQueryable": true,
-                        "minScale": 2000000,
-                        "realtime": false,
-                        "wmsUrl": "http://kartta.nba.fi/arcgis/services/WMS/MVWMS/MapServer/WMSServer",
-                        "subtitle": ""
-                    },
-                    {
-                        "dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
-                        "wmsName": "taustakartta",
-                        "styles": [
-                            {
-                                "isDefault": true,
-                                "identifier": "default"
-                            }
-                        ],
-                        "tileMatrixSetId": "ETRS-TM35FIN",
-                        "params": {},
-                        "baseLayerId": -1,
-                        "type": "wmtslayer",
-                        "orgName": "Taustakartat",
-                        "legendImage": "",
-                        "refreshRate": 0,
-                        "id": "base_35",
-                        "minScale": 15000000,
-                        "style": "default",
-                        "realtime": false,
-                        "wmsUrl": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts",
-                        "name": "Taustakarttasarja",
-                        "permissions": {
-                            "publish": "no_publication_permission"
-                        },
-                        "subtitle": "(WMTS)",
-                        "opacity": 100,
-                        "tileMatrixSetData": {
-                            "contents": {
-                                "tileMatrixSets": {
-                                    "ETRS-TM35FIN": {
-                                        "bounds": {
-                                            "bottom": 6291456,
-                                            "left": -548576,
-                                            "right": 1548576,
-                                            "top": 8388608
-                                        },
-                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                        "projection": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                        "matrixIds": [
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 1,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "0",
-                                                "matrixHeight": 1,
-                                                "scaleDenominator": 29257142.85714286
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 2,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "1",
-                                                "matrixHeight": 2,
-                                                "scaleDenominator": 14628571.42857143
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 4,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "2",
-                                                "matrixHeight": 4,
-                                                "scaleDenominator": 7314285.714285715
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 8,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "3",
-                                                "matrixHeight": 8,
-                                                "scaleDenominator": 3657142.8571428573
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 16,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "4",
-                                                "matrixHeight": 16,
-                                                "scaleDenominator": 1828571.4285714286
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 32,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "5",
-                                                "matrixHeight": 32,
-                                                "scaleDenominator": 914285.7142857143
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 64,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "6",
-                                                "matrixHeight": 64,
-                                                "scaleDenominator": 457142.85714285716
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 128,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "7",
-                                                "matrixHeight": 128,
-                                                "scaleDenominator": 228571.42857142858
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 256,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "8",
-                                                "matrixHeight": 256,
-                                                "scaleDenominator": 114285.71428571429
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 512,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "9",
-                                                "matrixHeight": 512,
-                                                "scaleDenominator": 57142.857142857145
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 1024,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "10",
-                                                "matrixHeight": 1024,
-                                                "scaleDenominator": 28571.428571428572
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 2048,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "11",
-                                                "matrixHeight": 2048,
-                                                "scaleDenominator": 14285.714285714286
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 4096,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "12",
-                                                "matrixHeight": 4096,
-                                                "scaleDenominator": 7142.857142857143
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 8192,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "13",
-                                                "matrixHeight": 8192,
-                                                "scaleDenominator": 3571.4285714285716
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 16384,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "14",
-                                                "matrixHeight": 16384,
-                                                "scaleDenominator": 1785.7142857142858
-                                            },
-                                            {
-                                                "topLeftCorner": {
-                                                    "lon": -548576,
-                                                    "lat": 8388608
-                                                },
-                                                "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
-                                                "matrixWidth": 32768,
-                                                "tileHeight": 256,
-                                                "tileWidth": 256,
-                                                "identifier": "15",
-                                                "matrixHeight": 32768,
-                                                "scaleDenominator": 892.8571428571429
-                                            }
-                                        ],
-                                        "identifier": "ETRS-TM35FIN"
-                                    }
-                                },
-                                "layers": [
-                                    {
-                                        "resourceUrls": [
-                                            {
-                                                "template": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
-                                                "format": "image/png",
-                                                "resourceType": "tile"
-                                            }
-                                        ],
-                                        "tileMatrixSetLinks": [
-                                            {
-                                                "tileMatrixSet": "ETRS-TM35FIN"
-                                            }
-                                        ],
-                                        "title": "Taustakartta",
-                                        "layers": [],
-                                        "dimensions": [],
-                                        "styles": [
-                                            {
-                                                "isDefault": true,
-                                                "identifier": "default"
-                                            }
-                                        ],
-                                        "resourceUrl": {
-                                            "tile": {
-                                                "template": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
-                                                "format": "image/png",
-                                                "resourceType": "tile"
-                                            }
-                                        },
-                                        "identifier": "taustakartta",
-                                        "formats": [
-                                            "image/png"
-                                        ]
-                                    },
-                                    {
-                                        "resourceUrls": [
-                                            {
-                                                "template": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/ortokuva/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg",
-                                                "format": "image/jpeg",
-                                                "resourceType": "tile"
-                                            }
-                                        ],
-                                        "tileMatrixSetLinks": [
-                                            {
-                                                "tileMatrixSet": "ETRS-TM35FIN"
-                                            }
-                                        ],
-                                        "title": "Ortokuva",
-                                        "layers": [],
-                                        "dimensions": [],
-                                        "styles": [
-                                            {
-                                                "isDefault": true,
-                                                "identifier": "default"
-                                            }
-                                        ],
-                                        "resourceUrl": {
-                                            "tile": {
-                                                "template": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/ortokuva/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg",
-                                                "format": "image/jpeg",
-                                                "resourceType": "tile"
-                                            }
-                                        },
-                                        "identifier": "ortokuva",
-                                        "formats": [
-                                            "image/jpeg"
-                                        ]
-                                    },
-                                    {
-                                        "resourceUrls": [
-                                            {
-                                                "template": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
-                                                "format": "image/png",
-                                                "resourceType": "tile"
-                                            }
-                                        ],
-                                        "tileMatrixSetLinks": [
-                                            {
-                                                "tileMatrixSet": "ETRS-TM35FIN"
-                                            }
-                                        ],
-                                        "title": "Maastokartta",
-                                        "layers": [],
-                                        "dimensions": [],
-                                        "styles": [
-                                            {
-                                                "isDefault": true,
-                                                "identifier": "default"
-                                            }
-                                        ],
-                                        "resourceUrl": {
-                                            "tile": {
-                                                "template": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
-                                                "format": "image/png",
-                                                "resourceType": "tile"
-                                            }
-                                        },
-                                        "identifier": "maastokartta",
-                                        "formats": [
-                                            "image/png"
-                                        ]
-                                    }
-                                ]
-                            },
-                            "operationsMetadata": {
-                                "GetTile": {
-                                    "dcp": {
-                                        "http": {
-                                            "get": [
-                                                {
-                                                    "constraints": {
-                                                        "GetEncoding": {
-                                                            "allowedValues": {
-                                                                "KVP": true
-                                                            }
-                                                        }
-                                                    },
-                                                    "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?"
-                                                }
-                                            ]
-                                        }
-                                    }
-                                },
-                                "GetCapabilities": {
-                                    "dcp": {
-                                        "http": {
-                                            "get": [
-                                                {
-                                                    "constraints": {
-                                                        "GetEncoding": {
-                                                            "allowedValues": {
-                                                                "KVP": true
-                                                            }
-                                                        }
-                                                    },
-                                                    "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?"
-                                                }
-                                            ]
-                                        }
-                                    }
-                                },
-                                "GetFeatureInfo": {
-                                    "dcp": {
-                                        "http": {
-                                            "get": [
-                                                {
-                                                    "constraints": {
-                                                        "GetEncoding": {
-                                                            "allowedValues": {
-                                                                "KVP": true
-                                                            }
-                                                        }
-                                                    },
-                                                    "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?"
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            "version": "1.0.0"
-                        },
-                        "inspire": "Taustakartat",
-                        "maxScale": 1,
-                        "options": {}
-                    }
-                ],
-                "imageLocation": "/Oskari/resources",
-                "user": {
-                    "userID": 10110123214353465,
-                    "lastName": "",
-                    "nickName": "10110",
-                    "userUUID": "",
-                    "firstName": "",
-                    "loginName": "default@maanmittauslaitos.fi"
-                }
+                "showSearchSuggestions": true
             }
+        },
+        "metadataflyout": {
+            "state": {},
+            "conf": {}
         },
         "personaldata": {
             "state": {},
@@ -977,6 +124,14 @@
                                 "sv": "Tillägg linje - Logga in för att använda",
                                 "en": "Add line - Log in to use"
                             }
+                        },
+                        "import": {
+                            "iconCls": "upload-material",
+                            "tooltip": {
+                                "fi": "Tuo oma aineisto - Kirjaudu sisään käyttääksesi",
+                                "sv": "Importera egen datamängd - Logga in för att använda",
+                                "en": "Import your own dataset - Log in to use"
+                            }
                         }
                     }
                 },
@@ -1000,11 +155,516 @@
                     "sv": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account",
                     "en": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
                 },
-                "__name": "Personaldata",
+                "__name": "PersonalData",
                 "signup": {
                     "fi": "Kirjaudu palveluun",
                     "sv": "Logga in",
                     "en": "Log in"
+                }
+            }
+        },
+        "mapfull": {
+            "state": {
+                "selectedLayers": [{
+                    "id": "base_35",
+                    "style": "default",
+                    "opacity": 100
+                }],
+                "plugins": {
+                    "MainMapModuleMarkersPlugin": {
+                        "markers": []
+                    },
+                    "MainMapModuleManageStatsPlugin": {
+                        "filterMethod": "",
+                        "numberOfClasses": 5,
+                        "indicators": [],
+                        "layerId": null,
+                        "methodId": "1",
+                        "filterInput": [],
+                        "filterRegion": [],
+                        "municipalities": []
+                    }
+                },
+                "zoom": 5,
+                "srs": "EPSG:3067",
+                "north": 6678683,
+                "east": 381567
+            },
+            "conf": {
+                "mapOptions": {
+                    "srsName": "EPSG:3067",
+                    "maxExtent": {
+                        "bottom": 6291456,
+                        "left": -548576,
+                        "right": 1548576,
+                        "top": 8388608,
+                        "//": "from http://docs.jhs-suositukset.fi/jhs-suositukset/JHS180_liite1/JHS180_liite1.html"
+                    },
+                    "resolutions": [
+                        8192,
+                        4096,
+                        2048,
+                        1024,
+                        512,
+                        256,
+                        128,
+                        64,
+                        32,
+                        16,
+                        8,
+                        4,
+                        2,
+                        1,
+                        0.5,
+                        0.25
+                    ]
+                },
+                "globalMapAjaxUrl": "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&",
+                "plugins": [{
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
+                }, {
+                    "id": "Oskari.mapframework.mapmodule.WmsLayerPlugin"
+                }, {
+                    "id": "Oskari.mapframework.mapmodule.MarkersPlugin"
+                }, {
+                    "id": "Oskari.mapframework.mapmodule.ControlsPlugin"
+                }, {
+                    "id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
+                    "config": {
+                        "infoBox": false,
+                        "ignoredLayerTypes": ["WFS"]
+                    }
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
+                    "config": {
+                        "maxBackoff": 60000,
+                        "port": 80,
+                        "maxNetworkDelay": 10000,
+                        "hostname": "dev.paikkatietoikkuna.fi",
+                        "contextPath": "/transport-0.0.1",
+                        "lazy": true,
+                        "backoffIncrement": 1000,
+                        "disconnectTime": 30000
+                    }
+                }, {
+                    "id": "Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.GeoLocationPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.RealtimePlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin"
+                }, {
+                    "id": "Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin"
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayerSelectionPlugin",
+                    "config": {
+                        "baseLayers": ["base_2", "24", "base_35"],
+                        "showAsDropdown": false
+                    }
+                }, {
+                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin",
+                    "config": {
+                        "termsUrl": {
+                            "fi": "http://www.paikkatietoikkuna.fi/web/fi/kayttoehdot",
+                            "sv": "http://www.paikkatietoikkuna.fi/web/sv/anvandningsvillkor",
+                            "en": "http://www.paikkatietoikkuna.fi/web/en/terms-and-conditions"
+                        },
+                        "mapUrlPrefix": {
+                            "fi": "http://www.paikkatietoikkuna.fi/web/fi/kartta?",
+                            "sv": "http://www.paikkatietoikkuna.fi/web/sv/kartfonstret?",
+                            "en": "http://www.paikkatietoikkuna.fi/web/en/map-window?"
+                        }
+                    }
+                }],
+                "layers": [{
+                    "wmsName": "taustakartta",
+                    "tileMatrixSetId": "ETRS-TM35FIN",
+                    "layerName": "taustakartta",
+                    "type": "wmtslayer",
+                    "baseLayerId": -1,
+                    "legendImage": "",
+                    "refreshRate": 0,
+                    "id": "base_35",
+                    "style": "default",
+                    "name": "Taustakarttasarja",
+                    "opacity": 100,
+                    "permissions": {
+                        "publish": "no_publication_permission"
+                    },
+                    "tileMatrixSetData": {
+                        "contents": {
+                            "tileMatrixSets": {
+                                "ETRS-TM35FIN": {
+                                    "bounds": {
+                                        "bottom": 6291456,
+                                        "left": -548576,
+                                        "right": 1548576,
+                                        "top": 8388608
+                                    },
+                                    "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                    "projection": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                    "matrixIds": [{
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 1,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "0",
+                                        "matrixHeight": 1,
+                                        "scaleDenominator": 2.925714285714286E7
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 2,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "1",
+                                        "matrixHeight": 2,
+                                        "scaleDenominator": 1.462857142857143E7
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 4,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "2",
+                                        "matrixHeight": 4,
+                                        "scaleDenominator": 7314285.714285715
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 8,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "3",
+                                        "matrixHeight": 8,
+                                        "scaleDenominator": 3657142.8571428573
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 16,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "4",
+                                        "matrixHeight": 16,
+                                        "scaleDenominator": 1828571.4285714286
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 32,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "5",
+                                        "matrixHeight": 32,
+                                        "scaleDenominator": 914285.7142857143
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 64,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "6",
+                                        "matrixHeight": 64,
+                                        "scaleDenominator": 457142.85714285716
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 128,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "7",
+                                        "matrixHeight": 128,
+                                        "scaleDenominator": 228571.42857142858
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 256,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "8",
+                                        "matrixHeight": 256,
+                                        "scaleDenominator": 114285.71428571429
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 512,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "9",
+                                        "matrixHeight": 512,
+                                        "scaleDenominator": 57142.857142857145
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 1024,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "10",
+                                        "matrixHeight": 1024,
+                                        "scaleDenominator": 28571.428571428572
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 2048,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "11",
+                                        "matrixHeight": 2048,
+                                        "scaleDenominator": 14285.714285714286
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 4096,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "12",
+                                        "matrixHeight": 4096,
+                                        "scaleDenominator": 7142.857142857143
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 8192,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "13",
+                                        "matrixHeight": 8192,
+                                        "scaleDenominator": 3571.4285714285716
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 16384,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "14",
+                                        "matrixHeight": 16384,
+                                        "scaleDenominator": 1785.7142857142858
+                                    }, {
+                                        "topLeftCorner": {
+                                            "lon": -548576,
+                                            "lat": 8388608
+                                        },
+                                        "supportedCRS": "urn:ogc:def:crs:EPSG:6.3:3067",
+                                        "matrixWidth": 32768,
+                                        "tileHeight": 256,
+                                        "tileWidth": 256,
+                                        "identifier": "15",
+                                        "matrixHeight": 32768,
+                                        "scaleDenominator": 892.8571428571429
+                                    }],
+                                    "identifier": "ETRS-TM35FIN"
+                                }
+                            },
+                            "layers": [{
+                                "resourceUrls": [{
+                                    "template": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
+                                    "format": "image/png",
+                                    "resourceType": "tile"
+                                }],
+                                "tileMatrixSetLinks": [{
+                                    "tileMatrixSet": "ETRS-TM35FIN"
+                                }],
+                                "title": "Taustakartta",
+                                "layers": [],
+                                "dimensions": [],
+                                "styles": [{
+                                    "isDefault": true,
+                                    "identifier": "default"
+                                }],
+                                "resourceUrl": {
+                                    "tile": {
+                                        "template": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
+                                        "format": "image/png",
+                                        "resourceType": "tile"
+                                    }
+                                },
+                                "identifier": "taustakartta",
+                                "formats": ["image/png"]
+                            }, {
+                                "resourceUrls": [{
+                                    "template": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/ortokuva/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg",
+                                    "format": "image/jpeg",
+                                    "resourceType": "tile"
+                                }],
+                                "tileMatrixSetLinks": [{
+                                    "tileMatrixSet": "ETRS-TM35FIN"
+                                }],
+                                "title": "Ortokuva",
+                                "layers": [],
+                                "dimensions": [],
+                                "styles": [{
+                                    "isDefault": true,
+                                    "identifier": "default"
+                                }],
+                                "resourceUrl": {
+                                    "tile": {
+                                        "template": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/ortokuva/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg",
+                                        "format": "image/jpeg",
+                                        "resourceType": "tile"
+                                    }
+                                },
+                                "identifier": "ortokuva",
+                                "formats": ["image/jpeg"]
+                            }, {
+                                "resourceUrls": [{
+                                    "template": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
+                                    "format": "image/png",
+                                    "resourceType": "tile"
+                                }],
+                                "tileMatrixSetLinks": [{
+                                    "tileMatrixSet": "ETRS-TM35FIN"
+                                }],
+                                "title": "Maastokartta",
+                                "layers": [],
+                                "dimensions": [],
+                                "styles": [{
+                                    "isDefault": true,
+                                    "identifier": "default"
+                                }],
+                                "resourceUrl": {
+                                    "tile": {
+                                        "template": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
+                                        "format": "image/png",
+                                        "resourceType": "tile"
+                                    }
+                                },
+                                "identifier": "maastokartta",
+                                "formats": ["image/png"]
+                            }]
+                        },
+                        "operationsMetadata": {
+                            "GetTile": {
+                                "dcp": {
+                                    "http": {
+                                        "get": [{
+                                            "constraints": {
+                                                "GetEncoding": {
+                                                    "allowedValues": {
+                                                        "KVP": true
+                                                    }
+                                                }
+                                            },
+                                            "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?"
+                                        }]
+                                    }
+                                }
+                            },
+                            "GetCapabilities": {
+                                "dcp": {
+                                    "http": {
+                                        "get": [{
+                                            "constraints": {
+                                                "GetEncoding": {
+                                                    "allowedValues": {
+                                                        "KVP": true
+                                                    }
+                                                }
+                                            },
+                                            "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?"
+                                        }]
+                                    }
+                                }
+                            },
+                            "GetFeatureInfo": {
+                                "dcp": {
+                                    "http": {
+                                        "get": [{
+                                            "constraints": {
+                                                "GetEncoding": {
+                                                    "allowedValues": {
+                                                        "KVP": true
+                                                    }
+                                                }
+                                            },
+                                            "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?"
+                                        }]
+                                    }
+                                }
+                            }
+                        },
+                        "version": "1.0.0"
+                    },
+                    "maxScale": 1,
+                    "inspire": "Taustakartat",
+                    "options": {},
+                    "dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+                    "styles": [{
+                        "title": "default",
+                        "name": "default"
+                    }],
+                    "params": {},
+                    "orgName": "Taustakartat",
+                    "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts",
+                    "minScale": 1.5E7,
+                    "realtime": false,
+                    "wmsUrl": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts",
+                    "subtitle": "(WMTS)"
+                }],
+                "imageLocation": "/Oskari/resources",
+                "user": {
+                    "userID": 10110,
+                    "lastName": "",
+                    "nickName": "10110",
+                    "roles": [{
+                        "id": 10114,
+                        "name": "Guest"
+                    }],
+                    "userUUID": "",
+                    "firstName": "",
+                    "loginName": "default@maanmittauslaitos.fi"
                 }
             }
         },
@@ -1044,17 +704,80 @@
                 }
             }
         },
-        "search": {
+        "printout": {
             "state": {},
             "conf": {
-                "url": "/ajax?action_route=GetSearchResult&"
+                "legend": {
+                    "printAreaDefault": {
+                        "fontWeight": "bold",
+                        "fontColor": "#000000",
+                        "fillColor": "#FFFFFF",
+                        "fontFamily": "Liberation Sans",
+                        "fontSize": "12px",
+                        "strokeColor": "#00FF00",
+                        "fillOpacity": 0.2,
+                        "strokeWidth": 1,
+                        "strokeOpacity": 1
+                    },
+                    "colorBoxDefault": {
+                        "fillColor": "${color}",
+                        "labelXOffset": 0,
+                        "label": "${name}",
+                        "fontFamily": "Liberation Sans",
+                        "labelAlign": "l",
+                        "fontSize": "10px",
+                        "strokeColor": "#000000",
+                        "labelYOffset": 5,
+                        "fillOpacity": 1,
+                        "strokeWidth": 1,
+                        "strokeOpacity": 1
+                    },
+                    "legendBoxDefault": {
+                        "fontWeight": "bold",
+                        "fontColor": "#000000",
+                        "fillColor": "#FFFFFF",
+                        "label": "${name}",
+                        "fontFamily": "Liberation Sans",
+                        "labelAlign": "l",
+                        "fontSize": "12px",
+                        "strokeColor": "#00FF00",
+                        "fillOpacity": 0.7,
+                        "strokeWidth": 0,
+                        "strokeOpacity": 1
+                    },
+                    "general": {
+                        "legendRowHeight": 0.02,
+                        "legendWidth": 0.27,
+                        "charsInrow": 32
+                    }
+                },
+                "backendConfiguration": {
+                    "formatProducers": {
+                        "image/png": "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png?",
+                        "application/pdf": "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?"
+                    }
+                }
             }
+        },
+        "routesearch": {
+            "state": {},
+            "conf": {
+                "flyoutClazz": "Oskari.mapframework.bundle.routesearch.Flyout"
+            }
+        },
+        "openlayers-default-theme": {
+            "state": {},
+            "conf": {}
+        },
+        "search": {
+            "state": {},
+            "conf": {}
         },
         "maplegend": {
             "state": {},
             "conf": {}
         },
-        "guidedtour": {
+        "divmanazer": {
             "state": {},
             "conf": {}
         },
@@ -1062,11 +785,489 @@
             "state": {},
             "conf": {}
         },
+        "analyse": {
+            "state": {},
+            "conf": {
+                "register": {
+                    "fi": "Rekisteröidy",
+                    "sv": "Registrera dig",
+                    "en": "Register"
+                },
+                "title": {
+                    "fi": "Analyysi",
+                    "sv": "Analys",
+                    "en": "Analyse"
+                },
+                "signupUrl": {
+                    "fi": "/web/fi/login",
+                    "sv": "/web/sv/login",
+                    "en": "/web/en/login"
+                },
+                "desc": {
+                    "fi": "Voit käyttää Analyysitoimintoa kirjauduttuasi palveluun.",
+                    "sv": "Logga in i tjänsten för att använda analys funktioner.",
+                    "en": "You need to log in before using the embedding function."
+                },
+                "registerUrl": {
+                    "fi": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account",
+                    "sv": "/web/sv/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account",
+                    "en": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+                },
+                "__name": "Analyse",
+                "signup": {
+                    "fi": "Kirjaudu sisään",
+                    "sv": "Logga in",
+                    "en": "Log in"
+                }
+            }
+        },
         "infobox": {
             "state": {},
             "conf": {
                 "adaptable": true
             }
+        },
+        "coordinatedisplay": {
+            "state": {},
+            "conf": {}
         }
-    }
+    },
+    "startupSequence": [{
+        "instanceProps": {},
+        "title": "OpenLayers",
+        "bundleinstancename": "openlayers-default-theme",
+        "fi": "OpenLayers",
+        "sv": "OpenLayers",
+        "en": "OpenLayers",
+        "bundlename": "openlayers-default-theme",
+        "metadata": {
+            "Import-Bundle": {
+                "openlayers-default-theme": {
+                    "bundlePath": "../../../packages/openlayers/bundle/"
+                },
+                "openlayers-full-map": {
+                    "bundlePath": "../../../packages/openlayers/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Map",
+        "bundleinstancename": "mapfull",
+        "fi": "mapfull",
+        "sv": "mapfull",
+        "en": "mapfull",
+        "bundlename": "mapfull",
+        "metadata": {
+            "Import-Bundle": {
+                "mapwmts": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "service-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "maparcgis": {
+                    "bundlePath": "../../../packages/arcgis/bundle/"
+                },
+                "event-map-layer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-map-layer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapmodule-plugin": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "ui-components": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "event-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapfull": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "core-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "oskariui": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapwfs2": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapuserlayers": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapstats": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "core-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "domain": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "sandbox-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "service-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "sandbox-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "event-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Oskari DIV Manazer",
+        "fi": "divmanazer",
+        "bundleinstancename": "divmanazer",
+        "sv": "divmanazer",
+        "en": "divmanazer",
+        "bundlename": "divmanazer",
+        "metadata": {
+            "Import-Bundle": {
+                "divmanazer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Toolbar",
+        "bundleinstancename": "toolbar",
+        "fi": "toolbar",
+        "sv": "toolbar",
+        "en": "toolbar",
+        "bundlename": "toolbar",
+        "metadata": {
+            "Import-Bundle": {
+                "toolbar": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Statehandler",
+        "bundleinstancename": "statehandler",
+        "fi": "statehandler",
+        "sv": "statehandler",
+        "en": "statehandler",
+        "bundlename": "statehandler",
+        "metadata": {
+            "Import-Bundle": {
+                "statehandler": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Infobox",
+        "fi": "infobox",
+        "bundleinstancename": "infobox",
+        "sv": "infobox",
+        "en": "infobox",
+        "bundlename": "infobox",
+        "metadata": {
+            "Import-Bundle": {
+                "infobox": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Search",
+        "bundleinstancename": "search",
+        "fi": "search",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "search",
+        "metadata": {
+            "Import-Bundle": {
+                "search": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Maplayer selection",
+        "bundleinstancename": "layerselector2",
+        "fi": "layerselector2",
+        "sv": "layerselector2",
+        "en": "layerselector2",
+        "bundlename": "layerselector2",
+        "metadata": {
+            "Import-Bundle": {
+                "layerselector2": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Chosen maplayers",
+        "bundleinstancename": "layerselection2",
+        "fi": "layerselection2",
+        "sv": "layerselection2",
+        "en": "layerselection2",
+        "bundlename": "layerselection2",
+        "metadata": {
+            "Import-Bundle": {
+                "layerselection2": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Map legend",
+        "bundleinstancename": "maplegend",
+        "fi": "maplegend",
+        "sv": "maplegend",
+        "en": "maplegend",
+        "bundlename": "maplegend",
+        "metadata": {
+            "Import-Bundle": {
+                "maplegend": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Map publisher",
+        "bundleinstancename": "publisher",
+        "fi": "publisher",
+        "sv": "publisher",
+        "en": "publisher",
+        "bundlename": "promote",
+        "metadata": {
+            "Import-Bundle": {
+                "promote": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Coordinate display",
+        "bundleinstancename": "coordinatedisplay",
+        "fi": "coordinatedisplay",
+        "sv": "coordinatedisplay",
+        "en": "coordinatedisplay",
+        "bundlename": "coordinatedisplay",
+        "metadata": {
+            "Import-Bundle": {
+                "coordinatedisplay": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Statistics grid",
+        "fi": "statsgrid",
+        "bundleinstancename": "statsgrid",
+        "sv": "statsgrid",
+        "en": "statsgrid",
+        "bundlename": "statsgrid",
+        "metadata": {
+            "Import-Bundle": {
+                "geostats": {
+                    "bundlePath": "../../../packages/libraries/bundle/"
+                },
+                "statsgrid": {
+                    "bundlePath": "../../../packages/statistics/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Analyse",
+        "bundleinstancename": "analyse",
+        "fi": "Analyysi",
+        "sv": "Analys",
+        "en": "Analyse",
+        "bundlename": "promote",
+        "metadata": {
+            "Import-Bundle": {
+                "promote": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Metadata Flyout",
+        "bundleinstancename": "metadataflyout",
+        "fi": "metadataflyout",
+        "sv": "metadataflyout",
+        "en": "metadataflyout",
+        "bundlename": "metadataflyout",
+        "metadata": {
+            "Import-Bundle": {
+                "metadataflyout": {
+                    "bundlePath": "../../../packages/catalogue/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Route Search",
+        "fi": "Reittihaku",
+        "bundleinstancename": "routesearch",
+        "sv": "Ruttsök",
+        "en": "Route Search",
+        "bundlename": "routesearch",
+        "metadata": {
+            "Import-Bundle": {
+                "routesearch": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "User Guide",
+        "bundleinstancename": "userguide",
+        "fi": "userguide",
+        "sv": "userguide",
+        "en": "userguide",
+        "bundlename": "userguide",
+        "metadata": {
+            "Import-Bundle": {
+                "userguide": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Personal data",
+        "bundleinstancename": "personaldata",
+        "fi": "personaldata",
+        "sv": "personaldata",
+        "en": "personaldata",
+        "bundlename": "promote",
+        "metadata": {
+            "Import-Bundle": {
+                "promote": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Guided Tour",
+        "bundleinstancename": "guidedtour",
+        "fi": "guidedtour",
+        "sv": "guidedtour",
+        "en": "guidedtour",
+        "bundlename": "guidedtour",
+        "metadata": {
+            "Import-Bundle": {
+                "guidedtour": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Backend status",
+        "fi": "backendstatus",
+        "bundleinstancename": "backendstatus",
+        "sv": "backendstatus",
+        "en": "backendstatus",
+        "bundlename": "backendstatus",
+        "metadata": {
+            "Import-Bundle": {
+                "backendstatus": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Printout",
+        "fi": "printout",
+        "bundleinstancename": "printout",
+        "sv": "printout",
+        "en": "printout",
+        "bundlename": "printout",
+        "metadata": {
+            "Import-Bundle": {
+                "printout": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Feature data",
+        "bundleinstancename": "featuredata2",
+        "fi": "featuredata2",
+        "sv": "featuredata2",
+        "en": "featuredata2",
+        "bundlename": "featuredata2",
+        "metadata": {
+            "Import-Bundle": {
+                "featuredata2": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "metadatacatalogue",
+        "bundleinstancename": "metadatacatalogue",
+        "fi": "metadatacatalogue",
+        "sv": "metadatacatalogue",
+        "en": "metadatacatalogue",
+        "bundlename": "metadatacatalogue",
+        "metadata": {
+            "Import-Bundle": {
+                "metadatacatalogue": {
+                    "bundlePath": "../../../packages/catalogue/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }]
 }

@@ -62,9 +62,10 @@ function() {
             this._sandbox.printDebug("#!#! CREATED ol.layer.TileLayer for " + _layer.getId());
 
             if (keepLayerOnTop) {
-                this.mapModule.setLayerIndex(layerImpl, this.mapModule.getLayers().length);
-            } else {
+                // This might not be completly correct. We assume keepLayerOnTop means put this layer at the bottom as a faked baselayer.
                 this.mapModule.setLayerIndex(layerImpl, 0);
+            } else {
+                this.mapModule.setLayerIndex(layerImpl, this.mapModule.getLayers().length);
             }
         }
 
