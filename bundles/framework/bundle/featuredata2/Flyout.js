@@ -543,7 +543,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                 j,
                 k,
                 featureData,
+                urlLink,
                 values;
+
+            eachFeature:
             for (i = 0; i < features.length; i++) {
                 featureData = {};
                 values = features[i];
@@ -561,13 +564,48 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
                     if (values[j] === null || values[j] === undefined || values[j] === '') {
                         featureData[fields[j]] = '';
                     } else {
-                        featureData[fields[j]] = values[j];
+                        // Generate and url links
+                        if (this._isUrlValid(values[j])) {
+                            if (values[j].substring(0,4) === "http") {
+                                urlLink = values[j];
+                            } else {
+                                urlLink = "http://"+values[j];
+                            }
+                            featureData[fields[j]] = '<a href="'+urlLink+'" target="_blank">'+values[j]+'</a>';
+                        } else {
+                            featureData[fields[j]] = values[j];
+                        }
                         // remove from empty fields
                         remove_item(hiddenFields, fields[j]);
                     }
                 }
+
+                // Remove this when better solution to handle duplicates is implemented
+                var tableData = model.getData();
+                for (j = 0; j < tableData.length; j += 1) {
+                    if (tableData[j]["__fid"] === featureData["__fid"]) {
+                        continue eachFeature;
+                    }
+                }
+
                 model.addData(featureData);
             }
+        },
+
+        /**
+         * @method _isUrlValid
+         * @param {String} url
+         * @returns {boolean}
+         * @private
+         *
+         * Checks if a url is valid
+         */
+        _isUrlValid: function(url) {
+            if ((!url)||(typeof url !== "string")){
+                return false;
+            }
+            var re = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-zåÅäÄöÖ0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+            return re.test(url);
         },
 
         /**

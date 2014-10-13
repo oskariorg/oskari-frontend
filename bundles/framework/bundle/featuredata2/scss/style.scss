@@ -5,13 +5,6 @@
         overflow: auto;
     }
 
-    .link  {
-        padding: 20px 0px 0px 0px;
-        color: #0091FF;
-        text-decoration: underline;
-        display: block;
-    }
-
     /* Selected row hightlighting */
     tbody tr.selected {
         background-color: #FDF8D9;
@@ -26,11 +19,18 @@
 
     /* Override sort img position */
     th {
-
         &.asc, &.desc {
             background-position: right center;
         }
+     }
 
+    td {
+        &.link  {
+            padding: 20px 0px 0px 0px;
+            color: #0091FF;
+            text-decoration: underline;
+            display: block;
+        }
     }
 
 }
