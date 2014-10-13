@@ -13,7 +13,7 @@ Oskari.registerLocalization({
         "searchResultDescriptionOrdering": "U kunt ook de resultaten in de tabel hieronder sorteren door te klikken op de kolomkoppen.",
         "searchResults": "Resultaten: ",
         "searchResultsDescription": " zoek resultaten ",
-        "searchservice_search_alert_title": "Fout: ",
+        "searchservice_search_alert_title": "Fout",
         "searchservice_search_not_found_anything_text": "De zoekopdracht heeft geen resultaten opgeleverd.",
         "too_short": "Uw zoekterm is te kort.",
         "cannot_be_empty": "Het zoekveld kan niet leeg zijn.",

@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.24.1
+
+### mapmodule/LogoPlugin
+
+Fixed link binding for terms-of-use. It's now more specific instead of binding to all a-tags in plugin content.
+
 ## 1.24
 
 ### bundles/bundle.js
@@ -54,6 +60,8 @@ Disabled rotation of rectangular selection.
 ### myplacesimport
 
 Updated flyout for GPX and MIF/MID format import, which was implemented in the oskari-server backend.
+
+Now disables button for guest users.
 
 ### OpenLayers
 
