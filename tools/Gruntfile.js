@@ -214,7 +214,7 @@ module.exports = function (grunt) {
           'toolbar': '../packages/framework/bundle/toolbar',
           'usagetracker': '../packages/framework/bundle/usagetracker',
           'userguide': '../packages/framework/bundle/userguide',
-          'statsgrid': '../packages/statistics/bundle/statsgrid',
+// Manual modification          'statsgrid': '../packages/statistics/bundle/statsgrid',
           'analyse': '../packages/analysis/bundle/analyse',
 // Manual modification          'metadataflyout': '../packages/catalogue/bundle/metadataflyout',
           'metadatacatalogue': '../packages/catalogue/bundle/metadataflyout'
