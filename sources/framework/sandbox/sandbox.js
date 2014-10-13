@@ -80,8 +80,17 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
          * Utility method for printing debug messages to browser console
          */
         printDebug: function () {
-            //this._core.printDebug(text);
+            /* forward debug to core */
             this._core.printDebug.apply(this._core, arguments);
+        },
+
+        /**
+         * @method printError
+         * Utility method for printing error messages to browser console
+         */
+        printError: function () {
+            /* forward error to core */
+            this._core.printError.apply(this._core, arguments);
         },
 
         /**
@@ -90,7 +99,6 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
          */
         printWarn: function () {
             /* forward warning to core */
-            //this._core.printWarn(text);
             this._core.printWarn.apply(this._core, arguments);
         },
         /**

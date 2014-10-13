@@ -1,39 +1,22 @@
 .metadataflyout {
   /* Content */ }
-  .metadataflyout .tab-content div.browseGraphic {
+  .metadataflyout .tab-content article .browseGraphic {
+    cursor: zoom-out;
+    float: left;
     margin-left: 2px; }
-  .metadataflyout .tab-content div h1 {
-    text-align: left;
-    text-transform: uppercase;
+    .metadataflyout .tab-content article .browseGraphic:not(.fullsize) img {
+      max-height: 200px;
+      cursor: zoom-in; }
+  .metadataflyout .tab-content article h1 {
     margin-bottom: 8px; }
-  .metadataflyout .tab-content div table {
-    margin-right: 0px;
-    margin-left: 0px;
-    /* We have to force font size back to normal as this isn't actual table content */
-    font-size: 14px;
-    line-height: 21px; }
-    .metadataflyout .tab-content div table tr td {
-      text-align: left;
-      display: block;
-      margin-top: 4px;
-      margin-left: 4px;
-      margin-bottom: 8px;
-      vertical-align: top;
-      border: 0; }
-      .metadataflyout .tab-content div table tr td.MD_DigitalTransferOptions a {
-        text-decoration: underline;
-        cursor: pointer;
-        max-width: 700px;
-        display: block;
-        word-wrap: break-word; }
-      .metadataflyout .tab-content div table tr td a {
-        text-decoration: underline;
-        cursor: pointer; }
-    .metadataflyout .tab-content div table tr th {
-      text-align: left;
-      display: block;
-      text-transform: uppercase;
-      vertical-align: top; }
+  .metadataflyout .tab-content article h1, .metadataflyout .tab-content article h2 {
+    clear: both;
+    text-align: left;
+    text-transform: uppercase; }
+  .metadataflyout .tab-content article ol, .metadataflyout .tab-content article ul, .metadataflyout .tab-content article p {
+    margin-bottom: 18px; }
+  .metadataflyout .tab-content article ol, .metadataflyout .tab-content article ul {
+    margin-left: 20px; }
 
 /* xml */
 .metadataflyout_content_xml {

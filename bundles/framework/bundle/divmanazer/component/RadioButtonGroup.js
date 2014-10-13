@@ -102,7 +102,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
             this._element.disabled = !enabled;
         },
 
-        getName: function (name) {
+        getName: function () {
             'use strict';
             var input = this._element.querySelector('input'),
                 ret = '';

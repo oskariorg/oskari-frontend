@@ -44,28 +44,28 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         me.methodOptions = me.loc.method.options;
 
         me.methodOptionsMap = {};
-        for (s = 0; s < me.methodOptions.length; s++) {
+        for (s = 0; s < me.methodOptions.length; s += 1) {
             me.methodOptionsMap[me.methodOptions[s].id] = me.methodOptions[s];
         }
 
         /* parameter options listed in localisations */
         me.paramsOptions = me.loc.params.options;
         me.paramsOptionsMap = {};
-        for (f = 0; f < me.paramsOptions.length; f++) {
+        for (f = 0; f < me.paramsOptions.length; f += 1) {
             me.paramsOptionsMap[me.paramsOptions[f].id] = me.paramsOptions[f];
         }
 
         /* aggregate options listed in localisations */
         me.aggreOptions = me.loc.aggregate.options;
         me.aggreOptionsMap = {};
-        for (f = 0; f < me.aggreOptions.length; f++) {
+        for (f = 0; f < me.aggreOptions.length; f += 1) {
             me.aggreOptionsMap[me.aggreOptions[f].id] = me.aggreOptions[f];
         }
 
         /* spatial options listed in localisations for intersect */
         me.spatialOptions = me.loc.spatial.options;
         me.spatialOptionsMap = {};
-        for (f = 0; f < me.spatialOptions.length; f++) {
+        for (f = 0; f < me.spatialOptions.length; f += 1) {
             me.spatialOptionsMap[me.spatialOptions[f].id] = me.spatialOptions[f];
         }
 
@@ -81,7 +81,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         me.accordion = null;
         me.mainPanel = null;
 
-        me.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+        me.progressSpinner = Oskari.clazz.create(
+            'Oskari.userinterface.component.ProgressSpinner'
+        );
         me.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
 
         me.previewContent = null;
@@ -270,7 +272,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 return function () {
                     var j;
                     // reset previous setting
-                    for (j = 0; j < me.methodOptions.length; ++j) {
+                    for (j = 0; j < me.methodOptions.length; j += 1) {
                         me.methodOptions[j].selected = false;
                     }
                     tool.selected = true;
@@ -282,7 +284,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me._modifyExtraParameters(tool.id);
                 };
             };
-            for (i = 0; i < this.methodOptions.length; ++i) {
+            for (i = 0; i < this.methodOptions.length; i += 1) {
                 option = this.methodOptions[i];
                 me.option_id = option.id;
                 toolContainer = this.template.methodOptionTool.clone();
@@ -382,7 +384,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     var featureList = columnsContainer.find('.analyse-featurelist'),
                         j;
                     // reset previous setting
-                    for (j = 0; j < me.paramsOptions.length; ++j) {
+                    for (j = 0; j < me.paramsOptions.length; j += 1) {
                         me.paramsOptions[j].selected = false;
                     }
                     tool.selected = true;
@@ -395,7 +397,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 };
             };
 
-            for (i = 0; i < this.paramsOptions.length; ++i) {
+            for (i = 0; i < this.paramsOptions.length; i += 1) {
                 option = this.paramsOptions[i];
                 toolContainer = this.template.paramsOptionTool.clone();
                 label = option.label;
@@ -1000,7 +1002,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 return function () {
                     var j;
                     // reset previous setting
-                    for (j = 0; j < me.aggreOptions.length; ++j) {
+                    for (j = 0; j < me.aggreOptions.length; j += 1) {
                         me.aggreOptions[j].selected = false;
                     }
                     tool.selected = true;
@@ -1008,7 +1010,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 };
             };
 
-            for (i = 0; i < this.aggreOptions.length; ++i) {
+            for (i = 0; i < this.aggreOptions.length; i += 1) {
                 option = this.aggreOptions[i];
                 toolContainer = this.template.aggreOptionTool.clone();
                 label = option.label;
@@ -1067,7 +1069,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 return function () {
                     var j;
                     // reset previous setting
-                    for (j = 0; j < text_parm_len; ++j) {
+                    for (j = 0; j < text_parm_len; j += 1) {
                         me.aggreOptions[j].selected = false;
                     }
                     tool.selected = true;
@@ -1075,7 +1077,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 };
             };
 
-            for (i = 0; i < text_parm_len; ++i) {
+            for (i = 0; i < text_parm_len; i += 1) {
                 option = this.aggreOptions[i];
                 toolContainer = this.template.aggreOptionTool.clone();
                 label = option.label;
@@ -1124,7 +1126,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me.intersectOptions = options;
             me.intersectOptionsMap = {};
 
-            for (f = 0; f < me.intersectOptions.length; f++) {
+            for (f = 0; f < me.intersectOptions.length; f += 1) {
                 me.intersectOptionsMap[me.intersectOptions[f].id] = me.intersectOptions[f];
             }
 
@@ -1144,7 +1146,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 return function () {
                     var j;
                     // reset previous setting
-                    for (j = 0; j < me.intersectOptions.length; ++j) {
+                    for (j = 0; j < me.intersectOptions.length; j += 1) {
                         me.intersectOptions[j].selected = false;
                     }
                     tool.selected = true;
@@ -1152,7 +1154,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 };
             };
 
-            for (i = 0; i < me.intersectOptions.length; ++i) {
+            for (i = 0; i < me.intersectOptions.length; i += 1) {
                 optionChecked = (i === 0 ? 'checked' : undefined);
                 option = me.intersectOptions[i];
                 toolContainer = me.template.intersectOptionTool.clone();
@@ -1194,7 +1196,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     return function () {
                         var j;
                         // reset previous setting
-                        for (j = 0; j < me.spatialOptions.length; ++j) {
+                        for (j = 0; j < me.spatialOptions.length; j += 1) {
                             me.spatialOptions[i].selected = false;
                         }
                         tool.selected = true;
@@ -1203,7 +1205,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 };
 
                 // spatial operators
-                for (i = 0; i < this.spatialOptions.length; ++i) {
+                for (i = 0; i < this.spatialOptions.length; i += 1) {
                     option = this.spatialOptions[i];
                     toolContainer = this.template.spatialOptionTool.clone();
                     label = option.label;
@@ -1248,7 +1250,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me.unionOptions = options;
             me.unionOptionsMap = {};
 
-            for (f = 0; f < me.unionOptions.length; f++) {
+            for (f = 0; f < me.unionOptions.length; f += 1) {
                 me.unionOptionsMap[me.unionOptions[f].id] = me.unionOptions[f];
             }
             // title
@@ -1258,7 +1260,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 return function () {
                     var j;
                     // reset previous setting
-                    for (j = 0; j < me.unionOptions.length; ++j) {
+                    for (j = 0; j < me.unionOptions.length; j += 1) {
                         me.unionOptions[j].selected = false;
                     }
                     tool.selected = true;
@@ -1266,7 +1268,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 };
             };
 
-            for (i = 0; i < me.unionOptions.length; ++i) {
+            for (i = 0; i < me.unionOptions.length; i += 1) {
                 option = me.unionOptions[i];
                 toolContainer = me.template.unionOptionTool.clone();
                 label = option.label;
@@ -1298,7 +1300,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 return function () {
                     var j;
                     // reset previous setting
-                    for (j = 0; j < me.spatialOptions.length; ++j) {
+                    for (j = 0; j < me.spatialOptions.length; j += 1) {
                         me.spatialOptions[j].selected = false;
                     }
                     tool.selected = true;
@@ -1307,7 +1309,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             };
 
             // spatial operators
-            for (i = 0; i < this.spatialOptions.length; ++i) {
+            for (i = 0; i < this.spatialOptions.length; i += 1) {
                 option = this.spatialOptions[i];
                 toolContainer = this.template.spatialOptionTool.clone();
                 label = option.label;
@@ -1374,7 +1376,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me._addTitle(contentPanel, me.loc.layer_union.label);
 
             // layers
-            for (i = 0; i < me.unionOptions.length; ++i) {
+            for (i = 0; i < me.unionOptions.length; i += 1) {
                 option = me.unionOptions[i];
                 toolContainer = me.template.layerUnionOptionTool.clone();
                 label = option.label;
@@ -1475,7 +1477,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 return function () {
                     var k;
                     // reset previous setting
-                    for (k = 0; k < me.differenceOptions.length; ++j) {
+                    for (k = 0; k < me.differenceOptions.length; j += 1) {
                         me.differenceOptions[k].selected = false;
                     }
                     tool.selected = true;
@@ -1484,7 +1486,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 };
             };
 
-            for (i = 0, j = me.differenceOptions.length; i < j; ++i) {
+            for (i = 0, j = me.differenceOptions.length; i < j; i += 1) {
                 option = me.differenceOptions[i];
                 toolContainer = me.template.differenceOptionTool.clone();
                 toolContainer.find('label span').append(option.label);
@@ -1590,9 +1592,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 return;
             }
 
-            for (i = 0; i < dataLayers.length; i++) {
+            for (i = 0; i < dataLayers.length; i += 1) {
                 paramLayer = jQuery('div.basic_analyse div.extra_params input[type=radio][name=intersect][value=' + jQuery(dataLayers[i]).attr('id') + ']');
-                for (j = 0; j < dataLayers.length; j++) {
+                for (j = 0; j < dataLayers.length; j += 1) {
                     if (jQuery(dataLayers[i]).is(':checked')) {
                         paramLayer.prop('checked', false);
                         paramLayer.parent().hide();
@@ -1643,7 +1645,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 return false;
             }
             // compare the elemets
-            for (i = 0; i < f1Len; ++i) {
+            for (i = 0; i < f1Len; i += 1) {
                 if (fields1[i] !== fields2[i]) {
                     return false;
                 }
@@ -1996,7 +1998,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 ret = null,
                 i;
 
-            for (i = 0; i < this.loc.aggregate.options.length; i++) {
+            for (i = 0; i < this.loc.aggregate.options.length; i += 1) {
                 if (this.loc.aggregate.options[i].id === fullKey) {
                     ret = this.loc.aggregate.options[i].label;
                     break;
@@ -2013,7 +2015,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          *
          */
         _analyseMap: function () {
-            var me = this,
+            var data,
+                me = this,
                 sandbox = this.instance.getSandbox(),
                 selections = me._gatherSelections(),
                 i,
@@ -2027,8 +2030,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
 
-                var data = {};
-
                 // Sorry - use intersect method for clip
                 if (selections.method === 'clip') {
                     selections.method = 'intersect';
@@ -2040,7 +2041,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         selections.methodParams.functions.length) {
 
                     selections.methodParams.locales = [];
-                    for (i = 0; i < selections.methodParams.functions.length; i++) {
+                    for (i = 0; i < selections.methodParams.functions.length; i += 1) {
                         selections.methodParams.locales.push(
                             this._getAggregateLocalization(
                                 selections.methodParams.functions[i]
@@ -2049,10 +2050,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     }
                 }
 
-                data.analyse = JSON.stringify(selections);
+                data = {
+                    analyse: JSON.stringify(selections)
+                };
 
                 var layerId = selections.layerId,
                     layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+
                 if (this.getFilterJson(layerId)) {
                     var filterJson = this.getFilterJson(layerId);
                     // If the user wanted to include only selected/clicked
@@ -2190,7 +2194,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     s,
                     subUuid;
                 if (subLayers && subLayers.length > 0) {
-                    for (s = 0; s < subLayers.length; s++) {
+                    for (s = 0; s < subLayers.length; s += 1) {
                         subUuid = subLayers[s].getMetadataIdentifier();
                         if (subUuid && subUuid !== '' && !additionalUuidsCheck[subUuid]) {
                             additionalUuidsCheck[subUuid] = true;
@@ -2324,7 +2328,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         _addPropertyTypes: function (layers) {
             var me = this,
                 i;
-            for (i = 0; i < layers.length; i++) {
+            for (i = 0; i < layers.length; i += 1) {
                 if (layers[i].hasFeatureData()) {
                     if (jQuery.isEmptyObject(layers[i].getWpsLayerParams())) {
                         me.instance.analyseService.loadWFSLayerPropertiesAndTypes(layers[i].getId());
@@ -2493,7 +2497,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (this.colorCount === undefined || this.colorCount === 16) {
                 this.colorCount = 0;
             } else {
-                ++this.colorCount;
+                this.colorCount += 1;
             }
 
             var line_point_border_colors = [

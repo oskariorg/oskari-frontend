@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
         this.municipalityCategory = 'kunta';
 
         this.templates = {
-            "main": '<form class="add-indicator">' +
+            main: '<form class="add-indicator">' +
                     '    <h2></h2>' +
                     '    <fieldset class="form-meta">' +
                     '        <legend></legend>' +
@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                     '        <button class="cancel-form-button"></button><button class="submit-form-button primary" title=""></button><button class="clear-form-button"></button>' +
                     '    </fieldset>' +
                     '</form>',
-            "municipalityRow": '<li class="municipality-row"><label class="municipality-row"></label><input type="text"></li>'
+            municipalityRow: '<li class="municipality-row"><label class="municipality-row"></label><input type="text"></li>'
         };
     }, {
         /**
@@ -178,7 +178,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                     .attr('data-id', region.id)
                     .find('label')
                     .attr('for', 'municipality_' + name)
-                    .append(region.municipality + " (" + region.code + ")");
+                    .append(region.municipality + ' (' + region.code + ')');
 
                 row
                     .find('input')
@@ -271,8 +271,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                 return false;
             };
             var lines = data.match(/[^\r\n]+/g),
-                updated = 0;
-            unrecognized = [];
+                updated = 0,
+                unrecognized = [];
             //loop through all the lines and parse municipalities (name or code)
             _.each(lines, function (line) {
                 var area,
@@ -287,7 +287,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                 }
                 // update municipality values
                 if (updateValue(jQuery.trim(area), jQuery.trim(value))) {
-                    updated++;
+                    updated += 1;
                 } else if (value && value.length > 0) {
                     unrecognized.push({
                         region: area,
@@ -298,7 +298,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
             // Attach tooltip to clea-import as it's on the right...
             var openImport = me.container.find('.clear-import');
             // alert user of unrecognized lines
-            var unrecognizedInfo = "";
+            var unrecognizedInfo = '';
             if (unrecognized.length > 0) {
                 unrecognizedInfo = '<br>' + me.localization.parsedDataUnrecognized + ': ' + unrecognized.length;
             }
@@ -307,11 +307,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
             openImport.tooltip({
                 content: info,
                 position: {
-                    my: "right-10 center",
-                    at: "left center"
+                    my: 'right-10 center',
+                    at: 'left center'
                 }
             });
-            openImport.tooltip("open");
+            openImport.tooltip('open');
 
             textarea.val('');
         },
@@ -334,7 +334,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
             }
             // Get indicator title or push it to the unrecognized areas array
             var title = me.container.find('#indicator_title').val();
-            if (title === null || title === undefined || title.trim() === "") {
+            if (title === null || title === undefined || title.trim() === '') {
                 emptyFields.push(me.container.find('#indicator_title').prev().text());
             }
             // TODO: real localized title
@@ -343,7 +343,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
             });
 
             var source = me.container.find('#indicator_sources').val();
-            if (source === null || source === undefined || source.trim() === "") {
+            if (source === null || source === undefined || source.trim() === '') {
                 emptyFields.push(me.container.find('#indicator_sources').prev().text());
             }
             // TODO: real localized source
@@ -352,7 +352,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
             });
 
             var description = me.container.find('#indicator_description').val();
-            if (description === null || description === undefined || description.trim() === "") {
+            if (description === null || description === undefined || description.trim() === '') {
                 emptyFields.push(me.container.find('#indicator_description').prev().text());
             }
             // TODO: real localized description
@@ -363,9 +363,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
             var year = me.container.find('#indicator_year').val(),
                 text = /^[0-9]+$/,
                 currentYear = new Date().getFullYear();
-            if (year === null || year === undefined || year.trim() === "" ||
-                ((year !== "") && (!text.test(year))) ||
-                year.length != 4 ||
+            if (year === null || year === undefined || year.trim() === '' ||
+                ((year !== '') && (!text.test(year))) ||
+                year.length !== 4 ||
                 year < 1900 ||
                 year > currentYear) {
 
@@ -385,18 +385,18 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
             // if there was empty fields 
             if (emptyFields.length > 0) {
                 var submitBtn = me.container.find('.submit-form-button');
-                var failedSubmit = me.localization.failedSubmit + '<br>' + emptyFields.join(", ");
+                var failedSubmit = me.localization.failedSubmit + '<br>' + emptyFields.join(', ');
                 submitBtn.attr('title', failedSubmit);
                 submitBtn.tooltip({
                     content: failedSubmit,
                     position: {
-                        my: "right bottom-10",
-                        at: "right top"
+                        my: 'right bottom-10',
+                        at: 'right top'
                     }
                 });
-                submitBtn.tooltip("open");
+                submitBtn.tooltip('open');
                 setTimeout(function () {
-                    submitBtn.tooltip("destroy");
+                    submitBtn.tooltip('destroy');
                     submitBtn.attr('title', '');
                 }, 1500);
                 return null;
@@ -404,11 +404,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                 // loop through all the regions and gather data 
                 var municipalityRows = me.container.find('.municipality-row'),
                     i;
-                for (i = 0; i < municipalityRows.length; i++) {
+                for (i = 0; i < municipalityRows.length; i += 1) {
                     var row = jQuery(municipalityRows[i]),
                         input = row.find('input'),
                         value = input.val();
-                    if (value !== null && value !== undefined && value.trim() !== "") {
+                    if (value !== null && value !== undefined && value.trim() !== '') {
                         json.data.push({
                             'region': row.attr('data-id'),
                             'primary value': value
@@ -433,18 +433,18 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
         validateYear: function (year, e) {
             // FIXME just parseInt(value, 10); !isNaN(numVal) && numVal >= minVal && numVal <= maxVal
             var text = /^[0-9]+$/;
-            if (e.type == "blur" ||
+            if (e.type === 'blur' ||
                 year.length === 4 && e.keyCode !== 8 && e.keyCode !== 46 && e.keyCode !== 37 && e.keyCode !== 39) {
                 if (year !== 0 && year !== '0') {
                     var current = jQuery(e.target);
-                    if ((year !== "") && (!text.test(year))) {
+                    if ((year !== '') && (!text.test(year))) {
                         //alert("Please Enter Numeric Values Only");
                         current.css({
                             'color': '#ff0000'
                         });
                         return false;
                     }
-                    if (year.length != 4) {
+                    if (year.length !== 4) {
                         //alert("Year is not proper. Please check");
                         current.css({
                             'color': '#ff0000'

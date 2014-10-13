@@ -1,23 +1,24 @@
 /**
  * Used to notify StatsLayerPlugin to remove hilight effect.
- * 
+ *
  * @class Oskari.statistics.bundle.statsgrid.event.ClearHilightsEvent
  */
-Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.event.ClearHilightsEvent',
-/**
- * @method create called automatically on construction
- * @static
- */
-function() {
-}, {
+Oskari.clazz.define(
+    'Oskari.statistics.bundle.statsgrid.event.ClearHilightsEvent',
     /**
-     * @method getName
-     * Returns event name
-     * @return {String} The event name.
+     * @method create called automatically on construction
+     * @static
      */
-    getName : function() {
-        return "StatsGrid.ClearHilightsEvent";
+    function () {}, {
+        /**
+         * @method getName
+         * Returns event name
+         * @return {String} The event name.
+         */
+        getName: function () {
+            return 'StatsGrid.ClearHilightsEvent';
+        }
+    }, {
+        'protocol': ['Oskari.mapframework.event.Event']
     }
-}, {
-    'protocol' : ['Oskari.mapframework.event.Event']
-});
+);
