@@ -95,7 +95,7 @@ Oskari.registerLocalization({
                     },
                     "8859part14": {
                         "label": "8859 Part 14",
-                        "description": "ISO/IEC 8859-14, Information technology - 8-bit single byte coded graphic character sets - Part 14 : Latin alphabet No.8 (Celtic)",
+                        "description": "ISO/IEC 8859-14, Information technology - 8-bit single byte coded graphic character sets - Part 14 : Latin alphabet No.8 (Celtic)"
                     },
                     "8859part15": {
                         "label": "8859 Part 15",
