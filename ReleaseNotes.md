@@ -7,6 +7,12 @@
 Rewritten to use JSON backend, any code relying on the old implementation is likely to break.
 New implementation has full localization.
 
+## 1.24.3
+
+### applications/elf
+
+Typo fixed in index.js
+
 ## 1.24.2
 
 ###  featuredata2 / Flyout
