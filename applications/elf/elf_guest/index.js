@@ -46,7 +46,7 @@ jQuery(document).ready(function() {
     }
     Oskari.setLang(language);
 
-    if (langauge === "fi") {
+    if (language === "fi") {
         Oskari.getLocalization('MapModule').plugin.LogoPlugin.layersHeader = "&copy; ELF ja seuraavat tiedontuottajat:";
     } else if (language === "sv") {
         Oskari.getLocalization('MapModule').plugin.LogoPlugin.layersHeader = "&copy; ELF och följande dataproducenter:";

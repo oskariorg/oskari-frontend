@@ -4,92 +4,99 @@
  * Class to load metadata content from backend
  *
  */
-Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.service.MetadataLoader', function (urls, sandbox) {
-    this.urls = urls;
-    this.sandbox = sandbox;
-    this.dev = false;
-}, {
+Oskari.clazz.define(
+    'Oskari.catalogue.bundle.metadataflyout.service.MetadataLoader',
+    function (baseUrl) {
+        this.baseUrl = baseUrl;
+    }, {
+        /**
+         * @public @method getCSWData
+         *
+         * @param {string}   uuid            Metadata UUID
+         * @param {string}   lang            Metadata language
+         * @param {function} successCallback Success callback function
+         * @param {function} errorCallback   Error callback function
+         *
+         */
+        getCSWData: function (uuid, lang, successCallback, errorCallback) {
+            var err = this._checkArgs(
+                    uuid,
+                    lang,
+                    successCallback,
+                    errorCallback
+                ),
+                uri;
 
-    /**
-     * @method getURLForView
-     *
-     * builds backend URL URI or whatever it's called n
-     */
-    getURLForView: function (subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace, cb, dataType) {
-        var url = this.urls[subsetId],
-            uri = url + 'uuid=' + uuid;
-
-        /*dev only */
-        if (this.dev) {
-            var devuri = {
-                abstract: 'abstract',
-                jhs: 'jhs158',
-                inspire: 'inspire',
-                json: 'json'
-            }[subsetId];
-
-            if (devuri !== null && devuri !== undefined) {
-                uri = devuri;
+            if (err) {
+                throw new TypeError(err);
             }
 
-        }
+            uri = this.baseUrl + 'action_route=GetCSWData&uuid=' + uuid +
+                '&lang=' + lang;
 
-        return uri;
-    },
-    /**
-     * @method loadMetadata
-     *
-     * loads metadata from backend
-     *
-     */
-    loadMetadata: function (subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace, cb, dataType) {
-        var uri = this.getURLForView(subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace);
-        this.sandbox.printDebug('loadMetadata ' + uri);
-
-        if (uri === null || uri === undefined) {
-            return;
-        }
-
-        jQuery.ajax({
-            url: uri,
-            dataType: dataType || 'xml',
-            beforeSend: function (x) {
-                if (x && x.overrideMimeType) {
-                    if (dataType && dataType === 'json') {
-                        x.overrideMimeType('application/json');
-                    } else {
-                        x.overrideMimeType('text/html');
-                    }
-                }
-            },
-            success: function (data, textStatus) {
-                cb(data, true);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                cb(null, false);
-            }
-        });
-    },
-
-    /**
-     * Helper to circumvent jQuery ajax html hassles
-     */
-    loadGeonetworkAjaxHTML: function (handler, viewId, metadata_uuid, metadata_RS_Identifier_Code, metadata_RS_Identifier_CodeSpace) {
-        var uri = this.getURLForView(viewId, metadata_uuid, metadata_RS_Identifier_Code, metadata_RS_Identifier_CodeSpace),
-            request = OpenLayers.Request.GET({
+            jQuery.ajax({
                 url: uri,
-                callback: handler
+                dataType: 'json',
+                success: successCallback,
+                error: errorCallback
             });
-    },
-    /**
-     * @method openMetadata
-     *
-     * opens metadata from backend to new window
-     *
-     */
-    openMetadata: function (subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace, cb, dataType, target) {
-        var uri = this.getURLForView(subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace),
-            win = window.open(uri, target, 'resizable=yes,scrollbars=yes,status=yes');
-        this.sandbox.printDebug('openMetadata ' + uri);
+        },
+
+        /**
+         * @private @method _isMissing
+         *
+         * @param value
+         *
+         * @return {Boolean} whether the value is missing or not
+         */
+        _isMissing: function (value) {
+            return value === null || value === undefined;
+        },
+
+        /**
+         * @private @method _checkArgs
+         *
+         * @param {string}    uuid            Metadata UUID
+         * @param {string}    lang            Metadata language
+         * @param {function}  successCallback Success callback function
+         * @param {function}  errorCallback   Error callback function
+         *
+         * @return {string[]}                 Errors
+         */
+        _checkArgs: function (uuid, lang, successCallback, errorCallback) {
+            var exceptions = [],
+                base = 'getCSWData():\n  -',
+                ret = null;
+
+            if (this._isMissing(uuid)) {
+                exceptions.push('missing uuid');
+            }
+
+            if (this._isMissing(lang)) {
+                exceptions.push('missing lang');
+            }
+
+            if (this._isMissing(successCallback)) {
+                exceptions.push('missing successCallback');
+            } else if (typeof successCallback !== 'function') {
+                exceptions.push('successCallback is not a function');
+            }
+
+            if (this._isMissing(errorCallback)) {
+                exceptions.push('missing errorCallback');
+            } else if (typeof errorCallback !== 'function') {
+                exceptions.push('errorCallback is not a function');
+            }
+
+            if (this._isMissing(this.baseUrl)) {
+                exceptions.push('missing baseUrl, check your config');
+            }
+
+            if (exceptions.length) {
+                ret = base + exceptions.join('\n  -');
+            }
+
+            return ret;
+        }
     }
-});
+);

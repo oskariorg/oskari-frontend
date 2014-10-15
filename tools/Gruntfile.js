@@ -70,6 +70,14 @@ module.exports = function (grunt) {
                 defaultIconDirectoryPath: "../applications/default/icons/"
             }
         },
+        buildApp: {
+            options: {
+                applicationPaths: "../applications/paikkatietoikkuna.fi/full-map/,../applications/paikkatietoikkuna.fi/full-map_guest/,../applications/paikkatietoikkuna.fi/published-map/,../applications/parcel/",
+                buildsetupconfigFileName: "buildsetupconfig.json",
+                appsetupconfigFileName: "appsetupconfig.json",
+                defaultIconDirectoryPath: "../applications/default/icons/"
+            }
+        },
         karma: {
             options: {
                 configFile: 'karma.conf.js'
@@ -214,7 +222,7 @@ module.exports = function (grunt) {
           'toolbar': '../packages/framework/bundle/toolbar',
           'usagetracker': '../packages/framework/bundle/usagetracker',
           'userguide': '../packages/framework/bundle/userguide',
-          'statsgrid': '../packages/statistics/bundle/statsgrid',
+// Manual modification          'statsgrid': '../packages/statistics/bundle/statsgrid',
           'analyse': '../packages/analysis/bundle/analyse',
 // Manual modification          'metadataflyout': '../packages/catalogue/bundle/metadataflyout',
           'metadatacatalogue': '../packages/catalogue/bundle/metadataflyout'
@@ -368,57 +376,6 @@ module.exports = function (grunt) {
                 name: "src/framework/userguide/module",
                 out: "../src/framework/userguide/minified.js"
             }
-        },
-        requirejs: {
-          'oskari': {
-            options: {
-                baseUrl : "../",
-                paths: {
-                    jquery: "empty:"
-                },
-                optimizeAllPluginResources: true,
-                findNestedDependencies: true,
-                preserveLicenseComments: true,
-                name: "src/oskari/oskari",
-                version: "2.0.0",
-                out: "../libraries/oskari/oskari-<%= requirejs.oskari.options.version %>.min.js"
-            }
-          },
-          'oskari-with-loader': {
-            options: {
-                baseUrl : "../",
-                paths: {
-                    jquery: "empty:",
-                    oskari: "src/oskari/oskari",
-                    css: "libraries/requirejs/lib/css",
-                    json: "libraries/requirejs/lib/json",
-                    domReady: "libraries/requirejs/lib/domReady",
-                    normalize: "libraries/requirejs/lib/normalize",
-                    'css-builder': "libraries/requirejs/lib/css-builder"                    
-                },
-                optimizeAllPluginResources: true,
-                findNestedDependencies: true,
-                preserveLicenseComments: true,
-                version: "1.13",
-                name: "src/oskari/oskari-with-loader",
-                out: "../libraries/oskari/oskari-<%= requirejs['oskari-with-loader'].options.version %>.min.js"
-            }
-          },
-          'leaflet': {
-            options: {
-                mainConfigFile: "../applications/oskari2/leaflet/build.js"
-            }
-          },
-          'ol3': {
-            options: {
-                mainConfigFile: "../applications/oskari2/ol3/build.js"
-            }
-          },
-          'ol2': {
-            options: {
-                mainConfigFile: "../applications/oskari2/ol2/build.js"
-            }
-          }
         }
     });
 
@@ -999,10 +956,139 @@ module.exports = function (grunt) {
         grunt.task.run('requirejs:' + this.target);
     });
 
-    grunt.registerTask("buildsetup", "Build setup with configuration", function (buildsetupconfig) {
-        grunt.log.writeln("Building setup from ", buildsetupconfig);
-        var options = grunt.file.readJSON(buildsetupconfig);
-        grunt.config.set('requirejs.buildsetup.options', options);
-        grunt.task.run('requirejs:buildsetup');
+    grunt.registerTask("buildApp", "Build App", function (applicationPaths, version, defaultIconDirectoryPath, copyResourcesToApplications) {
+        grunt.log.writeln("Building Apps in ", applicationPaths);
+        var i,
+            ilen,
+            applicationPath,
+            buildsetupconfig,
+            appsetupconfig,
+            last,
+            cwd,
+            appName,
+            APPSFOLDERNAME = "applications",
+            dest,
+            options = this.options(),
+            buildoptions,
+            files,
+            copyFiles,
+            appNameSeparatorIndex,
+            parentAppName;
+
+        // use grunt default options
+        if (options.applicationPaths && !applicationPaths) {
+            applicationPaths = options.applicationPaths;
+        }
+        if (!version) {
+            var packagejson = grunt.file.readJSON("../package.json");
+            version = packagejson.version;
+        }
+        if (options.defaultIconDirectoryPath && !defaultIconDirectoryPath) {
+            defaultIconDirectoryPath = options.defaultIconDirectoryPath;
+        }
+
+        // set version in config for grunt templating
+        grunt.config.set("version", version);
+
+        // set multi task configs for compile and validate
+        applicationPaths = applicationPaths.split(',');
+        for (i = 0, ilen = applicationPaths.length; i < ilen; i += 1) {
+            applicationPath = applicationPaths[i];
+            buildsetupconfig = applicationPath + options.buildsetupconfigFileName;
+            appsetupconfig = applicationPath + options.appsetupconfigFileName;
+            last = (applicationPath.lastIndexOf('/'));
+            cwd = applicationPath.substring(0, last);
+            appName = applicationPath.substring(cwd.lastIndexOf('/') + 1, last);
+            dest = "../dist/<%= version %>/" + appName + "/";
+            options = {
+                iconDirectoryPath: applicationPath.substring(0, last) + "/icons",
+                resultImageName: "../dist/<%= version %>/" + appName + "/icons/icons.png",
+                resultCSSName: "../dist/<%= version %>/" + appName + "/css/icons.css",
+                spritePathInCSS: "../icons",
+                defaultIconDirectoryPath: defaultIconDirectoryPath
+            };
+            files = [];
+            copyFiles = {
+                "expand": true,
+                "cwd": cwd + "/",
+                "src": ["css/**", "images/**", "*.js"],
+                "dest": dest
+            };
+
+            // subsets have underscore (_) in appName, which means we need to
+            // get the parent resources first and then replace with subset specific stuff
+            appNameSeparatorIndex = appName.indexOf('_');
+            if (appNameSeparatorIndex > 0) {
+                parentAppName = appName.substring(0, appNameSeparatorIndex);
+                // copy files from parent folder to be replaced by child
+                files.push({
+                    "expand": true,
+                    "cwd": cwd.replace(appName, parentAppName) + "/",
+                    "src": ["css/**", "images/**", "*.js"],
+                    "dest": dest
+                });
+                // modify css-sprite to use parent icons instead
+                options.iconDirectoryPath = options.iconDirectoryPath.replace(appName, parentAppName);
+            }
+
+            // add files to be copied
+            files.push(copyFiles);
+
+            // setting task configs
+            grunt.config.set("copy." + appName + ".files", files);
+            grunt.config.set("compileAppCSS." + appName + ".options", {
+                "appSetupFile": appsetupconfig,
+                "dest": dest
+            });
+            grunt.config.set("sprite." + appName + ".options", options);
+
+            buildoptions = grunt.file.readJSON(buildsetupconfig);
+            buildoptions.out = "../dist/" + version + "/" + appName + "/oskari.min.js";
+            grunt.config.set("requirejs." + appName + ".options", buildoptions);
+        }
+
+        // add resources to dist
+        grunt.config.set("copy.common.files", [{
+                "expand": true,
+                "cwd": "../",
+                "src": ["resources/**", "libraries/**", "bundles/**", "packages/**", "src/**", "applications/**", "sources/**"],
+                "dest": "../dist/"
+            }]);
+
+        // configure copy-task to copy back the results from dist/css and dist/icons to applications/appname/(css || icons)
+        if (copyResourcesToApplications) {
+            var copyApps = Object.keys(grunt.config.get('copy')),
+                finalFiles = [];
+
+            for(i = 0, ilen = copyApps.length; i < ilen; i++) {
+                appName = copyApps[i];
+
+                // skip common copy task, the rest should be real apps that are copied
+                if ("common" !== appName) {
+                    copyFiles = grunt.config.get('copy.' + copyApps[i] + '.files')[0];
+                    finalFiles.push({
+                        "expand": true,
+                        "cwd": copyFiles.dest,
+                        "src": ["css/**", "icons/**"],
+                        "dest": copyFiles.cwd
+                    });                    
+                }
+                // only run the given copy tasks
+                grunt.task.run('copy:' + copyApps[i]);
+            }
+
+            // add final copy settings to be run after compilation
+            grunt.config.set("copy.final.files", finalFiles);
+        } else {
+            grunt.task.run('copy');
+        }
+
+        grunt.task.run('compileAppCSS');
+        grunt.task.run('requirejs');
+        grunt.task.run('sprite');
+
+        if (copyResourcesToApplications) {
+            grunt.task.run('copy:final');
+        }
     });
 };

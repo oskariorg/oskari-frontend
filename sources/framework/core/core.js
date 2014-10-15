@@ -368,6 +368,15 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
         },
 
         /**
+         * Prints given error text to browser console
+         */
+        printWarn: function () {
+            if (window.console !== null && window.console !== undefined) {
+                console.error.apply(console, arguments);
+            }
+        },
+
+        /**
          * Prints given warn text to browser console
          */
         printWarn: function () {

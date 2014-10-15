@@ -35,5 +35,5 @@
     "featuredata2",
     "metadatacatalogue"
   ],
-  "out" : "../applications/oskari2/full-map_guest/main.js"
+  "out" : "This value is overwritten when running 'grunt buildsetup:../applications/oskari2/full-map_guest/buildserupconfig.json', but for completeness here is a working example for manual builds '../applications/oskari2/full-map_guest/main.js'"
 }

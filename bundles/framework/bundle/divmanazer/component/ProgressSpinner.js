@@ -12,7 +12,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
      * @method create called automatically on construction
      * @static
      */
-
     function () {
         this.container = undefined;
         this.opts = undefined;
@@ -22,22 +21,38 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
          * @property __opts default opts for spinner
          */
         __opts: {
-            lines: 15, // The number of lines to draw
-            length: 0, // The length of each line
-            width: 5, // The line thickness
-            radius: 16, // The radius of the inner circle
-            corners: 0, // Corner roundness (0..1)
-            rotate: 0, // The rotation offset
-            color: '#000', // #rgb or #rrggbb
-            speed: 0.6, // Rounds per second
-            trail: 59, // Afterglow percentage
-            shadow: false, // Whether to render a shadow
-            hwaccel: false, // Whether to use hardware acceleration
-            className: 'spinner', // The CSS class to assign to the spinner
-            zIndex: 2e9, // The z-index (defaults to 2000000000)
-            top: 'auto', // Top position relative to parent in px
-            left: 'auto' // Left position relative to parent in px
+            // The number of lines to draw
+            lines: 15,
+            // The length of each line
+            length: 0,
+            // The line thickness
+            width: 5,
+            // The radius of the inner circle
+            radius: 16,
+            // Corner roundness (0..1)
+            corners: 0,
+            // The rotation offset
+            rotate: 0,
+            // #rgb or #rrggbb
+            color: '#000',
+            // Rounds per second
+            speed: 0.6,
+            // Afterglow percentage
+            trail: 59,
+            // Whether to render a shadow
+            shadow: false,
+            // Whether to use hardware acceleration
+            hwaccel: false,
+            // The CSS class to assign to the spinner
+            className: 'spinner',
+            // The z-index (defaults to 2000000000)
+            zIndex: 2e9,
+            // Top position relative to parent in px
+            top: 'auto',
+            // Left position relative to parent in px
+            left: 'auto'
         },
+
         /**
          * @method insertTo
          * @param el jQuery element to append the spinner to
@@ -48,6 +63,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
             this.container = el;
             this.opts = opts || this.__opts;
         },
+
         /**
          * @method start
          * starts spinner spin
@@ -69,6 +85,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                 }, opts)).spin($el.get()[0]);
             }
         },
+
         /**
          * @method stop
          * stops spinner spin
@@ -124,7 +141,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
              * Utility function to create elements. If no tag name is given,
              * a DIV is created. Optionally properties can be passed.
              */
-
             function createEl(tag, prop) {
                 var el = document.createElement(tag || 'div'),
                     n;
@@ -140,7 +156,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
             /**
              * Appends children and returns the parent.
              */
-
             function ins(parent) {
                 var i, n;
                 for (i = 1, n = arguments.length; i < n; i += 1) {
@@ -166,9 +181,8 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
              * Since most mobile Webkits have timing issues with animation-delay,
              * we create separate rules for each line/segment.
              */
-
             function addAnimation(alpha, trail, i, lines) {
-                var name = ['opacity', trail, ~~ (alpha * 100), i, lines].join('-'),
+                var name = ['opacity', trail, ~~(alpha * 100), i, lines].join('-'),
                     start = 0.01 + i / lines * 100,
                     z = Math.max(1 - (1 - alpha) / trail * (100 - start), alpha),
                     prefix = useCssAnimations.substring(0, useCssAnimations.indexOf('Animation')).toLowerCase(),
@@ -185,7 +199,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
             /**
              * Tries various vendor prefixes and returns the first supported property.
              **/
-
             function vendor(el, prop) {
                 var s = el.style,
                     pp,
@@ -317,7 +330,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                                 alpha = Math.max(1 - (i + s * astep) % f * ostep, o.opacity);
                                 self.opacity(el, o.lines - s, alpha, o);
                             }
-                            self.timeout = self.el && setTimeout(anim, ~~ (1000 / fps));
+                            self.timeout = self.el && setTimeout(anim, ~~(1000 / fps));
                         })();
                     }
                     return self;
@@ -426,20 +439,20 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                                 rotation: 360 / o.lines * i + 'deg',
                                 left: ~~dx
                             }), ins(css(vml('roundrect', {
-                                arcsize: o.corners
-                            }), {
-                                width: r,
-                                height: o.width,
-                                left: o.radius,
-                                top: -o.width >> 1,
-                                filter: filter
-                            }), vml('fill', {
-                                color: o.color,
-                                opacity: o.opacity
-                            }), vml('stroke', {
-                                opacity: 0
-                            }) // transparent stroke to fix color bleeding upon opacity change
-                                )));
+                                    arcsize: o.corners
+                                }), {
+                                    width: r,
+                                    height: o.width,
+                                    left: o.radius,
+                                    top: -o.width >> 1,
+                                    filter: filter
+                                }), vml('fill', {
+                                    color: o.color,
+                                    opacity: o.opacity
+                                }), vml('stroke', {
+                                    opacity: 0
+                                }) // transparent stroke to fix color bleeding upon opacity change
+                            )));
                         }
 
                         if (o.shadow) {

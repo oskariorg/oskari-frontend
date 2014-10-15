@@ -1,0 +1,39 @@
+{
+  "baseUrl" : "../",
+  "paths" : {
+    "jquery" : "empty:",
+    "css-builder": "libraries/requirejs/lib/css-builder"
+  },
+  "optimize" : "uglify2",
+  "optimizeAllPluginResources" : true,
+  "findNestedDependencies" : true,
+  "wrapShim": true,
+  "skipDirOptimize": true,
+  "keepBuildDir": true,
+  "name" : "applications/oskari2/ol2/main-dev",
+  "mainConfigFile" : "../applications/oskari2/ol2/main-dev.js",
+  "deps" : [
+    "openlayers-default-theme",
+    "mapfull",
+    "divmanazer",
+    "toolbar",
+    "statehandler",
+    "infobox",
+    "search",
+    "layerselector2",
+    "layerselection2",
+    "maplegend",
+    "guidedtour",
+    "promote",
+    "coordinatedisplay",
+    "statsgrid",
+    "metadataflyout",
+    "routesearch",
+    "userguide",
+    "backendstatus",
+    "printout",
+    "featuredata2",
+    "metadatacatalogue"
+  ],
+  "out" : "This value is overwritten when running 'grunt buildsetup:../applications/oskari2/ol2/buildserupconfig.json', but for completeness here is a working example for manual builds '../applications/oskari2/ol2/main.js'"
+}

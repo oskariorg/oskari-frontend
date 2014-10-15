@@ -17,7 +17,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
      * instance
      *      reference to component that created the tile
      */
-
     function (instance) {
         this.instance = instance;
         this.container = null;
@@ -30,8 +29,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         this.templateLayerOutOfContentArea = null;
         this.sortableBinded = false;
         this._sliders = {};
-        this.WFS_TYPE = "WFS";
-        this.ANALYSIS_TYPE = "ANALYSIS";
+        this.WFS_TYPE = 'WFS';
+        this.ANALYSIS_TYPE = 'ANALYSIS';
     }, {
         /**
          * @method getName
@@ -65,8 +64,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          */
         startPlugin: function () {
             var loc = this.instance.getLocalization('layer'),
-            	elParent,
-            	elId;
+                elParent,
+                elId;
             // sortable class/data-sortable are configs for rightJS
             // sortable component
             this.template = jQuery('<ul class="selectedLayersList sortable" ' + 'data-sortable=\'{' + 'itemCss: "li.layer.selected", ' + 'handleCss: "div.layer-title" ' + '}\'></ul>');
@@ -78,14 +77,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             this.templateLayerFooterHidden = jQuery('<p class="layer-msg">' + '<a href="JavaScript:void(0);">' + loc.show + '</a> ' + loc.hidden + '</p>');
 
-            this.templateLayerFooterOutOfScale = jQuery('<p class="layer-msg">' + loc["out-of-scale"] + ' <a href="JavaScript:void(0);">' + loc["move-to-scale"] + '</a></p>');
+            this.templateLayerFooterOutOfScale = jQuery('<p class="layer-msg">' + loc['out-of-scale'] + ' <a href="JavaScript:void(0);">' + loc['move-to-scale'] + '</a></p>');
 
-            this.templateLayerFooterOutOfContentArea = jQuery('<p class="layer-msg">' + loc["out-of-content-area"] + ' <a href="JavaScript:void(0);">' + loc["move-to-content-area"] + '</a></p>');
+            this.templateLayerFooterOutOfContentArea = jQuery('<p class="layer-msg">' + loc['out-of-content-area'] + ' <a href="JavaScript:void(0);">' + loc['move-to-content-area'] + '</a></p>');
 
             //set id to flyouttool-close
             elParent = this.container.parentElement.parentElement;
-        	elId = jQuery(elParent).find('.oskari-flyouttoolbar').find('.oskari-flyouttools').find('.oskari-flyouttool-close');
-        	elId.attr("id", 'oskari_layerselection2_flyout_oskari_flyouttool_close');
+            elId = jQuery(elParent).find('.oskari-flyouttoolbar').find('.oskari-flyouttools').find('.oskari-flyouttool-close');
+            elId.attr('id', 'oskari_layerselection2_flyout_oskari_flyouttool_close');
         },
         /**
          * @method stopPlugin
@@ -145,7 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 layer,
                 layerContainer;
 
-            for (n = layers.length - 1; n >= 0; --n) {
+            for (n = layers.length - 1; n >= 0; n -= 1) {
                 layer = layers[n];
                 layerContainer = this._createLayerContainer(layer);
                 listContainer.append(layerContainer);
@@ -155,7 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             }
 
             listContainer.sortable({
-                /*change: function(event,ui) {
+                /*change: function (event,ui) {
              var item = ui.item ;
              me._layerOrderChanged(item)
              },*/
@@ -172,7 +171,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             //TODO: get rid of sortableBinded and UNBIND?
             if (!this.sortableBinded) {
                 this.sortableBinded = true;
-                /*RightJS('.selectedLayersList').on('finish', function(event) {
+                /*RightJS('.selectedLayersList').on('finish', function (event) {
              me._layerOrderChanged(event.index);
              });*/
 
@@ -186,20 +185,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             if (!layer.isVisible()) {
                 toolsDiv.addClass('hidden-layer');
-                footer.css("display", "none");
+                footer.css('display', 'none');
                 toolsDiv.append(this._createLayerFooterHidden(layer));
             } else if (!isInScale) {
                 var oosFtr = this._createLayerFooterOutOfScale(layer);
                 toolsDiv.addClass('out-of-scale');
-                footer.css("display", "none");
+                footer.css('display', 'none');
                 toolsDiv.append(oosFtr);
             } else if (!isGeometryMatch) {
                 var oocaFtr = this._createLayerFooterOutOfContentArea(layer);
                 toolsDiv.addClass('out-of-content');
-                footer.css("display", "none");
+                footer.css('display', 'none');
                 toolsDiv.append(oocaFtr);
             } else {
-                footer.css("display", "");
+                footer.css('display', '');
             }
 
             toolsDiv.append(footer);
@@ -217,7 +216,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     min: 0,
                     max: 100,
                     value: opa,
-                    /*change: function(event,ui) {
+                    /*change: function (event,ui) {
                  me._layerOpacityChanged(layer, ui.value);
                  },*/
                     slide: function (event, ui) {
@@ -252,7 +251,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 newIndex = -1;
 
             allNodes.each(function (index, el) {
-                if ($(this).attr('layer_id') == movedId) {
+                if ($(this).attr('layer_id') === movedId) {
                     newIndex = index;
                     return false;
                 }
@@ -293,24 +292,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     i,
                     opt;
                 sel.empty();
-                for (i = 0; i < styles.length; i++) {
+                for (i = 0; i < styles.length; i += 1) {
                     opt = jQuery('<option value="' + styles[i].getName() + '">' + styles[i].getTitle() + '</option>');
                     sel.append(opt);
                     hasOpts = true;
                 }
-                if (!sel.hasClass("binded")) {
+                if (!sel.hasClass('binded')) {
                     sel.change(function (e) {
                         var val = sel.find('option:selected').val();
                         layer.selectStyle(val);
-                        var builder = sandbox.getRequestBuilder("ChangeMapLayerStyleRequest"),
+                        var builder = sandbox.getRequestBuilder('ChangeMapLayerStyleRequest'),
                             req = builder(layer.getId(), val);
                         sandbox.request(me.instance.getName(), req);
                     });
-                    sel.addClass("binded");
+                    sel.addClass('binded');
                 }
                 if (hasOpts) {
-                    if (layer.getCurrentStyle()) sel.val(layer.getCurrentStyle().getName());
-                    sel.trigger("change");
+                    if (layer.getCurrentStyle()) {
+                        sel.val(layer.getCurrentStyle().getName());
+                    }
+                    sel.trigger('change');
                     stylesel.show();
                 }
             }
@@ -375,7 +376,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             // remove layer from selected tool
             if (!layer.isSticky()) {
                 layerDiv.find('div.layer-tool-remove').addClass('icon-close');
-                layerDiv.find('.layer-tool-remove').attr("id", 'oskari_layerselection_layercontainer_icon_close_layerId' + layerId);
+                layerDiv.find('.layer-tool-remove').attr('id', 'oskari_layerselection_layercontainer_icon_close_layerId' + layerId);
 
                 layerDiv.find('div.layer-tool-remove').bind('click', function () {
                     var reqName = 'RemoveMapLayerRequest',
@@ -413,7 +414,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 layerCount = layerContainer.find('> li').length,
                 fromIndex = layerCount - fromPosition, // Order is inverted
                 toIndex = layerCount - toPosition,
-                el = layerContainer.find('> li:nth-child(' + fromIndex + ')' ).detach();
+                el = layerContainer.find('> li:nth-child(' + fromIndex + ')').detach();
 
             if (toIndex === 1) {
                 // First element, just add to the beginning
@@ -425,7 +426,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 // Somewhere in the middle, add before index
                 // This would fail on toIndex === layerCount as we've removed one element,
                 // but that case is handled above
-                layerContainer.find('> li:nth-child(' + toIndex + ')' ).before(el);
+                layerContainer.find('> li:nth-child(' + toIndex + ')').before(el);
             }
         },
         /**
@@ -539,7 +540,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 msg = this.templateLayerFooterOutOfScale.clone();
-            msg.addClass("layer-msg-for-outofscale");
+            msg.addClass('layer-msg-for-outofscale');
             var reqName = 'MapModulePlugin.MapMoveByLayerContentRequest',
                 requestBuilder = sandbox.getRequestBuilder(reqName);
             msg.find('a').bind('click', function () {
@@ -564,7 +565,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 msg = this.templateLayerFooterHidden.clone();
-            msg.addClass("layer-msg-for-hidden");
+            msg.addClass('layer-msg-for-hidden');
             var reqName = 'MapModulePlugin.MapLayerVisibilityRequest',
                 visibilityRequestBuilder = sandbox.getRequestBuilder(reqName);
             msg.find('a').bind('click', function () {
@@ -589,7 +590,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 msg = this.templateLayerFooterOutOfContentArea.clone();
-            msg.addClass("layer-msg-for-outofcontentarea");
+            msg.addClass('layer-msg-for-outofcontentarea');
             var reqName = 'MapModulePlugin.MapMoveByLayerContentRequest',
                 requestBuilder = sandbox.getRequestBuilder(reqName);
             msg.find('a').bind('click', function () {
@@ -631,7 +632,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             });
 
             // data url link
-            var subLmeta = false;
+            var subLmeta = false,
+                subUuid;
             if (!layer.getMetadataIdentifier()) {
                 //Check if sublayers have metadata info     
                 var subLayers = layer.getSubLayers();
@@ -641,7 +643,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     for (s = 0; s < subLayers.length; s += 1) {
 
                         subUuid = subLayers[s].getMetadataIdentifier();
-                        if (!subUuid || subUuid === "") {
+                        if (!subUuid || subUuid === '') {
                             subLmeta = false;
                             break;
                         }
@@ -661,19 +663,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     additionalUuidsCheck[uuid] = true;
 
                     var subLayers = layer.getSubLayers(),
-                        s,
-                        subUuid;
+                        s;
                     if (subLayers && subLayers.length > 0) {
-                        for (s = 0; s < subLayers.length; s++) {
+                        for (s = 0; s < subLayers.length; s += 1) {
                             subUuid = subLayers[s].getMetadataIdentifier();
-                            if (subUuid && subUuid !== "" && !additionalUuidsCheck[subUuid]) {
+                            if (subUuid && subUuid !== '' && !additionalUuidsCheck[subUuid]) {
                                 additionalUuidsCheck[subUuid] = true;
                                 additionalUuids.push({
                                     uuid: subUuid
                                 });
                             }
                         }
-
                     }
 
                     sandbox.postRequestByName(rn, [{
@@ -685,33 +685,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             }
 
             // Filter functionality for WFS layers
-            if ((layer.isLayerOfType(me.WFS_TYPE))||(layer.isLayerOfType(me.ANALYSIS_TYPE))) {
+            if ((layer.isLayerOfType(me.WFS_TYPE)) || (layer.isLayerOfType(me.ANALYSIS_TYPE))) {
                 var fixedOptions = {
-                    bboxSelection : true,
-                    clickedFeaturesSelection : false
+                    bboxSelection: true,
+                    clickedFeaturesSelection: false
                 };
-                var filterDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', loc, fixedOptions);
-                var filterIcon = tools.find('div.layer-filter');
+                var filterDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', loc, fixedOptions),
+                    filterIcon = tools.find('div.layer-filter');
                 filterIcon.addClass('icon-funnel');
                 filterIcon.bind('click', function () {
                     var icon = jQuery(this);
                     if (icon.hasClass('icon-funnel')) {
                         filterDialog.createFilterDialog(layer);
-//                        filterDialog.setCloseButtonHandler(function(){
-//                        });
-//                        filterDialog.setClearButtonHandler(function(){
-//                        });
-                        filterDialog.setUpdateButtonHandler(function(filters){
+                        //                        filterDialog.setCloseButtonHandler(function (){
+                        //                        });
+                        //                        filterDialog.setClearButtonHandler(function (){
+                        //                        });
+                        filterDialog.setUpdateButtonHandler(function (filters) {
                             // throw event to new wfs
-                            var event = me.instance.sandbox.getEventBuilder("WFSSetPropertyFilter")(filters, layer.getId());
+                            var event = me.instance.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
                             me.instance.sandbox.notifyAll(event);
                         });
 
-//                        icon.removeClass();
-//                        icon.addClass('icon-funnel-active');
+                        //                        icon.removeClass();
+                        //                        icon.addClass('icon-funnel-active');
                     } else {
-//                        icon.removeClass();
-//                        icon.addClass('icon-funnel');
+                        //                        icon.removeClass();
+                        //                        icon.addClass('icon-funnel');
                     }
                 });
             }
@@ -728,7 +728,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 s,
                 laytool,
                 toolContainer;
-            for (s = 0; s < laytools.length; s++) {
+            for (s = 0; s < laytools.length; s += 1) {
                 laytool = laytools[s];
                 if (laytool) {
                     // Icon or text link
@@ -757,10 +757,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 loc = this.instance.getLocalization('layer'),
                 publishPermission = layer.getPermission('publish');
 
-            if (publishPermission == 'publication_permission_ok' && sandbox.getUser().isLoggedIn()) {
-
+            if (publishPermission === 'publication_permission_ok' && sandbox.getUser().isLoggedIn()) {
                 footer.find('div.layer-rights').html(loc.rights.can_be_published_map_user.label);
-                footer.find('div.layer-rights').attr("title", loc.rights.can_be_published_map_user.tooltip);
+                footer.find('div.layer-rights').attr('title', loc.rights.can_be_published_map_user.tooltip);
             }
         },
 
@@ -816,7 +815,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 if (layerDiv) {
                     this._sliders[layer.getId()] = null;
                     layerDiv.remove();
-
                 }
             }
         },
@@ -829,7 +827,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * Updates the name for the given layer in the UI
          */
         handleLayerModified: function (layer) {
-            var me = this,
+            var newDiv,
+                me = this,
                 layerDiv = jQuery(me.container).find('li.layerselection2[layer_id=' + layer.getId() + ']'),
                 scale = this.instance.getSandbox().getMap().getScale();
 
@@ -855,7 +854,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             var me = this,
                 layerDiv = jQuery(me.container).find('li.layerselection2[layer_id=' + layer.getId() + ']');
             layerDiv.find('div.layer-tool-remove').removeClass('icon-close');
-
         },
         /**
          * @method refresh
@@ -868,10 +866,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 n,
                 layer;
 
-            for (n = layers.length - 1; n >= 0; --n) {
+            for (n = layers.length - 1; n >= 0; n -= 1) {
                 layer = layers[n];
                 this.handleLayerOpacityChanged(layer);
-
             }
         }
     }, {

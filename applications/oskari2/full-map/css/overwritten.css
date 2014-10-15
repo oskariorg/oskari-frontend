@@ -1,0 +1,8 @@
+table td {
+	text-align: left;
+	vertical-align: top;
+}
+
+table {
+	border-top-width: 0px;
+}

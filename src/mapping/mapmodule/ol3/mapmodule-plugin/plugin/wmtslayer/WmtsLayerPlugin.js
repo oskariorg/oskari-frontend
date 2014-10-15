@@ -31,8 +31,6 @@ define(["bundles/framework/bundle/mapwmts/plugin/wmtslayer/WmtsLayerPlugin"], fu
             }
 
             var sandbox = this._sandbox;
-
-            var imageFormat = "image/png";
             var reqEnc = "KVP";
 
             var wmtsUrl = //layer.getWmtsUrls()[0]; 
@@ -45,23 +43,6 @@ define(["bundles/framework/bundle/mapwmts/plugin/wmtslayer/WmtsLayerPlugin"], fu
             }
 
             var matrixSet = layer.getWmtsMatrixSet();
-            matrixIds = [];
-            var resolutions = [];
-            var serverResolutions = [],
-                n,
-                scaleDenom,
-                res;
-
-            for (n = 0; n < matrixSet.matrixIds.length; n++) {
-
-                matrixIds.push(matrixSet.matrixIds[n]);
-                //.identifier);
-                scaleDenom = matrixSet.matrixIds[n].scaleDenominator;
-                res = scaleDenom / 90.71446714322 * OpenLayers.METERS_PER_INCH;
-                resolutions.push(res);
-                serverResolutions.push(res);
-            }
-
             var wmtsCaps = layer.getWmtsCaps();
             var wmtsOpts = ol.source.WMTS.optionsFromCapabilities(wmtsCaps, wmtsCaps.contents.layers[0].identifier);
             wmtsOpts.url = wmtsUrl;

@@ -879,7 +879,7 @@ Oskari = (function () {
                 // If this error is thrown,
                 // the class definition is missing.
                 // Ensure the file has been loaded before use
-                throw 'Class ' + className + ' does not exist';
+                throw 'Class "' + className + '" does not exist';
             }
             classInstance = new classInfo._class();
             constructors = classInfo._constructors;
@@ -924,7 +924,8 @@ Oskari = (function () {
                             constructors[i] === undefined) {
                         throw new Error(
                             'createWithClassInfo(): Undefined constructor in ' +
-                                'class ' + classInfo._composition.className
+                                'class "' + classInfo._composition.className +
+                                '"'
                         );
                     }
                     constructors[i].apply(classInstance, instanceArguments);
@@ -953,7 +954,7 @@ Oskari = (function () {
 
             classInfo = this._getClassInfo(className);
             if (!classInfo) {
-                throw 'Class ' + className + ' does not exist';
+                throw 'Class "' + className + '" does not exist';
             }
             return this.getBuilderFromClassInfo(classInfo);
         },
