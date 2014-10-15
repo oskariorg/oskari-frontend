@@ -7,6 +7,22 @@
 Rewritten to use JSON backend, any code relying on the old implementation is likely to break.
 New implementation has full localization.
 
+## 1.24.3
+
+### applications/elf
+
+Typo fixed in index.js
+
+## 1.24.2
+
+###  featuredata2 / Flyout
+
+Implemented clickable links in the grid. Improved table header style. Fixed a nested table issue with My places data.
+
+###  mapmodule-plugin / GetFeatureInfoFormatter
+
+Modified image position.
+
 ## 1.24.1
 
 ### mapmodule/LogoPlugin

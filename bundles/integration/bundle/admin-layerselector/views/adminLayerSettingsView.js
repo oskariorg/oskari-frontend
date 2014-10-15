@@ -432,8 +432,8 @@ define([
                 data.realtime = form.find('#add-layer-realtime').is(':checked');
                 data.refreshRate = form.find('#add-layer-refreshrate').val();
 
-                data.username = form.find('#add-layer-username').val();
-                data.password = form.find('#add-layer-password').val();
+                data.username = me.model.getUsername(); // form.find('#add-layer-username').val();
+                data.password = me.model.getPassword(); //form.find('#add-layer-password').val();
 
                 if (!data.gfiType) {
                     // if there isn't a selection, don't send anything so backend will keep the existing value
@@ -647,11 +647,19 @@ define([
                 e.stopPropagation();
 
                 var serviceURL = form.find('#add-layer-interface').val(),
-                    layerType = form.find('#add-layer-layertype').val();
+                    layerType = form.find('#add-layer-layertype').val(),
+                    user = form.find('#add-layer-username').val(),
+                    pw =  form.find('#add-layer-password').val();
 
                 me.model.set({
                     '_layerUrls': [serviceURL]
                 }, {
+                    silent: true
+                });
+                me.model.set({_admin:{
+                    username: user,
+                    password: pw
+                }}, {
                     silent: true
                 });
 
@@ -659,7 +667,9 @@ define([
                     type: 'POST',
                     data: {
                         url: serviceURL,
-                        type : layerType
+                        type : layerType,
+                        user: user,
+                        pw: pw
                     },
                     url: baseUrl + 'action_route=GetWSCapabilities',
                     success: function (resp) {
