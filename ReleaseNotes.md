@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.24.4
+
+### publishedmyplaces2
+
+Now checks if Toolbar.ToolButtonStateRequest is present before trying to send one.
+
 ## 1.24.3
 
 ### applications/elf
