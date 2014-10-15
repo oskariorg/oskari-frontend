@@ -6,6 +6,14 @@
 
 Now checks if Toolbar.ToolButtonStateRequest is present before trying to send one.
 
+### myplacesimport
+
+Changed translations to not reference "Paikkatietoikkuna"
+
+### publisher
+
+Fixed typo in finnish translations
+
 ## 1.24.3
 
 ### applications/elf
