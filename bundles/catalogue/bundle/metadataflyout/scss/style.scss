@@ -5,13 +5,21 @@
 		article {
 			// Images are restricted in size and can be zoomed in
 			.browseGraphic {
-				cursor: zoom-out;
 				float: left;
-				margin-left: 2px;
+				margin-bottom: 6px;
+				margin-left: 6px;
+
+				img:hover {
+					cursor: zoom-out;
+				}
 
 				&:not(.fullsize) img {
 					max-height: 200px;
-					cursor: zoom-in;
+
+					&:hover {
+						cursor: zoom-in;
+					}
+
 				}
 
 			}

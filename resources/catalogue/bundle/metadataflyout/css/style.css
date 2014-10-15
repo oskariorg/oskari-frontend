@@ -1,12 +1,15 @@
 .metadataflyout {
   /* Content */ }
   .metadataflyout .tab-content article .browseGraphic {
-    cursor: zoom-out;
     float: left;
-    margin-left: 2px; }
+    margin-bottom: 6px;
+    margin-left: 6px; }
+    .metadataflyout .tab-content article .browseGraphic img:hover {
+      cursor: zoom-out; }
     .metadataflyout .tab-content article .browseGraphic:not(.fullsize) img {
-      max-height: 200px;
-      cursor: zoom-in; }
+      max-height: 200px; }
+      .metadataflyout .tab-content article .browseGraphic:not(.fullsize) img:hover {
+        cursor: zoom-in; }
   .metadataflyout .tab-content article h1 {
     margin-bottom: 8px; }
   .metadataflyout .tab-content article h1, .metadataflyout .tab-content article h2 {
