@@ -192,7 +192,7 @@ Oskari.registerLocalization(
             "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
         },
         "StartView": {
-            "text": "Julkaise kartta -toiminnon avulla voit julkaista upotettavan kartan omslla verkkosivulla. Toiminnon avulla voit määritellä kartalla näytettävän karttanäkymän ja kartalla käytössä olevat työkalut sekä niiden ulkoasun. Kun määrittely on valmis, voit julkaista kartan liittämällä saamasi html-koodin verkkosivuillesi.",
+            "text": "Julkaise kartta -toiminnon avulla voit julkaista upotettavan kartan omalla verkkosivulla. Toiminnon avulla voit määritellä kartalla näytettävän karttanäkymän ja kartalla käytössä olevat työkalut sekä niiden ulkoasun. Kun määrittely on valmis, voit julkaista kartan liittämällä saamasi html-koodin verkkosivuillesi.",
             "touLink": "Näytä karttajulkaisun käyttöehdot",
             "layerlist_title": "Julkaistavissa olevat karttatasot",
             "layerlist_empty": "Valitsemiasi karttatasoja ei voida julkaista. Karttatasojen julkaisuoikeudet voi tarkistaa \"Valitut karttatasot\"-valikosta.",
