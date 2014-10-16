@@ -699,11 +699,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 parent = gridDiv.parent(), // .publishedgrid
                 selectorsCont = parent.find('.selectors-container'),
                 selectorsHeight = 0;
+
             if (selectorsCont.length > 0) {
                 selectorsHeight = selectorsCont.outerHeight();
             }
             gridDiv.height(parent.height() - selectorsHeight);
-            this.grid.resizeCanvas();
+            if (this.grid) {
+                this.grid.resizeCanvas();
+            }
         },
 
         /**

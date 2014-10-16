@@ -4,9 +4,10 @@
 	display: block;
 	/* Force line to fit container */
     line-height: 15px;
-	height: 25px;
 	z-index: 100000000 !important;
 	opacity: 0.8 !important;
+	height: 25px;
+	
 	
 	a, a:hover, a:active, a:visited {
 		color: inherit;

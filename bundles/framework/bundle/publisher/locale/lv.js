@@ -144,7 +144,8 @@ Oskari.registerLocalization(
                 "fill": "NOT TRANSLATED",
                 "custom": "Pielāgots izmērs",
                 "width": "Platums",
-                "height": "Augstums"
+                "height": "Augstums",
+                "separator": "x"
             },
             "buttons": {
                 "save": "Saglabāt",

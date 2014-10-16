@@ -1,7 +1,4 @@
-#contentMap.mapPublishMode > #mapdiv {
-  position: relative;
-  left: 212px; }
-#contentMap.mapPublishMode > div.row-fluid {
+#contentMap.mapPublishMode > #mapdiv, #contentMap.mapPublishMode > div.row-fluid {
   position: relative;
   left: 212px; }
 #contentMap div.basic_publisher {
@@ -22,11 +19,13 @@ div.codesnippet {
   border-width: 1px;
   padding: 5px;
   max-height: 200px;
-  over-flow: auto; }
+  overflow: auto; }
 
 div.notLoggedIn {
   padding: 10px; }
 
+div.basic_publisher input[type=text] {
+  width: 260px; }
 div.basic_publisher .disabled-button {
   opacity: 0.8; }
 div.basic_publisher div#publisher-layout-colours input[name=publisher-colour] {
@@ -35,10 +34,20 @@ div.basic_publisher p#publisher-selected-colour {
   display: inline; }
 div.basic_publisher button#publisher-colours {
   float: right; }
-div.basic_publisher div.customsize input {
-  width: 55px; }
-  div.basic_publisher div.customsize input.error {
-    border: 1px solid red; }
+div.basic_publisher .customsize:disabled {
+  color: #DDD; }
+div.basic_publisher .customsize label {
+  clear: none;
+  display: inline-block;
+  width: 60px; }
+  div.basic_publisher .customsize label:first-of-type {
+    margin-right: 3px; }
+  div.basic_publisher .customsize label:last-of-type {
+    margin-left: 3px; }
+  div.basic_publisher .customsize label input {
+    width: 100%; }
+    div.basic_publisher .customsize label input.error {
+      border: 1px solid red; }
 div.basic_publisher div.icon-info {
   float: right; }
 div.basic_publisher div.tool {
@@ -162,13 +171,23 @@ div#publisher-custom-colours {
       margin: 0 8px;
       width: 30px; }
 
-.maincontainer ul.selectedLayersList {
-  margin-left: 0px; }
-  .maincontainer ul.selectedLayersList li {
-    list-style: none; }
+/* I don't think this is needed anymore?
+.maincontainer {
 
-.maincontainer .block {
-  display: block; }
+    ul.selectedLayersList {
+        margin-left: 0px;
 
+        li {
+            list-style: none;
+        }
+
+    }
+
+    .block {
+        display: block;
+    }
+
+}
+*/
 #editModeBtn {
   margin: 0; }

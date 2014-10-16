@@ -146,7 +146,8 @@ Oskari.registerLocalization(
                 "fill": "Tilan täyttävä",
                 "custom": "Määritä oma koko",
                 "width": "leveys",
-                "height": "korkeus"
+                "height": "korkeus",
+                "separator": "x"
             },
             "buttons": {
                 "save": "Tallenna",
