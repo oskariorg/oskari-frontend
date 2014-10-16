@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 'abstract': _.template(
                     '<article>' +
                     '    <% _.forEach(identification.browseGraphics, function (graphic) { %>' +
-                    '        <div class="browseGraphic" style="display: none;">' +
+                    '        <div class="browseGraphic">' +
                     '            <img src="<%- graphic.fileName %>" />' +
                     '        </div>' +
                     '    <% }); %>' +
@@ -80,7 +80,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 'jhs': _.template(
                     '<article>' +
                     '    <% _.forEach(identification.browseGraphics, function (graphic) { %>' +
-                    '        <div class="browseGraphic" style="display: none;">' +
+                    '        <div class="browseGraphic">' +
                     '            <img src="<%- graphic.fileName %>" />' +
                     '        </div>' +
                     '    <% }); %>' +
@@ -246,7 +246,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 'inspire': _.template(
                     '<article>' +
                     '    <% _.forEach(identification.browseGraphics, function (graphic) { %>' +
-                    '        <div class="browseGraphic" style="display: none;">' +
+                    '        <div class="browseGraphic">' +
                     '            <img src="<%- graphic.fileName %>" />' +
                     '        </div>' +
                     '    <% }); %>' +
@@ -456,12 +456,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 links,
                 locale = me.locale,
                 model = me._model,
-                showImage = function () {
-                    browseGraphics.find(
-                        'img[src="' + this.src + '"]').parent().css({
-                        display: ''
-                    });
-                },
                 tabContainerHeader,
                 tabId;
 
@@ -497,7 +491,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
             for (i = 0; i < identification.browseGraphics.length; i += 1) {
                 images[i] = new Image();
-                images[i].onload = showImage;
                 images[i].src = identification.browseGraphics[i].fileName;
             }
 
