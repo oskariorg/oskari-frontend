@@ -3,21 +3,19 @@
  * Handles modules implementing Stateful protocol to get application state
  * and uses the registered plugin to handle saving the state.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedStateHandlerBundleInstance",
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.publishedstatehandler.PublishedStateHandlerBundleInstance',
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
      * @param {Object} config
      *      JSON config with params needed to run the bundle
      *
      */
-
     function () {
-
         this._localization = null;
         this._pluginInstances = {};
         this._startupState = null;
-
         this._historyPollingInterval = 1500;
         this._historyTimer = null;
         this._historyPrevious = [];
@@ -27,7 +25,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
         // TODO: default view from conf?
         this._defaultViewId = 1;
 
-        if (typeof window.viewId !== "undefined") {
+        if (typeof window.viewId !== 'undefined') {
             this._currentViewId = window.viewId;
         } else {
             this._currentViewId = this._defaultViewId;
@@ -42,7 +40,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -64,7 +62,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
          * @method start
          * implements BundleInstance start methdod
          */
-        "start": function () {
+        start: function () {
 
             var me = this;
             if (me.started) {
@@ -93,14 +91,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
          *
          * implements bundle instance update method
          */
-        "update": function () {
+        update: function () {
 
         },
         /**
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function () {
+        stop: function () {
             var sandbox = this.sandbox(),
                 p;
             // sends a request that removes button described in config
@@ -122,7 +120,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
          * @method init
          * implements Module protocol init method
          */
-        "init": function () {
+        init: function () {
             var me = this;
             var sandbox = this.sandbox;
             // headless
@@ -194,8 +192,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
 
             }
         },
-
-
 
         /**
          * @method registerPlugin
@@ -279,14 +275,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
         }, {
             rule: 'location',
             cmp: function (prevState, nextState) {
-                // FIXME use ===
-                if (prevState.east != nextState.east ||
-                        prevState.north != nextState.north
+                if (prevState.east !== nextState.east ||
+                        prevState.north !== nextState.north
                         ) {
                     return true;
                 }
-                // FIXME use ===
-                if (prevState.zoom != nextState.zoom) {
+                if (prevState.zoom !== nextState.zoom) {
                     return true;
                 }
             }
@@ -306,7 +300,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
                     prevLayer = prevLayers[ln];
                     nextLayer = nextLayers[ln];
 
-                    me.sandbox.printDebug("[StateHandler] comparing layer state " + prevLayer.id + " vs " + nextLayer.id);
+                    me.sandbox.printDebug(
+                        '[StateHandler] comparing layer state ' +
+                        prevLayer.id + ' vs ' + nextLayer.id
+                    );
 
 
                     if (prevLayer.id !== nextLayer.id) {
@@ -339,9 +336,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
                 cmp;
             for (sc = 0; sc < me._stateComparators.length; sc += 1) {
                 cmp = me._stateComparators[sc];
-                me.sandbox.printDebug("[StateHandler] comparing state " + cmp.rule);
+                me.sandbox.printDebug(
+                    '[StateHandler] comparing state ' + cmp.rule
+                );
                 if (cmp.cmp.apply(this, [prevState, nextState])) {
-                    me.sandbox.printDebug("[StateHandler] comparing state MATCH " + cmp.rule);
+                    me.sandbox.printDebug(
+                        '[StateHandler] comparing state MATCH ' + cmp.rule
+                    );
                     cmpResult.result = true;
                     cmpResult.rule = cmp.rule;
                     cmpResult.rulesMatched[cmp.rule] = cmp.rule;
@@ -363,7 +364,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
                 logUrlWithLinkParams = me.conf.logUrl + '?' + me.sandbox.generateMapLinkParameters();
 
             jQuery.ajax({
-                type: "GET",
+                type: 'GET',
                 url: logUrlWithLinkParams
             });
         },
@@ -376,7 +377,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
                     prevState = history.length === 0 ? null : history[history.length - 1],
                     cmpResult = me._compareState(prevState, state, true);
                 if (cmpResult.result) {
-                    me.sandbox.printDebug("[StateHandler] PUSHING state");
+                    me.sandbox.printDebug('[StateHandler] PUSHING state');
                     state.rule = cmpResult.rule;
                     me._historyPrevious.push(state);
                     me._historyNext = [];
@@ -462,7 +463,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
                 if (layer.getCurrentStyle &&
                         layer.getCurrentStyle() &&
                         layer.getCurrentStyle().getName() &&
-                        layer.getCurrentStyle().getName() !== "!default!") {
+                        layer.getCurrentStyle().getName() !== '!default!') {
                     layerJson.style = layer.getCurrentStyle().getName();
                 }
                 state.selectedLayers.push(layerJson);
@@ -477,7 +478,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
 
             // setting state
             if (state.selectedLayers && cmpResult.rulesMatched.layers) {
-                sandbox.printDebug("[StateHandler] restoring LAYER state");
+                sandbox.printDebug('[StateHandler] restoring LAYER state');
                 this._teardownState(mapmodule);
 
                 var rbAdd = sandbox.getRequestBuilder('AddMapLayerRequest'),
@@ -505,7 +506,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
             }
 
             if (state.east) {
-                sandbox.printDebug("[StateHandler] restoring LOCATION state");
+                sandbox.printDebug('[StateHandler] restoring LOCATION state');
                 this.getSandbox().getMap().moveTo(
                     state.east,
                     state.north,
@@ -534,5 +535,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedS
         }
 
     }, {
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
+        protocol: [
+            'Oskari.bundle.BundleInstance',
+            'Oskari.mapframework.module.Module'
+        ]
     });

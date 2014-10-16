@@ -158,10 +158,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
             // setup initial size
             var sizeIsSet = false,
-                initWidth = me.data.state.mapfull.config.size.width,
-                initHeight = me.data.state.mapfull.config.size.height,
+                initWidth,
+                initHeight,
                 option,
                 i;
+
+            if (me.data.state.mapfull.config.size) {
+                initWidth = me.data.state.mapfull.config.size.width
+                initHeight = me.data.state.mapfull.config.size.height
+            }
+
+            if (initWidth === null || initWidth === undefined) {
+                initWidth = '';
+            }
+
+            if (initHeight === null || initHeight === undefined) {
+                initHeight = '';
+            }
 
             for (i = 0; i < me.sizeOptions.length; i += 1) {
                 option = me.sizeOptions[i];
