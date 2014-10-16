@@ -4,14 +4,14 @@ Oskari.registerLocalization(
     "key": "MyPlacesImport",
     "value": {
         "title": "Omien aineistojen tuonti",
-        "desc": "Voit tuoda omia aineistoja Paikkatietoikkunaan ja luoda niistä oman karttatason. Tuotavat aineistot voivat olla joko shp (shapefile) -, gpx-, mif/mid-, zip- tai kml/kmz (Google) -tiedostomuodossa.",
+        "desc": "Voit tuoda omia aineistoja shp-, gpx- tai mif/mid-tiedostomuodossa zip-pakattuna tai kmz-tiedostomuodossa (pakattu kml).",
         "help": "Valitse aineiston sisältävä tiedosto tai anna linkki vastaavaan tiedostoon. Tiedosto voi olla joko shp-, zip- tai kml/kmx-tiedostomuodossa. Voit luoda shapefile (shp) -siirtoformaatissa olevasta aineistosta zip-tiedoston pakkaamalla ko. aineistoon liittyvät shp-, shx-, dbf- ja prj-päätteiset tiedostot yhteen zip-tiedostoon. Myös Googlen karttapalvelusta saatavat kml/kmz-tiedostot on mahdollista pakata zip-tiedostoon.",
         "tool": {
             "tooltip": "Omien aineistojen tuonti"
         },
         "flyout": {
             "title": "Omien aineistojen tuonti",
-            "description": "Voit tuoda omia aineistoja Paikkatietoikkunaan karttatasoksi. Tuotavien aineistojen tulee olla shp-, gpx- tai mif/mid-tiedostomuotoa zip-paketissa tai kmz-tiedostomuotoa (pakattu kml).",
+            "description": "Voit tuoda omia aineistoja shp-, gpx- tai mif/mid-tiedostomuodossa zip-pakattuna tai kmz-tiedostomuodossa (pakattu kml).",
             "actions": {
                 "cancel": "Peruuta",
                 "next": "Seuraava"
