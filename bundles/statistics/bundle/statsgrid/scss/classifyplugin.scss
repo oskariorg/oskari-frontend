@@ -1,6 +1,6 @@
 .manageClassificationPlugin {
 	z-index: 1000000 !important;
-	max-width: 240px;
+	max-width: 220px;
 	background-color: white !important;
 	color: #000 !important;
 	padding: 0px;
@@ -15,7 +15,7 @@
 		padding: 0px;
 		margin: 4px;
 	}
-
+	// FIXME WTH is this random id?
 	div#pop-up_06052013 {
 		/* HOVER colortable details */
 		display: none;

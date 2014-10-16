@@ -144,7 +144,8 @@ Oskari.registerLocalization(
                 "fill": "NOT TRANSLATED",
                 "custom": "Madhësia e zakonshme",
                 "width": "gjerësia",
-                "height": "gjetësia"
+                "height": "gjetësia",
+                "separator": "x"
             },
             "buttons": {
                 "save": "Ruaj",

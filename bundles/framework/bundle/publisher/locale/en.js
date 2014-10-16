@@ -146,7 +146,8 @@ Oskari.registerLocalization(
                 "fill": "Fill space",
                 "custom": "Custom size",
                 "width": "width",
-                "height": "height"
+                "height": "height",
+                "separator": "x"
             },
             "buttons": {
                 "save": "Save",
