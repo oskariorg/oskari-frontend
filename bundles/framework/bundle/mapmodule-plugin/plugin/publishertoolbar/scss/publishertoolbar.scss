@@ -1,3 +1,5 @@
+$iconImageWidth: 32px;
+$iconImageHeight: 32px;
 $iconHeight: 35px;
 $iconWidth: $iconHeight;
 $darkColor: #424343;
@@ -52,6 +54,8 @@ $darkToolBackground: #212121;
 				div.tool {
 					display: inline-block;
 					cursor: pointer;
+					width: $iconImageWidth;
+					height: $iconImageHeight;
 				}
 
 				div.tool.selected, 

@@ -4,11 +4,12 @@
  * A Temporarily placed handler for showing map measurement (intermediate) results
  *
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasurementRequestHandler',
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.toolbar.request.ShowMapMeasurementRequestHandler',
 
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
      * @param {Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance} toolbar
      *          reference to toolbarInstance that handles the buttons
      */
@@ -24,6 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasureme
 
         var buttons = [],
             cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+
         cancelBtn.setTitle(loc.close);
 
         buttons.push(cancelBtn);
@@ -55,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasureme
                 dialog = me._dialog;
 
             // show measurements in toolbar's content container
-            if(me._toolbar.conf.hasContentContainer) {
+            if (me._toolbar.conf.hasContentContainer) {
                 me._showResultsInPlugin(value);
             } else {
                 // if there is no content container, show the data in dialog
@@ -83,47 +85,54 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasureme
         },
 
 
-    /**
-     * @method update
-     * implements Module protocol update method
-     */
-    _showResultsInPlugin : function(value) {
-        var me = this,
-            toolContainerRequest;
-        if (!me.toolContentDivData) {
-            var cancelBtn = me._buttons[0];
-            cancelBtn.setHandler(function() {
-                // ask toolbar to select default tool
-                var toolbarRequest = me._toolbar.getSandbox().getRequestBuilder('Toolbar.SelectToolButtonRequest')();
-                me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
-                me._hideResultsInPlugin(true);
-            });
-        
-            // store data for later reuse 
-            me.toolContentDivData = {
-                className: 'measureline',
-                title: me._title,
-                content: jQuery('<div></div>'),
-                buttons: me._buttons
-            };
+        /**
+         * @method update
+         * implements Module protocol update method
+         */
+        _showResultsInPlugin: function (value) {
+            var me = this,
+                toolContainerRequest;
+            if (!me.toolContentDivData) {
+                var cancelBtn = me._buttons[0];
+                cancelBtn.setHandler(function () {
+                    // ask toolbar to select default tool
+                    var toolbarRequest =
+                        me._toolbar.getSandbox().getRequestBuilder(
+                            'Toolbar.SelectToolButtonRequest'
+                        )();
+                    me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
+                    me._hideResultsInPlugin(true);
+                });
 
-            toolContainerRequest = me._toolbar.getSandbox().getRequestBuilder('Toolbar.ToolContainerRequest')('set', me.toolContentDivData);
+                // store data for later reuse 
+                me.toolContentDivData = {
+                    className: 'measureline',
+                    title: me._title,
+                    content: jQuery('<div></div>'),
+                    buttons: me._buttons
+                };
+
+                toolContainerRequest = me._toolbar.getSandbox().getRequestBuilder(
+                    'Toolbar.ToolContainerRequest'
+                )('set', me.toolContentDivData);
+                me._toolbar.getSandbox().request(me._toolbar, toolContainerRequest);
+            }
+            me.toolContentDivData.content.html(value);
+        },
+        /**
+         * @method sendStopDrawRequest
+         * Sends a StopDrawingRequest.
+         * Changes the panel controls to match the application state (new/edit) if propagateEvent != true
+         * @param {Boolean} isCancel boolean param for StopDrawingRequest, true == canceled, false = finish drawing (dblclick)
+         */
+        _hideResultsInPlugin: function (isCancel) {
+            var me = this,
+                toolContainerRequest = me._toolbar.getSandbox().getRequestBuilder(
+                    'Toolbar.ToolContainerRequest'
+                )('reset', me.toolContentDivData);
             me._toolbar.getSandbox().request(me._toolbar, toolContainerRequest);
+            me.toolContentDivData = null;
         }
-        me.toolContentDivData.content.html(value);
-    },
-    /**
-     * @method sendStopDrawRequest
-     * Sends a StopDrawingRequest. 
-     * Changes the panel controls to match the application state (new/edit) if propagateEvent != true
-     * @param {Boolean} isCancel boolean param for StopDrawingRequest, true == canceled, false = finish drawing (dblclick)
-     */
-    _hideResultsInPlugin : function(isCancel) {
-        var me = this,
-            toolContainerRequest = me._toolbar.getSandbox().getRequestBuilder('Toolbar.ToolContainerRequest')('reset', me.toolContentDivData);
-        me._toolbar.getSandbox().request(me._toolbar, toolContainerRequest);
-        me.toolContentDivData = null;
-    }
 
     }, {
         /**

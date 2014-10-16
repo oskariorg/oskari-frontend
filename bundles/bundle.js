@@ -891,6 +891,9 @@ Oskari = (function () {
                     // Ensure the file has been loaded before use.
                     // Note! check extends classes as well, those might also be
                     // missing.
+                    if (constructors[i] === null || constructors[i] === undefined) {
+                        throw new Error('Class ' + className + ' is missing super constructor ' + (i + 1) + '/' + constructors.length);
+                    }
                     constructors[i].apply(classInstance, instanceArguments);
                 }
             } else {

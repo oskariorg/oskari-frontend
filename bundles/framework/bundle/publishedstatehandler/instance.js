@@ -63,7 +63,6 @@ Oskari.clazz.define(
          * implements BundleInstance start methdod
          */
         start: function () {
-
             var me = this;
             if (me.started) {
                 return;
@@ -84,6 +83,14 @@ Oskari.clazz.define(
             }
 
             var ajaxUrl = sandbox.getAjaxUrl();
+            sandbox.addRequestHandler(
+                'StateHandler.SetStateRequest',
+                this.requestHandlers.setStateHandler
+            );
+            sandbox.addRequestHandler(
+                'StateHandler.SaveStateRequest',
+                this.requestHandlers.saveStateHandler
+            );
         },
 
         /**
@@ -101,6 +108,14 @@ Oskari.clazz.define(
         stop: function () {
             var sandbox = this.sandbox(),
                 p;
+            sandbox.removeRequestHandler(
+                'StateHandler.SetStateRequest',
+                this.requestHandlers.setStateHandler
+            );
+            sandbox.removeRequestHandler(
+                'StateHandler.SaveStateRequest',
+                this.requestHandlers.saveStateHandler
+            );
             // sends a request that removes button described in config
             var rb = sandbox.getRequestBuilder('MapControls.ToolButtonRequest');
             if (rb) {
@@ -121,8 +136,19 @@ Oskari.clazz.define(
          * implements Module protocol init method
          */
         init: function () {
-            var me = this;
             var sandbox = this.sandbox;
+            this.requestHandlers = {
+                setStateHandler: Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.statehandler.request.SetStateRequestHandler',
+                    sandbox,
+                    this
+                ),
+                saveStateHandler: Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.statehandler.request.SaveStateRequestHandler',
+                    sandbox,
+                    this
+                )
+            };
             // headless
             return null;
         },
