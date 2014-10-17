@@ -7,6 +7,10 @@
 Fixed state handling (history tools) for published map. Notice that 'publishedstatehandler' needs to be part of the startupSequence for 
 published map that has history tools enabled on toolbar.
 
+### publisher
+
+Fill screen option is now again available in size options. Map size handling is now more consistent when thematic maps are enabled.
+
 ## 1.24.4
 
 ### publishedmyplaces2
