@@ -302,12 +302,20 @@
     background-position: -647px 0px !important;
 }
 
+.tool-reset {
+    width: 32px;
+    height: 32px;
+    background-image: url('../icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -679px 0px !important;
+}
+
 .menu-3d-dark {
     width: 35px;
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -679px 0px !important;
+    background-position: -711px 0px !important;
 }
 
 .menu-3d-light {
@@ -315,7 +323,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -714px 0px !important;
+    background-position: -746px 0px !important;
 }
 
 .menu-rounded-dark {
@@ -323,7 +331,7 @@
     height: 36px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -749px 0px !important;
+    background-position: -781px 0px !important;
 }
 
 .menu-rounded-light {
@@ -331,7 +339,7 @@
     height: 36px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -785px 0px !important;
+    background-position: -817px 0px !important;
 }
 
 .menu-sharp-dark {
@@ -339,7 +347,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -821px 0px !important;
+    background-position: -853px 0px !important;
 }
 
 .menu-sharp-light {
@@ -347,7 +355,7 @@
     height: 35px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -856px 0px !important;
+    background-position: -888px 0px !important;
 }
 
 .myplaces-draw-area-dark {
@@ -355,7 +363,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -891px 0px !important;
+    background-position: -923px 0px !important;
 }
 
 .myplaces-draw-area-light {
@@ -363,7 +371,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -923px 0px !important;
+    background-position: -955px 0px !important;
 }
 
 .myplaces-draw-line-dark {
@@ -371,7 +379,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -955px 0px !important;
+    background-position: -987px 0px !important;
 }
 
 .myplaces-draw-line-light {
@@ -379,7 +387,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -987px 0px !important;
+    background-position: -1019px 0px !important;
 }
 
 .myplaces-draw-point-dark {
@@ -387,7 +395,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1019px 0px !important;
+    background-position: -1051px 0px !important;
 }
 
 .myplaces-draw-point-light {
@@ -395,7 +403,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1051px 0px !important;
+    background-position: -1083px 0px !important;
 }
 
 .tool-history-back-dark {
@@ -403,7 +411,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1083px 0px !important;
+    background-position: -1115px 0px !important;
 }
 
 .tool-history-back-light {
@@ -411,7 +419,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1115px 0px !important;
+    background-position: -1147px 0px !important;
 }
 
 .tool-history-forward-dark {
@@ -419,7 +427,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1147px 0px !important;
+    background-position: -1179px 0px !important;
 }
 
 .tool-history-forward-light {
@@ -427,7 +435,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1179px 0px !important;
+    background-position: -1211px 0px !important;
 }
 
 .tool-measure-area-dark {
@@ -435,7 +443,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1211px 0px !important;
+    background-position: -1243px 0px !important;
 }
 
 .tool-measure-area-light {
@@ -443,7 +451,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1243px 0px !important;
+    background-position: -1275px 0px !important;
 }
 
 .tool-measure-line-dark {
@@ -451,7 +459,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1275px 0px !important;
+    background-position: -1307px 0px !important;
 }
 
 .tool-measure-line-light {
@@ -459,7 +467,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1307px 0px !important;
+    background-position: -1339px 0px !important;
 }
 
 .tool-zoombox-dark {
@@ -467,7 +475,7 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1339px 0px !important;
+    background-position: -1371px 0px !important;
 }
 
 .tool-zoombox-light {
@@ -475,6 +483,6 @@
     height: 32px;
     background-image: url('../icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1371px 0px !important;
+    background-position: -1403px 0px !important;
 }
 
