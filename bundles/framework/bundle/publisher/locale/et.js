@@ -143,7 +143,8 @@ Oskari.registerLocalization({
                 "fill": "NOT TRANSLATED",
                 "custom": "Oma suurus",
                 "width": "laius",
-                "height": "kõrgus"
+                "height": "kõrgus",
+                "separator": "x"
             },
             "buttons": {
                 "save": "Salvesta",

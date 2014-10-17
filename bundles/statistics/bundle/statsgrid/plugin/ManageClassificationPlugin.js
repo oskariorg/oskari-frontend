@@ -8,14 +8,12 @@
  */
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin',
     /**
-     * @method create called automatically on construction
-     * @params config reserved for future
-     * @params locale localization strings
+     * @static @method create called automatically on construction
      *
+     * @param config reserved for future
+     * @param locale localization strings
      *
-     * @static
      */
-
     function (config, locale) {
         this.mapModule = null;
         this.pluginName = null;
@@ -52,23 +50,31 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
         /**
          * @method getName
+         *
+         *
          * @return {String} module name
          */
         getName: function () {
             return this.pluginName;
         },
+
         /**
          * @method getMapModule
          * Returns reference to map module this plugin is registered to
+         *
+         *
          * @return {Oskari.mapframework.ui.module.common.MapModule}
          */
         getMapModule: function () {
             return this.mapModule;
         },
+
         /**
          * @method setMapModule
+         *
          * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
          * module
+         *
          */
         setMapModule: function (mapModule) {
             this.mapModule = mapModule;
@@ -76,38 +82,47 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 this.pluginName = mapModule.getName() + this.__name;
             }
         },
+
         /**
          * @method hasUI
          * This plugin has an UI so always returns true
+         *
+         *
          * @return {Boolean}
          */
         hasUI: function () {
             return true;
         },
+
         /**
          * @method getMap
+         *
+         *
          * @return {OpenLayers.Map} reference to map implementation
          */
         getMap: function () {
             return this._map;
         },
+
         /**
          * @method register
          * Interface method for the module protocol
          */
         register: function () {},
+
         /**
          * @method unregister
          * Interface method for the module protocol
          */
         unregister: function () {},
+
         /**
          * @method init
          * Interface method for the module protocol. Initializes the request
          * handlers/templates.
          *
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
+         * Reference to application sandbox
          */
         init: function (sandbox) {
             // Classify html template
@@ -118,14 +133,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             // Setup Colors
             this.setColors();
         },
+
         /**
          * @method startPlugin
-         *
-         * Interface method for the plugin protocol. Registers requesthandlers and
-         * eventlisteners. Creates the plugin UI.
+         * Interface method for the plugin protocol. Registers requesthandlers
+         * and eventlisteners. Creates the plugin UI.
          *
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
+         * Reference to application sandbox
+         *
          */
         startPlugin: function (sandbox) {
             var me = this,
@@ -144,11 +160,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             me._initState();
             me._createUI();
         },
+
         /**
-         * @method _initState
-         * @private
+         * @private @method _initState
          * initializes state params since it might be possible
          * that there is not all the data included
+         *
+         *
          */
         _initState: function () {
             if (this._state.methodId === null || this._state.methodId === undefined || this._state.methodId < 1) {
@@ -177,14 +195,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 this._state.municipalities = [];
             }
         },
+
         /**
          * @method stopPlugin
-         *
          * Interface method for the plugin protocol. Unregisters requesthandlers and
          * eventlisteners. Removes the plugin UI.
          *
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
+         * Reference to application sandbox
+         *
          */
         stopPlugin: function (sandbox) {
             var me = this,
@@ -204,32 +223,37 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 delete me.element;
             }
         },
+
         /**
          * @method start
          * Interface method for the module protocol
          *
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
+         * Reference to application sandbox
+         *
          */
         start: function (sandbox) {},
+
         /**
          * @method stop
          * Interface method for the module protocol
          *
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
+         * Reference to application sandbox
+         *
          */
         stop: function (sandbox) {},
+
         /**
-         * @property {Object} eventHandlers
-         * @static
+         * @static @property {Object} eventHandlers
          */
         eventHandlers: {
             /**
              * @method MapLayerEvent
+             * Adds the layer to selection
+             *
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              *
-             * Adds the layer to selection
              */
             'MapLayerEvent': function (event) {
                 // Is stats map layer selected
@@ -252,9 +276,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             },
             /**
              * @method AfterMapLayerRemoveEvent
+             * Removes the layer from selection
+             *
              * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
              *
-             * Removes the layer from selection
              */
             'AfterMapLayerRemoveEvent': function (event) {
                 // Reset the UI and hide the dialog
@@ -264,9 +289,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             },
             /**
              * @method AfterMapLayerAddEvent
+             * Adds the layer to selection
+             *
              * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
              *
-             * Adds the layer to selection
              */
             'AfterMapLayerAddEvent': function (event) {
 
@@ -277,8 +303,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             },
 
             /**
-             * @method MapModulePlugin_MapLayerVisibilityRequest
-             * refreshes checkbox state based on visibility
+             * @method MapLayerVisibilityChangedEvent
+             * Refreshes checkbox state based on visibility
+             *
+             * @param {Oskari.mapframework.bundle.mapmodule.event.MapLayerVisibilityChangedEvent} event
+             *
              */
             'MapLayerVisibilityChangedEvent': function (event) {
                 // Hide Classify dialog
@@ -296,9 +325,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
             /**
              * @method AfterMapMoveEvent
+             * Adds the layer to selection
+             *
              * @param {Oskari.mapframework.event.common.AfterMapMoveEvent} event
              *
-             * Adds the layer to selection
              */
             'AfterMapMoveEvent': function (event) {
                 // setup initial state here since we are using selected layers to create ui
@@ -312,10 +342,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
                 this.isSelectHilightedMode = false;
             },
             /**
-             * @method StatsDataChangedEvent
+             * @method StatsGrid.StatsDataChangedEvent
+             * Creates classification of stats column data and shows it on geostats legend html
+             *
              * @param {MapStats.StatsDataChangedEvent} event
              *
-             * Creates classification of stats column data and shows it on geostats legend html
              */
             'StatsGrid.StatsDataChangedEvent': function (event) {
                 // Create a new classification for thematic data, if selected
@@ -337,8 +368,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
         /**
          * @method setState
-         * @param state Statsgrid state object
          * Set the state object of statsgrid to this plugin too.
+         *
+         * @param state Statsgrid state object
+         *
          */
         setState: function (state) {
             this._state = state;
@@ -347,18 +380,23 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
         /**
          * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
          * Event is handled forwarded to correct #eventHandlers if found or discarded
          * if not.
+         *
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         *
          */
         onEvent: function (event) {
             return this.eventHandlers[event.getName()].apply(this, [event]);
         },
+
         /**
          * @method classifyData
          * Classify Stats indicator column data
          * Parses the data from the grid for geostats and backend so that it can be shown on the map.
+         *
          * @param event  Data sent by 'MapStats.StatsDataChangedEvent' (eg. in  ManageStatsOut.js)
+         *
          */
         classifyData: function (event) {
             // return, if no old data
@@ -576,11 +614,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
 
         /**
+         * @method sendEmptyValues
          * Sends empty values for visualization. Used because #classifyData
          * does a whole lot of other things besides just sending the values.
          *
-         * @method sendEmptyValues
          * @param  {Object} event The event with layer and params
+         *
          * @return {undefined}
          */
         sendEmptyValues: function (event) {
@@ -623,9 +662,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
 
         /**
+         * @method resetUI
          * Creates UI again from scratch
          *
-         * @method resetUI
+         *
          * @return {undefined}
          */
         resetUI: function () {
@@ -634,10 +674,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
 
         /**
-         * @method  _createUI
+         * @private @method  _createUI
          * Creates classification UI (method select, class count, colors)
-         
-         * @private
+         *
+         *
          */
         _createUI: function () {
             var me = this;
@@ -825,8 +865,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         /**
          * @method showMessage
          * Shows user a message with ok button
+         *
          * @param {String} title popup title
          * @param {String} message popup message
+         *
          */
         showMessage: function (title, message) {
             var me = this;
@@ -855,7 +897,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
          * @method setManualBreaks
          * Gets the user fed list of numbers and does some range and value checking to them
          * before setting the bounds for geostats.
+         *
          * @param {Object} gstats the geostats object
+         *
          * @return {Array[Number]} returns a limits array for setting the data.
          */
         setManualBreaks: function (gstats) {
@@ -902,6 +946,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
          * @method  _setColors
          * Set color themes for coloring maps
          * (3 color classification qualitative, quantitative and divergent)
+         *
+         *
          */
         setColors: function () {
             //  var colorsjson = [["ffeda0,f03b20","ffeda0,feb24c,f03b20", "ffffb2,fecc5c,fd8d3c,e31a1c", "ffffb2,fecc5c,fd8d3c,f03b20,bd0026", "ffffb2,fed976,feb24c,fd8d3c,f03b20,bd0026", "ffffb2,fed976,feb24c,fd8d3c,fc4e2a,e31a1c,b10026", "ffffcc,ffeda0,fed976,feb24c,fd8d3c,fc4e2a,e31a1c,b10026", "ffffcc,ffeda0,fed976,feb24c,fd8d3c,fc4e2a,e31a1c,bd0026,800026"], ["deebf7,9ecae1,3182bd", "eff3ff,bdd7e7,6baed6,2171b5", "eff3ff,bdd7e7,6baed6,3182bd,08519c", "eff3ff,c6dbef,9ecae1,6baed6,3182bd,08519c", "eff3ff,c6dbef,9ecae1,6baed6,4292c6,2171b5,084594", "f7fbff,deebf7,c6dbef,9ecae1,6baed6,4292c6,2171b5,084594", "f7fbff,deebf7,c6dbef,9ecae1,6baed6,4292c6,2171b5,08519c,08306b"], ["e5f5f9,99d8c9,2ca25f", "edf8fb,b2e2e2,66c2a4,238b45", "edf8fb,b2e2e2,66c2a4,2ca25f,006d2c", "edf8fb,ccece6,99d8c9,66c2a4,2ca25f,006d2c", "edf8fb,ccece6,99d8c9,66c2a4,41ae76,238b45,005824", "f7fcfd,e5f5f9,ccece6,99d8c9,66c2a4,41ae76,238b45,005824", "f7fcfd,e5f5f9,ccece6,99d8c9,66c2a4,41ae76,238b45,006d2c,00441b"], ["e0ecf4,9ebcda,8856a7", "edf8fb,b3cde3,8c96c6,88419d", "edf8fb,b3cde3,8c96c6,8856a7,810f7c", "edf8fb,bfd3e6,9ebcda,8c96c6,8856a7,810f7c", "edf8fb,bfd3e6,9ebcda,8c96c6,8c6bb1,88419d,6e016b", "f7fcfd,e0ecf4,bfd3e6,9ebcda,8c96c6,8c6bb1,88419d,6e016b", "f7fcfd,e0ecf4,bfd3e6,9ebcda,8c96c6,8c6bb1,88419d,810f7c,4d004b"], ["e0f3db,a8ddb5,43a2ca", "f0f9e8,bae4bc,7bccc4,2b8cbe", "f0f9e8,bae4bc,7bccc4,43a2ca,0868ac", "f0f9e8,ccebc5,a8ddb5,7bccc4,43a2ca,0868ac", "f0f9e8,ccebc5,a8ddb5,7bccc4,4eb3d3,2b8cbe,08589e", "f7fcf0,e0f3db,ccebc5,a8ddb5,7bccc4,4eb3d3,2b8cbe,08589e", "f7fcf0,e0f3db,ccebc5,a8ddb5,7bccc4,4eb3d3,2b8cbe,0868ac,084081"], ["e5f5e0,a1d99b,31a354", "edf8e9,bae4b3,74c476,238b45", "edf8e9,bae4b3,74c476,31a354,006d2c", "edf8e9,c7e9c0,a1d99b,74c476,31a354,006d2c", "edf8e9,c7e9c0,a1d99b,74c476,41ab5d,238b45,005a32", "f7fcf5,e5f5e0,c7e9c0,a1d99b,74c476,41ab5d,238b45,005a32", "f7fcf5,e5f5e0,c7e9c0,a1d99b,74c476,41ab5d,238b45,006d2c,00441b"], ["f0f0f0,bdbdbd,636363", "f7f7f7,cccccc,969696,525252", "f7f7f7,cccccc,969696,636363,252525", "f7f7f7,d9d9d9,bdbdbd,969696,636363,252525", "f7f7f7,d9d9d9,bdbdbd,969696,737373,525252,252525", "ffffff,f0f0f0,d9d9d9,bdbdbd,969696,737373,525252,252525", "ffffff,f0f0f0,d9d9d9,bdbdbd,969696,737373,525252,252525,000000"], ["fee6ce,fdae6b,e6550d", "feedde,fdbe85,fd8d3c,d94701", "feedde,fdbe85,fd8d3c,e6550d,a63603", "feedde,fdd0a2,fdae6b,fd8d3c,e6550d,a63603", "feedde,fdd0a2,fdae6b,fd8d3c,f16913,d94801,8c2d04", "fff5eb,fee6ce,fdd0a2,fdae6b,fd8d3c,f16913,d94801,8c2d04", "fff5eb,fee6ce,fdd0a2,fdae6b,fd8d3c,f16913,d94801,a63603,7f2704"], ["fee8c8,fdbb84,e34a33", "fef0d9,fdcc8a,fc8d59,d7301f", "fef0d9,fdcc8a,fc8d59,e34a33,b30000", "fef0d9,fdd49e,fdbb84,fc8d59,e34a33,b30000", "fef0d9,fdd49e,fdbb84,fc8d59,ef6548,d7301f,990000", "fff7ec,fee8c8,fdd49e,fdbb84,fc8d59,ef6548,d7301f,990000", "fff7ec,fee8c8,fdd49e,fdbb84,fc8d59,ef6548,d7301f,b30000,7f0000"], ["ece7f2,a6bddb,2b8cbe", "f1eef6,bdc9e1,74a9cf,0570b0", "f1eef6,bdc9e1,74a9cf,2b8cbe,045a8d", "f1eef6,d0d1e6,a6bddb,74a9cf,2b8cbe,045a8d", "f1eef6,d0d1e6,a6bddb,74a9cf,3690c0,0570b0,034e7b", "fff7fb,ece7f2,d0d1e6,a6bddb,74a9cf,3690c0,0570b0,034e7b", "fff7fb,ece7f2,d0d1e6,a6bddb,74a9cf,3690c0,0570b0,045a8d,023858"], ["ece2f0,a6bddb,1c9099", "f6eff7,bdc9e1,67a9cf,02818a", "f6eff7,bdc9e1,67a9cf,1c9099,016c59", "f6eff7,d0d1e6,a6bddb,67a9cf,1c9099,016c59", "f6eff7,d0d1e6,a6bddb,67a9cf,3690c0,02818a,016450", "fff7fb,ece2f0,d0d1e6,a6bddb,67a9cf,3690c0,02818a,016450", "fff7fb,ece2f0,d0d1e6,a6bddb,67a9cf,3690c0,02818a,016c59,014636"], ["e7e1ef,c994c7,dd1c77", "f1eef6,d7b5d8,df65b0,ce1256", "f1eef6,d7b5d8,df65b0,dd1c77,980043", "f1eef6,d4b9da,c994c7,df65b0,dd1c77,980043", "f1eef6,d4b9da,c994c7,df65b0,e7298a,ce1256,91003f", "f7f4f9,e7e1ef,d4b9da,c994c7,df65b0,e7298a,ce1256,91003f", "f7f4f9,e7e1ef,d4b9da,c994c7,df65b0,e7298a,ce1256,980043,67001f"], ["efedf5,bcbddc,756bb1", "f2f0f7,cbc9e2,9e9ac8,6a51a3", "f2f0f7,cbc9e2,9e9ac8,756bb1,54278f", "f2f0f7,dadaeb,bcbddc,9e9ac8,756bb1,54278f", "f2f0f7,dadaeb,bcbddc,9e9ac8,807dba,6a51a3,4a1486", "fcfbfd,efedf5,dadaeb,bcbddc,9e9ac8,807dba,6a51a3,4a1486", "fcfbfd,efedf5,dadaeb,bcbddc,9e9ac8,807dba,6a51a3,54278f,3f007d"], ["fde0dd,fa9fb5,c51b8a", "feebe2,fbb4b9,f768a1,ae017e", "feebe2,fbb4b9,f768a1,c51b8a,7a0177", "feebe2,fcc5c0,fa9fb5,f768a1,c51b8a,7a0177", "feebe2,fcc5c0,fa9fb5,f768a1,dd3497,ae017e,7a0177", "fff7f3,fde0dd,fcc5c0,fa9fb5,f768a1,dd3497,ae017e,7a0177", "fff7f3,fde0dd,fcc5c0,fa9fb5,f768a1,dd3497,ae017e,7a0177,49006a"], ["fee0d2,fc9272,de2d26", "fee5d9,fcae91,fb6a4a,cb181d", "fee5d9,fcae91,fb6a4a,de2d26,a50f15", "fee5d9,fcbba1,fc9272,fb6a4a,de2d26,a50f15", "fee5d9,fcbba1,fc9272,fb6a4a,ef3b2c,cb181d,99000d", "fff5f0,fee0d2,fcbba1,fc9272,fb6a4a,ef3b2c,cb181d,99000d", "fff5f0,fee0d2,fcbba1,fc9272,fb6a4a,ef3b2c,cb181d,a50f15,67000d"], ["f7fcb9,addd8e,31a354", "ffffcc,c2e699,78c679,238443", "ffffcc,c2e699,78c679,31a354,006837", "ffffcc,d9f0a3,addd8e,78c679,31a354,006837", "ffffcc,d9f0a3,addd8e,78c679,41ab5d,238443,005a32", "ffffe5,f7fcb9,d9f0a3,addd8e,78c679,41ab5d,238443,005a32", "ffffe5,f7fcb9,d9f0a3,addd8e,78c679,41ab5d,238443,006837,004529"], ["edf8b1,7fcdbb,2c7fb8", "ffffcc,a1dab4,41b6c4,225ea8", "ffffcc,a1dab4,41b6c4,2c7fb8,253494", "ffffcc,c7e9b4,7fcdbb,41b6c4,2c7fb8,253494", "ffffcc,c7e9b4,7fcdbb,41b6c4,1d91c0,225ea8,0c2c84", "ffffd9,edf8b1,c7e9b4,7fcdbb,41b6c4,1d91c0,225ea8,0c2c84", "ffffd9,edf8b1,c7e9b4,7fcdbb,41b6c4,1d91c0,225ea8,253494,081d58"], ["fff7bc,fec44f,d95f0e", "ffffd4,fed98e,fe9929,cc4c02", "ffffd4,fed98e,fe9929,d95f0e,993404", "ffffd4,fee391,fec44f,fe9929,d95f0e,993404", "ffffd4,fee391,fec44f,fe9929,ec7014,cc4c02,8c2d04", "ffffe5,fff7bc,fee391,fec44f,fe9929,ec7014,cc4c02,8c2d04", "ffffe5,fff7bc,fee391,fec44f,fe9929,ec7014,cc4c02,993404,662506"]];
@@ -1052,12 +1098,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
         },
         /**
-         * @method  _getColors
+         * @private @method  _getColors
          * Get current color theme class
+         *
          * @param {String}  selected theme (qual, seq, or div)
          * @param {Integer} colorindex is index to the color set
          * @param {Integer} classind is class# in color set
-         * @private
+         *
+         * @return {Object} colors
          */
         _getColors: function (colorset, colorindex, classind) {
             var colors = null;
@@ -1072,27 +1120,30 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
 
         /**
-         * @method  visibilyOn
+         * @private @method _visibilyOn
          * Classify dialog visibility on
-         
-         * @private
+         *
+         *
          */
         _visibilityOn: function () {
             this.element.show();
         },
+
         /**
-         * @method  visibilyOff
+         * @private @method _visibilyOff
          * Classify dialog off
-         
-         * @private
+         *
+         *
          */
         _visibilityOff: function () {
             this.element.hide();
         },
+
         /**
-         * @method  _createColorDialog
+         * @private @method _createColorDialog
          * Creates color theme and color set select dialog
-         * @private
+         *
+         *
          */
         _createColorDialog: function () {
             // Main dialog
@@ -1145,10 +1196,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
             me.dialog.show(this._locale.colorset.themeselection, me.content, [cancelBtn]);
             //dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
         },
+
         /**
-         * @method  _createColorTable
+         * @private @method _createColorTable
          * Creates a color table for color selection
-         * @private
+         *
+         *
          */
         _createColorTable: function () {
             var me = this,
@@ -1225,10 +1278,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
 
         /**
-         * @method  _selectedColors
+         * @private @method _selectedColors
          * Changes the setup of current color range in current color theme
+         *
          * @param {Object} event  (jq click event)
-         * @private
+         *
          */
         _selectedColors: function (colorsetIndex) {
             var me = this;
@@ -1244,9 +1298,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
 
         /**
-         * @method  _hiliSelectedColors
+         * @private @method _hiliSelectedColors
          * Put background color for current color range in the color dialog
-         * @private
+         *
+         *
          */
         _hiliSelectedColors: function () {
             var me = this,
@@ -1271,13 +1326,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
 
         /**
-         * @method  _hoverZoomColorTable
+         * @private @method _hoverZoomColorTable
          * Zoom in  the color table section in hover
+         *
          * @param {object} row color table section to zoom in
-         * @private
+         *
          */
         _hoverZoomColorTable: function (row) {
-
             var pic = row.clone();
             // zoom in color table
             pic.find('div').width("18px");
@@ -1303,11 +1358,12 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
 
         /**
-         * @method  _colorTableChanged
+         * @private @method _colorTableChanged
          * Change the color theme class in color dialog
          * Check new limits for class count slider
          * Creates a new color table for current color theme
-         * @private
+         *
+         *
          */
         _colorTableChanged: function () {
             var me = this;
@@ -1376,10 +1432,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
 
         /**
+         * @private @method _flipCurrentColors
          * Classifies data with colors flipped.
          *
-         * @method _flipCurrentColors
-         * @private
+         *
          */
         _flipCurrentColors: function () {
             this.colorsFlipped = this.colorsFlipped ? false : true;
@@ -1387,11 +1443,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
 
         /**
+         * @private @method _adjustClassificationSlider
          * Classification slider should only work if some rules apply
          *
-         * @method _adjustClassificationSlider
-         * @private
          * @param checkedItemsCount tells if there are enough items selected
+         *
          */
         _adjustClassificationSlider: function (checkedItemsCount) {
 
@@ -1417,10 +1473,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
 
         /**
-         * @method _checkClassCount
-         * @private
-         *
+         * @private @method _checkClassCount
          * Check class count and limits.
+         *
+         * @param {Number} checkedItemsCount
+         * @param {Number} selectedVal
+         *
+         * @return {Object}
          */
         _checkClassCount: function (checkedItemsCount, selectedVal) {
             /* Why do we set max to at least 3? */
@@ -1437,10 +1496,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
         },
 
         /**
-         * @method _loadStateVariables
-         * @private
-         *
+         * @private @method _loadStateVariables
          * Set state of classification options to correct one.
+         *
+         *
          */
         _loadStateVariables: function () {
             var me = this,
@@ -1498,8 +1557,8 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificat
 
     }, {
         /**
-         * @property {String[]} protocol array of superclasses as {String}
-         * @static
+         * @static @property {string[]} protocol
+         * Array of superclasses as {string}
          */
         'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
     });

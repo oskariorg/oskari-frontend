@@ -75,6 +75,12 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequestHandler.js"
         }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapfull/request/MapSizeUpdateRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapfull/request/MapSizeUpdateRequestHandler.js"
+        }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/mapfull/css/style.css"
         }],

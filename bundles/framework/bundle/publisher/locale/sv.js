@@ -146,7 +146,8 @@ Oskari.registerLocalization({
                 "fill": "Fyll utrymmet",
                 "custom": "Definiera storlek",
                 "width": "bredd",
-                "height": "höjd"
+                "height": "höjd",
+                "separator": "x"
             },
             "buttons": {
                 "save": "Lagra",
