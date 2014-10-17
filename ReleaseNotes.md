@@ -7,6 +7,13 @@
 Rewritten to use JSON backend, any code relying on the old implementation is likely to break.
 New implementation has full localization.
 
+## 1.24.5
+
+### publishedstatehandler
+
+Fixed state handling (history tools) for published map. Notice that 'publishedstatehandler' needs to be part of the startupSequence for 
+published map that has history tools enabled on toolbar.
+
 ## 1.24.4
 
 ### publishedmyplaces2

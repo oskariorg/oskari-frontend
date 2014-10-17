@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             }
             jQuery('body').append(this.dialog);
             if (focusedButton >= 0) {
-                buttons[focusedButton].setFocus(true);
+                buttons[focusedButton].focus();
             }
 
             contentHeight = contentDiv.height();
@@ -64,8 +64,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 contentDiv.css('overflow-y', 'auto');
             }
             // center on screen
-            this.dialog.css('margin-left', -(this.dialog.width() / 2) + 'px');
-            this.dialog.css('margin-top', -(this.dialog.height() / 2) + 'px');
+            this.dialog.css('margin-left', - (this.dialog.width() / 2) + 'px');
+            this.dialog.css('margin-top', - (this.dialog.height() / 2) + 'px');
         },
         /**
          * @method fadeout

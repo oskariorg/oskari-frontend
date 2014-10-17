@@ -32,6 +32,12 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
          */
         "scripts" : [{
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/component/Component.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/component/FormComponent.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/component/Accordion.js"
         }, {
             "type" : "text/javascript",

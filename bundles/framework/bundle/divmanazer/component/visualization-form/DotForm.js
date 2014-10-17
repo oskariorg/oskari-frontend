@@ -423,7 +423,7 @@ Oskari.clazz.define("Oskari.userinterface.component.visualization-form.DotForm",
             } else {
                 me.renderDialog.moveTo(renderButton, 'top');
             }
-            this.saveButton.setFocus(true);
+            this.saveButton.focus();
             return me.renderDialog;
         },
 
