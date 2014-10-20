@@ -702,9 +702,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 selectorsHeight = 0;
 
             if (selectorsCont.length > 0) {
-                selectorsHeight = selectorsCont.outerHeight();
+                selectorsHeight = selectorsCont.offset().top + selectorsCont.outerHeight();
             }
             gridDiv.height(parent.height() - selectorsHeight);
+            console.log("setGridHeight", gridDiv, gridDiv.height());
             if (this.grid) {
                 this.grid.resizeCanvas();
             }

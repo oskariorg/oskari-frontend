@@ -83,8 +83,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 // contentMap holds the total width and height of the document
                 jQuery('#' + me.contentMapDivId).width(me.conf.size.width);
                 jQuery('#' + me.contentMapDivId).height(me.conf.size.height);
-                jQuery('#' + me.mapDivId).width(me.conf.size.width);
-                jQuery('#' + me.mapDivId).height(me.conf.size.height);
+                // TODO check if we need to set mapDiv size at all here...
+                //jQuery('#' + me.mapDivId).width(me.conf.size.width);
+                //jQuery('#' + me.mapDivId).height(me.conf.size.height);
             } else {
                 // react to window resize with timer so app stays responsive
                 var adjustMapSize = function () {
@@ -100,20 +101,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                             mapWidth = contentMap.width();
 
                         contentMap.height(mapHeight);
-                        dataContent.height(mapHeight);
 
                         var toolbar = contentMap.find('.oskariui-menutoolbar');
                         if (toolbar.length > 0 && toolbar.is(':visible')) {
                             mapHeight -= toolbar.height();
                         }
+                        dataContent.height(mapHeight);
                         mapDiv.height(mapHeight);
 
-                        if (dataContent.is(':visible') && dataContentHasContent && dataContentWidth) {
+                        if (dataContent.is(':visible') &&
+                                dataContentHasContent &&
+                                dataContentWidth) {
                             mapWidth -= dataContentWidth;
                         }
 
                         mapContainer.width(mapWidth);
-                        mapDiv.width(mapWidth);
+                        //mapDiv.width(mapWidth);
 
                         // notify map module that size has changed
                         me.updateSize();
