@@ -380,7 +380,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
 
             mapDiv.css({
                 'width': mapWidth,
-                'height': mapHeight,
+                'height': mapHeight
             });
 
             mapContainer.css({
