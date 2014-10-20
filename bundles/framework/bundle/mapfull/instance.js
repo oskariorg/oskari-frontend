@@ -95,6 +95,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                             dataContent = jQuery('.oskariui-left'),
                             dataContentHasContent = !dataContent.is(':empty'),
                             dataContentWidth = dataContent.width(),
+                            dataContentInlineWidth = dataContent[0].style.width,
                             mapContainer = contentMap.find('.oskariui-center'),
                             mapDiv = jQuery('#' + me.mapDivId),
                             mapHeight = jQuery(window).height(),
@@ -115,8 +116,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                             mapWidth -= dataContentWidth;
                         }
 
-                        mapContainer.width(mapWidth);
-                        //mapDiv.width(mapWidth);
+
+                        // HACKHACK don't set widths if we have percentages there...
+                        if (!dataContentInlineWidth ||
+                                dataContentInlineWidth.indexOf('%') === -1) {
+                            mapContainer.width(mapWidth);
+                            //mapDiv.width(mapWidth);
+                        }
 
                         // notify map module that size has changed
                         me.updateSize();
