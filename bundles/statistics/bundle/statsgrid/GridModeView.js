@@ -196,8 +196,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                     }
                 });
 
-                console.log("View init");
-
                 /** a hack to notify openlayers of map size change */
                 map.updateSize();
             } else {
