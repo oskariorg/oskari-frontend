@@ -103,8 +103,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
                         contentMap.height(mapHeight);
 
-                        var toolbar = contentMap.find('.oskariui-menutoolbar');
-                        if (toolbar.length > 0 && toolbar.is(':visible')) {
+                        var toolbar = contentMap.find('.oskariui-menutoolbar:visible');
+                        if (toolbar.length > 0) {
                             mapHeight -= toolbar.height();
                         }
                         dataContent.height(mapHeight);
