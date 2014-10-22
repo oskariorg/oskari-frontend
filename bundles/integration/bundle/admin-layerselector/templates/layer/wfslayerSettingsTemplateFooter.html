@@ -1,0 +1,14 @@
+<% var admin = model.getAdmin();
+if ((admin)&&(admin.passthrough)) {
+    _.forEach(admin.passthrough, function(value, key) {
+        var name = "passthrough-" + key;
+        var text;
+        if (typeof value === "string") {
+            text = value;
+        } else {
+            text = JSON.stringify(value);
+        }
+%>
+<input type="hidden" id="add-layer-<%= name %>" class="add-layer-input long"
+       value="<%= text %>" />
+<% })} %>
