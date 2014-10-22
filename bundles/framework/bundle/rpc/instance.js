@@ -62,13 +62,13 @@ Oskari.clazz.define(
                     var ret = origin.indexOf(domain, origin.length - domain.length) !== -1,
                         protocol = origin.split('/')[0];
 
-                    alert(
-                        'origin: ' + origin + '\n' +
-                        'doman match: ' + ret + '\n' +
-                        'protocol: ' + protocol
-                    );
+                    return {
+                        origin: origin,
+                        domain: ret,
+                        protocol: protocol
+                    };
 
-                    return ret && origin.indexOf(protocol) === 0;
+                    //return ret && origin.indexOf(protocol) === 0;
                 },
                 channel;
 
@@ -145,9 +145,6 @@ Oskari.clazz.define(
             channel.bind(
                 'getSupportedEvents',
                 function (trans) {
-                    if (!domainMatch(trans.origin)) {
-                        return;
-                    }
                     return me._allowedEvents;
                 }
             );
@@ -155,9 +152,6 @@ Oskari.clazz.define(
             channel.bind(
                 'getSupportedRequests',
                 function (trans) {
-                    if (!domainMatch(trans.origin)) {
-                        return;
-                    }
                     return me._allowedRequests;
                 }
             );
@@ -167,15 +161,19 @@ Oskari.clazz.define(
                 'getMapPosition',
                 function (trans) {
                     var map = me.sandbox.getMap();
-                    if (!domainMatch(trans.origin)) {
-                        return;
-                    }
                     return {
                         centerX: map.getY(),
                         centerY: map.getX(),
                         zoom: map.getZoom(),
                         srsName: map.getSrsName()
                     };
+                }
+            );
+
+            channel.bind(
+                'testOriginCheck',
+                function (trans) {
+                    return domainMatch(trans.origin);
                 }
             );
 
