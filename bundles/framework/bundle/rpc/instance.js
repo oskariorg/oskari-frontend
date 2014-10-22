@@ -17,14 +17,21 @@ Oskari.clazz.define(
             me.conf = {};
         }
 
-        allowedEvents = me.conf.allowedEvents || {
-            AfterMapMoveEvent: true,
-            MapClickedEvent: true
-        };
+        allowedEvents = me.conf.allowedEvents;
+        allowedRequests = me.conf.allowedRequests;
 
-        allowedRequests = me.conf.allowedRequests || {
-            MapMoveRequest: true
-        };
+        if (allowedEvents === null || allowedEvents === undefined) {
+            allowedEvents = {
+                AfterMapMoveEvent: true,
+                MapClickedEvent: true
+            };
+        }
+
+        if (allowedRequests === null || allowedRequests === undefined) {
+            allowedRequests = {
+                MapMoveRequest: true
+            };
+        }
 
         me._allowedEvents = allowedEvents;
         me._allowedRequests = allowedRequests;
@@ -67,15 +74,12 @@ Oskari.clazz.define(
                 me.sandbox.printError('RemoteProcedureCallInstance.startPlugin(): Target window is same as present window - not allowed.');
                 return;
             }
-            console.log("startPlugin");
 
             channel = Channel.build({
                 window: window.parent,
                 origin: domain,
                 scope: 'Oskari'
             });
-
-            console.log("startPlugin channel set up");
 
             // Makes it possible to listen to events
             // channel.call({method: 'handleEvent', params: ['MapClickedEvent', true]});
@@ -147,7 +151,6 @@ Oskari.clazz.define(
             );
 
             me._channel = channel;
-            console.log("startPlugin done");
         },
 
         /**
