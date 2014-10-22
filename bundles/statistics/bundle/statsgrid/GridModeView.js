@@ -176,6 +176,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.GridModeView',
                 mapModule.getMapEl().height(height);
                 //window resize is handled in mapfull - instance.js
                 elLeft.empty();
+                elLeft.show();
                 elLeft.removeClass('oskari-closed');
                 elLeft.width(leftWidth + '%');
                 elLeft.height(height);

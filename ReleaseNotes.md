@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.24.6
+
+### publisher
+
+Fixed map sizing, .oskariui-center is now always floated left.
+
 ## 1.24.5
 
 ### publishedstatehandler

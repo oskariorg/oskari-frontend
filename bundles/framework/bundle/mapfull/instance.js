@@ -110,12 +110,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                         dataContent.height(mapHeight);
                         mapDiv.height(mapHeight);
 
-                        if (dataContent.is(':visible') &&
-                                dataContentHasContent &&
-                                dataContentWidth) {
-                            mapWidth -= dataContentWidth;
+                        if (dataContentHasContent) {
+                            if (dataContent.is(':visible') &&
+                                    dataContentWidth) {
+                                mapWidth -= dataContentWidth;
+                            }
+                        } else {
+                            dataContent.addClass('oskari-closed');
                         }
-
 
                         // HACKHACK don't set widths if we have percentages there...
                         if (!dataContentInlineWidth ||
