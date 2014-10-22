@@ -7,6 +7,12 @@
 Rewritten to use JSON backend, any code relying on the old implementation is likely to break.
 New implementation has full localization.
 
+## 1.24.7
+
+### mapfull
+
+Additional check for existance when referencing DOM element properties so size setting is compatible with published.jsp in oskari-server.
+
 ## 1.24.6
 
 ### publisher
