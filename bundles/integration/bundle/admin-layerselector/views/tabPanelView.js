@@ -97,6 +97,7 @@ define([
                 var me = this;
                 // generic list of layertypes supported
                 this.supportedTypes = [
+                    {id : "wfslayer", localeKey : "wfs"},
                     {id : "wmslayer", localeKey : "wms"},
                     {id : "wmtslayer", localeKey : "wmts"},
                     {id : "arcgislayer", localeKey : "arcgis", footer : false}
