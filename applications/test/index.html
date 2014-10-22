@@ -8,22 +8,22 @@
         <script>
             var chan = Channel.build({
                 window: document.getElementById("Oskari").contentWindow,
-                origin: "http://hk-pc-112w764.mmlnet.nls.fi:8080",
-                scope: "Oskari"
-
+                origin: "*",
+                //origin: "http://hk-pc-112w764.mmlnet.nls.fi:8080",
+                scope: "Oskari",
+                onReady: function () {
+                    console.log("Channel ready");
+                }
             });
-            var call = function () {
-                console.log('Calling elvis');
-                chan.call({
-                    method: "getSupportedEvents",
-                    success: function(data) {
-                        alert(JSON.stringify(data));
-                    }
-                });
-            }
-            setInterval(function () {
-                call();
-            },1000);
+            chan.call({
+                method: "testOriginCheck",
+                success: function(data) {
+                    console.log(JSON.stringify(data));
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
         </script>
     </body>
 </html>
