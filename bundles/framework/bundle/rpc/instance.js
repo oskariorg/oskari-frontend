@@ -64,20 +64,22 @@ Oskari.clazz.define(
             sandbox.register(this);
 
             if (!Channel) {
-                throw new Error('JSChannel not found.');
+                me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): JSChannel not found.');
+                return;
             }
 
-            if (domain === null || domain === undefined) {
-                throw new Error('RemoteProcedureCallInstance.startPlugin(): missing domain.');
+            if (domain === null || domain === undefined || !domain.length) {
+                me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): missing domain.');
+                return;
             }
 
             if (domain === '*') {
-                throw new Error('RemoteProcedureCallInstance.startPlugin(): * is not an allowed domain.');
+                me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): * is not an allowed domain.');
+                return;
             }
 
             if (window === window.parent) {
-                //throw new Error('Target window is same as present window - not allowed.');
-                me.sandbox.printError('RemoteProcedureCallInstance.startPlugin(): Target window is same as present window - not allowed.');
+                me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): Target window is same as present window - not allowed.');
                 return;
             }
 
