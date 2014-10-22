@@ -1,5 +1,4 @@
 /**
-/**
  * @class Oskari.userinterface.extension.DefaultModule
  *
  *
