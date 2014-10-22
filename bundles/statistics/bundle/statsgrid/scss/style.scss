@@ -183,10 +183,9 @@
 
     .selectors-container {
         position: relative;
-        height: 20%;
+        min-width: 470px;
         min-height: 157px;
         @include box-sizing(border-box); 
-        min-width: 470px;
 
         .indisel {
             display: inline-block;

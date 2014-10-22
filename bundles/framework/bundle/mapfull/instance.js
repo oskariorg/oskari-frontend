@@ -83,7 +83,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 // contentMap holds the total width and height of the document
                 jQuery('#' + me.contentMapDivId).width(me.conf.size.width);
                 jQuery('#' + me.contentMapDivId).height(me.conf.size.height);
-                jQuery('#' + me.mapDivId).width(me.conf.size.width);
+                // TODO check if we need to set mapDiv size at all here...
+                //jQuery('#' + me.mapDivId).width(me.conf.size.width);
                 jQuery('#' + me.mapDivId).height(me.conf.size.height);
             } else {
                 // react to window resize with timer so app stays responsive
@@ -94,26 +95,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                             dataContent = jQuery('.oskariui-left'),
                             dataContentHasContent = !dataContent.is(':empty'),
                             dataContentWidth = dataContent.width(),
+                            dataContentInlineWidth = dataContent[0].style.width,
                             mapContainer = contentMap.find('.oskariui-center'),
                             mapDiv = jQuery('#' + me.mapDivId),
                             mapHeight = jQuery(window).height(),
                             mapWidth = contentMap.width();
 
                         contentMap.height(mapHeight);
-                        dataContent.height(mapHeight);
 
-                        var toolbar = contentMap.find('.oskariui-menutoolbar');
-                        if (toolbar.length > 0 && toolbar.is(':visible')) {
+                        var toolbar = contentMap.find('.oskariui-menutoolbar:visible');
+                        if (toolbar.length > 0) {
                             mapHeight -= toolbar.height();
                         }
+                        dataContent.height(mapHeight);
                         mapDiv.height(mapHeight);
 
-                        if (dataContent.is(':visible') && dataContentHasContent && dataContentWidth) {
-                            mapWidth -= dataContentWidth;
+                        if (dataContentHasContent) {
+                            if (dataContent.is(':visible') &&
+                                    dataContentWidth) {
+                                mapWidth -= dataContentWidth;
+                            }
+                        } else {
+                            dataContent.addClass('oskari-closed');
                         }
 
-                        mapContainer.width(mapWidth);
-                        mapDiv.width(mapWidth);
+                        // HACKHACK don't set widths if we have percentages there...
+                        if (!dataContentInlineWidth ||
+                                dataContentInlineWidth.indexOf('%') === -1) {
+                            mapContainer.width(mapWidth);
+                            //mapDiv.width(mapWidth);
+                        }
 
                         // notify map module that size has changed
                         me.updateSize();

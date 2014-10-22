@@ -92,12 +92,11 @@
       background: linear-gradient(top, #fefefe, #e3e3e3); }
   .statsgrid .selectors-container {
     position: relative;
-    height: 20%;
+    min-width: 470px;
     min-height: 157px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    min-width: 470px; }
+    box-sizing: border-box; }
     .statsgrid .selectors-container .indisel {
       display: inline-block; }
     .statsgrid .selectors-container .new-indicator-cont {

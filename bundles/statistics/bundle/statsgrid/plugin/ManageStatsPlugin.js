@@ -289,7 +289,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 //clear the selectors container
                 container.find('.selectors-container').remove();
                 //add selectors
-                var selectors = jQuery('<div class="selectors-container"></div>');
+                var selectors = jQuery('<div class="selectors-container clearfix"></div>');
                 container.append(selectors);
 
                 //Adding csv button
@@ -702,9 +702,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
                 selectorsHeight = 0;
 
             if (selectorsCont.length > 0) {
-                selectorsHeight = selectorsCont.outerHeight();
+                selectorsHeight = selectorsCont.offset().top + selectorsCont.outerHeight();
             }
+
             gridDiv.height(parent.height() - selectorsHeight);
+
             if (this.grid) {
                 this.grid.resizeCanvas();
             }
