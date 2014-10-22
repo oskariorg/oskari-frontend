@@ -58,6 +58,12 @@ Oskari.clazz.define(
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
                 domain = me.conf.domain,
+                domainMatch = function (origin) {
+                    var ret = origin.indexOf(domain, origin.length - domain.length) !== -1,
+                        protocol = origin.split('/')[0];
+
+                    return ret && origin.indexOf(protocol) === 0;
+                },
                 channel;
 
             me.sandbox = sandbox;
@@ -85,7 +91,7 @@ Oskari.clazz.define(
 
             channel = Channel.build({
                 window: window.parent,
-                origin: domain,
+                origin: '*',
                 scope: 'Oskari'
             });
 
@@ -189,8 +195,9 @@ Oskari.clazz.define(
          * BundleInstance protocol method
          */
         stop: function () {
-            var sandbox = this.sandbox,
-            p;
+            var me = this,
+                sandbox = this.sandbox,
+                p;
 
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
@@ -205,7 +212,7 @@ Oskari.clazz.define(
             sandbox.unregister(this);
             this.sandbox = null;
         },
-        "init": function () {
+        init: function () {
             return null;
         },
         /**
