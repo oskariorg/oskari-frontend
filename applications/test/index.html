@@ -8,17 +8,22 @@
         <script>
             var chan = Channel.build({
                 window: document.getElementById("Oskari").contentWindow,
-                origin: "http://dev.paikkatietoikkuna.fi",
+                origin: "http://hk-pc-112w764.mmlnet.nls.fi:8080",
                 scope: "Oskari"
 
             });
-
-            chan.call({
-                method: "getSupportedEvents",
-                success: function(data) {
-                    alert(JSON.stringify(data));
-                }
-            });
+            var call = function () {
+                console.log('Calling elvis');
+                chan.call({
+                    method: "getSupportedEvents",
+                    success: function(data) {
+                        alert(JSON.stringify(data));
+                    }
+                });
+            }
+            setInterval(function () {
+                call();
+            },1000);
         </script>
     </body>
 </html>

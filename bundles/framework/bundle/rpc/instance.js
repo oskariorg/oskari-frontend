@@ -62,9 +62,11 @@ Oskari.clazz.define(
                     var ret = origin.indexOf(domain, origin.length - domain.length) !== -1,
                         protocol = origin.split('/')[0];
 
-                    console.log("origin: " + origin);
-                    console.log("doman match: " + ret);
-                    console.log("protocol: " + protocol);
+                    alert(
+                        'origin: ' + origin + '\n' +
+                        'doman match: ' + ret + '\n' +
+                        'protocol: ' + protocol
+                    );
 
                     return ret && origin.indexOf(protocol) === 0;
                 },
