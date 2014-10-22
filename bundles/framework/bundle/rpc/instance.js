@@ -29,6 +29,7 @@ Oskari.clazz.define(
         me._allowedEvents = allowedEvents;
         me._allowedRequests = allowedRequests;
         me._channel = null;
+        me._localization = {};
     }, {
         /**
          * @public @method getName
@@ -44,17 +45,37 @@ Oskari.clazz.define(
          * @public @method startPlugin
          */
         startPlugin: function () {
+            // FIXME get published map 'parent' domain from somewhere
+            var me = this,
+                domain = me.conf.domain,
+                channel;
+
             if (!Channel) {
                 throw new Error('JSChannel not found.');
             }
-            // FIXME get published map 'parent' domain from somewhere
-            var domain = '*',
-                me = this,
-                channel = Channel.build({
-                    window: window.parent,
-                    origin: domain,
-                    scope: 'Oskari'
-                });
+
+            if (domain === null || domain === undefined) {
+                throw new Error('RemoteProcedureCallInstance.startPlugin(): missing domain.');
+            }
+
+            if (domain === '*') {
+                throw new Error('RemoteProcedureCallInstance.startPlugin(): * is not an allowed domain.');
+            }
+
+            if (window === window.parent) {
+                //throw new Error('Target window is same as present window - not allowed.');
+                me.sandbox.printError('RemoteProcedureCallInstance.startPlugin(): Target window is same as present window - not allowed.');
+                return;
+            }
+            console.log("startPlugin");
+
+            channel = Channel.build({
+                window: window.parent,
+                origin: domain,
+                scope: 'Oskari'
+            });
+
+            console.log("startPlugin channel set up");
 
             // Makes it possible to listen to events
             // channel.call({method: 'handleEvent', params: ['MapClickedEvent', true]});
@@ -96,6 +117,20 @@ Oskari.clazz.define(
                 }
             );
 
+            // bind getSupportedEvents
+            channel.bind(
+                'getSupportedEvents',
+                function (trans) {
+                    return me._allowedEvents;
+                }
+            );
+            // bind getSupportedRequests
+            channel.bind(
+                'getSupportedRequests',
+                function (trans) {
+                    return me._allowedRequests;
+                }
+            );
             // bind get map position
             // TODO OskariRPC.getMapPosition
             channel.bind(
@@ -112,12 +147,13 @@ Oskari.clazz.define(
             );
 
             me._channel = channel;
+            console.log("startPlugin done");
         },
 
         /**
          * @private @method _registerEventHandler
          *
-         * @param {string} eventName
+         * @param {string} eventName Event name
          *
          */
         _registerEventHandler: function (eventName) {
@@ -127,10 +163,12 @@ Oskari.clazz.define(
                 return;
             }
             me.eventHandlers[eventName] = function (event) {
-                me._channel.notify({
-                    method: eventName,
-                    params: event.getParams ? event.getParams() : me._getParams(event)
-                });
+                if (me._channel) {
+                    me._channel.notify({
+                        method: eventName,
+                        params: event.getParams ? event.getParams() : me._getParams(event)
+                    });
+                }
             };
             me.sandbox.registerForEventByName(me, eventName);
         },
