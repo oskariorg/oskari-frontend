@@ -4,7 +4,13 @@
 
 ### publisher
 
-Fixed map sizing, .oskariui-center is now always floated left.
+Fixed map sizing, .oskariui-left is now always floated left. If you have a customized version of applications/yourapp/css/portal.css please make sure you include:
+
+```javascript
+.oskariui-left {
+  float: left;
+}
+```
 
 ## 1.24.5
 
