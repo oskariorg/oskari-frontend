@@ -49,13 +49,19 @@ Oskari.clazz.define(
         },
 
         /**
-         * @public @method startPlugin
+         * @public @method start
+         * BundleInstance protocol method
          */
-        startPlugin: function () {
-            // FIXME get published map 'parent' domain from somewhere
+        start: function () {
             var me = this,
+                conf = this.conf ,
+                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
+                sandbox = Oskari.getSandbox(sandboxName),
                 domain = me.conf.domain,
                 channel;
+
+            me.sandbox = sandbox;
+            sandbox.register(this);
 
             if (!Channel) {
                 throw new Error('JSChannel not found.');
@@ -177,6 +183,44 @@ Oskari.clazz.define(
         },
 
         /**
+         * @method stop
+         * BundleInstance protocol method
+         */
+        stop: function () {
+            var sandbox = this.sandbox,
+            p;
+
+            for (p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.unregisterFromEventByName(me, p);
+                }
+            }
+            for (p in me.requestHandlers) {
+                if (me.requestHandlers.hasOwnProperty(p)) {
+                    sandbox.removeRequestHandler(p, this);
+                }
+            }
+            sandbox.unregister(this);
+            this.sandbox = null;
+        },
+        "init": function () {
+            return null;
+        },
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         */
+        onEvent: function (event) {
+            var me = this,
+                handler = me.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+
+            return handler.apply(this, [event]);
+        },
+        /**
          * @private @method _getParams
          * Returns event's simple variables as params.
          * This should suffice for simple events.
@@ -217,6 +261,12 @@ Oskari.clazz.define(
         },
 
         /**
+         * @method update
+         * BundleInstance protocol method
+         */
+        update: function () {},
+        
+        /**
          * @private @method _unregisterEventHandler
          *
          * @param {string} eventName
@@ -228,8 +278,8 @@ Oskari.clazz.define(
         }
     }, {
         /**
-         * @static @property {String[]} extend
+         * @static @property {String[]} protocol
          */
-        'extend': ['Oskari.userinterface.extension.DefaultExtension']
+        'protocol': ['Oskari.bundle.BundleInstance','Oskari.mapframework.module.Module']
     }
 );
