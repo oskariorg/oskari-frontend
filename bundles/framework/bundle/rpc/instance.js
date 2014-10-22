@@ -139,6 +139,7 @@ Oskari.clazz.define(
             channel.bind(
                 'getSupportedEvents',
                 function (trans) {
+                    console.log(trans);
                     return me._allowedEvents;
                 }
             );
@@ -212,6 +213,7 @@ Oskari.clazz.define(
             sandbox.unregister(this);
             this.sandbox = null;
         },
+
         init: function () {
             return null;
         },
