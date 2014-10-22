@@ -4,21 +4,21 @@
         <script src="../../libraries/JSChannel/jschannel.js"></script>
     </head>
     <body>
-        <iframe src="http://dev.paikkatietoikkuna.fi/published/fi/6043" style="border: none; width: 700px; height: 525px;"></iframe>
-        <script>/*
+        <iframe id="Oskari" src="http://dev.paikkatietoikkuna.fi/published/fi/6043" style="border: none; width: 700px; height: 525px;"></iframe>
+        <script>
             var chan = Channel.build({
                 window: document.getElementById("Oskari").contentWindow,
-                origin: "dev.paikkatietoikkuna.fi",
+                origin: "http://dev.paikkatietoikkuna.fi",
                 scope: "Oskari"
 
             });
 
             chan.call({
-                method: "getMapPosition",
+                method: "getSupportedEvents",
                 success: function(data) {
-                    alert(data.centerX, data.centerY);
+                    alert(JSON.stringify(data));
                 }
-            });*/
+            });
         </script>
     </body>
 </html>
