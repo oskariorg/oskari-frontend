@@ -426,6 +426,10 @@ ul#lang span {
   background: #cce9ff;
 }
 
+.oskariui-left {
+  float: left;
+}
+
 .maincontainer {
   padding: 30px 0 30px 20px;
   border-top: 5px solid #ffdb00;

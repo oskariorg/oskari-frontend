@@ -7,6 +7,18 @@
 Rewritten to use JSON backend, any code relying on the old implementation is likely to break.
 New implementation has full localization.
 
+## 1.24.6
+
+### publisher
+
+Fixed map sizing, .oskariui-left is now always floated left. If you have a customized version of applications/yourapp/css/portal.css please make sure you include:
+
+```javascript
+.oskariui-left {
+  float: left;
+}
+```
+
 ## 1.24.5
 
 ### publishedstatehandler
