@@ -10,8 +10,8 @@
  */
 Oskari.clazz.define('Oskari.mapframework.request.common.MapMoveRequest',
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
      *
      * @param {Number} centerX
      *            longitude
@@ -21,6 +21,9 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapMoveRequest',
      *            zoomlevel (0-12) or OpenLayers.Bounds to zoom to. If not given the map zoom level stays as it was.
      * @param {Boolean} marker
      *            true if map should add a marker to this location (optional, defaults to false)
+     *
+     * @param {string} srsName
+     *
      */
 
     function (centerX, centerY, zoom, marker, srsName) {

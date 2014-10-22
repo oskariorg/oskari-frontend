@@ -135,8 +135,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
         init: function () {
             var sandbox = this.sandbox;
             this.requestHandlers = {
-                setStateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.statehandler.request.SetStateRequestHandler', sandbox, this),
-                saveStateHandler: Oskari.clazz.create('Oskari.mapframework.bundle.statehandler.request.SaveStateRequestHandler', sandbox, this)
+                setStateHandler: Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.statehandler.request.SetStateRequestHandler',
+                    sandbox,
+                    this
+                ),
+                saveStateHandler: Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.statehandler.request.SaveStateRequestHandler',
+                    sandbox,
+                    this
+                )
             };
             // headless
             return null;
@@ -535,5 +543,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
         }
 
     }, {
-        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
+        protocol: [
+            'Oskari.bundle.BundleInstance',
+            'Oskari.mapframework.module.Module'
+        ]
     });

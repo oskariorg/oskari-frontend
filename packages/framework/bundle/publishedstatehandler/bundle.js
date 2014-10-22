@@ -1,59 +1,78 @@
-
 /**
  * @class Oskari.mapframework.bundle.statehandler.StateHandlerBundle
- * Bundle definition for Oskari.mapframework.bundle.statehandler.StateHandlerBundleInstance
+ * Bundle definition for
+ * Oskari.mapframework.bundle.statehandler.StateHandlerBundleInstance
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.publishedstatehandler.PublishedStateHandlerBundle", function() {
+Oskari.clazz.define(
+    "Oskari.mapframework.bundle.publishedstatehandler.PublishedStateHandlerBundle",
+    function () {
 
-}, {
-    "create" : function() {
-
-        return Oskari.clazz.create("Oskari.mapframework.bundle.publishedstatehandler.PublishedStateHandlerBundleInstance");
     },
-    "update" : function(manager, bundle, bi, info) {
+    {
+        create: function () {
+            return Oskari.clazz.create(
+                "Oskari.mapframework.bundle.publishedstatehandler.PublishedStateHandlerBundleInstance"
+            );
+        },
+        update: function (manager, bundle, bi, info) {}
+    }, {
 
-    }
-}, {
-
-    "protocol" : ["Oskari.bundle.Bundle"],
-    "source" : {
-
-        "scripts" : [
-		{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/publishedstatehandler/instance.js"
-        }
-        ]
-    },
-    "bundle" : {
-        "manifest" : {
-            "Bundle-Identifier" : "publishedstatehandler",
-            "Bundle-Name" : "publishedstatehandler",
-            "Bundle-Author" : [{
-                "Name" : "jjk",
-                "Organisation" : "nls.fi",
-                "Temporal" : {
-                    "Start" : "2009",
-                    "End" : "2011"
-                },
-                "Copyleft" : {
-                    "License" : {
-                        "License-Name" : "EUPL",
-                        "License-Online-Resource" : "http://www.paikkatietoikkuna.fi/license"
+        "protocol": ["Oskari.bundle.Bundle"],
+        "source": {
+            "scripts": [{
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/statehandler/request/SaveStateRequest.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/statehandler/request/SaveStateRequestHandler.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/statehandler/request/SetStateRequest.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/statehandler/request/SetStateRequestHandler.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/publishedstatehandler/instance.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/publishedstatehandler/state-methods.js"
+            }]
+        },
+        "bundle": {
+            "manifest": {
+                "Bundle-Identifier": "publishedstatehandler",
+                "Bundle-Name": "publishedstatehandler",
+                "Bundle-Author": [{
+                    "Name": "jjk",
+                    "Organisation": "nls.fi",
+                    "Temporal": {
+                        "Start": "2009",
+                        "End": "2011"
+                    },
+                    "Copyleft": {
+                        "License": {
+                            "License-Name": "EUPL",
+                            "License-Online-Resource": "http://www.paikkatietoikkuna.fi/license"
+                        }
                     }
-                }
-            }],
-            "Bundle-Name-Locale" : {
-                "fi" : {
-                    "Name" : "publishedstatehandler",
-                    "Title" : "publishedstatehandler"
+                }],
+                "Bundle-Name-Locale": {
+                    "fi": {
+                        "Name": "publishedstatehandler",
+                        "Title": "publishedstatehandler"
+                    },
+                    "en": {}
                 },
-                "en" : {}
-            },
-            "Bundle-Version" : "1.0.0",
-            "Import-Namespace" : ["Oskari"],
-            "Import-Bundle" : {}
+                "Bundle-Version": "1.0.0",
+                "Import-Namespace": ["Oskari"],
+                "Import-Bundle": {}
+            }
         }
     }
-});
-Oskari.bundle_manager.installBundleClass("publishedstatehandler", "Oskari.mapframework.bundle.publishedstatehandler.PublishedStateHandlerBundle");
+);
+
+Oskari.bundle_manager.installBundleClass(
+    "publishedstatehandler",
+    "Oskari.mapframework.bundle.publishedstatehandler.PublishedStateHandlerBundle"
+);

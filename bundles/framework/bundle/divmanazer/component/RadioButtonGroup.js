@@ -104,12 +104,7 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
 
         getName: function () {
             'use strict';
-            var input = this._element.querySelector('input'),
-                ret = '';
-            if (input) {
-                ret = input.name;
-            }
-            return ret;
+            return this._name || '';
         },
 
         /**
@@ -120,8 +115,10 @@ Oskari.clazz.define('Oskari.userinterface.component.RadioButtonGroup',
             var i,
                 inputs = this._element.querySelectorAll('input');
 
+            this._name = name || '';
+
             for (i = 0; i < inputs.length; i += 1) {
-                inputs[i].name = name || '';
+                inputs[i].name = this._name;
             }
         },
 

@@ -38,6 +38,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/bundle/divmanazer/instance.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/Component.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/divmanazer/request/AddExtensionRequest.js"
             }, {
                 "type": "text/javascript",
@@ -63,9 +66,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/divmanazer/event/ExtensionUpdatedEvent.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/bundle/divmanazer/component/Component.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/divmanazer/component/Accordion.js"

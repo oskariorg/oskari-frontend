@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
 
     function () {
         this.conf = {
-            "sandbox": "sandbox"
+            sandbox: 'sandbox'
         };
         this.state = {};
     }, {
@@ -129,11 +129,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             }
 
             var i = null,
-                ilen = null,
-                ilast = null,
-                statsgridState = "statsgrid=",
-                valueSeparator = "+",
-                indicatorSeparator = ",",
+                len = null,
+                last = null,
+                statsgridState = 'statsgrid=',
+                valueSeparator = '+',
+                indicatorSeparator = ',',
                 stateValues = null,
                 indicatorValues = null,
                 colorsValues = null,
@@ -156,13 +156,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             // fifth value.
             // 'manualBreaksInput' can be an empty string but it must be the
             // sixth value.
-            for (i = 0, ilen = keys.length, ilast = ilen - 1; i < ilen; i++) {
+            for (i = 0, len = keys.length, last = len - 1; i < len; i += 1) {
                 value = state[keys[i]];
                 if (value !== null && value !== undefined) {
                     // skip undefined and null
                     stateValues += value;
                 }
-                if (i !== ilast) {
+                if (i !== last) {
                     stateValues += valueSeparator;
                 }
             }
@@ -170,13 +170,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
 
 
             // handle indicators separately
-            for (i = 0, ilen = indicators.length, ilast = ilen - 1; i < ilen; i++) {
+            for (i = 0, len = indicators.length, last = len - 1; i < len; i += 1) {
                 indicatorValues += indicators[i].id;
                 indicatorValues += valueSeparator;
                 indicatorValues += indicators[i].year;
                 indicatorValues += valueSeparator;
                 indicatorValues += indicators[i].gender;
-                if (i !== ilast) {
+                if (i !== last) {
                     indicatorValues += indicatorSeparator;
                 }
             }
@@ -184,8 +184,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             // handle colors separately
             var colorArr = [],
                 cKey;
+
             colors.flipped = colors.flipped === true;
-            for (i = 0, ilen = colorKeys.length; i < ilen; ++i) {
+            for (i = 0, len = colorKeys.length; i < len; i += 1) {
                 cKey = colorKeys[i];
                 if (colors.hasOwnProperty(cKey) && colors[cKey] !== null && colors[cKey] !== undefined) {
                     colorArr.push(colors[cKey]);
@@ -197,11 +198,11 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
 
             var ret = null;
             if (stateValues && indicatorValues) {
-                ret = statsgridState + stateValues + "-" + indicatorValues + "-";
+                ret = statsgridState + stateValues + '-' + indicatorValues + '-';
                 if (colorsValues) {
                     ret += colorsValues;
                 }
-                ret += "-1"; // always enable mode
+                ret += '-1'; // always enable mode
             }
 
             return ret;
@@ -225,7 +226,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             // Initialize the grid
             me.gridPlugin.createStatsOut(me.container);
             me._adjustDataContainer();
-            me._adjustMapPluginLocations();
         },
 
         /**
@@ -264,29 +264,22 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
         _toggleGrid: function (show) {
             var me = this,
                 elCenter = jQuery('.oskariui-center'), // the map column
-                elLeft = jQuery('.oskariui-left'), // the grid column
-                gridWidth = 40; // How wide the grid should be, in percentages.
+                elLeft = jQuery('.oskariui-left'); // the grid column
+
+            elCenter.toggleClass('span12', !show);
+            elLeft.toggleClass('oskari-closed', !show);
 
             if (show) {
-                elCenter.removeClass('span12');
-                elCenter.width((100 - gridWidth) + '%');
-                elLeft.removeClass('oskari-closed');
-                elLeft.width(gridWidth + '%');
                 elLeft.html(me.container);
             } else {
-                elCenter.width('').addClass('span12');
-                elLeft.addClass('oskari-closed');
-                elLeft.width('');
-                if (!elLeft.is(":empty")) {
+                if (!elLeft.is(':empty')) {
                     elLeft.remove(me.container);
                 }
             }
 
             me.gridVisible = show;
 
-            // A hack to notify openlayers of map size change.
-            var map = me.mapModule.getMap();
-            map.updateSize();
+            me._updateMapModuleSize();
         },
 
         /**
@@ -328,67 +321,107 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
 
             buttonContainer.append(button);
         },
-        _adjustDataContainer: function () {
-            var mapDiv = this.mapModule.getMapEl(),
-                mapWidth = mapDiv.width(),
-                mapHeight = mapDiv.height();
 
-            // how many columns * 80px
-            var gridWidth = this._calculateGridWidth(), //maxContentWidth - mapWidth;
-                gridHeight = mapHeight,
-                elLeft = jQuery('.oskariui-left'),
-                elCenter = jQuery('.oskariui-center');
+        _updateMapModuleSize: function () {
+            var sandbox = Oskari.getSandbox('sandbox'),
+                reqBuilder = sandbox.getRequestBuilder(
+                    'MapFull.MapSizeUpdateRequest'
+                );
 
-            if (this.gridVisible) {
-                if (gridWidth > 400) {
-                    gridWidth = 400;
-                }
-                elLeft.removeClass('oskari-closed');
-                jQuery('#contentMap').width(gridWidth + mapWidth + 20);
-
-                gridWidth = (gridWidth + 20) + 'px';
-                gridHeight = gridHeight + 'px';
-                mapWidth = mapWidth + 'px';
-            } else {
-                elLeft.addClass('oskari-closed');
-                jQuery('#contentMap').width('');
-
-                gridWidth = '0px';
-                gridHeight = '0px';
-                //contentWidth = '100%';
+            if (reqBuilder) {
+                sandbox.request(this, reqBuilder());
             }
-            elLeft.css({
+        },
+
+        /**
+         * @private @method _adjustDataContainer
+         * This horrific thing is what sets the statsgrid, container and map size.
+         */
+        _adjustDataContainer: function () {
+            /*
+            Structure:
+            - content
+                - dataContainer
+                    - grid
+                - mapContainer
+                    - mapDiv
+            */
+            var me = this,
+                mapDiv = this.mapModule.getMapEl(),
+                content = jQuery('#contentMap'),
+                container = content.find('.row-fluid'),
+                dataContainer = container.find('.oskariui-left'),
+                gridWidth = me._calculateGridWidth(),
+                gridHeight = 0,
+                mapContainer = container.find('.oskariui-center'),
+                mapWidth,
+                mapHeight,
+                totalWidth = content.width(),
+                totalHeight = content.height();
+
+            dataContainer.toggleClass('oskari-closed', !me.gridVisible);
+
+            if (me.gridVisible) {
+                gridHeight = totalHeight;
+            } else {
+                gridWidth = 0;
+            }
+
+            mapWidth = (totalWidth - gridWidth) + 'px';
+            mapHeight = totalHeight + 'px';
+            gridWidth = gridWidth + 'px';
+            gridHeight = gridHeight + 'px';
+
+            dataContainer.css({
                 'width': gridWidth,
                 'height': gridHeight,
                 'float': 'left'
             }).addClass('published-grid-left');
-            elCenter.css({
+
+            mapDiv.css({
                 'width': mapWidth,
+                'height': mapHeight
+            });
+
+            mapContainer.css({
+                'width': mapWidth,
+                'height': mapHeight,
                 'float': 'left'
             }).addClass('published-grid-center');
-            this.container.height(mapHeight);
 
+            if (me.container) {
+                me.container.height(mapHeight);
+            }
+
+            // notify map module that size has changed
+            me._updateMapModuleSize();
         },
+
+        /**
+         * @private @method _calculateGridWidth
+         * Calculates a sensible width for statsgrid (but doesn't set it...)
+         */
         _calculateGridWidth: function () {
-            if (this.state && this.state.indicators !== null && this.state.indicators !== undefined) {
+            var sandbox = Oskari.getSandbox('sandbox'),
+                columns,
+                statsGrid = sandbox.getStatefulComponents().statsgrid, // get state of statsgrid
+                width = 160;
+
+            if (this.state &&
+                this.state.indicators !== null &&
+                this.state.indicators !== undefined) {
+
                 //indicators + municipality (name & code)
-                var columns = this.state.indicators.length + 2;
+                columns = this.state.indicators.length + 2;
                 //slickgrid column width is 80 by default
-                return columns * 80;
+                width = columns * 80;
             }
-            return 160;
-        },
-
-        _adjustMapPluginLocations: function () {
-            var zoomBar = jQuery('.mapplugin.pzbDiv'),
-                panButtons = jQuery('.mapplugin.panbuttonDiv');
-
-            // This shouldn't be done anymore...
-            if (zoomBar && zoomBar.length && !panButtons.length) {
-                zoomBar.css('top', '35px');
-            }
+            // Width + scroll bar width, but 400 at most.
+            return Math.min((width + 20), 400);
         }
-
     }, {
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
+        protocol: [
+            'Oskari.bundle.BundleInstance',
+            'Oskari.mapframework.module.Module'
+        ]
     });

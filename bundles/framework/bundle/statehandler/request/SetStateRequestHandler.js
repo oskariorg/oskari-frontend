@@ -11,6 +11,41 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.request.SetStateReq
      *          reference to statehandler
      */
     function (sandbox, statehandler) {
+        if (statehandler === null || statehandler === undefined) {
+            throw new TypeError(
+                'SetStateRequestHandler(): is missing statehandler.'
+            );
+        }
+        if (!statehandler.setCurrentViewId) {
+            throw new TypeError(
+                'SetStateRequestHandler(): statehandler is missing setCurrentViewId.'
+            );
+        }
+        if (typeof statehandler.setCurrentViewId !== 'function') {
+            throw new TypeError(
+                'SetStateRequestHandler(): statehandler.setCurrentViewId is not a function.'
+            );
+        }
+        if (!statehandler.useState) {
+            throw new TypeError(
+                'SetStateRequestHandler(): statehandler is missing useState.'
+            );
+        }
+        if (typeof statehandler.useState !== 'function') {
+            throw new TypeError(
+                'SetStateRequestHandler(): statehandler.useState is not a function.'
+            );
+        }
+        if (!statehandler.resetState) {
+            throw new TypeError(
+                'SetStateRequestHandler(): statehandler is missing resetState.'
+            );
+        }
+        if (typeof statehandler.resetState !== 'function') {
+            throw new TypeError(
+                'SetStateRequestHandler(): statehandler.resetState is not a function.'
+            );
+        }
         this.sandbox = sandbox;
         this.statehandler = statehandler;
     }, {

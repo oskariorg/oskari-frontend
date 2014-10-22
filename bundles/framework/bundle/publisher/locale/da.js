@@ -144,7 +144,8 @@ Oskari.registerLocalization(
                 "fill": "NOT TRANSLATED",
                 "custom": "Brugerdefineret størrelse",
                 "width": "Bredde",
-                "height": "Højde"
+                "height": "Højde",
+                "separator": "x"
             },
             "buttons": {
                 "save": "Gem",

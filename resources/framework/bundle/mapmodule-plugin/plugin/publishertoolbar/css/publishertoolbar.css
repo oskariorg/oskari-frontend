@@ -35,7 +35,9 @@
         padding: 0px 10px; }
         .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow div.tool {
           display: inline-block;
-          cursor: pointer; }
+          cursor: pointer;
+          width: 32px;
+          height: 32px; }
         .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow div.tool.selected, .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow div.tool:hover:not(.disabled), .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow div.tool:active:not(.disabled) {
           background-color: #212121; }
       .tools .publishedToolbarContainer .publishedToolbarContent div.toolrow:first-child {
