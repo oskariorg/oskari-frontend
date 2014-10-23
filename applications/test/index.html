@@ -21,6 +21,9 @@
                 method: "getMapPosition",
                 success: function (data) {
                     console.log(JSON.stringify(data));
+                },
+                error: function (data) {
+                    console.log("error", data);
                 }
             });
             // Bind AfterMapMoveEvent so we react to receiving it
@@ -35,7 +38,7 @@
                 method: "handleEvent",
                 params: ["AfterMapMoveEvent", true],
                 success: function(data) {
-                    console.log("AfterMapMoveEvent", JSON.stringify(data));
+                    console.log("Listening to AfterMapMoveEvent");
                 },
                 error: function (data) {
                     console.log("error", data);
@@ -54,7 +57,7 @@
                 method: "handleEvent",
                 params: ["MapClickedEvent", true],
                 success: function(data) {
-                    console.log("MapClickedEvent", JSON.stringify(data));
+                    console.log("Listening to MapClickedEvent");
                 },
                 error: function (data) {
                     console.log("error", data);
@@ -63,7 +66,13 @@
 
             chan.call({
                 method: "postRequest",
-                params: ["MapMoveRequest", [354490.70442968, 6770658.0402485, 8, false, "EPSG:3067"]]
+                params: ["MapMoveRequest", [354490.70442968, 6770658.0402485, 8, false, "EPSG:3067"]],
+                success: function(data) {
+                    console.log("MapMoveRequest", JSON.stringify(data));
+                },
+                error: function (data) {
+                    console.log("error", data);
+                }
             });
         </script>
     </body>
