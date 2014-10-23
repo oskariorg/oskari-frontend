@@ -59,16 +59,14 @@ Oskari.clazz.define(
                 sandbox = Oskari.getSandbox(sandboxName),
                 domain = me.conf.domain,
                 domainMatch = function (origin) {
-                    var protocol = origin.split('//')[0],
-                        re = new RegExp(
-                            // Allow subdomains, limit to same protocol
-                            '^' + protocol + ':\/\/([a-z0-9]+[.])*' + domain + '$'
+                    // Allow subdomains and different ports
+                    var re = new RegExp(
+                            '^https?:\/\/([a-z0-9]+[.])*' + domain + '(:\d+)?$'
                         );
 
                     return {
                         domain: domain,
                         origin: origin,
-                        protocol: protocol,
                         test: re.test(origin)
                     };
                 },
