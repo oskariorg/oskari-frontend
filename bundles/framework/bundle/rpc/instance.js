@@ -115,31 +115,31 @@ Oskari.clazz.define(
             // TODO OskariRPC.handleEvent
             channel.bind(
                 'handleEvent',
-                function (trans, name, register) {
+                function (trans, params) {
                     if (!domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
                             message: 'Invalid origin: ' + trans.origin
                         };
                     }
-                    if (me._allowedEvents[name]) {
-                        if (register) {
-                            me._registerEventHandler(name);
-                            return "Registered " + name;
+                    if (me._allowedEvents[params[0]]) {
+                        if (params[1]) {
+                            me._registerEventHandler(params[0]);
+                            return "Registered " + params[0];
                         } else {
-                            me._unregisterEventHandler(name);
-                            return "Unegistered " + name;
+                            me._unregisterEventHandler(params[0]);
+                            return "Unegistered " + params[0];
                         }
                     } else {
                         /*throw {
                             error: 'event_not_allowed',
-                            message: 'Event not allowed: ' + name
+                            message: 'Event not allowed: ' + params[0]
                         };*/
                         return [
-                            "Event not allowed: " + name,
+                            "Event not allowed: " + params[0],
                             me._allowedEvents,
-                            name,
-                            me._allowedEvents[name]
+                            params[0],
+                            me._allowedEvents[params[0]]
                         ];
                     }
                 }
@@ -150,29 +150,29 @@ Oskari.clazz.define(
             // TODO OskariRPC.postRequest
             channel.bind(
                 'postRequest',
-                function (trans, name, params) {
+                function (trans, params) {
                     if (!domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
                             message: 'Invalid origin: ' + trans.origin
                         };
                     }
-                    if (me._allowedRequests[name]) {
-                        var builder = me.sandbox.getRequestBuilder(name),
+                    if (me._allowedRequests[params[0]]) {
+                        var builder = me.sandbox.getRequestBuilder(params[0]),
                             request;
                         if (builder) {
-                            request = builder.apply(me, params);
+                            request = builder.apply(me, params[1]);
                             me.sandbox.request(me, request);
                         } else {
                             throw {
                                 error: 'builder_not_found',
-                                message: 'No builder found for: ' + name
+                                message: 'No builder found for: ' + params[0]
                             };
                         }
                     } else {
                         throw {
                             error: 'request_not_allowed',
-                            message: 'Request not allowed: ' + name
+                            message: 'Request not allowed: ' + params[0]
                         };
                     }
                 }
