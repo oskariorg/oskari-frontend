@@ -124,11 +124,11 @@ Oskari.clazz.define(
                     }
                     if (me._allowedEvents[params[0]]) {
                         if (params[1]) {
-                            me._registerEventHandler(params[0]);
-                            return "Registered " + params[0];
+                            //me._registerEventHandler(params[0]);
+                            return 'Registered ' + params[0];
                         } else {
-                            me._unregisterEventHandler(params[0]);
-                            return "Unegistered " + params[0];
+                            //me._unregisterEventHandler(params[0]);
+                            return 'Unegistered ' + params[0];
                         }
                     } else {
                         /*throw {
@@ -136,7 +136,7 @@ Oskari.clazz.define(
                             message: 'Event not allowed: ' + params[0]
                         };*/
                         return [
-                            "Event not allowed: " + params[0],
+                            'Event not allowed: ' + params[0],
                             me._allowedEvents,
                             params[0],
                             me._allowedEvents[params[0]]
