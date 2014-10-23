@@ -65,7 +65,12 @@ Oskari.clazz.define(
                             "^" + protocol + ":\/\/([a-z0-9]+[.])*" + domain + "$"
                         );
 
-                    return re.test(origin);
+                    return {
+                        domain: domain,
+                        origin: origin,
+                        protocol: protocol,
+                        test: re.test(origin);
+                    }
                 },
                 channel;
 
@@ -185,8 +190,9 @@ Oskari.clazz.define(
             channel.bind(
                 'testOriginCheck',
                 function (trans) {
-                    if (!domainMatch(trans.origin)) {
-                        throw "Wrong origin";
+                    var dm = domainMatch(trans.origin);
+                    if (!dm.test) {
+                        return dm;
                     }
                     return domainMatch(trans.origin);
                 }
