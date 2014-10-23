@@ -60,7 +60,10 @@ Oskari.clazz.define(
                 domain = me.conf.domain,
                 domainMatch = function (origin) {
                     var protocol = origin.split('//')[0],
-                        re = new RegExp(protocol + "\/\/(.+\\.)*" + domain + );
+                        re = new RegExp(
+                            // Allow subdomains, limit to same protocol
+                            "^" + protocol + ":\/\/([a-z0-9]+[.])*" + domain + "$"
+                        );
 
                     return re.test(origin);
                 },
@@ -102,7 +105,7 @@ Oskari.clazz.define(
                 'handleEvent',
                 function (trans, name, register) {
                     if (!domainMatch(trans.origin)) {
-                        return;
+                        throw "Wrong origin";
                     }
                     me.sandbox.postWarn('Tried to ' + register ? 'register ' : 'unregister ' + name);
                     if (me._allowedEvents[name]) {
@@ -124,7 +127,7 @@ Oskari.clazz.define(
                 'postRequest',
                 function (trans, name, params) {
                     if (!domainMatch(trans.origin)) {
-                        return;
+                        throw "Wrong origin";
                     }
                     if (me._allowedRequests[name]) {
                         var builder = me.sandbox.getRequestBuilder(name),
@@ -146,7 +149,7 @@ Oskari.clazz.define(
                 'getSupportedEvents',
                 function (trans) {
                     if (!domainMatch(trans.origin)) {
-                        return;
+                        throw "Wrong origin";
                     }
                     return me._allowedEvents;
                 }
@@ -156,7 +159,7 @@ Oskari.clazz.define(
                 'getSupportedRequests',
                 function (trans) {
                     if (!domainMatch(trans.origin)) {
-                        return;
+                        throw "Wrong origin";
                     }
                     return me._allowedRequests;
                 }
@@ -168,7 +171,7 @@ Oskari.clazz.define(
                 function (trans) {
                     var map = me.sandbox.getMap();
                     if (!domainMatch(trans.origin)) {
-                        return;
+                        throw "Wrong origin";
                     }
                     return {
                         centerX: map.getY(),
@@ -183,7 +186,7 @@ Oskari.clazz.define(
                 'testOriginCheck',
                 function (trans) {
                     if (!domainMatch(trans.origin)) {
-                        return;
+                        throw "Wrong origin";
                     }
                     return domainMatch(trans.origin);
                 }
