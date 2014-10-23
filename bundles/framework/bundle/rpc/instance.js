@@ -125,17 +125,22 @@ Oskari.clazz.define(
                     if (me._allowedEvents[name]) {
                         if (register) {
                             me._registerEventHandler(name);
-                            return "Registered";
+                            return "Registered " + name;
                         } else {
                             me._unregisterEventHandler(name);
-                            return "Unegistered";
+                            return "Unegistered " + name;
                         }
                     } else {
                         /*throw {
                             error: 'event_not_allowed',
                             message: 'Event not allowed: ' + name
                         };*/
-                        return "Event not allowed";
+                        return [
+                            "Event not allowed: " + name,
+                            me._allowedEvents,
+                            name,
+                            me._allowedEvents[name]
+                        ];
                     }
                 }
             );

@@ -15,6 +15,12 @@
                     console.log("Channel ready");
                 }
             });
+            chan.call({
+                method: "getSupportedEvents",
+                success: function (data) {
+                    console.log(JSON.stringify(data));
+                }
+            });
             // Bind AfterMapMoveEvent so we react to receiving it
             chan.bind(
                 "AfterMapMoveEvent",
