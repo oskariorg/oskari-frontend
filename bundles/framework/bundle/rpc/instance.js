@@ -61,7 +61,7 @@ Oskari.clazz.define(
                 domainMatch = function (origin) {
                     // Allow subdomains and different ports
                     var re = new RegExp(
-                            '^https?:\/\/([a-z0-9]+[.])*' + domain + '(:\d+)?$'
+                            '^https?:\/\/([a-zA-Z0-9]+\.)*' + domain + "(:\d+)?"
                         );
 
                     return {
