@@ -76,11 +76,7 @@ Oskari.clazz.define(
                         }
                     }
 
-                    return {
-                        domain: domain,
-                        origin: origin,
-                        test: ret
-                    };
+                    return ret;
                 },
                 channel;
 
@@ -120,7 +116,10 @@ Oskari.clazz.define(
                 'handleEvent',
                 function (trans, name, register) {
                     if (!domainMatch(trans.origin)) {
-                        throw 'Wrong origin';
+                        throw {
+                            error: 'invalid_origin',
+                            message: 'Invalid origin: ' + trans.origin
+                        };
                     }
                     me.sandbox.postWarn('Tried to ' + register ? 'register ' : 'unregister ' + name);
                     if (me._allowedEvents[name]) {
@@ -130,7 +129,10 @@ Oskari.clazz.define(
                             me._unregisterEventHandler(name);
                         }
                     } else {
-                        throw 'Event not allowed: ' + name;
+                        throw {
+                            error: 'event_not_allowed',
+                            message: 'Event not allowed: ' + name
+                        };
                     }
                 }
             );
@@ -142,7 +144,10 @@ Oskari.clazz.define(
                 'postRequest',
                 function (trans, name, params) {
                     if (!domainMatch(trans.origin)) {
-                        throw 'Wrong origin';
+                        throw {
+                            error: 'invalid_origin',
+                            message: 'Invalid origin: ' + trans.origin
+                        };
                     }
                     if (me._allowedRequests[name]) {
                         var builder = me.sandbox.getRequestBuilder(name),
@@ -151,10 +156,16 @@ Oskari.clazz.define(
                             request = builder.apply(me, params);
                             me.sandbox.request(me, request);
                         } else {
-                            throw 'No builder found for ' + name;
+                            throw {
+                                error: 'builder_not_found',
+                                message: 'No builder found for: ' + name
+                            };
                         }
                     } else {
-                        throw 'Request not allowed: ' + name;
+                        throw {
+                            error: 'request_not_allowed',
+                            message: 'Request not allowed: ' + name
+                        };
                     }
                 }
             );
@@ -164,7 +175,10 @@ Oskari.clazz.define(
                 'getSupportedEvents',
                 function (trans) {
                     if (!domainMatch(trans.origin)) {
-                        trans.delayReturn(true);
+                        throw {
+                            error: 'invalid_origin',
+                            message: 'Invalid origin: ' + trans.origin
+                        };
                     }
                     return me._allowedEvents;
                 }
@@ -174,7 +188,10 @@ Oskari.clazz.define(
                 'getSupportedRequests',
                 function (trans) {
                     if (!domainMatch(trans.origin)) {
-                        trans.delayReturn(true);
+                        throw {
+                            error: 'invalid_origin',
+                            message: 'Invalid origin: ' + trans.origin
+                        };
                     }
                     return me._allowedRequests;
                 }
@@ -186,7 +203,10 @@ Oskari.clazz.define(
                 function (trans) {
                     var map = me.sandbox.getMap();
                     if (!domainMatch(trans.origin)) {
-                        trans.delayReturn(true);
+                        throw {
+                            error: 'invalid_origin',
+                            message: 'Invalid origin: ' + trans.origin
+                        };
                     }
                     return {
                         centerX: map.getY(),
@@ -200,7 +220,11 @@ Oskari.clazz.define(
             channel.bind(
                 'testOriginCheck',
                 function (trans) {
-                    return domainMatch(trans.origin);
+                    return {
+                        domain: domain,
+                        origin: trans.origin,
+                        test: domainMatch(trans.origin)
+                    };
                 }
             );
 
@@ -223,7 +247,7 @@ Oskari.clazz.define(
                 if (me._channel) {
                     me._channel.notify({
                         method: eventName,
-                        params: event.getParams ? event.getParams() : me._getParams(event)
+                        params: me._getParams(event)
                     });
                 }
             };
@@ -286,27 +310,32 @@ Oskari.clazz.define(
                 //strippedKey,
                 value;
 
-            for (key in event) {
-                if (event.hasOwnProperty(key)) {
-                    // Skip __name and such
-                    if (key.indexOf('__') !== 0) {
-                        value = event[key];
-                        if (typeof value === 'string' ||
-                            typeof value === 'number' ||
-                            typeof value === 'boolean') {
-                            /* try to make the key a tad cleaner?
-                            strippedKey = key;
-                            if (key.indexOf('_') === 0) {
-                                strippedKey = key.substring(1);
-                                if (event[strippedKey] === undefined) {
-                                    key = strippedKey;
-                                }
-                            }*/
-                            ret[key] = value;
+            if (event.getParams) {
+                ret = event.getParams();
+            } else {
+                for (key in event) {
+                    if (event.hasOwnProperty(key)) {
+                        // Skip __name and such
+                        if (key.indexOf('__') !== 0) {
+                            value = event[key];
+                            if (typeof value === 'string' ||
+                                typeof value === 'number' ||
+                                typeof value === 'boolean') {
+                                /* try to make the key a tad cleaner?
+                                strippedKey = key;
+                                if (key.indexOf('_') === 0) {
+                                    strippedKey = key.substring(1);
+                                    if (event[strippedKey] === undefined) {
+                                        key = strippedKey;
+                                    }
+                                }*/
+                                ret[key] = value;
+                            }
                         }
                     }
                 }
             }
+
             return ret;
         },
 

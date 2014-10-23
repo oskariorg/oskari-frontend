@@ -15,8 +15,17 @@
                     console.log("Channel ready");
                 }
             });
+            // Bind AfterMapMoveEvent so we react to receiving it
+            chan.bind(
+                "AfterMapMoveEvent",
+                function (trans, data) {
+                    console.log(JSON.stringify(data));
+                }
+            );
+            // Listen to AfterMapMoveEvent
             chan.call({
-                method: "testOriginCheck",
+                method: "handleEvent",
+                params: ["AfterMapMoveEvent", true],
                 success: function(data) {
                     console.log(JSON.stringify(data));
                 },
