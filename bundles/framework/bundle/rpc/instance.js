@@ -59,8 +59,9 @@ Oskari.clazz.define(
                 sandbox = Oskari.getSandbox(sandboxName),
                 domain = me.conf.domain,
                 domainMatch = function (origin) {
+                    return true;
                     // Allow subdomains and different ports
-                    var ret = origin.indexOf(domain) !== -1,
+                    /*var ret = origin.indexOf(domain) !== -1,
                         parts;
 
                     if (ret) {
@@ -76,7 +77,7 @@ Oskari.clazz.define(
                         }
                     }
 
-                    return ret;
+                    return ret;*/
                 },
                 channel;
 
@@ -121,18 +122,20 @@ Oskari.clazz.define(
                             message: 'Invalid origin: ' + trans.origin
                         };
                     }
-                    me.sandbox.postWarn('Tried to ' + register ? 'register ' : 'unregister ' + name);
                     if (me._allowedEvents[name]) {
                         if (register) {
                             me._registerEventHandler(name);
+                            return "Registered";
                         } else {
                             me._unregisterEventHandler(name);
+                            return "Unegistered";
                         }
                     } else {
-                        throw {
+                        /*throw {
                             error: 'event_not_allowed',
                             message: 'Event not allowed: ' + name
-                        };
+                        };*/
+                        return "Event not allowed";
                     }
                 }
             );
