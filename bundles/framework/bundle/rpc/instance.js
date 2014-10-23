@@ -59,17 +59,10 @@ Oskari.clazz.define(
                 sandbox = Oskari.getSandbox(sandboxName),
                 domain = me.conf.domain,
                 domainMatch = function (origin) {
-                    var re = new RegExp("\/\/(.+\\.)*" + domain);
-                    var protocol = origin.split(':')[0];
+                    var protocol = origin.split('//')[0],
+                        re = new RegExp(protocol + "\/\/(.+\\.)*" + domain + );
 
-                    return {
-                        origin: origin,
-                        domain: domain,
-                        protocol: protocol,
-                        match: re.test(origin)
-                    };
-
-                    //return ret && origin.indexOf(protocol) === 0;
+                    return re.test(origin);
                 },
                 channel;
 
@@ -108,6 +101,9 @@ Oskari.clazz.define(
             channel.bind(
                 'handleEvent',
                 function (trans, name, register) {
+                    if (!domainMatch(trans.origin)) {
+                        return;
+                    }
                     me.sandbox.postWarn('Tried to ' + register ? 'register ' : 'unregister ' + name);
                     if (me._allowedEvents[name]) {
                         if (register) {
@@ -127,6 +123,9 @@ Oskari.clazz.define(
             channel.bind(
                 'postRequest',
                 function (trans, name, params) {
+                    if (!domainMatch(trans.origin)) {
+                        return;
+                    }
                     if (me._allowedRequests[name]) {
                         var builder = me.sandbox.getRequestBuilder(name),
                             request;
@@ -146,6 +145,9 @@ Oskari.clazz.define(
             channel.bind(
                 'getSupportedEvents',
                 function (trans) {
+                    if (!domainMatch(trans.origin)) {
+                        return;
+                    }
                     return me._allowedEvents;
                 }
             );
@@ -153,6 +155,9 @@ Oskari.clazz.define(
             channel.bind(
                 'getSupportedRequests',
                 function (trans) {
+                    if (!domainMatch(trans.origin)) {
+                        return;
+                    }
                     return me._allowedRequests;
                 }
             );
@@ -162,6 +167,9 @@ Oskari.clazz.define(
                 'getMapPosition',
                 function (trans) {
                     var map = me.sandbox.getMap();
+                    if (!domainMatch(trans.origin)) {
+                        return;
+                    }
                     return {
                         centerX: map.getY(),
                         centerY: map.getX(),
@@ -174,6 +182,9 @@ Oskari.clazz.define(
             channel.bind(
                 'testOriginCheck',
                 function (trans) {
+                    if (!domainMatch(trans.origin)) {
+                        return;
+                    }
                     return domainMatch(trans.origin);
                 }
             );
