@@ -37,6 +37,8 @@ Oskari.clazz.define(
         me._allowedRequests = allowedRequests;
         me._channel = null;
         me._localization = {};
+        me.eventHandlers = {};
+        me.requestHandlers = {};
     }, {
         /**
          * @public @method getName
@@ -58,27 +60,6 @@ Oskari.clazz.define(
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
                 domain = me.conf.domain,
-                domainMatch = function (origin) {
-                    return true;
-                    // Allow subdomains and different ports
-                    /*var ret = origin.indexOf(domain) !== -1,
-                        parts;
-
-                    if (ret) {
-                        parts = origin.split(domain);
-                        if (parts) {
-                            ret = /^https?:\/\/([a-zA-Z0-9]+[.])*$/.test(parts[0]);
-                            if (ret && parts.length > 1) {
-                                ret = /^(:\d+)?$/.test(parts[1]);
-                            }
-                        } else {
-                            // origin must have a protocol
-                            ret = false;
-                        }
-                    }
-
-                    return ret;*/
-                },
                 channel;
 
             me.sandbox = sandbox;
@@ -116,7 +97,7 @@ Oskari.clazz.define(
             channel.bind(
                 'handleEvent',
                 function (trans, params) {
-                    if (!domainMatch(trans.origin)) {
+                    if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
                             message: 'Invalid origin: ' + trans.origin
@@ -125,22 +106,14 @@ Oskari.clazz.define(
                     if (me._allowedEvents[params[0]]) {
                         if (params[1]) {
                             me._registerEventHandler(params[0]);
-                            //return 'Registered ' + params[0];
                         } else {
                             me._unregisterEventHandler(params[0]);
-                            //return 'Unegistered ' + params[0];
                         }
                     } else {
-                        /*throw {
+                        throw {
                             error: 'event_not_allowed',
                             message: 'Event not allowed: ' + params[0]
-                        };*/
-                        return [
-                            'Event not allowed: ' + params[0],
-                            me._allowedEvents,
-                            params[0],
-                            me._allowedEvents[params[0]]
-                        ];
+                        };
                     }
                 }
             );
@@ -151,7 +124,7 @@ Oskari.clazz.define(
             channel.bind(
                 'postRequest',
                 function (trans, params) {
-                    if (!domainMatch(trans.origin)) {
+                    if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
                             message: 'Invalid origin: ' + trans.origin
@@ -182,7 +155,7 @@ Oskari.clazz.define(
             channel.bind(
                 'getSupportedEvents',
                 function (trans) {
-                    if (!domainMatch(trans.origin)) {
+                    if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
                             message: 'Invalid origin: ' + trans.origin
@@ -195,7 +168,7 @@ Oskari.clazz.define(
             channel.bind(
                 'getSupportedRequests',
                 function (trans) {
-                    if (!domainMatch(trans.origin)) {
+                    if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
                             message: 'Invalid origin: ' + trans.origin
@@ -210,7 +183,7 @@ Oskari.clazz.define(
                 'getMapPosition',
                 function (trans) {
                     var map = me.sandbox.getMap();
-                    if (!domainMatch(trans.origin)) {
+                    if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
                             message: 'Invalid origin: ' + trans.origin
@@ -220,23 +193,44 @@ Oskari.clazz.define(
                         centerX: map.getY(),
                         centerY: map.getX(),
                         zoom: map.getZoom(),
+                        scale: map.getScale(),
                         srsName: map.getSrsName()
                     };
                 }
             );
 
-            channel.bind(
-                'testOriginCheck',
-                function (trans) {
-                    return {
-                        domain: domain,
-                        origin: trans.origin,
-                        test: domainMatch(trans.origin)
-                    };
-                }
-            );
-
             me._channel = channel;
+        },
+
+        /**
+         * @private @method _domainMatch
+         * Used to check message origin, JSChannel only checks for an exact
+         * match where we need subdomain matches as well.
+         *
+         * @param  {string} origin Origin domain
+         *
+         * @return {Boolean} Does origin match config domain
+         */
+        _domainMatch: function (origin) {
+            // Allow subdomains and different ports
+            var domain = this.conf.domain,
+                ret = origin.indexOf(domain) !== -1,
+                parts;
+
+            if (ret) {
+                parts = origin.split(domain);
+                if (parts) {
+                    ret = /^https?:\/\/([a-zA-Z0-9]+[.])*$/.test(parts[0]);
+                    if (ret && parts.length > 1) {
+                        ret = /^(:\d+)?$/.test(parts[1]);
+                    }
+                } else {
+                    // origin must have a protocol
+                    ret = false;
+                }
+            }
+
+            return ret;
         },
 
         /**
@@ -263,8 +257,10 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method stop
+         * @public @method stop
          * BundleInstance protocol method
+         *
+         *
          */
         stop: function () {
             var me = this,
@@ -285,13 +281,21 @@ Oskari.clazz.define(
             this.sandbox = null;
         },
 
+        /**
+         * @public @method init
+         *
+         *
+         */
         init: function () {
             return null;
         },
         /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         * @public @method onEvent
+         *
+         * @param {Oskari.mapframework.event.Event} event an Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or
+         * discarded if not.
+         *
          */
         onEvent: function (event) {
             var me = this,
@@ -348,8 +352,10 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method update
+         * @public @method update
          * BundleInstance protocol method
+         *
+         *
          */
         update: function () {},
 
@@ -365,8 +371,11 @@ Oskari.clazz.define(
         }
     }, {
         /**
-         * @static @property {String[]} protocol
+         * @static @property {string[]} protocol
          */
-        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
+        protocol: [
+            'Oskari.bundle.BundleInstance',
+            'Oskari.mapframework.module.Module'
+        ]
     }
 );
