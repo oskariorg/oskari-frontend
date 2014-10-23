@@ -190,8 +190,8 @@ Oskari.clazz.define(
                         };
                     }
                     return {
-                        centerX: map.getY(),
-                        centerY: map.getX(),
+                        centerX: map.getX(),
+                        centerY: map.getY(),
                         zoom: map.getZoom(),
                         scale: map.getScale(),
                         srsName: map.getSrsName()

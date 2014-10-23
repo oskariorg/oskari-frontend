@@ -2,78 +2,110 @@
     <head>
         <title>Test RPC</title>
         <script src="../../libraries/JSChannel/jschannel.js"></script>
+        <style>
+            iframe {
+                border: none;
+                border-radius: 10px;
+                box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.15);
+                clear: both;
+                display: block;
+                margin-bottom: 12px;
+            }
+        </style>
     </head>
+
     <body>
-        <!--<iframe id="Oskari" src="http://dev.paikkatietoikkuna.fi/published/fi/6043" style="border: none; width: 700px; height: 525px;"></iframe>-->
-        <iframe id="Oskari" src="http://hk-pc-112w764.mmlnet.nls.fi:8080/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true&viewId=6493" style="border: none; width: 700px; height: 525px;"></iframe>
+        <iframe id="Oskari" src="http://dev.paikkatietoikkuna.fi/published/fi/6043" style="width: 700px; height: 525px;"></iframe>
+        <button id="helsinki">Helsinkiin</button>
+        <button id="lehka">M&ouml;kille</button>
+        <output id="coords"></output>
         <script>
-            var chan = Channel.build({
+        var chan = Channel.build({
                 window: document.getElementById("Oskari").contentWindow,
                 origin: "*",
                 //origin: "http://hk-pc-112w764.mmlnet.nls.fi:8080",
                 scope: "Oskari",
-                onReady: function () {
+                onReady: function() {
                     console.log("Channel ready");
                 }
-            });
-            // Get current map position
-            chan.call({
-                method: "getMapPosition",
-                success: function (data) {
-                    console.log(JSON.stringify(data));
-                },
-                error: function (data) {
-                    console.log("error", data);
-                }
-            });
-            // Bind AfterMapMoveEvent so we react to receiving it
-            chan.bind(
-                "AfterMapMoveEvent",
-                function (trans, data) {
-                    console.log(JSON.stringify(data));
-                }
-            );
-            // Listen to AfterMapMoveEvent
-            chan.call({
-                method: "handleEvent",
-                params: ["AfterMapMoveEvent", true],
-                success: function(data) {
-                    console.log("Listening to AfterMapMoveEvent");
-                },
-                error: function (data) {
-                    console.log("error", data);
-                }
-            });
+            }),
+            coords = document.getElementById('coords'),
+            setCoords = function(data) {
+                coords.textContent = data.centerX + ", " + data.centerY;
+            },
+            moveMap = function(centerX, centerY) {
+                chan.call({
+                    method: "postRequest",
+                    params: ["MapMoveRequest", [centerX, centerY, 8]],
+                    success: function(data) {
+                        console.log("MapMoveRequest posted");
+                    },
+                    error: function(data) {
+                        console.log("error", data);
+                    }
+                });
+            };
 
-            // Bind MapClickedEvent so we react to receiving it
-            chan.bind(
-                "MapClickedEvent",
-                function (trans, data) {
-                    console.log(JSON.stringify(data));
-                }
-            );
-            // Listen to MapClickedEvent
-            chan.call({
-                method: "handleEvent",
-                params: ["MapClickedEvent", true],
-                success: function(data) {
-                    console.log("Listening to MapClickedEvent");
-                },
-                error: function (data) {
-                    console.log("error", data);
-                }
-            });
 
-            chan.call({
-                method: "postRequest",
-                params: ["MapMoveRequest", [354490.70442968, 6770658.0402485, 8, false, "EPSG:3067"]],
-                success: function(data) {
-                    console.log("MapMoveRequest", JSON.stringify(data));
-                },
-                error: function (data) {
-                    console.log("error", data);
-                }
-            });
+        // Get current map position
+        chan.call({
+            method: "getMapPosition",
+            success: function(data) {
+                console.log("getMapPosition", JSON.stringify(data));
+                setCoords(data);
+            },
+            error: function(data) {
+                console.log("error", data);
+            }
+        });
+        // Bind AfterMapMoveEvent so we react to receiving it
+        chan.bind(
+            "AfterMapMoveEvent",
+            function(trans, data) {
+                console.log("AfterMapMoveEvent", JSON.stringify(data));
+                setCoords(data);
+            }
+        );
+        // Listen to AfterMapMoveEvent
+        chan.call({
+            method: "handleEvent",
+            params: ["AfterMapMoveEvent", true],
+            success: function(data) {
+                console.log("Listening to AfterMapMoveEvent");
+            },
+            error: function(data) {
+                console.log("error", data);
+            }
+        });
+
+        // Bind MapClickedEvent so we react to receiving it
+        chan.bind(
+            "MapClickedEvent",
+            function(trans, data) {
+                console.log("MapClickedEvent", JSON.stringify(data));
+            }
+        );
+        // Listen to MapClickedEvent
+        chan.call({
+            method: "handleEvent",
+            params: ["MapClickedEvent", true],
+            success: function(data) {
+                console.log("Listening to MapClickedEvent");
+            },
+            error: function(data) {
+                console.log("error", data);
+            }
+        });
+
+        document.getElementById('lehka').onclick = function() {
+            console.log("Mökille");
+            moveMap(354490.70442968, 6770658.0402485);
+        };
+
+        document.getElementById('helsinki').onclick = function() {
+            console.log("Helsinkiin");
+            moveMap(385540.20442968, 6675294.2902485);
+        };
         </script>
     </body>
 </html>
