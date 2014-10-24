@@ -45,6 +45,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
 
             var continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             continueButton.addClass('primary');
+            continueButton.setId('oskari_analysis_analyse_view_start_view_buttons_continue');
             continueButton.setTitle(this.loc.buttons['continue']);
             continueButton.setHandler(function () {
                 me.instance.setAnalyseMode(true);
@@ -88,6 +89,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
 
             var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
+            cancelButton.setId('oskari_analysis_analyse_view_start_view_buttons_cancel');
             cancelButton.setTitle(this.loc.buttons.cancel);
             cancelButton.setHandler(function () {
                 me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);

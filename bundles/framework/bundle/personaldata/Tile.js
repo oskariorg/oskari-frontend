@@ -81,7 +81,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Tile',
          * @method refresh
          * Creates the UI for a fresh start
          */
-        refresh: function () {}
+        refresh: function () {
+            var cel = this.container;
+            var idEl = cel.children('.oskari-tile-title');
+            idEl.attr("id", 'oskari_personaldata_tile_title');
+        }
     }, {
         /**
          * @property {String[]} protocol
