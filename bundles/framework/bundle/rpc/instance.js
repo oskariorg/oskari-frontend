@@ -29,7 +29,8 @@ Oskari.clazz.define(
 
         if (allowedRequests === null || allowedRequests === undefined) {
             allowedRequests = {
-                MapMoveRequest: true
+                MapMoveRequest: true,
+                'MapModulePlugin.AddMarkerRequest': true
             };
         }
 
