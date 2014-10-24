@@ -492,6 +492,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 searchButton = Oskari.clazz.create(
                     'Oskari.userinterface.component.Button');
 
+            dataButton.setId('oskari_analysis_analyse_view_analyse_buttons_data');
             dataButton.setTitle(loc.buttons.data);
             dataButton.addClass('primary');
             dataButton.setHandler(function () {
@@ -499,6 +500,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             });
             dataButton.insertTo(buttons);
 
+            searchButton.setId('oskari_analysis_analyse_view_analyse_content_search_title');
             searchButton.setTitle(loc.content.search.title);
             searchButton.addClass('primary');
             searchButton.setHandler(function() {
@@ -528,7 +530,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             return _.foldl(tools, function(container, tool) {
                 var toolDiv = toolTemplate.clone();
                 toolDiv.addClass('add-' + tool);
-                toolDiv.attr('title', loc.content.features.tooltips[tool]);
+                toolDiv.attr({'title': loc.content.features.tooltips[tool], 'id': "oskari_analysis_analyse_view_analyse_content_features_" + tool});
                 toolDiv.click(function() {
                     me._startNewDrawing({
                         drawMode: tool
@@ -591,6 +593,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
                 finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
             cancelBtn.setTitle(loc.cancel);
+            cancelBtn.setId('oskari_analysis_analyse_view_analyse_content_features_cancel');
             cancelBtn.setHandler(function () {
                 me._sendStopDrawRequest(true);
                 me._closeHelpDialog();
@@ -598,6 +601,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.ContentPanel',
             });
 
             finishBtn.setTitle(loc.finish);
+            finishBtn.setId('oskari_analysis_analyse_view_analyse_content_features_finish');
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
                 me._sendStopDrawRequest(false);
