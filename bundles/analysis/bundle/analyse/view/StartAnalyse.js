@@ -1493,6 +1493,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             };
 
             for (i = 0, j = me.differenceOptions.length; i < j; i += 1) {
+console.log("---");
+console.log(me.differenceOptions);
                 option = me.differenceOptions[i];
                 toolContainer = me.template.differenceOptionTool.clone();
                 toolContainer.find('label span').append(option.label);
