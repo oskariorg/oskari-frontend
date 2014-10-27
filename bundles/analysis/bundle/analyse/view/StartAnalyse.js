@@ -1460,8 +1460,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 j;
 
             me.differenceOptions = options;
-            console.log(options);
-            debugger;
             // First layer is selected outside this panel, so no selection to be done here
             me._addTitle(extraParams, loc.firstLayer);
             extraParams.append(jQuery('<span></span>').html((targetLayerOption ? targetLayerOption.label : '')));
@@ -1493,8 +1491,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             };
 
             for (i = 0, j = me.differenceOptions.length; i < j; i += 1) {
-console.log("---");
-console.log(me.differenceOptions);
                 option = me.differenceOptions[i];
                 toolContainer = me.template.differenceOptionTool.clone();
                 toolContainer.find('label span').append(option.label);
@@ -1548,7 +1544,8 @@ console.log(me.differenceOptions);
                 preselection = false,
                 serviceFields = me._getLayerServiceFields(layer);
 
-
+console.log("test");
+console.log(serviceFields);
             // Make sure the container is empty
             container.empty();
 
