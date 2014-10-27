@@ -1460,7 +1460,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 j;
 
             me.differenceOptions = options;
-
+            console.log(options);
+            debugger;
             // First layer is selected outside this panel, so no selection to be done here
             me._addTitle(extraParams, loc.firstLayer);
             extraParams.append(jQuery('<span></span>').html((targetLayerOption ? targetLayerOption.label : '')));
