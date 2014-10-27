@@ -8,7 +8,7 @@ Oskari.clazz.define(
     function () {}, {
         create: function () {
             return Oskari.clazz.create(
-                "Oskari.mapframework.bundle.rpc.RemoteProcedureCallBundleInstance"
+                "Oskari.mapframework.bundle.rpc.RemoteProcedureCallInstance"
             );
         },
         update: function (manager, bundle, bi, info) {}

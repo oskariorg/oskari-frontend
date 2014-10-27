@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             unionOptionTool: '<div class="tool ">' + '<input type="radio" name="union" />' + '<label></label></div>',
             layerUnionOptionTool: '<div class="tool"><input type="checkbox" name="layer_union" /><label></label></div>',
             differenceOptionTool: '<div class="tool ">' + '<label><input type="radio" name="difference" />' + '<span></span></label></div>',
-            title: '<div class="analyse_title_cont analyse_settings_cont"><div class="settings_buffer_label"></div><input class="settings_buffer_field" type="text"><select class="settings_buffer_units"></select></div>',
+            title: '<div class="analyse_title_cont analyse_settings_cont"><div class="settings_buffer_label"></div><input class="settings_buffer_field" type="text"><select id="oskari_analysis_analyse_view_start_analyse_settings_buffer_units" class="settings_buffer_units"></select></div>',
             title_name: '<div class="analyse_title_name analyse_settings_cont"><div class="settings_name_label"></div><input class="settings_name_field" type="text"></div>',
             title_color: '<div class="analyse_title_colcont analyse_output_cont"><div class="output_color_label"></div></div>',
             title_columns: '<div class="analyse_title_columns analyse_output_cont"><div class="columns_title_label"></div></div>',
@@ -353,6 +353,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var analyseTitle = me.template.title_name.clone();
             analyseTitle.find('.settings_name_label').html(me.loc.analyse_name.label);
             analyseTitle.find('.settings_name_field').attr({
+                'id': 'oskari_analysis_analyse_view_start_analyse_settings_name_field',
                 'value': name,
                 'placeholder': me.loc.analyse_name.tooltip
             });
@@ -703,6 +704,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             closeBtn.setHandler(function () {
                 me.instance.setAnalyseMode(false);
             });
+            closeBtn.setId('oskari_analysis_analyse_view_start_analyse_buttons_cancel');
             closeBtn.insertTo(buttonCont);
 
             saveBtn.setPrimary(false);
@@ -712,6 +714,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me._saveAnalyse(selections);
                 }
             });
+            saveBtn.setId('oskari_analysis_analyse_view_start_analyse_buttons_save');
             saveBtn.insertTo(buttonCont);
 
             analyseBtn.setTitle(this.loc.buttons.analyse);
@@ -720,6 +723,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 // Check parameters and continue to analyse action
                 me._analyseMap();
             });
+            analyseBtn.setId('oskari_analysis_analyse_view_start_analyse_buttons_analyse');
             analyseBtn.insertTo(buttonCont);
 
             return buttonCont;
@@ -916,6 +920,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     unit;
                 bufferTitle.find('.settings_buffer_label').html(me.loc.buffer_size.label);
                 bufferTitle.find('.settings_buffer_field').attr({
+                    'id': 'oskari_analysis_analyse_view_start_analyse_settings_buffer_field',
                     'value': '',
                     'placeholder': me.loc.buffer_size.tooltip
                 });

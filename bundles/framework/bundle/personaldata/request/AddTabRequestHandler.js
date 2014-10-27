@@ -22,7 +22,7 @@ function(sandbox, personaldata) {
      *      request to handle
      */
     handleRequest : function(core, request) {
-        this.personaldata.addTab({"title": request.getTitle(), "content": request.getContent(), "first": request.isFirst()});
+        this.personaldata.addTab({"title": request.getTitle(), "content": request.getContent(), "first": request.isFirst(), "id": request.getId()});
    }
 }, {
     /**

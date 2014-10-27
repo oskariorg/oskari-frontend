@@ -1,0 +1,101 @@
+<html>
+    <head>
+        <title>Test RPC</title>
+        <script src="../../libraries/JSChannel/jschannel.js"></script>
+        <script src="../../libraries/OskariRPC/OskariRPC.js"></script>
+        <style>
+            iframe {
+                border: none;
+                border-radius: 10px;
+                box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.15);
+                clear: both;
+                display: block;
+                margin-bottom: 12px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <iframe id="Oskari" src="http://dev.paikkatietoikkuna.fi/published/fi/6043" style="width: 700px; height: 525px;"></iframe>
+        <button id="helsinki">Helsinkiin</button>
+        <button id="lehka">M&ouml;kille</button>
+        <output id="coords"></output>
+        <script>
+        var channel = OskariRPC.connect(
+                document.getElementById("Oskari"),
+                "http://dev.paikkatietoikkuna.fi"
+            ),
+            coords = document.getElementById('coords'),
+            setCoords = function(x, y) {
+                coords.textContent = x + ", " + y;
+            },
+            moveMap = function(centerX, centerY) {
+                channel.postRequest(
+                    "MapMoveRequest",
+                    [centerX, centerY, 8],
+                    function(data) {
+                        console.log("MapMoveRequest posted");
+                    },
+                    function(error, message) {
+                        console.log("error", error, message);
+                    }
+                );
+            };
+
+        // Get current map position
+        channel.getMapPosition(
+            function(data) {
+                console.log("getMapPosition", JSON.stringify(data));
+                setCoords(data.centerX, data.centerY);
+            },
+            function(error, message) {
+                console.log("error", error, message);
+            }
+        );
+
+        channel.handleEvent(
+            'AfterMapMoveEvent',
+            function(data) {
+                console.log("AfterMapMoveEvent", JSON.stringify(data));
+                setCoords(data.centerX, data.centerY);
+            },
+            function(error, message) {
+                console.log("error", error, message);
+            }
+        );
+
+        channel.handleEvent(
+            'MapClickedEvent',
+            function(data) {
+                console.log("MapClickedEvent", JSON.stringify(data));
+                channel.postRequest(
+                    'MapModulePlugin.AddMarkerRequest',
+                    [
+                        {
+                            x: data.lon,
+                            y: data.lat
+                        },
+                        'RPCMarker'
+                    ], 
+                    function(error, message) {
+                        console.log("error", error, message);
+                    }
+                );
+            },
+            function(error, message) {
+                console.log("error", error, message);
+            }
+        );
+
+        document.getElementById('lehka').onclick = function() {
+            console.log("Mökille");
+            moveMap(354490.70442968, 6770658.0402485);
+        };
+
+        document.getElementById('helsinki').onclick = function() {
+            console.log("Helsinkiin");
+            moveMap(385540.20442968, 6675294.2902485);
+        };
+        </script>
+    </body>
+</html>

@@ -469,14 +469,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 totalWidth = size.width,
                 totalHeight = size.height;
 
-            // Don't set height, it would hide the publisher menu...
-            //content.width(totalWidth);
-            if (totalWidth === '') {
+            if (totalWidth === null || totalWidth === undefined || totalWidth === '') {
                 // Ugly hack, container has a nasty habit of overflowing the viewport...
-                totalWidth = jQuery(document).width() - container.offset().left;
+                totalWidth = jQuery(window).width() - container.offset().left;
             }
-            if (totalHeight === '') {
-                totalHeight = content.height();
+            if (totalHeight === null || totalHeight === undefined || totalHeight === '') {
+                totalHeight = jQuery(window).height();
             }
 
             dataContainer.toggleClass('oskari-closed', !me.isDataVisible);
