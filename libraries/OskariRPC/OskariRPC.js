@@ -64,6 +64,21 @@
                 },
 
                 /**
+                 * @public @method getZoomRange
+                 *
+                 * @param {function} success Callback function
+                 * @param {function} error   Error handler
+                 *
+                 */
+                getZoomRange: function (success, error) {
+                    channel.call({
+                        method: 'getZoomRange',
+                        success: success,
+                        error: error
+                    });
+                },
+
+                /**
                  * @public @method getSupportedEvents
                  *
                  * @param {function} success Callback function

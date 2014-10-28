@@ -227,6 +227,39 @@ Oskari.clazz.define(
                 }
             );
 
+            // bind get zoom range
+            channel.bind(
+                'getZoomRange',
+                function (trans) {
+                    var map = me.sandbox.getMap();
+                    if (!me._domainMatch(trans.origin)) {
+                        throw {
+                            error: 'invalid_origin',
+                            message: 'Invalid origin: ' + trans.origin
+                        };
+                    }
+                    return {
+                        min: 0,
+                        max: map.getNumZoomLevels() - 1,
+                        current: map.getZoom()
+                    };
+                }
+            );
+
+            channel.bind(
+                'zoomTo',
+                function (trans, zoomLevel) {
+                    var map = me.sandbox.getMap();
+                    if (!me._domainMatch(trans.origin)) {
+                        throw {
+                            error: 'invalid_origin',
+                            message: 'Invalid origin: ' + trans.origin
+                        };
+                    }
+                    map.zoomTo(zoomLevel);
+                }
+            );
+
             me._channel = channel;
         },
 

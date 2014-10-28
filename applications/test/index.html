@@ -17,7 +17,7 @@
     </head>
 
     <body>
-        <iframe id="Oskari" src="http://dev.paikkatietoikkuna.fi/published/fi/6043" style="width: 700px; height: 525px;"></iframe>
+        <iframe id="Oskari" src="http://dev.paikkatietoikkuna.fi/published/fi/6044" style="width: 700px; height: 525px;"></iframe>
         <button id="helsinki">Helsinkiin</button>
         <button id="lehka">M&ouml;kille</button>
         <output id="coords"></output>
@@ -48,6 +48,53 @@
             function(data) {
                 console.log("getMapPosition", JSON.stringify(data));
                 setCoords(data.centerX, data.centerY);
+            },
+            function(error, message) {
+                console.log("error", error, message);
+            }
+        );
+
+        channel.getAllLayers(
+            function(data) {
+                console.log("getAllLayers", JSON.stringify(data));
+                // Layer names aren't available through RPC as it might contain sensitive data
+                var localization = {
+                    "base_2": "Maastokartta",
+                    "base_35": "Taustakarttasarja"
+                };
+                data.forEach(function (layer) {
+                    var layerButton = document.createElement('button');
+                    layerButton.id = layer.id;
+                    layerButton.textContent = localization[layer.id];
+                    layerButton.onclick = function () {
+                        var lid = this.id;
+                        console.log("Showing layer " + localization[lid]);
+                        data.forEach(function (l) {
+                            channel.postRequest(
+                                "MapModulePlugin.MapLayerVisibilityRequest",
+                                [l.id, l.id === '' + lid]
+                            );
+                        });
+                    };
+                    document.body.appendChild(layerButton);
+                });
+            },
+            function(error, message) {
+                console.log("error", error, message);
+            }
+        );
+
+        channel.getZoomRange(
+            function (data) {
+                var zoombar = document.createElement('input');
+                zoombar.type = 'range';
+                zoombar.min = data.min;
+                zoombar.max = data.max;
+                zoombar.value = data.current;
+                zoombar.onchange = function (event) {
+                    channel.zoomTo(this.value);
+                };
+                document.body.appendChild(zoombar);
             },
             function(error, message) {
                 console.log("error", error, message);
