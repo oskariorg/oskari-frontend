@@ -407,6 +407,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     uiName = fieldName.replace(baseKey, uiName);
                 }
                 link.append(uiName);
+                header.attr('title',uiName);
                 if (me.lastSort && fieldName === me.lastSort.attr) {
                     if (me.lastSort.descending) {
                         header.addClass('desc');
