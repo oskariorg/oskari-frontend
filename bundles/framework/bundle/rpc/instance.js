@@ -250,19 +250,6 @@ Oskari.clazz.define(
                 }
             );
 
-            channel.bind(
-                'zoomTo',
-                function (trans, zoomLevel) {
-                    if (!me._domainMatch(trans.origin)) {
-                        throw {
-                            error: 'invalid_origin',
-                            message: 'Invalid origin: ' + trans.origin
-                        };
-                    }
-                    map.zoomTo(zoomLevel);
-                }
-            );
-
             me._channel = channel;
         },
 

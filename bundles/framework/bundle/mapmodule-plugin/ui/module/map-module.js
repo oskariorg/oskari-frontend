@@ -347,7 +347,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
             var isDragging = (pIsDragging === true);
             // using panTo BREAKS IE on startup so do not
             // should we spam events on dragmoves?
-            this._map.setCenter(lonlat, this._getMapZoom(), isDragging);
+            //this._map.setCenter(lonlat, this._getMapZoom(), isDragging);
+            this._map.panTo(lonlat, this._getMapZoom(), isDragging);
             if (zoomAdjust) {
                 this.adjustZoomLevel(zoomAdjust, true);
             }

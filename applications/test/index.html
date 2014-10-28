@@ -32,10 +32,10 @@
             setCoords = function(x, y) {
                 coords.textContent = x + ", " + y;
             },
-            moveMap = function(centerX, centerY) {
+            moveMap = function(centerX, centerY, zoomLevel) {
                 channel.postRequest(
                     "MapMoveRequest",
-                    [centerX, centerY, 8],
+                    [centerX, centerY, zoomLevel === undefined ? 8 : zoomLevel],
                     function(data) {
                         console.log("MapMoveRequest posted");
                     },
@@ -53,12 +53,14 @@
                 zoombar.min = data.min;
                 zoombar.max = data.max;
                 zoombar.value = data.current
-                //zoombar.value = data.current;
                 zoombar.onchange = function (event) {
-                    channel.zoomTo(
-                        this.value,
-                        function () {
-                            console.log("Great success.");
+                    var zoomLevel = this.value;
+                    // There's no setZoomLevel, so we use MapMoveRequest width
+                    // getMapPosition's x and y coords
+                    channel.getMapPosition(
+                        function(data) {
+                            console.log("getMapPosition", JSON.stringify(data));
+                            moveMap(data.centerX, data.centerY, zoomLevel);
                         },
                         function(error, message) {
                             console.log("error", error, message);
