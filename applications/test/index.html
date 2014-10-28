@@ -5,9 +5,10 @@
         <script src="../../libraries/OskariRPC/OskariRPC.js"></script>
         <style>
             iframe {
+                background-clip: padding-box;
                 border: none;
-                border-radius: 10px;
-                box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.15);
+                border-radius: 12px;
+                box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);
                 clear: both;
                 display: block;
                 margin-bottom: 12px;
@@ -23,7 +24,7 @@
         <script>
         var channel = OskariRPC.connect(
                 document.getElementById("Oskari"),
-                "http://dev.paikkatietoikkuna.fi"
+                'http://dev.paikkatietoikkuna.fi'
             ),
             coords = document.getElementById('coords'),
             setCoords = function(x, y) {
