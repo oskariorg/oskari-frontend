@@ -240,7 +240,8 @@ Oskari.clazz.define(
                     }
                     return {
                         min: 0,
-                        max: map.getNumZoomLevels() - 1
+                        max: map.getNumZoomLevels() - 1,
+                        zoom: map.getZoom()
                     };
                 }
             );
