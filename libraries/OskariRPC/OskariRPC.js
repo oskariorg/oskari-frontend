@@ -79,6 +79,23 @@
                 },
 
                 /**
+                 * @public @method zoomTo
+                 *
+                 * @param {number}   zoomLevel Zoom level
+                 * @param {function} success   Callback function
+                 * @param {function} error     Error handler
+                 *
+                 */
+                zoomTo: function (zoomLevel, success, error) {
+                    channel.call({
+                        method: 'zoomTo',
+                        params: zoomLevel,
+                        success: success,
+                        error: error
+                    });
+                },
+
+                /**
                  * @public @method getSupportedEvents
                  *
                  * @param {function} success Callback function

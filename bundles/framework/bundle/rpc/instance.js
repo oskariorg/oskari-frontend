@@ -238,11 +238,11 @@ Oskari.clazz.define(
                             message: 'Invalid origin: ' + trans.origin
                         };
                     }
-                    return {
-                        min: 0,
-                        max: map.getNumZoomLevels() - 1,
-                        current: map.getZoom()
+                    var ret = {
+                        min: 0;
                     };
+                    ret.max = map.getNumZoomLevels() - 1;
+                    return ret;
                 }
             );
 
