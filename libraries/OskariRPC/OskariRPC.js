@@ -87,6 +87,7 @@
                  *
                  */
                 zoomTo: function (zoomLevel, success, error) {
+                    console.log("zoomTo");
                     channel.call({
                         method: 'zoomTo',
                         params: zoomLevel,

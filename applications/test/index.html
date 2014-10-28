@@ -55,12 +55,20 @@
                 zoombar.value = data.current
                 //zoombar.value = data.current;
                 zoombar.onchange = function (event) {
-                    channel.zoomTo(this.value, function () {});
+                    channel.zoomTo(
+                        this.value,
+                        function () {
+                            console.log("Great success.");
+                        },
+                        function(error, message) {
+                            console.log("error", error, message);
+                        }
+                    );
                 };
                 document.body.appendChild(zoombar);
             },
             function(error, message) {
-                console.log("zoomy error", error, message);
+                console.log("error", error, message);
             }
         );
 

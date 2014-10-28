@@ -59,6 +59,8 @@ Oskari.clazz.define(
         start: function () {
             var me = this,
                 conf = this.conf,
+                map,
+                mapModule,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
                 domain = me.conf.domain,
@@ -66,6 +68,8 @@ Oskari.clazz.define(
 
             me.sandbox = sandbox;
             sandbox.register(this);
+            mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            map = mapModule.getMap();
 
             if (!Channel) {
                 me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): JSChannel not found.');
@@ -210,7 +214,6 @@ Oskari.clazz.define(
             channel.bind(
                 'getMapPosition',
                 function (trans) {
-                    var map = me.sandbox.getMap();
                     if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
@@ -231,17 +234,12 @@ Oskari.clazz.define(
             channel.bind(
                 'getZoomRange',
                 function (trans) {
-                    var mapModule = sandbox.findRegisteredModuleInstance(
-                            'MainMapModule'
-                        ),
-                        map;
                     if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
                             message: 'Invalid origin: ' + trans.origin
                         };
                     }
-                    map = mapModule.getMap();
                     return {
                         min: 0,
                         max: map.getNumZoomLevels() - 1,
@@ -253,7 +251,6 @@ Oskari.clazz.define(
             channel.bind(
                 'zoomTo',
                 function (trans, zoomLevel) {
-                    var map = me.sandbox.getMap();
                     if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
