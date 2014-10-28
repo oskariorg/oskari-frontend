@@ -126,10 +126,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
                 layerarr = analysislayersJson.analysislayers,
                 i,
                 analyseJson;
+            this.analyseLayers = [];
 
             for (i in layerarr) {
                 if (layerarr.hasOwnProperty(i)) {
                     analyseJson = layerarr[i];
+                    this.analyseLayers.push(analyseJson);
+                    console.log('analyseJSON', analyseJson);
                     // TODO: Handle WPS results when no FeatureCollection eg. aggregate
                     if (analyseJson.wpsLayerId + '' === "-1") {
                         // no analyse layer case  eg. aggregate wps function
@@ -149,6 +152,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
                 sandbox.notifyAll(evt); // add the analysis layers programmatically since normal link processing
             }
         },
+
+        _returnAnalysisOfTypeAggregate: function() {
+            var analyseLayers = this.analyseLayers;
+            var analysisOfTypeAggregate = _.where(this.analyseLayers, {method: "aggregate"});
+            return analysisOfTypeAggregate;
+        },
+
         /**
          * Get WFS layer properties and property types
          *
