@@ -1460,7 +1460,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 j;
 
             me.differenceOptions = options;
-
             // First layer is selected outside this panel, so no selection to be done here
             me._addTitle(extraParams, loc.firstLayer);
             extraParams.append(jQuery('<span></span>').html((targetLayerOption ? targetLayerOption.label : '')));
@@ -1545,7 +1544,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 preselection = false,
                 serviceFields = me._getLayerServiceFields(layer);
 
-
             // Make sure the container is empty
             container.empty();
 
@@ -1576,6 +1574,21 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 container.append(featureListElement);
+            });
+            container.find('input:radio[name="'+name+'"]').on('change', function(){
+                // Update another radio button group
+                for (var i=1; i<3; i++) {
+                    var j = 2-(i+1)%2;
+                    if (jQuery(this).attr('name') === 'analyse-layer'+i+'-field-property') {
+                        var labels = me.mainPanel.find('input:radio[name="analyse-layer'+j+'-field-property"]').parent();
+                        var radios = labels.find('input:radio');
+                        radios.attr('checked',false);
+                        var spans = labels.find('span');
+                        var text = jQuery(this).parent().find('span').text();
+                        var selIndex = spans.index(labels.find('span:contains("'+text+'")'));
+                        jQuery(radios[selIndex]).attr('checked',true);
+                    }
+                }
             });
             return preselection ? preselectId : firstElement ? firstElement.find('input').val() : null;
         },
