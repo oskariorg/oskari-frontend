@@ -13,6 +13,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
     function () {
         this.template = jQuery('<div class="tab-content"></div>');
         this.templateTabHeader = jQuery('<li><a href="JavaScript:void(0);"></a></li>');
+        this.templateIconTemplate = jQuery('<div class="union-filter"></div>');
         this.id = null;
         this.title = null;
         this.content = null;
@@ -74,6 +75,24 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
             link = header.find('a');
             link.html(this.getTitle());
         },
+        /**
+         * @method setTitleIcon
+         * Sets icon to panel header afetr title
+         * @param {String} icon 
+         */
+        setTitleIcon: function (iconClass, clickHandler) {
+            if (!this.header) {
+                header = this.templateTabHeader.clone();
+                this.header = header;
+            }
+            var iconDiv =this.templateIconTemplate.clone();
+            iconDiv.addClass(iconClass);
+            this.header.find("a").after(iconDiv);
+            if (_.isFunction(clickHandler)) {
+                iconDiv.bind('click', clickHandler);
+            }
+        },
+
         /**
          * @method getTitle
          * Returns the panel title
