@@ -9,6 +9,7 @@
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.rpc.RemoteProcedureCallInstance',
     function () {
+        'use strict';
         var me = this,
             allowedEvents,
             allowedFunctions,
@@ -55,7 +56,8 @@ Oskari.clazz.define(
         me._localization = {};
         me.eventHandlers = {};
         me.requestHandlers = {};
-    }, {
+    },
+    {
         /**
          * @public @method getName
          *
@@ -63,6 +65,7 @@ Oskari.clazz.define(
          * @return {string} the name for the component
          */
         getName: function () {
+            'use strict';
             return 'RPC';
         },
 
@@ -71,15 +74,13 @@ Oskari.clazz.define(
          * BundleInstance protocol method
          */
         start: function () {
+            'use strict';
             var me = this,
                 channel,
                 conf = this.conf,
                 domain = me.conf.domain,
-                map,
-                mapModule,
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName),
-                sbMap;
+                sandboxName = conf && conf.sandbox ? conf.sandbox : 'sandbox',
+                sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
             sandbox.register(this);
@@ -170,7 +171,6 @@ Oskari.clazz.define(
             );
 
             me._bindFunctions(channel);
-
             me._channel = channel;
         },
 
@@ -184,6 +184,7 @@ Oskari.clazz.define(
          *
          */
         _bindFunctions: function (channel) {
+            'use strict';
             var me = this,
                 mapModule = me.sandbox.findRegisteredModuleInstance(
                     'MainMapModule'
@@ -264,7 +265,7 @@ Oskari.clazz.define(
                         });
                     }
                 );
-            }         
+            }
 
             // bind get map position
             if (me._allowedFunctions.getMapPosition) {
@@ -319,6 +320,7 @@ Oskari.clazz.define(
          * @return {Boolean} Does origin match config domain
          */
         _domainMatch: function (origin) {
+            'use strict';
             // Allow subdomains and different ports
             var domain = this.conf.domain,
                 ret = origin.indexOf(domain) !== -1,
@@ -347,6 +349,7 @@ Oskari.clazz.define(
          *
          */
         _registerEventHandler: function (eventName) {
+            'use strict';
             var me = this;
             if (me.eventHandlers[eventName]) {
                 // Event handler already in place
@@ -370,6 +373,7 @@ Oskari.clazz.define(
          *
          */
         stop: function () {
+            'use strict';
             var me = this,
                 sandbox = this.sandbox,
                 p;
@@ -394,8 +398,10 @@ Oskari.clazz.define(
          *
          */
         init: function () {
+            'use strict';
             return null;
         },
+
         /**
          * @public @method onEvent
          *
@@ -405,6 +411,7 @@ Oskari.clazz.define(
          *
          */
         onEvent: function (event) {
+            'use strict';
             var me = this,
                 handler = me.eventHandlers[event.getName()];
             if (!handler) {
@@ -413,17 +420,18 @@ Oskari.clazz.define(
 
             return handler.apply(this, [event]);
         },
+
         /**
          * @private @method _getParams
          * Returns event's simple variables as params.
          * This should suffice for simple events.
-         * TODO see if this could be done with some library...
          *
          * @param  {Object} event Event
          *
          * @return {Object}       Event params
          */
         _getParams: function (event) {
+            'use strict';
             var ret = {},
                 key,
                 //strippedKey,
@@ -438,8 +446,8 @@ Oskari.clazz.define(
                         if (key.indexOf('__') !== 0) {
                             value = event[key];
                             if (typeof value === 'string' ||
-                                typeof value === 'number' ||
-                                typeof value === 'boolean') {
+                                    typeof value === 'number' ||
+                                    typeof value === 'boolean') {
                                 /* try to make the key a tad cleaner?
                                 strippedKey = key;
                                 if (key.indexOf('_') === 0) {
@@ -464,7 +472,10 @@ Oskari.clazz.define(
          *
          *
          */
-        update: function () {},
+        update: function () {
+            'use strict';
+            return undefined;
+        },
 
         /**
          * @private @method _unregisterEventHandler
@@ -473,10 +484,12 @@ Oskari.clazz.define(
          *
          */
         _unregisterEventHandler: function (eventName) {
+            'use strict';
             delete this.eventHandlers[eventName];
             this.sandbox.unregisterFromEventByName(this, eventName);
         }
-    }, {
+    },
+    {
         /**
          * @static @property {string[]} protocol
          */
