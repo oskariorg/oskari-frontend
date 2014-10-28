@@ -17,14 +17,16 @@
     </head>
 
     <body>
-        <iframe id="Oskari" src="http://dev.paikkatietoikkuna.fi/published/fi/6044" style="width: 700px; height: 525px;"></iframe>
+        <!--<iframe id="Oskari" src="http://dev.paikkatietoikkuna.fi/published/fi/6044" style="width: 700px; height: 525px;"></iframe>-->
+        <iframe id="Oskari" src="http://hk-pc-112w764.mmlnet.nls.fi:8080/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true&viewId=6494" style="width: 700px; height: 525px;"></iframe>
         <button id="helsinki">Helsinkiin</button>
         <button id="lehka">M&ouml;kille</button>
         <output id="coords"></output>
         <script>
         var channel = OskariRPC.connect(
                 document.getElementById("Oskari"),
-                'http://dev.paikkatietoikkuna.fi'
+                'http://hk-pc-112w764.mmlnet.nls.fi:8080'
+                //'http://dev.paikkatietoikkuna.fi'
             ),
             coords = document.getElementById('coords'),
             setCoords = function(x, y) {
@@ -42,6 +44,25 @@
                     }
                 );
             };
+
+        channel.getZoomRange(
+            function (data) {
+                console.log("SUCCESS!!!");
+                var zoombar = document.createElement('input');
+                zoombar.type = 'range';
+                zoombar.min = data.min;
+                zoombar.max = data.max;
+                zoombar.value = data.zoom
+                //zoombar.value = data.current;
+                zoombar.onchange = function (event) {
+                    channel.zoomTo(this.value);
+                };
+                document.body.appendChild(zoombar);
+            },
+            function(error, message) {
+                console.log("zoomy error", error, message);
+            }
+        );
 
         // Get current map position
         channel.getMapPosition(
@@ -81,24 +102,6 @@
             },
             function(error, message) {
                 console.log("error", error, message);
-            }
-        );
-
-        channel.getZoomRange(
-            function (data) {
-                console.log("SUCCESS!!!");
-                var zoombar = document.createElement('input');
-                zoombar.type = 'range';
-                zoombar.min = data.min;
-                zoombar.max = data.max;
-                //zoombar.value = data.current;
-                zoombar.onchange = function (event) {
-                    channel.zoomTo(this.value);
-                };
-                document.body.appendChild(zoombar);
-            },
-            function(error, message) {
-                console.log("zoomy error", error, message);
             }
         );
 
