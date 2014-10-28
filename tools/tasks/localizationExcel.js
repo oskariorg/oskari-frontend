@@ -142,7 +142,7 @@ module.exports = function (grunt) {
                 grunt.log.error('No template locale defined.');
                 done(false);
             }
-            console.log(notesFile);
+            //console.log(notesFile);
             var cleanup = function (finish, ret) {
                 // delete copied template...
                 var templateDir = localizationDir + '\\' + bundleName + '_' + locale;
@@ -337,7 +337,11 @@ module.exports = function (grunt) {
                     // ignore, old translation isn't mandatory
                     //grunt.log.writeln('No old ' + locale + ' localization found for ' + bundleName);
                 } else {
-                    translation = eval(data);
+                    try {
+                        translation = eval(data);
+                    } catch (e) {
+                        grunt.fail.fatal("Couldn't read localization file: " + bundleDir + '\\locale\\' + locale + '.js, ' + e);
+                    }
                 }
                 checkAsyncStatus();
             });

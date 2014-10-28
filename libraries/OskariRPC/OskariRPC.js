@@ -34,6 +34,21 @@
                 },
 
                 /**
+                 * @public @method getAllLayers
+                 *
+                 * @param {function} success Callback function
+                 * @param {function} error   Error handler
+                 *
+                 */
+                getAllLayers: function (success, error) {
+                    channel.call({
+                        method: 'getAllLayers',
+                        success: success,
+                        error: error
+                    });
+                },
+
+                /**
                  * @public @method getMapPosition
                  *
                  * @param {function} success Callback function

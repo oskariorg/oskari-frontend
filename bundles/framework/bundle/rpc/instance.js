@@ -30,6 +30,7 @@ Oskari.clazz.define(
         if (allowedRequests === null || allowedRequests === undefined) {
             allowedRequests = {
                 MapMoveRequest: true,
+                'MapModulePlugin.MapLayerVisibilityRequest': true,
                 'MapModulePlugin.AddMarkerRequest': true
             };
         }
@@ -178,8 +179,34 @@ Oskari.clazz.define(
                     return me._allowedRequests;
                 }
             );
+
+            // bind get all layers (returns only IDs as the layers might contain private data)
+            channel.bind(
+                'getAllLayers',
+                function (trans) {
+                    if (!me._domainMatch(trans.origin)) {
+                        throw {
+                            error: 'invalid_origin',
+                            message: 'Invalid origin: ' + trans.origin
+                        };
+                    }
+                    var mapLayerService = me.sandbox.getService(
+                            'Oskari.mapframework.service.MapLayerService'
+                        ),
+                        layers;
+
+                    layers = mapLayerService.getAllLayers();
+                    return layers.map(function (layer) {
+                        return {
+                            id: layer.getId(),
+                            opacity: layer.getOpacity(),
+                            visible: layer.isVisible()
+                        };
+                    });
+                }
+            );           
+
             // bind get map position
-            // TODO OskariRPC.getMapPosition
             channel.bind(
                 'getMapPosition',
                 function (trans) {

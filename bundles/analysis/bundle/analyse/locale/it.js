@@ -133,14 +133,8 @@ Oskari.registerLocalization({
                 "area_count": "NOT TRANSLATED",
                 "area_count_tooltip": "NOT TRANSLATED",
                 "area_size": "NOT TRANSLATED",
-<<<<<<< HEAD
                 "area_size_tooltip": "NOT TRANSLATED",
                 "sector_count": "NOT TRANSLATED",
-=======
-                "sector_count": "NOT TRANSLATED",
-                "area_count_tooltip": "NOT TRANSLATED",
-                "area_size_tooltip": "NOT TRANSLATED",
->>>>>>> release/1.23.0
                 "sector_count_tooltip": "NOT TRANSLATED"
             },
             "spatial": {
