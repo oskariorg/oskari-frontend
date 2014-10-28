@@ -345,9 +345,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
         moveMapToLanLot: function (lonlat, zoomAdjust, pIsDragging) {
             // TODO: openlayers has isValidLonLat(); maybe use it here
             var isDragging = (pIsDragging === true);
+            // TODO check if panTo (still) breaks IE9+ and if not, should we use it
             // using panTo BREAKS IE on startup so do not
             // should we spam events on dragmoves?
             this._map.setCenter(lonlat, this._getMapZoom(), isDragging);
+            //this._map.panTo(lonlat, this._getMapZoom(), isDragging);
             if (zoomAdjust) {
                 this.adjustZoomLevel(zoomAdjust, true);
             }
