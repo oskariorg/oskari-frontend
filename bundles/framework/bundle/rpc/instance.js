@@ -241,7 +241,7 @@ Oskari.clazz.define(
                     var ret = {
                         min: 0;
                     };
-                    ret.max = map.getNumZoomLevels() - 1;
+                    //ret.max = map.getNumZoomLevels() - 1;
                     return ret;
                 }
             );
