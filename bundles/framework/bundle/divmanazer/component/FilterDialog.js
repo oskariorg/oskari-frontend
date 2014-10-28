@@ -43,7 +43,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * @method _createFilterDialog
          * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
          */
-        createFilterDialog: function (layer) {
+        createFilterDialog: function (layer, cb) {
             var me = this,
                 closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 // Clears the filter values
@@ -63,11 +63,10 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             if (typeof me._layer === null) {
                 return;
             }
-
             // Create filter dialog content
             layerAttributes = me._layer.getFilterJson();
-            if (me._layer.getFilterJson() === null) {
-                me._loadWFSLayerPropertiesAndTypes(me._layer.getId());
+            if (layerAttributes === null) {
+                me._loadWFSLayerPropertiesAndTypes(me._layer.getId(), cb);
                 return;
             }
             popupContent = this.getFilterDialogContent(me._layer);
@@ -119,6 +118,9 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
 
             // Make the popup draggable
             me.popup.makeDraggable();
+            if (_.isArray(layerAttributes) && _.isFunction(cb)) {
+               cb();
+            }
         },
 
         /**
@@ -324,6 +326,12 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             this._bindAddNewFilter(manageFilterOption.find('div.add-filter-option'), layer);
             // Bind a click event to the 'remove filter' button.
             this._bindRemoveFilter(manageFilterOption.find('div.remove-filter-option'), layer);
+
+            // Add link to filter with aggregate values if there are any
+            if (this.fixedOptions.addLinkToAggregateValues === true) {
+                var linkDiv = '<div class="addLink"><a>text</a></div>';
+                manageFilterOption.append(linkDiv);
+            }
 
             return manageFilterOption;
         },
@@ -623,7 +631,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * Load analysis layers in start.
          *
          */
-        _loadWFSLayerPropertiesAndTypes:function (layer_id) {
+        _loadWFSLayerPropertiesAndTypes:function (layer_id, cb) {
             var me = this,
                 url = me.sandbox.getAjaxUrl()
 
@@ -633,7 +641,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
 
                 function (response) {
                     if (response) {
-                        me._handleWFSLayerPropertiesAndTypesResponse(response);
+                        me._handleWFSLayerPropertiesAndTypesResponse(response, cb);
                     }
                 },
                 // Error callback
@@ -674,7 +682,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * @private
          * @param {JSON} propertyJson properties and property types of WFS layer JSON returned by server.
          */
-        _handleWFSLayerPropertiesAndTypesResponse: function (propertyJson) {
+        _handleWFSLayerPropertiesAndTypesResponse: function (propertyJson, cb) {
             var me = this,
                 fields = propertyJson.propertyTypes;
             var layerAttributes = [];
@@ -688,7 +696,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 }
             }
             this._layer.setFilterJson(layerAttributes);
-            this.createFilterDialog();
+            this.createFilterDialog(this._layer, cb);
         },
 
         /**
