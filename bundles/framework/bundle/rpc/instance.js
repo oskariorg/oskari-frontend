@@ -58,18 +58,20 @@ Oskari.clazz.define(
          */
         start: function () {
             var me = this,
+                channel,
                 conf = this.conf,
+                domain = me.conf.domain,
                 map,
                 mapModule,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
-                domain = me.conf.domain,
-                channel;
+                sbMap;
 
             me.sandbox = sandbox;
             sandbox.register(this);
             mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             map = mapModule.getMap();
+            sbMap = me.sandbox.getMap();
 
             if (!Channel) {
                 me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): JSChannel not found.');
@@ -221,11 +223,11 @@ Oskari.clazz.define(
                         };
                     }
                     return {
-                        centerX: map.getX(),
-                        centerY: map.getY(),
-                        zoom: map.getZoom(),
-                        scale: map.getScale(),
-                        srsName: map.getSrsName()
+                        centerX: sbMap.getX(),
+                        centerY: sbMap.getY(),
+                        zoom: sbMap.getZoom(),
+                        scale: sbMap.getScale(),
+                        srsName: sbMap.getSrsName()
                     };
                 }
             );
