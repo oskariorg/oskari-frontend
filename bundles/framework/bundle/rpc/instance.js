@@ -231,17 +231,21 @@ Oskari.clazz.define(
             channel.bind(
                 'getZoomRange',
                 function (trans) {
-                    var map = me.sandbox.getMap();
+                    var mapModule = sandbox.findRegisteredModuleInstance(
+                            'MainMapModule'
+                        ),
+                        map;
                     if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
                             message: 'Invalid origin: ' + trans.origin
                         };
                     }
+                    map = mapModule.getMap();
                     return {
                         min: 0,
                         max: map.getNumZoomLevels() - 1,
-                        zoom: map.getZoom()
+                        current: map.getZoom()
                     };
                 }
             );
