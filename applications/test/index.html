@@ -43,12 +43,13 @@
                         console.log("error", error, message);
                     }
                 );
-            };
+            },
+            zoombar;
 
         channel.getZoomRange(
             function (data) {
                 console.log("SUCCESS!!!");
-                var zoombar = document.createElement('input');
+                zoombar = document.createElement('input');
                 zoombar.type = 'range';
                 zoombar.min = data.min;
                 zoombar.max = data.max;
@@ -120,6 +121,9 @@
             function(data) {
                 console.log("AfterMapMoveEvent", JSON.stringify(data));
                 setCoords(data.centerX, data.centerY);
+                if (zoombar) {
+                    zoombar.value = data.zoom;
+                }
             },
             function(error, message) {
                 console.log("error", error, message);
