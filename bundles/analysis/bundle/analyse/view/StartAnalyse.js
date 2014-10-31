@@ -1487,10 +1487,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     tool.selected = true;
                     me._addFeatureList(me._getLayerByPrefixedId(tool.id), jQuery('#analyse-layer2-field').find('ul'), 'analyse-layer2-field-property');
                     me.differenceLayer = me._getLayerByPrefixedId(tool.id);
-                };
-            };
 console.log("###1");
 console.log(me.differenceLayer);
+console.log(me.differenceLayer.getWpsLayerParams());
+                };
+            };
             for (i = 0, j = me.differenceOptions.length; i < j; i += 1) {
                 option = me.differenceOptions[i];
                 toolContainer = me.template.differenceOptionTool.clone();
@@ -1526,7 +1527,7 @@ console.log(me.differenceLayer);
                 featureList = me.template.featureList.clone();
                 featureList.attr('id', 'analyse-layer2-field');
 console.log("###2");
-console.log(me.differenceLayer);
+console.log(me.differenceLayer.getWpsLayerParams());
                 me._addFeatureList(me.differenceLayer, featureList.find('ul'), 'analyse-layer2-field-property', firstField);
                 extraParams.append(featureList);
             }
@@ -1535,7 +1536,7 @@ console.log(me.differenceLayer);
             featureList = me.template.featureList.clone();
             featureList.attr('id', 'analyse-key-field');
 console.log("###3");
-console.log(me.targetLayer);
+console.log(targetLayer.getWpsLayerParams());
             me._addFeatureList(targetLayer, featureList.find('ul'), 'analyse-key-field-property');
             extraParams.append(featureList);
 
