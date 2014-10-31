@@ -1489,7 +1489,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me.differenceLayer = me._getLayerByPrefixedId(tool.id);
                 };
             };
-
+console.log("###1");
+console.log(me.differenceLayer);
             for (i = 0, j = me.differenceOptions.length; i < j; i += 1) {
                 option = me.differenceOptions[i];
                 toolContainer = me.template.differenceOptionTool.clone();
@@ -1524,6 +1525,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (me.differenceLayer && me.differenceLayer.getFields) {
                 featureList = me.template.featureList.clone();
                 featureList.attr('id', 'analyse-layer2-field');
+console.log("###2");
+console.log(me.differenceLayer);
                 me._addFeatureList(me.differenceLayer, featureList.find('ul'), 'analyse-layer2-field-property', firstField);
                 extraParams.append(featureList);
             }
@@ -1531,6 +1534,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me._addTitle(extraParams, loc.keyField);
             featureList = me.template.featureList.clone();
             featureList.attr('id', 'analyse-key-field');
+console.log("###3");
+console.log(me.targetLayer);
             me._addFeatureList(targetLayer, featureList.find('ul'), 'analyse-key-field-property');
             extraParams.append(featureList);
 
@@ -1543,6 +1548,22 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 featureListElement,
                 preselection = false,
                 serviceFields = me._getLayerServiceFields(layer);
+
+serviceFields = [
+    {
+        id: "A_id",
+        label: "A"
+    },
+    {
+        id: "B_id",
+        label: "B"
+    },
+    {
+        id: "C_id",
+        label: "C"
+    }
+];
+
 
             // Make sure the container is empty
             container.empty();
