@@ -326,15 +326,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method onEvent
-         * @param {Object} event
-         * @return {Function} event handler
-         */
-        onEvent: function (event) {
-            return this.eventHandlers[event.getName()].apply(this, [event]);
-        },
-
-        /**
          * @method mapMoveHandler
          */
         mapMoveHandler: function () {

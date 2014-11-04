@@ -8,6 +8,8 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
      */
     function (config) {
         this._config = config;
+        this._ctl = null;
+        this._element = null;
         this._enabled = true;
         this._visible = true;
     }, {
@@ -62,11 +64,12 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
 
             me._destroyControlElement();
 
-            if (me._element) {
+            if (me.getElement()) {
                 mapModule.removeMapControlPlugin(
-                    me._element,
+                    me.getElement(),
                     me.inLayerToolsEditMode()
                 );
+                me.getElement().remove();
                 me._element = null;
             }
         },

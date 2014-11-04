@@ -25,6 +25,7 @@ Oskari.clazz.define(
         me._name = 'ManageClassificationPlugin';
 
         me._state = null;
+        me._visible = false;
         me._locale = locale || Oskari.getLocalization('StatsGrid');
         me.initialSetup = true;
         me.colorsets_div = null;
@@ -133,6 +134,7 @@ Oskari.clazz.define(
                         }
                     }
                 },
+
                 /**
                  * @method AfterMapLayerRemoveEvent
                  * Removes the layer from selection
@@ -144,8 +146,10 @@ Oskari.clazz.define(
                     // Reset the UI and hide the dialog
                     if (event.getMapLayer()._layerType === 'STATS') {
                         this.refresh();
+                        this.setVisible(false);
                     }
                 },
+
                 /**
                  * @method AfterMapLayerAddEvent
                  * Adds the layer to selection
@@ -170,15 +174,12 @@ Oskari.clazz.define(
                 MapLayerVisibilityChangedEvent: function (event) {
                     // Hide Classify dialog
                     if (event.getMapLayer()._layerType === 'STATS') {
-
-                        var blnVisible = event.getMapLayer().isVisible();
-                        if (blnVisible) {
+                        if (event.getMapLayer().isVisible()) {
                             this.setVisible(true);
                         } else {
                             this.setVisible(false);
                         }
                     }
-
                 },
 
                 /**
@@ -196,9 +197,11 @@ Oskari.clazz.define(
                 'StatsGrid.SelectHilightsModeEvent': function (event) {
                     this.isSelectHilightedMode = true;
                 },
+
                 'StatsGrid.ClearHilightsEvent': function (event) {
                     this.isSelectHilightedMode = false;
                 },
+
                 /**
                  * @method StatsGrid.StatsDataChangedEvent
                  * Creates classification of stats column data and shows it on geostats legend html
@@ -518,6 +521,14 @@ Oskari.clazz.define(
             }
         },
 
+        _isStatsLayerVisible: function () {
+            var selectedLayers = this.getSandbox().findAllSelectedMapLayers();
+
+            return selectedLayers.some(function (layer) {
+                return layer._layerType === 'STATS';
+            });
+        },
+
         refresh: function (element) {
             var me = this,
                 el = element || me.getElement();
@@ -729,7 +740,8 @@ Oskari.clazz.define(
             content.hide();
             el.append(content);
             // Hide Classify dialog
-            me.setVisible(false);
+            //me.setVisible(me._isStatsLayerVisible());
+            me.setVisible(me.isVisible());
             // Setup Colors
             me.setColors();
         },
@@ -1640,12 +1652,12 @@ Oskari.clazz.define(
             }
 
             // Set Slider
-            var curcla = Number(me.getElement().find('.classificationMethod').find('.classCount').find('#amount_class').val());
+            var curcla = Number(me.getElement().find('.classificationMethod .classCount #amount_class').val());
             if (curcla > cl_max) {
                 curcla = cl_max;
-                me.getElement().find('.classificationMethod').find('.classCount').find('#amount_class').attr('value', cl_max);
+                me.getElement().find('.classificationMethod .classCount #amount_class').attr('value', cl_max);
             }
-            var classcnt = me.getElement().find('.classificationMethod').find('.classCount');
+            var classcnt = me.getElement().find('.classificationMethod .classCount');
             classcnt.find('#slider-range-max').remove();
             var newslider = jQuery('<div id="slider-range-max"></div>');
             classcnt.append(newslider);
@@ -1667,7 +1679,6 @@ Oskari.clazz.define(
 
             // Set background color for selected colors
             me._hiliSelectedColors();
-
         },
 
         /**
