@@ -1539,12 +1539,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // Second layer field selection
             me._addTitle(extraParams, loc.field);
+            featureList = me.template.featureList.clone();
+            featureList.attr('id', 'analyse-layer2-field');
             if (me.differenceLayer && me.differenceLayer.getFields) {
-                featureList = me.template.featureList.clone();
-                featureList.attr('id', 'analyse-layer2-field');
                 me._addFeatureList(me.differenceLayer, featureList.find('ul'), 'analyse-layer2-field-property', firstField);
-                extraParams.append(featureList);
             }
+            extraParams.append(featureList);
 
             me._addTitle(extraParams, loc.keyField);
             extraParams.append(me._createJoinList(targetLayer));
