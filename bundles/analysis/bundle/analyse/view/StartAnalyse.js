@@ -1568,13 +1568,13 @@ console.log(targetJoinKey);
             featureList.attr('id', 'analyse-key-field');
             if ((me.differenceLayer)&&(targetLayer)) {
                 diffParams = me.differenceLayer.getWpsLayerParams();
-                //if (typeof diffParams !== "undefined") {
+                if (typeof diffParams !== "undefined") {
                     diffJoinKey = diffParams.join_key;
-                //}
+                }
                 targetParams = targetLayer.getWpsLayerParams();
-                //if (typeof targetParams !== "undefined") {
+                if (typeof targetParams !== "undefined") {
                     targetJoinKey = targetParams.join_key;
-                //}
+                }
             }
 console.log("...");
 console.log(diffJoinKey);
