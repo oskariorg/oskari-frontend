@@ -45,6 +45,7 @@ Oskari.clazz.define(
             allowedRequests = {
                 'MapModulePlugin.AddMarkerRequest': true,
                 'MapModulePlugin.MapLayerVisibilityRequest': true,
+                'MapModulePlugin.RemoveMarkersRequest': true,
                 MapMoveRequest: true
             };
         }

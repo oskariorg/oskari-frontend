@@ -1,20 +1,26 @@
 .manageClassificationPlugin {
 	z-index: 1000000 !important;
 	max-width: 220px;
-	background-color: white !important;
-	color: #000 !important;
 	padding: 0px;
 	text-align: left;
-	font-size: 12px;
+	/* If there's a sane reason to keep the absolute positioning, write it here
 	position: absolute;
 	bottom: 8px;
 	right: 10px;
+	*/
 	cursor: pointer;
-	
-	.content select {
-		padding: 0px;
-		margin: 4px;
+
+	.content {
+		background-color: #FFF;
+		font-size: 12px;
+
+		select {
+			padding: 0px;
+			margin: 4px;
+		}
+
 	}
+	
 	// FIXME WTH is this random id?
 	div#pop-up_06052013 {
 		/* HOVER colortable details */
@@ -30,18 +36,19 @@
 	
 	div.classCount {
 		float: left;
-		background-color: #FFF !important;
+		background-color: #FFF;
 		padding: 0px;
 		margin: 2px;
 	}
 	
 	div.classheader {
 		color: #FFF;
-		background-color: #000 !important;
-		padding: 4px;
+		background-color: #3c3c3c;
+		padding: 4px 8px;
 
 		.header-icon {
 			display: inline-block;
+			margin-right: 4px;
 			vertical-align: middle;
 		}
 
@@ -58,7 +65,7 @@
 	
 	div.content {
 		color: black;
-		background-color: white !important;
+		background-color: white;
 
 		label {
 			float: left;

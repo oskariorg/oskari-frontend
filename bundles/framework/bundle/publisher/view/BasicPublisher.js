@@ -684,7 +684,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 for (i = 0; i < plugins.length; i += 1) {
                     enabledPlugins[plugins[i].id] = true;
                     if (plugins[i].id === 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin') {
-                        me.data.hasLayerSelectionPlugin = plugins[i].config;
+                        me.data.hasLayerSelectionPlugin = plugins[i].getConfig();
                     }
                 }
             }
@@ -943,14 +943,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             // Set logoplugin and layerselection as well
             // FIXME get this from logoPlugin's config, no need to traverse the DOM
             if (me.logoPlugin) {
-                me.logoPluginClasses.classes = me.logoPlugin.element.parents('.mapplugins').attr('data-location');
-                me.logoPlugin.element.css('position', '');
+                me.logoPluginClasses.classes = me.logoPlugin.getElement().parents('.mapplugins').attr('data-location');
+                me.logoPlugin.getElement().css('position', '');
                 //me.logoPlugin.setLocation(me.logoPluginClasses.classes);
             }
-            if (me.maplayerPanel.plugin && me.maplayerPanel.plugin.element) {
-                me.layerSelectionClasses.classes = me.maplayerPanel.plugin.element.parents('.mapplugins').attr('data-location');
+            if (me.maplayerPanel.plugin && me.maplayerPanel.plugin.getElement()) {
+                me.layerSelectionClasses.classes = me.maplayerPanel.plugin.getElement().parents('.mapplugins').attr('data-location');
                 //me.maplayerPanel.plugin.setLocation(me.layerSelectionClasses.classes);
-                me.maplayerPanel.plugin.element.css('position', '');
+                me.maplayerPanel.plugin.getElement().css('position', '');
             }
 
             // set map controls back to original settings after editing tool layout
@@ -1225,17 +1225,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 selections.baseLayers = layerValues.baseLayers;
             }
             // add logoplugin
+            var layoutOptions = me.layoutPanel.getValues();
             var logoPlugin = {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 config: {
+                    font: layoutOptions.font,
                     location: {
                         classes: me.logoPluginClasses.classes
                     }
                 }
             };
-            // setup logoplugin font
-            var layoutOptions = me.layoutPanel.getValues();
-            logoPlugin.config.font = layoutOptions.font;
             selections.plugins.push(logoPlugin);
 
             // if data grid is enabled
@@ -1709,8 +1708,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             var infoPlugin = this._getGetInfoPlugin(),
                 mlp = this.maplayerPanel;
             if (infoPlugin) {
-                infoPlugin.config = infoPlugin.config || {};
-                infoPlugin.config.colourScheme = colourScheme;
+                var conf = infoPlugin.getConfig();
+                conf.colourScheme = colourScheme;
+                infoPlugin.setConfig(conf);
             }
 
             mlp.pluginConfig.colourScheme = colourScheme;
@@ -1760,8 +1760,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             // Change the font of the info plugin
             var infoPlugin = me._getGetInfoPlugin();
             if (infoPlugin) {
-                infoPlugin.config = infoPlugin.config || {};
-                infoPlugin.config.font = font;
+                var conf = infoPlugin.getConfig();
+                conf.font = font;
+                infoPlugin.setConfig(conf);
             }
         },
 
@@ -1780,13 +1781,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         },
 
         /**
-         * @private@method _getGetInfoPlugin
+         * @private @method _getGetInfoPlugin
          *
          *
          * @return Infoplugin instance
          */
         _getGetInfoPlugin: function () {
-            return this.toolsPanel.getToolById('Oskari.mapframework.mapmodule.GetInfoPlugin');
+            return this.toolsPanel.getToolById(
+                'Oskari.mapframework.mapmodule.GetInfoPlugin'
+            );
         },
         /**
          * @private @method _getPreferredPluginLocation
@@ -1834,8 +1837,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             for (i = 0; i < plugins.length; i += 1) {
                 plugin = plugins[i];
-                if (plugin.id === pluginName && plugin.config && plugin.config.location) {
-                    return plugin.config.location.classes;
+                if (plugin.id === pluginName && plugin.getConfig() && plugin.getConfig().location) {
+                    return plugin.getConfig().location.classes;
                 }
             }
             return null;
@@ -1879,20 +1882,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             for (i = 0; i < pLen; i += 1) {
                 plugin = plugins[i];
 
-                if (plugin.config) {
-                    if (plugin.config.font) {
-                        layoutConf.font = plugin.config.font;
+                if (plugin.getConfig()) {
+                    if (plugin.getConfig().font) {
+                        layoutConf.font = plugin.getConfig().font;
                     }
 
-                    if (plugin.config.colourScheme) {
-                        layoutConf.colourScheme = plugin.config.colourScheme;
+                    if (plugin.getConfig().colourScheme) {
+                        layoutConf.colourScheme = plugin.getConfig().colourScheme;
                     }
 
-                    if (plugin.config.toolStyle) {
-                        if (typeof plugin.config.toolStyle === 'string') {
-                            layoutConf.toolStyle = plugin.config.toolStyle;
+                    if (plugin.getConfig().toolStyle) {
+                        if (typeof plugin.getConfig().toolStyle === 'string') {
+                            layoutConf.toolStyle = plugin.getConfig().toolStyle;
                         } else {
-                            layoutConf.toolStyle = plugin.config.toolStyle.val;
+                            layoutConf.toolStyle = plugin.getConfig().toolStyle.val;
                         }
                     }
                 }
@@ -1971,7 +1974,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             if (this.toolDropRules[pluginClazz].groupedSiblings) {
                 ret = this._getActivePlugins(this.toolDropRules[pluginClazz].allowedSiblings);
-
             }
             ret.push(pluginClazz);
             return ret;
@@ -2140,6 +2142,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          *
          */
         _hideDroppable: function () {
-            jQuery('div.mapplugins .mappluginsContent').removeClass('allowed').removeClass('disallowed');
+            jQuery(
+                'div.mapplugins .mappluginsContent'
+            ).removeClass('allowed').removeClass('disallowed');
         }
     });

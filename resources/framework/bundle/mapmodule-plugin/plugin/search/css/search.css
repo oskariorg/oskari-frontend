@@ -6,7 +6,7 @@ div.mapplugin.search {
 div.search div.close {
   float: right; }
 div.search input[type=text] {
-  width: 140px !important; }
+  width: 140px; }
 div.search input[type=button] {
   width: 60px;
   margin-left: 3px; }
@@ -59,7 +59,7 @@ div.published-search-div {
       background-image: none;
       width: 145px;
       float: left;
-      padding: 10px 5px 10px 5px;
+      padding: 5px;
       outline: none; }
   div.published-search-div div.published-search-results {
     width: 316px;

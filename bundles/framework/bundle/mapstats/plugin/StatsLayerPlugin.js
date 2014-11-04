@@ -2,75 +2,46 @@
  * @class Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
  * Provides functionality to draw Stats layers on the map
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin',
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin',
 
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
+     *
      */
+    function () {
+        var me = this;
 
-    function (config) {
-        this.mapModule = null;
-        this.pluginName = null;
-        this._sandbox = null;
-        this._map = null;
-        this._supportedFormats = {};
-        this._statsDrawLayer = null;
-        this._highlightCtrl = null;
-        this._navCtrl = null;
-        this._getFeatureControlHover = null;
-        this._getFeatureControlSelect = null;
-        this._modeVisible = false;
-        this.config = config;
-        this.ajaxUrl = null;
-        this.featureAttribute = 'kuntakoodi';
-        if (config && config.ajaxUrl) {
-            me.ajaxUrl = config.ajaxUrl;
-        }
-        if (config && config.published) {
-            // A sort of a hack to enable the controls in a published map.
-            // At the moment there's no such option in the conf, but there might be.
-            me._modeVisible = config.published;
+        me._clazz =
+            'Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin';
+        me._name = 'StatsLayerPlugin';
+
+        me._supportedFormats = {};
+        me._statsDrawLayer = null;
+        me._highlightCtrl = null;
+        me._navCtrl = null;
+        me._getFeatureControlHover = null;
+        me._getFeatureControlSelect = null;
+        me._modeVisible = false;
+        me.ajaxUrl = null;
+        me.featureAttribute = 'kuntakoodi';
+        if (me._config) {
+            if (me._config.ajaxUrl) {
+                me.ajaxUrl = me._config.ajaxUrl;
+            }
+            if (me._config.published) {
+                // A sort of a hack to enable the controls in a published map.
+                // At the moment there's no such option in the conf, but there
+                // might be.
+                me._modeVisible = me._config.published;
+            }
         }
     }, {
-        /** @static @property __name plugin name */
-        __name: 'StatsLayerPlugin',
 
         /** @static @property _layerType type of layers this plugin handles */
         _layerType: 'STATS',
 
-        /**
-         * @method getName
-         * @return {String} plugin name
-         */
-        getName: function () {
-            return this.pluginName;
-        },
-        /**
-         * @method getMapModule
-         * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        getMapModule: function () {
-            return this.mapModule;
-        },
-        /**
-         * @method setMapModule
-         * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        setMapModule: function (mapModule) {
-            this.mapModule = mapModule;
-            this.pluginName = mapModule.getName() + this.__name;
-        },
-        /**
-         * @method hasUI
-         * This plugin doesn't have an UI that we would want to ever hide so always returns false
-         * @return {Boolean}
-         */
-        hasUI: function () {
-            return false;
-        },
         /**
          * @method register
          * Interface method for the plugin protocol.
@@ -79,6 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
         register: function () {
             this.getMapModule().setLayerPlugin('statslayer', this);
         },
+
         /**
          * @method unregister
          * Interface method for the plugin protocol
@@ -87,143 +59,108 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
         unregister: function () {
             this.getMapModule().setLayerPlugin('statslayer', null);
         },
+
         /**
-         * @method init
+         * @private @method _initImpl
          * Interface method for the module protocol.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
+         *
          */
-        init: function (sandbox) {
+        _initImpl: function () {
+            var layerModelBuilder,
+                mapLayerService = this.getSandbox().getService(
+                    'Oskari.mapframework.service.MapLayerService'
+                ); // register domain builder
 
-            var sandboxName = (this.config ? this.config.sandbox : null) || 'sandbox',
-                sbx = Oskari.getSandbox(sandboxName),
-                mapLayerService = sbx.getService('Oskari.mapframework.service.MapLayerService'); // register domain builder
             if (mapLayerService) {
-                mapLayerService.registerLayerModel('statslayer', 'Oskari.mapframework.bundle.mapstats.domain.StatsLayer');
-
-                var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder', sbx);
-                mapLayerService.registerLayerModelBuilder('statslayer', layerModelBuilder);
+                mapLayerService.registerLayerModel(
+                    'statslayer',
+                    'Oskari.mapframework.bundle.mapstats.domain.StatsLayer'
+                );
+                layerModelBuilder = Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder',
+                    this.getSandbox()
+                );
+                mapLayerService.registerLayerModelBuilder(
+                    'statslayer',
+                    layerModelBuilder
+                );
             }
         },
+
         /**
-         * @method startPlugin
+         * @private @method _startPluginImpl
          * Interface method for the plugin protocol.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
+         *
          */
-        startPlugin: function (sandbox) {
-            this._sandbox = sandbox;
-            this._map = this.getMapModule().getMap();
-
-            sandbox.register(this);
-            var p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(this, p);
-                }
-            }
+        _startPluginImpl: function () {
             if (!this.ajaxUrl) {
-                this.ajaxUrl = sandbox.getAjaxUrl() + 'action_route=GetStatsTile';
+                this.ajaxUrl =
+                    this.getSandbox().getAjaxUrl() +
+                    'action_route=GetStatsTile';
             }
         },
-        /**
-         * @method stopPlugin
-         * Interface method for the plugin protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stopPlugin: function (sandbox) {
-            var p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
+
+        _createEventHandlers: function () {
+            var me = this;
+
+            return {
+                AfterMapLayerRemoveEvent: function (event) {
+                    me._afterMapLayerRemoveEvent(event);
+                },
+
+                MapLayerVisibilityChangedEvent: function (event) {
+                    me._mapLayerVisibilityChangedEvent(event);
+                },
+
+                AfterChangeMapLayerOpacityEvent: function (event) {
+                    me._afterChangeMapLayerOpacityEvent(event);
+                },
+
+                AfterChangeMapLayerStyleEvent: function (event) {
+                },
+
+                'MapStats.StatsVisualizationChangeEvent': function (event) {
+                    me._afterStatsVisualizationChangeEvent(event);
+                },
+
+                'StatsGrid.ModeChangedEvent': function (event) {
+                    me._afterModeChangedEvent(event);
+                },
+
+                'StatsGrid.SelectHilightsModeEvent': function (event) {
+                    me._hilightFeatures(event);
+                },
+
+                'StatsGrid.ClearHilightsEvent': function (event) {
+                    me._clearHilights(event);
+                },
+
+                //_clearHilights
+                'MapStats.HoverTooltipContentEvent': function (event) {
+                    me._afterHoverTooltipContentEvent(event);
                 }
-            }
-
-            sandbox.unregister(this);
-
-            this._map = null;
-            this._sandbox = null;
-        },
-        /**
-         * @method start
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        start: function (sandbox) {},
-        /**
-         * @method stop
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stop: function (sandbox) {},
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            'AfterMapLayerRemoveEvent': function (event) {
-                this._afterMapLayerRemoveEvent(event);
-            },
-            'MapLayerVisibilityChangedEvent': function (event) {
-                this._mapLayerVisibilityChangedEvent(event);
-            },
-            'AfterChangeMapLayerOpacityEvent': function (event) {
-                this._afterChangeMapLayerOpacityEvent(event);
-            },
-            'AfterChangeMapLayerStyleEvent': function (event) {
-            },
-            'MapStats.StatsVisualizationChangeEvent': function (event) {
-                this._afterStatsVisualizationChangeEvent(event);
-            },
-            'StatsGrid.ModeChangedEvent': function (event) {
-                this._afterModeChangedEvent(event);
-            },
-            'StatsGrid.SelectHilightsModeEvent': function (event) {
-                this._hilightFeatures(event);
-            },
-            'StatsGrid.ClearHilightsEvent': function (event) {
-                this._clearHilights(event);
-            },
-            //_clearHilights
-            'MapStats.HoverTooltipContentEvent': function (event) {
-                this._afterHoverTooltipContentEvent(event);
-            }
+            };
         },
 
-        /**
-         * @method onEvent
-         * Event is handled forwarded to correct #eventHandlers if found or discarded
-         * if not.
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         */
-        onEvent: function (event) {
-            return this.eventHandlers[event.getName()].apply(this, [event]);
-        },
         /**
          * @method preselectLayers
          * Adds given layers to map if of type WMS
          * @param {Oskari.mapframework.domain.WmsLayer[]} layers
          */
         preselectLayers: function (layers) {
-
-            var sandbox = this._sandbox,
+            var sandbox = this.getSandbox(),
                 i,
                 layer,
                 layerId;
-            for (i = 0; i < layers.length; i++) {
+
+            for (i = 0; i < layers.length; i += 1) {
                 layer = layers[i];
                 layerId = layer.getId();
 
                 if (layer.isLayerOfType(this._layerType)) {
-                    sandbox.printDebug("preselecting " + layerId);
+                    sandbox.printDebug('preselecting ' + layerId);
                     this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
             }
@@ -259,6 +196,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 me._getFeatureControlSelect.deactivate();
             }
         },
+
         /**
          * Adds a single WMS layer to this map
          *
@@ -273,54 +211,69 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             }
 
             var me = this,
-                eventBuilder = me._sandbox.getEventBuilder('MapStats.FeatureHighlightedEvent'),
-                highlightEvent;
-
-            var layerScales = me.getMapModule().calculateLayerScales(layer.getMaxScale(), layer.getMinScale()),
-                openLayer = new OpenLayers.Layer.WMS('layer_' + layer.getId(), me.ajaxUrl + "&LAYERID=" + layer.getId(), {
-                    layers: layer.getWmsName(),
-                    transparent: true,
-                    format: "image/png"
-                }, {
-                    scales: layerScales,
-                    isBaseLayer: false,
-                    displayInLayerSwitcher: false,
-                    visibility: true,
-                    singleTile: true,
-                    buffer: 0
-                });
+                eventBuilder = me.getSandbox().getEventBuilder(
+                    'MapStats.FeatureHighlightedEvent'
+                ),
+                highlightEvent,
+                layerScales = me.getMapModule().calculateLayerScales(
+                    layer.getMaxScale(),
+                    layer.getMinScale()
+                ),
+                openLayer = new OpenLayers.Layer.WMS(
+                    'layer_' + layer.getId(),
+                    me.ajaxUrl + '&LAYERID=' + layer.getId(),
+                    {
+                        layers: layer.getWmsName(),
+                        transparent: true,
+                        format: 'image/png'
+                    },
+                    {
+                        scales: layerScales,
+                        isBaseLayer: false,
+                        displayInLayerSwitcher: false,
+                        visibility: true,
+                        singleTile: true,
+                        buffer: 0
+                    }
+                );
 
             // Select control
-            me._statsDrawLayer = new OpenLayers.Layer.Vector("Stats Draw Layer", {
-                styleMap: new OpenLayers.StyleMap({
-                    "default": new OpenLayers.Style({
-                        fillOpacity: 0.0,
-                        strokeOpacity: 0.0
-                    }),
-                    "temporary": new OpenLayers.Style({
-                        strokeColor: "#ff6666",
-                        strokeOpacity: 1.0,
-                        strokeWidth: 3,
-                        fillColor: "#ff0000",
-                        fillOpacity: 0.0,
-                        graphicZIndex: 2,
-                        cursor: "pointer"
-                    }),
-                    "select": new OpenLayers.Style({})
-                })
-            });
-            me._map.addLayers([me._statsDrawLayer]);
+            me._statsDrawLayer = new OpenLayers.Layer.Vector(
+                'Stats Draw Layer',
+                {
+                    styleMap: new OpenLayers.StyleMap({
+                        'default': new OpenLayers.Style({
+                            fillOpacity: 0.0,
+                            strokeOpacity: 0.0
+                        }),
+                        'temporary': new OpenLayers.Style({
+                            strokeColor: '#ff6666',
+                            strokeOpacity: 1.0,
+                            strokeWidth: 3,
+                            fillColor: '#ff0000',
+                            fillOpacity: 0.0,
+                            graphicZIndex: 2,
+                            cursor: 'pointer'
+                        }),
+                        'select': new OpenLayers.Style({})
+                    })
+                }
+            );
+            me.getMap().addLayers([me._statsDrawLayer]);
 
             // Hover control
-            me._highlightCtrl = new OpenLayers.Control.SelectFeature(me._statsDrawLayer, {
-                hover: true,
-                highlightOnly: true,
-                outFeature: function (feature) {
-                    me._highlightCtrl.unhighlight(feature);
-                    me._removePopup();
-                },
-                renderIntent: "temporary"
-            });
+            me._highlightCtrl = new OpenLayers.Control.SelectFeature(
+                me._statsDrawLayer,
+                {
+                    hover: true,
+                    highlightOnly: true,
+                    outFeature: function (feature) {
+                        me._highlightCtrl.unhighlight(feature);
+                        me._removePopup();
+                    },
+                    renderIntent: 'temporary'
+                }
+            );
             // Make sure selected feature doesn't swallow events so we can drag above it
             // http://trac.osgeo.org/openlayers/wiki/SelectFeatureControlMapDragIssues
             if (me._highlightCtrl.handlers !== undefined) { // OL 2.7
@@ -329,7 +282,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 me._highlightCtrl.handler.stopDown = false;
                 me._highlightCtrl.handler.stopUp = false;
             }
-            me._map.addControl(this._highlightCtrl);
+            me.getMap().addControl(this._highlightCtrl);
             me._highlightCtrl.activate();
 
             var queryableMapLayers = [openLayer];
@@ -338,24 +291,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 drillDown: false,
                 hover: true,
                 handlerOptions: {
-                    "hover": {
+                    'hover': {
                         delay: 0
                     },
-                    "stopSingle": false
+                    'stopSingle': false
                 },
-                infoFormat: "application/vnd.ogc.gml",
+                infoFormat: 'application/vnd.ogc.gml',
                 layers: queryableMapLayers,
                 eventListeners: {
                     getfeatureinfo: function (event) {
-                        var drawLayer = me._map.getLayersByName("Stats Draw Layer")[0],
+                        var drawLayer = me.getDrawLayer(),
                             i;
-                        if (typeof drawLayer === "undefined") {
+                        if (typeof drawLayer === 'undefined') {
                             return;
                         }
                         if (event.features.length === 0) {
-                            for (i = 0; i < drawLayer.features.length; i++) {
+                            for (i = 0; i < drawLayer.features.length; i += 1) {
                                 if (!drawLayer.features[i].selected) {
-                                    drawLayer.removeFeatures([drawLayer.features[i]]);
+                                    drawLayer.removeFeatures(
+                                        [drawLayer.features[i]]
+                                    );
                                 }
                             }
                             me._removePopup();
@@ -364,11 +319,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                         var found = false,
                             attrText = me.featureAttribute;
 
-                        for (i = 0; i < drawLayer.features.length; i++) {
+                        for (i = 0; i < drawLayer.features.length; i += 1) {
                             if (drawLayer.features[i].attributes[attrText] === event.features[0].attributes[attrText]) {
                                 found = true;
                             } else if (!drawLayer.features[i].selected) {
-                                drawLayer.removeFeatures([drawLayer.features[i]]);
+                                drawLayer.removeFeatures(
+                                    [drawLayer.features[i]]
+                                );
                             }
                         }
 
@@ -386,7 +343,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 }
             });
             // Add the control to the map
-            me._map.addControl(me._getFeatureControlHover);
+            me.getMap().addControl(me._getFeatureControlHover);
             // Activate only is mode is on.
             if (me._modeVisible) {
                 me._getFeatureControlHover.activate();
@@ -397,12 +354,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 drillDown: true,
                 hover: false,
                 handlerOptions: {
-                    "click": {
+                    'click': {
                         delay: 0
                     },
-                    "pixelTolerance": 5
+                    'pixelTolerance': 5
                 },
-                infoFormat: "application/vnd.ogc.gml",
+                infoFormat: 'application/vnd.ogc.gml',
                 layers: queryableMapLayers,
                 eventListeners: {
                     getfeatureinfo: function (event) {
@@ -410,29 +367,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                             return;
                         }
                         var newFeature = event.features[0],
-                            drawLayer = me._map.getLayersByName("Stats Draw Layer")[0];
-                        if (typeof drawLayer === "undefined") {
+                            drawLayer = me.getDrawLayer();
+
+                        if (typeof drawLayer === 'undefined') {
                             return;
                         }
-                        var foundInd = -1;
-                        var attrText = me.featureAttribute,
+                        var foundInd = -1,
+                            attrText = me.featureAttribute,
                             i,
                             featureStyle;
 
-                        for (i = 0; i < drawLayer.features.length; i++) {
+                        for (i = 0; i < drawLayer.features.length; i += 1) {
                             if (drawLayer.features[i].attributes[attrText] === event.features[0].attributes[attrText]) {
                                 foundInd = i;
                                 break;
                             }
                         }
-                        featureStyle = OpenLayers.Util.applyDefaults(featureStyle, OpenLayers.Feature.Vector.style['default']);
-                        featureStyle.fillColor = "#ff0000";
-                        featureStyle.strokeColor = "#ff3333";
+                        featureStyle = OpenLayers.Util.applyDefaults(
+                            featureStyle,
+                            OpenLayers.Feature.Vector.style['default']
+                        );
+                        featureStyle.fillColor = '#ff0000';
+                        featureStyle.strokeColor = '#ff3333';
                         featureStyle.strokeWidth = 3;
                         featureStyle.fillOpacity = 0.2;
 
                         if (foundInd >= 0) {
-                            drawLayer.features[i].selected = !drawLayer.features[i].selected;
+                            drawLayer.features[i].selected =
+                                !drawLayer.features[i].selected;
                             if (drawLayer.features[i].selected) {
                                 drawLayer.features[i].style = featureStyle;
                             } else {
@@ -440,20 +402,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                                 me._highlightCtrl.highlight(drawLayer.features[i]);
                             }
                             if (eventBuilder) {
-                                highlightEvent = eventBuilder(drawLayer.features[i], drawLayer.features[i].selected, 'click');
+                                highlightEvent = eventBuilder(
+                                    drawLayer.features[i],
+                                    drawLayer.features[i].selected,
+                                    'click'
+                                );
                             }
                         } else {
                             drawLayer.addFeatures([newFeature]);
                             newFeature.selected = true;
                             newFeature.style = featureStyle;
                             if (eventBuilder) {
-                                highlightEvent = eventBuilder(newFeature, newFeature.selected, 'click');
+                                highlightEvent = eventBuilder(
+                                    newFeature,
+                                    newFeature.selected,
+                                    'click'
+                                );
                             }
                         }
                         drawLayer.redraw();
 
                         if (highlightEvent) {
-                            me._sandbox.notifyAll(highlightEvent);
+                            me.getSandbox().notifyAll(highlightEvent);
                         }
                     },
                     beforegetfeatureinfo: function (event) {},
@@ -461,7 +431,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 }
             });
             // Add the control to the map
-            me._map.addControl(me._getFeatureControlSelect);
+            me.getMap().addControl(me._getFeatureControlSelect);
             // Activate only is mode is on.
             if (me._modeVisible) {
                 me._getFeatureControlSelect.activate();
@@ -469,14 +439,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
 
             openLayer.opacity = layer.getOpacity() / 100;
 
-            me._map.addLayer(openLayer);
+            me.getMap().addLayer(openLayer);
 
-            me._sandbox.printDebug("#!#! CREATED OPENLAYER.LAYER.WMS for StatsLayer " + layer.getId());
+            me.getSandbox().printDebug(
+                '#!#! CREATED OPENLAYER.LAYER.WMS for StatsLayer ' +
+                layer.getId()
+            );
 
             if (keepLayerOnTop) {
-                me._map.setLayerIndex(openLayer, me._map.layers.length);
+                me.getMap().setLayerIndex(openLayer, me.getMap().layers.length);
             } else {
-                me._map.setLayerIndex(openLayer, 0);
+                me.getMap().setLayerIndex(openLayer, 0);
             }
         },
 
@@ -489,7 +462,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
          */
         _afterModeChangedEvent: function (event) {
             this._modeVisible = event.isModeVisible();
-            var drawLayer = this._map.getLayersByName("Stats Draw Layer")[0];
+            var drawLayer = this.getDrawLayer();
 
             if (this._modeVisible) {
                 this.activateControls();
@@ -509,10 +482,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
          * @param {Oskari.statistics.bundle.statsgrid.event.ClearHilightsEvent} event
          */
         _clearHilights: function (event) {
-            var drawLayer = this._map.getLayersByName("Stats Draw Layer")[0],
+            var drawLayer = this.getDrawLayer(),
                 i;
+
             if (drawLayer) {
-                for (i = 0; i < drawLayer.features.length; i++) {
+                for (i = 0; i < drawLayer.features.length; i += 1) {
                     //clear style
                     drawLayer.features[i].style = null;
                     // notify highlight control
@@ -534,10 +508,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
         _hilightFeatures: function (event) {
             // which municipalities should be hilighted
             var codes = event.getCodes(),
-                drawLayer = this._map.getLayersByName("Stats Draw Layer")[0];
+                drawLayer = this.getDrawLayer();
 
             // drawLayer can not be undefined
-            if (typeof drawLayer === "undefined") {
+            if (typeof drawLayer === 'undefined') {
                 return;
             }
 
@@ -546,9 +520,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
 
 
             // add hilight feature style
-            featureStyle = OpenLayers.Util.applyDefaults(featureStyle, OpenLayers.Feature.Vector.style['default']);
-            featureStyle.fillColor = "#ff0000";
-            featureStyle.strokeColor = "#ff3333";
+            featureStyle = OpenLayers.Util.applyDefaults(
+                featureStyle,
+                OpenLayers.Feature.Vector.style['default']
+            );
+            featureStyle.fillColor = '#ff0000';
+            featureStyle.strokeColor = '#ff3333';
             featureStyle.strokeWidth = 3;
             featureStyle.fillOpacity = 0.2;
 
@@ -557,7 +534,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 i;
             for (key in codes) {
                 if (codes.hasOwnProperty(key)) {
-                    for (i = 0; i < drawLayer.features.length; i++) {
+                    for (i = 0; i < drawLayer.features.length; i += 1) {
                         if (drawLayer.features[i].attributes[attrText] === key && codes[key]) {
                             drawLayer.features[i].style = featureStyle;
                             this._highlightCtrl.highlight(drawLayer.features[i]);
@@ -579,6 +556,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
         _afterMapLayerRemoveEvent: function (event) {
             var me = this,
                 layer = event.getMapLayer();
+
             if (!layer.isLayerOfType(me._layerType)) {
                 return;
             }
@@ -586,11 +564,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             me._highlightCtrl.deactivate();
             me._getFeatureControlHover.deactivate();
             me._getFeatureControlSelect.deactivate();
-            me._map.removeControl(me._highlightCtrl);
-//            me._map.removeControl(me._navCtrl);
-            me._map.removeControl(me._getFeatureControlHover);
-            me._map.removeControl(me._getFeatureControlSelect);
-            me._map.removeLayer(me._statsDrawLayer);
+            me.getMap().removeControl(me._highlightCtrl);
+//            me.getMap().removeControl(me._navCtrl);
+            me.getMap().removeControl(me._getFeatureControlHover);
+            me.getMap().removeControl(me._getFeatureControlSelect);
+            me.getMap().removeLayer(me._statsDrawLayer);
         },
 
         /**
@@ -601,7 +579,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
          */
         _mapLayerVisibilityChangedEvent: function (event) {
             var mapLayer = event.getMapLayer();
-            if (mapLayer._layerType !== "STATS") {
+            if (mapLayer._layerType !== 'STATS') {
                 return;
             }
             this._statsDrawLayer.setVisibility(mapLayer.isVisible());
@@ -630,10 +608,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 return;
             }
 
-            var mapLayer = this.getOLMapLayers(layer);
+            var mapLayer = this.getFirstOLMapLayer(layer);
             /* This should free all memory */
-            mapLayer[0].destroy();
+            if (mapLayer !== null && mapLayer !== undefined) {
+                mapLayer.destroy();
+            }
         },
+
         /**
          * @method getOLMapLayers
          * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map.
@@ -641,12 +622,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
          * @return {OpenLayers.Layer[]}
          */
         getOLMapLayers: function (layer) {
-
             if (!layer.isLayerOfType(this._layerType)) {
                 return null;
             }
 
-            return this._map.getLayersByName('layer_' + layer.getId());
+            return this.getMap().getLayersByName('layer_' + layer.getId());
+        },
+
+        getFirstOLMapLayer: function (layer) {
+            var ls = this.getOLMapLayers(layer),
+                ret = null;
+
+            if (ls && ls.length > 0 && ls[0] !== null && ls[0] !== undefined) {
+                ret = ls[0];
+            }
+            return ret;
+        },
+
+        getDrawLayer: function () {
+            var ret = null,
+                layers = this.getMap().getLayersByName('Stats Draw Layer');
+
+            if (layers && layers.length) {
+                ret = layers[0];
+            }
+            return ret;
         },
 
         /**
@@ -659,7 +659,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
         _removePopup: function (popup) {
             popup = popup || this._popup;
             if (popup) {
-                this._map.removePopup(popup);
+                this.getMap().removePopup(popup);
             }
         },
 
@@ -674,18 +674,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
         _addPopup: function (event) {
             var content = event.features[0].attributes.kuntanimi;
             this._popup = new OpenLayers.Popup('mapstatsHover',
-                this._map.getLonLatFromPixel(new OpenLayers.Pixel(event.xy.x + 5, event.xy.y + 5)),
+                this.getMap().getLonLatFromPixel(new OpenLayers.Pixel(event.xy.x + 5, event.xy.y + 5)),
                 new OpenLayers.Size(100, 100),
                 content
                 );
             this._popup.autoSize = true;
             this._popup.opacity = 0.8;
-            this._map.addPopup(this._popup);
+            this.getMap().addPopup(this._popup);
 
-            var reqBuilder = this._sandbox.getRequestBuilder('StatsGrid.TooltipContentRequest');
+            var reqBuilder = this.getSandbox().getRequestBuilder('StatsGrid.TooltipContentRequest');
             if (reqBuilder) {
                 var request = reqBuilder(event.features[0]);
-                this._sandbox.request(this, request);
+                this.getSandbox().request(this, request);
             }
         },
 
@@ -717,22 +717,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
                 return;
             }
 
-            this._sandbox.printDebug("Setting Layer Opacity for " + layer.getId() + " to " + layer.getOpacity());
-            var mapLayer = this.getOLMapLayers(layer);
-            if (mapLayer[0] !== null && mapLayer[0] !== undefined) {
-                mapLayer[0].setOpacity(layer.getOpacity() / 100);
+            this.getSandbox().printDebug(
+                'Setting Layer Opacity for ' + layer.getId() + ' to ' +
+                layer.getOpacity()
+            );
+            var mapLayer = this.getFirstOLMapLayer(layer);
+            if (mapLayer !== null && mapLayer !== undefined) {
+                mapLayer.setOpacity(layer.getOpacity() / 100);
             }
         },
 
         _afterStatsVisualizationChangeEvent: function (event) {
             var layer = event.getLayer(),
                 params = event.getParams(),
-                mapLayer = this.getOLMapLayers(layer);
+                mapLayer = this.getFirstOLMapLayer(layer);
 
             this.featureAttribute = params.VIS_ATTR;
 
             if (mapLayer !== null && mapLayer !== undefined) {
-                mapLayer[0].mergeNewParams({
+                mapLayer.mergeNewParams({
                     VIS_ID: params.VIS_ID,
                     VIS_NAME: params.VIS_NAME,
                     VIS_ATTR: params.VIS_ATTR,
@@ -743,9 +746,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin
             }
         }
     }, {
+        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
-         * @property {String[]} protocol array of superclasses as {String}
-         * @static
+         * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': [
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
+        ]
     });

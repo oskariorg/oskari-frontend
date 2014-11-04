@@ -171,9 +171,9 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * @return {Boolean} Returns true, if request was handled, false otherwise
          */
         processRequest: function (request) {
-
             var requestName = request.getName(),
                 handlerFunc = this.__getRequestHandlerFunction(requestName);
+
             if (handlerFunc) {
                 return handlerFunc(this, request);
             } else {
@@ -219,6 +219,9 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
          */
         addRequestHandler: function (requestName, handlerClsInstance) {
+            if (!handlerClsInstance) {
+                this.printWarn('Adding non-existent handler for', requestName);
+            }
             this.externalHandlerCls[requestName] = handlerClsInstance;
         },
 
@@ -269,7 +272,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * @param {String} name - name of the request
          * @return {Function} builder method for given request name or undefined if not found
          */
-        getRequestBuilder: function (requestName) {
+        getRequestBuilder: function (requestName) {            
             var qname = this._getQNameForRequest(requestName),
                 ret;
             if (!qname) {
@@ -278,7 +281,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
             }
             var handlerFunc = this.__getRequestHandlerFunction(requestName);
             if(!handlerFunc) {
-                this.printDebug('#!#!# ! Request defined, but handler not registered. Perhaps timing issue?');
+                this.printWarn('Request ' + requestName + ' defined, but handler not registered. Perhaps timing issue?');
                 return undefined;
             }
             ret = Oskari.clazz.builder(qname);
@@ -437,6 +440,7 @@ Oskari.clazz.define('Oskari.mapframework.core.Core',
          * @return {String} value for the parameter or null if not found
          */
         getRequestParameter: function (name) {
+            // FIXME explain regex, fix escaping
             name = name.replace(/[\[]/, '\\\[').replace(/[\]]/, '\\\]');
             var regexS = '[\\?&]' + name + '=([^&#]*)',
                 regex = new RegExp(regexS),
