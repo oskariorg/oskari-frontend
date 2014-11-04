@@ -19,7 +19,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
 
         // call parent parseLayerData
         this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
-
+console.log("...");
+console.log(layer);
+console.log(mapLayerJson);
+console.log(maplayerService);
 		if(mapLayerJson.fields){
 			layer.setFields(mapLayerJson.fields);
 		}
