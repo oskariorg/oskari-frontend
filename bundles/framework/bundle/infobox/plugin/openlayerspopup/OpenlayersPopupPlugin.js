@@ -7,7 +7,7 @@ jQuery.fn.outerHTML = function (arg) {
 
     // If no items in the collection, return
     if (!this.length) {
-        return val === undefined || val === null ? this : null;
+        return typeof arg === 'undefined' ? this : null;
     }
     // Getter overload (no argument passed)
     if (!arg) {
@@ -17,7 +17,7 @@ jQuery.fn.outerHTML = function (arg) {
     jQuery.each(this, function (i, el) {
         var fnRet,
             pass = el,
-            inOrOut = el.outerHTML ? "outerHTML" : "innerHTML";
+            inOrOut = el.outerHTML ? 'outerHTML' : 'innerHTML';
 
         if (!el.outerHTML) {
             el = jQuery(el).wrap('<div>').parent()[0];
@@ -45,68 +45,51 @@ jQuery.fn.outerHTML = function (arg) {
  * Extends jquery by defining outerHtml() method for it. (TODO: check if we really want to do it here).
  * Provides a customized popup functionality for Openlayers map.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin',
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin',
 
     /**
      * @method create called automatically on construction
      * @static
      */
     function () {
-        this.mapModule = null;
-        this.pluginName = null;
-        this._sandbox = null;
-        this._map = null;
-        this._popups = {};
+        var me = this;
+
+        me._clazz =
+            'Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin';
+        me._name = 'OpenLayersPopupPlugin';
+
+        me._popups = {};
     }, {
-        /**
-         * @static
-         * @property __name
-         */
-        __name: 'OpenLayersPopupPlugin',
 
         /**
-         * @method getName
-         * @return {String} the name for the component
-         */
-        getName: function () {
-            return this.pluginName;
-        },
-        /**
-         * @method getMapModule
-         * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        getMapModule: function () {
-            return this.mapModule;
-        },
-        /**
-         * @method setMapModule
-         * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        setMapModule: function (mapModule) {
-            this.mapModule = mapModule;
-            this._map = mapModule.getMap();
-            this.pluginName = mapModule.getName() + this.__name;
-        },
-        /**
-         * @method init
+         * @private @method _initImpl
          * implements Module protocol init method - declares popup templates
          */
-        init: function () {
+        _initImpl: function () {
             var me = this;
 
             // templates
             me._arrow = jQuery('<div class="popupHeaderArrow"></div>');
             me._header = jQuery('<div></div>');
             me._headerWrapper = jQuery('<div class="popupHeader"></div>');
-            me._headerCloseButton = jQuery('<div class="olPopupCloseBox icon-close-white" style="position: absolute; top: 12px;"></div>');
+            // FIXME move styles to css
+            me._headerCloseButton = jQuery(
+                '<div class="olPopupCloseBox icon-close-white" style="position: absolute; top: 12px;"></div>'
+            );
             me._contentDiv = jQuery('<div class="popupContent"></div>');
             me._contentWrapper = jQuery('<div class="contentWrapper"></div>');
-            me._actionLink = jQuery('<span class="infoboxActionLinks"><a href="#"></a></span>');
-            me._actionButton = jQuery('<span class="infoboxActionLinks"><input type="button" /></span>');
-            me._contentSeparator = jQuery('<div class="infoboxLine">separator</div>');
-
+            me._actionLink = jQuery(
+                '<span class="infoboxActionLinks"><a href="#"></a></span>'
+            );
+            me._actionButton = jQuery(
+                '<span class="infoboxActionLinks">' +
+                '  <input type="button" />' +
+                '</span>'
+            );
+            me._contentSeparator = jQuery(
+                '<div class="infoboxLine">separator</div>'
+            );
         },
 
         /**
@@ -143,19 +126,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             }
 
             var me = this,
-                currPopup = this._popups[id],
+                currPopup = me._popups[id],
                 refresh = (currPopup &&
                     currPopup.lonlat.lon === lonlat.lon &&
                     currPopup.lonlat.lat === lonlat.lat);
 
             if (refresh) {
-                contentData = this._getChangedContentData(
+                contentData = me._getChangedContentData(
                     currPopup.contentData.slice(), contentData.slice());
                 currPopup.contentData = contentData;
             }
 
-            this._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh);
+            me._renderPopup(id, contentData, title, lonlat, colourScheme, font, refresh);
         },
+
         /**
          * @method _renderPopup
          */
@@ -187,9 +171,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
                 popup.moveTo = function (px) {
                     if ((px !== null && px !== undefined) && (this.div !== null && this.div !== undefined)) {
-                        this.div.style.left = px.x + "px";
+                        this.div.style.left = px.x + 'px';
                         var topy = px.y - 20;
-                        this.div.style.top = topy + "px";
+                        this.div.style.top = topy + 'px';
                     }
                 };
 
@@ -217,11 +201,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 me._changeFont(font, popupDOM, id);
             }
             // Fix the HTML5 placeholder for < IE10
-            var inputs = popupDOM.find('.contentWrapper input, .contentWrapper textarea');
+            var inputs = popupDOM.find(
+                '.contentWrapper input, .contentWrapper textarea'
+            );
             if (typeof inputs.placeholder === 'function') {
                 inputs.placeholder();
             }
         },
+
         /**
          * Wraps the content into popup and returns the html string.
          *
@@ -239,7 +226,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 closeButton = this._headerCloseButton.clone(),
                 resultHtml;
 
-            closeButton.attr("id", 'oskari_' + id + '_headerCloseButton');
+            closeButton.attr('id', 'oskari_' + id + '_headerCloseButton');
             header.append(title);
             headerWrapper.append(header);
             headerWrapper.append(closeButton);
@@ -249,6 +236,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
             return resultHtml;
         },
+
         /**
          * Renders the content data into html presentation.
          * Also creates links/buttons for the actions.
@@ -272,41 +260,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
                 contentWrapper.append(datum.html);
 
-	            contentWrapper.attr("id", 'oskari_' + id + '_contentWrapper');
+	            contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
                 for (key in datum.actions) {
-                    if (useButtons) {
-                        actionLink = me._actionButton.clone();
-                        btn = actionLink.find('input');
-                        btn.attr({
-                            "contentdata": index,
-                            "value": key
-                        });
-                        if (key == primaryButton) btn.addClass('primary');
-                    } else {
-                        actionLink = me._actionLink.clone();
-                        link = actionLink.find('a');
-                        link.attr('contentdata', index);
-                        link.attr('id', 'oskari_' + id + '_actionLink');
-                        link.append(key);
+                    if (datum.actions.hasOwnProperty(key)) {
+                        if (useButtons) {
+                            actionLink = me._actionButton.clone();
+                            btn = actionLink.find('input');
+                            btn.attr({
+                                contentdata: index,
+                                value: key
+                            });
+                            if (key == primaryButton) {
+                                btn.addClass('primary');
+                            }
+                        } else {
+                            actionLink = me._actionLink.clone();
+                            link = actionLink.find('a');
+                            link.attr('contentdata', index);
+                            link.attr('id', 'oskari_' + id + '_actionLink');
+                            link.append(key);
+                        }
+                        contentWrapper.append(actionLink);
                     }
-                    contentWrapper.append(actionLink);
                 }
 
                 contentDiv.append(contentWrapper);
                 return contentDiv;
             }, me._contentDiv.clone());
         },
+
         _setClickEvent: function (id, popup, contentData) {
             var me = this;
             // override
             popup.events.un({
-                "click": popup.onclick,
+                'click': popup.onclick,
                 scope: popup
             });
 
             popup.events.on({
-                "click": function (evt) {
+                'click': function (evt) {
                     var link = jQuery(evt.target || evt.srcElement);
 
                     if (link.hasClass('olPopupCloseBox')) { // Close button
@@ -325,6 +318,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 scope: popup
             });
         },
+
         /**
          * Merges the given new data to the old data.
          * If there's a fragment with the same layerId in both,
@@ -339,10 +333,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         _getChangedContentData: function (oldData, newData) {
             var retData,
                 i,
-                j;
+                j,
+                nLen,
+                oLen;
 
-            for (i = 0, oLen = oldData.length; i < oLen; ++i) {
-                for (j = 0, nLen = newData.length; j < nLen; ++j) {
+            for (i = 0, oLen = oldData.length; i < oLen; i += 1) {
+                for (j = 0, nLen = newData.length; j < nLen; j += 1) {
                     if (newData[j].layerId &&
                         newData[j].layerId === oldData[i].layerId) {
                         oldData[i] = newData[j];
@@ -356,6 +352,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
             return retData;
         },
+
         /**
          * Removes the data of given id from the popup and
          * renders it again to reflect the change.
@@ -368,6 +365,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         removeContentData: function (popupId, contentId) {
             var popup = this.getPopups(popupId),
                 removed = false,
+                cLen,
                 contentData,
                 datum,
                 i;
@@ -378,7 +376,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
 
             contentData = popup.contentData;
 
-            for (i = 0, cLen = contentData.length; i < cLen; ++i) {
+            for (i = 0, cLen = contentData.length; i < cLen; i += 1) {
                 datum = contentData[i];
                 if (datum.layerId && ('' + datum.layerId === '' + contentId)) {
                     contentData.splice(i, 1);
@@ -404,6 +402,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 }
             }
         },
+
         setAdaptable: function (isAdaptable) {
             this.adaptable = isAdaptable;
         },
@@ -472,8 +471,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
          * @param {OpenLayers.LonLat} lonlat where to show the popup
          */
         _panMapToShowPopup: function (lonlat) {
-            var pixels = this._map.getViewPortPxFromLonLat(lonlat),
-                size = this._map.getCurrentSize(),
+            var me = this,
+                pixels = me.getMap().getViewPortPxFromLonLat(lonlat),
+                size = me.getMap().getCurrentSize(),
                 width = size.w,
                 height = size.h;
             // if infobox would be out of screen 
@@ -483,6 +483,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 popup = jQuery('.olPopup'),
                 infoboxWidth = popup.width() + 128, // add some safety margin here so the popup close button won't got under the zoombar...
                 infoboxHeight = popup.height() + 128; //300; 
+
             if (pixels.x + infoboxWidth > width) {
                 panx = width - (pixels.x + infoboxWidth);
             }
@@ -494,9 +495,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 pany = 25;
             }
             if (panx !== 0 || pany !== 0) {
-                this.getMapModule().panMapByPixels(-panx, -pany);
+                me.getMapModule().panMapByPixels(-panx, -pany);
             }
         },
+
         /**
          * Changes the colour scheme of the plugin
          *
@@ -557,6 +559,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                     .addClass(colourScheme.iconCls);
             }
         },
+
         /**
          * Changes the font used by plugin by adding a CSS class to its DOM elements.
          *
@@ -568,10 +571,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         _changeFont: function (fontId, div, id) {
             div = div || jQuery('div#' + id);
 
-            if (!div || !fontId) return;
+            if (!div || !fontId) {
+                return;
+            }
 
             // The elements where the font style should be applied to.
             var elements = [],
+                j,
                 k,
                 el;
 
@@ -579,7 +585,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             elements.push(div.find('table.getinforesult_table'));
 
             // Remove possible old font classes.
-            for (j = 0; j < elements.length; j++) {
+            for (j = 0; j < elements.length; j += 1) {
                 el = elements[j];
                 // FIXME create function outside the loop
                 el.removeClass(function () {
@@ -588,7 +594,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                         i;
 
                     // Check if there are any old font classes.
-                    for (i = 0; i < classNames.length; ++i) {
+                    for (i = 0; i < classNames.length; i += 1) {
                         if (/oskari-publisher-font-/.test(classNames[i])) {
                             removeThese += classNames[i] + ' ';
                         }
@@ -602,6 +608,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 el.addClass('oskari-publisher-font-' + fontId);
             }
         },
+
         /**
          * @method close
          * @param {String} id
@@ -610,16 +617,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
         close: function (id, position) {
             // destroys all if id not given
             // deletes reference to the same id will work next time also
+            var pid,
+                popup;
             if (!id) {
-                var pid,
-                    popup;
                 for (pid in this._popups) {
-                    popup = this._popups[pid];
-                    if (!position ||
-                        position.lon !== popup.lonlat.lon ||
-                        position.lat !== popup.lonlat.lat) {
-                        popup.popup.destroy();
-                        delete this._popups[pid];
+                    if (this._popups.hasOwnProperty(pid)) {
+                        popup = this._popups[pid];
+                        if (!position ||
+                            position.lon !== popup.lonlat.lon ||
+                            position.lat !== popup.lonlat.lat) {
+                            popup.popup.destroy();
+                            delete this._popups[pid];
+                        }
                     }
                 }
                 return;
@@ -633,6 +642,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
             }
             // else notify popup not found?
         },
+
         /**
          * @method getPopups
          * Returns references to popups that are currently open
@@ -643,59 +653,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.plugin.mapmodule.Openlay
                 return this._popups[id];
             }
             return this._popups;
-        },
-
-        /**
-         * @method register
-         * mapmodule.Plugin protocol method - does nothing atm
-         */
-        register: function () {
-
-        },
-        /**
-         * @method unregister
-         * mapmodule.Plugin protocol method - does nothing atm
-         */
-        unregister: function () {},
-        /**
-         * @method startPlugin
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         * mapmodule.Plugin protocol method.
-         * Sets sandbox and registers self to sandbox
-         */
-        startPlugin: function (sandbox) {
-            this._sandbox = sandbox;
-            sandbox.register(this);
-        },
-        /**
-         * @method stopPlugin
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         * mapmodule.Plugin protocol method.
-         * Unregisters self from sandbox
-         */
-        stopPlugin: function (sandbox) {
-
-            sandbox.unregister(this);
-
-            this._map = null;
-            this._sandbox = null;
-        },
-        /**
-         * @method start
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         * Module protocol method - does nothing atm
-         */
-        start: function (sandbox) {},
-        /**
-         * @method stop
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         * Module protocol method - does nothing atm
-         */
-        stop: function (sandbox) {}
+        }
     }, {
+        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
-         * @property {String[]} protocol
-         * @static
+         * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': [
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
+        ]
     });

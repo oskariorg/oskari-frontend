@@ -8,165 +8,152 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
      * @static
      */
     function (config) {
-        this.mapModule = null;
-        this.pluginName = null;
-        this._sandbox = null;
-        this._map = null;
-        this._supportedFormats = {};
-        this.service = null;
-        this.config = config;
+        var me = this;
+
+        me._clazz =
+            'Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin';
+        me._name = 'WfsLayerPlugin';
+
+        me._supportedFormats = {};
+        me.service = null;
     }, {
-        __name: 'WfsLayerPlugin',
 
-        getName: function () {
-            return this.pluginName;
-        },
-        getMapModule: function () {
-            return this.mapModule;
-        },
-        setMapModule: function (mapModule) {
-            this.mapModule = mapModule;
-            this.pluginName = mapModule.getName() + this.__name;
-        },
-        init: function () {
-            var sandboxName = (this.config ? this.config.sandbox : null) || 'sandbox';
-            var sandbox = Oskari.getSandbox(sandboxName);
-
+        _initImpl: function () {
             // register domain model
-            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            if (mapLayerService) {
-                mapLayerService.registerLayerModel('wfslayer', 'Oskari.mapframework.domain.WfsLayer');
+            var layerModelBuilder,
+                mapLayerService = this.getSandbox().getService(
+                    'Oskari.mapframework.service.MapLayerService'
+                );
 
-                var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs.domain.WfsLayerModelBuilder', sandbox);
-                mapLayerService.registerLayerModelBuilder('wfslayer', layerModelBuilder);
+            if (mapLayerService) {
+                mapLayerService.registerLayerModel(
+                    'wfslayer',
+                    'Oskari.mapframework.domain.WfsLayer'
+                );
+                layerModelBuilder = Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.mapwfs.domain.WfsLayerModelBuilder',
+                    this.getSandbox()
+                );
+                mapLayerService.registerLayerModelBuilder(
+                    'wfslayer',
+                    layerModelBuilder
+                );
             }
         },
+
         register: function () {
             this.getMapModule().setLayerPlugin('wfslayer', this);
         },
+
         unregister: function () {
             this.getMapModule().setLayerPlugin('wfslayer', null);
         },
-        startPlugin: function (sandbox) {
-            this._sandbox = sandbox;
-            this._map = this.getMapModule().getMap();
 
+        _startPluginImpl: function () {
             this.createTilesGrid();
-            this.service = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs.service.WfsTileService', this);
-
-            sandbox.register(this);
-            for (var p in this.eventHandlers) {
-                sandbox.registerForEventByName(this, p);
-            }
+            this.service = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.mapwfs.service.WfsTileService',
+                this
+            );
         },
-        stopPlugin: function (sandbox) {
 
-            for (var p in this.eventHandlers) {
-                sandbox.unregisterFromEventByName(this, p);
-            }
+        _createEventHandlers: function () {
+            var me = this;
 
-            sandbox.unregister(this);
+            return {
+                AfterMapMoveEvent: function (event) {
+                    var creator = me.getSandbox().getObjectCreator(event);
 
-            this._map = null;
-            this._sandbox = null;
-        },
-        /*
-         * @method start called from sandbox
-         */
-        start: function (sandbox) {},
-        /**
-         * @method stop called from sandbox
-         *
-         */
-        stop: function (sandbox) {},
-        eventHandlers: {
-            'AfterMapMoveEvent': function (event) {
-                var creator = this._sandbox.getObjectCreator(event);
-                this._sandbox
-                    .printDebug("[WfsLayerPlugin] got AfterMapMoveEvent from " + creator);
-                this.afterAfterMapMoveEvent();
-            },
-            'AfterMapLayerAddEvent': function (event) {
-                this.afterMapLayerAddEvent(event);
-            },
-            'AfterMapLayerRemoveEvent': function (event) {
-                var layer = event.getMapLayer();
-                if (layer.isLayerOfType('WFS')) {
-                    this.afterMapLayerRemoveEvent(event);
+                    me.getSandbox().printDebug(
+                        '[WfsLayerPlugin] got AfterMapMoveEvent from ' + creator
+                    );
+                    me.afterAfterMapMoveEvent();
+                },
+
+                AfterMapLayerAddEvent: function (event) {
+                    me.afterMapLayerAddEvent(event);
+                },
+
+                AfterMapLayerRemoveEvent: function (event) {
+                    var layer = event.getMapLayer();
+
+                    if (layer.isLayerOfType('WFS')) {
+                        me.afterMapLayerRemoveEvent(event);
+                    }
+                },
+
+                /*'AfterWfsGetFeaturesPngImageForMapEvent' : function (event) {
+                me.afterWfsGetFeaturesPngImageForMapEvent(event);
+            },*/
+                AfterHighlightWFSFeatureRowEvent: function (event) {
+                    me.handleAfterHighlightWFSFeatureRowEvent(event);
+                },
+                AfterChangeMapLayerOpacityEvent: function (event) {
+                    me.afterChangeMapLayerOpacityEvent(event);
+                },
+                AfterDimMapLayerEvent: function (event) {
+                    me.handleAfterDimMapLayerEvent(event);
+                },
+                MapClickedEvent: function (evt) {
+                    // don't process while moving
+                    if (me.getSandbox().getMap().isMoving()) {
+                        return;
+                    }
+                    var lonlat = evt.getLonLat(),
+                        mouseX = evt.getMouseX(),
+                        mouseY = evt.getMouseY();
+                    me._getFeatureIds(lonlat, mouseX, mouseY);
+                },
+
+                WFSFeaturesSelectedEvent: function (event) {
+                    me.service.scheduleWFSMapHighlightUpdate(event);
+                },
+
+                /**
+                 * @method MapModulePlugin_MapLayerVisibilityRequest
+                 * refreshes WFS-layer grid based on visibility
+                 */
+                MapLayerVisibilityChangedEvent: function (event) {
+                    if (event.getMapLayer().isVisible()) {
+                        me.afterAfterMapMoveEvent();
+                    }
                 }
-            },
-            /*'AfterWfsGetFeaturesPngImageForMapEvent' : function(event) {
-            this.afterWfsGetFeaturesPngImageForMapEvent(event);
-        },*/
-            'AfterHighlightWFSFeatureRowEvent': function (event) {
-                this.handleAfterHighlightWFSFeatureRowEvent(event);
-            },
-            'AfterChangeMapLayerOpacityEvent': function (event) {
-                this.afterChangeMapLayerOpacityEvent(event);
-            },
-            'AfterDimMapLayerEvent': function (event) {
-                this.handleAfterDimMapLayerEvent(event);
-            },
-            'MapClickedEvent': function (evt) {
-
-                // don't process while moving
-                if (this._sandbox.getMap().isMoving()) {
-                    return;
-                }
-                var lonlat = evt.getLonLat();
-                var mouseX = evt.getMouseX();
-                var mouseY = evt.getMouseY();
-                this._getFeatureIds(lonlat, mouseX, mouseY);
-            },
-            'WFSFeaturesSelectedEvent': function (event) {
-                this.service.scheduleWFSMapHighlightUpdate(event);
-            },
-            /**
-             * @method MapModulePlugin_MapLayerVisibilityRequest
-             * refreshes WFS-layer grid based on visibility
-             */
-            'MapLayerVisibilityChangedEvent': function (event) {
-                if (event.getMapLayer().isVisible()) {
-                    this.afterAfterMapMoveEvent();
-                }
-            }
-
+            };
         },
 
-        onEvent: function (event) {
-            return this.eventHandlers[event.getName()].apply(this, [event]);
-        },
         /**
          *
          */
         preselectLayers: function (layers) {
+            var sandbox = this.getSandbox(),
+                i,
+                layer,
+                layerId;
 
-            var sandbox = this._sandbox;
-
-            for (var i = 0; i < layers.length; i++) {
-                var layer = layers[i];
-                var layerId = layer.getId();
+            for (i = 0; i < layers.length; i += 1) {
+                layer = layers[i];
+                layerId = layer.getId();
 
                 if (!layer.isLayerOfType('WFS')) {
                     continue;
                 }
 
-                sandbox.printDebug("[WfsLayerPlugin] preselecting " + layerId);
+                sandbox.printDebug('[WfsLayerPlugin] preselecting ' + layerId);
                 this.addMapLayerToMap(layer, true, layer.isBaseLayer());
             }
         },
 
         afterChangeMapLayerOpacityEvent: function (event) {
-            var layer = event.getMapLayer();
+            var layer = event.getMapLayer(),
+                i;
 
             if (!layer.isLayerOfType('WFS')) {
                 return;
             }
             //var wfsReqExp = new RegExp('wfs_layer_' + layer.getId() + '_*', 'i');
             var layers = this.getOLMapLayers(layer); //_map.getLayersByName(wfsReqExp);
-            for (var i = 0; i < layers.length; i++) {
+            for (i = 0; i < layers.length; i += 1) {
                 layers[i].setOpacity(layer.getOpacity() / 100);
-
             }
         },
 
@@ -177,14 +164,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
          *            event
          */
         handleAfterDimMapLayerEvent: function (event) {
-            var layer = event.getMapLayer();
+            var i,
+                layer = event.getMapLayer(),
+                layers,
+                wfsReqExp;
 
             if (layer.isLayerOfType('WFS')) {
                 /** remove higlighed wfs layer from map */
-                var wfsReqExp = new RegExp('wfs_layer_' + layer
-                    .getId() + '_HIGHLIGHTED_FEATURE*', 'i');
-                var layers = this._map.getLayersByName(wfsReqExp);
-                for (var i = 0; i < layers.length; i++) {
+                wfsReqExp = new RegExp(
+                    'wfs_layer_' + layer.getId() + '_HIGHLIGHTED_FEATURE*', 'i'
+                );
+                layers = this.getMap().getLayersByName(wfsReqExp);
+                for (i = 0; i < layers.length; i += 1) {
                     layers[i].destroy();
                 }
             }
@@ -197,13 +188,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
          *            event
          */
         afterMapLayerAddEvent: function (event) {
-            this.addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
+            this.addMapLayerToMap(
+                event.getMapLayer(),
+                event.getKeepLayersOrder(),
+                event.isBasemap()
+            );
             this.afterAfterMapMoveEvent();
         },
+
         /**
          * primitive for adding layer to this map
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {},
+
         /***************************************************************************
          * Handle AfterMapLayerRemoveEvent
          *
@@ -212,18 +209,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
          */
         afterMapLayerRemoveEvent: function (event) {
             var layer = event.getMapLayer();
+
             this.service.removeWFsLayerRequests(layer);
             this.removeMapLayerFromMap(layer);
         },
-        removeMapLayerFromMap: function (layer) {
 
-            var removeLayers = this.getOLMapLayers(layer);
-            for (var i = 0; i < removeLayers.length; i++) {
+        removeMapLayerFromMap: function (layer) {
+            var removeLayers = this.getOLMapLayers(layer),
+                i;
+
+            for (i = 0; i < removeLayers.length; i += 1) {
                 removeLayers[i].destroy();
             }
         },
-        getOLMapLayers: function (layer) {
 
+        getOLMapLayers: function (layer) {
             if (layer && !layer.isLayerOfType('WFS')) {
                 return;
             }
@@ -233,7 +233,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
             }
 
             var wfsReqExp = new RegExp('wfs_layer' + layerPart + '_*', 'i');
-            return this._map.getLayersByName(wfsReqExp);
+            return this.getMap().getLayersByName(wfsReqExp);
         },
 
         /**
@@ -253,15 +253,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
          *           true to not delete existing tile
          */
         drawImageTile: function (layer, imageUrl, imageBbox, layerPostFix, keepPrevious) {
-            var layerName = "wfs_layer_" + layer.getId() + "_" + layerPostFix;
-            var boundsObj = null;
-            if (imageBbox.bounds && imageBbox.bounds.left && imageBbox.bounds.right && imageBbox.bounds.top && imageBbox.bounds.bottom) {
-                boundsObj = new OpenLayers.Bounds(imageBbox.bounds.left,
-                    imageBbox.bounds.bottom, imageBbox.bounds.right,
-                    imageBbox.bounds.top);
-            } else if (imageBbox.left && imageBbox.right && imageBbox.top && imageBbox.bottom) {
-                boundsObj = new OpenLayers.Bounds(imageBbox.left, imageBbox.bottom,
-                    imageBbox.right, imageBbox.top);
+            var layerName = 'wfs_layer_' + layer.getId() + '_' + layerPostFix,
+                boundsObj = null;
+
+            if (imageBbox.bounds && imageBbox.bounds.left &&
+                    imageBbox.bounds.right && imageBbox.bounds.top &&
+                    imageBbox.bounds.bottom) {
+
+                boundsObj = new OpenLayers.Bounds(
+                    imageBbox.bounds.left,
+                    imageBbox.bounds.bottom,
+                    imageBbox.bounds.right,
+                    imageBbox.bounds.top
+                );
+            } else if (imageBbox.left && imageBbox.right && imageBbox.top &&
+                    imageBbox.bottom) {
+
+                boundsObj = new OpenLayers.Bounds(
+                    imageBbox.left,
+                    imageBbox.bottom,
+                    imageBbox.right,
+                    imageBbox.top
+                );
             }
 
             /** Safety checks */
@@ -269,29 +282,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
                 return;
             }
 
-            var layerScales = this.mapModule.calculateLayerScales(layer
-                .getMaxScale(), layer.getMinScale());
-
-            var layerIndex = null;
+            var i,
+                layerScales = this.mapModule.calculateLayerScales(
+                    layer.getMaxScale(),
+                    layer.getMinScale()
+                ),
+                layerIndex = null,
+                removeLayers;
 
             /** remove old wfs layers from map */
             if (!keepPrevious) {
                 // TODO: make remove layer methods better so we can use them here 
-                var removeLayers = this._map.getLayersByName(layerName);
-                for (var i = 0; i < removeLayers.length; i++) {
-                    layerIndex = this._map.getLayerIndex(removeLayers[i]);
+                removeLayers = this.getMap().getLayersByName(layerName);
+                for (i = 0; i < removeLayers.length; i += 1) {
+                    layerIndex = this.getMap().getLayerIndex(removeLayers[i]);
                     removeLayers[i].destroy();
                 }
             }
 
-
-            var ols = new OpenLayers.Size(256, 256);
-
-            var wfsMapImageLayer = new OpenLayers.Layer.Image(layerName,
+            var ols = new OpenLayers.Size(256, 256),
+            wfsMapImageLayer = new OpenLayers.Layer.Image(layerName,
                 imageUrl, boundsObj, ols, {
                     scales: layerScales,
                     transparent: true,
-                    format: "image/png",
+                    format: 'image/png',
                     isBaseLayer: false,
                     displayInLayerSwitcher: true,
                     visibility: true,
@@ -300,36 +314,41 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
 
             wfsMapImageLayer.opacity = layer.getOpacity() / 100;
 
-            this._map.addLayer(wfsMapImageLayer);
+            this.getMap().addLayer(wfsMapImageLayer);
             wfsMapImageLayer.setVisibility(true);
             wfsMapImageLayer.redraw(true);
 
-            var opLayersLength = this._map.layers.length;
+            var opLayersLength = this.getMap().layers.length,
+                changeLayer = this.getMap().getLayersByName('Markers');
 
-            var changeLayer = this._map.getLayersByName('Markers');
             if (changeLayer.length > 0) {
-                this._map.setLayerIndex(changeLayer[0], opLayersLength);
-                opLayersLength--;
+                this.getMap().setLayerIndex(changeLayer[0], opLayersLength);
+                opLayersLength -= 1;
             }
 
             if (layerIndex !== null && wfsMapImageLayer !== null) {
-                this._map.setLayerIndex(wfsMapImageLayer, layerIndex);
+                this.getMap().setLayerIndex(wfsMapImageLayer, layerIndex);
             }
 
             var wfsReqExp2 = new RegExp(
-                'wfs_layer_' + layer.getId() + '_WFS_LAYER_IMAGE*', 'i');
-            var lastWfsLayer = this._map.getLayersByName(wfsReqExp2);
+                    'wfs_layer_' + layer.getId() + '_WFS_LAYER_IMAGE*',
+                    'i'
+                ),
+                lastWfsLayer = this.getMap().getLayersByName(wfsReqExp2);
             if (lastWfsLayer.length > 0) {
-                var lastWfsLayerIndex = this._map
-                    .getLayerIndex(lastWfsLayer[lastWfsLayer.length - 1]);
-
-                var changeLayer2 = this._map.getLayersByName(layerName);
+                var lastWfsLayerIndex = this.getMap().getLayerIndex(
+                        lastWfsLayer[lastWfsLayer.length - 1]
+                    ),
+                    changeLayer2 = this.getMap().getLayersByName(layerName);
                 if (changeLayer2.length > 0) {
-                    this._map.setLayerIndex(changeLayer2[0], lastWfsLayerIndex);
+                    this.getMap().setLayerIndex(
+                        changeLayer2[0],
+                        lastWfsLayerIndex
+                    );
                 }
             }
-
         },
+
         /***************************************************************************
          * Handle AfterHighlightWFSFeatureRowEvent
          *
@@ -337,36 +356,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
          *            event
          */
         handleAfterHighlightWFSFeatureRowEvent: function (event) {
-            var selectedFeatureIds = event.getWfsFeatureIds();
+            var layer,
+                selectedFeatureIds = event.getWfsFeatureIds();
+
             if (selectedFeatureIds.length === 0 && !event.isKeepSelection()) {
-                var layer = event.getMapLayer();
+                layer = event.getMapLayer();
                 this.removeHighlightOnMapLayer(layer.getId());
             }
         },
+
         /* ******************************************************************************
          * Handle AfterRemoveHighlightMapLayerEvent
          *
          * @param {Object}
          *            event
          */
-
         removeHighlightOnMapLayer: function (layerId) {
-            var prefix = '';
-            if (layerId) {
-                prefix = 'wfs_layer_' + layerId;
-            }
-            var wfsReqExp = new RegExp(prefix + '_HIGHLIGHTED_FEATURE*', 'i');
-            var layers = this._map.getLayersByName(wfsReqExp);
-            for (var i = 0; i < layers.length; i++) {
+            var prefix = layerId ? 'wfs_layer_' + layerId : '',
+                i,
+                wfsReqExp = new RegExp(prefix + '_HIGHLIGHTED_FEATURE*', 'i'),
+                layers = this.getMap().getLayersByName(wfsReqExp);
+
+            for (i = 0; i < layers.length; i += 1) {
                 layers[i].destroy();
             }
         },
-        updateWfsImages: function (creator) {
 
-            var layers = Oskari.$().sandbox.findAllSelectedMapLayers();
+        updateWfsImages: function (creator) {
+            var layers = Oskari.$().sandbox.findAllSelectedMapLayers(),
+                i;
             // request updates for map tiles
-            for (var i = 0; i < layers.length; i++) {
-                if (layers[i].isInScale() && layers[i].isVisible() && layers[i].isLayerOfType('WFS')) {
+            for (i = 0; i < layers.length; i += 1) {
+                if (layers[i].isInScale() && layers[i].isVisible() &&
+                        layers[i].isLayerOfType('WFS')) {
                     this.doWfsLayerRelatedQueries(layers[i]);
                 }
             }
@@ -379,18 +401,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
          *            mapLayer
          */
         doWfsLayerRelatedQueries: function (mapLayer) {
-
             if (!mapLayer.isInScale()) {
                 return;
             }
-            var map = this._sandbox.getMap();
-            var bbox = map.getBbox();
+            var map = this.getSandbox().getMap(),
+                bbox = map.getBbox(),
+                mapWidth = map.getWidth(),
+                mapHeight = map.getHeight();
 
-            var mapWidth = map.getWidth();
-            var mapHeight = map.getHeight();
-            this.service.scheduleWFSMapLayerUpdate(mapLayer, bbox, mapWidth, mapHeight, this.getName());
+            this.service.scheduleWFSMapLayerUpdate(
+                mapLayer,
+                bbox,
+                mapWidth,
+                mapHeight,
+                this.getName()
+            );
             this.service.startPollers();
         },
+
         afterAfterMapMoveEvent: function () {
             this.tileStrategy.update();
             // TODO: fixme
@@ -410,17 +438,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
          *
          */
         createTilesGrid: function () {
-            var me = this;
-            var sandbox = me._sandbox;
-
-            var tileQueue =
-                Oskari.clazz.create("Oskari.mapframework.gridcalc.TileQueue");
-
-            //sandbox.getMap().setTileQueue(tileQueue);
-
-            var strategy = Oskari.clazz.create("Oskari.mapframework.gridcalc.QueuedTilesStrategy", {
-                tileQueue: tileQueue
-            });
+            var me = this,
+                sandbox = me.getSandbox(),
+                tileQueue = Oskari.clazz.create(
+                    'Oskari.mapframework.gridcalc.TileQueue'
+                ),
+                strategy = Oskari.clazz.create(
+                    'Oskari.mapframework.gridcalc.QueuedTilesStrategy',
+                    {
+                        tileQueue: tileQueue
+                    }
+                );
             strategy.debugGridFeatures = false;
             this.tileQueue = tileQueue;
             this.tileStrategy = strategy;
@@ -454,14 +482,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
                                     styleMap: styles,
                                     visibility: true
                                 });
-                        this._map.addLayer(this._tilesLayer);
+                        this.getMap().addLayer(this._tilesLayer);
                         this._tilesLayer.setOpacity(0.3);
                         */
 
         },
+
         getTileQueue: function () {
             return this.tileQueue;
         },
+
         /***********************************************************
          * WFS FeatureInfo request
          *
@@ -469,50 +499,57 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
          *            e
          */
         _getFeatureIds: function (lonlat, mouseX, mouseY) {
-            var me = this;
-            var sandbox = this._sandbox;
-            var allHighlightedLayers = sandbox.findAllHighlightedLayers();
+            var me = this,
+                sandbox = me.getSandbox(),
+                allHighlightedLayers = sandbox.findAllHighlightedLayers();
             // Safety check
             // This case highlighted layer is the first one as there should not be more than one selected
-            if (allHighlightedLayers.length === 0 || !allHighlightedLayers[0] || !allHighlightedLayers[0].isLayerOfType('WFS')) {
+            if (allHighlightedLayers.length === 0 || !allHighlightedLayers[0] ||
+                    !allHighlightedLayers[0].isLayerOfType('WFS')) {
                 // nothing to do, not wfs or nothing highlighted
                 return;
             }
-            if (allHighlightedLayers.length != 1) {
-                sandbox.printDebug("Trying to highlight WFS feature but there is either too many or none selected WFS layers. Size: " + allHighlightedLayers.length);
+            if (allHighlightedLayers.length !== 1) {
+                sandbox.printDebug(
+                    'Trying to highlight WFS feature but there is either too ' +
+                    'many or none selected WFS layers. Size: ' +
+                    allHighlightedLayers.length
+                );
                 return;
             }
 
             var layer = allHighlightedLayers[0];
             // Safety check at layer is in scale
             if (!layer.isInScale()) {
-                sandbox.printDebug('Trying to hightlight WFS feature from wfs layer that is not in scale!');
+                sandbox.printDebug(
+                    'Trying to hightlight WFS feature from wfs layer that is ' +
+                    'not in scale!'
+                );
                 return;
             }
 
-            var map = sandbox.getMap();
-            var imageBbox = this._map.getExtent();
-            var parameters = "&flow_pm_wfsLayerId=" + layer.getId() +
-                "&flow_pm_point_x=" + lonlat.lon +
-                "&flow_pm_point_y=" + lonlat.lat +
-                "&flow_pm_bbox_min_x=" + imageBbox.left +
-                "&flow_pm_bbox_min_y=" + imageBbox.bottom +
-                "&flow_pm_bbox_max_x=" + imageBbox.right +
-                "&flow_pm_bbox_max_y=" + imageBbox.top +
-                "&flow_pm_zoom_level=" + map.getZoom() +
-                "&flow_pm_map_width=" + map.getWidth() +
-                "&flow_pm_map_height=" + map.getHeight() +
-                "&srs=" + map.getSrsName() +
-                "&action_route=GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT";
-
-            var keepCollection = sandbox.isCtrlKeyDown();
+            var map = sandbox.getMap(),
+                imageBbox = this.getMap().getExtent(),
+                parameters = '&flow_pm_wfsLayerId=' + layer.getId() +
+                    '&flow_pm_point_x=' + lonlat.lon +
+                    '&flow_pm_point_y=' + lonlat.lat +
+                    '&flow_pm_bbox_min_x=' + imageBbox.left +
+                    '&flow_pm_bbox_min_y=' + imageBbox.bottom +
+                    '&flow_pm_bbox_max_x=' + imageBbox.right +
+                    '&flow_pm_bbox_max_y=' + imageBbox.top +
+                    '&flow_pm_zoom_level=' + map.getZoom() +
+                    '&flow_pm_map_width=' + map.getWidth() +
+                    '&flow_pm_map_height=' + map.getHeight() +
+                    '&srs=' + map.getSrsName() +
+                    '&action_route=GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT',
+                keepCollection = sandbox.isCtrlKeyDown();
 
             jQuery.ajax({
-                dataType: "json",
-                type: "POST",
+                dataType: 'json',
+                type: 'POST',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 url: sandbox.getAjaxUrl() + parameters,
@@ -524,23 +561,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
         },
         // Send out event so components can highlight selected features
         _handleGetFeatureIdsResponse: function (response, layer, keepCollection) {
-            var sandbox = this._sandbox;
-            if (!response || response.error == "true") {
-                sandbox.printWarn("Couldn't get feature id for selected map point.");
+            var sandbox = this.getSandbox();
+            // FIXME error == 'true'?
+            if (!response || response.error == 'true') {
+                sandbox.printWarn(
+                    'Couldn\'t get feature id for selected map point.'
+                );
                 return;
             }
             // TODO: check if we want to do it with eval
-            var selectedFeatures = eval("(" + response.selectedFeatures + ")");
-            var featureIds = [];
+            var selectedFeatures = eval('(' + response.selectedFeatures + ')'),
+                featureIds = [];
             if (selectedFeatures && selectedFeatures.id !== null && selectedFeatures.id !== undefined) {
                 featureIds.push(selectedFeatures.id);
             }
-            var builder = sandbox.getEventBuilder('WFSFeaturesSelectedEvent');
-            var event = builder(featureIds, layer, keepCollection);
+            var builder = sandbox.getEventBuilder('WFSFeaturesSelectedEvent'),
+                event = builder(featureIds, layer, keepCollection);
             sandbox.notifyAll(event);
         }
     }, {
-        'protocol': ["Oskari.mapframework.module.Module",
-            "Oskari.mapframework.ui.module.common.mapmodule.Plugin"
+        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
+        /**
+         * @static @property {string[]} protocol array of superclasses
+         */
+        'protocol': [
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
     });

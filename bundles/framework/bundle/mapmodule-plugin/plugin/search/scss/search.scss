@@ -22,7 +22,7 @@ div.search {
     }
 
     input[type=text] {
-        width: 140px !important;
+        width: 140px;
     }
 
     input[type=button] {
@@ -104,7 +104,7 @@ div.published-search-div {
             background-image: none;
             width: 145px;
             float: left;
-            padding: 10px 5px 10px 5px;
+            padding: 5px;
             outline: none;
         }
 

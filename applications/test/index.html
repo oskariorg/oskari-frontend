@@ -12,19 +12,21 @@
                 clear: both;
                 display: block;
                 margin-bottom: 12px;
+                width: 700px;
+                height: 525px;
             }
         </style>
     </head>
 
     <body>
-        <iframe id="Oskari" src="http://dev.paikkatietoikkuna.fi/published/fi/6044" style="width: 700px; height: 525px;"></iframe>
-        <button id="helsinki">Helsinkiin</button>
-        <button id="lehka">M&ouml;kille</button>
+        <iframe id="Oskari" src="http://demo.paikkatietoikkuna.fi/published/fi/8184"></iframe>
+        <button id="helsinki">Messukeskus</button>
+        <button id="lehka">Lehijärvi</button>
         <output id="coords"></output>
         <script>
             var channel = OskariRPC.connect(
                     document.getElementById('Oskari'),
-                    'http://dev.paikkatietoikkuna.fi'
+                    'http://demo.paikkatietoikkuna.fi'
                 ),
                 coords = document.getElementById('coords'),
                 setCoords = function(x, y) {
@@ -32,7 +34,12 @@
                 },
                 moveMap = function(centerX, centerY, zoomLevel) {
                     channel.postRequest(
-                        'MapMoveRequest', [centerX, centerY, zoomLevel === undefined ? 8 : zoomLevel],
+                        'MapMoveRequest',
+                        [
+                            centerX,
+                            centerY,
+                            zoomLevel === undefined ? 9 : zoomLevel
+                        ],
                         function(data) {
                             console.log('MapMoveRequest posted');
                         },
@@ -52,7 +59,7 @@
                     zoombar.value = data.current;
                     zoombar.onchange = function(event) {
                         var zoomLevel = this.value;
-                        // There's no setZoomLevel, so we use MapMoveRequest width
+                        // There's no setZoomLevel for now, so we use MapMoveRequest with
                         // getMapPosition's x and y coords
                         channel.getMapPosition(
                             function(data) {
@@ -87,6 +94,7 @@
                     console.log('getAllLayers', JSON.stringify(data));
                     // Layer names aren't available through RPC as it might contain sensitive data
                     var localization = {
+                        '24': 'Ortokuvat',
                         'base_2': 'Maastokartta',
                         'base_35': 'Taustakarttasarja'
                     };
@@ -99,7 +107,11 @@
                             console.log('Showing layer ' + localization[lid]);
                             data.forEach(function(l) {
                                 channel.postRequest(
-                                    'MapModulePlugin.MapLayerVisibilityRequest', [l.id, l.id === '' + lid]
+                                    'MapModulePlugin.MapLayerVisibilityRequest',
+                                    [
+                                        l.id,
+                                        l.id + '' === lid
+                                    ]
                                 );
                             });
                         };
@@ -147,13 +159,13 @@
             );
 
             document.getElementById('lehka').onclick = function() {
-                console.log('Mökille');
+                console.log('Lehijärvi');
                 moveMap(354490.70442968, 6770658.0402485);
             };
 
             document.getElementById('helsinki').onclick = function() {
-                console.log('Helsinkiin');
-                moveMap(385540.20442968, 6675294.2902485);
+                console.log('Messukeskus');
+                moveMap(385597.68323541, 6675813.1806321);
             };
         </script>
     </body>

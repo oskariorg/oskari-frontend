@@ -15,318 +15,167 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
 
     function (config) {
         var me = this;
-        me.mapModule = this.mapmodule;
-        me.pluginName = null;
-        me._sandbox = null;
-        me._map = null;
-        me.conf = config || {};
-        me.element = null;
+        me._clazz =
+            'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin';
+        me._defaultLocation = 'bottom right';
+        me._index = 5;
+        me._name = 'IndexMapPlugin';
         me._indexMap = null;
         me._indexMapUrl = '/framework/bundle/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
-        me.isInLayerToolsEditMode = false;
     }, {
-        templates: {
-            main: jQuery('<div class="mapplugin indexmap" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin"></div>'),
-            toggle: jQuery('<div class="indexmapToggle"></div>')
-        },
-
-        /** @static @property __name plugin name */
-        __name: 'IndexMapPlugin',
-
-        getClazz: function () {
-            return "Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin";
-        },
-
         /**
-         * @method getName
-         * @return {String} plugin name
-         */
-        getName: function () {
-            return this.pluginName;
-        },
-        /**
-         * @method getMapModule
-         * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        getMapModule: function () {
-            return this.mapModule;
-        },
-        /**
-         * @method setMapModule
-         * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        setMapModule: function (mapModule) {
-            this.mapModule = mapModule;
-            if (mapModule) {
-                this.pluginName = mapModule.getName() + this.__name;
-            }
-        },
-
-        getElement: function () {
-            return this.element;
-        },
-        
-        /**
-         * @method hasUI
-         * This plugin has an UI so always returns true
-         * @return {Boolean} true
-         */
-        hasUI: function () {
-            return true;
-        },
-        /**
-         * @method init
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        init: function (sandbox) {
-
-        },
-
-        /**
-         * Sets the location of the indexmap.
-         *
-         * @method setLocation
-         * @param {String} location The new location
-         */
-        setLocation: function (location) {
-            var me = this;
-            if(!me.conf.location){
-                me.conf.location = {};
-            }
-            me.conf.location.classes = location;
-
-            if (me.element) {
-                me.getMapModule().setMapControlPlugin(me.element, location, 5);
-            }
-        },
-        /**
-         * @method _createUI
-         * @private
-         *
+         * @private @method _createControlElement
          * Constructs/initializes the indexmap  control for the map.
+         *
+         * @return {jQuery} element
          */
-        _createUI: function () {
+        _createControlElement: function () {
             /* overview map */
             var me = this,
-                graphic = new OpenLayers.Layer.Image('Overview map image',
-                    me.getMapModule().getImageUrl() + me._indexMapUrl,
-                    new OpenLayers.Bounds(26783, 6608595, 852783, 7787250), new OpenLayers.Size(120, 173)),
-                containerClasses = 'bottom right',
-                position = 5;
-            if (me.conf.containerId) {
-                me.element = jQuery("#" + me.conf.containerId);
-            } else { 
-                me.element = me.templates.main.clone();
+                conf = me.getConfig(),
+                el;
+
+            if (conf.containerId) {
+                el = jQuery('#' + conf.containerId);
+            } else {
+                el = jQuery('<div class="mapplugin indexmap"></div>');
             }
 
+            return el;
+        },
+
+        /**
+         * @private @method _createControlAdapter
+         * Constructs/initializes the control adapter for the plugin
+         *
+         * @param {jQuery} el
+         */
+        _createControlAdapter: function (el) {
             /*
              * create an overview map control with non-default
              * options
              */
-            var controlOptions = {
-                div: me.element[0],
-                mapOptions: {
-                    maxExtent: new OpenLayers.Bounds(26783, 6608595, 852783, 7787250),
-                    units: 'm',
-                    projection: me._map.getProjection(),
-                    numZoomLevels: 1
-                },
-                layers: [graphic],
-                size: new OpenLayers.Size(120, 173),
-                autoPan: false,
-                controls: []
-            };
-
-            /* Indexmap */
-            if (me.conf && me.conf.location) {
-                containerClasses = me.conf.location.classes || containerClasses;
-                position = me.conf.location.position || position;
-            }
-
-
-            // add container to map
-            if (!me.conf.containerId) {
-                me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
-            }
+            var me = this,
+                graphic = new OpenLayers.Layer.Image(
+                    'Overview map image',
+                    me.getMapModule().getImageUrl() + me._indexMapUrl,
+                    new OpenLayers.Bounds(26783, 6608595, 852783, 7787250),
+                    new OpenLayers.Size(120, 173)
+                ),
+                controlOptions = {
+                    div: el[0],
+                    mapOptions: {
+                        maxExtent: new OpenLayers.Bounds(
+                            26783,
+                            6608595,
+                            852783,
+                            7787250
+                        ),
+                        units: 'm',
+                        projection: me._map.getProjection(),
+                        numZoomLevels: 1
+                    },
+                    layers: [graphic],
+                    size: new OpenLayers.Size(120, 173),
+                    autoPan: false,
+                    controls: []
+                };
             // initialize control, pass container
             me._indexMap = new OpenLayers.Control.OverviewMap(controlOptions);
             // Set indexmap stable in container
-            me._indexMap.isSuitableOverview = function() {
-               return true;
+            me._indexMap.isSuitableOverview = function () {
+                return true;
             };
-
-            // in case we are already in edit mode when plugin is drawn
-            this.isInLayerToolsEditMode = me.getMapModule().isInLayerToolsEditMode();
 
             // Extends overviewmap to send AfterMapMove event
             OpenLayers.Util.extend(me._indexMap, {
-                updateMapToRect: function() {
-                    var lonLatBounds = this.getMapBoundsFromRectBounds(this.rectPxBounds);
-                    if (this.ovmap.getProjection() != this.map.getProjection()) {
+                updateMapToRect: function () {
+                    var lonLatBounds = this.getMapBoundsFromRectBounds(
+                        this.rectPxBounds
+                    );
+                    if (this.ovmap.getProjection() !== this.map.getProjection()) {
                         lonLatBounds = lonLatBounds.transform(
                             this.ovmap.getProjectionObject(),
-                            this.map.getProjectionObject() );
+                            this.map.getProjectionObject()
+                        );
                     }
                     this.map.panTo(lonLatBounds.getCenterLonLat());
                     me.getMapModule().notifyMoveEnd(me.getClazz());
                 }
             });
-        },
-        /**
-         * @method register
-         * Interface method for the module protocol
-         */
-        register: function () {
 
+            return me._indexMap;
         },
-        /**
-         * @method unregister
-         * Interface method for the module protocol
-         */
-        unregister: function () {
 
-        },
-        /**
-         * @method startPlugin
-         * Interface method for the plugin protocol.
-         * Adds the indexmap to the map as control.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        startPlugin: function (sandbox) {
+        refresh: function () {
             var me = this,
-                p;
-            me._sandbox = sandbox || me.getMapModule().getSandbox();
-            me._map = me.getMapModule().getMap();
-            me._createUI();
-
-            me._sandbox.register(me);
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me._sandbox.registerForEventByName(me, p);
-                }
+                toggleButton = me.getElement().find('.indexmapToggle');
+            if (!toggleButton.length) {
+                toggleButton = jQuery('<div class="indexmapToggle"></div>');
+                // button has to be added separately so the element order is correct...
+                me.getElement().append(toggleButton);
             }
-            me.getMapModule().addMapControl('overviewMap', me._indexMap);
-            var toggleButton = me.templates.toggle.clone();
             // add toggle functionality to button
             me._bindIcon(toggleButton);
-
-            // button has to be added separately so the element order is correct...
-            me.element.append(toggleButton);
-
-
-            
-
         },
 
         _bindIcon: function (icon) {
             var me = this;
-            icon.bind("click", function (event) {
-                event.preventDefault();
-                var miniMap = me.element.find('.olControlOverviewMapElement');
-                miniMap.toggle();
+            icon.unbind('click');
+            icon.bind('click', function (event) {
+                event.preventDefault();                
+                var miniMap = me.getElement().find(
+                    '.olControlOverviewMapElement'
+                );
+                console.log("icon click", miniMap);
+                miniMap.slideToggle({
+                    duration: 100
+                });
             });
         },
 
         /**
-         * @method stopPlugin
-         * Interface method for the plugin protocol.
-         * Removes the indexmap from the map controls.
+         * @method _createEventHandlers
+         * Create eventhandlers.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
+         *
+         * @return {Object.<string, Function>} EventHandlers
          */
-        stopPlugin: function (sandbox) {
-            var me = this,
-                p;
-            me.getMapModule().removeMapControl('overviewMap');
+        _createEventHandlers: function () {
+            var me = this;
 
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me._sandbox.unregisterFromEventByName(me, p);
+            return {
+                AfterMapMoveEvent: function (event) {
+                    if (me._indexMap && (event.getCreator() !== me.getClazz())) {
+                        me._indexMap.update();
+                    }
                 }
-            }
-
-            me._sandbox.unregister(me);
-            me._map = null;
-            me._sandbox = null;
-            if (me.element) {
-                me.element.remove();
-                me.element = undefined;
-            }
-        },
-        /**
-         * @method start
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        start: function (sandbox) {},
-        /**
-         * @method stop
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stop: function (sandbox) {},
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-
-        eventHandlers: {
-            'AfterMapMoveEvent': function (event) {
-                if (this._indexMap && (event.getCreator() !== this.getClazz())) {
-                    this._indexMap.update();
-                }
-            },
-            'LayerToolsEditModeEvent': function (event) {
-                this._setLayerToolsEditMode(event.isInMode());
-            }
+            };
         },
 
-        _setLayerToolsEditMode: function (isInEditMode) {
-            if (this.isInLayerToolsEditMode === isInEditMode) {
-                // we don't want to bind click twice...
-                return;
-            }
-            this.isInLayerToolsEditMode = isInEditMode;
-            var icon = this.element.find(".indexmapToggle");
+        _setLayerToolsEditModeImpl: function () {
+            var icon = this.getElement().find('.indexmapToggle');
 
-            if (isInEditMode) {
+            if (this.inLayerToolsEditMode()) {
                 // close map
-                var miniMap = this.element.find('.olControlOverviewMapElement');
+                var miniMap = this.getElement().find(
+                    '.olControlOverviewMapElement'
+                );
                 miniMap.hide();
                 // disable icon
-                icon.unbind("click");
+                icon.unbind('click');
             } else {
                 // enable icon
                 this._bindIcon(icon);
             }
-        },
-
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded
-         * if
-         * not.
-         */
-        onEvent: function (event) {
-            return this.eventHandlers[event.getName()].apply(this, [event]);
         }
     }, {
+        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
-         * @property {String[]} protocol array of superclasses as {String}
-         * @static
+         * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': [
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
+        ]
     });

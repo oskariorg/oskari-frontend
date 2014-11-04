@@ -7,62 +7,92 @@
 Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
 
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
      */
     function (config) {
-        this._mapModule = null;
-        this._name = "AbstractPlugin" + Math.floor(Math.random() * (1632960) + 46656).toString(36);
-        this._pluginName = this._name;
-        this._sandbox = null;
-        this._map = null;
-        this._config = config || {};
-        this._eventHandlers = {};
-        this.isInLayerToolsEditMode = false;
+        var me = this;
+        me._config = config || {};
+        me._eventHandlers = {};
+        me.isInLayerToolsEditMode = false;
+        me._loc = {};
+        me._map = null;
+        me._mapModule = null;
+        me._name = 'AbstractPlugin' + Math.floor(Math.random() * (1632960) + 46656).toString(36);
+        me._pluginName = me._name;
+        me._requestHandlers = {};
+        me._sandbox = null;
     }, {
         /**
-         * @method getName
-         * @return {String} the name for the component
+         * @public @method getName
+         *
+         *
+         * @return {string} the name for the component
          */
         getName: function () {
             return this._pluginName;
         },
+
         /**
-         * @method getMap
+         * @public @method getMap
+         *
+         *
          * @return {OpenLayers.Map} reference to map implementation
          */
         getMap: function () {
             return this._map;
         },
+
         /**
-         * @method getMapModule
+         * @public @method getMapModule
+         *
+         *
          * @return {Oskari.mapframework.ui.module.common.MapModule} reference
          * to map module
          */
         getMapModule: function () {
             // Throw a fit if mapmodule is not set, it'd probably break things.
             if (this._mapModule === null || this._mapModule === undefined) {
-                throw "No mapmodule provided!";
+                throw 'No mapmodule provided!';
             }
             return this._mapModule;
         },
+
         /**
-         * @method setMapModule
-         * Setter for MapModule, checks map module reference truthy before assigning
+         * @public @method setMapModule
+         * Setter for MapModule, checks that map module reference is truthy
+         * before assigning.
+         *
          * @param {Oskari.mapframework.ui.module.common.MapModule} reference
          * to map module
+         *
          */
         setMapModule: function (mapModule) {
             if (mapModule) {
                 this._mapModule = mapModule;
                 this._map = mapModule.getMap();
                 this._pluginName = mapModule.getName() + this._name;
+                this._loc =
+                    mapModule.getLocalization('plugin', true)[this._name];
             }
         },
+
         /**
-         * @method init
+         * @public @method getSandbox
+         *
+         *
+         * @return {Object}
+         * Sandbox
+         */
+        getSandbox: function () {
+            return this._sandbox;
+        },
+
+        /**
+         * @public @method init
          * Initializes plugin by calling _initImpl, which is overwritten by the
          * implementation when needed.
+         *
+         *
          */
         init: function () {
             return this._initImpl();
@@ -71,21 +101,26 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         _initImpl: function () {},
 
         /**
-         * @method register
+         * @public @method register
          * Interface method for the module protocol
-         * Registers plugin by calling _registerImpl, which is overwritten by the
-         * implementation when needed.
+         * Registers plugin by calling _registerImpl, which is overwritten by
+         * the implementation when needed.
+         *
+         *
          */
         register: function () {
             return this._registerImpl();
         },
 
         _registerImpl: function () {},
+
         /**
-         * @method unregister
+         * @public @method unregister
          * Interface method for the module protocol
-         * Unregisters plugin by calling _registerImpl, which is overwritten by the
-         * implementation when needed.
+         * Unregisters plugin by calling _registerImpl, which is overwritten by
+         * the implementation when needed.
+         *
+         *
          */
         unregister: function () {
             return this._unregisterImpl();
@@ -94,7 +129,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         _unregisterImpl: function () {},
 
         /**
-         * @method createEventHandlers
+         * @public @method createEventHandlers
+         *
+         *
          * @return {Object} EventHandlers
          */
         createEventHandlers: function () {
@@ -109,9 +146,35 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         /**
          * @method _createEventHandlers
          * Create eventhandlers. Implement if need be.
+         *
+         *
          * @return {Object} EventHandlers
          */
         _createEventHandlers: function () {
+            return {};
+        },
+
+        /**
+         * @public @method createRequestHandlers
+         *
+         *
+         * @return {Object} RequestHandlers
+         */
+        createRequestHandlers: function () {
+            var me = this,
+                requestHandlers = me._createRequestHandlers();
+
+            return requestHandlers;
+        },
+
+        /**
+         * @method _createRequestHandlers
+         * Create eventhandlers. Implement if need be.
+         *
+         *
+         * @return {Object} RequestHandlers
+         */
+        _createRequestHandlers: function () {
             return {};
         },
 
@@ -127,37 +190,55 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         /**
          * @method _setLayerToolsEditModeImpl
          * Called after layerToolsEditMode is set, implement if needed.
+         *
+         *
          */
         _setLayerToolsEditModeImpl: function () {},
 
         /**
-         * @method startPlugin
+         * @public @method startPlugin
          * mapmodule.Plugin protocol method.
-         * Sets sandbox and registers self to sandbox. Constructs the plugin UI and displays it.
+         * Sets sandbox and registers self to sandbox. Constructs the plugin UI
+         * and displays it.
+         *
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         *
          */
         startPlugin: function (sandbox) {
             var me = this,
-                eventHandler;
+                handler;
 
-            me._eventHandlers = me.createEventHandlers();
             me._sandbox = sandbox;
+            me._eventHandlers = me.createEventHandlers();
+            me._requestHandlers = me.createRequestHandlers();
             sandbox.register(me);
-            for (eventHandler in me._eventHandlers) {
-                if (me._eventHandlers.hasOwnProperty(eventHandler)) {
-                    sandbox.registerForEventByName(me, eventHandler);
+            for (handler in me._eventHandlers) {
+                if (me._eventHandlers.hasOwnProperty(handler)) {
+                    sandbox.registerForEventByName(me, handler);
+                }
+            }
+
+            for (handler in me._requestHandlers) {
+                if (me._requestHandlers.hasOwnProperty(handler)) {
+                    me._sandbox.addRequestHandler(
+                        handler,
+                        this._requestHandlers[handler]
+                    );
                 }
             }
 
             me._startPluginImpl(sandbox);
-            // Make sure plugin's edit mode is set correctly (we might already be in edit mode)
-            me._setLayerToolsEditMode(me.getMapModule().isInLayerToolsEditMode());
+            // Make sure plugin's edit mode is set correctly
+            // (we might already be in edit mode)
+            me._setLayerToolsEditMode(
+                me.getMapModule().isInLayerToolsEditMode()
+            );
         },
 
         _startPluginImpl: function (sandbox) {},
 
         /**
-         * @method stopPlugin
+         * @public @method stopPlugin
          * mapmodule.Plugin protocol method.
          * Unregisters self from sandbox and removes plugins UI from screen.
          *
@@ -165,12 +246,22 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          */
         stopPlugin: function (sandbox) {
             var me = this,
-                eventHandler;
+                handler;
+
             me._stopPluginImpl(sandbox);
 
-            for (eventHandler in me._eventHandlers) {
-                if (me._eventHandlers.hasOwnProperty(eventHandler)) {
-                    me._sandbox.unregisterFromEventByName(me, eventHandler);
+            for (handler in me._eventHandlers) {
+                if (me._eventHandlers.hasOwnProperty(handler)) {
+                    me._sandbox.unregisterFromEventByName(me, handler);
+                }
+            }
+
+            for (handler in me._requestHandlers) {
+                if (me._requestHandlers.hasOwnProperty(handler)) {
+                    me._sandbox.removeRequestHandler(
+                        handler,
+                        this._requestHandlers[handler]
+                    );
                 }
             }
 
@@ -181,32 +272,92 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         _stopPluginImpl: function (sandbox) {},
 
         /**
-         * @method start
-         * Start plugin as module by calling _registerImpl, which is overwritten by the
-         * implementation when needed.
+         * @public @method start
+         * Start plugin as module by calling _registerImpl, which is overwritten
+         * by the implementation when needed.
+         *
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         *
          */
         start: function (sandbox) {
             return this._startImpl(sandbox);
         },
 
         _startImpl: function (sandbox) {},
+
         /**
-         * @method stop
-         * Stop plugin as module by calling _registerImpl, which is overwritten by the
-         * implementation when needed.
+         * @public @method stop
+         * Stop plugin as module by calling _registerImpl, which is overwritten
+         * by the implementation when needed.
+         *
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         *
          */
         stop: function (sandbox) {
             return this._stopImpl(sandbox);
         },
 
         _stopImpl: function (sandbox) {},
+
         /**
-         * @method onEvent
+         * @public @method getConfig Gets the plugin's config
+         *
+         *
+         * @return {Object}
+         * Plugin's configuration (a clone, use setConfig if you want to change
+         * the plugin's config)
+         */
+        getConfig: function () {
+            // use this when saving published map so we won't have to keep a
+            // separate copy in the publisher
+            var ret = {};
+            if (this._config) {
+                // return a clone so people won't muck about with the config...
+                return jQuery.extend(true, ret, this._config);
+            }
+            return ret;
+        },
+
+        /**
+         * @public @method setConfig
+         * Sets the plugin's config
+         *
+         * @param {Object} config
+         * Config
+         *
+         */
+        setConfig: function (config) {
+            this._config = config;
+            // take new conf to use
+            this.refresh();
+        },
+
+        /**
+         * @public  @method _refresh
+         * Called after a configuration change. Implement if needed.
+         *
+         *
+         */
+        refresh: function () {},
+
+        /**
+         * @public @method hasUI
+         * Override if need be.
+         *
+         *
+         * @return {Boolean} false
+         */
+        hasUI: function () {
+            return false;
+        },
+
+        /**
+         * @public @method onEvent
          * Event is handled forwarded to correct #eventHandlers if found or
          * discarded* if not.
+         *
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         *
          */
         onEvent: function (event) {
             var me = this,
@@ -217,8 +368,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         }
     }, {
         /**
-         * @property {String[]} protocol
-         * @static
+         * @static @property {string[]} protocol
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        protocol: [
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
+        ]
     });

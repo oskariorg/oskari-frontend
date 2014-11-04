@@ -15,35 +15,36 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
      * @param {Oskari.mapframework.core.Core} core
      */
     function (core) {
+        var me = this;
 
-        this._core = core;
+        me._core = core;
 
         /*
          * All registered listeners in map key: event name value:
          * array of modules who are interested in this type of event
          */
-        this._listeners = [];
+        me._listeners = [];
 
         /* array of all registered modules */
-        this._modules = [];
-        this._modulesByName = {};
-        this._statefuls = {};
+        me._modules = [];
+        me._modulesByName = {};
+        me._statefuls = {};
 
         /* as of 2012-09-24 debug by default false */
-        this.debugRequests = false;
-        this.debugEvents = false;
-        this.requestEventLog = [];
-        this.requestEventStack = [];
+        me.debugRequests = false;
+        me.debugEvents = false;
+        me.requestEventLog = [];
+        me.requestEventStack = [];
 
         // TODO: move to some conf?
         /* as of 2012-09-24 debug by default false */
-        this.gatherDebugRequests = false;
-        this.maxGatheredRequestsAndEvents = 4096;
-        this.requestAndEventGather = [];
-        this._eventLoopGuard = 0;
+        me.gatherDebugRequests = false;
+        me.maxGatheredRequestsAndEvents = 4096;
+        me.requestAndEventGather = [];
+        me._eventLoopGuard = 0;
 
-        this._user = null;
-        this._ajaxUrl = null;
+        me._user = null;
+        me._ajaxUrl = null;
     }, {
 
         /**
@@ -101,6 +102,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
             /* forward warning to core */
             this._core.printWarn.apply(this._core, arguments);
         },
+
         /**
          * @method setUser
          *
@@ -112,6 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
         setUser: function (userData) {
             this._user = Oskari.clazz.create('Oskari.mapframework.domain.User', userData);
         },
+
         /**
          * @method getUser
          * Returns current user. See #setUser
@@ -134,6 +137,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
         setAjaxUrl: function (pUrl) {
             this._ajaxUrl = pUrl;
         },
+
         /**
          * @method getAjaxUrl
          * Returns global ajax url for the application. See #setAjaxUrl
@@ -142,7 +146,6 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
         getAjaxUrl: function () {
             return this._ajaxUrl;
         },
-
 
         /**
          * @method registerService
@@ -154,6 +157,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
         registerService: function (service) {
             this._core.registerService(service);
         },
+
         /**
          * Method for asking a registered service
          *
@@ -164,6 +168,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
         getService: function (type) {
             return this._core.getService(type);
         },
+
         /**
          * @method registerAsStateful
          * Registers given bundle instance to sandbox as stateful
@@ -177,6 +182,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
         registerAsStateful: function (pBundleId, pInstance) {
             this._statefuls[pBundleId] = pInstance;
         },
+
         /**
          * @method unregisterStateful
          * Unregisters given bundle instance from stateful bundles in sandbox
@@ -188,6 +194,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
             this._statefuls[pBundleId] = null;
             delete this._statefuls[pBundleId];
         },
+
         /**
          * @method getStatefulComponents
          * Returns an object that has references to stateful components (see
@@ -224,7 +231,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
             var me = this,
                 remainingModules = [],
                 m;
-            for (m = 0; m < me._modules.length; m++) {
+            for (m = 0; m < me._modules.length; m += 1) {
                 if (module === me._modules[m]) {
                     continue;
                 }
@@ -272,7 +279,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
                 return;
             }
 
-            for (d = 0; d < oldListeners.length; d++) {
+            for (d = 0; d < oldListeners.length; d += 1) {
                 if (oldListeners[d] === module) {
                     deleteIndex = d;
                     break;
@@ -325,6 +332,11 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
             var creatorName = null,
                 creatorComponent,
                 rv = null;
+
+            if (creator === null || creator === undefined) {
+                throw new TypeError('sandbox.request(): missing creator.');
+            }
+
             if (creator.getName !== null && creator.getName !== undefined) {
                 creatorName = creator.getName();
             } else {
@@ -367,9 +379,11 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
          * @return {Boolean} Returns true, if request was handled, false otherwise
          */
         requestByName: function (creator, requestName, requestArgs) {
-            this.printDebug('#!#!#! --------------> requestByName ' + requestName);
-            var requestBuilder = this.getRequestBuilder(requestName);
-            var request = requestBuilder.apply(this, requestArgs || []);
+            this.printDebug(
+                '#!#!#! --------------> requestByName ' + requestName
+            );
+            var requestBuilder = this.getRequestBuilder(requestName),
+                request = requestBuilder.apply(this, requestArgs || []);
             return this.request(creator, request);
         },
 
@@ -409,7 +423,10 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
                 me._core.setObjectCreator(request, creatorComponent);
 
                 if (me.gatherDebugRequests) {
-                    me._pushRequestAndEventGather(creatorComponent + '->Sandbox: ', me.getObjectName(request));
+                    me._pushRequestAndEventGather(
+                        creatorComponent + '->Sandbox: ',
+                        me.getObjectName(request)
+                    );
                 }
 
                 if (this.debugRequests) {
@@ -455,26 +472,38 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
             var eventName;
             if (!retainEvent) {
                 eventName = event.getName();
-                this._core.printDebug('Sandbox received notifyall for event \'' + eventName + '\'');
+                this._core.printDebug(
+                    'Sandbox received notifyall for event \'' + eventName + '\''
+                );
             }
 
             var modules = this._findModulesInterestedIn(event),
                 i,
                 module;
             if (!retainEvent) {
-                this._core.printDebug('Found ' + modules.length + ' interested modules');
+                this._core.printDebug(
+                    'Found ' + modules.length + ' interested modules'
+                );
             }
-            for (i = 0; i < modules.length; i++) {
+            for (i = 0; i < modules.length; i += 1) {
                 module = modules[i];
                 if (!retainEvent) {
-                    this._core.printDebug('Notifying module \'' + module.getName() + '\'.');
+                    this._core.printDebug(
+                        'Notifying module \'' + module.getName() + '\'.'
+                    );
 
                     if (this.gatherDebugRequests) {
-                        this._pushRequestAndEventGather('Sandbox->' + module.getName() + ':', eventName);
+                        this._pushRequestAndEventGather(
+                            'Sandbox->' + module.getName() + ':', eventName
+                        );
                     }
                 }
 
-                this._debugPushEvent(this.getObjectCreator(event), module, event);
+                this._debugPushEvent(
+                    this.getObjectCreator(event),
+                    module,
+                    event
+                );
                 module.onEvent(event);
                 this._debugPopEvent();
             }
@@ -524,7 +553,10 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
             size.height = jQuery(window).height();
             size.width = width;
 
-            this.printDebug('Got browser window size is: width: ' + size.width + ' px, height:' + size.height + ' px.');
+            this.printDebug(
+                'Got browser window size is: width: ' + size.width +
+                ' px, height:' + size.height + ' px.'
+            );
 
             return size;
         },
@@ -574,7 +606,10 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
          * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
          */
         addRequestHandler: function (requestName, handlerClsInstance) {
-            return this._core.addRequestHandler(requestName, handlerClsInstance);
+            return this._core.addRequestHandler(
+                requestName,
+                handlerClsInstance
+            );
         },
 
         /**
@@ -585,7 +620,10 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
          * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
          */
         removeRequestHandler: function (requestName, handlerInstance) {
-            return this._core.removeRequestHandler(requestName, handlerInstance);
+            return this._core.removeRequestHandler(
+                requestName,
+                handlerInstance
+            );
         },
 
         /**
@@ -637,7 +675,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
             if (!this.debugEvents) {
                 return;
             }
-            this._eventLoopGuard++;
+            this._eventLoopGuard += 1;
 
             if (this._eventLoopGuard > 64) {
                 throw 'Events Looped?';
@@ -664,7 +702,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
             if (!this.debugEvents) {
                 return;
             }
-            this._eventLoopGuard--;
+            this._eventLoopGuard -= 1;
             this.requestEventStack.pop();
         },
 
@@ -697,17 +735,29 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
          * Uses www.websequencediagrams.com to create the diagram.
          */
         popUpSeqDiagram: function () {
-            var seq_html = '<html><head></head><body><div class="wsd" wsd_style="modern-blue"><pre>',
+            var seq_html =
+                    '<html>' +
+                    '  <head></head>' +
+                    '  <body>' +
+                    '    <div class="wsd" wsd_style="modern-blue">' +
+                    '      <pre>',
                 seq_commands = '',
                 openedWindow,
                 x;
+
             for (x in this.requestAndEventGather) {
                 if (this.requestAndEventGather.hasOwnProperty(x)) {
                     seq_commands += this.requestAndEventGather[x].name + this.requestAndEventGather[x].request + '\n';
                 }
             }
             if (seq_commands !== '') {
-                seq_html += seq_commands + '</pre></div><script type="text/javascript" src="http://www.websequencediagrams.com/service.js"></script></body></html>';
+                seq_html +=
+                    seq_commands +
+                    '</pre>\n' +
+                    '    </div>' +
+                    '    <script type="text/javascript" src="http://www.websequencediagrams.com/service.js"></script>' +
+                    '  </body>' +
+                    '</html>';
                 openedWindow = window.open();
                 openedWindow.document.write(seq_html);
                 this.requestAndEventGather = [];
@@ -749,4 +799,5 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
             // property is not localized
             return property;
         }
-    });
+    }
+);
