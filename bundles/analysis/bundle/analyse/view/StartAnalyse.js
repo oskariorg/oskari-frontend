@@ -1561,6 +1561,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 targetParams,
                 me = this;
 
+console.log(".............");
+console.log(diffJoinKey);
+console.log(targetJoinKey);
             featureList = me.template.featureList.clone();
             featureList.attr('id', 'analyse-key-field');
             if ((me.differenceLayer)&&(targetLayer)) {
@@ -1573,6 +1576,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     targetJoinKey = targetParams.join_key;
                 //}
             }
+console.log("...");
+console.log(diffJoinKey);
+console.log(targetJoinKey);
             if ((diffJoinKey)&&(targetJoinKey)&&(diffJoinKey===targetJoinKey)) {
                 featureList.find('ul').append(diffJoinKey);
             } else {
