@@ -1972,7 +1972,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 differenceFieldA1 = container.find('input[name=analyse-layer1-field-property]:checked').val(),
                 differenceFieldB1 = container.find('input[name=analyse-layer2-field-property]:checked').val(),
                 keyField = container.find('input[name=analyse-key-field-property]:checked').val();
-
+                // Predefined key
+                if (typeof keyField === "undefined") {
+                    keyField = container.find('div#analyse-key-field > ul').text();
+                }
                 differenceLayerId = differenceLayerId && differenceLayerId.replace((this.id_prefix + 'layer_'), '');
 
             var methodSelections = {
