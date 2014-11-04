@@ -1,4 +1,5 @@
 .manageClassificationPlugin {
+  background-color: #FFF;
   z-index: 1000000 !important;
   max-width: 220px;
   padding: 0px;
@@ -7,10 +8,8 @@
 	position: absolute;
 	bottom: 8px;
 	right: 10px;
-	*/
-  cursor: pointer; }
+	*/ }
   .manageClassificationPlugin .content {
-    background-color: #FFF;
     font-size: 12px; }
     .manageClassificationPlugin .content select {
       padding: 0px;
@@ -32,6 +31,7 @@
     margin: 2px; }
   .manageClassificationPlugin div.classheader {
     color: #FFF;
+    cursor: pointer;
     background-color: #3c3c3c;
     padding: 4px 8px; }
     .manageClassificationPlugin div.classheader .header-icon {

@@ -162,7 +162,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                         me.plugin.getConfig().location.classes
                     )
                 );
-                //this.plugin.setLocation(this.plugin.getConfig().location.classes);
+
                 me.plugin.startPlugin(me.instance.sandbox);
                 if (me._publisher.toolLayoutEditMode && me.plugin.getElement()) {
                     me._publisher._makeDraggable(me.plugin.getElement());
