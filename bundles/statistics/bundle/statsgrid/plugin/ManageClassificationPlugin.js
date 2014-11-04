@@ -635,6 +635,7 @@ Oskari.clazz.define(
                 manualcls.find('input[type=button]').click(function (event) {
                     me._createColorDialog();
                 });
+
                 manualcls.find('input[name=breaksInput]').keypress(function (evt) {
                     if (evt.which === 13) {
                         me._state.manualBreaksInput = me.getElement().find('.manualBreaks').find('input[name=breaksInput]').val();
@@ -722,7 +723,6 @@ Oskari.clazz.define(
                 content.animate({
                     height: 'toggle'
                 }, 500);
-
             });
 
             // Hide content

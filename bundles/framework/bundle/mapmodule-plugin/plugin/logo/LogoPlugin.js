@@ -84,12 +84,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
         _createControlElement: function () {
             return jQuery(
                 '<div class="mapplugin logoplugin">' +
-                '  <div class="icon"></div>' +
                 '  <div class="terms">' +
-                '    <a href="JavaScript:void(0);"></a>' +
+                '    <a href="#" target="_blank"></a>' +
                 '  </div>' +
                 '  <div class="data-sources">' +
-                '    <a href="JavaScript:void(0);"></a>' +
+                '    <a href="#"></a>' +
                 '  </div>' +
                 '</div>'
             );
@@ -108,7 +107,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 termsUrl;
 
             if (conf) {
-                mapUrl =me.getSandbox().getLocalizedProperty(
+                mapUrl = me.getSandbox().getLocalizedProperty(
                     conf.mapUrlPrefix
                 );
                 termsUrl = me.getSandbox().getLocalizedProperty(conf.termsUrl);
@@ -119,25 +118,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             }
 
             me._createServiceLink(mapUrl);
-            me._createTermsLink(me._loc, termsUrl);
-            me._createDataSourcesLink(me._loc);
+            me._createTermsLink(termsUrl);
+            me._createDataSourcesLink();
         },
 
         _createServiceLink: function (mapUrl) {
             var me = this,
-                link = me.getElement().find('.icon'),
+                link,
                 linkParams;
 
+            me.getElement().find('.icon').remove();
+
             if (mapUrl) {
-                link.unbind('click');
-                link.bind('click', function () {
-                    if (!me.inLayerToolsEditMode()) {
-                        linkParams = me.getSandbox().generateMapLinkParameters();
-                        window.open(mapUrl + linkParams, '_blank');
-                        return false;
-                    }
-                });
+                linkParams = me.getSandbox().generateMapLinkParameters();
+                link = document.createElement('a');
+                link.href = mapUrl + linkParams;
+                link.target = '_blank';
+            } else {
+                link = document.createElement('div');
             }
+
+            link.className = 'icon';
+            me.getElement().prepend(link);
         },
 
         _createTermsLink: function (termsUrl) {
@@ -146,13 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
 
             if (termsUrl) {
                 link.html(me._loc.terms);
-                link.unbind('click');
-                link.bind('click', function () {
-                    if (!me.inLayerToolsEditMode()) {
-                        window.open(termsUrl, '_blank');
-                        return false;
-                    }
-                });
+                link.attr('href', termsUrl);
                 link.show();
             } else {
                 link.hide();

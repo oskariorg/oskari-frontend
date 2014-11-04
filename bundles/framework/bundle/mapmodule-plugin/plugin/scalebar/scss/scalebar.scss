@@ -1,5 +1,15 @@
 div.mapplugin.scalebar {
     /* 14px would be too big... */
 	font-size: 12px;
+    font-weight: bold;
     line-height: 13px;
+
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35);
+    /* text-shadow replacement for IE9 */
+    filter: unquote("DropShadow(Color=#FFFFFF99, OffX=1, OffY=1, Positive=1)");
+
+    div {
+        // Add a slight brightening to the bg so the scale is visible on dark backgrounds
+        background-color: rgba(255, 255, 255, 0.1);
+    }
 }

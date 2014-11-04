@@ -142,7 +142,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         _createEventHandlers: function () {
             var me = this;
             return {
-                'AfterMapMoveEvent': function (event) {
+                AfterMapMoveEvent: function (event) {
                     me._setZoombarValue(event.getZoom());
                 }
             };
