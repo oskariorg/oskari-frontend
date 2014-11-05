@@ -113,7 +113,12 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
         // Realtime
         me._realtime = false;
         me._refreshRate = null;
-        
+
+        // WMS, WMTS or WFS version
+        me._version = null;
+        // Spatial reference system
+        me._srs_name = null;
+
         // Admin params, applicable only for admin users
         me._admin = null;
 
@@ -1024,6 +1029,34 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
          */
         getRefreshRate: function() {
             return this._refreshRate;
+        },
+        /**
+         * @method setVersion
+         * @param {String} WMS, WMTS or WFS version
+         */
+        setVersion: function(version) {
+           this._version = version;
+        },
+        /**
+         * @method getVersion
+         * @return {String}
+         */
+        getVersion: function() {
+            return this._version;
+        },
+        /**
+         * @method setSrs_name
+         * @param {String} Spatial reference system
+         */
+        setSrs_name: function(srs_name) {
+            this._srs_name = srs_name;
+        },
+        /**
+         * @method getSrs_name
+         * @return {String}
+         */
+        getSrs_name: function() {
+            return this._srs_name;
         },
         /**
          * @method setGfiContent

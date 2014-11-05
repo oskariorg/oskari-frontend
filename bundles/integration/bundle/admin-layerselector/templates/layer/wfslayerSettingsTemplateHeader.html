@@ -15,6 +15,29 @@
     </div>
 <% } %>
 
+<% if(model.getId()){ %>
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-interface" class="add-layer-label"  title="<%= instance.getLocalization('admin').interfaceAddress %>"><%= instance.getLocalization('admin').interfaceAddress %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <div class="input-controls">
+            <input type="text" id="add-layer-interface" class="add-layer-input mid"
+                   placeholder="<%= instance.getLocalization('admin').interfaceAddress %>"
+                   value="<%= model.getInterfaceUrl() %>" readonly />
+            <input
+                    type="hidden"
+                    id="add-layer-srs_name"
+                    class="add-layer-input long"
+            <% if (model.getSrs_name()) { %>value="<%= model.getSrs_name() %>"<% } %>
+            />
+            <div class="icon-close mid"></div>
+        </div>
+    </div>
+
+</div>
+<% } %>
+
 <% if(capabilities) { %>
     <div class="add-layer-record capabilities">
         <div class="add-layer-label-area">

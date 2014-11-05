@@ -243,6 +243,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (newLayerConf.refreshRate) {
                 layer.setRefreshRate(newLayerConf.refreshRate);
             }
+            if (newLayerConf.version) {
+                layer.setVersion(newLayerConf.version);
+            }
+            if (newLayerConf.srs_name) {
+                layer.setSrs_name(newLayerConf.srs_name);
+            }
 
             if (newLayerConf.admin) {
                 layer.setAdmin(newLayerConf.admin);
@@ -741,6 +747,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             layer.setRealtime(mapLayerJson.realtime);
             layer.setRefreshRate(mapLayerJson.refreshRate);
             layer.setAdmin(mapLayerJson.admin);
+
+            layer.setVersion(mapLayerJson.version);
+            layer.setSrs_name(mapLayerJson.srs_name);
 
             // metadata 
             layer.setDataUrl(mapLayerJson.dataUrl);
