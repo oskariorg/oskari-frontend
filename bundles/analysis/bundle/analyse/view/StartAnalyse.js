@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             unionOptionTool: '<div class="tool ">' + '<input type="radio" name="union" />' + '<label></label></div>',
             layerUnionOptionTool: '<div class="tool"><input type="checkbox" name="layer_union" /><label></label></div>',
             differenceOptionTool: '<div class="tool ">' + '<label><input type="radio" name="difference" />' + '<span></span></label></div>',
-            title: '<div class="analyse_title_cont analyse_settings_cont"><div class="settings_buffer_label"></div><input class="settings_buffer_field" type="text"><select class="settings_buffer_units"></select></div>',
+            title: '<div class="analyse_title_cont analyse_settings_cont"><div class="settings_buffer_label"></div><input class="settings_buffer_field" type="text"><select id="oskari_analysis_analyse_view_start_analyse_settings_buffer_units" class="settings_buffer_units"></select></div>',
             title_name: '<div class="analyse_title_name analyse_settings_cont"><div class="settings_name_label"></div><input class="settings_name_field" type="text"></div>',
             title_color: '<div class="analyse_title_colcont analyse_output_cont"><div class="output_color_label"></div></div>',
             title_columns: '<div class="analyse_title_columns analyse_output_cont"><div class="columns_title_label"></div></div>',
@@ -353,6 +353,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var analyseTitle = me.template.title_name.clone();
             analyseTitle.find('.settings_name_label').html(me.loc.analyse_name.label);
             analyseTitle.find('.settings_name_field').attr({
+                'id': 'oskari_analysis_analyse_view_start_analyse_settings_name_field',
                 'value': name,
                 'placeholder': me.loc.analyse_name.tooltip
             });
@@ -703,6 +704,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             closeBtn.setHandler(function () {
                 me.instance.setAnalyseMode(false);
             });
+            closeBtn.setId('oskari_analysis_analyse_view_start_analyse_buttons_cancel');
             closeBtn.insertTo(buttonCont);
 
             saveBtn.setPrimary(false);
@@ -712,6 +714,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me._saveAnalyse(selections);
                 }
             });
+            saveBtn.setId('oskari_analysis_analyse_view_start_analyse_buttons_save');
             saveBtn.insertTo(buttonCont);
 
             analyseBtn.setTitle(this.loc.buttons.analyse);
@@ -720,6 +723,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 // Check parameters and continue to analyse action
                 me._analyseMap();
             });
+            analyseBtn.setId('oskari_analysis_analyse_view_start_analyse_buttons_analyse');
             analyseBtn.insertTo(buttonCont);
 
             return buttonCont;
@@ -734,11 +738,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _addAnalyseData: function (contentPanel, inserted_layer_id) {
             var me = this,
+                i,
                 layersContainer = contentPanel.getLayersContainer(),
                 sandbox = me.instance.getSandbox(),
                 layers = sandbox.findAllSelectedMapLayers(),
                 features = contentPanel.getFeatures(),
                 selectedLayer = me._getSelectedMapLayer(),
+                selectedLayerAvailable,
                 templateOpt = me.template.option,
                 templateIcons = me.template.icons_layer,
                 templateTempIcons = me.template.icons_temp_layer,
@@ -779,6 +785,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     return option;
                 })
                 .value();
+
+            // Check if selected layer is currently available
+            if (selectedLayer) {
+                selectedLayerAvailable = false;
+                for (i=0; i<layers.length; i++) {
+                    if (layers[i].getId() === selectedLayer.getId()) {
+                        selectedLayerAvailable = true;
+                        break;
+                    }
+                }
+                if (!selectedLayerAvailable) {
+                    selectedLayer = null;
+                }
+            }
 
             if (!selectedLayer && contentOptions.length) {
                 _.first(contentOptions).checked = 'checked';
@@ -916,6 +936,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     unit;
                 bufferTitle.find('.settings_buffer_label').html(me.loc.buffer_size.label);
                 bufferTitle.find('.settings_buffer_field').attr({
+                    'id': 'oskari_analysis_analyse_view_start_analyse_settings_buffer_field',
                     'value': '',
                     'placeholder': me.loc.buffer_size.tooltip
                 });
@@ -1455,7 +1476,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 j;
 
             me.differenceOptions = options;
-
+            me.differenceLayer = null;
             // First layer is selected outside this panel, so no selection to be done here
             me._addTitle(extraParams, loc.firstLayer);
             extraParams.append(jQuery('<span></span>').html((targetLayerOption ? targetLayerOption.label : '')));
@@ -1477,15 +1498,16 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 return function () {
                     var k;
                     // reset previous setting
-                    for (k = 0; k < me.differenceOptions.length; j += 1) {
+                    for (k = 0; k < me.differenceOptions.length; k += 1) {
                         me.differenceOptions[k].selected = false;
                     }
                     tool.selected = true;
                     me._addFeatureList(me._getLayerByPrefixedId(tool.id), jQuery('#analyse-layer2-field').find('ul'), 'analyse-layer2-field-property');
                     me.differenceLayer = me._getLayerByPrefixedId(tool.id);
+                    // Update the key list
+                    jQuery("div.analyse-featurelist#analyse-key-field").replaceWith(me._createJoinList(me._getSelectedMapLayer()));
                 };
             };
-
             for (i = 0, j = me.differenceOptions.length; i < j; i += 1) {
                 option = me.differenceOptions[i];
                 toolContainer = me.template.differenceOptionTool.clone();
@@ -1517,20 +1539,46 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // Second layer field selection
             me._addTitle(extraParams, loc.field);
-            if (me.differenceLayer && me.differenceLayer.getFields) {
-                featureList = me.template.featureList.clone();
-                featureList.attr('id', 'analyse-layer2-field');
-                me._addFeatureList(me.differenceLayer, featureList.find('ul'), 'analyse-layer2-field-property', firstField);
-                extraParams.append(featureList);
-            }
-
-            me._addTitle(extraParams, loc.keyField);
             featureList = me.template.featureList.clone();
-            featureList.attr('id', 'analyse-key-field');
-            me._addFeatureList(targetLayer, featureList.find('ul'), 'analyse-key-field-property');
+            featureList.attr('id', 'analyse-layer2-field');
+            if (me.differenceLayer && me.differenceLayer.getFields) {
+                me._addFeatureList(me.differenceLayer, featureList.find('ul'), 'analyse-layer2-field-property', firstField);
+            }
             extraParams.append(featureList);
 
+            me._addTitle(extraParams, loc.keyField);
+            extraParams.append(me._createJoinList(targetLayer));
+
             contentPanel.append(extraParams);
+        },
+
+        _createJoinList: function(targetLayer) {
+            // Check equal join keys
+            var diffJoinKey,
+                targetJoinKey,
+                featureList,
+                diffParams,
+                targetParams,
+                me = this;
+
+            featureList = me.template.featureList.clone();
+            featureList.attr('id', 'analyse-key-field');
+            if ((me.differenceLayer)&&(targetLayer)) {
+                diffParams = me.differenceLayer.getWpsLayerParams();
+                if (typeof diffParams !== "undefined") {
+                    diffJoinKey = diffParams.join_key;
+                }
+                targetParams = targetLayer.getWpsLayerParams();
+                if (typeof targetParams !== "undefined") {
+                    targetJoinKey = targetParams.join_key;
+                }
+            }
+            if ((diffJoinKey)&&(targetJoinKey)&&(diffJoinKey===targetJoinKey)) {
+                featureList.find('ul').append(diffJoinKey);
+            } else {
+                me._addFeatureList(targetLayer, featureList.find('ul'), 'analyse-key-field-property');
+            }
+            return featureList;
         },
 
         _addFeatureList: function (layer, container, name, preselectId) {
@@ -1539,7 +1587,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 featureListElement,
                 preselection = false,
                 serviceFields = me._getLayerServiceFields(layer);
-
 
             // Make sure the container is empty
             container.empty();
@@ -1571,6 +1618,21 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 container.append(featureListElement);
+            });
+            container.find('input:radio[name="'+name+'"]').on('change', function(){
+                // Update another radio button group
+                for (var i=1; i<3; i++) {
+                    var j = 2-(i+1)%2;
+                    if (jQuery(this).attr('name') === 'analyse-layer'+i+'-field-property') {
+                        var labels = me.mainPanel.find('input:radio[name="analyse-layer'+j+'-field-property"]').parent();
+                        var radios = labels.find('input:radio');
+                        radios.attr('checked',false);
+                        var spans = labels.find('span');
+                        var text = jQuery(this).parent().find('span').text();
+                        var selIndex = spans.index(labels.find('span:contains("'+text+'")'));
+                        jQuery(radios[selIndex]).attr('checked',true);
+                    }
+                }
             });
             return preselection ? preselectId : firstElement ? firstElement.find('input').val() : null;
         },
@@ -1918,7 +1980,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 differenceFieldA1 = container.find('input[name=analyse-layer1-field-property]:checked').val(),
                 differenceFieldB1 = container.find('input[name=analyse-layer2-field-property]:checked').val(),
                 keyField = container.find('input[name=analyse-key-field-property]:checked').val();
-
+                // Predefined key
+                if (typeof keyField === "undefined") {
+                    keyField = container.find('div#analyse-key-field > ul').text();
+                }
                 differenceLayerId = differenceLayerId && differenceLayerId.replace((this.id_prefix + 'layer_'), '');
 
             var methodSelections = {

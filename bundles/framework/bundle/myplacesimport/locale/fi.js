@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Omien aineistojen tuonti",
-            "description": "Voit tuoda omia aineistoja shp-, gpx- tai mif/mid-tiedostomuodossa zip-pakattuna tai kmz-tiedostomuodossa (pakattu kml).",
+            "description": "Voit tuoda omia aineistoja shp-, gpx- tai mif/mid-tiedostomuodossa zip-pakattuna tai kmz-tiedostomuodossa (pakattu kml). Tuotava tiedosto voi sisältää enintään 5000 kohdetta.",
             "actions": {
                 "cancel": "Peruuta",
                 "next": "Seuraava"

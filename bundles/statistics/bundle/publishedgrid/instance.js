@@ -363,6 +363,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
 
             if (me.gridVisible) {
                 gridHeight = totalHeight;
+                dataContainer.show();
             } else {
                 gridWidth = 0;
             }

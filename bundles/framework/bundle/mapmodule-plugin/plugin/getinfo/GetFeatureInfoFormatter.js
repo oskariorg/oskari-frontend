@@ -176,7 +176,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                             // Get localized name for attribute
                             // TODO this should only apply to omat tasot?
                             pluginLoc = this.getMapModule().getLocalization('plugin', true);
-                            myLoc = pluginLoc[this.__name];
+                            myLoc = pluginLoc[this._name];
                             localizedAttr = myLoc[attr];
                             labelCell.append(localizedAttr || attr);
                             row.append(labelCell);
@@ -249,7 +249,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                             // Get localized attribute name
                             // TODO this should only apply to omat tasot?
                             pluginLoc = this.getMapModule().getLocalization('plugin', true);
-                            myLoc = pluginLoc[this.__name];
+                            myLoc = pluginLoc[this._name];
                             localizedAttr = myLoc[objAttr];
                             value.append(localizedAttr || objAttr);
                             value.append(': ');

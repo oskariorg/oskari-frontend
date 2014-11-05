@@ -1687,7 +1687,13 @@ D         * @param {Object} classInfo ClassInfo
                             if (fn.indexOf('http') === -1) {
                                 fnWithPath = bundlePath + '/' + fn;
                             }
-                            srcFiles.files[fnWithPath] = def;
+                            // Don't load unneeded locale files if we're not in
+                            // packed mode
+                            if (p !== 'locales' || _isPackedMode() ||
+                                    def.lang === undefined ||
+                                    Oskari.getLang() === def.lang) {
+                                srcFiles.files[fnWithPath] = def;
+                            }
                         }
                     }
                 }

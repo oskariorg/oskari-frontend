@@ -5,10 +5,9 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugin',
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
      */
-
     function () {
         this.mapModule = null;
         this.pluginName = null;
@@ -234,6 +233,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
          * renders pop-up
          */
         _openDialog: function () {
+            alert("wee");
             var me = this,
                 sandbox = me._sandbox,
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),

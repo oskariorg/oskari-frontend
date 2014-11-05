@@ -3,7 +3,8 @@
  *
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.layerselector2.view.LayersTab',
 
     /**
      * @method create called automatically on construction
@@ -20,13 +21,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
         this.layerGroups = [];
         this.layerContainers = {};
         this.templates = {
-            'spinner': '<span class="spinner-text"></span>',
-            'shortDescription': '<div class="field-description"></div>',
-            'description': '<div><h4 class="indicator-msg-popup"></h4><p></p></div>',
-            'relatedKeywords': '<div class="related-keywords"></div>',
-            'keywordsTitle': '<div class="keywords-title"></div>',
-            'keywordContainer': '<a href="#"class="keyword-cont"><span class="keyword"></span></a>',
-            'keywordType': '<div class="type"></div>'
+            spinner: '<span class="spinner-text"></span>',
+            shortDescription: '<div class="field-description"></div>',
+            description: '<div>' +
+                '  <h4 class="indicator-msg-popup"></h4>' +
+                '  <p></p>' +
+                '</div>',
+            relatedKeywords: '<div class="related-keywords"></div>',
+            keywordsTitle: '<div class="keywords-title"></div>',
+            keywordContainer: '<a href="#"class="keyword-cont">' +
+                '  <span class="keyword"></span>' +
+                '</a>',
+            keywordType: '<div class="type"></div>'
         };
         this._createUI(id);
     }, {
@@ -93,12 +99,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             infoIcon.click(function (e) {
                 var desc = jQuery(me.templates.description),
                     dialog = Oskari.clazz.create(
-                        'Oskari.userinterface.component.Popup'),
+                        'Oskari.userinterface.component.Popup'
+                    ),
                     okBtn = Oskari.clazz.create(
-                        'Oskari.userinterface.component.Button');
+                        'Oskari.userinterface.component.buttons.OkButton'
+                    );
 
                 desc.find('p').text(me._locale.filter.description);
-                okBtn.setTitle(me._locale.buttons.ok);
                 okBtn.addClass('primary');
                 okBtn.setHandler(function () {
                     dialog.close(true);
@@ -141,7 +148,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             me.tabPanel.getContainer().append(oskarifield);
             oskarifield.find('.spinner-text').hide();
             // add id to search input
-            oskarifield.find('input').attr("id", 'oskari_layerselector2_search_input_tab_' + oskarifieldId);
+            oskarifield.find('input').attr(
+                'id',
+                'oskari_layerselector2_search_input_tab_' + oskarifieldId
+            );
 
 
             me.accordion = Oskari.clazz.create(
@@ -193,16 +203,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             //"use strict";
             // Filter by name
             me.filterLayers(keyword);
-            
+
             if (me.showSearchSuggestions) {
                 // User input has changed, clear suggestions
-                me.clearRelatedKeywordsPopup(keyword, jQuery(event.currentTarget).parents(
-                    '.oskarifield'));
+                me.clearRelatedKeywordsPopup(
+                    keyword,
+                    jQuery(event.currentTarget).parents('.oskarifield')
+                );
                 // get new suggestions if user input is long enough
                 me._relatedKeywordsPopup(keyword, event, me);
             }
         },
-        
+
         showLayerGroups: function (groups) {
             //"use strict";
             var me = this,
@@ -229,10 +241,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                 layers = group.getLayers();
                 layersLength = layers.length;
                 groupPanel = Oskari.clazz.create(
-                    'Oskari.userinterface.component.AccordionPanel');
+                    'Oskari.userinterface.component.AccordionPanel'
+                );
                 groupPanel.setTitle(group.getTitle() + ' (' + layersLength +
                     ')');
-                groupPanel.setId('oskari_layerselector2_accordionPanel_' + group.getTitle().replace(/[^a-z0-9\-_:\.]/gi, "-"));
+                groupPanel.setId(
+                    'oskari_layerselector2_accordionPanel_' +
+                    group.getTitle().replace(/[^a-z0-9\-_:\.]/gi, '-')
+                );
                 group.layerListPanel = groupPanel;
 
                 groupContainer = groupPanel.getContainer();
@@ -241,8 +257,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                     layerWrapper =
                         Oskari.clazz.create(
                             'Oskari.mapframework.bundle.layerselector2.view.Layer',
-                            layer, me.instance.sandbox, localization
-                    );
+                            layer,
+                            me.instance.sandbox,
+                            localization
+                        );
                     layerContainer = layerWrapper.getContainer();
                     groupContainer.append(layerContainer);
 
@@ -324,7 +342,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                 // empty result
                 loc = me.instance.getLocalization('errors');
                 me.accordion.showMessage(loc.noResults);
-                jQuery(me.accordion.ui).find('.accordionmsg').attr("id", 'oskari_layerselector2_inspiretab_search_no-result');
+                jQuery(me.accordion.ui).find('.accordionmsg').attr(
+                    'id',
+                    'oskari_layerselector2_inspiretab_search_no-result'
+                );
             } else {
                 me.accordion.removeMessage();
             }
@@ -343,7 +364,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             //"use strict";
             // clear only if sent keyword has changed or it is not null
             if (this.sentKeyword && this.sentKeyword !== keyword) {
-                oskarifield.find('.related-keywords').html("").hide();
+                oskarifield.find('.related-keywords').html('').hide();
             }
         },
 
@@ -363,7 +384,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             //"use strict";
             //event.preventDefault();
             var oskarifield = jQuery(event.currentTarget).parents(
-                '.oskarifield'),
+                    '.oskarifield'
+                ),
                 loc,
                 relatedKeywordsCont,
                 ajaxUrl;
@@ -384,16 +406,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
 
             ajaxUrl = this.instance.sandbox.getAjaxUrl();
             jQuery.ajax({
-                type: "GET",
+                type: 'GET',
                 dataType: 'json',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType(
-                            "application/j-son;charset=UTF-8");
+                            'application/j-son;charset=UTF-8');
                     }
                 },
-                url: ajaxUrl + 'action_route=SearchKeywords&keyword=' + encodeURIComponent(keyword) + '&lang=' + Oskari
-                    .getLang(),
+                url: ajaxUrl + 'action_route=SearchKeywords&keyword=' +
+                    encodeURIComponent(keyword) + '&lang=' + Oskari.getLang(),
                 success: function (pResp) {
                     me.relatedKeywords = pResp;
                     me._showRelatedKeywords(keyword, pResp, oskarifield);
@@ -414,6 +436,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
          *     Array to be checked
          * @param {String} val
          *     Value to be searched
+         * FIXME IE8 isn't supported anymore, just use forEach or some
          * IE8 doesn't have Array.indexOf so we use this...
          */
         _arrayContains: function (arr, val) {
@@ -442,6 +465,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             //"use strict";
             var me = this,
                 i;
+
             for (i = arr2.length - 1; i >= 0; i -= 1) {
                 if (!me._arrayContains(arr1, arr2[i])) {
                     arr1.push(arr2[i]);
@@ -499,7 +523,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             //"use strict";
             var me = this,
                 relatedKeywordsCont = me.getFilterField().getField().find(
-                    '.related-keywords'),
+                    '.related-keywords'
+                ),
                 i,
                 keyword,
                 keywordTmpl,
@@ -515,8 +540,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                     if (keyword.layers.length > 0) {
                         // check if we want to show matching layers instead of a suggestion
                         if (me._matchesIgnoreCase(keyword.type, 'syn') || (!me._isDefined(
-                            keyword.type) && me._containsIgnoreCase(
-                            keyword.keyword, userInput))) {
+                                keyword.type) && me._containsIgnoreCase(
+                                keyword.keyword, userInput))) {
                             // copy keyword layerids to ontologyLayers, avoid duplicates just because
                             if (ontologyLayers.size === 0) {
                                 ontologyLayers.concat(keyword.layers);
@@ -535,8 +560,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
 
 
             if (ontologySuggestions.length > 0) {
-                relatedKeywordsCont.prepend(jQuery(me.templates.keywordsTitle).text(
-                    me._locale.filter.didYouMean));
+                relatedKeywordsCont.prepend(
+                    jQuery(me.templates.keywordsTitle).text(
+                        me._locale.filter.didYouMean
+                    )
+                );
             } else {
                 // Why show an error if we can't find suggestions?
                 //relatedKeywordsCont.prepend(jQuery(me.templates.keywordsTitle).text(me._locale.errors.noResultsForKeyword));
@@ -554,8 +582,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                 keywordTmpl
                     .attr('data-id', keyword.id)
                     .attr('data-keyword', keyword.keyword)
-                    .find('.keyword').text(keyword.keyword.toLowerCase() + ' (' +
-                        keyword.layers.length + ')');
+                    .find('.keyword').text(
+                        keyword.keyword.toLowerCase() + ' (' +
+                        keyword.layers.length + ')'
+                    );
 
                 /* Disabled for now as the design document doesn't show these
                 if (keyword.type) {
@@ -567,7 +597,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
 
                 relatedKeywordsCont.append(keywordTmpl);
             }
-            if(ontologySuggestions.length) {
+            if (ontologySuggestions.length) {
                 relatedKeywordsCont.show();
             }
 
@@ -576,12 +606,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             me.filterLayers(userInput, ontologyLayers);
 
             // when clicked -> filter layers
-            relatedKeywordsCont.find('.keyword-cont').on("click", function (
-                event) {
-                var val = jQuery(event.currentTarget).attr("data-keyword");
-                me.getFilterField().setValue(val);
-                me._fireFiltering(val, event, me);
-            });
+            relatedKeywordsCont.find('.keyword-cont').on(
+                'click',
+                function (event) {
+                    var val = jQuery(event.currentTarget).attr('data-keyword');
+
+                    me.getFilterField().setValue(val);
+                    me._fireFiltering(val, event, me);
+                }
+            );
         },
 
         _showAllLayers: function () {
@@ -606,12 +639,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                 }
                 group.layerListPanel.setVisible(true);
                 group.layerListPanel.close();
-                group.layerListPanel.setTitle(group.getTitle() + ' (' + layers.length +
-                    ')');
+                group.layerListPanel.setTitle(
+                    group.getTitle() + ' (' + layers.length + ')'
+                );
             }
 
             this.accordion.removeMessage();
         },
+
         setLayerSelected: function (layerId, isSelected) {
             //"use strict";
             var layerCont = this.layerContainers[layerId];
@@ -619,6 +654,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                 layerCont.setSelected(isSelected);
             }
         },
+
         updateLayerContent: function (layerId, layer) {
             //"use strict";
             var layerCont = this.layerContainers[layerId];
@@ -626,4 +662,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                 layerCont.updateLayerContent(layer);
             }
         }
-    });
+    }
+);
