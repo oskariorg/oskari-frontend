@@ -1,11 +1,12 @@
 @mixin box-shadow($shadow...) {
-   -webkit-box-shadow: $shadow;
-   -moz-box-shadow: $shadow;
-   box-shadow: $shadow;
+    -webkit-box-shadow: $shadow;
+    -moz-box-shadow: $shadow;
+    box-shadow: $shadow;
 }
 
 div.oskariTabs {
     /* tab headers */
+    
     .tabsHeader {
         clear: both;
         font-weight: bold;
@@ -57,7 +58,7 @@ div.oskariTabs {
                 }
 
                 &.fill a {
-                   width: 100%;
+                    width: 100%;
                 }
 
                 a {
@@ -88,15 +89,15 @@ div.oskariTabs {
         }
 
     }
-
     /* "tab" content */
+    
     div.tabsContent {
         border: 1px solid #999;
         /*height: 90%;*/
     }
 
     div.tab-content {
-        padding : 10px;
+        padding: 10px;
         overflow: auto;
         clear: both;
     }

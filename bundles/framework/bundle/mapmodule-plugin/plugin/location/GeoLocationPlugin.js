@@ -51,7 +51,7 @@ Oskari.clazz.define(
             var me = this,
                 callback = function (lon, lat) {
                     // transform coordinates from browser projection to current
-                    var lonlat = me.getMapModule().transformCoordinates(
+                    var lonlat = me.getMapModule()._transformCoordinates(
                         new OpenLayers.LonLat(lon, lat),
                         'EPSG:4326'
                     );
