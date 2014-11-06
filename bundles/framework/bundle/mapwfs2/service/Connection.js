@@ -1,66 +1,74 @@
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.service.Connection
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Connection',
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.mapwfs2.service.Connection',
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
      *
      * @param {Object} config
      * @param {Object} plugin
+     *
      */
-
     function (config, plugin) {
-        this.config = config || {};
-        this.plugin = plugin;
-        this.cometd = jQuery.cometd;
+        var me = this;
 
-        this._connected = false;
-        this._errorSub = null;
+        me.config = config || {};
+        me.plugin = plugin;
+        me.cometd = jQuery.cometd;
 
-        this._connectionProblemWaitTime = 5000; // wait before say that we have disconnected (retry change)
+        me._connected = false;
+        me._errorSub = null;
+
+        me._connectionProblemWaitTime = 5000; // wait before say that we have disconnected (retry change)
 
         // config defaults
-        if (typeof this.config.lazy === "undefined") this.config.lazy = true;
-        this._lazy = this.config.lazy;
-        this._disconnectTime = this.config.disconnectTime || 30000;
-        this._backoffIncrement = this.config.backoffIncrement || 1000;
-        this._maxBackoff = this.config.maxBackoff || 60000;
-        this._maxNetworkDelay = this.config.maxNetworkDelay || 10000;
+        if (typeof me.config.lazy === 'undefined') {
+            me.config.lazy = true;
+        }
+        me._lazy = me.config.lazy;
+        me._disconnectTime = me.config.disconnectTime || 30000;
+        me._backoffIncrement = me.config.backoffIncrement || 1000;
+        me._maxBackoff = me.config.maxBackoff || 60000;
+        me._maxNetworkDelay = me.config.maxNetworkDelay || 10000;
 
-        this.browser = {};
-        this.getBrowser();
+        me.browser = {};
+        me.getBrowser();
 
-        this.cometURL = location.protocol + "//" +
-            this.config.hostname + this.config.port +
-            this.config.contextPath + "/cometd";
+        me.cometURL = location.protocol + '//' +
+            me.config.hostname + me.config.port +
+            me.config.contextPath + '/cometd';
 
-        this.cometd.configure({
-            url: this.cometURL,
+        me.cometd.configure({
+            url: me.cometURL,
             //logLevel : "debug",
-            backoffIncrement: this._backoffIncrement, // if connection can't be established add this time to waiting time before trying again (ms)
-            maxBackoff: this._maxBackoff, // maximum time of backoff (not incremented after reaching) (ms)
-            maxNetworkDelay: this._maxNetworkDelay // max request time before considering that the request failed (ms)
+            backoffIncrement: me._backoffIncrement, // if connection can't be established add this time to waiting time before trying again (ms)
+            maxBackoff: me._maxBackoff, // maximum time of backoff (not incremented after reaching) (ms)
+            maxNetworkDelay: me._maxNetworkDelay // max request time before considering that the request failed (ms)
         });
 
-
-        var self = this;
-        this.cometd.addListener('/meta/handshake', function () {
-            self._metaHandshake.apply(self, arguments);
-        });
-        this.cometd.addListener('/meta/connect', function () {
-            self._metaConnect.apply(self, arguments);
-        });
+        me.cometd.addListener(
+            '/meta/handshake',
+            function () {
+                me._metaHandshake.apply(me, arguments);
+            }
+        );
+        me.cometd.addListener(
+            '/meta/connect',
+            function () {
+                me._metaConnect.apply(me, arguments);
+            }
+        );
         //this.cometd.addListener('/service/**', this.getData); // debug
         //this.cometd.addListener('/meta/**', this.getData); // debug
 
-        if (!this._lazy) {
-            this.connect(); // init conn
+        if (!me._lazy) {
+            me.connect(); // init conn
         }
 
         // Disconnect when the page unloads
         jQuery(window).unload(function () {
-            self.disconnect();
+            me.disconnect();
         });
     }, {
         /**
@@ -104,36 +112,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Connection',
          * Get browser information
          */
         getBrowser: function () {
+            // FIXME get rid of jQuery.browser,
+            // use some plugin if you must
             this.browser = {
-                name: "",
-                versionNum: ""
+                name: 'unknown',
+                versionNum: parseInt(jQuery.browser.version, 10)
             };
 
             if (jQuery.browser.msie) {
-                this.browser.name = "msie";
+                this.browser.name = 'msie';
             } else if (jQuery.browser.chrome) {
-                this.browser.name = "chrome";
+                this.browser.name = 'chrome';
             } else if (jQuery.browser.mozilla) {
-                this.browser.name = "mozilla";
+                this.browser.name = 'mozilla';
             } else if (jQuery.browser.safari) {
-                this.browser.name = "safari";
-            } else {
-                this.browser.name = "unknown";
+                this.browser.name = 'safari';
             }
-            this.browser.versionNum = parseInt(jQuery.browser.version, 10);
         },
 
         updateLazyDisconnect: function (isWFSOpen) {
-            if (this.isLazy()) {
+            var me = this;
+
+            if (me.isLazy()) {
                 if (!isWFSOpen) {
-                    var self = this;
-                    this._disconnectTimer = setTimeout(function () {
-                        self.disconnect();
-                    }, this._disconnectTime);
+                    me._disconnectTimer = setTimeout(
+                        function () {
+                            me.disconnect();
+                        },
+                        me._disconnectTime
+                    );
                 } else {
-                    if (this._disconnectTimer) {
-                        clearTimeout(this._disconnectTimer);
-                        this._disconnectTimer = null;
+                    if (me._disconnectTimer) {
+                        clearTimeout(me._disconnectTimer);
+                        me._disconnectTimer = null;
                     }
                 }
             }
@@ -144,25 +155,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Connection',
          * @param {Object} message
          */
         _metaConnect: function (message) {
-            if (this.cometd.isDisconnected()) {
-                this._connected = false;
+            var me = this;
+
+            if (me.cometd.isDisconnected()) {
+                me._connected = false;
                 return;
             }
 
-            var wasConnected = this._connected;
-            this._connected = message.successful === true;
-            if (!wasConnected && this._connected) {
+            var wasConnected = me._connected;
+            me._connected = message.successful === true;
+            if (!wasConnected && me._connected) {
                 // clear errors
-                if (this._brokenConnectionTimer) {
-                    clearTimeout(this._brokenConnectionTimer);
-                    this._brokenConnectionTimer = null;
+                if (me._brokenConnectionTimer) {
+                    clearTimeout(me._brokenConnectionTimer);
+                    me._brokenConnectionTimer = null;
                 }
-                this.plugin.clearConnectionErrorTriggers();
-            } else if (wasConnected && !this._connected) {
-                var self = this;
-                this._brokenConnectionTimer = setTimeout(function () {
-                    self.plugin.showErrorPopup("connection_broken", null, true);
-                }, this._connectionProblemWaitTime);
+                me.plugin.clearConnectionErrorTriggers();
+            } else if (wasConnected && !me._connected) {
+                me._brokenConnectionTimer = setTimeout(
+                    function () {
+                        me.plugin.showErrorPopup(
+                            'connection_broken',
+                            null,
+                            true
+                        );
+                    },
+                    me._connectionProblemWaitTime
+                );
             }
         },
 
@@ -171,27 +190,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Connection',
          * @param {Object} handshake
          */
         _metaHandshake: function (handshake) {
-            var self = this;
+            var me = this;
             if (handshake.successful === true) {
                 // clear errors
-                if (this._connectionNotAvailableTimer) {
-                    clearTimeout(this._connectionNotAvailableTimer);
-                    this._connectionNotAvailableTimer = null;
+                if (me._connectionNotAvailableTimer) {
+                    clearTimeout(me._connectionNotAvailableTimer);
+                    me._connectionNotAvailableTimer = null;
                 }
 
-                this.cometd.batch(function () {
-                    self._errorSub = self.cometd.subscribe('/error', self.getError);
-                    self.plugin.getIO().subscribe();
-                    self.plugin.getIO().startup({
-                        "clientId": handshake.clientId,
-                        "browser": self.browser.name,
-                        "browserVersion": self.browser.versionNum
+                me.cometd.batch(function () {
+                    me._errorSub = me.cometd.subscribe(
+                        '/error',
+                        me.getError
+                    );
+                    me.plugin.getIO().subscribe();
+                    me.plugin.getIO().startup({
+                        clientId: handshake.clientId,
+                        browser: me.browser.name,
+                        browserVersion: me.browser.versionNum
                     });
                 });
             } else {
-                this._connectionNotAvailableTimer = setTimeout(function () {
-                    self.plugin.showErrorPopup("connection_not_available", null, true);
-                }, this._connectionProblemWaitTime);
+                me._connectionNotAvailableTimer = setTimeout(
+                    function () {
+                        me.plugin.showErrorPopup(
+                            'connection_not_available',
+                            null,
+                            true
+                        );
+                    },
+                    me._connectionProblemWaitTime
+                );
             }
         },
 
@@ -201,9 +230,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Connection',
          */
         getError: function (data) {
             var message = data.data.message,
-                layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
+                plugin = this.plugin,
+                layer = plugin.getSandbox().findMapLayerFromSelectedMapLayers(
+                    data.data.layerId
+                ),
                 once = data.data.once;
-            this.plugin.showErrorPopup(message, layer, once);
+
+            plugin.showErrorPopup(message, layer, once);
         }
 
         /**
@@ -211,7 +244,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Connection',
          * @param {Object} data
          */
         /*
-    , getData : function(data) {
+    , getData : function (data) {
         console.log("getData:", data);
     }
     */

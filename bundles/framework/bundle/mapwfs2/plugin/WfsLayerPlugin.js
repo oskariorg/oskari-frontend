@@ -162,6 +162,130 @@ Oskari.clazz.define(
             this.createTilesGrid();
         },
 
+        _createEventHandlers: function () {
+            var me = this;
+
+            return {
+                /**
+                 * @method AfterMapMoveEvent
+                 * @param {Object} event
+                 */
+                AfterMapMoveEvent: function (event) {
+                    if (me.getConfig() && me.getConfig().deferSetLocation) {
+                        me.getSandbox().printDebug(
+                            'setLocation deferred (to aftermapmove)'
+                        );
+                        return;
+                    }
+                    me.mapMoveHandler();
+                },
+
+                /**
+                 * @method AfterMapLayerAddEvent
+                 * @param {Object} event
+                 */
+                AfterMapLayerAddEvent: function (event) {
+                    me.mapLayerAddHandler(event);
+                },
+
+                /**
+                 * @method AfterMapLayerRemoveEvent
+                 * @param {Object} event
+                 */
+                AfterMapLayerRemoveEvent: function (event) {
+                    me.mapLayerRemoveHandler(event);
+                },
+
+                /**
+                 * @method WFSFeaturesSelectedEvent
+                 * @param {Object} event
+                 */
+                WFSFeaturesSelectedEvent: function (event) {
+                    me.featuresSelectedHandler(event);
+                },
+
+                /**
+                 * @method MapClickedEvent
+                 * @param {Object} event
+                 */
+                MapClickedEvent: function (event) {
+                    me.mapClickedHandler(event);
+                },
+
+                /**
+                 * @method AfterChangeMapLayerStyleEvent
+                 * @param {Object} event
+                 */
+                AfterChangeMapLayerStyleEvent: function (event) {
+                    me.changeMapLayerStyleHandler(event);
+                },
+
+                /**
+                 * @method MapLayerVisibilityChangedEvent
+                 * @param {Object} event
+                 */
+                MapLayerVisibilityChangedEvent: function (event) {
+                    me.mapLayerVisibilityChangedHandler(event);
+                    if (event.getMapLayer().hasFeatureData()) {
+                        if (me.getConfig() && me.getConfig().deferSetLocation) {
+                            me.getSandbox().printDebug(
+                                'sending deferred setLocation'
+                            );
+                            me.mapMoveHandler();
+                        }
+                    }
+                },
+
+                /**
+                 * @method AfterChangeMapLayerOpacityEvent
+                 * @param {Object} event
+                 */
+                AfterChangeMapLayerOpacityEvent: function (event) {
+                    me.afterChangeMapLayerOpacityEvent(event);
+                },
+
+                /**
+                 * @method MapSizeChangedEvent
+                 * @param {Object} event
+                 */
+                MapSizeChangedEvent: function (event) {
+                    me.mapSizeChangedHandler(event);
+                },
+
+                /**
+                 * @method WFSSetFilter
+                 * @param {Object} event
+                 */
+                WFSSetFilter: function (event) {
+                    me.setFilterHandler(event);
+                },
+
+                /**
+                 * @method WFSSetPropertyFilter
+                 * @param {Object} event
+                 */
+                WFSSetPropertyFilter: function (event) {
+                    me.setPropertyFilterHandler(event);
+                },
+
+                /**
+                 * @method WFSImageEvent
+                 * @param {Object} event
+                 */
+                WFSImageEvent: function (event) {
+                    me.drawImageTile(
+                        event.getLayer(),
+                        event.getImageUrl(),
+                        event.getBBOX(),
+                        event.getSize(),
+                        event.getLayerType(),
+                        event.isBoundaryTile(),
+                        event.isKeepPrevious()
+                    );
+                }
+            };
+        },
+
         _createRequestHandlers: function () {
             var me = this;
 
@@ -202,141 +326,20 @@ Oskari.clazz.define(
         },
 
         /**
-         * @static
-         * @property eventHandlers
-         */
-        eventHandlers: {
-            /**
-             * @method AfterMapMoveEvent
-             * @param {Object} event
-             */
-            AfterMapMoveEvent: function (event) {
-                if (this.getConfig() && this.getConfig().deferSetLocation) {
-                    this.getSandbox().printDebug(
-                        'setLocation deferred (to aftermapmove)'
-                    );
-                    return;
-                }
-                this.mapMoveHandler();
-            },
-
-            /**
-             * @method AfterMapLayerAddEvent
-             * @param {Object} event
-             */
-            AfterMapLayerAddEvent: function (event) {
-                this.mapLayerAddHandler(event);
-            },
-
-            /**
-             * @method AfterMapLayerRemoveEvent
-             * @param {Object} event
-             */
-            AfterMapLayerRemoveEvent: function (event) {
-                this.mapLayerRemoveHandler(event);
-            },
-
-            /**
-             * @method WFSFeaturesSelectedEvent
-             * @param {Object} event
-             */
-            WFSFeaturesSelectedEvent: function (event) {
-                this.featuresSelectedHandler(event);
-            },
-
-            /**
-             * @method MapClickedEvent
-             * @param {Object} event
-             */
-            MapClickedEvent: function (event) {
-                this.mapClickedHandler(event);
-            },
-
-            /**
-             * @method AfterChangeMapLayerStyleEvent
-             * @param {Object} event
-             */
-            AfterChangeMapLayerStyleEvent: function (event) {
-                this.changeMapLayerStyleHandler(event);
-            },
-
-            /**
-             * @method MapLayerVisibilityChangedEvent
-             * @param {Object} event
-             */
-            MapLayerVisibilityChangedEvent: function (event) {
-                this.mapLayerVisibilityChangedHandler(event);
-                if (event.getMapLayer().hasFeatureData()) {
-                    if (this.getConfig() && this.getConfig().deferSetLocation) {
-                        this.getSandbox().printDebug(
-                            'sending deferred setLocation'
-                        );
-                        this.mapMoveHandler();
-                    }
-                }
-            },
-
-            /**
-             * @method AfterChangeMapLayerOpacityEvent
-             * @param {Object} event
-             */
-            AfterChangeMapLayerOpacityEvent: function (event) {
-                this.afterChangeMapLayerOpacityEvent(event);
-            },
-
-            /**
-             * @method MapSizeChangedEvent
-             * @param {Object} event
-             */
-            MapSizeChangedEvent: function (event) {
-                this.mapSizeChangedHandler(event);
-            },
-
-            /**
-             * @method WFSSetFilter
-             * @param {Object} event
-             */
-            WFSSetFilter: function (event) {
-                this.setFilterHandler(event);
-            },
-
-            /**
-             * @method WFSSetPropertyFilter
-             * @param {Object} event
-             */
-            WFSSetPropertyFilter: function (event) {
-                this.setPropertyFilterHandler(event);
-            },
-
-            /**
-             * @method WFSImageEvent
-             * @param {Object} event
-             */
-            WFSImageEvent: function (event) {
-                this.drawImageTile(
-                    event.getLayer(),
-                    event.getImageUrl(),
-                    event.getBBOX(),
-                    event.getSize(),
-                    event.getLayerType(),
-                    event.isBoundaryTile(),
-                    event.isKeepPrevious()
-                );
-            }
-        },
-
-        /**
          * @method mapMoveHandler
          */
         mapMoveHandler: function () {
-            var srs = this.getSandbox().getMap().getSrsName(),
-                bbox = this.getSandbox().getMap().getExtent(),
-                zoom = this.getSandbox().getMap().getZoom(),
+            var me = this,
+                sandbox = me.getSandbox(),
+                map = sandbox.getMap(),
+                srs = map.getSrsName(),
+                bbox = map.getExtent(),
+                zoom = map.getZoom(),
                 geomRequest = false,
                 fids;
 
             // clean tiles for printing
-            this._printTiles = {};
+            me._printTiles = {};
 
             // update location
             var grid = this.getGrid();
@@ -345,9 +348,8 @@ Oskari.clazz.define(
             this.refreshCaches();
 
             var layerId,
-                layers = this.getSandbox().findAllSelectedMapLayers(),
+                layers = sandbox.findAllSelectedMapLayers(),
                 i,
-                j,
                 tiles,
                 x;
 
@@ -356,8 +358,8 @@ Oskari.clazz.define(
                     layers[i].setActiveFeatures([]); /// clean features lists
                     if (grid !== null && grid !== undefined) {
                         layerId = layers[i].getId();
-                        tiles = this.getNonCachedGrid(layerId, grid);
-                        this.getIO().setLocation(
+                        tiles = me.getNonCachedGrid(layerId, grid);
+                        me.getIO().setLocation(
                             layerId,
                             srs,
                             [
@@ -370,30 +372,31 @@ Oskari.clazz.define(
                             grid,
                             tiles
                         );
-                        this._tilesLayer.redraw();
+                        me._tilesLayer.redraw();
                     }
                 }
             }
 
             // update zoomLevel and highlight pictures
-            if (this.zoomLevel !== zoom) {
-                this.zoomLevel = zoom;
+            if (me.zoomLevel !== zoom) {
+                me.zoomLevel = zoom;
 
                 // TODO 472: if no connection or the layer is not registered, get highlight with URL
-                for (x = 0; x < this.activeHighlightLayers.length; x += 1) {
-                    if (this.getConnection().isLazy() &&
-                            !this.getConnection().isConnected() ||
-                            !this.getSandbox().findMapLayerFromSelectedMapLayers(this.activeHighlightLayers[x].getId())) {
+                for (x = 0; x < me.activeHighlightLayers.length; x += 1) {
+                    if (me.getConnection().isLazy() &&
+                            !me.getConnection().isConnected() ||
+                            !sandbox.findMapLayerFromSelectedMapLayers(me.activeHighlightLayers[x].getId())) {
 
-                        srs = this.getSandbox().getMap().getSrsName();
-                        bbox = this.getSandbox().getMap().getExtent();
-                        zoom = this.getSandbox().getMap().getZoom();
-                        fids = this.activeHighlightLayers[x].getClickedFeatureListIds();
-                        this.removeHighlightImages(
-                            this.activeHighlightLayers[x]
+                        // FIXME can't we just do this stuff once outside the loop?
+                        srs = map.getSrsName();
+                        bbox = map.getExtent();
+                        zoom = map.getZoom();
+                        fids = me.activeHighlightLayers[x].getClickedFeatureListIds();
+                        me.removeHighlightImages(
+                            me.activeHighlightLayers[x]
                         );
-                        this.getHighlightImage(
-                            this.activeHighlightLayers[x],
+                        me.getHighlightImage(
+                            me.activeHighlightLayers[x],
                             srs, [
                                 bbox.left,
                                 bbox.bottom,
@@ -406,20 +409,20 @@ Oskari.clazz.define(
                     }
                 }
 
-                for (j = 0; j < layers.length; j += 1) {
-                    if (layers[j].hasFeatureData()) {
-                        fids = this.getAllFeatureIds(layers[j]);
-                        this.removeHighlightImages(layers[j]);
-                        if (this._highlighted) {
-                            this.getIO().highlightMapLayerFeatures(
-                                layers[j].getId(),
+                layers.forEach(function (layer) {
+                    if (layer.hasFeatureData()) {
+                        fids = me.getAllFeatureIds(layer);
+                        me.removeHighlightImages(layer);
+                        if (me._highlighted) {
+                            me.getIO().highlightMapLayerFeatures(
+                                layer.getId(),
                                 fids,
                                 false,
                                 geomRequest
                             );
                         }
                     }
-                }
+                });
             }
         },
 
@@ -502,68 +505,65 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         featuresSelectedHandler: function (event) {
-            if (event.getMapLayer().hasFeatureData()) {
-                var layer = event.getMapLayer(),
-                    ids = layer.getClickedFeatureListIds(),
-                    tmpIds = event.getWfsFeatureIds(),
-                    geomRequest = true,
-                    isFound,
-                    i,
-                    j;
+            if (!event.getMapLayer().hasFeatureData()) {
+                // No featuredata available, return
+                return;
+            }
+            var me = this,
+                sandbox = me.getSandbox(),
+                map = sandbox.getMap(),
+                layer = event.getMapLayer(),
+                layerId = layer.getId(),
+                ids = layer.getClickedFeatureListIds(),
+                tmpIds = event.getWfsFeatureIds(),
+                geomRequest = true,
+                wfsFeatureIds = event.getWfsFeatureIds();
 
-                if (!event.isKeepSelection()) {
-                    layer.setClickedFeatureListIds(event.getWfsFeatureIds());
-                } else {
-                    isFound = false;
-                    for (i = 0; i < tmpIds.length; i += 1) {
-                        isFound = false;
-                        for (j = 0; j < ids.length; j += 1) {
-                            if (tmpIds[i] === ids[j]) {
-                                isFound = true;
-                                continue;
-                            }
-                        }
-                        if (!isFound) {
-                            ids.push(tmpIds[i]);
-                        }
-
+            if (!event.isKeepSelection()) {
+                layer.setClickedFeatureListIds(wfsFeatureIds);
+            } else {
+                // Merge tmpIds to ids
+                tmpIds.forEach(function (id) {
+                    if (ids.indexOf(id) === -1) {
+                        ids.push(id);
                     }
-                }
+                });
+            }
 
-                // remove highlight image
-                if (!event.isKeepSelection()) {
-                    this.removeHighlightImages();
-                }
+            // remove highlight image
+            if (!event.isKeepSelection()) {
+                me.removeHighlightImages();
+            }
 
-                // TODO 472: if no connection or the layer is not registered, get highlight with URl
-                if (this.getConnection().isLazy() &&
-                    !this.getConnection().isConnected() ||
-                    !this.getSandbox().findMapLayerFromSelectedMapLayers(layer.getId())) {
+            // TODO 472: if no connection or the layer is not registered, get highlight with URl
+            if (me.getConnection().isLazy() &&
+                !me.getConnection().isConnected() ||
+                !sandbox.findMapLayerFromSelectedMapLayers(layerId)) {
 
-                    var srs = this.getSandbox().getMap().getSrsName(),
-                        bbox = this.getSandbox().getMap().getExtent(),
-                        zoom = this.getSandbox().getMap().getZoom();
-                    layer.setClickedFeatureListIds(event.getWfsFeatureIds());
-                    this.getHighlightImage(
-                        layer,
-                        srs, [
-                            bbox.left,
-                            bbox.bottom,
-                            bbox.right,
-                            bbox.top
-                        ],
-                        zoom,
-                        event.getWfsFeatureIds()
-                    );
-                }
-                if (this._highlighted) {
-                    this.getIO().highlightMapLayerFeatures(
-                        layer.getId(),
-                        event.getWfsFeatureIds(),
-                        event.isKeepSelection(),
-                        geomRequest
-                    );
-                }
+                var srs = map.getSrsName(),
+                    bbox = map.getExtent(),
+                    zoom = map.getZoom();
+
+                layer.setClickedFeatureListIds(wfsFeatureIds);
+                this.getHighlightImage(
+                    layer,
+                    srs, [
+                        bbox.left,
+                        bbox.bottom,
+                        bbox.right,
+                        bbox.top
+                    ],
+                    zoom,
+                    wfsFeatureIds
+                );
+            }
+            if (me._highlighted) {
+                me.getIO().highlightMapLayerFeatures(
+                    layerId,
+                    wfsFeatureIds,
+                    event.isKeepSelection(),
+                    geomRequest
+                );
             }
         },
 
@@ -790,6 +790,7 @@ Oskari.clazz.define(
         removeMapLayerFromMap: function (layer) {
             var i,
                 removeLayers = this.getOLMapLayers(layer);
+
             for (i = 0; i < removeLayers.length; i += 1) {
                 removeLayers[i].destroy();
             }
@@ -1469,39 +1470,42 @@ Oskari.clazz.define(
         getHighlightImage: function (layer, srs, bbox, zoom, featureIds) {
 
             // helper function for visibleFields
-            var contains = function (a, obj) {
-                var i;
-                for (i = 0; i < a.length; i += 1) {
-                    if (a[i] == obj) {
-                        return true;
-                    }
-                }
-                return false;
-            };
+            var me = this,
+                sandbox = me.getSandbox(),
+                map = sandbox.getMap(),
+                contains = function (a, obj) {
+                    var i;
 
-            if (!contains(this.activeHighlightLayers, layer)) {
-                this.activeHighlightLayers.push(layer);
+                    for (i = 0; i < a.length; i += 1) {
+                        // FIXME use ===, check that it works
+                        if (a[i] == obj) {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+
+            if (!contains(me.activeHighlightLayers, layer)) {
+                me.activeHighlightLayers.push(layer);
             }
 
             var imageSize = {
-                width: this.getSandbox().getMap().getWidth(),
-                height: this.getSandbox().getMap().getHeight()
-            };
-
-            var params = '?layerId=' + layer.getId() +
-                '&session=' + this.getIO().getSessionID() +
-                '&type=' + 'highlight' +
-                '&srs=' + srs +
-                '&bbox=' + bbox.join(',') +
-                '&zoom=' + zoom +
-                '&featureIds=' + featureIds.join(',') +
-                '&width=' + imageSize.width +
-                '&height=' + imageSize.height;
-
-            var imageUrl = this.getIO().getRootURL() + '/image' + params;
+                    width: map.getWidth(),
+                    height: map.getHeight()
+                },
+                params = '?layerId=' + layer.getId() +
+                    '&session=' + me.getIO().getSessionID() +
+                    '&type=' + 'highlight' +
+                    '&srs=' + srs +
+                    '&bbox=' + bbox.join(',') +
+                    '&zoom=' + zoom +
+                    '&featureIds=' + featureIds.join(',') +
+                    '&width=' + imageSize.width +
+                    '&height=' + imageSize.height,
+                imageUrl = me.getIO().getRootURL() + '/image' + params;
 
             // send as an event forward to WFSPlugin (draws)
-            var event = this.getSandbox().getEventBuilder('WFSImageEvent')(
+            var event = sandbox.getEventBuilder('WFSImageEvent')(
                 layer,
                 imageUrl,
                 bbox,
@@ -1510,7 +1514,7 @@ Oskari.clazz.define(
                 false,
                 false
             );
-            this.getSandbox().notifyAll(event);
+            sandbox.notifyAll(event);
         },
 
         /**
