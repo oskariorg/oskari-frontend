@@ -16,9 +16,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      */
     function (instance, localization) {
         var me = this,
-            p,
-            f,
-            s;
+            p;
+
         me.isEnabled = false;
         me.instance = instance;
         me.loc = localization;
@@ -42,32 +41,31 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
         /* Analyse method options in localisations */
         me.methodOptions = me.loc.method.options;
-
         me.methodOptionsMap = {};
-        for (s = 0; s < me.methodOptions.length; s += 1) {
-            me.methodOptionsMap[me.methodOptions[s].id] = me.methodOptions[s];
-        }
+        me.methodOptions.forEach(function (option) {
+            me.methodOptionsMap[option.id] = option;
+        });
 
         /* parameter options listed in localisations */
         me.paramsOptions = me.loc.params.options;
         me.paramsOptionsMap = {};
-        for (f = 0; f < me.paramsOptions.length; f += 1) {
-            me.paramsOptionsMap[me.paramsOptions[f].id] = me.paramsOptions[f];
-        }
+        me.paramsOptions.forEach(function (option) {
+            me.paramsOptionsMap[option.id] = option;
+        });
 
         /* aggregate options listed in localisations */
         me.aggreOptions = me.loc.aggregate.options;
         me.aggreOptionsMap = {};
-        for (f = 0; f < me.aggreOptions.length; f += 1) {
-            me.aggreOptionsMap[me.aggreOptions[f].id] = me.aggreOptions[f];
-        }
+        me.aggreOptions.forEach(function (option) {
+            me.aggreOptionsMap[option.id] = option;
+        });
 
         /* spatial options listed in localisations for intersect */
         me.spatialOptions = me.loc.spatial.options;
         me.spatialOptionsMap = {};
-        for (f = 0; f < me.spatialOptions.length; f += 1) {
-            me.spatialOptionsMap[me.spatialOptions[f].id] = me.spatialOptions[f];
-        }
+        me.spatialOptions.forEach(function (option) {
+            me.spatialOptionsMap[option.id] = option;
+        });
 
         // content options listed in localisations
         me.contentOptionsMap = {};
@@ -102,36 +100,126 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
     }, {
         __templates: {
             content: '<div class="layer_data"></div>',
-            icons_layer: '<table class=layer-icons> <tr> <td><div class="layer-icon layer-wfs" title="Tietotuote"></div></td><td><div class="layer-info icon-info"></div></td><td><div class="filter icon-funnel-active"></div></td><td><div class="icon-close"></div></td></tr></table>',
+            icons_layer:
+                '<table class=layer-icons>' +
+                '  <tr>' +
+                '    <td>' +
+                '      <div class="layer-icon layer-wfs" title="Tietotuote"></div>' +
+                '    </td>' +
+                '    <td>' +
+                '      <div class="layer-info icon-info"></div>' +
+                '    </td>' +
+                '    <td>' +
+                '      <div class="filter icon-funnel-active"></div>' +
+                '    </td>' +
+                '    <td>' +
+                '      <div class="icon-close"></div>' +
+                '    </td>' +
+                '  </tr>' +
+                '</table>',
             icons_temp_layer: '<div class="icon-close"></div>',
-            tool: '<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>',
+            tool:
+                '<div class="tool ">' +
+                '  <input type="checkbox"/>' +
+                '  <label></label>' +
+                '</div>',
             buttons: '<div class="buttons"></div>',
             help: '<div class="help icon-info"></div>',
-            main: '<div class="basic_analyse">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '</div>',
+            main:
+                '<div class="basic_analyse">' +
+                '  <div class="header">' +
+                '    <div class="icon-close"></div>' +
+                '    <h3></h3>' +
+                '  </div>' +
+                '  <div class="content"></div>' +
+                '</div>',
             columnsContainer: '<div class="analyse-columns-container"></div>',
-            columnsDropdown: '<select class="analyse-columns-dropdown"></select>',
+            columnsDropdown:
+                '<select class="analyse-columns-dropdown"></select>',
             paramsOptionExtra: '<div class="extra_params"></div>',
-            paramsOptionTool: '<div class="tool ">' + '<input type="radio" name="params" />' + '<label></label></div>',
-            aggreOptionTool: '<div class="tool ">' + '<input type="checkbox" name="aggre" />' + '<label></label></div>',
-            spatialOptionTool: '<div class="tool ">' + '<input type="radio" name="spatial" />' + '<label></label></div>',
-            intersectOptionTool: '<div class="tool ">' + '<input type="radio" name="intersect" />' + '<label></label></div>',
-            unionOptionTool: '<div class="tool ">' + '<input type="radio" name="union" />' + '<label></label></div>',
-            layerUnionOptionTool: '<div class="tool"><input type="checkbox" name="layer_union" /><label></label></div>',
-            differenceOptionTool: '<div class="tool ">' + '<label><input type="radio" name="difference" />' + '<span></span></label></div>',
-            title: '<div class="analyse_title_cont analyse_settings_cont"><div class="settings_buffer_label"></div><input class="settings_buffer_field" type="text"><select id="oskari_analysis_analyse_view_start_analyse_settings_buffer_units" class="settings_buffer_units"></select></div>',
-            title_name: '<div class="analyse_title_name analyse_settings_cont"><div class="settings_name_label"></div><input class="settings_name_field" type="text"></div>',
-            title_color: '<div class="analyse_title_colcont analyse_output_cont"><div class="output_color_label"></div></div>',
-            title_columns: '<div class="analyse_title_columns analyse_output_cont"><div class="columns_title_label"></div></div>',
-            title_extra: '<div class="analyse_title_extra analyse_output_cont"><div class="extra_title_label"></div></div>',
+            option:
+                '<div class="analyse_option_cont analyse_settings_cont">' +
+                '  <label>' +
+                '    <input type="radio" name="selectedlayer" />' +
+                '    <span></span>' +
+                '  </label>' +
+                '</div>',
+            checkboxToolOptíon:
+                '<div class="tool ">' +
+                '  <label>' +
+                '    <input type="checkbox" />' +
+                '    <span></span>' +
+                '  </label>' +
+                '</div>',
+            radioToolOption:
+                '<div class="tool ">' +
+                '  <label>' +
+                '    <input type="radio" />' +
+                '    <span></span>' +
+                '  </label>' +
+                '</div>',
+            title:
+                '<div class="analyse_title_cont analyse_settings_cont">' +
+                '  <div class="settings_buffer_label"></div>' +
+                '  <input class="settings_buffer_field" type="text" />' +
+                '  <select id="oskari_analysis_analyse_view_start_analyse_settings_buffer_units" class="settings_buffer_units"></select>' +
+                '</div>',
+            title_name:
+                '<div class="analyse_title_name analyse_settings_cont">' +
+                '  <div class="settings_name_label"></div>' +
+                '  <input class="settings_name_field" type="text" />' +
+                '</div>',
+            title_color:
+                '<div class="analyse_title_colcont analyse_output_cont">' +
+                '  <div class="output_color_label"></div>' +
+                '</div>',
+            title_columns:
+                '<div class="analyse_title_columns analyse_output_cont">' +
+                '  <div class="columns_title_label"></div>' +
+                '</div>',
+            title_extra:
+                '<div class="analyse_title_extra analyse_output_cont">' +
+                '  <div class="extra_title_label"></div>' +
+                '</div>',
             icon_colors: '<div class="icon-menu"></div>',
-            random_colors: '<div class="analyse_randomize_colors tool"><input type="checkbox" name="randomize_colors" id="analyse_randomize_colors_input" /><label for="analyse_randomize_colors_input"></label></div>',
-            option: '<div class="analyse_option_cont analyse_settings_cont">' + '<input type="radio" name="selectedlayer" />' + '<label></label></div>',
-            methodOptionTool: '<div class="tool ">' + '<input type="radio" name="method" />' + '<label></label></div>',
-            featureListSelect: '<div class="analyse-select-featurelist"><a href="#">...</a></div>',
-            featureList: '<div class="analyse-featurelist"><ul></ul></div>',
-            featureListElement: '<li><label><input type="checkbox"/><span></span></label></li>',
-            featureListRadioElement: '<li><label><input type="radio"/><span></span></label></li>',
-            areasAndSectorsExtra: '<div class="analyse_areas_and_sectors_cont analyse_settings_cont"><label><span></span><input class="settings_area_size_field" type="text" pattern="[0-9]+"></label><select class="settings_area_size_units"></select><label><span></span><input class="settings_area_count_field" type="text" pattern="[0-9]+"></label><label><span></span><input class="settings_sector_count_field" type="text" pattern="^0*[1-9]$|^0*1[0-2]$"></label></div>',
+            featureListSelect:
+                '<div class="analyse-select-featurelist">' +
+                '  <a href="#">...</a>' +
+                '</div>',
+            featureList:
+                '<div class="analyse-featurelist">' +
+                '  <ul></ul>' +
+                '</div>',
+            featureListElement:
+                '<li>' +
+                '  <label>' +
+                '    <input type="checkbox" />' +
+                '    <span></span>' +
+                '  </label>' +
+                '</li>',
+            featureListRadioElement:
+                '<li>' +
+                '  <label>' +
+                '    <input type="radio" />' +
+                '    <span></span>' +
+                '  </label>' +
+                '</li>',
+            areasAndSectorsExtra:
+                '<div class="analyse_areas_and_sectors_cont analyse_settings_cont">' +
+                '  <label>' +
+                '    <span></span>' +
+                '    <input class="settings_area_size_field" type="text" pattern="[0-9]+" />' +
+                '  </label>' +
+                '  <select class="settings_area_size_units"></select>' +
+                '  <label>' +
+                '    <span></span>' +
+                '    <input class="settings_area_count_field" type="text" pattern="[0-9]+" />' +
+                '  </label>' +
+                '  <label>' +
+                '    <span></span>' +
+                '    <input class="settings_sector_count_field" type="text" pattern="^0*[1-9]$|^0*1[0-2]$" />' +
+                '  </label>' +
+                '</div>',
             difference: '<div class="analyse_difference_cont"></div>'
         },
 
@@ -143,28 +231,30 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         render: function (container) {
             var me = this,
-                content = this.template.main.clone();
+                content = me.template.main.clone();
 
-            this.mainPanel = content;
-            content.find('div.header h3').append(this.loc.title);
+            me.mainPanel = content;
+            content.find('div.header h3').append(me.loc.title);
 
             container.append(content);
             var contentDiv = content.find('div.content');
 
-            this.alert.insertTo(contentDiv);
+            me.alert.insertTo(contentDiv);
 
-            var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-            this.accordion = accordion;
+            var accordion = Oskari.clazz.create(
+                'Oskari.userinterface.component.Accordion'
+            );
+            me.accordion = accordion;
 
             var contentPanel = Oskari.clazz.create(
                 'Oskari.analysis.bundle.analyse.view.ContentPanel',
-                this
+                me
             );
-            this.contentPanel = contentPanel;
+            me.contentPanel = contentPanel;
 
-            var methodPanel = this._createMethodPanel(),
-                settingsPanel = this._createSettingsPanel(),
-                outputPanel = this._createOutputPanel();
+            var methodPanel = me._createMethodPanel(),
+                settingsPanel = me._createSettingsPanel(),
+                outputPanel = me._createOutputPanel();
 
             contentPanel.getDataPanel().open();
             contentPanel.getDrawToolsPanel().open();
@@ -179,28 +269,43 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // buttons
             // close
-            container.find('div.header div.icon-close').bind('click', function () {
-                me.instance.setAnalyseMode(false);
-            });
-            contentDiv.append(this._getButtons());
+            container.find('div.header div.icon-close').bind(
+                'click',
+                function () {
+                    me.instance.setAnalyseMode(false);
+                }
+            );
+            contentDiv.append(me._getButtons());
 
-            var inputs = this.mainPanel.find('input[type=text]');
+            var inputs = me.mainPanel.find('input[type=text]');
             inputs.focus(function () {
-                me.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+                me.instance.sandbox.postRequestByName(
+                    'DisableMapKeyboardMovementRequest'
+                );
             });
             inputs.blur(function () {
-                me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+                me.instance.sandbox.postRequestByName(
+                    'EnableMapKeyboardMovementRequest'
+                );
             });
             // bind help tags
-            var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', this.instance.sandbox);
-            helper.processHelpLinks(this.loc.help, content, this.loc.error.title, this.loc.error.nohelp);
+            var helper = Oskari.clazz.create(
+                'Oskari.userinterface.component.UIHelper',
+                me.instance.sandbox
+            );
+            helper.processHelpLinks(
+                me.loc.help,
+                content,
+                me.loc.error.title,
+                me.loc.error.nohelp
+            );
 
             /* progress */
             me.progressSpinner.insertTo(container);
 
-            this._addAnalyseData(contentPanel);
+            me._addAnalyseData(contentPanel);
             // Show the possible warning of exceeding the feature property count.
-            this.showInfos();
+            me.showInfos();
         },
         /**
          * Sets the filter JSON object for a given layer.
@@ -235,6 +340,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var ret = this._filterJsons[layer_id],
                 sandbox = this.instance.getSandbox(),
                 layer = sandbox.findMapLayerFromSelectedMapLayers(layer_id);
+
             if (!ret) {
                 // There's no user set values for the filter
                 ret = {};
@@ -251,6 +357,19 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
             return ret;
         },
+
+        _createLabel: function (option, toolContainer, className) {
+            // TODO does any option actually have width & height?
+            var label = option.label;
+            if (option.width && option.height) {
+                label =
+                    label + ' (' + option.width + ' x ' + option.height + 'px)';
+            }
+            toolContainer.find('label').attr({
+                'class': className
+            }).find('span').html(label);
+        },
+
         /**
          * @method _createMethodPanel
          * @private
@@ -259,12 +378,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _createMethodPanel: function () {
             var me = this,
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
+                panel = Oskari.clazz.create(
+                    'Oskari.userinterface.component.AccordionPanel'
+                ),
                 i,
                 option,
-                label,
                 toolContainer,
                 tooltipCont;
+
             panel.setTitle(this.loc.method.label);
             var contentPanel = panel.getContainer();
             // content
@@ -287,15 +408,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             for (i = 0; i < this.methodOptions.length; i += 1) {
                 option = this.methodOptions[i];
                 me.option_id = option.id;
-                toolContainer = this.template.methodOptionTool.clone();
-                label = option.label;
-                if (option.width && option.height) {
-                    label = label + ' (' + option.width + ' x ' + option.height + 'px)';
-                }
-                toolContainer.find('label').append(label).attr({
-                    'for': option.id,
-                    'class': 'method_radiolabel'
-                });
+                toolContainer = this.template.radioToolOption.clone();
+                toolContainer.find('input').attr('name', 'method');
+                me._createLabel(option, toolContainer, 'method_radiolabel');
+
                 if (option.selected) {
                     toolContainer.find('input').attr('checked', 'checked');
                 }
@@ -325,11 +441,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _createSettingsPanel: function () {
             var me = this,
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-            panel.setTitle(this.loc.settings.label);
-            var headerPanel = panel.getHeader(),
+                panel = Oskari.clazz.create(
+                    'Oskari.userinterface.component.AccordionPanel'
+                ),
+                headerPanel = panel.getHeader(),
                 contentPanel = panel.getContainer(),
                 tooltipCont = this.template.help.clone();
+
+            panel.setTitle(this.loc.settings.label);
             tooltipCont.attr('title', this.loc.settings.tooltip);
             tooltipCont.addClass('header-icon-info');
             headerPanel.append(tooltipCont);
@@ -347,11 +466,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Analyse NAME
             var selected_layers = me._selectedLayers(),
                 name = '_';
+
             if (selected_layers[0]) {
                 name = selected_layers[0].name.substring(0, 15) + name;
             }
             var analyseTitle = me.template.title_name.clone();
-            analyseTitle.find('.settings_name_label').html(me.loc.analyse_name.label);
+            analyseTitle.find('.settings_name_label').html(
+                me.loc.analyse_name.label
+            );
             analyseTitle.find('.settings_name_field').attr({
                 'id': 'oskari_analysis_analyse_view_start_analyse_settings_name_field',
                 'value': name,
@@ -372,49 +494,43 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _createColumnsSelector: function (columnsContainer, title) {
             var me = this,
-                columnsTitle = this.template.title_columns.clone(),
+                columnsTitle = me.template.title_columns.clone(),
                 i,
                 option,
-                label,
                 toolContainer;
+
             columnsTitle.find('.columns_title_label').html(title);
             columnsContainer.append(columnsTitle);
 
             var closureMagic = function (tool) {
                 return function () {
-                    var featureList = columnsContainer.find('.analyse-featurelist'),
-                        j;
                     // reset previous setting
-                    for (j = 0; j < me.paramsOptions.length; j += 1) {
-                        me.paramsOptions[j].selected = false;
-                    }
+                    me.paramsOptions.forEach(function (option) {
+                        option.selected = false;
+                    });
                     tool.selected = true;
 
-                    if (tool.id === 'oskari_analyse_select') {
-                        featureList.show();
-                    } else {
-                        featureList.hide();
-                    }
+                    // Show analyse featurelist if tool is analyse_select
+                    columnsContainer.find('.analyse-featurelist').toggle(
+                        tool.id === 'oskari_analyse_select'
+                    );
                 };
             };
 
-            for (i = 0; i < this.paramsOptions.length; i += 1) {
-                option = this.paramsOptions[i];
-                toolContainer = this.template.paramsOptionTool.clone();
-                label = option.label;
-                if (option.width && option.height) {
-                    label = label + ' (' + option.width + ' x ' + option.height + 'px)';
-                }
-                toolContainer.find('label').append(label).attr({
-                    'for': option.id,
-                    'class': 'params_radiolabel'
-                });
+            me.paramsOptions.forEach(function (option, i, options) {
+                toolContainer = me.template.radioToolOption.clone();
+                toolContainer.find('input').attr('name', 'params');
+                me._createLabel(option, toolContainer, 'params_radiolabel');
+
                 if (option.selected) {
-                    toolContainer.find('input[name=params]').attr('checked', 'checked');
+                    toolContainer.find('input[name=params]').attr(
+                        'checked',
+                        'checked'
+                    );
                 }
 
                 if (option.id === 'oskari_analyse_select') {
-                    this._appendFeatureList(toolContainer);
+                    me._appendFeatureList(toolContainer);
                 }
 
                 columnsContainer.append(toolContainer);
@@ -423,8 +539,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     'name': 'params',
                     'id': option.id
                 });
-                toolContainer.find('input[name=params]').change(closureMagic(option));
-            }
+                toolContainer.find('input[name=params]').change(
+                    closureMagic(option)
+                );
+            });
 
             // Check that params selection is allowed for the selected layer
             this._checkParamsSelection();
@@ -469,21 +587,22 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var featureListElement,
                 featureListList = featureList.find('ul');
 
-            me._getLayerServiceFields(selectedLayer).forEach(function (serviceField) {
-                featureListElement = me.template.featureListElement.clone();
-                featureListElement
-                    .find('input')
-                    .prop('name', 'analyse-feature-property')
-                    .val(serviceField.id);
+            me._getLayerServiceFields(selectedLayer).forEach(
+                function (serviceField) {
+                    featureListElement = me.template.featureListElement.clone();
+                    featureListElement
+                        .find('input')
+                        .prop('name', 'analyse-feature-property')
+                        .val(serviceField.id);
 
-                featureListElement
-                    .find('span')
-                    .html(serviceField.label);
-                featureListList.append(featureListElement);
+                    featureListElement
+                        .find('span')
+                        .html(serviceField.label);
+                    featureListList.append(featureListElement);
+                }
+            );
 
-            });
-
-            this._preselectProperties(featureListList);
+            me._preselectProperties(featureListList);
             featureListList
                 .find('li')
                 .change(function () {
@@ -551,26 +670,41 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _createOutputPanel: function () {
             var me = this,
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                panel = Oskari.clazz.create(
+                    'Oskari.userinterface.component.AccordionPanel'
+                ),
+                headerPanel = panel.getHeader(),
+                colorRandomizer = me.template.checkboxToolOptíon.clone(),
+                colorTitle = me.template.title_color.clone(),
+                contentPanel = panel.getContainer(),
+                tooltipCont = me.template.help.clone(),
+                visualizationForm = Oskari.clazz.create(
+                    'Oskari.userinterface.component.VisualizationForm'
+                );
+
+            colorRandomizer.find('input')
+                .addClass('analyse_randomize_colors')
+                .attr('name', 'randomize_colors')
+                .attr('id', 'analyse_randomize_colors_input');
+
             panel.setTitle(me.loc.output.label);
-            var headerPanel = panel.getHeader(),
-                contentPanel = panel.getContainer();
             // tooltip
-            var tooltipCont = me.template.help.clone();
             tooltipCont.attr('title', me.loc.output.tooltip);
             tooltipCont.addClass('header-icon-info');
             headerPanel.append(tooltipCont);
             // title
-            var colorTitle = me.template.title_color.clone();
             colorTitle.find('.output_color_label').html(me.loc.output.color_label);
             contentPanel.append(colorTitle);
             // Create random color picker checkbox
-            var colorRandomizer = me.template.random_colors.clone();
-            colorRandomizer.find('input[name=randomize_colors]').attr('checked', 'checked');
-            colorRandomizer.find('label').addClass('params_checklabel').html(me.loc.output.random_color_label);
+            colorRandomizer.find('input[name=randomize_colors]').attr(
+                'checked',
+                'checked'
+            );
+            colorRandomizer.find('label').addClass('params_checklabel').html(
+                me.loc.output.random_color_label
+            );
             contentPanel.append(colorRandomizer);
 
-            var visualizationForm = Oskari.clazz.create('Oskari.userinterface.component.VisualizationForm');
             me.visualizationForm = visualizationForm;
             contentPanel.append(me.visualizationForm.getForm());
 
@@ -632,6 +766,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         _selectedLayers: function () {
             return this._getLayerOptions(true, false, true);
         },
+
         /**
          * @method _columnSelector
          * @private
@@ -704,7 +839,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             closeBtn.setHandler(function () {
                 me.instance.setAnalyseMode(false);
             });
-            closeBtn.setId('oskari_analysis_analyse_view_start_analyse_buttons_cancel');
+            closeBtn.setId(
+                'oskari_analysis_analyse_view_start_analyse_buttons_cancel'
+            );
             closeBtn.insertTo(buttonCont);
 
             saveBtn.setPrimary(false);
@@ -714,7 +851,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     me._saveAnalyse(selections);
                 }
             });
-            saveBtn.setId('oskari_analysis_analyse_view_start_analyse_buttons_save');
+            saveBtn.setId(
+                'oskari_analysis_analyse_view_start_analyse_buttons_save'
+            );
             saveBtn.insertTo(buttonCont);
 
             analyseBtn.setTitle(this.loc.buttons.analyse);
@@ -723,7 +862,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 // Check parameters and continue to analyse action
                 me._analyseMap();
             });
-            analyseBtn.setId('oskari_analysis_analyse_view_start_analyse_buttons_analyse');
+            analyseBtn.setId(
+                'oskari_analysis_analyse_view_start_analyse_buttons_analyse'
+            );
             analyseBtn.insertTo(buttonCont);
 
             return buttonCont;
@@ -788,13 +929,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // Check if selected layer is currently available
             if (selectedLayer) {
-                selectedLayerAvailable = false;
-                for (i=0; i<layers.length; i++) {
-                    if (layers[i].getId() === selectedLayer.getId()) {
-                        selectedLayerAvailable = true;
-                        break;
-                    }
-                }
+                selectedLayerAvailable = layers.some(function (layer) {
+                    return layers.getId() === selectedLayer.getId();
+                });
                 if (!selectedLayerAvailable) {
                     selectedLayer = null;
                 }
@@ -803,7 +940,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (!selectedLayer && contentOptions.length) {
                 _.first(contentOptions).checked = 'checked';
             }
-
 
             contentOptionsMap = _.foldl(contentOptions, function (map, option) {
                 map[option.id] = option;
@@ -923,69 +1059,27 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @method _addExtraParameters
          * @private
          * Add parameters data UI according to method
-         * @param {String} method  analyse method
+         * @param {String} prefixedMethod analyse method
          */
-        _addExtraParameters: function (contentPanel, method) {
+        _addExtraParameters: function (contentPanel, prefixedMethod) {
             var me = this,
                 extra = contentPanel.find('.extra_params'),
-                prefix = me.id_prefix;
+                prefix = me.id_prefix,
+                method;
 
-            if (method === prefix + 'buffer') {
-                var bufferTitle = me.template.title.clone(),
-                    bufferUnitSelect = bufferTitle.find('select.settings_buffer_units'),
-                    unit;
-                bufferTitle.find('.settings_buffer_label').html(me.loc.buffer_size.label);
-                bufferTitle.find('.settings_buffer_field').attr({
-                    'id': 'oskari_analysis_analyse_view_start_analyse_settings_buffer_field',
-                    'value': '',
-                    'placeholder': me.loc.buffer_size.tooltip
-                });
-                for (unit in me.bufferUnits) {
-                    if (me.bufferUnits.hasOwnProperty(unit)) {
-                        bufferUnitSelect.append(
-                            '<option value="' + unit + '">' +
-                                me.loc.buffer_units[unit] +
-                                '</option>'
-                        );
-                    }
-                }
+            if (prefixedMethod.indexOf(prefix) !== 0) {
+                // We only handle methods that start with the prefix, so we
+                // might as well return here if prefix isn't there...
+                me.instance.getSandbox().printWarn(
+                    'StartAnalyse._addExtraParameters(): unprefixed method:',
+                    prefixedMethod
+                );
+                return;
+            }
 
-                extra.append(bufferTitle);
-
-            } else if (method === prefix + 'aggregate') {
-                // sum, count, min, max, med
-                me._aggregateExtra(extra);
-
-            } else if (method === prefix + 'aggregateNumeric') {
-                // sum, count, min, max, med
-                me._aggregateExtra(extra);
-
-            } else if (method === prefix + 'aggregateText') {
-                // sum, count, min, max, med
-                me._aggregateExtraText(extra);
-
-            } else if (method === prefix + 'clip') {
-                // clipping layer selection
-                me._intersectExtra(extra, false);
-
-            } else if (method === prefix + 'intersect') {
-                // intersecting layer selection
-                me._intersectExtra(extra);
-
-            } else if (method === prefix + 'union') {
-                // union input 2 layer selection
-                // deprecated  me._unionExtra(extra);
-
-            } else if (method === prefix + 'layer_union') {
-                // unfiy two or more analyse layers
-                me._layerUnionExtra(extra);
-
-            } else if (method === prefix + 'areas_and_sectors') {
-                me._areasAndSectorsExtra(extra);
-
-            } else if (method === prefix + 'difference') {
-                me._diffExtra(extra);
-
+            method = prefixedMethod.substring(prefix.length);
+            if (me.extraParamBuilders[method]) {
+                me.extraParamBuilders[method].call(me, me, extra);
             }
         },
 
@@ -1004,238 +1098,324 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         /**
-         * @method _aggregateExtra
-         * @private
-         ** Add extra parameters for params UI according to method aggregate
-         * @param {jQuery} contentPanel  div to append extra params
+         * These add extra parameters to the UI
          */
-        _aggregateExtra: function (contentPanel) {
-            var me = this,
-                i,
-                option,
-                toolContainer,
-                label;
-            // Title
-            me._addTitle(contentPanel, me.loc.aggregate.label);
+        extraParamBuilders: {
+            /**
+             * @private @method buffer
+             * Add extra parameters for params UI according to method buffer
+             *
+             * @param {jQuery} contentPanel  div to append extra params
+             *
+             */
+            buffer: function (me, contentPanel) {
+                var bufferTitle = me.template.title.clone(),
+                    bufferUnitSelect = bufferTitle.find(
+                        'select.settings_buffer_units'
+                    ),
+                    unit;
 
-            // sum, count, min, max, med
-            var closureMagic = function (tool) {
-                return function () {
-                    var j;
-                    // reset previous setting
-                    for (j = 0; j < me.aggreOptions.length; j += 1) {
-                        me.aggreOptions[j].selected = false;
+                bufferTitle.find('.settings_buffer_label').html(
+                    me.loc.buffer_size.label
+                );
+                bufferTitle.find('.settings_buffer_field').attr({
+                    'id': 'oskari_analysis_analyse_view_start_analyse_settings_buffer_field',
+                    'value': '',
+                    'placeholder': me.loc.buffer_size.tooltip
+                });
+                for (unit in me.bufferUnits) {
+                    if (me.bufferUnits.hasOwnProperty(unit)) {
+                        bufferUnitSelect.append(
+                            '<option value="' + unit + '">' +
+                            me.loc.buffer_units[unit] +
+                            '</option>'
+                        );
                     }
-                    tool.selected = true;
+                }
 
+                contentPanel.append(bufferTitle);
+            },
+
+            /**
+             * @method aggregate
+             * @private
+             ** Add extra parameters for params UI according to method aggregate
+             * @param {jQuery} contentPanel  div to append extra params
+             */
+            aggregate: function (me, contentPanel) {
+                var i,
+                    option,
+                    toolContainer;
+                // Title
+                me._addTitle(contentPanel, me.loc.aggregate.label);
+
+                // sum, count, min, max, med
+                var closureMagic = function (tool) {
+                    return function () {
+                        me.aggreOptions.forEach(function (option) {
+                            option.selected = false;
+                        });
+                        tool.selected = true;
+                    };
                 };
-            };
 
-            for (i = 0; i < this.aggreOptions.length; i += 1) {
-                option = this.aggreOptions[i];
-                toolContainer = this.template.aggreOptionTool.clone();
-                label = option.label;
-                if (option.width && option.height) {
-                    label = label + ' (' + option.width + ' x ' + option.height + 'px)';
-                }
-                toolContainer.find('label').append(label).attr({
-                    'for': option.id,
-                    'class': 'params_radiolabel'
-                });
-                if (i !== this.aggreOptions.length - 1) {
-                    toolContainer.find('input').attr('checked', 'checked');
-                }
+                me.aggreOptions.forEach(function (option, i, options) {
+                    toolContainer = me.template.checkboxToolOptíon.clone();
+                    toolContainer.find('input').attr('name', 'aggre');
+                    me._createLabel(option, toolContainer, 'params_radiolabel');
 
-                contentPanel.append(toolContainer);
-                toolContainer.find('input').attr({
-                    'value': option.id,
-                    'name': 'aggre',
-                    'id': option.id
-                });
-                toolContainer.find('input').change(closureMagic(option));
-
-                // Disable last one, if no no data
-                if (i === this.aggreOptions.length - 1) {
-                    if (this._getNoDataValue()) {
-                        toolContainer.find('input').prop('disabled', false);
+                    if (i !== options.length - 1) {
                         toolContainer.find('input').attr('checked', 'checked');
-                    } else {
-                        toolContainer.find('input').removeAttr('checked');
-                        toolContainer.find('input').prop('disabled', true);
                     }
-                }
-            }
 
-        },
+                    contentPanel.append(toolContainer);
+                    toolContainer.find('input').attr({
+                        'value': option.id,
+                        'name': 'aggre',
+                        'id': option.id
+                    });
+                    toolContainer.find('input').change(closureMagic(option));
 
-        /**
-         * @method _aggregateExtraText
-         * @private
-         ** Add extra parameters for params UI according to method aggregate
-         * @param {jQuery} contentPanel  div to append extra params
-         */
-        _aggregateExtraText: function (contentPanel) {
-            var me = this,
-                text_parm_len = 1,
-                i,
-                option,
-                toolContainer,
-                label;
-
-            // Title
-            me._addTitle(contentPanel, me.loc.aggregate.label);
-
-            // sum, count, min, max, med
-            var closureMagic = function (tool) {
-                return function () {
-                    var j;
-                    // reset previous setting
-                    for (j = 0; j < text_parm_len; j += 1) {
-                        me.aggreOptions[j].selected = false;
+                    // Disable last one, if no no data
+                    if (i === options.length - 1) {
+                        if (me._getNoDataValue()) {
+                            toolContainer.find('input').prop('disabled', false);
+                            toolContainer.find('input').attr('checked', 'checked');
+                        } else {
+                            toolContainer.find('input').removeAttr('checked');
+                            toolContainer.find('input').prop('disabled', true);
+                        }
                     }
-                    tool.selected = true;
-
-                };
-            };
-
-            for (i = 0; i < text_parm_len; i += 1) {
-                option = this.aggreOptions[i];
-                toolContainer = this.template.aggreOptionTool.clone();
-                label = option.label;
-                if (option.width && option.height) {
-                    label = label + ' (' + option.width + ' x ' + option.height + 'px)';
-                }
-                toolContainer.find('label').append(label).attr({
-                    'for': option.id,
-                    'class': 'params_radiolabel'
                 });
+            },
 
-                toolContainer.find('input').attr('checked', 'checked');
+            aggregateNumeric: function (me, contentPanel) {
+                return me.extraParamBuilders.aggregate(contentPanel);
+            },
 
-                contentPanel.append(toolContainer);
-                toolContainer.find('input').attr({
-                    'value': option.id,
-                    'name': 'aggre',
-                    'id': option.id
-                });
-                toolContainer.find('input').change(closureMagic(option));
-            }
+            /**
+             * @method aggregateText
+             * @private
+             ** Add extra parameters for params UI according to method aggregate
+             * @param {jQuery} contentPanel  div to append extra params
+             */
+            aggregateText: function (me, contentPanel) {
+                var text_parm_len = 1,
+                    i,
+                    option,
+                    toolContainer;
 
-        },
+                // Title
+                me._addTitle(contentPanel, me.loc.aggregate.label);
 
-        /**
-         * @method _intersectExtra
-         * @private
-         * Add extra parameters for params UI according to method needs
-         * @param {jQuery} contentPanel  div to append extra params
-         * @param {boolean} full define if full or limited set of choices is shown
-         */
-        _intersectExtra: function (contentPanel, full) {
-            var me = this;
-            // Set radiobuttons for selecting intersecting layer
-            var options = me._getLayerOptions(false, true, false),
-                option,
-                optionChecked,
-                f,
-                showSpatial = true;
-
-            // Show also spatial operator choice
-            if (typeof full !== 'undefined') {
-                showSpatial = full;
-            }
-
-            me.intersectOptions = options;
-            me.intersectOptionsMap = {};
-
-            for (f = 0; f < me.intersectOptions.length; f += 1) {
-                me.intersectOptionsMap[me.intersectOptions[f].id] = me.intersectOptions[f];
-            }
-
-            var targetLayer = _.find(options, {'data': true}),
-                targetLayerElem = jQuery('<span></span>'),
-                i,
-                toolContainer,
-                label;
-
-            me._addTitle(contentPanel, me.loc.intersect.target);
-            targetLayerElem.html((targetLayer ? targetLayer.label : ''));
-            contentPanel.append(targetLayerElem);
-
-            me._addTitle(contentPanel, me.loc.intersect.label);
-
-            var closureMagic = function (tool) {
-                return function () {
-                    var j;
-                    // reset previous setting
-                    for (j = 0; j < me.intersectOptions.length; j += 1) {
-                        me.intersectOptions[j].selected = false;
-                    }
-                    tool.selected = true;
-
-                };
-            };
-
-            for (i = 0; i < me.intersectOptions.length; i += 1) {
-                optionChecked = (i === 0 ? 'checked' : undefined);
-                option = me.intersectOptions[i];
-                toolContainer = me.template.intersectOptionTool.clone();
-                label = option.label;
-                toolContainer.find('label').append(label).attr({
-                    'for': 'intersect_' + option.id,
-                    'class': 'params_radiolabel'
-                });
-                // Preselect option if there's only 2 in total (one of them will be hidden below)
-                if (me.intersectOptions.length === 2) {
-                    option.selected = true;
-                }
-                // Do not show option if it is selected as analysis data
-                if (option.data) {
-                    toolContainer.hide();
-                    option.selected = false;
-                }
-                if (option.selected) {
-                    toolContainer.find('input').attr('checked', 'checked');
-                }
-                contentPanel.append(toolContainer);
-                toolContainer.find('input').attr({
-                    'value': option.id,
-                    'name': 'intersect',
-                    'id': 'intersect_' + option.id,
-                    'checked': optionChecked
-                });
-                toolContainer.find('input').change(closureMagic(option));
-            }
-
-            // Show spatial operator choice
-            if (showSpatial) {
-                //title spatial operator
-                var titlespa = this.template.title_extra.clone();
-                titlespa.find('.extra_title_label').html(this.loc.spatial.label);
-                contentPanel.append(titlespa);
-
-                var selectSpatial = function (tool) {
+                // sum, count, min, max, med
+                var closureMagic = function (tool) {
                     return function () {
                         var j;
                         // reset previous setting
-                        for (j = 0; j < me.spatialOptions.length; j += 1) {
-                            me.spatialOptions[i].selected = false;
+                        for (j = 0; j < text_parm_len; j += 1) {
+                            me.aggreOptions[j].selected = false;
                         }
                         tool.selected = true;
 
                     };
                 };
 
-                // spatial operators
-                for (i = 0; i < this.spatialOptions.length; i += 1) {
-                    option = this.spatialOptions[i];
-                    toolContainer = this.template.spatialOptionTool.clone();
+                for (i = 0; i < text_parm_len; i += 1) {
+                    option = me.aggreOptions[i];
+                    toolContainer = me.template.checkboxToolOptíon.clone();
+                    toolContainer.find('input').attr('name', 'aggre');
+                    me._createLabel(option, toolContainer, 'params_radiolabel');
+
+                    toolContainer.find('input').attr('checked', 'checked');
+
+                    contentPanel.append(toolContainer);
+                    toolContainer.find('input').attr({
+                        'value': option.id,
+                        'name': 'aggre',
+                        'id': option.id
+                    });
+                    toolContainer.find('input').change(closureMagic(option));
+                }
+
+            },
+
+            clip: function (me, contentPanel) {
+                return me.extraParamBuilders.intersect(me, contentPanel, false);
+            },
+
+            /**
+             * @method _intersectExtra
+             * @private
+             * Add extra parameters for params UI according to method needs
+             * @param {jQuery} contentPanel  div to append extra params
+             * @param {boolean} full define if full or limited set of choices is shown
+             */
+            intersect: function (me, contentPanel, full) {
+                // Set radiobuttons for selecting intersecting layer
+                var options = me._getLayerOptions(false, true, false),
+                    option,
+                    optionChecked,
+                    targetLayer = _.find(options, {
+                        'data': true
+                    }),
+                    targetLayerElem = jQuery('<span></span>'),
+                    toolContainer,
+                    i,
+                    input,
+                    label,
+                    showSpatial = full !== undefined ? full : true; // Show also spatial operator choice
+
+                me.intersectOptions = options;
+                me.intersectOptionsMap = {};
+
+                options.forEach(function (option) {
+                    me.intersectOptionsMap[option.id] = option;
+                });
+
+                me._addTitle(contentPanel, me.loc.intersect.target);
+                targetLayerElem.html((targetLayer ? targetLayer.label : ''));
+                contentPanel.append(targetLayerElem);
+
+                me._addTitle(contentPanel, me.loc.intersect.label);
+
+                var closureMagic = function (tool) {
+                    return function () {
+                        me.intersectOptions.forEach(function (option) {
+                            option.selected = false;
+                        });
+                        tool.selected = true;
+                    };
+                };
+                options.forEach(function (option, i, options) {
+                    optionChecked = (i === 0 ? 'checked' : undefined);
+                    toolContainer = me.template.radioToolOption.clone();
+                    toolContainer.find('input').attr('name', 'intersect');
+                    input = toolContainer.find('input');
                     label = option.label;
-                    if (option.width && option.height) {
-                        label = label + ' (' + option.width + ' x ' + option.height + 'px)';
+                    toolContainer.find('label').append(label).attr({
+                        'for': 'intersect_' + option.id,
+                        'class': 'params_radiolabel'
+                    });
+                    // Preselect option if there's only 2 in total (one of them will be hidden below)
+                    // Do not show option if it is selected as analysis data
+                    option.selected = options.length === 2 && !option.data;
+
+                    if (option.data) {
+                        toolContainer.hide();
                     }
+
+                    if (option.selected) {
+                        input.attr('checked', 'checked');
+                    }
+                    contentPanel.append(toolContainer);
+                    input.attr({
+                        'value': option.id,
+                        'name': 'intersect',
+                        'id': 'intersect_' + option.id,
+                        'checked': optionChecked
+                    });
+                    input.change(closureMagic(option));
+                });
+
+                // Show spatial operator choice
+                if (showSpatial) {
+                    //title spatial operator
+                    var titlespa = me.template.title_extra.clone();
+                    titlespa.find('.extra_title_label').html(
+                        me.loc.spatial.label
+                    );
+                    contentPanel.append(titlespa);
+
+                    var selectSpatial = function (tool) {
+                        return function () {
+                            me.spatialOptions.forEach(function (option) {
+                                option.selected = false;
+                            });
+                            tool.selected = true;
+                        };
+                    };
+
+                    // spatial operators
+                    me.spatialOptions.forEach(function (option, i, options) {
+                        toolContainer = me.template.radioToolOption.clone();
+                        toolContainer.find('input').attr('name', 'spatial');
+                        me._createLabel(
+                            option,
+                            toolContainer,
+                            'params_radiolabel'
+                        );
+
+                        if (option.selected) {
+                            toolContainer.find('input').attr(
+                                'checked',
+                                'checked'
+                            );
+                        }
+                        contentPanel.append(toolContainer);
+                        toolContainer.find('input').attr({
+                            'value': option.id,
+                            'name': 'spatial',
+                            'id': option.id
+                        });
+                        toolContainer.find('input').change(
+                            selectSpatial(option)
+                        );
+                    });
+                }
+            },
+
+            /**
+             * Add layer selection ui for analyse layer union.
+             *
+             * @method layer_union
+             * @param  {jQuery} contentPanel
+             * @return {undefined}
+             */
+            layer_union: function (me, contentPanel) {
+                var selectedLayer = me._getSelectedMapLayer(),
+                    i,
+                    option,
+                    toolContainer,
+                    label;
+
+                if (!selectedLayer || (selectedLayer && !selectedLayer.isLayerOfType('ANALYSIS'))) {
+                    contentPanel.append(jQuery(
+                        '<div>' + me.loc.layer_union.notAnalyseLayer + '</div>'
+                    ));
+                    return;
+                }
+
+                me.unionOptions = jQuery.map(
+                    me.contentOptionsMap || {},
+                    function (val, key) {
+                        if (me._validForLayerUnion(selectedLayer, val.id)) {
+                            return {
+                                id: val.id,
+                                label: val.label
+                            };
+                        }
+                    }
+                );
+
+                if (me.unionOptions.length === 0) {
+                    contentPanel.append(jQuery(
+                        '<div>' + me.loc.layer_union.noLayersAvailable + '</div>'
+                    ));
+                    return;
+                }
+
+                me._addTitle(contentPanel, me.loc.layer_union.label);
+
+                // layers
+                for (i = 0; i < me.unionOptions.length; i += 1) {
+                    option = me.unionOptions[i];
+                    toolContainer = me.template.checkboxToolOptíon.clone();
+                    toolContainer.find('input').attr('name', 'layer_union');
+                    label = option.label;
                     toolContainer.find('label').append(label).attr({
                         'for': option.id,
-                        'class': 'params_radiolabel'
+                        'class': 'params_checklabel'
                     });
                     if (option.selected) {
                         toolContainer.find('input').attr('checked', 'checked');
@@ -1243,316 +1423,163 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     contentPanel.append(toolContainer);
                     toolContainer.find('input').attr({
                         'value': option.id,
-                        'name': 'spatial',
                         'id': option.id
                     });
-                    toolContainer.find('input').change(selectSpatial(option));
                 }
-            }
-        },
+            },
 
-        /**
-         * @method _unionExtra
-         * @private
-         * Add extra parameters for params UI according to method union
-         * @param {jQuery} contentPanel  div to append extra params
-         */
-        _unionExtra: function (contentPanel) {
-            var me = this;
+            /**
+             * Add params ui for areas and sectors.
+             *
+             * @method areas_and_sectors
+             * @param  {jQuery} contentPanel
+             * @return {undefined}
+             */
+            areas_and_sectors: function (me, contentPanel) {
+                var loc = me.loc.areas_and_sectors,
+                    extraParams = me.template.areasAndSectorsExtra.clone(),
+                    unitsSelect = extraParams.find('.settings_area_size_units'),
+                    unit,
+                    labels = extraParams.find('label'),
+                    keys = ['area_size', 'area_count', 'sector_count'];
 
-            // Set radiobuttons for selecting union layer
-            var options = me._getLayerOptions(false, false, false),
-                option,
-                f,
-                i,
-                toolContainer,
-                label;
-
-            me.unionOptions = options;
-            me.unionOptionsMap = {};
-
-            for (f = 0; f < me.unionOptions.length; f += 1) {
-                me.unionOptionsMap[me.unionOptions[f].id] = me.unionOptions[f];
-            }
-            // title
-            me._addTitle(contentPanel, me.loc.union.label);
-
-            var selectUnion = function (tool) {
-                return function () {
-                    var j;
-                    // reset previous setting
-                    for (j = 0; j < me.unionOptions.length; j += 1) {
-                        me.unionOptions[j].selected = false;
-                    }
-                    tool.selected = true;
-
-                };
-            };
-
-            for (i = 0; i < me.unionOptions.length; i += 1) {
-                option = me.unionOptions[i];
-                toolContainer = me.template.unionOptionTool.clone();
-                label = option.label;
-                if (option.width && option.height) {
-                    label = label + ' (' + option.width + ' x ' + option.height + 'px)';
-                }
-                toolContainer.find('label').append(label).attr({
-                    'for': option.id,
-                    'class': 'params_radiolabel'
-                });
-                if (option.selected) {
-                    toolContainer.find('input').attr('checked', 'checked');
-                }
-                contentPanel.append(toolContainer);
-                toolContainer.find('input').attr({
-                    'value': option.id,
-                    'name': 'union',
-                    'id': option.id
-                });
-                toolContainer.find('input').change(selectUnion(option));
-            }
-
-            //title spatial operator
-            var titlespa = this.template.title_extra.clone();
-            titlespa.find('.extra_title_label').html(this.loc.spatial.label);
-            contentPanel.append(titlespa);
-
-            var closureMagic = function (tool) {
-                return function () {
-                    var j;
-                    // reset previous setting
-                    for (j = 0; j < me.spatialOptions.length; j += 1) {
-                        me.spatialOptions[j].selected = false;
-                    }
-                    tool.selected = true;
-
-                };
-            };
-
-            // spatial operators
-            for (i = 0; i < this.spatialOptions.length; i += 1) {
-                option = this.spatialOptions[i];
-                toolContainer = this.template.spatialOptionTool.clone();
-                label = option.label;
-                if (option.width && option.height) {
-                    label = label + ' (' + option.width + ' x ' + option.height + 'px)';
-                }
-                toolContainer.find('label').append(label).attr({
-                    'for': option.id,
-                    'class': 'params_radiolabel'
-                });
-                if (option.selected) {
-                    toolContainer.find('input').attr('checked', 'checked');
-                }
-                contentPanel.append(toolContainer);
-                toolContainer.find('input').attr({
-                    'value': option.id,
-                    'name': 'spatial',
-                    'id': option.id
-                });
-                toolContainer.find('input').change(closureMagic(option));
-            }
-
-        },
-
-        /**
-         * Add layer selection ui for analyse layer union.
-         *
-         * @method _layerUnionExtra
-         * @param  {jQuery} contentPanel
-         * @return {undefined}
-         */
-        _layerUnionExtra: function (contentPanel) {
-            var me = this,
-                selectedLayer = me._getSelectedMapLayer();
-
-            if (!selectedLayer || (selectedLayer && !selectedLayer.isLayerOfType('ANALYSIS'))) {
-                contentPanel.append(jQuery(
-                    '<div>' + me.loc.layer_union.notAnalyseLayer + '</div>'
-                ));
-                return;
-            }
-
-            me.unionOptions = jQuery.map(me.contentOptionsMap || {}, function (val, key) {
-                if (me._validForLayerUnion(selectedLayer, val.id)) {
-                    return {
-                        id: val.id,
-                        label: val.label
-                    };
-                }
-            });
-
-            if (me.unionOptions.length === 0) {
-                contentPanel.append(jQuery(
-                    '<div>' + me.loc.layer_union.noLayersAvailable + '</div>'
-                ));
-                return;
-            }
-
-            var i,
-                option,
-                toolContainer,
-                label;
-
-            me._addTitle(contentPanel, me.loc.layer_union.label);
-
-            // layers
-            for (i = 0; i < me.unionOptions.length; i += 1) {
-                option = me.unionOptions[i];
-                toolContainer = me.template.layerUnionOptionTool.clone();
-                label = option.label;
-                toolContainer.find('label').append(label).attr({
-                    'for': option.id,
-                    'class': 'params_checklabel'
-                });
-                if (option.selected) {
-                    toolContainer.find('input').attr('checked', 'checked');
-                }
-                contentPanel.append(toolContainer);
-                toolContainer.find('input').attr({
-                    'value': option.id,
-                    'id': option.id
-                });
-            }
-        },
-
-        /**
-         * Add params ui for areas and sectors.
-         *
-         * @method _areasAndSectorsExtra
-         * @param  {jQuery} contentPanel
-         * @return {undefined}
-         */
-        _areasAndSectorsExtra: function (contentPanel) {
-            var me = this,
-                loc = me.loc.areas_and_sectors,
-                extraParams = me.template.areasAndSectorsExtra.clone(),
-                unitsSelect = extraParams.find('.settings_area_size_units'),
-                unit,
-                labels = extraParams.find('label'),
-                keys = ['area_size', 'area_count', 'sector_count'];
-
-            for (unit in me.bufferUnits) {
-                if (me.bufferUnits.hasOwnProperty(unit)) {
-                    unitsSelect.append(
-                        '<option value="' + unit + '">' +
+                for (unit in me.bufferUnits) {
+                    if (me.bufferUnits.hasOwnProperty(unit)) {
+                        unitsSelect.append(
+                            '<option value="' + unit + '">' +
                             me.loc.buffer_units[unit] +
                             '</option>'
+                        );
+                    }
+                }
+
+                labels.each(function (i) {
+                    this.getElementsByTagName('SPAN')[0].innerHTML = loc[keys[i]];
+                    this.getElementsByTagName('INPUT')[0].placeholder =
+                        loc[keys[i] + '_tooltip'];
+                });
+
+                // FIXME remove this when sectors are supported
+                jQuery(labels[2]).hide();
+
+                contentPanel.append(extraParams);
+            },
+
+            /**
+             * Add params ui for difference.
+             *
+             * @method _diffExtra
+             * @param  {jQuery} contentPanel
+             * @return {undefined}
+             */
+            difference: function (me, contentPanel) {
+                var loc = me.loc.difference,
+                    extraParams = me.template.difference.clone(),
+                    featureList,
+                    firstField,
+                    options = me._getLayerOptions(false, true, false),
+                    option,
+                    targetLayerOption = _.find(options, {
+                        'data': true
+                    }),
+                    targetLayer = targetLayerOption ? me._getLayerByPrefixedId(targetLayerOption.id, true) : null,
+                    toolContainer,
+                    i,
+                    j;
+
+                me.differenceOptions = options;
+                me.differenceLayer = null;
+                // First layer is selected outside this panel, so no selection to be done here
+                me._addTitle(extraParams, loc.firstLayer);
+                extraParams.append(jQuery('<span></span>').html((targetLayerOption ? targetLayerOption.label : '')));
+
+                // Field for first layer, it's well possible that the layer doesn't have any...
+                // TODO select matching field in second layer if possible (and if there's no user selection)
+                me._addTitle(extraParams, loc.field);
+                if (targetLayer && targetLayer.getFields) {
+                    featureList = me.template.featureList.clone();
+                    featureList.attr('id', 'analyse-layer1-field');
+                    firstField = me._addFeatureList(
+                        targetLayer,
+                        featureList.find('ul'),
+                        'analyse-layer1-field-property'
+                    );
+                    extraParams.append(featureList);
+                }
+
+                // Second layer selection
+                me._addTitle(extraParams, loc.secondLayer);
+
+                var closureMagic = function (tool) {
+                    return function () {
+                        var k;
+                        // reset previous setting
+                        for (k = 0; k < me.differenceOptions.length; k += 1) {
+                            me.differenceOptions[k].selected = false;
+                        }
+                        tool.selected = true;
+                        me._addFeatureList(
+                            me._getLayerByPrefixedId(tool.id),
+                            jQuery('#analyse-layer2-field').find('ul'),
+                            'analyse-layer2-field-property'
+                        );
+                        me.differenceLayer = me._getLayerByPrefixedId(tool.id);
+                        // Update the key list
+                        jQuery('div.analyse-featurelist#analyse-key-field').replaceWith(me._createJoinList(me._getSelectedMapLayer()));
+                    };
+                };
+                for (i = 0, j = me.differenceOptions.length; i < j; i += 1) {
+                    option = me.differenceOptions[i];
+                    toolContainer = me.template.radioToolOption.clone();
+                    toolContainer.find('input').attr('name', 'difference');
+                    toolContainer.find('label span').append(option.label);
+
+                    // Select option if there's only 2 to select from (the other one will be unselected below)
+                    if (j === 2) {
+                        option.selected = true;
+                    }
+
+                    // Do not show option if it is selected as analysis data
+                    if (option.data) {
+                        toolContainer.hide();
+                        option.selected = false;
+                    }
+
+                    extraParams.append(toolContainer);
+
+                    if (option.selected) {
+                        me.differenceLayer = me._getLayerByPrefixedId(option.id);
+                    }
+                    toolContainer.find('input').attr({
+                        'value': option.id,
+                        'name': 'differenceLayer',
+                        'id': 'difference_' + option.id,
+                        'checked': (option.selected ? 'checked' : undefined)
+                    }).change(closureMagic(option));
+                }
+
+                // Second layer field selection
+                me._addTitle(extraParams, loc.field);
+                featureList = me.template.featureList.clone();
+                featureList.attr('id', 'analyse-layer2-field');
+                if (me.differenceLayer && me.differenceLayer.getFields) {
+                    me._addFeatureList(
+                        me.differenceLayer,
+                        featureList.find('ul'),
+                        'analyse-layer2-field-property',
+                        firstField
                     );
                 }
-            }
-
-            labels.each(function (i) {
-                this.getElementsByTagName('SPAN')[0].innerHTML = loc[keys[i]];
-                this.getElementsByTagName('INPUT')[0].placeholder =
-                    loc[keys[i] + '_tooltip'];
-            });
-
-            // FIXME remove this when sectors are supported
-            jQuery(labels[2]).hide();
-
-            contentPanel.append(extraParams);
-        },
-
-        /**
-         * Add params ui for difference.
-         *
-         * @method _diffExtra
-         * @param  {jQuery} contentPanel
-         * @return {undefined}
-         */
-        _diffExtra: function (contentPanel) {
-            var me = this,
-                loc = me.loc.difference,
-                extraParams = me.template.difference.clone(),
-                featureList,
-                firstField,
-                options = me._getLayerOptions(false, true, false),
-                option,
-                targetLayerOption = _.find(options, {'data': true}),
-                targetLayer = targetLayerOption ? me._getLayerByPrefixedId(targetLayerOption.id, true) : null,
-                toolContainer,
-                i,
-                j;
-
-            me.differenceOptions = options;
-            me.differenceLayer = null;
-            // First layer is selected outside this panel, so no selection to be done here
-            me._addTitle(extraParams, loc.firstLayer);
-            extraParams.append(jQuery('<span></span>').html((targetLayerOption ? targetLayerOption.label : '')));
-
-            // Field for first layer, it's well possible that the layer doesn't have any...
-            // TODO select matching field in second layer if possible (and if there's no user selection)
-            me._addTitle(extraParams, loc.field);
-            if (targetLayer && targetLayer.getFields) {
-                featureList = me.template.featureList.clone();
-                featureList.attr('id', 'analyse-layer1-field');
-                firstField = me._addFeatureList(targetLayer, featureList.find('ul'), 'analyse-layer1-field-property');
                 extraParams.append(featureList);
+
+                me._addTitle(extraParams, loc.keyField);
+                extraParams.append(me._createJoinList(targetLayer));
+
+                contentPanel.append(extraParams);
             }
-
-            // Second layer selection
-            me._addTitle(extraParams, loc.secondLayer);
-
-            var closureMagic = function (tool) {
-                return function () {
-                    var k;
-                    // reset previous setting
-                    for (k = 0; k < me.differenceOptions.length; k += 1) {
-                        me.differenceOptions[k].selected = false;
-                    }
-                    tool.selected = true;
-                    me._addFeatureList(me._getLayerByPrefixedId(tool.id), jQuery('#analyse-layer2-field').find('ul'), 'analyse-layer2-field-property');
-                    me.differenceLayer = me._getLayerByPrefixedId(tool.id);
-                    // Update the key list
-                    jQuery("div.analyse-featurelist#analyse-key-field").replaceWith(me._createJoinList(me._getSelectedMapLayer()));
-                };
-            };
-            for (i = 0, j = me.differenceOptions.length; i < j; i += 1) {
-                option = me.differenceOptions[i];
-                toolContainer = me.template.differenceOptionTool.clone();
-                toolContainer.find('label span').append(option.label);
-
-                // Select option if there's only 2 to select from (the other one will be unselected below)
-                if (j === 2) {
-                    option.selected = true;
-                }
-
-                // Do not show option if it is selected as analysis data
-                if (option.data) {
-                    toolContainer.hide();
-                    option.selected = false;
-                }
-
-                extraParams.append(toolContainer);
-
-                if (option.selected) {
-                    me.differenceLayer = me._getLayerByPrefixedId(option.id);
-                }
-                toolContainer.find('input').attr({
-                    'value': option.id,
-                    'name': 'differenceLayer',
-                    'id': 'difference_' + option.id,
-                    'checked': (option.selected ? 'checked' : undefined)
-                }).change(closureMagic(option));
-            }
-
-            // Second layer field selection
-            me._addTitle(extraParams, loc.field);
-            featureList = me.template.featureList.clone();
-            featureList.attr('id', 'analyse-layer2-field');
-            if (me.differenceLayer && me.differenceLayer.getFields) {
-                me._addFeatureList(me.differenceLayer, featureList.find('ul'), 'analyse-layer2-field-property', firstField);
-            }
-            extraParams.append(featureList);
-
-            me._addTitle(extraParams, loc.keyField);
-            extraParams.append(me._createJoinList(targetLayer));
-
-            contentPanel.append(extraParams);
         },
 
-        _createJoinList: function(targetLayer) {
+        _createJoinList: function (targetLayer) {
             // Check equal join keys
             var diffJoinKey,
                 targetJoinKey,
@@ -1563,20 +1590,24 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             featureList = me.template.featureList.clone();
             featureList.attr('id', 'analyse-key-field');
-            if ((me.differenceLayer)&&(targetLayer)) {
+            if ((me.differenceLayer) && (targetLayer)) {
                 diffParams = me.differenceLayer.getWpsLayerParams();
-                if (typeof diffParams !== "undefined") {
+                if (typeof diffParams !== 'undefined') {
                     diffJoinKey = diffParams.join_key;
                 }
                 targetParams = targetLayer.getWpsLayerParams();
-                if (typeof targetParams !== "undefined") {
+                if (typeof targetParams !== 'undefined') {
                     targetJoinKey = targetParams.join_key;
                 }
             }
-            if ((diffJoinKey)&&(targetJoinKey)&&(diffJoinKey===targetJoinKey)) {
+            if ((diffJoinKey) && (targetJoinKey) && (diffJoinKey === targetJoinKey)) {
                 featureList.find('ul').append(diffJoinKey);
             } else {
-                me._addFeatureList(targetLayer, featureList.find('ul'), 'analyse-key-field-property');
+                me._addFeatureList(
+                    targetLayer,
+                    featureList.find('ul'),
+                    'analyse-key-field-property'
+                );
             }
             return featureList;
         },
@@ -1619,18 +1650,25 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 container.append(featureListElement);
             });
-            container.find('input:radio[name="'+name+'"]').on('change', function(){
+            container.find('input:radio[name="' + name + '"]').on('change', function () {
+                var i,
+                    j,
+                    labels,
+                    radios,
+                    selIndex,
+                    spans,
+                    text;
                 // Update another radio button group
-                for (var i=1; i<3; i++) {
-                    var j = 2-(i+1)%2;
-                    if (jQuery(this).attr('name') === 'analyse-layer'+i+'-field-property') {
-                        var labels = me.mainPanel.find('input:radio[name="analyse-layer'+j+'-field-property"]').parent();
-                        var radios = labels.find('input:radio');
-                        radios.attr('checked',false);
-                        var spans = labels.find('span');
-                        var text = jQuery(this).parent().find('span').text();
-                        var selIndex = spans.index(labels.find('span:contains("'+text+'")'));
-                        jQuery(radios[selIndex]).attr('checked',true);
+                for (i = 1; i < 3; i += 1) {
+                    j = 2 - (i + 1) % 2;
+                    if (jQuery(this).attr('name') === 'analyse-layer' + i + '-field-property') {
+                        labels = me.mainPanel.find('input:radio[name="analyse-layer' + j + '-field-property"]').parent();
+                        radios = labels.find('input:radio');
+                        radios.attr('checked', false);
+                        spans = labels.find('span');
+                        text = jQuery(this).parent().find('span').text();
+                        selIndex = spans.index(labels.find('span:contains("' + text + '")'));
+                        jQuery(radios[selIndex]).attr('checked', true);
                     }
                 }
             });
@@ -1773,6 +1811,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             me._addExtraParameters(contentPanel.parent(), method);
         },
+
         /**
          * Get only the fields which originate from the service,
          * that is, exclude those which are added by Oskari (starts with '__').
@@ -1808,9 +1847,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 aggreMagic = function () {
                     return function () {
                         if (me._isNumericField(this.value)) {
-                            me._modifyExtraParameters(me.id_prefix + 'aggregateNumeric');
+                            me._modifyExtraParameters(
+                                me.id_prefix +
+                                'aggregateNumeric'
+                            );
                         } else {
-                            me._modifyExtraParameters(me.id_prefix + 'aggregateText');
+                            me._modifyExtraParameters(
+                                me.id_prefix +
+                                'aggregateText'
+                            );
                         }
                     };
                 };
@@ -1819,16 +1864,27 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 featureListOption;
 
             // Placeholder
-            dropdown.append(jQuery('<option value="' + null + '">' + this.loc.aggregate.attribute + '</option>'));
+            dropdown.append(jQuery(
+                '<option value="' + null + '">' +
+                this.loc.aggregate.attribute +
+                '</option>'
+            ));
 
-            me._getLayerServiceFields(selectedLayer).forEach(function (serviceField) {
-                featureListOption = jQuery('<option value="' + serviceField.id + '">' + serviceField.label + '</option>');
-                dropdown.append(featureListOption);
-            });
+            me._getLayerServiceFields(selectedLayer).forEach(
+                function (serviceField) {
+                    featureListOption = jQuery(
+                        '<option value="' + serviceField.id + '">' +
+                        serviceField.label +
+                        '</option>'
+                    );
+                    dropdown.append(featureListOption);
+                }
+            );
 
             dropdown.change(aggreMagic());
             columnsContainer.append(dropdown);
         },
+
         /**
          * @method refreshAnalyseData
          * @private
@@ -1841,6 +1897,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             this._addAnalyseData(this.contentPanel, layer_id);
 
         },
+
         /**
          * @method refreshExtraParameters
          * @private
@@ -1851,9 +1908,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 container = me.mainPanel,
                 selectedMethod = container.find('input[name=method]:checked').val();
-            me._modifyExtraParameters(selectedMethod);
 
+            me._modifyExtraParameters(selectedMethod);
         },
+
         /**
          * @method _gatherSelections
          * @private
@@ -1861,12 +1919,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @return {Object}
          */
         _gatherSelections: function () {
-            var container = this.mainPanel;
+            var me = this,
+                container = me.mainPanel;
 
             // Get the name of the method
             var selectedMethod = container.find('input[name=method]:checked').val(),
-                methodName = selectedMethod && selectedMethod.replace(this.id_prefix, ''),
-                layer = this._getSelectedMapLayer();
+                methodName = selectedMethod && selectedMethod.replace(me.id_prefix, ''),
+                layer = me._getSelectedMapLayer();
 
             // No layers
             if (!layer) {
@@ -1875,7 +1934,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // Get the feature fields
             var selectedColumnmode = container.find('input[name=params]:checked').val(),
-                fields = selectedColumnmode && selectedColumnmode.replace(this.id_prefix, '');
+                fields = selectedColumnmode && selectedColumnmode.replace(me.id_prefix, '');
             // All fields
             if (fields === 'all') {
                 fields = ((layer && layer.getFields && layer.getFields()) ? layer.getFields().slice() : [0]);
@@ -1897,7 +1956,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     layerType: layer.getLayerType()
                 };
 
-            if (layer.isLayerOfType(this.contentPanel.getLayerType())) {
+            if (layer.isLayerOfType(me.contentPanel.getLayerType())) {
                 defaults.fields = [];
                 defaults.fieldTypes = {};
                 defaults.layerId = -1;
@@ -1908,12 +1967,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 defaults.layerId = layer.getId();
             }
             // Get method specific selections
-            var selections = this._getMethodSelections(layer, defaults);
+            var selections = me._getMethodSelections(layer, defaults);
 
             // Styles
-            selections.style = this.getStyleValues();
+            selections.style = me.getStyleValues();
             // Bbox
-            selections.bbox = this.instance.getSandbox().getMap().getBbox();
+            selections.bbox = me.instance.getSandbox().getMap().getBbox();
             // Override style - :TODO make UI for this and get override from there
             if (defaults.method === 'difference') {
                 selections.override_sld = 'sld_muutos_n1';
@@ -1934,18 +1993,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         _getMethodSelections: function (layer, defaultSelections) {
             var me = this,
                 container = this.mainPanel,
-                methodName = defaultSelections.method;
-
-            // buffer
-            var bufferSize = container.find('.settings_buffer_field').val(),
+                methodName = defaultSelections.method,
+                bufferSize = container.find('.settings_buffer_field').val(),
                 bufferUnit = container.find('.settings_buffer_units option:selected').val(),
                 bufferUnitMultiplier = this.bufferUnits[bufferUnit] || 1;
+
             bufferSize *= bufferUnitMultiplier;
             // aggregate
             var aggregateFunctions = container.find('input[name=aggre]:checked');
-            aggregateFunctions = jQuery.map(aggregateFunctions, function (val, i) {
-                return val.value.replace(me.id_prefix, '');
-            });
+            aggregateFunctions = jQuery.map(
+                aggregateFunctions,
+                function (val, i) {
+                    return val.value.replace(me.id_prefix, '');
+                }
+            );
             var aggregateAttribute = container.find('select.analyse-columns-dropdown option').filter(':selected').val();
             // union
             var unionLayerId = container.find('input[name=union]:checked').val();
@@ -1955,6 +2016,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             intersectLayerId = intersectLayerId && intersectLayerId.replace((this.id_prefix + 'layer_'), '');
             var intersectFeatures,
                 tempLayer = this.contentOptionsMap[intersectLayerId];
+
             if (tempLayer && tempLayer.temp) {
                 tempLayer = this.contentPanel.findFeatureById(tempLayer.id);
                 intersectLayerId = -1;
@@ -1963,9 +2025,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var spatialOperator = container.find('input[name=spatial]:checked').val();
             spatialOperator = spatialOperator && spatialOperator.replace(this.id_prefix, '');
             // layer union
-            var layerUnionLayers = this._getLayerUnionLayers(container);
-
-            var areaCount = container.find('input.settings_area_count_field').val(),
+            var layerUnionLayers = this._getLayerUnionLayers(container),
+                areaCount = container.find('input.settings_area_count_field').val(),
                 areaSize = container.find('input.settings_area_size_field').val(),
                 areaUnit = container.find('.settings_area_size_units option:selected').val(),
                 areaUnitMultiplier = this.bufferUnits[areaUnit] || 1,
@@ -1980,11 +2041,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 differenceFieldA1 = container.find('input[name=analyse-layer1-field-property]:checked').val(),
                 differenceFieldB1 = container.find('input[name=analyse-layer2-field-property]:checked').val(),
                 keyField = container.find('input[name=analyse-key-field-property]:checked').val();
-                // Predefined key
-                if (typeof keyField === "undefined") {
-                    keyField = container.find('div#analyse-key-field > ul').text();
-                }
-                differenceLayerId = differenceLayerId && differenceLayerId.replace((this.id_prefix + 'layer_'), '');
+            // Predefined key
+            if (typeof keyField === 'undefined') {
+                keyField = container.find('div#analyse-key-field > ul').text();
+            }
+            differenceLayerId = differenceLayerId && differenceLayerId.replace((this.id_prefix + 'layer_'), '');
 
             var methodSelections = {
                 'buffer': {
@@ -2059,13 +2120,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * Get localized name for aggregate function
          */
         _getAggregateLocalization: function (funcKey) {
-            var fullKey = 'oskari_analyse_' + funcKey,
+            var aggregateOptions = this.loc.aggregate.options,
+                fullKey = 'oskari_analyse_' + funcKey,
                 ret = null,
                 i;
 
-            for (i = 0; i < this.loc.aggregate.options.length; i += 1) {
-                if (this.loc.aggregate.options[i].id === fullKey) {
-                    ret = this.loc.aggregate.options[i].label;
+            for (i = 0; i < aggregateOptions.length; i += 1) {
+                if (aggregateOptions[i].id === fullKey) {
+                    ret = aggregateOptions[i].label;
                     break;
                 }
             }
@@ -2082,8 +2144,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         _analyseMap: function () {
             var data,
                 me = this,
-                sandbox = this.instance.getSandbox(),
+                sandbox = me.instance.getSandbox(),
                 selections = me._gatherSelections(),
+                functions = selections.methodParams.functions,
                 i,
                 showError = function (error) {
                     me.instance.showMessage(
@@ -2099,20 +2162,16 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 if (selections.method === 'clip') {
                     selections.method = 'intersect';
                     selections.methodParams.operator = 'clip';
-
                 }
 
-                if (selections.methodParams.functions &&
-                        selections.methodParams.functions.length) {
+                if (functions && functions.length) {
 
                     selections.methodParams.locales = [];
-                    for (i = 0; i < selections.methodParams.functions.length; i += 1) {
+                    functions.forEach(function (func) {
                         selections.methodParams.locales.push(
-                            this._getAggregateLocalization(
-                                selections.methodParams.functions[i]
-                            )
+                            me._getAggregateLocalization(func)
                         );
-                    }
+                    });
                 }
 
                 data = {
@@ -2122,23 +2181,28 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 var layerId = selections.layerId,
                     layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
 
-                if (this.getFilterJson(layerId)) {
+                if (me.getFilterJson(layerId)) {
                     var filterJson = this.getFilterJson(layerId);
                     // If the user wanted to include only selected/clicked
                     // features, get them now from the layer.
                     if (filterJson.featureIds) {
                         // no bbox filter when selected features
-                        this._getSelectedFeatureIds(layer, filterJson);
+                        me._getSelectedFeatureIds(layer, filterJson);
                         delete filterJson.bbox;
                     } else {
                         filterJson.featureIds = [];
                     }
                     data.filter1 = JSON.stringify(filterJson);
                 }
-                if ((selections.method === 'intersect') || (selections.method === 'clip')) {
+                // Applies to clip as well, but we changed its method to
+                // intersect above
+                if (selections.method === 'intersect') {
                     var intersectLayerId = selections.methodParams.layerId,
-                        ilayer = sandbox.findMapLayerFromSelectedMapLayers(intersectLayerId),
+                        ilayer = sandbox.findMapLayerFromSelectedMapLayers(
+                            intersectLayerId
+                        ),
                         ifilterJson = this.getFilterJson(intersectLayerId);
+
                     if (ifilterJson) {
                         // If the user wanted to include only selected/clicked
                         // features, get them now from the layer.
@@ -2201,7 +2265,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             // Request the layer to be added to the map.
             // instance.js handles things from here on.
-            requestBuilder = me.instance.sandbox.getRequestBuilder('AddMapLayerRequest');
+            requestBuilder = me.instance.sandbox.getRequestBuilder(
+                'AddMapLayerRequest'
+            );
             if (requestBuilder) {
                 request = requestBuilder(mapLayer.getId());
                 me.instance.sandbox.request(this.instance, request);
@@ -2212,7 +2278,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 if (mlays.length > 0) {
                     // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
                     // also we need to do it before service.remove() to avoid problems on other components
-                    var removeMLrequestBuilder = me.instance.sandbox.getRequestBuilder('RemoveMapLayerRequest');
+                    var removeMLrequestBuilder =
+                        me.instance.sandbox.getRequestBuilder(
+                            'RemoveMapLayerRequest'
+                        );
 
                     for (i in mlays) {
                         if (mlays.hasOwnProperty(i)) {
@@ -2255,21 +2324,19 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     additionalUuidsCheck = {};
                 additionalUuidsCheck[uuid] = true;
 
-                var subLayers = layer.getSubLayers(),
+                var subLayers = layer.getSubLayers() || [],
                     s,
                     subUuid;
-                if (subLayers && subLayers.length > 0) {
-                    for (s = 0; s < subLayers.length; s += 1) {
-                        subUuid = subLayers[s].getMetadataIdentifier();
-                        if (subUuid && subUuid !== '' && !additionalUuidsCheck[subUuid]) {
-                            additionalUuidsCheck[subUuid] = true;
-                            additionalUuids.push({
-                                uuid: subUuid
-                            });
-                        }
-                    }
 
-                }
+                subLayers.forEach(function (subLayer) {
+                    subUuid = subLayer.getMetadataIdentifier();
+                    if (subUuid && subUuid.length && !additionalUuidsCheck[subUuid]) {
+                        additionalUuidsCheck[subUuid] = true;
+                        additionalUuids.push({
+                            uuid: subUuid
+                        });
+                    }
+                });
 
                 me.instance.getSandbox().postRequestByName(
                     rn,
@@ -2295,7 +2362,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 popupContent,
                 prevJson,
-                editDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', me.loc),
+                editDialog = Oskari.clazz.create(
+                    'Oskari.userinterface.component.FilterDialog',
+                    me.loc
+                ),
                 // From 'oskari_analyse_layer_{id}' to '{id}'
                 layerId = analyse_layer_id.replace((this.id_prefix + 'layer_'), ''),
                 layer = this.instance.mapLayerService.findMapLayer(layerId);
@@ -2310,14 +2380,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     if (prevJson && !jQuery.isEmptyObject(prevJson)) {
                         popupContent = editDialog.getFilterDialogContent(layer);
                         editDialog.fillDialogContent(popupContent, prevJson, layer);
-                        editDialog.setCloseButtonHandler(function(){
+                        editDialog.setCloseButtonHandler(function () {
                             me._filterPopups[layerId] = null;
                         });
-                        editDialog.setClearButtonHandler(function(){
+                        editDialog.setClearButtonHandler(function () {
                             // Removes the filter for the layer
                             me.removeFilterJson(layer.getId());
                         });
-                        editDialog.setUpdateButtonHandler(function(){
+                        editDialog.setUpdateButtonHandler(function () {
                             // Get the filter values from the dialog
                             var filterJson = editDialog.getFilterValues();
                             me.setFilterJson(layer.getId(), filterJson);
@@ -2329,6 +2399,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
             });
         },
+
         /**
          * Requests to remove a layer from the map.
          *
@@ -2392,14 +2463,17 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _addPropertyTypes: function (layers) {
             var me = this,
-                i;
-            for (i = 0; i < layers.length; i += 1) {
-                if (layers[i].hasFeatureData()) {
-                    if (jQuery.isEmptyObject(layers[i].getWpsLayerParams())) {
-                        me.instance.analyseService.loadWFSLayerPropertiesAndTypes(layers[i].getId());
+                analyseService = me.instance.analyseService;
+
+            layers.forEach(function (layer) {
+                if (layer.hasFeatureData()) {
+                    if (jQuery.isEmptyObject(layer.getWpsLayerParams())) {
+                        analyseService.loadWFSLayerPropertiesAndTypes(
+                            layer.getId()
+                        );
                     }
                 }
-            }
+            });
         },
 
         /**
@@ -2412,6 +2486,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 isIt = false,
                 selectedLayer = me._getSelectedMapLayer(),
                 data = selectedLayer.getPropertyTypes();
+
             jQuery.each(data, function (key, value) {
                 if (fieldName === key) {
                     if (value === 'numeric') {
@@ -2433,6 +2508,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var me = this,
                 no_data,
                 selectedLayer = me._getSelectedMapLayer();
+
             if (!selectedLayer) {
                 return no_data;
             }
@@ -2460,6 +2536,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 container = me.mainPanel,
                 selected_layer = me._getSelectedMapLayer(),
                 name = '_';
+
             if (selected_layer) {
                 name = selected_layer.getName().substring(0, 15) + name;
             }
@@ -2566,12 +2643,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
 
             var line_point_border_colors = [
-                'e31a1c', '2171b5', '238b45', '88419d',
-                '2b8cbe', '238b45', 'd94801', 'd7301f',
-                '0570b0', '02818a', 'ce1256', '6a51a3',
-                'ae017e', 'cb181d', '238443', '225ea8',
-                'cc4c02'
-            ],
+                    'e31a1c', '2171b5', '238b45', '88419d',
+                    '2b8cbe', '238b45', 'd94801', 'd7301f',
+                    '0570b0', '02818a', 'ce1256', '6a51a3',
+                    'ae017e', 'cb181d', '238443', '225ea8',
+                    'cc4c02'
+                ],
                 fill_colors = [
                     'fd8d3c', '6baed6', '66c2a4', '8c96c6',
                     '7bccc4', '74c476', 'fd8d3c', 'fc8d59',
@@ -2632,6 +2709,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         },
 
         setState: function (formState) {
-
+            return undefined;
         }
     });

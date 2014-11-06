@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "it",
     "key": "Analyse",
     "value": {
@@ -11,17 +12,67 @@ Oskari.registerLocalization({
             "title": "Analisi",
             "content": {
                 "label": "Dati",
+                "drawToolsLabel": "NOT TRANSLATED",
                 "tooltip": "Aggiungi dati da analizzare",
+                "drawToolsTooltip": "NOT TRANSLATED",
                 "features": {
                     "title": "Draw a feature",
                     "buttons": {
                         "cancel": "Cancel",
                         "finish": "Done"
                     },
+                    "tooltips": {
+                        "point": "NOT TRANSLATED",
+                        "line": "NOT TRANSLATED",
+                        "area": "NOT TRANSLATED"
+                    },
                     "modes": {
                         "area": "Area",
                         "line": "Line",
                         "point": "Point"
+                    }
+                },
+                "drawDialog": {
+                    "point": {
+                        "title": "NOT TRANSLATED",
+                        "add": "NOT TRANSLATED"
+                    },
+                    "line": {
+                        "title": "NOT TRANSLATED",
+                        "add": "NOT TRANSLATED"
+                    },
+                    "area": {
+                        "title": "NOT TRANSLATED",
+                        "add": "NOT TRANSLATED"
+                    }
+                },
+                "drawFilter": {
+                    "title": "NOT TRANSLATED",
+                    "buttons": {
+                        "cancel": "NOT TRANSLATED",
+                        "finish": "NOT TRANSLATED"
+                    },
+                    "tooltip": {
+                        "point": "NOT TRANSLATED",
+                        "line": "NOT TRANSLATED",
+                        "edit": "NOT TRANSLATED",
+                        "remove": "NOT TRANSLATED"
+                    },
+                    "dialog": {
+                        "modes": {
+                            "point": {
+                                "title": "NOT TRANSLATED",
+                                "message": "NOT TRANSLATED"
+                            },
+                            "line": {
+                                "title": "NOT TRANSLATED",
+                                "message": "NOT TRANSLATED"
+                            },
+                            "edit": {
+                                "title": "NOT TRANSLATED",
+                                "message": "NOT TRANSLATED"
+                            }
+                        }
                     }
                 },
                 "search": {

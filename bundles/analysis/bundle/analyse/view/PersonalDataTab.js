@@ -3,7 +3,8 @@
  * Renders the analysis tab content to be shown in "personal data" bundle.
  * Also handles the delete functionality it provides in the UI.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
 
     /**
      * @method create called automatically on construction
@@ -15,6 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
     function (instance, localization) {
         var me = this,
             p;
+
         me.instance = instance;
         me.loc = localization;
         me.grid = undefined;
@@ -43,11 +45,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
             }
             // construct it
             var me = this,
-                grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
-            this.grid = grid;
-            var sandbox = me.instance.sandbox,
-                addMLrequestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest'),
+                sandbox = me.instance.sandbox,
+                addMLrequestBuilder = sandbox.getRequestBuilder(
+                    'AddMapLayerRequest'
+                ),
+                grid = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Grid'
+                ),
                 visibleFields = ['name', 'delete'];
+
+            me.grid = grid;
             grid.setVisibleFields(visibleFields);
             // set up the link from name field
             var nameRenderer = function (name, data) {
@@ -57,7 +64,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
                 link.append(name);
                 link.bind('click', function () {
                     // add analysis layer to map on name click
-                    var request = addMLrequestBuilder(layer.getId(), false, layer.isBaseLayer());
+                    var request = addMLrequestBuilder(
+                        layer.getId(),
+                        false,
+                        layer.isBaseLayer()
+                    );
                     sandbox.request(me.instance, request);
                     return false;
                 });
@@ -77,41 +88,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
                 return link;
             };
             grid.setColumnValueRenderer('delete', deleteRenderer);
-            var i,
-                key;
-            // setup localization
-            for (i = 0; i < visibleFields.length; ++i) {
-                key = visibleFields[i];
-                grid.setColumnUIName(key, this.loc.grid[key]);
-            }
 
-            this.container = this.template.main.clone();
+            // setup localization
+            visibleFields.forEach(function (key) {
+                grid.setColumnUIName(key, me.loc.grid[key]);
+            });
+
+            me.container = me.template.main.clone();
             // populate initial grid content
-            this.update();
-            return this.container;
+            me.update();
+            return me.container;
         },
         /**
          * Updates the tab content with current analysis layers listing
          * @method update
          */
         update: function () {
-            var service = this.instance.sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+            var me = this,
+                service = me.instance.sandbox.getService(
+                    'Oskari.mapframework.service.MapLayerService'
+                ),
                 layers = service.getAllLayersByMetaType('ANALYSIS'),
-                gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
-                i;
+                gridModel = Oskari.clazz.create(
+                    'Oskari.userinterface.component.GridModel'
+                );
+
             gridModel.setIdField('id');
 
-            for (i = 0; i < layers.length; ++i) {
+            layers.forEach(function (layer) {
                 gridModel.addData({
-                    'id': layers[i].getId(),
-                    'name': layers[i].getName(),
-                    'layer': layers[i],
-                    'delete': this.loc.buttons['delete']
+                    'id': layer.getId(),
+                    'name': layer.getName(),
+                    'layer': layer,
+                    'delete': me.loc.buttons['delete']
                 });
-            }
-            this.grid.setDataModel(gridModel);
-            this.container.empty();
-            this.grid.renderTo(this.container);
+            });
+
+            me.grid.setDataModel(gridModel);
+            me.container.empty();
+            me.grid.renderTo(me.container);
         },
         /**
          * Confirms delete for given place and deletes it if confirmed. Also shows
@@ -121,22 +136,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
          * @private
          */
         _confirmDeleteAnalysis: function (data) {
-            var me = this;
-            //var loc = this.loc.notification['delete'];
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            okBtn.setTitle(this.loc.buttons['delete']);
+            var me = this,
+                dialog = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup'
+                ),
+                okBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.buttons.DeleteButton'
+                );
+
             okBtn.addClass('primary');
 
             okBtn.setHandler(function () {
                 me._deleteAnalysis(data.layer);
                 dialog.close();
             });
-            var cancelBtn = dialog.createCloseButton(this.loc.buttons.cancel),
-                confirmMsg = this.loc.confirmDeleteMsg + '"' + data.name + '"' + '?';
-            dialog.show(this.loc.title, confirmMsg, [cancelBtn, okBtn]);
+
+            dialog.show(
+                me.loc.title,
+                me.loc.confirmDeleteMsg + '"' + data.name + '"' + '?',
+                [
+                    dialog.createCloseButton(me.loc.buttons.cancel),
+                    okBtn
+                ]
+            );
+
             dialog.makeModal();
         },
+
         /**
          * @method _deleteAnalysis
          * Request backend to delete analysis data for the layer. On success removes the layer
@@ -146,10 +172,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
          */
         _deleteAnalysis: function (layer) {
             var me = this,
-                sandbox = this.instance.sandbox;
-
-            // parse actual id from layer id
-            var tokenIndex = layer.getId().lastIndexOf('_') + 1,
+                sandbox = this.instance.sandbox,
+                tokenIndex = layer.getId().lastIndexOf('_') + 1, // parse actual id from layer id
                 idParam = layer.getId().substring(tokenIndex);
 
             jQuery.ajax({
@@ -180,16 +204,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
          */
         _deleteSuccess: function (layer) {
             var sandbox = this.instance.sandbox,
-                service = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                service = sandbox.getService(
+                    'Oskari.mapframework.service.MapLayerService'
+                );
             // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
             // also we need to do it before service.remove() to avoid problems on other components
-            var removeMLrequestBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest'),
+            var removeMLrequestBuilder = sandbox.getRequestBuilder(
+                    'RemoveMapLayerRequest'
+                ),
                 request = removeMLrequestBuilder(layer.getId());
+
             sandbox.request(this.instance, request);
             service.removeLayer(layer.getId());
             // show msg to user about successful removal
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.show(this.loc.notification.deletedTitle, this.loc.notification.deletedMsg);
+            var dialog = Oskari.clazz.create(
+                'Oskari.userinterface.component.Popup'
+            );
+            dialog.show(
+                this.loc.notification.deletedTitle,
+                this.loc.notification.deletedMsg
+            );
             dialog.fadeout(3000);
         },
         /**
@@ -198,8 +232,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
          * @private
          */
         _deleteFailure: function () {
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            var dialog = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup'
+                ),
                 okBtn = dialog.createCloseButton(this.loc.buttons.ok);
+
             dialog.show(this.loc.error.title, this.loc.error.generic, [okBtn]);
         }
     });

@@ -15,10 +15,21 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
 
     function (instance, localization) {
         this.instance = instance;
-        this.template = jQuery("<div class='startview'><div class='content'></div><div class='buttons'></div></div>");
-        this.templateError = jQuery('<div class="error"><ul></ul></div>');
-        this.templateInfo = jQuery("<div class='icon-info'></div>");
-        this.checkboxTemplate = jQuery('<input type="checkbox" name="analyse_info_seen" id="analyse_info_seen" value="1">');
+        this.template = jQuery(
+            '<div class="startview">' +
+            '  <div class="content"></div>' +
+            '  <div class="buttons"></div>' +
+            '</div>'
+        );
+        this.templateError = jQuery(
+            '<div class="error">' +
+            '  <ul></ul>' +
+            '</div>'
+        );
+        this.templateInfo = jQuery('<div class="icon-info"></div>');
+        this.checkboxTemplate = jQuery(
+            '<input type="checkbox" name="analyse_info_seen" id="analyse_info_seen" value="1">'
+        );
         this.labelTemplate = jQuery('<label for="analyse_info_seen"></label>');
         this.loc = localization;
         this.appendAlwaysCheckbox = true;
@@ -33,8 +44,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
          * rendered to
          */
         render: function (container) {
-            var me = this;
-            var content = this.template.clone();
+            var me = this,
+                content = this.template.clone();
             this.content = content;
             /*content.find('div.content').before(txt);*/
             container.append(content);
@@ -43,7 +54,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
 
             this.alert.setContent(this.loc.text, 'default', true);
 
-            var continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var continueButton = Oskari.clazz.create(
+                'Oskari.userinterface.component.Button'
+            );
             continueButton.addClass('primary');
             continueButton.setId('oskari_analysis_analyse_view_start_view_buttons_continue');
             continueButton.setTitle(this.loc.buttons['continue']);
@@ -54,9 +67,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
             continueButton.insertTo(content.find('div.buttons'));
             if (me.appendAlwaysCheckbox) {
                 content.append('<br><br>');
-                var checkbox = this.checkboxTemplate.clone();
-
-                var label = this.labelTemplate.clone();
+                var checkbox = this.checkboxTemplate.clone(),
+                    label = this.labelTemplate.clone();
                 label.append(me.loc.infoseen.label);
                 checkbox.bind(
                     'change',
@@ -64,8 +76,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
                         if (jQuery(this).attr('checked')) {
                             // Set cookie not to show analyse info again
                             jQuery.cookie(
-                                "analyse_info_seen",
-                                "1",
+                                'analyse_info_seen',
+                                '1',
                                 {
                                     expires: 365
                                 }
@@ -73,8 +85,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
                         } else {
                             // Revert to show guided tour on startup
                             jQuery.cookie(
-                                "analyse_info_seen",
-                                "0",
+                                'analyse_info_seen',
+                                '0',
                                 {
                                     expires: 1
                                 }
@@ -87,12 +99,16 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
                 content.append(label);
             }
 
-            var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var cancelButton = Oskari.clazz.create(
+                'Oskari.userinterface.component.buttons.CancelButton'
+            );
 
             cancelButton.setId('oskari_analysis_analyse_view_start_view_buttons_cancel');
-            cancelButton.setTitle(this.loc.buttons.cancel);
             cancelButton.setHandler(function () {
-                me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
+                me.instance.sandbox.postRequestByName(
+                    'userinterface.UpdateExtensionRequest',
+                    [me.instance, 'close']
+                );
             });
             this.buttons.cancel = cancelButton;
 

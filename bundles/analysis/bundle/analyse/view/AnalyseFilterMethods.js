@@ -10,11 +10,42 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             filterContent: '<div class="analyse-filter-popup-content">' +
             //'<div class="analyse-filter filter-title"></div>' +
             '</div>',
-            filterContentBBOX: '<div class="analyse-filter analyse-filter-popup-bbox">' + '<div class="bbox-title"></div>' + '<div class="bbox-radio">' + '<div class="bbox-on">' + '<input id="analyse-filter-bbox-on" type="radio" name="filter-bbox" value="true" />' + '<label for="analyse-filter-bbox-on"></label>' + '</div>' + '<div class="bbox-off">' + '<input id="analyse-filter-bbox-off" type="radio" name="filter-bbox" value="false" checked="checked" />' + '<label for="analyse-filter-bbox-off"></label>' + '</div>' + '</div>' + '</div>',
-            filterClickedFeatures: '<div class="analyse-filter analyse-filter-clicked-features">' + '<div class="clicked-features-title"></div>' + '<input type="checkbox" name="analyse-clicked-features" id="analyse-clicked-features" />' + '<label for="analyse-clicked-features"></label>' + '</div>',
-            filterContentValues: '<div class="analyse-filter analyse-filter-popup-values">' + '<div class="values-title"></div>' + '</div>',
-            filterContentOption: '<div class="filter-option">' + '<input name="case-sensitive" type="checkbox"></input>' + '<select class="attribute"></select>' + '<select class="operator"></select>' + '<input name="attribute-value" type="text"></input>' + '</div>',
-            manageFilterOption: '<div class="manage-filter-option">' + '<div class="add-filter-option">+</div>' + '<div class="remove-filter-option">-</div>' + '</div>',
+            filterContentBBOX:
+                '<div class="analyse-filter analyse-filter-popup-bbox">' +
+                '  <div class="bbox-title"></div>' +
+                '  <div class="bbox-radio">' +
+                '    <div class="bbox-on">' +
+                '      <input id="analyse-filter-bbox-on" type="radio" name="filter-bbox" value="true" />' +
+                '      <label for="analyse-filter-bbox-on"></label>' +
+                '    </div>' +
+                '    <div class="bbox-off">' +
+                '      <input id="analyse-filter-bbox-off" type="radio" name="filter-bbox" value="false" checked="checked" />' +
+                '      <label for="analyse-filter-bbox-off"></label>' +
+                '    </div>' +
+                '  </div>' +
+                '</div>',
+            filterClickedFeatures:
+                '<div class="analyse-filter analyse-filter-clicked-features">' +
+                '  <div class="clicked-features-title"></div>' +
+                '  <input type="checkbox" name="analyse-clicked-features" id="analyse-clicked-features" />' +
+                '  <label for="analyse-clicked-features"></label>' +
+                '</div>',
+            filterContentValues:
+                '<div class="analyse-filter analyse-filter-popup-values">' +
+                '  <div class="values-title"></div>' +
+                '</div>',
+            filterContentOption:
+                '<div class="filter-option">' +
+                '  <input name="case-sensitive" type="checkbox"></input>' +
+                '  <select class="attribute"></select>' +
+                '  <select class="operator"></select>' +
+                '  <input name="attribute-value" type="text"></input>' +
+                '</div>',
+            manageFilterOption:
+                '<div class="manage-filter-option">' +
+                '  <div class="add-filter-option">+</div>' +
+                '  <div class="remove-filter-option">-</div>' +
+                '</div>',
             filterBooleanOption: '<select class="boolean"></select>',
             option: '<option></option>'
         },
@@ -99,12 +130,20 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _createFilterDialog: function (layer) {
             var me = this,
-                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                popup = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup'
+                ),
+                closeButton = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Button'
+                ),
                 // Clears the filter values
-                clearButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                clearButton = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Button'
+                ),
                 // Updates the filter values
-                updateButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                updateButton = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Button'
+                ),
                 popupContent = this._getFilterDialogContent(layer),
                 popupTitle = this.loc.filter.description + layer.getName(),
                 filterJson,
@@ -157,7 +196,11 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 this._fillDialogContent(popupContent, prevJson, layer);
             }
 
-            popup.show(popupTitle, popupContent, [closeButton, clearButton, updateButton]);
+            popup.show(
+                popupTitle,
+                popupContent,
+                [closeButton, clearButton, updateButton]
+            );
 
             // Make the popup draggable
             popup.makeDraggable();
@@ -183,27 +226,40 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
          */
         _getFilterDialogContent: function (layer) {
-            var content = jQuery(this.__filterTemplates.filterContent),
-                bboxSelection = jQuery(this.__filterTemplates.filterContentBBOX),
-                clickedFeaturesSelection = jQuery(this.__filterTemplates.filterClickedFeatures),
-                valuesSelection = jQuery(this.__filterTemplates.filterContentValues),
+            var me = this,
+                content = jQuery(me.__filterTemplates.filterContent),
+                bboxSelection = jQuery(me.__filterTemplates.filterContentBBOX),
+                clickedFeaturesSelection = jQuery(me.__filterTemplates.filterClickedFeatures),
+                valuesSelection = jQuery(me.__filterTemplates.filterContentValues),
                 filterOption;
 
             // The BBOX filter selection
-            bboxSelection.find('div.bbox-title').html('<h4>' + this.loc.filter.bbox.title + '</h4>');
-            bboxSelection.find('div.bbox-on').find('label').html(this.loc.filter.bbox.on);
-            bboxSelection.find('div.bbox-off').find('label').html(this.loc.filter.bbox.off);
+            bboxSelection.find('div.bbox-title').html(
+                '<h4>' + me.loc.filter.bbox.title + '</h4>'
+            );
+            bboxSelection.find('div.bbox-on').find('label').html(
+                me.loc.filter.bbox.on
+            );
+            bboxSelection.find('div.bbox-off').find('label').html(
+                me.loc.filter.bbox.off
+            );
             content.append(bboxSelection);
 
             // Filter clicked features
-            clickedFeaturesSelection.find('div.clicked-features-title').html('<h4>' + this.loc.filter.clickedFeatures.title + '</h4>');
-            clickedFeaturesSelection.find('label').html(this.loc.filter.clickedFeatures.label);
+            clickedFeaturesSelection.find('div.clicked-features-title').html(
+                '<h4>' + me.loc.filter.clickedFeatures.title + '</h4>'
+            );
+            clickedFeaturesSelection.find('label').html(
+                me.loc.filter.clickedFeatures.label
+            );
             content.append(clickedFeaturesSelection);
 
             // Filter values selection
-            valuesSelection.find('div.values-title').html('<h4>' + this.loc.filter.values.title + '</h4>');
+            valuesSelection.find('div.values-title').html(
+                '<h4>' + me.loc.filter.values.title + '</h4>'
+            );
             // Add a filter
-            filterOption = this._addAttributeFilter(layer);
+            filterOption = me._addAttributeFilter(layer);
             valuesSelection.append(filterOption);
 
             content.append(valuesSelection);
@@ -221,53 +277,60 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
          */
         _fillDialogContent: function (dialog, values, layer) {
-            var bboxDiv = dialog.find('div.bbox-radio'),
-                clickedFeaturesDiv = dialog.find('div.analyse-filter-clicked-features'),
-                filterDiv = dialog.find('div.filter-option'),
-                filter,
-                i;
+            var me = this,
+                bboxDiv = dialog.find('div.bbox-radio'),
+                bboxOff = bboxDiv.find('div.bbox-off input[name=filter-bbox]'),
+                bboxOn = bboxDiv.find('div.bbox-on input[name=filter-bbox]'),
+                clickedFeaturesDiv = dialog.find(
+                    'div.analyse-filter-clicked-features'
+                ),
+                filterDiv = dialog.find('div.filter-option');
 
             // Set the BBOX value
             if (values.bbox && !jQuery.isEmptyObject(values.bbox)) {
                 // BBOX enabled
-                bboxDiv.find('div.bbox-off').find('input[name=filter-bbox]').removeAttr('checked');
-                bboxDiv.find('div.bbox-on').find('input[name=filter-bbox]').attr('checked', 'checked');
+                bboxOff.removeAttr('checked');
+                bboxOn.attr('checked', 'checked');
             } else {
                 // BBOX disabled
-                bboxDiv.find('div.bbox-off').find('input[name=filter-bbox]').attr('checked', 'checked');
-                bboxDiv.find('div.bbox-on').find('input[name=filter-bbox]').removeAttr('checked');
+                bboxOff.attr('checked', 'checked');
+                bboxOn.removeAttr('checked');
             }
 
             if (values.featureIds) {
-                clickedFeaturesDiv.find('input[name=analyse-clicked-features]').attr('checked', 'checked');
+                clickedFeaturesDiv.find(
+                    'input[name=analyse-clicked-features]'
+                ).attr('checked', 'checked');
             }
 
             if (values.filters && values.filters.length) {
                 // Fill the values of the first filter already visible in the DOM.
-                filter = values.filters[0];
-                this._fillFilterOptionsDiv(filterDiv, filter);
+                me._fillFilterOptionsDiv(filterDiv, values.filters[0]);
 
-                // Create the rest of the filters and fill the values.
-                for (i = 1; values.filters && i < values.filters.length; ++i) {
-                    filter = values.filters[i];
-
+                values.filters.forEach(function (filter) {
                     // The boolean operator selection
                     if (filter.boolean) {
                         var lastFilter = dialog.find('div.filter-option').last(),
-                            boolSelect = this._createBooleanSelect();
+                            boolSelect = me._createBooleanSelect();
 
-                        jQuery(boolSelect.find('option')).filter(function () {
-                            return (jQuery(this).val() === filter.boolean);
-                        }).prop('selected', 'selected');
+                        jQuery(boolSelect.find('option')).filter(
+                            function () {
+                                return (jQuery(this).val() === filter.boolean);
+                            }
+                        ).prop('selected', 'selected');
 
-                        lastFilter.find('div.manage-filter-option').replaceWith(boolSelect);
+                        lastFilter.find(
+                            'div.manage-filter-option'
+                        ).replaceWith(boolSelect);
                     } else {
                         // A normal filter
-                        var newFilterDiv = this._addAttributeFilter(layer);
-                        this._fillFilterOptionsDiv(newFilterDiv, filter);
-                        dialog.find('div.analyse-filter-popup-values').append(newFilterDiv);
+                        var newFilterDiv = me._addAttributeFilter(layer);
+                        me._fillFilterOptionsDiv(newFilterDiv, filter);
+                        dialog.find(
+                            'div.analyse-filter-popup-values'
+                        ).append(newFilterDiv);
                     }
-                }
+                });
             }
         },
 
@@ -291,7 +354,10 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }).prop('selected', 'selected');
 
             // Set the case-sensitive checkbox
-            div.find('input[name=case-sensitive]').attr('checked', analyseFilter.caseSensitive);
+            div.find('input[name=case-sensitive]').attr(
+                'checked',
+                analyseFilter.caseSensitive
+            );
 
             // Set the value of the value field ;)
             div.find('input[name=attribute-value]').val(analyseFilter.value);
@@ -306,53 +372,64 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _addAttributeFilter: function (layer) {
             var me = this,
-                filterOption = jQuery(this.__filterTemplates.filterContentOption),
+                floc = me.loc.filter.values,
+                filterOption = jQuery(me.__filterTemplates.filterContentOption),
                 attrSelect = filterOption.find('select.attribute'),
-                attrPlaceHolder = this.loc.filter.values.placeholders.attribute,
+                attrPlaceHolder = floc.placeholders.attribute,
                 opSelect = filterOption.find('select.operator'),
-                opPlaceHolder = this.loc.filter.values.placeholders.operator,
+                opPlaceHolder = floc.placeholders.operator,
                 layerAttributes = me._getLayerAttributes(layer);
 
             // Appends values to the attribute select.
-            this._appendOptionValues(attrSelect, attrPlaceHolder, layerAttributes);
+            me._appendOptionValues(
+                attrSelect,
+                attrPlaceHolder,
+                layerAttributes
+            );
             // Appends values to the operator select.
             // values: equals, like, not equals, not like, greater than, less than,
             //         greater or equal than, less or equal than
-            this._appendOptionValues(opSelect, null, [
+            me._appendOptionValues(opSelect, null, [
                 {
                     id: '=',
-                    name: this.loc.filter.values.equals
+                    name: floc.equals
                 }, {
                     id: '~=',
-                    name: this.loc.filter.values.like
+                    name: floc.like
                 }, {
                     id: '≠',
-                    name: this.loc.filter.values.notEquals
+                    name: floc.notEquals
                 }, {
                     id: '~≠',
-                    name: this.loc.filter.values.notLike
+                    name: floc.notLike
                 }, {
                     id: '>',
-                    name: this.loc.filter.values.greaterThan
+                    name: floc.greaterThan
                 }, {
                     id: '<',
-                    name: this.loc.filter.values.lessThan
+                    name: floc.lessThan
                 }, {
                     id: '≥',
-                    name: this.loc.filter.values.greaterThanOrEqualTo
+                    name: floc.greaterThanOrEqualTo
                 }, {
                     id: '≤',
-                    name: this.loc.filter.values.lessThanOrEqualTo
+                    name: floc.lessThanOrEqualTo
                 }
             ]);
 
             // Placeholder to the attribute value input.
-            filterOption.find('input[name=attribute-value]').attr('placeholder', this.loc.filter.values.placeholders['attribute-value']);
+            filterOption.find('input[name=attribute-value]').attr(
+                'placeholder',
+                floc.placeholders['attribute-value']
+            );
 
-            filterOption.find('input[name=case-sensitive]').attr('title', this.loc.filter.values.placeholders['case-sensitive']);
+            filterOption.find('input[name=case-sensitive]').attr(
+                'title',
+                floc.placeholders['case-sensitive']
+            );
 
             // Add the buttons to remove this filter and to add a new filter.
-            filterOption.append(this._addManageFilterOption(layer));
+            filterOption.append(me._addManageFilterOption(layer));
 
             return filterOption;
         },
@@ -365,16 +442,29 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @return {jQuery object}
          */
         _addManageFilterOption: function (layer) {
-            var manageFilterOption = jQuery(this.__filterTemplates.manageFilterOption),
-                addTitle = this.loc.filter.addFilter,
-                removeTitle = this.loc.filter.removeFilter;
+            var me = this,
+                manageFilterOption = jQuery(me.__filterTemplates.manageFilterOption),
+                addTitle = me.loc.filter.addFilter,
+                removeTitle = me.loc.filter.removeFilter;
 
-            manageFilterOption.find('div.add-filter-option').attr('title', addTitle);
-            manageFilterOption.find('div.remove-filter-option').attr('title', removeTitle);
+            manageFilterOption.find('div.add-filter-option').attr(
+                'title',
+                addTitle
+            );
+            manageFilterOption.find('div.remove-filter-option').attr(
+                'title',
+                removeTitle
+            );
             // Bind a click event to the 'add a new filter' button.
-            this._bindAddNewFilter(manageFilterOption.find('div.add-filter-option'), layer);
+            me._bindAddNewFilter(
+                manageFilterOption.find('div.add-filter-option'),
+                layer
+            );
             // Bind a click event to the 'remove filter' button.
-            this._bindRemoveFilter(manageFilterOption.find('div.remove-filter-option'), layer);
+            me._bindRemoveFilter(
+                manageFilterOption.find('div.remove-filter-option'),
+                layer
+            );
 
             return manageFilterOption;
         },
@@ -493,20 +583,19 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 select.append(option);
             }
 
-            // Iterate the list of given values
-            for (i = 0; values && i < values.length; ++i) {
+            values.forEach(function (value) {
                 option = jQuery(this.__filterTemplates.option);
                 // Array of strings.
-                if (typeof values[i] === 'string') {
-                    option.attr('value', values[i]);
-                    option.html(values[i]);
+                if (typeof value === 'string') {
+                    option.attr('value', value);
+                    option.html(value);
                 } else {
                     // Otherwise we're assuming an array of objects.
-                    option.attr('value', values[i].id);
-                    option.html(values[i].name);
+                    option.attr('value', value.id);
+                    option.html(value.name);
                 }
                 select.append(option);
-            }
+            });
         },
 
         /**
@@ -555,7 +644,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (domFilters && domFilters.length) {
                 filterValues.filters = [];
 
-                for (i = 0; i < domFilters.length; ++i) {
+                for (i = 0; i < domFilters.length; i += 1) {
                     domFilter = jQuery(domFilters[i]);
 
                     filter = {};
@@ -601,7 +690,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 attributes = [],
                 i;
 
-            for (i = 0; i < fields.length; ++i) {
+            for (i = 0; i < fields.length; i += 1) {
                 // Get only the fields which originate from the service,
                 // that is, exclude those which are added by Oskari (starts with '__').
                 if (!fields[i].match(/^__/)) {
@@ -635,9 +724,8 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 filter,
                 i;
 
-            for (i = 0; filters && i < filters.length; ++i) {
-                filter = filters[i];
-                // These are the filter objects
+            filters.forEach(function (filter, i) {
+                // Even ones are the filter objects
                 if (i % 2 === 0) {
                     if (filter.boolean) {
                         errors.push('boolean_operator_missing');
@@ -652,12 +740,12 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         errors.push('value_missing');
                     }
                 } else {
-                    // These are the boolean operators combining the filters
+                    // Odd ones are the boolean operators combining the filters
                     if (!filter.boolean) {
                         errors.push('boolean_operator_missing');
                     }
                 }
-            }
+            });
 
             // If no errors found, set the errors variable to false
             if (!errors.length) {
@@ -674,14 +762,16 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _displayValidationErrors: function (errors) {
             var loc = this.loc.filter.validation,
-                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                popup = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup'
+                ),
                 closeButton = popup.createCloseButton(this.loc.buttons.ok),
                 popupTitle = this.loc.error.title,
                 popupContent = '<h4>' + loc.title + '</h4>',
                 i;
 
-            for (i = 0; i < errors.length; ++i) {
-                popupContent += '<p>' + loc[errors[i]] + '</p>';
+            for (i = 0; i < errors.length; i += 1) {
+                popupContent += '<p>' + loc[errors[i]] + '</p>\n';
             }
 
             popup.show(popupTitle, popupContent, [closeButton]);
