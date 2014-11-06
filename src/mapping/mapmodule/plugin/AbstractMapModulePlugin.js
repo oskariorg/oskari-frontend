@@ -137,6 +137,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         createEventHandlers: function () {
             var me = this,
                 eventHandlers = me._createEventHandlers();
+
             eventHandlers.LayerToolsEditModeEvent = function(event) {
                 me._setLayerToolsEditMode(event.isInMode());
             };
@@ -209,9 +210,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
                 handler;
 
             me._sandbox = sandbox;
+            sandbox.register(me);
             me._eventHandlers = me.createEventHandlers();
             me._requestHandlers = me.createRequestHandlers();
-            sandbox.register(me);
             for (handler in me._eventHandlers) {
                 if (me._eventHandlers.hasOwnProperty(handler)) {
                     sandbox.registerForEventByName(me, handler);
@@ -311,6 +312,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
             // use this when saving published map so we won't have to keep a
             // separate copy in the publisher
             var ret = {};
+
             if (this._config) {
                 // return a clone so people won't muck about with the config...
                 return jQuery.extend(true, ret, this._config);
@@ -362,8 +364,13 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         onEvent: function (event) {
             var me = this,
                 handler = me._eventHandlers[event.getName()];
+
             if (handler) {
                 return handler.apply(me, [event]);
+            } else {
+                me.getSandbox().printWarn(
+                    'No handler found for registered event', event.getName()
+                );
             }
         }
     }, {

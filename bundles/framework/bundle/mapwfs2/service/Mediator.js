@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator',
             var srs = this.plugin.getSandbox().getMap().getSrsName(),
                 bbox = this.plugin.getSandbox().getMap().getExtent(),
                 zoom = this.plugin.getSandbox().getMap().getZoom(),
-                mapScales = this.plugin.mapModule.getMapScales(),
+                mapScales = this.plugin.getMapModule().getMapScales(),
                 grid = this.plugin.getGrid();
             if (grid === null || grid === undefined) {
                 grid = {};
@@ -303,8 +303,10 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * Creates WFSImageEvent
      */
     getWFSImage: function (data) {
-        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
-        var imageUrl = "";
+        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(
+                data.data.layerId
+            ),
+            imageUrl = '';
         try {
             if (typeof data.data.data != "undefined") {
                 imageUrl = 'data:image/png;base64,' + data.data.data;
@@ -323,15 +325,40 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             };
 
         // send as an event forward to WFSPlugin (draws)
-        var event = this.plugin.getSandbox().getEventBuilder("WFSImageEvent")(layer, imageUrl, data.data.bbox, size, layerType, boundaryTile, keepPrevious);
+        var event = this.plugin.getSandbox().getEventBuilder("WFSImageEvent")(
+            layer,
+            imageUrl,
+            data.data.bbox,
+            size,
+            layerType,
+            boundaryTile,
+            keepPrevious
+        );
+
         this.plugin.getSandbox().notifyAll(event);
 
+        if (layerType === "normal") {
+            this.plugin.setPrintTile(
+                layer,
+                data.data.bbox,
+                this.rootURL +
+                data.data.url +
+                "&session=" +
+                this.session.session
+            );
 
-        if (layerType == "normal") {
-            this.plugin.setPrintTile(layer, data.data.bbox, this.rootURL + data.data.url + "&session=" + this.session.session);
-            var printoutEvent = this.plugin.getSandbox().getEventBuilder('Printout.PrintableContentEvent');
+            var printoutEvent = this.plugin.getSandbox().getEventBuilder(
+                    'Printout.PrintableContentEvent'
+                ),
+                evt;
+
             if (printoutEvent) {
-                var evt = printoutEvent(this.plugin.getName(), layer, this.plugin.getPrintTiles(), null);
+                evt = printoutEvent(
+                    this.plugin.getName(),
+                    layer,
+                    this.plugin.getPrintTiles(),
+                    null
+                );
                 this.plugin.getSandbox().notifyAll(evt);
             }
         }
