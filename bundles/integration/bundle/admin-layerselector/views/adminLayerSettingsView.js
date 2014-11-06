@@ -433,6 +433,7 @@ define([
                 }
                 else if(data.layerType === 'wfslayer') {
                     admin = me.model.getAdmin();
+                    // in insert all wfs properties are behind passthrough
                     if ((admin)&&(admin.passthrough)) {
                         _.forEach(admin.passthrough, function (value, key) {
                             data[key] = form.find("#add-layer-passthrough-"+key).val();
@@ -444,8 +445,10 @@ define([
                 data.realtime = form.find('#add-layer-realtime').is(':checked');
                 data.refreshRate = form.find('#add-layer-refreshrate').val();
 
-                data.username = me.model.getUsername(); // form.find('#add-layer-username').val();
-                data.password = me.model.getPassword(); //form.find('#add-layer-password').val();
+                data.srs_name = form.find('#add-layer-srs_name').val();
+
+                data.username = form.find('#add-layer-username').val();
+                data.password = form.find('#add-layer-password').val();
 
                 if (!data.gfiType) {
                     // if there isn't a selection, don't send anything so backend will keep the existing value
