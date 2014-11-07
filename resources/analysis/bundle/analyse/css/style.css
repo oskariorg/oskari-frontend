@@ -160,9 +160,9 @@ label.params_checklabel {
 table.layer-icons {
   margin: 0 0 2px;
   width: 30%;
-  display: inline-table; }
+  display: inline-block; }
   table.layer-icons td {
-    margin-top: 0; }
+    padding-left: 6px; }
   table.layer-icons div.icon-info {
     float: none; }
   table.layer-icons div.icon-close {
