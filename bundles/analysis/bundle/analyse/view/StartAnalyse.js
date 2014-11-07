@@ -930,7 +930,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Check if selected layer is currently available
             if (selectedLayer) {
                 selectedLayerAvailable = layers.some(function (layer) {
-                    return layers.getId() === selectedLayer.getId();
+                    return layer.getId() === selectedLayer.getId();
                 });
                 if (!selectedLayerAvailable) {
                     selectedLayer = null;
@@ -967,11 +967,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     });
 
                 opt.find('label')
-                    .html(datum.label)
                     .attr({
-                        'for': datum.id,
                         'class': 'params_checklabel'
-                    });
+                    })
+                    .find('span')
+                    .html(datum.label);
 
                 if (isTemp) {
                     removeLayer = function (id) {

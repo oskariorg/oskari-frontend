@@ -234,10 +234,7 @@ div.basic_analyse {
         label {
             margin: 5px 0;
 
-            span {
-                clear: both;
-                display: block;
-            }
+            span {}
 
             input, select {
                 margin-top: 7px;
@@ -310,6 +307,10 @@ table.layer-icons {
     margin: 0 0 2px;
     width: 30%;
     display: inline-table;
+
+    td {
+        margin-top: 0;
+    }
 
     div.icon-info {
         float: none;
