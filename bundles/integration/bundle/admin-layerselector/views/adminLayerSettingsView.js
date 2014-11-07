@@ -37,6 +37,7 @@ define([
                 'click .admin-remove-sublayer': 'removeLayer',
                 'click .show-edit-layer': 'clickLayerSettings',
                 'click .fetch-ws-button': 'fetchCapabilities',
+                // for wfs params editing - phase 3 'click .fetch-wfs-button': 'fetchWfsLayerConfiguration',
                 'click .icon-close': 'clearInput',
                 'change .admin-layer-type': 'createLayerSelect',
                 'click .admin-add-group-ok': 'saveCollectionLayer',
@@ -689,6 +690,44 @@ define([
                     url: baseUrl + 'action_route=GetWSCapabilities',
                     success: function (resp) {
                         me.__capabilitiesResponseHandler(layerType, resp);
+                    },
+                    error: function (jqXHR, textStatus) {
+                        if (jqXHR.status !== 0) {
+                            alert(me.instance.getLocalization('admin').metadataReadFailure);
+                        }
+                    }
+                });
+            },
+            /**
+             * Fetch WFS layer configuration. AJAX call to get configuration for given wfs layer id
+             * Only for wfslayer-type
+             * TODO: add this to button click for wfs spesific editing popup
+             *
+             * @method fetchWfsLayerConfiguration
+             */
+            fetchWfsLayerConfiguration: function (e) {
+                var me = this,
+                    //element = jQuery(e.currentTarget),
+                    //form = element.parents('.add-wfs-layer-wrapper'),
+                    baseUrl = me.options.instance.getSandbox().getAjaxUrl();
+
+               // e.stopPropagation();
+
+              /*  var serviceURL = form.find('#add-layer-interface').val(),
+                    layerType = form.find('#add-layer-layertype').val(),
+                    user = form.find('#add-layer-username').val(),
+                    pw =  form.find('#add-layer-password').val();  */
+
+
+                jQuery.ajax({
+                    type: 'POST',
+                    data: {
+                        id: me.model.getId(),
+                        redis : 'no'
+                    },
+                    url: baseUrl + 'action_route=GetWFSLayerConfiguration',
+                    success: function (resp) {
+                        me.model.setWfsConfigurationResponse(resp);
                     },
                     error: function (jqXHR, textStatus) {
                         if (jqXHR.status !== 0) {

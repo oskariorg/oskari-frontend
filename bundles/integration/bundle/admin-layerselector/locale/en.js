@@ -91,6 +91,7 @@ Oskari.registerLocalization({
             "wms1_1_1": "WMS 1.1.1",
             "wms1_3_0": "WMS 1.3.0",
             "getInfo": "Get info",
+            "editWfs": "Edit WFS",
             "selectClass": "Select a theme",
             "selectClassDesc": "Select a Inspire theme",
             "baseName": "Background layer name",
