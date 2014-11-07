@@ -1610,16 +1610,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                                 ':checked'
                             ).length;
 
-                        console.log(features.length, 'total features');
-                        console.log(selectedFeatures, 'selected features');
-
                         if (autoSelect && selectedFeatures < 10) {
                             // Some selections can still be made...
                             var newSelections = features
                                 .filter(':not(:checked)')
                                 .slice(0, 10 - selectedFeatures);
-
-                            console.log('selecting ' + newSelections.length + ' more');
 
                             selectedFeatures += newSelections.length;
                             newSelections.prop(
@@ -1629,14 +1624,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         }
 
                         if (selectedFeatures === 10) {
-                            console.log('max selections');
                             // max amount of features selected, disable the rest
                             features.filter(':not(:checked)').prop(
                                 'disabled',
                                 true
                             );
                         } else {
-                            console.log('more can be selected');
                             // Features can still be selected
                             features.prop(
                                 'disabled',
@@ -2013,58 +2006,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     });
                 }
             }
-            //return ret;
-            console.log("FIXME DEBUG RESPONSE");
-            return [
-                {
-                    id: "id1",
-                    label: "field1"
-                },
-                {
-                    id: "id2",
-                    label: "field2"
-                },
-                {
-                    id: "id3",
-                    label: "field3"
-                },
-                {
-                    id: "id4",
-                    label: "field4"
-                },
-                {
-                    id: "id5",
-                    label: "field5"
-                },
-                {
-                    id: "id6",
-                    label: "field6"
-                },
-                {
-                    id: "id7",
-                    label: "field7"
-                },
-                {
-                    id: "id8",
-                    label: "field8"
-                },
-                {
-                    id: "id9",
-                    label: "field9"
-                },
-                {
-                    id: "id10",
-                    label: "field10"
-                },
-                {
-                    id: "id11",
-                    label: "field11"
-                },
-                {
-                    id: "id12",
-                    label: "field12"
-                }
-            ];
+            return ret;
         },
 
         /**
