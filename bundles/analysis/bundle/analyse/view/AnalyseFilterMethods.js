@@ -3,9 +3,10 @@
  *
  * Adds filter methods to the StartAnalyse class.
  */
-Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
-    'filter-methods', {
-
+Oskari.clazz.category(
+    'Oskari.analysis.bundle.analyse.view.StartAnalyse',
+    'filter-methods',
+    {
         __filterTemplates: {
             filterContent: '<div class="analyse-filter-popup-content">' +
             //'<div class="analyse-filter filter-title"></div>' +
@@ -574,7 +575,8 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          *          Should have 'id' and 'name' keys if an array of objects (optional).
          */
         _appendOptionValues: function (select, placeHolder, values) {
-            var option = jQuery(this.__filterTemplates.option),
+            var me = this,
+                option = jQuery(me.__filterTemplates.option),
                 i;
             // Append the first, empty value to work as a placeholder
             if (placeHolder) {
@@ -584,7 +586,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
 
             values.forEach(function (value) {
-                option = jQuery(this.__filterTemplates.option);
+                option = jQuery(me.__filterTemplates.option);
                 // Array of strings.
                 if (typeof value === 'string') {
                     option.attr('value', value);
