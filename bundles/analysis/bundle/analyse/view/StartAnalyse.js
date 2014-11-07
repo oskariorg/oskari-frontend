@@ -1576,6 +1576,182 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 extraParams.append(me._createJoinList(targetLayer));
 
                 contentPanel.append(extraParams);
+            },
+
+            /**
+             * Add layer selection ui for analyse spatial join.
+             *
+             * @method layer_union
+             * @param  {jQuery} contentPanel
+             * @return {undefined}
+             */
+            spatial_join: function (me, contentPanel) {
+                // - Second layer selection
+                // - Option selection for both layers
+                //   - combined max 10 options
+                var loc = me.loc.difference,
+                    extraParams = me.template.difference.clone(),
+                    featureList,
+                    firstField,
+                    options = me._getLayerOptions(false, true, false),
+                    option,
+                    targetLayerOption = _.find(options, {
+                        'data': true
+                    }),
+                    targetLayer = targetLayerOption ? me._getLayerByPrefixedId(targetLayerOption.id, true) : null,
+                    toolContainer,
+                    i,
+                    j,
+                    limitSelection = function (autoSelect) {
+                        var features = extraParams.find(
+                                '.analyse-featurelist ul li input'
+                            ),
+                            selectedFeatures = features.filter(
+                                ':checked'
+                            ).length;
+
+                        console.log(features.length, 'total features');
+                        console.log(selectedFeatures, 'selected features');
+
+                        if (autoSelect && selectedFeatures < 10) {
+                            // Some selections can still be made...
+                            var newSelections = features
+                                .filter(':not(:checked)')
+                                .slice(0, 10 - selectedFeatures);
+
+                            console.log('selecting ' + newSelections.length + ' more');
+
+                            selectedFeatures += newSelections.length;
+                            newSelections.prop(
+                                'checked',
+                                true
+                            );
+                        }
+
+                        if (selectedFeatures === 10) {
+                            console.log('max selections');
+                            // max amount of features selected, disable the rest
+                            features.filter(':not(:checked)').prop(
+                                'disabled',
+                                true
+                            );
+                        } else {
+                            console.log('more can be selected');
+                            // Features can still be selected
+                            features.prop(
+                                'disabled',
+                                false
+                            );
+                        }
+                    };
+
+                me.differenceOptions = options;
+                me.differenceLayer = null;
+                // First layer is selected outside this panel, so no selection to be done here
+                me._addTitle(extraParams, loc.firstLayer);
+                extraParams.append(
+                    jQuery('<span></span>').html(
+                        (targetLayerOption ? targetLayerOption.label : '')
+                    )
+                );
+
+                // Field for first layer, it's well possible that the layer doesn't have any...
+                // TODO select matching field in second layer if possible (and if there's no user selection)
+                me._addTitle(extraParams, me.loc.params.label);
+                if (targetLayer && targetLayer.getFields) {
+                    featureList = me.template.featureList.clone();
+                    featureList.attr('id', 'analyse-layer1-field');
+                    firstField = me._addFeatureList(
+                        targetLayer,
+                        featureList.find('ul'),
+                        'analyse-layer1-field-property',
+                        null,
+                        true
+                    );
+                    featureList.find('ul li').change(function () {
+                        limitSelection(false);
+                    });
+                    extraParams.append(featureList);
+                }
+
+                // Second layer selection
+                me._addTitle(extraParams, loc.secondLayer);
+
+                var closureMagic = function (tool) {
+                    return function () {
+                        // reset previous setting
+                        me.differenceOptions.forEach(function (option) {
+                            option.selected = false;
+                        });
+                        tool.selected = true;
+                        var featureList = jQuery('#analyse-layer2-field ul');
+                        me._addFeatureList(
+                            me._getLayerByPrefixedId(tool.id),
+                            featureList,
+                            'analyse-layer2-field-property',
+                            null,
+                            true
+                        );
+                        featureList.find('ul li').change(function () {
+                            limitSelection(false);
+                        });
+                        limitSelection();
+                        me.differenceLayer = me._getLayerByPrefixedId(tool.id);
+                    };
+                };
+
+                for (i = 0, j = me.differenceOptions.length; i < j; i += 1) {
+                    option = me.differenceOptions[i];
+                    toolContainer = me.template.radioToolOption.clone();
+                    toolContainer.find('input').attr('name', 'difference');
+                    toolContainer.find('label span').append(option.label);
+
+                    // Select option if there's only 2 to select from (the other one will be unselected below)
+                    if (j === 2) {
+                        option.selected = true;
+                    }
+
+                    // Do not show option if it is selected as analysis data
+                    if (option.data) {
+                        toolContainer.hide();
+                        option.selected = false;
+                    }
+
+                    extraParams.append(toolContainer);
+
+                    if (option.selected) {
+                        me.differenceLayer = me._getLayerByPrefixedId(
+                            option.id
+                        );
+                    }
+                    toolContainer.find('input').attr({
+                        'value': option.id,
+                        'name': 'differenceLayer',
+                        'id': 'difference_' + option.id,
+                        'checked': (option.selected ? 'checked' : undefined)
+                    }).change(closureMagic(option));
+                }
+
+                // Second layer field selection
+                me._addTitle(extraParams, me.loc.params.label);
+                featureList = me.template.featureList.clone();
+                featureList.attr('id', 'analyse-layer2-field');
+                if (me.differenceLayer && me.differenceLayer.getFields) {
+                    me._addFeatureList(
+                        me.differenceLayer,
+                        featureList.find('ul'),
+                        'analyse-layer2-field-property',
+                        null,
+                        true
+                    );
+                    featureList.find('ul li').change(function () {
+                        limitSelection(false);
+                    });
+                }
+                extraParams.append(featureList);
+                limitSelection(true);
+
+                contentPanel.append(extraParams);
             }
         },
 
@@ -1612,18 +1788,19 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             return featureList;
         },
 
-        _addFeatureList: function (layer, container, name, preselectId) {
+        _addFeatureList: function (layer, container, name, preselectId, multiSelect) {
             var me = this,
                 firstElement,
                 featureListElement,
                 preselection = false,
-                serviceFields = me._getLayerServiceFields(layer);
+                serviceFields = me._getLayerServiceFields(layer),
+                elementTemplate = multiSelect ? me.template.featureListElement : me.template.featureListRadioElement;
 
             // Make sure the container is empty
             container.empty();
 
             serviceFields.forEach(function (serviceField, idx) {
-                featureListElement = me.template.featureListRadioElement.clone();
+                featureListElement = elementTemplate.clone();
                 // Store first element so we can check it if there's no preselection found
                 if (idx === 0) {
                     firstElement = featureListElement;
@@ -1638,11 +1815,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     .prop('name', name)
                     .prop('checked', preselection && serviceField.id === preselectId)
                     .val(serviceField.id);
+
                 featureListElement
                     .find('label span')
                     .html(serviceField.label);
 
-                if (!preselection) {
+                if (!multiSelect && !preselection) {
                     firstElement
                         .find('input')
                         .prop('checked', true);
@@ -1804,6 +1982,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             } else if (prefix + 'difference' === method) {
                 // difference doesn't need anything here...
                 columnsContainer.empty();
+            } else if (prefix + 'spatial_join' === method) {
+                // spatial join doesn't need anything here...
+                columnsContainer.empty();
             } else {
                 columnsContainer.empty();
                 me._createColumnsSelector(columnsContainer, me.loc.params.label);
@@ -1832,7 +2013,58 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     });
                 }
             }
-            return ret;
+            //return ret;
+            console.log("FIXME DEBUG RESPONSE");
+            return [
+                {
+                    id: "id1",
+                    label: "field1"
+                },
+                {
+                    id: "id2",
+                    label: "field2"
+                },
+                {
+                    id: "id3",
+                    label: "field3"
+                },
+                {
+                    id: "id4",
+                    label: "field4"
+                },
+                {
+                    id: "id5",
+                    label: "field5"
+                },
+                {
+                    id: "id6",
+                    label: "field6"
+                },
+                {
+                    id: "id7",
+                    label: "field7"
+                },
+                {
+                    id: "id8",
+                    label: "field8"
+                },
+                {
+                    id: "id9",
+                    label: "field9"
+                },
+                {
+                    id: "id10",
+                    label: "field10"
+                },
+                {
+                    id: "id11",
+                    label: "field11"
+                },
+                {
+                    id: "id12",
+                    label: "field12"
+                }
+            ];
         },
 
         /**
@@ -2040,6 +2272,12 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var differenceLayerId = container.find('input[name=differenceLayer]:checked').val(),
                 differenceFieldA1 = container.find('input[name=analyse-layer1-field-property]:checked').val(),
                 differenceFieldB1 = container.find('input[name=analyse-layer2-field-property]:checked').val(),
+                featuresA1 = container.find('input[name=analyse-layer1-field-property]:checked').map(function () {
+                    return this.value;
+                }).get(),
+                featuresB1 = container.find('input[name=analyse-layer2-field-property]:checked').map(function () {
+                    return this.value;
+                }).get(),
                 keyField = container.find('input[name=analyse-key-field-property]:checked').val();
             // Predefined key
             if (typeof keyField === 'undefined') {
@@ -2100,6 +2338,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         keyA1: keyField,
                         keyB1: keyField,
                         no_data: me._getNoDataValue()
+                    }
+                },
+                'spatial_join': {
+                    methodParams: {
+                        layerId: differenceLayerId,
+                        featuresA1: featuresA1,
+                        featuresB1: featuresB1
                     }
                 }
             };
