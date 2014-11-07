@@ -111,6 +111,8 @@ div.basic_analyse div.tool input, div.basic_analyse div.drawFilter input, div.ba
   margin-right: 10px; }
 div.basic_analyse div.analyse_settings_cont label {
   margin: 5px 0; }
+  div.basic_analyse div.analyse_settings_cont label input[type=text] {
+    clear: left; }
   div.basic_analyse div.analyse_settings_cont label input, div.basic_analyse div.analyse_settings_cont label select {
     margin-top: 7px;
     margin-bottom: 10px; }
@@ -153,7 +155,7 @@ div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
 label.params_checklabel {
   text-overflow: ellipsis;
   display: inline-block;
-  width: 200px;
+  width: 230px;
   white-space: nowrap;
   overflow: hidden; }
 

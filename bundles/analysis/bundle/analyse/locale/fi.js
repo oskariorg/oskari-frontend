@@ -131,6 +131,11 @@ Oskari.registerLocalization(
                         "label": "Muutoksen laskenta",
                         "classForPreview": "difference",
                         "tooltip": ""
+                    }, {
+                        "id": "oskari_analyse_spatial_join",
+                        "label": "Ominaisuustietojen yhdistäminen",
+                        "classForPreview": "spatial_join",
+                        "tooltip": ""
                     }]
             },
             "aggregate": {

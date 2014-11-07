@@ -126,6 +126,11 @@ Oskari.registerLocalization(
                         "label": "Flera zoner",
                         "classForPreview": "areas_and_sectors",
                         "tooltip": "Man kan skapa flera zoner omkring utvalda objekt. Man kan välja sig själv zoners storlek och antal."
+                    }, {
+                        "id": "oskari_analyse_spatial_join",
+                        "label": "NOT TRANSLATED",
+                        "classForPreview": "spatial_join",
+                        "tooltip": ""
                     }
                 ]
             },

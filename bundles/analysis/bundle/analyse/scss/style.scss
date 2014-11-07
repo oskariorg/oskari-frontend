@@ -234,7 +234,9 @@ div.basic_analyse {
         label {
             margin: 5px 0;
 
-            span {}
+            input[type=text] {
+                clear: left;
+            }
 
             input, select {
                 margin-top: 7px;
@@ -292,7 +294,7 @@ div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
 label.params_checklabel {
     text-overflow: ellipsis;
     display: inline-block;
-    width: 200px;
+    width: 230px;
     white-space: nowrap;
     overflow: hidden;
 }
@@ -305,6 +307,7 @@ label.params_checklabel {
 //} 
 table.layer-icons {
     margin: 0 0 2px;
+    // FIXME percentages is no bueno
     width: 30%;
     display: inline-block;
 
