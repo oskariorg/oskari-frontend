@@ -132,7 +132,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
                 if (layerarr.hasOwnProperty(i)) {
                     analyseJson = layerarr[i];
                     this.analyseLayers.push(analyseJson);
-                    console.log('analyseJSON', analyseJson);
                     // TODO: Handle WPS results when no FeatureCollection eg. aggregate
                     if (analyseJson.wpsLayerId + '' === "-1") {
                         // no analyse layer case  eg. aggregate wps function
@@ -146,6 +145,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
                     }
                 }
             }
+            console.log("_handleAnalysisLayersResponse, analyseLayers: ", this.analyseLayers);
             if (layerarr && layerarr.length > 0) {
                 // notify components of added layer if not suppressed
                 var evt = sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
@@ -153,10 +153,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
             }
         },
 
-        _returnAnalysisOfTypeAggregate: function() {
-            var analyseLayers = this.analyseLayers;
-            var analysisOfTypeAggregate = _.where(this.analyseLayers, {method: "aggregate"});
-            return analysisOfTypeAggregate;
+        _returnAnalysisOfTypeAggregate: function(cb) {
+            this.analyselayers = [];
+            this._getAnalysisLayers(function (response) {
+                this.analyselayers = response.analysislayers;
+                var analysisOfTypeAggregate = _.where(this.analyselayers, {method: "aggregate"});
+                cb(analysisOfTypeAggregate);
+            });
         },
 
         /**
