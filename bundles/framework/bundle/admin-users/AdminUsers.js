@@ -123,6 +123,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsers', functio
                     me._openForm(event, me);
                 }
             );
+            console.log("Element onclick", btn.getElement().onclick);
             btn.insertTo(me.templates.item.find('div.header'));
             me.templates.main.append(me.templates.search);
             me.createRolesSelect();
