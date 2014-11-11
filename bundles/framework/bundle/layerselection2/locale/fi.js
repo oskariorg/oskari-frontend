@@ -83,6 +83,16 @@ Oskari.registerLocalization(
                     "greaterThanOrEqualTo": "on suurempi tai yhtä suuri kuin",
                     "lessThanOrEqualTo": "on pienempi tai yhtä pieni kuin"
                 },
+                "aggregateAnalysisFilter": {
+                    "addAggregateFilter": "Hae koosteanalyysin arvo",
+                    "aggregateValueSelectTitle": "Käytä koosteanalyysin arvoa suodatuksessa",
+                    "selectAggregateAnalyse": "Valitse koosteanalyysi",
+                    "selectIndicator": "Valitse indikaattori",
+                    "selectReadyButton": "Valmis",
+                    "getAggregateAnalysisFailed": "Koosteanalyysidatan haku epäonnistui!",
+                    "noAggregateAnalysisPopupTitle": "Koosteanalyysejä ei löytynyt",
+                    "noAggregateAnalysisPopupContent": "Sinulla ei ole tallennettuja koosteanalyysejä. Voit luoda omia koosteanalyysejä Analyysi-toiminnolla ja käyttää koosteanalyysin arvoja kohteiden suodatuksessa"
+                },
                 "validation": {
                     "title": "Seuraavat virheet estivät suodattimen päivityksen:",
                     "attribute_missing": "Ominaisuustieto puuttuu.",

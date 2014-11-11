@@ -211,8 +211,17 @@ div.analyse-filter-popup-content div.filter-option {
       margin-left: 5px;
       min-width: 16px;
       text-align: center; }
-  div.analyse-filter-popup-content div.filter-option input[name="attribute-value"] {
-    width: 120px; }
+  div.analyse-filter-popup-content div.filter-option.filter-option-aggregate {
+    padding-bottom: 25px; }
+    div.analyse-filter-popup-content div.filter-option.filter-option-aggregate div.attribute-value-block {
+      position: relative;
+      display: inline-block; }
+      div.analyse-filter-popup-content div.filter-option.filter-option-aggregate div.attribute-value-block div.add-link {
+        position: absolute;
+        top: 40px; }
+  div.analyse-filter-popup-content div.filter-option .filter-input-value {
+    width: 160px;
+    margin: 1px; }
   div.analyse-filter-popup-content div.filter-option input[name="case-sensitive"] {
     margin-right: 5px; }
   div.analyse-filter-popup-content div.filter-option select.attribute {
@@ -222,6 +231,22 @@ div.analyse-filter-popup-content div.filter-option {
     width: 60px; }
   div.analyse-filter-popup-content div.filter-option select.operator {
     width: 210px; }
+
+div.analyse-filter-popup-content div.analyse-filter {
+  border-bottom: none; }
+  div.analyse-filter-popup-content div.analyse-filter .input-blink {
+    border: 2px solid #217ad4;
+    margin: 0px; }
+
+div.filter-popup-multiselect {
+  border: 1px solid; }
+  div.filter-popup-multiselect div.header div.icon-close {
+    float: right;
+    margin: 10px; }
+  div.filter-popup-multiselect .oskari-formcomponent {
+    margin: 10px; }
+  div.filter-popup-multiselect .oskari-filter-with-aggregateAnalysis {
+    margin: 10px; }
 
 div.divmanazerpopup.drawfilterdialog {
   max-width: 400px; }

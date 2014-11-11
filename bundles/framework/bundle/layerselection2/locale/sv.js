@@ -46,6 +46,59 @@ Oskari.registerLocalization({
         "type-base": "Bakgrundskarta",
         "type-wms": "Kartlager",
         "type-wfs": "Dataprodukt"
+      },
+      "filter": {
+        "title": "NOT TRANSLATED",
+        "description": "NOT TRANSLATED",
+        "cancelButton": "NOT TRANSLATED",
+        "clearButton": "NOT TRANSLATED",
+        "refreshButton": "NOT TRANSLATED",
+        "addFilter": "NOT TRANSLATED",
+        "removeFilter": "NOT TRANSLATED",
+        "bbox": {
+            "title": "NOT TRANSLATED",
+            "on": "NOT TRANSLATED",
+            "off": "NOT TRANSLATED"
+        },
+        "clickedFeatures": {
+            "title": "NOT TRANSLATED",
+            "label": "NOT TRANSLATED"
+        },
+        "values": {
+            "title": "NOT TRANSLATED",
+            "placeholders": {
+                "case-sensitive": "NOT TRANSLATED",
+                "attribute": "NOT TRANSLATED",
+                "boolean": "NOT TRANSLATED",
+                "operator": "NOT TRANSLATED",
+                "attribute-value": "NOT TRANSLATED"
+            },
+            "equals": "NOT TRANSLATED",
+            "like": "NOT TRANSLATED",
+            "notEquals": "NOT TRANSLATED",
+            "notLike": "NOT TRANSLATED",
+            "greaterThan": "NOT TRANSLATED",
+            "lessThan": "NOT TRANSLATED",
+            "greaterThanOrEqualTo": "NOT TRANSLATED",
+            "lessThanOrEqualTo": "NOT TRANSLATED"
+        },
+        "aggregateAnalysisFilter": {
+            "addAggregateFilter": "NOT TRANSLATED",
+            "aggregateValueSelectTitle": "NOT TRANSLATED",
+            "selectAggregateAnalyse": "NOT TRANSLATED",
+            "selectIndicator": "NOT TRANSLATED",
+            "selectReadyButton": "NOT TRANSLATED",
+            "getAggregateAnalysisFailed": "NOT TRANSLATED",
+            "noAggregateAnalysisPopupTitle": "NOT TRANSLATED",
+            "noAggregateAnalysisPopupContent": "NOT TRANSLATED"
+        },
+        "validation": {
+            "title": "NOT TRANSLATED",
+            "attribute_missing": "NOT TRANSLATED",
+            "operator_missing": "NOT TRANSLATED",
+            "value_missing": "NOT TRANSLATED",
+            "boolean_operator_missing": "NOT TRANSLATED"
+        }
       }
     }
   }
