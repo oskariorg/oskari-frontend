@@ -18,6 +18,15 @@
     color: #0091FF;
     text-decoration: underline;
     display: block; }
+  .featuredata div.icon-funnel {
+    cursor: pointer; }
+
+div.oskariTabs .tabsHeader ul li a {
+  display: inline-block; }
+
+div.oskariTabs .tabsHeader ul li .union-filter {
+  display: inline-block;
+  margin-right: 10px; }
 
 div.flyout-resizer {
   float: right;
