@@ -211,7 +211,7 @@ Oskari.clazz.define(
                 if (matches) {
                     list.append(
                         me._populateItem(
-                            me.templates.item.clone(true),
+                            me.templates.item.clone(true, true),
                             user
                         )
                     );
