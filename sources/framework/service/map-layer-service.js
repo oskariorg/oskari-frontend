@@ -297,7 +297,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         loadAllLayersAjax: function (callbackSuccess, callbackFailure) {
             //console.log("loadAllLayersAjax");
-            var me = this;
+            var me = this,
+                epsg = me._sandbox.getMap().getSrsName();
             // Used to bypass browsers' cache especially in IE, which seems to cause
             // problems with displaying publishing permissions in some situations.
             var timeStamp = new Date().getTime();
@@ -305,12 +306,16 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
+                data : {
+                    timestamp : timeStamp,
+                    epsg : epsg
+                },
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType("application/j-son;charset=UTF-8");
                     }
                 },
-                url: this._mapLayerUrl + '&timestamp=' + timeStamp + '&',
+                url: this._mapLayerUrl,
                 success: function (pResp) {
                     me._loadAllLayersAjaxCallBack(pResp, callbackSuccess);
                 },
