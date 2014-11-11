@@ -117,13 +117,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsers', functio
             btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
             btn.setHandler(
                 function (event) {
-                    if (console && console.log) {
-                        console.log("EditButton.click");
-                    }
                     me._openForm(event, me);
                 }
             );
-            console.log("Element onclick", btn.getElement().onclick);
             btn.insertTo(me.templates.item.find('div.header'));
             me.templates.main.append(me.templates.search);
             me.createRolesSelect();
@@ -464,7 +460,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsers', functio
             var me = this,
                 btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
             me._initTemplates();
-            me.container = me.templates.main.clone();
+            me.container = me.templates.main.clone(true);
             me.fetchUsers(me.container);
 
             btn.setHandler(function (event) {

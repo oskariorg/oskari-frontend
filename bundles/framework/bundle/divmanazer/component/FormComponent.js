@@ -102,9 +102,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormComponent',
          * @param {Function} handler 
          */
         setHandler: function (handler) {
-            if (console && console.log) {
-                console.log("FormComponent.setHandler", handler);
-            }
             'use strict';
             if (handler && typeof handler !== 'function') {
                 throw new TypeError(

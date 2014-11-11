@@ -97,9 +97,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          */
         _setHandlerImpl: function () {
             'use strict';
-            if (console && console.log) {
-                console.log("Button._setHandlerImpl", this._handler);
-            }
             this._element.onclick = this._handler;
         },
 
