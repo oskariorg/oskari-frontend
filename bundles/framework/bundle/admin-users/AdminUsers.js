@@ -117,11 +117,7 @@ Oskari.clazz.define(
                 '</li>'
             );
             btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
-            btn.setHandler(
-                function (event) {
-                    me._openForm(event, me);
-                }
-            );
+            btn.setName('edit');
             btn.insertTo(me.templates.item.find('div.header'));
             me.templates.main.append(me.templates.search);
             me.createRolesSelect();
@@ -287,9 +283,11 @@ Oskari.clazz.define(
          * Populates an item fragment
          */
         _populateItem: function (item, user) {
-            item.find('input.oskari-button').each(
-                function () {
-                    console.log(this.onclick);
+            var me = this;
+
+            item.find('input[name=edit]').click(
+                function (event) {
+                    me._openForm(event, me);
                 }
             );
             item.attr('data-id', user.id);
