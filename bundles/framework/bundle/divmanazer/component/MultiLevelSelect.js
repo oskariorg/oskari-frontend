@@ -113,7 +113,8 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
                         optionsArray[i],
                         oldValue
                     );
-                    dirty = dirty || me._selects[i].getValue() !== oldValue;
+                    var currentValue = me._selects[i].getValue();
+                    dirty = dirty || currentValue !== oldValue;
                 } else {
                     // No select element, create a new one
                     dirty = true;

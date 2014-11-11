@@ -686,32 +686,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             // Filter functionality for WFS layers
             if ((layer.isLayerOfType(me.WFS_TYPE)) || (layer.isLayerOfType(me.ANALYSIS_TYPE))) {
-                var fixedOptions = {
-                    bboxSelection: true,
-                    clickedFeaturesSelection: false
-                };
-                var filterDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', loc, fixedOptions),
-                    filterIcon = tools.find('div.layer-filter');
+                var filterIcon = tools.find('div.layer-filter');
                 filterIcon.addClass('icon-funnel');
+
                 filterIcon.bind('click', function () {
                     var icon = jQuery(this);
                     if (icon.hasClass('icon-funnel')) {
-                        filterDialog.createFilterDialog(layer);
-                        //                        filterDialog.setCloseButtonHandler(function (){
-                        //                        });
-                        //                        filterDialog.setClearButtonHandler(function (){
-                        //                        });
-                        filterDialog.setUpdateButtonHandler(function (filters) {
+                        var isAggregateValueAvailable = me.checkIfAggregateValuesAreAvailable();
+                        var fixedOptions = {
+                            bboxSelection: true,
+                            clickedFeaturesSelection: false,
+                            addLinkToAggregateValues: isAggregateValueAvailable,
+                            loc: loc
+                        };
+                        me.filterDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', loc, fixedOptions);
+                        me.filterDialog.setUpdateButtonHandler(function (filters) {
                             // throw event to new wfs
                             var event = me.instance.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
                             me.instance.sandbox.notifyAll(event);
                         });
 
-                        //                        icon.removeClass();
-                        //                        icon.addClass('icon-funnel-active');
-                    } else {
-                        //                        icon.removeClass();
-                        //                        icon.addClass('icon-funnel');
+                        me.aggregateAnalyseFilter = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter', me.instance, me.instance.getLocalization('layer'), me.filterDialog);
+
+                        me.filterDialog.createFilterDialog(layer, function() {
+                            me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
+                        });
+                        me.filterDialog.setCloseButtonHandler(_.bind(me.turnOnClickOff, me));
                     }
                 });
             }
@@ -752,6 +752,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             return tools;
         },
+
+        // function gives value to addLinkToAggregateValues (true/false) 
+        checkIfAggregateValuesAreAvailable: function() {
+            this.service = this.instance.sandbox.getService('Oskari.analysis.bundle.analyse.service.AnalyseService');
+            if (!this.service) {
+                return false;
+            }
+            return true;
+        },
+
+        turnOnClickOff: function() {
+            var me = this;
+            me.filterDialog.popup.dialog.off('click', '.add-link');
+        },
+
         _updatePublishPermissionText: function (layer, footer) {
             var sandbox = this.instance.getSandbox(),
                 loc = this.instance.getLocalization('layer'),
