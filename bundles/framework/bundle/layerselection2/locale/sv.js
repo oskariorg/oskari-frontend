@@ -48,56 +48,56 @@ Oskari.registerLocalization({
         "type-wfs": "Dataprodukt"
       },
       "filter": {
-        "title": "NOT TRANSLATED",
-        "description": "NOT TRANSLATED",
-        "cancelButton": "NOT TRANSLATED",
-        "clearButton": "NOT TRANSLATED",
-        "refreshButton": "NOT TRANSLATED",
-        "addFilter": "NOT TRANSLATED",
-        "removeFilter": "NOT TRANSLATED",
-        "bbox": {
-            "title": "NOT TRANSLATED",
-            "on": "NOT TRANSLATED",
-            "off": "NOT TRANSLATED"
+        "title": "Filter",
+        "description": "Välj objekt från analyslager:",
+        "cancelButton": "Avbryt",
+        "clearButton": "Töm filter",
+        "refreshButton": "Uppdatera filter",
+        "addFilter": "Tilllägg en ny filter",
+        "removeFilter": "Ta bort en filter",
+        "bbox": { 
+          "title": "Filter på grund av kartvyn", 
+          "on": "Ta med endast objekt som syns på kartvyn.", 
+          "off": "Ta med alla objekt." 
         },
-        "clickedFeatures": {
-            "title": "NOT TRANSLATED",
-            "label": "NOT TRANSLATED"
+        "clickedFeatures": { 
+          "title": "Filter på grund av objektval", 
+          "label": "Ta med endast objekt utvalda på kartan." 
         },
         "values": {
-            "title": "NOT TRANSLATED",
-            "placeholders": {
-                "case-sensitive": "NOT TRANSLATED",
-                "attribute": "NOT TRANSLATED",
-                "boolean": "NOT TRANSLATED",
-                "operator": "NOT TRANSLATED",
-                "attribute-value": "NOT TRANSLATED"
-            },
-            "equals": "NOT TRANSLATED",
-            "like": "NOT TRANSLATED",
-            "notEquals": "NOT TRANSLATED",
-            "notLike": "NOT TRANSLATED",
-            "greaterThan": "NOT TRANSLATED",
-            "lessThan": "NOT TRANSLATED",
-            "greaterThanOrEqualTo": "NOT TRANSLATED",
-            "lessThanOrEqualTo": "NOT TRANSLATED"
+          "title": "Filter på grund av attribut",
+          "placeholders": { 
+            "case-sensitive": "Bokstavsstorlek verkar på val.", 
+            "attribute": "Attribut", 
+            "boolean": "Logisk operator", 
+            "operator": "Operator", 
+            "attribute-value": "Värde" 
+          },
+          "equals": "är lika med",
+          "like": "är ungefär lika med",
+          "notEquals": "är inte lika med",
+          "notLike": "är inte ungefär lika med",
+          "greaterThan": "är större än",
+          "lessThan": "är mindre än",
+          "greaterThanOrEqualTo": "är större än eller lika med",
+          "lessThanOrEqualTo": "är mindre än eller lika med"
         },
-        "aggregateAnalysisFilter": {
-            "addAggregateFilter": "NOT TRANSLATED",
-            "aggregateValueSelectTitle": "NOT TRANSLATED",
-            "selectAggregateAnalyse": "NOT TRANSLATED",
-            "selectIndicator": "NOT TRANSLATED",
-            "selectReadyButton": "NOT TRANSLATED",
-            "getAggregateAnalysisFailed": "NOT TRANSLATED",
-            "noAggregateAnalysisPopupTitle": "NOT TRANSLATED",
-            "noAggregateAnalysisPopupContent": "NOT TRANSLATED"
+        "aggregateAnalysisFilter": { 
+          "addAggregateFilter": "Välj ett statistiskt mått.", 
+          "aggregateValueSelectTitle": "Använd ett statistiskt mått på analys", 
+          "selectAggregateAnalyse": "Välj en analys för statistiska mått", 
+          "selectIndicator": "Välj en indikator", 
+          "selectReadyButton": "Färdig", 
+          "getAggregateAnalysisFailed": "Statistiska måttet kunde inte hitttas.", 
+          "noAggregateAnalysisPopupTitle": "Analyslager kunde inte hittas.", 
+          "noAggregateAnalysisPopupContent": "Du har gjort inga analys för statistiska mått. Du kan göra dem med analys funktion och efter det använda det med filter." 
         },
-        "validation": {
-            "title": "NOT TRANSLATED",
-            "attribute_missing": "NOT TRANSLATED",
-            "operator_missing": "NOT TRANSLATED",
-            "value_missing": "NOT TRANSLATED",
-            "boolean_operator_missing": "NOT TRANSLATED"
+        "validation": { 
+          "title": "Uppdatering av filter misslyckades beroende av följande orsaker: ", 
+          "attribute_missing": "The attribut finns inte.", 
+          "operator_missing": "Operator finns inte.", 
+          "value_missing": "Värde finns inte.", 
+          "boolean_operator_missing": "Logisk operator finns inte." 
         }
       }
     }
