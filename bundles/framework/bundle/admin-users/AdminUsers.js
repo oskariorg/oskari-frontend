@@ -117,13 +117,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsers', functio
             btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
             btn.setHandler(
                 function (event) {
+                    if (console && console.log) {
+                        console.log("EditButton.click");
+                    }
                     me._openForm(event, me);
                 }
             );
             btn.insertTo(me.templates.item.find('div.header'));
             me.templates.main.append(me.templates.search);
             me.createRolesSelect();
-
         },
         /**
          * Create roles drop down select
