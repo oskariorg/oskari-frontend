@@ -115,6 +115,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             });
 
             me.popup.show(popupTitle, popupContent, [closeButton, clearButton, updateButton]);
+            me.popup.getJqueryContent().addClass('filter-popup-content');
             me.popup.makeModal();
 
             // Make the popup draggable

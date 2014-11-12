@@ -171,6 +171,13 @@ table.layer-icons {
     cursor: pointer; }
 
 /* Analyse filter CSS */
+div.filter-popup-content {
+  overflow: auto;
+  max-height: 500px;
+  width: 700px;
+  margin: 0px !important;
+  padding: 10px; }
+
 div.analyse-filter-popup-content {
   padding: 8px; }
   div.analyse-filter-popup-content div.analyse-filter {
@@ -228,7 +235,7 @@ div.analyse-filter-popup-content div.filter-option {
     width: 150px; }
   div.analyse-filter-popup-content div.filter-option select.boolean {
     margin-top: 10px;
-    width: 60px; }
+    width: 65px; }
   div.analyse-filter-popup-content div.filter-option select.operator {
     width: 210px; }
 
