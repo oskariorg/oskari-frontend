@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          */
         _createControlElement: function () {
             var me = this,
-                sandbox = me._sandbox,
+                sandbox = me.getSandbox(),
                 el = jQuery('<div class="mapplugin featuredataplugin">' +
                     '<a href="JavaScript: void(0);"></a>' +
                     '</div>');
@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         _bindLinkClick: function (link) {
             var me = this,
                 linkElement = link || me.getElement().find('a'),
-                sandbox = me._sandbox;
+                sandbox = me.getSandbox();
             linkElement.bind('click', function () {
                 sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
                 return false;

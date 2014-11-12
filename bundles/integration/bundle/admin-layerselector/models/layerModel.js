@@ -114,6 +114,16 @@ if (!Function.prototype.bind) {
                 this.setCapabilitiesResponse(capabilities);
             },
             /**
+             * Append wfsconfiguration to capabilities adminblock.
+             * @param  {Object} GetWfsLayerconfiguration response from server
+             */
+            setWfsConfigurationResponse: function (resp) {
+                var adminBlock = this.get("_admin");
+                if(adminBlock) {
+                    adminBlock.passtrough = resp;
+                }
+            },
+            /**
              * Extra handling per layertype. If data is not given assume getter, otherwise setup data.
              * @type {Object}
              */

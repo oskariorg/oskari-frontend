@@ -483,15 +483,16 @@ Oskari.clazz.define(
         _getDialogButton: function (dialog) {
             var me = this,
                 buttons = [],
-                bn,
+                bn = 'Oskari.userinterface.component.Button',
                 closeTxt = me._localization.button.close;
             var closeBtn = dialog.createCloseButton(closeTxt);
+            closeBtn.setId('oskari_guidedtour_button_close');
             buttons.push(closeBtn);
 
             if (this.guideStep > 1) {
-                bn = 'Oskari.userinterface.component.Button';
                 var prevBtn = Oskari.clazz.create(bn);
                 var prevTxt = me._localization.button.previous;
+                prevBtn.setId('oskari_guidedtour_button_previous');
                 prevBtn.setTitle(prevTxt);
                 prevBtn.setHandler(
                     function () {
@@ -503,9 +504,9 @@ Oskari.clazz.define(
             }
 
             if (this.guideStep === 0) {
-                bn = 'Oskari.userinterface.component.Button';
                 var startBtn = Oskari.clazz.create(bn);
                 var startTxt = me._localization.button.start;
+                startBtn.setId('oskari_guidedtour_button_start');
                 startBtn.setTitle(startTxt);
                 startBtn.setHandler(
                     function () {
@@ -518,9 +519,9 @@ Oskari.clazz.define(
             // check this._guideSteps.length <> 
             // this.guideStep and return next or finish?
             else if (this.guideStep < this._guideSteps.length - 1) {
-                bn = 'Oskari.userinterface.component.Button';
                 var nextBtn = Oskari.clazz.create(bn);
                 var nextTxt = me._localization.button.next;
+                nextBtn.setId('oskari_guidedtour_button_next');
                 nextBtn.setTitle(nextTxt);
                 nextBtn.setHandler(
                     function () {
@@ -534,6 +535,7 @@ Oskari.clazz.define(
             } else if (this.guideStep === this._guideSteps.length - 1) {
                 var finishTxt = me._localization.button.finish;
                 var finishBtn = dialog.createCloseButton(finishTxt);
+                finishBtn.setId('oskari_guidedtour_button_finish');
                 buttons.push(finishBtn);
             }
             return buttons;

@@ -6,99 +6,42 @@
  *
  * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginBackgroundLayerSelectionPlugin
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayerSelectionPlugin',
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayerSelectionPlugin',
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
+     *
      */
-
     function (config) {
         var i;
-        this.mapModule = null;
-        this.pluginName = null;
-        this._sandbox = null;
-        this._map = null;
-        this.element = undefined;
-        this.conf = config;
-        this.error = !(this.conf && this.conf.baseLayers && this.conf.baseLayers.length);
-        // Make sure baseLayers aren't Numbers
+        this._clazz =
+            'Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayerSelectionPlugin';
+        this._defaultLocation = 'bottom center';
+        this._index = 0;
+        this._name = 'BackgroundLayerSelectionPlugin';
+        this.error = !(this._config && this._config.baseLayers && this._config.baseLayers.length);
+        // Hackhack, make sure baseLayers aren't numbers.
         if (!this.error) {
-            for (i = 0; i < this.conf.baseLayers.length; i += 1) {
-                if (typeof this.conf.baseLayers[i] === 'number') {
-                    this.conf.baseLayers[i] = this.conf.baseLayers[i].toString();
+            for (i = 0; i < this._config.baseLayers.length; i += 1) {
+                if (typeof this._config.baseLayers[i] === 'number') {
+                    this._config.baseLayers[i] =
+                        this._config.baseLayers[i].toString();
                 }
             }
         }
-        this.initialSetup = true;
     }, {
         /** @static @property __name module name */
         __name: 'BackgroundLayerSelectionPlugin',
 
         /**
-         * @method getName
-         * @return {String} module name
-         */
-        getName: function () {
-            return this.pluginName;
-        },
-        /**
-         * @method getMapModule
-         * Returns reference to map module this plugin is registered to
-         * @return {Oskari.mapframework.ui.module.common.MapModule}
-         */
-        getMapModule: function () {
-            return this.mapModule;
-        },
-        /**
-         * @method setMapModule
-         * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        setMapModule: function (mapModule) {
-            this.mapModule = mapModule;
-            if (mapModule) {
-                this.pluginName = mapModule.getName() + this.__name;
-            }
-        },
-
-        getElement: function () {
-            return this.element;
-        },
-        
-        /**
-         * @method hasUI
-         * This plugin has an UI so always returns true
-         * @return {Boolean}
-         */
-        hasUI: function () {
-            return true;
-        },
-        /**
-         * @method getMap
-         * @return {OpenLayers.Map} reference to map implementation
-         */
-        getMap: function () {
-            return this._map;
-        },
-        /**
-         * @method register
-         * Interface method for the module protocol
-         */
-        register: function () {},
-        /**
-         * @method unregister
-         * Interface method for the module protocol
-         */
-        unregister: function () {},
-        /**
-         * @method init
+         * @private @method _initImpl
          * Interface method for the module protocol. Initializes the request
          * handlers/templates.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *         reference to application sandbox
+         *
          */
-        init: function (sandbox) {
+        _initImpl: function () {
             // selected layer's li is marked by selected-class
             // if dropdown is open, li with selected-class will be hidden
             // currentSelection stores the current selection so we don't have to reorder the list elements
@@ -111,174 +54,114 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 '</div></div>'
             );
             // header-icon is used to show the open/close arrow
-            this.dropdownArrowTemplate = jQuery('<div class="header-icon icon-arrow-white-right"></div>');
-            // this is inserted in the ul
-            this.layerSelectionTemplate = jQuery('<li></li>');
+            this.dropdownArrowTemplate = jQuery(
+                '<div class="header-icon icon-arrow-white-right"></div>'
+            );
             // used in case the module config is faulty
             this.errorTemplate = jQuery(
                 '<div class="backgroundLayerSelectionPlugin oskariui mapplugin">' +
-                '<div class="bg"></div>' +
-                '<div class="error">No baseLayers defined in configuration</div>' +
+                '  <div class="bg"></div>' +
+                '  <div class="error">No baseLayers defined in configuration</div>' +
                 '</div>'
             );
         },
-        /**
-         * @method startPlugin
-         *
-         * Interface method for the plugin protocol. Registers requesthandlers and
-         * eventlisteners. Creates the plugin UI.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *         reference to application sandbox
-         */
-        startPlugin: function (sandbox) {
-            var p,
-                me = this;
-            me._sandbox = sandbox || me.getMapModule().getSandbox();
-            me._map = me.getMapModule().getMap();
-            me._sandbox.register(me);
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me._sandbox.registerForEventByName(me, p);
-                }
-            }
-            me._createUI();
-        },
 
         /**
-         * @method stopPlugin
+         * @method _createEventHandlers
+         * Create eventhandlers.
          *
-         * Interface method for the plugin protocol. Unregisters requesthandlers and
-         * eventlisteners. Removes the plugin UI.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *         reference to application sandbox
+         * @return {Object.<string, Function>} EventHandlers
          */
-        stopPlugin: function (sandbox) {
-            var p,
-                me = this;
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me._sandbox.unregisterFromEventByName(me, p);
-                }
-            }
+        _createEventHandlers: function () {
+            return {
+                /**
+                 * @method AfterRearrangeSelectedMapLayerEvent
+                 * @param {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent} event
+                 *
+                 * Rearranges layers
+                 */
+                AfterRearrangeSelectedMapLayerEvent: function (event) {
+                    // Update selection, bottom baselayer might've changed
+                    //this._updateUISelection();
+                    this.refresh();
+                },
 
-            me._sandbox.unregister(me);
+                /**
+                 * @method AfterMapLayerRemoveEvent
+                 * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
+                 *
+                 * Removes the layer from selection
+                 */
+                AfterMapLayerRemoveEvent: function (event) {
+                    // Redo ui, one of our layers might've been deleted
+                    // TODO Check if event.getMapLayer() id is in our layers first...
+                    // if not, still do this._updateUISelection() as the selected
+                    // layer might still have changed
+                    //this._createLayerSelectionElements();
+                    this.refresh();
+                },
 
-            // remove ui
-            if (me.element) {
-                me.element.remove();
-                me.element = undefined;
-                delete me.element;
-            }
-        },
-        /**
-         * @method start
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *         reference to application sandbox
-         */
-        start: function (sandbox) {},
-        /**
-         * @method stop
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *         reference to application sandbox
-         */
-        stop: function (sandbox) {},
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            /**
-             * @method AfterRearrangeSelectedMapLayerEvent
-             * @param {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent} event
-             *
-             * Rearranges layers
-             */
-            'AfterRearrangeSelectedMapLayerEvent': function (event) {
-                // Update selection, bottom baselayer might've changed
-                this._updateUISelection();
-            },
-            /**
-             * @method AfterMapLayerRemoveEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
-             *
-             * Removes the layer from selection
-             */
-            'AfterMapLayerRemoveEvent': function (event) {
-                // Redo ui, one of our layers might've been deleted
-                // TODO Check if event.getMapLayer() id is in our layers first...
-                // if not, still do this._updateUISelection() as the selected
-                // layer might still have changed
-                this._createLayerSelectionElements();
-            },
-            /**
-             * @method AfterMapLayerAddEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
-             *
-             * Adds the layer to selection
-             */
-            'AfterMapLayerAddEvent': function (event) {
-                // Redo ui, we might've gotten a previously missing layer
-                // TODO Check if event.getMapLayer() id is in our layers first...
-                // if not, still do this._updateUISelection() as the selected
-                // layer might still have changed
-                this._createLayerSelectionElements();
-            },
+                /**
+                 * @method AfterMapLayerAddEvent
+                 * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
+                 *
+                 * Adds the layer to selection
+                 */
+                AfterMapLayerAddEvent: function (event) {
+                    // Redo ui, we might've gotten a previously missing layer
+                    // TODO Check if event.getMapLayer() id is in our layers first...
+                    // if not, still do this._updateUISelection() as the selected
+                    // layer might still have changed
+                    //this._createLayerSelectionElements();
+                    this.refresh();
+                },
 
-            /**
-             * @method AfterMapMoveEvent
-             * @param {Oskari.mapframework.event.common.AfterMapMoveEvent} event
-             *
-             * Adds the layer to selection
-             */
-            'MapLayerEvent': function (event) {
-                // TODO add check for event.getMapLayer().getId() here?
-                this._createLayerSelectionElements();
-            },
-            /**
-             * @method userinterface.ExtensionUpdatedEvent
-             */
-            'userinterface.ExtensionUpdatedEvent': function (event) {
-                if (jQuery.inArray(event.getExtension().getName(), ['Analyse', 'Publisher', 'StatsGrid', 'Printout']) > -1) {
-                    var me = this,
-                        isShown = event.getViewState() !== "close";
-                    if (isShown) {
-                        // Mode opened, hide plugin
-                        if (!me.hiddenByMode) {
-                            me.hiddenByMode = true;
-                            me.element.hide();
+                /**
+                 * @method AfterMapMoveEvent
+                 * @param {Oskari.mapframework.event.common.AfterMapMoveEvent} event
+                 *
+                 * Adds the layer to selection
+                 */
+                MapLayerEvent: function (event) {
+                    // TODO add check for event.getMapLayer().getId() here?
+                    //this._createLayerSelectionElements();
+                    this.refresh();
+                },
+
+                /**
+                 * @method userinterface.ExtensionUpdatedEvent
+                 */
+                'userinterface.ExtensionUpdatedEvent': function (event) {
+                    // Hide layer selection if a mode was activated
+                    if (jQuery.inArray(event.getExtension().getName(), ['Analyse', 'Publisher', 'StatsGrid', 'Printout']) > -1) {
+                        var me = this,
+                            isShown = event.getViewState() !== 'close';
+                        if (isShown) {
+                            // Mode opened, hide plugin
+                            if (!me.hiddenByMode) {
+                                me.hiddenByMode = true;
+                                me.setVisible(false);
+                            }
+                        } else if (me.hiddenByMode) {
+                            me.hiddenByMode = null;
+                            delete me.hiddenByMode;
+                            me.setVisible(true);
                         }
-                    } else if (me.hiddenByMode) {
-                        me.hiddenByMode = null;
-                        delete me.hiddenByMode;
-                        me.element.show();
                     }
                 }
-            }
+            };
         },
 
         /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded
-         * if not.
-         */
-        onEvent: function (event) {
-            return this.eventHandlers[event.getName()].apply(this, [event]);
-        },
-        /**
-         * @method toggleSelection
+         * @private @method toggleSelection
          * Programmatically opens/closes the plugins interface as if user had clicked it open
-         * @private
+         *
+         *
          */
         _toggleSelection: function () {
-            var icon = this.element.find('div.header-icon'),
-                content = this.element.find('div.content');
+            var icon = this.getElement().find('div.header-icon'),
+                content = this.getElement().find('div.content');
 
             if (content.hasClass('open')) {
                 icon.addClass('icon-arrow-white-right');
@@ -290,20 +173,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 content.addClass('open');
             }
         },
+
         /**
-         * @method _getBottomLayer
+         * @private @method _getBottomLayer
          * Returns the bottom-most selected layer if any
+         *
          * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
-         * @private
          */
         _getBottomLayer: function () {
             var bottomIdx = 0,
-                allSelectedLayers = this._sandbox.findAllSelectedMapLayers();
+                allSelectedLayers =
+                    this.getSandbox().findAllSelectedMapLayers();
+
             if (allSelectedLayers && allSelectedLayers.length) {
                 return allSelectedLayers[bottomIdx];
             }
             return null;
         },
+
         /**
          * Does the actual layer selection update
          * @param  {Number} newSelectionId Id of the new base layer
@@ -314,13 +201,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 return;
             }
             var me = this,
+                conf = me.getConfig(),
                 currentBottom = me._getBottomLayer(),
-                currentBottomId = "",
-                currentSelection = me.element.find('div.currentSelection'),
-                newSelection = me._sandbox.findMapLayerFromSelectedMapLayers(newSelectionId),
+                currentBottomId = '',
+                currentSelection = me.getElement().find('div.currentSelection'),
+                newSelection =
+                    me.getSandbox().findMapLayerFromSelectedMapLayers(
+                        newSelectionId
+                    ),
                 isBaseLayer = true;
 
-            if(newSelectionId === currentSelection.attr("data-layerId")) {
+            if (newSelectionId === currentSelection.attr('data-layerId')) {
                 // user clicked already selected option, do nothing
                 return;
             }
@@ -328,42 +219,59 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             // - check if current bottom layer exists & is in our list (if so, remove)
             if (currentBottom) {
                 currentBottomId += currentBottom.getId();
-                if (jQuery.inArray(currentBottomId, me.conf.baseLayers) > -1) {
-                    me._sandbox.postRequestByName('RemoveMapLayerRequest', [currentBottomId]);
+                if (jQuery.inArray(currentBottomId, conf.baseLayers) > -1) {
+                    me.getSandbox().postRequestByName(
+                        'RemoveMapLayerRequest',
+                        [currentBottomId]
+                    );
                 }
             }
             // - check if new selection is already selected, remove if so as rearrange doesn't seem to work
             if (newSelection) {
-                me._sandbox.postRequestByName('RemoveMapLayerRequest', [newSelectionId]);
+                me.getSandbox().postRequestByName(
+                    'RemoveMapLayerRequest',
+                    [newSelectionId]
+                );
             } else {
-                newSelection = me._sandbox.findMapLayerFromAllAvailable(newSelectionId);
+                newSelection =
+                    me.getSandbox().findMapLayerFromAllAvailable(
+                        newSelectionId
+                    );
                 isBaseLayer = (newSelection ? newSelection.isBaseLayer() : true);
             }
 
-            me._sandbox.postRequestByName('AddMapLayerRequest', [newSelectionId, false, isBaseLayer]);
+            me.getSandbox().postRequestByName(
+                'AddMapLayerRequest',
+                [newSelectionId, false, isBaseLayer]
+            );
             // - move new selection to bottom (see layerselection._layerOrderChanged(item))
-            me._sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [newSelectionId, 0]);
+            me.getSandbox().postRequestByName(
+                'RearrangeSelectedMapLayerRequest',
+                [newSelectionId, 0]
+            );
             // toggle dropdown open/closed.
             // won't bother with dropdown being on or off here
             me._toggleSelection();
         },
+
         /**
-         * @method  _updateUISelection
+         * @private @method  _updateUISelection
          * Updates UI selection:
          * - Fetches new bottom baselayer
          * - LI element of the selected layer gets the 'selected'-class
          * - currentSelection gets filled with the new selection's information
-         *  @private
+         *
          */
         _updateUISelection: function (force) {
             // TODO:
             // - check what the new selection is (dig up bottom layer...)
             var me = this,
+                conf = me.getConfig(),
                 newSelection = me._getBottomLayer(),
-                newSelectionId = "",
-                newSelectionName = "",
+                newSelectionId = '',
+                newSelectionName = '',
                 listElement,
-                currentSelection = me.element.find('div.currentSelection'),
+                currentSelection = me.getElement().find('div.currentSelection'),
                 icon;
 
             // find bottom-most bg layer
@@ -372,59 +280,68 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 newSelectionName = newSelection.getName();
             }
             // use attr(data-foo) instead of data(foo) so old jquery works...
-            if (!force && newSelectionId === currentSelection.attr("data-layerId")) {
+            if (!force && newSelectionId === currentSelection.attr('data-layerId')) {
                 // Update isn't forced and selection hasn't changed
                 return;
             }
             // - go through LIs, toggle selected class
-            me.element.find('li').each(function (index) {
+            me.getElement().find('li').each(function (index) {
                 listElement = jQuery(this);
-                listElement.toggleClass('selected', listElement.attr("data-layerId") === newSelectionId);
+                listElement.toggleClass(
+                    'selected',
+                    listElement.attr('data-layerId') === newSelectionId
+                );
             });
             // - update currentSelection with the new selection's information if it's in baseLayers
             // clean up current selection
+            currentSelection.attr('data-layerId', '');
+            currentSelection.attr('title', '');
             currentSelection.empty();
-            currentSelection.attr("data-layerId", '');
-            currentSelection.attr("title", '');
-            if (jQuery.inArray(newSelectionId, me.conf.baseLayers) > -1) {
-                currentSelection.attr("data-layerId", newSelectionId);
-                currentSelection.attr("title", newSelectionName);
+            if (jQuery.inArray(newSelectionId, conf.baseLayers) > -1) {
+                currentSelection.attr('data-layerId', newSelectionId);
+                currentSelection.attr('title', newSelectionName);
                 currentSelection.html(newSelectionName);
             }
             icon = me.dropdownArrowTemplate.clone();
-            if (me.element.find('div.content').hasClass('open')) {
-                icon.removeClass('icon-arrow-white-right').addClass('icon-arrow-white-down');
+            if (me.getElement().find('div.content').hasClass('open')) {
+                icon.removeClass(
+                    'icon-arrow-white-right'
+                ).addClass(
+                    'icon-arrow-white-down'
+                );
             }
             currentSelection.prepend(icon);
-            if (me.conf) {
+            if (conf) {
                 /* TODO is there any tool style to be configured?
-                if (me.conf.toolStyle) {
-                    me.changeToolStyle(me.conf.toolStyle, me.element);
+                if (conf.toolStyle) {
+                    me.changeToolStyle(conf.toolStyle, me.getElement());
                 }
                 */
-                if (me.conf.font) {
-                    me.changeFont(me.conf.font, me.element);
+                if (conf.font) {
+                    me.changeFont(conf.font, me.getElement());
                 }
-                if (me.conf.colorScheme) {
+                if (conf.colorScheme) {
                     // TODO this'll be fun to implement with all the dynamic elements...
-                    me.changeColorScheme(me.conf.colorScheme, me.element);
+                    me.changeColorScheme(conf.colorScheme, me.getElement());
                 }
             }
         },
+
         /**
-         * @method  _createLayerSelectionElements
+         * @private @method  _createLayerSelectionElements
          * Creates LI elements for the bg layers.
          * These are used in both dropdown and list mode.
-         * @private
+         *
          */
         _createLayerSelectionElements: function () {
             if (this.error) {
                 return;
             }
             var me = this,
+                element = me.getElement(),
                 layer,
-                layerIds = me.conf.baseLayers,
-                list = me.element.find('ul'),
+                layerIds = me.getConfig().baseLayers,
+                list = element.find('ul'),
                 listItem,
                 i,
                 selectionUpdateHandler = function () {
@@ -433,11 +350,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             // remove children, this function is called on update
             list.empty();
             for (i = 0; i < layerIds.length; i += 1) {
-                // TODO get layer from somewhere to see if it exists and to get its name...
-                layer = me._sandbox.findMapLayerFromAllAvailable(layerIds[i]);
+                layer = me.getSandbox().findMapLayerFromAllAvailable(
+                    layerIds[i]
+                );
                 if (layer) {
-                    listItem = me.layerSelectionTemplate.clone();
-                    listItem.attr("data-layerId", layerIds[i]).attr("title", layer.getName()).html(layer.getName());
+                    listItem = jQuery('<li></li>');
+                    listItem.attr(
+                        'data-layerId',
+                        layerIds[i]
+                    ).attr(
+                        'title',
+                        layer.getName()
+                    ).html(
+                        layer.getName()
+                    );
                     list.append(listItem);
                     listItem.bind('click', selectionUpdateHandler);
                 }
@@ -445,67 +371,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             // force update selection
             me._updateUISelection(true);
         },
+
         /**
-         * @method  _createUI
+         * @private @method  _createControlElement
          * Creates the whole ui from scratch and writes the plugin in to the UI.
-         * Tries to find the plugins placeholder with 'div.mapplugins.left' selector.
-         * If it exists, checks if there are other bundles and writes itself as the first one.
-         * If the placeholder doesn't exist the plugin is written to the mapmodules div element.
-         * @private
+         * Tries to find the plugins placeholder with 'div.mapplugins.left'
+         * selector. If it exists, checks if there are other bundles and writes
+         * itself as the first one. If the placeholder doesn't exist the plugin
+         * is written to the mapmodules div element.
+         *
+         *
          */
-        _createUI: function () {
+        _createControlElement: function () {
             var me = this,
+                conf = me.getConfig(),
+                el,
                 containerClasses = 'bottom center',
                 position = 0;
 
-            if (!me.element) {
-                if (me.error) {
-                    // No baseLayers in config, show error.
-                    me.element = me.errorTemplate.clone();
-                } else {
-                    me.element = me.template.clone();
-                    me.element.find('div.currentSelection').bind('click', function () {
+            if (me.error) {
+                // No baseLayers in config, show error.
+                el = me.errorTemplate.clone();
+            } else {
+                el = me.template.clone();
+                el.find('div.currentSelection').bind(
+                    'click',
+                    function () {
                         me._toggleSelection();
-                    });
+                    }
+                );
 
-                    me.element.find('div.content').toggleClass('dropdown', me.conf && me.conf.showAsDropdown);
-
-                    // create entries
-                    me._createLayerSelectionElements();
-                }
+                el.find('div.content').toggleClass(
+                    'dropdown',
+                    conf && conf.showAsDropdown
+                );
             }
 
-            // make sure we're in before logo etc.
-            if (me.conf && me.conf.location) {
-                containerClasses = me.conf.location.classes || containerClasses;
-                position = me.conf.location.position || position;
-            }
-            //parentContainer.append(me.element);
-            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
+            return el;
         },
-        /**
-         * Sets the location of the plugin.
-         *
-         * @method setLocation
-         * @param {String} location The new location
-         */
-        setLocation: function (location) {
-            var me = this;
-            if (!me.conf) {
-                me.conf = {};
-            }
-            me.conf.location = location;
 
-            // reset plugin if active
-            if (me.element) {
-                me.stopPlugin();
-                me.startPlugin();
-            }
+        refresh: function () {
+            this._createLayerSelectionElements();
         },
+
         /**
+         * @public @method changeColorScheme
          * Changes the color scheme of the plugin
          *
-         * @method changeColorScheme
          * @param {Object} colorScheme object containing the color settings for the plugin
          *      {
          *          buttonColor: <Text color for buttons>,
@@ -515,9 +427,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
          *          buttonBorderColor: <Border color for dropdown buttons>
          *      }
          * @param {jQuery} div
+         *
          */
         changeColorScheme: function (colorScheme, div) {
-            div = div || this.element;
+            div = div || this.getElement();
 
             if (!div || !colorScheme) {
                 return;
@@ -543,15 +456,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 'color': colorScheme.buttonColor
             });
         },
+
         /**
+         * @method changeFont
          * Changes the font used by plugin by adding a CSS class to its DOM elements.
          *
-         * @method changeFont
          * @param {String} fontId
          * @param {jQuery} div
+         *
          */
         changeFont: function (fontId, div) {
-            div = div || this.element;
+            div = div || this.getElement();
 
             if (!div || !fontId) {
                 return;
@@ -563,9 +478,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             this.getMapModule().changeCssClasses(classToAdd, testRegex, [div]);
         }
     }, {
+        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
-         * @property {String[]} protocol array of superclasses as {String}
-         * @static
+         * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
-    });
+        'protocol': [
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
+        ]
+    }
+);

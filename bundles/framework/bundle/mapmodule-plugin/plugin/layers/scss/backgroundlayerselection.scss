@@ -30,12 +30,6 @@ div.mapplugin.backgroundLayerSelectionPlugin {
     $backgroundColor: #000;
     $backgroundOpacity: 0.3;
 
-    width: 100%;
-    height: $buttonHeight + $contentVerticalMargin + $contentVerticalMargin;
-    margin: 0;
-    z-index: 15000;
-    text-align: center;
-
     div.bg {
         background-color: $backgroundColor;
         opacity: $backgroundOpacity;

@@ -241,7 +241,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance'
             this.gridPlugin.setState(this.state);
             this.classifyPlugin.setState(this.state);
             // Reset the classify plugin
-            this.classifyPlugin.resetUI(this.state);
+            this.classifyPlugin.refresh();
 
             if (state.isActive) {
                 var view = this.getView(),

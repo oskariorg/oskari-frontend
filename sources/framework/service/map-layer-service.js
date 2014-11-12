@@ -243,6 +243,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (newLayerConf.refreshRate) {
                 layer.setRefreshRate(newLayerConf.refreshRate);
             }
+            if (newLayerConf.version) {
+                layer.setVersion(newLayerConf.version);
+            }
+            if (newLayerConf.srs_name) {
+                layer.setSrs_name(newLayerConf.srs_name);
+            }
 
             if (newLayerConf.admin) {
                 layer.setAdmin(newLayerConf.admin);
@@ -291,7 +297,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         loadAllLayersAjax: function (callbackSuccess, callbackFailure) {
             //console.log("loadAllLayersAjax");
-            var me = this;
+            var me = this,
+                epsg = me._sandbox.getMap().getSrsName();
             // Used to bypass browsers' cache especially in IE, which seems to cause
             // problems with displaying publishing permissions in some situations.
             var timeStamp = new Date().getTime();
@@ -299,12 +306,16 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             jQuery.ajax({
                 type: "GET",
                 dataType: 'json',
+                data : {
+                    timestamp : timeStamp,
+                    epsg : epsg
+                },
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType("application/j-son;charset=UTF-8");
                     }
                 },
-                url: this._mapLayerUrl + '&timestamp=' + timeStamp + '&',
+                url: this._mapLayerUrl,
                 success: function (pResp) {
                     me._loadAllLayersAjaxCallBack(pResp, callbackSuccess);
                 },
@@ -741,6 +752,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             layer.setRealtime(mapLayerJson.realtime);
             layer.setRefreshRate(mapLayerJson.refreshRate);
             layer.setAdmin(mapLayerJson.admin);
+
+            layer.setVersion(mapLayerJson.version);
+            layer.setSrs_name(mapLayerJson.srs_name);
 
             // metadata 
             layer.setDataUrl(mapLayerJson.dataUrl);

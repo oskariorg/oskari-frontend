@@ -5,99 +5,57 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
+     *
      */
-
     function (conf) {
         var me = this;
-        me.conf = conf || {};
-        me.element = null;
-        me.mapModule = null;
-        me.pluginName = null;
-        me._sandbox = null;
-        me._map = null;
-        me._scalebar = null;
-        me.toolbarId = me.conf.toolbarId;
+        me._clazz =
+            'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin';
+        me._defaultLocation = 'top left';
+        me._index = 0;
+        me._name = 'PublisherToolbarPlugin';
+
+        me.toolbarId = conf.toolbarId;
         me.toolbarContent = 'publishedToolbarContent';
         me.toolbarPopupContent = 'publishedToolbarPopupContent';
         me.toolbarContainer = 'publishedToolbarContainer'; // Note! this needs to match styles and templates
-        me.isInLayerToolsEditMode = false;
-
     }, {
         // templates for tools-mapplugin
         templates: {
             main: jQuery(
-                '<div class="mapplugin tools" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin">' +
-                    "<div class='icon menu-rounded-dark'></div>" +
-                    "<div class='publishedToolbarContainer'>" +
-                    "<div class='tools-top-arrow'></div>" +
-                    "</div>" +
-                    '</div>'
+                '<div class="mapplugin tools">' +
+                '  <div class="icon menu-rounded-dark"></div>' +
+                '  <div class="publishedToolbarContainer">' +
+                '    <div class="tools-top-arrow"></div>' +
+                '  </div>' +
+                '</div>'
             ),
-            container: jQuery("<div></div>"),
-            publishedToolbarPopupContent: jQuery('<div class="publishedToolPopupContent"><h3></h3><div class="content"></div><div class="actions"></div></div>')
+            container: jQuery('<div></div>'),
+            publishedToolbarPopupContent: jQuery(
+                '<div class="publishedToolPopupContent">' +
+                '  <h3></h3>' +
+                '  <div class="content"></div>' +
+                '  <div class="actions"></div>' +
+                '</div>'
+            )
         },
 
-        /** @static @property __name plugin name */
-        __name: 'PublisherToolbarPlugin',
-
         /**
-         * @method getName
-         * @return {String} plugin name
-         */
-        getName: function () {
-            return this.pluginName;
-        },
-        getClazz: function () {
-            return "Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin";
-        },
-        /**
-         * @method getMapModule
-         * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        getMapModule: function () {
-            return this.mapModule;
-        },
-        /**
-         * @method setMapModule
-         * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        setMapModule: function (mapModule) {
-            this.mapModule = mapModule;
-            if (mapModule) {
-                this.pluginName = mapModule.getName() + this.__name;
-            }
-        },
-
-        getElement: function () {
-            return this.element;
-        },
-        
-        /**
-         * @method hasUI
-         * This plugin has an UI so always returns true
-         * @return {Boolean} true
-         */
-        hasUI: function () {
-            return true;
-        },
-        /**
-         * @method init
+         * @private @method _initImpl
          * Interface method for the module protocol.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
+         *
          */
-        init: function (sandbox) {
+        _initImpl: function () {
             var me = this,
-                pluginLoc = me.getMapModule().getLocalization('plugin', true),
-                reqBuilder = me._sandbox.getRequestBuilder('ToolSelectionRequest'),
+                reqBuilder = me.getSandbox().getRequestBuilder(
+                    'ToolSelectionRequest'
+                ),
                 gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest',
-                gfiReqBuilder = me._sandbox.getRequestBuilder(gfiRn);
-            me.localization = pluginLoc[me.__name];
+                gfiReqBuilder = me.getSandbox().getRequestBuilder(gfiRn);
+
             me.template = jQuery(me.templates.main);
 
             /////////////////////////////////
@@ -110,22 +68,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                         'history_back': {
                             toolbarid: me.toolbarId,
                             iconCls: 'tool-history-back-dark',
-                            tooltip: me.localization.history.back,
+                            tooltip: me._loc.history.back,
                             prepend: true,
                             enabled: false,
                             sticky: false,
                             callback: function () {
-                                me._sandbox.request(me, reqBuilder('map_control_tool_prev'));
+                                me.getSandbox().request(
+                                    me,
+                                    reqBuilder('map_control_tool_prev')
+                                );
                             }
                         },
                         'history_forward': {
                             toolbarid: me.toolbarId,
                             iconCls: 'tool-history-forward-dark',
-                            tooltip: me.localization.history.next,
+                            tooltip: me._loc.history.next,
                             enabled: false,
                             sticky: false,
                             callback: function () {
-                                me._sandbox.request(me, reqBuilder('map_control_tool_next'));
+                                me.getSandbox().request(
+                                    me,
+                                    reqBuilder('map_control_tool_next')
+                                );
                             }
                         }
                     }
@@ -135,272 +99,171 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                         'measureline': {
                             toolbarid: me.toolbarId,
                             iconCls: 'tool-measure-line-dark',
-                            tooltip: me.localization.measure.line,
+                            tooltip: me._loc.measure.line,
                             enabled: false,
                             sticky: true,
                             callback: function () {
                                 var rn = 'map_control_measure_tool';
-                                me._sandbox.request(me, gfiReqBuilder(false));
-                                me._sandbox.request(me, reqBuilder(rn));
+                                me.getSandbox().request(me, gfiReqBuilder(false));
+                                me.getSandbox().request(me, reqBuilder(rn));
                             }
                         },
                         'measurearea': {
                             toolbarid: me.toolbarId,
                             iconCls: 'tool-measure-area-dark',
-                            tooltip: me.localization.measure.area,
+                            tooltip: me._loc.measure.area,
                             enabled: false,
                             sticky: true,
                             callback: function () {
                                 var rn = 'map_control_measure_area_tool';
-                                me._sandbox.request(me, gfiReqBuilder(false));
-                                me._sandbox.request(me, reqBuilder(rn));
+                                me.getSandbox().request(me, gfiReqBuilder(false));
+                                me.getSandbox().request(me, reqBuilder(rn));
                             }
                         }
                     }
                 }
             ];
+        },
 
-            this.requestHandlers = {
-                toolContainerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler', me)
+        _createRequestHandlers: function () {
+            return {
+                'Toolbar.ToolContainerRequest': Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler', this)
             };
         },
-        /**
-         * @method register
-         * Interface method for the module protocol
-         */
-        register: function () {},
-        /**
-         * @method unregister
-         * Interface method for the module protocol
-         */
-        unregister: function () {},
 
-        /**
-         * Sets the location of the tools container.
-         *
-         * @method setLocation
-         * @param {String} location The new location
-         */
-        setLocation: function (location) {
-            var me = this;
-            if (!me.conf) {
-                me.conf = {};
-            }
-            if (!me.conf.location) {
-                me.conf.location = {};
-            }
-            me.conf.location.classes = location;
-
-            if (me.element) {
-                me.getMapModule().setMapControlPlugin(me.element, location, 0);
-            }
-        },
-
-        /**
-         * @method startPlugin
-         * Interface method for the plugin protocol.
-         * Adds the tools container to the map controls.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        startPlugin: function (sandbox) {
-            var me = this,
-                p;
-            me._sandbox = sandbox || me.getMapModule().getSandbox();
-            me._map = me.getMapModule().getMap();
-
-            //register plugin
-            me._sandbox.register(me);
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    //register event listeners
-                    me._sandbox.registerForEventByName(me, p);
-                }
-            }
-
-            me._sandbox.addRequestHandler('Toolbar.ToolContainerRequest', this.requestHandlers.toolContainerRequestHandler);
-
-            me._createUI();
-        },
-        /**
-         * @method stopPlugin
-         * Interface method for the plugin protocol.
-         * Removes the scalebar from map controls.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stopPlugin: function (sandbox) {
-            var me = this,
-                p;
-
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me._sandbox.unregisterFromEventByName(me, p);
-                }
-            }
-            me.destroy();
-            me._sandbox.unregister(me);
-            me._map = null;
-            me._sandbox = null;
-            if (me.element) {
-                me.element.remove();
-                me.element = undefined;
-            }
-        },
-        /**
-         * @method start
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        start: function (sandbox) {},
-        /**
-         * @method stop
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stop: function (sandbox) {},
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            'LayerToolsEditModeEvent': function (event) {
-                this._setLayerToolsEditMode(event.isInMode());
-            }
-        },
-
-        _setLayerToolsEditMode: function (isInEditMode) {
-            if (this.isInLayerToolsEditMode === isInEditMode) {
-                // we don't want to bind click twice...
-                return;
-            }
-            this.isInLayerToolsEditMode = isInEditMode;
-            if (isInEditMode) {
+        _setLayerToolsEditModeImpl: function () {
+            if (this.inLayerToolsEditMode()) {
                 // close toolbar
-                this.element.find('.' + this.toolbarContainer).hide();
+                this.getElement().find('.' + this.toolbarContainer).hide();
                 // disable icon
-                this.element.find("div.icon").unbind("click");
+                this.getElement().find('div.icon').unbind('click');
             } else {
                 // enable icon
                 this._bindIcon();
             }
         },
 
-        /**
-         * @method onEvent
-         * Event is handled forwarded to correct #eventHandlers if found or discarded
-         * if not.
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         */
-        onEvent: function (event) {
-            return this.eventHandlers[event.getName()].apply(this, [event]);
-        },
-
         show: function (isShown) {
             var showHide = isShown ? 'show' : 'hide';
-            this._sandbox.requestByName(this, 'Toolbar.ToolbarRequest', [this.toolbarId, showHide]);
+            this.getSandbox().requestByName(
+                this,
+                'Toolbar.ToolbarRequest',
+                [
+                    this.toolbarId,
+                    showHide
+                ]
+            );
         },
+
         destroy: function () {
-            this._sandbox.requestByName(this, 'Toolbar.ToolbarRequest', [this.toolbarId, 'remove']);
+            this.getSandbox().requestByName(
+                this,
+                'Toolbar.ToolbarRequest',
+                [
+                    this.toolbarId,
+                    'remove'
+                ]
+            );
         },
+
         changeName: function (title) {
-            this._sandbox.requestByName(this, 'Toolbar.ToolbarRequest', [this.toolbarId, 'changeName', title]);
+            this.getSandbox().requestByName(
+                this,
+                'Toolbar.ToolbarRequest',
+                [
+                    this.toolbarId,
+                    'changeName',
+                    title
+                ]
+            );
         },
 
         /**
-         * @method _createUI
-         * sample toolbar for statistics functionality
+         * @private @method _createControlElement
          */
-        _createUI: function () {
+        _createControlElement: function () {
             var me = this,
+                el,
                 toolscontainer,
-                sandbox = me._sandbox,
+                sandbox = me.getSandbox(),
                 container,
-                content,
-                containerClasses = 'top left',
-                position = 0,
                 containers = [me.toolbarContent, me.toolbarPopupContent],
                 i,
                 ilen;
 
-            if (!me.element) {
-                me.element = me.template.clone();
-                container = me.element.find('.' + me.toolbarContainer);
+            el = me.template.clone();
+            container = el.find('.' + me.toolbarContainer);
 
-                for (i = 0, ilen = containers.length; i < ilen; i++) {
-                    // create configured containers
-                    me.templates.container
-                        .clone()
-                        .attr("class", containers[i])
-                        .appendTo(container);
-                }
+            for (i = 0, ilen = containers.length; i < ilen; i += 1) {
+                // create configured containers
+                me.templates.container
+                    .clone()
+                    .attr('class', containers[i])
+                    .appendTo(container);
             }
-
-            if (this.conf && this.conf.toolStyle) {
-                this.changeToolStyle(this.conf.toolStyle, me.element);
-            }
-
-            me.insertToMap();
 
             // hide container
-            toolscontainer = me.element.find('.' + me.toolbarContainer);
+            toolscontainer = el.find('.' + me.toolbarContainer);
             toolscontainer.hide();
+            return el;
+        },
+
+        refresh: function () {
+            var me = this,
+                conf = me.getConfig();
 
             me._bindIcon();
-            
 
-            if (me.conf && me.conf.font) {
-                me.changeFont(me.conf.font, content);
+            if (conf) {
+                if (conf.toolStyle) {
+                    me.changeToolStyle(conf.toolStyle, me.getElement());
+                }
+                if (conf.font) {
+                    me.changeFont(conf.font, me.getElement());
+                }
             }
-
         },
 
         _bindIcon: function () {
             var me = this,
-                icon = me.element.find("div.icon"),
-                toolscontainer = me.element.find('.' + me.toolbarContainer);
+                el = me.getElement(),
+                icon = el.find('div.icon'),
+                toolscontainer = el.find('.' + me.toolbarContainer);
+
+            icon.unbind('click');
             icon.bind('click', function () {
                 toolscontainer.toggle();
             });
         },
 
-        insertToMap: function () {
-            var me = this,
-                containerClasses = 'top left',
-                position = 0;
-            // add classes (top, bottom, left, right, center)
-            if (me.conf && me.conf.location) {
-                containerClasses = me.conf.location.classes || containerClasses;
-                position = me.conf.location.position || position;
-            }
-            me.getMapModule().setMapControlPlugin(me.element, containerClasses, position);
-        },
-
         setToolbarContainer: function () {
             var me = this,
-                sandbox = me._sandbox,
+                sandbox = me.getSandbox(),
                 builder = sandbox.getRequestBuilder('Toolbar.ToolbarRequest');
 
             if (me.toolbarId && (me.toolbarContent) && builder !== null && builder !== undefined) {
                 // add toolbar when toolbarId and target container is configured
                 // We assume the first container is intended for the toolbar
-                sandbox.requestByName(me, 'Toolbar.ToolbarRequest', [me.toolbarId, 'add', {
-                    title: me.localization.title,
-                    show: false,
-                    toolbarContainer: me.element.find('.' + me.toolbarContent),
-                    closeBoxCallback: function () {
-                        // this is useless, I guess.  
-                        //view.prepareMode(false);
-                    }
-                }]);
+                sandbox.requestByName(
+                    me,
+                    'Toolbar.ToolbarRequest',
+                    [
+                        me.toolbarId,
+                        'add',
+                        {
+                            title: me._loc.title,
+                            show: false,
+                            toolbarContainer: me.getElement().find('.' + me.toolbarContent),
+                            closeBoxCallback: function () {
+                                // this is useless, I guess.  
+                                //view.prepareMode(false);
+                            }
+                        }
+                    ]
+                );
             }
         },
+
         /**
          * @method getToolOptions
          * Function to return plugin options
@@ -410,6 +273,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             var me = this;
             return me.buttonGroups;
         },
+
         /**
          * Changes the tool style of the plugin
          *
@@ -419,7 +283,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          */
         changeToolStyle: function (style, div) {
             var me = this;
-            div = div || me.element;
+            div = div || me.getElement();
 
             if (!div) {
                 return;
@@ -432,7 +296,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 icon = div.find('.icon'),
                 toolsContent = div.find('.' + me.toolbarContent),
                 toolsPopupContent = div.find('.' + me.toolbarPopupContent),
-                blackOrWhite = style ? style.split("-")[1] : 'dark';
+                blackOrWhite = style ? style.split('-')[1] : 'dark';
 
             var styledImgClass = 'menu-' + style;
 
@@ -444,7 +308,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 icon.removeClass();
                 icon.addClass('icon menu-' + style);
 
-                if (blackOrWhite === "dark") {
+                if (blackOrWhite === 'dark') {
                     toolsContent.removeClass('light').addClass('dark');
                     toolsPopupContent.removeClass('light').addClass('dark');
                 } else {
@@ -453,7 +317,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 }
             }
 
-            var toolbarContent = me.element.find('.' + me.toolbarContent),
+            var toolbarContent = me.getElement().find('.' + me.toolbarContent),
                 key,
                 buttonKey,
                 i;
@@ -467,14 +331,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     for (buttonKey in confGroup.buttons) {
                         if (confGroup.buttons.hasOwnProperty(buttonKey)) {
                             var confButton = confGroup.buttons[buttonKey],
-                                iconClassParts = confButton.iconCls.split("-"),
+                                iconClassParts = confButton.iconCls.split('-'),
                                 iconClass = iconClassParts[0],
                                 lastInd = iconClassParts.length - 1;
-                            if (!(iconClassParts[lastInd] === "dark" || iconClassParts[lastInd] === "light")) {
+                            if (!(iconClassParts[lastInd] === 'dark' || iconClassParts[lastInd] === 'light')) {
                                 iconClassParts.push('dark');
-                                lastInd++;
+                                lastInd += 1;
                             }
-                            for (i = 1; i < iconClassParts.length; i++) {
+                            for (i = 1; i < iconClassParts.length; i += 1) {
                                 if (i < lastInd) {
                                     iconClass += '-' + iconClassParts[i];
                                 } else {
@@ -493,14 +357,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         },
 
         /**
+         * @method changeFont
          * Changes the font used by plugin by adding a CSS class to its DOM elements.
          *
-         * @method changeFont
          * @param {String} fontId
          * @param {jQuery} div
          */
         changeFont: function (fontId, div) {
-            div = div || this.element;
+            div = div || this.getElement();
 
             if (!div || !fontId) {
                 return;
@@ -512,7 +376,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             var classToAdd = 'oskari-publisher-font-' + fontId,
                 testRegex = /oskari-publisher-font-/;
-            this.getMapModule().changeCssClasses(classToAdd, testRegex, elements);
+            this.getMapModule().changeCssClasses(
+                classToAdd,
+                testRegex,
+                elements
+            );
         },
 
         /**
@@ -531,12 +399,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          */
         setToolContent: function (data) {
             var me = this,
-                className = data.className || "", // defaults to empty
-                title = data.title || "", // defaults to empty
-                content = data.content || "", // defaults to empty
+                className = data.className || '', // defaults to empty
+                title = data.title || '', // defaults to empty
+                content = data.content || '', // defaults to empty
                 buttons = data.buttons || [], // defaults to empty
-                toolbarDiv = me.element.find('.' + me.toolbarContent),
-                contentDiv = me.element.find('.' + className),
+                toolbarDiv = me.getElement().find('.' + me.toolbarContent),
+                contentDiv = me.getElement().find('.' + className),
                 appendContentDiv = false,
                 actionDiv,
                 i,
@@ -553,7 +421,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             if (className) {
                 contentDiv.removeClass();
-                contentDiv.addClass("publishedToolPopupContent " + className);
+                contentDiv.addClass('publishedToolPopupContent ' + className);
             }
 
             // buttons cannot be reattached so that they are functional, it also requires some other stuff, hence the TODO
@@ -573,7 +441,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             // attach to container
             if (appendContentDiv) {
-                me.element.find('.' + me.toolbarPopupContent).append(contentDiv);
+                me.getElement().find('.' + me.toolbarPopupContent).append(contentDiv);
                 toolbarDiv.hide();
             }
 
@@ -586,13 +454,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         resetToolContent: function (data) {
             // clear and show toolbar
             var me = this,
-                className = data.className || "publishedToolPopupContent", // defaults to publishedToolbarPopupContent
-                toolbarDiv = me.element.find('.' + me.toolbarContent),
-                contentDiv = me.element.find('.' + className);
+                className = data.className || 'publishedToolPopupContent', // defaults to publishedToolbarPopupContent
+                toolbarDiv = me.getElement().find('.' + me.toolbarContent),
+                contentDiv = me.getElement().find('.' + className);
 
             contentDiv.remove();
             toolbarDiv.show();
         },
+
         getToolConfs: function () {
             var me = this,
                 confs = {},
@@ -622,9 +491,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         }
 
     }, {
+        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
-         * @property {String[]} protocol array of superclasses as {String}
-         * @static
+         * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': [
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
+        ]
     });

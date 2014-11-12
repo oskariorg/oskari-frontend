@@ -125,6 +125,11 @@ Oskari.registerLocalization(
                         "label": "Difference computation",
                         "classForPreview": "difference",
                         "tooltip": ""
+                    }, {
+                        "id": "oskari_analyse_spatial_join",
+                        "label": "Spatial join",
+                        "classForPreview": "spatial_join",
+                        "tooltip": ""
                     }]
             },
             "aggregate": {

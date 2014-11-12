@@ -1,238 +1,79 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PanButtons
- * Adds on-screen pan buttons on the map. In the middle of the pan buttons is a state reset button.
+ * Adds on-screen pan buttons on the map. In the middle of the pan buttons is a
+ * state reset button.
+ *
  * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginPanButtons
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
 
     /**
-     * @method create called automatically on construction
-     * @static
+     * @static @method create called automatically on construction
+     *
+     *
      */
-
     function (config) {
-        var me = this;
-        me.mapModule = null;
-        me.pluginName = null;
-        me._sandbox = null;
-        me._map = null;
-        me.templates = {};
-        me.element = null;
-        me.__parent = null;
-        me.conf = config;
+        this._clazz =
+            'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons';
+        this._defaultLocation = 'top right';
+        this._index = 0;
+        this._name = 'PanButtons';
     }, {
         /**
-         * @static
-         * @property __name
+         * @private @method _createControlElement
+         * Draws the panbuttons on the screen.
+         *
+         *
+         * @return {jQuery}
+         * Plugin jQuery element
          */
-        __name: 'PanButtons',
-
-        getClazz: function () {
-            return 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons';
-        },
-
-        /**
-         * @method getName
-         * @return {String} the name for the component
-         */
-        getName: function () {
-            return this.pluginName;
-        },
-
-        /**
-         * @method getMapModule
-         * @return {Oskari.mapframework.ui.module.common.MapModule} reference
-         * to map module
-         */
-        getMapModule: function () {
-            return this.mapModule;
-        },
-
-        getElement: function () {
-            return this.element;
-        },
-
-        /**
-         * @method hasUI
-         * This plugin has an UI so always returns true
-         * @return {Boolean} true
-         */
-        hasUI: function () {
-            return true;
-
-        },
-
-        /**
-         * @method setMapModule
-         * @param {Oskari.mapframework.ui.module.common.MapModule} reference
-         * to map module
-         */
-        setMapModule: function (mapModule) {
-            this.mapModule = mapModule;
-            if (mapModule) {
-                this._map = mapModule.getMap();
-                this.pluginName = mapModule.getName() + this.__name;
-            }
-        },
-
-        /**
-         * @method init
-         * implements Module protocol init method - declares pan
-         * buttons templates
-         */
-        init: function () {
-            var ppid = (new Date()).getTime().toString();
-            // templates
-            this.templates.main = jQuery('<div class="mapplugin panbuttonDiv panbuttons" data-clazz="Oskari.mapframework.bundle.mapmodule.plugin.PanButtons">' +
-                '<div>' +
-                '  <img class="panbuttonDivImg" usemap="#panbuttons_' + ppid + '">' +
-                '    <map name="panbuttons_' + ppid + '">' +
-                // center
-                '      <area shape="circle" ' + 'class="panbuttons_center" ' + 'coords="45,45,20" href="#">' +
-                // left
-                '      <area shape="polygon" ' + 'class="panbuttons_left" ' + 'coords="13,20,25,30,20,45,27,65,13,70,5,45" ' + 'href="#">' +
-                // up
-                '      <area shape="polygon" ' + 'class="panbuttons_up" ' + 'coords="30,8,45,4,60,8,60,23,45,20,30,23" ' + 'href="#">' +
-                //right
-                '      <area shape="polygon" ' + 'class="panbuttons_right" ' + 'coords="79,20,67,30,72,45,65,65,79,70,87,45" ' + 'href="#">' +
-                // down
-                '      <area shape="polygon" ' + 'class="panbuttons_down" ' + 'coords="30,82,45,86,60,82,60,68,45,70,30,68" ' + 'href="#">' +
-                '    </map>' + '  </img>' + '</div>' + '</div>');
-        },
-
-        /**
-         * @method register
-         * mapmodule.Plugin protocol method - does nothing atm
-         */
-        register: function () {
-
-        },
-
-        /**
-         * @method unregister
-         * mapmodule.Plugin protocol method - does nothing atm
-         */
-        unregister: function () {},
-
-        /**
-         * @method startPlugin
-         * mapmodule.Plugin protocol method.
-         * Sets sandbox and registers self to sandbox. Constructs the plugin UI and displays it.
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         */
-        startPlugin: function (sandbox) {
+        _createControlElement: function () {
             var me = this,
-                p;
-            me._sandbox = sandbox || me.getMapModule().getSandbox();
-            me._sandbox.register(me);
-
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me._sandbox.registerForEventByName(me, p);
-                }
-            }
-
-            this._draw();
-        },
-
-        /**
-         * @method stopPlugin
-         * mapmodule.Plugin protocol method.
-         * Unregisters self from sandbox and removes plugins UI from screen.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         */
-        stopPlugin: function (sandbox) {
-            var me = this,
-                p;
-            if (me.element) {
-                me.element.remove();
-                delete me.element;
-            }
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me._sandbox.unregisterFromEventByName(me, p);
-                }
-            }
-            me._sandbox.unregister(this);
-        },
-
-        /**
-         * Sets the location of the panbuttons.
-         *
-         * @method setLocation
-         * @param {String} location The new location
-         */
-        setLocation: function (location) {
-            var me = this;
-            if (!me.conf) {
-                me.conf = {};
-            }
-            me.conf.location.classes = location;
-
-            if (me.element) {
-                me.getMapModule().setMapControlPlugin(me.element, location, 0);
-            }
-        },
-
-        /**
-         * @method _draw
-         * @private
-         *
-         * Creates the UI and binds the button functionality to it.
-         */
-        _draw: function () {
-            var me = this;
-            if (!me.__parent) {
-                me.__parent = this._map.div;
-            }
-            if (!me.element) {
-                me.element = me.templates.main.clone();
-            }
-
-            var pb = me.element,
-                containerClasses = 'top right',
-                position = 0;
-
-            if (me.conf && me.conf.location) {
-                containerClasses = me.conf.location.classes || containerClasses;
-                position = me.conf.location.position || position;
-            }
-
-            me.mapModule.setMapControlPlugin(pb, containerClasses, position);
-
-            var pbimg = this.getMapModule().getImageUrl() + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/',
-                panbuttonDivImg = pb.find('.panbuttonDivImg');
+                ppid = (new Date()).getTime().toString(),
+                el = jQuery(
+                    '<div class="mapplugin panbuttonDiv panbuttons">' +
+                    '  <div>' +
+                    '    <img class="panbuttonDivImg" usemap="#panbuttons_' + ppid + '">' +
+                    '      <map name="panbuttons_' + ppid + '">' +
+                    '        <area shape="circle"  class="panbuttons_center" coords="45,45,20" href="#">' +
+                    '        <area shape="polygon" class="panbuttons_left"   coords="13,20,25,30,20,45,27,65,13,70,5,45" href="#">' +
+                    '        <area shape="polygon" class="panbuttons_up"     coords="30,8,45,4,60,8,60,23,45,20,30,23" href="#">' +
+                    '        <area shape="polygon" class="panbuttons_right"  coords="79,20,67,30,72,45,65,65,79,70,87,45" href="#">' +
+                    '        <area shape="polygon" class="panbuttons_down"   coords="30,82,45,86,60,82,60,68,45,70,30,68" href="#">' +
+                    '      </map>' +
+                    '   </img>' +
+                    '  </div>' +
+                    '</div>'
+                ),
+                center = el.find('.panbuttons_center'),
+                left = el.find('.panbuttons_left'),
+                right = el.find('.panbuttons_right'),
+                top = el.find('.panbuttons_up'),
+                bottom = el.find('.panbuttons_down'),
+                pbimg = me.getMapModule().getImageUrl() + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/',
+                panbuttonDivImg = el.find('.panbuttonDivImg');
             // update path from config
             panbuttonDivImg.attr('src', pbimg + 'empty.png');
 
-            if (me.conf && me.conf.toolStyle) {
-                me.changeToolStyle(me.conf.toolStyle, pb);
-            }
-
-            var center = pb.find('.panbuttons_center');
-
             center.bind('mouseover', function (event) {
-                panbuttonDivImg.addClass("root");
+                panbuttonDivImg.addClass('root');
             });
             center.bind('mouseout', function (event) {
-                panbuttonDivImg.removeClass("root");
+                panbuttonDivImg.removeClass('root');
             });
             center.bind('click', function (event) {
-                if (!me.isInLayerToolsEditMode) {
-                    var rn = 'StateHandler.SetStateRequest',
-                        mm = me.getMapModule(),
-                        sb = mm.getSandbox(),
-                        rb = sb.getRequestBuilder(rn);
-                    if (rb) {
-                        sb.request(me, rb());
+                if (!me.inLayerToolsEditMode()) {
+                    var requestBuilder = me.getSandbox().getRequestBuilder(
+                        'StateHandler.SetStateRequest'
+                    );
+                    if (requestBuilder) {
+                        me.getSandbox().request(me, requestBuilder());
                     } else {
-                        sb.resetState();
+                        me.getSandbox().resetState();
                     }
                 }
             });
-
-            var left = pb.find('.panbuttons_left');
+    
             left.bind('mouseover', function (event) {
                 panbuttonDivImg.addClass('left');
             });
@@ -240,12 +81,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panbuttonDivImg.removeClass('left');
             });
             left.bind('click', function (event) {
-                if (!me.isInLayerToolsEditMode) {
+                if (!me.inLayerToolsEditMode()) {
                     me.getMapModule().panMapByPixels(-100, 0, true);
                 }
             });
-
-            var right = pb.find('.panbuttons_right');
+            
             right.bind('mouseover', function (event) {
                 panbuttonDivImg.addClass('right');
             });
@@ -253,12 +93,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panbuttonDivImg.removeClass('right');
             });
             right.bind('click', function (event) {
-                if (!me.isInLayerToolsEditMode) {
+                if (!me.inLayerToolsEditMode()) {
                     me.getMapModule().panMapByPixels(100, 0, true);
                 }
             });
 
-            var top = pb.find('.panbuttons_up');
             top.bind('mouseover', function (event) {
                 panbuttonDivImg.addClass('up');
             });
@@ -266,12 +105,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panbuttonDivImg.removeClass('up');
             });
             top.bind('click', function (event) {
-                if (!me.isInLayerToolsEditMode) {
+                if (!me.inLayerToolsEditMode()) {
                     me.getMapModule().panMapByPixels(0, -100, true);
                 }
             });
-
-            var bottom = pb.find('.panbuttons_down');
+            
             bottom.bind('mouseover', function (event) {
                 panbuttonDivImg.addClass('down');
             });
@@ -279,12 +117,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panbuttonDivImg.removeClass('down');
             });
             bottom.bind('click', function (event) {
-                if (!me.isInLayerToolsEditMode) {
+                if (!me.inLayerToolsEditMode()) {
                     me.getMapModule().panMapByPixels(0, 100, true);
                 }
             });
-            pb.mousedown(function (event) {
-                if (!me.isInLayerToolsEditMode) {
+            el.mousedown(function (event) {
+                if (!me.inLayerToolsEditMode()) {
                     var radius = Math.round(0.5 * panbuttonDivImg[0].width),
                         pbOffset = panbuttonDivImg.offset(),
                         centerX = pbOffset.left + radius,
@@ -294,53 +132,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     }
                 }
             });
-            // in case we are already in edit mode when plugin is drawn
-            this.isInLayerToolsEditMode = me.getMapModule().isInLayerToolsEditMode();
+
+            return el;
         },
 
         /**
-         * @property {Object} eventHandlers
-         * @static
+         * @public  @method _refresh
+         * Called after a configuration change.
+         *
+         *
          */
-        eventHandlers: {
-            'LayerToolsEditModeEvent': function (event) {
-                this.isInLayerToolsEditMode = event.isInMode();
+        refresh: function () {
+            var me = this,
+                conf = me.getConfig();
+            // Change the style if in the conf
+            if (conf && conf.toolStyle) {
+                me.changeToolStyle(conf.toolStyle, me.getElement());
             }
         },
 
-        /**
-         * @method onEvent
-         * Event is handled forwarded to correct #eventHandlers if found or
-         * discarded* if not.
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         */
-        onEvent: function (event) {
-            return this.eventHandlers[event.getName()].apply(this, [event]);
-        },
 
         /**
-         * @method start
-         * Module protocol method - does nothing atm
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         */
-        start: function (sandbox) {},
-
-        /**
-         * @method stop
-         * Module protocol method - does nothing atm
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         */
-        stop: function (sandbox) {},
-
-        /**
+         * @method changeToolStyle
          * Changes the tool style of the plugin
          *
-         * @method changeToolStyle
          * @param {Object} styleName
          * @param {jQuery} div
+         *
          */
         changeToolStyle: function (styleName, div) {
-            div = div || this.element;
+            div = div || this.getElement();
 
             if (!div) {
                 return;
@@ -361,9 +182,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             }
         }
     }, {
+        'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**
-         * @property {String[]} protocol
-         * @static
+         * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': ['Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin']
+        'protocol': [
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
+        ]
     });

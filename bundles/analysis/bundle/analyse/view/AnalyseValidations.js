@@ -3,7 +3,8 @@
  *
  * Adds validation methods to the StartAnalyse class.
  */
-Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
+Oskari.clazz.category(
+    'Oskari.analysis.bundle.analyse.view.StartAnalyse',
     'validation-methods', {
 
         /**
@@ -35,12 +36,15 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 noErrors = methodValidator.call(this, selections, errorBase);
             } else {
                 // otherwise notify user of unknown method.
-                this._notifyValidationError(this.loc.error.invalidMethod + selectedMethod);
+                this._notifyValidationError(
+                    this.loc.error.invalidMethod + selectedMethod
+                );
                 noErrors = false;
             }
 
             return noErrors;
         },
+
         /**
          * Validates selections for analysis method buffer
          *
@@ -55,13 +59,22 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 noErrors = true;
 
             if (bufferSize === '') {
-                this._notifyValidationError(this.loc.error.bufferSize, errorTitle);
+                this._notifyValidationError(
+                    this.loc.error.bufferSize,
+                    errorTitle
+                );
                 noErrors = false;
             } else if (isNaN(bufferSize)) {
-                this._notifyValidationError(this.loc.error.illegalCharacters, errorTitle);
+                this._notifyValidationError(
+                    this.loc.error.illegalCharacters,
+                    errorTitle
+                );
                 noErrors = false;
             } else if (Number(bufferSize) > -1 && Number(bufferSize) < 1) {
-                this._notifyValidationError(this.loc.error.bufferSize, errorTitle);
+                this._notifyValidationError(
+                    this.loc.error.bufferSize,
+                    errorTitle
+                );
                 noErrors = false;
             }
             return noErrors;
@@ -79,15 +92,19 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var noErrors = true;
 
             if (!selections.methodParams.functions || selections.methodParams.functions.length === 0) {
-                this._notifyValidationError('Aggregate functions not selected', errorTitle);
+                this._notifyValidationError(
+                    'Aggregate functions not selected',
+                    errorTitle
+                );
                 noErrors = false;
             }
-         /*   if (!selections.methodParams.attribute) {
-                this._notifyValidationError('Aggregate attribute not selected', errorTitle);
-                noErrors = false;
-            }  */
+            /*   if (!selections.methodParams.attribute) {
+                   this._notifyValidationError('Aggregate attribute not selected', errorTitle);
+                   noErrors = false;
+               }  */
             return noErrors;
         },
+
         /**
          * Validates selections for analysis method union
          *
@@ -109,6 +126,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         }  */
             return noErrors;
         },
+
         /**
          * Validates selections for analysis method clip
          *
@@ -121,7 +139,10 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         _validate_method_clip: function (selections, errorTitle) {
             var noErrors = true;
             if (!selections.methodParams.layerId) {
-                this._notifyValidationError('Clipping layer is not selected', errorTitle);
+                this._notifyValidationError(
+                    'Clipping layer is not selected',
+                    errorTitle
+                );
                 noErrors = false;
             }
             return noErrors;
@@ -139,10 +160,16 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             var noErrors = true;
 
             if (!selections.methodParams.layerId) {
-                this._notifyValidationError('Intersecting layer is not selected', errorTitle);
+                this._notifyValidationError(
+                    'Intersecting layer is not selected',
+                    errorTitle
+                );
                 noErrors = false;
             } else if (selections.layerId == selections.methodParams.layerId) {
-                this._notifyValidationError('No intersections to itself', errorTitle);
+                this._notifyValidationError(
+                    'No intersections to itself',
+                    errorTitle
+                );
                 noErrors = false;
             }
             return noErrors;
@@ -163,7 +190,10 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 noErrors = false;
             }
             if (selections.methodParams.layers && selections.methodParams.layers.length < 2) {
-                this._notifyValidationError(this.loc.error.noAnalyseUnionLayer, errorTitle);
+                this._notifyValidationError(
+                    this.loc.error.noAnalyseUnionLayer,
+                    errorTitle
+                );
                 noErrors = false;
             }
             return noErrors;
@@ -203,19 +233,68 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         _validate_method_difference: function (selections, errorTitle) {
             var noErrors = true;
             if (!selections.methodParams.layerId) {
-                this._notifyValidationError('Second layer is not selected', errorTitle);
+                this._notifyValidationError(
+                    'Second layer is not selected',
+                    errorTitle
+                );
                 noErrors = false;
             }
             if (!selections.methodParams.fieldA1) {
-                this._notifyValidationError('First layer\'s field is not selected', errorTitle);
+                this._notifyValidationError(
+                    'First layer\'s field is not selected',
+                    errorTitle
+                );
                 noErrors = false;
             }
             if (!selections.methodParams.fieldB1) {
-                this._notifyValidationError('Second layer\'s field is not selected', errorTitle);
+                this._notifyValidationError(
+                    'Second layer\'s field is not selected',
+                    errorTitle
+                );
                 noErrors = false;
             }
             if (!selections.methodParams.keyA1 || !selections.methodParams.keyB1) {
-                this._notifyValidationError('Key field is not selected', errorTitle);
+                this._notifyValidationError(
+                    'Key field is not selected',
+                    errorTitle
+                );
+                noErrors = false;
+            }
+            return noErrors;
+        },
+
+        /**
+         * Validates selections for analysis method difference
+         *
+         * @method _validate_method_difference
+         * @private
+         * @param {Object} selections Selections for output JSON
+         * @param {String} errorTitle Error title to display to the user
+         * @return {Boolean} returns true if no validation errors, false otherwise
+         */
+        _validate_method_spatial_join: function (selections, errorTitle) {
+            var noErrors = true;
+            if (!selections.methodParams.layerId) {
+                this._notifyValidationError(
+                    'Second layer is not selected',
+                    errorTitle
+                );
+                noErrors = false;
+            }
+
+            if (!selections.layerId) {
+                this._notifyValidationError(
+                    'First layer is not selected',
+                    errorTitle
+                );
+                noErrors = false;
+            }
+
+            if (!selections.methodParams.featuresA1 && !selections.methodParams.featuresA1) {
+                this._notifyValidationError(
+                    'No features selected',
+                    errorTitle
+                );
                 noErrors = false;
             }
             return noErrors;

@@ -217,9 +217,10 @@ function() {
         var title =  this.tab.getTitle(),
             content = this.tab.getContent(),
             first = true,
+            id = 'oskari_myplaces2_tabpanel_header',
             reqName = 'PersonalData.AddTabRequest',
             reqBuilder = sandbox.getRequestBuilder(reqName),
-            req = reqBuilder(title, content, first);
+            req = reqBuilder(title, content, first, id);
         sandbox.request(this, req);
     },
     /**

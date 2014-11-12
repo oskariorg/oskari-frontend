@@ -15,10 +15,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      */
 
     function () {
-        this.mapModule = null;
-        this.pluginName = null;
-        this._sandbox = null;
-        this._map = null;
+        var me = this;
+        me._clazz =
+            'Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin';
+        me._name = 'LayersPlugin';
+
         this._supportedFormats = {};
         // visibility checks are cpu intensive so only make them when the map has
         // stopped moving
@@ -28,167 +29,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
         this._visibilityCheckOrder = 0;
         this._previousTimer = null;
     }, {
-        /** @static @property __name module name */
-        __name: 'LayersPlugin',
+        _createEventHandlers: function () {
+            var me = this;
 
-        /**
-         * @method getName
-         * @return {String} module name
-         */
-        getName: function () {
-            return this.pluginName;
-        },
-        /**
-         * @method getMapModule
-         * Returns reference to map module this plugin is registered to
-         * @return {Oskari.mapframework.ui.module.common.MapModule}
-         */
-        getMapModule: function () {
-            return this.mapModule;
-        },
-        /**
-         * @method setMapModule
-         * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
-         * module
-         */
-        setMapModule: function (mapModule) {
-            this.mapModule = mapModule;
-            this.pluginName = mapModule.getName() + this.__name;
-        },
-        /**
-         * @method hasUI
-         * This plugin doesn't have an UI so always returns false
-         * @return {Boolean}
-         */
-        hasUI: function () {
-            return false;
-        },
-        /**
-         * @method getMap
-         * @return {OpenLayers.Map} reference to map implementation
-         */
-        getMap: function () {
-            return this._map;
-        },
-        /**
-         * @method register
-         * Interface method for the module protocol
-         */
-        register: function () {},
-        /**
-         * @method unregister
-         * Interface method for the module protocol
-         */
-        unregister: function () {},
-        /**
-         * @method init
-         *
-         * Interface method for the module protocol. Initializes the request
-         * handlers.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        init: function (sandbox) {
-            this.requestHandlers = {
-                layerVisibilityHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequestHandler', sandbox, this),
-                layerContentHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayerContentRequestHandler', sandbox, this)
+            return {
+                AfterRearrangeSelectedMapLayerEvent: function (event) {
+                    me._afterRearrangeSelectedMapLayerEvent(event);
+                },
+                MapMoveStartEvent: function () {
+                    // clear out any previous visibility check when user starts to move
+                    // map
+                    // not always sent f.ex. when moving with keyboard so do this in
+                    // AfterMapMoveEvent also
+                    me._visibilityCheckOrder += 1;
+                    if (me._previousTimer) {
+                        clearTimeout(me._previousTimer);
+                        me._previousTimer = null;
+                    }
+                },
+                AfterMapMoveEvent: function () {
+                    me._scheduleVisiblityCheck();
+                },
+                AfterMapLayerAddEvent: function (event) {
+                    // parse geom if available
+                    me._parseGeometryForLayer(event.getMapLayer());
+                    me._scheduleVisiblityCheck();
+                }
             };
         },
-        /**
-         * @method startPlugin
-         *
-         * Interface method for the plugin protocol. Registers requesthandlers and
-         * eventlisteners.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        startPlugin: function (sandbox) {
-            this._sandbox = sandbox;
-            this._map = this.getMapModule().getMap();
-            sandbox.register(this);
-            var p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(this, p);
-                }
-            }
-            sandbox.addRequestHandler('MapModulePlugin.MapLayerVisibilityRequest', this.requestHandlers.layerVisibilityHandler);
-            sandbox.addRequestHandler('MapModulePlugin.MapMoveByLayerContentRequest', this.requestHandlers.layerContentHandler);
 
+        _createRequestHandlers: function () {
+            var me = this,
+                sandbox = me.getSandbox();
+
+            return {
+                'MapModulePlugin.MapLayerVisibilityRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequestHandler',
+                    sandbox,
+                    me
+                ),
+                'MapModulePlugin.MapMoveByLayerContentRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayerContentRequestHandler',
+                    sandbox,
+                    me
+                )
+            };
         },
-        /**
-         * @method stopPlugin
-         *
-         * Interface method for the plugin protocol. Unregisters requesthandlers and
-         * eventlisteners.
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stopPlugin: function (sandbox) {
 
-            sandbox.removeRequestHandler('MapModulePlugin.MapLayerVisibilityRequest', this.requestHandlers.layerVisibilityHandler);
-            sandbox.removeRequestHandler('MapModulePlugin.MapMoveByLayerContentRequest', this.requestHandlers.layerContentHandler);
-            var p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
-                }
-            }
-
-            sandbox.unregister(this);
-
-            this._map = null;
-            this._sandbox = null;
-        },
-        /**
-         * @method start
-         *
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        start: function (sandbox) {},
-        /**
-         * @method stop
-         *
-         * Interface method for the module protocol
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
-         */
-        stop: function (sandbox) {},
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            'AfterRearrangeSelectedMapLayerEvent': function (event) {
-                this._afterRearrangeSelectedMapLayerEvent(event);
-            },
-            'MapMoveStartEvent': function () {
-                // clear out any previous visibility check when user starts to move
-                // map
-                // not always sent f.ex. when moving with keyboard so do this in
-                // AfterMapMoveEvent also
-                this._visibilityCheckOrder++;
-                if (this._previousTimer) {
-                    clearTimeout(this._previousTimer);
-                    this._previousTimer = null;
-                }
-            },
-            'AfterMapMoveEvent': function () {
-                this._scheduleVisiblityCheck();
-            },
-            'AfterMapLayerAddEvent': function (event) {
-                // parse geom if available
-                this._parseGeometryForLayer(event.getMapLayer());
-                this._scheduleVisiblityCheck();
-            }
-        },
         /**
          * @method _scheduleVisiblityCheck
          * @private
@@ -197,25 +84,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
          */
         _scheduleVisiblityCheck: function () {
             var me = this;
-            if (this._previousTimer) {
-                clearTimeout(this._previousTimer);
-                this._previousTimer = null;
+
+            if (me._previousTimer) {
+                clearTimeout(me._previousTimer);
+                me._previousTimer = null;
             }
-            this._visibilityCheckOrder++;
-            this._previousTimer = setTimeout(function () {
+            me._visibilityCheckOrder += 1;
+            me._previousTimer = setTimeout(function () {
                 me._checkLayersVisibility(me._visibilityCheckOrder);
-            }, this._visibilityPollingInterval);
+            }, me._visibilityPollingInterval);
         },
 
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded
-         * if not.
-         */
-        onEvent: function (event) {
-            return this.eventHandlers[event.getName()].apply(this, [event]);
-        },
         /**
          * @method preselectLayers
          * Does nothing, protocol method for mapmodule-plugin
@@ -234,10 +113,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
          *
          */
         _parseGeometryForLayer: function (layer) {
+            var features,
+                geometries = [],
+                i,
+                layerWKTGeom,
+                wkt;
 
             // parse geometry if available
             if (layer.getGeometry && layer.getGeometry().length === 0) {
-                var layerWKTGeom = layer.getGeometryWKT();
+                layerWKTGeom = layer.getGeometryWKT();
                 if (!layerWKTGeom) {
                     // no wkt, dont parse
                     return;
@@ -245,15 +129,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
                 // http://dev.openlayers.org/docs/files/OpenLayers/Format/WKT-js.html
                 // parse to OpenLayers.Geometry.Geometry[] array ->
                 // layer.setGeometry();
-                var wkt = new OpenLayers.Format.WKT(),
-                    features = wkt.read(layerWKTGeom);
+                wkt = new OpenLayers.Format.WKT();
+                features = wkt.read(layerWKTGeom);
                 if (features) {
-                    if (features.constructor != Array) {
+                    if (features.constructor !== Array) {
                         features = [features];
                     }
-                    var geometries = [],
-                        i;
-                    for (i = 0; i < features.length; ++i) {
+
+                    for (i = 0; i < features.length; i += 1) {
                         geometries.push(features[i].geometry);
                     }
                     layer.setGeometry(geometries);
@@ -275,10 +158,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             if (orderNumber !== this._visibilityCheckOrder) {
                 return;
             }
-            var layers = this._sandbox.findAllSelectedMapLayers(),
+            var layers = this.getSandbox().findAllSelectedMapLayers(),
                 i,
                 layer;
-            for (i = 0; i < layers.length; ++i) {
+
+            for (i = 0; i < layers.length; i += 1) {
                 layer = layers[i];
 
                 if (layer.isVisible()) {
@@ -297,7 +181,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
          * @return {Boolean} true maplayer is visible in current zoomlevel
          */
         _isInScale: function (layer) {
-            var scale = this._sandbox.getMap().getScale();
+            var scale = this.getSandbox().getMap().getScale();
             return layer.isInScale(scale);
         },
         /**
@@ -322,7 +206,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             var viewBounds = this.getMap().getExtent(),
                 i,
                 bounds;
-            for (i = 0; i < geometries.length; ++i) {
+
+            for (i = 0; i < geometries.length; i += 1) {
                 bounds = geometries[i].getBounds();
                 if (!bounds) {
                     continue;
@@ -355,21 +240,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             var map = this.getMap(),
                 mapLayers = this.getMapModule().getOLMapLayers(layer.getId()),
                 mapLayer = mapLayers.length ? mapLayers[0] : null;
-            if (scaleOk && geometryMatch && layer.isVisible()) {             // show non-baselayer if in scale, in geometry and layer visible
 
+            if (scaleOk && geometryMatch && layer.isVisible()) {
+                // show non-baselayer if in scale, in geometry and layer visible
                 if (mapLayer && !mapLayer.getVisibility()) {
                     mapLayer.setVisibility(true);
                     mapLayer.display(true);
                 }
-            } else {             // otherwise hide non-baselayer
-
+            } else {
+                // otherwise hide non-baselayer
                 if (mapLayer && mapLayer.getVisibility()) {
                     mapLayer.setVisibility(false);
                     mapLayer.display(false);
                 }
             }
-            var event = this._sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, scaleOk, geometryMatch);
-            this._sandbox.notifyAll(event);
+            var event = this.getSandbox().getEventBuilder(
+                'MapLayerVisibilityChangedEvent'
+            )(layer, scaleOk, geometryMatch);
+            this.getSandbox().notifyAll(event);
         },
         /**
          * @method _afterRearrangeSelectedMapLayerEvent
@@ -383,33 +271,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
          *            event
          */
         _afterRearrangeSelectedMapLayerEvent: function (event) {
-            var layers = this._sandbox.findAllSelectedMapLayers(),
+            var layers = this.getSandbox().findAllSelectedMapLayers(),
                 layerIndex = 0,
-                opLayersLength = this._map.layers.length,
-                changeLayer = this._map.getLayersByName('Markers');
+                opLayersLength = this.getMap().layers.length,
+                changeLayer = this.getMap().getLayersByName('Markers');
+
             if (changeLayer.length > 0) {
-                this._map.setLayerIndex(changeLayer[0], opLayersLength);
-                opLayersLength--;
+                this.getMap().setLayerIndex(changeLayer[0], opLayersLength);
+                opLayersLength -= 1;
             }
             var i,
                 ilen,
                 j,
                 jlen,
                 olLayers;
-            for (i = 0, ilen = layers.length; i < ilen; i++) {
+
+            for (i = 0, ilen = layers.length; i < ilen; i += 1) {
                 if (layers[i] !== null && layers[i] !== undefined) {
-                    olLayers = this.getMapModule().getOLMapLayers(layers[i].getId());
-                    for (j = 0, jlen = olLayers.length; j < jlen; j++) {
+                    olLayers =
+                        this.getMapModule().getOLMapLayers(layers[i].getId());
+                    for (j = 0, jlen = olLayers.length; j < jlen; j += 1) {
                         this._map.setLayerIndex(olLayers[j], layerIndex);
-                        layerIndex++;
+                        layerIndex += 1;
                     }
                 }
             }
         }
     }, {
+        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
-         * @property {String[]} protocol array of superclasses as {String}
-         * @static
+         * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': [
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
+        ]
     });

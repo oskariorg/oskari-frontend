@@ -32,7 +32,7 @@ div.mapplugins {
       div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.indexmap {
         margin-bottom: 0; }
       div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.logoplugin {
-        margin-top: 10px; }
+        margin-top: 20px; }
       div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.scalebar {
         margin-bottom: 0; }
       div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.zoombar {
@@ -93,23 +93,13 @@ div.mapplugins {
           div.mapplugins.bottom.center .mappluginsContainer .mappluginsContent .mapplugin.layerselection, div.mapplugins.bottom.center .mappluginsContainer .mappluginsContent .mapplugin.search {
             float: right; }
     div.mapplugins.bottom.right .mapplugin.indexmap {
-      margin-left: 20px;
-      margin-right: -10px; }
+      margin-left: 20px; }
     div.mapplugins.bottom.right .mapplugin.logoplugin {
-      clear: both;
-      margin-right: -10px; }
-    div.mapplugins.bottom.right .mapplugin.indexmap, div.mapplugins.bottom.right .mapplugin.logoplugin, div.mapplugins.bottom.right .mapplugin.scalebar {
-      float: right;
-      display: inline-block; }
+      clear: both; }
     div.mapplugins.bottom.left .mapplugin.indexmap {
-      margin-right: 20px;
-      margin-left: -10px; }
+      margin-right: 20px; }
     div.mapplugins.bottom.left .mapplugin.logoplugin {
-      clear: both;
-      margin-left: -10px; }
-    div.mapplugins.bottom.left .mapplugin.indexmap, div.mapplugins.bottom.left .mapplugin.logoplugin, div.mapplugins.bottom.left .mapplugin.scalebar {
-      float: left;
-      display: inline-block; }
+      clear: both; }
   div.mapplugins.left {
     left: 0; }
     div.mapplugins.left .mappluginsContainer .mappluginsContent {

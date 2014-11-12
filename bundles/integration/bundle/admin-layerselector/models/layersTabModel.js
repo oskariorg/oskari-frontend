@@ -141,9 +141,9 @@
             __tryRestMethods : function(method, config) {
                 var me = this;
                 config.type = method;
-                var errorHandler = function(jqXHR, textStatus) {
+                var errorHandler = function(jqXHR, textStatus, errorThrown) {
                     var origType = config.type;
-                    if(textStatus === 'Method Not Allowed' && 
+                    if(errorThrown === 'Method Not Allowed' && 
                         (origType === 'PUT' || origType === 'DELETE')) {
                         // PUT/DELETE not allowed -> try POST instead
                         var origBefore = config.beforeSend;
@@ -156,7 +156,7 @@
                         me.__tryRestMethods('POST', config);
                     }
                     else if(config.__oskariError) {
-                        config.__oskariError(jqXHR, textStatus);
+                        config.__oskariError(jqXHR, textStatus, errorThrown);
                     }
                 }
                 if(!config.__oskariError) {
