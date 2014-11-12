@@ -207,16 +207,16 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             areasAndSectorsExtra:
                 '<div class="analyse_areas_and_sectors_cont analyse_settings_cont">' +
                 '  <label>' +
-                '    <span></span>' +
+                '    <div></div>' +
                 '    <input class="settings_area_size_field" type="text" pattern="[0-9]+" />' +
                 '  </label>' +
                 '  <select class="settings_area_size_units"></select>' +
                 '  <label>' +
-                '    <span></span>' +
+                '    <div></div>' +
                 '    <input class="settings_area_count_field" type="text" pattern="[0-9]+" />' +
                 '  </label>' +
                 '  <label>' +
-                '    <span></span>' +
+                '    <div></div>' +
                 '    <input class="settings_sector_count_field" type="text" pattern="^0*[1-9]$|^0*1[0-2]$" />' +
                 '  </label>' +
                 '</div>',
@@ -1454,13 +1454,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 labels.each(function (i) {
-                    this.getElementsByTagName('SPAN')[0].innerHTML = loc[keys[i]];
+                    this.getElementsByTagName('DIV')[0].innerHTML = loc[keys[i]];
                     this.getElementsByTagName('INPUT')[0].placeholder =
                         loc[keys[i] + '_tooltip'];
                 });
-
-                // FIXME remove this when sectors are supported
-                jQuery(labels[2]).hide();
 
                 contentPanel.append(extraParams);
             },
