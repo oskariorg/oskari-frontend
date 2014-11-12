@@ -47,6 +47,59 @@ Oskari.registerLocalization(
                 "type-base": "Background map",
                 "type-wms": "Map layer",
                 "type-wfs": "Data product"
+            },
+            "filter": {
+                "title": "Filter",
+                "description": "Select the features from the map layer:",
+                "cancelButton": "Cancel",
+                "clearButton": "Clear the filter",
+                "refreshButton": "Refresh the filter",
+                "addFilter": "Add a new filter",
+                "removeFilter": "Delete the filter",
+                "bbox": { 
+                    "title": "Map window filter", 
+                    "on": "Only the feature visible on the map window.", 
+                    "off": "All features." 
+                },
+                "clickedFeatures": { 
+                    "title": "Feature selection filter", 
+                    "label": "Only the features selected on the map." 
+                },
+                "values": {
+                    "title": "Filter the features by attribute data",
+                    "placeholders": { 
+                        "case-sensitive": "The filter is case sensitive.", 
+                        "attribute": "Attribute", 
+                        "boolean": "Logical operator", 
+                        "operator": "Operator", 
+                        "attribute-value": "Value" 
+                    },
+                    "equals": "is equal to",
+                    "like": "is like",
+                    "notEquals": "is not equal to",
+                    "notLike": "is not like",
+                    "greaterThan": "is greater than",
+                    "lessThan": "is smaller than",
+                    "greaterThanOrEqualTo": "is greater than or equal to",
+                    "lessThanOrEqualTo": "is smaller than or equal to"
+                },
+                "aggregateAnalysisFilter": { 
+                    "addAggregateFilter": "Select the aggregate value", 
+                    "aggregateValueSelectTitle": "Use the aggregate value in the filter", 
+                    "selectAggregateAnalyse": "Select the aggregate analysis", 
+                    "selectIndicator": "Select the indicator", 
+                    "selectReadyButton": "Ready", 
+                    "getAggregateAnalysisFailed": "The aggregate data could not be found.", 
+                    "noAggregateAnalysisPopupTitle": "The aggregate analysis did not found.", 
+                    "noAggregateAnalysisPopupContent": "You have not done any aggregate analysis. You can create your own aggregata data by the analysis function and then use values in filtering." 
+                },
+                "validation": { 
+                    "title": "The filter could not be refreshed because of following mistakes:", 
+                    "attribute_missing": "The attribute is missing.", 
+                    "operator_missing": "The operator is missing.", 
+                    "value_missing": "The value is missing.", 
+                    "boolean_operator_missing": "The logical operator is missing." 
+                }
             }
         }
     }

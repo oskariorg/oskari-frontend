@@ -326,6 +326,15 @@ table.layer-icons {
 }
 
 /* Analyse filter CSS */
+
+div.filter-popup-content {
+    overflow: auto;
+    max-height: 500px;
+    width: 700px;
+    margin: 0px !important;
+    padding: 10px;
+}
+
 div.analyse-filter-popup-content {
     padding: 8px;
 
@@ -398,8 +407,23 @@ div.analyse-filter-popup-content div.filter-option {
         
     }
 
-    input[name="attribute-value"] {
-        width: 120px;
+    &.filter-option-aggregate {
+        padding-bottom: 25px;
+
+        div.attribute-value-block {
+            position: relative;
+            display: inline-block;
+
+            div.add-link {
+                position: absolute;
+                top: 40px;
+            }
+        }
+    }
+
+    .filter-input-value {
+        width: 160px;
+        margin: 1px;
     }
 
     input[name="case-sensitive"] {
@@ -414,7 +438,7 @@ div.analyse-filter-popup-content div.filter-option {
 
         &.boolean {
             margin-top: 10px;
-            width: 60px;
+            width: 65px;
         }
 
         &.operator {
@@ -422,7 +446,32 @@ div.analyse-filter-popup-content div.filter-option {
         }
 
     }
+}
 
+div.analyse-filter-popup-content div.analyse-filter {
+    border-bottom: none;
+
+    .input-blink {
+        border: 2px solid #217ad4;
+        margin: 0px;
+    }
+}
+
+div.filter-popup-multiselect {
+    border: 1px solid;
+
+    div.header div.icon-close {
+        float: right;
+        margin: 10px;
+    }
+
+    .oskari-formcomponent {
+        margin: 10px;
+    }
+
+    .oskari-filter-with-aggregateAnalysis {
+        margin: 10px;
+    }
 }
 
 div.divmanazerpopup {

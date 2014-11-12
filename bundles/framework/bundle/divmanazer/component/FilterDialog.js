@@ -26,7 +26,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             filterContentBBOX: '<div class="analyse-filter analyse-filter-popup-bbox">' + '<div class="bbox-title"></div>' + '<div class="bbox-radio">' + '<div class="bbox-on">' + '<input id="analyse-filter-bbox-on" type="radio" name="filter-bbox" value="true" />' + '<label for="analyse-filter-bbox-on"></label>' + '</div>' + '<div class="bbox-off">' + '<input id="analyse-filter-bbox-off" type="radio" name="filter-bbox" value="false" checked="checked" />' + '<label for="analyse-filter-bbox-off"></label>' + '</div>' + '</div>' + '</div>',
             filterClickedFeatures: '<div class="analyse-filter analyse-filter-clicked-features">' + '<div class="clicked-features-title"></div>' + '<input type="checkbox" name="analyse-clicked-features" id="analyse-clicked-features" />' + '<label for="analyse-clicked-features"></label>' + '</div>',
             filterContentValues: '<div class="analyse-filter analyse-filter-popup-values">' + '<div class="values-title"></div>' + '</div>',
-            filterContentOption: '<div class="filter-option">' + '<input name="case-sensitive" type="checkbox"></input>' + '<select class="attribute"></select>' + '<select class="operator"></select>' + '<input name="attribute-value" type="text"></input>' + '</div>',
+            filterContentOption: '<div class="filter-option">' + '<input name="case-sensitive" type="checkbox"></input>' + '<select class="attribute"></select>' + '<select class="operator"></select>' + '<input name="attribute-value" class="filter-input-value" type="text"></input>' + '</div>',
             manageFilterOption: '<div class="manage-filter-option">' + '<div class="add-filter-option">+</div>' + '<div class="remove-filter-option">-</div>' + '</div>',
             filterBooleanOption: '<select class="boolean"></select>',
             option: '<option></option>'
@@ -43,7 +43,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * @method _createFilterDialog
          * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
          */
-        createFilterDialog: function (layer) {
+        createFilterDialog: function (layer, cb) {
             var me = this,
                 closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 // Clears the filter values
@@ -63,11 +63,10 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             if (typeof me._layer === null) {
                 return;
             }
-
             // Create filter dialog content
             layerAttributes = me._layer.getFilterJson();
-            if (me._layer.getFilterJson() === null) {
-                me._loadWFSLayerPropertiesAndTypes(me._layer.getId());
+            if (layerAttributes === null) {
+                me._loadWFSLayerPropertiesAndTypes(me._layer.getId(), cb);
                 return;
             }
             popupContent = this.getFilterDialogContent(me._layer);
@@ -116,9 +115,14 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
             });
 
             me.popup.show(popupTitle, popupContent, [closeButton, clearButton, updateButton]);
+            me.popup.getJqueryContent().addClass('filter-popup-content');
+            me.popup.makeModal();
 
             // Make the popup draggable
             me.popup.makeDraggable();
+            if (_.isArray(layerAttributes) && _.isFunction(cb)) {
+               cb();
+            }
         },
 
         /**
@@ -300,6 +304,15 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
 
             filterOption.find('input[name=case-sensitive]').attr('title', this.loc.filter.values.placeholders['case-sensitive']);
 
+            // Add link to filter with aggregate values if there are any
+            if (this.fixedOptions.addLinkToAggregateValues === true) {
+                filterOption
+                    .addClass("filter-option-aggregate")
+                    .find('input[name=attribute-value]')
+                    .wrap('<div class="attribute-value-block"></div>')
+                    .after('<div class="add-link"><a href="javascript:void(0)">' + this.fixedOptions.loc.filter.aggregateAnalysisFilter.addAggregateFilter + '</a></div>');
+            }
+
             // Add the buttons to remove this filter and to add a new filter.
             filterOption.append(this._addManageFilterOption(layer));
 
@@ -315,6 +328,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          */
         _addManageFilterOption: function (layer) {
             var manageFilterOption = jQuery(this.__filterTemplates.manageFilterOption),
+                filterContentOption = jQuery(this.__filterTemplates.filterContentOption),
                 addTitle = this.loc.filter.addFilter,
                 removeTitle = this.loc.filter.removeFilter;
 
@@ -623,7 +637,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * Load analysis layers in start.
          *
          */
-        _loadWFSLayerPropertiesAndTypes:function (layer_id) {
+        _loadWFSLayerPropertiesAndTypes:function (layer_id, cb) {
             var me = this,
                 url = me.sandbox.getAjaxUrl()
 
@@ -633,7 +647,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
 
                 function (response) {
                     if (response) {
-                        me._handleWFSLayerPropertiesAndTypesResponse(response);
+                        me._handleWFSLayerPropertiesAndTypesResponse(response, cb);
                     }
                 },
                 // Error callback
@@ -674,7 +688,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
          * @private
          * @param {JSON} propertyJson properties and property types of WFS layer JSON returned by server.
          */
-        _handleWFSLayerPropertiesAndTypesResponse: function (propertyJson) {
+        _handleWFSLayerPropertiesAndTypesResponse: function (propertyJson, cb) {
             var me = this,
                 fields = propertyJson.propertyTypes;
             var layerAttributes = [];
@@ -688,7 +702,7 @@ Oskari.clazz.category('Oskari.userinterface.component.FilterDialog',
                 }
             }
             this._layer.setFilterJson(layerAttributes);
-            this.createFilterDialog();
+            this.createFilterDialog(this._layer, cb);
         },
 
         /**

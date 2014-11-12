@@ -154,14 +154,61 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
          * Adds a tab for the layer
          */
         layerAdded: function (layer) {
-            var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+            var me = this,
+                panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
             panel.setTitle(layer.getName());
             panel.getContainer().append(this.instance.getLocalization('loading'));
             panel.layer = layer;
             this.layers['' + layer.getId()] = panel;
             this.tabsContainer.addPanel(panel);
+            panel.setTitleIcon('icon-funnel', function(event){
+                me.addFilterFunctionality(event, layer);
+            });
         },
 
+        turnOnClickOff: function() {
+            var me = this;
+            me.filterDialog.popup.dialog.off('click', '.add-link');
+        },
+
+        addFilterFunctionality: function(event, layer) {
+            var me = this,
+                loc = this.instance.getLocalization('layer'),
+
+                // this is needed to add the functionality to filter with aggregate analyse values
+                // if value is true, the link to filter with aggregate analyse values is added to dialog
+                isAggregateValueAvailable = me.checkIfAggregateValuesAreAvailable();
+
+            var fixedOptions = {
+                bboxSelection: true,
+                clickedFeaturesSelection: false,
+                addLinkToAggregateValues: isAggregateValueAvailable,
+                loc: loc
+            };
+            me.filterDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', loc, fixedOptions);
+            me.filterDialog.setUpdateButtonHandler(function (filters) {
+                // throw event to new wfs
+                var event = me.instance.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
+                me.instance.sandbox.notifyAll(event);
+            });
+
+            me.aggregateAnalyseFilter = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter', me.instance, me.instance.getLocalization('layer'), me.filterDialog);
+
+            me.filterDialog.createFilterDialog(layer, function() {
+                me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
+            });
+            me.filterDialog.setCloseButtonHandler(_.bind(me.turnOnClickOff, me));
+        },
+
+        // function gives value to addLinkToAggregateValues (true/false) 
+        checkIfAggregateValuesAreAvailable: function() {
+            this.service = this.instance.sandbox.getService('Oskari.analysis.bundle.analyse.service.AnalyseService');
+            if (!this.service) {
+                return false;
+            }
+            return true;
+        },
+        
         /**
          * @method layerRemoved
          * @param {Oskari.mapframework.domain.WfsLayer} layer
@@ -735,3 +782,4 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.Flyout',
          */
         'protocol': ['Oskari.userinterface.Flyout']
     });
+

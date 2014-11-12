@@ -7,8 +7,6 @@
   line-height: 15px;
   opacity: 0.8 !important;
   text-shadow: 1px 0px 3px rgba(0, 0, 0, 0.5), -1px 0px 3px rgba(0, 0, 0, 0.5), 1px 0px 1px #000, -1px 0px 1px #000;
-  /* text-shadow replacement for IE9 */
-  filter: glow(color=000000C0, strength=1);
   z-index: 100000000 !important; }
   .logoplugin a, .logoplugin a:hover, .logoplugin a:active, .logoplugin a:visited {
     color: inherit; }
@@ -24,7 +22,9 @@
     margin: 5px;
     cursor: pointer; }
     .logoplugin .data-sources a, .logoplugin .terms a {
-      text-decoration: none; }
+      text-decoration: none;
+      /* text-shadow replacement for IE9 */
+      filter: glow(color=#C0000000,strength=3); }
 
 .data-sources-dialog {
   max-width: 400px; }

@@ -534,7 +534,7 @@ Oskari.clazz.define(
             me.clearRelatedKeywordsPopup(null, oskarifield);
 
             // Go through related keywords, get top 3, show only them
-            if (keywords.length > 0) {
+            if (keywords && keywords.length > 0) {
                 for (i = 0; i < keywords.length; i += 1) {
                     keyword = keywords[i];
                     if (keyword.layers.length > 0) {

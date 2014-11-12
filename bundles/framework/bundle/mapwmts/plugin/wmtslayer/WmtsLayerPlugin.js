@@ -211,7 +211,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
 
             if (oLayer && oLayer[0]) {
                 oLayer[0].mergeNewParams({
-                    styles: newStyle
+                    style: newStyle
                 });
             }
         }

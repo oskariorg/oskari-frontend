@@ -32,7 +32,20 @@
             display: block;
         }
     }
+    
+    div.icon-funnel {
+        cursor: pointer;
+    }
 
+}
+
+div.oskariTabs .tabsHeader ul li a{
+    display: inline-block;
+}
+
+div.oskariTabs .tabsHeader ul li .union-filter{
+    display: inline-block;
+    margin-right: 10px;
 }
 
 div.flyout-resizer {
