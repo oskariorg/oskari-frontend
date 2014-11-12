@@ -1,3 +1,4 @@
+/* Mixins */
 .featuredata {
   /* Selected row hightlighting */
   /* Override common table settings */
@@ -34,6 +35,14 @@ div.flyout-resizer {
 
 div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin {
   display: block;
-  background: #FFF;
-  border: 1px solid;
+  background: #fafafa;
+  border: 1px solid #e6e6e6;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -o-border-radius: 2px;
+  -ms-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box;
   margin: 10px auto; }
