@@ -92,6 +92,7 @@ Oskari.registerLocalization({
             "wms1_1_1": "WMS 1.1.1",
             "wms1_3_0": "WMS 1.3.0",
             "getInfo": "Sök data",
+            "editWfs": "Editera WFS",
             "selectClass": "Välj tema",
             "selectClassDesc": "Välj tema",
 
