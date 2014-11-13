@@ -104,7 +104,7 @@ function(instance) {
             // Create the layer model
             mapLayer = mapLayerService.createMapLayer(layerJson);
         // Add the layer to the map layer service
-        mapLayerService.addLayer(mapLayer);
+        mapLayerService.addLayer(mapLayer, true);
         if (_.isFunction(cb)) cb(mapLayer);
 
         return mapLayer;
