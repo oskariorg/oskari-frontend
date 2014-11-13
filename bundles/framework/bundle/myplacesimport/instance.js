@@ -122,7 +122,7 @@ function () {
             sandbox = this.getSandbox(),
             reqBuilder, request;
 
-        this.getService().addLayerToService(layerJson, function(mapLayer) {
+        this.getService().addLayerToService(layerJson, false, function(mapLayer) {
             // refresh the tab
             me.getTab().refresh();
             // Request the layer to be added to the map.
