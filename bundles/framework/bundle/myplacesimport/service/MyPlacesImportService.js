@@ -89,8 +89,11 @@ function(instance) {
             me.addLayerToService(layerJson, true);
         });
         if (_.isFunction(cb)) cb();
-        var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
-        sandbox.notifyAll(event); // add the
+        if (layers && layers.length > 0) {
+            var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
+            me.sandbox.notifyAll(event); // add user layers programmatically since normal link processing
+        }
+
     },
     /**
      * Adds one layer to the map layer service
