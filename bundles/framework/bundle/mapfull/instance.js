@@ -531,7 +531,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                             styleReqBuilder(layer.id, layer.style)
                         );
                     }
-                    if (layer.opacity) {
+                    if (layer.opacity || layer.opacity === 0) {
                         me.sandbox.request(
                             mapModuleName,
                             rbOpacity(layer.id, layer.opacity)
