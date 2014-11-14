@@ -204,8 +204,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 timestamp: new Date().getTime(),
 
                 success: function (data) {
-                    Oskari.setSupportedLocales(data.supportedLocales);
-                    //console.log(blocale.getSupportedLocales());
+                    Oskari.setSupportedLocales(data.supportedLocales || []);
+                    Oskari.setDecimalSeparators(data.decimalSeparators || {});
                 },
                 error: function () {
                     // TODO add error handling
@@ -403,6 +403,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                         'RemoveMapLayerRequest'
                 ),
                 i;
+
             for (i = 0; i < selectedLayers.length; i += 1) {
                 this.sandbox.request(
                     module.getName(),
