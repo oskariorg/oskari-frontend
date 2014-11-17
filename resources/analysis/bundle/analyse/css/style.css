@@ -117,7 +117,7 @@ div.basic_analyse div.analyse_settings_cont label {
     margin-top: 7px;
     margin-bottom: 10px; }
 div.basic_analyse select.settings_buffer_units, div.basic_analyse select.settings_area_size_units {
-  width: 80px; }
+  width: 110px; }
 
 .analyse_radiolabel, .analyse_checklabel {
   padding: 3px 6px;

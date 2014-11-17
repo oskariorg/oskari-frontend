@@ -1,3 +1,15 @@
+/* Mixins */
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -o-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
 .featuredata {
 
     div.tab-content {
@@ -55,7 +67,8 @@ div.flyout-resizer {
 
 div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin {
     display: block;
-    background: #FFF;
-    border: 1px solid;
+    background: #fafafa;
+    border: 1px solid #e6e6e6;
+    @include border-radius(2px);
     margin: 10px auto;
 }
