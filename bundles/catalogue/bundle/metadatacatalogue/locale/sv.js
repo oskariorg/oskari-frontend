@@ -34,11 +34,14 @@ Oskari.registerLocalization({
         "metadataCatalogueResults": "Resultatet",
         "show": "Visa kartlag",
         "hide": "Ta kartlag bort",
-        "contentErrorMsg": "Sökord kan inte innehålla tecken ",
+        "searchservice_search_not_found_anything_text": "Sökningen gav inga resultat.",
         "metadataoptionservice_alert_title": "Fel",
-        "metadataoptionservice_not_found_anything_text": "Sök misslyckats.",
-        "metadatasearchservice_alert_title": "Fel",
-        "metadatasearchservice_not_found_anything_text": "Sök misslyckats.",
+        "metadataoptionservice_not_found_anything_text": "Hämtning av alternativ misslyckats.",
+        "metadatasearchservice_not_found_anything_text": "Hämtning av sökresultat misslyckats.",
+        "invalid_characters": "Sökterm innehåller otillåtna tecken.",
+        "too_short": "Sökordet är för kort.",
+        "cannot_be_empty": "Sökordet kan inte vara tomt.",
+        "too_many_stars": "För många *-tecken.",
         "searching": "Söker…",
         "grid": {
             "name": "Namn"
