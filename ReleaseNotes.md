@@ -2,6 +2,14 @@
 
 ## 1.25
 
+### personaldata
+
+No longer uses publishedMapUrl from config. GetViews JSON now includes URLs to views. Checkout oskari-server release notes for more details.
+
+### core/sandbox
+
+Now has a convenience method createURL(baseUrl) that fills in protocol/host/path if missing from baseUrl.
+
 ### catalogue/metadataflyout
 
 Rewritten to use JSON backend, any code relying on the old implementation is likely to break.

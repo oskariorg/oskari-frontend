@@ -255,6 +255,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                     'id': view.id,
                     'state': view.state,
                     'name': view.name,
+                    'url': view.url,
                     'domain': view.pubDomain,
                     'lang': view.lang,
                     'isPublic': isPublic,
@@ -300,14 +301,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
 
             // set up the link from name field
             var nameRenderer = function (name, data) {
+                var url = sandbox.createURL(data.url);
+                if(!url) {
+                    // no url, no link just plain text
+                    return name;
+                }
+                // create link
                 var link = me.templateLink.clone();
                 link.append(name);
                 link.bind('click', function () {
-                    var publishedMapUrl = sandbox.getLocalizedProperty(
-                        me.instance.conf.publishedMapUrl
-                    );
                     window.open(
-                        publishedMapUrl + data.id,
+                        url,
                         'Published',
                         'location=1,status=1,scrollbars=yes,width=850,height=800'
                     );

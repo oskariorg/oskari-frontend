@@ -798,6 +798,34 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox',
             }
             // property is not localized
             return property;
+        },
+        /**
+         * Fills in missing details for base url. Uses
+         * window.location.protocol/host/port/path if needed.
+         * @method createURL
+         * @param  {String} baseUrl URL fragment or whole URL
+         * @return {String} Usable URL or null if couldn't create it.
+         */
+        createURL : function(baseUrl) {
+            if(!baseUrl) {
+                return null;
+            }
+            // whole url, use as is
+            if(baseUrl.indexOf('://') !== -1) {
+                return baseUrl;
+            }
+            // starts with // -> fill in protocol
+            if(baseUrl.indexOf('//') === 0) {
+                return window.location.protocol + ':' + baseUrl;
+            }
+            var serverUrl = window.location.protocol + '://'
+                     + window.location.host
+                     + ':' + window.location.port;
+            // starts with / -> fill in protocol + host + port
+            if(baseUrl.indexOf('/') === 0) {
+                return serverUrl + baseUrl;
+            }
+            return serverUrl + window.location.pathname + '/' + baseUrl;
         }
     }
 );
