@@ -380,15 +380,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
 
             //sending a request to publisher for editing view
             var htmlRenderer = function (name, data) {
+                var url = sandbox.createURL(data.url);
                 var link = me.templateLink.clone();
                 link.append(name);
                 link.bind('click', function () {
-                    var publishedMapUrl = sandbox.getLocalizedProperty(
-                            me.instance.conf.publishedMapUrl, data.lang
-                        ),
-                        url = 'http://' + window.location.host +
-                            publishedMapUrl + data.id,
-                        view = me._getViewById(data.id),
+                    var view = me._getViewById(data.id),
                         size = view ? view.state.mapfull.config.size : {
                             height: '525px',
                             width: '700px'
