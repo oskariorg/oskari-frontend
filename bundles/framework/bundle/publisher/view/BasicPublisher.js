@@ -1382,7 +1382,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                             response.id,
                             totalWidth,
                             totalHeight,
-                            selections.language
+                            response.lang,
+                            sandbox.createURL(response.url)
                         );
                         sandbox.notifyAll(event);
                     } else {
