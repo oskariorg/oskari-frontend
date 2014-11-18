@@ -1383,7 +1383,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                             totalWidth,
                             totalHeight,
                             response.lang,
-                            response.url
+                            sandbox.createURL(response.url)
                         );
                         sandbox.notifyAll(event);
                     } else {
