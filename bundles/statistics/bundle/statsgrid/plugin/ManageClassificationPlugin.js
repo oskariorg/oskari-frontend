@@ -312,8 +312,11 @@ Oskari.clazz.define(
             // Get class count
             if (me._state.numberOfClasses > params.COL_VALUES.length - 1) {
                 var newValue = Math.max(2, params.COL_VALUES.length - 1);
-                this.rangeSlider.slider('option',
-                    'value', newValue);
+
+                if (this.rangeSlider) {
+                    this.rangeSlider.slider('option',
+                        'value', newValue);
+                }
                 jQuery('input#amount_class').val(newValue);
                 me._state.numberOfClasses = newValue;
             }
@@ -629,6 +632,7 @@ Oskari.clazz.define(
                         );
                     }
                 });
+
                 me.rangeSlider = slider;
 
                 // HTML for the manual classification method.
@@ -725,6 +729,7 @@ Oskari.clazz.define(
                     flipColorsButton
                 );
             }
+
             content.append(classify);
 
             me._loadStateVariables(el);
