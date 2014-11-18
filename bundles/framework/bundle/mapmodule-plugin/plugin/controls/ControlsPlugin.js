@@ -180,6 +180,7 @@ Oskari.clazz.define(
         _createMapControls: function () {
             var me = this,
                 conf = me.getConfig(),
+                geodesic = conf.geodesic === undefined ? true : conf.geodesic,
                 sandbox = me.getSandbox(),
                 key;
 
@@ -216,12 +217,14 @@ Oskari.clazz.define(
 
             // Measure tools
             var optionsLine = {
+                geodesic: geodesic,
                 handlerOptions: {
                     persist: true
                 },
                 immediate: true
             };
             var optionsPolygon = {
+                geodesic: geodesic,
                 handlerOptions: {
                     persist: true
                 },
@@ -282,7 +285,6 @@ Oskari.clazz.define(
                 };
             for (key in me._measureControls) {
                 if (me._measureControls.hasOwnProperty(key)) {
-                    // FIXME create functions outside loop
                     me._measureControls[key].events.on({
                         measure: measureHandler,
                         measurepartial: measurePartialHandler

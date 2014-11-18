@@ -566,16 +566,19 @@ Oskari.clazz.define(
             }
             return zoomLevel;
         },
+
         /**
          * Formats the measurement of the geometry.
          * Returns a string with the measurement and
          * an appropriate unit (m/km or m²/km²)
          * or an empty string for point.
          *
-         * @method formatMeasurementResult
+         * @public @method formatMeasurementResult
+         *
          * @param  {OpenLayers.Geometry} geometry
          * @param  {String} drawMode
          * @return {String}
+         *
          */
         formatMeasurementResult: function(geometry, drawMode) {
             var measurement,
@@ -605,6 +608,7 @@ Oskari.clazz.define(
                 Oskari.getDecimalSeparator()
             ) + unit;
         },
+
         /**
          * @method start
          * implements BundleInstance protocol start method
