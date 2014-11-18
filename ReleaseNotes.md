@@ -15,6 +15,16 @@ Now has a convenience method createURL(baseUrl) that fills in protocol/host/path
 Rewritten to use JSON backend, any code relying on the old implementation is likely to break.
 New implementation has full localization.
 
+### analysis/analyse
+
+New spatial join method is available in analysis methods (join attributes of two layers)
+Field naming and styling of difference-method is changed 
+
+### integration/admin-layerselector
+
+Management of WFS-type maplayers in Oskari maplayer configuration
+Inserting/editing/removing WFS-layers in admin-layer UI.
+
 ## 1.24.7
 
 ### mapfull
