@@ -2148,6 +2148,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (defaults.method === 'difference') {
                 selections.override_sld = 'sld_muutos_n1';
             }
+            else if (defaults.method === 'areas_and_sectors') {
+                selections.override_sld = 'sld_label_t1';
+            }
 
             return selections;
         },
