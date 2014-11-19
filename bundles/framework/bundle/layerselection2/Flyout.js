@@ -708,9 +708,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
                         me.aggregateAnalyseFilter = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter', me.instance, me.instance.getLocalization('layer'), me.filterDialog);
 
-                        me.filterDialog.createFilterDialog(layer, function() {
-                            me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
-                        });
+                        if (me.service) {
+                            me.filterDialog.createFilterDialog(layer, function() {
+                                me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
+                            });
+                        } else {
+                            me.filterDialog.createFilterDialog(layer);
+                        }
                         me.filterDialog.setCloseButtonHandler(_.bind(me.turnOnClickOff, me));
                     }
                 });
