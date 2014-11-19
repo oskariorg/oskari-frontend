@@ -616,7 +616,9 @@ Oskari.clazz.define(
                     value: me._state.numberOfClasses,
                     slide: function (event, ui) {
                         var newValue = ui.value;
-                        if (newValue > me._params.COL_VALUES.length - 1) {
+                        if ((me._params) &&
+                            (me._params.COL_VALUES) &&
+                            (newValue > me._params.COL_VALUES.length - 1)) {
                             newValue = Math.max(2, me._params.COL_VALUES.length - 1);
                         }
                         me._state.numberOfClasses = newValue;
