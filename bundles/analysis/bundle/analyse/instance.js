@@ -352,8 +352,15 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
                     this.analyse.hide();
                 }
             }
-            mapmodule.updateSize();
+            var reqBuilder = me.sandbox.getRequestBuilder(
+                    'MapFull.MapSizeUpdateRequest'
+                );
+
+            if (reqBuilder) {
+                me.sandbox.request(me, reqBuilder(true));
+            }
         },
+
         displayContent: function (isOpen) {
             if (isOpen) {
                 this.plugins['Oskari.userinterface.Flyout'].refresh();
