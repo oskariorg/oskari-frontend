@@ -2023,7 +2023,6 @@ Oskari.clazz.define(
                 if (this.dialog) {
                     this.dialog.close(true);
                     this.dialog = null;
-                    return;
                 }
 
                 var me = this,
@@ -2041,8 +2040,8 @@ Oskari.clazz.define(
                         me.dialog = null;
                     });
                     dialog.show(title, message, [okBtn]);
-                    me.dialog = dialog;
                 }
+                me.dialog = dialog;
             }
         },
 
