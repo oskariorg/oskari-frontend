@@ -41,30 +41,46 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             var locale = Oskari.getLocalization('StatsGrid'),
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
-            this.sandbox = sandbox;
-            sandbox.register(this);
 
-            sandbox.registerAsStateful(this.mediator.bundleId, this);
+            me.sandbox = sandbox;
+            sandbox.register(me);
+
+            sandbox.registerAsStateful(me.mediator.bundleId, me);
 
             // Find the map module.
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            this.mapModule = mapModule;
+            me.mapModule = mapModule;
 
             // The container where the grid will be rendered to.
             var container = jQuery('<div class="publishedgrid"></div>');
-            this.container = container;
+            me.container = container;
 
             // Create the StatisticsService for handling ajax calls and common functionality.
             // Used in both plugins below.
-            var statsService = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService', me);
+            var statsService = Oskari.clazz.create(
+                'Oskari.statistics.bundle.statsgrid.StatisticsService',
+                me
+            );
             sandbox.registerService(statsService);
-            this.statsService = statsService;
+            me.statsService = statsService;
 
-            var tooltipRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.TooltipContentRequestHandler', this);
-            sandbox.addRequestHandler('StatsGrid.TooltipContentRequest', tooltipRequestHandler);
+            var tooltipRequestHandler = Oskari.clazz.create(
+                'Oskari.statistics.bundle.statsgrid.request.TooltipContentRequestHandler',
+                me
+            );
+            sandbox.addRequestHandler(
+                'StatsGrid.TooltipContentRequest',
+                tooltipRequestHandler
+            );
 
-            var indicatorRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.IndicatorsRequestHandler', this);
-            sandbox.addRequestHandler('StatsGrid.IndicatorsRequest', indicatorRequestHandler);
+            var indicatorRequestHandler = Oskari.clazz.create(
+                'Oskari.statistics.bundle.statsgrid.request.IndicatorsRequestHandler',
+                me
+            );
+            sandbox.addRequestHandler(
+                'StatsGrid.IndicatorsRequest',
+                indicatorRequestHandler
+            );
 
             // Get the stats layer.
             var statsLayer = me.sandbox.findMapLayerFromAllAvailable(me.state.layerId);
@@ -78,20 +94,30 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
                 'state': me.state,
                 'layer': statsLayer
             };
-            var gridPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin', gridConf, locale);
+            var gridPlugin = Oskari.clazz.create(
+                'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
+                gridConf,
+                locale
+            );
             mapModule.registerPlugin(gridPlugin);
             mapModule.startPlugin(gridPlugin);
-            this.gridPlugin = gridPlugin;
+            me.gridPlugin = gridPlugin;
 
             // Register classification plugin to the map.
-            var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', {
-                'state': me.getState()
-            }, locale);
+            var classifyPlugin = Oskari.clazz.create(
+                'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin',
+                {
+                    'state': me.getState()
+                },
+                locale
+            );
             mapModule.registerPlugin(classifyPlugin);
             mapModule.startPlugin(classifyPlugin);
-            this.classifyPlugin = classifyPlugin;
+            me.classifyPlugin = classifyPlugin;
 
-            var statsLayerPlugin = sandbox.findRegisteredModuleInstance('MainMapModuleStatsLayerPlugin');
+            var statsLayerPlugin = sandbox.findRegisteredModuleInstance(
+                'MainMapModuleStatsLayerPlugin'
+            );
             if (statsLayerPlugin) {
                 // A sort of a hack to enable the hover and select controls in a published map.
                 statsLayerPlugin._modeVisible = true;

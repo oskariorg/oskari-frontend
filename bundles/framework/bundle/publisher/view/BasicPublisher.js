@@ -742,7 +742,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 for (i = 0; i < plugins.length; i += 1) {
                     enabledPlugins[plugins[i].id] = true;
                     if (plugins[i].id === 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin') {
-                        me.data.hasLayerSelectionPlugin = plugins[i].getConfig();
+                        me.data.hasLayerSelectionPlugin = plugins[i].config;
                     }
                 }
             }
@@ -860,10 +860,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 } else if (i === 0) {
                     input.attr('checked', 'checked');
                 }
-                layoutContainer.find('span').html(me.loc.toollayout[me.toolLayouts[i]] || me.toolLayouts[i]);
+                layoutContainer.find('span').html(
+                    me.loc.toollayout[me.toolLayouts[i]] || me.toolLayouts[i]
+                );
                 contentPanel.append(layoutContainer);
                 if (me.toolLayouts[i] === 'userlayout') {
-                    var editBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                    var editBtn = Oskari.clazz.create(
+                        'Oskari.userinterface.component.Button'
+                    );
                     editBtn.setTitle(me.loc.toollayout.usereditmode);
                     // FIXME create function outside loop
                     editBtn.setHandler(function () {
@@ -901,7 +905,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 snap: true,
                 start: function (event, ui) {
                     // drag start, see which droppables are valid
-                    me._showDroppable(ui.helper.attr('data-clazz'), ui.helper.parents('.mapplugins'));
+                    me._showDroppable(
+                        ui.helper.attr('data-clazz'),
+                        ui.helper.parents('.mapplugins')
+                    );
                 },
                 stop: me._hideDroppable,
                 revert: 'invalid'
@@ -970,7 +977,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             sandbox.notifyAll(event);
 
             // remove map controls when editing tool layout
-            var controlsPluginTool = me.toolsPanel.getToolById('Oskari.mapframework.mapmodule.ControlsPlugin');
+            var controlsPluginTool = me.toolsPanel.getToolById(
+                'Oskari.mapframework.mapmodule.ControlsPlugin'
+            );
             if (controlsPluginTool) {
                 me.isMapControlActive = controlsPluginTool && controlsPluginTool.selected;
                 me.toolsPanel.activatePreviewPlugin(controlsPluginTool, false);
@@ -1036,6 +1045,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         _createDataPanel: function () {
             var me = this,
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+
             panel.setTitle(me.loc.data.label);
             var contentPanel = panel.getContainer(),
                 tooltipCont = me.templateHelp.clone(); // tooltip
@@ -1049,6 +1059,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             ).change(function (e) {
                 var checkbox = jQuery(e.target),
                     isChecked = checkbox.is(':checked');
+
                 me.isDataVisible = isChecked;
                 me._adjustDataContainer();
                 // Update the size labels
@@ -1133,18 +1144,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         _getButtons: function () {
             var me = this,
                 buttonCont = me.templateButtonsDiv.clone(),
-                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                cancelBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.buttons.CancelButton'
+                );
 
-            cancelBtn.setTitle(me.loc.buttons.cancel);
             cancelBtn.setHandler(function () {
                 me._editToolLayoutOff();
                 me.instance.setPublishMode(false);
             });
             cancelBtn.insertTo(buttonCont);
 
-            var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            saveBtn.setTitle(me.loc.buttons.save);
-            saveBtn.addClass('primary');
+            var saveBtn = Oskari.clazz.create(
+                'Oskari.userinterface.component.buttons.SaveButton'
+            );
 
             if (me.data) {
                 var save = function () {
@@ -1162,7 +1174,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 });
                 saveBtn.insertTo(buttonCont);
 
-                var replaceBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                var replaceBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Button'
+                );
                 replaceBtn.setTitle(me.loc.buttons.replace);
                 replaceBtn.addClass('primary');
                 replaceBtn.setHandler(function () {
@@ -1193,8 +1207,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          *
          */
         _showReplaceConfirm: function (continueCallback) {
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var dialog = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup'
+                ),
+                okBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Button'
+                );
             okBtn.setTitle(this.loc.buttons.replace);
             okBtn.addClass('primary');
             okBtn.setHandler(function () {
@@ -1202,7 +1220,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 continueCallback();
             });
             var cancelBtn = dialog.createCloseButton(this.loc.buttons.cancel);
-            dialog.show(this.loc.confirm.replace.title, this.loc.confirm.replace.msg, [cancelBtn, okBtn]);
+            dialog.show(
+                this.loc.confirm.replace.title,
+                this.loc.confirm.replace.msg,
+                [cancelBtn, okBtn]
+            );
         },
 
         /**
@@ -1214,7 +1236,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          *
          */
         _showValidationErrorMessage: function (errors) {
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            var dialog = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup'
+                ),
                 okBtn = dialog.createCloseButton(this.loc.buttons.ok),
                 content = jQuery('<ul></ul>'),
                 i,
@@ -1382,7 +1406,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                             response.id,
                             totalWidth,
                             totalHeight,
-                            selections.language
+                            response.lang,
+                            sandbox.createURL(response.url)
                         );
                         sandbox.notifyAll(event);
                     } else {
@@ -1649,10 +1674,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             // Fetch the state of the statsgrid bundle and create the UI based on it.
             // TODO: get the saved state from the published map.
             var statsGrid = me.sandbox.getStatefulComponents().statsgrid;
+
             if (statsGrid && statsGrid.state && showGrid) {
                 //me.createUI(statsGrid.state);
                 //me.publisher.
                 statsGridState = me._filterIndicators(_.clone(statsGrid.state, true));
+
                 // Register grid plugin to the map.
                 var gridConf = {
                     'published': true,
@@ -1795,9 +1822,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             var infoPlugin = this._getGetInfoPlugin(),
                 mlp = this.maplayerPanel;
             if (infoPlugin) {
-                var conf = infoPlugin.getConfig();
+                var conf = infoPlugin.config;
                 conf.colourScheme = colourScheme;
-                infoPlugin.setConfig(conf);
+                infoPlugin.config = conf;
             }
 
             mlp.pluginConfig.colourScheme = colourScheme;
@@ -1847,9 +1874,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             // Change the font of the info plugin
             var infoPlugin = me._getGetInfoPlugin();
             if (infoPlugin) {
-                var conf = infoPlugin.getConfig();
+                var conf = infoPlugin.config;
                 conf.font = font;
-                infoPlugin.setConfig(conf);
+                infoPlugin.config = conf;
             }
         },
 
@@ -1924,8 +1951,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             for (i = 0; i < plugins.length; i += 1) {
                 plugin = plugins[i];
-                if (plugin.id === pluginName && plugin.getConfig() && plugin.getConfig().location) {
-                    return plugin.getConfig().location.classes;
+
+                if (plugin.id === pluginName && plugin.config && plugin.config.location) {
+                    return plugin.config.location.classes;
                 }
             }
             return null;
@@ -1969,20 +1997,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             for (i = 0; i < pLen; i += 1) {
                 plugin = plugins[i];
 
-                if (plugin.getConfig()) {
-                    if (plugin.getConfig().font) {
-                        layoutConf.font = plugin.getConfig().font;
+                if (plugin.config) {
+                    if (plugin.config.font) {
+                        layoutConf.font = plugin.config.font;
                     }
 
-                    if (plugin.getConfig().colourScheme) {
-                        layoutConf.colourScheme = plugin.getConfig().colourScheme;
+                    if (plugin.config.colourScheme) {
+                        layoutConf.colourScheme = plugin.config.colourScheme;
                     }
 
-                    if (plugin.getConfig().toolStyle) {
-                        if (typeof plugin.getConfig().toolStyle === 'string') {
-                            layoutConf.toolStyle = plugin.getConfig().toolStyle;
+                    if (plugin.config.toolStyle) {
+                        if (typeof plugin.config.toolStyle === 'string') {
+                            layoutConf.toolStyle = plugin.config.toolStyle;
                         } else {
-                            layoutConf.toolStyle = plugin.getConfig().toolStyle.val;
+                            layoutConf.toolStyle = plugin.config.toolStyle.val;
                         }
                     }
                 }

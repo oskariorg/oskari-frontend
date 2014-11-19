@@ -66,12 +66,15 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
             var field = form.find('#indicator_title');
             field.prev().append(me.localization.addDataMetaTitle);
             field.attr('placeholder', me.localization.addDataMetaTitlePH);
+
             field = form.find('#indicator_sources');
             field.prev().append(me.localization.addDataMetaSources);
             field.attr('placeholder', me.localization.addDataMetaSourcesPH);
+
             field = form.find('#indicator_description');
             field.prev().append(me.localization.addDataMetaDescription);
             field.attr('placeholder', me.localization.addDataMetaDescriptionPH);
+
             field = form.find('#indicator_year');
             field.prev().append(me.localization.addDataMetaYear);
             field.attr('placeholder', me.localization.addDataMetaYear);
@@ -81,7 +84,10 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
             field.keypress(function (e) {
                 me.validateYear(this.value, e);
             });
-            form.find('#indicator_publicity').prev().append(me.localization.addDataMetaPublicity);
+
+            form.find('#indicator_publicity').prev().append(
+                me.localization.addDataMetaPublicity
+            );
 
             // Set title for indicator data fieldset
             form.find('fieldset.form-import > legend')
@@ -120,6 +126,7 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                 e.preventDefault();
                 form.find('fieldset.form-import textarea').val('');
             });
+
             field = form.find('button.start-import');
             field.append(me.localization.importDataButton);
             field.click(function (e) {
@@ -134,12 +141,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.AddOwnIndicatorForm',
                 e.preventDefault();
                 me._handleCancel(e, me);
             });
+
             field = form.find('.clear-form-button');
             field.append(me.localization.formEmpty);
             field.click(function (e) {
                 e.preventDefault();
                 me._clearValues();
             });
+            
             // add data submit
             field = form.find('.submit-form-button');
             field.append(me.localization.formSubmit);
