@@ -343,6 +343,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                             request = builder(jQuery(e.currentTarget).parents('.layer').attr('data-id')),
                             checkbox = jQuery(e.currentTarget).parents('.layer').find('.baselayer'),
                             isChecked = checkbox.is(':checked');
+
                         layer.selected = isChecked;
                         if (isChecked) {
                             me.plugin.removeBaseLayer(layer);
@@ -659,8 +660,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 return function () {
                     var checkbox = jQuery(this),
                         isChecked = checkbox.is(':checked');
+
                     layer.selected = isChecked;
                     if (isChecked) {
+                        console.log("Moving to base layers");
                         me.plugin.addBaseLayer(layer);
                     } else {
                         me.plugin.removeBaseLayer(layer);

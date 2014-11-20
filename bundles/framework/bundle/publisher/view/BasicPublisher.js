@@ -100,7 +100,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 allowedLocations: ['top right'],
                 allowedSiblings: [
                     'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
+                    'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
+                    'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin'
                 ],
                 groupedSiblings: true
             },
@@ -144,6 +145,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin': {
                 allowedLocations: ['top left', 'top center', 'top right'],
                 allowedSiblings: [
+                    'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
                     'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
                     'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin'
                 ],
