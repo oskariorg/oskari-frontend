@@ -215,10 +215,10 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 '    <div></div>' +
                 '    <input class="settings_area_count_field" type="text" pattern="[0-9]+" />' +
                 '  </label>' +
-              /*  '  <label>' +
+                '  <label>' +
                 '    <div></div>' +
                 '    <input class="settings_sector_count_field" type="text" pattern="^0*[1-9]$|^0*1[0-2]$" />' +
-                '  </label>' + not yet in 1.25.0 release*/
+                '  </label>' +
                 '</div>',
             difference: '<div class="analyse_difference_cont"></div>'
         },
