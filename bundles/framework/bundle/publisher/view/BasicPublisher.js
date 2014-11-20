@@ -123,8 +123,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 groupedSiblings: true
             },
 
-            'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin': {
-                allowedLocations: ['top left', 'top center', 'top right'],
+            'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin': 
+{                allowedLocations: ['top left', 'top center', 'top right'],
                 allowedSiblings: [
                     'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
                     'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin'
@@ -966,6 +966,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
 
+            if (me.toolLayoutEditMode) {
+                return;
+            }
+
             me.toolLayoutEditMode = true;
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmodeoff);
             jQuery('.mapplugins').show();
@@ -1017,6 +1021,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
         _editToolLayoutOff: function () {
             var me = this,
                 sandbox = Oskari.getSandbox('sandbox');
+
+            if (!me.toolLayoutEditMode) {
+                return;
+            }
 
             me.toolLayoutEditMode = false;
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
