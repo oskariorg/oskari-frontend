@@ -1100,9 +1100,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 var checkbox = jQuery(e.target),
                     isChecked = checkbox.is(':checked');
 
-                // FIXME this doesn't seem right... aren't we supposed to show _something_ even if the user can't select the classification?
                 me.classifyPlugin.showClassificationOptions(isChecked);
-                me.classifyPlugin.setVisible(isChecked);
             });
             dataContainer.find(
                 'label.allow-classification-label'
