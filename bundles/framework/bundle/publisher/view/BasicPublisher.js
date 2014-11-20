@@ -396,6 +396,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 );
             });
 
+            /* Disabled as none of the help tags work?
             // bind help tags
             var helper = Oskari.clazz.create(
                 'Oskari.userinterface.component.UIHelper',
@@ -406,7 +407,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 content,
                 me.loc.error.title,
                 me.loc.error.nohelp
-            );
+            );*/
         },
 
         /**
