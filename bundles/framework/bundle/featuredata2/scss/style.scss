@@ -112,13 +112,17 @@ div.analyse-filter-popup-content div.filter-option {
     }
 }
 
-div.oskariTabs .tabsHeader ul li a{
-    display: inline-block;
-}
+div.oskariTabs .tabsHeader ul li {
 
-div.oskariTabs .tabsHeader ul li .union-filter{
-    display: inline-block;
-    margin-right: 10px;
+    a {
+        display: inline-block;
+    }
+
+    .union-filter{
+        display: inline-block;
+        margin-right: 10px;
+    }
+
 }
 
 div.flyout-resizer {
@@ -127,9 +131,17 @@ div.flyout-resizer {
 }
 
 div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin {
+    clear: both;
     display: block;
-    background: #fafafa;
-    border: 1px solid #e6e6e6;
+    background: #3c3c3c;
     @include border-radius(2px);
+    line-height: 28px;
     margin: 10px auto;
+    padding: 0 10px;
+
+    a {
+        color: white;
+        text-decoration: none;
+    }
+
 }
