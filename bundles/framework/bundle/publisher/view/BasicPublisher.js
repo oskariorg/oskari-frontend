@@ -58,15 +58,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 allowedLocations: ['bottom left', 'bottom right'],
                 allowedSiblings: [
                     'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
+                    'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
+                    'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin'
                 ],
                 groupedSiblings: false
             },
 
-            'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin': {
+            'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin': {
                 allowedLocations: ['bottom left', 'bottom right'],
                 allowedSiblings: [
                     'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
+                    'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                     'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
                 ],
                 groupedSiblings: false
@@ -76,7 +78,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 allowedLocations: ['bottom left', 'bottom right'],
                 allowedSiblings: [
                     'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
-                    'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin'
+                    'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
+                    'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin'
+                ],
+                groupedSiblings: false
+            },
+
+            'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin': {
+                allowedLocations: ['bottom left', 'bottom right'],
+                allowedSiblings: [
+                    'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
+                    'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
+                    'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin'
                 ],
                 groupedSiblings: false
             },
