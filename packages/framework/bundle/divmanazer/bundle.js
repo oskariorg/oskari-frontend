@@ -185,6 +185,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/bundle/divmanazer/component/buttons/EditButton.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/bundle/divmanazer/component/buttons/ExitButton.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/bundle/divmanazer/component/buttons/OkButton.js"
             }, {
                 "type": "text/javascript",

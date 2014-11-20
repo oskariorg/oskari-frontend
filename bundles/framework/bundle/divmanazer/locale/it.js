@@ -3,14 +3,15 @@ Oskari.registerLocalization({
     "key": "DivManazer",
     "value": {
         "buttons": {
-            "add": "NOT TRANSLATED",
+            "add": "Aggiungi",
             "cancel": "Annulla",
-            "close": "Annulla",
+            "close": "Chiudi",
             "delete": "Cancella",
-            "edit": "NOT TRANSLATED",
+            "edit": "Modifica",
+            "exit": "Uscire",
             "ok": "OK",
             "save": "Salve",
-            "search": "NOT TRANSLATED"
+            "search": "Cerca"
         },
         "LanguageSelect": {
             "title": "Lingua",
