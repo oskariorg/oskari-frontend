@@ -6,6 +6,10 @@
 
 No longer uses publishedMapUrl from config. GetViews JSON now includes URLs to views. Checkout oskari-server release notes for more details.
 
+### publisher
+
+No longer uses publishedMapUrl from config. Publish JSON now includes URL to published view. Checkout oskari-server release notes for more details.
+
 ### core/sandbox
 
 Now has a convenience method createURL(baseUrl) that fills in protocol/host/path if missing from baseUrl.
