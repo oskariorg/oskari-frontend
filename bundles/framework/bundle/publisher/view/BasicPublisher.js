@@ -65,7 +65,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             },
 
             'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin': {
-                allowedLocations: ['bottom left', 'bottom right'],
+                // FIXME this should be moved to the left in righthanded layout
+                allowedLocations: ['bottom right'],
                 allowedSiblings: [
                     'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
                     'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
@@ -2189,7 +2190,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 if (jQuery.inArray(siblings[i], me.toolDropRules[pluginClazz].allowedSiblings) < 0) {
                     // Unallowed sibling, move to source
                     sibling = me._getPluginByClazz(siblings[i]);
-                    sibling.setLocation(source.attr('data-location'));
+                    if (sibling) {
+                        sibling.setLocation(source.attr('data-location'));
+                    } else {
+                        me.sandbox.printWarn(
+                            'BasicPublisher._moveSiblings(): Couldn\'t find sibling',
+                            siblings[i]
+                        );
+                    }
                 }
             }
         },

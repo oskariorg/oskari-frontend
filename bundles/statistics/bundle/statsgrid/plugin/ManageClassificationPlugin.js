@@ -21,7 +21,7 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin';
         me._defaultLocation = 'bottom right';
-        me._index = 0;
+        me._index = 6;
         me._name = 'ManageClassificationPlugin';
 
         me._state = null;
@@ -226,6 +226,46 @@ Oskari.clazz.define(
                     }
                 }
             };
+        },
+
+        _toggleHeaderClickBind: function (active, element) {
+            var me = this,
+                el = element || me.getElement(),
+                content = el.find('div.content'),
+                header = el.find('div.classheader');
+
+            header.unbind('click');
+            if (!active) {
+                header.click(
+                    function () {
+                        content.animate(
+                            {
+                                height: 'toggle'
+                            },
+                            500
+                        );
+                    }
+                );
+            }
+        },
+
+        /**
+         * @method _setLayerToolsEditModeImpl
+         * Called after layerToolsEditMode is set, implement if needed.
+         *
+         *
+         */
+        _setLayerToolsEditModeImpl: function () {
+            var me = this,
+                active = me.inLayerToolsEditMode(),
+                el = me.getElement(),
+                content = el.find('div.content');
+
+            if (active) {
+                content.hide();
+            }
+
+            me._toggleHeaderClickBind(active);
         },
 
         /**
@@ -736,22 +776,20 @@ Oskari.clazz.define(
 
             me._loadStateVariables(el);
 
-            // Toggle content HTML
-            header.click(function () {
-                content.animate({
-                    height: 'toggle'
-                }, 500);
-            });
-
             // Hide content
             content.hide();
             el.append(content);
+
+            // Toggle content HTML
+            me._toggleHeaderClickBind(false, el);
+
             // Hide Classify dialog
             //me.setVisible(me._isStatsLayerVisible());
             me.setVisible(me.isVisible());
             // Setup Colors
             me.setColors();
         },
+
 
         /**
          * @private @method  _createUI
