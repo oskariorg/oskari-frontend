@@ -246,11 +246,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
         me.maplayerPanel = null;
         me.mainPanel = null;
-        me.logoPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin', {
-            location: {
-                classes: me.logoPluginClasses.classes
+        me.logoPlugin = Oskari.clazz.create(
+            'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
+            {
+                location: {
+                    classes: me.logoPluginClasses.classes
+                }
             }
-        });
+        );
         me.latestGFI = null;
         me.urlBase = instance.conf.urlPrefix + '/web/';
     }, {
@@ -268,10 +271,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
             container.append(content);
             var contentDiv = content.find('div.content'),
-                accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+                accordion = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Accordion'
+                );
             me.accordion = accordion;
 
-            var form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLocationForm', me.loc, me);
+            var form = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.publisher.view.PublisherLocationForm',
+                me.loc,
+                me
+            );
             me.locationForm = form;
             if (me.data) {
                 content.find('div.header h3').append(me.loc.titleEdit);
